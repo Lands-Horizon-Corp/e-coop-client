@@ -66,6 +66,7 @@ const JournalVoucherPage = () => {
                 {...createModal}
             />
             <JournalVoucherTable
+                className="max-h-[90vh] min-h-[90vh] w-full"
                 toolbarProps={{
                     createActionProps: {
                         onClick: () => {
@@ -73,7 +74,6 @@ const JournalVoucherPage = () => {
                         },
                     },
                 }}
-                className="max-h-[90vh] min-h-[90vh] w-full"
             />
         </PageContainer>
     )

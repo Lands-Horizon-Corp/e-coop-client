@@ -73,19 +73,19 @@ const CameraDevicePicker = ({ onPick, currentCamId, children }: Props) => {
             <DropdownMenuTrigger asChild>
                 <span>{children}</span>
             </DropdownMenuTrigger>
-            <DropdownMenuContent side="bottom" align="end">
+            <DropdownMenuContent align="end" side="bottom">
                 <DropdownMenuLabel>Camera</DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 {devices.map((camDevice, id) => (
                     <DropdownMenuItem
-                        key={id}
-                        onClick={() => onPick(camDevice.deviceId)}
                         className={cn(
                             '',
                             currentCamId &&
                                 currentCamId === camDevice.deviceId &&
                                 'bg-primary'
                         )}
+                        key={id}
+                        onClick={() => onPick(camDevice.deviceId)}
                     >
                         <CameraIcon className="mr-2 size-4" />
                         {camDevice.label

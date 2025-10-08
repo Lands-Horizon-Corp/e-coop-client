@@ -119,13 +119,13 @@ const UserOrgSettingsForm = ({
     return (
         <Form {...form}>
             <form
-                ref={formRef}
-                onSubmit={onSubmit}
                 className={cn('flex w-full flex-col gap-y-4', className)}
+                onSubmit={onSubmit}
+                ref={formRef}
             >
                 <fieldset
-                    disabled={isPending || readOnly}
                     className="space-y-6"
+                    disabled={isPending || readOnly}
                 >
                     {/* Description Section */}
                     <div className="space-y-4 p-4 bg-secondary/60 dark:bg-popover rounded-xl">
@@ -146,30 +146,30 @@ const UserOrgSettingsForm = ({
 
                         <FormFieldWrapper
                             control={form.control}
-                            name="description"
                             label="Description"
+                            name="description"
                             render={({ field }) => (
                                 <Textarea
                                     {...field}
-                                    placeholder="Enter description (optional)"
                                     className="resize-none"
-                                    rows={3}
                                     disabled={isDisabled(field.name)}
+                                    placeholder="Enter description (optional)"
+                                    rows={3}
                                 />
                             )}
                         />
 
                         <FormFieldWrapper
                             control={form.control}
-                            name="user_setting_description"
                             label="User Setting Description"
+                            name="user_setting_description"
                             render={({ field }) => (
                                 <Textarea
                                     {...field}
-                                    placeholder="Enter user setting description"
                                     className="resize-none"
-                                    rows={3}
                                     disabled={isDisabled(field.name)}
+                                    placeholder="Enter user setting description"
+                                    rows={3}
                                 />
                             )}
                         />
@@ -200,98 +200,98 @@ const UserOrgSettingsForm = ({
                         <div className="grid gap-x-4 gap-y-3 md:grid-cols-3">
                             <FormFieldWrapper
                                 control={form.control}
-                                name="user_setting_start_or"
                                 label="Start OR"
+                                name="user_setting_start_or"
                                 render={({ field }) => (
                                     <Input
                                         {...field}
+                                        disabled={isDisabled(field.name)}
                                         min="0"
                                         placeholder="Start OR"
-                                        disabled={isDisabled(field.name)}
                                     />
                                 )}
                             />
 
                             <FormFieldWrapper
                                 control={form.control}
-                                name="user_setting_end_or"
                                 label="End OR"
+                                name="user_setting_end_or"
                                 render={({ field }) => (
                                     <Input
                                         {...field}
+                                        disabled={isDisabled(field.name)}
                                         min="0"
                                         placeholder="End OR"
-                                        disabled={isDisabled(field.name)}
                                     />
                                 )}
                             />
 
                             <FormFieldWrapper
                                 control={form.control}
-                                name="user_setting_used_or"
                                 label="Used OR"
+                                name="user_setting_used_or"
                                 render={({ field }) => (
                                     <Input
                                         {...field}
+                                        disabled={isDisabled(field.name)}
                                         min="0"
                                         placeholder="Used OR"
-                                        disabled={isDisabled(field.name)}
                                     />
                                 )}
                             />
 
                             <FormFieldWrapper
                                 control={form.control}
-                                name="user_setting_start_voucher"
                                 label="Start Voucher"
+                                name="user_setting_start_voucher"
                                 render={({ field }) => (
                                     <Input
                                         {...field}
+                                        disabled={isDisabled(field.name)}
                                         min="0"
                                         placeholder="Start Voucher"
-                                        disabled={isDisabled(field.name)}
                                     />
                                 )}
                             />
 
                             <FormFieldWrapper
                                 control={form.control}
-                                name="user_setting_end_voucher"
                                 label="End Voucher"
+                                name="user_setting_end_voucher"
                                 render={({ field }) => (
                                     <Input
                                         {...field}
+                                        disabled={isDisabled(field.name)}
                                         min="0"
                                         placeholder="End Voucher"
-                                        disabled={isDisabled(field.name)}
                                     />
                                 )}
                             />
 
                             <FormFieldWrapper
                                 control={form.control}
-                                name="user_setting_used_voucher"
                                 label="Used Voucher"
+                                name="user_setting_used_voucher"
                                 render={({ field }) => (
                                     <Input
                                         {...field}
+                                        disabled={isDisabled(field.name)}
                                         min="0"
                                         placeholder="Used Voucher"
-                                        disabled={isDisabled(field.name)}
                                     />
                                 )}
                             />
 
                             <FormFieldWrapper
                                 control={form.control}
-                                name="user_setting_number_padding"
                                 label="Number Padding"
+                                name="user_setting_number_padding"
                                 render={({ field }) => (
                                     <Input
                                         {...field}
+                                        disabled={isDisabled(field.name)}
                                         min="0"
                                         placeholder="Number Padding"
-                                        disabled={isDisabled(field.name)}
                                     />
                                 )}
                             />
@@ -324,12 +324,12 @@ const UserOrgSettingsForm = ({
                             render={({ field }) => (
                                 <div className="shadow-xs bg-background/50 relative flex w-full items-start gap-2 rounded-lg border border-input p-4 outline-none duration-200 ease-out has-[:checked]:border-primary/30 has-[:checked]:bg-gradient-to-br has-[:checked]:from-primary/50 has-[:checked]:to-primary/10">
                                     <Switch
-                                        id={field.name}
-                                        checked={field.value}
-                                        onCheckedChange={field.onChange}
-                                        className="order-1 after:absolute after:inset-0"
                                         aria-describedby={`${field.name}`}
+                                        checked={field.value}
+                                        className="order-1 after:absolute after:inset-0"
                                         disabled={isDisabled(field.name)}
+                                        id={field.name}
+                                        onCheckedChange={field.onChange}
                                     />
                                     <div className="flex grow items-center gap-3">
                                         <div className="size-fit rounded-full bg-secondary p-2">
@@ -340,8 +340,8 @@ const UserOrgSettingsForm = ({
                                                 Allow Withdraw Negative Balance
                                             </Label>
                                             <p
-                                                id={`${field.name}`}
                                                 className="text-xs text-muted-foreground"
+                                                id={`${field.name}`}
                                             >
                                                 Allow withdrawal with negative
                                                 balance for this user
@@ -359,12 +359,12 @@ const UserOrgSettingsForm = ({
                             render={({ field }) => (
                                 <div className="shadow-xs bg-background/50 relative flex w-full items-start gap-2 rounded-lg border border-input p-4 outline-none duration-200 ease-out has-[:checked]:border-primary/30 has-[:checked]:bg-gradient-to-br has-[:checked]:from-primary/50 has-[:checked]:to-primary/10">
                                     <Switch
-                                        id={field.name}
-                                        checked={field.value}
-                                        onCheckedChange={field.onChange}
-                                        className="order-1 after:absolute after:inset-0"
                                         aria-describedby={`${field.name}`}
+                                        checked={field.value}
+                                        className="order-1 after:absolute after:inset-0"
                                         disabled={isDisabled(field.name)}
+                                        id={field.name}
+                                        onCheckedChange={field.onChange}
                                     />
                                     <div className="flex grow items-center gap-3">
                                         <div className="size-fit rounded-full bg-secondary p-2">
@@ -375,8 +375,8 @@ const UserOrgSettingsForm = ({
                                                 Allow Withdraw Exact Balance
                                             </Label>
                                             <p
-                                                id={`${field.name}`}
                                                 className="text-xs text-muted-foreground"
+                                                id={`${field.name}`}
                                             >
                                                 Allow withdrawal of exact
                                                 balance amount for this user
@@ -394,12 +394,12 @@ const UserOrgSettingsForm = ({
                             render={({ field }) => (
                                 <div className="shadow-xs bg-background/50 relative flex w-full items-start gap-2 rounded-lg border border-input p-4 outline-none duration-200 ease-out has-[:checked]:border-primary/30 has-[:checked]:bg-gradient-to-br has-[:checked]:from-primary/50 has-[:checked]:to-primary/10">
                                     <Switch
-                                        id={field.name}
-                                        checked={field.value}
-                                        onCheckedChange={field.onChange}
-                                        className="order-1 after:absolute after:inset-0"
                                         aria-describedby={`${field.name}`}
+                                        checked={field.value}
+                                        className="order-1 after:absolute after:inset-0"
                                         disabled={isDisabled(field.name)}
+                                        id={field.name}
+                                        onCheckedChange={field.onChange}
                                     />
                                     <div className="flex grow items-center gap-3">
                                         <div className="size-fit rounded-full bg-secondary p-2">
@@ -410,8 +410,8 @@ const UserOrgSettingsForm = ({
                                                 Maintaining Balance
                                             </Label>
                                             <p
-                                                id={`${field.name}`}
                                                 className="text-xs text-muted-foreground"
+                                                id={`${field.name}`}
                                             >
                                                 Require maintaining minimum
                                                 balance for this user
@@ -446,41 +446,39 @@ const UserOrgSettingsForm = ({
 
                         <FormFieldWrapper
                             control={form.control}
-                            name="settings_payment_type_default_value_id"
                             label={
                                 <span>
                                     Default Payment Type{' '}
                                     <InfoTooltip content="Select the default payment type to be used for payment transactions. This type will be automatically selected during payment operations, ensuring consistency and efficiency." />
                                 </span>
                             }
+                            name="settings_payment_type_default_value_id"
                             render={({ field }) => (
                                 <TransactionPaymentTypeComboBox
+                                    onChange={(paymentType) => {
+                                        field.onChange(paymentType?.id)
+                                    }}
                                     placeholder="Select default payment type"
                                     value={
                                         field.value ? field.value : undefined
                                     }
-                                    onChange={(paymentType) => {
-                                        field.onChange(paymentType?.id)
-                                    }}
                                 />
                             )}
                         />
 
                         <FormFieldWrapper
                             control={form.control}
-                            name="settings_accounting_payment_default_value_id"
                             label={
                                 <span>
                                     Default Account for Payment{' '}
                                     <InfoTooltip content="Select the default account to be used for payment transactions. This account will be automatically selected during payment operations." />
                                 </span>
                             }
+                            name="settings_accounting_payment_default_value_id"
                             render={({ field }) => (
                                 <AccountPicker
+                                    disabled={isDisabled(field.name)}
                                     hideDescription
-                                    value={form.getValues(
-                                        'settings_accounting_payment_default_value'
-                                    )}
                                     onSelect={(account) => {
                                         field.onChange(account?.id)
                                         form.setValue(
@@ -489,26 +487,26 @@ const UserOrgSettingsForm = ({
                                         )
                                     }}
                                     placeholder="Select default payment account"
-                                    disabled={isDisabled(field.name)}
+                                    value={form.getValues(
+                                        'settings_accounting_payment_default_value'
+                                    )}
                                 />
                             )}
                         />
 
                         <FormFieldWrapper
                             control={form.control}
-                            name="settings_accounting_deposit_default_value_id"
                             label={
                                 <span>
                                     Default Account for Deposit{' '}
                                     <InfoTooltip content="Select the default account to be used for deposit transactions. This account will be automatically selected during deposit operations." />
                                 </span>
                             }
+                            name="settings_accounting_deposit_default_value_id"
                             render={({ field }) => (
                                 <AccountPicker
+                                    disabled={isDisabled(field.name)}
                                     hideDescription
-                                    value={form.getValues(
-                                        'settings_accounting_deposit_default_value'
-                                    )}
                                     onSelect={(account) => {
                                         field.onChange(account?.id)
                                         form.setValue(
@@ -517,26 +515,26 @@ const UserOrgSettingsForm = ({
                                         )
                                     }}
                                     placeholder="Select default deposit account"
-                                    disabled={isDisabled(field.name)}
+                                    value={form.getValues(
+                                        'settings_accounting_deposit_default_value'
+                                    )}
                                 />
                             )}
                         />
 
                         <FormFieldWrapper
                             control={form.control}
-                            name="settings_accounting_withdraw_default_value_id"
                             label={
                                 <span>
                                     Default Account for Withdrawal{' '}
                                     <InfoTooltip content="Select the default account to be used for withdrawal transactions. This account will be automatically selected during withdrawal operations." />
                                 </span>
                             }
+                            name="settings_accounting_withdraw_default_value_id"
                             render={({ field }) => (
                                 <AccountPicker
+                                    disabled={isDisabled(field.name)}
                                     hideDescription
-                                    value={form.getValues(
-                                        'settings_accounting_withdraw_default_value'
-                                    )}
                                     onSelect={(account) => {
                                         field.onChange(account?.id)
                                         form.setValue(
@@ -545,7 +543,9 @@ const UserOrgSettingsForm = ({
                                         )
                                     }}
                                     placeholder="Select default withdraw account"
-                                    disabled={isDisabled(field.name)}
+                                    value={form.getValues(
+                                        'settings_accounting_withdraw_default_value'
+                                    )}
                                 />
                             )}
                         />
@@ -553,20 +553,20 @@ const UserOrgSettingsForm = ({
                 </fieldset>
 
                 <FormFooterResetSubmit
-                    error={error}
-                    readOnly={readOnly}
-                    isLoading={isPending}
-                    disableSubmit={!form.formState.isDirty}
                     className="sticky bottom-0 bg-popover rounded-xl p-4"
+                    disableSubmit={!form.formState.isDirty}
+                    error={error}
+                    isLoading={isPending}
+                    onReset={() => {
+                        form.reset()
+                        reset?.()
+                    }}
+                    readOnly={readOnly}
                     submitText={
                         mode === 'current'
                             ? 'Update Current Settings'
                             : 'Update User Settings'
                     }
-                    onReset={() => {
-                        form.reset()
-                        reset?.()
-                    }}
                 />
             </form>
         </Form>
@@ -584,22 +584,22 @@ export const UserOrgSettingsFormModal = ({
 }) => {
     return (
         <Modal
-            title={title}
-            description={description}
             className={cn('max-w-4xl', className)}
+            description={description}
+            title={title}
             {...props}
         >
             {formProps.mode === 'specific' ? (
                 <UserOrgSettingsForm
                     {...formProps}
                     mode="specific"
-                    userOrganizationId={
-                        formProps.userOrganizationId as TEntityId
-                    }
                     onSuccess={(updatedData) => {
                         formProps?.onSuccess?.(updatedData)
                         props.onOpenChange?.(false)
                     }}
+                    userOrganizationId={
+                        formProps.userOrganizationId as TEntityId
+                    }
                 />
             ) : (
                 <UserOrgSettingsForm

@@ -14,10 +14,10 @@ function RouteComponent() {
     return (
         <PageContainer>
             <GeneralLedgerTable
+                className="max-h-[90vh] min-h-[90vh] w-full"
+                excludeColumnIds={['balance']}
                 mode="current"
                 TEntryType="withdraw-entry"
-                excludeColumnIds={['balance']}
-                className="max-h-[90vh] min-h-[90vh] w-full"
             />
         </PageContainer>
     )

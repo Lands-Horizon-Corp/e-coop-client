@@ -83,12 +83,12 @@ const OrgBranchSidebar = (props: IBaseProps) => {
             <SidebarHeader>
                 <SidebarMenu>
                     <SidebarMenuItem>
-                        <SidebarMenuButton size="lg" asChild>
+                        <SidebarMenuButton asChild size="lg">
                             <Link to={baseUrl}>
                                 <EcoopLogo
-                                    lightUrl={orgLogo}
-                                    darkUrl={orgLogo}
                                     className="size-9 rounded-md"
+                                    darkUrl={orgLogo}
+                                    lightUrl={orgLogo}
                                 />
                                 <div className="grid flex-1 [[data-side=left][data-state=collapsed]_&]:hidden text-left text-sm leading-tight">
                                     <span className="truncate font-semibold">
@@ -100,8 +100,8 @@ const OrgBranchSidebar = (props: IBaseProps) => {
                                                 <span className="space-y-2 text-xs">
                                                     As{' '}
                                                     <Badge
-                                                        variant="secondary"
                                                         className="capitalize"
+                                                        variant="secondary"
                                                     >
                                                         {
                                                             user_organization.user_type
@@ -120,8 +120,8 @@ const OrgBranchSidebar = (props: IBaseProps) => {
                                                 }{' '}
                                             </span>
                                             <Badge
-                                                variant="outline"
                                                 className="capitalize"
+                                                variant="outline"
                                             >
                                                 {user_organization.user_type}
                                             </Badge>

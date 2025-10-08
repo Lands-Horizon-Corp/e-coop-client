@@ -100,59 +100,59 @@ const IncludeNegativeAccountCreateUpdateForm = ({
     return (
         <Form {...form}>
             <form
-                ref={formRef}
-                onSubmit={onSubmit}
                 className={cn('flex w-full flex-col gap-y-4', className)}
+                onSubmit={onSubmit}
+                ref={formRef}
             >
                 <fieldset
-                    disabled={isPending || formProps.readOnly}
                     className="space-y-4"
+                    disabled={isPending || formProps.readOnly}
                 >
                     <FormFieldWrapper
                         control={form.control}
-                        name="account_id"
                         label="Account"
+                        name="account_id"
                         render={({ field }) => (
                             <AccountPicker
                                 {...field}
+                                disabled={isDisabled(field.name)}
                                 hideDescription
-                                value={form.getValues('account')}
                                 onSelect={(account) => {
                                     field.onChange(account.id)
                                     form.setValue('account', account, {
                                         shouldDirty: true,
                                     })
                                 }}
-                                disabled={isDisabled(field.name)}
+                                value={form.getValues('account')}
                             />
                         )}
                     />
 
                     <FormFieldWrapper
                         control={form.control}
-                        name="description"
                         label="Description"
+                        name="description"
                         render={({ field }) => (
                             <Textarea
                                 {...field}
                                 content={field.value}
-                                placeholder="Optional description"
                                 disabled={isDisabled(field.name)}
+                                placeholder="Optional description"
                             />
                         )}
                     />
                 </fieldset>
 
                 <FormFooterResetSubmit
-                    error={error}
-                    readOnly={formProps.readOnly}
-                    isLoading={isPending}
                     disableSubmit={!form.formState.isDirty}
-                    submitText={includeNegativeAccountId ? 'Update' : 'Create'}
+                    error={error}
+                    isLoading={isPending}
                     onReset={() => {
                         form.reset()
                         reset?.()
                     }}
+                    readOnly={formProps.readOnly}
+                    submitText={includeNegativeAccountId ? 'Update' : 'Create'}
                 />
             </form>
         </Form>
@@ -170,9 +170,9 @@ export const IncludeNegativeAccountCreateUpdateFormModal = ({
 }) => {
     return (
         <Modal
-            title={title}
-            description={description}
             className={cn('', className)}
+            description={description}
+            title={title}
             {...props}
         >
             <IncludeNegativeAccountCreateUpdateForm

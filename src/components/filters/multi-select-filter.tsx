@@ -44,7 +44,7 @@ const MultiSelectFilter = <TValue,>({
     const selectedValues = new Set(value.map((v) => serialize(v)))
 
     return (
-        <div onKeyDown={(e) => e.stopPropagation()} className="space-y-2 p-1">
+        <div className="space-y-2 p-1" onKeyDown={(e) => e.stopPropagation()}>
             {!hideLabel && <p className="text-sm">Filter</p>}
             <Command className="w-fit bg-transparent">
                 <CommandInput placeholder="Search filters..." />
@@ -107,10 +107,10 @@ const MultiSelectFilter = <TValue,>({
                 </CommandList>
             </Command>
             <Button
-                size="sm"
-                variant="secondary"
                 className="w-full"
                 onClick={() => clearValues()}
+                size="sm"
+                variant="secondary"
             >
                 Clear Filter
             </Button>

@@ -71,10 +71,10 @@ const APIKeyGen = ({ className }: Props) => {
                 this. Make sure to protect this API Key at all times. Please
                 read our{' '}
                 <Link
-                    to={'/developers' as string}
-                    target="_blank"
-                    rel="noopener noreferrer"
                     className="underline font-medium hover:text-primary underline-offset-4 text-primary/70"
+                    rel="noopener noreferrer"
+                    target="_blank"
+                    to={'/developers' as string}
                 >
                     Developer Policy.
                 </Link>
@@ -110,25 +110,25 @@ const APIKeyGen = ({ className }: Props) => {
                     onCopy={() => handleCopy()}
                 />
                 <Button
-                    variant="ghost"
-                    onClick={() => setCanView((prev) => !prev)}
                     className={cn(
                         'size-fit p-2 rounded-full text-muted-foreground/80 hover:text-foreground inline-flex items-center justify-center text-sm font-medium',
                         !data?.developer_secret_key && 'hidden'
                     )}
+                    onClick={() => setCanView((prev) => !prev)}
+                    variant="ghost"
                 >
                     {canView ? (
                         <span className="pointer-events-none flex items-center justify-center text-center">
                             <EyeNoneIcon
-                                className="size-4"
                                 aria-hidden="true"
+                                className="size-4"
                             />
                         </span>
                     ) : (
                         <span className="pointer-events-none flex items-center justify-center text-center">
                             <EyeViewIcon
-                                className="size-4"
                                 aria-hidden="true"
+                                className="size-4"
                             />
                         </span>
                     )}
@@ -137,11 +137,11 @@ const APIKeyGen = ({ className }: Props) => {
             <FormErrorMessage errorMessage={error} />
             <Button
                 className="w-full"
+                disabled={isPending}
                 onClick={() => {
                     reset()
                     mutate()
                 }}
-                disabled={isPending}
             >
                 Refresh and Copy
                 {isPending && <LoadingSpinner className="ml-2" />}

@@ -97,15 +97,15 @@ const TextEditor = forwardRef<HTMLDivElement, Props>(
             >
                 {showToolbar && editor && (
                     <Toolbar
+                        activeHeading={activeHeading}
                         className={toolBarClassName}
                         editor={editor}
-                        activeHeading={activeHeading}
-                        toggleHeading={toggleHeading}
-                        isHeadingDisabled={isHeadingDisabled}
                         isAllowedHorizontalRule={isAllowedHorizontalRule}
+                        isHeadingDisabled={isHeadingDisabled}
+                        toggleHeading={toggleHeading}
                     />
                 )}
-                <EditorContent editor={editor} disabled={disabled} />
+                <EditorContent disabled={disabled} editor={editor} />
             </div>
         )
     }

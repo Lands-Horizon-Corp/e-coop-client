@@ -87,55 +87,55 @@ const MemberDepartmentCreateUpdateForm = ({
     return (
         <Form {...form}>
             <form
-                ref={formRef}
-                onSubmit={onSubmit}
                 className={cn('flex w-full flex-col gap-y-4', className)}
+                onSubmit={onSubmit}
+                ref={formRef}
             >
                 <fieldset
-                    disabled={isPending || formProps.readOnly}
                     className="grid gap-x-6 gap-y-4 sm:gap-y-3"
+                    disabled={isPending || formProps.readOnly}
                 >
                     <fieldset className="space-y-3">
                         <FormFieldWrapper
                             control={form.control}
-                            name="name"
                             label="Department Name *"
+                            name="name"
                             render={({ field }) => (
                                 <Input
                                     {...field}
-                                    id={field.name}
-                                    placeholder="Department Name"
                                     autoComplete="off"
                                     disabled={isDisabled(field.name)}
+                                    id={field.name}
+                                    placeholder="Department Name"
                                 />
                             )}
                         />
                         <FormFieldWrapper
                             control={form.control}
-                            name="icon"
                             label="Department Icon"
+                            name="icon"
                             render={({ field }) => (
                                 <IconCombobox
-                                    value={field.value as TIcon}
-                                    placeholder="Select department icon..."
                                     disabled={isDisabled(field.name)}
                                     onChange={(selected) => {
                                         field.onChange(selected || null)
                                     }}
+                                    placeholder="Select department icon..."
+                                    value={field.value as TIcon}
                                 />
                             )}
                         />
                         <FormFieldWrapper
                             control={form.control}
-                            name="description"
                             label="Description"
+                            name="description"
                             render={({ field }) => (
                                 <Textarea
                                     {...field}
-                                    id={field.name}
                                     autoComplete="off"
-                                    placeholder="Department description"
                                     disabled={isDisabled(field.name)}
+                                    id={field.name}
+                                    placeholder="Department description"
                                     rows={3}
                                 />
                             )}
@@ -143,15 +143,15 @@ const MemberDepartmentCreateUpdateForm = ({
                     </fieldset>
                 </fieldset>
                 <FormFooterResetSubmit
-                    error={error}
-                    readOnly={formProps.readOnly}
-                    isLoading={isPending}
                     disableSubmit={!form.formState.isDirty}
-                    submitText={memberDepartmentId ? 'Update' : 'Create'}
+                    error={error}
+                    isLoading={isPending}
                     onReset={() => {
                         form.reset()
                         reset()
                     }}
+                    readOnly={formProps.readOnly}
+                    submitText={memberDepartmentId ? 'Update' : 'Create'}
                 />
             </form>
         </Form>
@@ -169,9 +169,9 @@ export const MemberDepartmentCreateUpdateFormModal = ({
 }) => {
     return (
         <Modal
-            title={title}
-            description={description}
             className={cn('', className)}
+            description={description}
+            title={title}
             {...props}
         >
             <MemberDepartmentCreateUpdateForm

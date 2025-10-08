@@ -51,8 +51,8 @@ export const FootstepAction = ({
             <div onClick={(e) => e.stopPropagation()}>
                 <Sheet {...footstepModal}>
                     <SheetContent
-                        side="right"
                         className="!max-w-lg bg-transparent p-2 focus:outline-none border-none"
+                        side="right"
                     >
                         <div className="rounded-xl bg-popover p-6 ecoop-scroll relative h-full overflow-y-auto">
                             <FootstepDetail footstep={footstep} />
@@ -62,7 +62,6 @@ export const FootstepAction = ({
             </div>
             <RowActionsGroup
                 canSelect
-                row={row}
                 otherActions={
                     <>
                         <DropdownMenuItem onClick={handleViewFootstep}>
@@ -71,6 +70,7 @@ export const FootstepAction = ({
                         </DropdownMenuItem>
                     </>
                 }
+                row={row}
             />
         </>
     )
@@ -95,8 +95,8 @@ export const FootstepRowContext = ({
         <>
             <Sheet {...footstepModal}>
                 <SheetContent
-                    side="right"
                     className="!max-w-lg bg-transparent p-2 focus:outline-none border-none"
+                    side="right"
                 >
                     <div className="rounded-xl bg-popover p-6 ecoop-scroll relative h-full overflow-y-auto">
                         <FootstepDetail footstep={footstep} />
@@ -104,7 +104,6 @@ export const FootstepRowContext = ({
                 </SheetContent>
             </Sheet>
             <DataTableRowContext
-                row={row}
                 otherActions={
                     <>
                         <ContextMenuItem onClick={handleViewFootstep}>
@@ -113,6 +112,7 @@ export const FootstepRowContext = ({
                         </ContextMenuItem>
                     </>
                 }
+                row={row}
             >
                 {children}
             </DataTableRowContext>

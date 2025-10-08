@@ -84,13 +84,13 @@ const TransactionReverseRequestForm = ({
     return (
         <Form {...form}>
             <form
-                ref={formRef}
-                onSubmit={onSubmit}
                 className={cn('flex w-full flex-col gap-y-4', className)}
+                onSubmit={onSubmit}
+                ref={formRef}
             >
                 <fieldset
-                    disabled={isPending || formProps.readOnly}
                     className="grid gap-x-6 gap-y-4 sm:gap-y-3"
+                    disabled={isPending || formProps.readOnly}
                 >
                     <div className="flex flex-col items-center justify-center gap-y-2">
                         {isSuccess ? (
@@ -102,13 +102,12 @@ const TransactionReverseRequestForm = ({
                     {isPending && <LoadingSpinner className="mx-auto" />}
                     <FormFieldWrapper
                         control={form.control}
-                        name="user_organization_id"
                         label="Select Owner/Admin"
+                        name="user_organization_id"
                         render={({ field }) => (
                             <EmployeePicker
                                 {...field}
                                 mode="owner"
-                                value={form.getValues('user_organization')}
                                 onSelect={(value) => {
                                     field.onChange(value?.id)
                                     form.setValue(
@@ -117,6 +116,7 @@ const TransactionReverseRequestForm = ({
                                     )
                                 }}
                                 placeholder="Select Employee"
+                                value={form.getValues('user_organization')}
                             />
                         )}
                     />
@@ -126,8 +126,8 @@ const TransactionReverseRequestForm = ({
                         render={({ field }) => (
                             <PasswordInput
                                 {...field}
-                                id="password-field"
                                 autoComplete="off"
+                                id="password-field"
                                 placeholder="Password"
                             />
                         )}
@@ -137,10 +137,10 @@ const TransactionReverseRequestForm = ({
                     <Separator className="my-2 sm:my-4" />
                     <FormErrorMessage errorMessage={error} />
                     <Button
+                        className="mt-4 w-full self-end px-8"
+                        disabled={isPending || formProps.readOnly}
                         size="sm"
                         type="submit"
-                        disabled={isPending || formProps.readOnly}
-                        className="mt-4 w-full self-end px-8"
                     >
                         {isPending ? <LoadingSpinner /> : 'Request Reverse'}
                     </Button>
@@ -161,9 +161,9 @@ export const TransactionReverseRequestFormModal = ({
 }) => {
     return (
         <Modal
-            title={title}
-            description={description}
             className={cn('', className)}
+            description={description}
+            title={title}
             {...props}
         >
             <TransactionReverseRequestForm

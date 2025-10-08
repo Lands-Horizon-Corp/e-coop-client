@@ -26,12 +26,12 @@ const LoanMiniInfoCard = ({ className, loanTransaction }: Props) => {
         <div className={cn('bg-popover p-4 rounded border', className)}>
             <Modal
                 {...amortViewer}
-                title=""
-                description=""
-                closeButtonClassName="top-2 right-2"
-                titleClassName="sr-only"
-                descriptionClassName="sr-only"
                 className="!max-w-[90vw] p-0 shadow-none border-none bg-transparent gap-y-0"
+                closeButtonClassName="top-2 right-2"
+                description=""
+                descriptionClassName="sr-only"
+                title=""
+                titleClassName="sr-only"
             >
                 <LoanAmortization
                     className="col-span-5 p-0 bg-transparent"
@@ -70,8 +70,8 @@ const LoanMiniInfoCard = ({ className, loanTransaction }: Props) => {
                     </p>
                     <div className="text-lg">
                         <LoanModeOfPaymentBadge
-                            size="sm"
                             mode={loanTransaction.mode_of_payment}
+                            size="sm"
                         />
                     </div>
                 </div>
@@ -79,16 +79,16 @@ const LoanMiniInfoCard = ({ className, loanTransaction }: Props) => {
                     <p className="text-muted-foreground text-xs">Loan Type</p>
                     <div className="text-lg">
                         <LoanTypeBadge
-                            size="sm"
                             loanType={loanTransaction.loan_type}
+                            size="sm"
                         />
                     </div>
                 </div>
             </div>
             <Button
-                variant="secondary"
                 className="w-full"
                 onClick={() => amortViewer.onOpenChange(true)}
+                variant="secondary"
             >
                 <CalendarNumberIcon className="inline" /> View Loan Amortization
             </Button>

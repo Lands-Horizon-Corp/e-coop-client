@@ -61,19 +61,19 @@ const GenericPicker = <T extends { id: TEntityId }>({
     return (
         <Modal
             {...other}
-            open={modalState}
-            onOpenChange={setModalState}
-            titleClassName="!hidden"
-            closeButtonClassName="hidden"
-            descriptionClassName="!hidden"
             className={cn(
                 '!h-fit max-w-[90vw] !gap-y-0 border p-0 shadow-none backdrop-blur-none sm:max-w-2xl',
                 className
             )}
+            closeButtonClassName="hidden"
+            descriptionClassName="!hidden"
+            onOpenChange={setModalState}
+            open={modalState}
+            titleClassName="!hidden"
         >
             <Command
-                shouldFilter={false}
                 className={cn('bg-none', commandClassName)}
+                shouldFilter={false}
             >
                 {customSearchComponent ? (
                     customSearchComponent
@@ -85,11 +85,11 @@ const GenericPicker = <T extends { id: TEntityId }>({
                     <div className="relative flex items-center border-b px-3">
                         <MagnifyingGlassIcon className="mr-2 size-4 shrink-0 opacity-50" />
                         <Input
+                            className="flex h-11 w-full  focus-visible:ring-0 px-0 border-0 !bg-transparent py-3 text-sm outline-none placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50"
                             onChange={(e) => onSearchChange(e.target.value)}
                             placeholder={
                                 searchPlaceHolder ?? 'Search anything...'
                             }
-                            className="flex h-11 w-full  focus-visible:ring-0 px-0 border-0 !bg-transparent py-3 text-sm outline-none placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50"
                         />
                         {otherSearchInputChild}
                     </div>
@@ -107,12 +107,12 @@ const GenericPicker = <T extends { id: TEntityId }>({
                         <CommandGroup heading={listHeading}>
                             {items?.map((item) => (
                                 <CommandItem
+                                    className="cursor-pointer rounded-lg"
                                     key={item.id}
                                     onSelect={() => {
                                         onSelect?.(item)
                                         setModalState(false)
                                     }}
-                                    className="cursor-pointer rounded-lg"
                                 >
                                     {renderItem(item)}
                                 </CommandItem>

@@ -65,8 +65,8 @@ const QrCodeScanner = <TData, TErr = string>({
     return (
         <QrScanner
             onScan={handleOnScan}
-            scanDelay={scanDelay}
             paused={paused || pauseOnDecoding ? isPending : undefined}
+            scanDelay={scanDelay}
             {...props}
         >
             {isPending && (
@@ -87,9 +87,9 @@ export const QrCodeScannerModal = <TData, TErr>({
 }: IModalProps & { qrScannerProps: IQrCodeScannerProps<TData, TErr> }) => {
     return (
         <Modal
-            title={title}
-            showCloseButton={false}
             className={cn('max-h[98vh] size-fit max-w-[98vw]', className)}
+            showCloseButton={false}
+            title={title}
             {...props}
         >
             <QrCodeScanner<TData, TErr>

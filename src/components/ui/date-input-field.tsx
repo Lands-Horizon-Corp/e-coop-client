@@ -18,22 +18,22 @@ export function DateInputField({
 }: Props) {
     return (
         <DateField
-            isDisabled={disabled}
-            value={value}
-            onChange={onChange}
             className={cn(
                 'flex w-full items-center rounded-md border border-input bg-background px-3 py-2 text-sm shadow-sm ring-offset-background transition-colors focus-within:outline-none focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50',
                 className
             )}
+            isDisabled={disabled}
+            onChange={onChange}
+            value={value}
         >
             <DateInput>
                 {(segment) => (
                     <DateSegment
-                        segment={segment}
                         className={cn(
                             'px-0.5 outline-none',
                             segment.isPlaceholder && 'text-muted-foreground'
                         )}
+                        segment={segment}
                     />
                 )}
             </DateInput>

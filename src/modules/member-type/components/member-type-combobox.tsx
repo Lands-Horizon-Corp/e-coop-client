@@ -64,8 +64,6 @@ const MemberTypeCombobox = React.forwardRef<HTMLButtonElement, Props>(
         return (
             <>
                 <MemberTypeCreateUpdateFormModal
-                    open={createModal}
-                    onOpenChange={setCreateModal}
                     formProps={{
                         ...memberTypeComboboxCreateProps,
                         onSuccess: (newType) => {
@@ -73,20 +71,22 @@ const MemberTypeCombobox = React.forwardRef<HTMLButtonElement, Props>(
                             setCreateModal(false)
                         },
                     }}
+                    onOpenChange={setCreateModal}
+                    open={createModal}
                 />
-                <Popover modal open={open} onOpenChange={setOpen}>
+                <Popover modal onOpenChange={setOpen} open={open}>
                     <PopoverTrigger asChild>
                         <Button
                             {...other}
-                            ref={ref}
-                            variant="outline"
-                            role="combobox"
                             aria-expanded={open}
                             className={cn(
                                 'w-full justify-between px-3',
                                 className
                             )}
                             disabled={disabled || isLoading}
+                            ref={ref}
+                            role="combobox"
+                            variant="outline"
                         >
                             {value ? (
                                 data?.find((option) => option.id === value)
@@ -102,8 +102,8 @@ const MemberTypeCombobox = React.forwardRef<HTMLButtonElement, Props>(
                     <PopoverContent className="max-h-[--radix-popover-content-available-height] w-[--radix-popover-trigger-width] p-0">
                         <Command>
                             <CommandInput
-                                placeholder="Search Member Type..."
                                 className="h-9"
+                                placeholder="Search Member Type..."
                             />
                             {isLoading ? (
                                 <CommandEmpty>
@@ -119,10 +119,10 @@ const MemberTypeCombobox = React.forwardRef<HTMLButtonElement, Props>(
                                         <>
                                             <CommandGroup>
                                                 <CommandItem
+                                                    onClick={() => {}}
                                                     onSelect={() => {
                                                         setCreateModal(true)
                                                     }}
-                                                    onClick={() => {}}
                                                 >
                                                     <PlusIcon /> Create new type
                                                 </CommandItem>
@@ -134,11 +134,11 @@ const MemberTypeCombobox = React.forwardRef<HTMLButtonElement, Props>(
                                         {data?.map((option) => (
                                             <CommandItem
                                                 key={option.id}
-                                                value={option.name}
                                                 onSelect={() => {
                                                     setOpen(false)
                                                     onChange?.(option)
                                                 }}
+                                                value={option.name}
                                             >
                                                 {option.name}
                                                 <Check

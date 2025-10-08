@@ -21,9 +21,9 @@ const MemberAccountGeneralLedgerTable = ({
 }: MemberAccountGeneralLedgerTableProps) => {
     return (
         <GeneralLedgerTable
-            mode="member-account"
             accountId={accountId}
             memberProfileId={memberProfileId}
+            mode="member-account"
             {...props}
         />
     )

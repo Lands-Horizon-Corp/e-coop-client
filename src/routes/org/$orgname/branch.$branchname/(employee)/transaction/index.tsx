@@ -23,5 +23,5 @@ function RouteComponent() {
     const fullPath = Route.fullPath
     const { transactionId } = Route.useSearch()
 
-    return <Transaction transactionId={transactionId} fullPath={fullPath} />
+    return <Transaction fullPath={fullPath} transactionId={transactionId} />
 }

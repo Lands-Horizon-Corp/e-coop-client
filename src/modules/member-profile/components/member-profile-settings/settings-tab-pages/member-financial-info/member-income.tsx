@@ -39,31 +39,30 @@ const MemberIncomeCard = ({ income }: { income: IMemberIncome }) => {
     return (
         <div className="flex flex-col gap-y-1 rounded-xl border bg-background p-4">
             <MemberIncomeCreateUpdateFormModal
-                open={edit}
-                onOpenChange={setEdit}
-                title="Update Income"
                 description="Modify / Update this income information."
                 formProps={{
                     incomeId: income.id,
                     memberProfileId: income.member_profile_id,
                     defaultValues: income,
                 }}
+                onOpenChange={setEdit}
+                open={edit}
+                title="Update Income"
             />
             <div className="flex justify-between">
                 <p className="font-bold">{income.name}</p>
                 <div className="flex items-center justify-end">
                     <Button
-                        size="icon"
-                        variant="ghost"
                         className="!size-fit px-1.5 py-1.5 text-muted-foreground/40"
                         disabled={isDeleting}
                         onClick={() => setEdit(true)}
+                        size="icon"
+                        variant="ghost"
                     >
                         <PencilFillIcon className="size-4" />
                     </Button>
                     <Button
-                        size="icon"
-                        variant="ghost"
+                        className="!size-fit px-1.5 py-1.5 text-muted-foreground/40"
                         disabled={isDeleting}
                         hoverVariant="destructive"
                         onClick={() =>
@@ -79,7 +78,8 @@ const MemberIncomeCard = ({ income }: { income: IMemberIncome }) => {
                                     }),
                             })
                         }
-                        className="!size-fit px-1.5 py-1.5 text-muted-foreground/40"
+                        size="icon"
+                        variant="ghost"
                     >
                         {isDeleting ? (
                             <LoadingSpinner />
@@ -128,30 +128,30 @@ const MemberIncome = ({ memberProfile }: Props) => {
     return (
         <div>
             <MemberIncomeCreateUpdateFormModal
-                open={create}
-                onOpenChange={setCreate}
-                title="Create Income"
                 description="Add new income information."
                 formProps={{
                     memberProfileId: memberProfile.id,
                     defaultValues: {},
                 }}
+                onOpenChange={setCreate}
+                open={create}
+                title="Create Income"
             />
             <div className="mb-2 flex items-start justify-between">
                 <p>Member Income</p>
-                <Button size="sm" onClick={() => setCreate(true)}>
+                <Button onClick={() => setCreate(true)} size="sm">
                     Add Income <PlusIcon className="ml-1" />
                 </Button>
             </div>
             <div className="grid grid-cols-3 gap-4">
                 {memberProfile.member_incomes?.map((income) => (
-                    <MemberIncomeCard key={income.id} income={income} />
+                    <MemberIncomeCard income={income} key={income.id} />
                 ))}
                 {(!memberProfile.member_incomes ||
                     memberProfile.member_incomes.length === 0) && (
                     <EmptyListIndicator
-                        message="No income yet"
                         className="col-span-3"
+                        message="No income yet"
                     />
                 )}
             </div>

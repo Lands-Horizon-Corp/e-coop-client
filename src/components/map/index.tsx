@@ -163,30 +163,30 @@ const Map = ({
         >
             {!viewOnly && (
                 <MapSearch
-                    onLocationFound={handleLocationFound}
-                    map={map}
                     className={searchClassName}
+                    map={map}
+                    onLocationFound={handleLocationFound}
                     setSearchedAddress={setSearchedAddress}
                 />
             )}
             <MapContainer
-                zoom={zoom}
-                ref={setMap}
-                style={style}
                 center={center}
-                minZoom={minZoom}
-                maxZoom={maxZoom}
-                whenReady={whenReady}
-                zoomControl={zoomControl}
-                scrollWheelZoom={scrollWheelZoom}
                 className={cn(
                     `!z-0 size-full flex-grow rounded-lg`,
                     mapContainerClassName
                 )}
+                maxZoom={maxZoom}
+                minZoom={minZoom}
+                ref={setMap}
+                scrollWheelZoom={scrollWheelZoom}
+                style={style}
+                whenReady={whenReady}
+                zoom={zoom}
+                zoomControl={zoomControl}
             >
                 <TileLayer
-                    url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                     attribution="&copy; OpenStreetMap contributors"
+                    url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                 />
                 <LayerControl />
                 <MapWithClick onLocationFound={handleLocationFound} />

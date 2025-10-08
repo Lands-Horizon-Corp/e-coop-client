@@ -114,13 +114,13 @@ const columns: ColumnDef<ICashCheckVoucherEntryRequest>[] = [
         header: 'Action',
         cell: (row) => (
             <Button
-                variant="ghost"
-                size="icon"
                 className="w-full hover:bg-primary/10 !p-0 text-destructive"
                 onClick={(e) => {
                     e.preventDefault()
                     row.table.options.meta?.handleDeleteRow(row.row)
                 }}
+                size="icon"
+                variant="ghost"
             >
                 <TrashIcon />
             </Button>
@@ -244,12 +244,12 @@ export const CashCheckJournalEntryTable = ({
                 <h1 className="text-lg font-semibold">Cash Check Entries</h1>
                 <div className="flex py-2 items-center space-x-2">
                     <Button
-                        size="sm"
-                        type="button"
-                        tabIndex={0}
+                        aria-label="Add new cash check entry"
                         className="size-fit px-2 py-0.5 text-xs"
                         onClick={(e) => handleAddRow(e)}
-                        aria-label="Add new cash check entry"
+                        size="sm"
+                        tabIndex={0}
+                        type="button"
                     >
                         Add <PlusIcon className="inline" />
                     </Button>
@@ -262,18 +262,18 @@ export const CashCheckJournalEntryTable = ({
                 <TableHeader className={cn('sticky top-0 z-10')}>
                     {table.getHeaderGroups().map((headerGroup) => (
                         <TableRow
-                            key={headerGroup.id}
                             className={cn('h-fit hover:bg-background')}
+                            key={headerGroup.id}
                         >
                             {headerGroup.headers.map((header) => (
                                 <TableHead
-                                    key={header.id}
-                                    colSpan={header.colSpan}
                                     className={cn(
                                         'h-10 bg-sidebar',
                                         'first:!rounded-tl-2xl',
                                         'last:!rounded-tr-2xl'
                                     )}
+                                    colSpan={header.colSpan}
+                                    key={header.id}
                                     style={{ width: header.getSize() }}
                                 >
                                     {!header.isPlaceholder &&
@@ -289,13 +289,13 @@ export const CashCheckJournalEntryTable = ({
                 <TableBody>
                     {table.getRowModel().rows.map((row) => (
                         <TableRow
-                            key={row.id}
                             className={cn(
                                 'hover:bg-background !border-b-[0.5px] border-b-primary/20'
                             )}
+                            key={row.id}
                         >
                             {row.getVisibleCells().map((cell) => (
-                                <TableCell key={cell.id} className="!p-1">
+                                <TableCell className="!p-1" key={cell.id}>
                                     {flexRender(
                                         cell.column.columnDef.cell,
                                         cell.getContext()

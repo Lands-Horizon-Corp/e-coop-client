@@ -98,34 +98,35 @@ const AccountTagCreateUpdateForm = ({
     return (
         <Form {...form}>
             <form
-                ref={formRef}
-                onSubmit={onSubmit}
                 className={cn('flex w-full flex-col gap-y-4', className)}
+                onSubmit={onSubmit}
+                ref={formRef}
             >
                 <fieldset
-                    disabled={isPending || formProps.readOnly}
                     className="grid gap-x-6 gap-y-4"
+                    disabled={isPending || formProps.readOnly}
                 >
                     <FormFieldWrapper
                         control={form.control}
-                        name="name"
                         label="Tag Name"
+                        name="name"
                         render={({ field }) => (
                             <Input
                                 {...field}
-                                id={field.name}
-                                value={field.value || ''}
-                                placeholder="Enter tag name"
                                 disabled={isDisabled(field.name)}
+                                id={field.name}
+                                placeholder="Enter tag name"
+                                value={field.value || ''}
                             />
                         )}
                     />
                     <FormFieldWrapper
                         control={form.control}
-                        name="account_id"
                         label="Account"
+                        name="account_id"
                         render={({ field }) => (
                             <AccountPicker
+                                disabled={isDisabled(field.name)}
                                 onSelect={(account) => {
                                     field.onChange(account.id)
                                     form.setValue('account', account, {
@@ -134,37 +135,36 @@ const AccountTagCreateUpdateForm = ({
                                 }}
                                 placeholder="Select an account"
                                 value={form.getValues('account')}
-                                disabled={isDisabled(field.name)}
                             />
                         )}
                     />
 
                     <FormFieldWrapper
                         control={form.control}
-                        name="description"
                         label="Description"
+                        name="description"
                         render={({ field }) => (
                             <Textarea
                                 {...field}
-                                placeholder="Optional description"
                                 className="max-h-40"
                                 disabled={isDisabled(field.name)}
+                                placeholder="Optional description"
                             />
                         )}
                     />
 
                     <FormFieldWrapper
                         control={form.control}
-                        name="category"
                         label="Category"
+                        name="category"
                         render={({ field }) => (
                             <FormControl>
                                 <Select
+                                    defaultValue={field.value}
+                                    disabled={isDisabled(field.name)}
                                     onValueChange={(selectedValue) => {
                                         field.onChange(selectedValue)
                                     }}
-                                    defaultValue={field.value}
-                                    disabled={isDisabled(field.name)}
                                 >
                                     <SelectTrigger className="w-full">
                                         {field.value || 'select Account Type'}
@@ -190,46 +190,46 @@ const AccountTagCreateUpdateForm = ({
 
                     <FormFieldWrapper
                         control={form.control}
-                        name="color"
                         label="Select Color"
+                        name="color"
                         render={({ field }) => (
                             <ColorPicker
-                                value={field.value ?? ''}
-                                onChange={field.onChange}
                                 alpha={true}
                                 className="mt-0 w-full"
                                 inputClassName="h-10 w-full"
+                                onChange={field.onChange}
+                                value={field.value ?? ''}
                             />
                         )}
                     />
 
                     <FormFieldWrapper
                         control={form.control}
-                        name="icon"
                         label="Icon"
+                        name="icon"
                         render={({ field }) => (
                             <IconCombobox
-                                value={field.value as TIcon}
+                                className="w-full"
+                                disabled={isDisabled(field.name)}
                                 onChange={field.onChange}
                                 placeholder="Select an icon"
-                                disabled={isDisabled(field.name)}
-                                className="w-full"
+                                value={field.value as TIcon}
                             />
                         )}
                     />
                 </fieldset>
 
                 <FormFooterResetSubmit
-                    error={error}
-                    readOnly={formProps.readOnly}
-                    isLoading={isPending}
                     disableSubmit={!form.formState.isDirty}
-                    submitText={accountTagId ? 'Update' : 'Create'}
+                    error={error}
+                    isLoading={isPending}
                     onReset={() => {
                         form.reset()
                         resetCreate()
                         resetUpdate()
                     }}
+                    readOnly={formProps.readOnly}
+                    submitText={accountTagId ? 'Update' : 'Create'}
                 />
             </form>
         </Form>
@@ -247,9 +247,9 @@ export const AccountTagFormModal = ({
 }) => {
     return (
         <Modal
-            title={title}
-            description={description}
             className={cn('', className)}
+            description={description}
+            title={title}
             {...props}
         >
             <AccountTagCreateUpdateForm

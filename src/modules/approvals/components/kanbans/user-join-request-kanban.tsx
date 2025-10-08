@@ -82,16 +82,16 @@ const UserJoinRequestKanban = (_props: Props) => {
             <div className="flex items-center">
                 <UserListIcon className="mr-2 size-4" />
                 <KanbanTitle
-                    totalItems={data.length}
-                    title="User Join Requests"
                     isLoading={isRefetching}
                     onRefresh={() => refetch()}
+                    title="User Join Requests"
+                    totalItems={data.length}
                 />
             </div>
             <Separator />
             <KanbanItemsContainer>
                 {data.map((userOrg) => (
-                    <JoinRequestCard userOrg={userOrg} key={userOrg.id} />
+                    <JoinRequestCard key={userOrg.id} userOrg={userOrg} />
                 ))}
                 {data.length === 0 && (
                     <p className="text-center text-xs text-muted-foreground/60">
@@ -154,13 +154,12 @@ const JoinRequestCard = ({ userOrg }: { userOrg: IUserOrganization }) => {
                 </div>
             </div>
             <fieldset
-                disabled={isLoading}
                 className="flex items-center justify-end gap-x-1"
+                disabled={isLoading}
             >
                 <Button
-                    variant="secondary"
-                    hoverVariant="destructive"
                     className="size-fit px-2 py-1"
+                    hoverVariant="destructive"
                     onClick={() =>
                         onOpen({
                             title: 'Reject Join Request',
@@ -170,6 +169,7 @@ const JoinRequestCard = ({ userOrg }: { userOrg: IUserOrganization }) => {
                             onConfirm: () => reject(userOrg.id),
                         })
                     }
+                    variant="secondary"
                 >
                     {isRejecting ? (
                         <LoadingSpinner className="size-3" />

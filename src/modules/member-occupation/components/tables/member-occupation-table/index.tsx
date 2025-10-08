@@ -147,15 +147,6 @@ const MemberOccupationTable = ({
                 )}
             >
                 <DataTableToolbar
-                    globalSearchProps={{
-                        defaultMode: 'contains',
-                        targets: memberOccupationGlobalSearchTargets,
-                    }}
-                    table={table}
-                    refreshActionProps={{
-                        onClick: () => refetch(),
-                        isLoading: isPending || isRefetching,
-                    }}
                     deleteActionProps={{
                         onDeleteSuccess: () =>
                             queryClient.invalidateQueries({
@@ -166,7 +157,6 @@ const MemberOccupationTable = ({
                                 ids: selectedData.map((item) => item.id),
                             }),
                     }}
-                    scrollableProps={{ isScrollable, setIsScrollable }}
                     exportActionProps={{
                         pagination,
                         isLoading: isPending,
@@ -186,18 +176,28 @@ const MemberOccupationTable = ({
                         filterLogic: filterState.filterLogic,
                         setFilterLogic: filterState.setFilterLogic,
                     }}
+                    globalSearchProps={{
+                        defaultMode: 'contains',
+                        targets: memberOccupationGlobalSearchTargets,
+                    }}
+                    refreshActionProps={{
+                        onClick: () => refetch(),
+                        isLoading: isPending || isRefetching,
+                    }}
+                    scrollableProps={{ isScrollable, setIsScrollable }}
+                    table={table}
                     {...toolbarProps}
                 />
                 <DataTable
-                    table={table}
-                    isStickyHeader
-                    isStickyFooter
                     className="mb-2"
-                    onRowClick={onRowClick}
-                    onDoubleClick={onDoubleClick}
                     isScrollable={isScrollable}
+                    isStickyFooter
+                    isStickyHeader
+                    onDoubleClick={onDoubleClick}
+                    onRowClick={onRowClick}
                     RowContextComponent={RowContextComponent}
                     setColumnOrder={setColumnOrder}
+                    table={table}
                 />
                 <DataTablePagination table={table} totalSize={totalSize} />
             </div>

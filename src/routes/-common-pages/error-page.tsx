@@ -28,11 +28,11 @@ const ErrorPage = ({ className, error }: Props) => {
             )}
         >
             <FlickeringGrid
-                gridGap={1}
-                squareSize={60}
-                maxOpacity={0.5}
-                flickerChance={0.05}
                 className="absolute inset-0 z-0 opacity-60 [mask-image:radial-gradient(80vh_circle_at_center,white,transparent)] dark:opacity-20"
+                flickerChance={0.05}
+                gridGap={1}
+                maxOpacity={0.5}
+                squareSize={60}
             />
             <div className="z-10 flex h-full w-full flex-col items-center justify-center gap-y-4">
                 <BracketErrorIcon className="size-24 text-muted-foreground" />

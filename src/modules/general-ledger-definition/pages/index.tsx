@@ -111,6 +111,25 @@ const GeneralLedgerDefinition = () => {
         <PageContainer className="w-full relative min-h-[100vh] p-5 ">
             {grouping && (
                 <GLAccountsGroupingUpdateFormModal
+                    description={
+                        financialStatementGrouping
+                            ? `${grouping.description}`
+                            : 'Edit the General Ledger Definition grouping details.'
+                    }
+                    formProps={{
+                        defaultValues: grouping,
+                        groupingId: grouping.id,
+                        onSuccess: (data) => {
+                            setOnOpenEditGLGrouping(false)
+                            toast.success(
+                                `Successfully updated the ${data.name} grouping.`
+                            )
+                            refetch()
+                        },
+                        readOnly: financialStatementGrouping,
+                    }}
+                    onOpenChange={setOnOpenEditGLGrouping}
+                    open={onOpenEditGLGrouping}
                     title={
                         <p>
                             {financialStatementGrouping
@@ -129,25 +148,6 @@ const GeneralLedgerDefinition = () => {
                             </span>
                         </p>
                     }
-                    description={
-                        financialStatementGrouping
-                            ? `${grouping.description}`
-                            : 'Edit the General Ledger Definition grouping details.'
-                    }
-                    open={onOpenEditGLGrouping}
-                    onOpenChange={setOnOpenEditGLGrouping}
-                    formProps={{
-                        defaultValues: grouping,
-                        groupingId: grouping.id,
-                        onSuccess: (data) => {
-                            setOnOpenEditGLGrouping(false)
-                            toast.success(
-                                `Successfully updated the ${data.name} grouping.`
-                            )
-                            refetch()
-                        },
-                        readOnly: financialStatementGrouping,
-                    }}
                 />
             )}
             <div className="my-5 w-full flex items-center gap-2 ">
@@ -176,24 +176,24 @@ const GeneralLedgerDefinition = () => {
                 </div>
             ) : (
                 <Accordion
-                    type="single"
-                    collapsible
                     className="w-full space-y-2"
+                    collapsible
                     defaultValue="item-1"
+                    type="single"
                 >
                     {generalLedgerGropings?.map((grouping) => (
                         <div key={grouping.id}>
                             <AccordionItem
+                                className="shadow-md w-full bg-sidebar/50 p-5 rounded-xl"
                                 key={grouping.id}
                                 value={grouping.id}
-                                className="shadow-md w-full bg-sidebar/50 p-5 rounded-xl"
                             >
                                 <div className="flex items-center justify-between">
                                     <AccordionTrigger
+                                        className="flex-1 hover:no-underline text-left"
                                         onClick={() =>
                                             handleAccountTrigger(grouping)
                                         }
-                                        className="flex-1 hover:no-underline text-left"
                                     >
                                         <div className="flex flex-col">
                                             <h1 className="font-bold text-2xl">
@@ -208,8 +208,8 @@ const GeneralLedgerDefinition = () => {
                                     <DropdownMenu>
                                         <DropdownMenuTrigger>
                                             <SettingsIcon
-                                                size={30}
                                                 className="hover:cursor-pointer"
+                                                size={30}
                                             />
                                         </DropdownMenuTrigger>
                                         <DropdownMenuContent>
@@ -229,6 +229,7 @@ const GeneralLedgerDefinition = () => {
                                                 </DropdownMenuShortcut>
                                             </DropdownMenuItem>
                                             <DropdownMenuItem
+                                                className="flex items-center gap-2"
                                                 onClick={(e) => {
                                                     e.preventDefault()
                                                     handleViewGLGrouping(
@@ -236,7 +237,6 @@ const GeneralLedgerDefinition = () => {
                                                         true
                                                     )
                                                 }}
-                                                className="flex items-center gap-2"
                                             >
                                                 <ViewIcon />
                                                 View
@@ -250,12 +250,12 @@ const GeneralLedgerDefinition = () => {
                                 <AccordionContent className="w-full shadow-none">
                                     {hasGeneralLedgerGropings && (
                                         <GeneralLedgerDefinitionTreeViewer
+                                            isRefetchingGeneralLedgerAccountsGrouping={
+                                                isRefetchingGeneralLedgerAccountsGrouping
+                                            }
                                             refetch={refetch}
                                             treeData={
                                                 grouping.general_ledger_definition
-                                            }
-                                            isRefetchingGeneralLedgerAccountsGrouping={
-                                                isRefetchingGeneralLedgerAccountsGrouping
                                             }
                                         />
                                     )}

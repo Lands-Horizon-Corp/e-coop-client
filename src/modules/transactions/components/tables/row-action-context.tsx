@@ -105,21 +105,20 @@ export const TransactionAction = ({
                 <Modal
                     {...ledgerTableModal}
                     className="max-w-[95vw]"
-                    title={getModalTitle()}
                     description={`You are viewing transaction ${transaction.reference_number}'s ${getModalTitle().toLowerCase()}`}
+                    title={getModalTitle()}
                 >
                     <GeneralLedgerTable
+                        className="min-h-[90vh] min-w-0 max-h-[90vh]"
                         mode="transaction"
                         TEntryType={selectedEntryType}
                         transactionId={transaction.id}
-                        className="min-h-[90vh] min-w-0 max-h-[90vh]"
                     />
                 </Modal>
             </div>
 
             <RowActionsGroup
                 canSelect
-                row={row}
                 otherActions={
                     <>
                         <DropdownMenuSub>
@@ -266,6 +265,7 @@ export const TransactionAction = ({
                         </DropdownMenuSub>
                     </>
                 }
+                row={row}
             />
         </>
     )
@@ -295,18 +295,17 @@ export const TransactionRowContext = ({
             <Modal
                 {...ledgerTableModal}
                 className="max-w-[95vw]"
-                title={getModalTitle()}
                 description={`You are viewing transaction ${transaction.reference_number}'s ${getModalTitle().toLowerCase()}`}
+                title={getModalTitle()}
             >
                 <GeneralLedgerTable
+                    className="min-h-[90vh] min-w-0 max-h-[90vh]"
                     mode="transaction"
                     TEntryType={selectedEntryType}
                     transactionId={transaction.id}
-                    className="min-h-[90vh] min-w-0 max-h-[90vh]"
                 />
             </Modal>
             <DataTableRowContext
-                row={row}
                 otherActions={
                     <>
                         <ContextMenuSub>
@@ -453,6 +452,7 @@ export const TransactionRowContext = ({
                         </ContextMenuSub>
                     </>
                 }
+                row={row}
             >
                 {children}
             </DataTableRowContext>

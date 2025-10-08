@@ -282,18 +282,19 @@ const CashCheckVoucherCreateUpdateForm = ({
     return (
         <Form {...form}>
             <form
-                ref={formRef}
-                onSubmit={onSubmit}
                 className={cn('!w-full flex flex-col gap-y-4', className)}
+                onSubmit={onSubmit}
+                ref={formRef}
             >
                 <div className="absolute top-4 right-10 z-10 flex gap-2">
                     {CashCheckVoucherTransactionId && (
                         <CashCheckVoucherTagsManagerPopover
-                            size="sm"
                             cashCheckVoucherId={CashCheckVoucherTransactionId}
+                            size="sm"
                         />
                     )}
                     <CashCheckVoucherStatusIndicator
+                        className="max-w-max"
                         voucherDates={{
                             printed_date: isPrinted
                                 ? defaultValues?.printed_date
@@ -305,12 +306,11 @@ const CashCheckVoucherCreateUpdateForm = ({
                                 ? defaultValues?.released_date
                                 : null,
                         }}
-                        className="max-w-max"
                     />
                 </div>
                 <fieldset
-                    disabled={isPending || formProps.readOnly}
                     className="grid grid-cols-1 md:grid-cols-3 gap-x-6 gap-y-4 sm:gap-y-3"
+                    disabled={isPending || formProps.readOnly}
                 >
                     <div className="col-span-1 md:col-span-3 flex flex-col">
                         <FormFieldWrapper
@@ -323,12 +323,10 @@ const CashCheckVoucherCreateUpdateForm = ({
                                         <Input
                                             className="!text-md p-5 font-semibold h-12"
                                             {...field}
-                                            value={field.value || ''}
                                             id={field.name}
+                                            value={field.value || ''}
                                         />
                                         <Button
-                                            variant="ghost"
-                                            size={'sm'}
                                             className="absolute m-auto top-0 bottom-0 right-1 hover:!bg-primary/20"
                                             onClick={(e) => {
                                                 e.preventDefault()
@@ -340,6 +338,8 @@ const CashCheckVoucherCreateUpdateForm = ({
                                                     name: '',
                                                 })
                                             }}
+                                            size={'sm'}
+                                            variant="ghost"
                                         >
                                             <XIcon />
                                         </Button>
@@ -348,13 +348,13 @@ const CashCheckVoucherCreateUpdateForm = ({
                             }}
                         />
                         <Accordion
-                            type="single"
-                            collapsible
                             className="w-full px-5 bg-sidebar rounded-2xl my-2"
+                            collapsible
+                            type="single"
                         >
                             <AccordionItem
-                                value="item-1"
                                 className="border-b-0"
+                                value="item-1"
                             >
                                 <AccordionTrigger className="text-primary text-xs">
                                     more options
@@ -363,13 +363,14 @@ const CashCheckVoucherCreateUpdateForm = ({
                                     <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4 sm:gap-y-3 mt-2">
                                         <FormFieldWrapper
                                             control={form.control}
-                                            name="member_profile_id"
                                             label="Member Profile"
+                                            name="member_profile_id"
                                             render={({ field }) => {
                                                 return (
                                                     <MemberPicker
-                                                        value={form.getValues(
-                                                            'member_profile'
+                                                        allowShorcutCommand
+                                                        disabled={isDisabled(
+                                                            field.name
                                                         )}
                                                         onSelect={(
                                                             selectedMember
@@ -395,23 +396,23 @@ const CashCheckVoucherCreateUpdateForm = ({
                                                             )
                                                         }}
                                                         placeholder="Relative Member Profile"
-                                                        disabled={isDisabled(
-                                                            field.name
+                                                        value={form.getValues(
+                                                            'member_profile'
                                                         )}
-                                                        allowShorcutCommand
                                                     />
                                                 )
                                             }}
                                         />
                                         <FormFieldWrapper
                                             control={form.control}
-                                            name="company_id"
                                             label="Company"
+                                            name="company_id"
                                             render={({ field }) => (
                                                 <CompanyCombobox
                                                     {...field}
-                                                    value={field.value}
-                                                    placeholder="Select a company"
+                                                    disabled={isDisabled(
+                                                        field.name
+                                                    )}
                                                     onChange={(
                                                         selectedCompany
                                                     ) => {
@@ -431,9 +432,8 @@ const CashCheckVoucherCreateUpdateForm = ({
                                                             undefined
                                                         )
                                                     }}
-                                                    disabled={isDisabled(
-                                                        field.name
-                                                    )}
+                                                    placeholder="Select a company"
+                                                    value={field.value}
                                                 />
                                             )}
                                         />
@@ -443,97 +443,95 @@ const CashCheckVoucherCreateUpdateForm = ({
                         </Accordion>
                     </div>
                     <FormFieldWrapper
-                        control={form.control}
-                        name="cash_voucher_number"
-                        label="CV Number"
                         className="col-span-1"
+                        control={form.control}
+                        label="CV Number"
+                        name="cash_voucher_number"
                         render={({ field }) => (
                             <Input
                                 {...field}
+                                disabled={isDisabled(field.name)}
                                 id={field.name}
                                 placeholder="Enter CV number"
-                                disabled={isDisabled(field.name)}
                             />
                         )}
                     />
                     <FormFieldWrapper
                         control={form.control}
-                        name="pay_to"
                         label="Pay To"
+                        name="pay_to"
                         render={({ field }) => (
                             <Input
                                 {...field}
+                                disabled={isDisabled(field.name)}
                                 id={field.name}
                                 placeholder="Enter payee"
-                                disabled={isDisabled(field.name)}
                             />
                         )}
                     />
                     <FormFieldWrapper
                         control={form.control}
-                        name="print_count"
                         label="Print Count"
+                        name="print_count"
                         render={({ field }) => (
                             <Input
                                 {...field}
-                                type="number"
+                                disabled={isDisabled(field.name)}
                                 id={field.name}
                                 onChange={(e) =>
                                     field.onChange(Number(e.target.value))
                                 }
-                                value={field.value ?? 0}
                                 placeholder="Enter print count"
-                                disabled={isDisabled(field.name)}
+                                type="number"
+                                value={field.value ?? 0}
                             />
                         )}
                     />
                     <FormFieldWrapper
-                        control={form.control}
-                        name="description"
-                        label="Particulars"
                         className="col-span-1 md:col-span-3 !max-h-xs"
+                        control={form.control}
+                        label="Particulars"
+                        name="description"
                         render={({ field }) => (
                             <Textarea
                                 {...field}
-                                id={field.name}
                                 className="!max-h-[100px] h-[70px] resize-y"
-                                placeholder="Particulars"
                                 disabled={isDisabled(field.name)}
+                                id={field.name}
+                                placeholder="Particulars"
                             />
                         )}
                     />
                     {isUpdate && (
                         <CashCheckJournalEntryTable
-                            className="col-span-1 md:col-span-3"
                             cashCheckVoucherId={cashCheckVoucherId ?? ''}
+                            className="col-span-1 md:col-span-3"
+                            defaultMemberProfile={defaultMember}
                             isUpdateMode={isUpdate}
                             rowData={CashCheckEntries}
-                            defaultMemberProfile={defaultMember}
                         />
                     )}
                 </fieldset>
                 <div className="w-full flex justify-end gap-4">
                     <div className="max-w-[130px] flex-col flex justify-end">
                         <TransactionAmountField
-                            value={defaultValues?.total_debit || 0}
-                            readOnly
                             className="text-primary font-bold text-left [&_.input]:text-right [&_.input]:font-bold"
                             isDefault
+                            readOnly
+                            value={defaultValues?.total_debit || 0}
                         />
                     </div>
                     <div className="max-w-[130px]">
                         <TransactionAmountField
                             className="text-primary font-bold [&_.input]:text-right [&_.input]:font-bold"
-                            value={defaultValues?.total_credit || 0}
                             isDefault
+                            value={defaultValues?.total_credit || 0}
                         />
                     </div>
                 </div>
                 <FormFooterResetSubmit
                     error={error}
-                    readOnly={formProps.readOnly}
                     isLoading={isPending}
-                    submitText={isUpdate ? 'Update' : 'Create'}
                     onReset={() => {
                         if (isUpdate) {
                             form.reset({
@@ -553,6 +551,8 @@ const CashCheckVoucherCreateUpdateForm = ({
                             queryKey: [cashCheckVoucherBaseKey, 'paginated'],
                         })
                     }}
+                    readOnly={formProps.readOnly}
+                    submitText={isUpdate ? 'Update' : 'Create'}
                 />
             </form>
         </Form>
@@ -576,8 +576,8 @@ export const CashCheckVoucherCreateUpdateFormModal = ({
     return (
         <Modal
             className={cn('', className)}
-            title={title}
             description={description}
+            title={title}
             {...props}
         >
             <CashCheckVoucherCreateUpdateForm

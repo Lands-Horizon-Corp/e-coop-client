@@ -36,10 +36,9 @@ const NumberFilter = <T,>({
     }
 
     return (
-        <div onKeyDown={(e) => e.stopPropagation()} className="space-y-2 p-1">
+        <div className="space-y-2 p-1" onKeyDown={(e) => e.stopPropagation()}>
             <p className="text-sm">Filter</p>
             <Select
-                value={filterVal.mode}
                 onValueChange={(val) => {
                     const newFilterMode = val as TFilterModes
                     setFilter(field, {
@@ -47,13 +46,14 @@ const NumberFilter = <T,>({
                         mode: newFilterMode,
                     })
                 }}
+                value={filterVal.mode}
             >
                 <SelectTrigger className="">
                     <SelectValue placeholder="Select Filter" />
                 </SelectTrigger>
                 <SelectContent
-                    onClick={(e) => e.stopPropagation()}
                     className="ecoop-scroll max-h-[60vh] min-w-40 overflow-y-scroll shadow-md"
+                    onClick={(e) => e.stopPropagation()}
                 >
                     {filterModeOptions.map((mode, i) => (
                         <SelectItem key={i} value={mode.value}>
@@ -64,8 +64,6 @@ const NumberFilter = <T,>({
             </Select>
             {filterVal.mode !== 'range' ? (
                 <DebouncedInput
-                    type="number"
-                    value={filterVal.value ?? ''}
                     className="w-full"
                     onChange={(inpt) =>
                         setFilter(field, {
@@ -76,10 +74,11 @@ const NumberFilter = <T,>({
                         })
                     }
                     placeholder={`value`}
+                    type="number"
+                    value={filterVal.value ?? ''}
                 />
             ) : (
                 <NumberRange
-                    value={{ from: filterVal.from, to: filterVal.to }}
                     onChange={(val) =>
                         setFilter(field, {
                             ...filterVal,
@@ -87,13 +86,14 @@ const NumberFilter = <T,>({
                             value: undefined,
                         })
                     }
+                    value={{ from: filterVal.from, to: filterVal.to }}
                 />
             )}
             <Button
-                size="sm"
                 className="w-full"
-                variant="secondary"
                 onClick={() => setFilter(field)}
+                size="sm"
+                variant="secondary"
             >
                 Clear Filter
             </Button>

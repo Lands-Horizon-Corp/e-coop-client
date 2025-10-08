@@ -161,27 +161,27 @@ const GeneralButtonShortcuts = ({ className }: { className?: string }) => {
     return (
         <div className={cn('w-fit ', className)}>
             <Button
-                variant="outline"
-                size="sm"
                 className="hover:!bg-transparent text-muted-foreground/70 h-9 rounded-full"
                 onClick={() => onOpenChange(!open)}
+                size="sm"
+                variant="outline"
             >
                 <CommandIcon />
             </Button>
             <Modal
-                open={open}
-                title="All Keyboard Shortcuts"
-                titleClassName="text-lg font-semibold text-center"
+                className="min-w-fit lg:min-w-[1200px] h-fit bg-background border-border text-foreground p-6 flex flex-col"
                 description="Here are some useful keyboard shortcuts to help you navigate and perform actions quickly."
                 descriptionClassName="text-sm text-center text-muted-foreground"
                 onOpenChange={onOpenChange}
-                className="min-w-fit lg:min-w-[1200px] h-fit bg-background border-border text-foreground p-6 flex flex-col"
+                open={open}
+                title="All Keyboard Shortcuts"
+                titleClassName="text-lg font-semibold text-center"
             >
                 <div className="">
                     {/* Main Content Area - Columns */}
                     <div className="flex-1 grid grid-cols-1 lg:grid-cols-3 gap-6 ecoop-scroll overflow-y-auto">
                         {Object.values(shortcutsData).map((category, index) => (
-                            <div key={index} className="p-2">
+                            <div className="p-2" key={index}>
                                 <h2 className="text-sm text-muted-foreground font-medium mb-2">
                                     {category.title}
                                 </h2>

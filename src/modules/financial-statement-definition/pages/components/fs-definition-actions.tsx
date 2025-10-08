@@ -111,14 +111,14 @@ const FinancialStatementDefinitionActions = ({
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
                 <Button
-                    variant="outline"
-                    size={'sm'}
                     className="border-0 bg-transparent hover:bg-white dark:hover:bg-secondary/50 !px-0 text-xl"
+                    size={'sm'}
+                    variant="outline"
                 >
                     <DotsHorizontalIcon className="h-5 w-5 rotate-90" />
                 </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent className="w-56" align="start">
+            <DropdownMenuContent align="start" className="w-56">
                 <DropdownMenuGroup>
                     <DropdownMenuItem
                         onClick={(e) =>

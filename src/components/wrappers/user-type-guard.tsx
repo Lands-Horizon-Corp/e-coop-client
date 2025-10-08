@@ -50,8 +50,8 @@ const UserTypeGuard = ({
             <BannerContainer>
                 <AccountInfoContent
                     currentUser={currentAuth.user}
-                    infoTitle="Not Allowed"
                     infoDescription="It looks like your account has been banned. If you think this is a mistake, please talk your cooperative admin/staff for assistance."
+                    infoTitle="Not Allowed"
                 />
                 <Button
                     className="rounded-full"
@@ -73,8 +73,8 @@ const UserTypeGuard = ({
             <BannerContainer>
                 <AccountInfoContent
                     currentUser={currentAuth.user}
-                    infoTitle="Not Allowed"
                     infoDescription="It looks like your account is not allowed on this page."
+                    infoTitle="Not Allowed"
                 />
                 <Button
                     className="rounded-full"
@@ -109,9 +109,9 @@ const AccountInfoContent = ({
     return (
         <>
             <UserAvatar
-                src={currentUser.media?.download_url ?? ''}
-                fallback={currentUser.user_name.charAt(0) ?? '-'}
                 className="size-36 border-4 text-2xl font-medium"
+                fallback={currentUser.user_name.charAt(0) ?? '-'}
+                src={currentUser.media?.download_url ?? ''}
             />
             {currentUser.type === 'ban' && (
                 <BadgeExclamationFillIcon className="size-8 text-rose-400" />

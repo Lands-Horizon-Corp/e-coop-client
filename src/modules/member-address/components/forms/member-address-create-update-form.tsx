@@ -116,32 +116,32 @@ const MemberAddressCreateUpdateForm = ({
     return (
         <Form {...form}>
             <form
-                ref={formRef}
-                onSubmit={onSubmit}
                 className={cn('flex w-full flex-col gap-y-4', className)}
+                onSubmit={onSubmit}
+                ref={formRef}
             >
                 <fieldset
-                    disabled={isPending || formProps.readOnly}
                     className="grid gap-x-6 gap-y-4 sm:gap-y-3"
+                    disabled={isPending || formProps.readOnly}
                 >
                     <fieldset className="space-y-3">
                         <FormFieldWrapper
                             control={form.control}
-                            name="label"
                             label="Label *"
+                            name="label"
                             render={({ field }) => (
                                 <Input
                                     {...field}
+                                    disabled={isDisabled(field.name)}
                                     id={field.name}
                                     placeholder="Label"
-                                    disabled={isDisabled(field.name)}
                                 />
                             )}
                         />
                         <FormFieldWrapper
                             control={form.control}
-                            name="country_code"
                             label="Country Code *"
+                            name="country_code"
                             render={({ field }) => (
                                 <CountryCombobox
                                     {...field}
@@ -155,54 +155,54 @@ const MemberAddressCreateUpdateForm = ({
                         />
                         <FormFieldWrapper
                             control={form.control}
-                            name="address"
                             label="Address *"
+                            name="address"
                             render={({ field }) => (
                                 <Textarea
                                     {...field}
+                                    disabled={isDisabled(field.name)}
                                     id={field.name}
                                     placeholder="Type complete address here"
-                                    disabled={isDisabled(field.name)}
                                 />
                             )}
                         />
                         <FormFieldWrapper
                             control={form.control}
-                            name="city"
                             label="City"
+                            name="city"
                             render={({ field }) => (
                                 <Input
                                     {...field}
+                                    disabled={isDisabled(field.name)}
                                     id={field.name}
                                     placeholder="City"
-                                    disabled={isDisabled(field.name)}
                                 />
                             )}
                         />
                         <div className="grid grid-cols-2 gap-2">
                             <FormFieldWrapper
                                 control={form.control}
-                                name="postal_code"
                                 label="Postal Code"
+                                name="postal_code"
                                 render={({ field }) => (
                                     <Input
                                         {...field}
+                                        disabled={isDisabled(field.name)}
                                         id={field.name}
                                         placeholder="Postal Code"
-                                        disabled={isDisabled(field.name)}
                                     />
                                 )}
                             />
                             <FormFieldWrapper
                                 control={form.control}
-                                name="province_state"
                                 label="Province / State"
+                                name="province_state"
                                 render={({ field }) => (
                                     <Input
                                         {...field}
+                                        disabled={isDisabled(field.name)}
                                         id={field.name}
                                         placeholder="Province/State"
-                                        disabled={isDisabled(field.name)}
                                     />
                                 )}
                             />
@@ -210,43 +210,43 @@ const MemberAddressCreateUpdateForm = ({
                         {countryCode === 'PH' && (
                             <FormFieldWrapper
                                 control={form.control}
-                                name="barangay"
                                 label="Barangay"
+                                name="barangay"
                                 render={({ field }) => (
                                     <Input
                                         {...field}
+                                        disabled={isDisabled(field.name)}
                                         id={field.name}
                                         placeholder="Barangay"
-                                        disabled={isDisabled(field.name)}
                                     />
                                 )}
                             />
                         )}
                         <FormFieldWrapper
                             control={form.control}
-                            name="landmark"
                             label="Landmark"
+                            name="landmark"
                             render={({ field }) => (
                                 <Textarea
                                     {...field}
+                                    disabled={isDisabled(field.name)}
                                     id={field.name}
                                     placeholder="Landmark"
-                                    disabled={isDisabled(field.name)}
                                 />
                             )}
                         />
                     </fieldset>
                 </fieldset>
                 <FormFooterResetSubmit
-                    error={error}
-                    readOnly={formProps.readOnly}
-                    isLoading={isPending}
                     disableSubmit={!form.formState.isDirty}
-                    submitText={memberAddressId ? 'Update' : 'Create'}
+                    error={error}
+                    isLoading={isPending}
                     onReset={() => {
                         form.reset()
                         reset()
                     }}
+                    readOnly={formProps.readOnly}
+                    submitText={memberAddressId ? 'Update' : 'Create'}
                 />
             </form>
         </Form>
@@ -264,9 +264,9 @@ export const MemberAddressCreateUpdateFormModal = ({
 }) => {
     return (
         <Modal
-            title={title}
-            description={description}
             className={cn('', className)}
+            description={description}
+            title={title}
             {...props}
         >
             <MemberAddressCreateUpdateForm

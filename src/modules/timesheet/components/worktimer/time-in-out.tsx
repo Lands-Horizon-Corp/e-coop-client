@@ -80,27 +80,27 @@ const TimeInOut = ({
         <div className={cn('flex flex-col gap-y-3', className)}>
             <div className="relative mx-auto">
                 <WebCam
-                    ref={camRef}
                     className="!h-[300px] !w-[350px] rounded-2xl"
+                    ref={camRef}
                 />
             </div>
             <RealtimeTimeText className="text-center text-sm text-muted-foreground" />
             <FormErrorMessage errorMessage={error} />
             <div className="flex w-full items-center gap-x-2">
                 <Button
+                    className="flex-1 border hover:bg-background/40 hover:text-foreground dark:border-none"
+                    disabled={isSaving || isUploading}
+                    onClick={() => onCancel?.()}
                     size="sm"
                     variant="secondary"
-                    className="flex-1 border hover:bg-background/40 hover:text-foreground dark:border-none"
-                    onClick={() => onCancel?.()}
-                    disabled={isSaving || isUploading}
                 >
                     Cancel
                 </Button>
                 <Button
-                    size="sm"
                     className="flex-1 gap-x-2"
-                    onClick={() => handleSave()}
                     disabled={isSaving || isUploading}
+                    onClick={() => handleSave()}
+                    size="sm"
                 >
                     {(isSaving || isUploading) && <LoadingSpinner />}
                     {error

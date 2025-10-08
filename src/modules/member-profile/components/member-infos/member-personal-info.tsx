@@ -33,13 +33,13 @@ const MemberPersonalInfo = forwardRef<HTMLDivElement, Props>(
 
         return (
             <div
-                ref={ref}
                 className={cn(
                     'flex flex-1 flex-col gap-y-4 rounded-xl bg-background p-4',
                     className
                 )}
+                ref={ref}
             >
-                <SectionTitle title="Personal Info" Icon={UserIcon} />
+                <SectionTitle Icon={UserIcon} title="Personal Info" />
 
                 <div className="grid grid-cols-2 gap-x-2">
                     <div className="w-full space-y-2">
@@ -137,8 +137,8 @@ const MemberPersonalInfo = forwardRef<HTMLDivElement, Props>(
                 <div className="space-y-4">
                     <SectionTitle
                         Icon={DetailsIcon}
-                        title="Description"
                         subTitle="Bio/Short description about member"
+                        title="Description"
                     />
                     <TextRenderer
                         className="rounded-xl bg-popover p-4"
@@ -156,9 +156,9 @@ const MemberPersonalInfo = forwardRef<HTMLDivElement, Props>(
 
                 <Separator />
                 <SectionTitle
-                    title="Business"
                     Icon={StoreIcon}
                     subTitle="Business Information"
+                    title="Business"
                 />
                 <div className="grid grid-cols-5">
                     <div className="w-full space-y-2 text-sm">
@@ -189,9 +189,9 @@ const MemberPersonalInfo = forwardRef<HTMLDivElement, Props>(
 
                 <Separator />
                 <SectionTitle
-                    title="Notes"
                     Icon={NoteIcon}
                     subTitle="Notes About the member"
+                    title="Notes"
                 />
                 <TextRenderer
                     className="rounded-xl bg-popover p-4"

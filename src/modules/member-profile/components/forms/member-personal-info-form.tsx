@@ -132,33 +132,26 @@ const MemberPersonalInfoForm = ({
     return (
         <Form {...form}>
             <form
-                ref={formRef}
-                onSubmit={form.handleSubmit(handleSubmit)}
                 className={cn('flex w-full flex-col gap-y-4', className)}
+                onSubmit={form.handleSubmit(handleSubmit)}
+                ref={formRef}
             >
-                <fieldset disabled={readOnly} className="grid gap-x-6 gap-y-4">
+                <fieldset className="grid gap-x-6 gap-y-4" disabled={readOnly}>
                     <div className="space-y-4">
                         <div className="space-y-4">
                             <p>Photo & Signature</p>
                             <div className="grid grid-cols-2 gap-x-3">
                                 <FormFieldWrapper
                                     control={form.control}
-                                    name="media_id"
-                                    label="Photo"
                                     hiddenFields={hiddenFields}
+                                    label="Photo"
+                                    name="media_id"
                                     render={({ field }) => {
                                         const value = form.watch('media')
 
                                         return (
                                             <ImageField
                                                 {...field}
-                                                placeholder="Upload Photo"
-                                                value={
-                                                    value
-                                                        ? (value as IMedia)
-                                                              .download_url
-                                                        : value
-                                                }
                                                 onChange={(newImage) => {
                                                     if (newImage)
                                                         field.onChange(
@@ -174,28 +167,28 @@ const MemberPersonalInfoForm = ({
                                                         newImage
                                                     )
                                                 }}
-                                            />
-                                        )
-                                    }}
-                                />
-                                <FormFieldWrapper
-                                    control={form.control}
-                                    name="signature_media_id"
-                                    label="Signature"
-                                    hiddenFields={hiddenFields}
-                                    render={({ field }) => {
-                                        const value =
-                                            form.watch('signature_media')
-                                        return (
-                                            <SignatureField
-                                                {...field}
-                                                placeholder="Signature"
+                                                placeholder="Upload Photo"
                                                 value={
                                                     value
                                                         ? (value as IMedia)
                                                               .download_url
                                                         : value
                                                 }
+                                            />
+                                        )
+                                    }}
+                                />
+                                <FormFieldWrapper
+                                    control={form.control}
+                                    hiddenFields={hiddenFields}
+                                    label="Signature"
+                                    name="signature_media_id"
+                                    render={({ field }) => {
+                                        const value =
+                                            form.watch('signature_media')
+                                        return (
+                                            <SignatureField
+                                                {...field}
                                                 onChange={(newImage) => {
                                                     if (newImage)
                                                         field.onChange(
@@ -211,6 +204,13 @@ const MemberPersonalInfoForm = ({
                                                         newImage
                                                     )
                                                 }}
+                                                placeholder="Signature"
+                                                value={
+                                                    value
+                                                        ? (value as IMedia)
+                                                              .download_url
+                                                        : value
+                                                }
                                             />
                                         )
                                     }}
@@ -222,69 +222,69 @@ const MemberPersonalInfoForm = ({
                             <p>Personal Information</p>
                             <div className="grid grid-cols-1 gap-2 sm:grid-cols-10">
                                 <FormFieldWrapper
-                                    control={form.control}
-                                    name="first_name"
-                                    label="First Name *"
                                     className="col-span-3"
+                                    control={form.control}
                                     hiddenFields={hiddenFields}
+                                    label="First Name *"
+                                    name="first_name"
                                     render={({ field }) => (
                                         <Input
                                             {...field}
-                                            id={field.name}
-                                            placeholder="First Name"
                                             autoComplete="given-name"
                                             disabled={isDisabled(field.name)}
+                                            id={field.name}
+                                            placeholder="First Name"
                                         />
                                     )}
                                 />
 
                                 <FormFieldWrapper
-                                    control={form.control}
-                                    name="middle_name"
-                                    label="Middle Name"
                                     className="col-span-3"
+                                    control={form.control}
                                     hiddenFields={hiddenFields}
+                                    label="Middle Name"
+                                    name="middle_name"
                                     render={({ field }) => (
                                         <Input
                                             {...field}
-                                            id={field.name}
-                                            placeholder="Middle Name"
                                             autoComplete="additional-name"
                                             disabled={isDisabled(field.name)}
+                                            id={field.name}
+                                            placeholder="Middle Name"
                                         />
                                     )}
                                 />
 
                                 <FormFieldWrapper
-                                    control={form.control}
-                                    name="last_name"
-                                    label="Last Name *"
                                     className="col-span-3"
+                                    control={form.control}
                                     hiddenFields={hiddenFields}
+                                    label="Last Name *"
+                                    name="last_name"
                                     render={({ field }) => (
                                         <Input
                                             {...field}
-                                            id={field.name}
-                                            placeholder="Last Name"
                                             autoComplete="family-name"
                                             disabled={isDisabled(field.name)}
+                                            id={field.name}
+                                            placeholder="Last Name"
                                         />
                                     )}
                                 />
 
                                 <FormFieldWrapper
-                                    control={form.control}
-                                    name="suffix"
-                                    label="Suffix"
                                     className="col-span-1"
+                                    control={form.control}
                                     hiddenFields={hiddenFields}
+                                    label="Suffix"
+                                    name="suffix"
                                     render={({ field }) => (
                                         <Input
                                             {...field}
-                                            id={field.name}
-                                            placeholder=""
                                             autoComplete="honorific-suffix"
                                             disabled={isDisabled(field.name)}
+                                            id={field.name}
+                                            placeholder=""
                                         />
                                     )}
                                 />
@@ -293,47 +293,47 @@ const MemberPersonalInfoForm = ({
                         <div className="grid grid-cols-1 gap-2 sm:grid-cols-3">
                             <FormFieldWrapper
                                 control={form.control}
-                                name="civil_status"
-                                label="Civil Status *"
                                 hiddenFields={hiddenFields}
+                                label="Civil Status *"
+                                name="civil_status"
                                 render={({ field }) => (
                                     <CivilStatusCombobox
                                         {...field}
+                                        disabled={isDisabled(field.name)}
                                         id={field.name}
                                         placeholder="Civil Status"
-                                        disabled={isDisabled(field.name)}
                                     />
                                 )}
                             />
                             <FormFieldWrapper
                                 control={form.control}
-                                name="member_gender_id"
-                                label="Gender *"
                                 hiddenFields={hiddenFields}
+                                label="Gender *"
+                                name="member_gender_id"
                                 render={({ field }) => (
                                     <MemberGenderCombobox
                                         {...field}
-                                        placeholder="Select Gender"
                                         disabled={isDisabled(field.name)}
                                         onChange={(selected) =>
                                             field.onChange(selected.id)
                                         }
+                                        placeholder="Select Gender"
                                     />
                                 )}
                             />
                             <FormFieldWrapper
-                                control={form.control}
-                                name="birthdate"
                                 className="relative"
-                                label="Date of Birth"
+                                control={form.control}
                                 description="mm/dd/yyyy"
-                                hiddenFields={hiddenFields}
                                 descriptionClassName="absolute top-0 right-0"
+                                hiddenFields={hiddenFields}
+                                label="Date of Birth"
+                                name="birthdate"
                                 render={({ field }) => (
                                     <InputDate
                                         {...field}
-                                        value={field.value ?? ''}
                                         disabled={isDisabled(field.name)}
+                                        value={field.value ?? ''}
                                     />
                                 )}
                             />
@@ -341,9 +341,9 @@ const MemberPersonalInfoForm = ({
                         <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
                             <FormFieldWrapper
                                 control={form.control}
-                                name="contact_number"
-                                label="Contact Number"
                                 hiddenFields={hiddenFields}
+                                label="Contact Number"
+                                name="contact_number"
                                 render={({
                                     field,
                                     fieldState: { invalid },
@@ -366,18 +366,18 @@ const MemberPersonalInfoForm = ({
                             />
                             <FormFieldWrapper
                                 control={form.control}
-                                name="member_occupation_id"
-                                label="Occupation"
                                 hiddenFields={hiddenFields}
+                                label="Occupation"
+                                name="member_occupation_id"
                                 render={({ field }) => {
                                     return (
                                         <MemberOccupationCombobox
                                             {...field}
+                                            disabled={isDisabled(field.name)}
                                             onChange={(occupation) => {
                                                 field.onChange(occupation.id)
                                             }}
                                             placeholder="Occupation"
-                                            disabled={isDisabled(field.name)}
                                         />
                                     )
                                 }}
@@ -386,29 +386,29 @@ const MemberPersonalInfoForm = ({
                         <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
                             <FormFieldWrapper
                                 control={form.control}
-                                name="business_address"
-                                label="Business Address"
                                 hiddenFields={hiddenFields}
+                                label="Business Address"
+                                name="business_address"
                                 render={({ field }) => (
                                     <Input
                                         {...field}
+                                        disabled={isDisabled(field.name)}
                                         id={field.name}
                                         placeholder="Business Address"
-                                        disabled={isDisabled(field.name)}
                                     />
                                 )}
                             />
                             <FormFieldWrapper
                                 control={form.control}
-                                name="business_contact_number"
-                                label="Business Contact"
                                 hiddenFields={hiddenFields}
+                                label="Business Contact"
+                                name="business_contact_number"
                                 render={({ field }) => (
                                     <Input
                                         {...field}
+                                        disabled={isDisabled(field.name)}
                                         id={field.name}
                                         placeholder="Business Contact"
-                                        disabled={isDisabled(field.name)}
                                     />
                                 )}
                             />
@@ -420,31 +420,31 @@ const MemberPersonalInfoForm = ({
                             <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
                                 <FormFieldWrapper
                                     control={form.control}
-                                    name="notes"
-                                    label="Notes"
                                     hiddenFields={hiddenFields}
+                                    label="Notes"
+                                    name="notes"
                                     render={({ field }) => (
                                         <TextEditor
                                             {...field}
                                             content={field.value}
+                                            disabled={isDisabled(field.name)}
                                             placeholder="Notes"
                                             textEditorClassName="!max-w-none bg-background"
-                                            disabled={isDisabled(field.name)}
                                         />
                                     )}
                                 />
                                 <FormFieldWrapper
                                     control={form.control}
-                                    name="description"
-                                    label="Description"
                                     hiddenFields={hiddenFields}
+                                    label="Description"
+                                    name="description"
                                     render={({ field }) => (
                                         <TextEditor
                                             {...field}
                                             content={field.value}
+                                            disabled={isDisabled(field.name)}
                                             placeholder="Description"
                                             textEditorClassName="!max-w-none bg-background"
-                                            disabled={isDisabled(field.name)}
                                         />
                                     )}
                                 />
@@ -454,16 +454,16 @@ const MemberPersonalInfoForm = ({
                 </fieldset>
 
                 <FormFooterResetSubmit
-                    error={error}
-                    readOnly={readOnly}
-                    isLoading={isPending}
-                    disableSubmit={!form.formState.isDirty}
-                    submitText="Update"
                     className="sticky bottom-4"
+                    disableSubmit={!form.formState.isDirty}
+                    error={error}
+                    isLoading={isPending}
                     onReset={() => {
                         form.reset()
                         reset()
                     }}
+                    readOnly={readOnly}
+                    submitText="Update"
                 />
             </form>
         </Form>

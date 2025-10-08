@@ -95,28 +95,9 @@ const TagTemplatePicker = forwardRef<HTMLButtonElement, Props>(
                     initiallyActiveScopes={['tag-template-picker']}
                 >
                     <GenericPicker
-                        items={data}
-                        open={state}
-                        listHeading={`Matched Results (${data.length})`}
-                        searchPlaceHolder="Search name or PB no."
                         isLoading={isPending || isLoading || isFetching}
-                        otherSearchInputChild={
-                            <Button
-                                size="icon"
-                                variant="ghost"
-                                className="size-fit p-2 text-muted-foreground "
-                                onClick={() =>
-                                    qrScannerModal.onOpenChange(true)
-                                }
-                            >
-                                <ScanLineIcon />
-                            </Button>
-                        }
-                        onSelect={(member) => {
-                            queryClient.setQueryData(['member', value], member)
-                            onSelect?.(member)
-                            setState(false)
-                        }}
+                        items={data}
+                        listHeading={`Matched Results (${data.length})`}
                         onOpenChange={setState}
                         onSearchChange={(searchValue) => {
                             bulkSetFilter(
@@ -138,6 +119,24 @@ const TagTemplatePicker = forwardRef<HTMLButtonElement, Props>(
                                 }
                             )
                         }}
+                        onSelect={(member) => {
+                            queryClient.setQueryData(['member', value], member)
+                            onSelect?.(member)
+                            setState(false)
+                        }}
+                        open={state}
+                        otherSearchInputChild={
+                            <Button
+                                className="size-fit p-2 text-muted-foreground "
+                                onClick={() =>
+                                    qrScannerModal.onOpenChange(true)
+                                }
+                                size="icon"
+                                variant="ghost"
+                            >
+                                <ScanLineIcon />
+                            </Button>
+                        }
                         renderItem={(tagTemplate) => (
                             <div className="w-full py-1">
                                 <div className="flex items-center gap-x-2">
@@ -151,17 +150,18 @@ const TagTemplatePicker = forwardRef<HTMLButtonElement, Props>(
                                 </div>
                             </div>
                         )}
+                        searchPlaceHolder="Search name or PB no."
                     ></GenericPicker>
                     <Button
-                        ref={ref}
-                        type="button"
-                        variant={triggerVariant}
-                        disabled={disabled}
-                        onClick={() => setState(true)}
                         className={cn(
                             'w-full items-center justify-between rounded-md border p-0 px-2',
                             triggerClassName
                         )}
+                        disabled={disabled}
+                        onClick={() => setState(true)}
+                        ref={ref}
+                        type="button"
+                        variant={triggerVariant}
                     >
                         <span className="justify-betweentext-sm inline-flex w-full items-center text-foreground/90">
                             <span className="inline-flex w-full items-center gap-x-2">

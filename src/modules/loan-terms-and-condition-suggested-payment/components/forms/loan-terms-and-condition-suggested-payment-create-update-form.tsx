@@ -79,68 +79,68 @@ const LoanTermsAndConditionSuggestedPaymentCreateForm = ({
     return (
         <Form {...form}>
             <form
-                ref={formRef}
-                onSubmit={onSubmit}
                 className={cn(
                     'flex w-full max-w-full min-w-0 flex-col gap-y-4',
                     className
                 )}
+                onSubmit={onSubmit}
+                ref={formRef}
             >
                 <div className="space-y-4">
                     <FormFieldWrapper
                         control={form.control}
-                        name="name"
                         label="Name"
+                        name="name"
                         render={({ field }) => (
                             <Input
                                 {...field}
-                                id={field.name}
-                                placeholder="e.g., Monthly installment, Weekly payment"
                                 disabled={isDisabled(field.name)}
+                                id={field.name}
                                 onKeyDown={(e) => {
                                     if (e.key === 'Enter') {
                                         onSubmit()
                                         e.preventDefault()
                                     }
                                 }}
+                                placeholder="e.g., Monthly installment, Weekly payment"
                             />
                         )}
                     />
 
                     <FormFieldWrapper
                         control={form.control}
-                        name="description"
                         label="Description"
+                        name="description"
                         render={({ field }) => (
                             <Textarea
                                 {...field}
-                                id={field.name}
-                                placeholder="Describe the payment method terms and conditions..."
                                 className="min-h-[100px]"
                                 disabled={isDisabled(field.name)}
+                                id={field.name}
                                 onKeyDown={(e) => {
                                     if (e.key === 'Enter' && e.ctrlKey) {
                                         onSubmit()
                                         e.preventDefault()
                                     }
                                 }}
+                                placeholder="Describe the payment method terms and conditions..."
                             />
                         )}
                     />
                 </div>
 
                 <FormFooterResetSubmit
-                    readOnly={readOnly}
-                    resetButtonType="button"
-                    submitButtonType="button"
                     disableSubmit={!form.formState.isDirty}
-                    submitText={
-                        formProps.defaultValues?.fieldKey ? 'Update' : 'Create'
-                    }
-                    onSubmit={(e) => onSubmit(e)}
                     onReset={() => {
                         form.reset()
                     }}
+                    onSubmit={(e) => onSubmit(e)}
+                    readOnly={readOnly}
+                    resetButtonType="button"
+                    submitButtonType="button"
+                    submitText={
+                        formProps.defaultValues?.fieldKey ? 'Update' : 'Create'
+                    }
                 />
             </form>
         </Form>
@@ -158,9 +158,9 @@ export const LoanTermsAndConditionSuggestedPaymentCreateModal = ({
 }) => {
     return (
         <Modal
-            title={title}
-            description={description}
             className={cn('!max-w-xl', className)}
+            description={description}
+            title={title}
             {...props}
         >
             <LoanTermsAndConditionSuggestedPaymentCreateForm

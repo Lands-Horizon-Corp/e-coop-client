@@ -124,28 +124,28 @@ const InvitationCodeCreateUpdateForm = ({
     return (
         <Form {...form}>
             <form
-                ref={formRef}
-                onSubmit={onSubmit}
                 className={cn(
                     'flex w-full flex-col gap-y-4  max-w-full min-w-0',
                     className
                 )}
+                onSubmit={onSubmit}
+                ref={formRef}
             >
                 <fieldset
-                    disabled={isPending || formProps.readOnly}
                     className="grid gap-x-6 gap-y-4 sm:gap-y-3  max-w-full min-w-0"
+                    disabled={isPending || formProps.readOnly}
                 >
                     <fieldset className="space-y-3">
                         <FormFieldWrapper
                             control={form.control}
-                            name="user_type"
                             label="User Type *"
+                            name="user_type"
                             render={({ field }) => (
                                 <RadioGroup
-                                    value={field.value}
-                                    onValueChange={field.onChange}
-                                    disabled={isDisabled(field.name)}
                                     className="flex items-center gap-x-3"
+                                    disabled={isDisabled(field.name)}
+                                    onValueChange={field.onChange}
+                                    value={field.value}
                                 >
                                     <div
                                         className={`shadow-xs relative flex w-full cursor-pointer items-start gap-2 rounded-lg border border-input p-4 outline-none duration-200 ease-out ${
@@ -155,10 +155,10 @@ const InvitationCodeCreateUpdateForm = ({
                                         }`}
                                     >
                                         <RadioGroupItem
-                                            value="employee"
-                                            id="employee"
-                                            className="order-1 after:absolute after:inset-0"
                                             aria-describedby="employee-description"
+                                            className="order-1 after:absolute after:inset-0"
+                                            id="employee"
+                                            value="employee"
                                         />
                                         <div className="flex grow items-center gap-3">
                                             <div className="size-fit rounded-full bg-secondary p-2">
@@ -166,15 +166,15 @@ const InvitationCodeCreateUpdateForm = ({
                                             </div>
                                             <div className="grid gap-2">
                                                 <Label
-                                                    htmlFor="employee"
                                                     className="cursor-pointer"
+                                                    htmlFor="employee"
                                                 >
                                                     Employee
                                                     <span className="text-xs font-normal leading-[inherit] text-muted-foreground"></span>
                                                 </Label>
                                                 <p
-                                                    id="employee-description"
                                                     className="text-xs text-muted-foreground"
+                                                    id="employee-description"
                                                 >
                                                     Staff member with
                                                     administrative access and
@@ -191,10 +191,10 @@ const InvitationCodeCreateUpdateForm = ({
                                         }`}
                                     >
                                         <RadioGroupItem
-                                            value="member"
-                                            id="member"
-                                            className="order-1 after:absolute after:inset-0"
                                             aria-describedby="member-description"
+                                            className="order-1 after:absolute after:inset-0"
+                                            id="member"
+                                            value="member"
                                         />
                                         <div className="flex grow items-center gap-3">
                                             <div className="size-fit rounded-full bg-secondary p-2">
@@ -202,15 +202,15 @@ const InvitationCodeCreateUpdateForm = ({
                                             </div>
                                             <div className="grid gap-2">
                                                 <Label
-                                                    htmlFor="member"
                                                     className="cursor-pointer"
+                                                    htmlFor="member"
                                                 >
                                                     Member
                                                     <span className="text-xs font-normal leading-[inherit] text-muted-foreground"></span>
                                                 </Label>
                                                 <p
-                                                    id="member-description"
                                                     className="text-xs text-muted-foreground"
+                                                    id="member-description"
                                                 >
                                                     Community member with
                                                     standard user privileges and
@@ -224,70 +224,70 @@ const InvitationCodeCreateUpdateForm = ({
                         />
                         <FormFieldWrapper
                             control={form.control}
-                            name="code"
                             label="Code"
+                            name="code"
                             render={({ field }) => (
                                 <Input
                                     {...field}
-                                    placeholder="Code"
                                     disabled={isDisabled(field.name)}
+                                    placeholder="Code"
                                 />
                             )}
                         />
 
                         <div className="grid grid-cols-1 gap-x-3 gap-y-4 sm:grid-cols-3">
                             <FormFieldWrapper
-                                control={form.control}
-                                name="expiration_date"
-                                label="Expiration Date"
                                 className="relative"
+                                control={form.control}
                                 description="mm/dd/yyyy"
                                 descriptionClassName="absolute top-0 right-0"
+                                label="Expiration Date"
+                                name="expiration_date"
                                 render={({ field }) => (
                                     <InputDate
                                         {...field}
-                                        value={field.value ?? ''}
                                         className="block"
                                         disabled={isDisabled(field.name)}
+                                        value={field.value ?? ''}
                                     />
                                 )}
                             />
                             <FormFieldWrapper
                                 control={form.control}
-                                name="max_use"
                                 label="Max Use"
+                                name="max_use"
                                 render={({ field }) => (
                                     <Input
                                         {...field}
-                                        placeholder="Max Use"
-                                        type="number"
+                                        disabled={isDisabled(field.name)}
                                         onChange={(e) => {
                                             field.onChange(
                                                 parseInt(e.target.value)
                                             )
                                         }}
-                                        disabled={isDisabled(field.name)}
+                                        placeholder="Max Use"
+                                        type="number"
                                     />
                                 )}
                             />
                             <FormFieldWrapper
                                 control={form.control}
-                                name="current_use"
-                                label="Current Use"
                                 hiddenFields={
                                     invitationCodeId ? ['max_use'] : []
                                 }
+                                label="Current Use"
+                                name="current_use"
                                 render={({ field }) => (
                                     <Input
                                         {...field}
-                                        placeholder="Current Use"
-                                        type="number"
+                                        disabled={isDisabled(field.name)}
                                         onChange={(e) => {
                                             field.onChange(
                                                 parseInt(e.target.value)
                                             )
                                         }}
-                                        disabled={isDisabled(field.name)}
+                                        placeholder="Current Use"
+                                        type="number"
                                     />
                                 )}
                             />
@@ -295,16 +295,16 @@ const InvitationCodeCreateUpdateForm = ({
 
                         <FormFieldWrapper
                             control={form.control}
-                            name="description"
                             label="Description"
+                            name="description"
                             render={({ field }) => (
                                 <Textarea
                                     {...field}
-                                    id={field.name}
                                     autoComplete="off"
-                                    placeholder="Description"
                                     className="max-h-40"
                                     disabled={isDisabled(field.name)}
+                                    id={field.name}
+                                    placeholder="Description"
                                 />
                             )}
                         />
@@ -320,7 +320,6 @@ const InvitationCodeCreateUpdateForm = ({
                             </p>
                         </div>
                         <PermissionPicker
-                            triggerClassName="hidden"
                             modalState={permissionTemplate}
                             onSelect={(picked) => {
                                 form.setValue('permission_name', picked.name)
@@ -330,14 +329,15 @@ const InvitationCodeCreateUpdateForm = ({
                                 )
                                 form.setValue('permissions', picked.permissions)
                             }}
+                            triggerClassName="hidden"
                         />
                         <Button
-                            size="sm"
-                            type="button"
-                            variant="secondary"
                             onClick={() =>
                                 permissionTemplate.onOpenChange(true)
                             }
+                            size="sm"
+                            type="button"
+                            variant="secondary"
                         >
                             <ShieldCheckIcon className="mr-1" />
                             Choose Permission Template
@@ -347,37 +347,37 @@ const InvitationCodeCreateUpdateForm = ({
                     <fieldset className="space-y-3 max-w-full min-w-0">
                         <FormFieldWrapper
                             control={form.control}
-                            name="permission_name"
                             label="Permission Name *"
+                            name="permission_name"
                             render={({ field }) => (
                                 <Input
                                     {...field}
-                                    id={field.name}
-                                    placeholder="Permission Name"
                                     autoComplete="off"
                                     disabled={isDisabled(field.name)}
+                                    id={field.name}
+                                    placeholder="Permission Name"
                                 />
                             )}
                         />
                         <FormFieldWrapper
                             control={form.control}
-                            name="permission_description"
                             label="Permission Description *"
+                            name="permission_description"
                             render={({ field }) => (
                                 <Textarea
                                     {...field}
-                                    id={field.name}
-                                    placeholder="Describe the permission"
                                     autoComplete="off"
                                     disabled={isDisabled(field.name)}
+                                    id={field.name}
+                                    placeholder="Describe the permission"
                                     rows={3}
                                 />
                             )}
                         />
                         <FormFieldWrapper
                             control={form.control}
-                            name="permissions"
                             label="Permissions *"
+                            name="permissions"
                             render={({ field }) => (
                                 <PermissionMatrix
                                     controlledState={{
@@ -398,16 +398,16 @@ const InvitationCodeCreateUpdateForm = ({
                 </fieldset>
                 <Separator />
                 <FormFooterResetSubmit
-                    error={error}
-                    readOnly={formProps.readOnly}
-                    isLoading={isPending}
                     disableSubmit={!form.formState.isDirty}
-                    submitText={invitationCodeId ? 'Update' : 'Create'}
+                    error={error}
+                    isLoading={isPending}
                     onReset={() => {
                         form.reset()
                         resetCreate()
                         resetUpdate()
                     }}
+                    readOnly={formProps.readOnly}
+                    submitText={invitationCodeId ? 'Update' : 'Create'}
                 />
             </form>
         </Form>
@@ -425,9 +425,9 @@ const InvitationCodeCreateUpdateFormModal = ({
 }) => {
     return (
         <Modal
-            title={title}
-            description={description}
             className={cn('!max-w-[90vw] max-h-[95vh]', className)}
+            description={description}
+            title={title}
             {...props}
         >
             <InvitationCodeCreateUpdateForm

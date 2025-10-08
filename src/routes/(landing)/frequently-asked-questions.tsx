@@ -60,19 +60,19 @@ const FAQ_ITEMS: {
             <>
                 You can register by visiting{' '}
                 <Link
-                    to={'/' as string}
-                    target="_blank"
-                    rel="noopener noreferrer"
                     className="underline underline-offset-4 text-primary/70"
+                    rel="noopener noreferrer"
+                    target="_blank"
+                    to={'/' as string}
                 >
                     ecoop
                 </Link>{' '}
                 and clicking on the “Sign Up” button or just visit the{' '}
                 <Link
-                    to={'/auth/sign-up' as string}
-                    target="_blank"
-                    rel="noopener noreferrer"
                     className="underline underline-offset-4 text-primary/70"
+                    rel="noopener noreferrer"
+                    target="_blank"
+                    to={'/auth/sign-up' as string}
                 >
                     Sign-Up Page
                 </Link>{' '}
@@ -91,10 +91,10 @@ const FAQ_ITEMS: {
                 Enterprise. Each plan comes with its own set of features and
                 pricing. For more details, visit our{' '}
                 <Link
-                    to={'/subscription-plan' as string}
-                    target="_blank"
-                    rel="noopener noreferrer"
                     className="underline underline-offset-4 text-primary/70"
+                    rel="noopener noreferrer"
+                    target="_blank"
+                    to={'/subscription-plan' as string}
                 >
                     Subscription Plans
                 </Link>{' '}
@@ -113,8 +113,8 @@ const FAQ_ITEMS: {
                 reputable cloud provider. For more information, see our{' '}
                 <a
                     href="http://ecoop-suite.com/security"
-                    target="_blank"
                     rel="noopener noreferrer"
+                    target="_blank"
                 >
                     Security Policy
                 </a>
@@ -132,10 +132,10 @@ const FAQ_ITEMS: {
                 other necessary documents. This ensures compliance with
                 regulatory requirements and protects against fraud. See our{' '}
                 <Link
+                    className="underline underline-offset-4 text-primary/70"
+                    rel="noopener noreferrer"
                     target="_blank"
                     to={'/policy/kyc-policy' as string}
-                    rel="noopener noreferrer"
-                    className="underline underline-offset-4 text-primary/70"
                 >
                     KYC Policy
                 </Link>{' '}
@@ -152,10 +152,10 @@ const FAQ_ITEMS: {
                 data is encrypted, securely stored, and only accessible to
                 authorized personnel. For more, see our{' '}
                 <Link
-                    to={'/policy/data-protection' as string}
-                    target="_blank"
-                    rel="noopener noreferrer"
                     className="underline underline-offset-4 text-primary/70"
+                    rel="noopener noreferrer"
+                    target="_blank"
+                    to={'/policy/data-protection' as string}
                 >
                     Data Protection Policy
                 </Link>
@@ -172,10 +172,10 @@ const FAQ_ITEMS: {
                 transactions may incur additional charges. All fees are
                 transparently listed on our{' '}
                 <Link
-                    to={'/policy/fee-and-charges-policy' as string}
-                    target="_blank"
-                    rel="noopener noreferrer"
                     className="underline underline-offset-4 text-primary/70"
+                    rel="noopener noreferrer"
+                    target="_blank"
+                    to={'/policy/fee-and-charges-policy' as string}
                 >
                     Fee and Charges Policy
                 </Link>{' '}
@@ -192,12 +192,12 @@ const FAQ_ITEMS: {
                 phone, or mail. We are committed to addressing all concerns
                 fairly and promptly. Read our{' '}
                 <Link
+                    className="underline underline-offset-4 text-primary/70"
+                    rel="noopener noreferrer"
+                    target="_blank"
                     to={
                         '/policy/complaint-handling-and-dispute-policy' as string
                     }
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="underline underline-offset-4 text-primary/70"
                 >
                     Complaint Handling and Dispute Resolution Policy
                 </Link>{' '}
@@ -268,9 +268,9 @@ function RouteComponent() {
                     answers to common questions about our platform, services,
                     and policies. You can also directly{' '}
                     <Link
+                        className="underline underline-offset-4 text-primary/70"
                         resetScroll
                         to="/contact"
-                        className="underline underline-offset-4 text-primary/70"
                     >
                         send us a message
                     </Link>
@@ -279,10 +279,10 @@ function RouteComponent() {
 
                 <div className="relative group">
                     <Input
-                        type="text"
-                        placeholder="Search FAQs..."
                         className="w-full pr-10"
                         onChange={(e) => setRawSearch(e.target.value)}
+                        placeholder="Search FAQs..."
+                        type="text"
                     />
                     <MagnifyingGlassIcon className="absolute right-4 top-1/2 -translate-y-1/2 group-hover:text-foreground text-muted-foreground/80 ease-in-out duration-200" />
                 </div>
@@ -299,16 +299,16 @@ function RouteComponent() {
                     </p>
                 )}
                 <Accordion
-                    type="multiple"
                     className="w-full space-y-2"
-                    value={expandedItems}
                     onValueChange={(values) => setExpandedItems(values)}
+                    type="multiple"
+                    value={expandedItems}
                 >
                     {filteredFAQs.map((item) => (
                         <AccordionItem
-                            value={item.id}
-                            key={item.id}
                             className="py-2 border-b-0 px-4 data-[state=open]:bg-popover rounded-xl hover:bg-popover/70"
+                            key={item.id}
+                            value={item.id}
                         >
                             <AccordionTrigger className="text-foreground/70 hover:text-foreground duration-300">
                                 {item.title}
@@ -326,9 +326,9 @@ function RouteComponent() {
                     </CopyWrapper>{' '}
                     or{' '}
                     <Link
+                        className="underline underline-offset-4 hover:text-primary"
                         resetScroll
                         to="/contact"
-                        className="underline underline-offset-4 hover:text-primary"
                     >
                         send us a message
                     </Link>{' '}

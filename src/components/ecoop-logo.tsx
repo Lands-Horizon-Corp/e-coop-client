@@ -53,18 +53,18 @@ const EcoopLogo = ({
     return (
         <div className={cn('relative size-8', className)}>
             <Image
-                src={finalUrl}
                 alt="logo"
                 className="h-full w-full rounded-md"
+                src={finalUrl}
             />
             {!blurDisabled && (
                 <Image
-                    src={finalUrl}
                     alt="logo-blur"
                     className={cn(
                         'pointer-events-none absolute inset-0 left-1/2 top-1/2 z-0 size-full -translate-x-1/2 -translate-y-[45%] blur-xl selection:bg-none',
                         blurClassName
                     )}
+                    src={finalUrl}
                 />
             )}
         </div>

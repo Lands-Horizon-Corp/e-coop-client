@@ -60,16 +60,16 @@ const NewMemberProfileKanban = (_props: Props) => {
             <div className="flex items-center">
                 <UserListIcon className="mr-2 size-4" />
                 <KanbanTitle
-                    totalItems={data.length}
-                    title="New Member Profile Approvals"
                     isLoading={isRefetching}
                     onRefresh={() => refetch()}
+                    title="New Member Profile Approvals"
+                    totalItems={data.length}
                 />
             </div>
             <Separator />
             <KanbanItemsContainer>
                 {data.map((member) => (
-                    <MemberProfileCard member={member} key={member.id} />
+                    <MemberProfileCard key={member.id} member={member} />
                 ))}
                 {data.length === 0 && (
                     <p className="text-center text-xs text-muted-foreground/60">
@@ -112,13 +112,13 @@ const MemberProfileCard = ({ member }: { member: IMemberProfile }) => {
                                 {member?.member_type?.name ?? 'unknown type'}
                             </p>
                             <Button
-                                size="icon"
-                                variant="ghost"
                                 className="size-fit p-1"
                                 disabled={isDeclining || isApproving}
                                 onClick={() =>
                                     viewMemberModal.onOpenChange(true)
                                 }
+                                size="icon"
+                                variant="ghost"
                             >
                                 <EyeIcon />
                             </Button>
@@ -133,11 +133,10 @@ const MemberProfileCard = ({ member }: { member: IMemberProfile }) => {
                 </div>
             </div>
             <fieldset
-                disabled={isApproving || isDeclining}
                 className="flex items-center justify-end gap-x-1"
+                disabled={isApproving || isDeclining}
             >
                 <Button
-                    variant="secondary"
                     className="size-fit px-2 py-1"
                     onClick={() =>
                         onOpen({
@@ -148,6 +147,7 @@ const MemberProfileCard = ({ member }: { member: IMemberProfile }) => {
                             onConfirm: () => decline(member.id),
                         })
                     }
+                    variant="secondary"
                 >
                     {isDeclining ? (
                         <LoadingSpinner className="size-3" />

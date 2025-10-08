@@ -11,8 +11,8 @@ const Toasterize = ({ ...props }: ToasterProps) => {
 
     return (
         <Sonner
-            theme={theme as ToasterProps['theme']}
             className="toaster group"
+            theme={theme as ToasterProps['theme']}
             toastOptions={{
                 classNames: {
                     toast: 'group toast group-[.toaster]:bg-background group-[.toaster]:text-foreground group-[.toaster]:border-border group-[.toaster]:shadow-lg',

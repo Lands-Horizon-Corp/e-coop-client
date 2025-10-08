@@ -100,12 +100,12 @@ export const CashCheckVoucherStatusIndicatorDetails = ({
             : 1
 
     return (
-        <Timeline value={lastCompleted} className="p-4 gap-y-3">
+        <Timeline className="p-4 gap-y-3" value={lastCompleted}>
             {steps.map((step) => (
                 <TimelineItem
+                    className="group-data-[orientation=vertical]/timeline:ms-10 group-data-[orientation=vertical]/timeline:not-last:pb-5"
                     key={step.key}
                     step={step.key}
-                    className="group-data-[orientation=vertical]/timeline:ms-10 group-data-[orientation=vertical]/timeline:not-last:pb-5"
                 >
                     <TimelineHeader>
                         <TimelineSeparator className="group-data-[orientation=vertical]/timeline:-left-7 group-data-[orientation=vertical]/timeline:top-2 group-data-[orientation=vertical]/timeline:h-[calc(100%-1.5rem)] group-data-[orientation=vertical]/timeline:translate-y-6.5" />
@@ -150,8 +150,8 @@ const CashCheckVoucherStatusIndicator = ({
         <Popover>
             <PopoverTrigger asChild>
                 <CashCheckVoucherStatusBadge
-                    size="sm"
                     className="cursor-pointer"
+                    size="sm"
                     status={resolvedStatus}
                 />
             </PopoverTrigger>

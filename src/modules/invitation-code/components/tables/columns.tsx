@@ -44,8 +44,8 @@ const InvitationCodeTableColumns = (
                 <HeaderToggleSelect table={table} />
                 {!column.getIsPinned() && (
                     <PushPinSlashIcon
-                        onClick={() => column.pin('left')}
                         className="mr-2 size-3.5 cursor-pointer"
+                        onClick={() => column.pin('left')}
                     />
                 )}
             </div>
@@ -85,8 +85,8 @@ const InvitationCodeTableColumns = (
             },
         }) => (
             <div
-                onClick={(e) => e.stopPropagation()}
                 className="flex min-w-0 items-center gap-3"
+                onClick={(e) => e.stopPropagation()}
             >
                 <CopyWrapper>
                     <span className="truncate group-hover:text-foreground ease-in duration-200 text-xs text-muted-foreground/90">
@@ -242,8 +242,8 @@ const PermissionCell = ({
 
     return (
         <div
-            onClick={(e) => e.stopPropagation()}
             className="flex w-full min-w-0 justify-between items-center gap-3"
+            onClick={(e) => e.stopPropagation()}
         >
             <div>
                 <p className="capitalize">
@@ -258,12 +258,12 @@ const PermissionCell = ({
                 {...viewPermissions}
             />
             <Badge
+                className="text-xs px-2 py-1 h-fit cursor-pointer opacity-90 hover:opacity-100 duration-200 ease-in-out"
                 onClick={(e) => {
                     e.stopPropagation()
                     viewPermissions.onOpenChange(true)
                 }}
                 variant="success"
-                className="text-xs px-2 py-1 h-fit cursor-pointer opacity-90 hover:opacity-100 duration-200 ease-in-out"
             >
                 <ShieldExclamationIcon className="mr-1" />
                 <p>{(permissions ?? []).length} permissions</p>

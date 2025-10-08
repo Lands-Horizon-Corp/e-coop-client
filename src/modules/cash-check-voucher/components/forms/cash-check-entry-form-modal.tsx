@@ -112,21 +112,22 @@ const CashCheckEntryCreateUpdateForm = ({
     return (
         <Form {...form}>
             <form
-                ref={formRef}
-                onSubmit={onSubmit}
                 className={cn('!w-full flex flex-col gap-y-4', className)}
+                onSubmit={onSubmit}
+                ref={formRef}
             >
                 <fieldset
-                    disabled={isPending || formProps.readOnly}
                     className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4 sm:gap-y-3"
+                    disabled={isPending || formProps.readOnly}
                 >
                     <FormFieldWrapper
-                        control={form.control}
-                        name="check_entry_account_id"
-                        label="Account"
                         className="md:col-span-2"
+                        control={form.control}
+                        label="Account"
+                        name="check_entry_account_id"
                         render={({ field }) => (
                             <AccountPicker
+                                disabled={isDisabled(field.name)}
                                 onSelect={(account) => {
                                     field.onChange(account.id)
                                     form.setValue(
@@ -139,48 +140,47 @@ const CashCheckEntryCreateUpdateForm = ({
                                 }}
                                 placeholder="Select an account"
                                 value={form.getValues('check_entry_account')}
-                                disabled={isDisabled(field.name)}
                             />
                         )}
                     />
                     <FormFieldWrapper
-                        control={form.control}
-                        name="check_entry_amount"
-                        label="Amount"
                         className="col-span-1 md:col-span-2"
+                        control={form.control}
+                        label="Amount"
+                        name="check_entry_amount"
                         render={({ field }) => (
                             <TransactionAmountField
                                 {...field}
-                                id={field.name}
-                                type="number"
-                                step="0.01"
-                                placeholder="0.00"
                                 disabled={isDisabled(field.name)}
+                                id={field.name}
                                 onChange={(e) => {
                                     field.onChange(
                                         parseFloat(e.target.value) || 0
                                     )
                                 }}
+                                placeholder="0.00"
+                                step="0.01"
+                                type="number"
                             />
                         )}
                     />
                     <FormFieldWrapper
                         control={form.control}
-                        name="check_entry_check_number"
                         label="CV Number"
+                        name="check_entry_check_number"
                         render={({ field }) => (
                             <Input
                                 {...field}
+                                disabled={isDisabled(field.name)}
                                 id={field.name}
                                 placeholder="Enter CV number"
-                                disabled={isDisabled(field.name)}
                             />
                         )}
                     />
                     <FormFieldWrapper
                         control={form.control}
-                        name="check_entry_check_date"
                         label="Entry Date"
+                        name="check_entry_check_date"
                         render={({ field }) => (
                             <InputDate {...field} value={field.value ?? ''} />
                         )}
@@ -188,9 +188,7 @@ const CashCheckEntryCreateUpdateForm = ({
                 </fieldset>
                 <FormFooterResetSubmit
                     error={error}
-                    readOnly={formProps.readOnly}
                     isLoading={isPending}
-                    submitText={'Update'}
                     onReset={() => {
                         form.reset({
                             ...defaultValues,
@@ -200,6 +198,8 @@ const CashCheckEntryCreateUpdateForm = ({
                             queryKey: [cashCheckVoucherBaseKey, 'paginated'],
                         })
                     }}
+                    readOnly={formProps.readOnly}
+                    submitText={'Update'}
                 />
             </form>
         </Form>
@@ -218,8 +218,8 @@ export const CashCheckEntryUpdateFormModal = ({
     return (
         <Modal
             className={cn('', className)}
-            title={title}
             description={description}
+            title={title}
             {...props}
         >
             <CashCheckEntryCreateUpdateForm

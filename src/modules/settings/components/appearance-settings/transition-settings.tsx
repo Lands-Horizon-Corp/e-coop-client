@@ -59,11 +59,11 @@ const AnimationPreview = ({
     return (
         <div className="space-y-1 cursor-pointer group" onClick={onClick}>
             <div
-                tabIndex={0}
                 className={cn(
                     'bg-background border rounded-xl h-32 flex items-center justify-center group-hover:border-primary ease-in-out duration-100 relative overflow-hidden',
                     isSelected && 'border-4 border-primary/80'
                 )}
+                tabIndex={0}
             >
                 <div className="relative w-full h-full flex items-center justify-center">
                     <div className="absolute inset-0 bg-muted" />
@@ -139,12 +139,12 @@ const TransitionSettings = ({ className }: Props) => {
                         const config = animationConfig[variant]
                         return (
                             <AnimationPreview
-                                key={variant}
-                                variant={variant}
-                                title={config.title}
                                 description={config.description}
                                 isSelected={animationVariant === variant}
+                                key={variant}
                                 onClick={() => handleVariantChange(variant)}
+                                title={config.title}
+                                variant={variant}
                             />
                         )
                     })}

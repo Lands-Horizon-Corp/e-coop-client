@@ -13,9 +13,9 @@ const SitePolicyItem = forwardRef<HTMLDivElement, SitePolicyItemProps>(
     ({ title, id, children, onClick }, ref) => {
         return (
             <div
-                ref={ref}
-                id={id}
                 className="mb-4 border border-gray-200 dark:border-gray-700 rounded-lg p-4 w-full"
+                id={id}
+                ref={ref}
             >
                 <h2 className="text-xl font-bold flex items-center pb-2">
                     <span
@@ -23,8 +23,8 @@ const SitePolicyItem = forwardRef<HTMLDivElement, SitePolicyItemProps>(
                         title={`Copy link to section "${title}"`}
                     >
                         <LinkIcon
-                            onClick={onClick}
                             className="hover:opacity-100 opacity-100"
+                            onClick={onClick}
                         />
                     </span>
                     <span className="group">{title}</span>

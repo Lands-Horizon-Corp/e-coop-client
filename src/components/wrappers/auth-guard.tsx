@@ -106,9 +106,9 @@ const AuthGuard = ({ children, pageType = 'AUTHENTICATED' }: Props) => {
             return (
                 <div className="relative flex h-screen w-full flex-col items-center justify-center">
                     <ImageMatch
-                        src={LOADING_ARTWORK_GIF}
-                        className="block size-48 rounded-none !bg-transparent"
                         alt={'loading-gif'}
+                        className="block size-48 rounded-none !bg-transparent"
+                        src={LOADING_ARTWORK_GIF}
                     />
                     <p className="mt-4 animate-pulse text-sm text-muted-foreground drop-shadow-lg">
                         {/* <LoadingSpinner className="mr-2 inline size-3" /> */}
@@ -127,32 +127,32 @@ const AuthGuard = ({ children, pageType = 'AUTHENTICATED' }: Props) => {
                     </p>
                     <div className="z-10 flex items-center gap-x-2">
                         <Button
-                            variant="secondary"
-                            hoverVariant="primary"
                             className="gap-x-2 rounded-full"
+                            hoverVariant="primary"
                             onClick={() => location.reload()}
+                            variant="secondary"
                         >
                             <RefreshIcon />
                             Refresh
                         </Button>
                         <Button
-                            variant="secondary"
-                            hoverVariant="primary"
                             className="gap-x-2 rounded-full"
+                            hoverVariant="primary"
                             onClick={() =>
                                 router.navigate({ to: '/auth' as string })
                             }
+                            variant="secondary"
                         >
                             <ArrowRightIcon className="-rotate-45" />
                             Go to Sign In
                         </Button>
                     </div>
                     <FlickeringGrid
-                        gridGap={1}
-                        squareSize={64}
-                        maxOpacity={0.5}
-                        flickerChance={0.05}
                         className="absolute inset-0 z-0 opacity-80 [mask-image:radial-gradient(80vh_circle_at_center,white,transparent)] dark:opacity-20"
+                        flickerChance={0.05}
+                        gridGap={1}
+                        maxOpacity={0.5}
+                        squareSize={64}
                     />
                 </div>
             )
@@ -161,10 +161,10 @@ const AuthGuard = ({ children, pageType = 'AUTHENTICATED' }: Props) => {
             return (
                 <Navigate
                     ignoreBlocker
-                    to={'/auth/sign-in' as string}
                     search={{
                         cbUrl: callbackUrl,
                     }}
+                    to={'/auth/sign-in' as string}
                 />
             )
 
@@ -173,8 +173,8 @@ const AuthGuard = ({ children, pageType = 'AUTHENTICATED' }: Props) => {
                 <BannerContainer>
                     <AccountInfoContent
                         currentUser={currentAuth.user}
-                        infoTitle="Not Allowed"
                         infoDescription="It looks like your account has been banned. If you think this is a mistake, please talk your cooperative admin/staff for assistance."
+                        infoTitle="Not Allowed"
                     />
                     <Button
                         className="rounded-full"
@@ -210,9 +210,9 @@ const AccountInfoContent = ({
     return (
         <>
             <UserAvatar
-                src={currentUser.media?.download_url ?? ''}
-                fallback={currentUser.user_name.charAt(0) ?? '-'}
                 className="size-36 border-4 text-2xl font-medium"
+                fallback={currentUser.user_name.charAt(0) ?? '-'}
+                src={currentUser.media?.download_url ?? ''}
             />
             {currentUser.type === 'ban' && (
                 <BadgeExclamationFillIcon className="size-8 text-rose-400" />

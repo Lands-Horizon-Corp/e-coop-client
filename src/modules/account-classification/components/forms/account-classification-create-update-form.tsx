@@ -118,40 +118,40 @@ const AccountClassificationCreateUpdateForm = ({
     return (
         <Form {...form}>
             <form
-                ref={formRef}
-                onSubmit={onSubmit}
                 className={cn('flex w-full flex-col gap-y-4', className)}
+                onSubmit={onSubmit}
+                ref={formRef}
             >
                 <fieldset
-                    disabled={isPending || formProps.readOnly}
                     className="grid gap-x-6 gap-y-4 sm:gap-y-3"
+                    disabled={isPending || formProps.readOnly}
                 >
                     <fieldset className="space-y-3">
                         <FormFieldWrapper
                             control={form.control}
-                            name="name"
                             label="Classification Name"
+                            name="name"
                             render={({ field }) => (
                                 <Input
                                     {...field}
-                                    placeholder="e.g., Savings, Checking"
                                     disabled={isDisabled(field.name)}
+                                    placeholder="e.g., Savings, Checking"
                                 />
                             )}
                         />
 
                         <FormFieldWrapper
                             control={form.control}
-                            name="description"
                             label="Description"
+                            name="description"
                             render={({ field }) => (
                                 <Textarea
                                     {...field}
-                                    id={field.name}
                                     autoComplete="off"
-                                    placeholder="Optional description for the classification"
                                     className="max-h-40"
                                     disabled={isDisabled(field.name)}
+                                    id={field.name}
+                                    placeholder="Optional description for the classification"
                                 />
                             )}
                         />
@@ -162,25 +162,25 @@ const AccountClassificationCreateUpdateForm = ({
                     <FormErrorMessage errorMessage={error} />
                     <div className="flex items-center justify-end gap-x-2">
                         <Button
-                            size="sm"
-                            type="button"
-                            variant="ghost"
+                            className="w-full self-end px-8 sm:w-fit"
                             onClick={() => {
                                 form.reset(formProps.defaultValues)
                                 resetCreate()
                                 resetUpdate()
                             }}
-                            className="w-full self-end px-8 sm:w-fit"
+                            size="sm"
+                            type="button"
+                            variant="ghost"
                         >
                             Reset
                         </Button>
                         <Button
-                            size="sm"
-                            type="submit"
+                            className="w-full self-end px-8 sm:w-fit"
                             disabled={
                                 isPending || !isAccountClassificationOnChanged
                             }
-                            className="w-full self-end px-8 sm:w-fit"
+                            size="sm"
+                            type="submit"
                         >
                             {isPending ? (
                                 <LoadingSpinner />
@@ -208,9 +208,9 @@ export const AccountClassificationFormModal = ({
 }) => {
     return (
         <Modal
-            title={title}
-            description={description}
             className={cn('', className)}
+            description={description}
+            title={title}
             {...props}
         >
             <AccountClassificationCreateUpdateForm

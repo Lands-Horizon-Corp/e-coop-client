@@ -57,12 +57,12 @@ function Timeline({
             value={{ activeStep: currentStep, setActiveStep }}
         >
             <div
-                data-slot="timeline"
                 className={cn(
                     'group/timeline flex data-[orientation=horizontal]:w-full data-[orientation=horizontal]:flex-row data-[orientation=vertical]:flex-col',
                     className
                 )}
                 data-orientation={orientation}
+                data-slot="timeline"
                 {...props}
             />
         </TimelineContext.Provider>
@@ -76,8 +76,8 @@ function TimelineContent({
 }: React.HTMLAttributes<HTMLDivElement>) {
     return (
         <div
-            data-slot="timeline-content"
             className={cn('text-muted-foreground text-sm', className)}
+            data-slot="timeline-content"
             {...props}
         />
     )
@@ -97,11 +97,11 @@ function TimelineDate({
 
     return (
         <Comp
-            data-slot="timeline-date"
             className={cn(
                 'text-muted-foreground mb-1 block text-xs font-medium group-data-[orientation=vertical]/timeline:max-sm:h-4',
                 className
             )}
+            data-slot="timeline-date"
             {...props}
         />
     )
@@ -113,7 +113,7 @@ function TimelineHeader({
     ...props
 }: React.HTMLAttributes<HTMLDivElement>) {
     return (
-        <div data-slot="timeline-header" className={cn(className)} {...props} />
+        <div className={cn(className)} data-slot="timeline-header" {...props} />
     )
 }
 
@@ -129,12 +129,12 @@ function TimelineIndicator({
 }: TimelineIndicatorProps) {
     return (
         <div
-            data-slot="timeline-indicator"
+            aria-hidden="true"
             className={cn(
                 'border-primary/20 ease-in-out duration-100 group-data-completed/timeline-item:border-primary absolute size-4 rounded-full border-2 group-data-[orientation=horizontal]/timeline:-top-6 group-data-[orientation=horizontal]/timeline:left-0 group-data-[orientation=horizontal]/timeline:-translate-y-1/2 group-data-[orientation=vertical]/timeline:top-0 group-data-[orientation=vertical]/timeline:-left-6 group-data-[orientation=vertical]/timeline:-translate-x-1/2',
                 className
             )}
-            aria-hidden="true"
+            data-slot="timeline-indicator"
             {...props}
         >
             {children}
@@ -152,12 +152,12 @@ function TimelineItem({ step, className, ...props }: TimelineItemProps) {
 
     return (
         <div
-            data-slot="timeline-item"
             className={cn(
                 'group/timeline-item has-[+[data-completed]]:[&_[data-slot=timeline-separator]]:bg-primary relative flex flex-1 flex-col gap-0.5 group-data-[orientation=horizontal]/timeline:mt-8 group-data-[orientation=horizontal]/timeline:not-last:pe-8 group-data-[orientation=vertical]/timeline:ms-8 group-data-[orientation=vertical]/timeline:not-last:pb-12',
                 className
             )}
             data-completed={step <= activeStep || undefined}
+            data-slot="timeline-item"
             {...props}
         />
     )
@@ -170,12 +170,12 @@ function TimelineSeparator({
 }: React.HTMLAttributes<HTMLDivElement>) {
     return (
         <div
-            data-slot="timeline-separator"
+            aria-hidden="true"
             className={cn(
                 'bg-primary/10 rounded absolute duration-200 ease-in-out self-start group-last/timeline-item:hidden group-data-[orientation=horizontal]/timeline:-top-6 group-data-[orientation=horizontal]/timeline:h-0.5 group-data-[orientation=horizontal]/timeline:w-[calc(100%-1rem-0.25rem)] group-data-[orientation=horizontal]/timeline:translate-x-4.5 group-data-[orientation=horizontal]/timeline:-translate-y-1/2 group-data-[orientation=vertical]/timeline:-left-6 group-data-[orientation=vertical]/timeline:h-[calc(100%-1rem-0.25rem)] group-data-[orientation=vertical]/timeline:w-0.5 group-data-[orientation=vertical]/timeline:-translate-x-1/2 group-data-[orientation=vertical]/timeline:translate-y-4.5',
                 className
             )}
-            aria-hidden="true"
+            data-slot="timeline-separator"
             {...props}
         />
     )
@@ -188,8 +188,8 @@ function TimelineTitle({
 }: React.HTMLAttributes<HTMLHeadingElement>) {
     return (
         <h3
-            data-slot="timeline-title"
             className={cn('text-sm font-medium', className)}
+            data-slot="timeline-title"
             {...props}
         />
     )

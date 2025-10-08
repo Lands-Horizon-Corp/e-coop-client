@@ -70,15 +70,15 @@ const IconCombobox = forwardRef<HTMLButtonElement, Props>(
         }, [value])
 
         return (
-            <Popover modal open={open} onOpenChange={setOpen}>
+            <Popover modal onOpenChange={setOpen} open={open}>
                 <PopoverTrigger asChild>
                     <Button
+                        aria-expanded={open}
+                        className={cn('w-full justify-between px-3', className)}
+                        disabled={disabled}
                         ref={ref}
                         role="combobox"
                         variant="outline"
-                        aria-expanded={open}
-                        disabled={disabled}
-                        className={cn('w-full justify-between px-3', className)}
                     >
                         {selectedIcon !== undefined ? (
                             <>
@@ -96,23 +96,23 @@ const IconCombobox = forwardRef<HTMLButtonElement, Props>(
                 <PopoverContent className="max-h-[--radix-popover-content-available-height] w-[--radix-popover-trigger-width] p-0">
                     <Command shouldFilter={false}>
                         <CommandInput
-                            value={search}
+                            className="h-9"
                             onValueChange={setSearch}
                             placeholder={placeholder}
-                            className="h-9"
+                            value={search}
                         />
                         <CommandList className="ecoop-scroll">
                             <CommandEmpty>No icon found.</CommandEmpty>
                             <CommandGroup>
                                 {filteredIcons.map(({ name, icon: Icon }) => (
                                     <CommandItem
-                                        key={name}
-                                        value={name}
                                         className="group cursor-pointer"
+                                        key={name}
                                         onSelect={() => {
                                             setOpen(false)
                                             onChange?.(name as TIcon)
                                         }}
+                                        value={name}
                                     >
                                         <Icon className="mr-1 !size-5 text-muted-foreground duration-300 ease-in-out group-hover:text-foreground" />
                                         <span className="text-muted-foreground duration-200 group-hover:text-foreground">

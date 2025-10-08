@@ -67,7 +67,7 @@ const App = () => {
                     <LoadingSpinner />
                 ) : (
                     <>
-                        <Image src={SpySvg} alt="Spy" className="size-36" />
+                        <Image alt="Spy" className="size-36" src={SpySvg} />
                         <p className="text-4xl text-foreground/60">Forbidden</p>
                         <p>
                             We cannot allow you to use this app on

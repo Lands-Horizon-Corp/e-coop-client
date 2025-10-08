@@ -43,8 +43,8 @@ const SingleImageUploadOption = ({ onPhotoChoose }: Props) => {
 
     return (
         <Tabs
-            defaultValue="file-choose"
             className="flex flex-col justify-center"
+            defaultValue="file-choose"
         >
             <TabsList className="w-fit bg-transparent">
                 <TabsTrigger value="file-choose">Choose File</TabsTrigger>
@@ -54,14 +54,14 @@ const SingleImageUploadOption = ({ onPhotoChoose }: Props) => {
                 <PictureDrop onFileSelect={onFileSelect} />
             </TabsContent>
             <TabsContent
-                value="camera-capture"
                 className="flex flex-col justify-center gap-y-4 p-0"
+                value="camera-capture"
             >
-                <WebCam ref={webcamRef} className="rounded-2xl" />
+                <WebCam className="rounded-2xl" ref={webcamRef} />
                 <Button
-                    size="icon"
-                    onClick={handleCameraCapture}
                     className="mx-auto size-fit rounded-full p-2"
+                    onClick={handleCameraCapture}
+                    size="icon"
                 >
                     <CameraFillIcon className="size-5" />
                 </Button>

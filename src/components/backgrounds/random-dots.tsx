@@ -140,12 +140,12 @@ export function RandomDots({
         <>
             {dots.map((dot) => (
                 <div
-                    key={dot.id}
                     className={`absolute ${dot.size} ${dot.opacity} rounded-full z-10 transition-all duration-300 hover:scale-125 hover:brightness-125 cursor-pointer ${
                         dot.hasGlow
                             ? 'dark:shadow-lg dark:shadow-primary/30 dark:brightness-125'
                             : ''
                     } ${className}`}
+                    key={dot.id}
                     style={{
                         top: `${dot.topPercent}%`,
                         left: `${dot.leftPercent}%`,

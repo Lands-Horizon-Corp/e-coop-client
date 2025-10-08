@@ -47,17 +47,17 @@ const CivilStatusCombobox = React.forwardRef<HTMLButtonElement, Props>(
         const [open, setOpen] = React.useState(false)
 
         return (
-            <Popover modal open={open} onOpenChange={setOpen}>
+            <Popover modal onOpenChange={setOpen} open={open}>
                 <PopoverTrigger asChild>
                     <Button
                         {...other}
-                        ref={ref}
-                        type="button"
-                        role="combobox"
-                        variant="outline"
-                        disabled={disabled}
                         aria-expanded={open}
                         className={cn('w-full justify-between px-3', className)}
+                        disabled={disabled}
+                        ref={ref}
+                        role="combobox"
+                        type="button"
+                        variant="outline"
                     >
                         <span className="capitalize">
                             {value || (
@@ -72,8 +72,8 @@ const CivilStatusCombobox = React.forwardRef<HTMLButtonElement, Props>(
                 <PopoverContent className="max-h-[--radix-popover-content-available-height] w-[--radix-popover-trigger-width] p-0">
                     <Command>
                         <CommandInput
-                            placeholder="Search Civil Status..."
                             className="h-9"
+                            placeholder="Search Civil Status..."
                         />
                         <CommandList className="ecoop-scroll">
                             <CommandEmpty>No civil status found.</CommandEmpty>
@@ -81,11 +81,11 @@ const CivilStatusCombobox = React.forwardRef<HTMLButtonElement, Props>(
                                 {civilStatuses.map((status) => (
                                     <CommandItem
                                         key={status}
-                                        value={status}
                                         onSelect={() => {
                                             setOpen(false)
                                             onChange?.(status)
                                         }}
+                                        value={status}
                                     >
                                         <span className="capitalize">
                                             {status}

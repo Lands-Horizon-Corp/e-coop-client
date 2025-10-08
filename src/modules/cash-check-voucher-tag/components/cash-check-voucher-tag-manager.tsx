@@ -93,9 +93,7 @@ export const CashCheckVoucherTagChip = ({
                 <span>{tag.name}</span>
                 {onRemove && (
                     <Button
-                        size="icon"
-                        type="button"
-                        variant="ghost"
+                        className="size-fit cursor-pointer text-xs hover:text-red-600 disabled:opacity-50"
                         onClick={() =>
                             onOpen({
                                 title: 'Remove Tag',
@@ -116,7 +114,9 @@ export const CashCheckVoucherTagChip = ({
                                     ),
                             })
                         }
-                        className="size-fit cursor-pointer text-xs hover:text-red-600 disabled:opacity-50"
+                        size="icon"
+                        type="button"
+                        variant="ghost"
                     >
                         <XIcon className="size-4" />
                     </Button>
@@ -160,7 +160,6 @@ export function CashCheckVoucherTagsManager({
         <div className={cn('space-y-2', className)}>
             <TagTemplatePicker
                 modalState={tagPickerModal}
-                triggerClassName="hidden"
                 onSelect={({ color, name, description, icon }) => {
                     toast.promise(
                         createTagMutation.mutateAsync({
@@ -178,6 +177,7 @@ export function CashCheckVoucherTagsManager({
                         }
                     )
                 }}
+                triggerClassName="hidden"
             />
             <div className="w-full space-y-1">
                 <div className="flex justify-between">
@@ -194,10 +194,10 @@ export function CashCheckVoucherTagsManager({
             <div className="flex gap-1.5 flex-wrap ">
                 {!readOnly && (
                     <Button
-                        type="button"
-                        variant="outline"
                         className="border-dashed rounded !size-fit py-1 !px-1 text-xs"
                         onClick={() => tagPickerModal.onOpenChange(true)}
+                        type="button"
+                        variant="outline"
                     >
                         <PlusIcon className="inline text-accent-foreground" />{' '}
                         Add Tag
@@ -206,9 +206,9 @@ export function CashCheckVoucherTagsManager({
                 {voucherTags.map((tag) => (
                     <CashCheckVoucherTagChip
                         key={tag.id}
-                        tag={tag}
-                        size={size}
                         onRemove={readOnly ? undefined : refetch}
+                        size={size}
+                        tag={tag}
                     />
                 ))}
             </div>
@@ -251,13 +251,13 @@ export const CashCheckVoucherTagsManagerPopover = ({
                     children
                 ) : (
                     <Button
-                        size="sm"
-                        type="button"
-                        variant="outline"
                         className={cn(
                             'size-fit !p-0 border-accent rounded-full !py-0.5 !px-1.5',
                             className
                         )}
+                        size="sm"
+                        type="button"
+                        variant="outline"
                     >
                         <TagIcon />{' '}
                         <span>{isPending ? '...' : tagCount} Tags</span>
@@ -268,8 +268,8 @@ export const CashCheckVoucherTagsManagerPopover = ({
                 <CashCheckVoucherTagsManager
                     cashCheckVoucherId={cashCheckVoucherId}
                     defaultTags={defaultTags}
-                    size={size}
                     readOnly={readOnly}
+                    size={size}
                 />
             </PopoverContent>
         </Popover>

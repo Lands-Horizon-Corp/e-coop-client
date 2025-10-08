@@ -26,15 +26,15 @@ const OrganizationItem = ({ organization }: OrganizationItemProps) => {
 
     return (
         <Link
-            to={`/onboarding/organization/$organization_id`}
             params={{ organization_id: organization.id }}
+            to={`/onboarding/organization/$organization_id`}
         >
             <GradientBackground mediaUrl={organization.media?.download_url}>
                 <div
-                    key={organization.id}
                     className={cn(
                         'relative flex min-h-32 cursor-pointer items-center justify-between rounded-2xl border-0 p-4 hover:bg-secondary/50 hover:no-underline'
                     )}
+                    key={organization.id}
                     onClick={handleOpenChange}
                 >
                     <div className="flex flex-col">
@@ -43,6 +43,7 @@ const OrganizationItem = ({ organization }: OrganizationItemProps) => {
                         </p>
                         <PlainTextEditor content={organization.description} />
                         <Button
+                            className="mt-2 max-w-32 text-xs"
                             onClick={() =>
                                 navigate({
                                     to: `/onboarding/organization/${organization.id}`,
@@ -53,7 +54,6 @@ const OrganizationItem = ({ organization }: OrganizationItemProps) => {
                             }
                             size={'sm'}
                             variant={'secondary'}
-                            className="mt-2 max-w-32 text-xs"
                         >
                             View Details
                         </Button>

@@ -11,11 +11,11 @@ const ConfirmModal = () => {
 
     return (
         <Modal
-            open={isOpen}
-            onOpenChange={onClose}
-            title={modalData?.title}
-            description={modalData?.description}
             className={modalData?.modalClassName}
+            description={modalData?.description}
+            onOpenChange={onClose}
+            open={isOpen}
+            title={modalData?.title}
         >
             {modalData?.content}
             {modalData?.hideSeparator ? null : <Separator className="my-1" />}
@@ -26,9 +26,9 @@ const ConfirmModal = () => {
                 )}
             >
                 <Button
+                    className="bg-muted/60 hover:bg-muted"
                     onClick={onCancel}
                     variant={'ghost'}
-                    className="bg-muted/60 hover:bg-muted"
                 >
                     {modalData?.cancelString}
                 </Button>

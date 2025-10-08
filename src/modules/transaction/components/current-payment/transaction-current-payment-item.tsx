@@ -77,16 +77,16 @@ const TransactionCurrentPaymentItem = ({
                     {hasPayments ? (
                         currentPayment.map((payment, idx) => (
                             <div>
-                                <Card key={idx} className="!bg-background/90">
+                                <Card className="!bg-background/90" key={idx}>
                                     <CardContent className={cn('w-full !p-0')}>
                                         <Accordion
-                                            type="single"
-                                            collapsible
                                             className="w-full"
+                                            collapsible
+                                            type="single"
                                         >
                                             <AccordionItem
-                                                value="item-1"
                                                 className={cn('border-0')}
+                                                value="item-1"
                                             >
                                                 <AccordionTrigger
                                                     className={cn(
@@ -99,11 +99,8 @@ const TransactionCurrentPaymentItem = ({
                                                     >
                                                         <div className="flex size-8 items-center border p-1 justify-center rounded-full bg-primary/10 text-primary">
                                                             <RedoIcon
-                                                                size={20}
-                                                                className="cursor-pointer hover:opacity-65"
-                                                                title="Reverse Payment"
-                                                                role="button"
                                                                 aria-label="Reverse Payment"
+                                                                className="cursor-pointer hover:opacity-65"
                                                                 onClick={(
                                                                     event
                                                                 ) => {
@@ -112,16 +109,19 @@ const TransactionCurrentPaymentItem = ({
                                                                         payment.id
                                                                     )
                                                                 }}
+                                                                role="button"
+                                                                size={20}
+                                                                title="Reverse Payment"
                                                             />
                                                         </div>
                                                     </ActionTooltip>
                                                     <div className="flex size-8 items-center justify-center rounded-full bg-primary/10 text-primary">
                                                         <LedgerSourceBadge
+                                                            className="rounded-lg size-10 flex items-center justify-center"
+                                                            showValue={false}
                                                             source={
                                                                 payment.source
                                                             }
-                                                            className="rounded-lg size-10 flex items-center justify-center"
-                                                            showValue={false}
                                                         />
                                                     </div>
                                                     <div className="b flex w-full items-center gap-x-2">
@@ -161,10 +161,10 @@ const TransactionCurrentPaymentItem = ({
                                                 </AccordionTrigger>
                                                 <AccordionContent className="py-2 mr-3 pl-2">
                                                     <PaymentsEntryItem
-                                                        label="reference number"
                                                         copyText={
                                                             payment.reference_number
                                                         }
+                                                        label="reference number"
                                                         value={
                                                             payment.reference_number
                                                         }
@@ -198,8 +198,8 @@ const TransactionCurrentPaymentItem = ({
                                                         <>
                                                             <Separator className="my-2" />
                                                             <PaymentsEntryItem
-                                                                label="Bank Details"
                                                                 className="font-bold"
+                                                                label="Bank Details"
                                                             />
                                                             <PaymentsEntryItem
                                                                 label="name"
@@ -224,8 +224,8 @@ const TransactionCurrentPaymentItem = ({
                                                                 />
                                                             )}
                                                             <PaymentsEntryItem
-                                                                label="Proof of Payment"
                                                                 className="font-bold"
+                                                                label="Proof of Payment"
                                                             />
                                                             <PreviewMediaWrapper
                                                                 media={
@@ -246,8 +246,8 @@ const TransactionCurrentPaymentItem = ({
                                                         </>
                                                     )}
                                                     <PaymentsEntryItem
-                                                        label="Signature"
                                                         className="font-bold"
+                                                        label="Signature"
                                                     />
                                                     <div>
                                                         <PreviewMediaWrapper

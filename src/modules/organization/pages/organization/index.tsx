@@ -54,8 +54,8 @@ const Organization = () => {
         <div className="w-full py-2">
             <JoinBranchWithCodeFormModal
                 defaultCode={invitation_code}
-                open={onOpenJoinWithCodeModal}
                 onOpenChange={setOpenJoinWithCodeModal}
+                open={onOpenJoinWithCodeModal}
                 title="Enter Code to Join a Branch"
                 titleClassName="text-lg font-semibold"
             />
@@ -66,9 +66,9 @@ const Organization = () => {
                     branches.
                 </div>
                 <Button
-                    variant={'outline'}
-                    size={'sm'}
                     onClick={() => setOpenJoinWithCodeModal(true)}
+                    size={'sm'}
+                    variant={'outline'}
                 >
                     Join with Code
                     <QrCodeIcon className="ml-2" />

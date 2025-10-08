@@ -24,9 +24,6 @@ const TransactionAccountMemberLedger = ({
                 {...openTransactionMemberAccountLedger}
             />
             <MemberAccountingLedgerTable
-                mode="member"
-                memberProfileId={memberProfileId}
-                onRowClick={onRowClick}
                 actionComponent={(props) => (
                     <>
                         <MemberAccountGeneralLedgerAction
@@ -40,6 +37,9 @@ const TransactionAccountMemberLedger = ({
                     </>
                 )}
                 className="w-full min-h-[40vh] h-full"
+                memberProfileId={memberProfileId}
+                mode="member"
+                onRowClick={onRowClick}
             />
         </>
     )

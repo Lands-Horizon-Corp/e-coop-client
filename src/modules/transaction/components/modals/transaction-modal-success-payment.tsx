@@ -80,7 +80,7 @@ const TransactionModalSuccessPayment = ({
                         variant={'ghost'}
                     >
                         close
-                        <DoorExitFillIcon size={20} className="ml-2" />
+                        <DoorExitFillIcon className="ml-2" size={20} />
                     </Button>
                     <Button
                         onClick={() => {
@@ -99,7 +99,7 @@ const TransactionModalSuccessPayment = ({
             <div className="flex items-center justify-center w-full h-full">
                 <div className="flex flex-col items-center justify-center gap-2">
                     <span className="size-16 bg-primary/20 flex items-center justify-center rounded-full">
-                        <CheckFillIcon size={25} className=" text-primary" />
+                        <CheckFillIcon className=" text-primary" size={25} />
                     </span>
                     <p className="font-bold text-2xl dark:text-white">
                         {paymentType.charAt(0).toUpperCase() +

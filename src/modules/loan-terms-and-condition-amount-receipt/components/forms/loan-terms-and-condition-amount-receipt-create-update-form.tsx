@@ -79,42 +79,42 @@ const LoanTermsAndConditionAmountReceiptCreateForm = ({
     return (
         <Form {...form}>
             <form
-                ref={formRef}
-                onSubmit={onSubmit}
                 className={cn(
                     'flex w-full max-w-full min-w-0 flex-col gap-y-4',
                     className
                 )}
+                onSubmit={onSubmit}
+                ref={formRef}
             >
                 <div className="space-y-4">
                     <FormFieldWrapper
                         control={form.control}
-                        name="account_id"
                         label="Loan Account"
+                        name="account_id"
                         render={({ field }) => (
                             <AccountPicker
-                                mode="payment"
+                                disabled={isDisabled(field.name)}
                                 hideDescription
-                                value={form.getValues('account')}
-                                placeholder="Select Loan Account"
+                                mode="payment"
                                 onSelect={(account) => {
                                     field.onChange(account?.id)
 
                                     form.setValue('account', account)
                                 }}
-                                disabled={isDisabled(field.name)}
+                                placeholder="Select Loan Account"
+                                value={form.getValues('account')}
                             />
                         )}
                     />
                     <FormFieldWrapper
                         control={form.control}
-                        name="amount"
                         label="Amount"
+                        name="amount"
                         render={({ field }) => (
                             <Input
                                 {...field}
-                                id={field.name}
                                 disabled={isDisabled(field.name)}
+                                id={field.name}
                                 onChange={(e) => {
                                     const value =
                                         parseFloat(e.target.value) || 0
@@ -132,17 +132,17 @@ const LoanTermsAndConditionAmountReceiptCreateForm = ({
                 </div>
 
                 <FormFooterResetSubmit
-                    readOnly={readOnly}
-                    resetButtonType="button"
-                    submitButtonType="button"
                     disableSubmit={!form.formState.isDirty}
-                    submitText={
-                        formProps.defaultValues?.fieldKey ? 'Update' : 'Create'
-                    }
-                    onSubmit={(e) => onSubmit(e)}
                     onReset={() => {
                         form.reset()
                     }}
+                    onSubmit={(e) => onSubmit(e)}
+                    readOnly={readOnly}
+                    resetButtonType="button"
+                    submitButtonType="button"
+                    submitText={
+                        formProps.defaultValues?.fieldKey ? 'Update' : 'Create'
+                    }
                 />
             </form>
         </Form>
@@ -160,9 +160,9 @@ export const LoanTermsAndConditionAmountReceiptCreateModal = ({
 }) => {
     return (
         <Modal
-            title={title}
-            description={description}
             className={cn('!max-w-xl', className)}
+            description={description}
+            title={title}
             {...props}
         >
             <LoanTermsAndConditionAmountReceiptCreateForm

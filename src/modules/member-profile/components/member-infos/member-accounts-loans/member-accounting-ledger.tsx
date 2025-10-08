@@ -48,11 +48,11 @@ export const MemberAccountingLedgerTotal = ({
             )}
         >
             <Button
-                size="icon"
-                variant="secondary"
+                className="absolute rounded-full size-fit top-2 right-2"
                 disabled={isPending}
                 onClick={() => refetch()}
-                className="absolute rounded-full size-fit top-2 right-2"
+                size="icon"
+                variant="secondary"
             >
                 {isPending ? (
                     <LoadingSpinner className="size-3" />
@@ -110,14 +110,14 @@ const MemberAccountingLedger = ({ memberProfileId, className }: Props) => {
         <div className={cn('flex flex-col gap-y-4 h-[80vh]', className)}>
             {focused !== undefined && (
                 <Modal
-                    open={focused !== undefined}
+                    className={cn('!max-w-[90vw] p-2')}
+                    closeButtonClassName="md:hidden"
+                    descriptionClassName="hidden"
                     onOpenChange={(state) => {
                         if (!state) setFocused(undefined)
                     }}
+                    open={focused !== undefined}
                     titleClassName="hidden"
-                    descriptionClassName="hidden"
-                    closeButtonClassName="md:hidden"
-                    className={cn('!max-w-[90vw] p-2')}
                 >
                     <div className="min-h-[80vh] min-w-[80vw] space-y-4 p-2">
                         <div className="space-y-2">
@@ -130,91 +130,91 @@ const MemberAccountingLedger = ({ memberProfileId, className }: Props) => {
                         </div>
 
                         <Tabs
-                            defaultValue="general-ledger"
                             className="mt-2 flex-1 flex-col"
+                            defaultValue="general-ledger"
                         >
                             <ScrollArea>
                                 <TabsList className="mb-3 h-auto min-w-full justify-start gap-2 rounded-none border-b bg-transparent px-0 py-1 text-foreground">
                                     <TabsTrigger
-                                        value="general-ledger"
                                         className="relative after:absolute after:inset-x-0 after:bottom-0 after:-mb-1 after:h-0.5 after:duration-300 after:ease-in-out hover:bg-accent hover:text-foreground data-[state=active]:bg-transparent data-[state=active]:shadow-none data-[state=active]:after:bg-primary data-[state=active]:hover:bg-accent"
+                                        value="general-ledger"
                                     >
                                         <BookThickIcon
+                                            aria-hidden="true"
                                             className="-ms-0.5 me-1.5 opacity-60"
                                             size={16}
-                                            aria-hidden="true"
                                         />
                                         General Ledger
                                     </TabsTrigger>
 
                                     <TabsTrigger
-                                        value="check-entry"
                                         className="relative after:absolute after:inset-x-0 after:bottom-0 after:-mb-1 after:h-0.5 after:duration-300 after:ease-in-out hover:bg-accent hover:text-foreground data-[state=active]:bg-transparent data-[state=active]:shadow-none data-[state=active]:after:bg-primary data-[state=active]:hover:bg-accent"
+                                        value="check-entry"
                                     >
                                         <MoneyCheckIcon
+                                            aria-hidden="true"
                                             className="-ms-0.5 me-1.5 opacity-60"
                                             size={16}
-                                            aria-hidden="true"
                                         />
                                         Check Entry
                                     </TabsTrigger>
 
                                     <TabsTrigger
-                                        value="online-entry"
                                         className="relative after:absolute after:inset-x-0 after:bottom-0 after:-mb-1 after:h-0.5 after:duration-300 after:ease-in-out hover:bg-accent hover:text-foreground data-[state=active]:bg-transparent data-[state=active]:shadow-none data-[state=active]:after:bg-primary data-[state=active]:hover:bg-accent"
+                                        value="online-entry"
                                     >
                                         <BillIcon
+                                            aria-hidden="true"
                                             className="-ms-0.5 me-1.5 opacity-60"
                                             size={16}
-                                            aria-hidden="true"
                                         />
                                         Online Entry
                                     </TabsTrigger>
 
                                     <TabsTrigger
-                                        value="cash-entry"
                                         className="relative after:absolute after:inset-x-0 after:bottom-0 after:-mb-1 after:h-0.5 after:duration-300 after:ease-in-out hover:bg-accent hover:text-foreground data-[state=active]:bg-transparent data-[state=active]:shadow-none data-[state=active]:after:bg-primary data-[state=active]:hover:bg-accent"
+                                        value="cash-entry"
                                     >
                                         <HandCoinsIcon
+                                            aria-hidden="true"
                                             className="-ms-0.5 me-1.5 opacity-60"
                                             size={16}
-                                            aria-hidden="true"
                                         />
                                         Cash Entry
                                     </TabsTrigger>
 
                                     <TabsTrigger
-                                        value="payment-entry"
                                         className="relative after:absolute after:inset-x-0 after:bottom-0 after:-mb-1 after:h-0.5 after:duration-300 after:ease-in-out hover:bg-accent hover:text-foreground data-[state=active]:bg-transparent data-[state=active]:shadow-none data-[state=active]:after:bg-primary data-[state=active]:hover:bg-accent"
+                                        value="payment-entry"
                                     >
                                         <BillIcon
+                                            aria-hidden="true"
                                             className="-ms-0.5 me-1.5 opacity-60"
                                             size={16}
-                                            aria-hidden="true"
                                         />
                                         Payment Entry
                                     </TabsTrigger>
 
                                     <TabsTrigger
-                                        value="withdraw-entry"
                                         className="relative after:absolute after:inset-x-0 after:bottom-0 after:-mb-1 after:h-0.5 after:duration-300 after:ease-in-out hover:bg-accent hover:text-foreground data-[state=active]:bg-transparent data-[state=active]:shadow-none data-[state=active]:after:bg-primary data-[state=active]:hover:bg-accent"
+                                        value="withdraw-entry"
                                     >
                                         <HandCoinsIcon
+                                            aria-hidden="true"
                                             className="-ms-0.5 me-1.5 opacity-60"
                                             size={16}
-                                            aria-hidden="true"
                                         />
                                         Withdraw Entry
                                     </TabsTrigger>
 
                                     <TabsTrigger
-                                        value="deposit-entry"
                                         className="relative after:absolute after:inset-x-0 after:bottom-0 after:-mb-1 after:h-0.5 after:duration-300 after:ease-in-out hover:bg-accent hover:text-foreground data-[state=active]:bg-transparent data-[state=active]:shadow-none data-[state=active]:after:bg-primary data-[state=active]:hover:bg-accent"
+                                        value="deposit-entry"
                                     >
                                         <HandCoinsIcon
+                                            aria-hidden="true"
                                             className="-ms-0.5 me-1.5 opacity-60"
                                             size={16}
-                                            aria-hidden="true"
                                         />
                                         Deposit Entry
                                     </TabsTrigger>
@@ -222,67 +222,67 @@ const MemberAccountingLedger = ({ memberProfileId, className }: Props) => {
                                 <ScrollBar orientation="horizontal" />
                             </ScrollArea>
 
-                            <TabsContent value="general-ledger" asChild>
+                            <TabsContent asChild value="general-ledger">
                                 <MemberAccountGeneralLedger {...focused} />
                             </TabsContent>
 
-                            <TabsContent value="check-entry" asChild>
+                            <TabsContent asChild value="check-entry">
                                 <GeneralLedgerTable
+                                    accountId={focused.accountId}
+                                    className="min-h-[70vh] max-h-[70vh] w-full"
+                                    memberProfileId={focused.memberProfileId}
                                     mode="member-account"
                                     TEntryType="check-entry"
-                                    memberProfileId={focused.memberProfileId}
-                                    accountId={focused.accountId}
-                                    className="min-h-[70vh] max-h-[70vh] w-full"
                                 />
                             </TabsContent>
 
-                            <TabsContent value="online-entry" asChild>
+                            <TabsContent asChild value="online-entry">
                                 <GeneralLedgerTable
+                                    accountId={focused.accountId}
+                                    className="min-h-[70vh] max-h-[70vh] w-full"
+                                    memberProfileId={focused.memberProfileId}
                                     mode="member-account"
                                     TEntryType="online-entry"
-                                    memberProfileId={focused.memberProfileId}
-                                    accountId={focused.accountId}
-                                    className="min-h-[70vh] max-h-[70vh] w-full"
                                 />
                             </TabsContent>
 
-                            <TabsContent value="cash-entry" asChild>
+                            <TabsContent asChild value="cash-entry">
                                 <GeneralLedgerTable
+                                    accountId={focused.accountId}
+                                    className="min-h-[70vh] max-h-[70vh] w-full"
+                                    memberProfileId={focused.memberProfileId}
                                     mode="member-account"
                                     TEntryType="cash-entry"
-                                    memberProfileId={focused.memberProfileId}
-                                    accountId={focused.accountId}
-                                    className="min-h-[70vh] max-h-[70vh] w-full"
                                 />
                             </TabsContent>
 
-                            <TabsContent value="payment-entry" asChild>
+                            <TabsContent asChild value="payment-entry">
                                 <GeneralLedgerTable
+                                    accountId={focused.accountId}
+                                    className="min-h-[70vh] max-h-[70vh] w-full"
+                                    memberProfileId={focused.memberProfileId}
                                     mode="member-account"
                                     TEntryType="payment-entry"
-                                    memberProfileId={focused.memberProfileId}
-                                    accountId={focused.accountId}
-                                    className="min-h-[70vh] max-h-[70vh] w-full"
                                 />
                             </TabsContent>
 
-                            <TabsContent value="withdraw-entry" asChild>
+                            <TabsContent asChild value="withdraw-entry">
                                 <GeneralLedgerTable
+                                    accountId={focused.accountId}
+                                    className="min-h-[70vh] max-h-[70vh] w-full"
+                                    memberProfileId={focused.memberProfileId}
                                     mode="member-account"
                                     TEntryType="withdraw-entry"
-                                    memberProfileId={focused.memberProfileId}
-                                    accountId={focused.accountId}
-                                    className="min-h-[70vh] max-h-[70vh] w-full"
                                 />
                             </TabsContent>
 
-                            <TabsContent value="deposit-entry" asChild>
+                            <TabsContent asChild value="deposit-entry">
                                 <GeneralLedgerTable
-                                    mode="member-account"
-                                    TEntryType="deposit-entry"
-                                    memberProfileId={focused.memberProfileId}
                                     accountId={focused.accountId}
                                     className="min-h-[70vh] max-h-[70vh] w-full"
+                                    memberProfileId={focused.memberProfileId}
+                                    mode="member-account"
+                                    TEntryType="deposit-entry"
                                 />
                             </TabsContent>
                         </Tabs>
@@ -290,8 +290,9 @@ const MemberAccountingLedger = ({ memberProfileId, className }: Props) => {
                 </Modal>
             )}
             <MemberAccountingLedgerTable
-                mode="member"
+                className="w-full"
                 memberProfileId={memberProfileId}
+                mode="member"
                 onRowClick={(data) =>
                     setFocused({
                         accountId: data.original.account_id,
@@ -299,7 +300,6 @@ const MemberAccountingLedger = ({ memberProfileId, className }: Props) => {
                         account: data.original.account,
                     })
                 }
-                className="w-full"
             />
             <MemberAccountingLedgerTotal
                 className="w-fit self-end"

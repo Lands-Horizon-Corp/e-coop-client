@@ -9,6 +9,7 @@ interface Props<T> {
 const HeaderToggleSelect = <T,>({ table }: Props<T>) => {
     return (
         <Checkbox
+            aria-label="Select all"
             checked={
                 table.getIsAllPageRowsSelected() ||
                 (table.getIsSomePageRowsSelected() && 'indeterminate')
@@ -16,7 +17,6 @@ const HeaderToggleSelect = <T,>({ table }: Props<T>) => {
             onCheckedChange={(value) =>
                 table.toggleAllPageRowsSelected(!!value)
             }
-            aria-label="Select all"
         />
     )
 }

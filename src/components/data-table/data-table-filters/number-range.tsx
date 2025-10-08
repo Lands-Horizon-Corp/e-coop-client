@@ -9,9 +9,7 @@ const NumberRange = ({ value, onChange }: Props) => {
     return (
         <div className="flex items-center gap-x-1">
             <DebouncedInput
-                type="number"
                 className="max-w-32"
-                value={value.from ?? ''}
                 onChange={(inpt) =>
                     onChange({
                         ...value,
@@ -19,11 +17,11 @@ const NumberRange = ({ value, onChange }: Props) => {
                     })
                 }
                 placeholder="Min"
+                type="number"
+                value={value.from ?? ''}
             />
             <DebouncedInput
-                type="number"
                 className="max-w-32"
-                value={value.to ?? ''}
                 onChange={(inpt) =>
                     onChange({
                         ...value,
@@ -31,6 +29,8 @@ const NumberRange = ({ value, onChange }: Props) => {
                     })
                 }
                 placeholder="Max"
+                type="number"
+                value={value.to ?? ''}
             />
         </div>
     )

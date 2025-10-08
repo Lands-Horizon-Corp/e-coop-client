@@ -39,12 +39,11 @@ const DateFilter = <T,>({
 
     return (
         <div
-            onKeyDown={(e) => e.stopPropagation()}
             className="flex min-w-72 flex-col space-y-2 p-1"
+            onKeyDown={(e) => e.stopPropagation()}
         >
             <p className="text-sm">Filter</p>
             <Select
-                value={filterVal.mode}
                 onValueChange={(val) => {
                     const newFilterMode = val as TFilterModes
                     setFilter(field, {
@@ -52,13 +51,14 @@ const DateFilter = <T,>({
                         mode: newFilterMode,
                     })
                 }}
+                value={filterVal.mode}
             >
                 <SelectTrigger className="">
                     <SelectValue placeholder="Select Filter" />
                 </SelectTrigger>
                 <SelectContent
-                    onClick={(e) => e.stopPropagation()}
                     className="ecoop-scroll max-h-[60vh] min-w-40 overflow-y-scroll shadow-md"
+                    onClick={(e) => e.stopPropagation()}
                 >
                     {filterModeOptions.map((mode, i) => (
                         <SelectItem key={i} value={mode.value}>
@@ -69,11 +69,8 @@ const DateFilter = <T,>({
             </Select>
             {filterVal.mode !== 'range' ? (
                 <InputDatePicker
-                    fromYear={1960}
                     captionLayout="dropdown"
-                    value={
-                        isDate(filterVal.value) ? filterVal.value : undefined
-                    }
+                    fromYear={1960}
                     onChange={(newDate) => {
                         if (!newDate) return
                         setFilter(field, {
@@ -83,18 +80,13 @@ const DateFilter = <T,>({
                             to: undefined,
                         })
                     }}
+                    value={
+                        isDate(filterVal.value) ? filterVal.value : undefined
+                    }
                 />
             ) : (
                 <DateRange
                     modal
-                    withTimePick
-                    value={
-                        {
-                            from: filterVal.from,
-                            to: filterVal.to,
-                            value: undefined,
-                        } as unknown as DateRange
-                    }
                     onChange={(val) =>
                         setFilter(field, {
                             ...filterVal,
@@ -103,13 +95,21 @@ const DateFilter = <T,>({
                             value: undefined,
                         })
                     }
+                    value={
+                        {
+                            from: filterVal.from,
+                            to: filterVal.to,
+                            value: undefined,
+                        } as unknown as DateRange
+                    }
+                    withTimePick
                 />
             )}
             <Button
-                size="sm"
                 className="w-full"
-                variant="secondary"
                 onClick={() => setFilter(field)}
+                size="sm"
+                variant="secondary"
             >
                 Clear Filter
             </Button>

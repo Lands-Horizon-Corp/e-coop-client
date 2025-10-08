@@ -37,12 +37,12 @@ const DataTableBody = <TData,>({
             {rows.map((row) => {
                 const tableRow = (
                     <TableRow
-                        key={row.id}
-                        data-row-id={row.id}
                         className={cn('h-14', rowClassName)}
+                        data-row-id={row.id}
+                        data-state={row.getIsSelected() && 'selected'}
+                        key={row.id}
                         onClick={(e) => onRowClick?.(row, e)}
                         onDoubleClick={(e) => onDoubleClick?.(row, e)}
-                        data-state={row.getIsSelected() && 'selected'}
                     >
                         {row.getVisibleCells().map((cell) => {
                             const { column } = cell
@@ -56,12 +56,7 @@ const DataTableBody = <TData,>({
 
                             return (
                                 <TableCell
-                                    key={cell.id}
                                     className="data-[pinned]:bg-muted/60 data-[pinned]:backdrop-blur-md [&[data-pinned=left][data-last-col=left]]:border-r [&[data-pinned=right][data-last-col=right]]:border-l [&[data-pinned][data-last-col]]:border-border [&_*]:truncate"
-                                    style={{
-                                        ...getPinningStyles(column),
-                                    }}
-                                    data-pinned={isPinned || undefined}
                                     data-last-col={
                                         isLastLeftPinned
                                             ? 'left'
@@ -69,6 +64,11 @@ const DataTableBody = <TData,>({
                                               ? 'right'
                                               : undefined
                                     }
+                                    data-pinned={isPinned || undefined}
+                                    key={cell.id}
+                                    style={{
+                                        ...getPinningStyles(column),
+                                    }}
                                 >
                                     {flexRender(
                                         cell.column.columnDef.cell,
@@ -82,7 +82,7 @@ const DataTableBody = <TData,>({
 
                 if (RowContextComponent)
                     return (
-                        <RowContextComponent row={row} key={row.id}>
+                        <RowContextComponent key={row.id} row={row}>
                             {tableRow}
                         </RowContextComponent>
                     )
@@ -91,7 +91,7 @@ const DataTableBody = <TData,>({
             })}
             {rows.length === 0 && (
                 <TableRow>
-                    <TableCell colSpan={colCount} className="h-24 text-center">
+                    <TableCell className="h-24 text-center" colSpan={colCount}>
                         <span className="w-full text-center text-xs text-muted-foreground/60">
                             <MagnifyingGlassIcon className="mr-2 inline" /> no
                             data to display

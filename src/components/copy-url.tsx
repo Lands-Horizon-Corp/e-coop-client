@@ -35,12 +35,12 @@ const CopyURL = ({
 
     return (
         <div
-            onClick={handleCopy}
             className={cn(
                 'group flex cursor-pointer gap-x-4 rounded-md bg-secondary px-3 py-2 text-xs text-foreground/70 duration-200 hover:text-foreground',
                 className,
                 coppied && 'bg-primary/30'
             )}
+            onClick={handleCopy}
         >
             <p>{displayText}</p>
             {coppied ? (

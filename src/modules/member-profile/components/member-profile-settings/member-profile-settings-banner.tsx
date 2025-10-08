@@ -85,11 +85,11 @@ const MemberProfileSettingsBanner = ({ className, memberProfile }: Props) => {
                     <div className="flex-shrink-0">
                         <PreviewMediaWrapper media={memberProfile.media}>
                             <ImageDisplay
-                                src={memberProfile.media?.download_url}
+                                className="size-12"
                                 fallback={
                                     memberProfile.first_name.charAt(0) ?? '-'
                                 }
-                                className="size-12"
+                                src={memberProfile.media?.download_url}
                             />
                         </PreviewMediaWrapper>
                     </div>

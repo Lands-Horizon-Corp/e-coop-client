@@ -2,6 +2,7 @@ import js from '@eslint/js'
 import globals from 'globals'
 import reactHooks from 'eslint-plugin-react-hooks'
 import reactRefresh from 'eslint-plugin-react-refresh'
+import perfectionist from 'eslint-plugin-perfectionist'
 import { defineConfig } from 'eslint/config';
 import tseslint from 'typescript-eslint'
 
@@ -17,6 +18,7 @@ export default defineConfig(
     plugins: {
       'react-hooks': reactHooks,
       'react-refresh': reactRefresh,
+      'perfectionist': perfectionist,
     },
     rules: {
       ...reactHooks.configs.recommended.rules,
@@ -35,7 +37,15 @@ export default defineConfig(
         {
             'allowInterfaces': 'with-single-extends'
         }
-      ]
+      ],
+      'perfectionist/sort-jsx-props': [
+        'error',
+        {
+          type: 'alphabetical',
+          order: 'asc',
+          ignoreCase: true,
+        },
+      ],
     },
   },
 )

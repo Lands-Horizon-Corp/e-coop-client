@@ -35,7 +35,6 @@ export const PolicyAcceptanceModal = ({
 
     return (
         <Modal
-            title={`Join Branch ${branchName}`}
             description={
                 <span>
                     You are about to join this branch{' '}
@@ -45,6 +44,7 @@ export const PolicyAcceptanceModal = ({
                     , are you sure you want to proceed?
                 </span>
             }
+            title={`Join Branch ${branchName}`}
             {...rest}
             className="max-w-2xl"
         >
@@ -53,20 +53,20 @@ export const PolicyAcceptanceModal = ({
                     To proceed, please read and accept the following policies:
                 </p>
                 <OrganizationPolicies
-                    organization={organization}
+                    isIncludeIAccept
                     onPolicyChange={(isAllChecked) =>
                         setIsAllChecked(isAllChecked)
                     }
-                    isIncludeIAccept
+                    organization={organization}
                 />
                 <div className="flex justify-end col-span-2 gap-x-2 mt-6">
-                    <Button size={'sm'} onClick={onCancel} variant={'ghost'}>
+                    <Button onClick={onCancel} size={'sm'} variant={'ghost'}>
                         Cancel
                     </Button>
                     <Button
-                        size={'sm'}
                         disabled={!isAllChecked}
                         onClick={handleAccept}
+                        size={'sm'}
                     >
                         Join
                     </Button>

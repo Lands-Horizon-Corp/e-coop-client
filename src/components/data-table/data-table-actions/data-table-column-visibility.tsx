@@ -42,9 +42,9 @@ const DatatableColumnVisibility = <TData,>({
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
                 <Button
+                    className={cn('rounded-md', className)}
                     size="icon"
                     variant="secondary"
-                    className={cn('rounded-md', className)}
                 >
                     <ColumnOutlineIcon className="size-4" />
                 </Button>
@@ -85,14 +85,14 @@ const DatatableColumnVisibility = <TData,>({
                                 //     {column.id}
                                 // </DropdownMenuCheckboxItem>
                                 <DropdownMenuItem
-                                    key={column.id}
-                                    onClick={() => column.toggleVisibility()}
-                                    onSelect={(e) => e.preventDefault()}
                                     className={cn(
                                         'text-foreground',
                                         column.getIsVisible() === false &&
                                             ' text-muted-foreground/70'
                                     )}
+                                    key={column.id}
+                                    onClick={() => column.toggleVisibility()}
+                                    onSelect={(e) => e.preventDefault()}
                                 >
                                     {column.getIsVisible() ? (
                                         <EyeIcon className="mr-2" />

@@ -49,9 +49,6 @@ const InvitationCode = () => {
     return (
         <PageContainer>
             <InvitationCodeCreateUpdateFormModal
-                open={createModal}
-                onOpenChange={setCreateModal}
-                titleClassName="font-bold"
                 className="min-w-[400px] sm:min-w-[500px] md:min-w-[600px] lg:min-w-[700px] xl:min-w-[800px]"
                 formProps={{
                     defaultValues: {},
@@ -59,6 +56,9 @@ const InvitationCode = () => {
                         toast.success('Invitation code created')
                     },
                 }}
+                onOpenChange={setCreateModal}
+                open={createModal}
+                titleClassName="font-bold"
             />
             <InvitationCodeTable
                 actionComponent={(props) => (
@@ -72,12 +72,12 @@ const InvitationCode = () => {
                         {...props}
                     />
                 )}
+                className="max-h-[90vh] min-h-[90vh] w-full"
                 toolbarProps={{
                     createActionProps: {
                         onClick: () => setCreateModal(true),
                     },
                 }}
-                className="max-h-[90vh] min-h-[90vh] w-full"
             />
         </PageContainer>
     )

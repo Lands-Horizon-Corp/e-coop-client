@@ -35,7 +35,10 @@ const LoansPage = () => {
         <PageContainer>
             <LoanTransactionCreateUpdateFormModal {...createModal} />
             <LoanTransactionTable
+                actionComponent={LoanTransactionAction}
+                className="max-h-[90vh] min-h-[90vh] w-full"
                 mode="branch"
+                RowContextComponent={LoanTransactionRowContext}
                 toolbarProps={{
                     createActionProps: {
                         onClick: () => {
@@ -47,9 +50,6 @@ const LoansPage = () => {
                         },
                     },
                 }}
-                RowContextComponent={LoanTransactionRowContext}
-                actionComponent={LoanTransactionAction}
-                className="max-h-[90vh] min-h-[90vh] w-full"
             />
         </PageContainer>
     )

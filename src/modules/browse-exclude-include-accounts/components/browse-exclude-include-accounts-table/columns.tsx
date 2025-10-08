@@ -38,8 +38,8 @@ const BrowseExcludeIncludeAccountColumns = (
                 <HeaderToggleSelect table={table} />
                 {!column.getIsPinned() && (
                     <PushPinSlashIcon
-                        onClick={() => column.pin('left')}
                         className="mr-2 size-3.5 cursor-pointer"
+                        onClick={() => column.pin('left')}
                     />
                 )}
             </div>
@@ -66,8 +66,8 @@ const BrowseExcludeIncludeAccountColumns = (
             <DataTableColumnHeader {...props} title="Computation Sheet">
                 <ColumnActions {...props}>
                     <TextFilter
-                        field="computation_sheet.name"
                         displayText="Computation Sheet"
+                        field="computation_sheet.name"
                     />
                 </ColumnActions>
             </DataTableColumnHeader>
@@ -82,8 +82,8 @@ const BrowseExcludeIncludeAccountColumns = (
             <DataTableColumnHeader {...props} title="Fines Account">
                 <ColumnActions {...props}>
                     <TextFilter
-                        field="fines_account.name"
                         displayText="Fines Account"
+                        field="fines_account.name"
                     />
                 </ColumnActions>
             </DataTableColumnHeader>
@@ -98,8 +98,8 @@ const BrowseExcludeIncludeAccountColumns = (
             <DataTableColumnHeader {...props} title="Comaker Account">
                 <ColumnActions {...props}>
                     <TextFilter
-                        field="comaker_account.name"
                         displayText="Comaker Account"
+                        field="comaker_account.name"
                     />
                 </ColumnActions>
             </DataTableColumnHeader>
@@ -114,8 +114,8 @@ const BrowseExcludeIncludeAccountColumns = (
             <DataTableColumnHeader {...props} title="Interest Account">
                 <ColumnActions {...props}>
                     <TextFilter
-                        field="interest_account.name"
                         displayText="Interest Account"
+                        field="interest_account.name"
                     />
                 </ColumnActions>
             </DataTableColumnHeader>
@@ -130,8 +130,8 @@ const BrowseExcludeIncludeAccountColumns = (
             <DataTableColumnHeader {...props} title="Delinquent Account">
                 <ColumnActions {...props}>
                     <TextFilter
-                        field="deliquent_account.name"
                         displayText="Delinquent Account"
+                        field="deliquent_account.name"
                     />
                 </ColumnActions>
             </DataTableColumnHeader>
@@ -146,8 +146,8 @@ const BrowseExcludeIncludeAccountColumns = (
             <DataTableColumnHeader {...props} title="Existing Loan Account">
                 <ColumnActions {...props}>
                     <TextFilter
-                        field="include_existing_loan_account.name"
                         displayText="Existing Loan Account"
+                        field="include_existing_loan_account.name"
                     />
                 </ColumnActions>
             </DataTableColumnHeader>

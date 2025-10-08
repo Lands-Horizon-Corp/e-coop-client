@@ -96,19 +96,19 @@ const TransactionMemberProfile = ({
                             <PreviewMediaWrapper media={memberInfo.media}>
                                 <ImageDisplay
                                     className="size-16"
-                                    src={memberInfo.media?.download_url}
                                     fallback={
                                         memberInfo.first_name.charAt(0) ?? '-'
                                     }
+                                    src={memberInfo.media?.download_url}
                                 />
                             </PreviewMediaWrapper>
                         </div>
                         <Drawer>
                             <DrawerTrigger asChild>
                                 <Button
-                                    variant="outline"
-                                    size="sm"
                                     className="text-xs w-full h-7 min-w-24 cursor-pointer mt-2 sm:mt-0"
+                                    size="sm"
+                                    variant="outline"
                                 >
                                     View Profile
                                 </Button>
@@ -122,13 +122,13 @@ const TransactionMemberProfile = ({
                         </Drawer>
                         {allowRemoveButton && (
                             <Button
-                                variant="destructive"
-                                size="sm"
                                 className="text-xs w-full h-7 min-w-24 cursor-pointer mt-2 sm:mt-0"
                                 onClick={(e) => {
                                     e.preventDefault()
                                     onRemove?.()
                                 }}
+                                size="sm"
+                                variant="destructive"
                             >
                                 remove
                             </Button>
@@ -151,8 +151,6 @@ const TransactionMemberProfile = ({
                                     <TooltipTrigger asChild>
                                         {memberInfo.signature && (
                                             <Button
-                                                variant="ghost"
-                                                size="icon"
                                                 onClick={(e) => {
                                                     e.preventDefault()
                                                     e.stopPropagation()
@@ -162,6 +160,8 @@ const TransactionMemberProfile = ({
                                                         ] as IMedia[],
                                                     })
                                                 }}
+                                                size="icon"
+                                                variant="ghost"
                                             >
                                                 <SignatureLightIcon size={25} />
                                             </Button>
@@ -176,19 +176,19 @@ const TransactionMemberProfile = ({
                                 <HoverCard>
                                     <HoverCardTrigger>
                                         <ImageNameDisplay
+                                            className="rounded-full bg-card/80 p-1 text-sm"
+                                            name={memberInfo.user.first_name}
+                                            nameClassName="mr-2"
                                             src={
                                                 memberInfo.user?.media
                                                     ?.download_url
                                             }
-                                            name={memberInfo.user.first_name}
-                                            className="rounded-full bg-card/80 p-1 text-sm"
-                                            nameClassName="mr-2"
                                         />
                                     </HoverCardTrigger>
                                     <HoverCardContent className="border-0 bg-transparent p-0">
                                         <HoveruserInfo
-                                            userId={memberInfo.user.id}
                                             defaultValue={memberInfo.user}
+                                            userId={memberInfo.user.id}
                                         />
                                     </HoverCardContent>
                                 </HoverCard>
@@ -244,15 +244,15 @@ const TransactionMemberProfile = ({
 
                 {!viewOnly && (
                     <TransactionModalJointMember
-                        triggerProps={{ disabled: hasTransaction }}
-                        onSelect={(jointMember) =>
-                            setSelectedJointMember(jointMember || null)
-                        }
-                        value={selectedJointMember?.id}
-                        selectedMemberJointId={selectedJointMember?.id}
                         memberJointProfile={
                             memberInfo.member_joint_accounts ?? []
                         }
+                        onSelect={(jointMember) =>
+                            setSelectedJointMember(jointMember || null)
+                        }
+                        selectedMemberJointId={selectedJointMember?.id}
+                        triggerProps={{ disabled: hasTransaction }}
+                        value={selectedJointMember?.id}
                     />
                 )}
             </div>

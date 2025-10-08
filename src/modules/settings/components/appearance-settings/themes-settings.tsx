@@ -129,29 +129,29 @@ const ThemesSettings = ({ className }: Props) => {
             <div className="flex gap-3 items-center">
                 <div className="flex-1 max-w-sm relative">
                     <Input
-                        type="text"
-                        placeholder="Search themes..."
-                        value={searchQuery}
-                        onChange={(e) => setSearchQuery(e.target.value)}
                         className="w-full pr-8"
+                        onChange={(e) => setSearchQuery(e.target.value)}
+                        placeholder="Search themes..."
+                        type="text"
+                        value={searchQuery}
                     />
                     {searchQuery && (
                         <Button
-                            variant="ghost"
-                            size="sm"
-                            onClick={clearSearch}
                             className="absolute right-1 top-1/2 -translate-y-1/2 h-6 w-6 p-0 hover:bg-muted"
+                            onClick={clearSearch}
+                            size="sm"
+                            variant="ghost"
                         >
                             <XIcon className="h-3 w-3" />
                         </Button>
                     )}
                 </div>
                 <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={resetToDefault}
-                    disabled={selectedTheme === 'Default'}
                     className="whitespace-nowrap"
+                    disabled={selectedTheme === 'Default'}
+                    onClick={resetToDefault}
+                    size="sm"
+                    variant="outline"
                 >
                     Reset to Default
                 </Button>
@@ -167,7 +167,7 @@ const ThemesSettings = ({ className }: Props) => {
 
             <div className="grid grid-cols-2 md:grid-cols-5 gap-4 gap-y-10">
                 {filteredThemes.map((theme) => (
-                    <div key={theme.name} className="space-y-2">
+                    <div className="space-y-2" key={theme.name}>
                         <div
                             className={cn(
                                 'relative overflow-hidden rounded-lg border-2 cursor-pointer transition-all duration-200 hover:scale-105',

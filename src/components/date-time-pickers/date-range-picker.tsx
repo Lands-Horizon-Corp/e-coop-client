@@ -21,12 +21,12 @@ const DateRangePicker = ({
     return (
         <Calendar
             {...other}
-            required
-            mode="range"
-            showOutsideDays
-            selected={value}
             disabled={disabled}
+            mode="range"
             onSelect={onChange}
+            required
+            selected={value}
+            showOutsideDays
         />
     )
 }

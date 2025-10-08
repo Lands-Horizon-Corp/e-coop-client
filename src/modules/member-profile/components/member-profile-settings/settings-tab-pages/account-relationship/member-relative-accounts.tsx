@@ -45,22 +45,22 @@ const MemberRelativeAccountCard = ({
     return (
         <div className="flex flex-col gap-y-1 rounded-xl border bg-background p-4">
             <MemberRelativeAccountCreateUpdateFormModal
-                open={edit}
-                onOpenChange={setEdit}
-                title="Update Relative Account"
                 description="Modify / Update this relative account information."
                 formProps={{
                     memberProfileId,
                     defaultValues: relative,
                     relativeAccountId: relative.id,
                 }}
+                onOpenChange={setEdit}
+                open={edit}
+                title="Update Relative Account"
             />
             <div className="flex items-start justify-between">
                 <div className="flex min-w-0 items-center gap-3">
                     <PreviewMediaWrapper media={relProfile?.media}>
                         <ImageDisplay
-                            src={relProfile?.media?.download_url}
                             className="h-9 w-9 rounded-full border bg-muted object-cover"
+                            src={relProfile?.media?.download_url}
                         />
                     </PreviewMediaWrapper>
                     <div className="flex min-w-0 flex-col">
@@ -78,22 +78,20 @@ const MemberRelativeAccountCard = ({
                     </div>
                 </div>
                 <fieldset
-                    disabled={isDeleting}
                     className="flex items-center justify-end gap-1"
+                    disabled={isDeleting}
                 >
                     <Button
-                        size="icon"
-                        variant="ghost"
                         className="!size-fit px-1.5 py-1.5 text-muted-foreground/40"
                         onClick={() => setEdit(true)}
+                        size="icon"
+                        variant="ghost"
                     >
                         <PencilFillIcon className="size-4" />
                     </Button>
                     <Button
-                        size="icon"
-                        variant="ghost"
-                        hoverVariant="destructive"
                         className="!size-fit px-1.5 py-1.5 text-muted-foreground/40"
+                        hoverVariant="destructive"
                         onClick={() =>
                             onOpen({
                                 title: 'Delete Relative Account',
@@ -106,6 +104,8 @@ const MemberRelativeAccountCard = ({
                                     }),
                             })
                         }
+                        size="icon"
+                        variant="ghost"
                     >
                         {isDeleting ? (
                             <LoadingSpinner />
@@ -151,9 +151,6 @@ const MemberRelativeAccounts = ({
     return (
         <div>
             <MemberRelativeAccountCreateUpdateFormModal
-                open={create}
-                onOpenChange={setCreate}
-                title="Create Relative Account"
                 description="Add new relative account information."
                 formProps={{
                     memberProfileId: memberProfile.id,
@@ -161,10 +158,13 @@ const MemberRelativeAccounts = ({
                         member_profile_id: memberProfile.id,
                     },
                 }}
+                onOpenChange={setCreate}
+                open={create}
+                title="Create Relative Account"
             />
             <div className="mb-2 flex items-start justify-between">
                 <p>Relative Accounts</p>
-                <Button size="sm" onClick={() => setCreate(true)}>
+                <Button onClick={() => setCreate(true)} size="sm">
                     Add Relative Account
                 </Button>
             </div>
@@ -173,8 +173,8 @@ const MemberRelativeAccounts = ({
                     relativeAccounts.map((relative) => (
                         <MemberRelativeAccountCard
                             key={relative.id}
-                            relative={relative}
                             memberProfileId={memberProfile.id}
+                            relative={relative}
                         />
                     ))
                 ) : (

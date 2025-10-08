@@ -18,9 +18,6 @@ const PaymentType = () => {
     return (
         <PageContainer>
             <PaymentTypeCreateUpdateFormModal
-                open={createModal}
-                onOpenChange={setCreateModal}
-                titleClassName="font-bold"
                 formProps={{
                     defaultValues: {},
                     onSuccess: () => {
@@ -30,6 +27,9 @@ const PaymentType = () => {
                         toast.success('Payment type created successfully')
                     },
                 }}
+                onOpenChange={setCreateModal}
+                open={createModal}
+                titleClassName="font-bold"
             />
 
             <PaymentTypeTable

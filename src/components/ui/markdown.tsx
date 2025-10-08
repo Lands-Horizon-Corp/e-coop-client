@@ -74,12 +74,12 @@ const CopyButton = memo(function CopyButton({ text }: { text: string }) {
 
     return (
         <Button
-            variant="ghost"
-            size="sm"
-            onClick={handleCopy}
-            className="absolute top-2 right-2 h-8 w-8 p-0 opacity-0 group-hover:opacity-100 transition-opacity z-10"
-            tabIndex={-1}
             aria-label="Copy code block"
+            className="absolute top-2 right-2 h-8 w-8 p-0 opacity-0 group-hover:opacity-100 transition-opacity z-10"
+            onClick={handleCopy}
+            size="sm"
+            tabIndex={-1}
+            variant="ghost"
         >
             {copied ? (
                 <CheckIcon className="h-4 w-4 text-primary" />
@@ -161,7 +161,7 @@ const CodeBlock = memo(function CodeBlock({
     // Render plain text if highlighting is disabled or no language is specified
     if (disableHighlighting || !language) {
         return (
-            <div id={id} className="relative group my-4">
+            <div className="relative group my-4" id={id}>
                 {allowCopy && <CopyButton text={code} />}
                 <pre className="bg-muted p-4 rounded-lg overflow-auto">
                     <code>{code}</code>
@@ -171,13 +171,10 @@ const CodeBlock = memo(function CodeBlock({
     }
 
     return (
-        <div id={id} className="relative group my-4">
+        <div className="relative group my-4" id={id}>
             {allowCopy && <CopyButton text={code} />}
             {isVisible ? (
                 <SyntaxHighlighter
-                    style={syntaxTheme}
-                    language={language}
-                    showLineNumbers={showLineNumbers}
                     customStyle={{
                         margin: 0,
                         borderRadius: '0.5rem',
@@ -185,9 +182,12 @@ const CodeBlock = memo(function CodeBlock({
                         maxHeight: 500,
                         overflow: 'auto',
                     }}
+                    language={language}
+                    PreTag="div"
+                    showLineNumbers={showLineNumbers}
+                    style={syntaxTheme}
                     wrapLines
                     wrapLongLines
-                    PreTag="div"
                 >
                     {code}
                 </SyntaxHighlighter>
@@ -302,10 +302,10 @@ const staticComponents: Components = {
     ),
     a: ({ children, href, ...props }) => (
         <a
-            href={href}
             className="text-primary hover:text-primary/80 underline underline-offset-4 transition-colors"
-            target="_blank"
+            href={href}
             rel="noopener noreferrer"
+            target="_blank"
             {...props}
         >
             {children}
@@ -313,10 +313,10 @@ const staticComponents: Components = {
     ),
     img: ({ src, alt, ...props }) => (
         <Image
-            src={src || '/placeholder.svg'}
             alt={alt || 'placeholder image'}
             className="max-w-full h-auto rounded-lg my-4 shadow-sm"
             loading="lazy"
+            src={src || '/placeholder.svg'}
             {...props}
         />
     ),
@@ -391,10 +391,10 @@ const staticComponents: Components = {
     input: ({ type, checked, ...props }) =>
         type === 'checkbox' ? (
             <input
-                type="checkbox"
                 checked={!!checked}
-                readOnly
                 className="mr-2 accent-primary"
+                readOnly
+                type="checkbox"
                 {...props}
             />
         ) : (
@@ -436,11 +436,11 @@ export const Markdown = memo(function Markdown({
                 <InlineCode>{children}</InlineCode>
             ) : (
                 <CodeBlock
-                    className={className}
-                    showLineNumbers={showLineNumbers}
                     allowCopy={allowCopy}
-                    theme={theme}
+                    className={className}
                     disableHighlighting={disableHighlighting}
+                    showLineNumbers={showLineNumbers}
+                    theme={theme}
                 >
                     {children}
                 </CodeBlock>
@@ -461,9 +461,9 @@ export const Markdown = memo(function Markdown({
         <div className={cn('max-w-none', className)}>
             <ErrorBoundary>
                 <ReactMarkdown
-                    remarkPlugins={remarkPlugins}
-                    rehypePlugins={rehypePlugins}
                     components={components}
+                    rehypePlugins={rehypePlugins}
+                    remarkPlugins={remarkPlugins}
                 >
                     {content}
                 </ReactMarkdown>

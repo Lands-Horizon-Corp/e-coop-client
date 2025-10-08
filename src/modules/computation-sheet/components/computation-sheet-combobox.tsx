@@ -68,8 +68,6 @@ const ComputationSheetCombobox = ({
     return (
         <>
             <ComputationSheetCreateUpdateFormModal
-                open={createModal}
-                onOpenChange={setCreateModal}
                 formProps={{
                     ...computationSheetComboboxCreateProps,
                     onSuccess: (newComputationSheet) => {
@@ -77,15 +75,17 @@ const ComputationSheetCombobox = ({
                         setCreateModal(false)
                     },
                 }}
+                onOpenChange={setCreateModal}
+                open={createModal}
             />
-            <Popover modal open={open} onOpenChange={setOpen}>
+            <Popover modal onOpenChange={setOpen} open={open}>
                 <PopoverTrigger asChild>
                     <Button
-                        variant="outline"
-                        role="combobox"
                         aria-expanded={open}
                         className={cn('w-full justify-between px-3', className)}
                         disabled={disabled || isLoading}
+                        role="combobox"
+                        variant="outline"
                     >
                         {selectedComputationSheet ? (
                             <div className="flex items-center gap-2 min-w-0">
@@ -104,8 +104,8 @@ const ComputationSheetCombobox = ({
                 <PopoverContent className="max-h-[--radix-popover-content-available-height] w-[--radix-popover-trigger-width] p-0">
                     <Command>
                         <CommandInput
-                            placeholder="Search Bank..."
                             className="h-9"
+                            placeholder="Search Bank..."
                         />
                         {isLoading ? (
                             <CommandEmpty>
@@ -135,11 +135,11 @@ const ComputationSheetCombobox = ({
                                     {data?.map((option) => (
                                         <CommandItem
                                             key={option.id}
-                                            value={option.name}
                                             onSelect={() => {
                                                 setOpen(false)
                                                 onChange?.(option)
                                             }}
+                                            value={option.name}
                                         >
                                             <div className="flex items-center gap-2 min-w-0 flex-1">
                                                 <span className="truncate">

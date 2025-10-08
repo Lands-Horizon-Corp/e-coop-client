@@ -103,50 +103,50 @@ const BillsAndCoinCreateUpdateForm = ({
     return (
         <Form {...form}>
             <form
-                ref={formRef}
-                onSubmit={onSubmit}
                 className={cn('flex w-full flex-col gap-y-4', className)}
+                onSubmit={onSubmit}
+                ref={formRef}
             >
                 <fieldset
-                    disabled={isPending || formProps.readOnly}
                     className="grid gap-x-6 gap-y-4 sm:gap-y-3"
+                    disabled={isPending || formProps.readOnly}
                 >
                     <fieldset className="space-y-3">
                         <FormFieldWrapper
                             control={form.control}
-                            name="name"
                             label="Name *"
+                            name="name"
                             render={({ field }) => (
                                 <Input
                                     {...field}
-                                    id={field.name}
-                                    placeholder="Bill/Coin Name"
                                     autoComplete="off"
                                     disabled={isDisabled(field.name)}
+                                    id={field.name}
+                                    placeholder="Bill/Coin Name"
                                 />
                             )}
                         />
                         <FormFieldWrapper
                             control={form.control}
-                            name="value"
                             label="Value *"
+                            name="value"
                             render={({ field }) => (
                                 <Input
                                     {...field}
-                                    id={field.name}
-                                    type="number"
-                                    step="0.01"
-                                    placeholder="Value"
                                     autoComplete="off"
                                     disabled={isDisabled(field.name)}
+                                    id={field.name}
+                                    placeholder="Value"
+                                    step="0.01"
+                                    type="number"
                                 />
                             )}
                         />
 
                         <FormFieldWrapper
                             control={form.control}
-                            name="country_code"
                             label="Country Code *"
+                            name="country_code"
                             render={({ field }) => (
                                 <CountryCombobox
                                     {...field}
@@ -160,19 +160,13 @@ const BillsAndCoinCreateUpdateForm = ({
 
                         <FormFieldWrapper
                             control={form.control}
-                            name="media_id"
                             label="Bill/Coin Photo"
+                            name="media_id"
                             render={({ field }) => {
                                 const value = form.watch('media')
                                 return (
                                     <ImageField
                                         {...field}
-                                        placeholder="Upload Bill/Coin Photo"
-                                        value={
-                                            value
-                                                ? (value as IMedia).download_url
-                                                : value
-                                        }
                                         onChange={(newImage) => {
                                             if (newImage)
                                                 field.onChange(newImage.id)
@@ -180,6 +174,12 @@ const BillsAndCoinCreateUpdateForm = ({
 
                                             form.setValue('media', newImage)
                                         }}
+                                        placeholder="Upload Bill/Coin Photo"
+                                        value={
+                                            value
+                                                ? (value as IMedia).download_url
+                                                : value
+                                        }
                                     />
                                 )
                             }}
@@ -187,15 +187,15 @@ const BillsAndCoinCreateUpdateForm = ({
                     </fieldset>
                 </fieldset>
                 <FormFooterResetSubmit
-                    error={error}
-                    readOnly={formProps.readOnly}
-                    isLoading={isPending}
                     disableSubmit={!form.formState.isDirty}
-                    submitText={billsAndCoinId ? 'Update' : 'Create'}
+                    error={error}
+                    isLoading={isPending}
                     onReset={() => {
                         form.reset()
                         reset()
                     }}
+                    readOnly={formProps.readOnly}
+                    submitText={billsAndCoinId ? 'Update' : 'Create'}
                 />
             </form>
         </Form>
@@ -213,9 +213,9 @@ export const BillsAndCoinCreateUpdateFormModal = ({
 }) => {
     return (
         <Modal
-            title={title}
-            description={description}
             className={cn('', className)}
+            description={description}
+            title={title}
             {...props}
         >
             <BillsAndCoinCreateUpdateForm

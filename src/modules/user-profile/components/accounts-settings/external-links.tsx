@@ -25,11 +25,11 @@ export const ExternalLinks = ({ links, title }: ExternalLinksProps) => {
             <div className="space-y-0.5  overflow-y-auto">
                 {links.map((link) => (
                     <Link
-                        key={link.path}
-                        to={link.path as string}
-                        target="_blank"
-                        rel="noopener noreferrer"
                         className="flex items-start gap-1.5 px-2 py-1 text-xs text-muted-foreground hover:text-foreground transition-colors duration-200 group rounded-md hover:bg-accent"
+                        key={link.path}
+                        rel="noopener noreferrer"
+                        target="_blank"
+                        to={link.path as string}
                     >
                         <ArrowUpRightIcon className="size-3 mt-0.5 shrink-0 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform duration-200" />
                         <span className="text-wrap leading-tight">

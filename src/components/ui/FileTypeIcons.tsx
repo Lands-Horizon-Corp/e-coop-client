@@ -9,12 +9,12 @@ import { FileXIcon, ImageIcon } from '../icons'
 import Image from '../image'
 
 export const FileTypeIcons = {
-    audio: <Image src={attachmentAudio} alt="attachment-audio" />,
-    video: <Image src={attachmentVideo} alt="attachment-video" />,
-    doc: <Image src={attachmentDoc} alt="attachment-doc" />,
-    pdf: <Image src={attachmentpdf} alt="attachment-pdf" />,
-    sheet: <Image src={attachmentSheet} alt="attachment-sheet" />,
-    text: <Image src={attachmentTxt} alt="attachment-text" />,
+    audio: <Image alt="attachment-audio" src={attachmentAudio} />,
+    video: <Image alt="attachment-video" src={attachmentVideo} />,
+    doc: <Image alt="attachment-doc" src={attachmentDoc} />,
+    pdf: <Image alt="attachment-pdf" src={attachmentpdf} />,
+    sheet: <Image alt="attachment-sheet" src={attachmentSheet} />,
+    text: <Image alt="attachment-text" src={attachmentTxt} />,
     image: (
         <div className="flex size-8 items-center justify-center rounded-sm bg-primary/10">
             <ImageIcon className="size-5 text-primary/70" />

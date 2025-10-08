@@ -63,12 +63,11 @@ const TimeFilter = <T,>({
 
     return (
         <div
-            onKeyDown={(e) => e.stopPropagation()}
             className="flex min-w-72 flex-col space-y-2 p-1"
+            onKeyDown={(e) => e.stopPropagation()}
         >
             <p className="text-sm">Filter</p>
             <Select
-                value={filterVal.mode}
                 onValueChange={(val) => {
                     const newFilterMode = val as TFilterModes
                     setFilter(field, {
@@ -76,13 +75,14 @@ const TimeFilter = <T,>({
                         mode: newFilterMode,
                     })
                 }}
+                value={filterVal.mode}
             >
                 <SelectTrigger className="">
                     <SelectValue placeholder="Select Filter" />
                 </SelectTrigger>
                 <SelectContent
-                    onClick={(e) => e.stopPropagation()}
                     className="ecoop-scroll max-h-[60vh] min-w-40 overflow-y-scroll shadow-md"
+                    onClick={(e) => e.stopPropagation()}
                 >
                     {filterModeOptions.map((mode, i) => (
                         <SelectItem key={i} value={mode.value}>
@@ -93,7 +93,6 @@ const TimeFilter = <T,>({
             </Select>
             {filters[field]?.mode !== 'range' ? (
                 <TimePickerWithApply
-                    value={filterVal.value ?? new Date(0, 0, 0, 0, 0, 0)}
                     onChange={(newTime) => {
                         setFilter(field, {
                             ...filterVal,
@@ -102,12 +101,12 @@ const TimeFilter = <T,>({
                             to: undefined,
                         })
                     }}
+                    value={filterVal.value ?? new Date(0, 0, 0, 0, 0, 0)}
                 />
             ) : (
                 <>
                     <TimeRange
                         baseDate={new Date(0, 0, 0, 0, 0, 0)}
-                        value={{ from: filterVal.from, to: filterVal.to }}
                         onChange={(newTimeRange) => {
                             setFilter(field, {
                                 ...filterVal,
@@ -118,14 +117,15 @@ const TimeFilter = <T,>({
 
                             logger.log('Set time range', newTimeRange)
                         }}
+                        value={{ from: filterVal.from, to: filterVal.to }}
                     />
                 </>
             )}
             <Button
-                size="sm"
                 className="w-full"
-                variant="secondary"
                 onClick={() => setFilter(field)}
+                size="sm"
+                variant="secondary"
             >
                 Clear Filter
             </Button>

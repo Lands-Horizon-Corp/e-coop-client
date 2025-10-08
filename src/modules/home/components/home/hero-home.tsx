@@ -38,13 +38,13 @@ const HeroHome = () => {
                             <h1 className="text-foreground text-4xl font-bold tracking-tight sm:text-5xl lg:text-6xl">
                                 Empowering Communities Through{' '}
                                 <GradientText
-                                    variant="primary"
-                                    size="6xl"
                                     animate="shimmer"
                                     className="block leading-relaxed"
+                                    size="6xl"
                                     style={{
                                         fontFamily: "'Knewave', cursive",
                                     }}
+                                    variant="primary"
                                 >
                                     <h1>E-cooperative Suite</h1>
                                 </GradientText>
@@ -60,10 +60,10 @@ const HeroHome = () => {
                         {/* Action Buttons */}
                         <div className="flex flex-col gap-4 sm:flex-row">
                             <Button
+                                asChild
                                 className="group"
                                 size="lg"
                                 variant="default"
-                                asChild
                             >
                                 <Link
                                     className="flex items-center"
@@ -74,7 +74,7 @@ const HeroHome = () => {
                                     <ArrowChevronRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
                                 </Link>
                             </Button>
-                            <Button size="lg" variant="outline" asChild>
+                            <Button asChild size="lg" variant="outline">
                                 <Link
                                     className="button border px-2"
                                     to="/contact"
@@ -126,9 +126,9 @@ const HeroHome = () => {
                     <div className="animate-slide-up relative">
                         <div className="shadow-card relative overflow-hidden rounded-2xl ">
                             <ImageMatch
-                                src="/pictures/home/poster.png"
                                 alt="Cooperative community working together"
                                 containerClassName="shadow-card overflow-hidden rounded-2xl"
+                                src="/pictures/home/poster.png"
                             />
                         </div>
 

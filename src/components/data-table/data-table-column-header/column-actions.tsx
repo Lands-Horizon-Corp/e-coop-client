@@ -36,9 +36,9 @@ const ColumnActions = <TData, TValue>({
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
                 <Button
-                    variant="ghost"
-                    size="icon"
                     className="group-hover size-fit gap-x-2 p-1 data-[state=open]:bg-accent"
+                    size="icon"
+                    variant="ghost"
                 >
                     {
                         <>
@@ -54,8 +54,8 @@ const ColumnActions = <TData, TValue>({
                 </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent
-                className="ecoop-scroll max-h-[50vh] min-w-40 overflow-y-scroll shadow-md"
                 align="start"
+                className="ecoop-scroll max-h-[50vh] min-w-40 overflow-y-scroll shadow-md"
                 onClick={(e) => e.stopPropagation()}
             >
                 {children && (

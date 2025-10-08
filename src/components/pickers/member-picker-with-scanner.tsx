@@ -44,8 +44,8 @@ const ScannerView = ({
                 ) : (
                     <div className="flex flex-col size-full items-center justify-center text-center gap-y-2">
                         <ScanLineIcon
-                            size={50}
                             className="text-muted-foreground/70"
+                            size={50}
                         />
                         <Button onClick={onStartScan} size="sm">
                             <EyeIcon className="mr-1 h-4 w-4" />
@@ -98,26 +98,26 @@ const MemberProfilePickerWithScanner = ({
             <MemberPicker
                 modalState={modalState}
                 {...memberPickerProps}
-                value={value}
                 onSelect={onSelect}
+                value={value}
             />
             {hasMember ? (
                 <div className="flex flex-col flex-1 w-full h-full">
                     <TransactionMemberProfile
-                        className="h-full"
-                        memberInfo={value}
-                        hasTransaction={false}
-                        viewOnly
-                        onRemove={handleClearMember}
                         allowRemoveButton
+                        className="h-full"
+                        hasTransaction={false}
+                        memberInfo={value}
+                        onRemove={handleClearMember}
+                        viewOnly
                     />
                 </div>
             ) : (
                 <>
                     <ScannerView
                         isScanning={startScanner}
-                        onStartScan={() => setStartScanner(true)}
                         onScanSuccess={handleSuccessScan}
+                        onStartScan={() => setStartScanner(true)}
                     />
                     <div className="flex flex-col flex-1 w-full h-full">
                         {isLoadingScanner ? (

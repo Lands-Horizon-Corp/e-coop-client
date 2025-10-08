@@ -47,16 +47,16 @@ const RelationshipCombobox = ({
     const [open, setOpen] = React.useState(false)
 
     return (
-        <Popover modal open={open} onOpenChange={setOpen}>
+        <Popover modal onOpenChange={setOpen} open={open}>
             <PopoverTrigger asChild>
                 <Button
                     {...other}
-                    type="button"
-                    role="combobox"
-                    variant="outline"
-                    disabled={disabled}
                     aria-expanded={open}
                     className={cn('w-full justify-between px-3', className)}
+                    disabled={disabled}
+                    role="combobox"
+                    type="button"
+                    variant="outline"
                 >
                     <span className="capitalize">
                         {value || (
@@ -71,8 +71,8 @@ const RelationshipCombobox = ({
             <PopoverContent className="max-h-[--radix-popover-content-available-height] w-[--radix-popover-trigger-width] p-0">
                 <Command>
                     <CommandInput
-                        placeholder="Search Relationship..."
                         className="h-9"
+                        placeholder="Search Relationship..."
                     />
                     <CommandList className="ecoop-scroll">
                         <CommandEmpty>No relationship found.</CommandEmpty>
@@ -80,11 +80,11 @@ const RelationshipCombobox = ({
                             {relationships.map((relationship) => (
                                 <CommandItem
                                     key={relationship}
-                                    value={relationship}
                                     onSelect={() => {
                                         setOpen(false)
                                         onChange?.(relationship)
                                     }}
+                                    value={relationship}
                                 >
                                     <span className="capitalize">
                                         {relationship}

@@ -19,11 +19,11 @@ const NavTimeInBar = () => {
             <Popover modal>
                 <PopoverTrigger asChild>
                     <Button
-                        size="sm"
-                        variant="secondary"
+                        className={cn('group relative gap-x-2 rounded-full')}
                         disabled={isLoading && !timesheet}
                         hoverVariant="primary"
-                        className={cn('group relative gap-x-2 rounded-full')}
+                        size="sm"
+                        variant="secondary"
                     >
                         {!!timesheet && (
                             <div className="absolute -right-1 -top-1">

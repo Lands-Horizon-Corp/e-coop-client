@@ -44,9 +44,9 @@ export const MobileDropdown = ({
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
                 <Button
+                    className="group absolute right-5 top-8 rounded-full hover:text-foreground"
                     size="icon"
                     variant="ghost"
-                    className="group absolute right-5 top-8 rounded-full hover:text-foreground"
                 >
                     <GearIcon className="size-6 transition-transform duration-300 ease-out group-hover:rotate-45" />
                 </Button>
@@ -58,12 +58,12 @@ export const MobileDropdown = ({
 
                 {settingsNavItems.map((item) => (
                     <DropdownMenuItem
-                        key={item.path}
                         className={cn(
                             'text-muted-foreground cursor-pointer',
                             pathname === item.path &&
                                 'text-foreground bg-accent'
                         )}
+                        key={item.path}
                         onClick={() =>
                             router.navigate({ to: item.path as string })
                         }
@@ -76,8 +76,8 @@ export const MobileDropdown = ({
 
                 {externalLinks.map((item) => (
                     <DropdownMenuItem
-                        key={item.path}
                         className="text-muted-foreground cursor-pointer"
+                        key={item.path}
                         onClick={(e) => {
                             e.stopPropagation()
                             window.open(item.path, '_blank')

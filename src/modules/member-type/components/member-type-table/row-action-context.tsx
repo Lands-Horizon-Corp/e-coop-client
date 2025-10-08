@@ -92,13 +92,13 @@ export const MemberTypeAction = ({
             <div onClick={(e) => e.stopPropagation()}>
                 <MemberTypeCreateUpdateFormModal
                     {...createUpdateModal}
+                    description="Modify/Update members type..."
                     formProps={{
                         memberTypeId: memberType.id,
                         defaultValues: memberType,
                         onSuccess: () => createUpdateModal.onOpenChange(false),
                     }}
                     title="Update Member Type"
-                    description="Modify/Update members type..."
                 />
                 <MemberTypeReferenceCreateUpdateFormModal
                     {...referenceCreateUpdateModal}
@@ -111,13 +111,13 @@ export const MemberTypeAction = ({
                 />
                 <Modal
                     {...referenceTableModal}
-                    title={`Member type reference for member type ${memberType.name}`}
                     className="!max-w-[90vw] w-fit p-3"
+                    title={`Member type reference for member type ${memberType.name}`}
                 >
                     <MemberTypeReferenceTable
-                        mode="specific"
-                        memberTypeId={memberType.id}
                         className="max-h-[90vh] min-h-[90vh] w-full"
+                        memberTypeId={memberType.id}
+                        mode="specific"
                         toolbarProps={{
                             createActionProps: {
                                 onClick: () =>
@@ -131,7 +131,6 @@ export const MemberTypeAction = ({
             </div>
             <RowActionsGroup
                 canSelect
-                row={row}
                 onDelete={{
                     text: 'Delete',
                     isAllowed: !isDeletingMemberType,
@@ -150,6 +149,7 @@ export const MemberTypeAction = ({
                         </DropdownMenuItem>
                     </>
                 }
+                row={row}
             />
         </>
     )
@@ -181,13 +181,13 @@ export const MemberTypeRowContext = ({
         <>
             <MemberTypeCreateUpdateFormModal
                 {...createUpdateModal}
+                description="Modify/Update members type..."
                 formProps={{
                     memberTypeId: memberType.id,
                     defaultValues: memberType,
                     onSuccess: () => createUpdateModal.onOpenChange(false),
                 }}
                 title="Update Member Type"
-                description="Modify/Update members type..."
             />
             <MemberTypeReferenceCreateUpdateFormModal
                 {...referenceCreateUpdateModal}
@@ -200,13 +200,13 @@ export const MemberTypeRowContext = ({
             />
             <Modal
                 {...referenceTableModal}
-                title={`Member type reference for member type ${memberType.name}`}
                 className="!max-w-[90vw] w-fit p-3"
+                title={`Member type reference for member type ${memberType.name}`}
             >
                 <MemberTypeReferenceTable
-                    mode="specific"
-                    memberTypeId={memberType.id}
                     className="max-h-[90vh] min-h-[90vh] w-full"
+                    memberTypeId={memberType.id}
+                    mode="specific"
                     toolbarProps={{
                         createActionProps: {
                             onClick: () =>
@@ -216,7 +216,6 @@ export const MemberTypeRowContext = ({
                 />
             </Modal>
             <DataTableRowContext
-                row={row}
                 onDelete={{
                     text: 'Delete',
                     isAllowed: !isDeletingMemberType,
@@ -235,6 +234,7 @@ export const MemberTypeRowContext = ({
                         </ContextMenuItem>
                     </>
                 }
+                row={row}
             >
                 {children}
             </DataTableRowContext>

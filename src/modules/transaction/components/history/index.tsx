@@ -77,25 +77,25 @@ export const TransactionHistory = ({ fullPath }: { fullPath: string }) => {
     return (
         <>
             <Button
-                variant="outline"
                 className=""
-                size="sm"
                 onClick={() => setOnOpen(true)}
+                size="sm"
+                variant="outline"
             >
                 <HistoryIcon className="mr-2" />
                 History
             </Button>
             <SheetModal
-                open={onOpen}
-                onOpenChange={setOnOpen}
                 className="min-w-full h-full max-w-[500px] p-5 md:min-w-[600px] overflow-hidden"
+                onOpenChange={setOnOpen}
+                open={onOpen}
             >
                 <h1 className="text-lg font-bold ">
                     Transaction History
                     <RefreshButton
                         className="bg-transparent size-7"
-                        onClick={refetchCurrentTransaction}
                         isLoading={isLoadingCurrentTransaction}
+                        onClick={refetchCurrentTransaction}
                     />
                 </h1>
                 <div className=" ecoop-scroll max-h-[90vh] overflow-auto ">
@@ -129,12 +129,6 @@ export const TransactionHistory = ({ fullPath }: { fullPath: string }) => {
                 </div>
                 <div className="sticky bottom-0 left-0 right-0">
                     <MiniPaginationBar
-                        pagination={{
-                            pageIndex: pagination.pageIndex,
-                            pageSize: pagination.pageSize,
-                            totalPage: CurrentTransaction?.totalPage ?? 0,
-                            totalSize: CurrentTransaction?.totalSize ?? 0,
-                        }}
                         disablePageMove={isFetching}
                         onNext={({ pageIndex }) =>
                             setPagination((prev) => ({
@@ -148,6 +142,12 @@ export const TransactionHistory = ({ fullPath }: { fullPath: string }) => {
                                 pageIndex,
                             }))
                         }
+                        pagination={{
+                            pageIndex: pagination.pageIndex,
+                            pageSize: pagination.pageSize,
+                            totalPage: CurrentTransaction?.totalPage ?? 0,
+                            totalSize: CurrentTransaction?.totalSize ?? 0,
+                        }}
                     />
                 </div>
             </SheetModal>

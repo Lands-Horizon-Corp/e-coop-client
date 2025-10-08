@@ -108,13 +108,13 @@ export const AutomaticLoanDeductionCreateUpdateForm = ({
     return (
         <Form {...form}>
             <form
-                ref={formRef}
-                onSubmit={onSubmit}
                 className={cn('w-full max-w-full space-y-4', className)}
+                onSubmit={onSubmit}
+                ref={formRef}
             >
                 <fieldset
-                    disabled={isPending || formProps.readOnly}
                     className="gap-4 grid grid-cols-1"
+                    disabled={isPending || formProps.readOnly}
                 >
                     <div className="space-y-4">
                         <div className="space-y-2 ">
@@ -129,13 +129,13 @@ export const AutomaticLoanDeductionCreateUpdateForm = ({
                             <div className="grid grid-cols-2 gap-2">
                                 <FormFieldWrapper
                                     control={form.control}
-                                    name="account_id"
                                     label="Account"
+                                    name="account_id"
                                     render={({ field }) => (
                                         <AccountPicker
                                             {...field}
+                                            disabled={isDisabled(field.name)}
                                             hideDescription
-                                            value={form.getValues('account')}
                                             onSelect={(account) => {
                                                 field.onChange(account.id)
                                                 form.setValue(
@@ -144,21 +144,19 @@ export const AutomaticLoanDeductionCreateUpdateForm = ({
                                                     { shouldDirty: true }
                                                 )
                                             }}
-                                            disabled={isDisabled(field.name)}
+                                            value={form.getValues('account')}
                                         />
                                     )}
                                 />
                                 <FormFieldWrapper
                                     control={form.control}
-                                    name="link_account_id"
                                     label="Linked Account"
+                                    name="link_account_id"
                                     render={({ field }) => (
                                         <AccountPicker
                                             {...field}
+                                            disabled={isDisabled(field.name)}
                                             hideDescription
-                                            value={form.getValues(
-                                                'link_account'
-                                            )}
                                             onSelect={(account) => {
                                                 field.onChange(account.id)
                                                 form.setValue(
@@ -167,7 +165,9 @@ export const AutomaticLoanDeductionCreateUpdateForm = ({
                                                     { shouldDirty: true }
                                                 )
                                             }}
-                                            disabled={isDisabled(field.name)}
+                                            value={form.getValues(
+                                                'link_account'
+                                            )}
                                         />
                                     )}
                                 />
@@ -186,12 +186,12 @@ export const AutomaticLoanDeductionCreateUpdateForm = ({
                             <div className="grid gap-x-2 sm:grid-cols-2">
                                 <FormFieldWrapper
                                     control={form.control}
-                                    name="charges_percentage_1"
                                     label="Charges % 1"
+                                    name="charges_percentage_1"
                                     render={({ field }) => (
                                         <Input
-                                            type="number"
                                             placeholder="%"
+                                            type="number"
                                             {...field}
                                             disabled={isDisabled(field.name)}
                                         />
@@ -199,8 +199,8 @@ export const AutomaticLoanDeductionCreateUpdateForm = ({
                                 />
                                 <FormFieldWrapper
                                     control={form.control}
-                                    name="charges_amount"
                                     label="Charges Amount"
+                                    name="charges_amount"
                                     render={({ field }) => (
                                         <Input
                                             type="number"
@@ -212,12 +212,12 @@ export const AutomaticLoanDeductionCreateUpdateForm = ({
 
                                 <FormFieldWrapper
                                     control={form.control}
-                                    name="charges_percentage_2"
                                     label="Charges % 2"
+                                    name="charges_percentage_2"
                                     render={({ field }) => (
                                         <Input
-                                            type="number"
                                             placeholder="%"
+                                            type="number"
                                             {...field}
                                             disabled={isDisabled(field.name)}
                                         />
@@ -226,8 +226,8 @@ export const AutomaticLoanDeductionCreateUpdateForm = ({
 
                                 <FormFieldWrapper
                                     control={form.control}
-                                    name="charges_divisor"
                                     label="Charges Divisor"
+                                    name="charges_divisor"
                                     render={({ field }) => (
                                         <Input
                                             type="number"
@@ -253,8 +253,8 @@ export const AutomaticLoanDeductionCreateUpdateForm = ({
                                 <div className="grid gap-x-2 sm:grid-cols-2">
                                     <FormFieldWrapper
                                         control={form.control}
-                                        name="min_amount"
                                         label="Min Amount"
+                                        name="min_amount"
                                         render={({ field }) => (
                                             <Input
                                                 type="number"
@@ -268,8 +268,8 @@ export const AutomaticLoanDeductionCreateUpdateForm = ({
 
                                     <FormFieldWrapper
                                         control={form.control}
-                                        name="max_amount"
                                         label="Max Amount"
+                                        name="max_amount"
                                         render={({ field }) => (
                                             <Input
                                                 type="number"
@@ -295,8 +295,8 @@ export const AutomaticLoanDeductionCreateUpdateForm = ({
                                 <div className="grid gap-x-2 sm:grid-cols-2">
                                     <FormFieldWrapper
                                         control={form.control}
-                                        name="anum"
                                         label="Number of Months (Anum)"
+                                        name="anum"
                                         render={({ field }) => (
                                             <Input
                                                 type="number"
@@ -310,8 +310,8 @@ export const AutomaticLoanDeductionCreateUpdateForm = ({
 
                                     <FormFieldWrapper
                                         control={form.control}
-                                        name="ct"
                                         label="CT"
+                                        name="ct"
                                         render={({ field }) => (
                                             <Input
                                                 type="number"
@@ -340,18 +340,18 @@ export const AutomaticLoanDeductionCreateUpdateForm = ({
                                     name="add_on"
                                     render={({ field }) => (
                                         <Label
-                                            htmlFor={field.name}
                                             className="shadow-xs has-data-[state=checked]:bg-gradient-to-tl from-primary/70 to-popover relative has-data flex w-full items-center gap-2 rounded-lg border border-input p-2 outline-none duration-200 ease-out cursor-pointer"
+                                            htmlFor={field.name}
                                         >
                                             <Checkbox
-                                                id={field.name}
+                                                aria-describedby={`${field.name}-desc`}
                                                 checked={field.value}
-                                                onCheckedChange={field.onChange}
+                                                className="order-1"
                                                 disabled={isDisabled(
                                                     field.name
                                                 )}
-                                                className="order-1"
-                                                aria-describedby={`${field.name}-desc`}
+                                                id={field.name}
+                                                onCheckedChange={field.onChange}
                                             />
                                             <div className="flex grow items-center gap-3">
                                                 <div className="size-fit rounded-full bg-secondary p-1">
@@ -370,18 +370,18 @@ export const AutomaticLoanDeductionCreateUpdateForm = ({
                                     name="ao_rest"
                                     render={({ field }) => (
                                         <Label
-                                            htmlFor={field.name}
                                             className="shadow-xs has-data-[state=checked]:bg-gradient-to-tl from-primary/70 to-popover relative has-data flex w-full items-center gap-2 rounded-lg border border-input p-2 outline-none duration-200 ease-out cursor-pointer"
+                                            htmlFor={field.name}
                                         >
                                             <Checkbox
-                                                id={field.name}
+                                                aria-describedby={`${field.name}-desc`}
                                                 checked={field.value}
-                                                onCheckedChange={field.onChange}
+                                                className="order-1"
                                                 disabled={isDisabled(
                                                     field.name
                                                 )}
-                                                className="order-1"
-                                                aria-describedby={`${field.name}-desc`}
+                                                id={field.name}
+                                                onCheckedChange={field.onChange}
                                             />
                                             <div className="flex grow items-center gap-3">
                                                 <div className="size-fit rounded-full bg-secondary p-1">
@@ -400,18 +400,18 @@ export const AutomaticLoanDeductionCreateUpdateForm = ({
                                     name="exclude_renewal"
                                     render={({ field }) => (
                                         <Label
-                                            htmlFor={field.name}
                                             className="shadow-xs ease-in-out duration-100 transition-colors has-data-[state=checked]:bg-gradient-to-tl from-primary/70 bg-muted to-popover relative has-data flex w-full items-center gap-2 rounded-lg border border-input p-2 outline-none duration-500 ease-out cursor-pointer"
+                                            htmlFor={field.name}
                                         >
                                             <Checkbox
-                                                id={field.name}
+                                                aria-describedby={`${field.name}-desc`}
                                                 checked={field.value}
-                                                onCheckedChange={field.onChange}
+                                                className="order-1"
                                                 disabled={isDisabled(
                                                     field.name
                                                 )}
-                                                className="order-1"
-                                                aria-describedby={`${field.name}-desc`}
+                                                id={field.name}
+                                                onCheckedChange={field.onChange}
                                             />
                                             <div className="flex grow items-center gap-3">
                                                 <div className="size-fit rounded-full bg-secondary p-1">
@@ -430,8 +430,8 @@ export const AutomaticLoanDeductionCreateUpdateForm = ({
 
                     <FormFieldWrapper
                         control={form.control}
-                        name="description"
                         label="Remrks / Description"
+                        name="description"
                         render={({ field }) => (
                             <Textarea
                                 {...field}
@@ -442,16 +442,16 @@ export const AutomaticLoanDeductionCreateUpdateForm = ({
                     />
                 </fieldset>
                 <FormFooterResetSubmit
-                    error={error}
-                    readOnly={formProps.readOnly}
-                    isLoading={isPending}
                     className="sticky bottom-0"
                     disableSubmit={!form.formState.isDirty}
-                    submitText={automaticLoanDeductionId ? 'Update' : 'Create'}
+                    error={error}
+                    isLoading={isPending}
                     onReset={() => {
                         form.reset()
                         reset()
                     }}
+                    readOnly={formProps.readOnly}
+                    submitText={automaticLoanDeductionId ? 'Update' : 'Create'}
                 />
             </form>
         </Form>
@@ -469,9 +469,9 @@ export const AutomaticLoanDeductionCreateUpdateFormModal = ({
 }) => {
     return (
         <Modal
-            title={title}
-            description={description}
             className={cn('!max-w-5xl', className)}
+            description={description}
+            title={title}
             {...props}
         >
             <AutomaticLoanDeductionCreateUpdateForm

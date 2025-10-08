@@ -95,19 +95,19 @@ const MemberProfileCloseForm = ({
     return (
         <Form {...form}>
             <form
-                ref={formRef}
-                onSubmit={handleSubmit}
                 className={cn('flex w-full flex-col gap-y-4', className)}
+                onSubmit={handleSubmit}
+                ref={formRef}
             >
                 <fieldset
                     className="min-h-[60vh] gap-x-4 gap-y-4 space-y-5"
                     disabled={isClosingAccount || formProps.readOnly}
                 >
                     <FormFieldWrapper
-                        name="remarks"
                         control={form.control}
-                        label="Add Close Remark"
                         hiddenFields={formProps.hiddenFields}
+                        label="Add Close Remark"
+                        name="remarks"
                         render={() => (
                             <FormItem className="col-span-1 space-y-2">
                                 <Separator />
@@ -117,13 +117,13 @@ const MemberProfileCloseForm = ({
                                     account/profile closure.
                                 </p>
                                 <fieldset
-                                    disabled={isDisabled('remarks')}
                                     className="space-y-2"
+                                    disabled={isDisabled('remarks')}
                                 >
                                     {remarksFields.map((field, index) => (
                                         <div
-                                            key={field.fieldKey}
                                             className="relative space-y-2 rounded-xl border bg-background p-4"
+                                            key={field.fieldKey}
                                         >
                                             <FormFieldWrapper
                                                 control={form.control}
@@ -156,38 +156,36 @@ const MemberProfileCloseForm = ({
                                                     <FormControl>
                                                         <TextEditor
                                                             {...field}
+                                                            className="w-full"
                                                             content={
                                                                 field.value
                                                             }
                                                             disabled={isDisabled(
                                                                 field.name
                                                             )}
-                                                            className="w-full"
-                                                            textEditorClassName="!max-w-none"
                                                             placeholder="Write a full description/reason explaining what happened..."
+                                                            textEditorClassName="!max-w-none"
                                                         />
                                                     </FormControl>
                                                 )}
                                             />
                                             <Button
-                                                size="icon"
-                                                type="button"
-                                                variant="secondary"
+                                                className="absolute -right-1 -top-1 !my-0 size-fit rounded-full p-1"
+                                                disabled={isDisabled('remarks')}
                                                 onClick={() =>
                                                     removeRemark(index)
                                                 }
-                                                disabled={isDisabled('remarks')}
-                                                className="absolute -right-1 -top-1 !my-0 size-fit rounded-full p-1"
+                                                size="icon"
+                                                type="button"
+                                                variant="secondary"
                                             >
                                                 <XIcon className="size-4" />
                                             </Button>
                                         </div>
                                     ))}
                                     <Button
-                                        size="sm"
-                                        type="button"
-                                        variant="secondary"
                                         className="w-full"
+                                        disabled={isDisabled('remarks')}
                                         onClick={() =>
                                             appendRemark({
                                                 member_profile_id: profileId,
@@ -195,7 +193,9 @@ const MemberProfileCloseForm = ({
                                                 description: '',
                                             })
                                         }
-                                        disabled={isDisabled('remarks')}
+                                        size="sm"
+                                        type="button"
+                                        variant="secondary"
                                     >
                                         <PlusIcon className="mr-2" /> Add
                                         Closure Remark Reason
@@ -215,16 +215,16 @@ const MemberProfileCloseForm = ({
                     />
                 </fieldset>
                 <FormFooterResetSubmit
-                    error={error}
-                    readOnly={formProps.readOnly}
-                    isLoading={isClosingAccount}
-                    disableSubmit={isClosingAccount || !!data}
-                    submitText="Close Account"
                     className="sticky bottom-0"
+                    disableSubmit={isClosingAccount || !!data}
+                    error={error}
+                    isLoading={isClosingAccount}
                     onReset={() => {
                         form.reset(formProps.defaultValues)
                         reset()
                     }}
+                    readOnly={formProps.readOnly}
+                    submitText="Close Account"
                 />
             </form>
         </Form>
@@ -247,9 +247,9 @@ export const MemberProfileCloseFormModal = ({
 }) => {
     return (
         <Modal
-            title={title}
-            description={description}
             className={cn('sm:max-w-full lg:max-w-3xl', className)}
+            description={description}
+            title={title}
             {...props}
         >
             <MemberProfileCloseForm

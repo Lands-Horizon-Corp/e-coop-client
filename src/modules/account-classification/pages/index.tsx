@@ -23,9 +23,6 @@ export const AccountClassificationPage = () => {
     return (
         <PageContainer>
             <AccountClassificationFormModal
-                open={createModal}
-                onOpenChange={setCreateModal}
-                titleClassName="font-bold"
                 formProps={{
                     defaultValues: {},
                     onSuccess: () => {
@@ -37,6 +34,9 @@ export const AccountClassificationPage = () => {
                         })
                     },
                 }}
+                onOpenChange={setCreateModal}
+                open={createModal}
+                titleClassName="font-bold"
             />
             <AccountClassificationTable
                 actionComponent={(props) => (

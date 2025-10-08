@@ -25,16 +25,16 @@ const MemberGovernmentBenefits = forwardRef<HTMLDivElement, Props>(
 
         return (
             <div
-                ref={ref}
                 className={cn(
                     'flex flex-1 flex-col gap-y-4 rounded-xl bg-background p-4',
                     className
                 )}
+                ref={ref}
             >
                 <SectionTitle
-                    title="Government Benefits"
                     Icon={BankDuoToneIcon}
                     subTitle="View all government benefits and ID this member have."
+                    title="Government Benefits"
                 />
                 <MemberGovernmentBenefitsDisplay
                     governmentBenefits={data?.member_government_benefits}

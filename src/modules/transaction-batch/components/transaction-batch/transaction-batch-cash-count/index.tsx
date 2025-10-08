@@ -117,13 +117,13 @@ const TransactionBatchCashCount = ({
                     <LoadingSpinner className="mx-auto my-4" />
                 )}
                 <BatchCashCount
-                    resetOnDefaultChange
                     defaultValues={defaultValues}
                     onSuccess={(data) => {
                         onCashCountUpdate?.(data)
                         refetchBillsAndCoins()
                         refetchCashCounts()
                     }}
+                    resetOnDefaultChange
                 />
             </div>
         </div>

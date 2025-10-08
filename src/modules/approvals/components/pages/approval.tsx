@@ -11,17 +11,17 @@ const ApprovalPage = () => {
     return (
         <PageContainer className="h-[100vh]">
             <ResizablePanelGroup
-                direction="vertical"
                 className="w-full rounded-lg "
+                direction="vertical"
             >
                 <ResizablePanel
-                    defaultSize={50}
                     className="!overflow-auto h-fit"
+                    defaultSize={50}
                 >
                     <Approval className="min-h-[91dvh] " />
                 </ResizablePanel>
                 <ResizableHandle withHandle />
-                <ResizablePanel defaultSize={50} className=" h-fit ">
+                <ResizablePanel className=" h-fit " defaultSize={50}>
                     <div className="flex h-full items-center justify-center p-6">
                         <span className="font-semibold">Content</span>
                     </div>

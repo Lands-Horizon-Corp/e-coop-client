@@ -187,17 +187,17 @@ const LoanEntriesEditor = forwardRef<
                         </div>
                         <div className="flex flex-col items-center gap-y-4">
                             <AccountMiniCard
-                                defaultAccount={originalEntry.account}
                                 accountId={
                                     originalEntry.account_id as TEntityId
                                 }
                                 className="border-dashed border-2 border-destructive bg-destructive/40"
+                                defaultAccount={originalEntry.account}
                             />
                             <ArrowDownIcon className="size-4 shrink-0" />
                             <AccountMiniCard
                                 accountId={account.id}
-                                defaultAccount={account}
                                 className="border-2 border-primary"
+                                defaultAccount={account}
                             />
                         </div>
                     </div>
@@ -229,11 +229,11 @@ const LoanEntriesEditor = forwardRef<
         return (
             <div className="relative">
                 <AccountPicker
-                    triggerClassName="sr-only"
-                    mode="cash-and-cash-equivalence"
-                    modalState={cashAccountPickerModal}
-                    onSelect={handleChangeCashEntryAccount}
                     disabled={isReadOnly || isDisabled}
+                    modalState={cashAccountPickerModal}
+                    mode="cash-and-cash-equivalence"
+                    onSelect={handleChangeCashEntryAccount}
+                    triggerClassName="sr-only"
                 />
                 <div className="flex items-center justify-between mb-4">
                     <div>
@@ -266,28 +266,28 @@ const LoanEntriesEditor = forwardRef<
                     </div>
                     <div className="flex items-center shrink-0 flex-1 justify-end gap-2">
                         <Button
-                            size="sm"
-                            tabIndex={0}
-                            type="button"
-                            variant="ghost"
                             className="size-fit px-2 py-0.5 text-xs"
                             disabled={isReadOnly || isDisabled}
                             onClick={() =>
                                 cashAccountPickerModal.onOpenChange(true)
                             }
+                            size="sm"
+                            tabIndex={0}
+                            type="button"
+                            variant="ghost"
                         >
                             Change Cash Equivalence
                             <SwapArrowIcon className="inline" />
                         </Button>
                         <Button
-                            size="sm"
-                            type="button"
-                            tabIndex={0}
                             className="size-fit px-2 py-0.5 text-xs"
                             disabled={isReadOnly || isDisabled}
                             onClick={() =>
                                 addChargeModalState.onOpenChange(true)
                             }
+                            size="sm"
+                            tabIndex={0}
+                            type="button"
                         >
                             Add Deduction <PlusIcon className="inline" />
                         </Button>
@@ -299,32 +299,32 @@ const LoanEntriesEditor = forwardRef<
                             to add
                         </p>
                         <FormFieldWrapper
+                            className="w-fit"
                             control={form.control}
                             name="is_add_on"
-                            className="w-fit"
                             render={({ field }) => (
                                 <div className="border-input has-data-[state=checked]:border-primary/50 border-2 has-data-[state=checked]:bg-primary/20 duration-200 ease-in-out relative flex w-fit items-center gap-2 rounded-xl px-2 py-0.5 shadow-xs outline-none">
                                     <Switch
-                                        tabIndex={0}
-                                        id="loan-add-on"
-                                        disabled={isReadOnly || isDisabled}
-                                        checked={field.value}
-                                        onCheckedChange={field.onChange}
                                         aria-describedby={`loan-add-on-description`}
+                                        checked={field.value}
                                         className="order-1 h-4 w-6 after:absolute after:inset-0 [&_span]:size-3 data-[state=checked]:[&_span]:translate-x-2 data-[state=checked]:[&_span]:rtl:-translate-x-2"
+                                        disabled={isReadOnly || isDisabled}
+                                        id="loan-add-on"
+                                        onCheckedChange={field.onChange}
+                                        tabIndex={0}
                                     />
                                     <div className="flex grow items-center gap-3">
                                         <ShapesIcon className="text-primary size-4" />
                                         <div className="text-xs flex items-center gap-x-2">
                                             <Label
-                                                htmlFor={'loan-add-on'}
                                                 className="text-xs"
+                                                htmlFor={'loan-add-on'}
                                             >
                                                 Add-On{' '}
                                             </Label>
                                             <p
-                                                id="loan-add-on-description"
                                                 className="text-muted-foreground text-xs"
+                                                id="loan-add-on-description"
                                             >
                                                 Include Add-On&apos;s
                                             </p>
@@ -336,8 +336,8 @@ const LoanEntriesEditor = forwardRef<
                     </div>
                 </div>
                 <Table
-                    ref={ref}
                     onKeyDown={handleKeyDown}
+                    ref={ref}
                     tabIndex={0}
                     wrapperClassName="max-h-[95vh] bg-secondary rounded-xl ecoop-scroll"
                 >
@@ -367,15 +367,15 @@ const LoanEntriesEditor = forwardRef<
                             })
                             .map((loanEntry, index) => (
                                 <LoanEntryRow
+                                    entry={loanEntry}
+                                    form={form}
+                                    key={`${loanEntry.id}`}
                                     onDelete={() =>
                                         handleGetLoanTransactionEntry()
                                     }
                                     onRestore={(newLoanTransaction) =>
                                         form.reset(newLoanTransaction)
                                     }
-                                    entry={loanEntry}
-                                    key={`${loanEntry.id}`}
-                                    form={form}
                                     ref={(el) => {
                                         rowRefs.current[index] = el
                                     }}
@@ -396,7 +396,6 @@ const LoanEntriesEditor = forwardRef<
                             <TableCell className="font-semibold flex items-center gap-2">
                                 <ActionTooltip tooltipContent="Show/Hide deleted automatic deductions">
                                     <Toggle
-                                        pressed={showDeleted}
                                         className="!p-2 size-fit"
                                         onPressedChange={(state) => {
                                             toast.info(
@@ -406,6 +405,7 @@ const LoanEntriesEditor = forwardRef<
                                             )
                                             setShowDeleted(state)
                                         }}
+                                        pressed={showDeleted}
                                     >
                                         {showDeleted ? (
                                             <EyeIcon />
@@ -522,10 +522,16 @@ const LoanEntryRow = memo(
             return (
                 <>
                     <TableRow
+                        className={cn(
+                            'focus:bg-background/20',
+                            entry.is_automatic_loan_deduction_deleted &&
+                                'opacity-50 italic'
+                        )}
                         onDoubleClick={() => {
                             if (disabled) return
                             editModalState.onOpenChange(true)
                         }}
+                        onKeyDown={handleRowKeyDown}
                         ref={(el) => {
                             rowRef.current = el
                             if (typeof ref === 'function') {
@@ -534,13 +540,7 @@ const LoanEntryRow = memo(
                                 ref.current = el
                             }
                         }}
-                        onKeyDown={handleRowKeyDown}
                         tabIndex={0}
-                        className={cn(
-                            'focus:bg-background/20',
-                            entry.is_automatic_loan_deduction_deleted &&
-                                'opacity-50 italic'
-                        )}
                     >
                         <TableCell className="py-2 h-fit">
                             <div className="flex flex-col">
@@ -598,16 +598,16 @@ const LoanEntryRow = memo(
                                 {isEditable &&
                                     !entry.is_automatic_loan_deduction_deleted && (
                                         <Button
-                                            type="button"
-                                            variant="ghost"
-                                            size="sm"
+                                            className="size-8 p-0"
                                             disabled={disabled}
                                             onClick={() =>
                                                 editModalState.onOpenChange(
                                                     true
                                                 )
                                             }
-                                            className="size-8 p-0"
+                                            size="sm"
+                                            type="button"
+                                            variant="ghost"
                                         >
                                             <PencilFillIcon className="size-4" />
                                             <span className="sr-only">
@@ -618,12 +618,12 @@ const LoanEntryRow = memo(
                                 {isRemovable &&
                                     !entry.is_automatic_loan_deduction_deleted && (
                                         <Button
+                                            className="h-8 w-8 p-0"
+                                            disabled={disabled}
+                                            onClick={() => handleDelete()}
                                             size="sm"
                                             type="button"
                                             variant="destructive"
-                                            disabled={disabled}
-                                            onClick={() => handleDelete()}
-                                            className="h-8 w-8 p-0"
                                         >
                                             <TrashIcon className="h-4 w-4" />
                                             <span className="sr-only">
@@ -633,9 +633,7 @@ const LoanEntryRow = memo(
                                     )}
                                 {entry.is_automatic_loan_deduction_deleted && (
                                     <Button
-                                        type="button"
-                                        variant="ghost"
-                                        size="sm"
+                                        className="size-8 p-0"
                                         disabled={disabled}
                                         onClick={() =>
                                             toast.promise(
@@ -651,7 +649,9 @@ const LoanEntryRow = memo(
                                                 }
                                             )
                                         }
-                                        className="size-8 p-0"
+                                        size="sm"
+                                        type="button"
+                                        variant="ghost"
                                     >
                                         <RefreshIcon className="size-4" />
                                         <span className="sr-only">Restore</span>
@@ -662,13 +662,6 @@ const LoanEntryRow = memo(
                     </TableRow>
                     <LoanTransactionEntryCreateUpdateModal
                         {...editModalState}
-                        onOpenChange={(state) => {
-                            if (!state) {
-                                rowRef.current?.focus()
-                            }
-                            editModalState.onOpenChange(state)
-                        }}
-                        title="Edit Deduction"
                         description="Update the deduction details."
                         formProps={{
                             defaultValues: entry,
@@ -678,6 +671,13 @@ const LoanEntryRow = memo(
                                 form.reset(updatedData)
                             },
                         }}
+                        onOpenChange={(state) => {
+                            if (!state) {
+                                rowRef.current?.focus()
+                            }
+                            editModalState.onOpenChange(state)
+                        }}
+                        title="Edit Deduction"
                     />
                 </>
             )
@@ -705,12 +705,12 @@ const AmortizationView = ({
             {loanTransactionId && (
                 <Modal
                     {...amortViewer}
-                    title=""
-                    description=""
-                    closeButtonClassName="top-2 right-2"
-                    titleClassName="sr-only"
-                    descriptionClassName="sr-only"
                     className="!max-w-[90vw] p-0 shadow-none border-none bg-transparent gap-y-0"
+                    closeButtonClassName="top-2 right-2"
+                    description=""
+                    descriptionClassName="sr-only"
+                    title=""
+                    titleClassName="sr-only"
                 >
                     <LoanAmortization
                         className="col-span-5 p-0 bg-transparent"
@@ -719,13 +719,13 @@ const AmortizationView = ({
                 </Modal>
             )}
             <Button
-                size="sm"
-                type="button"
+                aria-label="See amortization"
+                aria-name="View amortization"
                 className="text-xs size-fit !pl-4 py-0.5"
                 disabled={!loanTransactionId}
                 onClick={() => amortViewer.onOpenChange(!amortViewer.open)}
-                aria-label="See amortization"
-                aria-name="View amortization"
+                size="sm"
+                type="button"
             >
                 <CalendarNumberIcon className="inline size-3" /> See
                 Amortization

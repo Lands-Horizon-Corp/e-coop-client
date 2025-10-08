@@ -131,10 +131,10 @@ const JournalVoucherOtherAction = ({
                 .filter((action) => action.isVisible)
                 .map((action) => (
                     <DropdownMenuItem
-                        key={action.label}
-                        disabled={isProcessing}
-                        onClick={action.onSelect}
                         className="flex items-center"
+                        disabled={isProcessing}
+                        key={action.label}
+                        onClick={action.onSelect}
                     >
                         {action.icon}
                         <span>{action.label}</span>

@@ -142,46 +142,46 @@ export const CreateUpdateBranchByOrgForm = ({
     return (
         <div className="mt-10">
             <Form {...form}>
-                <form ref={formRef} onSubmit={handleSubmit} className="w-full">
+                <form className="w-full" onSubmit={handleSubmit} ref={formRef}>
                     <div className="flex w-full gap-x-5">
                         <div className="grid w-1/2 grow grid-cols-2 gap-5">
                             <FormFieldWrapper
                                 control={form.control}
-                                name="name"
                                 label="Branch Name"
+                                name="name"
                                 render={({ field }) => (
                                     <Input
                                         {...field}
-                                        value={field.value || ''}
                                         disabled={isLoading}
                                         placeholder="Enter branch name"
+                                        value={field.value || ''}
                                     />
                                 )}
                             />
                             <FormFieldWrapper
                                 control={form.control}
-                                name="email"
                                 label="Branch Email"
+                                name="email"
                                 render={({ field }) => (
                                     <Input
                                         {...field}
-                                        value={field.value || ''}
                                         disabled={isLoading}
                                         placeholder="Enter email"
+                                        value={field.value || ''}
                                     />
                                 )}
                             />
                             <FormFieldWrapper
                                 control={form.control}
-                                name="type"
                                 label="Branch Type"
+                                name="type"
                                 render={({ field }) => (
                                     <Select
+                                        defaultValue={field.value}
+                                        disabled={isLoading}
                                         onValueChange={(selectedValue) => {
                                             field.onChange(selectedValue)
                                         }}
-                                        disabled={isLoading}
-                                        defaultValue={field.value}
                                     >
                                         <SelectTrigger className="w-full">
                                             {field.value ||
@@ -207,101 +207,101 @@ export const CreateUpdateBranchByOrgForm = ({
 
                             <FormFieldWrapper
                                 control={form.control}
-                                name="contact_number"
                                 label="Contact Number"
+                                name="contact_number"
                                 render={({ field }) => (
                                     <PhoneInput
                                         {...field}
                                         className="w-full"
-                                        disabled={isLoading}
                                         defaultCountry={countryCode}
+                                        disabled={isLoading}
                                     />
                                 )}
                             />
                             <FormFieldWrapper
-                                control={form.control}
-                                name="address"
-                                label="Address"
                                 className="grow"
+                                control={form.control}
+                                label="Address"
+                                name="address"
                                 render={({ field }) => (
                                     <Input
                                         {...field}
-                                        value={field.value || ''}
                                         disabled={isLoading}
                                         placeholder="Enter address"
+                                        value={field.value || ''}
                                     />
                                 )}
                             />
                             <FormFieldWrapper
                                 control={form.control}
-                                name="province"
                                 label="Province"
+                                name="province"
                                 render={({ field }) => (
                                     <Input
                                         {...field}
                                         disabled={isLoading}
-                                        value={field.value || ''}
                                         placeholder="Enter province"
+                                        value={field.value || ''}
                                     />
                                 )}
                             />
                             <FormFieldWrapper
                                 control={form.control}
-                                name="city"
                                 label="City"
+                                name="city"
                                 render={({ field }) => (
                                     <Input
                                         {...field}
-                                        value={field.value || ''}
                                         disabled={isLoading}
                                         placeholder="Enter city"
+                                        value={field.value || ''}
                                     />
                                 )}
                             />
                             <FormFieldWrapper
                                 control={form.control}
-                                name="barangay"
                                 label="Barangay"
+                                name="barangay"
                                 render={({ field }) => (
                                     <Input
                                         {...field}
                                         disabled={isLoading}
-                                        value={field.value || ''}
                                         placeholder="Enter barangay"
+                                        value={field.value || ''}
                                     />
                                 )}
                             />
                             <div className="col-span-2 grid grid-cols-3 gap-x-2">
                                 <FormFieldWrapper
                                     control={form.control}
-                                    name="region"
                                     label="Region"
+                                    name="region"
                                     render={({ field }) => (
                                         <Input
                                             {...field}
-                                            value={field.value || ''}
                                             disabled={isLoading}
                                             placeholder="Enter region"
+                                            value={field.value || ''}
                                         />
                                     )}
                                 />
                                 <FormFieldWrapper
                                     control={form.control}
-                                    name="postal_code"
                                     label="Postal Code"
+                                    name="postal_code"
                                     render={({ field }) => (
                                         <Input
                                             {...field}
                                             disabled={isLoading}
-                                            value={field.value || ''}
                                             placeholder="Enter postal code"
+                                            value={field.value || ''}
                                         />
                                     )}
                                 />
                                 <FormFieldWrapper
                                     control={form.control}
-                                    name="country_code"
                                     label="Country Code"
+                                    name="country_code"
                                     render={({ field }) => (
                                         <CountryCombobox
                                             {...field}
@@ -316,25 +316,25 @@ export const CreateUpdateBranchByOrgForm = ({
                             </div>
 
                             <FormFieldWrapper
-                                control={form.control}
-                                name="is_main_branch"
                                 className="col-span-2 bg-destructive"
-                                label="Set as Main Branch"
+                                control={form.control}
                                 hiddenFields={formProps.hiddenFields}
+                                label="Set as Main Branch"
+                                name="is_main_branch"
                                 render={({ field }) => {
                                     return (
                                         <GradientBackground gradientOnly>
                                             <div className="shadow-xs relative flex w-full items-start gap-2 rounded-2xl border border-input p-4 outline-none duration-200 ease-out has-[:checked]:border-primary/30 has-[:checked]:bg-primary/40">
                                                 <Checkbox
-                                                    id={field.name}
+                                                    aria-describedby={`${field.name}`}
                                                     checked={field.value}
+                                                    className="order-1 after:absolute after:inset-0"
+                                                    disabled={isLoading}
+                                                    id={field.name}
+                                                    name={field.name}
                                                     onCheckedChange={
                                                         field.onChange
                                                     }
-                                                    disabled={isLoading}
-                                                    name={field.name}
-                                                    className="order-1 after:absolute after:inset-0"
-                                                    aria-describedby={`${field.name}`}
                                                 />
                                                 <div className="flex grow items-center gap-3">
                                                     <div className="size-fit rounded-full bg-secondary p-2">
@@ -347,8 +347,8 @@ export const CreateUpdateBranchByOrgForm = ({
                                                             Set as Main Branch
                                                         </Label>
                                                         <p
-                                                            id={`${field.name}`}
                                                             className="text-xs text-muted-foreground"
+                                                            id={`${field.name}`}
                                                         >
                                                             This will designate
                                                             the branch as the
@@ -368,21 +368,14 @@ export const CreateUpdateBranchByOrgForm = ({
                         <div className="grid grid-cols-1">
                             <FormFieldWrapper
                                 control={form.control}
-                                name="media_id"
                                 label="Branch Photo"
+                                name="media_id"
                                 render={({ field }) => {
                                     const value = form.watch('media')
 
                                     return (
                                         <ImageField
                                             {...field}
-                                            placeholder="Upload Branch Photo"
-                                            value={
-                                                value
-                                                    ? (value as IMedia)
-                                                          .download_url
-                                                    : value
-                                            }
                                             onChange={(newImage) => {
                                                 if (newImage)
                                                     field.onChange(newImage.id)
@@ -390,25 +383,32 @@ export const CreateUpdateBranchByOrgForm = ({
 
                                                 form.setValue('media', newImage)
                                             }}
+                                            placeholder="Upload Branch Photo"
+                                            value={
+                                                value
+                                                    ? (value as IMedia)
+                                                          .download_url
+                                                    : value
+                                            }
                                         />
                                     )
                                 }}
                             />
                             <FormFieldWrapper
+                                className="col-span-4"
                                 control={form.control}
                                 label="Branch Description"
                                 name="description"
-                                className="col-span-4"
                                 render={({ field }) => {
                                     const { ref: _ref, ...rest } = field
                                     return (
                                         <FormControl>
                                             <TextEditor
                                                 {...rest}
-                                                disabled={isLoading}
                                                 content={field.value ?? ''}
-                                                textEditorClassName="!h-32"
+                                                disabled={isLoading}
                                                 placeholder="Write some description about your branch..."
+                                                textEditorClassName="!h-32"
                                             />
                                         </FormControl>
                                     )
@@ -418,61 +418,50 @@ export const CreateUpdateBranchByOrgForm = ({
                                 <div className="flex flex-col space-y-2">
                                     <div className="flex gap-x-2 items-center ">
                                         <FormFieldWrapper
+                                            className="grow"
                                             control={form.control}
                                             label="Latitude"
                                             name="latitude"
-                                            className="grow"
                                             render={({ field }) => (
                                                 <div className="flex grow flex-col gap-y-2">
                                                     <Input
                                                         {...field}
-                                                        value={
-                                                            field.value || ''
-                                                        }
                                                         disabled={isLoading}
                                                         onChange={
                                                             field.onChange
                                                         }
                                                         placeholder="latitude"
+                                                        value={
+                                                            field.value || ''
+                                                        }
                                                     />
                                                 </div>
                                             )}
                                         />
                                         <FormFieldWrapper
+                                            className="grow"
                                             control={form.control}
                                             label="Longitude"
                                             name="longitude"
-                                            className="grow"
                                             render={({ field }) => (
                                                 <div className="flex grow flex-col gap-y-2">
                                                     <Input
                                                         {...field}
-                                                        value={
-                                                            field.value || ''
-                                                        }
                                                         disabled={isLoading}
                                                         onChange={
                                                             field.onChange
                                                         }
                                                         placeholder="Longitude"
+                                                        value={
+                                                            field.value || ''
+                                                        }
                                                     />
                                                 </div>
                                             )}
                                         />
                                     </div>
                                     <MapPicker
-                                        placeholder="Click to select branch location"
-                                        title="Select Branch Location"
-                                        value={{
-                                            lat:
-                                                form.watch('latitude') ||
-                                                14.780043,
-                                            lng:
-                                                form.watch('longitude') ||
-                                                121.046351,
-                                        }}
                                         disabled={isLoading}
-                                        variant="outline"
                                         onChange={(location) => {
                                             if (location) {
                                                 form.setValue(
@@ -488,6 +477,17 @@ export const CreateUpdateBranchByOrgForm = ({
                                                 form.setValue('longitude', 0)
                                             }
                                         }}
+                                        placeholder="Click to select branch location"
+                                        title="Select Branch Location"
+                                        value={{
+                                            lat:
+                                                form.watch('latitude') ||
+                                                14.780043,
+                                            lng:
+                                                form.watch('longitude') ||
+                                                121.046351,
+                                        }}
+                                        variant="outline"
                                     />
                                 </div>
                             </div>
@@ -499,28 +499,28 @@ export const CreateUpdateBranchByOrgForm = ({
                     />
                     <div className="mt-5 flex justify-end gap-x-2">
                         <Button
-                            variant={'secondary'}
                             disabled={isLoading}
                             onClick={(e) => {
                                 e.preventDefault()
                                 form.reset()
                             }}
+                            variant={'secondary'}
                         >
                             Reset
                         </Button>
                         <Button
-                            type="submit"
+                            className=""
                             disabled={
                                 branchId ? updateDisabled : createDisabled
                             }
-                            className=""
+                            type="submit"
                         >
                             {isLoading ? (
                                 <div className="flex space-x-2">
                                     {branchId ? 'updating ' : 'Creating '}{' '}
                                     <LoadingSpinnerIcon
-                                        size={18}
                                         className="ml-2 animate-spin"
+                                        size={18}
                                     />
                                 </div>
                             ) : (
@@ -545,9 +545,9 @@ export const CreateUpdateBranchFormModal = ({
 }) => {
     return (
         <Modal
-            title={title}
-            description={description}
             className={cn('max-w-[75rem] p-10', className)}
+            description={description}
+            title={title}
             {...props}
         >
             <CreateUpdateBranchByOrgForm

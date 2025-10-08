@@ -31,22 +31,22 @@ const SubscriptionPage = () => {
             <div className="to-background/0 via-background/0 from-primary/50 absolute right-0 -z-10 -mt-16 h-screen w-full bg-radial-[ellipse_at_100%_0%] to-100%" />
 
             <FlickeringGrid
-                gridGap={1}
-                squareSize={64}
-                maxOpacity={0.5}
-                flickerChance={0.05}
                 className="absolute inset-0 h-full -z-10 opacity-80 [mask-image:radial-gradient(80vh_circle_at_center,white,transparent)] dark:opacity-20"
+                flickerChance={0.05}
+                gridGap={1}
+                maxOpacity={0.5}
+                squareSize={64}
             />
 
             <h1 className="text-foreground text-4xl font-extrabold">
                 <GradientText
-                    variant="primary"
-                    size="5xl"
                     animate="shimmer"
                     className="leading-relaxed mr-2"
+                    size="5xl"
                     style={{
                         fontFamily: "'Knewave', cursive",
                     }}
+                    variant="primary"
                 >
                     <h1>E-coop</h1>
                 </GradientText>
@@ -57,21 +57,21 @@ const SubscriptionPage = () => {
                 Flexible and transparent pricing designed to fit cooperatives of
                 all sizes, pay only for what you need as you grow.
             </p>
-            <FormErrorMessage errorMessage={error} className="my-24" />
+            <FormErrorMessage className="my-24" errorMessage={error} />
             {isPending && <LoadingSpinner className="mx-auto my-24" />}
             {subscriptionPlans && (
                 <>
                     <div className="p-1 bg-muted rounded-full inline-flex border !mt-9 gap-x-1 border-border">
                         {(['monthly', 'yearly'] as const).map((value) => (
                             <Button
-                                key={value}
-                                variant="ghost"
                                 className={cn(
                                     'rounded-full px-4 cursor-pointer hover:bg-background/70 py-1 text-sm transition-all',
                                     mode === value &&
                                         'bg-background shadow-sm text-foreground'
                                 )}
+                                key={value}
                                 onClick={() => setMode(value)}
+                                variant="ghost"
                             >
                                 {value === 'monthly' ? 'Monthly' : 'Yearly'}
                             </Button>
@@ -103,7 +103,7 @@ const SubscriptionPage = () => {
                         something just for you.
                     </p>
                 </div>
-                <Button size="sm" className="rounded-full px-4" asChild>
+                <Button asChild className="rounded-full px-4" size="sm">
                     <Link to="/contact">
                         {' '}
                         Talk to us

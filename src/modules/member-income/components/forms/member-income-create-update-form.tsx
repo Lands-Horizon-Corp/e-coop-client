@@ -115,90 +115,84 @@ const MemberIncomeCreateUpdateForm = ({
     return (
         <Form {...form}>
             <form
-                ref={formRef}
-                onSubmit={onSubmit}
                 className={cn('flex w-full flex-col gap-y-4', className)}
+                onSubmit={onSubmit}
+                ref={formRef}
             >
                 <fieldset
-                    disabled={isPending || formProps.readOnly}
                     className="grid gap-x-6 gap-y-4 sm:gap-y-3"
+                    disabled={isPending || formProps.readOnly}
                 >
                     <fieldset className="space-y-3">
                         <FormFieldWrapper
                             control={form.control}
-                            name="name"
                             label="Name *"
+                            name="name"
                             render={({ field }) => (
                                 <Input
                                     {...field}
+                                    disabled={isDisabled(field.name)}
                                     id={field.name}
                                     placeholder="Name"
-                                    disabled={isDisabled(field.name)}
                                 />
                             )}
                         />
                         <FormFieldWrapper
                             control={form.control}
-                            name="source"
                             label="Income Source *"
+                            name="source"
                             render={({ field }) => (
                                 <Input
                                     {...field}
+                                    disabled={isDisabled(field.name)}
                                     id={field.name}
                                     placeholder="Income Source"
-                                    disabled={isDisabled(field.name)}
                                 />
                             )}
                         />
                         <div className="grid grid-cols-2 gap-x-2">
                             <FormFieldWrapper
                                 control={form.control}
-                                name="amount"
                                 label="Amount *"
+                                name="amount"
                                 render={({ field }) => (
                                     <Input
                                         {...field}
-                                        id={field.name}
-                                        type="number"
-                                        placeholder="Amount"
                                         disabled={isDisabled(field.name)}
+                                        id={field.name}
+                                        placeholder="Amount"
+                                        type="number"
                                     />
                                 )}
                             />
                             <FormFieldWrapper
-                                control={form.control}
-                                name="release_date"
-                                label="Date Received *"
                                 className="relative"
+                                control={form.control}
                                 description="mm/dd/yyyy"
                                 descriptionClassName="absolute top-0 right-0"
+                                label="Date Received *"
+                                name="release_date"
                                 render={({ field }) => (
                                     <InputDate
                                         {...field}
-                                        placeholder="Release Date"
                                         className="block"
-                                        value={field.value ?? ''}
                                         disabled={isDisabled(field.name)}
+                                        placeholder="Release Date"
+                                        value={field.value ?? ''}
                                     />
                                 )}
                             />
                         </div>
                         <FormFieldWrapper
                             control={form.control}
-                            name="media_id"
                             label="Photo"
+                            name="media_id"
                             render={({ field }) => {
                                 const value = form.watch('media')
 
                                 return (
                                     <ImageField
                                         {...field}
-                                        placeholder="Upload Income Photo"
-                                        value={
-                                            value
-                                                ? (value as IMedia).download_url
-                                                : value
-                                        }
                                         onChange={(newImage) => {
                                             if (newImage)
                                                 field.onChange(newImage.id)
@@ -206,6 +200,12 @@ const MemberIncomeCreateUpdateForm = ({
 
                                             form.setValue('media', newImage)
                                         }}
+                                        placeholder="Upload Income Photo"
+                                        value={
+                                            value
+                                                ? (value as IMedia).download_url
+                                                : value
+                                        }
                                     />
                                 )
                             }}
@@ -213,15 +213,15 @@ const MemberIncomeCreateUpdateForm = ({
                     </fieldset>
                 </fieldset>
                 <FormFooterResetSubmit
-                    error={error}
-                    readOnly={formProps.readOnly}
-                    isLoading={isPending}
                     disableSubmit={!form.formState.isDirty}
-                    submitText={incomeId ? 'Update' : 'Create'}
+                    error={error}
+                    isLoading={isPending}
                     onReset={() => {
                         form.reset()
                         reset()
                     }}
+                    readOnly={formProps.readOnly}
+                    submitText={incomeId ? 'Update' : 'Create'}
                 />
             </form>
         </Form>
@@ -239,9 +239,9 @@ export const MemberIncomeCreateUpdateFormModal = ({
 }) => {
     return (
         <Modal
-            title={title}
-            description={description}
             className={cn('', className)}
+            description={description}
+            title={title}
             {...props}
         >
             <MemberIncomeCreateUpdateForm

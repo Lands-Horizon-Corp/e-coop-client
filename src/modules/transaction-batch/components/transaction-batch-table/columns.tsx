@@ -50,8 +50,8 @@ const TransactionBatchTableColumns = (
                     <HeaderToggleSelect table={table} />
                     {!column.getIsPinned() && (
                         <PushPinSlashIcon
-                            onClick={() => column.pin('left')}
                             className="mr-2 size-3.5 cursor-pointer"
+                            onClick={() => column.pin('left')}
                         />
                     )}
                 </div>
@@ -241,15 +241,15 @@ const TransactionBatchTableColumns = (
                 <div>
                     {is_closed ? (
                         <Badge
-                            variant="success"
                             className="bg-primary/20 border-primary/20"
+                            variant="success"
                         >
                             Ended
                         </Badge>
                     ) : (
                         <Badge
-                            variant="warning"
                             className="border-amber-400/40 bg-amber-200/40"
+                            variant="warning"
                         >
                             Ongoing
                         </Badge>
@@ -277,15 +277,15 @@ const TransactionBatchTableColumns = (
                 <div>
                     {can_view ? (
                         <Badge
-                            variant="success"
                             className="bg-primary/20 border-primary/20"
+                            variant="success"
                         >
                             Yes
                         </Badge>
                     ) : (
                         <Badge
-                            variant="secondary"
                             className="border-secondary bg-secondary/60"
+                            variant="secondary"
                         >
                             No
                         </Badge>

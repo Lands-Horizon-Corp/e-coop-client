@@ -47,14 +47,14 @@ const TransactionPaymentTypeComboBox = ({
 
     return (
         <>
-            <Popover modal open={open} onOpenChange={setOpen}>
+            <Popover modal onOpenChange={setOpen} open={open}>
                 <PopoverTrigger asChild>
                     <Button
-                        variant="outline"
-                        role="combobox"
                         aria-expanded={open}
                         className={cn('w-full justify-between px-3', className)}
                         disabled={disabled || isLoading}
+                        role="combobox"
+                        variant="outline"
                     >
                         {value ? (
                             selected?.name
@@ -69,8 +69,8 @@ const TransactionPaymentTypeComboBox = ({
                 <PopoverContent className="max-h-[--radix-popover-content-available-height] w-[--radix-popover-trigger-width] p-0">
                     <Command>
                         <CommandInput
-                            placeholder="Search Payment Type..."
                             className="h-9"
+                            placeholder="Search Payment Type..."
                         />
                         {isLoading ? (
                             <CommandEmpty>
@@ -86,11 +86,11 @@ const TransactionPaymentTypeComboBox = ({
                                     {paymentTypes?.map((option) => (
                                         <CommandItem
                                             key={option.id}
-                                            value={option.name}
                                             onSelect={() => {
                                                 setOpen(false)
                                                 onChange?.(option)
                                             }}
+                                            value={option.name}
                                         >
                                             {option.name}
                                             <Check

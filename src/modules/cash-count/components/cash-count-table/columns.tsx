@@ -43,8 +43,8 @@ const CashCountTableColumns = (
                     <HeaderToggleSelect table={table} />
                     {!column.getIsPinned() && (
                         <PushPinSlashIcon
-                            onClick={() => column.pin('left')}
                             className="mr-2 size-3.5 cursor-pointer"
+                            onClick={() => column.pin('left')}
                         />
                     )}
                 </div>
@@ -232,10 +232,10 @@ const CashCountTableColumns = (
             }) => (
                 <div>
                     <ImageNameDisplay
-                        src={employee_user?.media?.download_url}
                         name={
                             employee_user?.full_name ?? employee_user?.user_name
                         }
+                        src={employee_user?.media?.download_url}
                     />
                 </div>
             ),

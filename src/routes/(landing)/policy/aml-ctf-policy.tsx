@@ -108,8 +108,8 @@ function RouteComponent() {
 
                 {/* --- Section 1: Purpose and Scope --- */}
                 <SitePolicyItem
-                    ref={purposeScopeRef}
                     id="purpose-and-scope"
+                    ref={purposeScopeRef}
                     title="1. Purpose and Scope"
                 >
                     <div>
@@ -118,8 +118,8 @@ function RouteComponent() {
                                 To protect the integrity of e-coop-suite{' '}
                                 <LinkTag
                                     href="http://ecoop-suite.com/"
-                                    target="_blank"
                                     name={` (http://ecoop-suite.com/)`}
+                                    target="_blank"
                                 />{' '}
                                 and its users from involvement in money
                                 laundering or terrorist financing activities.
@@ -135,8 +135,8 @@ function RouteComponent() {
 
                 {/* --- Section 2: Customer Due Diligence (CDD) and Know Your Customer (KYC) --- */}
                 <SitePolicyItem
-                    ref={cddKycRef}
                     id="customer-due-diligence-and-know-your-customer"
+                    ref={cddKycRef}
                     title="2. Customer Due Diligence (CDD) and Know Your Customer (KYC)"
                 >
                     <div>
@@ -165,8 +165,8 @@ function RouteComponent() {
 
                 {/* --- Section 3: Transaction Monitoring --- */}
                 <SitePolicyItem
-                    ref={transactionMonitoringRef}
                     id="transaction-monitoring"
+                    ref={transactionMonitoringRef}
                     title="3. Transaction Monitoring"
                 >
                     <div>
@@ -192,8 +192,8 @@ function RouteComponent() {
 
                 {/* --- Section 4: Record Keeping --- */}
                 <SitePolicyItem
-                    ref={recordKeepingRef}
                     id="record-keeping"
+                    ref={recordKeepingRef}
                     title="4. Record Keeping"
                 >
                     <div>
@@ -214,8 +214,8 @@ function RouteComponent() {
 
                 {/* --- Section 5: Reporting Suspicious Activities --- */}
                 <SitePolicyItem
-                    ref={reportingSuspiciousActivitiesRef}
                     id="reporting-suspicious-activities"
+                    ref={reportingSuspiciousActivitiesRef}
                     title="5. Reporting Suspicious Activities"
                 >
                     <div>
@@ -237,8 +237,8 @@ function RouteComponent() {
 
                 {/* --- Section 6: Staff Training and Awareness --- */}
                 <SitePolicyItem
-                    ref={staffTrainingAwarenessRef}
                     id="staff-training-and-awareness"
+                    ref={staffTrainingAwarenessRef}
                     title="6. Staff Training and Awareness"
                 >
                     <div>
@@ -254,8 +254,8 @@ function RouteComponent() {
 
                 {/* --- Section 7: Compliance and Cooperation --- */}
                 <SitePolicyItem
-                    ref={complianceCooperationRef}
                     id="compliance-and-cooperation"
+                    ref={complianceCooperationRef}
                     title="7. Compliance and Cooperation"
                 >
                     <div>
@@ -277,8 +277,8 @@ function RouteComponent() {
 
                 {/* --- Section 8: Sanctions and Enforcement --- */}
                 <SitePolicyItem
-                    ref={sanctionsEnforcementRef}
                     id="sanctions-and-enforcement"
+                    ref={sanctionsEnforcementRef}
                     title="8. Sanctions and Enforcement"
                 >
                     <div>
@@ -299,8 +299,8 @@ function RouteComponent() {
 
                 {/* --- Section 9: Policy Review and Updates --- */}
                 <SitePolicyItem
-                    ref={policyReviewUpdatesRef}
                     id="policy-review-and-updates"
+                    ref={policyReviewUpdatesRef}
                     title="9. Policy Review and Updates"
                 >
                     <div>
@@ -320,8 +320,8 @@ function RouteComponent() {
 
                 {/* --- Section 10: Contact Us --- */}
                 <SitePolicyItem
-                    ref={contactUsRef}
                     id="contact-us"
+                    ref={contactUsRef}
                     title="10. Contact Us"
                 >
                     <div className="space-y-2 not-prose">
@@ -365,12 +365,12 @@ function RouteComponent() {
                     {articleList.map((sectionId, idx) => (
                         <li key={sectionId}>
                             <a
+                                className="block py-1 text-primary hover:underline cursor-pointer text-sm"
                                 href={`#${sectionId}`}
                                 onClick={(e) => {
                                     e.preventDefault()
                                     scrollToSection(sectionId)
                                 }}
-                                className="block py-1 text-primary hover:underline cursor-pointer text-sm"
                             >
                                 {idx + 1}
                                 {'. '}

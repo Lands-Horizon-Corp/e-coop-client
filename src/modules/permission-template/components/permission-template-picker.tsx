@@ -69,35 +69,35 @@ const PermissionPicker = forwardRef<HTMLButtonElement, Props>(
         return (
             <>
                 <GenericPicker
-                    items={filteredItems}
-                    open={open}
-                    listHeading={`Matched Results (${filteredItems.length})`}
-                    searchPlaceHolder="Search template name or description"
                     isLoading={isPending || isLoading || isFetching}
+                    items={filteredItems}
+                    listHeading={`Matched Results (${filteredItems.length})`}
+                    onOpenChange={setOpen}
+                    onSearchChange={setSearchValue}
                     onSelect={(permissionTemplate) => {
                         onSelect?.(permissionTemplate)
                         setOpen(false)
                     }}
-                    onOpenChange={setOpen}
-                    onSearchChange={setSearchValue}
+                    open={open}
                     renderItem={(permissionTemplate) => (
                         <PermissionItemDisplay
                             key={permissionTemplate.id}
                             permissionTemplate={permissionTemplate}
                         />
                     )}
+                    searchPlaceHolder="Search template name or description"
                 />
                 <Button
-                    ref={ref}
-                    role="button"
-                    type="button"
-                    variant="secondary"
-                    disabled={disabled}
-                    onClick={() => setOpen((prev) => !prev)}
                     className={cn(
                         'w-full items-center justify-between rounded-md border bg-background p-0 px-2',
                         triggerClassName
                     )}
+                    disabled={disabled}
+                    onClick={() => setOpen((prev) => !prev)}
+                    ref={ref}
+                    role="button"
+                    type="button"
+                    variant="secondary"
                 >
                     <span className="justify-betweentext-sm inline-flex w-full items-center text-foreground/90">
                         <span className="inline-flex w-full items-center gap-x-2">
@@ -151,12 +151,12 @@ const PermissionItemDisplay = ({
                 }}
             >
                 <Badge
-                    variant="success"
                     className="opacity-70 hover:opacity-100 hover:bg-primary hover:text-primary-foreground"
                     onClick={(e) => {
                         permissionView.onOpenChange(true)
                         e.stopPropagation()
                     }}
+                    variant="success"
                 >
                     <ShieldFillIcon className="inline mr-1 !size-3" />{' '}
                     {permissionTemplate.permissions.length} permissions

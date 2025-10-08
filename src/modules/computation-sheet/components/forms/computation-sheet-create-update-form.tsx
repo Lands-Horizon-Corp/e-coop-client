@@ -108,52 +108,52 @@ const ComputationSheetCreateUpdateForm = ({
     return (
         <Form {...form}>
             <form
-                ref={formRef}
-                onSubmit={onSubmit}
                 className={cn('flex w-full flex-col gap-y-4', className)}
+                onSubmit={onSubmit}
+                ref={formRef}
             >
                 <fieldset
-                    disabled={isPending || formProps.readOnly}
                     className="space-y-4 sm:gap-y-3"
+                    disabled={isPending || formProps.readOnly}
                 >
                     <FormFieldWrapper
                         control={form.control}
-                        name="name"
                         label="Name"
+                        name="name"
                         render={({ field }) => (
                             <Input
                                 {...field}
-                                type="text"
-                                placeholder="Computation Sheet Name"
-                                disabled={isDisabled(field.name)}
                                 className="input input-bordered w-full"
+                                disabled={isDisabled(field.name)}
+                                placeholder="Computation Sheet Name"
+                                type="text"
                             />
                         )}
                     />
                     <FormFieldWrapper
                         control={form.control}
-                        name="description"
                         label="Description"
+                        name="description"
                         render={({ field }) => (
                             <Textarea
                                 {...field}
                                 content={field.value}
-                                placeholder="Description (short)"
                                 disabled={isDisabled(field.name)}
+                                placeholder="Description (short)"
                             />
                         )}
                     />
                     <FormFieldWrapper
                         control={form.control}
-                        name="comaker_account"
                         label="Comaker Account"
+                        name="comaker_account"
                         render={({ field }) => (
                             <Input
                                 {...field}
-                                type="number"
-                                placeholder="Comaker Account"
-                                disabled={isDisabled(field.name)}
                                 className="input input-bordered w-full"
+                                disabled={isDisabled(field.name)}
+                                placeholder="Comaker Account"
+                                type="number"
                             />
                         )}
                     />
@@ -163,12 +163,12 @@ const ComputationSheetCreateUpdateForm = ({
                         render={({ field }) => (
                             <div className="shadow-xs relative flex w-full items-start gap-2 rounded-lg border border-input p-4 outline-none duration-200 ease-out has-[:checked]:border-primary/30 has-[:checked]:bg-gradient-to-br has-[:checked]:from-primary/50 has-[:checked]:to-primary/10">
                                 <Switch
-                                    id={field.name}
-                                    checked={field.value}
-                                    onCheckedChange={field.onChange}
-                                    className="order-1 after:absolute after:inset-0"
                                     aria-describedby={`${field.name}`}
+                                    checked={field.value}
+                                    className="order-1 after:absolute after:inset-0"
                                     disabled={isDisabled(field.name)}
+                                    id={field.name}
+                                    onCheckedChange={field.onChange}
                                 />
                                 <div className="flex grow items-center gap-3">
                                     <div className="size-fit rounded-full bg-secondary p-2">
@@ -180,8 +180,8 @@ const ComputationSheetCreateUpdateForm = ({
                                             <span className="text-xs font-normal leading-[inherit] text-muted-foreground"></span>
                                         </Label>
                                         <p
-                                            id={`${field.name}`}
                                             className="text-xs text-muted-foreground"
+                                            id={`${field.name}`}
                                         >
                                             Marks the computation sheet as
                                             related to accounts with overdue or
@@ -199,12 +199,12 @@ const ComputationSheetCreateUpdateForm = ({
                         render={({ field }) => (
                             <div className="shadow-xs relative flex w-full items-start gap-2 rounded-lg border border-input p-4 outline-none duration-200 ease-out has-[:checked]:border-primary/30 has-[:checked]:bg-gradient-to-br has-[:checked]:from-primary/50 has-[:checked]:to-primary/10">
                                 <Switch
-                                    id={field.name}
-                                    checked={field.value}
-                                    onCheckedChange={field.onChange}
-                                    className="order-1 after:absolute after:inset-0"
                                     aria-describedby={`${field.name}`}
+                                    checked={field.value}
+                                    className="order-1 after:absolute after:inset-0"
                                     disabled={isDisabled(field.name)}
+                                    id={field.name}
+                                    onCheckedChange={field.onChange}
                                 />
                                 <div className="flex grow items-center gap-3">
                                     <div className="size-fit rounded-full bg-secondary p-2">
@@ -216,8 +216,8 @@ const ComputationSheetCreateUpdateForm = ({
                                             <span className="text-xs font-normal leading-[inherit] text-muted-foreground"></span>
                                         </Label>
                                         <p
-                                            id={`${field.name}`}
                                             className="text-xs text-muted-foreground"
+                                            id={`${field.name}`}
                                         >
                                             Indicates that this computation
                                             involves penalties or fines applied
@@ -234,12 +234,12 @@ const ComputationSheetCreateUpdateForm = ({
                         render={({ field }) => (
                             <div className="shadow-xs relative flex w-full items-start gap-2 rounded-lg border border-input p-4 outline-none duration-200 ease-out has-[:checked]:border-primary/30 has-[:checked]:bg-gradient-to-br has-[:checked]:from-primary/50 has-[:checked]:to-primary/10">
                                 <Switch
-                                    id={field.name}
-                                    checked={field.value}
-                                    onCheckedChange={field.onChange}
-                                    className="order-1 after:absolute after:inset-0"
                                     aria-describedby={`${field.name}`}
+                                    checked={field.value}
+                                    className="order-1 after:absolute after:inset-0"
                                     disabled={isDisabled(field.name)}
+                                    id={field.name}
+                                    onCheckedChange={field.onChange}
                                 />
                                 <div className="flex grow items-center gap-3">
                                     <div className="size-fit rounded-full bg-secondary p-2">
@@ -251,8 +251,8 @@ const ComputationSheetCreateUpdateForm = ({
                                             <span className="text-xs font-normal leading-[inherit] text-muted-foreground"></span>
                                         </Label>
                                         <p
-                                            id={`${field.name}`}
                                             className="text-xs text-muted-foreground"
+                                            id={`${field.name}`}
                                         >
                                             Specifies that interest calculations
                                             are included or relevant in this
@@ -269,12 +269,12 @@ const ComputationSheetCreateUpdateForm = ({
                         render={({ field }) => (
                             <div className="shadow-xs relative flex w-full items-start gap-2 rounded-lg border border-input p-4 outline-none duration-200 ease-out has-[:checked]:border-primary/30 has-[:checked]:bg-gradient-to-br has-[:checked]:from-primary/50 has-[:checked]:to-primary/10">
                                 <Switch
-                                    id={field.name}
-                                    checked={field.value}
-                                    onCheckedChange={field.onChange}
-                                    className="order-1 after:absolute after:inset-0"
                                     aria-describedby={`${field.name}`}
+                                    checked={field.value}
+                                    className="order-1 after:absolute after:inset-0"
                                     disabled={isDisabled(field.name)}
+                                    id={field.name}
+                                    onCheckedChange={field.onChange}
                                 />
                                 <div className="flex grow items-center gap-3">
                                     <div className="size-fit rounded-full bg-secondary p-2 ">
@@ -286,8 +286,8 @@ const ComputationSheetCreateUpdateForm = ({
                                             <span className="text-xs font-normal leading-[inherit] text-muted-foreground"></span>
                                         </Label>
                                         <p
-                                            id={`${field.name}`}
                                             className="text-xs text-muted-foreground"
+                                            id={`${field.name}`}
                                         >
                                             Flags that the account already
                                             exists in the system, preventing
@@ -301,16 +301,16 @@ const ComputationSheetCreateUpdateForm = ({
                 </fieldset>
 
                 <FormFooterResetSubmit
-                    error={error}
-                    readOnly={formProps.readOnly}
-                    isLoading={isPending}
                     className="sticky bottom-0"
                     disableSubmit={!form.formState.isDirty}
-                    submitText={computationSheetId ? 'Update' : 'Create'}
+                    error={error}
+                    isLoading={isPending}
                     onReset={() => {
                         form.reset()
                         reset?.()
                     }}
+                    readOnly={formProps.readOnly}
+                    submitText={computationSheetId ? 'Update' : 'Create'}
                 />
             </form>
         </Form>
@@ -368,53 +368,53 @@ export const ComputationSheetUpdateMiniForm = ({
     return (
         <Form {...form}>
             <form
-                ref={formRef}
-                onSubmit={onSubmit}
                 className={cn('flex w-full flex-col gap-y-4', className)}
+                onSubmit={onSubmit}
+                ref={formRef}
             >
                 <fieldset
-                    disabled={isPending || formProps.readOnly}
                     className="flex justify-between gap-x-4"
+                    disabled={isPending || formProps.readOnly}
                 >
                     <div className="w-8/12 space-y-4">
                         <FormFieldWrapper
                             control={form.control}
-                            name="name"
                             label="Name"
+                            name="name"
                             render={({ field }) => (
                                 <Input
                                     {...field}
-                                    type="text"
-                                    placeholder="Computation Sheet Name"
-                                    disabled={isDisabled(field.name)}
                                     className="input input-bordered w-full"
+                                    disabled={isDisabled(field.name)}
+                                    placeholder="Computation Sheet Name"
+                                    type="text"
                                 />
                             )}
                         />
                         <FormFieldWrapper
                             control={form.control}
-                            name="description"
                             label="Description"
+                            name="description"
                             render={({ field }) => (
                                 <Textarea
                                     {...field}
                                     content={field.value}
-                                    placeholder="Description (short)"
                                     disabled={isDisabled(field.name)}
+                                    placeholder="Description (short)"
                                 />
                             )}
                         />
                         <FormFieldWrapper
                             control={form.control}
-                            name="comaker_account"
                             label="Comaker Account"
+                            name="comaker_account"
                             render={({ field }) => (
                                 <Input
                                     {...field}
-                                    type="number"
-                                    placeholder="Comaker Account"
-                                    disabled={isDisabled(field.name)}
                                     className="input input-bordered w-full"
+                                    disabled={isDisabled(field.name)}
+                                    placeholder="Comaker Account"
+                                    type="number"
                                 />
                             )}
                         />
@@ -426,12 +426,12 @@ export const ComputationSheetUpdateMiniForm = ({
                             render={({ field }) => (
                                 <div className="shadow-xs relative flex w-full items-center gap-2 rounded-lg border border-input p-1 outline-none duration-200 ease-out has-[:checked]:border-primary/30 has-[:checked]:bg-gradient-to-br has-[:checked]:from-primary/50 has-[:checked]:to-primary/10">
                                     <Switch
-                                        id={field.name}
-                                        checked={field.value}
-                                        onCheckedChange={field.onChange}
-                                        className="order-1 after:absolute after:inset-0"
                                         aria-describedby={`${field.name}`}
+                                        checked={field.value}
+                                        className="order-1 after:absolute after:inset-0"
                                         disabled={isDisabled(field.name)}
+                                        id={field.name}
+                                        onCheckedChange={field.onChange}
                                     />
                                     <div className="flex grow items-center gap-3">
                                         <div className="size-fit rounded-full bg-secondary p-2">
@@ -454,12 +454,12 @@ export const ComputationSheetUpdateMiniForm = ({
                             render={({ field }) => (
                                 <div className="shadow-xs relative flex w-full items-center gap-2 rounded-lg border border-input p-1 outline-none duration-200 ease-out has-[:checked]:border-primary/30 has-[:checked]:bg-gradient-to-br has-[:checked]:from-primary/50 has-[:checked]:to-primary/10">
                                     <Switch
-                                        id={field.name}
-                                        checked={field.value}
-                                        onCheckedChange={field.onChange}
-                                        className="order-1 after:absolute after:inset-0"
                                         aria-describedby={`${field.name}`}
+                                        checked={field.value}
+                                        className="order-1 after:absolute after:inset-0"
                                         disabled={isDisabled(field.name)}
+                                        id={field.name}
+                                        onCheckedChange={field.onChange}
                                     />
                                     <div className="flex grow items-center gap-3">
                                         <div className="size-fit rounded-full bg-secondary p-2">
@@ -481,12 +481,12 @@ export const ComputationSheetUpdateMiniForm = ({
                             render={({ field }) => (
                                 <div className="shadow-xs relative flex w-full items-center gap-2 rounded-lg border border-input p-1 outline-none duration-200 ease-out has-[:checked]:border-primary/30 has-[:checked]:bg-gradient-to-br has-[:checked]:from-primary/50 has-[:checked]:to-primary/10">
                                     <Switch
-                                        id={field.name}
-                                        checked={field.value}
-                                        onCheckedChange={field.onChange}
-                                        className="order-1 after:absolute after:inset-0"
                                         aria-describedby={`${field.name}`}
+                                        checked={field.value}
+                                        className="order-1 after:absolute after:inset-0"
                                         disabled={isDisabled(field.name)}
+                                        id={field.name}
+                                        onCheckedChange={field.onChange}
                                     />
                                     <div className="flex grow items-center gap-3">
                                         <div className="size-fit rounded-full bg-secondary p-2">
@@ -508,12 +508,12 @@ export const ComputationSheetUpdateMiniForm = ({
                             render={({ field }) => (
                                 <div className="shadow-xs relative flex w-full items-center gap-2 rounded-lg border border-input p-1 outline-none duration-200 ease-out has-[:checked]:border-primary/30 has-[:checked]:bg-gradient-to-br has-[:checked]:from-primary/50 has-[:checked]:to-primary/10">
                                     <Switch
-                                        id={field.name}
-                                        checked={field.value}
-                                        onCheckedChange={field.onChange}
-                                        className="order-1"
                                         aria-describedby={`${field.name}`}
+                                        checked={field.value}
+                                        className="order-1"
                                         disabled={isDisabled(field.name)}
+                                        id={field.name}
+                                        onCheckedChange={field.onChange}
                                     />
                                     <div className="flex grow items-center gap-3">
                                         <div className="size-fit rounded-full bg-secondary p-2 ">
@@ -532,15 +532,15 @@ export const ComputationSheetUpdateMiniForm = ({
                     </div>
                 </fieldset>
                 <FormFooterResetSubmit
-                    error={error}
-                    readOnly={formProps.readOnly}
-                    isLoading={isPending}
                     disableSubmit={!form.formState.isDirty}
-                    submitText="Update"
+                    error={error}
+                    isLoading={isPending}
                     onReset={() => {
                         form.reset()
                         reset?.()
                     }}
+                    readOnly={formProps.readOnly}
+                    submitText="Update"
                 />
             </form>
         </Form>
@@ -559,9 +559,9 @@ export const ComputationSheetCreateUpdateFormModal = ({
 }) => {
     return (
         <Modal
-            title={title}
-            description={description}
             className={cn('', className)}
+            description={description}
+            title={title}
             {...props}
         >
             <ComputationSheetCreateUpdateForm

@@ -113,8 +113,8 @@ const LoanLedgerHeader = ({
                             CV. <TicketIcon className="inline" />
                         </p>
                         <TextDisplay
-                            withCopy
                             noValueText="no voucher number set"
+                            withCopy
                         >
                             {loanTransaction.voucher}
                         </TextDisplay>
@@ -137,12 +137,12 @@ const LoanLedgerHeader = ({
                         >
                             <ImageDisplay
                                 className="size-14 rounded-lg"
+                                // fallback={memberProfile.first_name.charAt(0) ?? '-'}
+                                fallback="S"
                                 src={
                                     loanTransaction.member_profile?.media
                                         ?.download_url
                                 }
-                                // fallback={memberProfile.first_name.charAt(0) ?? '-'}
-                                fallback="S"
                             />
                         </PreviewMediaWrapper>
                     </div>
@@ -320,10 +320,10 @@ const LoanDetails = ({
                         Account :{' '}
                         {account?.icon && account?.name ? (
                             <AccountBadge
-                                size="sm"
-                                variant="primary"
                                 icon={account.icon as TIcon}
                                 name={account.name}
+                                size="sm"
+                                variant="primary"
                             />
                         ) : (
                             <span className="text-xs text-muted-foreground">
@@ -432,13 +432,13 @@ const LoanDetails = ({
                         </span>
                     </div>
                     <Button
-                        size="sm"
-                        variant="outline"
-                        hoverVariant="primary"
                         className="text-xs h-fit px-2 py-1 items-center"
+                        hoverVariant="primary"
                         onClick={() =>
                             loanAmortizationModalState.onOpenChange(true)
                         }
+                        size="sm"
+                        variant="outline"
                     >
                         <CalendarNumberIcon className="inline size-3" /> View
                         Amort. Schedule
@@ -783,8 +783,8 @@ const LoanQuickSummary = ({
                     {members_amount.length === 0 ? (
                         <TableRow>
                             <TableCell
-                                colSpan={2}
                                 className="text-center text-xs text-muted-foreground h-24"
+                                colSpan={2}
                             >
                                 No data to display
                             </TableCell>
@@ -796,16 +796,16 @@ const LoanQuickSummary = ({
                                     <TableCell className="w-2/3">
                                         <div className="flex items-center gap-2">
                                             <ImageDisplay
-                                                src={
-                                                    member_profile?.media
-                                                        ?.download_url
-                                                }
+                                                className="size-6 rounded-full"
                                                 fallback={
                                                     member_profile?.full_name?.charAt(
                                                         0
                                                     ) ?? '?'
                                                 }
-                                                className="size-6 rounded-full"
+                                                src={
+                                                    member_profile?.media
+                                                        ?.download_url
+                                                }
                                             />
                                             <span className="truncate">
                                                 {member_profile?.full_name ? (
@@ -988,35 +988,35 @@ const LoanQuickSummary = ({
             {/* Actions */}
             <div className="flex flex-col gap-2 items-end justify-start min-w-[140px]">
                 <Button
-                    size="sm"
-                    variant="secondary"
                     className="w-full flex gap-2 items-center"
                     onClick={() => calculatorModalState.onOpenChange(true)}
+                    size="sm"
+                    variant="secondary"
                 >
                     <CalculatorIcon className="size-4" />
                     Calc. Advance Interest/Fines
                 </Button>
                 <Button
-                    size="sm"
-                    variant="secondary"
                     className="w-full flex gap-2 items-center"
                     onClick={() => addInterestModalState.onOpenChange(true)}
+                    size="sm"
+                    variant="secondary"
                 >
                     <PlusIcon className="size-4" />
                     Add Interest
                 </Button>
                 <Button
+                    className="w-full flex gap-2 items-center"
                     size="sm"
                     variant="secondary"
-                    className="w-full flex gap-2 items-center"
                 >
                     <PrinterFillIcon className="size-4" />
                     Print Ledger
                 </Button>
                 <Button
+                    className="w-full flex gap-2 items-center"
                     size="sm"
                     variant="secondary"
-                    className="w-full flex gap-2 items-center"
                 >
                     <UndoIcon className="size-4" />
                     RePrint
@@ -1039,15 +1039,15 @@ export const LoanViewModal = ({
 }) => {
     return (
         <Modal
-            title={title}
-            description={description}
             className={cn('!max-w-[95vw]', className)}
+            description={description}
+            title={title}
             {...props}
         >
             <LoanView
-                loanTransactionId={loanTransactionId}
-                defaultLoanTransaction={defaultLoanTransaction}
                 className="p-0"
+                defaultLoanTransaction={defaultLoanTransaction}
+                loanTransactionId={loanTransactionId}
             />
         </Modal>
     )

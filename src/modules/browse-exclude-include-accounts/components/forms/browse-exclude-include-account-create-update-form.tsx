@@ -101,83 +101,83 @@ const BrowseExcludeIncludeAccountsCreateUpdateForm = ({
     return (
         <Form {...form}>
             <form
-                ref={formRef}
-                onSubmit={onSubmit}
                 className={cn('flex w-full flex-col gap-y-4', className)}
+                onSubmit={onSubmit}
+                ref={formRef}
             >
                 <fieldset
-                    disabled={isPending || formProps.readOnly}
                     className="space-y-4"
+                    disabled={isPending || formProps.readOnly}
                 >
                     <FormFieldWrapper
                         control={form.control}
-                        name="fines_account_id"
                         label="Fines Account"
+                        name="fines_account_id"
                         render={({ field }) => (
                             <AccountPicker
                                 {...field}
+                                disabled={isDisabled('fines_account_id')}
                                 hideDescription
-                                value={form.getValues('fines_account')}
                                 onSelect={(account) => {
                                     field.onChange(account.id)
                                     form.setValue('fines_account', account, {
                                         shouldDirty: true,
                                     })
                                 }}
-                                disabled={isDisabled('fines_account_id')}
+                                value={form.getValues('fines_account')}
                             />
                         )}
                     />
 
                     <FormFieldWrapper
                         control={form.control}
-                        name="comaker_account_id"
                         label="Comaker Account"
+                        name="comaker_account_id"
                         render={({ field }) => (
                             <AccountPicker
                                 {...field}
+                                disabled={isDisabled('comaker_account_id')}
                                 hideDescription
-                                value={form.getValues('comaker_account')}
                                 onSelect={(account) => {
                                     field.onChange(account.id)
                                     form.setValue('comaker_account', account, {
                                         shouldDirty: true,
                                     })
                                 }}
-                                disabled={isDisabled('comaker_account_id')}
+                                value={form.getValues('comaker_account')}
                             />
                         )}
                     />
 
                     <FormFieldWrapper
                         control={form.control}
-                        name="interest_account_id"
                         label="Interest Account"
+                        name="interest_account_id"
                         render={({ field }) => (
                             <AccountPicker
                                 {...field}
+                                disabled={isDisabled('interest_account_id')}
                                 hideDescription
-                                value={form.getValues('interest_account')}
                                 onSelect={(account) => {
                                     field.onChange(account.id)
                                     form.setValue('interest_account', account, {
                                         shouldDirty: true,
                                     })
                                 }}
-                                disabled={isDisabled('interest_account_id')}
+                                value={form.getValues('interest_account')}
                             />
                         )}
                     />
 
                     <FormFieldWrapper
                         control={form.control}
-                        name="deliquent_account_id"
                         label="Delinquent Account"
+                        name="deliquent_account_id"
                         render={({ field }) => (
                             <AccountPicker
                                 {...field}
+                                disabled={isDisabled('deliquent_account_id')}
                                 hideDescription
-                                value={form.getValues('deliquent_account')}
                                 onSelect={(account) => {
                                     field.onChange(account.id)
                                     form.setValue(
@@ -188,22 +188,22 @@ const BrowseExcludeIncludeAccountsCreateUpdateForm = ({
                                         }
                                     )
                                 }}
-                                disabled={isDisabled('deliquent_account_id')}
+                                value={form.getValues('deliquent_account')}
                             />
                         )}
                     />
 
                     <FormFieldWrapper
                         control={form.control}
-                        name="include_existing_loan_account_id"
                         label="Existing Loan Account"
+                        name="include_existing_loan_account_id"
                         render={({ field }) => (
                             <AccountPicker
                                 {...field}
-                                hideDescription
-                                value={form.getValues(
-                                    'include_existing_loan_account'
+                                disabled={isDisabled(
+                                    'include_existing_loan_account_id'
                                 )}
+                                hideDescription
                                 onSelect={(account) => {
                                     field.onChange(account.id)
                                     form.setValue(
@@ -214,8 +214,8 @@ const BrowseExcludeIncludeAccountsCreateUpdateForm = ({
                                         }
                                     )
                                 }}
-                                disabled={isDisabled(
-                                    'include_existing_loan_account_id'
+                                value={form.getValues(
+                                    'include_existing_loan_account'
                                 )}
                             />
                         )}
@@ -223,17 +223,17 @@ const BrowseExcludeIncludeAccountsCreateUpdateForm = ({
                 </fieldset>
 
                 <FormFooterResetSubmit
-                    error={error}
-                    readOnly={formProps.readOnly}
-                    isLoading={isPending}
                     disableSubmit={!form.formState.isDirty}
-                    submitText={
-                        browseExcludeIncludeAccountId ? 'Update' : 'Create'
-                    }
+                    error={error}
+                    isLoading={isPending}
                     onReset={() => {
                         form.reset()
                         reset?.()
                     }}
+                    readOnly={formProps.readOnly}
+                    submitText={
+                        browseExcludeIncludeAccountId ? 'Update' : 'Create'
+                    }
                 />
             </form>
         </Form>
@@ -251,9 +251,9 @@ export const BrowseExcludeIncludeAccountsCreateUpdateFormModal = ({
 }) => {
     return (
         <Modal
-            title={title}
-            description={description}
             className={cn('', className)}
+            description={description}
+            title={title}
             {...props}
         >
             <BrowseExcludeIncludeAccountsCreateUpdateForm

@@ -194,23 +194,16 @@ const OrganizationForm = () => {
                             <div className="grid w-full grid-cols-1 gap-4 md:grid-cols-4">
                                 <div className="md:col-span-4 flex gap-2 w-full">
                                     <FormFieldWrapper
-                                        control={form.control}
-                                        name="media_id"
-                                        label="Organization Photo"
                                         className=" "
+                                        control={form.control}
+                                        label="Organization Photo"
+                                        name="media_id"
                                         render={({ field }) => {
                                             const value = form.watch('media')
                                             return (
                                                 <ImageField
                                                     {...field}
-                                                    placeholder="Upload Organization Photo"
                                                     className=""
-                                                    value={
-                                                        value
-                                                            ? (value as IMedia)
-                                                                  .download_url
-                                                            : value
-                                                    }
                                                     onChange={(newImage) => {
                                                         if (newImage)
                                                             field.onChange(
@@ -226,20 +219,6 @@ const OrganizationForm = () => {
                                                             newImage
                                                         )
                                                     }}
-                                                />
-                                            )
-                                        }}
-                                    />
-                                    <FormFieldWrapper
-                                        control={form.control}
-                                        name="cover_media_id"
-                                        label="Organization Cover Photo"
-                                        render={({ field }) => {
-                                            const value =
-                                                form.watch('cover_media')
-                                            return (
-                                                <ImageField
-                                                    {...field}
                                                     placeholder="Upload Organization Photo"
                                                     value={
                                                         value
@@ -247,6 +226,20 @@ const OrganizationForm = () => {
                                                                   .download_url
                                                             : value
                                                     }
+                                                />
+                                            )
+                                        }}
+                                    />
+                                    <FormFieldWrapper
+                                        control={form.control}
+                                        label="Organization Cover Photo"
+                                        name="cover_media_id"
+                                        render={({ field }) => {
+                                            const value =
+                                                form.watch('cover_media')
+                                            return (
+                                                <ImageField
+                                                    {...field}
                                                     onChange={(newImage) => {
                                                         if (newImage)
                                                             field.onChange(
@@ -262,6 +255,13 @@ const OrganizationForm = () => {
                                                             newImage
                                                         )
                                                     }}
+                                                    placeholder="Upload Organization Photo"
+                                                    value={
+                                                        value
+                                                            ? (value as IMedia)
+                                                                  .download_url
+                                                            : value
+                                                    }
                                                 />
                                             )
                                         }}
@@ -271,48 +271,48 @@ const OrganizationForm = () => {
                                     <CategoriesItem className="grow" />
                                     <Button
                                         className="grid-cols-1"
-                                        variant={'ghost'}
                                         onClick={(e) => {
                                             e.preventDefault()
                                             setOnOpenCategoryPicker(true)
                                         }}
+                                        variant={'ghost'}
                                     >
                                         Edit Categories
                                     </Button>
                                 </div>
                                 <FormFieldWrapper
-                                    control={form.control}
-                                    name="name"
-                                    label="Organization Name"
                                     className="col-span-3"
+                                    control={form.control}
+                                    label="Organization Name"
+                                    name="name"
                                     render={({ field }) => (
                                         <Input
                                             {...field}
-                                            id={field.name}
                                             autoComplete="org-name"
+                                            id={field.name}
                                             placeholder="enter organization name"
                                         />
                                     )}
                                 />
                                 <FormFieldWrapper
-                                    control={form.control}
-                                    name="email"
-                                    label="Organization Email"
                                     className="col-span-1"
+                                    control={form.control}
+                                    label="Organization Email"
+                                    name="email"
                                     render={({ field }) => (
                                         <Input
                                             {...field}
-                                            id={field.name}
                                             autoComplete="organization email"
+                                            id={field.name}
                                             placeholder="enter email"
                                         />
                                     )}
                                 />
                                 <FormFieldWrapper
-                                    control={form.control}
-                                    name="contact_number"
-                                    label="Organization Contact Number"
                                     className="col-span-2"
+                                    control={form.control}
+                                    label="Organization Contact Number"
+                                    name="contact_number"
                                     render={({
                                         field,
                                         fieldState: { invalid, error },
@@ -334,24 +334,24 @@ const OrganizationForm = () => {
                                     )}
                                 />
                                 <FormFieldWrapper
-                                    control={form.control}
-                                    name="address"
-                                    label="Organization Address"
                                     className="col-span-2"
+                                    control={form.control}
+                                    label="Organization Address"
+                                    name="address"
                                     render={({ field }) => (
                                         <Input
                                             {...field}
-                                            id={field.name}
                                             autoComplete="organization address"
+                                            id={field.name}
                                             placeholder="enter organization address"
                                         />
                                     )}
                                 />
                                 <FormFieldWrapper
+                                    className="col-span-4"
                                     control={form.control}
                                     label="Organization Description"
                                     name="description"
-                                    className="col-span-4"
                                     render={({ field }) => {
                                         const { ref: _ref, ...rest } = field
                                         return (
@@ -359,8 +359,8 @@ const OrganizationForm = () => {
                                                 <TextEditor
                                                     {...rest}
                                                     className="w-full"
-                                                    textEditorClassName="!max-w-none"
                                                     placeholder="Write some description about your Organization..."
+                                                    textEditorClassName="!max-w-none"
                                                 />
                                             </FormControl>
                                         )
@@ -370,14 +370,13 @@ const OrganizationForm = () => {
                         )}
                         {activeStep === 1 && (
                             <FormFieldWrapper
+                                className="col-span-4"
                                 control={form.control}
                                 label="Organization Description"
                                 name="subscription_plan_id"
-                                className="col-span-4"
                                 render={({ field }) => (
                                     <div className="flex flex-col gap-2">
                                         <SubscriptionPlanPicker
-                                            value={field.value}
                                             onChange={(id: TEntityId) => {
                                                 form.setValue(
                                                     'subscription_plan_id',
@@ -385,6 +384,7 @@ const OrganizationForm = () => {
                                                 )
                                                 field.onChange(id)
                                             }}
+                                            value={field.value}
                                         />
                                     </div>
                                 )}
@@ -408,11 +408,11 @@ const OrganizationForm = () => {
                         <FormErrorMessage errorMessage={errorMessage} />
                         <div className="flex w-full items-center justify-end gap-x-2">
                             <Button
-                                variant="ghost"
                                 onClick={(e) => {
                                     e.preventDefault()
                                     form.reset()
                                 }}
+                                variant="ghost"
                             >
                                 reset
                             </Button>
@@ -421,39 +421,39 @@ const OrganizationForm = () => {
                                 {steps.length}
                             </div>
                             <Button
-                                variant="ghost"
-                                onClick={handleGoBack}
                                 disabled={activeStep === 0}
+                                onClick={handleGoBack}
+                                variant="ghost"
                             >
                                 <NextIcon
-                                    size={18}
                                     className="mr-2 rotate-180"
+                                    size={18}
                                 />
                                 Go Back
                             </Button>
 
                             <Button
-                                variant="ghost"
                                 disabled={isFinalStep}
                                 onClick={(e) => {
                                     handleNextStep(e)
                                 }}
+                                variant="ghost"
                             >
                                 next step
-                                <NextIcon size={18} className="ml-2" />
+                                <NextIcon className="ml-2" size={18} />
                             </Button>
                         </div>
                         {isFinalStep && (
                             <Button
-                                type="submit"
-                                disabled={!isFinalStep || isCreating}
-                                variant={isFinalStep ? 'default' : 'outline'}
                                 className="w-full"
+                                disabled={!isFinalStep || isCreating}
+                                type="submit"
+                                variant={isFinalStep ? 'default' : 'outline'}
                             >
                                 {isCreating ? (
                                     <LoadingSpinnerIcon
-                                        size={18}
                                         className="mr-2 animate-spin"
+                                        size={18}
                                     />
                                 ) : (
                                     'Submit'

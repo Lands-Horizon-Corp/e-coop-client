@@ -52,12 +52,12 @@ const TagTemplatePage = () => {
             />
             <TagTemplateTable
                 actionComponent={TagTemplateAction}
+                className="max-h-[90vh] min-h-[90vh] w-full"
                 toolbarProps={{
                     createActionProps: {
                         onClick: () => createModal.onOpenChange(true),
                     },
                 }}
-                className="max-h-[90vh] min-h-[90vh] w-full"
             />
         </PageContainer>
     )

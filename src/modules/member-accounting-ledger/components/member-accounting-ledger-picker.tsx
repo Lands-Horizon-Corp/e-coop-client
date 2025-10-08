@@ -95,19 +95,9 @@ const MemberAccountingLedgerPicker = forwardRef<
         return (
             <>
                 <GenericPicker
-                    items={data}
-                    open={state}
-                    listHeading={`Matched Results (${totalSize})`}
-                    searchPlaceHolder="Search account name, member, or amount..."
                     isLoading={isPending || isLoading || isFetching}
-                    onSelect={(ledger) => {
-                        queryClient.setQueryData(
-                            ['member-accounting-ledger', value],
-                            ledger
-                        )
-                        onSelect?.(ledger)
-                        setState(false)
-                    }}
+                    items={data}
+                    listHeading={`Matched Results (${totalSize})`}
                     onOpenChange={setState}
                     onSearchChange={(searchValue) => {
                         bulkSetFilter(
@@ -137,6 +127,15 @@ const MemberAccountingLedgerPicker = forwardRef<
                             }
                         )
                     }}
+                    onSelect={(ledger) => {
+                        queryClient.setQueryData(
+                            ['member-accounting-ledger', value],
+                            ledger
+                        )
+                        onSelect?.(ledger)
+                        setState(false)
+                    }}
+                    open={state}
                     renderItem={(ledger) => (
                         <div className="flex w-full items-center justify-between py-1">
                             <div className="flex items-center gap-x-2">
@@ -168,14 +167,9 @@ const MemberAccountingLedgerPicker = forwardRef<
                             </div>
                         </div>
                     )}
+                    searchPlaceHolder="Search account name, member, or amount..."
                 >
                     <MiniPaginationBar
-                        pagination={{
-                            pageIndex: pagination.pageIndex,
-                            pageSize: pagination.pageSize,
-                            totalPage: totalPage,
-                            totalSize: totalSize,
-                        }}
                         disablePageMove={isFetching}
                         onNext={({ pageIndex }) =>
                             setPagination((prev) => ({ ...prev, pageIndex }))
@@ -183,19 +177,25 @@ const MemberAccountingLedgerPicker = forwardRef<
                         onPrev={({ pageIndex }) =>
                             setPagination((prev) => ({ ...prev, pageIndex }))
                         }
+                        pagination={{
+                            pageIndex: pagination.pageIndex,
+                            pageSize: pagination.pageSize,
+                            totalPage: totalPage,
+                            totalSize: totalSize,
+                        }}
                     />
                 </GenericPicker>
 
                 <Button
-                    ref={ref}
-                    type="button"
-                    variant="secondary"
-                    disabled={disabled}
-                    onClick={() => setState(true)}
                     className={cn(
                         'w-full items-center justify-between rounded-md border p-0 px-2',
                         triggerClassName
                     )}
+                    disabled={disabled}
+                    onClick={() => setState(true)}
+                    ref={ref}
+                    type="button"
+                    variant="secondary"
                 >
                     <span className="inline-flex w-full items-center justify-between text-sm text-foreground/90">
                         <span className="inline-flex w-full items-center gap-x-2">

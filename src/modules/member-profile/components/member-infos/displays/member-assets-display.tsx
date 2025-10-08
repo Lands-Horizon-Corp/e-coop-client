@@ -23,9 +23,9 @@ const MemberAssetsDisplay = ({ assets, className }: Props) => {
     return (
         <div className={cn('space-y-4', className)}>
             <SectionTitle
-                title="Assets"
                 Icon={BoxesStackedIcon}
                 subTitle="List of member assets"
+                title="Assets"
             />
             {(!assets || assets.length === 0) && (
                 <p className="w-full text-center text-xs text-muted-foreground/70">
@@ -36,8 +36,8 @@ const MemberAssetsDisplay = ({ assets, className }: Props) => {
                 assets.map((asset) => {
                     return (
                         <div
-                            key={asset.id}
                             className="grid grid-cols-4 rounded-xl border bg-popover/60 p-4"
+                            key={asset.id}
                         >
                             <div className="space-y-2">
                                 <p>{asset.name ?? '-'}</p>
@@ -67,13 +67,13 @@ const MemberAssetsDisplay = ({ assets, className }: Props) => {
                             </div>
 
                             <Accordion
-                                type="single"
-                                collapsible
                                 className="col-span-4 w-full"
+                                collapsible
+                                type="single"
                             >
                                 <AccordionItem
-                                    value="item-1"
                                     className="border-b-0"
+                                    value="item-1"
                                 >
                                     <AccordionTrigger className="text-sm text-muted-foreground/60">
                                         Description..

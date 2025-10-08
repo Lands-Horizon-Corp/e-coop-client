@@ -44,15 +44,15 @@ const MemberContactReferenceCard = ({
     return (
         <div className="flex flex-col gap-y-1 rounded-xl border bg-background p-4">
             <MemberContactCreateUpdateFormModal
-                open={edit}
-                onOpenChange={setEdit}
-                title="Update Contact Reference"
                 description="Modify / Update this contact reference information."
                 formProps={{
                     memberProfileId,
                     defaultValues: reference,
                     contactReferenceId: reference.id,
                 }}
+                onOpenChange={setEdit}
+                open={edit}
+                title="Update Contact Reference"
             />
             <div className="flex justify-between">
                 <div>
@@ -62,22 +62,20 @@ const MemberContactReferenceCard = ({
                     </span>
                 </div>
                 <fieldset
-                    disabled={isDeleting}
                     className="flex items-center justify-end gap-1"
+                    disabled={isDeleting}
                 >
                     <Button
-                        size="icon"
-                        variant="ghost"
                         className="!size-fit px-1.5 py-1.5 text-muted-foreground/40"
                         onClick={() => setEdit(true)}
+                        size="icon"
+                        variant="ghost"
                     >
                         <PencilFillIcon className="size-4" />
                     </Button>
                     <Button
-                        size="icon"
-                        variant="ghost"
-                        hoverVariant="destructive"
                         className="!size-fit px-1.5 py-1.5 text-muted-foreground/40"
+                        hoverVariant="destructive"
                         onClick={() =>
                             onOpen({
                                 title: 'Delete Contact Reference',
@@ -95,6 +93,8 @@ const MemberContactReferenceCard = ({
                                     ),
                             })
                         }
+                        size="icon"
+                        variant="ghost"
                     >
                         {isDeleting ? (
                             <span className="size-4 animate-spin">
@@ -150,19 +150,19 @@ const MemberContactReferences = ({
     return (
         <div>
             <MemberContactCreateUpdateFormModal
-                open={create}
-                onOpenChange={setCreate}
-                title="Add Contact Reference"
                 description="Add new contact reference information."
                 formProps={{
                     memberProfileId: memberProfile.id,
                     defaultValues: { member_profile_id: memberProfile.id },
                 }}
+                onOpenChange={setCreate}
+                open={create}
+                title="Add Contact Reference"
             />
 
             <div className="mb-2 flex items-start justify-between">
                 <p>Contact References</p>
-                <Button size="sm" onClick={() => setCreate(true)}>
+                <Button onClick={() => setCreate(true)} size="sm">
                     Add Contact Reference <PlusIcon className="ml-1" />
                 </Button>
             </div>
@@ -171,8 +171,8 @@ const MemberContactReferences = ({
                     contactReferences.map((reference) => (
                         <MemberContactReferenceCard
                             key={reference.id}
-                            reference={reference}
                             memberProfileId={memberProfile.id}
+                            reference={reference}
                         />
                     ))
                 ) : (

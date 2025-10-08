@@ -164,15 +164,15 @@ export const EmployeesAction = ({
                 <Modal
                     {...ledgerTableModal}
                     className="!max-w-[95vw]"
-                    title={getModalTitle()}
                     description={`You are viewing ${employee.user.full_name}'s ${getModalTitle().toLowerCase()}`}
+                    title={getModalTitle()}
                 >
                     <GeneralLedgerTable
+                        className="min-h-[75vh] min-w-0 max-h-[75vh]"
+                        excludeColumnIds={['balance']}
                         mode="employee"
                         TEntryType={selectedEntryType}
                         userOrganizationId={employee.id}
-                        excludeColumnIds={['balance']}
-                        className="min-h-[75vh] min-w-0 max-h-[75vh]"
                     />
                 </Modal>
 
@@ -183,9 +183,9 @@ export const EmployeesAction = ({
                     description={`You are viewing ${employee.user.full_name || 'unknown'}'s disbursement transactions`}
                 >
                     <DisbursementTransactionTable
+                        className="min-h-[90vh] min-w-0 max-h-[90vh]"
                         mode="employee"
                         userOrganizationId={employee.id}
-                        className="min-h-[90vh] min-w-0 max-h-[90vh]"
                     />
                 </Modal>
 
@@ -207,11 +207,12 @@ export const EmployeesAction = ({
                 <Modal
                     {...footstepModal}
                     className="!max-w-[95vw]"
+                    description={`You are viewing ${employee.user.full_name}'s footstep`}
                     title={
                         <div className="flex gap-x-2 items-center">
                             <ImageDisplay
-                                src={employee.user.media?.download_url}
                                 className="rounded-xl size-12"
+                                src={employee.user.media?.download_url}
                             />
                             <div className="space-y-1">
                                 <p>{employee.user.full_name}</p>
@@ -221,58 +222,56 @@ export const EmployeesAction = ({
                             </div>
                         </div>
                     }
-                    description={`You are viewing ${employee.user.full_name}'s footstep`}
                 >
                     <FootstepTable
-                        userOrgId={employee.id}
-                        mode="user-organization"
                         className="min-h-[90vh] min-w-0 max-h-[90vh]"
+                        mode="user-organization"
+                        userOrgId={employee.id}
                     />
                 </Modal>
                 <Modal
                     {...timesheetModal}
                     className="!max-w-[95vw]"
-                    title="Timesheet"
                     description={`You are viewing ${employee.user.full_name}'s timesheet`}
+                    title="Timesheet"
                 >
                     <TimesheetTable
+                        className="min-h-[90vh] min-w-0 max-h-[90vh]"
                         mode="employee"
                         onRowClick={() => {}}
                         userOrganizationId={employee.id}
-                        className="min-h-[90vh] min-w-0 max-h-[90vh]"
                     />
                 </Modal>
                 <Modal
                     {...transactionBatchModal}
                     className="!max-w-[95vw]"
-                    title="Transaction Batch"
                     description={`You are viewing ${employee.user.full_name}'s transaction batch`}
+                    title="Transaction Batch"
                 >
                     <TransactionBatchTable
+                        className="min-h-[90vh] min-w-0 max-h-[90vh]"
                         mode="employee"
                         onRowClick={() => {}}
                         userOrganizationId={employee.id}
-                        className="min-h-[90vh] min-w-0 max-h-[90vh]"
                     />
                 </Modal>
 
                 <Modal
                     {...transactionsModal}
                     className="!max-w-[95vw]"
-                    title="Transactions"
                     description={`You are viewing ${employee.user.full_name}'s transactions`}
+                    title="Transactions"
                 >
                     <TransactionsTable
+                        className="min-h-[90vh] min-w-0 max-h-[90vh]"
                         mode="employee"
                         onRowClick={() => {}}
                         userId={employee.user_id}
-                        className="min-h-[90vh] min-w-0 max-h-[90vh]"
                     />
                 </Modal>
             </div>
             <RowActionsGroup
                 canSelect
-                row={row}
                 onDelete={{
                     text: 'Delete',
                     isAllowed: !isDeletingEmployee,
@@ -486,6 +485,7 @@ export const EmployeesAction = ({
                         </DropdownMenuItem>
                     </>
                 }
+                row={row}
             />
         </>
     )
@@ -523,15 +523,15 @@ export const EmployeesRowContext = ({
             <Modal
                 {...ledgerTableModal}
                 className="!max-w-[95vw]"
-                title={getModalTitle()}
                 description={`You are viewing ${employee.user.full_name}'s ${getModalTitle().toLowerCase()}`}
+                title={getModalTitle()}
             >
                 <GeneralLedgerTable
+                    className="min-h-[75vh] min-w-0 max-h-[75vh]"
+                    excludeColumnIds={['balance']}
                     mode="employee"
                     TEntryType={selectedEntryType}
                     userOrganizationId={employee.id}
-                    excludeColumnIds={['balance']}
-                    className="min-h-[75vh] min-w-0 max-h-[75vh]"
                 />
             </Modal>
 
@@ -542,9 +542,9 @@ export const EmployeesRowContext = ({
                 description={`You are viewing ${employee.user.full_name || 'unknown'}'s disbursement transactions`}
             >
                 <DisbursementTransactionTable
+                    className="min-h-[90vh] min-w-0 max-h-[90vh]"
                     mode="employee"
                     userOrganizationId={employee.id}
-                    className="min-h-[90vh] min-w-0 max-h-[90vh]"
                 />
             </Modal>
 
@@ -568,11 +568,12 @@ export const EmployeesRowContext = ({
             <Modal
                 {...footstepModal}
                 className="!max-w-[95vw]"
+                description={`You are viewing ${employee.user.full_name}'s footstep`}
                 title={
                     <div className="flex gap-x-2 items-center">
                         <ImageDisplay
-                            src={employee.user.media?.download_url}
                             className="rounded-xl size-12"
+                            src={employee.user.media?.download_url}
                         />
                         <div className="space-y-1">
                             <p>{employee.user.full_name}</p>
@@ -582,59 +583,57 @@ export const EmployeesRowContext = ({
                         </div>
                     </div>
                 }
-                description={`You are viewing ${employee.user.full_name}'s footstep`}
             >
                 <FootstepTable
-                    userOrgId={employee.id}
-                    mode="user-organization"
                     className="min-h-[90vh] min-w-0 max-h-[90vh]"
+                    mode="user-organization"
+                    userOrgId={employee.id}
                 />
             </Modal>
 
             <Modal
                 {...timesheetModal}
                 className="!max-w-[95vw]"
-                title="Timesheet"
                 description={`You are viewing ${employee.user.full_name}'s timesheet`}
+                title="Timesheet"
             >
                 <TimesheetTable
+                    className="min-h-[90vh] min-w-0 max-h-[90vh]"
                     mode="employee"
                     onRowClick={() => {}}
                     userOrganizationId={employee.id}
-                    className="min-h-[90vh] min-w-0 max-h-[90vh]"
                 />
             </Modal>
 
             <Modal
                 {...transactionBatchModal}
                 className="!max-w-[95vw]"
-                title="Transaction Batch"
                 description={`You are viewing ${employee.user.full_name}'s transaction batch`}
+                title="Transaction Batch"
             >
                 <TransactionBatchTable
+                    className="min-h-[90vh] min-w-0 max-h-[90vh]"
                     mode="employee"
                     onRowClick={() => {}}
                     userOrganizationId={employee.id}
-                    className="min-h-[90vh] min-w-0 max-h-[90vh]"
                 />
             </Modal>
 
             <Modal
                 {...transactionsModal}
                 className="!max-w-[95vw]"
-                title="Transactions"
                 description={`You are viewing ${employee.user.full_name}'s transactions`}
+                title="Transactions"
             >
                 <TransactionsTable
+                    className="min-h-[90vh] min-w-0 max-h-[90vh]"
                     mode="employee"
                     onRowClick={() => {}}
                     userId={employee.user_id}
-                    className="min-h-[90vh] min-w-0 max-h-[90vh]"
                 />
             </Modal>
 
             <DataTableRowContext
-                row={row}
                 onDelete={{
                     text: 'Delete',
                     isAllowed: !isDeletingEmployee,
@@ -848,6 +847,7 @@ export const EmployeesRowContext = ({
                         </ContextMenuItem>
                     </>
                 }
+                row={row}
             >
                 {children}
             </DataTableRowContext>

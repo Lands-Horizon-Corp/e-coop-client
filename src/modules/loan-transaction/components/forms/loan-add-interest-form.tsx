@@ -72,58 +72,58 @@ const LoanAddInterestForm = ({
     return (
         <Form {...form}>
             <form
-                onSubmit={onSubmit}
                 className={cn('flex w-full flex-col gap-y-4', className)}
+                onSubmit={onSubmit}
             >
                 <fieldset
-                    disabled={isPending || formProps.readOnly}
                     className="grid gap-x-6 gap-y-4 sm:gap-y-3"
+                    disabled={isPending || formProps.readOnly}
                 >
                     <fieldset className="space-y-3">
                         <FormFieldWrapper
                             control={form.control}
-                            name="interest"
                             label="Interest"
+                            name="interest"
                             render={({ field }) => (
                                 <Input
                                     {...field}
-                                    id={field.name}
-                                    type="number"
-                                    min={0}
-                                    step="0.01"
-                                    placeholder="Enter interest"
                                     autoComplete="off"
+                                    id={field.name}
+                                    min={0}
+                                    placeholder="Enter interest"
+                                    step="0.01"
+                                    type="number"
                                 />
                             )}
                         />
                         <FormFieldWrapper
                             control={form.control}
-                            name="interest_amortization"
                             label="Int. Amort."
+                            name="interest_amortization"
                             render={({ field }) => (
                                 <Input
                                     {...field}
-                                    id={field.name}
-                                    type="number"
-                                    min={0}
-                                    step="0.01"
-                                    placeholder="Enter interest amortization"
                                     autoComplete="off"
+                                    id={field.name}
+                                    min={0}
+                                    placeholder="Enter interest amortization"
+                                    step="0.01"
+                                    type="number"
                                 />
                             )}
                         />
                     </fieldset>
                 </fieldset>
                 <FormFooterResetSubmit
-                    error={error}
-                    readOnly={formProps.readOnly}
-                    isLoading={isPending}
                     disableSubmit={!form.formState.isDirty}
-                    submitText={'Accept'}
+                    error={error}
+                    isLoading={isPending}
                     onReset={() => {
                         form.reset()
                     }}
+                    readOnly={formProps.readOnly}
                     resetText="Cancel"
+                    submitText={'Accept'}
                 />
             </form>
         </Form>
@@ -141,9 +141,9 @@ export const LoanAddInterestFormModal = ({
 }) => {
     return (
         <Modal
-            title={title}
-            description={description}
             className={cn('', className)}
+            description={description}
+            title={title}
             {...props}
         >
             <LoanAddInterestForm

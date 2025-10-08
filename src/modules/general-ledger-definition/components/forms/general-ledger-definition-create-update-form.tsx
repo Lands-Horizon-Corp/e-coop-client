@@ -137,37 +137,37 @@ const GeneralLedgerDefinitionCreateUpdateForm = ({
     return (
         <Form {...form}>
             <form
-                ref={formRef}
-                onSubmit={onSubmit}
                 className={cn('w-full space-y-4', className)}
+                onSubmit={onSubmit}
+                ref={formRef}
             >
                 <FormFieldWrapper
                     control={form.control}
-                    name="name"
                     label="Name *"
+                    name="name"
                     render={({ field }) => (
                         <Input
                             {...field}
-                            id={field.name}
-                            value={field.value || ''}
                             disabled={isDisabled(field.name)}
+                            id={field.name}
                             placeholder="e.g., Cash in Bank, Accounts Payable"
+                            value={field.value || ''}
                         />
                     )}
                 />
                 <FormFieldWrapper
+                    className="col-span-4"
                     control={form.control}
                     label="Type *"
                     name="general_ledger_type"
-                    className="col-span-4"
                     render={({ field }) => (
                         <FormControl>
                             <Select
+                                defaultValue={field.value}
                                 disabled={isDisabled(field.name)}
                                 onValueChange={(selectedValue) => {
                                     field.onChange(selectedValue)
                                 }}
-                                defaultValue={field.value}
                             >
                                 <SelectTrigger className="w-full">
                                     {field.value || 'Select GL Type'}
@@ -187,14 +187,14 @@ const GeneralLedgerDefinitionCreateUpdateForm = ({
                 />
                 <FormFieldWrapper
                     control={form.control}
-                    name="description"
                     label="Description "
+                    name="description"
                     render={({ field }) => (
                         <TextEditor
                             {...field}
                             content={field.value}
-                            placeholder="Write some description..."
                             disabled={isDisabled(field.name)}
+                            placeholder="Write some description..."
                             textEditorClassName="!max-w-xl max-h-32 bg-background"
                         />
                     )}
@@ -207,15 +207,15 @@ const GeneralLedgerDefinitionCreateUpdateForm = ({
                         render={({ field }) => (
                             <Input
                                 {...field}
-                                value={field.value ?? ''}
+                                disabled={isDisabled(field.name)}
                                 onChange={(e) =>
                                     field.onChange(
                                         parseFloat(e.target.value) || undefined
                                     )
                                 }
-                                type="number"
-                                disabled={isDisabled(field.name)}
                                 placeholder="e.g., 100"
+                                type="number"
+                                value={field.value ?? ''}
                             />
                         )}
                     />
@@ -226,33 +226,33 @@ const GeneralLedgerDefinitionCreateUpdateForm = ({
                         render={({ field }) => (
                             <Input
                                 {...field}
-                                id={field.name}
-                                value={field.value || ''}
-                                disabled={isDisabled(field.name)}
-                                placeholder="e.g., Total Current Assets"
                                 autoComplete="off"
+                                disabled={isDisabled(field.name)}
+                                id={field.name}
+                                placeholder="e.g., Total Current Assets"
+                                value={field.value || ''}
                             />
                         )}
                     />
                 </div>
                 <FormFieldWrapper
+                    className="col-span-2"
                     control={form.control}
                     name="is_posting"
-                    className="col-span-2"
                     render={({ field }) => {
                         return (
                             <GradientBackground
-                                gradientOnly
                                 className="shadow-xs relative flex w-full items-start gap-2 rounded-2xl border border-input p-4 outline-none duration-200 ease-out has-[:checked]:border-primary/30 has-[:checked]:bg-primary/40"
+                                gradientOnly
                             >
                                 <Checkbox
+                                    aria-describedby={`${field.name}-description`}
+                                    checked={field.value || false}
+                                    className="order-1 after:absolute after:inset-0"
                                     disabled={isDisabled(field.name)}
                                     id={field.name}
-                                    checked={field.value || false}
-                                    onCheckedChange={field.onChange}
                                     name={field.name}
-                                    className="order-1 after:absolute after:inset-0"
-                                    aria-describedby={`${field.name}-description`}
+                                    onCheckedChange={field.onChange}
                                 />
                                 <div className="flex grow items-center gap-3">
                                     <div className="size-fit rounded-full bg-secondary p-2">
@@ -263,8 +263,8 @@ const GeneralLedgerDefinitionCreateUpdateForm = ({
                                             Is Posting Account?
                                         </Label>
                                         <p
-                                            id={`${field.name}-description`}
                                             className="text-xs text-muted-foreground"
+                                            id={`${field.name}-description`}
                                         >
                                             Check if this account allows direct
                                             financial postings.
@@ -283,15 +283,15 @@ const GeneralLedgerDefinitionCreateUpdateForm = ({
                         render={({ field }) => (
                             <Input
                                 {...field}
-                                value={field.value ?? ''}
-                                pattern="\d*"
+                                disabled={isDisabled(field.name)}
                                 onChange={(e) =>
                                     field.onChange(
                                         parseFloat(e.target.value) || undefined
                                     )
                                 }
-                                disabled={isDisabled(field.name)}
+                                pattern="\d*"
                                 placeholder="e.g., 5000.00"
+                                value={field.value ?? ''}
                             />
                         )}
                     />
@@ -302,15 +302,15 @@ const GeneralLedgerDefinitionCreateUpdateForm = ({
                         render={({ field }) => (
                             <Input
                                 {...field}
-                                pattern="\d*"
-                                value={field.value ?? ''}
+                                disabled={isDisabled(field.name)}
                                 onChange={(e) =>
                                     field.onChange(
                                         parseFloat(e.target.value) || undefined
                                     )
                                 }
-                                disabled={isDisabled(field.name)}
+                                pattern="\d*"
                                 placeholder="e.g., 5000.00"
+                                value={field.value ?? ''}
                             />
                         )}
                     />
@@ -322,21 +322,21 @@ const GeneralLedgerDefinitionCreateUpdateForm = ({
                             <FormErrorMessage errorMessage={errorMessage} />
                             <div className="flex items-center justify-end gap-x-2">
                                 <Button
+                                    className="w-full self-end px-8 sm:w-fit"
+                                    onClick={() => form.reset()}
                                     size="sm"
                                     type="button"
                                     variant="ghost"
-                                    onClick={() => form.reset()}
-                                    className="w-full self-end px-8 sm:w-fit"
                                 >
                                     Reset
                                 </Button>
                                 <Button
-                                    size="sm"
-                                    type="submit"
+                                    className="w-full self-end px-8 sm:w-fit"
                                     disabled={
                                         isLoading || !form.formState.isDirty
                                     }
-                                    className="w-full self-end px-8 sm:w-fit"
+                                    size="sm"
+                                    type="submit"
                                 >
                                     {isLoading ? (
                                         <LoadingSpinner />
@@ -366,10 +366,10 @@ export const GeneralLedgerDefinitionCreateUpdateFormModal = ({
 }) => {
     return (
         <Modal
-            title={title}
-            description={description}
             className={cn('', className)}
+            description={description}
             overlayClassName="!bg-transparent !backdrop-blur-sm"
+            title={title}
             {...props}
         >
             <GeneralLedgerDefinitionCreateUpdateForm

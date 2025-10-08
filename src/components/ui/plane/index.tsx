@@ -8,9 +8,9 @@ const AirplaneScene: React.FC = () => {
     return (
         <div>
             <div
-                ref={mountRef}
-                onMouseMove={handleMouseMove}
                 className="fixed inset-0 -z-10 bg-background"
+                onMouseMove={handleMouseMove}
+                ref={mountRef}
             />
             <div className="fixed inset-0 -z-10 bg-gradient-to-t from-white/90 to-transparent" />{' '}
         </div>

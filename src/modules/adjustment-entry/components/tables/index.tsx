@@ -166,17 +166,6 @@ const AdjustmentEntryTable = ({
                 )}
             >
                 <DataTableToolbar
-                    // --- Global Search Props ---
-                    globalSearchProps={{
-                        defaultMode: 'equal',
-                        targets: adjustmentEntryGlobalSearchTargets,
-                    }}
-                    table={table}
-                    // --- Refresh Action Props ---
-                    refreshActionProps={{
-                        onClick: () => refetch(),
-                        isLoading: isPending || isRefetching,
-                    }}
                     // --- Delete Action Props ---
                     deleteActionProps={{
                         onDeleteSuccess: () =>
@@ -188,8 +177,6 @@ const AdjustmentEntryTable = ({
                                 ids: selectedData.map((data) => data.id),
                             }),
                     }}
-                    // --- Scrollable Props ---
-                    scrollableProps={{ isScrollable, setIsScrollable }}
                     // --- Export Action Props (Placeholder) ---
                     exportActionProps={{
                         pagination,
@@ -202,19 +189,32 @@ const AdjustmentEntryTable = ({
                         filterLogic: filterState.filterLogic,
                         setFilterLogic: filterState.setFilterLogic,
                     }}
+                    // --- Global Search Props ---
+                    globalSearchProps={{
+                        defaultMode: 'equal',
+                        targets: adjustmentEntryGlobalSearchTargets,
+                    }}
+                    // --- Refresh Action Props ---
+                    refreshActionProps={{
+                        onClick: () => refetch(),
+                        isLoading: isPending || isRefetching,
+                    }}
+                    // --- Scrollable Props ---
+                    scrollableProps={{ isScrollable, setIsScrollable }}
+                    table={table}
                     {...toolbarProps}
                 />
 
                 <DataTable
-                    table={table}
-                    isStickyHeader
-                    isStickyFooter
                     className="mb-2"
-                    onRowClick={onRowClick}
                     isScrollable={isScrollable}
+                    isStickyFooter
+                    isStickyHeader
                     onDoubleClick={onDoubleClick}
-                    setColumnOrder={setColumnOrder}
+                    onRowClick={onRowClick}
                     RowContextComponent={RowContextComponent}
+                    setColumnOrder={setColumnOrder}
+                    table={table}
                 />
 
                 <DataTablePagination table={table} totalSize={totalSize} />

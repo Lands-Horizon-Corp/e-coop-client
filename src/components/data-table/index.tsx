@@ -78,17 +78,12 @@ const DataTable = <TData,>({
 
     return (
         <DndContext
-            sensors={sensors}
-            onDragEnd={handleDragEnd}
             collisionDetection={closestCenter}
             modifiers={[restrictToHorizontalAxis]}
+            onDragEnd={handleDragEnd}
+            sensors={sensors}
         >
             <Table
-                wrapperClassName={cn(
-                    'ecoop-scroll bg-popover ring-offset-0 shadow dark:bg-secondary/10 rounded-lg -z-0',
-                    className,
-                    !isScrollable ? 'h-fit max-h-none min-h-fit' : 'h-full grow'
-                )}
                 className="table-fixed border-separate border-spacing-0 [&_td]:border-border [&_tfoot_td]:border-t [&_th]:border-b [&_th]:border-border [&_tr:not(:last-child)_td]:border-b [&_tr]:border-none"
                 style={
                     isStaticWidth
@@ -97,23 +92,28 @@ const DataTable = <TData,>({
                           }
                         : {}
                 }
+                wrapperClassName={cn(
+                    'ecoop-scroll bg-popover ring-offset-0 shadow dark:bg-secondary/10 rounded-lg -z-0',
+                    className,
+                    !isScrollable ? 'h-fit max-h-none min-h-fit' : 'h-full grow'
+                )}
             >
                 <DataTableHeader
-                    isStickyHeader={isStickyHeader}
                     columnOrder={table.getState().columnOrder}
                     headerGroups={table.getHeaderGroups()}
+                    isStickyHeader={isStickyHeader}
                 />
                 <DataTableBody
+                    colCount={table.getVisibleLeafColumns().length}
+                    onDoubleClick={onDoubleClick}
                     onRowClick={onRowClick}
                     rowClassName={rowClassName}
-                    onDoubleClick={onDoubleClick}
-                    rows={table.getRowModel().rows}
                     RowContextComponent={RowContextComponent}
-                    colCount={table.getVisibleLeafColumns().length}
+                    rows={table.getRowModel().rows}
                 />
                 <DataTableFooter
-                    table={table}
                     isStickyFooter={isStickyFooter && isScrollable}
+                    table={table}
                 />
             </Table>
         </DndContext>

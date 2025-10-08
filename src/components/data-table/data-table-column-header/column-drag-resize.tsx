@@ -19,9 +19,9 @@ const ColumnResizeHandle = <TData, TValue>({
                 header.column.getIsResizing() &&
                     'z-50 h-full translate-y-0 bg-foreground/80'
             )}
+            onDoubleClick={() => header.column.resetSize()}
             onMouseDown={header.getResizeHandler()}
             onTouchStart={header.getResizeHandler()}
-            onDoubleClick={() => header.column.resetSize()}
             style={{
                 transform:
                     table.options.columnResizeMode === 'onEnd' &&

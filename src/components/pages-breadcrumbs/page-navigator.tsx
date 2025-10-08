@@ -12,9 +12,9 @@ const PageNavigator = () => {
         <div className="flex items-center justify-center gap-x-0.5 rounded-full bg-popover p-1">
             <ActionTooltip tooltipContent="Previous">
                 <Button
+                    className="size-fit rounded-full p-1"
                     onClick={() => router.history.back()}
                     size="icon"
-                    className="size-fit rounded-full p-1"
                     variant="ghost"
                 >
                     <ChevronLeftIcon className="size-3" />
@@ -22,9 +22,9 @@ const PageNavigator = () => {
             </ActionTooltip>
             <ActionTooltip tooltipContent="Forward">
                 <Button
-                    size="icon"
-                    onClick={() => router.history.forward()}
                     className="size-fit rounded-full p-1"
+                    onClick={() => router.history.forward()}
+                    size="icon"
                     variant="ghost"
                 >
                     <ChevronRightIcon className="size-3" />

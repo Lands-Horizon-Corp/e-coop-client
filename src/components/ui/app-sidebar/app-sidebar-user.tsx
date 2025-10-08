@@ -68,8 +68,8 @@ const AppSidebarUser = () => {
     return (
         <>
             <APIKeyGenModal
-                titleClassName="hidden"
                 descriptionClassName="hidden"
+                titleClassName="hidden"
                 {...apiKeyGenModal}
             />
             <SidebarMenu>
@@ -78,8 +78,8 @@ const AppSidebarUser = () => {
                         <DropdownMenuTrigger asChild>
                             <SidebarMenuButton className="!py-6">
                                 <ImageDisplay
-                                    src={user.media?.download_url ?? ''}
                                     className="size-5 rounded-[4rem] duration-150 ease-in-out"
+                                    src={user.media?.download_url ?? ''}
                                 />
                                 <div className="grid [[data-side=left][data-state=collapsed]_&]:hidden flex-1 text-left text-sm leading-tight">
                                     <span className="truncate font-semibold">
@@ -92,7 +92,7 @@ const AppSidebarUser = () => {
                                 <ChevronsUpDownIcon className="ml-auto size-4" />
                             </SidebarMenuButton>
                         </DropdownMenuTrigger>
-                        <DropdownMenuContent side="right" align="end">
+                        <DropdownMenuContent align="end" side="right">
                             <DropdownMenuItem>
                                 <QuestionCircleIcon className="mr-2 size-4 duration-150 ease-in-out" />
                                 <span>Help</span>

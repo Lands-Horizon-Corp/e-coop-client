@@ -68,6 +68,7 @@ const CashCheckJournalVoucherPage = () => {
                 {...createModal}
             />
             <CashCheckJournalVoucherTable
+                className="max-h-[90vh] min-h-[90vh] w-full"
                 toolbarProps={{
                     createActionProps: {
                         onClick: () => {
@@ -81,7 +82,6 @@ const CashCheckJournalVoucherPage = () => {
                     },
                     otherActionLeft: <CancelledCashCheckVoucherButton />,
                 }}
-                className="max-h-[90vh] min-h-[90vh] w-full"
             />
         </PageContainer>
     )

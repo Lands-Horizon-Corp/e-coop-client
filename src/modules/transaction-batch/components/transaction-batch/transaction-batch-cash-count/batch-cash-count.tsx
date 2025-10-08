@@ -115,17 +115,17 @@ const BatchCashCount = ({
     return (
         <Form {...form}>
             <form
-                ref={formRef}
-                onSubmit={onSubmit}
                 className={cn('space-y-1', className)}
+                onSubmit={onSubmit}
+                ref={formRef}
             >
                 <fieldset
-                    disabled={isPending || formProps.readOnly}
                     className="grid gap-x-6 gap-y-4 rounded-xl overflow-clip bg-secondary dark:bg-popover sm:gap-y-3"
+                    disabled={isPending || formProps.readOnly}
                 >
                     <FormFieldWrapper
-                        name="cash_counts"
                         control={form.control}
+                        name="cash_counts"
                         render={() => (
                             <div>
                                 <Table>
@@ -145,8 +145,8 @@ const BatchCashCount = ({
                                     <TableBody>
                                         {cashCounts.map((field, index) => (
                                             <TableRow
-                                                key={field.fieldKey}
                                                 className="border-none odd:bg-background/50 hover:bg-transparent odd:hover:bg-muted/50 odd:dark:bg-muted/50"
+                                                key={field.fieldKey}
                                             >
                                                 <TableCell className="h-fit py-1.5">
                                                     <FormFieldWrapper
@@ -166,20 +166,11 @@ const BatchCashCount = ({
                                                         render={({ field }) => (
                                                             <Input
                                                                 {...field}
-                                                                onKeyDown={(
-                                                                    e
-                                                                ) => {
-                                                                    if (
-                                                                        e.key ===
-                                                                            '.' ||
-                                                                        e.key ===
-                                                                            'e' ||
-                                                                        e.key ===
-                                                                            '-'
-                                                                    ) {
-                                                                        e.preventDefault()
-                                                                    }
-                                                                }}
+                                                                className="h-8 w-24"
+                                                                disabled={isDisabled(
+                                                                    `cash_counts.${index}.quantity` as Path<TFormValues>
+                                                                )}
+                                                                min={0}
                                                                 onChange={(
                                                                     e
                                                                 ) => {
@@ -208,14 +199,23 @@ const BatchCashCount = ({
                                                                                   .value
                                                                     )
                                                                 }}
-                                                                disabled={isDisabled(
-                                                                    `cash_counts.${index}.quantity` as Path<TFormValues>
-                                                                )}
-                                                                min={0}
+                                                                onKeyDown={(
+                                                                    e
+                                                                ) => {
+                                                                    if (
+                                                                        e.key ===
+                                                                            '.' ||
+                                                                        e.key ===
+                                                                            'e' ||
+                                                                        e.key ===
+                                                                            '-'
+                                                                    ) {
+                                                                        e.preventDefault()
+                                                                    }
+                                                                }}
+                                                                placeholder="qty"
                                                                 step={1}
                                                                 type="number"
-                                                                className="h-8 w-24"
-                                                                placeholder="qty"
                                                             />
                                                         )}
                                                     />
@@ -290,15 +290,15 @@ const BatchCashCount = ({
                 </div>
                 {form.formState.isDirty && (
                     <FormFooterResetSubmit
-                        error={error}
-                        readOnly={formProps.readOnly}
-                        isLoading={isPending}
                         disableSubmit={!form.formState.isDirty}
-                        submitText="Save Cashcount"
+                        error={error}
+                        isLoading={isPending}
                         onReset={() => {
                             form.reset()
                             reset()
                         }}
+                        readOnly={formProps.readOnly}
+                        submitText="Save Cashcount"
                     />
                 )}
             </form>

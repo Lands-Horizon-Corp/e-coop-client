@@ -46,10 +46,10 @@ const BackButton = () => {
 
     return (
         <Button
-            variant="ghost"
-            size="sm"
             className="absolute top-5 right-5"
             onClick={() => handleBack()}
+            size="sm"
+            variant="ghost"
         >
             <ArrowLeftIcon className="mr-2" /> Back to Org
         </Button>

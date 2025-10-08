@@ -107,101 +107,101 @@ const MemberEducationalAttainmentCreateUpdateForm = ({
     return (
         <Form {...form}>
             <form
-                ref={formRef}
-                onSubmit={onSubmit}
                 className={cn('flex w-full flex-col gap-y-4', className)}
+                onSubmit={onSubmit}
+                ref={formRef}
             >
                 <fieldset
-                    disabled={isPending || formProps.readOnly}
                     className="grid gap-x-6 gap-y-4 sm:gap-y-3"
+                    disabled={isPending || formProps.readOnly}
                 >
                     <fieldset className="space-y-3">
                         <FormFieldWrapper
                             control={form.control}
-                            name="school_name"
                             label="School Name"
+                            name="school_name"
                             render={({ field }) => (
                                 <Input
                                     {...field}
-                                    id={field.name}
-                                    placeholder="School Name"
                                     autoComplete="organization"
                                     disabled={isDisabled(field.name)}
+                                    id={field.name}
+                                    placeholder="School Name"
                                 />
                             )}
                         />
                         <FormFieldWrapper
                             control={form.control}
-                            name="school_year"
                             label="Year Graduated"
+                            name="school_year"
                             render={({ field }) => (
                                 <Input
                                     {...field}
-                                    id={field.name}
-                                    type="number"
-                                    step={1}
-                                    min={1900}
-                                    max={new Date().getFullYear()}
-                                    placeholder="Year Graduated"
                                     autoComplete="year"
                                     disabled={isDisabled(field.name)}
+                                    id={field.name}
+                                    max={new Date().getFullYear()}
+                                    min={1900}
+                                    placeholder="Year Graduated"
+                                    step={1}
+                                    type="number"
                                 />
                             )}
                         />
                         <FormFieldWrapper
                             control={form.control}
-                            name="educational_attainment"
                             label="Educational Attainment"
+                            name="educational_attainment"
                             render={({ field }) => (
                                 <EducationalAttainmentCombobox
                                     {...field}
+                                    disabled={isDisabled(field.name)}
                                     id={field.name}
                                     placeholder="Program / Course"
-                                    disabled={isDisabled(field.name)}
                                 />
                             )}
                         />
                         <FormFieldWrapper
                             control={form.control}
-                            name="program_course"
                             label="Program / Course *"
+                            name="program_course"
                             render={({ field }) => (
                                 <Input
                                     {...field}
-                                    id={field.name}
-                                    placeholder="Program / Course"
                                     autoComplete="course"
                                     disabled={isDisabled(field.name)}
+                                    id={field.name}
+                                    placeholder="Program / Course"
                                 />
                             )}
                         />
                         <FormFieldWrapper
                             control={form.control}
-                            name="description"
                             label="Description"
+                            name="description"
                             render={({ field }) => (
                                 <TextEditor
                                     {...field}
                                     content={field.value}
+                                    disabled={isDisabled(field.name)}
                                     placeholder="Description"
                                     textEditorClassName="!max-w-none bg-background"
-                                    disabled={isDisabled(field.name)}
                                 />
                             )}
                         />
                     </fieldset>
                 </fieldset>
                 <FormFooterResetSubmit
-                    error={error}
-                    readOnly={formProps.readOnly}
-                    isLoading={isPending}
-                    disableSubmit={!form.formState.isDirty}
-                    submitText={educationalAttainmentId ? 'Update' : 'Create'}
                     className="sticky -bottom-5"
+                    disableSubmit={!form.formState.isDirty}
+                    error={error}
+                    isLoading={isPending}
                     onReset={() => {
                         form.reset()
                         reset()
                     }}
+                    readOnly={formProps.readOnly}
+                    submitText={educationalAttainmentId ? 'Update' : 'Create'}
                 />
             </form>
         </Form>
@@ -219,9 +219,9 @@ export const MemberEducationalAttainmentCreateUpdateFormModal = ({
 }) => {
     return (
         <Modal
-            title={title}
-            description={description}
             className={cn('', className)}
+            description={description}
+            title={title}
             {...props}
         >
             <MemberEducationalAttainmentCreateUpdateForm

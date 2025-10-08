@@ -46,15 +46,15 @@ const MemberEducationalAttainmentCard = ({
     return (
         <div className="space-y-1 rounded-lg border bg-background">
             <MemberEducationalAttainmentCreateUpdateFormModal
-                open={edit}
-                onOpenChange={setEdit}
-                title="Update Educational Attainment"
                 description="Modify / Update this educational attainment information."
                 formProps={{
                     educationalAttainmentId: educationalAttainment.id,
                     memberProfileId: educationalAttainment.member_profile_id,
                     defaultValues: educationalAttainment,
                 }}
+                onOpenChange={setEdit}
+                open={edit}
+                title="Update Educational Attainment"
             />
             <div className="flex justify-between rounded-b-xl border-b bg-secondary/20 p-4">
                 <div className="flex items-center gap-x-2">
@@ -63,19 +63,18 @@ const MemberEducationalAttainmentCard = ({
                 </div>
                 <div className="flex items-center justify-end">
                     <Button
-                        onClick={() => setEdit(true)}
-                        variant="ghost"
-                        size="icon"
                         className="!size-fit px-1.5 py-1.5 text-muted-foreground"
                         disabled={isDeleting}
+                        onClick={() => setEdit(true)}
+                        size="icon"
+                        variant="ghost"
                     >
                         <PencilFillIcon className="size-4" />
                     </Button>
                     <Button
-                        size="icon"
-                        variant="ghost"
-                        hoverVariant="destructive"
+                        className="!size-fit px-1.5 py-1.5 text-muted-foreground"
                         disabled={isDeleting}
+                        hoverVariant="destructive"
                         onClick={() =>
                             onOpen({
                                 title: 'Delete Educational Attainment',
@@ -90,7 +89,8 @@ const MemberEducationalAttainmentCard = ({
                                     }),
                             })
                         }
-                        className="!size-fit px-1.5 py-1.5 text-muted-foreground"
+                        size="icon"
+                        variant="ghost"
                     >
                         {isDeleting ? (
                             <span className="size-4 animate-spin">
@@ -156,18 +156,18 @@ const MemberEducationalAttainment = forwardRef<HTMLDivElement, Props>(
         return (
             <div ref={ref}>
                 <MemberEducationalAttainmentCreateUpdateFormModal
-                    open={create}
-                    onOpenChange={setCreate}
                     formProps={{
                         memberProfileId: memberProfile.id,
                         defaultValues: {
                             member_profile_id: memberProfile.id,
                         },
                     }}
+                    onOpenChange={setCreate}
+                    open={create}
                 />
                 <div className="mb-2 flex items-start justify-between">
                     <p>Educational Attainments</p>
-                    <Button size="sm" onClick={() => setCreate(true)}>
+                    <Button onClick={() => setCreate(true)} size="sm">
                         Add Education <PlusIcon className="ml-1" />
                     </Button>
                 </div>
@@ -175,8 +175,8 @@ const MemberEducationalAttainment = forwardRef<HTMLDivElement, Props>(
                     {memberProfile.member_educational_attainments?.map(
                         (educationalAttainmentId) => (
                             <MemberEducationalAttainmentCard
-                                key={educationalAttainmentId.id}
                                 educationalAttainment={educationalAttainmentId}
+                                key={educationalAttainmentId.id}
                             />
                         )
                     )}

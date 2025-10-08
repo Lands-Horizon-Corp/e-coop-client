@@ -97,7 +97,6 @@ export const AdjustmentEntryAction = ({
             </div>
             <RowActionsGroup
                 canSelect
-                row={row}
                 onDelete={{
                     text: 'Delete',
                     isAllowed: !isDeletingEntry,
@@ -109,6 +108,7 @@ export const AdjustmentEntryAction = ({
                     onClick: handleEdit,
                 }}
                 otherActions={<>{/* Additional actions can be added here */}</>}
+                row={row}
             />
         </>
     )
@@ -151,7 +151,6 @@ export const AdjustmentEntryRowContext = ({
             />
 
             <DataTableRowContext
-                row={row}
                 onDelete={{
                     text: 'Delete',
                     isAllowed: !isDeletingEntry,
@@ -162,6 +161,7 @@ export const AdjustmentEntryRowContext = ({
                     isAllowed: true,
                     onClick: handleEdit,
                 }}
+                row={row}
             >
                 {children}
             </DataTableRowContext>

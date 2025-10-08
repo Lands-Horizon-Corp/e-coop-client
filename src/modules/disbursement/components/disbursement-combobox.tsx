@@ -70,8 +70,6 @@ const DisbursementCombobox = ({
     return (
         <>
             <DisbursementCreateUpdateFormModal
-                open={createModal}
-                onOpenChange={setCreateModal}
                 formProps={{
                     ...disbursementComboboxCreateProps,
                     onSuccess: (newDisbursement) => {
@@ -79,24 +77,26 @@ const DisbursementCombobox = ({
                         setCreateModal(false)
                     },
                 }}
+                onOpenChange={setCreateModal}
+                open={createModal}
             />
-            <Popover modal open={open} onOpenChange={setOpen}>
+            <Popover modal onOpenChange={setOpen} open={open}>
                 <PopoverTrigger asChild>
                     <Button
-                        variant="outline"
-                        role="combobox"
                         aria-expanded={open}
                         className={cn('w-full justify-between px-3', className)}
                         disabled={disabled || isLoading}
+                        role="combobox"
+                        variant="outline"
                     >
                         {selectedDisbursement ? (
                             <div className="flex items-center gap-2 min-w-0">
                                 {selectedDisbursement && (
                                     <RenderIcon
+                                        className="shrink-0"
                                         icon={
                                             selectedDisbursement.icon as TIcon
                                         }
-                                        className="shrink-0"
                                     />
                                 )}
                                 <span className="truncate">
@@ -114,8 +114,8 @@ const DisbursementCombobox = ({
                 <PopoverContent className="max-h-[--radix-popover-content-available-height] w-[--radix-popover-trigger-width] p-0">
                     <Command>
                         <CommandInput
-                            placeholder="Search Disbursement..."
                             className="h-9"
+                            placeholder="Search Disbursement..."
                         />
                         {isLoading ? (
                             <CommandEmpty>
@@ -147,16 +147,16 @@ const DisbursementCombobox = ({
                                     {data.map((option) => (
                                         <CommandItem
                                             key={option.id}
-                                            value={option.name}
                                             onSelect={() => {
                                                 setOpen(false)
                                                 onChange?.(option)
                                             }}
+                                            value={option.name}
                                         >
                                             <div className="flex items-center gap-2 min-w-0 flex-1">
                                                 <RenderIcon
-                                                    icon={option.icon as TIcon}
                                                     className="shrink-0"
+                                                    icon={option.icon as TIcon}
                                                 />
                                                 <div className="flex flex-col min-w-0">
                                                     <span className="truncate font-medium">

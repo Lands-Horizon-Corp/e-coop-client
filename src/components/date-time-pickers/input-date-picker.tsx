@@ -35,28 +35,28 @@ const InputDatePicker = ({
         <Popover modal>
             <PopoverTrigger asChild>
                 <Button
-                    id={id}
-                    variant={'outline'}
                     className={cn(
                         'w-full pl-3 text-left font-normal',
                         !value && 'text-muted-foreground'
                     )}
+                    id={id}
+                    variant={'outline'}
                 >
                     {value ? format(value, 'PPP') : <span>Pick a date</span>}
                     <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
                 </Button>
             </PopoverTrigger>
             <PopoverContent
-                className="w-auto rounded-2xl bg-popover/85 p-0 backdrop-blur"
                 align="start"
+                className="w-auto rounded-2xl bg-popover/85 p-0 backdrop-blur"
             >
                 <DateTimePicker
                     {...other}
-                    toYear={toYear}
-                    value={value}
+                    disabled={disabled}
                     fromYear={fromYear}
                     onChange={onChange}
-                    disabled={disabled}
+                    toYear={toYear}
+                    value={value}
                 />
             </PopoverContent>
         </Popover>

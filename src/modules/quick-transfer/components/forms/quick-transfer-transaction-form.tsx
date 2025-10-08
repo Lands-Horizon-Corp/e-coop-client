@@ -239,7 +239,7 @@ export const QuickTransferTransactionForm = ({
 
     return (
         <Form {...form}>
-            <form onSubmit={handleSubmit} className="min-w-[200px] relative">
+            <form className="min-w-[200px] relative" onSubmit={handleSubmit}>
                 <TransactionNoFoundBatch mode="deposit-withdrawal" />
                 <div className="flex flex-end">
                     <CommandShortcut className="rounded-md bg-primary/20 p-1">
@@ -251,45 +251,42 @@ export const QuickTransferTransactionForm = ({
                 <div className="grid grid-cols-1 gap-2 lg:grid-cols-2">
                     {/* Member */}
                     <FormFieldWrapper
-                        control={form.control}
-                        name="member_profile_id"
-                        label="Member"
                         className="col-span-2"
+                        control={form.control}
+                        label="Member"
+                        name="member_profile_id"
                         render={({ field }) => (
                             <MemberPicker
+                                allowShorcutCommand
+                                disabled={isDisabled('member_profile_id')}
                                 modalState={{
                                     open: openMemberPicker,
                                     onOpenChange: setOpenMemberPicker,
                                 }}
-                                value={form.getValues('member') ?? undefined}
                                 onSelect={(selectedMember) => {
                                     if (isDisabled('member_profile_id')) return
                                     field.onChange(selectedMember?.id)
                                     form.setValue('member', selectedMember)
                                     setSelectedMember(selectedMember)
                                 }}
-                                triggerVariant="outline"
                                 placeholder="Select Member"
-                                disabled={isDisabled('member_profile_id')}
-                                allowShorcutCommand
+                                triggerVariant="outline"
+                                value={form.getValues('member') ?? undefined}
                             />
                         )}
                     />
 
                     {/* Joint Member */}
                     <FormFieldWrapper
-                        control={form.control}
-                        name="member_joint_account_id"
-                        label="Joint Member"
                         className="col-span-2"
+                        control={form.control}
+                        label="Joint Member"
+                        name="member_joint_account_id"
                         render={({ field }) => (
                             <TransactionModalJointMember
-                                triggerProps={{
-                                    disabled:
-                                        form.watch('member_profile_id') ===
-                                            '' ||
-                                        isDisabled('member_joint_account_id'),
-                                }}
+                                memberJointProfile={
+                                    selectedMember?.member_joint_accounts ?? []
+                                }
                                 onSelect={(jointMember) => {
                                     if (isDisabled('member_joint_account_id'))
                                         return
@@ -300,12 +297,15 @@ export const QuickTransferTransactionForm = ({
                                     )
                                 }}
                                 triggerClassName="hover:bg-secondary/40"
+                                triggerProps={{
+                                    disabled:
+                                        form.watch('member_profile_id') ===
+                                            '' ||
+                                        isDisabled('member_joint_account_id'),
+                                }}
                                 value={
                                     form.getValues('member_joint_account_id') ??
                                     undefined
-                                }
-                                memberJointProfile={
-                                    selectedMember?.member_joint_accounts ?? []
                                 }
                             />
                         )}
@@ -313,29 +313,30 @@ export const QuickTransferTransactionForm = ({
 
                     {/* Reference Number */}
                     <FormFieldWrapper
-                        control={form.control}
-                        name="reference_number"
-                        label="Reference Number"
                         className="col-span-2"
+                        control={form.control}
+                        label="Reference Number"
+                        name="reference_number"
                         render={({ field }) => (
                             <TransactionReferenceNumber
                                 {...field}
-                                value={field.value ?? ''}
                                 className="col-span-2 w-full"
                                 disabled={isDisabled('reference_number')}
+                                value={field.value ?? ''}
                             />
                         )}
                     />
 
                     {/* Auto-generated OR */}
                     <FormFieldWrapper
+                        className="col-span-2"
                         control={form.control}
                         name="or_auto_generated"
-                        className="col-span-2"
                         render={({ field }) => (
                             <div className="flex items-center gap-2">
                                 <Checkbox
                                     checked={field.value ?? false}
+                                    disabled={isDisabled('or_auto_generated')}
                                     onCheckedChange={(checked) => {
                                         if (isDisabled('or_auto_generated'))
                                             return
@@ -347,7 +348,6 @@ export const QuickTransferTransactionForm = ({
                                             )
                                         }
                                     }}
-                                    disabled={isDisabled('or_auto_generated')}
                                 />
                                 <span className="text-sm text-muted-foreground">
                                     Auto generate reference number
@@ -358,12 +358,13 @@ export const QuickTransferTransactionForm = ({
 
                     {/* Account */}
                     <FormFieldWrapper
-                        control={form.control}
-                        name="account_id"
-                        label="Account"
                         className="col-span-2"
+                        control={form.control}
+                        label="Account"
+                        name="account_id"
                         render={({ field }) => (
                             <AccountPicker
+                                disabled={isDisabled('account_id')}
                                 onSelect={(account) => {
                                     if (isDisabled('account_id')) return
                                     field.onChange(account.id)
@@ -375,17 +376,16 @@ export const QuickTransferTransactionForm = ({
                                 value={
                                     form.getValues('account') || selectedAccount
                                 }
-                                disabled={isDisabled('account_id')}
                             />
                         )}
                     />
 
                     {/* Amount */}
                     <FormFieldWrapper
-                        control={form.control}
-                        name="amount"
-                        label="Amount"
                         className="col-span-2"
+                        control={form.control}
+                        label="Amount"
+                        name="amount"
                         render={({ field }) => (
                             <TransactionAmountField
                                 {...field}
@@ -396,19 +396,19 @@ export const QuickTransferTransactionForm = ({
 
                     {/* Payment Type */}
                     <FormFieldWrapper
+                        className="col-span-2"
                         control={form.control}
                         label="Payment Type"
                         name="payment_type_id"
-                        className="col-span-2"
                         render={({ field }) => (
                             <TransactionPaymentTypeComboBox
-                                value={field.value ?? undefined}
-                                placeholder="Select a payment type"
+                                disabled={isDisabled('payment_type_id')}
                                 onChange={(selectedPaymentType) => {
                                     if (isDisabled('payment_type_id')) return
                                     field.onChange(selectedPaymentType.id)
                                 }}
-                                disabled={isDisabled('payment_type_id')}
+                                placeholder="Select a payment type"
+                                value={field.value ?? undefined}
                             />
                         )}
                     />
@@ -417,49 +417,50 @@ export const QuickTransferTransactionForm = ({
                     {isOnlinePayment && (
                         <>
                             <FormFieldWrapper
-                                control={form.control}
-                                name="bank_id"
-                                label="Bank"
                                 className="col-span-2"
+                                control={form.control}
+                                label="Bank"
+                                name="bank_id"
                                 render={({ field }) => (
                                     <BankCombobox
                                         {...field}
-                                        value={field.value ?? undefined}
-                                        placeholder="Select a bank"
+                                        disabled={isDisabled('bank_id')}
                                         onChange={(selectedBank) => {
                                             if (isDisabled('bank_id')) return
                                             field.onChange(selectedBank.id)
                                         }}
-                                        disabled={isDisabled('bank_id')}
+                                        placeholder="Select a bank"
+                                        value={field.value ?? undefined}
                                     />
                                 )}
                             />
 
                             <FormFieldWrapper
-                                control={form.control}
-                                name="entry_date"
-                                label="Entry Date"
                                 className="relative"
+                                control={form.control}
                                 description="mm/dd/yyyy"
                                 descriptionClassName="absolute top-0 right-0"
+                                label="Entry Date"
+                                name="entry_date"
                                 render={({ field }) => (
                                     <InputDate
                                         {...field}
-                                        value={field.value ?? ''}
                                         disabled={isDisabled('entry_date')}
+                                        value={field.value ?? ''}
                                     />
                                 )}
                             />
 
                             <FormFieldWrapper
                                 control={form.control}
-                                name="bank_reference_number"
                                 label="Bank Reference Number"
+                                name="bank_reference_number"
                                 render={({ field }) => (
                                     <Input
                                         {...field}
-                                        value={field.value ?? undefined}
-                                        placeholder="add a bank reference number"
+                                        disabled={isDisabled(
+                                            'bank_reference_number'
+                                        )}
                                         onChange={(e) => {
                                             if (
                                                 isDisabled(
@@ -469,17 +470,16 @@ export const QuickTransferTransactionForm = ({
                                                 return
                                             field.onChange(e)
                                         }}
-                                        disabled={isDisabled(
-                                            'bank_reference_number'
-                                        )}
+                                        placeholder="add a bank reference number"
+                                        value={field.value ?? undefined}
                                     />
                                 )}
                             />
 
                             <FormFieldWrapper
                                 control={form.control}
-                                name="proof_of_payment_media_id"
                                 label="Proof of Payment"
+                                name="proof_of_payment_media_id"
                                 render={({ field }) => {
                                     const value = form.watch(
                                         'proof_of_payment_media'
@@ -487,13 +487,9 @@ export const QuickTransferTransactionForm = ({
                                     return (
                                         <ImageField
                                             {...field}
-                                            placeholder="Upload Photo"
-                                            value={
-                                                value
-                                                    ? (value as IMedia)
-                                                          .download_url
-                                                    : value
-                                            }
+                                            disabled={isDisabled(
+                                                'proof_of_payment_media_id'
+                                            )}
                                             onChange={(newImage) => {
                                                 if (
                                                     isDisabled(
@@ -510,9 +506,13 @@ export const QuickTransferTransactionForm = ({
                                                     newImage
                                                 )
                                             }}
-                                            disabled={isDisabled(
-                                                'proof_of_payment_media_id'
-                                            )}
+                                            placeholder="Upload Photo"
+                                            value={
+                                                value
+                                                    ? (value as IMedia)
+                                                          .download_url
+                                                    : value
+                                            }
                                         />
                                     )
                                 }}
@@ -522,18 +522,18 @@ export const QuickTransferTransactionForm = ({
 
                     {/* Note */}
                     <FormFieldWrapper
-                        control={form.control}
-                        name="description"
-                        label="Note"
                         className="h-[85%]"
+                        control={form.control}
+                        label="Note"
+                        name="description"
                         render={({ field }) => (
                             <Textarea
                                 {...field}
-                                id={field.name}
-                                className="h-full"
-                                placeholder="what is this payment for?"
                                 autoComplete="off"
+                                className="h-full"
                                 disabled={isDisabled('description')}
+                                id={field.name}
+                                placeholder="what is this payment for?"
                             />
                         )}
                     />
@@ -541,20 +541,15 @@ export const QuickTransferTransactionForm = ({
                     {/* Signature */}
                     <FormFieldWrapper
                         control={form.control}
-                        name="signature_media_id"
                         label="Signature"
+                        name="signature_media_id"
                         render={({ field }) => {
                             const value = form.watch('signature')
                             return (
                                 <SignatureField
                                     {...field}
-                                    placeholder="Signature"
-                                    value={
-                                        value
-                                            ? (value as IMedia).download_url
-                                            : value
-                                    }
                                     className="!max-h-25 h-25"
+                                    disabled={isDisabled('signature_media_id')}
                                     onChange={(newImage) => {
                                         if (isDisabled('signature_media_id'))
                                             return
@@ -564,7 +559,12 @@ export const QuickTransferTransactionForm = ({
 
                                         form.setValue('signature', newImage)
                                     }}
-                                    disabled={isDisabled('signature_media_id')}
+                                    placeholder="Signature"
+                                    value={
+                                        value
+                                            ? (value as IMedia).download_url
+                                            : value
+                                    }
                                 />
                             )
                         }}
@@ -573,8 +573,15 @@ export const QuickTransferTransactionForm = ({
 
                 <Separator className="my-2 sm:my-4" />
                 <FormFooterResetSubmit
+                    className="sticky bottom-0 bg-background/80 pt-2"
+                    disableSubmit={
+                        !form.formState.isDirty ||
+                        isQuickTransactionPending ||
+                        readOnly
+                    }
                     error={errorMessage}
                     isLoading={isQuickTransactionPending || !isFormIsDirty}
+                    onReset={() => form.reset()}
                     submitText={
                         <p className="">
                             {mode}{' '}
@@ -583,13 +590,6 @@ export const QuickTransferTransactionForm = ({
                             </span>
                         </p>
                     }
-                    disableSubmit={
-                        !form.formState.isDirty ||
-                        isQuickTransactionPending ||
-                        readOnly
-                    }
-                    className="sticky bottom-0 bg-background/80 pt-2"
-                    onReset={() => form.reset()}
                 />
             </form>
         </Form>

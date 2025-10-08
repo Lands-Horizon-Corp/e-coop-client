@@ -28,51 +28,51 @@ const SignatureField = forwardRef<HTMLButtonElement, SignatureFieldProps>(
         return (
             <>
                 <SignaturePickerUploaderModal
-                    open={open}
-                    title="Upload"
                     className="!max-w-[38rem]"
                     onOpenChange={setOpen}
+                    open={open}
                     signatureUploadProps={{
                         onSignatureUpload: (media) => {
                             onChange?.(media)
                             setOpen(false)
                         },
                     }}
+                    title="Upload"
                 />
                 <Button
                     ref={ref}
                     {...props}
-                    role="button"
-                    type="button"
-                    size="nostyle"
-                    variant="nostyle"
-                    onClick={() => setOpen(true)}
                     className={cn(
                         'has-disabled:pointer-events-none has-disabled:opacity-50 darkx:bg-popover/80x relative flex h-52 w-full cursor-pointer flex-col items-center justify-center overflow-hidden rounded-xl border border-dashed border-primary/60 bg-primary/5 p-4 transition-colors hover:border-foreground hover:bg-primary/10 has-[img]:border-none has-[input:focus]:border-ring has-[input:focus]:ring-[3px] has-[input:focus]:ring-ring/50 dark:border-input',
                         value &&
                             'ring ring-ring/40 ring-offset-1 dark:ring-muted-foreground/20',
                         className
                     )}
+                    onClick={() => setOpen(true)}
+                    role="button"
+                    size="nostyle"
+                    type="button"
+                    variant="nostyle"
                 >
                     {value ? (
                         <div
-                            onClick={(e) => e.stopPropagation()}
                             className="absolute left-0 top-0 size-full cursor-default"
+                            onClick={(e) => e.stopPropagation()}
                         >
                             <ImageDisplay
-                                src={value}
                                 className={cn(
                                     'block size-full rounded-none',
                                     value &&
                                         'dark:bg-secondary-foreground bg-secondary-foreground/50'
                                 )}
+                                src={value}
                             />
                             <span
+                                className="absolute hover:cursor-pointer bg-destructive text-white right-2 top-2 size-fit rounded-full p-1 ease-in-out duration-200 hover:bg-destructive hover:text-destructive-foreground"
                                 onClick={(e) => {
                                     e.stopPropagation()
                                     onChange?.(undefined)
                                 }}
-                                className="absolute hover:cursor-pointer bg-destructive text-white right-2 top-2 size-fit rounded-full p-1 ease-in-out duration-200 hover:bg-destructive hover:text-destructive-foreground"
                             >
                                 <XIcon className="size-4" />
                             </span>

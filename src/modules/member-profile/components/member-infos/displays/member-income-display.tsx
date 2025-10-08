@@ -18,8 +18,8 @@ const MemberIncomeDisplay = ({ incomes, className }: Props) => {
         <div className={cn('space-y-4', className)}>
             <SectionTitle
                 Icon={WalletIcon}
-                title="Income"
                 subTitle="Different source of income of this member"
+                title="Income"
             />
             {(!incomes || incomes.length === 0) && (
                 <p className="w-full text-center text-xs text-muted-foreground/70">
@@ -30,8 +30,8 @@ const MemberIncomeDisplay = ({ incomes, className }: Props) => {
                 incomes.map((income) => {
                     return (
                         <div
-                            key={income.id}
                             className="boreder grid grid-cols-4 rounded-xl bg-popover/60 p-4"
+                            key={income.id}
                         >
                             <div className="space-y-2">
                                 <p>{income.name ?? '-'}</p>

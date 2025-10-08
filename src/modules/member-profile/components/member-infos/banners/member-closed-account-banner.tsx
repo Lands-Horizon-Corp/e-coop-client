@@ -36,11 +36,11 @@ const MemberCloseAccountBanner = ({
             </div>
             {showRemarksList && closeRemarks && closeRemarks.length > 0 && (
                 <Accordion
-                    type="single"
-                    collapsible
                     className="col-span-4 w-full"
+                    collapsible
+                    type="single"
                 >
-                    <AccordionItem value="item-1" className="border-b-0">
+                    <AccordionItem className="border-b-0" value="item-1">
                         <AccordionTrigger className="text-sm text-muted-foreground/60">
                             Show Account Closure Reasons
                         </AccordionTrigger>
@@ -53,8 +53,8 @@ const MemberCloseAccountBanner = ({
                             <div className="space-y-2">
                                 {closeRemarks.map((closeRemark) => (
                                     <div
-                                        key={closeRemark?.id}
                                         className="space-y-2 rounded-xl border border-rose-300/40 bg-popover p-4"
+                                        key={closeRemark?.id}
                                     >
                                         <div className="flex items-center justify-between">
                                             <p className="text-sm text-foreground">

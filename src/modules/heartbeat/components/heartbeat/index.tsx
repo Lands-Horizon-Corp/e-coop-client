@@ -85,14 +85,14 @@ const Heartbeat = () => {
                     </div>
                 </div>
                 <div className="flex items-center gap-2">
-                    <Badge variant="outline" className="gap-1">
+                    <Badge className="gap-1" variant="outline">
                         <div className="w-2 h-2  dark:bg-primary rounded-full"></div>
                         Online ({data?.online_users_count || 0})
                     </Badge>
                     <Button
-                        variant="outline"
-                        size="sm"
                         onClick={() => refetch()}
+                        size="sm"
+                        variant="outline"
                     >
                         <RefreshIcon className="h-4 w-4" />
                     </Button>
@@ -187,45 +187,45 @@ const Heartbeat = () => {
                                 </div>
                                 <div className="flex flex-wrap gap-3">
                                     <Button
-                                        variant="outline"
-                                        size="sm"
                                         className="gap-2 border-border hover:bg-accent hover:"
+                                        size="sm"
+                                        variant="outline"
                                     >
                                         <Users3Icon className="h-4 w-4" />
                                         Online ({data.online_members})
                                     </Button>
                                     <Button
-                                        variant="outline"
-                                        size="sm"
                                         className="gap-2 border-border hover:bg-accent hover:"
+                                        size="sm"
+                                        variant="outline"
                                     >
                                         <MessagesIcon className="h-4 w-4" />
                                         New Message
                                     </Button>
                                     <Button
-                                        variant="outline"
-                                        size="sm"
                                         className="gap-2 border-border hover:bg-accent hover:"
+                                        size="sm"
+                                        variant="outline"
                                     >
                                         <SettingsIcon className="h-4 w-4" />
                                         Settings
                                     </Button>
                                     <Button
-                                        variant="outline"
-                                        size="sm"
                                         className="gap-2 border-border hover:bg-accent hover:"
+                                        size="sm"
+                                        variant="outline"
                                     >
                                         <div className="w-2 h-2 bg-primary dark:bg-primary rounded-full"></div>
                                         System Online
                                     </Button>
                                     <Button
-                                        size="sm"
-                                        variant="outline"
+                                        className="gap-2 border-border hover:bg-accent hover:"
                                         onClick={() =>
                                             // modalState.onOpenChange(true)
                                             qrScannerModal.onOpenChange(true)
                                         }
-                                        className="gap-2 border-border hover:bg-accent hover:"
+                                        size="sm"
+                                        variant="outline"
                                     >
                                         <ScanQrIcon />
                                         Quick Search Member
@@ -245,8 +245,8 @@ const Heartbeat = () => {
                     <Modal
                         {...modalState}
                         className="size-fit"
-                        titleClassName="hidden"
                         descriptionClassName="hidden"
+                        titleClassName="hidden"
                     >
                         {/* <MemberQuickSearch /> */}
                         {/* TODO: Add member quick search */}

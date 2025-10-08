@@ -34,9 +34,8 @@ const AccountProfilePicture = ({ user, className, onUploadSuccess }: Props) => {
     return (
         <div className={cn('relative size-24', className)}>
             <SingleImageUploaderModal
-                open={modal}
                 onOpenChange={toggleModal}
-                title="Update Profile Image"
+                open={modal}
                 singleImageUploadProps={{
                     defaultFileName: `user-${user.id}`,
                     onUploadComplete: (newMediaResource) => {
@@ -46,18 +45,19 @@ const AccountProfilePicture = ({ user, className, onUploadSuccess }: Props) => {
                         toggleModal(false)
                     },
                 }}
+                title="Update Profile Image"
             />
             <ImageDisplay
                 className="size-full border-4 border-popover shadow-sm"
-                src={user.media?.download_url}
                 fallback={user.user_name.charAt(0) ?? '-'}
+                src={user.media?.download_url}
             />
-            <ActionTooltip tooltipContent="Change" align="center" side="right">
+            <ActionTooltip align="center" side="right" tooltipContent="Change">
                 <Button
-                    variant="secondary"
+                    className="absolute bottom-2 right-2 size-fit rounded-full border border-transparent p-1 hover:border-foreground/20"
                     disabled={isUpdatingUserProfilePicture}
                     onClick={() => toggleModal((prev) => !prev)}
-                    className="absolute bottom-2 right-2 size-fit rounded-full border border-transparent p-1 hover:border-foreground/20"
+                    variant="secondary"
                 >
                     {isUpdatingUserProfilePicture ? (
                         <LoadingSpinner />

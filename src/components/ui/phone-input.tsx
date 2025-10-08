@@ -39,10 +39,9 @@ const PhoneInput: React.ForwardRefExoticComponent<PhoneInputProps> =
     >(({ className, onChange, ...props }, ref) => {
         return (
             <RPNInput.default
-                ref={ref}
                 className={cn('flex', className)}
-                flagComponent={FlagComponent}
                 countrySelectComponent={CountrySelect}
+                flagComponent={FlagComponent}
                 inputComponent={InputComponent}
                 /**
                  * Handles the onChange event.
@@ -54,6 +53,7 @@ const PhoneInput: React.ForwardRefExoticComponent<PhoneInputProps> =
                  * @param {E164Number | undefined} value - The entered value
                  */
                 onChange={(value) => onChange?.(value || ('' as Value))}
+                ref={ref}
                 {...props}
             />
         )
@@ -100,12 +100,12 @@ const CountrySelect = ({
         <Popover modal>
             <PopoverTrigger asChild>
                 <Button
-                    type="button"
-                    variant={'outline'}
                     className={cn(
                         'flex gap-1 rounded-e-none rounded-s-lg bg-white/50 px-3 dark:bg-secondary/70'
                     )}
                     disabled={disabled}
+                    type="button"
+                    variant={'outline'}
                 >
                     <FlagComponent country={value} countryName={value} />
                     <ArrowChevronDown

@@ -78,7 +78,6 @@ export const BankAction = ({ row, onDeleteSuccess }: IBankTableActionProps) => {
             </div>
             <RowActionsGroup
                 canSelect
-                row={row}
                 onDelete={{
                     text: 'Delete',
                     isAllowed: !isDeletingBank,
@@ -90,6 +89,7 @@ export const BankAction = ({ row, onDeleteSuccess }: IBankTableActionProps) => {
                     onClick: handleEdit,
                 }}
                 otherActions={<>{/* Additional actions can be added here */}</>}
+                row={row}
             />
         </>
     )
@@ -119,7 +119,6 @@ export const BankRowContext = ({
                 }}
             />
             <DataTableRowContext
-                row={row}
                 onDelete={{
                     text: 'Delete',
                     isAllowed: !isDeletingBank,
@@ -130,6 +129,7 @@ export const BankRowContext = ({
                     isAllowed: true,
                     onClick: handleEdit,
                 }}
+                row={row}
             >
                 {children}
             </DataTableRowContext>

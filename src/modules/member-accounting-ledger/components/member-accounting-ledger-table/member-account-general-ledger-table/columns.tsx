@@ -40,8 +40,8 @@ const MemberAccountGeneralLedgerTableColumns = (
                 <HeaderToggleSelect table={table} />
                 {!column.getIsPinned() && (
                     <PushPinSlashIcon
-                        onClick={() => column.pin('left')}
                         className="mr-2 size-3.5 cursor-pointer"
+                        onClick={() => column.pin('left')}
                     />
                 )}
             </div>
@@ -233,8 +233,8 @@ const MemberAccountGeneralLedgerTableColumns = (
         }) => (
             <span>
                 <ImageNameDisplay
-                    src={member_profile?.media?.download_url}
                     name={member_profile?.full_name}
+                    src={member_profile?.media?.download_url}
                 />
             </span>
         ),
@@ -267,8 +267,8 @@ const MemberAccountGeneralLedgerTableColumns = (
             <span className="relative">
                 {employee_user !== undefined && (
                     <ImageNameDisplay
-                        src={employee_user?.media?.download_url}
                         name={employee_user?.full_name}
+                        src={employee_user?.media?.download_url}
                     />
                 )}
             </span>

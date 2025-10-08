@@ -50,8 +50,8 @@ function SignInPage() {
                     {authStatus !== 'authorized' && (
                         <SignInForm
                             className="w-full max-w-lg"
-                            onSuccess={onSignInSuccess}
                             defaultValues={prefilledValues}
+                            onSuccess={onSignInSuccess}
                         />
                     )}
                     {(authStatus === 'loading' || currentAuth.user) && (

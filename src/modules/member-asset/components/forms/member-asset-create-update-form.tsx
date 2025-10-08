@@ -114,65 +114,65 @@ const MemberAssetCreateUpdateForm = ({
     return (
         <Form {...form}>
             <form
-                ref={formRef}
-                onSubmit={onSubmit}
                 className={cn('flex w-full flex-col gap-y-4', className)}
+                onSubmit={onSubmit}
+                ref={formRef}
             >
                 <fieldset
-                    disabled={isPending || formProps.readOnly}
                     className="grid gap-x-6 gap-y-4 sm:gap-y-3"
+                    disabled={isPending || formProps.readOnly}
                 >
                     <fieldset className="space-y-3">
                         <FormFieldWrapper
                             control={form.control}
-                            name="name"
                             label="Asset Name *"
+                            name="name"
                             render={({ field }) => (
                                 <Input
                                     {...field}
+                                    disabled={isDisabled(field.name)}
                                     id={field.name}
                                     placeholder="Asset Name"
-                                    disabled={isDisabled(field.name)}
                                 />
                             )}
                         />
                         <div className="grid grid-cols-2 gap-x-2">
                             <FormFieldWrapper
                                 control={form.control}
-                                name="cost"
                                 label="Asset Cost *"
+                                name="cost"
                                 render={({ field }) => (
                                     <Input
                                         {...field}
-                                        id={field.name}
-                                        type="number"
-                                        placeholder="Cost"
                                         disabled={isDisabled(field.name)}
+                                        id={field.name}
+                                        placeholder="Cost"
+                                        type="number"
                                     />
                                 )}
                             />
                             <FormFieldWrapper
-                                control={form.control}
-                                name="entry_date"
-                                label="Entry Date *"
                                 className="relative"
+                                control={form.control}
                                 description="mm/dd/yyyy"
                                 descriptionClassName="absolute top-0 right-0"
+                                label="Entry Date *"
+                                name="entry_date"
                                 render={({ field }) => (
                                     <InputDate
                                         {...field}
-                                        placeholder="Entry Date"
                                         className="block [&::-webkit-calendar-picker-indicator]:hidden"
-                                        value={field.value ?? ''}
                                         disabled={isDisabled(field.name)}
+                                        placeholder="Entry Date"
+                                        value={field.value ?? ''}
                                     />
                                 )}
                             />
                         </div>
                         <FormFieldWrapper
                             control={form.control}
-                            name="description"
                             label="Asset Description *"
+                            name="description"
                             render={({ field }) => (
                                 <TextEditor
                                     {...field}
@@ -185,20 +185,14 @@ const MemberAssetCreateUpdateForm = ({
                         />
                         <FormFieldWrapper
                             control={form.control}
-                            name="media_id"
                             label="Asset Photo"
+                            name="media_id"
                             render={({ field }) => {
                                 const value = form.watch('media')
 
                                 return (
                                     <ImageField
                                         {...field}
-                                        placeholder="Upload Asset Photo"
-                                        value={
-                                            value
-                                                ? (value as IMedia).download_url
-                                                : value
-                                        }
                                         onChange={(newImage) => {
                                             if (newImage)
                                                 field.onChange(newImage.id)
@@ -206,6 +200,12 @@ const MemberAssetCreateUpdateForm = ({
 
                                             form.setValue('media', newImage)
                                         }}
+                                        placeholder="Upload Asset Photo"
+                                        value={
+                                            value
+                                                ? (value as IMedia).download_url
+                                                : value
+                                        }
                                     />
                                 )
                             }}
@@ -213,15 +213,15 @@ const MemberAssetCreateUpdateForm = ({
                     </fieldset>
                 </fieldset>
                 <FormFooterResetSubmit
-                    error={error}
-                    readOnly={formProps.readOnly}
-                    isLoading={isPending}
                     disableSubmit={!form.formState.isDirty}
-                    submitText={assetId ? 'Update' : 'Create'}
+                    error={error}
+                    isLoading={isPending}
                     onReset={() => {
                         form.reset()
                         reset()
                     }}
+                    readOnly={formProps.readOnly}
+                    submitText={assetId ? 'Update' : 'Create'}
                 />
             </form>
         </Form>
@@ -239,9 +239,9 @@ export const MemberAssetCreateUpdateFormModal = ({
 }) => {
     return (
         <Modal
-            title={title}
-            description={description}
             className={cn('', className)}
+            description={description}
+            title={title}
             {...props}
         >
             <MemberAssetCreateUpdateForm

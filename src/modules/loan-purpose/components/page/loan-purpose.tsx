@@ -13,13 +13,13 @@ const LoanPurposePage = () => {
         <PageContainer>
             <LoanPurposeCreateUpdateFormModal {...createModal} />
             <LoanPurposeTable
+                actionComponent={LoanPurposeAction}
+                className="max-h-[90vh] min-h-[90vh] w-full"
                 toolbarProps={{
                     createActionProps: {
                         onClick: () => createModal.onOpenChange(true),
                     },
                 }}
-                actionComponent={LoanPurposeAction}
-                className="max-h-[90vh] min-h-[90vh] w-full"
             />
         </PageContainer>
     )

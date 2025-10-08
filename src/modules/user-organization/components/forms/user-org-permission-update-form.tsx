@@ -94,13 +94,13 @@ const UserOrgPermissionUpdateForm = ({
     return (
         <Form {...form}>
             <form
-                ref={formRef}
-                onSubmit={onSubmit}
                 className={cn('flex w-full flex-col gap-y-4', className)}
+                onSubmit={onSubmit}
+                ref={formRef}
             >
                 <fieldset
-                    disabled={isPending || formProps.readOnly}
                     className="grid gap-x-6 gap-y-4 sm:gap-y-3"
+                    disabled={isPending || formProps.readOnly}
                 >
                     <div className="border p-2 rounded-xl flex items-center justify-between bg-card">
                         <div>
@@ -112,7 +112,6 @@ const UserOrgPermissionUpdateForm = ({
                             </p>
                         </div>
                         <PermissionPicker
-                            triggerClassName="hidden"
                             modalState={permissionTemplate}
                             onSelect={(picked) =>
                                 form.reset({
@@ -121,14 +120,15 @@ const UserOrgPermissionUpdateForm = ({
                                     permissions: picked.permissions,
                                 })
                             }
+                            triggerClassName="hidden"
                         />
                         <Button
-                            size="sm"
-                            type="button"
-                            variant="secondary"
                             onClick={() =>
                                 permissionTemplate.onOpenChange(true)
                             }
+                            size="sm"
+                            type="button"
+                            variant="secondary"
                         >
                             <ShieldCheckIcon className="mr-1" />
                             Choose Permission Template
@@ -138,37 +138,37 @@ const UserOrgPermissionUpdateForm = ({
                     <fieldset className="space-y-3">
                         <FormFieldWrapper
                             control={form.control}
-                            name="permission_name"
                             label="Permission Name *"
+                            name="permission_name"
                             render={({ field }) => (
                                 <Input
                                     {...field}
-                                    id={field.name}
-                                    placeholder="Permission Name"
                                     autoComplete="off"
                                     disabled={isDisabled(field.name)}
+                                    id={field.name}
+                                    placeholder="Permission Name"
                                 />
                             )}
                         />
                         <FormFieldWrapper
                             control={form.control}
-                            name="permission_description"
                             label="Permission Description *"
+                            name="permission_description"
                             render={({ field }) => (
                                 <Textarea
                                     {...field}
-                                    id={field.name}
-                                    placeholder="Describe the permission"
                                     autoComplete="off"
                                     disabled={isDisabled(field.name)}
+                                    id={field.name}
+                                    placeholder="Describe the permission"
                                     rows={3}
                                 />
                             )}
                         />
                         <FormFieldWrapper
                             control={form.control}
-                            name="permissions"
                             label="Permissions *"
+                            name="permissions"
                             render={({ field }) => (
                                 <PermissionMatrix
                                     controlledState={{
@@ -188,15 +188,15 @@ const UserOrgPermissionUpdateForm = ({
                     </fieldset>
                 </fieldset>
                 <FormFooterResetSubmit
-                    error={error}
-                    readOnly={formProps.readOnly}
-                    isLoading={isPending}
                     disableSubmit={!form.formState.isDirty}
-                    submitText="Update"
+                    error={error}
+                    isLoading={isPending}
                     onReset={() => {
                         form.reset()
                         reset?.()
                     }}
+                    readOnly={formProps.readOnly}
+                    submitText="Update"
                 />
             </form>
         </Form>
@@ -214,9 +214,9 @@ export const UserOrgPermissionUpdateFormModal = ({
 }) => {
     return (
         <Modal
-            title={title}
-            description={description}
             className={cn('!max-w-[95vw]', className)}
+            description={description}
+            title={title}
             {...props}
         >
             <UserOrgPermissionUpdateForm

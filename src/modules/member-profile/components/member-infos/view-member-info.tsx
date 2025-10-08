@@ -128,29 +128,29 @@ const MemberOverallInfo = ({
                     <MemberInfoBanner memberProfile={memberProfile} />
                     {memberProfile.is_closed && (
                         <MemberCloseAccountBanner
-                            showRemarksList
                             closeRemarks={memberProfile.member_close_remarks}
+                            showRemarksList
                         />
                     )}
                 </>
             )}
             <Tabs
-                defaultValue="accounts-loans"
                 className="mt-2 flex-1 flex-col"
+                defaultValue="accounts-loans"
             >
                 <ScrollArea>
                     <TabsList className="mb-3 h-auto min-w-full justify-start gap-2 rounded-none border-b bg-transparent px-0 py-1 text-foreground">
                         {memberInfoTabs.map((tab) => (
                             <TabsTrigger
+                                className="relative after:absolute after:inset-x-0 after:bottom-0 after:-mb-1 after:h-0.5 after:duration-300 after:ease-in-out hover:bg-accent hover:text-foreground data-[state=active]:bg-transparent data-[state=active]:shadow-none data-[state=active]:after:bg-primary data-[state=active]:hover:bg-accent"
                                 key={tab.value}
                                 value={tab.value}
-                                className="relative after:absolute after:inset-x-0 after:bottom-0 after:-mb-1 after:h-0.5 after:duration-300 after:ease-in-out hover:bg-accent hover:text-foreground data-[state=active]:bg-transparent data-[state=active]:shadow-none data-[state=active]:after:bg-primary data-[state=active]:hover:bg-accent"
                             >
                                 {tab.Icon && (
                                     <tab.Icon
+                                        aria-hidden="true"
                                         className="-ms-0.5 me-1.5 opacity-60"
                                         size={16}
-                                        aria-hidden="true"
                                     />
                                 )}
                                 {tab.title}
@@ -160,7 +160,7 @@ const MemberOverallInfo = ({
                     <ScrollBar orientation="horizontal" />
                 </ScrollArea>
                 {memberInfoTabs.map((tab) => (
-                    <TabsContent value={tab.value} key={tab.value} asChild>
+                    <TabsContent asChild key={tab.value} value={tab.value}>
                         {tab.Component({ profileId: memberProfileId })}
                     </TabsContent>
                 ))}
@@ -179,10 +179,10 @@ export const MemberOverallInfoModal = ({
     return (
         <Modal
             {...props}
-            titleClassName="hidden"
-            descriptionClassName="hidden"
-            closeButtonClassName="top-1.5 right-1.5"
             className={cn('!max-w-[90vw] p-3', className)}
+            closeButtonClassName="top-1.5 right-1.5"
+            descriptionClassName="hidden"
+            titleClassName="hidden"
         >
             <MemberOverallInfo {...overallInfoProps} />
         </Modal>

@@ -127,7 +127,7 @@ const ChatReCaptcha = forwardRef<ChatReCaptchaRef, ChatReCaptchaProps>(
         }, [isVisible])
 
         return (
-            <Dialog open={isVisible} onOpenChange={setIsVisible}>
+            <Dialog onOpenChange={setIsVisible} open={isVisible}>
                 <DialogContent className="sm:max-w-md">
                     <DialogHeader>
                         <DialogTitle>Verify you're human</DialogTitle>
@@ -137,9 +137,9 @@ const ChatReCaptcha = forwardRef<ChatReCaptchaRef, ChatReCaptchaProps>(
                     </DialogHeader>
                     <div className="flex justify-center">
                         <div
-                            ref={containerRef}
-                            id={DEFAULT_CONTAINER_ID}
                             className="flex min-h-[65px] items-center justify-center"
+                            id={DEFAULT_CONTAINER_ID}
+                            ref={containerRef}
                         />
                     </div>
                 </DialogContent>

@@ -35,14 +35,14 @@ const ResendVerifyContactButton = ({
 
     return (
         <Button
-            size="sm"
-            variant="ghost"
             className={cn('underline', cooldownCount > 0 && 'no-underline')}
+            disabled={isResending || cooldownCount > 0}
             onClick={(e) => {
                 e.preventDefault()
                 resendOtpVerification()
             }}
-            disabled={isResending || cooldownCount > 0}
+            size="sm"
+            variant="ghost"
         >
             {isResending && <LoadingSpinner />}
             {!isResending && cooldownCount <= 0 && 'Resend Code'}

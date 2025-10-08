@@ -83,22 +83,22 @@ export const ValueChecklistMeter: React.FC<ValueChecklistMeterProps> = ({
             {showChecklist &&
                 !(strengthPercentage === 100 && hideOnComplete) && (
                     <ul
-                        className="mt-3 space-y-1.5"
                         aria-label="Value requirements"
+                        className="mt-3 space-y-1.5"
                     >
                         {displayedChecklist.map((req, index) => (
-                            <li key={index} className="flex items-center gap-2">
+                            <li className="flex items-center gap-2" key={index}>
                                 {req.met ? (
                                     <CheckIcon
-                                        size={16}
-                                        className="text-emerald-500"
                                         aria-hidden="true"
+                                        className="text-emerald-500"
+                                        size={16}
                                     />
                                 ) : (
                                     <XIcon
-                                        size={16}
-                                        className="text-muted-foreground/80"
                                         aria-hidden="true"
+                                        className="text-muted-foreground/80"
+                                        size={16}
                                     />
                                 )}
                                 <span

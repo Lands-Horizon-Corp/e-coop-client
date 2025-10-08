@@ -97,11 +97,11 @@ const JoinBranchWithCodeFormModal = ({
 
     return (
         <Modal
-            title={title}
-            description={description}
-            titleClassName="text-2xl"
             className={cn('w-[44rem]', className)}
+            description={description}
             onOpenChange={onOpenChange}
+            title={title}
+            titleClassName="text-2xl"
             {...props}
         >
             <QrCodeScannerModal
@@ -117,8 +117,8 @@ const JoinBranchWithCodeFormModal = ({
             />
             <div className="grid grid-cols-1 gap-y-2">
                 <fieldset
-                    disabled={isLoading}
                     className="relative flex w-full items-center gap-x-2"
+                    disabled={isLoading}
                 >
                     <div className="relative w-full">
                         <div className="absolute right-4 top-1/2 z-10 -translate-y-1/2 text-muted-foreground/70">
@@ -129,7 +129,7 @@ const JoinBranchWithCodeFormModal = ({
                             )}
                         </div>
                         <Input
-                            value={val}
+                            className="w-full rounded-2xl bg-secondary/50 text-primary"
                             onChange={(e) => {
                                 setVal(e.target.value)
                             }}
@@ -139,7 +139,7 @@ const JoinBranchWithCodeFormModal = ({
                                 }
                             }}
                             placeholder="Enter Invitation Code"
-                            className="w-full rounded-2xl bg-secondary/50 text-primary"
+                            value={val}
                         />
                     </div>
                     <ActionTooltip
@@ -148,10 +148,10 @@ const JoinBranchWithCodeFormModal = ({
                         tooltipContent="Scan QR Code instead"
                     >
                         <Button
-                            size="icon"
-                            variant="outline"
                             className="rounded-xl"
                             onClick={() => scanModal.onOpenChange(true)}
+                            size="icon"
+                            variant="outline"
                         >
                             <BarcodeScanIcon />
                         </Button>
@@ -221,7 +221,7 @@ const JoinBranchWithCodeFormModal = ({
                                                     </p>
                                                 </div>
                                                 <Button
-                                                    size="sm"
+                                                    className="h-fit w-fit bg-primary/50 px-2 py-2 text-xs capitalize"
                                                     disabled={
                                                         isLoading ||
                                                         IsLoadingJoining ||
@@ -230,7 +230,7 @@ const JoinBranchWithCodeFormModal = ({
                                                     onClick={() =>
                                                         handleSubmit()
                                                     }
-                                                    className="h-fit w-fit bg-primary/50 px-2 py-2 text-xs capitalize"
+                                                    size="sm"
                                                 >
                                                     Joining as {data.user_type}
                                                 </Button>
@@ -241,10 +241,10 @@ const JoinBranchWithCodeFormModal = ({
                             </div>
 
                             <Button
-                                size="icon"
-                                variant="secondary"
                                 className="absolute right-2 top-2 size-fit rounded-full p-1"
                                 onClick={() => handleInvalidateSearch()}
+                                size="icon"
+                                variant="secondary"
                             >
                                 <XIcon className="size-4" />
                             </Button>
@@ -252,13 +252,13 @@ const JoinBranchWithCodeFormModal = ({
                         <div className="my-5">
                             <OrganizationPolicies
                                 classNamePolicyItem="z-50"
-                                organization={
-                                    data.organization as IOrganizationWithPolicies
-                                }
+                                isIncludeIAccept={true}
                                 onPolicyChange={(isAllChecked) => {
                                     setIsAllChecked(isAllChecked)
                                 }}
-                                isIncludeIAccept={true}
+                                organization={
+                                    data.organization as IOrganizationWithPolicies
+                                }
                             />
                         </div>
                     </GradientBackground>

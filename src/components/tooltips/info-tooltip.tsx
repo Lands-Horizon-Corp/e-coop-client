@@ -48,11 +48,11 @@ const InfoTooltip = ({
             </TooltipTrigger>
             <TooltipPortal>
                 <TooltipContent
-                    side={side}
                     align={align}
-                    sideOffset={sideOffset}
                     alignOffset={alignOffset}
                     className="text-xs px-1.5 rounded-lg border text-foreground bg-background"
+                    side={side}
+                    sideOffset={sideOffset}
                     style={{ zIndex: 99999 }}
                 >
                     <div>{content}</div>

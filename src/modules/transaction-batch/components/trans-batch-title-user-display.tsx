@@ -81,8 +81,8 @@ const TransBatchTitleUserDisplay = ({ transBatch, className }: Props) => {
                     </div>
                 </div>
                 <Button
-                    size="sm"
                     onClick={() => historyModal.onOpenChange(true)}
+                    size="sm"
                 >
                     <EyeIcon className="mr-2" />
                     View Histories

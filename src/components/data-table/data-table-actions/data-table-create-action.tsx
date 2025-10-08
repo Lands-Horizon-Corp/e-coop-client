@@ -25,11 +25,11 @@ const DataTableCreateAction = ({
 }: IDataTableCreateActionProps) => {
     return (
         <Button
-            size={other.size ?? 'sm'}
-            onClick={onClick}
-            variant={other.variant ?? 'default'}
-            disabled={disabled || isLoading}
             className={cn('gap-x-1 rounded-md', className)}
+            disabled={disabled || isLoading}
+            onClick={onClick}
+            size={other.size ?? 'sm'}
+            variant={other.variant ?? 'default'}
         >
             {isLoading ? (
                 <LoadingSpinner />

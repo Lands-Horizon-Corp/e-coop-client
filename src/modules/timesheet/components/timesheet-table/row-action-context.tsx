@@ -40,8 +40,8 @@ export const TimesheetAction = ({
             <div onClick={(e) => e.stopPropagation()}></div>
             <RowActionsGroup
                 canSelect
-                row={row}
                 otherActions={<>{/* Additional actions can be added here */}</>}
+                row={row}
             />
         </>
     )
@@ -62,8 +62,8 @@ export const TimesheetRowContext = ({
     return (
         <>
             <DataTableRowContext
-                row={row}
                 otherActions={<>{/* Additional actions can be added here */}</>}
+                row={row}
             >
                 {children}
             </DataTableRowContext>

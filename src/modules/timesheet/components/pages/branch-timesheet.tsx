@@ -39,9 +39,9 @@ const BranchTimesheetPage = () => {
     return (
         <PageContainer>
             <TimesheetTable
-                mode="all"
                 actionComponent={TimesheetAction}
                 className="max-h-[90vh] min-h-[90vh] w-full"
+                mode="all"
             />
         </PageContainer>
     )

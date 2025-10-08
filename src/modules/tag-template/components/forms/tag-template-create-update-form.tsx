@@ -111,53 +111,53 @@ const TagTemplateCreateUpdateForm = ({
     return (
         <Form {...form}>
             <form
-                ref={formRef}
-                onSubmit={onSubmit}
                 className={cn('flex w-full flex-col gap-y-4', className)}
+                onSubmit={onSubmit}
+                ref={formRef}
             >
                 <fieldset
-                    disabled={isPending || formProps.readOnly}
                     className="grid gap-x-6 gap-y-4 sm:gap-y-3"
+                    disabled={isPending || formProps.readOnly}
                 >
                     <FormFieldWrapper
                         control={form.control}
-                        name="name"
                         label="Name *"
+                        name="name"
                         render={({ field }) => (
                             <Input
                                 {...field}
-                                id={field.name}
-                                placeholder="Tag Name"
                                 autoComplete="off"
                                 disabled={isDisabled(field.name)}
+                                id={field.name}
+                                placeholder="Tag Name"
                             />
                         )}
                     />
 
                     <FormFieldWrapper
                         control={form.control}
-                        name="description"
                         label="Description"
+                        name="description"
                         render={({ field }) => (
                             <Textarea
                                 {...field}
-                                id={field.name}
-                                placeholder="Optional description"
                                 autoComplete="off"
                                 disabled={isDisabled(field.name)}
+                                id={field.name}
+                                placeholder="Optional description"
                             />
                         )}
                     />
 
                     <FormFieldWrapper
                         control={form.control}
-                        name="category"
                         label="Category *"
+                        name="category"
                         render={({ field }) => (
                             <Select
                                 disabled={isDisabled(field.name)}
-                                value={field.value}
                                 onValueChange={field.onChange}
+                                value={field.value}
                             >
                                 <SelectTrigger className="w-full">
                                     <SelectValue placeholder="Select category" />
@@ -175,41 +175,41 @@ const TagTemplateCreateUpdateForm = ({
 
                     <FormFieldWrapper
                         control={form.control}
-                        name="color"
                         label="Color *"
+                        name="color"
                         render={({ field }) => (
                             <Input
                                 {...field}
+                                disabled={isDisabled(field.name)}
                                 id={field.name}
                                 type="color"
-                                disabled={isDisabled(field.name)}
                             />
                         )}
                     />
 
                     <FormFieldWrapper
                         control={form.control}
-                        name="icon"
                         label="Icon *"
+                        name="icon"
                         render={({ field }) => (
                             <IconCombobox
                                 {...field}
-                                value={field.value as TIcon}
                                 disabled={isDisabled(field.name)}
+                                value={field.value as TIcon}
                             />
                         )}
                     />
                 </fieldset>
                 <FormFooterResetSubmit
-                    error={error}
-                    readOnly={formProps.readOnly}
-                    isLoading={isPending}
                     disableSubmit={!form.formState.isDirty}
-                    submitText={tagTemplateId ? 'Update' : 'Create'}
+                    error={error}
+                    isLoading={isPending}
                     onReset={() => {
                         form.reset()
                         reset?.()
                     }}
+                    readOnly={formProps.readOnly}
+                    submitText={tagTemplateId ? 'Update' : 'Create'}
                 />
             </form>
         </Form>
@@ -227,9 +227,9 @@ export const TagTemplateCreateUpdateFormModal = ({
 }) => {
     return (
         <Modal
-            title={title}
-            description={description}
             className={cn('', className)}
+            description={description}
+            title={title}
             {...props}
         >
             <TagTemplateCreateUpdateForm

@@ -37,13 +37,13 @@ const RecruitedMembers = forwardRef<HTMLDivElement, Props>(
 
         return (
             <div
-                ref={ref}
                 className={cn(
                     'flex flex-1 flex-col gap-y-4 rounded-xl bg-background p-4',
                     className
                 )}
+                ref={ref}
             >
-                <SectionTitle title="Recruited Members" Icon={UserPlusIcon} />
+                <SectionTitle Icon={UserPlusIcon} title="Recruited Members" />
                 {!data && isPending && <LoadingSpinner />}
                 {data && (
                     <Table>
@@ -77,10 +77,10 @@ const RecruitedMembers = forwardRef<HTMLDivElement, Props>(
                                             <TableCell>
                                                 <div className="flex items-center gap-3">
                                                     <ImageNameDisplay
+                                                        name={full_name}
                                                         src={
                                                             media?.download_url
                                                         }
-                                                        name={full_name}
                                                     />
                                                 </div>
                                             </TableCell>
