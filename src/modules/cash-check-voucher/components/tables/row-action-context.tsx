@@ -11,6 +11,7 @@ import { useModalState } from '@/hooks/use-modal-state'
 
 import { ICashCheckVoucher, useDeleteCashCheckVoucherById } from '../..'
 import CashCheckEntryUpdateFormModal from '../forms/cash-check-entry-form-modal'
+import CashCheckVoucherTransactionSignatureUpdateFormModal from '../forms/cash-check-signature-form-modal'
 import CashCheckVoucherCreateUpdateFormModal from '../forms/cash-check-voucher-create-udate-form-modal'
 import CashCheckVoucherOtherAction from './cash-check-other-voucher'
 import { ICashCheckVoucherTableActionComponentProp } from './columns'
@@ -26,6 +27,7 @@ const useCashCheckVoucherActions = ({
 }: UseCashCheckVoucherActionsProps) => {
     const updateModal = useModalState()
     const checkEntry = useModalState()
+    const signatureModal = useModalState()
     const cashCheckVoucher = row.original
     const { onOpen } = useConfirmModalStore()
     const {
@@ -46,7 +48,9 @@ const useCashCheckVoucherActions = ({
     const handleOpenCheckEntry = () => {
         checkEntry.onOpenChange(true)
     }
-
+    const handleOpenSignature = () => {
+        signatureModal.onOpenChange(true)
+    }
     const handleDelete = () => {
         onOpen({
             title: 'Delete Journal Voucher',
@@ -63,6 +67,8 @@ const useCashCheckVoucherActions = ({
         handleDelete,
         checkEntry,
         handleOpenCheckEntry,
+        signatureModal,
+        handleOpenSignature,
     }
 }
 
@@ -84,6 +90,8 @@ export const CashCheckJournalVoucherAction = ({
         handleDelete,
         checkEntry,
         handleOpenCheckEntry,
+        signatureModal,
+        handleOpenSignature,
     } = useCashCheckVoucherActions({ row, onDeleteSuccess })
 
     const isReleased =
@@ -121,6 +129,13 @@ export const CashCheckJournalVoucherAction = ({
                         },
                     }}
                 />
+                <CashCheckVoucherTransactionSignatureUpdateFormModal
+                    {...signatureModal}
+                    formProps={{
+                        cashCheckVoucherId: cashCheckVoucher.id,
+                        defaultValues: { ...cashCheckVoucher },
+                    }}
+                />
             </div>
             <RowActionsGroup
                 canSelect
@@ -138,6 +153,7 @@ export const CashCheckJournalVoucherAction = ({
                 otherActions={
                     <CashCheckVoucherOtherAction
                         handleOpenCheckEntry={handleOpenCheckEntry}
+                        handleOpenSignature={handleOpenSignature}
                         row={row}
                     />
                 }

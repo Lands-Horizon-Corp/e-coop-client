@@ -284,6 +284,12 @@ const CashCheckVoucherCreateUpdateForm = ({
             >
                 <div className="absolute top-4 right-10 z-10 flex gap-2">
 <<<<<<< Updated upstream
+                    {CashCheckVoucherTransactionId && (
+                        <CashCheckVoucherTagsManagerPopover
+                            size="sm"
+                            cashCheckVoucherId={CashCheckVoucherTransactionId}
+                        />
+                    )}
                     <CashCheckVoucherStatusIndicator
                         voucherDates={{
                             printed_date: isPrinted

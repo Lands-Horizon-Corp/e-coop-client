@@ -300,7 +300,7 @@ const MemberPicker = forwardRef<HTMLButtonElement, Props>(
                                 }}
                                 variant={'ghost'}
                                 size={'sm'}
-                                className="cursor-pointer rounded-full !p-0 !px-2 flex-shrink-0"
+                                className="cursor-pointer rounded-full !p-0 !px-0 flex-shrink-0"
                             >
                                 <XIcon className="inline h-4 w-4" />
                             </Button>

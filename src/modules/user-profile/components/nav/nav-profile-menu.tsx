@@ -12,6 +12,7 @@ import {
 } from '@/modules/user-organization'
 import UserAvatar from '@/modules/user/components/user-avatar'
 import useConfirmModalStore from '@/store/confirm-modal-store'
+import { classNames } from 'node_modules/react-easy-crop/helpers'
 
 import {
     ArrowRightIcon,
@@ -101,8 +102,6 @@ const NavProfileMenu = () => {
             })
 
             queryClient.invalidateQueries()
-
-            toast.success(`Switched to ${nextUserOrg.branch.name || 'branch'}`)
         } catch {
             toast.error("Can't switch Branch")
         }
@@ -133,10 +132,9 @@ const NavProfileMenu = () => {
             <PopoverContent
                 side="bottom"
                 align="end"
-                // className="ecoop-scroll max-h-[80vh] w-[24rem] !max-w-md overflow-auto rounded-xl bg-popover/90 p-0 backdrop-blur-sm"
-                className="ecoop-scroll max-h-[80vh] w-[24rem] !max-w-md space-y-2 overflow-auto rounded-2xl border-none bg-transparent p-1 shadow-none"
+                className="relative flex flex-col max-h-[80vh] w-[24rem] !max-w-md space-y-2 rounded-2xl border-none bg-transparent p-1 shadow-none"
             >
-                <div className="rounded-xl border bg-popover p-4 shadow-md">
+                <div className="rounded-xl shrink-0 border bg-popover p-4 shadow-md">
                     <div className="flex flex-col items-center space-y-2">
                         <PreviewMediaWrapper media={user.media}>
                             <ImageDisplay
@@ -173,14 +171,14 @@ const NavProfileMenu = () => {
                         <LoadingSpinner />
                     </div>
                 ) : userOrganizations && userOrganizations.length > 0 ? (
-                    <div className="space-y-2 rounded-xl border bg-popover p-4 shadow-md">
-                        <div className="flex items-center justify-between text-sm font-semibold text-muted-foreground">
+                    <div className="rounded-xl flex flex-col flex-1 max-h-full min-h-0 border bg-popover shadow-md">
+                        <div className="flex p-4 items-center justify-between text-sm font-semibold text-muted-foreground">
                             <span>Organizations</span>
                             <span className="text-xs">
                                 ({userOrganizations?.length ?? ''})
                             </span>
                         </div>
-                        <div>
+                        <div className="flex-1 min-h-0 overflow-y-auto p-4 ecoop-scroll">
                             <Accordion
                                 type="single"
                                 collapsible
@@ -306,8 +304,16 @@ const NavProfileMenu = () => {
                                                                                     variant="outline"
                                                                                     className="ml-2 h-6 flex-shrink-0 px-2 text-xs"
                                                                                     onClick={() =>
-                                                                                        handleSwitch(
-                                                                                            userOrg
+                                                                                        toast.promise(
+                                                                                            handleSwitch(
+                                                                                                userOrg
+                                                                                            ),
+                                                                                            {
+                                                                                                loading:
+                                                                                                    'Switching...',
+                                                                                                success: `Switched to ${userOrg.branch.name}`,
+                                                                                                error: "Can't switch branch",
+                                                                                            }
                                                                                         )
                                                                                     }
                                                                                     disabled={
@@ -361,7 +367,7 @@ const NavProfileMenu = () => {
                     </div>
                 )}
 
-                <div className="flex items-center gap-x-2 rounded-xl border bg-popover p-1 shadow-md">
+                <div className="flex items-center shrink-0 gap-x-2 rounded-xl border bg-popover p-1 shadow-md">
                     <Button
                         variant="ghost"
                         className="justify-center flex-1"

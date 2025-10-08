@@ -37,6 +37,7 @@ import {
     BsFileEarmarkFill as FileFillIcon,
     BsImage as Image2Icon,
     BsFileEarmarkImageFill as ImageFileFillIcon,
+    BsFillInfoCircleFill as InfoFillCircleIcon,
     BsInfo as InfoIcon,
     BsInstagram as InstagramIcon,
     BsFileEarmarkMusicFill as MusicFileFillIcon,
@@ -102,7 +103,6 @@ import {
     FaBoxesStacked as BoxesStackedIcon,
     FaBusinessTime as BriefCaseClockIcon,
 <<<<<<< Updated upstream
-    FaCheck as CheckFillIcon,
 =======
     FaFirstdraft as DraftIcon,
 >>>>>>> Stashed changes
@@ -206,9 +206,11 @@ import {
     HiSparkles as SparkleIcon,
     HiOutlineSun as SunIcon,
     HiTag as TagIcon,
+    HiMiniWrenchScrewdriver as WrenchIcon,
 } from 'react-icons/hi2'
 import { ImHammer2 as JudgeHammerIcon } from 'react-icons/im'
 import {
+    IoIosCheckmarkCircle as CheckFillIcon,
     IoIosFunnel as FunnelFilledIcon,
     IoIosCog as GearIcon,
     IoIosCode as IoIosCodeIcon,
@@ -497,6 +499,7 @@ export {
     Image2Icon,
     IdCardIcon,
     EyeOffIcon,
+    WrenchIcon,
     CommandIcon,
     TwitterIcon,
     EyeViewIcon,
@@ -610,6 +613,7 @@ export {
     RowSpacingIcon,
     PowerResetIcon,
     BlockQuoteIcon,
+    InfoFillCircleIcon,
     DragHandleIcon,
     CameraFillIcon,
     EditPencilIcon,

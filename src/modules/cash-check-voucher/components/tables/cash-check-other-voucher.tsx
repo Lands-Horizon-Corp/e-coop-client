@@ -10,6 +10,7 @@ import {
     XCircleIcon,
 } from 'lucide-react'
 
+import { SignatureLightIcon } from '@/components/icons'
 import { DropdownMenuItem } from '@/components/ui/dropdown-menu'
 
 import {
@@ -21,10 +22,12 @@ import { ICashCheckVoucher } from '../../cash-check-voucher.types'
 type ICashCheckVoucherTableActionComponentProp = {
     row: Row<ICashCheckVoucher>
     handleOpenCheckEntry: () => void
+    handleOpenSignature: () => void
 }
 const CashCheckVoucherOtherAction = ({
     row,
     handleOpenCheckEntry,
+    handleOpenSignature,
 }: ICashCheckVoucherTableActionComponentProp) => {
     const CashCheckVoucher = row.original
 
@@ -130,6 +133,12 @@ const CashCheckVoucherOtherAction = ({
                 <SendHorizonalIcon className="mr-2 h-4 w-4 text-purple-500" />
             ),
             onSelect: handleOpenCheckEntry,
+            isVisible: true,
+        },
+        {
+            label: 'signature',
+            icon: <SignatureLightIcon className="mr-2 h-4 w-4" />,
+            onSelect: handleOpenSignature,
             isVisible: true,
         },
     ]

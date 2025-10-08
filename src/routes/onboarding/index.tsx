@@ -84,6 +84,7 @@ function RouteComponent() {
                 </GradientText>
                 Onboarding
             </h1>
+
             {hasOrganization ? (
                 <WithOrganization
                     organizationsWithBranches={userOrganizationsData}
