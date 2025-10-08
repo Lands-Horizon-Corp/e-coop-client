@@ -1,5 +1,6 @@
 import { ReactNode, useMemo } from 'react'
 
+import { useQueryClient } from '@tanstack/react-query'
 import { toast } from 'sonner'
 
 import { cn } from '@/helpers'
@@ -150,8 +151,18 @@ export function JournalVoucherTagsManager({
         options: { initialData: defaultTags, retry: 0 },
     })
 
+    const invalidateQueries = useQueryClient()
     const createTagMutation = useCreateJournalVoucherTag({
-        options: { onSuccess: onSuccess ?? (() => refetch()) },
+        options: {
+            onSuccess:
+                onSuccess ??
+                (() => {
+                    refetch()
+                    invalidateQueries.invalidateQueries({
+                        queryKey: ['journal-voucher'],
+                    })
+                }),
+        },
     })
 
     return (

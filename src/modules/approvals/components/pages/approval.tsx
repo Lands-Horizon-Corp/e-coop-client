@@ -25,7 +25,7 @@ const ApprovalPage = () => {
                 </ResizablePanel>
                 <ResizableHandle withHandle />
                 <ResizablePanel
-                    className=" h-fit flex p-5 space-x-5 !overflow-auto "
+                    className="!h-fit flex p-5 space-x-5 !overflow-auto "
                     defaultSize={33}
                 >
                     {['draft', 'printed', 'approved', 'released'].map(
@@ -36,6 +36,13 @@ const ApprovalPage = () => {
                             />
                         )
                     )}
+                </ResizablePanel>
+                <ResizableHandle withHandle />
+                <ResizablePanel
+                    className="!overflow-auto h-fit flex items-center justify-center italic text-muted-foreground"
+                    defaultSize={34}
+                >
+                    Cash check voucher kanban will be added here soon
                 </ResizablePanel>
             </ResizablePanelGroup>
         </PageContainer>

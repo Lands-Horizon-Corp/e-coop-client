@@ -1,4 +1,3 @@
-import CashCheckVoucherStatusIndicator from '@/modules/cash-check-voucher/components/cash-check-status-indicator'
 import { IJournalVoucher } from '@/modules/journal-voucher'
 import { ColumnDef, Row } from '@tanstack/react-table'
 
@@ -8,6 +7,8 @@ import { IGlobalSearchTargets } from '@/components/data-table/data-table-filters
 import HeaderToggleSelect from '@/components/data-table/data-table-row-actions/header-toggle-select'
 import { PushPinIcon } from '@/components/icons'
 import { Checkbox } from '@/components/ui/checkbox'
+
+import JournalVoucherStatusIndicator from '../journal-voucher-status-indicator'
 
 export const journalVoucherGlobalSearchTargets: IGlobalSearchTargets<IJournalVoucher>[] =
     [
@@ -155,9 +156,8 @@ const JournalVoucherTableColumns = (
             const isApproved = !!journalVoucher.approved_date
             const isReleased = !!journalVoucher.released_date
             return (
-                <CashCheckVoucherStatusIndicator
+                <JournalVoucherStatusIndicator
                     className="max-w-max"
-                    title="Journal Voucher Status"
                     voucherDates={{
                         printed_date: isPrinted
                             ? journalVoucher.printed_date

@@ -4,7 +4,7 @@ import { dateAgo, toReadableDateTime } from '@/helpers/date-utils'
 import {
     BadgeCheckFillIcon,
     PencilFillIcon,
-    TextFileFillIcon,
+    PrinterIcon,
 } from '@/components/icons'
 import { CheckIcon } from '@/components/icons'
 import {
@@ -31,101 +31,119 @@ import JournalVoucherStatusBadge, {
 } from './journal-voucher-status-badge'
 
 export interface ICJournalVoucherStatusDates {
-    posted_date?: string | null
-    cancelled_date?: string | null
+    printed_date?: string | null
+    approved_date?: string | null
+    released_date?: string | null
 }
 
 export const resolveJVStatusDatesToStatus = (
     dates: ICJournalVoucherStatusDates
 ): TJournalVoucherStatusType => {
-    if (dates.cancelled_date) {
-        return 'cancelled'
+    if (dates.released_date) {
+        return 'released'
     }
-    if (dates.posted_date) {
-        return 'posted'
+    if (dates.approved_date) {
+        return 'approved'
+    }
+    if (dates.printed_date) {
+        return 'printed'
     }
     return 'draft'
 }
 
 export const JournalVoucherStatusIndicatorDetails = ({
-    posted_date,
-    cancelled_date,
+    printed_date,
+    approved_date,
+    released_date,
 }: ICJournalVoucherStatusDates) => {
     const currentStatus = resolveJVStatusDatesToStatus({
-        posted_date,
-        cancelled_date,
+        printed_date,
+        approved_date,
+        released_date,
     })
 
     const steps = [
         {
             key: 1,
             label: 'Draft',
+            date: null,
             icon: <PencilFillIcon className="inline text-muted-foreground" />,
             description: 'The Journal Voucher is in draft mode.',
+            dateProp: null,
         },
         {
             key: 2,
-            label: 'Posted',
-            date: posted_date,
-            icon: <BadgeCheckFillIcon className="inline text-primary" />,
-            description: 'The Journal Voucher has been posted to the ledger.',
+            label: 'Printed',
+            dateProp: printed_date,
+            icon: <PrinterIcon className="inline text-blue-500" />,
+            description: 'The Journal Voucher has been printed.',
         },
         {
             key: 3,
-            label: 'Cancelled',
-            date: cancelled_date,
-            icon: <TextFileFillIcon className="inline text-destructive" />,
-            description: 'The Journal Voucher has been cancelled/voided.',
+            label: 'Approved',
+            dateProp: approved_date,
+            icon: (
+                <BadgeCheckFillIcon className="inline text-success-foreground" />
+            ),
+            description: 'The Journal Voucher has been approved.',
+        },
+        {
+            key: 4,
+            label: 'Released',
+            dateProp: released_date,
+            icon: <BadgeCheckFillIcon className="inline text-primary" />,
+            description: 'The Journal Voucher has been released.',
         },
     ]
 
-    const lastCompleted =
-        currentStatus === 'cancelled' ? 3 : currentStatus === 'posted' ? 2 : 1
+    const statusToStepMap: Record<TJournalVoucherStatusType, number> = {
+        draft: 1,
+        printed: 2,
+        approved: 3,
+        released: 4,
+    }
+
+    const lastCompleted = statusToStepMap[currentStatus]
 
     return (
         <Timeline className="p-4 gap-y-3" value={lastCompleted}>
-            {steps.map((step) => {
-                let dateDisplay = null
-                if (step.date) {
-                    dateDisplay = `${toReadableDateTime(step.date)} - ${dateAgo(
-                        step.date
-                    )}`
-                }
+            {steps
+                .filter((step) => step.key <= lastCompleted) // Only render steps that are completed or the current step
+                .map((step) => {
+                    const dateString = step.dateProp
+                    const dateDisplay = dateString
+                        ? `${toReadableDateTime(dateString)} - ${dateAgo(dateString)}`
+                        : 'Pending'
 
-                const shouldRender =
-                    step.key === 1 || step.key === lastCompleted
-
-                if (!shouldRender) return null
-
-                return (
-                    <TimelineItem
-                        className="group-data-[orientation=vertical]/timeline:ms-10 group-data-[orientation=vertical]/timeline:not-last:pb-5"
-                        key={step.key}
-                        step={step.key}
-                    >
-                        <TimelineHeader>
-                            <TimelineSeparator className="group-data-[orientation=vertical]/timeline:-left-7 group-data-[orientation=vertical]/timeline:top-2 group-data-[orientation=vertical]/timeline:h-[calc(100%-1.5rem)] group-data-[orientation=vertical]/timeline:translate-y-6.5" />
-                            <TimelineTitle className="mt-0.5 flex items-center gap-1">
-                                {step.icon}
-                                {step.label}
-                            </TimelineTitle>
-                            <TimelineIndicator className="group-data-completed/timeline-item:bg-primary/75 p-3.5 group-data-completed/timeline-item:text-primary-foreground flex size-6 items-center justify-center group-data-completed/timeline-item:border-none group-data-[orientation=vertical]/timeline:-left-7">
-                                <span className="text-primary-foreground group-not-data-completed/timeline-item:hidden">
-                                    <CheckIcon />
+                    return (
+                        <TimelineItem
+                            className="group-data-[orientation=vertical]/timeline:ms-10 group-data-[orientation=vertical]/timeline:not-last:pb-5"
+                            key={step.key}
+                            step={step.key}
+                        >
+                            <TimelineHeader>
+                                <TimelineSeparator className="group-data-[orientation=vertical]/timeline:-left-7 group-data-[orientation=vertical]/timeline:top-2 group-data-[orientation=vertical]/timeline:h-[calc(100%-1.5rem)] group-data-[orientation=vertical]/timeline:translate-y-6.5" />
+                                <TimelineIndicator className="group-data-completed/timeline-item:bg-primary/75 p-3.5 group-data-completed/timeline-item:text-primary-foreground flex size-6 items-center justify-center group-data-completed/timeline-item:border-none group-data-[orientation=vertical]/timeline:-left-7">
+                                    <span className="text-primary-foreground group-not-data-completed/timeline-item:hidden">
+                                        <CheckIcon />
+                                    </span>
+                                </TimelineIndicator>
+                                <TimelineTitle className="mt-0.5 flex items-center gap-1">
+                                    {step.icon}
+                                    {step.label}
+                                </TimelineTitle>
+                            </TimelineHeader>
+                            <TimelineContent>
+                                <span className="text-muted-foreground text-sm">
+                                    {step.description}
                                 </span>
-                            </TimelineIndicator>
-                        </TimelineHeader>
-                        <TimelineContent>
-                            <span className="text-muted-foreground text-sm">
-                                {step.description}
-                            </span>
-                            <TimelineDate className="mt-2 mb-0">
-                                {dateDisplay}
-                            </TimelineDate>
-                        </TimelineContent>
-                    </TimelineItem>
-                )
-            })}
+                                <TimelineDate className="mt-2 mb-0">
+                                    {dateDisplay}
+                                </TimelineDate>
+                            </TimelineContent>
+                        </TimelineItem>
+                    )
+                })}
         </Timeline>
     )
 }
@@ -136,7 +154,6 @@ interface Props extends IClassProps {
 
 const JournalVoucherStatusIndicator = ({ className, voucherDates }: Props) => {
     const resolvedStatus = resolveJVStatusDatesToStatus(voucherDates)
-
     return (
         <Popover>
             <PopoverTrigger asChild>

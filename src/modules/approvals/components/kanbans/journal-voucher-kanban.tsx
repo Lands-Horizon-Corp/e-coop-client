@@ -5,7 +5,6 @@ import { cn } from '@/helpers/tw-utils'
 import KanbanContainer from '@/modules/approvals/components/kanban/kanban-container'
 import KanbanItemsContainer from '@/modules/approvals/components/kanban/kanban-items-container'
 import KanbanTitle from '@/modules/approvals/components/kanban/kanban-title'
-import CashCheckVoucherStatusIndicator from '@/modules/cash-check-voucher/components/cash-check-status-indicator'
 import {
     IJournalVoucher,
     TJournalActionMode,
@@ -15,8 +14,12 @@ import {
     useGetAllJournalVoucher,
     useJournalVoucherActions,
 } from '@/modules/journal-voucher'
-import { JournalVoucherTagsManagerPopover } from '@/modules/journal-voucher-tag/components/journal-voucher-tag-management'
+import {
+    JournalVoucherTagChip,
+    JournalVoucherTagsManagerPopover,
+} from '@/modules/journal-voucher-tag/components/journal-voucher-tag-management'
 import JournalVoucherCreateUpdateFormModal from '@/modules/journal-voucher/components/forms/journal-voucher-create-update-modal'
+import JournalVoucherStatusIndicator from '@/modules/journal-voucher/components/journal-voucher-status-indicator'
 import {
     CheckCircle2Icon,
     PrinterIcon,
@@ -25,7 +28,12 @@ import {
     XCircleIcon,
 } from 'lucide-react'
 
-import { DraftIcon, EyeIcon, PencilFillIcon } from '@/components/icons'
+import {
+    BadgeCheckFillIcon,
+    DraftIcon,
+    EyeIcon,
+    PencilFillIcon,
+} from '@/components/icons'
 import ImageDisplay from '@/components/image-display'
 import InfoTooltip from '@/components/tooltips/info-tooltip'
 import { Button } from '@/components/ui/button'
@@ -244,7 +252,7 @@ const JournalVoucherCardActions = ({
                     journalVoucherId={journalVoucher.id}
                     size="sm"
                 />
-                <CashCheckVoucherStatusIndicator
+                <JournalVoucherStatusIndicator
                     className="flex-shrink-0"
                     voucherDates={jvDates}
                 />
@@ -275,20 +283,24 @@ const JournalVoucherCardCreatorInfo = ({
     return (
         <div className="flex items-center justify-evenly gap-x-2">
             <div className="flex space-x-2">
-                <Button
-                    className="min-w-16 font-semibold"
-                    size="sm"
-                    variant="secondary"
-                >
-                    DR: {journalVoucher.total_debit || 0}
-                </Button>
-                <Button
-                    className="min-w-16 font-semibold"
-                    size="sm"
-                    variant="secondary"
-                >
-                    CR: {journalVoucher.total_credit || 0}
-                </Button>
+                <InfoTooltip content="Total Debit">
+                    <Button
+                        className="min-w-16 font-semibold"
+                        size="sm"
+                        variant="secondary"
+                    >
+                        {journalVoucher.total_debit || 0}
+                    </Button>
+                </InfoTooltip>
+                <InfoTooltip content="Total Credit">
+                    <Button
+                        className="min-w-16 font-semibold"
+                        size="sm"
+                        variant="secondary"
+                    >
+                        {journalVoucher.total_credit || 0}
+                    </Button>
+                </InfoTooltip>
             </div>
             <InfoTooltip
                 content={`created by ${journalVoucher.created_by?.full_name}`}
@@ -297,9 +309,8 @@ const JournalVoucherCardCreatorInfo = ({
                     <p className="truncate font-medium text-sm text-foreground/90">
                         {journalVoucher.created_by?.full_name}
                     </p>
-                    <p className="text-xs text-muted-foreground/70 truncate">
+                    <p className="text-xs text-start text-muted-foreground/70 truncate">
                         @{journalVoucher.created_by?.user_name ?? '-'}{' '}
-                        {dateAgo(journalVoucher.date)}
                     </p>
                 </div>
             </InfoTooltip>
@@ -324,30 +335,10 @@ export const JournalVoucherCard = ({
         released_date: journalVoucher.released_date,
     }
 
-    // Logic for rendering tags
-    const TagsComponent = journalVoucher.journal_voucher_tags &&
-        journalVoucher.journal_voucher_tags.length > 0 && (
-            <div className="flex flex-wrap gap-1 pt-2 border-t border-border/70">
-                {journalVoucher.journal_voucher_tags.slice(0, 3).map((tag) => (
-                    <span
-                        className="text-xs px-2 py-0.5 rounded-full bg-accent/50 text-accent-foreground"
-                        key={tag.id}
-                    >
-                        {tag.name}
-                    </span>
-                ))}
-                {journalVoucher.journal_voucher_tags.length > 3 && (
-                    <span className="text-xs text-muted-foreground px-2 py-0.5">
-                        +{journalVoucher.journal_voucher_tags.length - 3} more
-                    </span>
-                )}
-            </div>
-        )
-
     return (
         <div
             className={cn(
-                'group space-y-3 rounded-xl border border-border bg-card p-4 transition-shadow hover:shadow-lg hover:shadow-accent/10',
+                'group space-y-3 relative rounded-xl border border-border bg-card p-4 transition-shadow hover:shadow-lg hover:shadow-accent/10',
                 className
             )}
         >
@@ -370,8 +361,21 @@ export const JournalVoucherCard = ({
             )}
 
             <JournalVoucherCardCreatorInfo journalVoucher={journalVoucher} />
+            <div className="w-full flex flex-wrap gap-1 max-h-16 overflow-x-auto ">
+                {journalVoucher?.journal_voucher_tags?.map((tag) => (
+                    <JournalVoucherTagChip
+                        key={tag.id}
+                        onRemove={() => {
+                            refetch()
+                        }}
+                        tag={tag}
+                    />
+                ))}
+            </div>
 
-            {TagsComponent}
+            <p className="text-xs text-end text-muted-foreground/70 truncate">
+                {dateAgo(journalVoucher.date)}
+            </p>
         </div>
     )
 }
@@ -404,6 +408,15 @@ const JournalVoucherKanban = ({ mode }: JournalVoucherKanbanProps) => {
                 <div className="flex items-center">
                     {mode === 'draft' && (
                         <DraftIcon className="mr-2 size-4 text-primary" />
+                    )}
+                    {mode === 'printed' && (
+                        <PrinterIcon className="mr-2 size-4 text-blue-500" />
+                    )}
+                    {mode === 'approved' && (
+                        <CheckCircle2Icon className="mr-2 size-4 text-success-foreground" />
+                    )}
+                    {mode === 'released' && (
+                        <BadgeCheckFillIcon className="mr-2 size-4 text-purple-500" />
                     )}
                     <KanbanTitle
                         isLoading={isRefetching}

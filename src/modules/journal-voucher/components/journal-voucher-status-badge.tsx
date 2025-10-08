@@ -4,24 +4,32 @@ import { VariantProps, cva } from 'class-variance-authority'
 import {
     BadgeCheckFillIcon,
     ClockIcon,
+    PrinterIcon,
     TextFileFillIcon,
 } from '@/components/icons'
 
-export type TJournalVoucherStatusType = 'draft' | 'posted' | 'cancelled'
+export type TJournalVoucherStatusType =
+    | 'draft'
+    | 'printed'
+    | 'approved'
+    | 'released'
 
 const journalVoucherStatusVariants = cva(
-    'font-medium transition-colors duration-200 inline-flex items-center border',
+    'font-medium transition-colors duration-200 inline-flex items-center border rounded-full max-w-full min-w-0',
     {
         variants: {
             status: {
                 draft: cn(
-                    'bg-warning dark:bg-warning/10 text-warning-foreground border-warning-foreground/20 hover:bg-warning/20'
+                    'bg-gray-200 text-gray-700 border-gray-300 hover:bg-gray-300/80'
                 ),
-                posted: cn(
+                printed: cn(
+                    'bg-blue-100 text-blue-700 border-blue-300 hover:bg-blue-200'
+                ),
+                approved: cn(
+                    'bg-success/20 text-success-foreground border-success/40 hover:bg-success/30'
+                ),
+                released: cn(
                     'bg-primary text-primary-foreground border-primary hover:bg-primary/90'
-                ),
-                cancelled: cn(
-                    'bg-destructive/10 text-destructive border-destructive/20 hover:bg-destructive/20'
                 ),
             },
             size: {
@@ -39,14 +47,16 @@ const journalVoucherStatusVariants = cva(
 
 const journalVoucherStatusIcons = {
     draft: ClockIcon,
-    posted: BadgeCheckFillIcon,
-    cancelled: TextFileFillIcon,
+    printed: PrinterIcon,
+    approved: TextFileFillIcon,
+    released: BadgeCheckFillIcon,
 } as const
 
 const journalVoucherStatusLabels = {
     draft: 'Draft',
-    posted: 'Posted',
-    cancelled: 'Cancelled',
+    printed: 'Printed',
+    approved: 'Approved',
+    released: 'Released',
 } as const
 
 export interface JournalVoucherStatusBadgeProps
@@ -69,9 +79,7 @@ const JournalVoucherStatusBadge = ({
     return (
         <div
             className={cn(
-                journalVoucherStatusVariants({ status, size }),
-                'rounded-full max-w-full min-w-0',
-                className
+                journalVoucherStatusVariants({ status, size, className })
             )}
             {...props}
         >
