@@ -18,15 +18,15 @@ const ApprovalPage = () => {
                 direction="vertical"
             >
                 <ResizablePanel
-                    defaultSize={33}
                     className="!overflow-auto h-fit"
+                    defaultSize={33}
                 >
                     <Approval className="min-h-[91dvh] " />
                 </ResizablePanel>
                 <ResizableHandle withHandle />
                 <ResizablePanel
-                    defaultSize={33}
                     className=" h-fit flex p-5 space-x-5 !overflow-auto "
+                    defaultSize={33}
                 >
                     {['draft', 'printed', 'approved', 'released'].map(
                         (status) => (

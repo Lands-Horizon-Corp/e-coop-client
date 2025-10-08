@@ -193,7 +193,7 @@ const JournalVoucherOtherAction = ({
     return (
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size={'icon'} aria-label="More Actions">
+                <Button size={'icon'} variant="ghost">
                     {<PencilFillIcon className="size-4" />}
                 </Button>
             </DropdownMenuTrigger>
@@ -202,10 +202,10 @@ const JournalVoucherOtherAction = ({
                     .filter((action) => action.isVisible)
                     .map((action) => (
                         <DropdownMenuItem
-                            key={action.label}
-                            disabled={isProcessing}
-                            onClick={action.onSelect}
                             className="flex items-center"
+                            disabled={isProcessing}
+                            key={action.label}
+                            onClick={action.onSelect}
                         >
                             {action.icon}
                             <span>{action.label}</span>
@@ -241,25 +241,25 @@ const JournalVoucherCardActions = ({
             />
             <div className="w-full flex items-center space-x-1 justify-end flex-shrink-0">
                 <JournalVoucherTagsManagerPopover
-                    size="sm"
                     journalVoucherId={journalVoucher.id}
+                    size="sm"
                 />
                 <CashCheckVoucherStatusIndicator
                     className="flex-shrink-0"
                     voucherDates={jvDates}
                 />
                 <Button
-                    size={'icon'}
-                    onClick={handleOpenViewModal}
-                    variant="ghost"
                     aria-label="View Journal Voucher"
+                    onClick={handleOpenViewModal}
+                    size={'icon'}
+                    variant="ghost"
                 >
                     <EyeIcon />
                 </Button>
                 {!isReleased && (
                     <JournalVoucherOtherAction
-                        refetch={refetch}
                         journalVoucher={journalVoucher}
+                        refetch={refetch}
                     />
                 )}
             </div>
@@ -276,16 +276,16 @@ const JournalVoucherCardCreatorInfo = ({
         <div className="flex items-center justify-evenly gap-x-2">
             <div className="flex space-x-2">
                 <Button
-                    variant="secondary"
-                    size="sm"
                     className="min-w-16 font-semibold"
+                    size="sm"
+                    variant="secondary"
                 >
                     DR: {journalVoucher.total_debit || 0}
                 </Button>
                 <Button
-                    variant="secondary"
-                    size="sm"
                     className="min-w-16 font-semibold"
+                    size="sm"
+                    variant="secondary"
                 >
                     CR: {journalVoucher.total_credit || 0}
                 </Button>
@@ -330,8 +330,8 @@ export const JournalVoucherCard = ({
             <div className="flex flex-wrap gap-1 pt-2 border-t border-border/70">
                 {journalVoucher.journal_voucher_tags.slice(0, 3).map((tag) => (
                     <span
-                        key={tag.id}
                         className="text-xs px-2 py-0.5 rounded-full bg-accent/50 text-accent-foreground"
+                        key={tag.id}
                     >
                         {tag.name}
                     </span>
@@ -406,10 +406,10 @@ const JournalVoucherKanban = ({ mode }: JournalVoucherKanbanProps) => {
                         <DraftIcon className="mr-2 size-4 text-primary" />
                     )}
                     <KanbanTitle
-                        title={`Journal Vouchers - ${mode}`}
-                        totalItems={dataFiltered?.length}
                         isLoading={isRefetching}
                         onRefresh={() => refetch()}
+                        title={`Journal Vouchers - ${mode}`}
+                        totalItems={dataFiltered?.length}
                     />
                 </div>
                 <Separator />
@@ -417,9 +417,9 @@ const JournalVoucherKanban = ({ mode }: JournalVoucherKanbanProps) => {
                     {dataFiltered?.map((jv) => (
                         <div key={jv.id}>
                             <JournalVoucherCard
-                                refetch={refetch}
-                                journalVoucher={jv}
                                 className="mb-2"
+                                journalVoucher={jv}
+                                refetch={refetch}
                             />
                         </div>
                     ))}
