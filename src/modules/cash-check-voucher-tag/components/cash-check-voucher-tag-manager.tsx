@@ -1,5 +1,6 @@
 import { ReactNode, useMemo } from 'react'
 
+import { useQueryClient } from '@tanstack/react-query'
 import { toast } from 'sonner'
 
 import { cn } from '@/helpers'
@@ -141,7 +142,7 @@ export function CashCheckVoucherTagsManager({
     size?: CashCheckVoucherTagManagerSize
 } & IClassProps) {
     const tagPickerModal = useModalState()
-
+    const invalidateQueries = useQueryClient()
     const {
         data: voucherTags = [],
         isPending,
@@ -153,7 +154,16 @@ export function CashCheckVoucherTagsManager({
     })
 
     const createTagMutation = useCreateCashCheckVoucherTag({
-        options: { onSuccess: onSuccess ?? (() => refetch()) },
+        options: {
+            onSuccess:
+                onSuccess ??
+                (() => {
+                    invalidateQueries.invalidateQueries({
+                        queryKey: ['cash-check-voucher'],
+                    })
+                    refetch()
+                }),
+        },
     })
 
     return (

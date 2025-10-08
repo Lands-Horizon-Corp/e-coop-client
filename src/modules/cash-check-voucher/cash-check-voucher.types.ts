@@ -184,7 +184,11 @@ export interface ICashCheckVoucherRequest {
     cash_check_voucher_entries?: ICashCheckVoucherEntryRequest[]
     cash_check_voucher_entries_deleted?: TEntityId[]
 }
-export type TCashCheckVoucherStatus = 'draft' | 'posted' | 'cancelled'
+export type TCashCheckVoucherStatus =
+    | 'draft'
+    | 'printed'
+    | 'approved'
+    | 'released'
 export enum ECashCheckVoucherStatus {
     Draft = 'draft',
     Posted = 'posted',

@@ -29,6 +29,8 @@ import {
 
 import { TEntityId } from '@/types'
 
+import { TCashCheckVoucherModalMode } from './cash-check-voucher-create-udate-form-modal'
+
 const columns: ColumnDef<ICashCheckVoucherEntryRequest>[] = [
     {
         accessorKey: 'account',
@@ -134,23 +136,25 @@ const columns: ColumnDef<ICashCheckVoucherEntryRequest>[] = [
 type CashCheckJournalEntryTableProps = {
     defaultMemberProfile?: IMemberProfile
     cashCheckVoucherId: TEntityId
-    isUpdateMode?: boolean
     rowData?: ICashCheckVoucherEntryRequest[]
     className?: string
     TableClassName?: string
+    mode: TCashCheckVoucherModalMode
 }
 
 export const CashCheckJournalEntryTable = ({
     defaultMemberProfile,
-    isUpdateMode = false,
+    mode = 'create',
     rowData,
     className,
     TableClassName,
 }: CashCheckJournalEntryTableProps) => {
+    const isUpdateMode = mode === 'update'
+    const isReadOnlyMode = mode === 'readOnly'
     const [cashCheckVoucherEntry, setCashCheckVoucherEntry] = useState<
         ICashCheckVoucherEntryRequest[]
     >(() => {
-        if (rowData && rowData.length > 0 && isUpdateMode) {
+        if (rowData && rowData.length > 0 && (isUpdateMode || isReadOnlyMode)) {
             return rowData
         }
         return []
@@ -161,10 +165,15 @@ export const CashCheckJournalEntryTable = ({
     } = useCashCheckVoucherStore()
 
     useEffect(() => {
-        if (isUpdateMode) {
+        if (isUpdateMode || isReadOnlyMode) {
             setSelectedCashCheckVoucherEntry(cashCheckVoucherEntry)
         }
-    }, [isUpdateMode, cashCheckVoucherEntry, setSelectedCashCheckVoucherEntry])
+    }, [
+        isUpdateMode,
+        isReadOnlyMode,
+        cashCheckVoucherEntry,
+        setSelectedCashCheckVoucherEntry,
+    ])
 
     const handleDeleteRow = (row: Row<ICashCheckVoucherEntryRequest>) => {
         const id = row.original.id

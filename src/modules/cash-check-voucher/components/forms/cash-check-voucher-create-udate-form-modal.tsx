@@ -57,6 +57,8 @@ import { CashCheckJournalEntryTable } from './cash-check-voucher-entry-table'
 
 type TCashCheckVoucherFormValues = z.infer<typeof CashCheckVoucherSchema>
 
+export type TCashCheckVoucherModalMode = 'create' | 'update' | 'readOnly'
+
 export interface ICashCheckVoucherCreateUpdateFormProps
     extends IClassProps,
         IForm<
@@ -66,6 +68,7 @@ export interface ICashCheckVoucherCreateUpdateFormProps
             TCashCheckVoucherFormValues
         > {
     cashCheckVoucherId?: TEntityId
+    mode?: TCashCheckVoucherModalMode
 }
 
 export type TValidateResultCashCheckVoucher = {
@@ -136,11 +139,16 @@ const CashCheckVoucherCreateUpdateForm = ({
     className,
     cashCheckVoucherId,
     defaultValues,
+    mode = 'create',
     ...formProps
 }: ICashCheckVoucherCreateUpdateFormProps) => {
     const queryClient = useQueryClient()
     const modalState = useModalState()
     const { data } = useTransactionBatchStore()
+
+    const [defaultMode, setDefaultMode] = useState<TCashCheckVoucherModalMode>(
+        formProps.readOnly ? 'readOnly' : mode
+    )
 
     const [defaultMember, setDefaultMember] = useState<
         IMemberProfile | undefined
@@ -181,6 +189,7 @@ const CashCheckVoucherCreateUpdateForm = ({
                     formProps.onSuccess?.(data)
                     setEditCashCheckVoucherId(data.id)
                     setSelectedCashCheckVoucherEntry([])
+                    setDefaultMode('update')
                 },
                 onError: formProps.onError,
             }),
@@ -490,12 +499,12 @@ const CashCheckVoucherCreateUpdateForm = ({
                             />
                         )}
                     />
-                    {isUpdate && (
+                    {defaultMode !== 'create' && (
                         <CashCheckJournalEntryTable
                             cashCheckVoucherId={cashCheckVoucherId ?? ''}
                             className="col-span-1 md:col-span-3"
                             defaultMemberProfile={defaultMember}
-                            isUpdateMode={isUpdate}
+                            mode={defaultMode}
                             rowData={CashCheckEntries}
                         />
                     )}

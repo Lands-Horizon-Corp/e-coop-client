@@ -108,6 +108,7 @@ export const CashCheckJournalVoucherAction = ({
                     formProps={{
                         cashCheckVoucherId: cashCheckVoucher.id,
                         defaultValues: { ...cashCheckVoucher },
+                        mode: 'update',
                         readOnly: isReleased,
                     }}
                 />
@@ -183,6 +184,8 @@ export const CashCheckVoucherRowContext = ({
                 formProps={{
                     cashCheckVoucherId: cashCheckVoucher.id,
                     defaultValues: { ...cashCheckVoucher },
+                    readOnly: true,
+                    mode: 'update',
                 }}
             />
             <DataTableRowContext

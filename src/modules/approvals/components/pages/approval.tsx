@@ -1,5 +1,3 @@
-import { TJournalVoucherMode } from '@/modules/journal-voucher'
-
 import PageContainer from '@/components/containers/page-container'
 import {
     ResizableHandle,
@@ -8,6 +6,7 @@ import {
 } from '@/components/ui/resizable'
 
 import Approval from '../approval'
+import CashCheckVoucherKanban from '../kanbans/cash-check-voucher-kanban'
 import JournalVoucherKanban from '../kanbans/journal-voucher-kanban'
 
 const ApprovalPage = () => {
@@ -28,21 +27,14 @@ const ApprovalPage = () => {
                     className="!h-fit flex p-5 space-x-5 !overflow-auto "
                     defaultSize={33}
                 >
-                    {['draft', 'printed', 'approved', 'released'].map(
-                        (status) => (
-                            <JournalVoucherKanban
-                                key={status}
-                                mode={status as TJournalVoucherMode}
-                            />
-                        )
-                    )}
+                    <JournalVoucherKanban />
                 </ResizablePanel>
                 <ResizableHandle withHandle />
                 <ResizablePanel
-                    className="!overflow-auto h-fit flex items-center justify-center italic text-muted-foreground"
-                    defaultSize={34}
+                    className="!h-fit flex p-5 space-x-5 !overflow-auto  "
+                    defaultSize={33}
                 >
-                    Cash check voucher kanban will be added here soon
+                    <CashCheckVoucherKanban />
                 </ResizablePanel>
             </ResizablePanelGroup>
         </PageContainer>
