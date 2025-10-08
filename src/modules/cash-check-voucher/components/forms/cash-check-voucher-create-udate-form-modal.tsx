@@ -283,44 +283,18 @@ const CashCheckVoucherCreateUpdateForm = ({
                 className={cn('!w-full flex flex-col gap-y-4', className)}
             >
                 <div className="absolute top-4 right-10 z-10 flex gap-2">
-<<<<<<< Updated upstream
                     {CashCheckVoucherTransactionId && (
                         <CashCheckVoucherTagsManagerPopover
                             size="sm"
                             cashCheckVoucherId={CashCheckVoucherTransactionId}
                         />
                     )}
-                    <CashCheckVoucherStatusIndicator
-                        voucherDates={{
-                            printed_date: isPrinted
-                                ? defaultValues?.printed_date
-                                : null,
-                            approved_date: isApproved
-                                ? defaultValues?.approved_date
-                                : null,
-                            released_date: isReleased
-                                ? defaultValues?.released_date
-                                : null,
-                        }}
-                        className="max-w-max"
-                    />
-=======
->>>>>>> Stashed changes
-                    {CashCheckVoucherTransactionId && (
-                        <CashCheckVoucherTagsManagerPopover
-                            size="sm"
-                            cashCheckVoucherId={CashCheckVoucherTransactionId}
-                        />
-                    )}
-<<<<<<< Updated upstream
-=======
                     {defaultValues && (
                         <CashCheckVoucherStatusIndicator
                             cashCheckVoucher={defaultValues}
                             className="max-w-max"
                         />
                     )}
->>>>>>> Stashed changes
                 </div>
                 <fieldset
                     disabled={isPending || formProps.readOnly}

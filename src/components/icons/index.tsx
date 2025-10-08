@@ -102,10 +102,7 @@ import {
     FaArrowUpLong as ArrowUpLong,
     FaBoxesStacked as BoxesStackedIcon,
     FaBusinessTime as BriefCaseClockIcon,
-<<<<<<< Updated upstream
-=======
     FaFirstdraft as DraftIcon,
->>>>>>> Stashed changes
     FaCircleCheck as FaCheckIcon,
     FaVenusMars as GendersIcon,
     FaHeadset as HeadsetIcon,
@@ -1111,11 +1108,8 @@ export const IconMap: Record<TIcon, IconType> = {
     'Command Icon': CommandIcon,
     'Code Icon': CodeIcon,
     'Clock Cancel': ClockCancelIcon,
-<<<<<<< Updated upstream
-=======
     'Wrench Icon': WrenchIcon,
     'Draft Icon': DraftIcon,
->>>>>>> Stashed changes
 }
 
 export type TIcon = (typeof ICONS)[number]
