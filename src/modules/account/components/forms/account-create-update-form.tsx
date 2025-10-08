@@ -32,6 +32,7 @@ import {
 import { AccountCategoryComboBox } from '@/modules/account-category'
 import { AccountClassificationComboBox } from '@/modules/account-classification'
 import { useAuthUserWithOrgBranch } from '@/modules/authentication/authgentication.store'
+import ComputationSheetCombobox from '@/modules/computation-sheet/components/computation-sheet-combobox'
 import MemberTypeCombobox from '@/modules/member-type/components/member-type-combobox'
 
 import IconCombobox from '@/components/comboboxes/icon-combobox'
@@ -753,6 +754,27 @@ const AccountCreateUpdateForm = ({
                                                 </SelectContent>
                                             </Select>
                                         </FormControl>
+                                    )}
+                                />
+                                <FormFieldWrapper
+                                    control={form.control}
+                                    label="Computation Sheet/Scheme"
+                                    name="computation_sheet_id"
+                                    className="col-span-4"
+                                    disabled={isLoading}
+                                    render={({ field }) => (
+                                        <ComputationSheetCombobox
+                                            value={
+                                                field.value
+                                                    ? String(field.value)
+                                                    : undefined
+                                            }
+                                            onChange={(computationSheet) =>
+                                                field.onChange(
+                                                    computationSheet.id
+                                                )
+                                            }
+                                        />
                                     )}
                                 />
                                 <div className="grid grid-cols-4 gap-2">

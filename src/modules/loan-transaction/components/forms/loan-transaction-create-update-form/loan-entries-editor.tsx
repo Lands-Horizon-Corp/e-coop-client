@@ -3,13 +3,14 @@ import { KeyboardEvent, forwardRef, memo, useRef, useState } from 'react'
 import { UseFormReturn } from 'react-hook-form'
 import { toast } from 'sonner'
 
-import { formatNumber } from '@/helpers'
+import { cn, formatNumber } from '@/helpers'
 import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
 import { AccountPicker, IAccount } from '@/modules/account'
 import AccountMiniCard from '@/modules/account/components/account-mini-card'
 import {
     ILoanTransactionEntry,
     useDeleteLoanTransactionEntryById,
+    useLoanTransactionEntryRestoreById,
 } from '@/modules/loan-transaction-entry'
 import { LoanTransactionEntryCreateUpdateModal } from '@/modules/loan-transaction-entry/components/forms/loan-transaction-entry-create-update-modal'
 import {
@@ -23,8 +24,11 @@ import { useHotkeys } from 'react-hotkeys-hook'
 import {
     ArrowDownIcon,
     CalendarNumberIcon,
+    EyeIcon,
+    EyeNoneIcon,
     PencilFillIcon,
     PlusIcon,
+    RefreshIcon,
     RenderIcon,
     ShapesIcon,
     SwapArrowIcon,
@@ -32,6 +36,8 @@ import {
     TrashIcon,
 } from '@/components/icons'
 import Modal from '@/components/modals/modal'
+import ActionTooltip from '@/components/tooltips/action-tooltip'
+import InfoTooltip from '@/components/tooltips/info-tooltip'
 import { Button } from '@/components/ui/button'
 import { CommandShortcut } from '@/components/ui/command'
 import FormFieldWrapper from '@/components/ui/form-field-wrapper'
@@ -46,6 +52,7 @@ import {
     TableHeader,
     TableRow,
 } from '@/components/ui/table'
+import { Toggle } from '@/components/ui/toggle'
 
 import { useModalState } from '@/hooks/use-modal-state'
 
@@ -77,6 +84,7 @@ const LoanEntriesEditor = forwardRef<
         },
         ref
     ) => {
+        const [showDeleted, setShowDeleted] = useState(false)
         const addChargeModalState = useModalState()
         const cashAccountPickerModal = useModalState()
         const { onOpen } = useConfirmModalStore()
@@ -91,6 +99,8 @@ const LoanEntriesEditor = forwardRef<
         const totalCredit = form.watch('total_credit') || 0
         const totalDebit = form.watch('total_debit') || 0
         const totalAddOns = form.watch('total_add_on') || 0
+
+        const interest = form.watch('interest') || 0
 
         const deductionsTotal = loanEntries.reduce(
             (sum, entry) =>
@@ -232,7 +242,7 @@ const LoanEntriesEditor = forwardRef<
                             <span
                                 className={`text-xs px-2 py-1 ml-2 rounded-sm ${
                                     isBalanced
-                                        ? 'bg-primary/20 dark:bg-primary/20'
+                                        ? 'bg-green-300 dark:bg-green-300/20 text-green-800 dark:text-green-400'
                                         : 'bg-destructive text-destructive-foreground'
                                 }`}
                             >
@@ -350,17 +360,27 @@ const LoanEntriesEditor = forwardRef<
                         </TableRow>
                     </TableHeader>
                     <TableBody>
-                        {loanEntries.map((loanEntry, index) => (
-                            <LoanEntryRow
-                                onDelete={() => handleGetLoanTransactionEntry()}
-                                entry={loanEntry}
-                                key={`${loanEntry.id}`}
-                                form={form}
-                                ref={(el) => {
-                                    rowRefs.current[index] = el
-                                }}
-                            />
-                        ))}
+                        {loanEntries
+                            .filter((entry) => {
+                                if (showDeleted) return true
+                                return !entry.is_automatic_loan_deduction_deleted
+                            })
+                            .map((loanEntry, index) => (
+                                <LoanEntryRow
+                                    onDelete={() =>
+                                        handleGetLoanTransactionEntry()
+                                    }
+                                    onRestore={(newLoanTransaction) =>
+                                        form.reset(newLoanTransaction)
+                                    }
+                                    entry={loanEntry}
+                                    key={`${loanEntry.id}`}
+                                    form={form}
+                                    ref={(el) => {
+                                        rowRefs.current[index] = el
+                                    }}
+                                />
+                            ))}
                         {loanEntries.length === 0 && (
                             <TableRow>
                                 <TableCell colSpan={4}>
@@ -373,10 +393,35 @@ const LoanEntriesEditor = forwardRef<
                     </TableBody>
                     <TableFooter>
                         <TableRow className="bg-muted/50 text-xl">
-                            <TableCell className="font-semibold">
+                            <TableCell className="font-semibold flex items-center gap-2">
+                                <ActionTooltip tooltipContent="Show/Hide deleted automatic deductions">
+                                    <Toggle
+                                        pressed={showDeleted}
+                                        className="!p-2 size-fit"
+                                        onPressedChange={(state) => {
+                                            toast.info(
+                                                state
+                                                    ? 'Deleted deductions showed'
+                                                    : 'Deleted deductions hidden'
+                                            )
+                                            setShowDeleted(state)
+                                        }}
+                                    >
+                                        {showDeleted ? (
+                                            <EyeIcon />
+                                        ) : (
+                                            <EyeNoneIcon />
+                                        )}
+                                    </Toggle>
+                                </ActionTooltip>
                                 <AmortizationView
                                     loanTransactionId={loanTransactionId}
                                 />
+                                <InfoTooltip content="Total interest to be paid for this loan.">
+                                    <span className="p-1 rounded-md bg-primary/50 font-mono terxt-primary-foreground">
+                                        {formatNumber(interest)}
+                                    </span>
+                                </InfoTooltip>
                             </TableCell>
                             <TableCell className="text-right font-semibold">
                                 {formatNumber(totalDebit)}
@@ -406,11 +451,12 @@ interface ILoanEntryRowProps {
     form: UseFormReturn<TLoanTransactionSchema>
     disabled?: boolean
     onDelete?: () => void
+    onRestore?: (newLoanTransaction: ILoanTransaction) => void
 }
 
 const LoanEntryRow = memo(
     forwardRef<HTMLTableRowElement, ILoanEntryRowProps>(
-        ({ entry, disabled, form, onDelete }, ref) => {
+        ({ entry, disabled, form, onDelete, onRestore }, ref) => {
             const rowRef = useRef<HTMLTableRowElement>(null)
             const { onOpen } = useConfirmModalStore()
 
@@ -467,6 +513,12 @@ const LoanEntryRow = memo(
                 }
             }
 
+            const restoreMutation = useLoanTransactionEntryRestoreById({
+                options: {
+                    onSuccess: onRestore,
+                },
+            })
+
             return (
                 <>
                     <TableRow
@@ -484,7 +536,11 @@ const LoanEntryRow = memo(
                         }}
                         onKeyDown={handleRowKeyDown}
                         tabIndex={0}
-                        className="focus:bg-background/20"
+                        className={cn(
+                            'focus:bg-background/20',
+                            entry.is_automatic_loan_deduction_deleted &&
+                                'opacity-50 italic'
+                        )}
                     >
                         <TableCell className="py-2 h-fit">
                             <div className="flex flex-col">
@@ -500,6 +556,11 @@ const LoanEntryRow = memo(
                                     {entry.description || '...'}
                                 </span>
                                 <div className="flex gap-2 mt-1">
+                                    {entry.is_automatic_loan_deduction_deleted && (
+                                        <span className="text-xs text-destructive-foreground bg-destructive p-1 rounded-md font-medium">
+                                            • Deleted
+                                        </span>
+                                    )}
                                     {entry.type === 'add-on' && (
                                         <span className="text-xs text-green-600 font-medium">
                                             • Add-on Interest
@@ -510,7 +571,12 @@ const LoanEntryRow = memo(
                                             • Deduction
                                         </span>
                                     )}
-                                    {entry.type === 'deduction' &&
+                                    {entry.type === 'automatic-deduction' && (
+                                        <span className="text-xs text-blue-600 font-medium">
+                                            • Automatic Deduction
+                                        </span>
+                                    )}
+                                    {entry.type.includes('deduction') &&
                                         entry.is_add_on && (
                                             <span className="text-xs text-green-600 font-medium">
                                                 • Add-On
@@ -529,36 +595,66 @@ const LoanEntryRow = memo(
                         </TableCell>
                         <TableCell className="text-right py-2 h-fit">
                             <div className="flex gap-1">
-                                {isEditable && (
+                                {isEditable &&
+                                    !entry.is_automatic_loan_deduction_deleted && (
+                                        <Button
+                                            type="button"
+                                            variant="ghost"
+                                            size="sm"
+                                            disabled={disabled}
+                                            onClick={() =>
+                                                editModalState.onOpenChange(
+                                                    true
+                                                )
+                                            }
+                                            className="size-8 p-0"
+                                        >
+                                            <PencilFillIcon className="size-4" />
+                                            <span className="sr-only">
+                                                Edit entry
+                                            </span>
+                                        </Button>
+                                    )}
+                                {isRemovable &&
+                                    !entry.is_automatic_loan_deduction_deleted && (
+                                        <Button
+                                            size="sm"
+                                            type="button"
+                                            variant="destructive"
+                                            disabled={disabled}
+                                            onClick={() => handleDelete()}
+                                            className="h-8 w-8 p-0"
+                                        >
+                                            <TrashIcon className="h-4 w-4" />
+                                            <span className="sr-only">
+                                                Remove entry
+                                            </span>
+                                        </Button>
+                                    )}
+                                {entry.is_automatic_loan_deduction_deleted && (
                                     <Button
                                         type="button"
                                         variant="ghost"
                                         size="sm"
                                         disabled={disabled}
                                         onClick={() =>
-                                            editModalState.onOpenChange(true)
+                                            toast.promise(
+                                                restoreMutation.mutateAsync(
+                                                    entry.id
+                                                ),
+                                                {
+                                                    loading:
+                                                        'Restoring entry...',
+                                                    success: 'Entry restored',
+                                                    error: (err) =>
+                                                        `Failed to restore entry ${serverRequestErrExtractor({ error: err })}`,
+                                                }
+                                            )
                                         }
                                         className="size-8 p-0"
                                     >
-                                        <PencilFillIcon className="size-4" />
-                                        <span className="sr-only">
-                                            Edit entry
-                                        </span>
-                                    </Button>
-                                )}
-                                {isRemovable && (
-                                    <Button
-                                        size="sm"
-                                        type="button"
-                                        variant="ghost"
-                                        disabled={disabled}
-                                        onClick={() => handleDelete()}
-                                        className="h-8 w-8 p-0 text-destructive hover:text-destructive-foreground hover:bg-destructive"
-                                    >
-                                        <TrashIcon className="h-4 w-4" />
-                                        <span className="sr-only">
-                                            Remove entry
-                                        </span>
+                                        <RefreshIcon className="size-4" />
+                                        <span className="sr-only">Restore</span>
                                     </Button>
                                 )}
                             </div>

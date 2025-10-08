@@ -89,7 +89,7 @@ const RowActionsGroup = <TData,>({
                 {onDelete && (
                     <DropdownMenuItem
                         disabled={!onDelete.isAllowed}
-                        className="text-rose-400 focus:bg-destructive"
+                        className="text-destructive-foreground focus:bg-destructive"
                         onClick={onDelete.onClick}
                     >
                         <TrashIcon className="mr-2" /> {onDelete.text}

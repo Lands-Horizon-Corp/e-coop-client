@@ -58,6 +58,8 @@ const LoanTransactionEntryCreateUpdate = ({
         },
     })
 
+    const deductionType = form.watch('type')
+
     const { firstError, formRef, isDisabled } =
         useFormHelper<TLoanTransactionEntrySchema>({
             form,
@@ -131,7 +133,10 @@ const LoanTransactionEntryCreateUpdate = ({
                                         { shouldDirty: true }
                                     )
                                 }}
-                                disabled={isDisabled(field.name)}
+                                disabled={
+                                    isDisabled(field.name) ||
+                                    deductionType === 'automatic-deduction'
+                                }
                             />
                         )}
                     />

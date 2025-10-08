@@ -94,7 +94,11 @@ export const {
 
 // custom hooks can go here
 
-export type TLoanTransactionHookMode = 'branch' | 'member-profile'
+export type TLoanTransactionHookMode =
+    | 'branch'
+    | 'member-profile'
+    | 'member-profile-loan-account'
+    | 'member-profile-interest-account'
 
 export const useGetPaginatedLoanTransaction = ({
     mode = 'branch',
@@ -106,6 +110,8 @@ export const useGetPaginatedLoanTransaction = ({
 }: {
     mode: TLoanTransactionHookMode
     memberProfileId?: TEntityId
+
+    // loan account
 
     query?: TAPIQueryOptions
     options?: HookQueryOptions<ILoanTransactionPaginated, Error>
