@@ -50,9 +50,9 @@ const FileMediaColumns = (): ColumnDef<IMedia>[] => {
                     <div className="mx-auto flex items-center gap-x-2">
                         <p className="text-sm">{id}</p>
                         <CopyTextButton
-                            textContent={id}
                             className="shrink-0"
                             successText="Copied media ID"
+                            textContent={id}
                         />
                     </div>
                 )
@@ -101,8 +101,8 @@ const FileMediaColumns = (): ColumnDef<IMedia>[] => {
                 return (
                     <div className="mx-auto flex items-center">
                         <MediaResourceFileIcon
-                            media={original}
                             className="shrink-0"
+                            media={original}
                         />
                         <p className="text-sm">{original.file_type}</p>
                     </div>
@@ -176,10 +176,10 @@ const FileMediaColumns = (): ColumnDef<IMedia>[] => {
                 return (
                     <div>
                         <Button
-                            size="sm"
                             className="gap-x-2"
-                            variant="ghost"
                             onClick={() => handleDownload()}
+                            size="sm"
+                            variant="ghost"
                         >
                             Download <DownloadIcon />
                         </Button>
@@ -259,12 +259,12 @@ const FilesTableView = ({
             )}
         >
             <DataTable
-                table={table}
-                isStickyHeader
-                isStickyFooter
-                isScrollable={isScrollable}
-                setColumnOrder={setColumnOrder}
                 className={cn('mb-2', isScrollable && 'flex-1')}
+                isScrollable={isScrollable}
+                isStickyFooter
+                isStickyHeader
+                setColumnOrder={setColumnOrder}
+                table={table}
             />
         </div>
     )
@@ -288,9 +288,9 @@ const MemberFileMediaDisplay = ({ userId, className }: Props) => {
         <div className={cn('min-h-[50vh] space-y-4', className)}>
             <div className="flex justify-between">
                 <SectionTitle
-                    title="Member Medias"
                     Icon={FolderFillIcon}
                     subTitle="View all medias/files this user has"
+                    title="Member Medias"
                 />
                 <p className="text-sm text-muted-foreground/80">
                     {(data ?? []).length} Files
@@ -298,8 +298,8 @@ const MemberFileMediaDisplay = ({ userId, className }: Props) => {
             </div>
             {!data && error && (
                 <FormErrorMessage
-                    errorMessage={error}
                     className="w-fit mx-auto text-xs"
+                    errorMessage={error}
                 />
             )}
             {isPending && userId && <LoadingSpinner className="mx-auto" />}

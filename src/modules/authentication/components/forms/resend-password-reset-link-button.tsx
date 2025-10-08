@@ -47,8 +47,8 @@ const ResendPasswordResetLinkButton = ({
     return (
         <Button
             disabled={isPending || cooldownCount > 0}
-            variant={cooldownCount || isPending ? 'secondary' : 'default'}
             onClick={() => resendResetLink(sentTo)}
+            variant={cooldownCount || isPending ? 'secondary' : 'default'}
         >
             {isPending && <LoadingSpinner />}
             {!isPending && cooldownCount <= 0 && 'Resend'}

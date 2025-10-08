@@ -50,19 +50,19 @@ const DataTableVirtualize = <TData,>({
 
     return (
         <div
-            ref={tableContainerRef}
             className={cn(
                 'ecoop-scroll relative max-h-full overflow-y-scroll bg-secondary',
                 wrapperClassName
             )}
+            ref={tableContainerRef}
         >
             <div className="flex h-fit">
                 <div className="ecoop-scroll sticky left-0 z-10 w-fit border-r border-popover">
                     <UITable
+                        className={cn('grid h-fit', className)}
                         style={{
                             width: table.getLeftTotalSize(),
                         }}
-                        className={cn('grid h-fit', className)}
                     >
                         <TableHeader
                             className={cn(
@@ -72,21 +72,21 @@ const DataTableVirtualize = <TData,>({
                         >
                             {table.getLeftHeaderGroups().map((headerGroup) => (
                                 <TableRow
-                                    key={headerGroup.id}
                                     className="flex w-full bg-popover hover:bg-popover"
+                                    key={headerGroup.id}
                                 >
                                     {headerGroup.headers.map((header) => {
                                         return (
                                             <TableHead
-                                                key={header.id}
-                                                colSpan={header.colSpan}
-                                                style={{
-                                                    width: header.getSize(),
-                                                }}
                                                 className={cn(
                                                     'relative z-10 flex bg-popover',
                                                     headerClassName
                                                 )}
+                                                colSpan={header.colSpan}
+                                                key={header.id}
+                                                style={{
+                                                    width: header.getSize(),
+                                                }}
                                             >
                                                 {header.isPlaceholder
                                                     ? null
@@ -116,17 +116,17 @@ const DataTableVirtualize = <TData,>({
                                     ] as Row<TData>
                                     return (
                                         <TableRow
-                                            key={row.id}
                                             className={cn('h-14 w-fit')}
                                             data-index={virtualRow.index}
+                                            data-state={
+                                                row.getIsSelected() &&
+                                                'selected'
+                                            }
+                                            key={row.id}
                                             ref={(node) =>
                                                 rowVirtualizer.measureElement(
                                                     node
                                                 )
-                                            }
-                                            data-state={
-                                                row.getIsSelected() &&
-                                                'selected'
                                             }
                                             style={{
                                                 display: 'flex',
@@ -140,13 +140,13 @@ const DataTableVirtualize = <TData,>({
                                                 .map((cell) => {
                                                     return (
                                                         <TableCell
+                                                            className={cn(
+                                                                'flex size-fit bg-secondary'
+                                                            )}
                                                             key={cell.id}
                                                             style={{
                                                                 width: cell.column.getSize(),
                                                             }}
-                                                            className={cn(
-                                                                'flex size-fit bg-secondary'
-                                                            )}
                                                         >
                                                             {flexRender(
                                                                 cell.column
@@ -164,8 +164,8 @@ const DataTableVirtualize = <TData,>({
                             {table.getRowModel().rows.length === 0 && (
                                 <TableRow>
                                     <TableCell
-                                        colSpan={table.getAllColumns().length}
                                         className="h-24 text-center"
+                                        colSpan={table.getAllColumns().length}
                                     >
                                         <span className="w-full text-center text-xs text-foreground/60">
                                             no data
@@ -178,10 +178,10 @@ const DataTableVirtualize = <TData,>({
                 </div>
                 <div className="z-0 flex-1">
                     <UITable
+                        className={cn('grid h-fit', className)}
                         style={{
                             width: table.getCenterTotalSize(),
                         }}
-                        className={cn('grid h-fit', className)}
                     >
                         <TableHeader
                             className={cn(
@@ -193,21 +193,21 @@ const DataTableVirtualize = <TData,>({
                                 .getCenterHeaderGroups()
                                 .map((headerGroup) => (
                                     <TableRow
-                                        key={headerGroup.id}
                                         className="flex w-full bg-popover hover:bg-popover"
+                                        key={headerGroup.id}
                                     >
                                         {headerGroup.headers.map((header) => {
                                             return (
                                                 <TableHead
-                                                    key={header.id}
-                                                    colSpan={header.colSpan}
-                                                    style={{
-                                                        width: header.getSize(),
-                                                    }}
                                                     className={cn(
                                                         'relative z-10 flex bg-popover',
                                                         headerClassName
                                                     )}
+                                                    colSpan={header.colSpan}
+                                                    key={header.id}
+                                                    style={{
+                                                        width: header.getSize(),
+                                                    }}
                                                 >
                                                     {header.isPlaceholder
                                                         ? null
@@ -238,17 +238,17 @@ const DataTableVirtualize = <TData,>({
                                     ] as Row<TData>
                                     return (
                                         <TableRow
-                                            key={row.id}
                                             className={cn('h-14 w-fit')}
                                             data-index={virtualRow.index}
+                                            data-state={
+                                                row.getIsSelected() &&
+                                                'selected'
+                                            }
+                                            key={row.id}
                                             ref={(node) =>
                                                 rowVirtualizer.measureElement(
                                                     node
                                                 )
-                                            }
-                                            data-state={
-                                                row.getIsSelected() &&
-                                                'selected'
                                             }
                                             style={{
                                                 display: 'flex',
@@ -262,13 +262,13 @@ const DataTableVirtualize = <TData,>({
                                                 .map((cell) => {
                                                     return (
                                                         <TableCell
+                                                            className={cn(
+                                                                'flex size-fit bg-secondary'
+                                                            )}
                                                             key={cell.id}
                                                             style={{
                                                                 width: cell.column.getSize(),
                                                             }}
-                                                            className={cn(
-                                                                'flex size-fit bg-secondary'
-                                                            )}
                                                         >
                                                             {flexRender(
                                                                 cell.column
@@ -286,8 +286,8 @@ const DataTableVirtualize = <TData,>({
                             {table.getRowModel().rows.length === 0 && (
                                 <TableRow>
                                     <TableCell
-                                        colSpan={table.getAllColumns().length}
                                         className="h-24 text-center"
+                                        colSpan={table.getAllColumns().length}
                                     >
                                         <span className="w-full text-center text-xs text-foreground/60">
                                             no data
@@ -300,10 +300,10 @@ const DataTableVirtualize = <TData,>({
                 </div>
                 <div className="ecoop-scroll sticky right-0 z-10 w-fit border-l border-popover">
                     <UITable
+                        className={cn('grid h-fit', className)}
                         style={{
                             width: table.getRightTotalSize(),
                         }}
-                        className={cn('grid h-fit', className)}
                     >
                         <TableHeader
                             className={cn(
@@ -313,21 +313,21 @@ const DataTableVirtualize = <TData,>({
                         >
                             {table.getRightHeaderGroups().map((headerGroup) => (
                                 <TableRow
-                                    key={headerGroup.id}
                                     className="flex w-full bg-popover hover:bg-popover"
+                                    key={headerGroup.id}
                                 >
                                     {headerGroup.headers.map((header) => {
                                         return (
                                             <TableHead
-                                                key={header.id}
-                                                colSpan={header.colSpan}
-                                                style={{
-                                                    width: header.getSize(),
-                                                }}
                                                 className={cn(
                                                     'relative z-10 flex bg-popover',
                                                     headerClassName
                                                 )}
+                                                colSpan={header.colSpan}
+                                                key={header.id}
+                                                style={{
+                                                    width: header.getSize(),
+                                                }}
                                             >
                                                 {header.isPlaceholder
                                                     ? null
@@ -357,17 +357,17 @@ const DataTableVirtualize = <TData,>({
                                     ] as Row<TData>
                                     return (
                                         <TableRow
-                                            key={row.id}
                                             className={cn('h-14 w-fit')}
                                             data-index={virtualRow.index} //needed for dynamic row height measurement
+                                            data-state={
+                                                row.getIsSelected() &&
+                                                'selected'
+                                            }
+                                            key={row.id}
                                             ref={(node) =>
                                                 rowVirtualizer.measureElement(
                                                     node
                                                 )
-                                            }
-                                            data-state={
-                                                row.getIsSelected() &&
-                                                'selected'
                                             }
                                             style={{
                                                 display: 'flex',
@@ -381,13 +381,13 @@ const DataTableVirtualize = <TData,>({
                                                 .map((cell) => {
                                                     return (
                                                         <TableCell
+                                                            className={cn(
+                                                                'flex size-fit bg-secondary/60'
+                                                            )}
                                                             key={cell.id}
                                                             style={{
                                                                 width: cell.column.getSize(),
                                                             }}
-                                                            className={cn(
-                                                                'flex size-fit bg-secondary/60'
-                                                            )}
                                                         >
                                                             {flexRender(
                                                                 cell.column
@@ -405,8 +405,8 @@ const DataTableVirtualize = <TData,>({
                             {table.getRowModel().rows.length === 0 && (
                                 <TableRow>
                                     <TableCell
-                                        colSpan={table.getAllColumns().length}
                                         className="h-24 text-center"
+                                        colSpan={table.getAllColumns().length}
                                     >
                                         <span className="w-full text-center text-xs text-foreground/60">
                                             no data

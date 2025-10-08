@@ -71,9 +71,8 @@ const MemberUserAccount = forwardRef<HTMLDivElement, Props>(
                             disconnect this account first.
                         </p>
                         <Button
-                            variant="secondary"
-                            hoverVariant="destructive"
                             disabled={isDisconnecting}
+                            hoverVariant="destructive"
                             onClick={() => {
                                 onOpen({
                                     title: 'Disconnect Account',
@@ -87,6 +86,7 @@ const MemberUserAccount = forwardRef<HTMLDivElement, Props>(
                                         }),
                                 })
                             }}
+                            variant="secondary"
                         >
                             {isDisconnecting ? (
                                 <LoadingSpinner />
@@ -106,8 +106,8 @@ const MemberUserAccount = forwardRef<HTMLDivElement, Props>(
                             account or connect an existing one.
                         </p>
                         <fieldset
-                            disabled={isConnecting}
                             className="flex gap-x-2"
+                            disabled={isConnecting}
                         >
                             <MemberUserAccountCreateUpdateFormModal
                                 {...createUserModal}
@@ -127,9 +127,7 @@ const MemberUserAccount = forwardRef<HTMLDivElement, Props>(
                                 }}
                             />
                             <UserOrganizationPicker
-                                triggerClassName="hidden"
                                 modalState={connectUserModal}
-                                userOrgSearchMode="none-member-profile"
                                 onSelect={(value) => {
                                     const userOrg =
                                         value as unknown as IUserOrganization<IMember>
@@ -154,8 +152,8 @@ const MemberUserAccount = forwardRef<HTMLDivElement, Props>(
                                         ),
                                         content: (
                                             <ProfileConnectUserModalDisplay
-                                                userOrg={userOrg}
                                                 memberProfile={memberProfile}
+                                                userOrg={userOrg}
                                             />
                                         ),
                                         onConfirm: () =>
@@ -166,14 +164,16 @@ const MemberUserAccount = forwardRef<HTMLDivElement, Props>(
                                             }),
                                     })
                                 }}
+                                triggerClassName="hidden"
+                                userOrgSearchMode="none-member-profile"
                             />
 
                             <Button
-                                variant="outline"
+                                className="group !h-auto w-1/2 flex-col items-start space-y-2 rounded-xl from-primary/40 to-transparent to-80% py-4 hover:bg-gradient-to-tr"
                                 onClick={() =>
                                     createUserModal.onOpenChange(true)
                                 }
-                                className="group !h-auto w-1/2 flex-col items-start space-y-2 rounded-xl from-primary/40 to-transparent to-80% py-4 hover:bg-gradient-to-tr"
+                                variant="outline"
                             >
                                 <div className="flex w-full items-center justify-between">
                                     <p className="shrink truncate group-hover:text-primary">
@@ -187,14 +187,14 @@ const MemberUserAccount = forwardRef<HTMLDivElement, Props>(
                                 </p>
                             </Button>
                             <Button
-                                variant="outline"
-                                onClick={() =>
-                                    connectUserModal.onOpenChange(true)
-                                }
                                 className={cn(
                                     'group !h-auto w-1/2 flex-col items-start space-y-2 rounded-xl from-primary/40 to-transparent to-80% py-4 hover:bg-gradient-to-tr',
                                     isConnecting && 'bg-gradient-to-tr'
                                 )}
+                                onClick={() =>
+                                    connectUserModal.onOpenChange(true)
+                                }
+                                variant="outline"
                             >
                                 <div className="flex w-full items-center justify-between">
                                     <p className="shrink truncate group-hover:text-primary">

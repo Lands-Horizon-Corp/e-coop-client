@@ -35,10 +35,9 @@ const TextFilter = <T,>({
     }
 
     return (
-        <div onKeyDown={(e) => e.stopPropagation()} className="space-y-2 p-1">
+        <div className="space-y-2 p-1" onKeyDown={(e) => e.stopPropagation()}>
             <p className="text-sm">Filter</p>
             <Select
-                value={filterVal?.mode}
                 onValueChange={(val) => {
                     const newFilterMode = val as TFilterModes
                     setFilter(field, {
@@ -46,13 +45,14 @@ const TextFilter = <T,>({
                         mode: newFilterMode,
                     })
                 }}
+                value={filterVal?.mode}
             >
                 <SelectTrigger className="">
                     <SelectValue placeholder="Select Filter" />
                 </SelectTrigger>
                 <SelectContent
-                    onClick={(e) => e.stopPropagation()}
                     className="ecoop-scroll max-h-[60vh] min-w-40 overflow-y-scroll shadow-md"
+                    onClick={(e) => e.stopPropagation()}
                 >
                     {filterModeOptions.map((mode, i) => (
                         <SelectItem key={i} value={mode.value}>
@@ -62,23 +62,23 @@ const TextFilter = <T,>({
                 </SelectContent>
             </Select>
             <DebouncedInput
-                type="text"
                 className="w-full"
-                placeholder="value"
                 debounceTime={500}
-                value={filterVal.value || ''}
                 onChange={(inpt: string) =>
                     setFilter(field, {
                         ...filterVal,
                         value: inpt,
                     })
                 }
+                placeholder="value"
+                type="text"
+                value={filterVal.value || ''}
             />
             <Button
-                size="sm"
                 className="w-full"
-                variant="secondary"
                 onClick={() => setFilter(field)}
+                size="sm"
+                variant="secondary"
             >
                 Clear Filter
             </Button>

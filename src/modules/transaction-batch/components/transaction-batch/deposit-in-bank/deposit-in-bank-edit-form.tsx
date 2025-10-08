@@ -85,41 +85,41 @@ const DepositInBankCreateForm = ({
     return (
         <Form {...form}>
             <form
-                ref={formRef}
-                onSubmit={onSubmit}
                 className={cn('flex w-full flex-col gap-y-4', className)}
+                onSubmit={onSubmit}
+                ref={formRef}
             >
                 <fieldset
-                    disabled={isPending || formProps.readOnly}
                     className="grid gap-x-6 gap-y-4 sm:gap-y-3"
+                    disabled={isPending || formProps.readOnly}
                 >
                     <FormFieldWrapper
                         control={form.control}
-                        name="deposit_in_bank"
                         label="Deposit in Bank"
+                        name="deposit_in_bank"
                         render={({ field }) => (
                             <Input
                                 {...field}
-                                id={field.name}
-                                type="number"
-                                step="0.01"
-                                placeholder="Enter total deposit amount"
                                 autoComplete="off"
                                 disabled={isDisabled(field.name)}
+                                id={field.name}
+                                placeholder="Enter total deposit amount"
+                                step="0.01"
+                                type="number"
                             />
                         )}
                     />
                 </fieldset>
                 <FormFooterResetSubmit
-                    error={error}
-                    readOnly={formProps.readOnly}
-                    isLoading={isPending}
                     disableSubmit={!form.formState.isDirty}
-                    submitText="Save"
+                    error={error}
+                    isLoading={isPending}
                     onReset={() => {
                         form.reset()
                         reset()
                     }}
+                    readOnly={formProps.readOnly}
+                    submitText="Save"
                 />
             </form>
         </Form>
@@ -137,9 +137,9 @@ export const DepositInBankCreateFormModal = ({
 }) => {
     return (
         <Modal
-            title={title}
-            description={description}
             className={cn('', className)}
+            description={description}
+            title={title}
             {...props}
         >
             <DepositInBankCreateForm

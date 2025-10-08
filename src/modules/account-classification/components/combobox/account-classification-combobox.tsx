@@ -46,14 +46,14 @@ const AccountClassificationComboBox = ({
 
     return (
         <>
-            <Popover modal open={open} onOpenChange={setOpen}>
+            <Popover modal onOpenChange={setOpen} open={open}>
                 <PopoverTrigger asChild>
                     <Button
-                        variant="outline"
-                        role="combobox"
                         aria-expanded={open}
                         className={cn('w-full justify-between px-3', className)}
                         disabled={disabled || isLoading}
+                        role="combobox"
+                        variant="outline"
                     >
                         {value ? (
                             accountClassification?.find(
@@ -70,8 +70,8 @@ const AccountClassificationComboBox = ({
                 <PopoverContent className="max-h-[--radix-popover-content-available-height] w-[--radix-popover-trigger-width] p-0">
                     <Command>
                         <CommandInput
-                            placeholder="Search Classification..."
                             className="h-9"
+                            placeholder="Search Classification..."
                         />
                         {isLoading ? (
                             <CommandEmpty>
@@ -87,11 +87,11 @@ const AccountClassificationComboBox = ({
                                     {accountClassification?.map((option) => (
                                         <CommandItem
                                             key={option.id}
-                                            value={option.name}
                                             onSelect={() => {
                                                 setOpen(false)
                                                 onChange?.(option)
                                             }}
+                                            value={option.name}
                                         >
                                             {option.name}
                                             <CheckIcon

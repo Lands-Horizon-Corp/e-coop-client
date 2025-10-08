@@ -16,6 +16,7 @@ const NavGetStarted = () => {
 
     return (
         <Button
+            className="scale-effects gap-x-2 cursor-pointer rounded-full px-2"
             onClick={() => {
                 if (
                     !user_organization?.organization ||
@@ -38,12 +39,11 @@ const NavGetStarted = () => {
                     })
                 }
             }}
-            className="scale-effects gap-x-2 cursor-pointer rounded-full px-2"
         >
             <UserAvatar
-                src={user.media?.download_url ?? ''}
                 fallback={user.user_name.charAt(0) ?? '-'}
                 fallbackClassName="bg-secondary text-secondary-foreground"
+                src={user.media?.download_url ?? ''}
             />
             <span className="mr-2">Get Started</span>
         </Button>

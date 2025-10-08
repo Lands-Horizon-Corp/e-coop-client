@@ -34,11 +34,11 @@ const LightDarkModeSettings = ({ className }: Props) => {
                     }}
                 >
                     <div
-                        tabIndex={0}
                         className={cn(
                             'bg-gray-100 border text-gray-700 rounded-xl h-48 flex items-center justify-center group-hover:border-primary ease-in-out duration-100',
                             theme === 'light' && 'border-4 border-primary/80'
                         )}
+                        tabIndex={0}
                     >
                         <div className="bg-gray-100 size-fit text-stone-800 p-4 rounded-full flex items-center justify-center">
                             <SunIcon className="size-8" />
@@ -62,11 +62,11 @@ const LightDarkModeSettings = ({ className }: Props) => {
                     }}
                 >
                     <div
-                        tabIndex={0}
                         className={cn(
                             'bg-stone-900 border flex items-center justify-center rounded-xl h-48 group-hover:border-primary ease-in-out duration-100',
                             theme === 'dark' && 'border-4 border-primary/80'
                         )}
+                        tabIndex={0}
                     >
                         <div className="bg-stone-800 size-fit text-stone-200 p-4 rounded-full flex items-center justify-center">
                             <MoonIcon className="size-8" />
@@ -90,11 +90,11 @@ const LightDarkModeSettings = ({ className }: Props) => {
                     }}
                 >
                     <div
-                        tabIndex={0}
                         className={cn(
                             'rounded-xl h-48 grid group-hover:border-primary ease-in-out duration-100 relative overflow-clip border grid-cols-2',
                             theme === 'system' && 'border-4 border-primary/80'
                         )}
+                        tabIndex={0}
                     >
                         <div className="bg-gray-100 flex items-center justify-center" />
                         <div className="bg-stone-950 flex items-center justify-center" />

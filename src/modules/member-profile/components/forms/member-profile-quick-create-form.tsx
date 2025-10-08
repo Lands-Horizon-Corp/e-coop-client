@@ -109,13 +109,13 @@ const MemberProfileQuickCreateForm = ({
     return (
         <Form {...form}>
             <form
-                ref={formRef}
-                onSubmit={onSubmit}
                 className={cn('flex w-full flex-col gap-y-4', className)}
+                onSubmit={onSubmit}
+                ref={formRef}
             >
                 <fieldset
-                    disabled={isPending || formProps.readOnly}
                     className="grid gap-x-6 gap-y-4"
+                    disabled={isPending || formProps.readOnly}
                 >
                     <div className="space-y-4">
                         <p className="text-muted-foreground">
@@ -123,61 +123,61 @@ const MemberProfileQuickCreateForm = ({
                         </p>
                         <div className="grid grid-cols-1 gap-x-2 gap-y-4 sm:grid-cols-2">
                             <FormFieldWrapper
-                                control={form.control}
-                                name="member_type_id"
-                                label="Member Type"
                                 className="col-span-1"
+                                control={form.control}
+                                label="Member Type"
+                                name="member_type_id"
                                 render={({ field }) => (
                                     <MemberTypeCombobox
                                         {...field}
-                                        placeholder="Select Member Type"
                                         disabled={isDisabled(field.name)}
                                         onChange={(selected) =>
                                             field.onChange(selected.id)
                                         }
+                                        placeholder="Select Member Type"
                                     />
                                 )}
                             />
                             <FormFieldWrapper
-                                control={form.control}
-                                name="status"
-                                label="Member Profile Status"
                                 className="col-span-1"
+                                control={form.control}
+                                label="Member Profile Status"
+                                name="status"
                                 render={({ field }) => (
                                     <GeneralStatusCombobox
                                         {...field}
-                                        placeholder="Status"
                                         disabled={isDisabled(field.name)}
+                                        placeholder="Status"
                                     />
                                 )}
                             />
                             <FormFieldWrapper
-                                control={form.control}
-                                name="passbook"
-                                label="Passbook"
                                 className="col-span-1"
+                                control={form.control}
+                                label="Passbook"
+                                name="passbook"
                                 render={({ field }) => (
                                     <Input
                                         {...field}
+                                        autoComplete="off"
+                                        disabled={isDisabled(field.name)}
                                         id={field.name}
                                         placeholder="Passbook"
-                                        autoComplete="off"
-                                        disabled={isDisabled(field.name)}
                                     />
                                 )}
                             />
                             <FormFieldWrapper
-                                control={form.control}
-                                name="old_reference_id"
-                                label="Old Passbook (optional)"
                                 className="col-span-1"
+                                control={form.control}
+                                label="Old Passbook (optional)"
+                                name="old_reference_id"
                                 render={({ field }) => (
                                     <Input
                                         {...field}
-                                        id={field.name}
-                                        placeholder="Old Passbook/Old Reference ID"
                                         autoComplete="off"
                                         disabled={isDisabled(field.name)}
+                                        id={field.name}
+                                        placeholder="Old Passbook/Old Reference ID"
                                     />
                                 )}
                             />
@@ -190,65 +190,65 @@ const MemberProfileQuickCreateForm = ({
                         </p>
                         <div className="grid grid-cols-1 gap-2 sm:grid-cols-10">
                             <FormFieldWrapper
-                                control={form.control}
-                                name="first_name"
-                                label="First Name *"
                                 className="col-span-3"
+                                control={form.control}
+                                label="First Name *"
+                                name="first_name"
                                 render={({ field }) => (
                                     <Input
                                         {...field}
-                                        id={field.name}
-                                        placeholder="First Name"
                                         autoComplete="given-name"
                                         disabled={isDisabled(field.name)}
+                                        id={field.name}
+                                        placeholder="First Name"
                                     />
                                 )}
                             />
 
                             <FormFieldWrapper
-                                control={form.control}
-                                name="middle_name"
-                                label="Middle Name"
                                 className="col-span-3"
+                                control={form.control}
+                                label="Middle Name"
+                                name="middle_name"
                                 render={({ field }) => (
                                     <Input
                                         {...field}
-                                        id={field.name}
-                                        placeholder="Middle Name"
                                         autoComplete="additional-name"
                                         disabled={isDisabled(field.name)}
+                                        id={field.name}
+                                        placeholder="Middle Name"
                                     />
                                 )}
                             />
 
                             <FormFieldWrapper
-                                control={form.control}
-                                name="last_name"
-                                label="Last Name *"
                                 className="col-span-3"
+                                control={form.control}
+                                label="Last Name *"
+                                name="last_name"
                                 render={({ field }) => (
                                     <Input
                                         {...field}
-                                        id={field.name}
-                                        placeholder="Last Name"
                                         autoComplete="family-name"
                                         disabled={isDisabled(field.name)}
+                                        id={field.name}
+                                        placeholder="Last Name"
                                     />
                                 )}
                             />
 
                             <FormFieldWrapper
-                                control={form.control}
-                                name="suffix"
-                                label="Suffix"
                                 className="col-span-1"
+                                control={form.control}
+                                label="Suffix"
+                                name="suffix"
                                 render={({ field }) => (
                                     <Input
                                         {...field}
-                                        id={field.name}
-                                        placeholder=""
                                         autoComplete="honorific-suffix"
                                         disabled={isDisabled(field.name)}
+                                        id={field.name}
+                                        placeholder=""
                                     />
                                 )}
                             />
@@ -256,39 +256,39 @@ const MemberProfileQuickCreateForm = ({
                         <div className="grid grid-cols-1 gap-2 sm:grid-cols-3">
                             <FormFieldWrapper
                                 control={form.control}
-                                name="civil_status"
                                 label="Civil Status *"
+                                name="civil_status"
                                 render={({ field }) => (
                                     <CivilStatusCombobox
                                         {...field}
+                                        disabled={isDisabled(field.name)}
                                         id={field.name}
                                         placeholder="Civil Status"
-                                        disabled={isDisabled(field.name)}
                                     />
                                 )}
                             />
                             <FormFieldWrapper
                                 control={form.control}
-                                name="member_gender_id"
                                 label="Gender *"
+                                name="member_gender_id"
                                 render={({ field }) => (
                                     <MemberGenderCombobox
                                         {...field}
-                                        placeholder="Select Gender"
                                         disabled={isDisabled(field.name)}
                                         onChange={(selected) =>
                                             field.onChange(selected.id)
                                         }
+                                        placeholder="Select Gender"
                                     />
                                 )}
                             />
                             <FormFieldWrapper
-                                control={form.control}
-                                name="birthdate"
-                                label="Date of Birth *"
                                 className="relative"
+                                control={form.control}
                                 description="mm/dd/yyyy"
                                 descriptionClassName="absolute top-0 right-0"
+                                label="Date of Birth *"
+                                name="birthdate"
                                 render={({ field }) => (
                                     <InputDate
                                         {...field}
@@ -298,8 +298,8 @@ const MemberProfileQuickCreateForm = ({
                             />
                             <FormFieldWrapper
                                 control={form.control}
-                                name="contact_number"
                                 label="Contact Number"
+                                name="contact_number"
                                 render={({
                                     field,
                                     fieldState: { invalid, error },
@@ -327,18 +327,18 @@ const MemberProfileQuickCreateForm = ({
                         <p className="text-muted-foreground">Other</p>
                         <div className="grid gap-x-2 gap-y-4 sm:grid-cols-2">
                             <FormFieldWrapper
-                                name="is_mutual_fund_member"
+                                className="col-span-1"
                                 control={form.control}
                                 hiddenFields={formProps.hiddenFields}
-                                className="col-span-1"
+                                name="is_mutual_fund_member"
                                 render={({ field }) => (
                                     <div className="shadow-xs relative flex w-full items-start gap-2 rounded-lg border border-input p-4 outline-none duration-200 ease-out has-[:checked]:border-primary/30 has-[:checked]:bg-primary/40">
                                         <Checkbox
-                                            id={field.name}
-                                            checked={field.value}
-                                            onCheckedChange={field.onChange}
-                                            className="order-1 after:absolute after:inset-0"
                                             aria-describedby={`${field.name}`}
+                                            checked={field.value}
+                                            className="order-1 after:absolute after:inset-0"
+                                            id={field.name}
+                                            onCheckedChange={field.onChange}
                                         />
                                         <div className="flex grow items-center gap-3">
                                             <div className="size-fit rounded-full bg-secondary p-2">
@@ -350,8 +350,8 @@ const MemberProfileQuickCreateForm = ({
                                                     <span className="text-xs font-normal leading-[inherit] text-muted-foreground"></span>
                                                 </Label>
                                                 <p
-                                                    id={`${field.name}`}
                                                     className="text-xs text-muted-foreground"
+                                                    id={`${field.name}`}
                                                 >
                                                     Contributes to a pooled
                                                     investment (mutual fund).
@@ -362,18 +362,18 @@ const MemberProfileQuickCreateForm = ({
                                 )}
                             />
                             <FormFieldWrapper
-                                name="is_micro_finance_member"
+                                className="col-span-1"
                                 control={form.control}
                                 hiddenFields={formProps.hiddenFields}
-                                className="col-span-1"
+                                name="is_micro_finance_member"
                                 render={({ field }) => (
                                     <div className="shadow-xs relative flex w-full items-start gap-2 rounded-lg border border-input p-4 outline-none duration-200 ease-out has-[:checked]:border-primary/30 has-[:checked]:bg-primary/40">
                                         <Checkbox
-                                            id={field.name}
-                                            checked={field.value}
-                                            onCheckedChange={field.onChange}
-                                            className="order-1 after:absolute after:inset-0"
                                             aria-describedby={`${field.name}`}
+                                            checked={field.value}
+                                            className="order-1 after:absolute after:inset-0"
+                                            id={field.name}
+                                            onCheckedChange={field.onChange}
                                         />
                                         <div className="flex grow items-center gap-3">
                                             <div className="size-fit rounded-full bg-secondary p-2">
@@ -385,8 +385,8 @@ const MemberProfileQuickCreateForm = ({
                                                     <span className="text-xs font-normal leading-[inherit] text-muted-foreground"></span>
                                                 </Label>
                                                 <p
-                                                    id={`${field.name}`}
                                                     className="text-xs text-muted-foreground"
+                                                    id={`${field.name}`}
                                                 >
                                                     Participates in small-scale
                                                     financial services.
@@ -403,8 +403,8 @@ const MemberProfileQuickCreateForm = ({
                 <Separator />
 
                 <fieldset
-                    disabled={isPending || formProps.readOnly}
                     className="space-y-4"
+                    disabled={isPending || formProps.readOnly}
                 >
                     <FormFieldWrapper
                         control={form.control}
@@ -412,14 +412,14 @@ const MemberProfileQuickCreateForm = ({
                         render={({ field }) => (
                             <div className="inline-flex items-start gap-x-4">
                                 <Switch
-                                    id={field.name}
-                                    checked={field.value}
-                                    onCheckedChange={field.onChange}
                                     aria-label="Toggle switch"
+                                    checked={field.value}
+                                    id={field.name}
+                                    onCheckedChange={field.onChange}
                                 />
                                 <Label
-                                    htmlFor={field.name}
                                     className="cursor-pointer space-y-2 text-sm font-medium"
+                                    htmlFor={field.name}
                                 >
                                     <p>Create User Account</p>
                                     <p className="text-xs text-muted-foreground/80">
@@ -441,8 +441,8 @@ const MemberProfileQuickCreateForm = ({
                                 render={({ field }) => (
                                     <Input
                                         {...field}
-                                        id={field.name}
                                         autoComplete="username"
+                                        id={field.name}
                                         placeholder="Username"
                                     />
                                 )}
@@ -453,8 +453,8 @@ const MemberProfileQuickCreateForm = ({
                                 render={({ field }) => (
                                     <Input
                                         {...field}
-                                        id={field.name}
                                         autoComplete="email"
+                                        id={field.name}
                                         placeholder="example@email.com"
                                     />
                                 )}
@@ -466,14 +466,12 @@ const MemberProfileQuickCreateForm = ({
                                     <FormItem>
                                         <PasswordInput
                                             {...field}
-                                            id={field.name}
-                                            defaultVisibility
-                                            placeholder="+8 Character Password"
                                             autoComplete="new-password"
+                                            defaultVisibility
+                                            id={field.name}
+                                            placeholder="+8 Character Password"
                                         />
                                         <ValueChecklistMeter
-                                            value={field.value}
-                                            hideOnComplete
                                             checkList={ChecklistTemplate[
                                                 'password-checklist'
                                             ].concat([
@@ -482,6 +480,8 @@ const MemberProfileQuickCreateForm = ({
                                                     text: 'No more than 50 characters',
                                                 },
                                             ])}
+                                            hideOnComplete
+                                            value={field.value}
                                         />
                                     </FormItem>
                                 )}
@@ -495,15 +495,15 @@ const MemberProfileQuickCreateForm = ({
                     creation
                 </span>
                 <FormFooterResetSubmit
-                    error={error}
-                    readOnly={formProps.readOnly}
-                    isLoading={isPending}
                     disableSubmit={!form.formState.isDirty}
-                    submitText="Create"
+                    error={error}
+                    isLoading={isPending}
                     onReset={() => {
                         form.reset()
                         reset()
                     }}
+                    readOnly={formProps.readOnly}
+                    submitText="Create"
                 />
             </form>
         </Form>
@@ -521,9 +521,9 @@ export const MemberProfileQuickCreateFormModal = ({
 }) => {
     return (
         <Modal
-            title={title}
-            description={description}
             className={cn('!max-w-4xl', className)}
+            description={description}
+            title={title}
             {...props}
         >
             <MemberProfileQuickCreateForm

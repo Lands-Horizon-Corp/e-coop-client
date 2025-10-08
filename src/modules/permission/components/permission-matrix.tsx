@@ -136,22 +136,22 @@ const PermissionMatrix = forwardRef<
 
         return (
             <fieldset
-                ref={ref}
-                disabled={readOnly}
                 aria-readonly={readOnly}
                 className={cn(
                     'bg-background border rounded-lg w-full min-w-0 max-w-full shadow-sm',
                     className
                 )}
+                disabled={readOnly}
+                ref={ref}
             >
                 <div className="p-6 pb-4">
                     <div className="flex items-center justify-between">
                         <div className="relative max-w-sm">
                             <Input
+                                className="pl-10"
+                                onChange={(e) => setSearchTerm(e.target.value)}
                                 placeholder="Search resources..."
                                 value={searchTerm}
-                                onChange={(e) => setSearchTerm(e.target.value)}
-                                className="pl-10"
                             />
                             <MagnifyingGlassIcon className="absolute left-3 top-1/2 transform -translate-y-1/2  h-4 w-4" />
                         </div>
@@ -161,13 +161,13 @@ const PermissionMatrix = forwardRef<
                             </Badge>
                             <div className="flex items-center space-x-2">
                                 <Checkbox
-                                    id="select-all"
                                     checked={selectAll}
+                                    id="select-all"
                                     onCheckedChange={handleSelectAll}
                                 />
                                 <Label
-                                    htmlFor="select-all"
                                     className="font-medium"
+                                    htmlFor="select-all"
                                 >
                                     Select All
                                 </Label>
@@ -190,8 +190,8 @@ const PermissionMatrix = forwardRef<
                                 </TableHead>
                                 {PERMISSION_ALL_ACTIONS.map((action) => (
                                     <TableHead
-                                        key={action.action}
                                         className="text-center w-[100px] bg-background"
+                                        key={action.action}
                                     >
                                         {action.label}
                                     </TableHead>
@@ -213,8 +213,6 @@ const PermissionMatrix = forwardRef<
                                     </TableCell>
                                     <TableCell className="text-center">
                                         <Checkbox
-                                            id={`${resource.resource}-all`}
-                                            className="size-5"
                                             checked={
                                                 isResourceAllSelected(
                                                     resource.resource
@@ -230,6 +228,8 @@ const PermissionMatrix = forwardRef<
                                                 ) &&
                                                     'indeterminate')
                                             }
+                                            className="size-5"
+                                            id={`${resource.resource}-all`}
                                             onCheckedChange={(checked) =>
                                                 handleResourceSelectAll(
                                                     resource.resource,
@@ -241,20 +241,21 @@ const PermissionMatrix = forwardRef<
                                     </TableCell>
                                     {PERMISSION_ALL_ACTIONS.map((action) => (
                                         <TableCell
-                                            key={action.action}
                                             className="text-center"
+                                            key={action.action}
                                         >
                                             <Checkbox
-                                                id={`${resource.resource}-${action.action}`}
+                                                checked={isPermissionChecked(
+                                                    resource.resource,
+                                                    action.action
+                                                )}
+                                                className="duration-200 size-5 ease-in-out data-[state=checked]:border-primary"
                                                 disabled={
                                                     !resource.supportedActions.includes(
                                                         action.action
                                                     )
                                                 }
-                                                checked={isPermissionChecked(
-                                                    resource.resource,
-                                                    action.action
-                                                )}
+                                                id={`${resource.resource}-${action.action}`}
                                                 onCheckedChange={(checked) =>
                                                     handlePermissionChange(
                                                         resource.resource,
@@ -262,7 +263,6 @@ const PermissionMatrix = forwardRef<
                                                         checked as boolean
                                                     )
                                                 }
-                                                className="duration-200 size-5 ease-in-out data-[state=checked]:border-primary"
                                             />
                                         </TableCell>
                                     ))}

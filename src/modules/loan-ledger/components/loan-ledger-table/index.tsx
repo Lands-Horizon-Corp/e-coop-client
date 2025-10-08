@@ -145,17 +145,6 @@ const LoanLedgerTable = ({
                 )}
             >
                 <DataTableToolbar
-                    globalSearchProps={{
-                        defaultMode: 'equal',
-                        targets: loanLedgerGlobalSearchTargets,
-                    }}
-                    table={table}
-                    refreshActionProps={{
-                        onClick: () => refetch(),
-                        isLoading: isPending || isRefetching,
-                    }}
-                    // No delete/export actions for loan ledger
-                    scrollableProps={{ isScrollable, setIsScrollable }}
                     exportActionProps={{
                         pagination,
                         isLoading: isPending,
@@ -166,18 +155,29 @@ const LoanLedgerTable = ({
                         filterLogic: filterState.filterLogic,
                         setFilterLogic: filterState.setFilterLogic,
                     }}
+                    globalSearchProps={{
+                        defaultMode: 'equal',
+                        targets: loanLedgerGlobalSearchTargets,
+                    }}
+                    refreshActionProps={{
+                        onClick: () => refetch(),
+                        isLoading: isPending || isRefetching,
+                    }}
+                    // No delete/export actions for loan ledger
+                    scrollableProps={{ isScrollable, setIsScrollable }}
+                    table={table}
                     {...toolbarProps}
                 />
                 <DataTable
-                    table={table}
-                    isStickyHeader
-                    isStickyFooter
                     className="mb-2"
-                    onRowClick={onRowClick}
                     isScrollable={isScrollable}
+                    isStickyFooter
+                    isStickyHeader
                     onDoubleClick={onDoubleClick}
-                    setColumnOrder={setColumnOrder}
+                    onRowClick={onRowClick}
                     RowContextComponent={RowContextComponent}
+                    setColumnOrder={setColumnOrder}
+                    table={table}
                 />
                 <DataTablePagination table={table} totalSize={totalSize} />
             </div>

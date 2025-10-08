@@ -24,9 +24,9 @@ const OrganizationBranchDisplay = ({
             <div className="flex min-w-64 items-end gap-x-2">
                 <PreviewMediaWrapper media={branch?.media}>
                     <ImageDisplay
-                        src={organization?.media?.download_url}
                         className="size-16 rounded-xl"
                         fallbackClassName="rounded-xl size-16"
+                        src={organization?.media?.download_url}
                     />
                 </PreviewMediaWrapper>
                 <div className="space-y-1">
@@ -39,9 +39,9 @@ const OrganizationBranchDisplay = ({
             <div className="flex min-w-64 items-end gap-x-2">
                 <PreviewMediaWrapper media={branch?.media}>
                     <ImageDisplay
-                        src={branch?.media?.download_url}
                         className="size-16 rounded-xl"
                         fallbackClassName="rounded-xl size-16"
+                        src={branch?.media?.download_url}
                     />
                 </PreviewMediaWrapper>
                 <div className="space-y-1">
@@ -61,9 +61,9 @@ const OrganizationBranchDisplay = ({
                     </p>
                     {branch?.latitude && branch?.longitude && (
                         <OpenExternalMap
+                            className="text-xs text-muted-foreground/40 duration-300 ease-out hover:text-muted-foreground hover:underline"
                             lat={branch?.latitude}
                             lon={branch?.longitude}
-                            className="text-xs text-muted-foreground/40 duration-300 ease-out hover:text-muted-foreground hover:underline"
                         >
                             Open External
                             <OpenExternalLinkIcon className="ml-1 inline" />

@@ -87,8 +87,8 @@ function RouteComponent() {
                     <span>
                         <LinkTag
                             href="http://ecoop-suite.com/"
-                            target="_blank"
                             name={` (http://ecoop-suite.com/)`}
+                            target="_blank"
                         />
                     </span>
                     . Our goal is to prevent fraud, support financial
@@ -99,8 +99,8 @@ function RouteComponent() {
 
                 {/* --- Section 1: Purpose and Scope --- */}
                 <SitePolicyItem
-                    ref={purposeScopeRef}
                     id="purpose-and-scope"
+                    ref={purposeScopeRef}
                     title="1. Purpose and Scope"
                 >
                     <div>
@@ -123,8 +123,8 @@ function RouteComponent() {
 
                 {/* --- Section 2: KYC Requirements --- */}
                 <SitePolicyItem
-                    ref={kycRequirementsRef}
                     id="kyc-requirements"
+                    ref={kycRequirementsRef}
                     title="2. KYC Requirements"
                 >
                     <div>
@@ -152,8 +152,8 @@ function RouteComponent() {
 
                 {/* --- Section 3: KYC Process --- */}
                 <SitePolicyItem
-                    ref={kycProcessRef}
                     id="kyc-process"
+                    ref={kycProcessRef}
                     title="3. KYC Process"
                 >
                     <div>
@@ -184,8 +184,8 @@ function RouteComponent() {
 
                 {/* --- Section 4: Ongoing Monitoring --- */}
                 <SitePolicyItem
-                    ref={ongoingMonitoringRef}
                     id="ongoing-monitoring"
+                    ref={ongoingMonitoringRef}
                     title="4. Ongoing Monitoring"
                 >
                     <div>
@@ -210,8 +210,8 @@ function RouteComponent() {
 
                 {/* --- Section 5: Data Protection --- */}
                 <SitePolicyItem
-                    ref={dataProtectionRef}
                     id="data-protection"
+                    ref={dataProtectionRef}
                     title="5. Data Protection"
                 >
                     <div>
@@ -236,8 +236,8 @@ function RouteComponent() {
 
                 {/* --- Section 6: Failure to Comply --- */}
                 <SitePolicyItem
-                    ref={failureToComplyRef}
                     id="failure-to-comply"
+                    ref={failureToComplyRef}
                     title="6. Failure to Comply"
                 >
                     <div>
@@ -259,8 +259,8 @@ function RouteComponent() {
 
                 {/* --- Section 7: Record Keeping --- */}
                 <SitePolicyItem
-                    ref={recordKeepingRef}
                     id="record-keeping"
+                    ref={recordKeepingRef}
                     title="7. Record Keeping"
                 >
                     <div>
@@ -279,8 +279,8 @@ function RouteComponent() {
 
                 {/* --- Section 8: Review and Updates --- */}
                 <SitePolicyItem
-                    ref={reviewUpdatesRef}
                     id="review-and-updates"
+                    ref={reviewUpdatesRef}
                     title="8. Review and Updates"
                 >
                     <div>
@@ -300,8 +300,8 @@ function RouteComponent() {
 
                 {/* --- Section 9: Contact Us --- */}
                 <SitePolicyItem
-                    ref={contactUsRef}
                     id="contact-us"
+                    ref={contactUsRef}
                     title="9. Contact Us"
                 >
                     <div className="space-y-2 not-prose">
@@ -346,12 +346,12 @@ function RouteComponent() {
                     {articleList.map((sectionId, idx) => (
                         <li key={sectionId}>
                             <a
+                                className="block py-1 text-primary hover:underline cursor-pointer text-sm"
                                 href={`#${sectionId}`}
                                 onClick={(e) => {
                                     e.preventDefault()
                                     scrollToSection(sectionId)
                                 }}
-                                className="block py-1 text-primary hover:underline cursor-pointer text-sm"
                             >
                                 {idx + 1}
                                 {'. '}

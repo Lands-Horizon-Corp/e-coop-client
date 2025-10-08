@@ -102,16 +102,9 @@ const EmployeePicker = forwardRef<HTMLButtonElement, Props>(
         return (
             <>
                 <GenericPicker
-                    items={data.data}
-                    open={state}
-                    listHeading={`Matched Results (${data.totalSize})`}
-                    searchPlaceHolder="Search employee username or email"
                     isLoading={isPending || isLoading || isFetching}
-                    onSelect={(employee) => {
-                        queryClient.setQueryData(['employee', value], employee)
-                        onSelect?.(employee)
-                        setState(false)
-                    }}
+                    items={data.data}
+                    listHeading={`Matched Results (${data.totalSize})`}
                     onOpenChange={setState}
                     onSearchChange={(searchValue) => {
                         bulkSetFilter(
@@ -134,6 +127,12 @@ const EmployeePicker = forwardRef<HTMLButtonElement, Props>(
                             }
                         )
                     }}
+                    onSelect={(employee) => {
+                        queryClient.setQueryData(['employee', value], employee)
+                        onSelect?.(employee)
+                        setState(false)
+                    }}
+                    open={state}
                     renderItem={(employee) => (
                         <div className="flex w-full items-center justify-between py-1">
                             <div className="flex items-center gap-x-2">
@@ -158,14 +157,9 @@ const EmployeePicker = forwardRef<HTMLButtonElement, Props>(
                             </p> */}
                         </div>
                     )}
+                    searchPlaceHolder="Search employee username or email"
                 >
                     <MiniPaginationBar
-                        pagination={{
-                            pageIndex: pagination.pageIndex,
-                            pageSize: pagination.pageSize,
-                            totalPage: data.totalPage,
-                            totalSize: data.totalSize,
-                        }}
                         disablePageMove={isFetching}
                         onNext={({ pageIndex }) =>
                             setPagination((prev) => ({ ...prev, pageIndex }))
@@ -173,16 +167,22 @@ const EmployeePicker = forwardRef<HTMLButtonElement, Props>(
                         onPrev={({ pageIndex }) =>
                             setPagination((prev) => ({ ...prev, pageIndex }))
                         }
+                        pagination={{
+                            pageIndex: pagination.pageIndex,
+                            pageSize: pagination.pageSize,
+                            totalPage: data.totalPage,
+                            totalSize: data.totalSize,
+                        }}
                     />
                 </GenericPicker>
                 <Button
+                    className="w-full items-center justify-between rounded-md border bg-background p-0 px-2"
+                    disabled={disabled}
+                    onClick={() => setState((prev) => !prev)}
                     ref={ref}
                     role="button"
                     type="button"
                     variant="secondary"
-                    disabled={disabled}
-                    onClick={() => setState((prev) => !prev)}
-                    className="w-full items-center justify-between rounded-md border bg-background p-0 px-2"
                 >
                     <span className="justify-betweentext-sm inline-flex w-full items-center text-foreground/90">
                         <span className="inline-flex w-full items-center gap-x-2">

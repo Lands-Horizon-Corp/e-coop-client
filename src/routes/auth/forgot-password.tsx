@@ -27,10 +27,10 @@ const ForgotPasswordPage = () => {
                 <AuthPageWrapper>
                     {!sentTo ? (
                         <ForgotPasswordEmail
+                            defaultValues={preFilledValues}
                             onSuccess={(data) => {
                                 setSentTo(data)
                             }}
-                            defaultValues={preFilledValues}
                         />
                     ) : (
                         <div className="flex w-full flex-col gap-y-4 sm:w-[390px]">
@@ -55,13 +55,12 @@ const ForgotPasswordPage = () => {
                             <ResendPasswordResetLinkButton
                                 duration={12}
                                 interval={1000}
-                                sentTo={sentTo}
                                 onErrorMessage={(errorMessage) =>
                                     setError(errorMessage)
                                 }
+                                sentTo={sentTo}
                             />
                             <Button
-                                variant={'ghost'}
                                 className="text-foreground/60"
                                 onClick={() => {
                                     router.navigate({
@@ -69,6 +68,7 @@ const ForgotPasswordPage = () => {
                                         search: preFilledValues,
                                     })
                                 }}
+                                variant={'ghost'}
                             >
                                 <ArrowLeftIcon className="mr-2" /> Back to Login
                             </Button>

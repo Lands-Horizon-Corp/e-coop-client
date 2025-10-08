@@ -63,11 +63,11 @@ const WorkTimer = ({ className }: Props) => {
                         />
                     )}
                     <LiveWorkTimeDurationDisplay
-                        timeIn={timesheet.time_in}
                         onTick={({ hours, minutes }) => {
                             if ((minutes >= 5 || hours > 0) && !canTimeOut)
                                 setCanTimeOut(true)
                         }}
+                        timeIn={timesheet.time_in}
                     />
                     <p className="text-center text-sm font-light text-muted-foreground">
                         Timed in at{' '}
@@ -97,7 +97,6 @@ const WorkTimer = ({ className }: Props) => {
             )}
             {showTimeInOut ? (
                 <TimeInOut
-                    timesheet={timesheet}
                     onCancel={() => setShowTimeInOut(false)}
                     onSuccess={(data) => {
                         setShowTimeInOut(false)
@@ -115,6 +114,7 @@ const WorkTimer = ({ className }: Props) => {
                             data
                         )
                     }}
+                    timesheet={timesheet}
                 />
             ) : (
                 <Button
@@ -146,10 +146,10 @@ const WorkTimer = ({ className }: Props) => {
             <p className="mx-auto max-w-72 text-center text-xs text-muted-foreground">
                 You can view your past timesheet/work time histories in{' '}
                 <Link
+                    className="text-foreground/60 underline duration-150 hover:text-foreground"
                     to={
                         '/org/$orgname/branch/$branchname/my-timesheet' as string
                     }
-                    className="text-foreground/60 underline duration-150 hover:text-foreground"
                 >
                     My Timesheet Page{' '}
                     <ArrowUpIcon className="inline size-2 rotate-45" />

@@ -19,10 +19,10 @@ const CancelledCashCheckVoucherButton = () => {
         <Popover modal>
             <PopoverTrigger asChild>
                 <Button
+                    className="group rounded-full"
+                    hoverVariant="primary"
                     size="sm"
                     variant="secondary"
-                    hoverVariant="primary"
-                    className="group rounded-full"
                 >
                     <ClockCancelIcon className="mr-2 text-primary duration-300 group-hover:text-inherit" />
                     Manage Cancelled Vouchers

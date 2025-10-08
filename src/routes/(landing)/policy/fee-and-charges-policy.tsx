@@ -93,8 +93,8 @@ function RouteComponent() {
                     <span>
                         <LinkTag
                             href="http://ecoop-suite.com/"
-                            target="_blank"
                             name={` (http://ecoop-suite.com/)`}
+                            target="_blank"
                         />
                     </span>
                     . Our goal is to ensure that all users, members, and
@@ -105,8 +105,8 @@ function RouteComponent() {
 
                 {/* --- Section 1: Purpose and Scope --- */}
                 <SitePolicyItem
-                    ref={purposeScopeRef}
                     id="purpose-and-scope"
+                    ref={purposeScopeRef}
                     title="1. Purpose and Scope"
                 >
                     <div>
@@ -126,8 +126,8 @@ function RouteComponent() {
 
                 {/* --- Section 2: Types of Fees and Charges --- */}
                 <SitePolicyItem
-                    ref={typesOfFeesChargesRef}
                     id="types-of-fees-and-charges"
+                    ref={typesOfFeesChargesRef}
                     title="2. Types of Fees and Charges"
                 >
                     <div>
@@ -187,8 +187,8 @@ function RouteComponent() {
 
                 {/* --- Section 3: Pricing Transparency --- */}
                 <SitePolicyItem
-                    ref={pricingTransparencyRef}
                     id="pricing-transparency"
+                    ref={pricingTransparencyRef}
                     title="3. Pricing Transparency"
                 >
                     <div>
@@ -211,8 +211,8 @@ function RouteComponent() {
 
                 {/* --- Section 4: Payment and Billing --- */}
                 <SitePolicyItem
-                    ref={paymentBillingRef}
                     id="payment-and-billing"
+                    ref={paymentBillingRef}
                     title="4. Payment and Billing"
                 >
                     <div>
@@ -237,8 +237,8 @@ function RouteComponent() {
 
                 {/* --- Section 5: Fee Changes and Notifications --- */}
                 <SitePolicyItem
-                    ref={feeChangesNotificationsRef}
                     id="fee-changes-and-notifications"
+                    ref={feeChangesNotificationsRef}
                     title="5. Fee Changes and Notifications"
                 >
                     <div>
@@ -260,8 +260,8 @@ function RouteComponent() {
 
                 {/* --- Section 6: Refunds and Disputes --- */}
                 <SitePolicyItem
-                    ref={refundsDisputesRef}
                     id="refunds-and-disputes"
+                    ref={refundsDisputesRef}
                     title="6. Refunds and Disputes"
                 >
                     <div>
@@ -288,8 +288,8 @@ function RouteComponent() {
 
                 {/* --- Section 7: Contact Us --- */}
                 <SitePolicyItem
-                    ref={contactUsRef}
                     id="contact-us"
+                    ref={contactUsRef}
                     title="7. Contact Us"
                 >
                     <div className="space-y-2 not-prose">
@@ -335,12 +335,12 @@ function RouteComponent() {
                     {articleList.map((sectionId, idx) => (
                         <li key={sectionId}>
                             <a
+                                className="block py-1 text-primary hover:underline cursor-pointer text-sm"
                                 href={`#${sectionId}`}
                                 onClick={(e) => {
                                     e.preventDefault()
                                     scrollToSection(sectionId)
                                 }}
-                                className="block py-1 text-primary hover:underline cursor-pointer text-sm"
                             >
                                 {idx + 1}
                                 {'. '}

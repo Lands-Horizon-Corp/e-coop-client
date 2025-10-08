@@ -19,7 +19,8 @@ const MemberLoanSummary = ({ memberProfileId }: Props) => {
     return (
         <div>
             <LoanViewModal
-                open={!!focusedLoan?.loanTransactionId}
+                defaultLoanTransaction={focusedLoan?.defaultLoanTransaction}
+                loanTransactionId={focusedLoan?.loanTransactionId as TEntityId}
                 onOpenChange={(open) => {
                     if (!open) {
                         setFocusedLoan((prev) => ({
@@ -29,8 +30,7 @@ const MemberLoanSummary = ({ memberProfileId }: Props) => {
                         }))
                     }
                 }}
-                loanTransactionId={focusedLoan?.loanTransactionId as TEntityId}
-                defaultLoanTransaction={focusedLoan?.defaultLoanTransaction}
+                open={!!focusedLoan?.loanTransactionId}
             />
             <MemberLoanTableSummary
                 className="h-[500px]"

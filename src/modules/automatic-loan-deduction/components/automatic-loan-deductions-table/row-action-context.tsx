@@ -92,7 +92,6 @@ export const AutomaticLoanDeductionAction = ({
             </div>
             <RowActionsGroup
                 canSelect
-                row={row}
                 onDelete={{
                     text: 'Delete',
                     isAllowed: !isDeletingAutomaticLoanDeduction,
@@ -104,6 +103,7 @@ export const AutomaticLoanDeductionAction = ({
                     onClick: handleEdit,
                 }}
                 otherActions={<>{/* Additional actions can be added here */}</>}
+                row={row}
             />
         </>
     )
@@ -139,7 +139,6 @@ export const AutomaticLoanDeductionRowContext = ({
                 }}
             />
             <DataTableRowContext
-                row={row}
                 onDelete={{
                     text: 'Delete',
                     isAllowed: !isDeletingAutomaticLoanDeduction,
@@ -150,6 +149,7 @@ export const AutomaticLoanDeductionRowContext = ({
                     isAllowed: true,
                     onClick: handleEdit,
                 }}
+                row={row}
             >
                 {children}
             </DataTableRowContext>

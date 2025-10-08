@@ -1,10 +1,8 @@
 import * as React from 'react'
 
 import { cn } from '@/helpers/tw-utils'
-import { IBank, useGetAllBanks } from '@/modules/bank'
 
 import { CheckIcon, ChevronDownIcon } from '@/components/icons'
-import ImageDisplay from '@/components/image-display'
 import LoadingSpinner from '@/components/spinners/loading-spinner'
 import { Button } from '@/components/ui/button'
 import {
@@ -20,18 +18,19 @@ import {
     PopoverContent,
     PopoverTrigger,
 } from '@/components/ui/popover'
-import PreviewMediaWrapper from '@/components/wrappers/preview-media-wrapper'
 
 import { TEntityId } from '@/types'
 
+import { useGetAllComputationSheet } from '..'
+import { IComputationSheet } from '../computation-sheet.types'
 import {
-    BankCreateUpdateFormModal,
-    IBankFormProps,
-} from './forms/bank-create-update-form'
+    ComputationSheetCreateUpdateFormModal,
+    IComputationSheetFormProps,
+} from './forms/computation-sheet-create-update-form'
 
-export interface IBankComboboxCreateProps
+export interface IComputationSheetCreateProps
     extends Pick<
-        IBankFormProps,
+        IComputationSheetFormProps,
         'defaultValues' | 'disabledFields' | 'hiddenFields'
     > {}
 
@@ -40,39 +39,39 @@ interface Props {
     disabled?: boolean
     className?: string
     placeholder?: string
-    bankComboboxCreateProps?: IBankComboboxCreateProps
-    onChange?: (selected: IBank) => void
+    computationSheetComboboxCreateProps?: IComputationSheetCreateProps
+    onChange?: (selected: IComputationSheet) => void
 }
 
-const BankCombobox = ({
+const ComputationSheetCombobox = ({
     value,
     className,
     disabled = false,
-    bankComboboxCreateProps,
-    placeholder = 'Select Bank...',
+    computationSheetComboboxCreateProps,
+    placeholder = 'Select Computation Sheet/Scheme...',
     onChange,
 }: Props) => {
     const [open, setOpen] = React.useState(false)
     const [createModal, setCreateModal] = React.useState(false)
 
-    const { data, isLoading } = useGetAllBanks({
+    const { data, isLoading } = useGetAllComputationSheet({
         options: {
             enabled: !disabled,
         },
     })
 
-    const selectedBank = React.useMemo(
-        () => data?.find((bank) => bank.id === value),
+    const selectedComputationSheet = React.useMemo(
+        () => data?.find((computationSheet) => computationSheet.id === value),
         [data, value]
     )
 
     return (
         <>
-            <BankCreateUpdateFormModal
+            <ComputationSheetCreateUpdateFormModal
                 formProps={{
-                    ...bankComboboxCreateProps,
-                    onSuccess: (newBank) => {
-                        onChange?.(newBank)
+                    ...computationSheetComboboxCreateProps,
+                    onSuccess: (newComputationSheet) => {
+                        onChange?.(newComputationSheet)
                         setCreateModal(false)
                     },
                 }}
@@ -88,16 +87,10 @@ const BankCombobox = ({
                         role="combobox"
                         variant="outline"
                     >
-                        {selectedBank ? (
+                        {selectedComputationSheet ? (
                             <div className="flex items-center gap-2 min-w-0">
-                                <PreviewMediaWrapper media={selectedBank.media}>
-                                    <ImageDisplay
-                                        className="size-4 rounded-full border bg-muted object-cover flex-shrink-0"
-                                        src={selectedBank.media?.download_url}
-                                    />
-                                </PreviewMediaWrapper>
                                 <span className="truncate">
-                                    {selectedBank.name}
+                                    {selectedComputationSheet.name}
                                 </span>
                             </div>
                         ) : (
@@ -149,17 +142,6 @@ const BankCombobox = ({
                                             value={option.name}
                                         >
                                             <div className="flex items-center gap-2 min-w-0 flex-1">
-                                                <PreviewMediaWrapper
-                                                    media={option.media}
-                                                >
-                                                    <ImageDisplay
-                                                        className="h-5 w-5 rounded-full border bg-muted object-cover flex-shrink-0"
-                                                        src={
-                                                            option.media
-                                                                ?.download_url
-                                                        }
-                                                    />
-                                                </PreviewMediaWrapper>
                                                 <span className="truncate">
                                                     {option.name}
                                                 </span>
@@ -184,4 +166,4 @@ const BankCombobox = ({
     )
 }
 
-export default BankCombobox
+export default ComputationSheetCombobox

@@ -88,8 +88,8 @@ function RouteComponent() {
                     <span>
                         <LinkTag
                             href="http://ecoop-suite.com/"
-                            target="_blank"
                             name={` (http://ecoop-suite.com/)`}
+                            target="_blank"
                         />
                     </span>
                     . By using our website or digital services, you agree to the
@@ -99,8 +99,8 @@ function RouteComponent() {
 
                 {/* --- Section 1: What Are Cookies? --- */}
                 <SitePolicyItem
-                    ref={whatAreCookiesRef}
                     id="what-are-cookies"
+                    ref={whatAreCookiesRef}
                     title="1. What Are Cookies?"
                 >
                     <div>
@@ -125,8 +125,8 @@ function RouteComponent() {
 
                 {/* --- Section 2: Types of Cookies We Use --- */}
                 <SitePolicyItem
-                    ref={typesOfCookiesRef}
                     id="types-of-cookies-we-use"
+                    ref={typesOfCookiesRef}
                     title="2. Types of Cookies We Use"
                 >
                     <div>
@@ -171,8 +171,8 @@ function RouteComponent() {
 
                 {/* --- Section 3: What Data is Collected --- */}
                 <SitePolicyItem
-                    ref={whatDataCollectedRef}
                     id="what-data-is-collected"
+                    ref={whatDataCollectedRef}
                     title="3. What Data is Collected"
                 >
                     <div>
@@ -194,8 +194,8 @@ function RouteComponent() {
 
                 {/* --- Section 4: How We Use Cookies --- */}
                 <SitePolicyItem
-                    ref={howWeUseCookiesRef}
                     id="how-we-use-cookies"
+                    ref={howWeUseCookiesRef}
                     title="4. How We Use Cookies"
                 >
                     <div>
@@ -220,8 +220,8 @@ function RouteComponent() {
 
                 {/* --- Section 5: Managing Cookies --- */}
                 <SitePolicyItem
-                    ref={managingCookiesRef}
                     id="managing-cookies"
+                    ref={managingCookiesRef}
                     title="5. Managing Cookies"
                 >
                     <div>
@@ -246,8 +246,8 @@ function RouteComponent() {
 
                 {/* --- Section 6: Third-Party Cookies --- */}
                 <SitePolicyItem
-                    ref={thirdPartyCookiesRef}
                     id="third-party-cookies"
+                    ref={thirdPartyCookiesRef}
                     title="6. Third-Party Cookies"
                 >
                     <div>
@@ -269,8 +269,8 @@ function RouteComponent() {
 
                 {/* --- Section 7: Changes to This Policy --- */}
                 <SitePolicyItem
-                    ref={changesToPolicyRef}
                     id="changes-to-this-policy"
+                    ref={changesToPolicyRef}
                     title="7. Changes to This Policy"
                 >
                     <div>
@@ -294,8 +294,8 @@ function RouteComponent() {
 
                 {/* --- Section 8: Contact Us --- */}
                 <SitePolicyItem
-                    ref={contactUsRef}
                     id="contact-us"
+                    ref={contactUsRef}
                     title="8. Contact Us"
                 >
                     <div className="space-y-2 not-prose">
@@ -340,12 +340,12 @@ function RouteComponent() {
                     {articleList.map((sectionId, idx) => (
                         <li key={sectionId}>
                             <a
+                                className="block py-1 text-primary hover:underline cursor-pointer text-sm"
                                 href={`#${sectionId}`}
                                 onClick={(e) => {
                                     e.preventDefault()
                                     scrollToSection(sectionId)
                                 }}
-                                className="block py-1 text-primary hover:underline cursor-pointer text-sm"
                             >
                                 {idx + 1}
                                 {'. '}

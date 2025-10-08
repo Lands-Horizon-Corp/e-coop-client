@@ -85,10 +85,10 @@ const DataTableToolbar = <TData,>({
 
     return (
         <div
+            className="ecoop-scroll flex w-full max-w-full shrink-0 items-center justify-between gap-x-2 overflow-auto"
             onClick={hanldeSetScope}
             onFocus={hanldeSetScope}
             onMouseOver={hanldeSetScope}
-            className="ecoop-scroll flex w-full max-w-full shrink-0 items-center justify-between gap-x-2 overflow-auto"
         >
             <div className="flex items-center gap-x-2">
                 {globalSearchProps ? (
@@ -127,22 +127,22 @@ const DataTableToolbar = <TData,>({
                         />
                     )}
                     <DatatableColumnVisibility
-                        table={table}
                         className="rounded-none border first:rounded-l-md last:rounded-r-md"
+                        table={table}
                     />
                     <DataTableOptionsMenu
-                        table={table}
-                        scrollOption={scrollableProps}
-                        filterLogicOption={filterLogicProps}
                         className="rounded-none border first:rounded-l-md last:rounded-r-md"
+                        filterLogicOption={filterLogicProps}
+                        scrollOption={scrollableProps}
+                        table={table}
                     />
                 </div>
 
                 {exportActionProps && !hideExportButton && (
                     <>
                         <Separator
-                            orientation="vertical"
                             className="h-full min-h-7"
+                            orientation="vertical"
                         />
                         <DataTableExportButton
                             table={table}

@@ -48,11 +48,11 @@ const DateRange = ({
         <Popover modal={modal}>
             <PopoverTrigger asChild>
                 <Button
-                    variant={'outline'}
                     className={cn(
                         'w-full pl-3 text-left font-normal',
                         !value && 'text-muted-foreground'
                     )}
+                    variant={'outline'}
                 >
                     {value?.from
                         ? format(value.from, 'MMM dd yyyy')
@@ -65,13 +65,13 @@ const DateRange = ({
                 </Button>
             </PopoverTrigger>
             <PopoverContent
-                className="w-auto rounded-2xl overflow-clip bg-popover/85 p-0 backdrop-blur"
                 align="start"
+                className="w-auto rounded-2xl overflow-clip bg-popover/85 p-0 backdrop-blur"
             >
                 <DateRangePicker
                     {...other}
-                    value={selected}
                     onChange={(range) => setSelected(range)}
+                    value={selected}
                 />
 
                 {withTimePick && (
@@ -117,6 +117,8 @@ const DateRange = ({
                 )}
                 <div className="flex w-full justify-end px-2 pb-2">
                     <Button
+                        className=""
+                        disabled={isInvalid}
                         onClick={() =>
                             onChange(
                                 selected as unknown as {
@@ -125,8 +127,6 @@ const DateRange = ({
                                 }
                             )
                         }
-                        disabled={isInvalid}
-                        className=""
                     >
                         Apply
                     </Button>

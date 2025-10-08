@@ -50,8 +50,8 @@ export default function FaqSection() {
                                     contact us directly
                                 </p>
                                 <Link
-                                    to="/contact"
                                     className="text-primary hover:text-primary/80 flex items-center group text-lg font-semibold"
+                                    to="/contact"
                                 >
                                     Contact us for more help
                                     <span className="ml-2 group-hover:translate-x-1 transition-transform">
@@ -73,15 +73,15 @@ export default function FaqSection() {
                             </p>
                             <div className="space-y-3 md:space-y-4 pb-4">
                                 <Accordion
-                                    type="single"
-                                    collapsible
                                     className="space-y-3 md:space-y-4"
+                                    collapsible
+                                    type="single"
                                 >
                                     {faqs.map((faq, index) => (
                                         <AccordionItem
+                                            className="border rounded-lg"
                                             key={index}
                                             value={`item-${index + 1}`}
-                                            className="border rounded-lg"
                                         >
                                             <AccordionTrigger className="px-4 md:px-6 text-sm md:text-base">
                                                 {faq.question}

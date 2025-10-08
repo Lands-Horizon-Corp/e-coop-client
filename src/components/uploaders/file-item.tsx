@@ -28,8 +28,8 @@ const FileItem = ({
 }: FileItemProps) => {
     return (
         <div
-            onClick={(e) => e.stopPropagation()}
             className="space-y-2 rounded-lg border border-secondary bg-popover p-3"
+            onClick={(e) => e.stopPropagation()}
         >
             <div className="flex space-x-3">
                 {media ? (
@@ -37,8 +37,8 @@ const FileItem = ({
                         <AspectRatio ratio={1 / 1}>
                             <PreviewMediaWrapper media={media}>
                                 <ImageDisplay
-                                    src={media.download_url}
                                     className="size-full rounded-none object-cover"
+                                    src={media.download_url}
                                 />
                             </PreviewMediaWrapper>
                         </AspectRatio>
@@ -57,12 +57,12 @@ const FileItem = ({
                     </p>
                 </div>
                 <Button
-                    size="icon"
-                    variant="secondary"
+                    className="size-fit rounded-md p-1 hover:text-destructive-foreground"
                     disabled={uploadDetails?.isUploading}
                     hoverVariant="destructive"
                     onClick={onRemoveFile}
-                    className="size-fit rounded-md p-1 hover:text-destructive-foreground"
+                    size="icon"
+                    variant="secondary"
                 >
                     <TrashIcon className="size-4 cursor-pointer" />
                 </Button>
@@ -75,8 +75,8 @@ const FileItem = ({
                         {uploadDetails?.eta} seconds left.
                     </p>
                     <Progress
-                        value={uploadDetails?.progress}
                         className="h-0.5"
+                        value={uploadDetails?.progress}
                     />
                 </div>
             )}

@@ -54,25 +54,25 @@ const TransactionModalJointMember = ({
     return (
         <>
             <Modal
-                open={openPicker}
-                onOpenChange={setOpenPicker}
-                title="Joint Accounts"
                 description="Co-owners of this account that have the access and share financial responsibility of this account (Select a one joint member)"
+                onOpenChange={setOpenPicker}
+                open={openPicker}
+                title="Joint Accounts"
                 {...rest}
                 className="!max-w-7xl"
             >
                 <div className="grid grid-cols-2 gap-4">
                     {hasSelectedMember && (
                         <Button
-                            variant={'outline'}
                             className="p-2 rounded-md text-xl text-muted-foreground h-full flex flex-col gap-y-2 justify-center items-center"
+                            disabled={!hasSelectedMember}
                             onClick={() => {
                                 setOpenPicker(false)
                                 onSelect?.(undefined)
                             }}
-                            disabled={!hasSelectedMember}
+                            variant={'outline'}
                         >
-                            <EmptyIcon size={50} className="ml-2" />
+                            <EmptyIcon className="ml-2" size={50} />
                             Select None
                         </Button>
                     )}
@@ -80,8 +80,8 @@ const TransactionModalJointMember = ({
                         memberJointProfile.map((jointMember) => (
                             <JointAccountCardView
                                 className="hover:border-primary hover:opacity-80 cursor-pointer"
-                                key={jointMember.id}
                                 jointAccounts={jointMember}
+                                key={jointMember.id}
                                 onClick={(e) => {
                                     e.stopPropagation()
                                     handleSelected(jointMember)
@@ -96,12 +96,12 @@ const TransactionModalJointMember = ({
                 </div>
             </Modal>
             <Button
+                className={`w-full ${hasSelectedMember ? 'justify-start' : ''} gap-x-2 px-2 ${triggerClassName}`}
                 onClick={(e) => {
                     e.preventDefault()
                     setOpenPicker(true)
                 }}
                 variant={'outline'}
-                className={`w-full ${hasSelectedMember ? 'justify-start' : ''} gap-x-2 px-2 ${triggerClassName}`}
                 {...triggerProps}
             >
                 {hasSelectedMember ? (

@@ -86,7 +86,6 @@ export const MemberTypeReferenceAction = ({
             </div>
             <RowActionsGroup
                 canSelect
-                row={row}
                 onDelete={{
                     text: 'Delete',
                     isAllowed: !isDeleting,
@@ -98,6 +97,7 @@ export const MemberTypeReferenceAction = ({
                     onClick: handleEdit,
                 }}
                 otherActions={<>{/* Additional actions can be added here */}</>}
+                row={row}
             />
         </>
     )
@@ -133,7 +133,6 @@ export const MemberTypeReferenceRowContext = ({
                 }}
             />
             <DataTableRowContext
-                row={row}
                 onDelete={{
                     text: 'Delete',
                     isAllowed: !isDeleting,
@@ -144,6 +143,7 @@ export const MemberTypeReferenceRowContext = ({
                     isAllowed: true,
                     onClick: handleEdit,
                 }}
+                row={row}
             >
                 {children}
             </DataTableRowContext>

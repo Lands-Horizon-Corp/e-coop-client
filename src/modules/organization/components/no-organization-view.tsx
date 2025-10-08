@@ -16,10 +16,10 @@ const NoOrganizationView = () => {
         <div className="flex w-full flex-col items-center gap-y-5">
             <HikingLandscape />
             <Button
+                className={cn('w-[300px] gap-x-2 rounded-xl')}
                 onClick={() => {
                     handleProceedToSetupOrg(navigate)
                 }}
-                className={cn('w-[300px] gap-x-2 rounded-xl')}
             >
                 <PlusIcon />
                 Create your own Organization
@@ -30,11 +30,11 @@ const NoOrganizationView = () => {
                 <Separator className="w-5" />
             </div>
             <Button
-                variant={'secondary'}
+                className={cn('w-[300px] gap-x-2 rounded-xl')}
                 onClick={() => {
                     navigate({ to: '/onboarding/organization' })
                 }}
-                className={cn('w-[300px] gap-x-2 rounded-xl')}
+                variant={'secondary'}
             >
                 <BuildingIcon /> Join an Organization
             </Button>

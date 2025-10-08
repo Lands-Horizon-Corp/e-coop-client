@@ -91,41 +91,41 @@ const MemberClassificationCreateUpdateForm = ({
     return (
         <Form {...form}>
             <form
-                ref={formRef}
-                onSubmit={onSubmit}
                 className={cn('flex w-full flex-col gap-y-4', className)}
+                onSubmit={onSubmit}
+                ref={formRef}
             >
                 <fieldset
-                    disabled={isPending || formProps.readOnly}
                     className="grid gap-x-6 gap-y-4 sm:gap-y-3"
+                    disabled={isPending || formProps.readOnly}
                 >
                     <fieldset className="space-y-3">
                         <FormFieldWrapper
                             control={form.control}
-                            name="name"
                             label="Name *"
+                            name="name"
                             render={({ field }) => (
                                 <Input
                                     {...field}
-                                    id={field.name}
-                                    placeholder="Member Classification Name"
                                     autoComplete="member-classification-name"
                                     disabled={isDisabled(field.name)}
+                                    id={field.name}
+                                    placeholder="Member Classification Name"
                                 />
                             )}
                         />
 
                         <FormFieldWrapper
                             control={form.control}
-                            name="description"
                             label="Description"
+                            name="description"
                             render={({ field }) => (
                                 <Textarea
                                     {...field}
-                                    id={field.name}
-                                    placeholder="Description *"
                                     autoComplete="member-classification-description"
                                     disabled={isDisabled(field.name)}
+                                    id={field.name}
+                                    placeholder="Description *"
                                 />
                             )}
                         />
@@ -133,15 +133,15 @@ const MemberClassificationCreateUpdateForm = ({
                 </fieldset>
 
                 <FormFooterResetSubmit
-                    error={error}
-                    readOnly={formProps.readOnly}
-                    isLoading={isPending}
                     disableSubmit={!form.formState.isDirty}
-                    submitText={memberClassificationId ? 'Update' : 'Create'}
+                    error={error}
+                    isLoading={isPending}
                     onReset={() => {
                         form.reset()
                         reset()
                     }}
+                    readOnly={formProps.readOnly}
+                    submitText={memberClassificationId ? 'Update' : 'Create'}
                 />
             </form>
         </Form>
@@ -159,9 +159,9 @@ export const MemberClassificationCreateUpdateFormModal = ({
 }) => {
     return (
         <Modal
-            title={title}
-            description={description}
             className={cn('', className)}
+            description={description}
+            title={title}
             {...props}
         >
             <MemberClassificationCreateUpdateForm

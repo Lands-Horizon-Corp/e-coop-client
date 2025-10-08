@@ -88,8 +88,8 @@ function RouteComponent() {
                     <span>
                         <LinkTag
                             href="http://ecoop-suite.com/"
-                            target="_blank"
                             name={` (http://ecoop-suite.com/)`}
+                            target="_blank"
                         />
                     </span>
                     . The API is designed to empower developers to build
@@ -100,8 +100,8 @@ function RouteComponent() {
 
                 {/* --- Section 1: Eligibility and Registration --- */}
                 <SitePolicyItem
-                    ref={eligibilityRegistrationRef}
                     id="eligibility-and-registration"
+                    ref={eligibilityRegistrationRef}
                     title="1. Eligibility and Registration"
                 >
                     <div>
@@ -126,8 +126,8 @@ function RouteComponent() {
 
                 {/* --- Section 2: API Key Management --- */}
                 <SitePolicyItem
-                    ref={apiKeyManagementRef}
                     id="api-key-management"
+                    ref={apiKeyManagementRef}
                     title="2. API Key Management"
                 >
                     <div>
@@ -151,8 +151,8 @@ function RouteComponent() {
 
                 {/* --- Section 3: Acceptable Use --- */}
                 <SitePolicyItem
-                    ref={acceptableUseRef}
                     id="acceptable-use"
+                    ref={acceptableUseRef}
                     title="3. Acceptable Use"
                 >
                     <div>
@@ -177,8 +177,8 @@ function RouteComponent() {
 
                 {/* --- Section 4: Security and Privacy --- */}
                 <SitePolicyItem
-                    ref={securityPrivacyRef}
                     id="security-and-privacy"
+                    ref={securityPrivacyRef}
                     title="4. Security and Privacy"
                 >
                     <div>
@@ -204,8 +204,8 @@ function RouteComponent() {
 
                 {/* --- Section 5: Revocation and Suspension --- */}
                 <SitePolicyItem
-                    ref={revocationSuspensionRef}
                     id="revocation-and-suspension"
+                    ref={revocationSuspensionRef}
                     title="5. Revocation and Suspension"
                 >
                     <div>
@@ -226,8 +226,8 @@ function RouteComponent() {
 
                 {/* --- Section 6: Updates to the Policy --- */}
                 <SitePolicyItem
-                    ref={updatesPolicyRef}
                     id="updates-to-the-policy"
+                    ref={updatesPolicyRef}
                     title="6. Updates to the Policy"
                 >
                     <div>
@@ -248,8 +248,8 @@ function RouteComponent() {
 
                 {/* --- Section 7: Support and Contact --- */}
                 <SitePolicyItem
-                    ref={supportContactRef}
                     id="support-and-contact"
+                    ref={supportContactRef}
                     title="7. Support and Contact"
                 >
                     <div>
@@ -291,12 +291,12 @@ function RouteComponent() {
                     {articleList.map((sectionId, idx) => (
                         <li key={sectionId}>
                             <a
+                                className="block py-1 text-primary hover:underline cursor-pointer text-sm"
                                 href={`#${sectionId}`}
                                 onClick={(e) => {
                                     e.preventDefault()
                                     scrollToSection(sectionId)
                                 }}
-                                className="block py-1 text-primary hover:underline cursor-pointer text-sm"
                             >
                                 {idx + 1}
                                 {'. '}

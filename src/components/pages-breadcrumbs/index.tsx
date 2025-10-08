@@ -103,8 +103,8 @@ const PageBreadCrumb = ({ className, homeUrl }: Props) => {
                 {paths.firstPart && (
                     <>
                         <BreadcrumbItem
-                            data-id="Yes"
                             className="text-foreground/40"
+                            data-id="Yes"
                         >
                             <BreadcrumbLink asChild className="text-inherit">
                                 <Link to={paths.firstPart.urlPath}>
@@ -133,8 +133,8 @@ const PageBreadCrumb = ({ className, homeUrl }: Props) => {
                                 >
                                     {paths.midPart.map((path) => (
                                         <DropdownMenuItem
-                                            key={path.urlPath}
                                             className="focus:bg-secondary focus:text-secondary-foreground"
+                                            key={path.urlPath}
                                         >
                                             <BreadcrumbItem className="w-full">
                                                 <BreadcrumbLink asChild>

@@ -43,15 +43,15 @@ const MemberJointAccountCard = ({ joint }: { joint: IMemberJointAccount }) => {
     return (
         <div className="flex flex-col gap-y-1 rounded-xl border bg-background p-4">
             <MemberJointAccountCreateUpdateFormModal
-                open={edit}
-                onOpenChange={setEdit}
-                title="Update Joint Account"
                 description="Modify / Update this joint account information."
                 formProps={{
                     jointAccountId: joint.id,
                     memberProfileId: joint.member_profile_id,
                     defaultValues: joint,
                 }}
+                onOpenChange={setEdit}
+                open={edit}
+                title="Update Joint Account"
             />
             <div className="flex justify-between">
                 <div className="flex items-center gap-x-2">
@@ -60,17 +60,16 @@ const MemberJointAccountCard = ({ joint }: { joint: IMemberJointAccount }) => {
                 </div>
                 <div className="flex items-center justify-end">
                     <Button
-                        size="icon"
-                        variant="ghost"
                         className="!size-fit px-1.5 py-1.5 text-muted-foreground/40"
                         disabled={isDeleting}
                         onClick={() => setEdit(true)}
+                        size="icon"
+                        variant="ghost"
                     >
                         <PencilFillIcon className="size-4" />
                     </Button>
                     <Button
-                        size="icon"
-                        variant="ghost"
+                        className="!size-fit px-1.5 py-1.5 text-muted-foreground/40"
                         disabled={isDeleting}
                         hoverVariant="destructive"
                         onClick={() =>
@@ -86,7 +85,8 @@ const MemberJointAccountCard = ({ joint }: { joint: IMemberJointAccount }) => {
                                     }),
                             })
                         }
-                        className="!size-fit px-1.5 py-1.5 text-muted-foreground/40"
+                        size="icon"
+                        variant="ghost"
                     >
                         {isDeleting ? (
                             <LoadingSpinner />
@@ -101,8 +101,8 @@ const MemberJointAccountCard = ({ joint }: { joint: IMemberJointAccount }) => {
                 <div className="col-span-full flex flex-1 flex-col items-center sm:col-span-2">
                     <PreviewMediaWrapper media={joint.picture_media}>
                         <ImageDisplay
-                            src={joint.picture_media?.download_url}
                             className="h-[200px] w-full rounded-lg border object-cover ring ring-ring/40"
+                            src={joint.picture_media?.download_url}
                         />
                     </PreviewMediaWrapper>
                     <span className="mt-1 text-xs text-muted-foreground/70">
@@ -112,8 +112,8 @@ const MemberJointAccountCard = ({ joint }: { joint: IMemberJointAccount }) => {
                 <div className="col-span-full flex flex-1 flex-col items-center sm:col-span-2">
                     <PreviewMediaWrapper media={joint.signature_media}>
                         <ImageDisplay
-                            src={joint.signature_media?.download_url}
                             className="h-[200px] w-full rounded-lg border object-cover ring ring-ring/40"
+                            src={joint.signature_media?.download_url}
                         />
                     </PreviewMediaWrapper>
                     <span className="mt-1 text-xs text-muted-foreground/70">
@@ -188,9 +188,6 @@ const MemberJointAccounts = ({ memberProfile }: Props) => {
     return (
         <div>
             <MemberJointAccountCreateUpdateFormModal
-                open={create}
-                onOpenChange={setCreate}
-                title="Create Joint Account"
                 description="Add new joint account information."
                 formProps={{
                     memberProfileId: memberProfile.id,
@@ -198,16 +195,19 @@ const MemberJointAccounts = ({ memberProfile }: Props) => {
                         member_profile_id: memberProfile.id,
                     },
                 }}
+                onOpenChange={setCreate}
+                open={create}
+                title="Create Joint Account"
             />
             <div className="mb-2 flex items-start justify-between">
                 <p>Joint Accounts</p>
-                <Button size="sm" onClick={() => setCreate(true)}>
+                <Button onClick={() => setCreate(true)} size="sm">
                     Add Joint Account <PlusIcon className="ml-1" />
                 </Button>
             </div>
             <div className="grid gap-4 sm:grid-cols-2">
                 {memberProfile.member_joint_accounts?.map((joint) => (
-                    <MemberJointAccountCard key={joint.id} joint={joint} />
+                    <MemberJointAccountCard joint={joint} key={joint.id} />
                 ))}
                 {(!memberProfile.member_joint_accounts ||
                     memberProfile.member_joint_accounts.length === 0) && (

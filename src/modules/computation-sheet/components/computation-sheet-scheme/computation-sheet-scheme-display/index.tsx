@@ -40,11 +40,11 @@ const LoanSchemeDisplay = ({ selectedId, defaultData, className }: Props) => {
     if (error)
         return (
             <div
-                key={isFetching ? 'yes' : 'no'}
                 className={cn(
                     'flex-1 flex items-center justify-center min-h-full space-y-4',
                     className
                 )}
+                key={isFetching ? 'yes' : 'no'}
             >
                 <p className="text-center text-xs py-8 mx-auto text-muted-foreground">
                     could not display scheme : <span>{error}</span>
@@ -54,11 +54,11 @@ const LoanSchemeDisplay = ({ selectedId, defaultData, className }: Props) => {
 
     return (
         <div
-            key={computationSheet?.id ?? ''}
             className={cn(
                 'flex-1 min-h-full max-w-full min-w-0 space-y-4',
                 className
             )}
+            key={computationSheet?.id ?? ''}
         >
             {isPending && selectedId !== undefined && (
                 <LoadingSpinner className="mx-auto" />
@@ -72,14 +72,14 @@ const LoanSchemeDisplay = ({ selectedId, defaultData, className }: Props) => {
                         <ScrollArea>
                             <TabsList className="text-foreground h-auto gap-2 rounded-none border-b bg-transparent px-0 py-1">
                                 <TabsTrigger
-                                    value="automatic-loan-deductions"
                                     className="hover:bg-accent hover:text-foreground data-[state=active]:after:bg-primary data-[state=active]:hover:bg-accent relative after:absolute after:inset-x-0 after:bottom-0 after:-mb-1 after:h-0.5 data-[state=active]:bg-transparent data-[state=active]:shadow-none"
+                                    value="automatic-loan-deductions"
                                 >
                                     Automatic Loan Deductions
                                 </TabsTrigger>
                                 <TabsTrigger
-                                    value="negative-excluded-included"
                                     className="hover:bg-accent hover:text-foreground data-[state=active]:after:bg-primary data-[state=active]:hover:bg-accent relative after:absolute after:inset-x-0 after:bottom-0 after:-mb-1 after:h-0.5 data-[state=active]:bg-transparent data-[state=active]:shadow-none"
+                                    value="negative-excluded-included"
                                 >
                                     Negative Accounts / Included / Excluded
                                     Accounts

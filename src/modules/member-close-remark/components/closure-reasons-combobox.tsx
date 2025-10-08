@@ -44,16 +44,16 @@ const AccountClosureReasonCombobox = ({
     const [open, setOpen] = React.useState(false)
 
     return (
-        <Popover modal open={open} onOpenChange={setOpen}>
+        <Popover modal onOpenChange={setOpen} open={open}>
             <PopoverTrigger asChild>
                 <Button
                     {...other}
-                    type="button"
-                    role="combobox"
-                    variant="outline"
-                    disabled={disabled}
                     aria-expanded={open}
                     className={cn('w-full justify-between px-3', className)}
+                    disabled={disabled}
+                    role="combobox"
+                    type="button"
+                    variant="outline"
                 >
                     <span className="capitalize">
                         {value || (
@@ -68,8 +68,8 @@ const AccountClosureReasonCombobox = ({
             <PopoverContent className="max-h-[--radix-popover-content-available-height] w-[--radix-popover-trigger-width] p-0">
                 <Command>
                     <CommandInput
-                        placeholder="Search Closure Reason..."
                         className="h-9"
+                        placeholder="Search Closure Reason..."
                     />
                     <CommandList className="ecoop-scroll">
                         <CommandEmpty>No reason found.</CommandEmpty>
@@ -77,13 +77,13 @@ const AccountClosureReasonCombobox = ({
                             {closureReasons.map((reason) => (
                                 <CommandItem
                                     key={reason}
-                                    value={reason}
                                     onSelect={() => {
                                         setOpen(false)
                                         onChange?.(
                                             reason as unknown as TAccountClosureReasonType
                                         )
                                     }}
+                                    value={reason}
                                 >
                                     <span className="capitalize">{reason}</span>
                                     <CheckIcon

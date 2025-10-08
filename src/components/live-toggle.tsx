@@ -24,8 +24,6 @@ const LiveToggle = ({ className, size = 'sm' }: LiveToggleProps) => {
             <Tooltip>
                 <TooltipTrigger asChild>
                     <Button
-                        variant={isLiveEnabled ? 'default' : 'secondary'}
-                        size={size}
                         className={cn(
                             'rounded-full shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105',
                             isLiveEnabled
@@ -34,6 +32,8 @@ const LiveToggle = ({ className, size = 'sm' }: LiveToggleProps) => {
                             className
                         )}
                         onClick={toggleLive}
+                        size={size}
+                        variant={isLiveEnabled ? 'default' : 'secondary'}
                     >
                         {isLiveEnabled ? (
                             <StopIcon className="h-4 w-4 mr-1 transition-all duration-200" />

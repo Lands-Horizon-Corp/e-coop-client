@@ -118,40 +118,40 @@ const AccountCategoryCreateUpdateForm = ({
     return (
         <Form {...form}>
             <form
-                ref={formRef}
-                onSubmit={onSubmit}
                 className={cn('flex w-full flex-col gap-y-4', className)}
+                onSubmit={onSubmit}
+                ref={formRef}
             >
                 <fieldset
-                    disabled={isPending || formProps.readOnly}
                     className="grid gap-x-6 gap-y-4 sm:gap-y-3"
+                    disabled={isPending || formProps.readOnly}
                 >
                     <fieldset className="space-y-3">
                         <FormFieldWrapper
                             control={form.control}
-                            name="name"
                             label="Category Name"
+                            name="name"
                             render={({ field }) => (
                                 <Input
                                     {...field}
-                                    placeholder="e.g., Assets, Liabilities"
                                     disabled={isDisabled(field.name)}
+                                    placeholder="e.g., Assets, Liabilities"
                                 />
                             )}
                         />
 
                         <FormFieldWrapper
                             control={form.control}
-                            name="description"
                             label="Description"
+                            name="description"
                             render={({ field }) => (
                                 <Textarea
                                     {...field}
-                                    id={field.name}
                                     autoComplete="off"
-                                    placeholder="Optional description for the category"
                                     className="max-h-40"
                                     disabled={isDisabled(field.name)}
+                                    id={field.name}
+                                    placeholder="Optional description for the category"
                                 />
                             )}
                         />
@@ -162,23 +162,23 @@ const AccountCategoryCreateUpdateForm = ({
                     <FormErrorMessage errorMessage={error} />
                     <div className="flex items-center justify-end gap-x-2">
                         <Button
-                            size="sm"
-                            type="button"
-                            variant="ghost"
+                            className="w-full self-end px-8 sm:w-fit"
                             onClick={() => {
                                 form.reset(formProps.defaultValues)
                                 resetCreate()
                                 resetUpdate()
                             }}
-                            className="w-full self-end px-8 sm:w-fit"
+                            size="sm"
+                            type="button"
+                            variant="ghost"
                         >
                             Reset
                         </Button>
                         <Button
+                            className="w-full self-end px-8 sm:w-fit"
+                            disabled={isPending || !isAccountCategoryOnChanged}
                             size="sm"
                             type="submit"
-                            disabled={isPending || !isAccountCategoryOnChanged}
-                            className="w-full self-end px-8 sm:w-fit"
                         >
                             {isPending ? (
                                 <LoadingSpinner />
@@ -211,19 +211,19 @@ export const AccountCategoryFormModal = ({
 }) => {
     return (
         <Modal
-            title={title}
-            description={description}
             className={cn('', className)}
+            description={description}
+            title={title}
             {...props}
         >
             <AccountCategoryCreateUpdateForm
                 {...formProps}
                 branchId={props.branchId}
-                organizationId={props.organizationId}
                 onSuccess={(createdData) => {
                     formProps?.onSuccess?.(createdData)
                     props.onOpenChange?.(false)
                 }}
+                organizationId={props.organizationId}
             />
         </Modal>
     )

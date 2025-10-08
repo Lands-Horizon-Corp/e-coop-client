@@ -96,10 +96,10 @@ function RouteComponent() {
                     ) : (
                         <>
                             <VerifyForm
-                                verifyMode="email"
                                 onSuccess={(data) =>
                                     updateCurrentAuth({ user: data })
                                 }
+                                verifyMode="email"
                             />
                         </>
                     )}

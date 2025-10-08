@@ -92,45 +92,39 @@ const BankCreateUpdateForm = ({ className, ...formProps }: IBankFormProps) => {
     return (
         <Form {...form}>
             <form
-                ref={formRef}
-                onSubmit={onSubmit}
                 className={cn('flex w-full flex-col gap-y-4', className)}
+                onSubmit={onSubmit}
+                ref={formRef}
             >
                 <fieldset
-                    disabled={isPending || formProps.readOnly}
                     className="grid gap-x-6 gap-y-4 sm:gap-y-3"
+                    disabled={isPending || formProps.readOnly}
                 >
                     <fieldset className="space-y-3">
                         <FormFieldWrapper
                             control={form.control}
-                            name="name"
                             label="Bank Name"
+                            name="name"
                             render={({ field }) => (
                                 <Input
                                     {...field}
-                                    id={field.name}
-                                    placeholder="Bank Name"
                                     autoComplete="off"
                                     disabled={isDisabled(field.name)}
+                                    id={field.name}
+                                    placeholder="Bank Name"
                                 />
                             )}
                         />
                         <FormFieldWrapper
                             control={form.control}
-                            name="media_id"
                             label="Bank Photo"
+                            name="media_id"
                             render={({ field }) => {
                                 const value = form.watch('media')
 
                                 return (
                                     <ImageField
                                         {...field}
-                                        placeholder="Upload Bank Photo"
-                                        value={
-                                            value
-                                                ? (value as IMedia).download_url
-                                                : value
-                                        }
                                         onChange={(newImage) => {
                                             if (newImage)
                                                 field.onChange(newImage.id)
@@ -138,36 +132,42 @@ const BankCreateUpdateForm = ({ className, ...formProps }: IBankFormProps) => {
 
                                             form.setValue('media', newImage)
                                         }}
+                                        placeholder="Upload Bank Photo"
+                                        value={
+                                            value
+                                                ? (value as IMedia).download_url
+                                                : value
+                                        }
                                     />
                                 )
                             }}
                         />
                         <FormFieldWrapper
                             control={form.control}
-                            name="description"
                             label="Description"
+                            name="description"
                             render={({ field }) => (
                                 <Textarea
                                     {...field}
-                                    id={field.name}
                                     autoComplete="off"
-                                    placeholder="Description"
                                     disabled={isDisabled(field.name)}
+                                    id={field.name}
+                                    placeholder="Description"
                                 />
                             )}
                         />
                     </fieldset>
                 </fieldset>
                 <FormFooterResetSubmit
-                    error={error}
-                    readOnly={formProps.readOnly}
-                    isLoading={isPending}
                     disableSubmit={!form.formState.isDirty}
-                    submitText={formProps.bankId ? 'Update' : 'Create'}
+                    error={error}
+                    isLoading={isPending}
                     onReset={() => {
                         form.reset()
                         reset()
                     }}
+                    readOnly={formProps.readOnly}
+                    submitText={formProps.bankId ? 'Update' : 'Create'}
                 />
             </form>
         </Form>
@@ -185,9 +185,9 @@ export const BankCreateUpdateFormModal = ({
 }) => {
     return (
         <Modal
-            title={title}
-            description={description}
             className={cn('', className)}
+            description={description}
+            title={title}
             {...props}
         >
             <BankCreateUpdateForm

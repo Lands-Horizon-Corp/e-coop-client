@@ -150,15 +150,6 @@ const BillsAndCoinsTable = ({
                 )}
             >
                 <DataTableToolbar
-                    globalSearchProps={{
-                        defaultMode: 'equal',
-                        targets: billsAndCoinsGlobalSearchTargets,
-                    }}
-                    table={table}
-                    refreshActionProps={{
-                        onClick: () => refetch(),
-                        isLoading: isPending || isRefetching,
-                    }}
                     deleteActionProps={{
                         onDeleteSuccess: () =>
                             queryClient.invalidateQueries({
@@ -169,23 +160,32 @@ const BillsAndCoinsTable = ({
                                 ids: selectedData.map((data) => data.id),
                             }),
                     }}
-                    scrollableProps={{ isScrollable, setIsScrollable }}
                     filterLogicProps={{
                         filterLogic: filterState.filterLogic,
                         setFilterLogic: filterState.setFilterLogic,
                     }}
+                    globalSearchProps={{
+                        defaultMode: 'equal',
+                        targets: billsAndCoinsGlobalSearchTargets,
+                    }}
+                    refreshActionProps={{
+                        onClick: () => refetch(),
+                        isLoading: isPending || isRefetching,
+                    }}
+                    scrollableProps={{ isScrollable, setIsScrollable }}
+                    table={table}
                     {...toolbarProps}
                 />
                 <DataTable
-                    table={table}
-                    isStickyHeader
-                    isStickyFooter
                     className="mb-2"
-                    onRowClick={onRowClick}
-                    onDoubleClick={onDoubleClick}
                     isScrollable={isScrollable}
-                    setColumnOrder={setColumnOrder}
+                    isStickyFooter
+                    isStickyHeader
+                    onDoubleClick={onDoubleClick}
+                    onRowClick={onRowClick}
                     RowContextComponent={RowContextComponent}
+                    setColumnOrder={setColumnOrder}
+                    table={table}
                 />
                 <DataTablePagination table={table} totalSize={totalSize} />
             </div>

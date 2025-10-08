@@ -30,9 +30,9 @@ const IntroSection = () => {
                     <div className="grid grid-cols-1 gap-6 md:grid-cols-2 md:gap-12">
                         <div className="relative order-2 aspect-[4/3] overflow-hidden rounded-lg md:order-1">
                             <ImageMatch
-                                src="/pictures/home/software.png"
                                 alt="Cooperative community working together"
                                 containerClassName="shadow-card overflow-hidden rounded-2xl"
+                                src="/pictures/home/software.png"
                             />
                         </div>
                         <div className="order-1 md:order-2">
@@ -50,8 +50,8 @@ const IntroSection = () => {
                             </p>
 
                             <FeatureList
-                                title="What we offer"
                                 items={features}
+                                title="What we offer"
                             />
                         </div>
                     </div>

@@ -121,36 +121,36 @@ const PaymentTypeCreateUpdateForm = ({
     return (
         <Form {...form}>
             <form
-                ref={formRef}
-                onSubmit={onSubmit}
                 className={cn('flex w-full flex-col gap-y-4', className)}
+                onSubmit={onSubmit}
+                ref={formRef}
             >
                 <fieldset
-                    disabled={isPending || formProps.readOnly}
                     className="grid gap-x-6 gap-y-4 sm:gap-y-3"
+                    disabled={isPending || formProps.readOnly}
                 >
                     <fieldset className="space-y-3">
                         <FormFieldWrapper
                             control={form.control}
-                            name="name"
                             label="Payment Type Name"
+                            name="name"
                             render={({ field }) => (
                                 <Input
                                     {...field}
-                                    placeholder="e.g., Cash, Bank Transfer, Credit Card"
                                     disabled={isDisabled(field.name)}
+                                    placeholder="e.g., Cash, Bank Transfer, Credit Card"
                                 />
                             )}
                         />
                         <FormFieldWrapper
                             control={form.control}
-                            name="type"
                             label="Payment Method Type"
+                            name="type"
                             render={({ field }) => (
                                 <Select
-                                    onValueChange={field.onChange}
                                     defaultValue={field.value}
                                     disabled={isDisabled(field.name)}
+                                    onValueChange={field.onChange}
                                 >
                                     <SelectTrigger>
                                         <SelectValue placeholder="Select a type" />
@@ -171,13 +171,11 @@ const PaymentTypeCreateUpdateForm = ({
                         />
                         <FormFieldWrapper
                             control={form.control}
-                            name="number_of_days"
                             label="Number of Days (Optional)"
+                            name="number_of_days"
                             render={({ field }) => (
                                 <Input
                                     {...field}
-                                    type="number"
-                                    placeholder="e.g., 30 (for credit terms)"
                                     disabled={isDisabled(field.name)}
                                     onChange={(e) =>
                                         field.onChange(
@@ -185,6 +183,8 @@ const PaymentTypeCreateUpdateForm = ({
                                                 undefined
                                         )
                                     }
+                                    placeholder="e.g., 30 (for credit terms)"
+                                    type="number"
                                     value={
                                         field.value !== undefined
                                             ? field.value
@@ -196,16 +196,16 @@ const PaymentTypeCreateUpdateForm = ({
 
                         <FormFieldWrapper
                             control={form.control}
-                            name="description"
                             label="Description"
+                            name="description"
                             render={({ field }) => (
                                 <Textarea
                                     {...field}
-                                    id={field.name}
                                     autoComplete="off"
-                                    placeholder="Optional description for the payment type"
                                     className="max-h-40"
                                     disabled={isDisabled(field.name)}
+                                    id={field.name}
+                                    placeholder="Optional description for the payment type"
                                 />
                             )}
                         />
@@ -216,23 +216,23 @@ const PaymentTypeCreateUpdateForm = ({
                     <FormErrorMessage errorMessage={errorMessage} />
                     <div className="flex items-center justify-end gap-x-2">
                         <Button
-                            size="sm"
-                            type="button"
-                            variant="ghost"
+                            className="w-full self-end px-8 sm:w-fit"
                             onClick={() => {
                                 form.reset(formProps.defaultValues)
                                 resetCreate()
                                 resetUpdate()
                             }}
-                            className="w-full self-end px-8 sm:w-fit"
+                            size="sm"
+                            type="button"
+                            variant="ghost"
                         >
                             Reset
                         </Button>
                         <Button
+                            className="w-full self-end px-8 sm:w-fit"
+                            disabled={isPending || !isPaymentTypeOnChanged}
                             size="sm"
                             type="submit"
-                            disabled={isPending || !isPaymentTypeOnChanged}
-                            className="w-full self-end px-8 sm:w-fit"
                         >
                             {isPending ? (
                                 <LoadingSpinner />
@@ -260,9 +260,9 @@ export const PaymentTypeCreateUpdateFormModal = ({
 }) => {
     return (
         <Modal
-            title={title}
-            description={description}
             className={cn('', className)}
+            description={description}
+            title={title}
             {...props}
         >
             <PaymentTypeCreateUpdateForm

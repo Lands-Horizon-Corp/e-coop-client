@@ -52,7 +52,6 @@ const TimePicker: React.FC<TimePickerProps> = ({
                 <div className="mb-2 text-sm">{label}</div>
             )}
             <Select
-                value={value.toString()}
                 onValueChange={(selectedValue) => {
                     const parsedValue =
                         typeof items[0].value === 'number'
@@ -60,6 +59,7 @@ const TimePicker: React.FC<TimePickerProps> = ({
                             : selectedValue
                     onSelect(parsedValue)
                 }}
+                value={value.toString()}
             >
                 <SelectTrigger className="w-[80px]" disabled={disabled}>
                     {items.find((item) => item.value === value)?.label ||

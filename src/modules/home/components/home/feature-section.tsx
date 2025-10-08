@@ -87,9 +87,9 @@ export default function FeatureSection() {
                     </div>
                     <div className="mt-8 flex justify-center">
                         <Button
+                            asChild
                             className="h-[42px] w-full md:w-auto"
                             variant="default"
-                            asChild
                         >
                             <Link to="/auth/sign-in">Sign in Now</Link>
                         </Button>

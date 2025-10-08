@@ -38,25 +38,25 @@ const TeamMemberCard = ({
 
     return (
         <div
-            onClick={() => viewMoreModal.onOpenChange(!viewMoreModal.open)}
             className={cn(
                 'group cursor-pointer relative overflow-hidden rounded-2xl bg-card border-0 hover:shadow-sm transition-all duration-500 delay-150',
                 'h-80 sm:h-96 md:h-[400px]',
                 className
             )}
+            onClick={() => viewMoreModal.onOpenChange(!viewMoreModal.open)}
         >
             <Image
-                src={image || '/placeholder.svg'}
                 className="object-cover absolute top-0 left-0 size-full transition-transform duration-300 group-hover:scale-105"
+                src={image || '/placeholder.svg'}
             />
 
             <Button
-                size="icon"
-                variant="secondary"
                 className={cn(
                     'size-fit p-2 absolute bg-secondary/40 backdrop-blur-sm group-hover:bg-primary z-10 rounded-full',
                     'top-3 right-3 sm:top-4 sm:right-4 md:top-5 md:right-5'
                 )}
+                size="icon"
+                variant="secondary"
             >
                 <PlusIcon className="size-4 group-hover:rotate-45 duration-200 ease-in-out" />
             </Button>
@@ -97,9 +97,6 @@ const TeamMemberCard = ({
             <div onClick={(e) => e.stopPropagation()}>
                 <Modal
                     {...viewMoreModal}
-                    showCloseButton
-                    titleClassName="hidden"
-                    descriptionClassName="hidden"
                     className={cn(
                         'outline-none',
                         'max-w-sm sm:max-w-2xl md:max-w-4xl lg:max-w-5xl',
@@ -108,6 +105,9 @@ const TeamMemberCard = ({
                         'flex flex-col md:flex-row',
                         className
                     )}
+                    descriptionClassName="hidden"
+                    showCloseButton
+                    titleClassName="hidden"
                 >
                     <div
                         className={cn(
@@ -117,8 +117,8 @@ const TeamMemberCard = ({
                         )}
                     >
                         <Image
-                            src={image || '/placeholder.svg'}
                             className="object-cover size-full transition-transform duration-300 group-hover:scale-105"
+                            src={image || '/placeholder.svg'}
                         />
                     </div>
 
@@ -165,18 +165,18 @@ const TeamMemberCard = ({
                             >
                                 {instagramUrl && (
                                     <Button
-                                        variant="ghost"
-                                        size="icon"
+                                        asChild
                                         className={cn(
                                             'text-muted-foreground/70 hover:text-fuchsia-300 hover:bg-foreground/20 transition-colors',
                                             'size-fit p-2 sm:p-3'
                                         )}
-                                        asChild
+                                        size="icon"
+                                        variant="ghost"
                                     >
                                         <a
                                             href={instagramUrl}
-                                            target="_blank"
                                             rel="noopener noreferrer"
+                                            target="_blank"
                                         >
                                             <InstagramIcon className="size-4" />
                                             <span className="sr-only">
@@ -188,18 +188,18 @@ const TeamMemberCard = ({
 
                                 {linkedInUrl && (
                                     <Button
-                                        variant="ghost"
-                                        size="icon"
+                                        asChild
                                         className={cn(
                                             'text-muted-foreground/70 hover:text-blue-300 hover:bg-foreground/20 transition-colors',
                                             'size-fit p-2 sm:p-3'
                                         )}
-                                        asChild
+                                        size="icon"
+                                        variant="ghost"
                                     >
                                         <a
                                             href={linkedInUrl}
-                                            target="_blank"
                                             rel="noopener noreferrer"
+                                            target="_blank"
                                         >
                                             <LinkedInIcon className="size-4" />
                                             <span className="sr-only">
@@ -211,18 +211,18 @@ const TeamMemberCard = ({
 
                                 {facebookUrl && (
                                     <Button
-                                        variant="ghost"
-                                        size="icon"
+                                        asChild
                                         className={cn(
                                             'text-muted-foreground/70 hover:text-blue-400 hover:bg-foreground/20 transition-colors',
                                             'size-fit p-2 sm:p-3'
                                         )}
-                                        asChild
+                                        size="icon"
+                                        variant="ghost"
                                     >
                                         <a
                                             href={facebookUrl}
-                                            target="_blank"
                                             rel="noopener noreferrer"
+                                            target="_blank"
                                         >
                                             <FacebookIcon className="size-4" />
                                             <span className="sr-only">

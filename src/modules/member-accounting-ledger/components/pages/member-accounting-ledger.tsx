@@ -37,8 +37,8 @@ const MemberAccountingLedgerPage = () => {
     return (
         <PageContainer>
             <MemberAccountingLedgerTable
-                mode="branch"
                 className="max-h-[90vh] min-h-[90vh] w-full"
+                mode="branch"
             />
         </PageContainer>
     )

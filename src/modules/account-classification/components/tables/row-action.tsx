@@ -81,9 +81,7 @@ export const AccountClassificationAction = ({
                 <AccountClassificationFormModal
                     {...updateModal}
                     className="!max-w-2xl"
-                    title="Edit Account Classification"
                     description="Update details for this account classification."
-                    titleClassName="font-bold"
                     formProps={{
                         accountClassificationId: accountClassification.id,
                         defaultValues: { ...accountClassification },
@@ -94,11 +92,12 @@ export const AccountClassificationAction = ({
                             updateModal.onOpenChange(false)
                         },
                     }}
+                    title="Edit Account Classification"
+                    titleClassName="font-bold"
                 />
             </div>
             <RowActionsGroup
                 canSelect
-                row={row}
                 onDelete={{
                     text: 'Delete',
                     isAllowed: !isDeletingAccountClassification,
@@ -110,6 +109,7 @@ export const AccountClassificationAction = ({
                     onClick: handleEdit,
                 }}
                 otherActions={<>{/* Additional actions can be added here */}</>}
+                row={row}
             />
         </>
     )
@@ -139,9 +139,7 @@ export const AccountClassificationRowContext = ({
             <AccountClassificationFormModal
                 {...updateModal}
                 className="!max-w-2xl"
-                title="Edit Account Classification"
                 description="Update details for this account classification."
-                titleClassName="font-bold"
                 formProps={{
                     accountClassificationId: accountClassification.id,
                     defaultValues: { ...accountClassification },
@@ -152,9 +150,10 @@ export const AccountClassificationRowContext = ({
                         updateModal.onOpenChange(false)
                     },
                 }}
+                title="Edit Account Classification"
+                titleClassName="font-bold"
             />
             <DataTableRowContext
-                row={row}
                 onDelete={{
                     text: 'Delete',
                     isAllowed: !isDeletingAccountClassification,
@@ -165,6 +164,7 @@ export const AccountClassificationRowContext = ({
                     isAllowed: true,
                     onClick: handleEdit,
                 }}
+                row={row}
             >
                 {children}
             </DataTableRowContext>

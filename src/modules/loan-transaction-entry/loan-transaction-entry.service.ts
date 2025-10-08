@@ -13,6 +13,7 @@ import type {
     ILoanTransactionEntryRequest,
 } from '../loan-transaction-entry'
 import { loanTransactionBaseKey } from '../loan-transaction/loan-transaction.service'
+import { ILoanTransaction } from '../loan-transaction/loan-transaction.types'
 
 const {
     apiCrudHooks,
@@ -119,6 +120,25 @@ export const useDeleteLoanTransactionEntryById = createMutationFactory<
     TEntityId
 >({
     mutationFn: (id) => deleteLoanTransactionEntryById({ id }),
+    invalidationFn: (props) => {
+        deleteMutationInvalidationFn(loanTransactionEntryBaseKey, props)
+        props.queryClient.invalidateQueries({
+            queryKey: [loanTransactionBaseKey, 'paginated'],
+        })
+    },
+})
+
+export const useLoanTransactionEntryRestoreById = createMutationFactory<
+    ILoanTransaction,
+    Error,
+    TEntityId
+>({
+    mutationFn: async (id) => {
+        const response = await API.put<void, ILoanTransaction>(
+            `${loanTransactionEntryAPIRoute}/${id}/restore`
+        )
+        return response.data
+    },
     invalidationFn: (props) => {
         deleteMutationInvalidationFn(loanTransactionEntryBaseKey, props)
         props.queryClient.invalidateQueries({

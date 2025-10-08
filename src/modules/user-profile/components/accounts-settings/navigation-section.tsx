@@ -34,8 +34,6 @@ export const NavigationSection = ({
             <div className="space-y-0.5">
                 {items.map((item) => (
                     <Link
-                        key={item.path}
-                        to={item.path as string}
                         className={cn(
                             'block px-2 py-1.5 rounded-md transition-colors duration-200',
                             'hover:bg-accent hover:text-accent-foreground',
@@ -43,6 +41,8 @@ export const NavigationSection = ({
                                 ? 'bg-accent text-accent-foreground font-medium'
                                 : 'text-muted-foreground'
                         )}
+                        key={item.path}
+                        to={item.path as string}
                     >
                         {item.name}
                     </Link>

@@ -84,23 +84,8 @@ function RootLayout() {
                 <div className="relative">
                     <DndProvider backend={HTML5Backend}>
                         <Toaster
-                            richColors
-                            closeButton
-                            theme="system"
                             className="z-[9999] toaster group"
-                            toastOptions={{
-                                classNames: {
-                                    icon: 'flex items-center !mr-2 justify-center',
-                                    success:
-                                        '!bg-gradient-to-tr !p-4 !rounded-xl !border-t-0 !border-x-0 !border-b-1 !border-b-green-500 !from-green-500/20 !to-background !text-foreground !border-green-600',
-                                    info: '!bg-gradient-to-tr !p-4 !rounded-xl !border-t-0 !border-x-0 !border-b-1 !border-b-blue-500 !from-blue-500/20 !to-background !text-foreground !border-blue-600',
-                                    loading:
-                                        '!bg-gradient-to-tr !p-4 !rounded-xl !border-t-0 !border-x-0 !border-b-1 !border-b-primary !from-primary/40 !to-background !text-foreground !border-primary',
-                                    error: '!bg-gradient-to-tr !p-4 !rounded-xl !border-t-0 !border-x-0 !border-b-1 !border-b-rose-400 !from-rose-400/20 !to-background !text-foreground !border-rose-400',
-                                    warning:
-                                        '!bg-gradient-to-tr !p-4 !rounded-xl !border-t-0 !border-x-0 !border-b-1 !border-b-[#e8915f] !from-[#e8915f]/20 !to-popover !text-foreground !border-[#e8915f]',
-                                },
-                            }}
+                            closeButton
                             icons={{
                                 success: (
                                     <span className="bg-green-300/20 rounded-full animate-pulse flex items-center justify-center p-1">
@@ -125,6 +110,21 @@ function RootLayout() {
                                         <WarningFillIcon className="text-[#e8915f] size-4 inline" />
                                     </span>
                                 ),
+                            }}
+                            richColors
+                            theme="system"
+                            toastOptions={{
+                                classNames: {
+                                    icon: 'flex items-center !mr-2 justify-center',
+                                    success:
+                                        '!bg-gradient-to-tr !p-4 !rounded-xl !border-t-0 !border-x-0 !border-b-1 !border-b-green-500 !from-green-500/20 !to-background !text-foreground !border-green-600',
+                                    info: '!bg-gradient-to-tr !p-4 !rounded-xl !border-t-0 !border-x-0 !border-b-1 !border-b-blue-500 !from-blue-500/20 !to-background !text-foreground !border-blue-600',
+                                    loading:
+                                        '!bg-gradient-to-tr !p-4 !rounded-xl !border-t-0 !border-x-0 !border-b-1 !border-b-primary !from-primary/40 !to-background !text-foreground !border-primary',
+                                    error: '!bg-gradient-to-tr !p-4 !rounded-xl !border-t-0 !border-x-0 !border-b-1 !border-b-rose-400 !from-rose-400/20 !to-background !text-foreground !border-rose-400',
+                                    warning:
+                                        '!bg-gradient-to-tr !p-4 !rounded-xl !border-t-0 !border-x-0 !border-b-1 !border-b-[#e8915f] !from-[#e8915f]/20 !to-popover !text-foreground !border-[#e8915f]',
+                                },
                             }}
                         />
                         <Outlet />

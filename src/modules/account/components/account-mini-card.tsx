@@ -46,8 +46,8 @@ const AccountMiniCard = ({ accountId, defaultAccount, className }: Props) => {
                         >
                             {data?.icon && (
                                 <RenderIcon
-                                    icon={data.icon as TIcon}
                                     className="inline mr-1"
+                                    icon={data.icon as TIcon}
                                 />
                             )}
                             {data?.name ?? '...'}
@@ -64,7 +64,7 @@ const AccountMiniCard = ({ accountId, defaultAccount, className }: Props) => {
                             {data?.type ?? 'unknown'}
                         </Badge>
                         {data?.is_internal && (
-                            <Badge variant="secondary" className="text-xs">
+                            <Badge className="text-xs" variant="secondary">
                                 Internal
                             </Badge>
                         )}
@@ -72,10 +72,10 @@ const AccountMiniCard = ({ accountId, defaultAccount, className }: Props) => {
                 </div>
             </CardHeader>
             <Button
-                disabled={isPending}
-                variant="ghost"
                 className="size-fit p-1 absolute top-1 right-1 rounded-full"
+                disabled={isPending}
                 onClick={() => refetch()}
+                variant="ghost"
             >
                 {isPending ? (
                     <LoadingSpinner className="size-3" />

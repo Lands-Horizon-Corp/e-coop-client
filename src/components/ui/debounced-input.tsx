@@ -44,8 +44,8 @@ const DebouncedInput = <T,>({
     return (
         <Input
             {...props}
-            value={internalValue as unknown as string}
             onChange={handleInputChange}
+            value={internalValue as unknown as string}
         />
     )
 }

@@ -88,8 +88,10 @@ const MapSearch = ({ onLocationFound, className, map }: TCustomSearchProps) => {
     return (
         <div className="h-fit w-full">
             <Input
-                type="text"
-                value={query}
+                className={cn(
+                    'rounded-lg border px-4 py-2 focus:border-none focus:outline-none',
+                    className ?? ''
+                )}
                 onChange={handleInputChange}
                 onKeyDown={(e) => {
                     if (e.key === 'Enter') {
@@ -97,10 +99,8 @@ const MapSearch = ({ onLocationFound, className, map }: TCustomSearchProps) => {
                     }
                 }}
                 placeholder="Search Google Maps"
-                className={cn(
-                    'rounded-lg border px-4 py-2 focus:border-none focus:outline-none',
-                    className ?? ''
-                )}
+                type="text"
+                value={query}
             />
             <div
                 className={`absolute z-[50] flex w-[90%] flex-col space-y-2 bg-background/90 ${!showSearchList ? 'hidden' : 'p-5'} rounded-lg`}
@@ -115,15 +115,14 @@ const MapSearch = ({ onLocationFound, className, map }: TCustomSearchProps) => {
                             <>
                                 {results.map((location, index) => (
                                     <div
-                                        key={index}
                                         className="cursor-pointer hover:rounded-lg hover:bg-accent focus:rounded-lg focus:bg-accent focus:outline-none focus:ring-0"
+                                        key={index}
                                         onClick={() => {
                                             handleOnLocationFound(
                                                 parseFloat(location.lat),
                                                 parseFloat(location.lng)
                                             )
                                         }}
-                                        tabIndex={0}
                                         onKeyDown={(e) => {
                                             if (e.key === 'Enter') {
                                                 e.preventDefault()
@@ -133,6 +132,7 @@ const MapSearch = ({ onLocationFound, className, map }: TCustomSearchProps) => {
                                                 )
                                             }
                                         }}
+                                        tabIndex={0}
                                     >
                                         <div className="flex p-2">
                                             <div className="w-9">

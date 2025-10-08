@@ -37,8 +37,8 @@ const TimeRange = ({
                 <div className="flex w-full items-center justify-between gap-x-2 space-y-1">
                     <p className="text-sm text-foreground/70">From Time : </p>
                     <TimePicker
-                        hideTimeFieldLabels
                         date={timeRange?.from || baseDate}
+                        hideTimeFieldLabels
                         onChange={(newDate) => {
                             const updatedRange = { ...timeRange, from: newDate }
                             setTimeRange(updatedRange)
@@ -48,8 +48,8 @@ const TimeRange = ({
                 <div className="flex w-full items-center justify-between gap-x-2 space-y-1">
                     <p className="text-sm text-foreground/70">To Time : </p>
                     <TimePicker
-                        hideTimeFieldLabels
                         date={timeRange?.to || baseDate}
+                        hideTimeFieldLabels
                         onChange={(newDate) => {
                             setTimeRange((prev) => ({
                                 from: prev?.from ? prev.from : newDate,

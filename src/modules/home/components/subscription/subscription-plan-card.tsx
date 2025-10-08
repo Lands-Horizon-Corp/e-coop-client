@@ -63,8 +63,8 @@ const PlanCard = ({
                     )}
                     {discountPercent > 0 && (
                         <Badge
-                            variant="secondary"
                             className="text-muted-foreground bg-primary/10 border-primary/70"
+                            variant="secondary"
                         >
                             {discountPercent}% Discount
                         </Badge>

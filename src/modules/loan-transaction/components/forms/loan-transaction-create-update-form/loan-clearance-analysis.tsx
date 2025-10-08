@@ -45,50 +45,50 @@ const LoanClearanceAnalysis = forwardRef<
     }
 >(({ form, isReadOnly, isDisabled }, ref) => {
     return (
-        <div ref={ref} className="space-y-4">
+        <div className="space-y-4" ref={ref}>
             <LoanClearanceAnalysisField
                 form={form}
-                isReadOnly={isReadOnly}
                 isDisabled={isDisabled}
+                isReadOnly={isReadOnly}
             />
             <div className="grid grid-cols-2 gap-x-2">
                 <div className="space-y-2">
                     <FormFieldWrapper
                         control={form.control}
-                        name="mount_to_be_closed"
                         label="Amount to be closed "
+                        name="mount_to_be_closed"
                         render={({ field }) => (
                             <Input
                                 {...field}
+                                disabled={isDisabled(field.name)}
                                 id={field.name}
                                 placeholder="Amount"
-                                disabled={isDisabled(field.name)}
                             />
                         )}
                     />
                     <FormFieldWrapper
                         control={form.control}
-                        name="share_capital"
                         label="Share Capital"
+                        name="share_capital"
                         render={({ field }) => (
                             <Input
                                 {...field}
+                                disabled={isDisabled(field.name)}
                                 id={field.name}
                                 placeholder="Share capital amount"
-                                disabled={isDisabled(field.name)}
                             />
                         )}
                     />{' '}
                     <FormFieldWrapper
                         control={form.control}
-                        name="damayan_fund"
                         label="Damayan Fund"
+                        name="damayan_fund"
                         render={({ field }) => (
                             <Input
                                 {...field}
+                                disabled={isDisabled(field.name)}
                                 id={field.name}
                                 placeholder="Amount"
-                                disabled={isDisabled(field.name)}
                             />
                         )}
                     />
@@ -96,19 +96,19 @@ const LoanClearanceAnalysis = forwardRef<
                 <div className="space-y-2">
                     <LoanClearanceInstitutionField
                         form={form}
-                        isReadOnly={isReadOnly}
                         isDisabled={isDisabled}
+                        isReadOnly={isReadOnly}
                     />
                     <FormFieldWrapper
                         control={form.control}
-                        name="length_of_service"
                         label="Length of Service"
+                        name="length_of_service"
                         render={({ field }) => (
                             <Input
                                 {...field}
+                                disabled={isDisabled(field.name)}
                                 id={field.name}
                                 placeholder="Amount"
-                                disabled={isDisabled(field.name)}
                             />
                         )}
                     />
@@ -213,15 +213,15 @@ const LoanClearanceAnalysisField = ({
                             </p>
                             <div className="flex items-center gap-2">
                                 <Button
-                                    size="sm"
-                                    type="button"
-                                    tabIndex={0}
                                     className="size-fit px-2 py-0.5 text-xs"
                                     onClick={() =>
                                         addLoanClearanceAnalysisModal.onOpenChange(
                                             true
                                         )
                                     }
+                                    size="sm"
+                                    tabIndex={0}
+                                    type="button"
                                 >
                                     Add <PlusIcon className="inline" />
                                 </Button>
@@ -234,21 +234,21 @@ const LoanClearanceAnalysisField = ({
                             </div>
                         </div>
                         <Table
+                            className="border-separate rounded-xl border-spacing-0 [&_td]:border-border [&_tfoot_td]:border-t [&_th]:border-b [&_th]:border-border [&_tr:not(:last-child)_td]:border-b [&_tr]:border-none"
                             ref={field?.ref}
                             wrapperClassName="max-h-[50vh] min-h-32 bg-secondary rounded-xl ecoop-scroll"
-                            className="border-separate rounded-xl border-spacing-0 [&_td]:border-border [&_tfoot_td]:border-t [&_th]:border-b [&_th]:border-border [&_tr:not(:last-child)_td]:border-b [&_tr]:border-none"
                         >
                             <TableHeader className="sticky top-0 z-10 backdrop-blur-xs">
                                 <TableRow className="*:border-border [&>:not(:last-child)]:border-r">
                                     <TableHead
-                                        colSpan={2}
                                         className="text-center font-bold"
+                                        colSpan={2}
                                     >
                                         Regular Deductions
                                     </TableHead>
                                     <TableHead
-                                        colSpan={3}
                                         className="text-center font-bold"
+                                        colSpan={3}
                                     >
                                         Balances
                                     </TableHead>
@@ -276,14 +276,14 @@ const LoanClearanceAnalysisField = ({
                             <TableBody>
                                 {loanClearanceAnalysis.map((field, index) => (
                                     <LoanClearanceAnalysisRow
-                                        key={field.fieldKey}
                                         field={field}
                                         index={index}
+                                        key={field.fieldKey}
+                                        onRemove={handleRemoveAnalysis}
+                                        onUpdate={handleUpdateAnalysis}
                                         ref={(el) => {
                                             rowRefs.current[index] = el
                                         }}
-                                        onRemove={handleRemoveAnalysis}
-                                        onUpdate={handleUpdateAnalysis}
                                     />
                                 ))}
 
@@ -338,6 +338,9 @@ const LoanClearanceAnalysisRow = memo(
             return (
                 <>
                     <TableRow
+                        className="*:border-border focus:bg-background/20 focus:outline-0 [&>:not(:last-child)]:border-r"
+                        key={field.id}
+                        onKeyDown={handleRowKeyDown}
                         ref={(el) => {
                             rowRef.current = el
                             if (typeof ref === 'function') {
@@ -346,10 +349,7 @@ const LoanClearanceAnalysisRow = memo(
                                 ref.current = el
                             }
                         }}
-                        key={field.id}
-                        onKeyDown={handleRowKeyDown}
                         tabIndex={-1}
-                        className="*:border-border focus:bg-background/20 focus:outline-0 [&>:not(:last-child)]:border-r"
                     >
                         <TableCell>
                             <div className="flex flex-col">
@@ -377,13 +377,13 @@ const LoanClearanceAnalysisRow = memo(
                         <TableCell>
                             <div className="flex justify-end gap-1">
                                 <Button
-                                    type="button"
-                                    variant="ghost"
-                                    size="sm"
+                                    className="size-8 p-0"
                                     onClick={() =>
                                         editModalState.onOpenChange(true)
                                     }
-                                    className="size-8 p-0"
+                                    size="sm"
+                                    type="button"
+                                    variant="ghost"
                                 >
                                     <PencilFillIcon className="size-4" />
                                     <span className="sr-only">
@@ -391,11 +391,11 @@ const LoanClearanceAnalysisRow = memo(
                                     </span>
                                 </Button>
                                 <Button
+                                    className="h-8 w-8 p-0 text-destructive hover:text-destructive-foreground hover:bg-destructive"
+                                    onClick={() => onRemove(index, field.id)}
                                     size="sm"
                                     type="button"
                                     variant="ghost"
-                                    onClick={() => onRemove(index, field.id)}
-                                    className="h-8 w-8 p-0 text-destructive hover:text-destructive-foreground hover:bg-destructive"
                                 >
                                     <TrashIcon className="h-4 w-4" />
                                     <span className="sr-only">
@@ -408,13 +408,6 @@ const LoanClearanceAnalysisRow = memo(
 
                     <LoanClearanceAnalysisCreateUpdateModal
                         {...editModalState}
-                        onOpenChange={(state) => {
-                            if (!state) {
-                                rowRef.current?.focus()
-                            }
-                            editModalState.onOpenChange(state)
-                        }}
-                        title="Edit Clearance Analysis"
                         description="Update the clearance analysis details."
                         formProps={{
                             defaultValues: field,
@@ -422,6 +415,13 @@ const LoanClearanceAnalysisRow = memo(
                                 onUpdate(index, { ...field, ...updatedData })
                             },
                         }}
+                        onOpenChange={(state) => {
+                            if (!state) {
+                                rowRef.current?.focus()
+                            }
+                            editModalState.onOpenChange(state)
+                        }}
+                        title="Edit Clearance Analysis"
                     />
                 </>
             )
@@ -518,22 +518,22 @@ const LoanClearanceInstitutionField = ({
                 name="loan_clearance_analysis_institution"
                 render={({ field }) => (
                     <fieldset
-                        disabled={disabled}
                         className="max-w-full min-w-0"
+                        disabled={disabled}
                     >
                         <div className="flex items-center justify-between mb-4">
                             <p className="font-medium">Institution</p>
                             <div className="flex items-center gap-2">
                                 <Button
-                                    size="sm"
-                                    type="button"
-                                    tabIndex={0}
                                     className="size-fit px-2 py-0.5 text-xs"
                                     onClick={() =>
                                         addLoanClearanceAnalysisInstitutionModal.onOpenChange(
                                             true
                                         )
                                     }
+                                    size="sm"
+                                    tabIndex={0}
+                                    type="button"
                                 >
                                     Add <PlusIcon className="inline" />
                                 </Button>
@@ -546,9 +546,9 @@ const LoanClearanceInstitutionField = ({
                             </div>
                         </div>
                         <Table
+                            className="border-separate rounded-xl border-spacing-0 [&_td]:border-border [&_tfoot_td]:border-t [&_th]:border-b [&_th]:border-border [&_tr:not(:last-child)_td]:border-b [&_tr]:border-none"
                             ref={field.ref}
                             wrapperClassName="max-h-[50vh] max-w-full min-w-0 min-h-32 bg-secondary rounded-xl ecoop-scroll"
-                            className="border-separate rounded-xl border-spacing-0 [&_td]:border-border [&_tfoot_td]:border-t [&_th]:border-b [&_th]:border-border [&_tr:not(:last-child)_td]:border-b [&_tr]:border-none"
                         >
                             <TableHeader className="sticky top-0 z-10 backdrop-blur-xs">
                                 <TableRow className="*:border-border [&>:not(:last-child)]:border-r">
@@ -565,16 +565,16 @@ const LoanClearanceInstitutionField = ({
                                 {loanClearanceAnalysisInstitution.map(
                                     (field, index) => (
                                         <LoanClearanceAnalysisInstitutionRow
-                                            key={field.fieldKey}
                                             field={field}
                                             index={index}
+                                            key={field.fieldKey}
+                                            onRemove={handleRemoveInstitution}
+                                            onUpdate={handleUpdateInstitution}
                                             ref={(el) => {
                                                 institutionRowRefs.current[
                                                     index
                                                 ] = el
                                             }}
-                                            onRemove={handleRemoveInstitution}
-                                            onUpdate={handleUpdateInstitution}
                                         />
                                     )
                                 )}
@@ -631,6 +631,9 @@ const LoanClearanceAnalysisInstitutionRow = memo(
             return (
                 <>
                     <TableRow
+                        className="*:border-border focus:bg-background/20 focus:outline-0 [&>:not(:last-child)]:border-r"
+                        key={field.id}
+                        onKeyDown={handleRowKeyDown}
                         ref={(el) => {
                             rowRef.current = el
                             if (typeof ref === 'function') {
@@ -639,10 +642,7 @@ const LoanClearanceAnalysisInstitutionRow = memo(
                                 ref.current = el
                             }
                         }}
-                        key={field.id}
-                        onKeyDown={handleRowKeyDown}
                         tabIndex={-1}
-                        className="*:border-border focus:bg-background/20 focus:outline-0 [&>:not(:last-child)]:border-r"
                     >
                         <TableCell>
                             <div className="flex flex-col">
@@ -661,13 +661,13 @@ const LoanClearanceAnalysisInstitutionRow = memo(
                         <TableCell>
                             <div className="flex justify-end gap-1">
                                 <Button
-                                    type="button"
-                                    variant="ghost"
-                                    size="sm"
+                                    className="size-8 p-0"
                                     onClick={() =>
                                         editModalState.onOpenChange(true)
                                     }
-                                    className="size-8 p-0"
+                                    size="sm"
+                                    type="button"
+                                    variant="ghost"
                                 >
                                     <PencilFillIcon className="size-4" />
                                     <span className="sr-only">
@@ -675,11 +675,11 @@ const LoanClearanceAnalysisInstitutionRow = memo(
                                     </span>
                                 </Button>
                                 <Button
+                                    className="h-8 w-8 p-0 text-destructive hover:text-destructive-foreground hover:bg-destructive"
+                                    onClick={() => onRemove(index, field.id)}
                                     size="sm"
                                     type="button"
                                     variant="ghost"
-                                    onClick={() => onRemove(index, field.id)}
-                                    className="h-8 w-8 p-0 text-destructive hover:text-destructive-foreground hover:bg-destructive"
                                 >
                                     <TrashIcon className="h-4 w-4" />
                                     <span className="sr-only">
@@ -692,13 +692,6 @@ const LoanClearanceAnalysisInstitutionRow = memo(
 
                     <LoanClearanceAnalysisInstitutionCreateUpdateModal
                         {...editModalState}
-                        onOpenChange={(state) => {
-                            if (!state) {
-                                rowRef.current?.focus()
-                            }
-                            editModalState.onOpenChange(state)
-                        }}
-                        title="Edit Institution"
                         description="Update the institution details."
                         formProps={{
                             defaultValues: field,
@@ -706,6 +699,13 @@ const LoanClearanceAnalysisInstitutionRow = memo(
                                 onUpdate(index, { ...field, ...updatedData })
                             },
                         }}
+                        onOpenChange={(state) => {
+                            if (!state) {
+                                rowRef.current?.focus()
+                            }
+                            editModalState.onOpenChange(state)
+                        }}
+                        title="Edit Institution"
                     />
                 </>
             )

@@ -185,9 +185,9 @@ export const TransactionBatchAction = ({
                     description={`You are viewing ${batch.batch_name || 'unknown'}'s disbursement transactions`}
                 >
                     <DisbursementTransactionTable
+                        className="min-h-[90vh] min-w-0 max-h-[90vh]"
                         mode="transaction-batch"
                         transactionBatchId={batch.id}
-                        className="min-h-[90vh] min-w-0 max-h-[90vh]"
                     />
                 </Modal>
                 <Modal
@@ -196,10 +196,10 @@ export const TransactionBatchAction = ({
                     title={getModalTitle()}
                 >
                     <GeneralLedgerTable
+                        className="min-h-[90vh] min-w-0 max-h-[90vh]"
                         mode="transaction-batch"
                         TEntryType={selectedEntryType}
                         transactionBatchId={batch.id}
-                        className="min-h-[90vh] min-w-0 max-h-[90vh]"
                     />
                 </Modal>
 
@@ -218,7 +218,6 @@ export const TransactionBatchAction = ({
             </div>
             <RowActionsGroup
                 canSelect
-                row={row}
                 onDelete={{
                     text: 'Delete',
                     isAllowed: !isDeletingBatch,
@@ -227,11 +226,11 @@ export const TransactionBatchAction = ({
                 otherActions={
                     <>
                         <DropdownMenuItem
-                            onClick={() => quickViewModal.onOpenChange(true)}
                             disabled={
                                 user?.id === batch.employee_user_id &&
                                 batch.can_view === false
                             }
+                            onClick={() => quickViewModal.onOpenChange(true)}
                         >
                             <EyeIcon className="mr-2" strokeWidth={1.5} />
                             View Quick Summary
@@ -410,6 +409,7 @@ export const TransactionBatchAction = ({
                         </DropdownMenuItem>
                     </>
                 }
+                row={row}
             />
         </>
     )
@@ -451,9 +451,9 @@ export const TransactionBatchRowContext = ({
                 description={`You are viewing ${batch.batch_name || 'unknown'}'s disbursement transactions`}
             >
                 <DisbursementTransactionTable
+                    className="min-h-[90vh] min-w-0 max-h-[90vh]"
                     mode="transaction-batch"
                     transactionBatchId={batch.id}
-                    className="min-h-[90vh] min-w-0 max-h-[90vh]"
                 />
             </Modal>
             <Modal
@@ -462,10 +462,10 @@ export const TransactionBatchRowContext = ({
                 title={getModalTitle()}
             >
                 <GeneralLedgerTable
+                    className="min-h-[90vh] min-w-0 max-h-[90vh]"
                     mode="transaction-batch"
                     TEntryType={selectedEntryType}
                     transactionBatchId={batch.id}
-                    className="min-h-[90vh] min-w-0 max-h-[90vh]"
                 />
             </Modal>
 
@@ -482,7 +482,6 @@ export const TransactionBatchRowContext = ({
                 }}
             />
             <DataTableRowContext
-                row={row}
                 onDelete={{
                     text: 'Delete',
                     isAllowed: !isDeletingBatch,
@@ -491,11 +490,11 @@ export const TransactionBatchRowContext = ({
                 otherActions={
                     <>
                         <ContextMenuItem
-                            onClick={() => quickViewModal.onOpenChange(true)}
                             disabled={
                                 user?.id === batch.employee_user_id &&
                                 batch.can_view === false
                             }
+                            onClick={() => quickViewModal.onOpenChange(true)}
                         >
                             <EyeIcon className="mr-2" strokeWidth={1.5} />
                             View Quick Summary
@@ -674,6 +673,7 @@ export const TransactionBatchRowContext = ({
                         </ContextMenuItem>
                     </>
                 }
+                row={row}
             >
                 {children}
             </DataTableRowContext>

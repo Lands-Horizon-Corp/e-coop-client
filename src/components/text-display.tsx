@@ -17,11 +17,11 @@ const TextDisplay = ({
 }: Props) => {
     return (
         <span
-            data-display-state={children === undefined ? 'missing' : 'present'}
             className={cn(
                 'text-sm data-display-state data-[display-state=present]:text-inherit data-[display-state=missing]:text-muted-foreground',
                 className
             )}
+            data-display-state={children === undefined ? 'missing' : 'present'}
         >
             {children && withCopy ? (
                 <CopyWrapper>{children}</CopyWrapper>

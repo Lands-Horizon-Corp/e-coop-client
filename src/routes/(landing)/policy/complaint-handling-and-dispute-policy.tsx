@@ -91,8 +91,8 @@ function RouteComponent() {
                     <span>
                         <LinkTag
                             href="http://ecoop-suite.com/"
-                            target="_blank"
                             name={` (http://ecoop-suite.com/)`}
+                            target="_blank"
                         />
                     </span>
                     . We are committed to ensuring that all complaints and
@@ -102,8 +102,8 @@ function RouteComponent() {
 
                 {/* --- Section 1: Purpose and Scope --- */}
                 <SitePolicyItem
-                    ref={purposeScopeRef}
                     id="purpose-and-scope"
+                    ref={purposeScopeRef}
                     title="1. Purpose and Scope"
                 >
                     <div>
@@ -123,8 +123,8 @@ function RouteComponent() {
 
                 {/* --- Section 2: How to Lodge a Complaint --- */}
                 <SitePolicyItem
-                    ref={howToLodgeComplaintRef}
                     id="how-to-lodge-a-complaint"
+                    ref={howToLodgeComplaintRef}
                     title="2. How to Lodge a Complaint"
                 >
                     <div>
@@ -180,8 +180,8 @@ function RouteComponent() {
 
                 {/* --- Section 3: Complaint Handling Process --- */}
                 <SitePolicyItem
-                    ref={complaintHandlingProcessRef}
                     id="complaint-handling-process"
+                    ref={complaintHandlingProcessRef}
                     title="3. Complaint Handling Process"
                 >
                     <div>
@@ -226,8 +226,8 @@ function RouteComponent() {
 
                 {/* --- Section 4: Dispute Resolution --- */}
                 <SitePolicyItem
-                    ref={disputeResolutionRef}
                     id="dispute-resolution"
+                    ref={disputeResolutionRef}
                     title="4. Dispute Resolution"
                 >
                     <div>
@@ -255,8 +255,8 @@ function RouteComponent() {
 
                 {/* --- Section 5: Record Keeping --- */}
                 <SitePolicyItem
-                    ref={recordKeepingRef}
                     id="record-keeping"
+                    ref={recordKeepingRef}
                     title="5. Record Keeping"
                 >
                     <div>
@@ -277,8 +277,8 @@ function RouteComponent() {
 
                 {/* --- Section 6: Continuous Improvement --- */}
                 <SitePolicyItem
-                    ref={continuousImprovementRef}
                     id="continuous-improvement"
+                    ref={continuousImprovementRef}
                     title="6. Continuous Improvement"
                 >
                     <div>
@@ -299,8 +299,8 @@ function RouteComponent() {
 
                 {/* --- Section 7: Contact Us --- */}
                 <SitePolicyItem
-                    ref={contactUsRef}
                     id="contact-us"
+                    ref={contactUsRef}
                     title="7. Contact Us"
                 >
                     <div className="space-y-2 not-prose">
@@ -345,12 +345,12 @@ function RouteComponent() {
                     {articleList.map((sectionId, idx) => (
                         <li key={sectionId}>
                             <a
+                                className="block py-1 text-primary hover:underline cursor-pointer text-sm"
                                 href={`#${sectionId}`}
                                 onClick={(e) => {
                                     e.preventDefault()
                                     scrollToSection(sectionId)
                                 }}
-                                className="block py-1 text-primary hover:underline cursor-pointer text-sm"
                             >
                                 {idx + 1}
                                 {'. '}

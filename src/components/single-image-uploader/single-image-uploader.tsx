@@ -76,10 +76,6 @@ const SingleImageUpload = ({
             (!croppedImage || reAdjust) ? (
                 <PictureCrop
                     image={newImage}
-                    onCrop={(result) => {
-                        setReAdjust(false)
-                        setCroppedImage(result)
-                    }}
                     onCancel={() => {
                         if (croppedImage) {
                             setReAdjust(false)
@@ -88,29 +84,33 @@ const SingleImageUpload = ({
                         }
                         setReAdjust(false)
                     }}
+                    onCrop={(result) => {
+                        setReAdjust(false)
+                        setCroppedImage(result)
+                    }}
                 />
             ) : null}
             {croppedImage && !reAdjust && (
                 <div className="space-y-4">
                     <div className="relative mx-auto size-fit">
                         <ImageDisplay
-                            fallback="-"
-                            src={croppedImage}
                             className={cn(
                                 'size-48 rounded-lg',
                                 squarePreview && ''
                             )}
+                            fallback="-"
+                            src={croppedImage}
                         />
                         {!disableCrop && (
                             <ActionTooltip
-                                side="right"
                                 align="center"
+                                side="right"
                                 tooltipContent="ReAdjust Image"
                             >
                                 <Button
-                                    variant="secondary"
-                                    onClick={() => setReAdjust(true)}
                                     className="absolute bottom-2 right-2 size-fit rounded-full border border-transparent p-1 hover:border-foreground/20"
+                                    onClick={() => setReAdjust(true)}
+                                    variant="secondary"
                                 >
                                     <AdjustIcon className="size-4 opacity-50 duration-300 ease-in-out group-hover:opacity-80" />
                                 </Button>
@@ -120,8 +120,8 @@ const SingleImageUpload = ({
                     {isUploadingPhoto && (
                         <>
                             <Progress
-                                value={uploadMediaProgress}
                                 className="h-1"
+                                value={uploadMediaProgress}
                             />
                             <div className="flex items-center justify-center gap-x-1 text-center text-xs text-foreground/60">
                                 <LoadingSpinner className="size-2" />
@@ -130,16 +130,16 @@ const SingleImageUpload = ({
                         </>
                     )}
                     <fieldset
-                        disabled={isUploadingPhoto}
                         className="flex w-full items-center justify-center gap-x-2"
+                        disabled={isUploadingPhoto}
                     >
                         {!uploadedPhoto && !isUploadingPhoto && (
                             <Button
-                                variant="secondary"
                                 onClick={() => {
                                     setNewImage(null)
                                     setCroppedImage(null)
                                 }}
+                                variant="secondary"
                             >
                                 Replace
                             </Button>

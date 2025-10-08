@@ -58,8 +58,8 @@ const GeneralLedgerTableColumns = (
                     <HeaderToggleSelect table={table} />
                     {!column.getIsPinned() && (
                         <PushPinSlashIcon
-                            onClick={() => column.pin('left')}
                             className="mr-2 size-3.5 cursor-pointer"
+                            onClick={() => column.pin('left')}
                         />
                     )}
                 </div>
@@ -250,7 +250,7 @@ const GeneralLedgerTableColumns = (
                     original: { source },
                 },
             }) => (
-                <Badge variant="secondary" className="text-xs px-1.5">
+                <Badge className="text-xs px-1.5" variant="secondary">
                     {source || '-'}
                 </Badge>
             ),
@@ -343,9 +343,9 @@ const GeneralLedgerTableColumns = (
                             IGeneralLedger,
                             TGeneralLedgerSource
                         >
+                            dataType="text"
                             displayText="Source"
                             field="source"
-                            dataType="text"
                             mode="contains"
                             multiSelectOptions={GENERAL_LEDGER_SOURCES.map(
                                 (source) => ({
@@ -368,8 +368,8 @@ const GeneralLedgerTableColumns = (
                     {source ? (
                         <LedgerSourceBadge
                             size={'sm'}
-                            variant={source}
                             source={source}
+                            variant={source}
                         />
                     ) : (
                         <span className="text-muted-foreground">-</span>

@@ -41,19 +41,13 @@ const DataTableMultiSelectFilter = <TData, TValue>({
 
     return (
         <div
-            onKeyDown={(e) => e.stopPropagation()}
             className="flex min-w-72 flex-col p-1"
+            onKeyDown={(e) => e.stopPropagation()}
         >
             <p className="text-sm">Filter</p>
             <MultiSelectFilter
+                clearValues={() => setFilter(field)}
                 hideLabel
-                value={
-                    filterVal.value
-                        ? typeof filterVal.value === 'string'
-                            ? [filterVal.value]
-                            : filterVal.value
-                        : []
-                }
                 multiSelectOptions={multiSelectOptions}
                 setValues={(selected) =>
                     setFilter(field, {
@@ -61,7 +55,13 @@ const DataTableMultiSelectFilter = <TData, TValue>({
                         value: selected,
                     })
                 }
-                clearValues={() => setFilter(field)}
+                value={
+                    filterVal.value
+                        ? typeof filterVal.value === 'string'
+                            ? [filterVal.value]
+                            : filterVal.value
+                        : []
+                }
             />
         </div>
     )

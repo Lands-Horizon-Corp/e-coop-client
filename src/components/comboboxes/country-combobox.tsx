@@ -96,11 +96,11 @@ const CountryComboboxComponent = (
     )
 
     return (
-        <Popover open={open} modal onOpenChange={setOpen}>
+        <Popover modal onOpenChange={setOpen} open={open}>
             <PopoverTrigger
-                ref={ref}
                 className={triggerClasses}
                 disabled={disabled}
+                ref={ref}
                 {...props}
             >
                 {selectedCountry ? (
@@ -135,9 +135,9 @@ const CountryComboboxComponent = (
                 <ArrowChevronDown size={16} />
             </PopoverTrigger>
             <PopoverContent
+                className="min-w-[--radix-popper-anchor-width] p-0"
                 collisionPadding={10}
                 side="bottom"
-                className="min-w-[--radix-popper-anchor-width] p-0"
             >
                 <Command className="max-h-[200px] w-full sm:max-h-[270px]">
                     <CommandList className="ecoop-scroll">

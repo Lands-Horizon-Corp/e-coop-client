@@ -68,13 +68,13 @@ const SingleFileDrop = ({
                         RenderDropArea({ isDragActive })
                     ) : (
                         <DefaultDropArea
-                            dropText={dropText}
                             className="min-h-80"
+                            dropText={dropText}
                             isDraggingAbove={isDragActive}
                         />
                     )}
                 </div>
-                <Input {...getInputProps()} id="picture" className="hidden" />
+                <Input {...getInputProps()} className="hidden" id="picture" />
             </div>
         </>
     )

@@ -89,70 +89,70 @@ const LoanTransactionPrintForm = ({
     return (
         <Form {...form}>
             <form
-                ref={formRef}
-                onSubmit={onSubmit}
                 className={cn('flex w-full flex-col gap-y-4', className)}
+                onSubmit={onSubmit}
+                ref={formRef}
             >
                 <fieldset
-                    disabled={isPending || formProps.readOnly}
                     className="grid gap-x-6 gap-y-4 sm:gap-y-3"
+                    disabled={isPending || formProps.readOnly}
                 >
                     <FormFieldWrapper
                         control={form.control}
-                        name="voucher"
                         label="Voucher *"
+                        name="voucher"
                         render={({ field }) => (
                             <Input
                                 {...field}
-                                id={field.name}
-                                placeholder="Voucher Number"
                                 autoComplete="off"
                                 disabled={isDisabled(field.name)}
+                                id={field.name}
+                                placeholder="Voucher Number"
                             />
                         )}
                     />
 
                     <FormFieldWrapper
                         control={form.control}
-                        name="check_number"
                         label="Check Number"
+                        name="check_number"
                         render={({ field }) => (
                             <Input
                                 {...field}
-                                id={field.name}
-                                placeholder="Check Number (optional)"
                                 autoComplete="off"
                                 disabled={isDisabled(field.name)}
+                                id={field.name}
+                                placeholder="Check Number (optional)"
                             />
                         )}
                     />
                     <FormFieldWrapper
                         control={form.control}
-                        name="check_date"
                         label="Check Date"
+                        name="check_date"
                         render={({ field }) => (
                             <InputDate
                                 {...field}
-                                id={field.name}
-                                type="date"
-                                placeholder="Check Date"
                                 autoComplete="off"
                                 disabled={isDisabled(field.name)}
+                                id={field.name}
+                                placeholder="Check Date"
+                                type="date"
                             />
                         )}
                     />
                 </fieldset>
 
                 <FormFooterResetSubmit
-                    error={error}
-                    readOnly={formProps.readOnly}
-                    isLoading={isPending}
                     disableSubmit={!form.formState.isDirty}
-                    submitText="Print"
+                    error={error}
+                    isLoading={isPending}
                     onReset={() => {
                         form.reset()
                         reset?.()
                     }}
+                    readOnly={formProps.readOnly}
+                    submitText="Print"
                 />
             </form>
         </Form>
@@ -170,9 +170,9 @@ export const LoanTransactionPrintFormModal = ({
 }) => {
     return (
         <Modal
-            title={title}
-            description={description}
             className={cn('!max-w-lg', className)}
+            description={description}
+            title={title}
             {...props}
         >
             <LoanTransactionPrintForm

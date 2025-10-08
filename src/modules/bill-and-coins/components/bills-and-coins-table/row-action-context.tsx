@@ -86,7 +86,6 @@ export const BillsAndCoinsAction = ({
             </div>
             <RowActionsGroup
                 canSelect
-                row={row}
                 onDelete={{
                     text: 'Delete',
                     isAllowed: !isDeletingBillsAndCoin,
@@ -98,6 +97,7 @@ export const BillsAndCoinsAction = ({
                     onClick: handleEdit,
                 }}
                 otherActions={<>{/* Additional actions can be added here */}</>}
+                row={row}
             />
         </>
     )
@@ -133,7 +133,6 @@ export const BillsAndCoinsRowContext = ({
                 }}
             />
             <DataTableRowContext
-                row={row}
                 onDelete={{
                     text: 'Delete',
                     isAllowed: !isDeletingBillsAndCoin,
@@ -144,6 +143,7 @@ export const BillsAndCoinsRowContext = ({
                     isAllowed: true,
                     onClick: handleEdit,
                 }}
+                row={row}
             >
                 {children}
             </DataTableRowContext>

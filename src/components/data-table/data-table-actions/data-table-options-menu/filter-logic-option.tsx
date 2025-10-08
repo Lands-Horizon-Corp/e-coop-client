@@ -24,20 +24,20 @@ const DataTableFilterLogicOption = ({
                 <FunnelIcon />
             </DropdownMenuLabel>
             <DropdownMenuRadioGroup
-                value={filterLogic}
                 onValueChange={(selected) =>
                     setFilterLogic(selected as TFilterLogic)
                 }
+                value={filterLogic}
             >
                 <DropdownMenuRadioItem
-                    value="AND"
                     onSelect={(e) => e.preventDefault()}
+                    value="AND"
                 >
                     AND
                 </DropdownMenuRadioItem>
                 <DropdownMenuRadioItem
-                    value="OR"
                     onSelect={(e) => e.preventDefault()}
+                    value="OR"
                 >
                     OR
                 </DropdownMenuRadioItem>

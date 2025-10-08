@@ -40,8 +40,8 @@ const ImageDisplay = forwardRef<HTMLImageElement, ImageDisplayProps>(
             <Avatar
                 ref={avatarRef}
                 {...props}
-                onClick={onClick}
                 className={cn('size-6 bg-secondary dark:bg-popover', className)}
+                onClick={onClick}
             >
                 <AvatarImage
                     ref={ref}

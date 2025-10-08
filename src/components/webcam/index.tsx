@@ -63,15 +63,10 @@ const WebCam = forwardRef<Webcam, Props>(({ className }: Props, ref) => {
             >
                 <div className="overflow-hidden rounded-xl">
                     <Webcam
-                        ref={ref}
-                        id={camId}
                         audio={false}
                         disablePictureInPicture
-                        screenshotFormat="image/jpeg"
-                        videoConstraints={{
-                            facingMode,
-                            deviceId: camId,
-                        }}
+                        id={camId}
+                        onUserMedia={handleOnStream}
                         onUserMediaError={(e) => {
                             setError(e)
                             setCamActive(false)
@@ -80,7 +75,12 @@ const WebCam = forwardRef<Webcam, Props>(({ className }: Props, ref) => {
                                     '. Try reopening camera'
                             )
                         }}
-                        onUserMedia={handleOnStream}
+                        ref={ref}
+                        screenshotFormat="image/jpeg"
+                        videoConstraints={{
+                            facingMode,
+                            deviceId: camId,
+                        }}
                     />
                 </div>
             </div>
@@ -90,6 +90,7 @@ const WebCam = forwardRef<Webcam, Props>(({ className }: Props, ref) => {
                     tooltipContent={`switch to ${facingMode === 'user' ? 'back camera' : 'front camera'}`}
                 >
                     <Button
+                        className="size-fit rounded-full p-2"
                         disabled={!camActive}
                         onClick={() => {
                             setFacingMode((prev) =>
@@ -98,7 +99,6 @@ const WebCam = forwardRef<Webcam, Props>(({ className }: Props, ref) => {
                             setCamActive(false)
                         }}
                         variant="secondary"
-                        className="size-fit rounded-full p-2"
                     >
                         <CameraFlipIcon className="size-4" />
                     </Button>
@@ -113,8 +113,8 @@ const WebCam = forwardRef<Webcam, Props>(({ className }: Props, ref) => {
                 >
                     <ActionTooltip side="left" tooltipContent="Change Camera">
                         <Button
-                            variant="secondary"
                             className={cn('size-fit rounded-full p-2')}
+                            variant="secondary"
                         >
                             <CameraSelectIcon className="size-4" />
                         </Button>

@@ -31,7 +31,7 @@ const NavSignOut = () => {
 
     return (
         <Button
-            variant="outline"
+            className="scale-effects rounded-full cursor-pointer"
             disabled={isSigningOut}
             onClick={() =>
                 onOpen({
@@ -40,7 +40,7 @@ const NavSignOut = () => {
                     onConfirm: () => handleSignout(),
                 })
             }
-            className="scale-effects rounded-full cursor-pointer"
+            variant="outline"
         >
             Sign-Out
         </Button>

@@ -38,8 +38,8 @@ const JournalVoucherTableColumns = (
                 <HeaderToggleSelect table={table} />
                 {!column.getIsPinned() && (
                     <PushPinIcon
-                        onClick={() => column.pin('left')}
                         className="mr-2 size-3.5 cursor-pointer"
+                        onClick={() => column.pin('left')}
                     />
                 )}
             </div>
@@ -156,6 +156,8 @@ const JournalVoucherTableColumns = (
             const isReleased = !!journalVoucher.released_date
             return (
                 <CashCheckVoucherStatusIndicator
+                    className="max-w-max"
+                    title="Journal Voucher Status"
                     voucherDates={{
                         printed_date: isPrinted
                             ? journalVoucher.printed_date
@@ -167,8 +169,6 @@ const JournalVoucherTableColumns = (
                             ? journalVoucher.released_date
                             : null,
                     }}
-                    title="Journal Voucher Status"
-                    className="max-w-max"
                 />
             )
         },

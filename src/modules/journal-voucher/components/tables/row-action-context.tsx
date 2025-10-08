@@ -99,7 +99,6 @@ export const JournalVoucherAction = ({
             </div>
             <RowActionsGroup
                 canSelect
-                row={row}
                 onDelete={{
                     text: 'Delete',
                     isAllowed: !isDeletingJournalVoucher,
@@ -111,6 +110,7 @@ export const JournalVoucherAction = ({
                     onClick: handleEdit,
                 }}
                 otherActions={<JournalVoucherOtherAction row={row} />}
+                row={row}
             />
         </>
     )
@@ -148,7 +148,6 @@ export const JournalVoucherRowContext = ({
                 }}
             />
             <DataTableRowContext
-                row={row}
                 onDelete={{
                     text: 'Delete',
                     isAllowed: !isDeletingJournalVoucher,
@@ -159,6 +158,7 @@ export const JournalVoucherRowContext = ({
                     isAllowed: true,
                     onClick: handleEdit,
                 }}
+                row={row}
             >
                 {children}
             </DataTableRowContext>

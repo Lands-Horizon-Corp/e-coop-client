@@ -27,6 +27,7 @@ export interface ILoanTransactionEntry extends IBaseEntityMeta {
     amount: number
 
     is_add_on: boolean //
+    is_automatic_loan_deduction_deleted: boolean
     type: TLoanTransactionEntryType //
 }
 

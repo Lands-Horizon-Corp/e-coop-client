@@ -81,8 +81,6 @@ const TransactionAmountField = forwardRef<HTMLInputElement, AmountFieldProps>(
             <div className={cn('relative w-full', className)}>
                 <Input
                     {...field}
-                    ref={ref}
-                    value={formattedValue}
                     className={cn(
                         'border !border-primary/20',
                         isDefault
@@ -90,10 +88,12 @@ const TransactionAmountField = forwardRef<HTMLInputElement, AmountFieldProps>(
                             : 'h-16 rounded-2xl pl-8 pr-10 text-lg font-bold text-primary placeholder:text-sm placeholder:font-normal placeholder:text-foreground/40',
                         InputClassName
                     )}
-                    onChange={handleChange}
                     onBlur={handleBlur}
-                    type="text"
+                    onChange={handleChange}
                     placeholder="Enter the payment amount"
+                    ref={ref}
+                    type="text"
+                    value={formattedValue}
                 />
                 {!isDefault && (
                     <span className="absolute left-4 top-1/2 -translate-y-1/2 text-lg font-bold text-primary after:content-['']" />

@@ -58,17 +58,12 @@ const AccountTag = () => {
     return (
         <div>
             <AccountTagFormModal
-                open={onOpenCreateUpdateAccountTag}
-                onOpenChange={setOnOpenCreateUpdateAccountTag}
-                title={
-                    selectedTag ? 'Update Account Tag' : 'Create Account Tag'
-                }
+                className="!max-w-fit min-w-[45vw] !w-fit"
                 description={
                     selectedTag
                         ? 'Update the account tag details'
                         : 'Create a new account tag'
                 }
-                className="!max-w-fit min-w-[45vw] !w-fit"
                 formProps={{
                     defaultValues: selectedTag || {},
                     accountTagId: selectedTag?.id,
@@ -77,14 +72,19 @@ const AccountTag = () => {
                         setSelectedTag(null)
                     },
                 }}
+                onOpenChange={setOnOpenCreateUpdateAccountTag}
+                open={onOpenCreateUpdateAccountTag}
+                title={
+                    selectedTag ? 'Update Account Tag' : 'Create Account Tag'
+                }
             />
 
             <Popover modal={true}>
                 <PopoverTrigger asChild>
                     <Button
+                        className="text-sm font-semibold"
                         size="sm"
                         variant="secondary"
-                        className="text-sm font-semibold"
                     >
                         Tags
                     </Button>
@@ -96,13 +96,13 @@ const AccountTag = () => {
                                 No account tags available
                             </span>
                             <Button
+                                className="mt-2 w-full"
                                 onClick={(e) => {
                                     e.preventDefault()
                                     setOnOpenCreateUpdateAccountTag(true)
                                 }}
-                                className="mt-2 w-full"
-                                variant={'ghost'}
                                 size={'sm'}
+                                variant={'ghost'}
                             >
                                 Add Tag
                             </Button>
@@ -121,10 +121,10 @@ const AccountTag = () => {
                                 </div>
 
                                 <Input
+                                    className="h-8 text-sm"
+                                    onChange={(e) => setSearch(e.target.value)}
                                     placeholder="Search tags..."
                                     value={search}
-                                    onChange={(e) => setSearch(e.target.value)}
-                                    className="h-8 text-sm"
                                 />
                             </div>
 
@@ -135,17 +135,17 @@ const AccountTag = () => {
                                             <ContextMenu>
                                                 <ContextMenuTrigger asChild>
                                                     <Button
+                                                        className="flex truncate max-w-52 items-center w-full text-start justify-between hover:scale-102 transition-transform duration-200 ease-in-out"
+                                                        key={tag.id}
+                                                        onClick={(e) =>
+                                                            e.stopPropagation()
+                                                        }
+                                                        size={'sm'}
                                                         style={{
                                                             backgroundColor:
                                                                 tag.color,
                                                         }}
-                                                        size={'sm'}
-                                                        key={tag.id}
                                                         variant="ghost"
-                                                        className="flex truncate max-w-52 items-center w-full text-start justify-between hover:scale-102 transition-transform duration-200 ease-in-out"
-                                                        onClick={(e) =>
-                                                            e.stopPropagation()
-                                                        }
                                                     >
                                                         <div className="truncate gap-x-2 flex items-center">
                                                             <CopyTextButton
@@ -158,8 +158,8 @@ const AccountTag = () => {
                                                             </p>
                                                         </div>
                                                         <IconContainer
-                                                            name={tag.icon}
                                                             className=""
+                                                            name={tag.icon}
                                                         />
                                                     </Button>
                                                 </ContextMenuTrigger>
@@ -177,12 +177,12 @@ const AccountTag = () => {
                                                         Edit
                                                     </ContextMenuItem>
                                                     <ContextMenuItem
+                                                        className="cursor-pointer hover:bg-secondary"
                                                         onClick={() =>
                                                             handleRemveAccountTag(
                                                                 tag.id
                                                             )
                                                         }
-                                                        className="cursor-pointer hover:bg-secondary"
                                                     >
                                                         <TrashIcon className="mr-2 h-4 w-4 text-destructive" />
                                                         Delete
@@ -198,12 +198,12 @@ const AccountTag = () => {
                                 )}
                             </ScrollArea>
                             <Button
+                                className="w-full"
                                 onClick={(e) => {
                                     e.preventDefault()
                                     setOnOpenCreateUpdateAccountTag(true)
                                 }}
                                 size={'sm'}
-                                className="w-full"
                             >
                                 Add Tag
                             </Button>

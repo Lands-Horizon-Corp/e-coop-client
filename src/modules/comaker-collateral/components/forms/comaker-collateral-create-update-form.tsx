@@ -77,39 +77,39 @@ const ComakerCollateralCreateUpdateForm = ({
     return (
         <Form {...form}>
             <form
-                ref={formRef}
-                onSubmit={onSubmit}
                 className={cn(
                     'flex w-full max-w-full min-w-0 flex-col gap-y-4',
                     className
                 )}
+                onSubmit={onSubmit}
+                ref={formRef}
             >
                 <div className="space-y-4">
                     <FormFieldWrapper
                         control={form.control}
-                        name="collateral_id"
                         label="Collateral"
+                        name="collateral_id"
                         render={({ field }) => (
                             <CollateralCombobox
                                 {...field}
-                                placeholder="Select Collateral"
+                                disabled={isDisabled(field.name)}
                                 onChange={(collateral) => {
                                     field.onChange(collateral?.id)
                                     form.setValue('collateral', collateral)
                                 }}
-                                disabled={isDisabled(field.name)}
+                                placeholder="Select Collateral"
                             />
                         )}
                     />
                     <FormFieldWrapper
                         control={form.control}
-                        name="amount"
                         label="Amount"
+                        name="amount"
                         render={({ field }) => (
                             <Input
                                 {...field}
-                                id={field.name}
                                 disabled={isDisabled(field.name)}
+                                id={field.name}
                                 onChange={(e) => {
                                     const value =
                                         parseFloat(e.target.value) || 0
@@ -127,62 +127,62 @@ const ComakerCollateralCreateUpdateForm = ({
                     <div className="grid grid-cols-2 gap-2">
                         <FormFieldWrapper
                             control={form.control}
-                            name="months_count"
                             label="Months Count"
+                            name="months_count"
                             render={({ field }) => (
                                 <Input
                                     {...field}
-                                    id={field.name}
-                                    type="number"
-                                    min={0}
                                     disabled={isDisabled(field.name)}
+                                    id={field.name}
+                                    min={0}
+                                    type="number"
                                 />
                             )}
                         />
                         <FormFieldWrapper
                             control={form.control}
-                            name="year_count"
                             label="Year Count"
+                            name="year_count"
                             render={({ field }) => (
                                 <Input
                                     {...field}
-                                    id={field.name}
-                                    type="number"
-                                    min={0}
                                     disabled={isDisabled(field.name)}
+                                    id={field.name}
+                                    min={0}
+                                    type="number"
                                 />
                             )}
                         />
                     </div>
                     <FormFieldWrapper
                         control={form.control}
-                        name="description"
                         label="Description"
+                        name="description"
                         render={({ field }) => (
                             <Textarea
                                 {...field}
+                                className="min-h-24"
+                                disabled={isDisabled(field.name)}
                                 id={field.name}
                                 placeholder="Description"
-                                disabled={isDisabled(field.name)}
-                                className="min-h-24"
                             />
                         )}
                     />
                 </div>
 
                 <FormFooterResetSubmit
-                    readOnly={readOnly}
-                    resetButtonType="button"
-                    submitButtonType="button"
-                    error={firstError}
                     disableSubmit={!form.formState.isDirty}
-                    submitText={
-                        formProps.defaultValues?.fieldKey ? 'Update' : 'Create'
-                    }
-                    onSubmit={(e) => onSubmit(e)}
+                    error={firstError}
                     onReset={() => {
                         form.reset()
                     }}
+                    onSubmit={(e) => onSubmit(e)}
+                    readOnly={readOnly}
+                    resetButtonType="button"
+                    submitButtonType="button"
+                    submitText={
+                        formProps.defaultValues?.fieldKey ? 'Update' : 'Create'
+                    }
                 />
             </form>
         </Form>
@@ -200,9 +200,9 @@ export const ComakerCollateralCreateUpdateModal = ({
 }) => {
     return (
         <Modal
-            title={title}
-            description={description}
             className={cn('!max-w-xl', className)}
+            description={description}
+            title={title}
             {...props}
         >
             <ComakerCollateralCreateUpdateForm

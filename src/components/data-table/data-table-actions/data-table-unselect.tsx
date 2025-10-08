@@ -25,11 +25,11 @@ const DataTableUnselect = <T,>({
             tooltipContent={`Unselect ${selectedRows.length} row(s)`}
         >
             <Button
-                size="icon"
-                disabled={selectedRows.length === 0}
-                variant="secondary"
                 className={className}
+                disabled={selectedRows.length === 0}
                 onClick={() => table.resetRowSelection()}
+                size="icon"
+                variant="secondary"
             >
                 <DashSquareDottedIcon />
             </Button>

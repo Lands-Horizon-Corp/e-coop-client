@@ -81,9 +81,9 @@ const TransactionBatchDisbursementTransaction = ({
                     </p>
                 </div>
                 <Button
-                    size="icon"
                     className="size-fit p-1"
                     onClick={() => modalState.onOpenChange(true)}
+                    size="icon"
                 >
                     <PlusIcon />
                 </Button>
@@ -100,8 +100,8 @@ const DisbursementList = ({ list }: { list: IDisbursementTransaction[] }) => {
                 list.map((disbursement) => {
                     return (
                         <DisbursementListRow
-                            key={disbursement.id}
                             disbursementTransaction={disbursement}
+                            key={disbursement.id}
                         />
                     )
                 })
@@ -122,8 +122,8 @@ const DisbursementListRow = ({
 }) => {
     return (
         <div
-            key={disbursementTransaction.id}
             className="space-y-4 rounded-xl bg-background p-4 text-xs"
+            key={disbursementTransaction.id}
         >
             <div className="flex items-center justify-between">
                 <div className="flex min-w-0 items-center gap-3">
@@ -147,11 +147,11 @@ const DisbursementListRow = ({
                     <span>
                         {' '}
                         <RenderIcon
+                            className="inline size-4"
                             icon={
                                 disbursementTransaction.disbursement
                                     ?.icon as TIcon
                             }
-                            className="inline size-4"
                         />{' '}
                         {disbursementTransaction.disbursement?.name}
                     </span>

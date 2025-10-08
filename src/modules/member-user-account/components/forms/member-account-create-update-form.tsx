@@ -144,85 +144,85 @@ const MemberUserAccountCreateUpdateForm = ({
     return (
         <Form {...form}>
             <form
-                ref={formRef}
-                onSubmit={handleSubmit}
                 className={cn('flex w-full flex-col gap-y-4', className)}
+                onSubmit={handleSubmit}
+                ref={formRef}
             >
                 <fieldset
-                    disabled={isLoading || formProps.readOnly}
                     className="grid grid-cols-1 gap-x-6 gap-y-8"
+                    disabled={isLoading || formProps.readOnly}
                 >
                     <fieldset className="space-y-3">
                         <legend>Personal Information</legend>
                         <div className="grid grid-cols-3 gap-x-2">
                             <FormFieldWrapper
-                                control={form.control}
-                                name="first_name"
-                                label="First Name *"
                                 className="col-span-1"
+                                control={form.control}
+                                label="First Name *"
+                                name="first_name"
                                 render={({ field }) => (
                                     <Input
                                         {...field}
-                                        id={field.name}
                                         autoComplete="given-name"
-                                        placeholder="First Name"
                                         disabled={isDisabled(field.name)}
+                                        id={field.name}
+                                        placeholder="First Name"
                                     />
                                 )}
                             />
                             <FormFieldWrapper
-                                control={form.control}
-                                name="middle_name"
-                                label="Middle Name *"
                                 className="col-span-1"
+                                control={form.control}
+                                label="Middle Name *"
+                                name="middle_name"
                                 render={({ field }) => (
                                     <Input
                                         {...field}
-                                        id={field.name}
-                                        placeholder="Middle Name"
                                         autoComplete="additional-name"
                                         disabled={isDisabled(field.name)}
+                                        id={field.name}
+                                        placeholder="Middle Name"
                                     />
                                 )}
                             />
                             <FormFieldWrapper
-                                control={form.control}
-                                name="last_name"
-                                label="Last Name *"
                                 className="col-span-1"
+                                control={form.control}
+                                label="Last Name *"
+                                name="last_name"
                                 render={({ field }) => (
                                     <Input
                                         {...field}
-                                        id={field.name}
-                                        placeholder="Last Name"
                                         autoComplete="family-name"
                                         disabled={isDisabled(field.name)}
+                                        id={field.name}
+                                        placeholder="Last Name"
                                     />
                                 )}
                             />
                         </div>
 
                         <FormFieldWrapper
-                            control={form.control}
-                            name="birthdate"
-                            label="Date of Birth *"
                             className="relative"
+                            control={form.control}
                             description="mm/dd/yyyy"
                             descriptionClassName="absolute top-0 right-0"
+                            label="Date of Birth *"
+                            name="birthdate"
                             render={({ field }) => (
                                 <InputDate
                                     {...field}
-                                    value={field.value ?? ''}
                                     className="block"
                                     disabled={isDisabled(field.name)}
+                                    value={field.value ?? ''}
                                 />
                             )}
                         />
 
                         <FormFieldWrapper
                             control={form.control}
-                            name="contact_number"
                             label="Contact Number"
+                            name="contact_number"
                             render={({
                                 field,
                                 fieldState: { invalid, error },
@@ -251,40 +251,44 @@ const MemberUserAccountCreateUpdateForm = ({
 
                         <FormFieldWrapper
                             control={form.control}
-                            name="user_name"
                             label="User Name *"
+                            name="user_name"
                             render={({ field }) => (
                                 <Input
                                     {...field}
-                                    id={field.name}
                                     autoComplete="username"
-                                    placeholder="Username"
                                     disabled={isDisabled(field.name)}
+                                    id={field.name}
+                                    placeholder="Username"
                                 />
                             )}
                         />
                         <FormFieldWrapper
                             control={form.control}
-                            name="email"
                             label="Email *"
+                            name="email"
                             render={({ field }) => (
                                 <Input
                                     {...field}
-                                    id={field.name}
                                     autoComplete="email"
-                                    placeholder="example@email.com"
                                     disabled={isDisabled(field.name)}
+                                    id={field.name}
+                                    placeholder="example@email.com"
                                 />
                             )}
                         />
                         <FormFieldWrapper
                             control={form.control}
-                            name="password"
                             label={`Password ${!userId ? '*' : ''}`}
+                            name="password"
                             render={({ field }) => (
                                 <FormItem>
                                     <PasswordInput
                                         {...field}
+                                        autoComplete="new-password"
+                                        defaultVisibility
+                                        disabled={isDisabled(field.name)}
+                                        id={field.name}
                                         onChange={(e) => {
                                             const inputValue = e.target.value
 
@@ -296,16 +300,10 @@ const MemberUserAccountCreateUpdateForm = ({
 
                                             field.onChange(e)
                                         }}
-                                        id={field.name}
-                                        defaultVisibility
                                         placeholder="+8 Character Password"
-                                        autoComplete="new-password"
-                                        disabled={isDisabled(field.name)}
                                     />
                                     {with_password && (
                                         <ValueChecklistMeter
-                                            value={field.value ?? ''}
-                                            hideOnComplete
                                             checkList={ChecklistTemplate[
                                                 'password-checklist'
                                             ].concat([
@@ -314,6 +312,8 @@ const MemberUserAccountCreateUpdateForm = ({
                                                     text: 'No more than 50 characters',
                                                 },
                                             ])}
+                                            hideOnComplete
+                                            value={field.value ?? ''}
                                         />
                                     )}
                                 </FormItem>
@@ -340,15 +340,15 @@ const MemberUserAccountCreateUpdateForm = ({
                     </div>
                 )}
                 <FormFooterResetSubmit
-                    error={error}
-                    readOnly={formProps.readOnly}
-                    isLoading={isLoading}
                     disableSubmit={!form.formState.isDirty}
-                    submitText={userId === undefined ? 'Create' : 'Update'}
+                    error={error}
+                    isLoading={isLoading}
                     onReset={() => {
                         form.reset()
                         reset()
                     }}
+                    readOnly={formProps.readOnly}
+                    submitText={userId === undefined ? 'Create' : 'Update'}
                 />
             </form>
         </Form>
@@ -365,17 +365,17 @@ export const MemberUserAccountCreateUpdateFormModal = ({
 }) => {
     return (
         <Modal
-            title={title}
             className={cn('w-fit !max-w-7xl', className)}
+            title={title}
             {...props}
         >
             <MemberUserAccountCreateUpdateForm
                 {...formProps}
+                className="mt-4"
                 onSuccess={(createdData) => {
                     formProps?.onSuccess?.(createdData)
                     props.onOpenChange?.(false)
                 }}
-                className="mt-4"
             />
         </Modal>
     )

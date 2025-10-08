@@ -34,13 +34,13 @@ const DateTimePicker = ({
         <div>
             <Calendar
                 {...other}
-                mode="single"
-                toYear={toYear}
-                showOutsideDays
-                selected={selected}
-                fromYear={fromYear}
-                onSelect={setSelected}
                 disabled={disabled}
+                fromYear={fromYear}
+                mode="single"
+                onSelect={setSelected}
+                selected={selected}
+                showOutsideDays
+                toYear={toYear}
             />
             <div className="flex w-full gap-x-2 px-2 pb-2">
                 {selected !== undefined && (
@@ -54,7 +54,7 @@ const DateTimePicker = ({
                 )}
             </div>
             <div className="flex w-full justify-end px-2 pb-2">
-                <Button onClick={() => onChange(selected)} className="">
+                <Button className="" onClick={() => onChange(selected)}>
                     Apply
                 </Button>
             </div>

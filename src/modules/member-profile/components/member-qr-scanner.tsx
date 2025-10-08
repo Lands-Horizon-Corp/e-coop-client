@@ -128,8 +128,8 @@ const MemberQrScanner = ({
                                 Rescan <ScanLineIcon className="ml-2" />
                             </Button>
                             <Button
-                                size="sm"
                                 onClick={() => onSelectMemberProfile(data)}
+                                size="sm"
                             >
                                 Select <ChevronRightIcon className="ml-2" />
                             </Button>
@@ -150,9 +150,9 @@ export const MemberQrScannerModal = ({
 }) => {
     return (
         <Modal
-            titleClassName="hidden"
-            descriptionClassName="hidden"
             className={cn('size-fit', className)}
+            descriptionClassName="hidden"
+            titleClassName="hidden"
             {...props}
         >
             <MemberQrScanner

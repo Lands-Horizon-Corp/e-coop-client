@@ -74,8 +74,6 @@ const MemberDepartmentCombobox = React.forwardRef<HTMLButtonElement, Props>(
         return (
             <>
                 <MemberDepartmentCreateUpdateFormModal
-                    open={createModal}
-                    onOpenChange={setCreateModal}
                     formProps={{
                         defaultValues: memberDepartmentComboboxCreateProps,
                         onSuccess: (newDepartment) => {
@@ -83,26 +81,28 @@ const MemberDepartmentCombobox = React.forwardRef<HTMLButtonElement, Props>(
                             setCreateModal(false)
                         },
                     }}
+                    onOpenChange={setCreateModal}
+                    open={createModal}
                 />
-                <Popover modal open={open} onOpenChange={setOpen}>
+                <Popover modal onOpenChange={setOpen} open={open}>
                     <PopoverTrigger asChild>
                         <Button
                             {...other}
-                            ref={ref}
-                            variant="outline"
-                            role="combobox"
                             aria-expanded={open}
                             className={cn(
                                 'w-full justify-between px-3',
                                 className
                             )}
                             disabled={disabled || isLoading}
+                            ref={ref}
+                            role="combobox"
+                            variant="outline"
                         >
                             {selectedDepartment ? (
                                 <div className="flex items-center text-muted-foreground gap-2">
                                     <RenderIcon
-                                        icon={selectedDepartment.icon as TIcon}
                                         className="size-4"
+                                        icon={selectedDepartment.icon as TIcon}
                                     />
                                     {selectedDepartment.name}
                                 </div>
@@ -117,8 +117,8 @@ const MemberDepartmentCombobox = React.forwardRef<HTMLButtonElement, Props>(
                     <PopoverContent className="max-h-[--radix-popover-content-available-height] w-[--radix-popover-trigger-width] p-0">
                         <Command>
                             <CommandInput
-                                placeholder="Search Member Department..."
                                 className="h-9"
+                                placeholder="Search Member Department..."
                             />
                             {isLoading ? (
                                 <CommandEmpty>
@@ -134,10 +134,10 @@ const MemberDepartmentCombobox = React.forwardRef<HTMLButtonElement, Props>(
                                         <>
                                             <CommandGroup>
                                                 <CommandItem
+                                                    onClick={() => {}}
                                                     onSelect={() => {
                                                         setCreateModal(true)
                                                     }}
-                                                    onClick={() => {}}
                                                 >
                                                     <PlusIcon /> Create new
                                                     department
@@ -150,18 +150,18 @@ const MemberDepartmentCombobox = React.forwardRef<HTMLButtonElement, Props>(
                                         {data?.map((option) => (
                                             <CommandItem
                                                 key={option.id}
-                                                value={option.name}
                                                 onSelect={() => {
                                                     setOpen(false)
                                                     onChange?.(option)
                                                 }}
+                                                value={option.name}
                                             >
                                                 <div className="flex items-center gap-2">
                                                     <RenderIcon
+                                                        className="size-4"
                                                         icon={
                                                             option.icon as TIcon
                                                         }
-                                                        className="size-4"
                                                     />
                                                     {option.name}
                                                 </div>

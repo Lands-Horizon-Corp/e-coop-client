@@ -37,8 +37,8 @@ const memberClassificationHistoryColumns =
                     <ColumnActions {...props}>
                         <TextFilter
                             defaultMode="contains"
-                            field="memberClassification.name"
                             displayText="Classification Name"
+                            field="memberClassification.name"
                         />
                     </ColumnActions>
                 </DataTableColumnHeader>
@@ -57,8 +57,8 @@ const memberClassificationHistoryColumns =
                     <ColumnActions {...props}>
                         <TextFilter<IMemberClassificationHistory>
                             defaultMode="contains"
-                            field="memberClassification.description"
                             displayText="Description"
+                            field="memberClassification.description"
                         />
                     </ColumnActions>
                 </DataTableColumnHeader>

@@ -75,21 +75,18 @@ const PictureCrop = ({ image, onCancel, onCrop }: Props) => {
         <div className="flex flex-col gap-y-2">
             <div className="relative h-[50vh] w-full overflow-clip rounded-2xl bg-background">
                 <Cropper
-                    crop={crop}
-                    zoom={zoom}
-                    image={image}
-                    zoomWithScroll
                     aspect={1 / 1}
-                    zoomSpeed={0.3}
-                    showGrid={false}
+                    crop={crop}
                     cropShape="rect"
-                    rotation={rotation}
-                    onZoomChange={setZoom}
+                    image={image}
                     onCropChange={setCrop}
                     onCropComplete={(_, cropAreaPixel) =>
                         setCropArea(cropAreaPixel)
                     }
                     onRotationChange={setRotation}
+                    onZoomChange={setZoom}
+                    rotation={rotation}
+                    showGrid={false}
                     transform={[
                         `translate(${crop.x}px, ${crop.y}px)`,
                         `rotateZ(${rotation}deg)`,
@@ -97,21 +94,24 @@ const PictureCrop = ({ image, onCancel, onCrop }: Props) => {
                         `rotateX(${flipVertical ? 180 : 0}deg)`,
                         `scale(${zoom})`,
                     ].join(' ')}
+                    zoom={zoom}
+                    zoomSpeed={0.3}
+                    zoomWithScroll
                 />
                 <p className="absolute bottom-1 left-1/2 -translate-x-1/2 rounded-md bg-popover/50 p-1 text-xs text-popover-foreground backdrop-blur">
                     {`${cropArea?.width.toLocaleString(undefined, { maximumFractionDigits: 1 }) ?? 0} x ${cropArea?.height.toLocaleString(undefined, { maximumFractionDigits: 1 }) ?? 0} rotate: ${rotation}°`}
                 </p>
             </div>
             <fieldset
-                disabled={loading}
                 className={cn(
                     'space-y-2 rounded-2xl bg-background p-4 text-foreground/60',
                     loading && 'cursor-not-allowed'
                 )}
+                disabled={loading}
             >
                 <div className="flex items-center justify-between">
                     <p className="text-sm">Adjustment</p>
-                    <Button variant="ghost" size="sm" onClick={() => reset()}>
+                    <Button onClick={() => reset()} size="sm" variant="ghost">
                         Reset
                     </Button>
                 </div>
@@ -174,49 +174,49 @@ const PictureCrop = ({ image, onCancel, onCrop }: Props) => {
                 <div className="group flex items-center gap-x-2">
                     <ZoomOutIcon className="size-4 duration-200 ease-in-out group-hover:text-foreground" />
                     <Slider
-                        min={1}
-                        max={3}
-                        step={0.08}
-                        value={[zoom]}
-                        disabled={loading}
-                        defaultValue={[1]}
                         className="group my-4"
-                        trackClassName="h-1"
-                        rangeClassName="duration-400 ease-in-out transition-colors bg-primary/50 group-hover:bg-primary/80"
-                        thumbClassName="size-4 duration-200 border-primary/50 bg-background shadow"
+                        defaultValue={[1]}
+                        disabled={loading}
+                        max={3}
+                        min={1}
                         onValueChange={(val) => setZoom(val[0])}
+                        rangeClassName="duration-400 ease-in-out transition-colors bg-primary/50 group-hover:bg-primary/80"
+                        step={0.08}
+                        thumbClassName="size-4 duration-200 border-primary/50 bg-background shadow"
+                        trackClassName="h-1"
+                        value={[zoom]}
                     />
                     <ZoomInIcon className="size-4 duration-200 ease-in-out group-hover:text-foreground" />
                 </div>
                 <div className="group flex items-center gap-x-2">
                     <RotateBoxLeftIcon className="size-4 duration-200 ease-in-out group-hover:text-foreground" />
                     <Slider
-                        step={1}
+                        className="group my-4"
+                        disabled={loading}
                         max={360}
                         min={-360}
-                        disabled={loading}
-                        value={[rotation]}
-                        trackClassName="h-1"
-                        className="group my-4"
-                        rangeClassName="duration-400 ease-in-out transition-colors bg-primary/50 group-hover:bg-primary/80"
-                        thumbClassName="size-4 duration-200 border-primary/50 bg-background"
                         onValueChange={(val) => setRotation(val[0])}
+                        rangeClassName="duration-400 ease-in-out transition-colors bg-primary/50 group-hover:bg-primary/80"
+                        step={1}
+                        thumbClassName="size-4 duration-200 border-primary/50 bg-background"
+                        trackClassName="h-1"
+                        value={[rotation]}
                     />
                     <RotateBoxRightIcon className="size-4 duration-200 ease-in-out group-hover:text-foreground" />
                 </div>
             </fieldset>
             <fieldset
-                disabled={loading}
                 className="flex items-center justify-center gap-x-2"
+                disabled={loading}
             >
                 <Button
-                    variant="ghost"
-                    onClick={onCancel}
                     className="rounded-full"
+                    onClick={onCancel}
+                    variant="ghost"
                 >
                     Cancel
                 </Button>
-                <Button onClick={handleCrop} className="rounded-full">
+                <Button className="rounded-full" onClick={handleCrop}>
                     {loading ? <LoadingSpinner /> : 'Crop'}
                 </Button>
             </fieldset>

@@ -29,8 +29,8 @@ const OrganizationDetails = () => {
     return (
         <div className="py-5">
             <OrganizationHeader
-                organization={organization}
                 isPending={isPendingOrganization}
+                organization={organization}
             />
             <BranchesSection organizationId={organizationId} />
             {organization && (
@@ -126,8 +126,8 @@ function BranchesSection({ organizationId }: BranchesSectionProps) {
             <div className="grid grid-cols-1 gap-2">
                 {Array.from({ length: 1 }).map((_, index) => (
                     <div
-                        key={index}
                         className="flex min-h-10 w-full rounded-2xl border-0 p-5"
+                        key={index}
                     >
                         <Skeleton className="size-16 rounded-full" />
                         <div className="ml-2 flex grow flex-col">

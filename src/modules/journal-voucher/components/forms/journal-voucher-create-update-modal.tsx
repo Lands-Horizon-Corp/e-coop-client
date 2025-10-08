@@ -290,22 +290,24 @@ const JournalVoucherCreateUpdateForm = ({
     return (
         <Form {...form}>
             <form
-                ref={formRef}
-                onSubmit={onSubmit}
                 className={cn('!w-full flex flex-col space-y-4', className)}
+                onSubmit={onSubmit}
+                ref={formRef}
             >
                 <fieldset
-                    disabled={isPending || formProps.readOnly}
                     className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4 sm:gap-y-3"
+                    disabled={isPending || formProps.readOnly}
                 >
                     <div className="absolute top-4 right-10 z-10 flex gap-2">
                         <JournalVoucherTagsManagerPopover
-                            size="sm"
                             journalVoucherId={editJournalId}
+                            readOnly={isReleased}
+                            size="sm"
                         />
                         {editJournalId && (
                             <div className="">
                                 <CashCheckVoucherStatusIndicator
+                                    className="max-w-max"
                                     voucherDates={{
                                         printed_date: isPrinted
                                             ? defaultValues?.printed_date
@@ -317,7 +319,6 @@ const JournalVoucherCreateUpdateForm = ({
                                             ? defaultValues?.released_date
                                             : null,
                                     }}
-                                    className="max-w-max"
                                 />
                             </div>
                         )}
@@ -333,12 +334,10 @@ const JournalVoucherCreateUpdateForm = ({
                                         <Input
                                             className="!text-md p-5 font-semibold h-12"
                                             {...field}
-                                            value={field.value || ''}
                                             id={field.name}
+                                            value={field.value || ''}
                                         />
                                         <Button
-                                            variant="ghost"
-                                            size={'sm'}
                                             className="absolute m-auto top-0 bottom-0 right-1 hover:!bg-primary/20"
                                             onClick={(e) => {
                                                 e.preventDefault()
@@ -349,6 +348,8 @@ const JournalVoucherCreateUpdateForm = ({
                                                     name: '',
                                                 })
                                             }}
+                                            size={'sm'}
+                                            variant="ghost"
                                         >
                                             <XIcon />
                                         </Button>
@@ -357,13 +358,13 @@ const JournalVoucherCreateUpdateForm = ({
                             }}
                         />
                         <Accordion
-                            type="single"
-                            collapsible
                             className="w-full px-5 bg-sidebar rounded-2xl my-2"
+                            collapsible
+                            type="single"
                         >
                             <AccordionItem
-                                value="item-1"
                                 className="border-b-0"
+                                value="item-1"
                             >
                                 <AccordionTrigger className="text-primary text-xs">
                                     more options
@@ -372,13 +373,14 @@ const JournalVoucherCreateUpdateForm = ({
                                     <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4 sm:gap-y-3 mt-2">
                                         <FormFieldWrapper
                                             control={form.control}
-                                            name="member_id"
                                             label="Member Profile"
+                                            name="member_id"
                                             render={({ field }) => {
                                                 return (
                                                     <MemberPicker
-                                                        value={form.getValues(
-                                                            'member_profile'
+                                                        allowShorcutCommand
+                                                        disabled={isDisabled(
+                                                            field.name
                                                         )}
                                                         onSelect={(
                                                             selectedMember
@@ -403,23 +405,23 @@ const JournalVoucherCreateUpdateForm = ({
                                                             )
                                                         }}
                                                         placeholder="Relative Member Profile"
-                                                        disabled={isDisabled(
-                                                            field.name
+                                                        value={form.getValues(
+                                                            'member_profile'
                                                         )}
-                                                        allowShorcutCommand
                                                     />
                                                 )
                                             }}
                                         />
                                         <FormFieldWrapper
                                             control={form.control}
-                                            name="company_id"
                                             label="Company"
+                                            name="company_id"
                                             render={({ field }) => (
                                                 <CompanyCombobox
                                                     {...field}
-                                                    value={field.value}
-                                                    placeholder="Select a company"
+                                                    disabled={isDisabled(
+                                                        field.name
+                                                    )}
                                                     onChange={(
                                                         selectedCompany
                                                     ) => {
@@ -439,9 +441,8 @@ const JournalVoucherCreateUpdateForm = ({
                                                             undefined
                                                         )
                                                     }}
-                                                    disabled={isDisabled(
-                                                        field.name
-                                                    )}
+                                                    placeholder="Select a company"
+                                                    value={field.value}
                                                 />
                                             )}
                                         />
@@ -453,91 +454,89 @@ const JournalVoucherCreateUpdateForm = ({
 
                     <FormFieldWrapper
                         control={form.control}
-                        name="cash_voucher_number"
                         label="CV Number"
+                        name="cash_voucher_number"
                         render={({ field }) => (
                             <Input
                                 {...field}
-                                id={field.name}
-                                value={field.value || ''}
-                                placeholder="Enter CV number"
                                 disabled={isDisabled(field.name)}
+                                id={field.name}
+                                placeholder="Enter CV number"
+                                value={field.value || ''}
                             />
                         )}
                     />
                     <FormFieldWrapper
-                        control={form.control}
-                        name="date"
-                        label="Date"
                         className="relative"
+                        control={form.control}
                         description="mm/dd/yyyy"
                         descriptionClassName="absolute top-0 right-0"
+                        label="Date"
+                        name="date"
                         render={({ field }) => (
                             <InputDate {...field} value={field.value ?? ''} />
                         )}
                     />
                     <FormFieldWrapper
                         control={form.control}
-                        name="reference"
                         label="Reference"
+                        name="reference"
                         render={({ field }) => (
                             <Input
                                 {...field}
+                                disabled={isDisabled(field.name)}
                                 id={field.name}
                                 placeholder="Enter reference"
-                                disabled={isDisabled(field.name)}
                             />
                         )}
                     />
                     <FormFieldWrapper
-                        control={form.control}
-                        name="description"
-                        label="Particulars"
                         className="col-span-1 md:col-span-4 !max-h-xs"
+                        control={form.control}
+                        label="Particulars"
+                        name="description"
                         render={({ field }) => (
                             <Textarea
                                 {...field}
-                                id={field.name}
                                 className="!max-h-[100px] h-[70px] resize-y"
-                                placeholder="Particulars"
                                 disabled={isDisabled(field.name)}
+                                id={field.name}
+                                placeholder="Particulars"
                             />
                         )}
                     />
                     {defaultMode !== 'create' && (
                         <JournalEntryTable
                             className="col-span-1 md:col-span-4"
+                            defaultMemberProfile={defaultMemberProfile}
                             journalVoucherId={journalVoucherId ?? ''}
                             mode={defaultMode}
                             rowData={JournalEntries}
                             transactionBatchId={data?.id}
-                            defaultMemberProfile={defaultMemberProfile}
                         />
                     )}
                 </fieldset>
                 <div className="w-full flex justify-end gap-4">
                     <div className="max-w-[130px] flex-col flex justify-end">
                         <TransactionAmountField
-                            value={defaultValues?.total_debit || 0}
-                            readOnly
                             className="text-primary font-bold text-left [&_.input]:text-right [&_.input]:font-bold"
                             isDefault
+                            readOnly
+                            value={defaultValues?.total_debit || 0}
                         />
                     </div>
                     <div className="max-w-[130px]">
                         <TransactionAmountField
                             className="text-primary font-bold [&_.input]:text-right [&_.input]:font-bold"
-                            value={defaultValues?.total_credit || 0}
                             isDefault
+                            value={defaultValues?.total_credit || 0}
                         />
                     </div>
                 </div>
                 {/* <FormErrorMessage errorMessage={error} /> */}
                 <FormFooterResetSubmit
                     error={error}
-                    readOnly={formProps.readOnly}
                     isLoading={isPending}
-                    submitText={isUpdate ? 'Update' : 'Create'}
                     onReset={() => {
                         if (isUpdate) {
                             form.reset({
@@ -557,6 +556,8 @@ const JournalVoucherCreateUpdateForm = ({
                             queryKey: [journalVoucherBaseKey, 'paginated'],
                         })
                     }}
+                    readOnly={formProps.readOnly}
+                    submitText={isUpdate ? 'Update' : 'Create'}
                 />
             </form>
         </Form>
@@ -580,8 +581,8 @@ export const JournalVoucherCreateUpdateFormModal = ({
     return (
         <Modal
             className={cn('', className)}
-            title={title}
             description={description}
+            title={title}
             {...props}
         >
             <JournalVoucherCreateUpdateForm

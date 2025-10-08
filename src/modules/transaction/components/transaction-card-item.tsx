@@ -66,20 +66,19 @@ export const TransactionCardItem = ({
 
                 {/* User Information */}
                 <TransactionUserInfoGrid
-                    title="Member Information"
                     data={[
                         { label: 'Name', value: userName },
                         { label: 'Passbook', value: passbook },
                         { label: 'Phone Number', value: userPhoneNumber },
                         { label: 'Member Since', value: memberSince },
                     ]}
+                    title="Member Information"
                 />
                 <div className="w-full px-5 dark:hidden">
                     <Separator className=" w-full" />
                 </div>
                 {/* Account and Loan Information (adapted from Shipping) */}
                 <TransactionUserInfoGrid
-                    title="Account and Loan Information"
                     data={[
                         {
                             label: 'Total Loan',
@@ -95,6 +94,7 @@ export const TransactionCardItem = ({
                             value: formatCurrency(fines_due),
                         },
                     ]}
+                    title="Account and Loan Information"
                 />
                 <div>
                     <label className="text-sm font-semibold text-muted-foreground">

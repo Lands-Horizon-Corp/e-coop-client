@@ -114,16 +114,9 @@ const AccountPicker = ({
     return (
         <>
             <GenericPicker
-                items={data}
-                open={modalOnly ? open : state}
-                listHeading={`Matched Results (${totalSize})`}
-                searchPlaceHolder="Search account name"
                 isLoading={isPending || isLoading || isFetching}
-                onSelect={(account) => {
-                    queryClient.setQueryData(['account', value], account)
-                    onSelect?.(account)
-                    setState(false)
-                }}
+                items={data}
+                listHeading={`Matched Results (${totalSize})`}
                 onOpenChange={modalOnly ? onOpenChange : setState}
                 onSearchChange={(searchValue) => {
                     bulkSetFilter(
@@ -142,6 +135,12 @@ const AccountPicker = ({
                         }
                     )
                 }}
+                onSelect={(account) => {
+                    queryClient.setQueryData(['account', value], account)
+                    onSelect?.(account)
+                    setState(false)
+                }}
+                open={modalOnly ? open : state}
                 renderItem={(Account) => (
                     <div className="flex w-full items-center justify-between py-1">
                         <div className="flex items-center gap-x-2">
@@ -162,33 +161,28 @@ const AccountPicker = ({
                         <p className="mr-2 flex gap-x-2 items-center font-mono text-xs italic text-foreground/40">
                             {Account.type && (
                                 <AccountTypeBadge
-                                    type={Account.type}
                                     description="(Type)"
+                                    type={Account.type}
                                 />
                             )}
                             {Account.general_ledger_type && (
                                 <GeneralLedgerTypeBadge
-                                    type={Account.general_ledger_type}
                                     description="(GL)"
+                                    type={Account.general_ledger_type}
                                 />
                             )}
                             {Account.financial_statement_type && (
                                 <FinancialStatementTypeBadge
-                                    type={Account.financial_statement_type}
                                     description=" (FS)"
+                                    type={Account.financial_statement_type}
                                 />
                             )}
                         </p>
                     </div>
                 )}
+                searchPlaceHolder="Search account name"
             >
                 <MiniPaginationBar
-                    pagination={{
-                        pageIndex: pagination.pageIndex,
-                        pageSize: pagination.pageSize,
-                        totalPage: totalPage,
-                        totalSize: totalSize,
-                    }}
                     disablePageMove={isFetching}
                     onNext={({ pageIndex }) =>
                         setPagination((prev) => ({ ...prev, pageIndex }))
@@ -196,6 +190,12 @@ const AccountPicker = ({
                     onPrev={({ pageIndex }) =>
                         setPagination((prev) => ({ ...prev, pageIndex }))
                     }
+                    pagination={{
+                        pageIndex: pagination.pageIndex,
+                        pageSize: pagination.pageSize,
+                        totalPage: totalPage,
+                        totalSize: totalSize,
+                    }}
                 />
             </GenericPicker>
             {!modalOnly && (
@@ -206,16 +206,16 @@ const AccountPicker = ({
                     )}
                 >
                     <Button
-                        type="button"
-                        role="combobox"
-                        tabIndex={0}
-                        variant="secondary"
-                        disabled={disabled}
-                        onClick={() => setState((prev) => !prev)}
                         className={cn(
                             'w-full items-center justify-between rounded-md border bg-background p-0 px-2',
                             triggerClassName
                         )}
+                        disabled={disabled}
+                        onClick={() => setState((prev) => !prev)}
+                        role="combobox"
+                        tabIndex={0}
+                        type="button"
+                        variant="secondary"
                     >
                         {/* for future references how it fixed the issue */}
                         {/* flex-1 min-w-0 makes content area responsive */}
@@ -260,22 +260,22 @@ const AccountPicker = ({
                                     <span className="ml-2 flex-none flex gap-x-1 items-center font-mono text-sm text-foreground/30 flex-shrink-0">
                                         {value?.type && (
                                             <AccountTypeBadge
-                                                type={value.type}
                                                 description="(Type)"
+                                                type={value.type}
                                             />
                                         )}
                                         {value?.general_ledger_type && (
                                             <GeneralLedgerTypeBadge
-                                                type={value.general_ledger_type}
                                                 description="(GL)"
+                                                type={value.general_ledger_type}
                                             />
                                         )}
                                         {value?.financial_statement_type && (
                                             <FinancialStatementTypeBadge
+                                                description=" (FS)"
                                                 type={
                                                     value.financial_statement_type
                                                 }
-                                                description=" (FS)"
                                             />
                                         )}
                                     </span>
@@ -295,14 +295,14 @@ const AccountPicker = ({
                     </Button>
                     {allowClear && value && (
                         <Button
+                            className="cursor-pointer rounded-full !p-0 !px-0"
                             onClick={(e) => {
                                 e.preventDefault()
                                 e.stopPropagation()
                                 onSelect?.(undefined as unknown as IAccount)
                             }}
-                            variant={'ghost'}
                             size={'sm'}
-                            className="cursor-pointer rounded-full !p-0 !px-0"
+                            variant={'ghost'}
                         >
                             <XIcon className="inline" />
                         </Button>

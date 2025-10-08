@@ -39,15 +39,15 @@ const FeatureList = ({
             <ul className="space-y-2">
                 {items.map((item, index) => (
                     <li
-                        key={item.id || index}
                         className={cn('flex items-start gap-3', itemClassName)}
+                        key={item.id || index}
                     >
                         <CheckIcon
+                            aria-hidden
                             className={cn(
                                 'text-primary h-5 w-5',
                                 iconClassName
                             )}
-                            aria-hidden
                         />
                         <span className="text-current/70">{item.text}</span>
                     </li>

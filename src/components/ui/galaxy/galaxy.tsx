@@ -355,9 +355,9 @@ export function Galaxy() {
         <>
             <ambientLight intensity={0.6} />
             <points
-                ref={particleSystemRef}
                 geometry={particleGeometry}
                 material={particleMaterial}
+                ref={particleSystemRef}
             />
             <group ref={linesRef}>
                 {constellationLines.map((line) => {
@@ -367,7 +367,6 @@ export function Galaxy() {
                         <line key={line.id}>
                             <bufferGeometry>
                                 <bufferAttribute
-                                    attach="attributes-position"
                                     args={[
                                         new Float32Array([
                                             line.point1.x,
@@ -379,7 +378,6 @@ export function Galaxy() {
                                         ]),
                                         3,
                                     ]}
-                                    count={2}
                                     array={
                                         new Float32Array([
                                             line.point1.x,
@@ -390,6 +388,8 @@ export function Galaxy() {
                                             line.point2.z,
                                         ])
                                     }
+                                    attach="attributes-position"
+                                    count={2}
                                     itemSize={3}
                                 />
                             </bufferGeometry>
@@ -399,8 +399,8 @@ export function Galaxy() {
                                         ? '#34d399'
                                         : '#22c55e'
                                 }
-                                transparent
                                 opacity={opacity}
+                                transparent
                             />
                         </line>
                     )

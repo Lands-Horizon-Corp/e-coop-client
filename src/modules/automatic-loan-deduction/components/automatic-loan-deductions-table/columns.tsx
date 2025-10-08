@@ -44,8 +44,8 @@ const AutomaticLoanDeductionColumns = (
                 <HeaderToggleSelect table={table} />
                 {!column.getIsPinned() && (
                     <PushPinSlashIcon
-                        onClick={() => column.pin('left')}
                         className="mr-2 size-3.5 cursor-pointer"
+                        onClick={() => column.pin('left')}
                     />
                 )}
             </div>
@@ -221,9 +221,9 @@ const AutomaticLoanDeductionColumns = (
                         IAutomaticLoanDeduction,
                         boolean
                     >
+                        dataType="boolean"
                         displayText="Add-On"
                         field="add_on"
-                        dataType="boolean"
                         mode="equal"
                         multiSelectOptions={[
                             { label: 'Yes', value: true },
@@ -250,9 +250,9 @@ const AutomaticLoanDeductionColumns = (
                         IAutomaticLoanDeduction,
                         boolean
                     >
+                        dataType="boolean"
                         displayText="Add-On Rest"
                         field="ao_rest"
-                        dataType="boolean"
                         mode="equal"
                         multiSelectOptions={[
                             { label: 'Yes', value: true },
@@ -279,9 +279,9 @@ const AutomaticLoanDeductionColumns = (
                         IAutomaticLoanDeduction,
                         boolean
                     >
+                        dataType="boolean"
                         displayText="Exclude Renewal"
                         field="exclude_renewal"
-                        dataType="boolean"
                         mode="equal"
                         multiSelectOptions={[
                             { label: 'Yes', value: true },

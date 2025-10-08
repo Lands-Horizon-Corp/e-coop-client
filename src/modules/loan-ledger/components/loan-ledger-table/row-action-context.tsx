@@ -63,7 +63,6 @@ export const LoanLedgerAction = ({
             </div>
             <RowActionsGroup
                 canSelect
-                row={row}
                 otherActions={
                     <>
                         <DropdownMenuItem
@@ -78,6 +77,7 @@ export const LoanLedgerAction = ({
                         </DropdownMenuItem>
                     </>
                 }
+                row={row}
             />
         </>
     )
@@ -112,7 +112,6 @@ export const LoanLedgerRowContext = ({
                 }}
             />
             <DataTableRowContext
-                row={row}
                 otherActions={
                     <>
                         <ContextMenuItem
@@ -132,6 +131,7 @@ export const LoanLedgerRowContext = ({
                         </ContextMenuItem>
                     </>
                 }
+                row={row}
             >
                 {children}
             </DataTableRowContext>

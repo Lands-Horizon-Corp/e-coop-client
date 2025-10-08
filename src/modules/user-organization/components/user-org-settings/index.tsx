@@ -48,14 +48,14 @@ const UserOrganizationSettings = ({ className }: Props) => {
             {isPending && <LoadingSpinner className="mx-auto" />}
             {!isPending && userOrganization && (
                 <UserOrgSettingsForm
-                    mode="current"
-                    resetOnDefaultChange
                     defaultValues={
                         userOrganization as TUserOrgSettingsFormValues
                     }
+                    mode="current"
                     onSuccess={(data) =>
                         updateCurrentAuth({ user_organization: data })
                     }
+                    resetOnDefaultChange
                 />
             )}
             {error && (
@@ -65,9 +65,9 @@ const UserOrganizationSettings = ({ className }: Props) => {
                         <FormErrorMessage errorMessage={error} />
                     </p>
                     <Button
+                        onClick={() => refetch()}
                         size="sm"
                         variant="secondary"
-                        onClick={() => refetch()}
                     >
                         Retry
                     </Button>

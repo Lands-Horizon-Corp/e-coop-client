@@ -32,16 +32,16 @@ export const VersionAndFeedBack = () => {
 
     return (
         <div className="fixed bottom-3 right-3 z-50">
-            <Popover open={isOpen} onOpenChange={setIsOpen}>
+            <Popover onOpenChange={setIsOpen} open={isOpen}>
                 <PopoverTrigger asChild>
                     <Badge
+                        className={cn(
+                            'cursor-pointer border-primary/50 dark:bg-background/80 dark:text-white'
+                        )}
                         onClick={() => {
                             togglePopover()
                         }}
                         variant="outline"
-                        className={cn(
-                            'cursor-pointer border-primary/50 dark:bg-background/80 dark:text-white'
-                        )}
                     >
                         <span className="mr-1 font-bold">
                             {softwareUpdates.name}
@@ -67,8 +67,8 @@ export const VersionAndFeedBack = () => {
                     <Dialog>
                         <DialogTrigger asChild>
                             <Button
-                                variant={'secondary'}
                                 className="w-full cursor-pointer rounded-lg px-0 text-sm"
+                                variant={'secondary'}
                             >
                                 Send Feedback
                             </Button>

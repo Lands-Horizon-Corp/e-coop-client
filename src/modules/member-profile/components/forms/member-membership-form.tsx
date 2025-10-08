@@ -110,55 +110,55 @@ const MemberMembershipForm = ({
     return (
         <Form {...form}>
             <form
-                ref={formRef}
-                onSubmit={onSubmit}
                 className={cn('flex w-full flex-col gap-y-4', className)}
+                onSubmit={onSubmit}
+                ref={formRef}
             >
                 <fieldset
-                    disabled={formProps.readOnly}
                     className="grid gap-x-6 gap-y-4"
+                    disabled={formProps.readOnly}
                 >
                     <div className="space-y-4">
                         <p>Membership Information</p>
                         <div className="grid grid-cols-1 gap-2 sm:grid-cols-3">
                             <FormFieldWrapper
                                 control={form.control}
-                                name="passbook"
-                                label="Passbook"
                                 hiddenFields={formProps.hiddenFields}
+                                label="Passbook"
+                                name="passbook"
                                 render={({ field }) => (
                                     <Input
                                         {...field}
+                                        disabled={isDisabled(field.name)}
                                         id={field.name}
                                         placeholder="Passbook"
-                                        disabled={isDisabled(field.name)}
                                     />
                                 )}
                             />
                             <FormFieldWrapper
                                 control={form.control}
-                                name="old_reference_id"
-                                label="Old Reference ID"
                                 hiddenFields={formProps.hiddenFields}
+                                label="Old Reference ID"
+                                name="old_reference_id"
                                 render={({ field }) => (
                                     <Input
                                         {...field}
+                                        disabled={isDisabled(field.name)}
                                         id={field.name}
                                         placeholder="Old Reference ID"
-                                        disabled={isDisabled(field.name)}
                                     />
                                 )}
                             />
                             <FormFieldWrapper
                                 control={form.control}
-                                name="status"
-                                label="Status"
                                 hiddenFields={formProps.hiddenFields}
+                                label="Status"
+                                name="status"
                                 render={({ field }) => (
                                     <GeneralStatusCombobox
                                         {...field}
-                                        placeholder="Select Status"
                                         disabled={isDisabled(field.name)}
+                                        placeholder="Select Status"
                                     />
                                 )}
                             />
@@ -166,33 +166,33 @@ const MemberMembershipForm = ({
                         <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
                             <FormFieldWrapper
                                 control={form.control}
-                                name="member_type_id"
-                                label="Member Type"
                                 hiddenFields={formProps.hiddenFields}
+                                label="Member Type"
+                                name="member_type_id"
                                 render={({ field }) => (
                                     <MemberTypeCombobox
                                         {...field}
-                                        placeholder="Select Member Type"
                                         disabled={isDisabled(field.name)}
                                         onChange={(selected) =>
                                             field.onChange(selected.id)
                                         }
+                                        placeholder="Select Member Type"
                                     />
                                 )}
                             />
                             <FormFieldWrapper
                                 control={form.control}
-                                name="member_group_id"
-                                label="Member Group"
                                 hiddenFields={formProps.hiddenFields}
+                                label="Member Group"
+                                name="member_group_id"
                                 render={({ field }) => (
                                     <MemberGroupCombobox
                                         {...field}
-                                        placeholder="Select Member Group"
                                         disabled={isDisabled(field.name)}
                                         onChange={(selected) =>
                                             field.onChange(selected.id)
                                         }
+                                        placeholder="Select Member Group"
                                     />
                                 )}
                             />
@@ -200,33 +200,33 @@ const MemberMembershipForm = ({
                         <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
                             <FormFieldWrapper
                                 control={form.control}
-                                name="member_classification_id"
-                                label="Member Classification"
                                 hiddenFields={formProps.hiddenFields}
+                                label="Member Classification"
+                                name="member_classification_id"
                                 render={({ field }) => (
                                     <MemberClassificationCombobox
                                         {...field}
-                                        placeholder="Select Classification"
                                         disabled={isDisabled(field.name)}
                                         onChange={(selected) =>
                                             field.onChange(selected.id)
                                         }
+                                        placeholder="Select Classification"
                                     />
                                 )}
                             />
                             <FormFieldWrapper
                                 control={form.control}
-                                name="member_center_id"
-                                label="Member Center"
                                 hiddenFields={formProps.hiddenFields}
+                                label="Member Center"
+                                name="member_center_id"
                                 render={({ field }) => (
                                     <MemberCenterCombobox
                                         {...field}
-                                        placeholder="Select Center"
                                         disabled={isDisabled(field.name)}
                                         onChange={(memberCenter) =>
                                             field.onChange(memberCenter.id)
                                         }
+                                        placeholder="Select Center"
                                     />
                                 )}
                             />
@@ -234,25 +234,25 @@ const MemberMembershipForm = ({
                         <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
                             <FormFieldWrapper
                                 control={form.control}
-                                name="member_department_id"
-                                label="Member Department"
                                 hiddenFields={formProps.hiddenFields}
+                                label="Member Department"
+                                name="member_department_id"
                                 render={({ field }) => (
                                     <MemberDepartmentCombobox
                                         {...field}
-                                        placeholder="Select Department"
                                         disabled={isDisabled(field.name)}
                                         onChange={(selected) =>
                                             field.onChange(selected.id)
                                         }
+                                        placeholder="Select Department"
                                     />
                                 )}
                             />
                             <FormFieldWrapper
                                 control={form.control}
-                                name="recruited_by_member_profile_id"
-                                label="Recruited By"
                                 hiddenFields={formProps.hiddenFields}
+                                label="Recruited By"
+                                name="recruited_by_member_profile_id"
                                 render={({ field }) => {
                                     const value = form.getValues(
                                         'recruited_by_member_profile'
@@ -260,7 +260,7 @@ const MemberMembershipForm = ({
 
                                     return (
                                         <MemberPicker
-                                            value={value}
+                                            disabled={isDisabled(field.name)}
                                             onSelect={(memberProfile) => {
                                                 if (
                                                     memberProfile &&
@@ -284,7 +284,7 @@ const MemberMembershipForm = ({
                                                     )
                                             }}
                                             placeholder="Select Recruiter"
-                                            disabled={isDisabled(field.name)}
+                                            value={value}
                                         />
                                     )
                                 }}
@@ -294,18 +294,18 @@ const MemberMembershipForm = ({
                             <p className="text-muted-foreground">Other</p>
                             <div className="grid gap-x-2 gap-y-4 sm:grid-cols-2">
                                 <FormFieldWrapper
-                                    name="is_mutual_fund_member"
+                                    className="col-span-1"
                                     control={form.control}
                                     hiddenFields={formProps.hiddenFields}
-                                    className="col-span-1"
+                                    name="is_mutual_fund_member"
                                     render={({ field }) => (
                                         <div className="shadow-xs relative flex w-full items-start gap-2 rounded-lg border border-input p-4 outline-none duration-200 ease-out has-[:checked]:border-primary/30 has-[:checked]:bg-primary/40">
                                             <Checkbox
-                                                id={field.name}
-                                                checked={field.value}
-                                                onCheckedChange={field.onChange}
-                                                className="order-1 after:absolute after:inset-0"
                                                 aria-describedby={`${field.name}`}
+                                                checked={field.value}
+                                                className="order-1 after:absolute after:inset-0"
+                                                id={field.name}
+                                                onCheckedChange={field.onChange}
                                             />
                                             <div className="flex grow items-center gap-3">
                                                 <div className="size-fit rounded-full bg-secondary p-2">
@@ -317,8 +317,8 @@ const MemberMembershipForm = ({
                                                         <span className="text-xs font-normal leading-[inherit] text-muted-foreground"></span>
                                                     </Label>
                                                     <p
-                                                        id={`${field.name}`}
                                                         className="text-xs text-muted-foreground"
+                                                        id={`${field.name}`}
                                                     >
                                                         Contributes to a pooled
                                                         investment.
@@ -329,18 +329,18 @@ const MemberMembershipForm = ({
                                     )}
                                 />
                                 <FormFieldWrapper
-                                    name="is_micro_finance_member"
+                                    className="col-span-1"
                                     control={form.control}
                                     hiddenFields={formProps.hiddenFields}
-                                    className="col-span-1"
+                                    name="is_micro_finance_member"
                                     render={({ field }) => (
                                         <div className="shadow-xs relative flex w-full items-start gap-2 rounded-lg border border-input p-4 outline-none duration-200 ease-out has-[:checked]:border-primary/30 has-[:checked]:bg-primary/40">
                                             <Checkbox
-                                                id={field.name}
-                                                checked={field.value}
-                                                onCheckedChange={field.onChange}
-                                                className="order-1 after:absolute after:inset-0"
                                                 aria-describedby={`${field.name}`}
+                                                checked={field.value}
+                                                className="order-1 after:absolute after:inset-0"
+                                                id={field.name}
+                                                onCheckedChange={field.onChange}
                                             />
                                             <div className="flex grow items-center gap-3">
                                                 <div className="size-fit rounded-full bg-secondary p-2">
@@ -352,8 +352,8 @@ const MemberMembershipForm = ({
                                                         <span className="text-xs font-normal leading-[inherit] text-muted-foreground"></span>
                                                     </Label>
                                                     <p
-                                                        id={`${field.name}`}
                                                         className="text-xs text-muted-foreground"
+                                                        id={`${field.name}`}
                                                     >
                                                         Participates in
                                                         small-scale financial
@@ -369,15 +369,15 @@ const MemberMembershipForm = ({
                     </div>
                 </fieldset>
                 <FormFooterResetSubmit
-                    error={error}
-                    readOnly={formProps.readOnly}
-                    isLoading={isPending}
                     disableSubmit={!form.formState.isDirty}
-                    submitText="Save"
+                    error={error}
+                    isLoading={isPending}
                     onReset={() => {
                         form.reset()
                         reset()
                     }}
+                    readOnly={formProps.readOnly}
+                    submitText="Save"
                 />
             </form>
         </Form>

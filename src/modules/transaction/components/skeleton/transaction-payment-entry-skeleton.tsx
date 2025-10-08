@@ -6,8 +6,8 @@ const PaymentsEntryListSkeleton = ({ itemNumber }: { itemNumber: number }) => {
         <div className="h-full space-y-2">
             {[...Array(itemNumber)].map((_, idx) => (
                 <Card
-                    key={idx}
                     className="w-full rounded-2xl border border-border bg-background/90 p-0"
+                    key={idx}
                 >
                     <CardContent className="flex items-center justify-between p-4">
                         {/* Left: Avatar + text */}

@@ -43,13 +43,13 @@ const PolicyNav = ({ className }: PolicyNavLinkProps) => {
                         pathName.toLowerCase() === linkName.toLowerCase()
                     return (
                         <Link
-                            key={link.name}
-                            to={`/policy${link.to}` as string}
                             className={`hover:bg-primary/20 px-3 py-2 min-w-52 rounded-md text-sm font-medium text-gray-900 dark:text-white ${
                                 isCurrentTab
                                     ? 'bg-primary/20 after:content-[""] after:block after:w-1 after:h-7 relative after:-left-2.5 after:top-1/2 after:-translate-y-1/2 after:absolute after:rounded-xl after:bg-primary'
                                     : ''
                             }`}
+                            key={link.name}
+                            to={`/policy${link.to}` as string}
                         >
                             {link.name}
                         </Link>

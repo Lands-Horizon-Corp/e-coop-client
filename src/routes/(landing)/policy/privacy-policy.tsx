@@ -104,8 +104,8 @@ function RouteComponent() {
     return (
         <PageContainer className="w-full  flex flex-col-reverse lg:flex-row  flex-grow">
             <div
-                ref={contentScrollRef}
                 className="flex-1 overflow-y-auto px-4 py-8 border-none lg:border-r border-gray-200 dark:border-gray-700 h-[calc(100vh-theme(spacing.16))]"
+                ref={contentScrollRef}
             >
                 <h1 className="text-3xl font-bold mb-4">
                     Lands Horizon Privacy Policy
@@ -122,8 +122,8 @@ function RouteComponent() {
                     <span>
                         <LinkTag
                             href="http://ecoop-suite.com/"
-                            target="_blank"
                             name={` (http://ecoop-suite.com/)`}
+                            target="_blank"
                         />
                     </span>
                     . By using our services, you agree to the practices
@@ -133,8 +133,8 @@ function RouteComponent() {
 
                 {/* --- Section 1 --- */}
                 <SitePolicyItem
-                    ref={personalCollectRef}
                     id="personal-data-we-collect"
+                    ref={personalCollectRef}
                     title="1. Personal Data We Collect"
                 >
                     <div>
@@ -159,8 +159,8 @@ function RouteComponent() {
 
                 {/* --- Section 2 --- */}
                 <SitePolicyItem
-                    ref={howWeCollectDataRef}
                     id="how-we-collect-data"
+                    ref={howWeCollectDataRef}
                     title="2. How We Collect Data"
                 >
                     <div>
@@ -180,8 +180,8 @@ function RouteComponent() {
 
                 {/* --- Section 3 --- */}
                 <SitePolicyItem
-                    ref={purposeDataCollectionRef}
                     id="purpose-of-data-collection"
+                    ref={purposeDataCollectionRef}
                     title="3. Purpose of Data Collection"
                 >
                     <div>
@@ -206,8 +206,8 @@ function RouteComponent() {
 
                 {/* --- Section 4 --- */}
                 <SitePolicyItem
-                    ref={legalBasisProcessingRef}
                     id="legal-basis-for-processing"
+                    ref={legalBasisProcessingRef}
                     title="4. Legal Basis for Processing"
                 >
                     <div>
@@ -230,8 +230,8 @@ function RouteComponent() {
 
                 {/* --- Section 5 --- */}
                 <SitePolicyItem
-                    ref={howWeUseYourDataRef}
                     id="how-we-use-your-data"
+                    ref={howWeUseYourDataRef}
                     title="5. How We Use Your Data"
                     // onClick removed as scrolling is handled by TOC
                 >
@@ -254,8 +254,8 @@ function RouteComponent() {
 
                 {/* --- Section 6 --- */}
                 <SitePolicyItem
-                    ref={sharingDisclosureDataRef}
                     id="sharing-and-disclosure-of-data"
+                    ref={sharingDisclosureDataRef}
                     title="6. Sharing and Disclosure of Data"
                 >
                     <div>
@@ -292,8 +292,8 @@ function RouteComponent() {
 
                 {/* --- Section 7 --- */}
                 <SitePolicyItem
-                    ref={DataRetentionRef}
                     id="data-retention"
+                    ref={DataRetentionRef}
                     title="7. Data Retention"
                 >
                     <div>
@@ -306,8 +306,8 @@ function RouteComponent() {
 
                 {/* --- Section 8 --- */}
                 <SitePolicyItem
-                    ref={SecurityMeasuresRef}
                     id="security-measures"
+                    ref={SecurityMeasuresRef}
                     title="8. Security Measures"
                 >
                     <div>
@@ -340,8 +340,8 @@ function RouteComponent() {
 
                 {/* --- Section 9 --- */}
                 <SitePolicyItem
-                    ref={yourRightsRef}
                     id="your-rights"
+                    ref={yourRightsRef}
                     title="9. Your Rights"
                 >
                     <div>
@@ -377,8 +377,8 @@ function RouteComponent() {
 
                 {/* --- Section 10 --- */}
                 <SitePolicyItem
-                    ref={internationalDataTransferRef}
                     id="international-data-transfers"
+                    ref={internationalDataTransferRef}
                     title="10. International Data Transfers"
                 >
                     <div>
@@ -394,8 +394,8 @@ function RouteComponent() {
 
                 {/* --- Section 11 --- */}
                 <SitePolicyItem
-                    ref={cookiesTrackingTechnologyRef}
                     id="cookies-and-tracking-technologies"
+                    ref={cookiesTrackingTechnologyRef}
                     title="11. Cookies and Tracking Technologies"
                 >
                     <div>
@@ -413,8 +413,8 @@ function RouteComponent() {
 
                 {/* --- Section 12 --- */}
                 <SitePolicyItem
-                    ref={childrenPrivacyRef}
                     id="children's-privacy"
+                    ref={childrenPrivacyRef}
                     title="12. Children’s Privacy"
                 >
                     <div>
@@ -428,8 +428,8 @@ function RouteComponent() {
 
                 {/* --- Section 13 --- */}
                 <SitePolicyItem
-                    ref={policyUpdatesRef}
                     id="policy-updates"
+                    ref={policyUpdatesRef}
                     title="13. Policy Updates"
                 >
                     <div>
@@ -450,8 +450,8 @@ function RouteComponent() {
 
                 {/* --- Section 14 --- */}
                 <SitePolicyItem
-                    ref={contactUsRef}
                     id="contact-us"
+                    ref={contactUsRef}
                     title="14. Contact Us"
                 >
                     <div className="space-y-2 not-prose">
@@ -496,12 +496,12 @@ function RouteComponent() {
                     {articleList.map((sectionId, idx) => (
                         <li key={sectionId}>
                             <a
+                                className="block py-1 text-primary hover:underline cursor-pointer text-sm"
                                 href={`#${sectionId}`}
                                 onClick={(e) => {
                                     e.preventDefault()
                                     scrollToSection(sectionId)
                                 }}
-                                className="block py-1 text-primary hover:underline cursor-pointer text-sm"
                             >
                                 {idx + 1}
                                 {'. '}

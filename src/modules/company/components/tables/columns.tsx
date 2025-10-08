@@ -38,8 +38,8 @@ const CompanyTableColumns = (
                 <HeaderToggleSelect table={table} />
                 {!column.getIsPinned() && (
                     <PushPinSlashIcon
-                        onClick={() => column.pin('left')}
                         className="mr-2 size-3.5 cursor-pointer"
+                        onClick={() => column.pin('left')}
                     />
                 )}
             </div>
@@ -81,8 +81,8 @@ const CompanyTableColumns = (
             <div className="flex min-w-0 items-center gap-3">
                 <PreviewMediaWrapper media={media}>
                     <ImageDisplay
-                        src={media?.download_url}
                         className="h-9 w-9 rounded-full border bg-muted object-cover"
+                        src={media?.download_url}
                     />
                 </PreviewMediaWrapper>
                 <div className="flex min-w-0 flex-col">

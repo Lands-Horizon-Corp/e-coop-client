@@ -15,7 +15,7 @@ type Props = {
 const MemberFinancial = forwardRef<HTMLDivElement, Props>(
     ({ memberProfile }, ref) => {
         return (
-            <div ref={ref} className="space-y-4">
+            <div className="space-y-4" ref={ref}>
                 <MemberAssets memberProfile={memberProfile} />
                 <Separator />
                 <MemberIncome memberProfile={memberProfile} />

@@ -58,6 +58,8 @@ const LoanTransactionEntryCreateUpdate = ({
         },
     })
 
+    const deductionType = form.watch('type')
+
     const { firstError, formRef, isDisabled } =
         useFormHelper<TLoanTransactionEntrySchema>({
             form,
@@ -103,23 +105,25 @@ const LoanTransactionEntryCreateUpdate = ({
     return (
         <Form {...form}>
             <form
-                ref={formRef}
-                onSubmit={onSubmit}
                 className={cn(
                     'flex w-full max-w-full min-w-0 flex-col gap-y-4',
                     className
                 )}
+                onSubmit={onSubmit}
+                ref={formRef}
             >
                 <div className="space-y-4">
                     <FormFieldWrapper
                         control={form.control}
-                        name="account_id"
                         label="Account"
+                        name="account_id"
                         render={({ field }) => (
                             <AccountPicker
+                                disabled={
+                                    isDisabled(field.name) ||
+                                    deductionType === 'automatic-deduction'
+                                }
                                 hideDescription
-                                value={form.getValues('account')}
-                                placeholder="Select Account for Charge"
                                 onSelect={(account) => {
                                     field.onChange(account?.id)
                                     form.setValue('account', account, {
@@ -131,21 +135,21 @@ const LoanTransactionEntryCreateUpdate = ({
                                         { shouldDirty: true }
                                     )
                                 }}
-                                disabled={isDisabled(field.name)}
+                                placeholder="Select Account for Charge"
+                                value={form.getValues('account')}
                             />
                         )}
                     />
 
                     <FormFieldWrapper
                         control={form.control}
-                        name="amount"
                         label="Amount"
+                        name="amount"
                         render={({ field }) => (
                             <Input
                                 {...field}
-                                id={field.name}
-                                placeholder="0.00"
                                 disabled={isDisabled(field.name)}
+                                id={field.name}
                                 onChange={(e) => {
                                     const value =
                                         parseFloat(e.target.value) || 0
@@ -157,17 +161,19 @@ const LoanTransactionEntryCreateUpdate = ({
                                         e.preventDefault()
                                     }
                                 }}
+                                placeholder="0.00"
                             />
                         )}
                     />
 
                     <FormFieldWrapper
                         control={form.control}
-                        name="description"
                         label="Description"
+                        name="description"
                         render={({ field }) => (
                             <Textarea
                                 {...field}
+                                disabled={isDisabled(field.name)}
                                 id={field.name}
                                 onKeyDown={(e) => {
                                     if (e.key === 'Enter') {
@@ -176,7 +182,6 @@ const LoanTransactionEntryCreateUpdate = ({
                                     }
                                 }}
                                 placeholder="Charge description"
-                                disabled={isDisabled(field.name)}
                                 rows={3}
                             />
                         )}
@@ -184,20 +189,20 @@ const LoanTransactionEntryCreateUpdate = ({
 
                     <div className="flex items-center gap-6">
                         <FormFieldWrapper
+                            className="w-fit"
                             control={form.control}
                             name="is_add_on"
-                            className="w-fit"
                             render={({ field }) => (
                                 <div className="flex items-center gap-2">
                                     <Switch
-                                        id={field.name}
                                         checked={field.value || false}
-                                        onCheckedChange={field.onChange}
                                         disabled={isDisabled(field.name)}
+                                        id={field.name}
+                                        onCheckedChange={field.onChange}
                                     />
                                     <Label
-                                        htmlFor={field.name}
                                         className="text-sm font-medium"
+                                        htmlFor={field.name}
                                     >
                                         Add-on Charge
                                     </Label>
@@ -208,19 +213,19 @@ const LoanTransactionEntryCreateUpdate = ({
                 </div>
 
                 <FormFooterResetSubmit
-                    error={error}
-                    readOnly={readOnly}
-                    isLoading={isPending}
-                    resetButtonType="button"
-                    submitButtonType="button"
                     disableSubmit={!form.formState.isDirty}
-                    submitText={
-                        formProps.defaultValues?.id ? 'Update' : 'Create'
-                    }
-                    onSubmit={(e) => onSubmit(e)}
+                    error={error}
+                    isLoading={isPending}
                     onReset={() => {
                         form.reset()
                     }}
+                    onSubmit={(e) => onSubmit(e)}
+                    readOnly={readOnly}
+                    resetButtonType="button"
+                    submitButtonType="button"
+                    submitText={
+                        formProps.defaultValues?.id ? 'Update' : 'Create'
+                    }
                 />
             </form>
         </Form>
@@ -238,9 +243,9 @@ export const LoanTransactionEntryCreateUpdateModal = ({
 }) => {
     return (
         <Modal
-            title={title}
-            description={description}
             className={cn('!max-w-xl', className)}
+            description={description}
+            title={title}
             {...props}
         >
             <LoanTransactionEntryCreateUpdate

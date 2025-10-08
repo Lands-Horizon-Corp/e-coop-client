@@ -39,8 +39,8 @@ const YesNoBadge = forwardRef<HTMLDivElement, Props>(
 
         return (
             <div
-                ref={ref}
                 className={cn(yesNoVariants({ variant }), className)}
+                ref={ref}
             >
                 {displayText}
             </div>

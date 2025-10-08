@@ -26,8 +26,8 @@ const DEVELOPER_POLICY: {
             <li key="1-2">
                 Developers must first{' '}
                 <Link
-                    target="_blank"
                     rel="noopener noreferrer"
+                    target="_blank"
                     to={'/auth/sign-up' as string}
                 >
                     create an account
@@ -55,8 +55,8 @@ const DEVELOPER_POLICY: {
                 The API may only be used for lawful purposes, and in accordance
                 with the platform&apos;s{' '}
                 <Link
-                    target="_blank"
                     rel="noopener noreferrer"
+                    target="_blank"
                     to={'/policy/terms-and-condition' as string}
                 >
                     Terms of Service
@@ -76,9 +76,9 @@ const DEVELOPER_POLICY: {
                 All data accessed via the API must be handled in accordance with
                 our{' '}
                 <Link
-                    to={'/policy/data-protection-policy' as string}
-                    target="_blank"
                     rel="noopener noreferrer"
+                    target="_blank"
+                    to={'/policy/data-protection-policy' as string}
                 >
                     Data Protection Policy
                 </Link>
@@ -156,10 +156,10 @@ function RouteComponent() {
                     accessing and using the Developer API provided by Lands
                     Horizon Corp through the e-coop-suite platform{' '}
                     <Link
-                        to={'/' as string}
-                        target="_blank"
-                        referrerPolicy="no-referrer"
                         className="underline underline-offset-4 text-primary/70"
+                        referrerPolicy="no-referrer"
+                        target="_blank"
+                        to={'/' as string}
                     >
                         ecoop-suite.netlify.app.com
                     </Link>
@@ -189,7 +189,7 @@ function RouteComponent() {
                         })()
 
                         return (
-                            <div key={policy.id} className="">
+                            <div className="" key={policy.id}>
                                 <p className="text-xl !mb-4">
                                     {policy.id}. {policy.title}
                                 </p>

@@ -39,31 +39,30 @@ const MemberExpenseCard = ({ expense }: { expense: IMemberExpense }) => {
     return (
         <div className="flex flex-col gap-y-1 rounded-xl border bg-background p-4">
             <MemberExpenseCreateUpdateFormModal
-                open={edit}
-                onOpenChange={setEdit}
-                title="Update Expense"
                 description="Modify / Update this expense information."
                 formProps={{
                     expenseId: expense.id,
                     memberProfileId: expense.member_profile_id,
                     defaultValues: expense,
                 }}
+                onOpenChange={setEdit}
+                open={edit}
+                title="Update Expense"
             />
             <div className="flex justify-between">
                 <p className="font-bold">{expense.name}</p>
                 <div className="flex items-center justify-end">
                     <Button
-                        size="icon"
-                        variant="ghost"
                         className="!size-fit px-1.5 py-1.5 text-muted-foreground/40"
                         disabled={isDeleting}
                         onClick={() => setEdit(true)}
+                        size="icon"
+                        variant="ghost"
                     >
                         <PencilFillIcon className="size-4" />
                     </Button>
                     <Button
-                        size="icon"
-                        variant="ghost"
+                        className="!size-fit px-1.5 py-1.5 text-muted-foreground/40"
                         disabled={isDeleting}
                         hoverVariant="destructive"
                         onClick={() =>
@@ -79,7 +78,8 @@ const MemberExpenseCard = ({ expense }: { expense: IMemberExpense }) => {
                                     }),
                             })
                         }
-                        className="!size-fit px-1.5 py-1.5 text-muted-foreground/40"
+                        size="icon"
+                        variant="ghost"
                     >
                         {isDeleting ? (
                             <LoadingSpinner />
@@ -135,9 +135,6 @@ const MemberExpenses = ({ memberProfile }: Props) => {
     return (
         <div>
             <MemberExpenseCreateUpdateFormModal
-                open={create}
-                onOpenChange={setCreate}
-                title="Create Expense"
                 description="Add new expense information."
                 formProps={{
                     memberProfileId: memberProfile.id,
@@ -146,16 +143,19 @@ const MemberExpenses = ({ memberProfile }: Props) => {
                         member_profile_id: memberProfile.id,
                     },
                 }}
+                onOpenChange={setCreate}
+                open={create}
+                title="Create Expense"
             />
             <div className="mb-2 flex items-start justify-between">
                 <p>Expenses</p>
-                <Button size="sm" onClick={() => setCreate(true)}>
+                <Button onClick={() => setCreate(true)} size="sm">
                     Add Expense <PlusIcon className="ml-1" />
                 </Button>
             </div>
             <div className="space-y-4">
                 {memberProfile.member_expenses?.map((expense) => (
-                    <MemberExpenseCard key={expense.id} expense={expense} />
+                    <MemberExpenseCard expense={expense} key={expense.id} />
                 ))}
                 {(!memberProfile.member_expenses ||
                     memberProfile.member_expenses.length === 0) && (

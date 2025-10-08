@@ -25,9 +25,9 @@ const ContactNumbersDisplay = ({ className, contactNumbers }: Props) => {
             <p></p>
             <p className="!mt-0 text-sm text-muted-foreground/60"></p>
             <SectionTitle
-                title="Contact Number References"
                 Icon={TelephoneIcon}
                 subTitle="Other contact number references"
+                title="Contact Number References"
             />
             {(!contactNumbers || contactNumbers.length === 0) && (
                 <p className="w-full text-center text-xs text-muted-foreground/70">
@@ -79,13 +79,13 @@ const ContactNumbersDisplay = ({ className, contactNumbers }: Props) => {
                                     </p>
                                 </div>
                                 <Accordion
-                                    type="single"
-                                    collapsible
                                     className="col-span-4 w-full"
+                                    collapsible
+                                    type="single"
                                 >
                                     <AccordionItem
-                                        value="item-1"
                                         className="border-b-0"
+                                        value="item-1"
                                     >
                                         <AccordionTrigger className="text-sm text-muted-foreground/60">
                                             Description..

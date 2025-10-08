@@ -74,16 +74,16 @@ const SignInForm = ({ className, ...formProps }: ISignInFormProps) => {
     return (
         <Form {...form}>
             <form
-                ref={formRef}
-                onSubmit={onSubmit}
                 className={cn('flex w-full flex-col gap-y-4', className)}
+                onSubmit={onSubmit}
+                ref={formRef}
             >
                 <div className="flex items-center gap-x-2 py-4 font-medium">
                     <p className="text-lg font-medium md:text-5xl">Sign In</p>
                 </div>
                 <fieldset
-                    disabled={isPending || formProps.readOnly}
                     className="space-y-3"
+                    disabled={isPending || formProps.readOnly}
                 >
                     <FormField
                         control={form.control}
@@ -93,10 +93,10 @@ const SignInForm = ({ className, ...formProps }: ISignInFormProps) => {
                                 <FormControl>
                                     <Input
                                         {...field}
-                                        id={field.name}
-                                        placeholder="Email Address"
                                         autoComplete="off"
                                         disabled={isDisabled(field.name)}
+                                        id={field.name}
+                                        placeholder="Email Address"
                                     />
                                 </FormControl>
                                 <FormMessage className="text-xs" />
@@ -105,10 +105,10 @@ const SignInForm = ({ className, ...formProps }: ISignInFormProps) => {
                     />
                     <Link
                         className="mt-4 text-right text-sm text-muted-foreground hover:text-foreground hover:underline"
-                        to={'/auth/forgot-password' as string}
                         search={{
                             key: form.getValues('key'),
                         }}
+                        to={'/auth/forgot-password' as string}
                     >
                         Forgot Password
                     </Link>
@@ -120,10 +120,10 @@ const SignInForm = ({ className, ...formProps }: ISignInFormProps) => {
                                 <FormControl>
                                     <PasswordInput
                                         {...field}
-                                        id="password-field"
                                         autoComplete="off"
-                                        placeholder="Password"
                                         disabled={isDisabled(field.name)}
+                                        id="password-field"
+                                        placeholder="Password"
                                     />
                                 </FormControl>
                                 <FormMessage className="text-xs" />
@@ -134,10 +134,10 @@ const SignInForm = ({ className, ...formProps }: ISignInFormProps) => {
                 <div className="mt-6 flex flex-col space-y-2">
                     <FormErrorMessage errorMessage={error} />
                     <Button
-                        size="sm"
-                        type="submit"
                         className="w-full max-w-xl rounded-3xl"
                         disabled={isPending || formProps.readOnly}
+                        size="sm"
+                        type="submit"
                     >
                         {isPending ? <LoadingSpinner /> : 'Login'}
                     </Button>

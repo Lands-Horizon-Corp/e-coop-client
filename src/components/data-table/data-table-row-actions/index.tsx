@@ -50,7 +50,7 @@ const RowActionsGroup = <TData,>({
     return (
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
-                <Button size="icon" className="size-fit p-1" variant="ghost">
+                <Button className="size-fit p-1" size="icon" variant="ghost">
                     <DotsVerticalIcon />
                 </Button>
             </DropdownMenuTrigger>
@@ -88,8 +88,8 @@ const RowActionsGroup = <TData,>({
                 )}
                 {onDelete && (
                     <DropdownMenuItem
+                        className="text-destructive-foreground focus:bg-destructive"
                         disabled={!onDelete.isAllowed}
-                        className="text-rose-400 focus:bg-destructive"
                         onClick={onDelete.onClick}
                     >
                         <TrashIcon className="mr-2" /> {onDelete.text}

@@ -34,8 +34,8 @@ const TransactionJointMemberCard = ({
                 <div className="col-span-full flex flex-1 flex-col items-center sm:col-span-2">
                     <PreviewMediaWrapper media={jointAccounts.picture_media}>
                         <ImageDisplay
-                            src={jointAccounts.picture_media?.download_url}
                             className="h-[200px] w-full rounded-lg border object-cover ring ring-ring/40"
+                            src={jointAccounts.picture_media?.download_url}
                         />
                     </PreviewMediaWrapper>
                     <span className="mt-1 text-xs text-muted-foreground/70">
@@ -45,8 +45,8 @@ const TransactionJointMemberCard = ({
                 <div className="col-span-full flex flex-1 flex-col items-center sm:col-span-2">
                     <PreviewMediaWrapper media={jointAccounts.signature_media}>
                         <ImageDisplay
-                            src={jointAccounts.signature_media?.download_url}
                             className="h-[200px] w-full rounded-lg border object-cover ring ring-ring/40"
+                            src={jointAccounts.signature_media?.download_url}
                         />
                     </PreviewMediaWrapper>
                     <span className="mt-1 text-xs text-muted-foreground/70">

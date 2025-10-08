@@ -105,11 +105,11 @@ export const DownloadButton = React.forwardRef<
 
     return (
         <ImagePreviewButtonAction
+            className={className}
             Icon={<DownloadIcon className="size-full cursor-pointer " />}
             name={name}
-            ref={ref}
-            className={className}
             onClick={handleDownload}
+            ref={ref}
         />
     )
 })
@@ -122,9 +122,6 @@ export const ImagePreviewPrevious = React.forwardRef<
 
     return (
         <Button
-            ref={ref}
-            variant={variant}
-            size={size}
             className={cn(
                 '!hover:scale-125 absolute size-10 bg-transparent ease-in-out hover:bg-transparent',
                 orientation === 'horizontal'
@@ -134,6 +131,9 @@ export const ImagePreviewPrevious = React.forwardRef<
                 className
             )}
             onClick={scrollPrev}
+            ref={ref}
+            size={size}
+            variant={variant}
             {...props}
         >
             <ChevronLeftIcon className="size-full" />
@@ -150,9 +150,6 @@ export const ImagePreviewNext = React.forwardRef<
 
     return (
         <Button
-            ref={ref}
-            variant={variant}
-            size={size}
             className={cn(
                 '!hover:scale-125 absolute size-10 bg-transparent ease-in-out hover:bg-transparent',
                 orientation === 'horizontal'
@@ -162,6 +159,9 @@ export const ImagePreviewNext = React.forwardRef<
                 className
             )}
             onClick={scrollNext}
+            ref={ref}
+            size={size}
+            variant={variant}
             {...props}
         >
             <ChevronRightIcon className="size-full" />
@@ -261,9 +261,12 @@ export const ImageContainer = ({
             <p className="py-1 text-xs">{media.file_name}</p>
             <div className="flex items-center justify-center">
                 <img
+                    alt="Image Preview"
                     className="h-full w-full cursor-pointer overflow-hidden rounded-lg object-cover"
                     // ref={imageRef}
                     onLoad={handleImageLoad}
+                    onMouseDown={onMouseDown}
+                    src={media.download_url}
                     style={{
                         width: '70%',
                         height: '100%',
@@ -274,20 +277,17 @@ export const ImageContainer = ({
                         objectFit: 'cover',
                         backgroundSize: 'cover',
                     }}
-                    onMouseDown={onMouseDown}
-                    src={media.download_url}
-                    alt="Image Preview"
                 />
             </div>
             <div className="flex w-full justify-between">
                 <Button
-                    variant={'link'}
                     className={cn('px-0 text-primary-foreground')}
+                    variant={'link'}
                 >
                     <a
-                        target="_blank"
-                        href={media.url}
                         className="py-1 text-xs "
+                        href={media.url}
+                        target="_blank"
                     >
                         Open in Browser
                     </a>
@@ -312,13 +312,13 @@ export const ImagePreviewButtonAction = React.forwardRef<
         <Tooltip>
             <TooltipTrigger asChild>
                 <Button
-                    ref={ref}
-                    variant="ghost"
                     className={cn(
                         'flex items-center justify-center space-x-3 border-0 hover:bg-background/20',
                         className
                     )}
                     onClick={onClick}
+                    ref={ref}
+                    variant="ghost"
                     {...props}
                 >
                     {Icon && (
@@ -366,12 +366,12 @@ export const ImagePreviewActions = React.forwardRef<
                 className={cn('absolute items-center overflow-auto', className)}
             >
                 <Card
-                    ref={ref}
                     className={cn('flex items-center p-2', className)}
+                    ref={ref}
                 >
                     <ImagePreviewButtonAction
-                        iconClassName="size-4"
                         Icon={<PowerResetIcon />}
+                        iconClassName="size-4"
                         name="reset"
                         onClick={handleResetActionState}
                     />
@@ -387,14 +387,14 @@ export const ImagePreviewActions = React.forwardRef<
                     />
                     <ImagePreviewButtonAction
                         Icon={<RotateLeftIcon />}
-                        name="rotate left"
                         iconClassName="size-4"
+                        name="rotate left"
                         onClick={handleRotateLeft}
                     />
                     <ImagePreviewButtonAction
                         Icon={<RotateRightIcon />}
-                        name="rotate right"
                         iconClassName="size-4"
+                        name="rotate right"
                         onClick={handleRotateRight}
                     />
                     <ImagePreviewButtonAction
@@ -409,8 +409,8 @@ export const ImagePreviewActions = React.forwardRef<
                     />
                     <DownloadButton
                         fileName={downloadImage.fileName}
-                        fileUrl={downloadImage.fileUrl}
                         fileType={downloadImage.fileType}
+                        fileUrl={downloadImage.fileUrl}
                         imageRef={imageRef}
                         name="download"
                     />
@@ -430,12 +430,11 @@ export const ImagePreviewPanel = forwardRef<
 
     return (
         <div
-            ref={ref}
             className="flex items-center space-x-2 overflow-x-auto overflow-y-hidden border-r-[.5px] border-background/20 bg-gray-200 p-10 backdrop-blur duration-100 ease-in-out dark:border-slate-400/20 dark:bg-black/10 lg:h-full lg:flex-col lg:space-x-0 lg:space-y-2 lg:overflow-y-auto lg:overflow-x-hidden"
+            ref={ref}
         >
             {Images.map((data, index) => (
                 <div
-                    onClick={() => scrollToIndex(index)}
                     className={cn(
                         `content:[''] relative flex aspect-square size-28 scroll-mb-4 scroll-mt-4 whitespace-nowrap bg-transparent ${
                             focusIndex === index
@@ -444,12 +443,13 @@ export const ImagePreviewPanel = forwardRef<
                         }`
                     )}
                     key={index}
+                    onClick={() => scrollToIndex(index)}
                     ref={focusIndex === index ? scrollIntoView : null}
                 >
                     <img
+                        alt={`Image ${index}`}
                         className="h-full w-full cursor-pointer overflow-hidden rounded-lg object-cover"
                         src={data.url}
-                        alt={`Image ${index}`}
                     />
                 </div>
             ))}

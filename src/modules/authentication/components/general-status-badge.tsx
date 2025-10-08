@@ -49,8 +49,8 @@ const GeneralStatusBadge = forwardRef<HTMLDivElement, Props>(
 
         return (
             <div
-                ref={ref}
                 className={cn(generalStatusVariants({ variant }), className)}
+                ref={ref}
             >
                 {displayText}
             </div>

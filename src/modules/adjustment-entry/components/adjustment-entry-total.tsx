@@ -19,11 +19,11 @@ export const AdjustmentEntryTotal = ({ className }: { className?: string }) => {
             )}
         >
             <Button
-                size="icon"
-                variant="secondary"
+                className="absolute rounded-full size-fit top-2 right-2"
                 disabled={isPending}
                 onClick={() => refetch()}
-                className="absolute rounded-full size-fit top-2 right-2"
+                size="icon"
+                variant="secondary"
             >
                 {isPending ? (
                     <LoadingSpinner className="size-3" />

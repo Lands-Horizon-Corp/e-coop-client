@@ -38,10 +38,10 @@ const TransactionViewNoMemberSelected = ({
                 <Tooltip>
                     <TooltipTrigger asChild>
                         <Button
-                            disabled={disabledSelectTrigger}
-                            size="sm"
-                            onClick={onClick}
                             className="px-3 sm:px-4"
+                            disabled={disabledSelectTrigger}
+                            onClick={onClick}
+                            size="sm"
                         >
                             Select Member
                             <span className="ml-1 sm:ml-2 text-base sm:text-lg translate-y-[2px]">

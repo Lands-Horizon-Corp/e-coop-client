@@ -77,23 +77,23 @@ const VerifyContactBar = ({
                 <p className="text-sm text-foreground/50">
                     Please verify {verifyMode} to enable other features/actions.{' '}
                     <ResendCode
-                        verifyMode={verifyMode}
                         duration={10}
                         interval={1_000}
+                        verifyMode={verifyMode}
                     />
                 </p>
             </div>
             <Form {...form}>
                 <form
-                    ref={formRef}
                     onSubmit={form.handleSubmit(
                         (data) => handleVerify({ ...data, verifyMode }),
                         handleFocusError
                     )}
+                    ref={formRef}
                 >
                     <fieldset
-                        disabled={isPending}
                         className="flex flex-col gap-y-4"
+                        disabled={isPending}
                     >
                         <FormField
                             control={form.control}
@@ -103,13 +103,10 @@ const VerifyContactBar = ({
                                     <FormControl>
                                         <InputOTP
                                             {...field}
-                                            maxLength={6}
                                             autoFocus={autoFocus}
-                                            pattern={
-                                                REGEXP_ONLY_DIGITS_AND_CHARS
-                                            }
                                             containerClassName="mx-auto capitalize w-fit"
                                             disabled={isDisabled(field.name)}
+                                            maxLength={6}
                                             onComplete={() =>
                                                 form.handleSubmit((data) =>
                                                     handleVerify({
@@ -118,34 +115,37 @@ const VerifyContactBar = ({
                                                     })
                                                 )()
                                             }
+                                            pattern={
+                                                REGEXP_ONLY_DIGITS_AND_CHARS
+                                            }
                                         >
                                             <InputOTPGroup>
                                                 <InputOTPSlot
+                                                    className="sm:size-8"
                                                     index={0}
-                                                    className="sm:size-8"
                                                 />
                                                 <InputOTPSlot
+                                                    className="sm:size-8"
                                                     index={1}
-                                                    className="sm:size-8"
                                                 />
                                                 <InputOTPSlot
-                                                    index={2}
                                                     className="sm:size-8"
+                                                    index={2}
                                                 />
                                             </InputOTPGroup>
                                             <InputOTPSeparator />
                                             <InputOTPGroup>
                                                 <InputOTPSlot
+                                                    className="sm:size-8"
                                                     index={3}
-                                                    className="sm:size-8"
                                                 />
                                                 <InputOTPSlot
+                                                    className="sm:size-8"
                                                     index={4}
-                                                    className="sm:size-8"
                                                 />
                                                 <InputOTPSlot
-                                                    index={5}
                                                     className="sm:size-8"
+                                                    index={5}
                                                 />
                                             </InputOTPGroup>
                                         </InputOTP>

@@ -43,11 +43,11 @@ const ComputationSheetSchemeCard = ({ computationSheet }: Props) => {
         <div className="w-full relative bg-card rounded-xl p-4 hover:shadow-md transition-shadow">
             <ComputationSheetCreateUpdateFormModal
                 {...editModal}
-                hideOnSuccess={false}
                 formProps={{
                     computationSheetId: computationSheet?.id,
                     defaultValues: computationSheet,
                 }}
+                hideOnSuccess={false}
             />
 
             <div className="shrink-none space-y-2">
@@ -67,8 +67,8 @@ const ComputationSheetSchemeCard = ({ computationSheet }: Props) => {
                         <Sheet {...calculatorModal}>
                             <SheetTrigger asChild>
                                 <Button
-                                    variant="outline"
                                     className="rounded-xl"
+                                    variant="outline"
                                 >
                                     <CalculatorIcon /> Try in Calculator
                                 </Button>
@@ -82,19 +82,19 @@ const ComputationSheetSchemeCard = ({ computationSheet }: Props) => {
                                     </SheetDescription>
                                 </SheetHeader>
                                 <ComputationSheetCalculator
+                                    computationSheetId={computationSheet?.id}
                                     defaultInput={recentCalcData}
                                     defaultResult={recentCalcResult}
-                                    onSubmitData={setRecentCalcData}
                                     onCalculatorResult={setRecentCalcResult}
-                                    computationSheetId={computationSheet?.id}
+                                    onSubmitData={setRecentCalcData}
                                 />
                             </SheetContent>
                         </Sheet>
                         {computationSheet?.id && (
                             <Button
-                                variant="outline"
-                                onClick={() => editModal.onOpenChange(true)}
                                 className="size-fit p-2 rounded-xl text-muted-foreground/70 hober:text-foreground"
+                                onClick={() => editModal.onOpenChange(true)}
+                                variant="outline"
                             >
                                 Edit
                             </Button>

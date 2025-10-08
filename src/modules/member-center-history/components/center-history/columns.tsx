@@ -29,8 +29,8 @@ const memberCenterHistoryColumns = (): ColumnDef<IMemberCenterHistory>[] => [
                 <ColumnActions {...props}>
                     <TextFilter
                         defaultMode="contains"
-                        field="memberCenter.name"
                         displayText="Member Center"
+                        field="memberCenter.name"
                     />
                 </ColumnActions>
             </DataTableColumnHeader>
@@ -47,8 +47,8 @@ const memberCenterHistoryColumns = (): ColumnDef<IMemberCenterHistory>[] => [
                 <ColumnActions {...props}>
                     <TextFilter<IMemberCenterHistory>
                         defaultMode="contains"
-                        field="memberCenter.description"
                         displayText="Member Center"
+                        field="memberCenter.description"
                     />
                 </ColumnActions>
             </DataTableColumnHeader>

@@ -38,13 +38,13 @@ const ActionTransactionItem = ({
 }: actionItemsProps) => {
     return (
         <GradientBackground
-            opacity={0.0}
-            gradientOnly
             className="w-full rounded-xl "
+            gradientOnly
+            opacity={0.0}
         >
             <Button
-                variant={variant}
                 className={`relative h-14 w-full overflow-hidden rounded-xl dark!border-blue-400/20 dark:border-0  ' ${className}`}
+                variant={variant}
                 {...buttonProps}
                 onClick={onClick}
             >
@@ -91,28 +91,28 @@ const TransactionActions = ({
     return (
         <div className="flex w-full flex-col justify-evenly space-y-2 py-2 lg:flex-row lg:space-x-2 lg:space-y-0">
             <ActionTransactionItem
-                onClick={paymentOnClick}
-                label={paymentLabel}
-                icon={<OutlinePaymentIcon />}
-                buttonProps={PaymentButtonProps}
                 backgroundImage={payment_bg}
+                buttonProps={PaymentButtonProps}
+                icon={<OutlinePaymentIcon />}
+                label={paymentLabel}
+                onClick={paymentOnClick}
             />
             <ActionTransactionItem
-                onClick={depositOnClick}
-                label={depositLabel}
-                icon={<PiHandDepositIcon />}
-                buttonProps={DepositButtonProps}
                 backgroundImage={deposit_bg}
+                buttonProps={DepositButtonProps}
+                icon={<PiHandDepositIcon />}
+                label={depositLabel}
+                onClick={depositOnClick}
                 variant="secondary"
             />
             <ActionTransactionItem
-                onClick={withdrawOnClick}
-                label={widthdrawLabel}
-                icon={<PiHandWithdrawIcon />}
                 backgroundImage={withdraw_bg}
                 buttonProps={withdrawButtonProps}
-                variant="destructive"
                 className="opacity-80 hover:opacity-100"
+                icon={<PiHandWithdrawIcon />}
+                label={widthdrawLabel}
+                onClick={withdrawOnClick}
+                variant="destructive"
             />
         </div>
     )

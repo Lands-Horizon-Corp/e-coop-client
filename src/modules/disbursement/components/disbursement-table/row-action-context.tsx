@@ -84,7 +84,6 @@ export const DisbursementAction = ({
             </div>
             <RowActionsGroup
                 canSelect
-                row={row}
                 onDelete={{
                     text: 'Delete',
                     isAllowed: !isDeletingDisbursement,
@@ -96,6 +95,7 @@ export const DisbursementAction = ({
                     onClick: handleEdit,
                 }}
                 otherActions={<></>}
+                row={row}
             />
         </>
     )
@@ -131,7 +131,6 @@ export const DisbursementRowContext = ({
                 }}
             />
             <DataTableRowContext
-                row={row}
                 onDelete={{
                     text: 'Delete',
                     isAllowed: !isDeletingDisbursement,
@@ -142,6 +141,7 @@ export const DisbursementRowContext = ({
                     isAllowed: true,
                     onClick: handleEdit,
                 }}
+                row={row}
             >
                 {children}
             </DataTableRowContext>

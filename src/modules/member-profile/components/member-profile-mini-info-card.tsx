@@ -89,10 +89,10 @@ const MemberProfileMiniInfoCard = ({ className, memberProfile }: Props) => {
                         <PreviewMediaWrapper media={memberProfile.media}>
                             <ImageDisplay
                                 className="size-20"
-                                src={memberProfile.media?.download_url}
                                 fallback={
                                     memberProfile.first_name.charAt(0) ?? '-'
                                 }
+                                src={memberProfile.media?.download_url}
                             />
                         </PreviewMediaWrapper>
                     </div>
@@ -106,21 +106,21 @@ const MemberProfileMiniInfoCard = ({ className, memberProfile }: Props) => {
                                     <HoverCard>
                                         <HoverCardTrigger>
                                             <ImageNameDisplay
+                                                className="rounded-full bg-card/80 p-1 text-sm"
+                                                name={memberProfile.full_name}
+                                                nameClassName="mr-2"
                                                 src={
                                                     memberProfile.user?.media
                                                         ?.download_url
                                                 }
-                                                name={memberProfile.full_name}
-                                                className="rounded-full bg-card/80 p-1 text-sm"
-                                                nameClassName="mr-2"
                                             />
                                         </HoverCardTrigger>
                                         <HoverCardContent>
                                             <HoveruserInfo
-                                                userId={memberProfile.user.id}
                                                 defaultValue={
                                                     memberProfile.user
                                                 }
+                                                userId={memberProfile.user.id}
                                             />
                                         </HoverCardContent>
                                     </HoverCard>

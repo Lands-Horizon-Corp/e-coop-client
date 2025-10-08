@@ -56,6 +56,7 @@ const DataTableDeleteSelected = <T,>({
 
     return (
         <Button
+            className={cn('relative', className)}
             disabled={isDeleting || isDisabled}
             onClick={() =>
                 onOpen({
@@ -67,7 +68,6 @@ const DataTableDeleteSelected = <T,>({
             }
             size="icon"
             variant="destructive"
-            className={cn('relative', className)}
         >
             {isDeleting ? (
                 <LoadingSpinner />
@@ -78,8 +78,8 @@ const DataTableDeleteSelected = <T,>({
             )}
             {selectedRows.length > 0 && (
                 <Badge
-                    variant="secondary"
                     className="absolute -right-[0%] top-[10px] size-fit w-fit -translate-y-1/2 translate-x-1/2 px-[3px] text-xs animate-in fade-in dark:bg-popover/60"
+                    variant="secondary"
                 >
                     {selectedRows.length}
                 </Badge>

@@ -56,23 +56,23 @@ const MiniPaginationBar = ({
             </p>
             <div className="flex items-center justify-end gap-x-1">
                 <Button
+                    className="size-fit p-1"
+                    disabled={pagination.pageIndex <= 0 || disablePageMove}
+                    onClick={handlePrevious}
                     size="icon"
                     variant="secondary"
-                    className="size-fit p-1"
-                    onClick={handlePrevious}
-                    disabled={pagination.pageIndex <= 0 || disablePageMove}
                 >
                     <ChevronLeftIcon />
                 </Button>
                 <Button
-                    size="icon"
-                    variant="secondary"
                     className="size-fit p-1"
-                    onClick={handleNext}
                     disabled={
                         pagination.pageIndex >= pagination.totalPage - 1 ||
                         disablePageMove
                     }
+                    onClick={handleNext}
+                    size="icon"
+                    variant="secondary"
                 >
                     <ChevronRightIcon />
                 </Button>

@@ -43,32 +43,32 @@ const MemberGeneralMembershipInfo = forwardRef<HTMLDivElement, Props>(
 
         return (
             <div
-                ref={ref}
                 className={cn(
                     'flex flex-1 flex-col gap-y-4 rounded-xl bg-background p-4',
                     className
                 )}
+                ref={ref}
             >
                 <SectionTitle
-                    title="Membership Information"
                     Icon={UserTagIcon}
+                    title="Membership Information"
                 />
                 <div className="flex items-center justify-between">
                     <OrganizationBranchDisplay
-                        organization={data?.organization}
                         branch={data?.branch}
+                        organization={data?.organization}
                     />
                     {data?.qr_code ? (
                         <QrCodeDownloadable
                             className="size-24"
-                            value={JSON.stringify(data.qr_code)}
                             fileName={`member-profile-${data.passbook ?? 'nopb'}-${toDateTimeFormatFile(new Date())}`}
+                            value={JSON.stringify(data.qr_code)}
                         />
                     ) : (
                         <div className="text-muted-foreground/60">
                             <QrCodeIcon
-                                strokeWidth={1.2}
                                 className="mx-auto size-24"
+                                strokeWidth={1.2}
                             />
                             <p className="mx-auto text-center text-xs">
                                 QR Unavailable
@@ -97,12 +97,12 @@ const MemberGeneralMembershipInfo = forwardRef<HTMLDivElement, Props>(
                             }
                         >
                             <ImageDisplay
+                                className="size-16 rounded-xl"
+                                fallbackClassName="rounded-xl"
                                 src={
                                     data?.member_verified_by_employee_user
                                         ?.media?.download_url
                                 }
-                                className="size-16 rounded-xl"
-                                fallbackClassName="rounded-xl"
                             />
                         </PreviewMediaWrapper>
                         <div className="flex-1 space-y-2">
@@ -231,11 +231,11 @@ const MemberGeneralMembershipInfo = forwardRef<HTMLDivElement, Props>(
                                 {data?.member_department?.icon && (
                                     <div className="inline-flex p-1 text-muted-foreground size-fit items-center justify-center rounded-full border bg-muted">
                                         <RenderIcon
+                                            className="size-4"
                                             icon={
                                                 data?.member_department
                                                     ?.icon as TIcon
                                             }
-                                            className="size-4"
                                         />
                                     </div>
                                 )}{' '}
@@ -290,8 +290,8 @@ const MemberGeneralMembershipInfo = forwardRef<HTMLDivElement, Props>(
                     <div className="space-y-4">
                         <SectionTitle
                             Icon={DetailsIcon}
-                            title="Description"
                             subTitle="Bio/Short description about member"
+                            title="Description"
                         />
                         <TextRenderer
                             className="rounded-xl bg-popover p-4"

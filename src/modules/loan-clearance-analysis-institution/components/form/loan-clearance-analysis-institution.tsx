@@ -76,38 +76,38 @@ const LoanClearanceAnalysisInstitutionCreateUpdateForm = ({
     return (
         <Form {...form}>
             <form
-                ref={formRef}
-                onSubmit={onSubmit}
                 className={cn(
                     'flex w-full max-w-full min-w-0 flex-col gap-y-4',
                     className
                 )}
+                onSubmit={onSubmit}
+                ref={formRef}
             >
                 <div className="space-y-4">
                     <FormFieldWrapper
                         control={form.control}
-                        name="name"
                         label="Institution Name"
+                        name="name"
                         render={({ field }) => (
                             <Input
                                 {...field}
+                                disabled={isDisabled(field.name)}
                                 id={field.name}
                                 placeholder="Institution name"
-                                disabled={isDisabled(field.name)}
                             />
                         )}
                     />
 
                     <FormFieldWrapper
                         control={form.control}
-                        name="description"
                         label="Description"
+                        name="description"
                         render={({ field }) => (
                             <Textarea
                                 {...field}
+                                disabled={isDisabled(field.name)}
                                 id={field.name}
                                 placeholder="Institution description"
-                                disabled={isDisabled(field.name)}
                                 rows={3}
                             />
                         )}
@@ -115,17 +115,17 @@ const LoanClearanceAnalysisInstitutionCreateUpdateForm = ({
                 </div>
 
                 <FormFooterResetSubmit
-                    readOnly={readOnly}
-                    resetButtonType="button"
-                    submitButtonType="button"
                     disableSubmit={!form.formState.isDirty}
-                    submitText={
-                        formProps.defaultValues?.fieldKey ? 'Update' : 'Create'
-                    }
-                    onSubmit={(e) => onSubmit(e)}
                     onReset={() => {
                         form.reset()
                     }}
+                    onSubmit={(e) => onSubmit(e)}
+                    readOnly={readOnly}
+                    resetButtonType="button"
+                    submitButtonType="button"
+                    submitText={
+                        formProps.defaultValues?.fieldKey ? 'Update' : 'Create'
+                    }
                 />
             </form>
         </Form>
@@ -143,9 +143,9 @@ export const LoanClearanceAnalysisInstitutionCreateUpdateModal = ({
 }) => {
     return (
         <Modal
-            title={title}
-            description={description}
             className={cn('!max-w-lg', className)}
+            description={description}
+            title={title}
             {...props}
         >
             <LoanClearanceAnalysisInstitutionCreateUpdateForm

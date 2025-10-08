@@ -121,6 +121,22 @@ const FinancialStatementDefinition = () => {
         <PageContainer className="w-full relative min-h-[100vh] p-5 ">
             {financialStatementGrouping && (
                 <FinancialStatementAccountGroupingUpdateModal
+                    description={
+                        viewOnlyFinancialStatementGrouping
+                            ? `${financialStatementGrouping.description}`
+                            : 'Edit the financial statement grouping details.'
+                    }
+                    formProps={{
+                        defaultValues: financialStatementGrouping,
+                        groupingId: financialStatementGrouping.id,
+                        onSuccess: () => {
+                            setOnOpenEditFinancialStatementGrouping(false)
+                            refetch()
+                        },
+                        readOnly: viewOnlyFinancialStatementGrouping,
+                    }}
+                    onOpenChange={setOnOpenEditFinancialStatementGrouping}
+                    open={onOpenEditFinancialStatementGrouping}
                     title={
                         <p>
                             {viewOnlyFinancialStatementGrouping
@@ -139,22 +155,6 @@ const FinancialStatementDefinition = () => {
                             </span>
                         </p>
                     }
-                    description={
-                        viewOnlyFinancialStatementGrouping
-                            ? `${financialStatementGrouping.description}`
-                            : 'Edit the financial statement grouping details.'
-                    }
-                    open={onOpenEditFinancialStatementGrouping}
-                    onOpenChange={setOnOpenEditFinancialStatementGrouping}
-                    formProps={{
-                        defaultValues: financialStatementGrouping,
-                        groupingId: financialStatementGrouping.id,
-                        onSuccess: () => {
-                            setOnOpenEditFinancialStatementGrouping(false)
-                            refetch()
-                        },
-                        readOnly: viewOnlyFinancialStatementGrouping,
-                    }}
                 />
             )}
 
@@ -192,28 +192,28 @@ const FinancialStatementDefinition = () => {
                 </div>
             ) : (
                 <Accordion
-                    type="single"
-                    collapsible
                     className="w-full space-y-2"
+                    collapsible
                     defaultValue="item-1"
+                    type="single"
                 >
                     {financialStatementGropings?.map((grouping) => (
                         <AccordionItem
+                            className="w-full shadow-md bg-sidebar/50 p-5 rounded-xl"
                             key={grouping.id}
                             value={grouping.id}
-                            className="w-full shadow-md bg-sidebar/50 p-5 rounded-xl"
                         >
                             <AccordionTrigger
-                                onClick={() => handleAccountTrigger(grouping)}
                                 className="w-full hover:no-underline  text-left /80"
+                                onClick={() => handleAccountTrigger(grouping)}
                             >
                                 <div className="flex items-center gap-2">
                                     <DropdownMenu>
                                         <DropdownMenuTrigger asChild>
                                             <span className="cursor-pointer">
                                                 <SettingsIcon
-                                                    size={30}
                                                     className="hover: cursor-pointer"
+                                                    size={30}
                                                 />
                                             </span>
                                         </DropdownMenuTrigger>
@@ -234,6 +234,7 @@ const FinancialStatementDefinition = () => {
                                                 </DropdownMenuShortcut>
                                             </DropdownMenuItem>
                                             <DropdownMenuItem
+                                                className="flex items-center gap-2"
                                                 onClick={(e) => {
                                                     e.preventDefault()
                                                     handleViewFinancialStatementGrouping(
@@ -241,7 +242,6 @@ const FinancialStatementDefinition = () => {
                                                         true
                                                     )
                                                 }}
-                                                className="flex items-center gap-2"
                                             >
                                                 <ViewIcon />
                                                 View
@@ -265,12 +265,12 @@ const FinancialStatementDefinition = () => {
                             <AccordionContent className="w-full">
                                 {hasFinancialGropings && (
                                     <FinancialStatementDefinitionTreeViewer
+                                        isRefetchingGeneralLedgerAccountsGrouping={
+                                            isRefetchingGeneralLedgerAccountsGrouping
+                                        }
                                         refetch={refetch}
                                         treeData={
                                             grouping.financial_statement_definition_entries
-                                        }
-                                        isRefetchingGeneralLedgerAccountsGrouping={
-                                            isRefetchingGeneralLedgerAccountsGrouping
                                         }
                                     />
                                 )}

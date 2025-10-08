@@ -93,10 +93,10 @@ const ComputationSchemesSidebar = ({
         >
             <div className="relative group">
                 <Input
-                    placeholder="Search scheme"
                     className="shrink-0 pr-10"
-                    value={search}
                     onChange={(e) => setSearch(e.target.value)}
+                    placeholder="Search scheme"
+                    value={search}
                 />
                 <MagnifyingGlassIcon className="inline text-muted-foreground/70 duration-200 ease-out group-hover:text-foreground absolute top-1/2 -translate-y-1/2 right-4" />
             </div>
@@ -104,20 +104,20 @@ const ComputationSchemesSidebar = ({
             <div className="flex items-center justify-between gap-x-2">
                 <ComputationSheetCreateUpdateFormModal {...createModal} />
                 <Button
-                    size="sm"
                     className="flex-1"
-                    variant="secondary"
                     onClick={() => createModal.onOpenChange(true)}
+                    size="sm"
+                    variant="secondary"
                 >
                     Add Scheme <PlusIcon className="inline ml-2" />
                 </Button>
 
                 <Button
-                    size="icon"
-                    variant="secondary"
                     className="shrink-0"
                     disabled={isPending}
                     onClick={() => refetch()}
+                    size="icon"
+                    variant="secondary"
                 >
                     {isPending ? <LoadingSpinner /> : <RefreshIcon />}
                 </Button>
@@ -144,10 +144,10 @@ const ComputationSchemesSidebar = ({
                 )}
                 {filteredData.map((scheme) => (
                     <LoanComputationSheet
-                        key={scheme.id}
-                        scheme={scheme}
-                        onDeletedScheme={onDeletedScheme}
                         handleSelect={handleSelect}
+                        key={scheme.id}
+                        onDeletedScheme={onDeletedScheme}
+                        scheme={scheme}
                         selected={selected === scheme.id}
                     />
                 ))}
@@ -183,38 +183,38 @@ const LoanComputationSheet = ({
         <ContextMenu>
             <ContextMenuTrigger asChild>
                 <InfoTooltip
-                    side="right"
                     content={
                         <p className="text-pretty text-xs max-w-[400px]">
                             {scheme.description || 'No description available'}
                         </p>
                     }
+                    side="right"
                 >
                     <div
-                        key={scheme.id}
-                        onClick={() => handleSelect(scheme)}
-                        tabIndex={0}
                         className={cn(
                             'p-2 rounded-lg bg-card border flex focus:bg-primary focus:outline-none focus:ring focus:ring-ring focus:text-primary-foreground justify-between relative duration-200 ease-in-out cursor-pointer hover:border-primary/40 hover:bg-primary/20',
                             selected &&
                                 'border-primary/60 text-primary-foreground bg-primary/80'
                         )}
+                        key={scheme.id}
+                        onClick={() => handleSelect(scheme)}
+                        tabIndex={0}
                     >
                         <ComputationSheetCreateUpdateFormModal
                             {...editModal}
-                            hideOnSuccess={false}
                             formProps={{
                                 computationSheetId: scheme?.id,
                                 defaultValues: scheme,
                             }}
+                            hideOnSuccess={false}
                         />
                         <p>{scheme.name}</p>
                         <DropdownMenu>
                             <DropdownMenuTrigger asChild>
                                 <Button
+                                    className="opacity-40 hover:opacity-100 size-fit p-1 rounded-full"
                                     size="icon"
                                     variant="ghost"
-                                    className="opacity-40 hover:opacity-100 size-fit p-1 rounded-full"
                                 >
                                     <DotsVerticalIcon />
                                 </Button>
@@ -231,6 +231,7 @@ const LoanComputationSheet = ({
                                     Edit
                                 </DropdownMenuItem>
                                 <DropdownMenuItem
+                                    className="bg-destructive/05 text-destructive focus:bg-destructive focus:text-destructive-foreground"
                                     disabled={isDeleting}
                                     onClick={(e) => {
                                         e.stopPropagation()
@@ -244,7 +245,6 @@ const LoanComputationSheet = ({
                                                 deleteScheme(scheme.id),
                                         })
                                     }}
-                                    className="bg-destructive/05 text-destructive focus:bg-destructive focus:text-destructive-foreground"
                                 >
                                     <TrashIcon className="opacity-60 mr-1" />
                                     Delete
@@ -264,6 +264,7 @@ const LoanComputationSheet = ({
                     Edit
                 </ContextMenuItem>
                 <ContextMenuItem
+                    className="bg-destructive/05 text-destructive focus:bg-destructive focus:text-destructive-foreground"
                     disabled={isDeleting}
                     onClick={(e) => {
                         e.stopPropagation()
@@ -275,7 +276,6 @@ const LoanComputationSheet = ({
                             onConfirm: () => deleteScheme(scheme.id),
                         })
                     }}
-                    className="bg-destructive/05 text-destructive focus:bg-destructive focus:text-destructive-foreground"
                 >
                     <TrashIcon className="opacity-60 mr-1" />
                     Delete

@@ -79,13 +79,13 @@ const ResetPasswordForm = ({ resetId, className, ...formProps }: Props) => {
     return (
         <Form {...form}>
             <form
-                ref={formRef}
-                onSubmit={onSubmit}
+                autoComplete="off"
                 className={cn(
                     'flex w-full flex-col gap-y-4 sm:w-[390px]',
                     className
                 )}
-                autoComplete="off"
+                onSubmit={onSubmit}
+                ref={formRef}
             >
                 <div className="flex flex-col items-center gap-y-4 py-4 text-center">
                     <div className="relative p-8">
@@ -100,8 +100,8 @@ const ResetPasswordForm = ({ resetId, className, ...formProps }: Props) => {
                     </p>
                 </div>
                 <fieldset
-                    disabled={isPending || formProps.readOnly}
                     className="space-y-4"
+                    disabled={isPending || formProps.readOnly}
                 >
                     <FormFieldWrapper
                         control={form.control}
@@ -110,13 +110,11 @@ const ResetPasswordForm = ({ resetId, className, ...formProps }: Props) => {
                             <FormItem>
                                 <PasswordInput
                                     {...field}
+                                    disabled={isDisabled(field.name)}
                                     id={field.name}
                                     placeholder="+8 Character Password"
-                                    disabled={isDisabled(field.name)}
                                 />
                                 <ValueChecklistMeter
-                                    value={field.value}
-                                    hideOnComplete
                                     checkList={ChecklistTemplate[
                                         'password-checklist'
                                     ].concat([
@@ -125,6 +123,8 @@ const ResetPasswordForm = ({ resetId, className, ...formProps }: Props) => {
                                             text: 'No more than 50 characters',
                                         },
                                     ])}
+                                    hideOnComplete
+                                    value={field.value}
                                 />
                             </FormItem>
                         )}
@@ -135,17 +135,17 @@ const ResetPasswordForm = ({ resetId, className, ...formProps }: Props) => {
                         render={({ field }) => (
                             <FormItem className="min-w-[277px]">
                                 <FormLabel
-                                    htmlFor={field.name}
                                     className="font-medium"
+                                    htmlFor={field.name}
                                 >
                                     Confirm Password
                                 </FormLabel>
                                 <FormControl>
                                     <PasswordInput
                                         {...field}
+                                        disabled={isDisabled(field.name)}
                                         id={field.name}
                                         placeholder="Confirm Password"
-                                        disabled={isDisabled(field.name)}
                                     />
                                 </FormControl>
                             </FormItem>
@@ -156,9 +156,9 @@ const ResetPasswordForm = ({ resetId, className, ...formProps }: Props) => {
                 <div className="mt-4 flex flex-col space-y-2">
                     <FormErrorMessage errorMessage={firstError || error} />
                     <Button
+                        disabled={isPending || formProps.readOnly}
                         size="sm"
                         type="submit"
-                        disabled={isPending || formProps.readOnly}
                     >
                         {isPending ? <LoadingSpinner /> : 'Save Password'}
                     </Button>

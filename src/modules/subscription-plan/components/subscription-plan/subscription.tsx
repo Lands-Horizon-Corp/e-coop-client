@@ -47,11 +47,11 @@ const SubscriptionPlanPicker = ({
                     {data?.map((item) => {
                         return (
                             <Card
+                                className={`w-full cursor-pointer items-center justify-between rounded-2xl border-0 p-2 ${isSelected(item.id) ? 'border border-primary' : ''}`}
                                 key={item.id}
                                 onClick={() => {
                                     handlePlanClick(item)
                                 }}
-                                className={`w-full cursor-pointer items-center justify-between rounded-2xl border-0 p-2 ${isSelected(item.id) ? 'border border-primary' : ''}`}
                             >
                                 <CardHeader>
                                     <CardTitle className="text-lg font-semibold">
@@ -90,22 +90,22 @@ const SubscriptionPlanPicker = ({
                                 </CardContent>
                                 <CardFooter>
                                     <Button
-                                        variant={
-                                            isSelected(item.id)
-                                                ? 'default'
-                                                : 'ghost'
-                                        }
-                                        onClick={(e) => {
-                                            e.preventDefault()
-                                            e.stopPropagation()
-                                            handlePlanClick(item)
-                                        }}
                                         className={cn(
                                             'w-full rounded-full border-2',
                                             isSelected(item.id)
                                                 ? 'border-0'
                                                 : 'border-1 border-primary'
                                         )}
+                                        onClick={(e) => {
+                                            e.preventDefault()
+                                            e.stopPropagation()
+                                            handlePlanClick(item)
+                                        }}
+                                        variant={
+                                            isSelected(item.id)
+                                                ? 'default'
+                                                : 'ghost'
+                                        }
                                     >
                                         Get Plan
                                     </Button>

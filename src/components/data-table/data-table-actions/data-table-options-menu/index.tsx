@@ -34,9 +34,9 @@ const DataTableOptionsMenu = <T,>({
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
                 <Button
+                    className={cn('rounded-md', className)}
                     size="icon"
                     variant="secondary"
-                    className={cn('rounded-md', className)}
                 >
                     <MixerHorizontalIcon className="size-4" />
                 </Button>

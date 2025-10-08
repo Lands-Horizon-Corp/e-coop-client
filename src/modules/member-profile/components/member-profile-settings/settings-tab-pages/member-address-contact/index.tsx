@@ -14,7 +14,7 @@ type Props = {
 const MemberAddressContact = forwardRef<HTMLDivElement, Props>(
     ({ memberProfile }, ref) => {
         return (
-            <div ref={ref} className="space-y-4">
+            <div className="space-y-4" ref={ref}>
                 <MemberProfileAddress memberProfile={memberProfile} />
                 <Separator />
                 <MemberContactReferences memberProfile={memberProfile} />

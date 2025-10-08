@@ -29,8 +29,8 @@ const memberTypeHistoryColumns = (): ColumnDef<IMemberTypeHistory>[] => [
                 <ColumnActions {...props}>
                     <TextFilter
                         defaultMode="contains"
-                        field="memberType.name"
                         displayText="Member Type"
+                        field="memberType.name"
                     />
                 </ColumnActions>
             </DataTableColumnHeader>
@@ -47,8 +47,8 @@ const memberTypeHistoryColumns = (): ColumnDef<IMemberTypeHistory>[] => [
                 <ColumnActions {...props}>
                     <TextFilter<IMemberTypeHistory>
                         defaultMode="contains"
-                        field="memberType.description"
                         displayText="Description"
+                        field="memberType.description"
                     />
                 </ColumnActions>
             </DataTableColumnHeader>
@@ -65,8 +65,8 @@ const memberTypeHistoryColumns = (): ColumnDef<IMemberTypeHistory>[] => [
                 <ColumnActions {...props}>
                     <TextFilter<IMemberTypeHistory>
                         defaultMode="contains"
-                        field="memberType.prefix"
                         displayText="Prefix"
+                        field="memberType.prefix"
                     />
                 </ColumnActions>
             </DataTableColumnHeader>

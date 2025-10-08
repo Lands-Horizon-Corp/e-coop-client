@@ -84,8 +84,8 @@ export const GovernmentCardDisplay = ({
                     </p>
                 </div>
             </div>
-            <Accordion collapsible type="single" className="w-full">
-                <AccordionItem value="item-1" className="border-b-0">
+            <Accordion className="w-full" collapsible type="single">
+                <AccordionItem className="border-b-0" value="item-1">
                     <AccordionTrigger className="text-sm font-normal">
                         Show Description...
                     </AccordionTrigger>

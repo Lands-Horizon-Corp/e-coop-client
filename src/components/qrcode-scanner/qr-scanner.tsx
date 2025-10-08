@@ -27,19 +27,19 @@ const QrScanner = (props: IQrScannerProps) => {
         <div className={cn('relative', props.classNames?.container)}>
             <Scanner
                 {...props}
-                constraints={{
-                    deviceId,
-                }}
                 components={{
                     tracker: outline,
+                }}
+                constraints={{
+                    deviceId,
                 }}
             />
             <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                     <Button
+                        className="absolute bottom-2 right-2 z-10 size-fit bg-secondary/80 p-1"
                         size="icon"
                         variant="outline"
-                        className="absolute bottom-2 right-2 z-10 size-fit bg-secondary/80 p-1"
                     >
                         <CameraIcon className="size-4 stroke-1" />
                     </Button>
@@ -48,8 +48,8 @@ const QrScanner = (props: IQrScannerProps) => {
                     <DropdownMenuLabel>Choose Camera Devices</DropdownMenuLabel>
                     <DropdownMenuSeparator />
                     <DropdownMenuRadioGroup
-                        value={deviceId}
                         onValueChange={setDeviceId}
+                        value={deviceId}
                     >
                         {devices.map((dev) => (
                             <DropdownMenuRadioItem

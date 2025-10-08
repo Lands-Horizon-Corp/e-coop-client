@@ -28,8 +28,8 @@ const memberGroupHistoryColumns = (): ColumnDef<IMemberGroupHistory>[] => [
                 <ColumnActions {...props}>
                     <TextFilter
                         defaultMode="contains"
-                        field="member_group.name"
                         displayText="Group Name"
+                        field="member_group.name"
                     />
                 </ColumnActions>
             </DataTableColumnHeader>
@@ -46,8 +46,8 @@ const memberGroupHistoryColumns = (): ColumnDef<IMemberGroupHistory>[] => [
                 <ColumnActions {...props}>
                     <TextFilter
                         defaultMode="contains"
-                        field="member_group.description"
                         displayText="Description"
+                        field="member_group.description"
                     />
                 </ColumnActions>
             </DataTableColumnHeader>

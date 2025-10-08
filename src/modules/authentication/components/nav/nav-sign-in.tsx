@@ -10,7 +10,7 @@ const NavSignIn = () => {
     if (authStatus === 'authorized') return null
 
     return (
-        <Button className="scale-effects rounded-full cursor-pointer" asChild>
+        <Button asChild className="scale-effects rounded-full cursor-pointer">
             <Link to={'/auth/sign-in' as string}>Sign-In</Link>
         </Button>
     )

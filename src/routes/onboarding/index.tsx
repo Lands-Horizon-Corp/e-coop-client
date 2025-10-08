@@ -40,13 +40,13 @@ function RouteComponent() {
     if (isError) {
         return (
             <ErrorPage
-                reset={refetch}
+                className="w-full"
                 error={
                     error instanceof Error
                         ? error
                         : new Error(error ? String(error) : 'Unknown error')
                 }
-                className="w-full"
+                reset={refetch}
             />
         )
     }
@@ -55,9 +55,9 @@ function RouteComponent() {
         return (
             <div className="flex min-h-full w-full flex-col items-center justify-center gap-y-2">
                 <ImageMatch
-                    src={LOADING_ARTWORK_GIF}
-                    className="block size-52 rounded-none !bg-transparent"
                     alt={'loading-gif'}
+                    className="block size-52 rounded-none !bg-transparent"
+                    src={LOADING_ARTWORK_GIF}
                 />
 
                 <p className="animate-pulse text-xs "> Getting ready...</p>
@@ -72,13 +72,13 @@ function RouteComponent() {
                 </span>
                 Welcome to
                 <GradientText
-                    variant="primary"
-                    size="4xl"
                     animate="shimmer"
                     className="leading-relaxed mx-2 "
+                    size="4xl"
                     style={{
                         fontFamily: "'Knewave', cursive",
                     }}
+                    variant="primary"
                 >
                     <h1>E-coop</h1>
                 </GradientText>

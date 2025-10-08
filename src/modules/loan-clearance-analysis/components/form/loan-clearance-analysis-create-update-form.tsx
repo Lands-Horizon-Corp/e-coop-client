@@ -76,24 +76,24 @@ const LoanClearanceAnalysisCreateUpdateForm = ({
     return (
         <Form {...form}>
             <form
-                ref={formRef}
-                onSubmit={onSubmit}
                 className={cn(
                     'flex w-full max-w-full min-w-0 flex-col gap-y-4',
                     className
                 )}
+                onSubmit={onSubmit}
+                ref={formRef}
             >
-                <fieldset disabled={readOnly} className="space-y-4">
+                <fieldset className="space-y-4" disabled={readOnly}>
                     <FormFieldWrapper
                         control={form.control}
-                        name="regular_deduction_description"
                         label="Regular Deduction Description"
+                        name="regular_deduction_description"
                         render={({ field }) => (
                             <Textarea
                                 {...field}
+                                disabled={isDisabled(field.name)}
                                 id={field.name}
                                 placeholder="Regular Deduction Description"
-                                disabled={isDisabled(field.name)}
                                 rows={3}
                             />
                         )}
@@ -101,19 +101,19 @@ const LoanClearanceAnalysisCreateUpdateForm = ({
 
                     <FormFieldWrapper
                         control={form.control}
-                        name="regular_deduction_amount"
                         label="Regular Deduction Amount"
+                        name="regular_deduction_amount"
                         render={({ field }) => (
                             <Input
                                 {...field}
-                                id={field.name}
-                                placeholder="0.00"
                                 disabled={isDisabled(field.name)}
+                                id={field.name}
                                 onChange={(e) => {
                                     const value =
                                         parseFloat(e.target.value) || 0
                                     field.onChange(value)
                                 }}
+                                placeholder="0.00"
                             />
                         )}
                     />
@@ -122,14 +122,14 @@ const LoanClearanceAnalysisCreateUpdateForm = ({
 
                     <FormFieldWrapper
                         control={form.control}
-                        name="balances_description"
                         label="Balances Description"
+                        name="balances_description"
                         render={({ field }) => (
                             <Textarea
                                 {...field}
+                                disabled={isDisabled(field.name)}
                                 id={field.name}
                                 placeholder="Balances Description"
-                                disabled={isDisabled(field.name)}
                                 rows={3}
                             />
                         )}
@@ -138,13 +138,13 @@ const LoanClearanceAnalysisCreateUpdateForm = ({
                     <div className="grid gap-3 grid-cols-2">
                         <FormFieldWrapper
                             control={form.control}
-                            name="balances_amount"
                             label="Balances Amount"
+                            name="balances_amount"
                             render={({ field }) => (
                                 <Input
                                     {...field}
-                                    id={field.name}
                                     disabled={isDisabled(field.name)}
+                                    id={field.name}
                                     onChange={(e) => {
                                         const value =
                                             parseFloat(e.target.value) || 0
@@ -156,14 +156,13 @@ const LoanClearanceAnalysisCreateUpdateForm = ({
 
                         <FormFieldWrapper
                             control={form.control}
-                            name="balances_count"
                             label="Balances Count"
+                            name="balances_count"
                             render={({ field }) => (
                                 <Input
                                     {...field}
-                                    id={field.name}
-                                    placeholder="0"
                                     disabled={isDisabled(field.name)}
+                                    id={field.name}
                                     onChange={(e) => {
                                         const value =
                                             parseInt(e.target.value) || 0
@@ -175,6 +174,7 @@ const LoanClearanceAnalysisCreateUpdateForm = ({
                                             e.preventDefault()
                                         }
                                     }}
+                                    placeholder="0"
                                 />
                             )}
                         />
@@ -182,20 +182,20 @@ const LoanClearanceAnalysisCreateUpdateForm = ({
                 </fieldset>
 
                 <FormFooterResetSubmit
+                    disableSubmit={!form.formState.isDirty}
+                    onReset={() => {
+                        form.reset()
+                    }}
+                    onSubmit={(e) => onSubmit(e)}
                     readOnly={readOnly}
                     resetButtonType="button"
                     submitButtonType="button"
-                    disableSubmit={!form.formState.isDirty}
                     submitText={
                         formProps.defaultValues?.id ||
                         formProps.defaultValues?.fieldKey
                             ? 'Update'
                             : 'Create'
                     }
-                    onSubmit={(e) => onSubmit(e)}
-                    onReset={() => {
-                        form.reset()
-                    }}
                 />
             </form>
         </Form>
@@ -213,9 +213,9 @@ export const LoanClearanceAnalysisCreateUpdateModal = ({
 }) => {
     return (
         <Modal
-            title={title}
-            description={description}
             className={cn('!max-w-xl', className)}
+            description={description}
+            title={title}
             {...props}
         >
             <LoanClearanceAnalysisCreateUpdateForm

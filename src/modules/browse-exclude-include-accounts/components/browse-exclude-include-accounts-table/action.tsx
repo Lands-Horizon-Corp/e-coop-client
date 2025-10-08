@@ -84,15 +84,15 @@ const BrowseExcludeIncludeAccountAction = ({
             </div>
 
             <RowActionsGroup
-                onEdit={{
-                    text: 'Edit',
-                    isAllowed: true,
-                    onClick: handleEdit,
-                }}
                 onDelete={{
                     text: 'Delete',
                     isAllowed: !isDeleting,
                     onClick: handleDelete,
+                }}
+                onEdit={{
+                    text: 'Edit',
+                    isAllowed: true,
+                    onClick: handleEdit,
                 }}
             />
         </>
@@ -124,7 +124,6 @@ export const BrowseExcludeIncludeAccountRowContext = ({
             />
 
             <DataTableRowContext
-                row={row}
                 onDelete={{
                     text: 'Delete',
                     isAllowed: !isDeleting,
@@ -135,6 +134,7 @@ export const BrowseExcludeIncludeAccountRowContext = ({
                     isAllowed: true,
                     onClick: handleEdit,
                 }}
+                row={row}
             >
                 {children}
             </DataTableRowContext>

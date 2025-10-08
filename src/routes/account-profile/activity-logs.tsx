@@ -81,10 +81,10 @@ function RouteComponent() {
                     </p>
                 </div>
                 <Button
-                    size="icon"
-                    variant="secondary"
                     className="size-fit p-2"
                     onClick={() => refetch()}
+                    size="icon"
+                    variant="secondary"
                 >
                     {isFetching || isPending ? (
                         <LoadingSpinner />
@@ -101,9 +101,9 @@ function RouteComponent() {
                 )}
                 {ActivityLogs.map((footstep) => (
                     <ActivityItem
-                        key={footstep.id}
-                        footstep={footstep}
                         className="last:border-b-0 border-b"
+                        footstep={footstep}
+                        key={footstep.id}
                     />
                 ))}
                 {!hasNextPage && !isFetching && (
@@ -139,11 +139,11 @@ const ActivityItem = ({
 
     return (
         <div
-            onClick={() => viewFootstepModal.onOpenChange(true)}
             className={cn(
                 'p-4 flex items-start cursor-pointer ease-in-out group duration-200 hover:bg-secondary/80 dark:hover:bg-secondary/20 justify-between gap-4',
                 className
             )}
+            onClick={() => viewFootstepModal.onOpenChange(true)}
         >
             <div className="space-y-1">
                 <p className="text-sm font-medium text-foreground">
@@ -179,8 +179,8 @@ const ActivityItem = ({
                     <div onClick={(e) => e.stopPropagation()}>
                         <Sheet {...viewFootstepModal}>
                             <SheetContent
-                                side="right"
                                 className="!max-w-lg bg-transparent p-2 focus:outline-none border-none"
+                                side="right"
                             >
                                 <div className="rounded-xl bg-popover p-6 ecoop-scroll relative h-full overflow-y-auto">
                                     <FootstepDetail footstep={footstep} />

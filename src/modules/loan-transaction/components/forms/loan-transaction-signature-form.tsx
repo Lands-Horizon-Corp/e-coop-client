@@ -240,29 +240,29 @@ const LoanTransactionSignatureUpdateForm = ({
     return (
         <Form {...form}>
             <form
-                ref={formRef}
-                onSubmit={onSubmit}
                 className={cn('flex w-full flex-col gap-y-4', className)}
+                onSubmit={onSubmit}
+                ref={formRef}
             >
                 <div className="flex w-full gap-x-4">
                     <div className="ecoop-scroll max-h-[90vh] w-[30%] gap-x-4 gap-y-4 overflow-auto sm:max-h-[73vh] [&::-webkit-scrollbar]:w-[3px] [&::-webkit-scrollbar]:hover:w-[6px]">
                         <Stepper
-                            value={step}
-                            orientation="vertical"
                             onValueChange={setStep}
+                            orientation="vertical"
+                            value={step}
                         >
                             {Steps.map(({ title, description }, i) => (
                                 <StepperItem
+                                    className="not-last:flex-1 relative items-start"
                                     key={i}
                                     step={i}
-                                    className="not-last:flex-1 relative items-start"
                                 >
                                     <StepperTrigger
-                                        type="button"
+                                        className="items-start cursor-pointer rounded pb-8 last:pb-0"
                                         disabled={
                                             formProps.readOnly || isPending
                                         }
-                                        className="items-start cursor-pointer rounded pb-8 last:pb-0"
+                                        type="button"
                                     >
                                         <StepperIndicator asChild>
                                             <p>{i + 1}</p>
@@ -293,8 +293,8 @@ const LoanTransactionSignatureUpdateForm = ({
                         </Stepper>
                     </div>
                     <fieldset
-                        disabled={isPending || formProps.readOnly}
                         className="ecoop-scroll max-h-[90vh] flex-1 space-y-4 overflow-auto px-2 sm:max-h-[73vh] sm:space-y-3"
+                        disabled={isPending || formProps.readOnly}
                     >
                         <fieldset className="space-y-3" key={step}>
                             <legend className="font-semibold">
@@ -306,36 +306,36 @@ const LoanTransactionSignatureUpdateForm = ({
                             <Separator />
                             <FormFieldWrapper
                                 control={form.control}
-                                name={Steps[step].fields[0]}
                                 label="Name"
+                                name={Steps[step].fields[0]}
                                 render={({ field }) => (
                                     <Input
                                         {...field}
+                                        autoComplete="off"
+                                        disabled={isDisabled(field.name)}
                                         id={field.name}
                                         placeholder="Name"
-                                        autoComplete="off"
-                                        disabled={isDisabled(field.name)}
                                     />
                                 )}
                             />
                             <FormFieldWrapper
                                 control={form.control}
-                                name={Steps[step].fields[1]}
                                 label="Position"
+                                name={Steps[step].fields[1]}
                                 render={({ field }) => (
                                     <Input
                                         {...field}
-                                        id={field.name}
-                                        placeholder="ex: Admin, Manager, Teller"
                                         autoComplete="off"
                                         disabled={isDisabled(field.name)}
+                                        id={field.name}
+                                        placeholder="ex: Admin, Manager, Teller"
                                     />
                                 )}
                             />
                             <FormFieldWrapper
                                 control={form.control}
-                                name={Steps[step].fields[2]}
                                 label="Signature"
+                                name={Steps[step].fields[2]}
                                 render={({ field }) => {
                                     const value = form.watch(
                                         Steps[step].fields[2].replace(
@@ -346,13 +346,7 @@ const LoanTransactionSignatureUpdateForm = ({
                                     return (
                                         <SignatureField
                                             {...field}
-                                            placeholder="Signature"
-                                            value={
-                                                value
-                                                    ? (value as IMedia)
-                                                          .download_url
-                                                    : value
-                                            }
+                                            disabled={isDisabled(field.name)}
                                             onChange={(newImage) => {
                                                 if (newImage)
                                                     field.onChange(newImage.id)
@@ -368,7 +362,13 @@ const LoanTransactionSignatureUpdateForm = ({
                                                     newImage
                                                 )
                                             }}
-                                            disabled={isDisabled(field.name)}
+                                            placeholder="Signature"
+                                            value={
+                                                value
+                                                    ? (value as IMedia)
+                                                          .download_url
+                                                    : value
+                                            }
                                         />
                                     )
                                 }}
@@ -381,46 +381,46 @@ const LoanTransactionSignatureUpdateForm = ({
                     <FormErrorMessage errorMessage={error} />
                     <div className="flex items-center justify-between gap-x-1">
                         <Button
+                            className="w-full self-end px-8 sm:w-fit"
+                            disabled={isPending || formProps.readOnly}
+                            onClick={() => onReset()}
                             size="sm"
                             type="button"
                             variant="ghost"
-                            onClick={() => onReset()}
-                            className="w-full self-end px-8 sm:w-fit"
-                            disabled={isPending || formProps.readOnly}
                         >
                             Reset
                         </Button>
                         <div className="flex items-center gap-x-2">
                             <Button
+                                disabled={isPending || step === 0}
+                                onClick={() => setStep((prev) => prev - 1)}
                                 size="icon"
                                 type="button"
                                 variant="secondary"
-                                disabled={isPending || step === 0}
-                                onClick={() => setStep((prev) => prev - 1)}
                             >
                                 <ChevronLeftIcon />
                             </Button>
                             <Button
-                                size="icon"
-                                type="button"
-                                variant="secondary"
                                 disabled={
                                     isPending || step === Steps.length - 1
                                 }
                                 onClick={() => onNext()}
+                                size="icon"
+                                type="button"
+                                variant="secondary"
                             >
                                 <ChevronRightIcon />
                             </Button>
                         </div>
                         <Button
-                            size="sm"
-                            type="submit"
+                            className="w-full self-end px-8 sm:w-fit"
                             disabled={
                                 isPending ||
                                 !form.formState.isDirty ||
                                 formProps.readOnly
                             }
-                            className="w-full self-end px-8 sm:w-fit"
+                            size="sm"
+                            type="submit"
                         >
                             {isPending ? <LoadingSpinner /> : 'Save'}
                         </Button>
@@ -440,10 +440,10 @@ export const LoanTransactionSignatureUpdateFormModal = ({
 }) => {
     return (
         <Modal
-            titleClassName="pb-4 hidden"
-            descriptionClassName="hidden"
-            closeButtonClassName="hidden"
             className={cn('!max-w-5xl', className)}
+            closeButtonClassName="hidden"
+            descriptionClassName="hidden"
+            titleClassName="pb-4 hidden"
             {...props}
         >
             <LoanTransactionSignatureUpdateForm

@@ -21,10 +21,10 @@ const JointAccountsDisplay = ({ jointAccounts }: Props) => {
     return (
         <div className="space-y-4">
             <SectionTitle
-                title="Joint Accounts"
+                Icon={HandShakeHeartIcon}
                 subTitle="Co-owners of this account that have the access and share
                 financial responsibility of this account "
-                Icon={HandShakeHeartIcon}
+                title="Joint Accounts"
             />
             {(!jointAccounts || jointAccounts.length === 0) && (
                 <p className="w-full text-center text-xs text-muted-foreground/70">
@@ -33,8 +33,8 @@ const JointAccountsDisplay = ({ jointAccounts }: Props) => {
             )}
             {jointAccounts?.map((jointAcc) => (
                 <div
-                    key={jointAcc.id}
                     className="space-y-2 rounded-xl bg-secondary/20 p-4"
+                    key={jointAcc.id}
                 >
                     <div className="flex gap-x-4">
                         <div className="grid w-80 grid-cols-2 gap-x-4">
@@ -43,10 +43,10 @@ const JointAccountsDisplay = ({ jointAccounts }: Props) => {
                                     media={jointAcc.picture_media}
                                 >
                                     <ImageDisplay
+                                        className="h-24 w-full rounded-xl"
                                         src={
                                             jointAcc.picture_media?.download_url
                                         }
-                                        className="h-24 w-full rounded-xl"
                                     />
                                 </PreviewMediaWrapper>
                                 <p className="mt-1 text-xs text-muted-foreground/70">
@@ -59,11 +59,11 @@ const JointAccountsDisplay = ({ jointAccounts }: Props) => {
                                     media={jointAcc.signature_media}
                                 >
                                     <ImageDisplay
+                                        className="h-24 w-full rounded-xl"
                                         src={
                                             jointAcc.signature_media
                                                 ?.download_url
                                         }
-                                        className="h-24 w-full rounded-xl"
                                     />
                                 </PreviewMediaWrapper>
                                 <p className="mt-1 text-xs text-muted-foreground/70">
@@ -105,7 +105,7 @@ const JointAccountsDisplay = ({ jointAccounts }: Props) => {
                             </div>
                         </div>
                     </div>
-                    <Accordion collapsible type="single" className="w-full">
+                    <Accordion className="w-full" collapsible type="single">
                         <AccordionItem value="item-1">
                             <AccordionTrigger className="font-normal">
                                 Description

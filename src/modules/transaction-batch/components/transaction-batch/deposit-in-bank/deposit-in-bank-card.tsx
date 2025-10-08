@@ -41,19 +41,18 @@ const DepositInBankCard = ({
             <p className="text-sm text-muted-foreground/70">
                 Total Deposit in Bank
             </p>
-            <Popover modal open={edit} onOpenChange={setEdit}>
+            <Popover modal onOpenChange={setEdit} open={edit}>
                 <PopoverTrigger asChild>
                     <Button
+                        className="absolute right-2 top-1.5 size-fit p-1"
                         size="icon"
                         variant="default"
-                        className="absolute right-2 top-1.5 size-fit p-1"
                     >
                         <PencilFillIcon />
                     </Button>
                 </PopoverTrigger>
                 <PopoverContent className="rounded-xl">
                     <DepositInBankCreateForm
-                        transactionBatchId={transactionBatchId}
                         defaultValues={{
                             deposit_in_bank: depositInBankAmount,
                         }}
@@ -61,6 +60,7 @@ const DepositInBankCard = ({
                             setEdit(false)
                             onUpdate?.()
                         }}
+                        transactionBatchId={transactionBatchId}
                     />
                 </PopoverContent>
             </Popover>

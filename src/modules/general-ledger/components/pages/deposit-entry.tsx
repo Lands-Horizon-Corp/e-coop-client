@@ -6,10 +6,10 @@ const DepositEntryPage = () => {
     return (
         <PageContainer>
             <GeneralLedgerTable
+                className="max-h-[90vh] min-h-[90vh] w-full"
+                excludeColumnIds={['balance']}
                 mode="branch"
                 TEntryType="deposit-entry"
-                excludeColumnIds={['balance']}
-                className="max-h-[90vh] min-h-[90vh] w-full"
             />
         </PageContainer>
     )

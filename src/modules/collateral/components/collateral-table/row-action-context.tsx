@@ -88,7 +88,6 @@ export const CollateralAction = ({
             </div>
             <RowActionsGroup
                 canSelect
-                row={row}
                 onDelete={{
                     text: 'Delete',
                     isAllowed: !isDeletingCollateral,
@@ -100,6 +99,7 @@ export const CollateralAction = ({
                     onClick: handleEdit,
                 }}
                 otherActions={<></>}
+                row={row}
             />
         </>
     )
@@ -135,7 +135,6 @@ export const CollateralRowContext = ({
                 }}
             />
             <DataTableRowContext
-                row={row}
                 onDelete={{
                     text: 'Delete',
                     isAllowed: !isDeletingCollateral,
@@ -146,6 +145,7 @@ export const CollateralRowContext = ({
                     isAllowed: true,
                     onClick: handleEdit,
                 }}
+                row={row}
             >
                 {children}
             </DataTableRowContext>

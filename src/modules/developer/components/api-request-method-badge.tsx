@@ -57,11 +57,11 @@ const APIRequestMethodBadge = forwardRef<HTMLDivElement, Props>(
 
         return (
             <div
-                ref={ref}
                 className={cn(
                     apiMethodVariants({ method: variant }),
                     className
                 )}
+                ref={ref}
             >
                 {methodLower.toUpperCase()}
             </div>

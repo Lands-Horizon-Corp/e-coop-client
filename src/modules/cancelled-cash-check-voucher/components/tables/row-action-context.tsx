@@ -90,7 +90,6 @@ export const CancelledCashCheckVoucherAction = ({
             </div>
             <RowActionsGroup
                 canSelect
-                row={row}
                 onDelete={{
                     text: 'Delete',
                     isAllowed: !isDeletingVoucher,
@@ -102,6 +101,7 @@ export const CancelledCashCheckVoucherAction = ({
                     onClick: handleEdit,
                 }}
                 otherActions={<>{/* Additional actions can be added here */}</>}
+                row={row}
             />
         </>
     )
@@ -137,7 +137,6 @@ export const CancelledCashCheckVoucherRowContext = ({
                 }}
             />
             <DataTableRowContext
-                row={row}
                 onDelete={{
                     text: 'Delete',
                     isAllowed: !isDeletingVoucher,
@@ -148,6 +147,7 @@ export const CancelledCashCheckVoucherRowContext = ({
                     isAllowed: true,
                     onClick: handleEdit,
                 }}
+                row={row}
             >
                 {children}
             </DataTableRowContext>

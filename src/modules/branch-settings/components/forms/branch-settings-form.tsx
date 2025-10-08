@@ -135,13 +135,13 @@ const BranchSettingsForm = ({
     return (
         <Form {...form}>
             <form
-                ref={formRef}
-                onSubmit={onSubmit}
                 className={cn('flex w-full flex-col gap-y-6', className)}
+                onSubmit={onSubmit}
+                ref={formRef}
             >
                 <fieldset
-                    disabled={isPending || formProps.readOnly}
                     className="space-y-6"
+                    disabled={isPending || formProps.readOnly}
                 >
                     {/* Default Member Creation Settings */}
                     <div className="space-y-4 p-4 bg-secondary/60 dark:bg-popover rounded-xl">
@@ -162,7 +162,6 @@ const BranchSettingsForm = ({
 
                         <FormFieldWrapper
                             control={form.control}
-                            name="default_member_type_id"
                             label={
                                 <span>
                                     Default Member Type{' '}
@@ -170,9 +169,9 @@ const BranchSettingsForm = ({
                                         content={
                                             <div className="flex gap-2 text-muted-foreground max-w-[400px]">
                                                 <InfoIcon
+                                                    aria-hidden="true"
                                                     className="size-6 shrink-0 opacity-60"
                                                     size={16}
-                                                    aria-hidden="true"
                                                 />
                                                 <div className="space-y-1">
                                                     <p className="text-[13px] font-medium">
@@ -191,14 +190,15 @@ const BranchSettingsForm = ({
                                     />
                                 </span>
                             }
+                            name="default_member_type_id"
                             render={({ field }) => (
                                 <MemberTypeCombobox
-                                    value={field.value}
+                                    disabled={isDisabled(field.name)}
                                     onChange={(selectedType) => {
                                         field.onChange(selectedType?.id)
                                     }}
                                     placeholder="Select default member type"
-                                    disabled={isDisabled(field.name)}
+                                    value={field.value}
                                 />
                             )}
                         />
@@ -223,7 +223,6 @@ const BranchSettingsForm = ({
 
                         <FormFieldWrapper
                             control={form.control}
-                            name="paid_up_shared_capital_account_id"
                             label={
                                 <span>
                                     Paid Up Share Capital{' '}
@@ -231,9 +230,9 @@ const BranchSettingsForm = ({
                                         content={
                                             <div className="flex gap-2 text-muted-foreground max-w-[400px]">
                                                 <InfoIcon
+                                                    aria-hidden="true"
                                                     className="size-6 shrink-0 opacity-60"
                                                     size={16}
-                                                    aria-hidden="true"
                                                 />
                                                 <div className="space-y-1">
                                                     <p className="text-[13px] font-medium">
@@ -251,11 +250,10 @@ const BranchSettingsForm = ({
                                     />
                                 </span>
                             }
+                            name="paid_up_shared_capital_account_id"
                             render={({ field }) => (
                                 <AccountPicker
-                                    value={form.getValues(
-                                        'paid_up_shared_capital_account'
-                                    )}
+                                    disabled
                                     onSelect={(selectedAccount) => {
                                         field.onChange(selectedAccount?.id)
                                         form.setValue(
@@ -265,14 +263,15 @@ const BranchSettingsForm = ({
                                         )
                                     }}
                                     placeholder="Select default account"
-                                    disabled
+                                    value={form.getValues(
+                                        'paid_up_shared_capital_account'
+                                    )}
                                 />
                             )}
                         />
 
                         <FormFieldWrapper
                             control={form.control}
-                            name="cash_on_hand_account_id"
                             label={
                                 <span>
                                     Cash On Hand (COH) account
@@ -280,9 +279,9 @@ const BranchSettingsForm = ({
                                         content={
                                             <div className="flex gap-2 text-muted-foreground max-w-[400px]">
                                                 <MoneyIcon
+                                                    aria-hidden="true"
                                                     className="size-6 shrink-0 opacity-60"
                                                     size={16}
-                                                    aria-hidden="true"
                                                 />
                                                 <div className="space-y-1">
                                                     <p className="text-[13px] font-medium">
@@ -298,11 +297,10 @@ const BranchSettingsForm = ({
                                     />
                                 </span>
                             }
+                            name="cash_on_hand_account_id"
                             render={({ field }) => (
                                 <AccountPicker
-                                    value={form.getValues(
-                                        'cash_on_hand_account'
-                                    )}
+                                    disabled
                                     onSelect={(selectedAccount) => {
                                         field.onChange(selectedAccount?.id)
                                         form.setValue(
@@ -312,7 +310,9 @@ const BranchSettingsForm = ({
                                         )
                                     }}
                                     placeholder="Select default account"
-                                    disabled
+                                    value={form.getValues(
+                                        'cash_on_hand_account'
+                                    )}
                                 />
                             )}
                         />
@@ -339,60 +339,60 @@ const BranchSettingsForm = ({
                         <div className="grid gap-x-4 gap-y-3 md:grid-cols-4">
                             <FormFieldWrapper
                                 control={form.control}
-                                name="withdraw_or_start"
                                 label="Start OR"
+                                name="withdraw_or_start"
                                 render={({ field }) => (
                                     <Input
                                         {...field}
-                                        type="text"
+                                        disabled={isDisabled(field.name)}
                                         min="0"
                                         placeholder="Start OR"
-                                        disabled={isDisabled(field.name)}
+                                        type="text"
                                     />
                                 )}
                             />
 
                             <FormFieldWrapper
                                 control={form.control}
-                                name="withdraw_or_current"
                                 label="Current OR"
+                                name="withdraw_or_current"
                                 render={({ field }) => (
                                     <Input
                                         {...field}
-                                        type="text"
+                                        disabled={isDisabled(field.name)}
                                         min="0"
                                         placeholder="Current OR"
-                                        disabled={isDisabled(field.name)}
+                                        type="text"
                                     />
                                 )}
                             />
 
                             <FormFieldWrapper
                                 control={form.control}
-                                name="withdraw_or_end"
                                 label="End OR"
+                                name="withdraw_or_end"
                                 render={({ field }) => (
                                     <Input
                                         {...field}
-                                        type="text"
+                                        disabled={isDisabled(field.name)}
                                         min="0"
                                         placeholder="End OR"
-                                        disabled={isDisabled(field.name)}
+                                        type="text"
                                     />
                                 )}
                             />
 
                             <FormFieldWrapper
                                 control={form.control}
-                                name="withdraw_or_iteration"
                                 label="OR Iteration"
+                                name="withdraw_or_iteration"
                                 render={({ field }) => (
                                     <Input
                                         {...field}
-                                        type="text"
+                                        disabled={isDisabled(field.name)}
                                         min="0"
                                         placeholder="OR Iteration"
-                                        disabled={isDisabled(field.name)}
+                                        type="text"
                                     />
                                 )}
                             />
@@ -400,14 +400,14 @@ const BranchSettingsForm = ({
 
                         <FormFieldWrapper
                             control={form.control}
-                            name="withdraw_prefix"
                             label="OR Prefix"
+                            name="withdraw_prefix"
                             render={({ field }) => (
                                 <Input
                                     {...field}
-                                    type="text"
-                                    placeholder="Enter prefix (optional)"
                                     disabled={isDisabled(field.name)}
+                                    placeholder="Enter prefix (optional)"
+                                    type="text"
                                 />
                             )}
                         />
@@ -419,12 +419,12 @@ const BranchSettingsForm = ({
                                 render={({ field }) => (
                                     <div className="shadow-xs bg-background/50 relative flex w-full items-start gap-2 rounded-lg border border-input p-4 outline-none duration-200 ease-out has-[:checked]:border-primary/30 has-[:checked]:bg-gradient-to-br has-[:checked]:from-primary/50 has-[:checked]:to-primary/10">
                                         <Switch
-                                            id={field.name}
-                                            checked={field.value}
-                                            onCheckedChange={field.onChange}
-                                            className="order-1 after:absolute after:inset-0"
                                             aria-describedby={`${field.name}-desc`}
+                                            checked={field.value}
+                                            className="order-1 after:absolute after:inset-0"
                                             disabled={isDisabled(field.name)}
+                                            id={field.name}
+                                            onCheckedChange={field.onChange}
                                         />
                                         <div className="flex grow items-center gap-3">
                                             <div className="size-fit rounded-full bg-secondary p-2">
@@ -435,8 +435,8 @@ const BranchSettingsForm = ({
                                                     Allow User Input
                                                 </Label>
                                                 <p
-                                                    id={`${field.name}-desc`}
                                                     className="text-xs text-muted-foreground"
+                                                    id={`${field.name}-desc`}
                                                 >
                                                     Allow users to manually
                                                     input OR numbers for
@@ -454,12 +454,12 @@ const BranchSettingsForm = ({
                                 render={({ field }) => (
                                     <div className="shadow-xs bg-background/50 relative flex w-full items-start gap-2 rounded-lg border border-input p-4 outline-none duration-200 ease-out has-[:checked]:border-primary/30 has-[:checked]:bg-gradient-to-br has-[:checked]:from-primary/50 has-[:checked]:to-primary/10">
                                         <Switch
-                                            id={field.name}
-                                            checked={field.value}
-                                            onCheckedChange={field.onChange}
-                                            className="order-1 after:absolute after:inset-0"
                                             aria-describedby={`${field.name}-desc`}
+                                            checked={field.value}
+                                            className="order-1 after:absolute after:inset-0"
                                             disabled={isDisabled(field.name)}
+                                            id={field.name}
+                                            onCheckedChange={field.onChange}
                                         />
                                         <div className="flex grow items-center gap-3">
                                             <div className="size-fit rounded-full bg-secondary p-2">
@@ -470,8 +470,8 @@ const BranchSettingsForm = ({
                                                     Unique OR Numbers
                                                 </Label>
                                                 <p
-                                                    id={`${field.name}-desc`}
                                                     className="text-xs text-muted-foreground"
+                                                    id={`${field.name}-desc`}
                                                 >
                                                     Ensure each withdrawal OR
                                                     number is unique
@@ -488,12 +488,12 @@ const BranchSettingsForm = ({
                                 render={({ field }) => (
                                     <div className="shadow-xs bg-background/50 relative flex w-full items-start gap-2 rounded-lg border border-input p-4 outline-none duration-200 ease-out has-[:checked]:border-primary/30 has-[:checked]:bg-gradient-to-br has-[:checked]:from-primary/50 has-[:checked]:to-primary/10">
                                         <Switch
-                                            id={field.name}
-                                            checked={field.value}
-                                            onCheckedChange={field.onChange}
-                                            className="order-1 after:absolute after:inset-0"
                                             aria-describedby={`${field.name}-desc`}
+                                            checked={field.value}
+                                            className="order-1 after:absolute after:inset-0"
                                             disabled={isDisabled(field.name)}
+                                            id={field.name}
+                                            onCheckedChange={field.onChange}
                                         />
                                         <div className="flex grow items-center gap-3">
                                             <div className="size-fit rounded-full bg-secondary p-2">
@@ -504,8 +504,8 @@ const BranchSettingsForm = ({
                                                     Use Date in OR
                                                 </Label>
                                                 <p
-                                                    id={`${field.name}-desc`}
                                                     className="text-xs text-muted-foreground"
+                                                    id={`${field.name}-desc`}
                                                 >
                                                     Include date formatting in
                                                     withdrawal OR numbers
@@ -540,60 +540,60 @@ const BranchSettingsForm = ({
                         <div className="grid gap-x-4 gap-y-3 md:grid-cols-4">
                             <FormFieldWrapper
                                 control={form.control}
-                                name="deposit_or_start"
                                 label="Start OR"
+                                name="deposit_or_start"
                                 render={({ field }) => (
                                     <Input
                                         {...field}
-                                        type="text"
+                                        disabled={isDisabled(field.name)}
                                         min="0"
                                         placeholder="Start OR"
-                                        disabled={isDisabled(field.name)}
+                                        type="text"
                                     />
                                 )}
                             />
 
                             <FormFieldWrapper
                                 control={form.control}
-                                name="deposit_or_current"
                                 label="Current OR"
+                                name="deposit_or_current"
                                 render={({ field }) => (
                                     <Input
                                         {...field}
-                                        type="text"
+                                        disabled={isDisabled(field.name)}
                                         min="0"
                                         placeholder="Current OR"
-                                        disabled={isDisabled(field.name)}
+                                        type="text"
                                     />
                                 )}
                             />
 
                             <FormFieldWrapper
                                 control={form.control}
-                                name="deposit_or_end"
                                 label="End OR"
+                                name="deposit_or_end"
                                 render={({ field }) => (
                                     <Input
                                         {...field}
-                                        type="text"
+                                        disabled={isDisabled(field.name)}
                                         min="0"
                                         placeholder="End OR"
-                                        disabled={isDisabled(field.name)}
+                                        type="text"
                                     />
                                 )}
                             />
 
                             <FormFieldWrapper
                                 control={form.control}
-                                name="deposit_or_iteration"
                                 label="OR Iteration"
+                                name="deposit_or_iteration"
                                 render={({ field }) => (
                                     <Input
                                         {...field}
-                                        type="text"
+                                        disabled={isDisabled(field.name)}
                                         min="0"
                                         placeholder="OR Iteration"
-                                        disabled={isDisabled(field.name)}
+                                        type="text"
                                     />
                                 )}
                             />
@@ -601,14 +601,14 @@ const BranchSettingsForm = ({
 
                         <FormFieldWrapper
                             control={form.control}
-                            name="deposit_prefix"
                             label="OR Prefix"
+                            name="deposit_prefix"
                             render={({ field }) => (
                                 <Input
                                     {...field}
-                                    type="text"
-                                    placeholder="Enter prefix (optional)"
                                     disabled={isDisabled(field.name)}
+                                    placeholder="Enter prefix (optional)"
+                                    type="text"
                                 />
                             )}
                         />
@@ -620,12 +620,12 @@ const BranchSettingsForm = ({
                                 render={({ field }) => (
                                     <div className="shadow-xs bg-background/50 relative flex w-full items-start gap-2 rounded-lg border border-input p-4 outline-none duration-200 ease-out has-[:checked]:border-primary/30 has-[:checked]:bg-gradient-to-br has-[:checked]:from-primary/50 has-[:checked]:to-primary/10">
                                         <Switch
-                                            id={field.name}
-                                            checked={field.value}
-                                            onCheckedChange={field.onChange}
-                                            className="order-1 after:absolute after:inset-0"
                                             aria-describedby={`${field.name}-desc`}
+                                            checked={field.value}
+                                            className="order-1 after:absolute after:inset-0"
                                             disabled={isDisabled(field.name)}
+                                            id={field.name}
+                                            onCheckedChange={field.onChange}
                                         />
                                         <div className="flex grow items-center gap-3">
                                             <div className="size-fit rounded-full bg-secondary p-2">
@@ -636,8 +636,8 @@ const BranchSettingsForm = ({
                                                     Allow User Input
                                                 </Label>
                                                 <p
-                                                    id={`${field.name}-desc`}
                                                     className="text-xs text-muted-foreground"
+                                                    id={`${field.name}-desc`}
                                                 >
                                                     Allow users to manually
                                                     input OR numbers for
@@ -655,12 +655,12 @@ const BranchSettingsForm = ({
                                 render={({ field }) => (
                                     <div className="shadow-xs bg-background/50 relative flex w-full items-start gap-2 rounded-lg border border-input p-4 outline-none duration-200 ease-out has-[:checked]:border-primary/30 has-[:checked]:bg-gradient-to-br has-[:checked]:from-primary/50 has-[:checked]:to-primary/10">
                                         <Switch
-                                            id={field.name}
-                                            checked={field.value}
-                                            onCheckedChange={field.onChange}
-                                            className="order-1 after:absolute after:inset-0"
                                             aria-describedby={`${field.name}-desc`}
+                                            checked={field.value}
+                                            className="order-1 after:absolute after:inset-0"
                                             disabled={isDisabled(field.name)}
+                                            id={field.name}
+                                            onCheckedChange={field.onChange}
                                         />
                                         <div className="flex grow items-center gap-3">
                                             <div className="size-fit rounded-full bg-secondary p-2">
@@ -671,8 +671,8 @@ const BranchSettingsForm = ({
                                                     Unique OR Numbers
                                                 </Label>
                                                 <p
-                                                    id={`${field.name}-desc`}
                                                     className="text-xs text-muted-foreground"
+                                                    id={`${field.name}-desc`}
                                                 >
                                                     Ensure each deposit OR
                                                     number is unique
@@ -689,12 +689,12 @@ const BranchSettingsForm = ({
                                 render={({ field }) => (
                                     <div className="shadow-xs bg-background/50 relative flex w-full items-start gap-2 rounded-lg border border-input p-4 outline-none duration-200 ease-out has-[:checked]:border-primary/30 has-[:checked]:bg-gradient-to-br has-[:checked]:from-primary/50 has-[:checked]:to-primary/10">
                                         <Switch
-                                            id={field.name}
-                                            checked={field.value}
-                                            onCheckedChange={field.onChange}
-                                            className="order-1 after:absolute after:inset-0"
                                             aria-describedby={`${field.name}-desc`}
+                                            checked={field.value}
+                                            className="order-1 after:absolute after:inset-0"
                                             disabled={isDisabled(field.name)}
+                                            id={field.name}
+                                            onCheckedChange={field.onChange}
                                         />
                                         <div className="flex grow items-center gap-3">
                                             <div className="size-fit rounded-full bg-secondary p-2">
@@ -705,8 +705,8 @@ const BranchSettingsForm = ({
                                                     Use Date in OR
                                                 </Label>
                                                 <p
-                                                    id={`${field.name}-desc`}
                                                     className="text-xs text-muted-foreground"
+                                                    id={`${field.name}-desc`}
                                                 >
                                                     Include date formatting in
                                                     deposit OR numbers
@@ -741,75 +741,75 @@ const BranchSettingsForm = ({
                         <div className="grid gap-x-4 gap-y-3 md:grid-cols-4">
                             <FormFieldWrapper
                                 control={form.control}
-                                name="loan_or_start"
                                 label="Start OR"
+                                name="loan_or_start"
                                 render={({ field }) => (
                                     <Input
                                         {...field}
-                                        type="text"
+                                        disabled={isDisabled(field.name)}
                                         min="0"
                                         placeholder="Start OR"
-                                        disabled={isDisabled(field.name)}
+                                        type="text"
                                     />
                                 )}
                             />
 
                             <FormFieldWrapper
                                 control={form.control}
-                                name="loan_or_current"
                                 label="Current OR"
+                                name="loan_or_current"
                                 render={({ field }) => (
                                     <Input
                                         {...field}
-                                        type="text"
+                                        disabled={isDisabled(field.name)}
                                         min="0"
                                         placeholder="Current OR"
-                                        disabled={isDisabled(field.name)}
+                                        type="text"
                                     />
                                 )}
                             />
 
                             <FormFieldWrapper
                                 control={form.control}
-                                name="loan_or_end"
                                 label="End OR"
+                                name="loan_or_end"
                                 render={({ field }) => (
                                     <Input
                                         {...field}
-                                        type="text"
+                                        disabled={isDisabled(field.name)}
                                         min="0"
                                         placeholder="End OR"
-                                        disabled={isDisabled(field.name)}
+                                        type="text"
                                     />
                                 )}
                             />
 
                             <FormFieldWrapper
                                 control={form.control}
-                                name="loan_or_iteration"
                                 label="OR Iteration"
+                                name="loan_or_iteration"
                                 render={({ field }) => (
                                     <Input
                                         {...field}
-                                        type="text"
+                                        disabled={isDisabled(field.name)}
                                         min="0"
                                         placeholder="OR Iteration"
-                                        disabled={isDisabled(field.name)}
+                                        type="text"
                                     />
                                 )}
                             />
 
                             <FormFieldWrapper
-                                control={form.control}
-                                name="loan_prefix"
-                                label="OR Prefix"
                                 className="col-span-full"
+                                control={form.control}
+                                label="OR Prefix"
+                                name="loan_prefix"
                                 render={({ field }) => (
                                     <Input
                                         {...field}
-                                        type="text"
-                                        placeholder="Enter prefix (optional)"
                                         disabled={isDisabled(field.name)}
+                                        placeholder="Enter prefix (optional)"
+                                        type="text"
                                     />
                                 )}
                             />
@@ -822,12 +822,12 @@ const BranchSettingsForm = ({
                                 render={({ field }) => (
                                     <div className="shadow-xs bg-background/50 relative flex w-full items-start gap-2 rounded-lg border border-input p-4 outline-none duration-200 ease-out has-[:checked]:border-primary/30 has-[:checked]:bg-gradient-to-br has-[:checked]:from-primary/50 has-[:checked]:to-primary/10">
                                         <Switch
-                                            id={field.name}
-                                            checked={field.value}
-                                            onCheckedChange={field.onChange}
-                                            className="order-1 after:absolute after:inset-0"
                                             aria-describedby={`${field.name}-desc`}
+                                            checked={field.value}
+                                            className="order-1 after:absolute after:inset-0"
                                             disabled={isDisabled(field.name)}
+                                            id={field.name}
+                                            onCheckedChange={field.onChange}
                                         />
                                         <div className="flex grow items-center gap-3">
                                             <div className="size-fit rounded-full bg-secondary p-2">
@@ -838,8 +838,8 @@ const BranchSettingsForm = ({
                                                     Allow User Input
                                                 </Label>
                                                 <p
-                                                    id={`${field.name}-desc`}
                                                     className="text-xs text-muted-foreground"
+                                                    id={`${field.name}-desc`}
                                                 >
                                                     Allow users to manually
                                                     input OR numbers for loans
@@ -855,12 +855,12 @@ const BranchSettingsForm = ({
                                 render={({ field }) => (
                                     <div className="shadow-xs bg-background/50 relative flex w-full items-start gap-2 rounded-lg border border-input p-4 outline-none duration-200 ease-out has-[:checked]:border-primary/30 has-[:checked]:bg-gradient-to-br has-[:checked]:from-primary/50 has-[:checked]:to-primary/10">
                                         <Switch
-                                            id={field.name}
-                                            checked={field.value}
-                                            onCheckedChange={field.onChange}
-                                            className="order-1 after:absolute after:inset-0"
                                             aria-describedby={`${field.name}-desc`}
+                                            checked={field.value}
+                                            className="order-1 after:absolute after:inset-0"
                                             disabled={isDisabled(field.name)}
+                                            id={field.name}
+                                            onCheckedChange={field.onChange}
                                         />
                                         <div className="flex grow items-center gap-3">
                                             <div className="size-fit rounded-full bg-secondary p-2">
@@ -871,8 +871,8 @@ const BranchSettingsForm = ({
                                                     Unique OR Numbers
                                                 </Label>
                                                 <p
-                                                    id={`${field.name}-desc`}
                                                     className="text-xs text-muted-foreground"
+                                                    id={`${field.name}-desc`}
                                                 >
                                                     Ensure each loan OR number
                                                     is unique
@@ -889,12 +889,12 @@ const BranchSettingsForm = ({
                                 render={({ field }) => (
                                     <div className="shadow-xs bg-background/50 relative flex w-full items-start gap-2 rounded-lg border border-input p-4 outline-none duration-200 ease-out has-[:checked]:border-primary/30 has-[:checked]:bg-gradient-to-br has-[:checked]:from-primary/50 has-[:checked]:to-primary/10">
                                         <Switch
-                                            id={field.name}
-                                            checked={field.value}
-                                            onCheckedChange={field.onChange}
-                                            className="order-1 after:absolute after:inset-0"
                                             aria-describedby={`${field.name}-desc`}
+                                            checked={field.value}
+                                            className="order-1 after:absolute after:inset-0"
                                             disabled={isDisabled(field.name)}
+                                            id={field.name}
+                                            onCheckedChange={field.onChange}
                                         />
                                         <div className="flex grow items-center gap-3">
                                             <div className="size-fit rounded-full bg-secondary p-2">
@@ -905,8 +905,8 @@ const BranchSettingsForm = ({
                                                     Use Date in OR
                                                 </Label>
                                                 <p
-                                                    id={`${field.name}-desc`}
                                                     className="text-xs text-muted-foreground"
+                                                    id={`${field.name}-desc`}
                                                 >
                                                     Include date formatting in
                                                     loan OR numbers
@@ -940,12 +940,12 @@ const BranchSettingsForm = ({
                             name="loan_applied_equal_to_balance"
                             render={({ field }) => (
                                 <Label
-                                    htmlFor={field.name}
                                     className="hover:bg-accent/40 ease-in-out duration-150 cursor-pointer flex items-start gap-3 rounded-lg border p-3 has-[[aria-checked=true]]:border-primary has-[[aria-checked=true]]:bg-primary/80"
+                                    htmlFor={field.name}
                                 >
                                     <Checkbox
-                                        id={field.name}
                                         checked={field.value}
+                                        id={field.name}
                                         onCheckedChange={(checkState) =>
                                             field.onChange(checkState)
                                         }
@@ -988,60 +988,60 @@ const BranchSettingsForm = ({
                         <div className="grid gap-x-4 gap-y-3 md:grid-cols-4">
                             <FormFieldWrapper
                                 control={form.control}
-                                name="check_voucher_or_start"
                                 label="Start OR"
+                                name="check_voucher_or_start"
                                 render={({ field }) => (
                                     <Input
                                         {...field}
-                                        type="text"
+                                        disabled={isDisabled(field.name)}
                                         min="0"
                                         placeholder="Start OR"
-                                        disabled={isDisabled(field.name)}
+                                        type="text"
                                     />
                                 )}
                             />
 
                             <FormFieldWrapper
                                 control={form.control}
-                                name="check_voucher_or_current"
                                 label="Current OR"
+                                name="check_voucher_or_current"
                                 render={({ field }) => (
                                     <Input
                                         {...field}
-                                        type="text"
+                                        disabled={isDisabled(field.name)}
                                         min="0"
                                         placeholder="Current OR"
-                                        disabled={isDisabled(field.name)}
+                                        type="text"
                                     />
                                 )}
                             />
 
                             <FormFieldWrapper
                                 control={form.control}
-                                name="check_voucher_or_end"
                                 label="End OR"
+                                name="check_voucher_or_end"
                                 render={({ field }) => (
                                     <Input
                                         {...field}
-                                        type="text"
+                                        disabled={isDisabled(field.name)}
                                         min="0"
                                         placeholder="End OR"
-                                        disabled={isDisabled(field.name)}
+                                        type="text"
                                     />
                                 )}
                             />
 
                             <FormFieldWrapper
                                 control={form.control}
-                                name="check_voucher_or_iteration"
                                 label="OR Iteration"
+                                name="check_voucher_or_iteration"
                                 render={({ field }) => (
                                     <Input
                                         {...field}
-                                        type="text"
+                                        disabled={isDisabled(field.name)}
                                         min="0"
                                         placeholder="OR Iteration"
-                                        disabled={isDisabled(field.name)}
+                                        type="text"
                                     />
                                 )}
                             />
@@ -1049,14 +1049,14 @@ const BranchSettingsForm = ({
 
                         <FormFieldWrapper
                             control={form.control}
-                            name="check_voucher_prefix"
                             label="OR Prefix"
+                            name="check_voucher_prefix"
                             render={({ field }) => (
                                 <Input
                                     {...field}
-                                    type="text"
-                                    placeholder="Enter prefix (optional)"
                                     disabled={isDisabled(field.name)}
+                                    placeholder="Enter prefix (optional)"
+                                    type="text"
                                 />
                             )}
                         />
@@ -1068,12 +1068,12 @@ const BranchSettingsForm = ({
                                 render={({ field }) => (
                                     <div className="shadow-xs bg-background/50 relative flex w-full items-start gap-2 rounded-lg border border-input p-4 outline-none duration-200 ease-out has-[:checked]:border-primary/30 has-[:checked]:bg-gradient-to-br has-[:checked]:from-primary/50 has-[:checked]:to-primary/10">
                                         <Switch
-                                            id={field.name}
-                                            checked={field.value}
-                                            onCheckedChange={field.onChange}
-                                            className="order-1 after:absolute after:inset-0"
                                             aria-describedby={`${field.name}-desc`}
+                                            checked={field.value}
+                                            className="order-1 after:absolute after:inset-0"
                                             disabled={isDisabled(field.name)}
+                                            id={field.name}
+                                            onCheckedChange={field.onChange}
                                         />
                                         <div className="flex grow items-center gap-3">
                                             <div className="size-fit rounded-full bg-secondary p-2">
@@ -1084,8 +1084,8 @@ const BranchSettingsForm = ({
                                                     Allow User Input
                                                 </Label>
                                                 <p
-                                                    id={`${field.name}-desc`}
                                                     className="text-xs text-muted-foreground"
+                                                    id={`${field.name}-desc`}
                                                 >
                                                     Allow users to manually
                                                     input OR numbers for check
@@ -1103,12 +1103,12 @@ const BranchSettingsForm = ({
                                 render={({ field }) => (
                                     <div className="shadow-xs bg-background/50 relative flex w-full items-start gap-2 rounded-lg border border-input p-4 outline-none duration-200 ease-out has-[:checked]:border-primary/30 has-[:checked]:bg-gradient-to-br has-[:checked]:from-primary/50 has-[:checked]:to-primary/10">
                                         <Switch
-                                            id={field.name}
-                                            checked={field.value}
-                                            onCheckedChange={field.onChange}
-                                            className="order-1 after:absolute after:inset-0"
                                             aria-describedby={`${field.name}-desc`}
+                                            checked={field.value}
+                                            className="order-1 after:absolute after:inset-0"
                                             disabled={isDisabled(field.name)}
+                                            id={field.name}
+                                            onCheckedChange={field.onChange}
                                         />
                                         <div className="flex grow items-center gap-3">
                                             <div className="size-fit rounded-full bg-secondary p-2">
@@ -1119,8 +1119,8 @@ const BranchSettingsForm = ({
                                                     Unique OR Numbers
                                                 </Label>
                                                 <p
-                                                    id={`${field.name}-desc`}
                                                     className="text-xs text-muted-foreground"
+                                                    id={`${field.name}-desc`}
                                                 >
                                                     Ensure each check voucher OR
                                                     number is unique
@@ -1137,12 +1137,12 @@ const BranchSettingsForm = ({
                                 render={({ field }) => (
                                     <div className="shadow-xs bg-background/50 relative flex w-full items-start gap-2 rounded-lg border border-input p-4 outline-none duration-200 ease-out has-[:checked]:border-primary/30 has-[:checked]:bg-gradient-to-br has-[:checked]:from-primary/50 has-[:checked]:to-primary/10">
                                         <Switch
-                                            id={field.name}
-                                            checked={field.value}
-                                            onCheckedChange={field.onChange}
-                                            className="order-1 after:absolute after:inset-0"
                                             aria-describedby={`${field.name}-desc`}
+                                            checked={field.value}
+                                            className="order-1 after:absolute after:inset-0"
                                             disabled={isDisabled(field.name)}
+                                            id={field.name}
+                                            onCheckedChange={field.onChange}
                                         />
                                         <div className="flex grow items-center gap-3">
                                             <div className="size-fit rounded-full bg-secondary p-2">
@@ -1153,8 +1153,8 @@ const BranchSettingsForm = ({
                                                     Use Date in OR
                                                 </Label>
                                                 <p
-                                                    id={`${field.name}-desc`}
                                                     className="text-xs text-muted-foreground"
+                                                    id={`${field.name}-desc`}
                                                 >
                                                     Include date formatting in
                                                     check voucher OR numbers
@@ -1169,16 +1169,16 @@ const BranchSettingsForm = ({
                 </fieldset>
 
                 <FormFooterResetSubmit
-                    error={error}
-                    readOnly={formProps.readOnly}
-                    isLoading={isPending}
-                    disableSubmit={!form.formState.isDirty}
-                    submitText="Update Branch Settings"
                     className="sticky bottom-0 bg-popover p-4 rounded-xl"
+                    disableSubmit={!form.formState.isDirty}
+                    error={error}
+                    isLoading={isPending}
                     onReset={() => {
                         form.reset()
                         reset?.()
                     }}
+                    readOnly={formProps.readOnly}
+                    submitText="Update Branch Settings"
                 />
             </form>
         </Form>
@@ -1196,9 +1196,9 @@ export const BranchSettingsFormModal = ({
 }) => {
     return (
         <Modal
-            title={title}
-            description={description}
             className={cn('max-w-5xl', className)}
+            description={description}
+            title={title}
             {...props}
         >
             <BranchSettingsForm

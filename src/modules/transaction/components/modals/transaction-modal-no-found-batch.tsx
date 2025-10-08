@@ -85,26 +85,26 @@ const TransactionNoFoundBatch = ({ mode }: TransactionNoFoundBatchProps) => {
                         )}
                     >
                         <Button
+                            className="text-xs"
                             size={'sm'}
                             variant={'secondary'}
-                            className="text-xs"
                         >
                             <Link
+                                className="w-"
                                 to={
                                     '/org/$orgname/branch/$branchname/dashboard' as string
                                 }
-                                className="w-"
                             >
                                 Return to Dashboard
                             </Link>
                         </Button>
                         <Button
                             className="text-xs"
-                            size={'sm'}
                             onClick={(e) => {
                                 e.preventDefault()
                                 createBatchModalState.onOpenChange(true)
                             }}
+                            size={'sm'}
                         >
                             Start Transaction Batch
                         </Button>

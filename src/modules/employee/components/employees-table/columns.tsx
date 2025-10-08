@@ -49,8 +49,8 @@ const EmployeesTableColumns = (
                 <HeaderToggleSelect table={table} />
                 {!column.getIsPinned() && (
                     <PushPinSlashIcon
-                        onClick={() => column.pin('left')}
                         className="mr-2 size-3.5 cursor-pointer"
+                        onClick={() => column.pin('left')}
                     />
                 )}
             </div>
@@ -92,8 +92,8 @@ const EmployeesTableColumns = (
             <div className="flex min-w-0 items-center gap-3">
                 <PreviewMediaWrapper media={user?.media}>
                     <ImageDisplay
-                        src={user?.media?.download_url}
                         className="h-9 w-9 rounded-full border bg-muted object-cover"
+                        src={user?.media?.download_url}
                     />
                 </PreviewMediaWrapper>
                 <div className="flex min-w-0 flex-col">
@@ -264,9 +264,9 @@ const EmployeesTableColumns = (
                         IUserOrganization,
                         TGeneralStatus
                     >
+                        dataType="text"
                         displayText="Contact"
                         field="application_status"
-                        dataType="text"
                         mode="contains"
                         multiSelectOptions={[
                             { label: 'Pending', value: 'pending' },
@@ -314,7 +314,7 @@ const EmployeesTableColumns = (
             row: {
                 original: { user_type },
             },
-        }) => <UserTypeBadge userType={user_type} size="sm" />,
+        }) => <UserTypeBadge size="sm" userType={user_type} />,
         enableMultiSort: true,
         enableSorting: true,
         enableResizing: true,
@@ -336,9 +336,9 @@ const EmployeesTableColumns = (
         ),
         cell: ({ row: { original } }) => (
             <PermissionCell
-                permissions={original.permissions}
-                permission_name={original.permission_name}
                 permission_description={original.permission_description}
+                permission_name={original.permission_name}
+                permissions={original.permissions}
             />
         ),
         enableMultiSort: true,
@@ -363,8 +363,8 @@ const PermissionCell = ({
 
     return (
         <div
-            onClick={(e) => e.stopPropagation()}
             className="flex w-full min-w-0 justify-between items-center gap-3"
+            onClick={(e) => e.stopPropagation()}
         >
             <div>
                 <p className="capitalize">{permission_name}</p>
@@ -377,12 +377,12 @@ const PermissionCell = ({
                 {...viewPermissions}
             />
             <Badge
+                className="text-xs px-2 py-1 h-fit cursor-pointer opacity-90 hover:opacity-100 duration-200 ease-in-out"
                 onClick={(e) => {
                     e.stopPropagation()
                     viewPermissions.onOpenChange(true)
                 }}
                 variant="success"
-                className="text-xs px-2 py-1 h-fit cursor-pointer opacity-90 hover:opacity-100 duration-200 ease-in-out"
             >
                 <p>{permissions.length} permissions</p>
             </Badge>

@@ -91,98 +91,98 @@ const GLAccountsGroupingUpdateFormModal = ({
     return (
         <Form {...form}>
             <form
-                ref={formRef}
-                onSubmit={onSubmit}
                 className={cn('flex w-full flex-col gap-y-4', className)}
+                onSubmit={onSubmit}
+                ref={formRef}
             >
                 <fieldset
-                    disabled={isPending || readOnly}
                     className="grid gap-x-6 gap-y-4 sm:gap-y-3"
+                    disabled={isPending || readOnly}
                 >
                     <FormFieldWrapper
                         control={form.control}
-                        name="name"
                         label="Name"
+                        name="name"
                         render={({ field }) => (
                             <Input
                                 {...field}
-                                id={field.name}
-                                placeholder="Group Name"
                                 autoComplete="off"
                                 disabled={isDisabled(field.name)}
+                                id={field.name}
+                                placeholder="Group Name"
                             />
                         )}
                     />
                     <FormFieldWrapper
                         control={form.control}
-                        name="description"
                         label="Description"
+                        name="description"
                         render={({ field }) => (
                             <Input
                                 {...field}
-                                id={field.name}
-                                placeholder="Description"
                                 autoComplete="off"
                                 disabled={isDisabled(field.name)}
+                                id={field.name}
+                                placeholder="Description"
                             />
                         )}
                     />
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-4">
                         <FormFieldWrapper
                             control={form.control}
-                            name="debit"
                             label="Debit"
+                            name="debit"
                             render={({ field }) => (
                                 <Input
                                     {...field}
-                                    id={field.name}
-                                    placeholder="debit"
                                     autoComplete="off"
                                     disabled={isDisabled(field.name)}
+                                    id={field.name}
+                                    placeholder="debit"
                                 />
                             )}
                         />
                         <FormFieldWrapper
                             control={form.control}
-                            name="credit"
                             label="Credit"
+                            name="credit"
                             render={({ field }) => (
                                 <Input
                                     {...field}
+                                    autoComplete="off"
+                                    disabled={isDisabled(field.name)}
                                     id={field.name}
                                     onChange={(e) => {
                                         field.onChange(parseInt(e.target.value))
                                     }}
                                     placeholder="credit"
-                                    autoComplete="off"
-                                    disabled={isDisabled(field.name)}
                                 />
                             )}
                         />
                     </div>
                     <FormFieldWrapper
                         control={form.control}
-                        name="from_code"
                         label="From Code"
+                        name="from_code"
                         render={({ field }) => (
                             <Input
                                 {...field}
+                                disabled={isDisabled(field.name)}
                                 id={field.name}
                                 placeholder="From Code"
-                                disabled={isDisabled(field.name)}
                             />
                         )}
                     />
                     <FormFieldWrapper
                         control={form.control}
-                        name="to_code"
                         label="To Code"
+                        name="to_code"
                         render={({ field }) => (
                             <Input
                                 {...field}
+                                disabled={isDisabled(field.name)}
                                 id={field.name}
                                 placeholder="To Code"
-                                disabled={isDisabled(field.name)}
                             />
                         )}
                     />
@@ -194,22 +194,22 @@ const GLAccountsGroupingUpdateFormModal = ({
                             <FormErrorMessage errorMessage={errorMessage} />
                             <div className="flex items-center justify-end gap-x-2">
                                 <Button
-                                    size="sm"
-                                    type="button"
-                                    variant="ghost"
+                                    className="w-full sm:w-fit px-8"
                                     onClick={() => {
                                         form.reset()
                                         reset()
                                     }}
-                                    className="w-full sm:w-fit px-8"
+                                    size="sm"
+                                    type="button"
+                                    variant="ghost"
                                 >
                                     Reset
                                 </Button>
                                 <Button
+                                    className="w-full sm:w-fit px-8"
+                                    disabled={isPending}
                                     size="sm"
                                     type="submit"
-                                    disabled={isPending}
-                                    className="w-full sm:w-fit px-8"
                                 >
                                     {isPending ? (
                                         <LoadingSpinner />

@@ -23,14 +23,14 @@ const MemberAccountsLoans = ({ className, memberProfileId }: Props) => {
             )}
         >
             <div className="space-y-4">
-                <SectionTitle title="Accounts Summary" Icon={WalletIcon} />
+                <SectionTitle Icon={WalletIcon} title="Accounts Summary" />
                 <MemberAccountingLedger
-                    memberProfileId={memberProfileId}
                     className="h-[500px]"
+                    memberProfileId={memberProfileId}
                 />
             </div>
             <div className="space-y-4">
-                <SectionTitle title="Loan Summary" Icon={WalletIcon} />
+                <SectionTitle Icon={WalletIcon} title="Loan Summary" />
                 <MemberLoanSummary memberProfileId={memberProfileId} />
                 {/* <MemberAccountingLedger
                     memberProfileId={memberProfileId}

@@ -14,8 +14,8 @@ const ApprovalPage = () => {
     return (
         <PageContainer className="h-[100vh]">
             <ResizablePanelGroup
-                direction="vertical"
                 className="w-full rounded-lg "
+                direction="vertical"
             >
                 <ResizablePanel
                     defaultSize={33}

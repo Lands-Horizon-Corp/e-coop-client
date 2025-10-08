@@ -80,9 +80,9 @@ const useInvitationCodeActions = ({
                         value={invitationUrl}
                     />
                     <CopyURL
-                        url={invitationUrl}
                         className="mx-auto w-fit"
                         displayText="Click here to copy invitation URL"
+                        url={invitationUrl}
                     />
                 </div>
             ),
@@ -146,9 +146,7 @@ export const InvitationCodeAction = ({
             <div onClick={(e) => e.stopPropagation()}>
                 <InvitationCodeCreateUpdateFormModal
                     {...updateModal}
-                    title="Edit Invitation Code"
                     description="Update details for this invitation code."
-                    titleClassName="font-bold"
                     formProps={{
                         invitationCodeId: invitationCode.id,
                         defaultValues: invitationCode,
@@ -157,11 +155,12 @@ export const InvitationCodeAction = ({
                             updateModal.onOpenChange(false)
                         },
                     }}
+                    title="Edit Invitation Code"
+                    titleClassName="font-bold"
                 />
             </div>
             <RowActionsGroup
                 canSelect
-                row={row}
                 onDelete={{
                     text: 'Delete',
                     isAllowed: !isDeletingInvitationCode,
@@ -188,6 +187,7 @@ export const InvitationCodeAction = ({
                         </DropdownMenuItem>
                     </>
                 }
+                row={row}
             />
         </>
     )
@@ -219,9 +219,7 @@ export const InvitationCodeRowContext = ({
         <>
             <InvitationCodeCreateUpdateFormModal
                 {...updateModal}
-                title="Edit Invitation Code"
                 description="Update details for this invitation code."
-                titleClassName="font-bold"
                 formProps={{
                     invitationCodeId: invitationCode.id,
                     defaultValues: invitationCode,
@@ -230,9 +228,10 @@ export const InvitationCodeRowContext = ({
                         updateModal.onOpenChange(false)
                     },
                 }}
+                title="Edit Invitation Code"
+                titleClassName="font-bold"
             />
             <DataTableRowContext
-                row={row}
                 onDelete={{
                     text: 'Delete Invitation Code',
                     isAllowed: !isDeletingInvitationCode,
@@ -259,6 +258,7 @@ export const InvitationCodeRowContext = ({
                         </ContextMenuItem>
                     </>
                 }
+                row={row}
             >
                 {children}
             </DataTableRowContext>

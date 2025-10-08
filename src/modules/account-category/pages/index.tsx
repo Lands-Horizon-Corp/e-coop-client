@@ -21,11 +21,7 @@ export const AccountCategoryPage = () => {
     return (
         <PageContainer>
             <AccountCategoryFormModal
-                open={createModal}
-                organizationId={organizationId}
                 branchId={branchId}
-                onOpenChange={setCreateModal}
-                titleClassName="font-bold"
                 formProps={{
                     defaultValues: {},
                     onSuccess: () => {
@@ -40,6 +36,10 @@ export const AccountCategoryPage = () => {
                         })
                     },
                 }}
+                onOpenChange={setCreateModal}
+                open={createModal}
+                organizationId={organizationId}
+                titleClassName="font-bold"
             />
             <AccountCategoryTable
                 actionComponent={(props) => (

@@ -40,7 +40,6 @@ export const CashCountAction = (opts: ICashCountTableActionProps) => {
             <div onClick={(e) => e.stopPropagation()}></div>
             <RowActionsGroup
                 canSelect
-                row={opts.row}
                 otherActions={
                     <>
                         <p className="mx-auto text-center text-muted-foreground/70 text-xs p-4">
@@ -48,6 +47,7 @@ export const CashCountAction = (opts: ICashCountTableActionProps) => {
                         </p>
                     </>
                 }
+                row={opts.row}
             />
         </>
     )

@@ -37,8 +37,8 @@ export default function TransactionPage() {
     return (
         <PageContainer>
             <TransactionsTable
-                mode="current-branch"
                 className="max-h-[90vh] min-h-[90vh] w-full"
+                mode="current-branch"
             />
         </PageContainer>
     )

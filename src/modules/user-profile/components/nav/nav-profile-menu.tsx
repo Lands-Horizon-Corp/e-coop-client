@@ -12,7 +12,6 @@ import {
 } from '@/modules/user-organization'
 import UserAvatar from '@/modules/user/components/user-avatar'
 import useConfirmModalStore from '@/store/confirm-modal-store'
-import { classNames } from 'node_modules/react-easy-crop/helpers'
 
 import {
     ArrowRightIcon,
@@ -113,26 +112,26 @@ const NavProfileMenu = () => {
         <Popover modal>
             <PopoverTrigger asChild>
                 <Button
+                    className="rounded-full p-0.5"
                     size="icon"
                     variant="outline"
-                    className="rounded-full p-0.5"
                 >
                     {isPending ? (
                         <LoadingSpinner />
                     ) : (
                         <UserAvatar
                             className="size-full capitalize"
+                            fallback={user.user_name.charAt(0) ?? '-'}
                             fallbackClassName="bg-transparent"
                             src={user.media?.download_url ?? ''}
-                            fallback={user.user_name.charAt(0) ?? '-'}
                         />
                     )}
                 </Button>
             </PopoverTrigger>
             <PopoverContent
-                side="bottom"
                 align="end"
                 className="relative flex flex-col max-h-[80vh] w-[24rem] !max-w-md space-y-2 rounded-2xl border-none bg-transparent p-1 shadow-none"
+                side="bottom"
             >
                 <div className="rounded-xl shrink-0 border bg-popover p-4 shadow-md">
                     <div className="flex flex-col items-center space-y-2">
@@ -154,12 +153,12 @@ const NavProfileMenu = () => {
                             )}
                         </p>
                         <Button
-                            size="sm"
-                            variant="ghost"
                             className="mx-auto w-fit justify-center"
                             onClick={() =>
                                 router.navigate({ to: '/account-profile' })
                             }
+                            size="sm"
+                            variant="ghost"
                         >
                             <GearIcon className="mr-1" /> Manage Profile
                         </Button>
@@ -180,18 +179,18 @@ const NavProfileMenu = () => {
                         </div>
                         <div className="flex-1 min-h-0 overflow-y-auto p-4 ecoop-scroll">
                             <Accordion
-                                type="single"
-                                collapsible
                                 className="w-full"
+                                collapsible
+                                type="single"
                             >
                                 {userOrganizations.map((orgGroup, index) => {
                                     const orgName = orgGroup.name
 
                                     return (
                                         <AccordionItem
+                                            className="border-none"
                                             key={orgGroup.id}
                                             value={`org-${index}`}
-                                            className="border-none"
                                         >
                                             <AccordionTrigger className="rounded-md px-2 py-2 hover:bg-accent hover:no-underline">
                                                 <div className="flex flex-1 items-center gap-3">
@@ -202,8 +201,8 @@ const NavProfileMenu = () => {
                                                     {currentUserOrg?.organization_id ===
                                                         orgGroup.id && (
                                                         <Badge
-                                                            variant="default"
                                                             className="bg-primary text-xs text-primary-foreground"
+                                                            variant="default"
                                                         >
                                                             Active
                                                         </Badge>
@@ -228,15 +227,15 @@ const NavProfileMenu = () => {
                                                                 (userOrg) => {
                                                                     return (
                                                                         <div
-                                                                            key={
-                                                                                userOrg.id
-                                                                            }
                                                                             className={`flex items-center justify-between rounded-md p-2 transition-colors ${
                                                                                 currentUserOrg?.branch_id ===
                                                                                 userOrg.branch_id
                                                                                     ? 'border border-primary bg-primary/20'
                                                                                     : 'hover:bg-muted/50'
                                                                             }`}
+                                                                            key={
+                                                                                userOrg.id
+                                                                            }
                                                                         >
                                                                             <div className="min-w-0 flex-1">
                                                                                 <div className="mb-1 flex items-center gap-2">
@@ -252,8 +251,8 @@ const NavProfileMenu = () => {
                                                                                         .branch
                                                                                         .is_main_branch && (
                                                                                         <Badge
-                                                                                            variant="outline"
                                                                                             className="text-xs"
+                                                                                            variant="outline"
                                                                                         >
                                                                                             Main
                                                                                         </Badge>
@@ -262,8 +261,8 @@ const NavProfileMenu = () => {
                                                                                     {userOrg.application_status !==
                                                                                         'accepted' && (
                                                                                         <Badge
-                                                                                            variant="warning"
                                                                                             className="ml-auto text-xs"
+                                                                                            variant="warning"
                                                                                         >
                                                                                             Pending
                                                                                         </Badge>
@@ -300,9 +299,17 @@ const NavProfileMenu = () => {
                                                                                 </p>
 
                                                                                 <Button
-                                                                                    size="sm"
-                                                                                    variant="outline"
                                                                                     className="ml-2 h-6 flex-shrink-0 px-2 text-xs"
+                                                                                    disabled={
+                                                                                        isLoading ||
+                                                                                        [
+                                                                                            'pending',
+                                                                                            'ban',
+                                                                                            'reported',
+                                                                                        ].includes(
+                                                                                            userOrg.application_status
+                                                                                        )
+                                                                                    }
                                                                                     onClick={() =>
                                                                                         toast.promise(
                                                                                             handleSwitch(
@@ -316,16 +323,8 @@ const NavProfileMenu = () => {
                                                                                             }
                                                                                         )
                                                                                     }
-                                                                                    disabled={
-                                                                                        isLoading ||
-                                                                                        [
-                                                                                            'pending',
-                                                                                            'ban',
-                                                                                            'reported',
-                                                                                        ].includes(
-                                                                                            userOrg.application_status
-                                                                                        )
-                                                                                    }
+                                                                                    size="sm"
+                                                                                    variant="outline"
                                                                                 >
                                                                                     {currentUserOrg?.branch_id ===
                                                                                     userOrg.branch_id
@@ -358,8 +357,8 @@ const NavProfileMenu = () => {
                         <p>
                             No organizations found{' '}
                             <span
-                                onClick={() => refetch()}
                                 className="cursor-pointer underline"
+                                onClick={() => refetch()}
                             >
                                 retry
                             </span>
@@ -369,7 +368,6 @@ const NavProfileMenu = () => {
 
                 <div className="flex items-center shrink-0 gap-x-2 rounded-xl border bg-popover p-1 shadow-md">
                     <Button
-                        variant="ghost"
                         className="justify-center flex-1"
                         disabled={
                             router.state.location.pathname === '/onboarding'
@@ -385,12 +383,12 @@ const NavProfileMenu = () => {
                                     }),
                             })
                         }
+                        variant="ghost"
                     >
                         <ArrowRightIcon className="mr-2 size-4 -rotate-45 duration-150 ease-in-out" />
                         <span>Onboarding</span>
                     </Button>
                     <Button
-                        variant="destructive"
                         className="flex-1 justify-center"
                         onClick={() =>
                             onOpen({
@@ -400,6 +398,7 @@ const NavProfileMenu = () => {
                                 onConfirm: () => handleSignout(),
                             })
                         }
+                        variant="destructive"
                     >
                         <LogoutIcon className="mr-2 size-4 duration-150 ease-in-out" />
                         <span>Sign Out</span>

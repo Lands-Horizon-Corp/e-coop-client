@@ -15,11 +15,11 @@ const RefreshButton = ({
 }: IRefreshButtonProps) => {
     return (
         <Button
+            className={className}
+            disabled={isLoading}
+            onClick={onClick}
             size="icon"
             variant="secondary"
-            onClick={onClick}
-            disabled={isLoading}
-            className={className}
         >
             {isLoading ? <LoadingSpinner /> : <ReloadIcon />}
         </Button>

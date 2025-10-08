@@ -65,13 +65,13 @@ const Modal = ({
         <GeneralShortcutsWrapper mode={SHORTCUT_SCOPES.MODAL}>
             <Dialog {...other}>
                 <DialogContent
-                    showCloseButton={!showCloseButton}
-                    closeButtonClassName={closeButtonClassName}
-                    overlayClassName={cn('backdrop-blur', overlayClassName)}
                     className={cn(
                         'shadow-2 ecoop-scroll max-h-[95vh] max-w-xl overflow-y-auto !rounded-2xl border font-inter',
                         className
                     )}
+                    closeButtonClassName={closeButtonClassName}
+                    overlayClassName={cn('backdrop-blur', overlayClassName)}
+                    showCloseButton={!showCloseButton}
                 >
                     <DialogTitle className={cn('font-medium', titleClassName)}>
                         {title}

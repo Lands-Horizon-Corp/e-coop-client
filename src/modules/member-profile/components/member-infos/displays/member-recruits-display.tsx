@@ -24,8 +24,8 @@ const MemberRecruitsDisplay = ({ recruits }: Props) => {
         <div className="space-y-4">
             <SectionTitle
                 Icon={UsersAddIcon}
-                title="Member Recruits"
                 subTitle="Accounts of your registered relative for reference"
+                title="Member Recruits"
             />
 
             {(!recruits || recruits.length === 0) && (
@@ -35,19 +35,19 @@ const MemberRecruitsDisplay = ({ recruits }: Props) => {
             )}
             {recruits?.map((recruit) => (
                 <div
-                    key={recruit.id}
                     className="space-y-2 rounded-xl bg-secondary/20 p-4"
+                    key={recruit.id}
                 >
                     <div className="flex items-center gap-x-4">
                         <PreviewMediaWrapper
                             media={recruit.membersProfileRecruited?.media}
                         >
                             <ImageDisplay
+                                className="size-16 rounded-xl"
                                 src={
                                     recruit.membersProfileRecruited?.media
                                         ?.download_url
                                 }
-                                className="size-16 rounded-xl"
                             />
                         </PreviewMediaWrapper>
                         <div className="grid flex-1 gap-2 md:grid-cols-5">
@@ -112,7 +112,7 @@ const MemberRecruitsDisplay = ({ recruits }: Props) => {
                             </div>
                         </div>
                     </div>
-                    <Accordion collapsible type="single" className="w-full">
+                    <Accordion className="w-full" collapsible type="single">
                         <AccordionItem value="item-1">
                             <AccordionTrigger className="font-normal">
                                 Description

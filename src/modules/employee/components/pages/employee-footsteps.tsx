@@ -37,9 +37,9 @@ const EmployeeFootstepPage = () => {
     return (
         <PageContainer>
             <FootstepTable
-                mode="branch"
                 actionComponent={FootstepAction}
                 className="max-h-[90vh] min-h-[90vh] w-full"
+                mode="branch"
             />
         </PageContainer>
     )

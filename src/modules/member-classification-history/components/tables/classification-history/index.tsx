@@ -134,33 +134,33 @@ const MemberClassificationHistoryTable = ({
                 )}
             >
                 <DataTableToolbar
+                    filterLogicProps={{
+                        filterLogic: filterState.filterLogic,
+                        setFilterLogic: filterState.setFilterLogic,
+                    }}
                     globalSearchProps={{
                         defaultMode: 'equal',
                         targets: memberClassificationHistoryGlobalSearchTargets,
                     }}
-                    table={table}
                     refreshActionProps={{
                         onClick: () => refetch(),
                         isLoading: isPending || isRefetching,
                     }}
                     scrollableProps={{ isScrollable, setIsScrollable }}
-                    filterLogicProps={{
-                        filterLogic: filterState.filterLogic,
-                        setFilterLogic: filterState.setFilterLogic,
-                    }}
+                    table={table}
                     {...toolbarProps}
                 />
                 <DataTable
-                    table={table}
-                    isStickyHeader
-                    isStickyFooter
                     isScrollable={isScrollable}
+                    isStickyFooter
+                    isStickyHeader
                     setColumnOrder={setColumnOrder}
+                    table={table}
                 />
                 <DataTablePagination
+                    pageSizes={PAGE_SIZES_SMALL.slice(1)}
                     table={table}
                     totalSize={totalSize}
-                    pageSizes={PAGE_SIZES_SMALL.slice(1)}
                 />
             </div>
         </FilterContext.Provider>

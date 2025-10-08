@@ -13,8 +13,8 @@ const MembershipInfo = forwardRef<HTMLDivElement, Props>(
         return (
             <div ref={ref}>
                 <MemberMembershipForm
-                    disabledFields={['passbook']}
                     defaultValues={memberProfile}
+                    disabledFields={['passbook']}
                     memberProfileId={memberProfile.id}
                 />
             </div>

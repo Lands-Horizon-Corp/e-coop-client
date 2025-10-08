@@ -15,15 +15,15 @@ const ContactPage = () => {
             <div className="absolute inset-0 -z-10 h-screen w-full bg-radial-[ellipse_at_0%_50%] from-primary/20 via-background/0 to-background/0 to-100%" />
 
             <FlickeringGrid
-                gridGap={1}
-                squareSize={64}
-                maxOpacity={0.5}
-                flickerChance={0.05}
                 className="absolute inset-0 -bottom-1/2 -z-10 h-screen w-full opacity-20 dark:opacity-10
     [mask-image:linear-gradient(to_bottom,transparent_0%,white_0%,white_0%,transparent_100%)]
     [-webkit-mask-image:linear-gradient(to_bottom,transparent_0%,white_0%,white_0%,transparent_100%)]
     [mask-repeat:no-repeat] [-webkit-mask-repeat:no-repeat]
     [mask-size:100%_100%] [-webkit-mask-size:100%_100%]"
+                flickerChance={0.05}
+                gridGap={1}
+                maxOpacity={0.5}
+                squareSize={64}
             />
 
             <div className="mx-auto max-w-7xl">
@@ -32,13 +32,13 @@ const ContactPage = () => {
                     <h1 className="text-foreground mb-4 text-4xl font-bold">
                         Get in{' '}
                         <GradientText
-                            variant="primary"
-                            size="4xl"
                             animate="shimmer"
                             className="leading-relaxed ml-1"
+                            size="4xl"
                             style={{
                                 fontFamily: "'Knewave', cursive",
                             }}
+                            variant="primary"
                         >
                             <h1>Touch</h1>
                         </GradientText>

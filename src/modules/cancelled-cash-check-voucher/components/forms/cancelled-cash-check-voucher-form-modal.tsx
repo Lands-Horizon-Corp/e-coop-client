@@ -118,37 +118,40 @@ const CancelledCashCheckVoucherCreateUpdateForm = ({
     return (
         <Form {...form}>
             <form
-                ref={formRef}
-                onSubmit={onSubmit}
                 className={cn('flex w-full flex-col gap-y-4', className)}
+                onSubmit={onSubmit}
+                ref={formRef}
             >
                 <fieldset
-                    disabled={isPending || formProps.readOnly}
                     className="grid gap-x-6 gap-y-4 sm:gap-y-3"
+                    disabled={isPending || formProps.readOnly}
                 >
                     <fieldset className="space-y-3">
                         <FormFieldWrapper
                             control={form.control}
-                            name="check_number"
                             label="Check Number"
+                            name="check_number"
                             render={({ field }) => (
                                 <Input
                                     {...field}
-                                    id={field.name}
-                                    placeholder="Check Number"
                                     autoComplete="off"
                                     disabled={isDisabled(field.name)}
+                                    id={field.name}
+                                    placeholder="Check Number"
                                 />
                             )}
                         />
                         <FormFieldWrapper
                             control={form.control}
-                            name="entry_date"
                             label="Entry Date"
+                            name="entry_date"
                             render={({ field }) => (
                                 <Input
                                     {...field}
+                                    autoComplete="off"
+                                    disabled={isDisabled(field.name)}
                                     id={field.name}
+                                    placeholder="Entry Date"
                                     type="date"
                                     value={
                                         field.value
@@ -157,38 +160,35 @@ const CancelledCashCheckVoucherCreateUpdateForm = ({
                                                   .split('T')[0]
                                             : ''
                                     }
-                                    autoComplete="off"
-                                    placeholder="Entry Date"
-                                    disabled={isDisabled(field.name)}
                                 />
                             )}
                         />
                         <FormFieldWrapper
                             control={form.control}
-                            name="description"
                             label="Description"
+                            name="description"
                             render={({ field }) => (
                                 <Textarea
                                     {...field}
-                                    id={field.name}
                                     autoComplete="off"
-                                    placeholder="Description"
                                     disabled={isDisabled(field.name)}
+                                    id={field.name}
+                                    placeholder="Description"
                                 />
                             )}
                         />
                     </fieldset>
                 </fieldset>
                 <FormFooterResetSubmit
-                    error={error}
-                    readOnly={formProps.readOnly}
-                    isLoading={isPending}
                     disableSubmit={!form.formState.isDirty}
-                    submitText={formProps.voucherId ? 'Update' : 'Create'}
+                    error={error}
+                    isLoading={isPending}
                     onReset={() => {
                         form.reset()
                         reset()
                     }}
+                    readOnly={formProps.readOnly}
+                    submitText={formProps.voucherId ? 'Update' : 'Create'}
                 />
             </form>
         </Form>
@@ -206,9 +206,9 @@ export const CancelledCashCheckVoucherCreateUpdateFormModal = ({
 }) => {
     return (
         <Modal
-            title={title}
-            description={description}
             className={cn('', className)}
+            description={description}
+            title={title}
             {...props}
         >
             <CancelledCashCheckVoucherCreateUpdateForm

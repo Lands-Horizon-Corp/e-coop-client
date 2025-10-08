@@ -53,29 +53,29 @@ const QuickDepositWithdraw = ({ mode }: { mode: TPaymentMode }) => {
                     />
                 </div>
                 <ResizablePanelGroup
-                    direction="horizontal"
                     className="!h-[80vh]"
+                    direction="horizontal"
                 >
                     <ResizablePanel
+                        className=" !overflow-auto p-5 ecoop-scroll  "
                         defaultSize={35}
                         maxSize={40}
                         minSize={0}
-                        className=" !overflow-auto p-5 ecoop-scroll  "
                     >
                         <QuickTransferTransactionForm
                             mode={mode}
-                            readOnly={!hasNoTransactionBatch}
                             onSuccess={() => {
                                 toast.success(
                                     'Transaction completed successfully'
                                 )
                             }}
+                            readOnly={!hasNoTransactionBatch}
                         />
                     </ResizablePanel>
                     <ResizableHandle withHandle />
                     <ResizablePanel
-                        defaultSize={65}
                         className="!overflow-y-auto px-5 ecoop-scroll !relative"
+                        defaultSize={65}
                     >
                         <div className="w-full flex items-center justify-end">
                             <CurrentTransactionWithdrawHistory mode={mode} />

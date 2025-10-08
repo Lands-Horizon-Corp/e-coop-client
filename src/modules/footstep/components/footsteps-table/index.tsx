@@ -172,32 +172,32 @@ const FootstepTable = ({
                 )}
             >
                 <DataTableToolbar
+                    filterLogicProps={{
+                        filterLogic: filterState.filterLogic,
+                        setFilterLogic: filterState.setFilterLogic,
+                    }}
                     globalSearchProps={{
                         defaultMode: 'equal',
                         targets: footstepGlobalSearchTargets,
                     }}
-                    table={table}
                     refreshActionProps={{
                         onClick: () => refetch(),
                         isLoading: isPending || isRefetching,
                     }}
                     scrollableProps={{ isScrollable, setIsScrollable }}
-                    filterLogicProps={{
-                        filterLogic: filterState.filterLogic,
-                        setFilterLogic: filterState.setFilterLogic,
-                    }}
+                    table={table}
                     {...toolbarProps}
                 />
                 <DataTable
-                    table={table}
-                    isStickyHeader
-                    isStickyFooter
                     className="mb-2"
-                    onRowClick={onRowClick}
-                    onDoubleClick={onDoubleClick}
                     isScrollable={isScrollable}
-                    setColumnOrder={setColumnOrder}
+                    isStickyFooter
+                    isStickyHeader
+                    onDoubleClick={onDoubleClick}
+                    onRowClick={onRowClick}
                     RowContextComponent={RowContextComponent}
+                    setColumnOrder={setColumnOrder}
+                    table={table}
                 />
                 <DataTablePagination table={table} totalSize={totalSize} />
             </div>

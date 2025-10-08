@@ -106,31 +106,30 @@ const SignUpForm = ({ className, ...formProps }: ISignUpFormProps) => {
     return (
         <Form {...form}>
             <form
-                ref={formRef}
-                onSubmit={onSubmit}
                 className={cn('flex w-full flex-col gap-y-4', className)}
+                onSubmit={onSubmit}
+                ref={formRef}
             >
                 <div className="flex items-center gap-x-2 pt-2 font-medium sm:pb-4">
                     <p className="text-2xl md:text-5xl">Sign Up</p>
                 </div>
                 <fieldset
-                    disabled={isLoading || formProps.readOnly}
                     className="grid grid-cols-1 gap-x-6 gap-y-8"
+                    disabled={isLoading || formProps.readOnly}
                 >
                     <fieldset className="space-y-3">
                         <legend>Personal Information</legend>
                         <div className="grid grid-cols-3 gap-x-2">
                             <FormFieldWrapper
+                                className="col-span-1"
                                 control={form.control}
                                 name="first_name"
-                                className="col-span-1"
                                 render={({ field }) => (
                                     <Input
                                         {...field}
-                                        id={field.name}
                                         autoComplete="given-name"
-                                        placeholder="First Name"
                                         disabled={isDisabled(field.name)}
+                                        id={field.name}
                                         onKeyDown={(e) => {
                                             const allowed = /^[a-zA-Z\s]$/
                                             if (
@@ -140,20 +139,20 @@ const SignUpForm = ({ className, ...formProps }: ISignUpFormProps) => {
                                                 e.preventDefault()
                                             }
                                         }}
+                                        placeholder="First Name"
                                     />
                                 )}
                             />
                             <FormFieldWrapper
+                                className="col-span-1"
                                 control={form.control}
                                 name="middle_name"
-                                className="col-span-1"
                                 render={({ field }) => (
                                     <Input
                                         {...field}
-                                        id={field.name}
-                                        placeholder="Middle Name"
                                         autoComplete="additional-name"
                                         disabled={isDisabled(field.name)}
+                                        id={field.name}
                                         onKeyDown={(e) => {
                                             const allowed = /^[a-zA-Z\s]$/
                                             if (
@@ -163,20 +162,20 @@ const SignUpForm = ({ className, ...formProps }: ISignUpFormProps) => {
                                                 e.preventDefault()
                                             }
                                         }}
+                                        placeholder="Middle Name"
                                     />
                                 )}
                             />
                             <FormFieldWrapper
+                                className="col-span-1"
                                 control={form.control}
                                 name="last_name"
-                                className="col-span-1"
                                 render={({ field }) => (
                                     <Input
                                         {...field}
-                                        id={field.name}
-                                        placeholder="Last Name"
                                         autoComplete="family-name"
                                         disabled={isDisabled(field.name)}
+                                        id={field.name}
                                         onKeyDown={(e) => {
                                             const allowed = /^[a-zA-Z\s]$/
                                             if (
@@ -186,6 +185,7 @@ const SignUpForm = ({ className, ...formProps }: ISignUpFormProps) => {
                                                 e.preventDefault()
                                             }
                                         }}
+                                        placeholder="Last Name"
                                     />
                                 )}
                             />
@@ -197,33 +197,33 @@ const SignUpForm = ({ className, ...formProps }: ISignUpFormProps) => {
                             render={({ field }) => (
                                 <Input
                                     {...field}
-                                    id={field.name}
-                                    disabled
                                     autoComplete="name"
+                                    disabled
+                                    id={field.name}
                                 />
                             )}
                         />
 
                         <FormFieldWrapper
-                            control={form.control}
-                            name="birthdate"
-                            label="Date of Birth *"
                             className="relative"
+                            control={form.control}
                             description="mm/dd/yyyy"
                             descriptionClassName="absolute top-0 right-0"
+                            label="Date of Birth *"
+                            name="birthdate"
                             render={({ field }) => (
                                 <InputDate
                                     {...field}
-                                    value={field.value ?? ''}
                                     disabled={isDisabled(field.name)}
+                                    value={field.value ?? ''}
                                 />
                             )}
                         />
 
                         <FormFieldWrapper
                             control={form.control}
-                            name="contact_number"
                             label="Contact Number *"
+                            name="contact_number"
                             render={({
                                 field,
                                 fieldState: { invalid, error },
@@ -256,10 +256,10 @@ const SignUpForm = ({ className, ...formProps }: ISignUpFormProps) => {
                             render={({ field }) => (
                                 <Input
                                     {...field}
-                                    id={field.name}
                                     autoComplete="username"
-                                    placeholder="Username"
                                     disabled={isDisabled(field.name)}
+                                    id={field.name}
+                                    placeholder="Username"
                                 />
                             )}
                         />
@@ -269,10 +269,10 @@ const SignUpForm = ({ className, ...formProps }: ISignUpFormProps) => {
                             render={({ field }) => (
                                 <Input
                                     {...field}
-                                    id={field.name}
                                     autoComplete="email"
-                                    placeholder="example@email.com"
                                     disabled={isDisabled(field.name)}
+                                    id={field.name}
+                                    placeholder="example@email.com"
                                 />
                             )}
                         />
@@ -283,15 +283,13 @@ const SignUpForm = ({ className, ...formProps }: ISignUpFormProps) => {
                                 <FormItem>
                                     <PasswordInput
                                         {...field}
-                                        id={field.name}
-                                        defaultVisibility
-                                        placeholder="+8 Character Password"
                                         autoComplete="new-password"
+                                        defaultVisibility
                                         disabled={isDisabled(field.name)}
+                                        id={field.name}
+                                        placeholder="+8 Character Password"
                                     />
                                     <ValueChecklistMeter
-                                        value={field.value}
-                                        hideOnComplete
                                         checkList={ChecklistTemplate[
                                             'password-checklist'
                                         ].concat([
@@ -300,6 +298,8 @@ const SignUpForm = ({ className, ...formProps }: ISignUpFormProps) => {
                                                 text: 'No more than 50 characters',
                                             },
                                         ])}
+                                        hideOnComplete
+                                        value={field.value}
                                     />
                                 </FormItem>
                             )}
@@ -313,16 +313,16 @@ const SignUpForm = ({ className, ...formProps }: ISignUpFormProps) => {
                         <FormItem className="col-span-3">
                             <div className="shadow-xs relative flex w-full items-start gap-2 rounded-xl outline-none duration-300 ease-in-out has-[:checked]:bg-primary/10 has-[:checked]:p-4">
                                 <Checkbox
-                                    id={field.name}
-                                    name={field.name}
                                     checked={field.value}
+                                    className="order-0 z-0 after:absolute after:inset-0"
                                     disabled={
                                         isLoading ||
                                         formProps.readOnly ||
                                         isDisabled(field.name)
                                     }
+                                    id={field.name}
+                                    name={field.name}
                                     onCheckedChange={field.onChange}
-                                    className="order-0 z-0 after:absolute after:inset-0"
                                 />
                                 <div
                                     className="grid gap-2 z-10"
@@ -331,23 +331,23 @@ const SignUpForm = ({ className, ...formProps }: ISignUpFormProps) => {
                                     <p className="text-xs text-muted-foreground">
                                         I agree to lands horizon - e coop suite{' '}
                                         <Link
+                                            className="underline underline-offset-4 text-primary/70"
+                                            rel="noopener noreferrer"
+                                            target="_blank"
                                             to={
                                                 '/policy/terms-and-condition' as string
                                             }
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                            className="underline underline-offset-4 text-primary/70"
                                         >
                                             terms and condition
                                         </Link>
                                         ,{' '}
                                         <Link
+                                            className="underline underline-offset-4 text-primary/70"
+                                            rel="noopener noreferrer"
+                                            target="_blank"
                                             to={
                                                 '/policy/privacy-policy' as string
                                             }
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                            className="underline underline-offset-4 text-primary/70"
                                         >
                                             privacy policy and data privacy.
                                         </Link>
@@ -360,10 +360,10 @@ const SignUpForm = ({ className, ...formProps }: ISignUpFormProps) => {
                 <div className="mt-4 flex flex-col items-center space-y-2">
                     <FormErrorMessage errorMessage={error} />
                     <Button
-                        size="sm"
-                        type="submit"
                         className="w-full max-w-xl rounded-3xl"
                         disabled={isLoading || formProps.readOnly}
+                        size="sm"
+                        type="submit"
                     >
                         {isLoading ? <LoadingSpinner /> : 'Submit'}
                     </Button>

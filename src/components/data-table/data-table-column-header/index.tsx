@@ -70,11 +70,11 @@ const DataTableColumnHeader = <TData, TValue>({
                         {...listeners}
                         // variant="ghost"
                         {...attributes}
-                        ref={setNodeRef}
                         className={cn(
                             '!size-fit cursor-ew-resize gap-x-2 self-start truncate p-1',
                             disableSort && 'pointer-events-none'
                         )}
+                        ref={setNodeRef}
                     >
                         {finalTitle}
                     </span>
@@ -83,16 +83,16 @@ const DataTableColumnHeader = <TData, TValue>({
                         {header.column.getCanPin() &&
                             header.column.getIsPinned() && (
                                 <Button
-                                    size="icon"
-                                    variant="secondary"
                                     className="size-fit rounded-md p-1"
                                     onClick={() => header.column.pin(false)}
+                                    size="icon"
+                                    variant="secondary"
                                 >
                                     <PushPinSlashIcon className="size-3.5" />
                                 </Button>
                             )}
                         {header.column.getCanResize() && (
-                            <ColumnResizeHandle table={table} header={header} />
+                            <ColumnResizeHandle header={header} table={table} />
                         )}
                     </div>
                 </div>

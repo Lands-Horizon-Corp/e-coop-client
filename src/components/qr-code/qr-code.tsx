@@ -18,11 +18,11 @@ const QrCode = forwardRef<HTMLDivElement, IQrCodeProps>(
 
         return (
             <div
-                ref={qrRef}
                 className={cn(
                     'relative flex size-48 flex-col items-center justify-center rounded-xl bg-white p-5',
                     className
                 )}
+                ref={qrRef}
             >
                 {value.length === 0 ? (
                     <div className="flex flex-col items-center gap-y-4 text-gray-700/70">
@@ -33,7 +33,8 @@ const QrCode = forwardRef<HTMLDivElement, IQrCodeProps>(
                     </div>
                 ) : (
                     <QRCodeSVG
-                        level={'M'}
+                        // NOTE: DO NOT PUT RADIUS THAT COULD CROP QRCODE! QR CODE WONT IDENTIFY BY QR CODE READER
+                        className="size-full duration-300"
                         imageSettings={{
                             src: '/favicon.ico',
                             x: undefined,
@@ -43,9 +44,8 @@ const QrCode = forwardRef<HTMLDivElement, IQrCodeProps>(
                             opacity: 1,
                             excavate: true,
                         }}
+                        level={'M'}
                         value={value}
-                        // NOTE: DO NOT PUT RADIUS THAT COULD CROP QRCODE! QR CODE WONT IDENTIFY BY QR CODE READER
-                        className="size-full duration-300"
                     />
                 )}
             </div>

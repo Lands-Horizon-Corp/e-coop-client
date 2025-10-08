@@ -55,17 +55,17 @@ const Branch = ({ branch, organization, isUserCanJoin }: BranchesProps) => {
     return (
         <>
             <PolicyAcceptanceModal
-                open={open}
-                onOpenChange={onOpenChange}
                 branchName={selectedBranch?.name ?? ''}
-                organization={organization}
                 onAccept={handleAcceptAndProceed}
                 onCancel={() => onOpenChange(false)}
+                onOpenChange={onOpenChange}
+                open={open}
+                organization={organization}
             />
             <BranchItem
-                key={branch.id}
                 branch={branch}
                 isUserCanJoin={isUserCanJoin}
+                key={branch.id}
                 onJoinClick={handleJoinClick}
             />
         </>

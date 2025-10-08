@@ -200,10 +200,10 @@ export const FlickeringGrid: React.FC<FlickeringGridProps> = ({
     }, [setupCanvas, updateSquares, drawGrid, width, height, isInView])
 
     return (
-        <div ref={containerRef} className={cn(` ${className}`)} {...props}>
+        <div className={cn(` ${className}`)} ref={containerRef} {...props}>
             <canvas
-                ref={canvasRef}
                 className="pointer-events-none"
+                ref={canvasRef}
                 style={{
                     width: canvasSize.width,
                     height: canvasSize.height,

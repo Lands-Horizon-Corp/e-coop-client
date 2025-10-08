@@ -53,18 +53,18 @@ const AppSidebarButton = React.forwardRef<
         <SidebarMenuButton
             ref={ref}
             {...other}
-            tooltip={item.title}
             className={cn(
                 'max-full group/navself rounde-lg relative justify-between overflow-visible truncate text-ellipsis !font-light text-foreground/80 data-[active=true]:font-normal',
                 className
             )}
+            isActive={isRouteMatched && item.type !== 'dropdown'}
             onClick={(some) => {
                 if (item.type === 'item') {
                     router.navigate({ to: item.url })
                 }
                 onClick?.(some)
             }}
-            isActive={isRouteMatched && item.type !== 'dropdown'}
+            tooltip={item.title}
         >
             <div
                 className={cn(
@@ -135,8 +135,8 @@ const AppSidebarItem = ({ navItem }: Props) => {
         return (
             <SidebarMenuItem className="my-0">
                 <Popover
-                    open={popoverState.open}
                     onOpenChange={popoverState.onOpenChange}
+                    open={popoverState.open}
                 >
                     <PopoverTrigger asChild>
                         <AppSidebarButton
@@ -146,8 +146,8 @@ const AppSidebarItem = ({ navItem }: Props) => {
                     </PopoverTrigger>
                     <PopoverContent
                         align="start"
-                        data-popovered="yes"
                         className="px-0 shadow-lg bg-popover/90 backdrop-blur-xs"
+                        data-popovered="yes"
                         onClick={() => popoverState.onOpenChange(false)}
                     >
                         <p className="px-4 pb-2">

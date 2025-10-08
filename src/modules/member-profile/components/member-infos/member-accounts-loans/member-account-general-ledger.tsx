@@ -35,11 +35,11 @@ export const MemberAccountLedgerTotal = ({
             )}
         >
             <Button
-                size="icon"
-                variant="secondary"
+                className="absolute rounded-full size-fit top-2 right-2"
                 disabled={isPending}
                 onClick={() => refetch()}
-                className="absolute rounded-full size-fit top-2 right-2"
+                size="icon"
+                variant="secondary"
             >
                 {isPending ? (
                     <LoadingSpinner className="size-3" />
@@ -101,11 +101,11 @@ const MemberAccountGeneralLedger = ({
                 <MemberAccountLedgerTotal {...other} />
             </div>
             <GeneralLedgerTable
-                mode="member-account"
                 accountId={other.accountId}
+                className={cn('bg-background p-2 rounded-xl', className)}
                 excludeColumnIds={['account']}
                 memberProfileId={other.memberProfileId}
-                className={cn('bg-background p-2 rounded-xl', className)}
+                mode="member-account"
             />
         </div>
     )

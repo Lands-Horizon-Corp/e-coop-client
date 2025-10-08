@@ -79,12 +79,9 @@ export const AccountCategoryAction = ({
             <div onClick={(e) => e.stopPropagation()}>
                 <AccountCategoryFormModal
                     {...updateModal}
-                    className="!max-w-2xl"
-                    organizationId={accountCategory.organization_id}
                     branchId={accountCategory.branch_id}
-                    title="Edit Account Category"
+                    className="!max-w-2xl"
                     description="Update details for this account category."
-                    titleClassName="font-bold"
                     formProps={{
                         accountCategoryId: accountCategory.id,
                         defaultValues: { ...accountCategory },
@@ -95,11 +92,13 @@ export const AccountCategoryAction = ({
                             updateModal.onOpenChange(false)
                         },
                     }}
+                    organizationId={accountCategory.organization_id}
+                    title="Edit Account Category"
+                    titleClassName="font-bold"
                 />
             </div>
             <RowActionsGroup
                 canSelect
-                row={row}
                 onDelete={{
                     text: 'Delete',
                     isAllowed: !isDeletingAccountCategory,
@@ -111,6 +110,7 @@ export const AccountCategoryAction = ({
                     onClick: handleEdit,
                 }}
                 otherActions={<>{/* Additional actions can be added here */}</>}
+                row={row}
             />
         </>
     )
@@ -139,12 +139,9 @@ export const AccountCategoryRowContext = ({
         <>
             <AccountCategoryFormModal
                 {...updateModal}
-                className="!max-w-2xl"
-                organizationId={accountCategory.organization_id}
                 branchId={accountCategory.branch_id}
-                title="Edit Account Category"
+                className="!max-w-2xl"
                 description="Update details for this account category."
-                titleClassName="font-bold"
                 formProps={{
                     accountCategoryId: accountCategory.id,
                     defaultValues: { ...accountCategory },
@@ -153,9 +150,11 @@ export const AccountCategoryRowContext = ({
                         updateModal.onOpenChange(false)
                     },
                 }}
+                organizationId={accountCategory.organization_id}
+                title="Edit Account Category"
+                titleClassName="font-bold"
             />
             <DataTableRowContext
-                row={row}
                 onDelete={{
                     text: 'Delete',
                     isAllowed: !isDeletingAccountCategory,
@@ -166,6 +165,7 @@ export const AccountCategoryRowContext = ({
                     isAllowed: true,
                     onClick: handleEdit,
                 }}
+                row={row}
             >
                 {children}
             </DataTableRowContext>

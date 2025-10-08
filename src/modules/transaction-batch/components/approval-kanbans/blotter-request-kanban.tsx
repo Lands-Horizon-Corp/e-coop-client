@@ -56,17 +56,17 @@ const BlotterRequestKanban = (_props: Props) => {
                 <LayersSharpDotIcon className="mr-2 size-4 text-orange-400" />
                 <KanbanTitle
                     isLoading={isRefetching}
-                    totalItems={data.length}
-                    title="Blotter View Request"
                     onRefresh={() => refetch()}
+                    title="Blotter View Request"
+                    totalItems={data.length}
                 />
             </div>
             <Separator />
             <KanbanItemsContainer>
                 {data.map((transactionBatch) => (
                     <TransactionBatchCard
-                        transBatch={transactionBatch}
                         key={transactionBatch.id}
+                        transBatch={transactionBatch}
                     />
                 ))}
                 {data.length === 0 && (
@@ -102,10 +102,10 @@ const TransactionBatchCard = ({
                 <p className="truncate">{transBatch.batch_name}</p>
                 <div className="flex items-center gap-x-1">
                     <Button
-                        size="icon"
-                        variant="secondary"
                         className="size-fit p-1"
                         onClick={() => viewModalState.onOpenChange(true)}
+                        size="icon"
+                        variant="secondary"
                     >
                         <EyeIcon />
                     </Button>

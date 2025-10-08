@@ -103,9 +103,9 @@ const FootstepTableColumns = (
             <DataTableColumnHeader {...props} title="User Type">
                 <ColumnActions {...props}>
                     <DataTableMultiSelectFilter<TUserType, TUserType>
+                        dataType="text"
                         displayText="User Type"
                         field="user_type"
-                        dataType="text"
                         mode="equal"
                         multiSelectOptions={[
                             { label: 'Ban', value: 'ban' },
@@ -120,8 +120,8 @@ const FootstepTableColumns = (
         cell: ({ row }) => (
             <div>
                 <UserTypeBadge
-                    size="sm"
                     showIcon
+                    size="sm"
                     userType={row.original.user_type}
                 />
             </div>
@@ -169,7 +169,7 @@ const FootstepTableColumns = (
         ),
         cell: ({ row }) => (
             <div>
-                <Badge variant="secondary" className="max-w-full">
+                <Badge className="max-w-full" variant="secondary">
                     <p>{row.original.module}</p>
                 </Badge>
             </div>
@@ -314,8 +314,8 @@ const ViewFootstepDetailCell = ({ footstep }: { footstep: IFootstep }) => {
                     <SheetDescription />
                 </SheetHeader>
                 <SheetContent
-                    side="right"
                     className="!max-w-lg bg-transparent p-2 focus:outline-none border-none"
+                    side="right"
                 >
                     <div className="rounded-xl bg-popover p-6 ecoop-scroll relative h-full overflow-y-auto">
                         <FootstepDetail footstep={footstep} />
@@ -323,10 +323,10 @@ const ViewFootstepDetailCell = ({ footstep }: { footstep: IFootstep }) => {
                 </SheetContent>
             </Sheet>
             <Button
-                size="icon"
-                variant="ghost"
                 className="size-fit p-2 text-muted-foreground"
                 onClick={() => footstepModal.onOpenChange(true)}
+                size="icon"
+                variant="ghost"
             >
                 <EyeIcon strokeWidth={1.5} />
             </Button>

@@ -107,15 +107,15 @@ const OrganizationPolicies = ({
             <span className="mr-1">. All rights reserved.</span>
             {termsAndConditions.map((term) => (
                 <PolicyItems
-                    key={term.value}
-                    policyType={term.value as PolicyKey}
-                    policyName={term.name}
-                    organazationName={organization.name}
                     className={classNamePolicyItem}
-                    policyContent={term.content}
-                    onAcceptPolicy={handlePolicyAcceptance}
                     isChecked={term.isChecked}
                     isIncludeIAccept={isIncludeIAccept}
+                    key={term.value}
+                    onAcceptPolicy={handlePolicyAcceptance}
+                    organazationName={organization.name}
+                    policyContent={term.content}
+                    policyName={term.name}
+                    policyType={term.value as PolicyKey}
                 />
             ))}
         </div>
@@ -141,7 +141,7 @@ const PolicyItems = ({
 
     return (
         <Popover>
-            <Dialog open={open} onOpenChange={setOpen}>
+            <Dialog onOpenChange={setOpen} open={open}>
                 <div className="flex items-center gap-x-2">
                     <DialogTrigger
                         className={cn(
@@ -155,10 +155,10 @@ const PolicyItems = ({
                     {isIncludeIAccept && (
                         <Checkbox
                             checked={isChecked}
+                            className="h-4 w-4 mr-2"
                             onCheckedChange={() => {
                                 onAcceptPolicy?.(policyType)
                             }}
-                            className="h-4 w-4 mr-2"
                         />
                     )}
                 </div>
@@ -170,10 +170,10 @@ const PolicyItems = ({
                         <div className="p-1">
                             {policyContent ? (
                                 <TextEditor
-                                    editable={false}
-                                    textEditorClassName="!max-w-full !h-full !border-0 !rounded-none !w-full"
-                                    showToolbar={false}
                                     content={policyContent}
+                                    editable={false}
+                                    showToolbar={false}
+                                    textEditorClassName="!max-w-full !h-full !border-0 !rounded-none !w-full"
                                 />
                             ) : (
                                 <p>No content available for {policyName}.</p>
@@ -183,14 +183,14 @@ const PolicyItems = ({
                     {isIncludeIAccept && (
                         <div className="w-full flex justify-end gap-x-2 mt-4">
                             <Button
-                                variant={'ghost'}
-                                size={'sm'}
                                 onClick={() => setOpen(false)}
+                                size={'sm'}
+                                variant={'ghost'}
                             >
                                 Close
                             </Button>
                             {!isChecked && (
-                                <Button size={'sm'} onClick={handleAcceptClick}>
+                                <Button onClick={handleAcceptClick} size={'sm'}>
                                     Accept
                                 </Button>
                             )}

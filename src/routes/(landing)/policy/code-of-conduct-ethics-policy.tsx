@@ -105,8 +105,8 @@ function RouteComponent() {
                     <span>
                         <LinkTag
                             href="http://ecoop-suite.com/"
-                            target="_blank"
                             name={` (http://ecoop-suite.com/)`}
+                            target="_blank"
                         />
                     </span>
                     . Our goal is to foster a culture of trust, respect,
@@ -116,8 +116,8 @@ function RouteComponent() {
 
                 {/* --- Section 1: Purpose and Scope --- */}
                 <SitePolicyItem
-                    ref={purposeScopeRef}
                     id="purpose-and-scope"
+                    ref={purposeScopeRef}
                     title="1. Purpose and Scope"
                 >
                     <div>
@@ -137,8 +137,8 @@ function RouteComponent() {
 
                 {/* --- Section 2: Core Values and Principles --- */}
                 <SitePolicyItem
-                    ref={coreValuesPrinciplesRef}
                     id="core-values-and-principles"
+                    ref={coreValuesPrinciplesRef}
                     title="2. Core Values and Principles"
                 >
                     <div>
@@ -182,8 +182,8 @@ function RouteComponent() {
 
                 {/* --- Section 3: Expected Standards of Behavior --- */}
                 <SitePolicyItem
-                    ref={expectedStandardsBehaviorRef}
                     id="expected-standards-of-behavior"
+                    ref={expectedStandardsBehaviorRef}
                     title="3. Expected Standards of Behavior"
                 >
                     <div>
@@ -226,8 +226,8 @@ function RouteComponent() {
 
                 {/* --- Section 4: Confidentiality and Data Protection --- */}
                 <SitePolicyItem
-                    ref={confidentialityDataProtectionRef}
                     id="confidentiality-and-data-protection"
+                    ref={confidentialityDataProtectionRef}
                     title="4. Confidentiality and Data Protection"
                 >
                     <div>
@@ -251,8 +251,8 @@ function RouteComponent() {
 
                 {/* --- Section 5: Use of Cooperative Resources --- */}
                 <SitePolicyItem
-                    ref={useCooperativeResourcesRef}
                     id="use-of-cooperative-resources"
+                    ref={useCooperativeResourcesRef}
                     title="5. Use of Cooperative Resources"
                 >
                     <div>
@@ -271,8 +271,8 @@ function RouteComponent() {
 
                 {/* --- Section 6: Compliance and Reporting --- */}
                 <SitePolicyItem
-                    ref={complianceReportingRef}
                     id="compliance-and-reporting"
+                    ref={complianceReportingRef}
                     title="6. Compliance and Reporting"
                 >
                     <div>
@@ -299,8 +299,8 @@ function RouteComponent() {
 
                 {/* --- Section 7: Consequences of Violations --- */}
                 <SitePolicyItem
-                    ref={consequencesViolationsRef}
                     id="consequences-of-violations"
+                    ref={consequencesViolationsRef}
                     title="7. Consequences of Violations"
                 >
                     <div>
@@ -322,8 +322,8 @@ function RouteComponent() {
 
                 {/* --- Section 8: Policy Review and Updates --- */}
                 <SitePolicyItem
-                    ref={policyReviewUpdatesRef}
                     id="policy-review-and-updates"
+                    ref={policyReviewUpdatesRef}
                     title="8. Policy Review and Updates"
                 >
                     <div>
@@ -343,8 +343,8 @@ function RouteComponent() {
 
                 {/* --- Section 9: Contact Information --- */}
                 <SitePolicyItem
-                    ref={contactInformationRef}
                     id="contact-information"
+                    ref={contactInformationRef}
                     title="9. Contact Information"
                 >
                     <div className="space-y-2 not-prose">
@@ -390,12 +390,12 @@ function RouteComponent() {
                     {articleList.map((sectionId, idx) => (
                         <li key={sectionId}>
                             <a
+                                className="block py-1 text-primary hover:underline cursor-pointer text-sm"
                                 href={`#${sectionId}`}
                                 onClick={(e) => {
                                     e.preventDefault()
                                     scrollToSection(sectionId)
                                 }}
-                                className="block py-1 text-primary hover:underline cursor-pointer text-sm"
                             >
                                 {idx + 1}
                                 {'. '}

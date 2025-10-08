@@ -118,19 +118,9 @@ const LoanPicker = forwardRef<
         return (
             <>
                 <GenericPicker
-                    items={data}
-                    open={state}
-                    listHeading={`Matched Results (${totalSize})`}
-                    searchPlaceHolder="Search loan type, amount, or OR number..."
                     isLoading={isPending || isLoading || isFetching}
-                    onSelect={(loan) => {
-                        queryClient.setQueryData(
-                            ['loan-transaction', value],
-                            loan
-                        )
-                        onSelect?.(loan)
-                        setState(false)
-                    }}
+                    items={data}
+                    listHeading={`Matched Results (${totalSize})`}
                     onOpenChange={setState}
                     onSearchChange={(searchValue) => {
                         bulkSetFilter(
@@ -156,6 +146,15 @@ const LoanPicker = forwardRef<
                             }
                         )
                     }}
+                    onSelect={(loan) => {
+                        queryClient.setQueryData(
+                            ['loan-transaction', value],
+                            loan
+                        )
+                        onSelect?.(loan)
+                        setState(false)
+                    }}
+                    open={state}
                     renderItem={(loan) => (
                         <div className="flex w-full items-center justify-between py-1">
                             <div className="flex items-center gap-x-2">
@@ -184,14 +183,9 @@ const LoanPicker = forwardRef<
                             </div>
                         </div>
                     )}
+                    searchPlaceHolder="Search loan type, amount, or OR number..."
                 >
                     <MiniPaginationBar
-                        pagination={{
-                            pageIndex: pagination.pageIndex,
-                            pageSize: pagination.pageSize,
-                            totalPage: totalPage,
-                            totalSize: totalSize,
-                        }}
                         disablePageMove={isFetching}
                         onNext={({ pageIndex }) =>
                             setPagination((prev) => ({ ...prev, pageIndex }))
@@ -199,19 +193,25 @@ const LoanPicker = forwardRef<
                         onPrev={({ pageIndex }) =>
                             setPagination((prev) => ({ ...prev, pageIndex }))
                         }
+                        pagination={{
+                            pageIndex: pagination.pageIndex,
+                            pageSize: pagination.pageSize,
+                            totalPage: totalPage,
+                            totalSize: totalSize,
+                        }}
                     />
                 </GenericPicker>
 
                 <Button
-                    ref={ref}
-                    type="button"
-                    variant="secondary"
-                    disabled={disabled}
-                    onClick={() => setState(true)}
                     className={cn(
                         'w-full items-center justify-between rounded-md border p-0 px-2',
                         triggerClassName
                     )}
+                    disabled={disabled}
+                    onClick={() => setState(true)}
+                    ref={ref}
+                    type="button"
+                    variant="secondary"
                 >
                     <span className="inline-flex w-full items-center justify-between text-sm text-foreground/90">
                         <span className="inline-flex w-full items-center gap-x-2">
