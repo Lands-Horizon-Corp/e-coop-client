@@ -93,6 +93,7 @@ export const JournalVoucherAction = ({
                         defaultValues: { ...journalVoucher },
                         // onSuccess: () => updateModal.onOpenChange(false),
                         readOnly: isRealease,
+                        mode: isRealease ? 'readOnly' : 'update',
                     }}
                 />
             </div>
@@ -142,6 +143,7 @@ export const JournalVoucherRowContext = ({
                 formProps={{
                     journalVoucherId: journalVoucher.id,
                     defaultValues: { ...journalVoucher },
+                    mode: 'update',
                     // onSuccess: () => updateModal.onOpenChange(false),
                 }}
             />

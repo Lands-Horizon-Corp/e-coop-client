@@ -44,7 +44,6 @@ import {
 } from '@/components/ui/accordion'
 import { Button } from '@/components/ui/button'
 import { Form } from '@/components/ui/form'
-import FormErrorMessage from '@/components/ui/form-error-message'
 import FormFieldWrapper from '@/components/ui/form-field-wrapper'
 import { Input } from '@/components/ui/input'
 import InputDate from '@/components/ui/input-date'
@@ -67,6 +66,7 @@ export interface IJournalVoucherCreateUpdateFormProps
             TJournalVoucherFormValues
         > {
     journalVoucherId?: TEntityId
+    mode?: 'create' | 'update' | 'readOnly'
 }
 
 type TValidateResult =
@@ -134,11 +134,15 @@ const JournalVoucherCreateUpdateForm = ({
     className,
     journalVoucherId,
     defaultValues,
+    mode = 'create',
     ...formProps
 }: IJournalVoucherCreateUpdateFormProps) => {
     const queryClient = useQueryClient()
 
     const { data } = useTransactionBatchStore()
+    const [defaultMode, setDefaultMode] = useState<
+        'create' | 'update' | 'readOnly'
+    >(formProps.readOnly ? 'readOnly' : mode)
 
     const [defaultMemberProfile, setDefaultMemberProfile] = useState<
         IMemberProfile | undefined
@@ -180,6 +184,7 @@ const JournalVoucherCreateUpdateForm = ({
                     formProps.onSuccess?.(data)
                     setEditJournalId(data.id)
                     setSelectedJournalVoucherEntry([])
+                    setDefaultMode('update')
                 },
                 onError: formProps.onError,
             }),
@@ -297,7 +302,6 @@ const JournalVoucherCreateUpdateForm = ({
                         <JournalVoucherTagsManagerPopover
                             size="sm"
                             journalVoucherId={editJournalId}
-                            readOnly={isReleased}
                         />
                         {editJournalId && (
                             <div className="">
@@ -500,11 +504,11 @@ const JournalVoucherCreateUpdateForm = ({
                             />
                         )}
                     />
-                    {isUpdate && (
+                    {defaultMode !== 'create' && (
                         <JournalEntryTable
                             className="col-span-1 md:col-span-4"
                             journalVoucherId={journalVoucherId ?? ''}
-                            isUpdateMode={isUpdate}
+                            mode={defaultMode}
                             rowData={JournalEntries}
                             transactionBatchId={data?.id}
                             defaultMemberProfile={defaultMemberProfile}
@@ -528,7 +532,7 @@ const JournalVoucherCreateUpdateForm = ({
                         />
                     </div>
                 </div>
-                <FormErrorMessage errorMessage={error} />
+                {/* <FormErrorMessage errorMessage={error} /> */}
                 <FormFooterResetSubmit
                     error={error}
                     readOnly={formProps.readOnly}

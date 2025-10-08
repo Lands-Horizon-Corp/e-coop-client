@@ -133,36 +133,48 @@ const columns: ColumnDef<IJournalVoucherEntryRequest>[] = [
 type JournalEntryTableProps = {
     defaultMemberProfile?: IMemberProfile
     journalVoucherId: TEntityId
-    isUpdateMode?: boolean
     rowData?: IJournalVoucherEntryRequest[]
     className?: string
     TableClassName?: string
     transactionBatchId?: TEntityId
+    mode: 'readOnly' | 'update' | 'create'
 }
 export const JournalEntryTable = ({
-    isUpdateMode = false,
     rowData,
     className,
     TableClassName,
     defaultMemberProfile,
     transactionBatchId,
+    mode,
 }: JournalEntryTableProps) => {
+    const isUpdateMode = mode === 'update'
+    const isReadyOnlyMode = mode === 'readOnly'
     const [journalVoucherEntry, setJournalVoucherEntry] = useState<
         IJournalVoucherEntryRequest[]
     >(() => {
-        if (rowData && rowData.length > 0 && isUpdateMode) {
+        if (
+            rowData &&
+            rowData.length > 0 &&
+            (isUpdateMode || isReadyOnlyMode)
+        ) {
             return rowData
         }
         return []
     })
+
     const { setSelectedJournalVoucherEntry, setJournalVoucherEntriesDeleted } =
         useJournalVoucherStore()
 
     useEffect(() => {
-        if (isUpdateMode) {
+        if (isUpdateMode || isReadyOnlyMode) {
             setSelectedJournalVoucherEntry(journalVoucherEntry)
         }
-    }, [isUpdateMode, journalVoucherEntry, setSelectedJournalVoucherEntry])
+    }, [
+        isUpdateMode,
+        isReadyOnlyMode,
+        journalVoucherEntry,
+        setSelectedJournalVoucherEntry,
+    ])
 
     const handleDeleteRow = (row: Row<IJournalVoucherEntryRequest>) => {
         const id = row.original.id

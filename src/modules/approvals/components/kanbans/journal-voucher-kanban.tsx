@@ -1,6 +1,6 @@
 import { toast } from 'sonner'
 
-import { toReadableDateTime } from '@/helpers/date-utils'
+import { dateAgo } from '@/helpers/date-utils'
 import { cn } from '@/helpers/tw-utils'
 import KanbanContainer from '@/modules/approvals/components/kanban/kanban-container'
 import KanbanItemsContainer from '@/modules/approvals/components/kanban/kanban-items-container'
@@ -15,6 +15,7 @@ import {
     useGetAllJournalVoucher,
     useJournalVoucherActions,
 } from '@/modules/journal-voucher'
+import { JournalVoucherTagsManagerPopover } from '@/modules/journal-voucher-tag/components/journal-voucher-tag-management'
 import JournalVoucherCreateUpdateFormModal from '@/modules/journal-voucher/components/forms/journal-voucher-create-update-modal'
 import {
     CheckCircle2Icon,
@@ -24,12 +25,9 @@ import {
     XCircleIcon,
 } from 'lucide-react'
 
-import {
-    DraftIcon,
-    EyeIcon,
-    OptionsIcon,
-    SignatureLightIcon,
-} from '@/components/icons'
+import { DraftIcon, EyeIcon, PencilFillIcon } from '@/components/icons'
+import ImageDisplay from '@/components/image-display'
+import InfoTooltip from '@/components/tooltips/info-tooltip'
 import { Button } from '@/components/ui/button'
 import {
     DropdownMenu,
@@ -43,6 +41,8 @@ import { useModalState } from '@/hooks/use-modal-state'
 
 import { IClassProps } from '@/types'
 
+// --- Type and Hook Definitions ---
+
 type UseCardKanbanActionsProps = {
     journalVoucher: IJournalVoucher
     onDeleteSuccess?: () => void
@@ -54,14 +54,9 @@ const useCardKanbanActions = ({
     refetch,
 }: UseCardKanbanActionsProps) => {
     const journalVoucherModalState = useModalState(false)
-    const signatureModalState = useModalState(false)
 
     const handleOpenViewModal = () => {
         journalVoucherModalState.onOpenChange(true)
-    }
-
-    const handleSignatureModal = () => {
-        signatureModalState.onOpenChange(true)
     }
 
     return {
@@ -69,8 +64,6 @@ const useCardKanbanActions = ({
         journalVoucherModalState,
         journalVoucher,
         refetch,
-        signatureModalState,
-        handleSignatureModal,
     }
 }
 
@@ -82,6 +75,19 @@ interface UseJournalVoucherActionsProps {
     onDeleteSuccess?: () => void
     refetch?: () => void
 }
+
+interface ICJournalVoucherStatusDates {
+    printed_date?: string | null
+    approved_date?: string | null
+    released_date?: string | null
+}
+
+interface IJournalVoucherCardProps extends IClassProps {
+    journalVoucher: IJournalVoucher
+    refetch: () => void
+}
+
+// --- Component: JournalVoucherOtherAction (Dropdown Menu) ---
 
 const JournalVoucherOtherAction = ({
     journalVoucher,
@@ -103,7 +109,7 @@ const JournalVoucherOtherAction = ({
                         ? 'undone'
                         : 'updated'
                     toast.success(`Print status ${actionText} successfully.`)
-                    refetch && refetch()
+                    refetch?.()
                 },
                 onError: (error) => {
                     toast.error(
@@ -119,7 +125,7 @@ const JournalVoucherOtherAction = ({
                 onSuccess: (_, variables) => {
                     const modeText = variables.mode.replace('-undo', ' undone')
                     toast.success(`Voucher has been ${modeText} successfully.`)
-                    refetch && refetch()
+                    refetch?.()
                 },
                 onError: (error) => {
                     toast.error(error.message || 'Failed to perform action.')
@@ -147,7 +153,7 @@ const JournalVoucherOtherAction = ({
 
     const menuActions = [
         {
-            label: isPrinted ? 'print-undo' : 'Print',
+            label: isPrinted ? 'Print-Undo' : 'Print',
             icon: !isPrinted ? (
                 <PrinterIcon className="mr-2 h-4 w-4 text-blue-500" />
             ) : (
@@ -157,7 +163,7 @@ const JournalVoucherOtherAction = ({
             isVisible: showPrint,
         },
         {
-            label: 'Print',
+            label: 'Print (Only)',
             icon: <PrinterIcon className="mr-2 h-4 w-4 text-blue-500" />,
             onSelect: handleJournalAction('print-only'),
             isVisible: !isApproved && !isPrinted && !showPrint,
@@ -186,8 +192,10 @@ const JournalVoucherOtherAction = ({
 
     return (
         <DropdownMenu>
-            <DropdownMenuTrigger>
-                {<OptionsIcon className="size-4" />}
+            <DropdownMenuTrigger asChild>
+                <Button variant="ghost" size={'icon'} aria-label="More Actions">
+                    {<PencilFillIcon className="size-4" />}
+                </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent>
                 {menuActions
@@ -207,44 +215,22 @@ const JournalVoucherOtherAction = ({
         </DropdownMenu>
     )
 }
-interface ICJournalVoucherStatusDates {
-    printed_date?: string | null
-    approved_date?: string | null
-    released_date?: string | null
-}
-export const JournalVoucherCard = ({
+
+// --- Component: JournalVoucherCardActions (Top right action group) ---
+
+const JournalVoucherCardActions = ({
     journalVoucher,
-    className,
+    jvDates,
     refetch,
-}: {
-    journalVoucher: IJournalVoucher
-    refetch: () => void
-} & IClassProps) => {
-    const {
-        handleOpenViewModal,
-        journalVoucherModalState,
-        handleSignatureModal,
-        signatureModalState,
-    } = useCardKanbanActions({
-        journalVoucher: journalVoucher,
-        refetch: refetch,
-    })
-
-    const jvDates: ICJournalVoucherStatusDates = {
-        printed_date: journalVoucher.printed_date,
-        approved_date: journalVoucher.approved_date,
-        released_date: journalVoucher.released_date,
-    }
-
+}: Pick<IJournalVoucherCardProps, 'journalVoucher' | 'refetch'> & {
+    jvDates: ICJournalVoucherStatusDates
+}) => {
     const isReleased = !!journalVoucher.released_date
+    const { handleOpenViewModal, journalVoucherModalState } =
+        useCardKanbanActions({ journalVoucher, refetch })
 
     return (
-        <div
-            className={cn(
-                'group space-y-3 rounded-xl border border-border bg-card p-4 transition-shadow hover:shadow-lg hover:shadow-accent/10',
-                className
-            )}
-        >
+        <>
             <JournalVoucherCreateUpdateFormModal
                 className={cn('!min-w-2xl !max-w-5xl')}
                 {...journalVoucherModalState}
@@ -253,86 +239,144 @@ export const JournalVoucherCard = ({
                     readOnly: true,
                 }}
             />
-            <div className="w-full flex items-center justify-between">
-                <p className="truncate grow">
-                    {journalVoucher.name ||
-                        journalVoucher.cash_voucher_number ||
-                        'JV-Unknown'}
-                </p>
-                <div className="flex items-center space-x-3 flex-shrink-0">
-                    <Button
-                        size={'icon'}
-                        onClick={handleOpenViewModal}
-                        variant="ghost"
-                    >
-                        <EyeIcon />
-                    </Button>
-                    <Button
-                        size={'icon'}
-                        variant={isReleased ? 'secondary' : 'ghost'}
-                        onClick={handleSignatureModal}
-                    >
-                        <SignatureLightIcon />
-                    </Button>
-                    <CashCheckVoucherStatusIndicator
-                        className="flex-shrink-0"
-                        voucherDates={jvDates}
+            <div className="w-full flex items-center space-x-1 justify-end flex-shrink-0">
+                <JournalVoucherTagsManagerPopover
+                    size="sm"
+                    journalVoucherId={journalVoucher.id}
+                />
+                <CashCheckVoucherStatusIndicator
+                    className="flex-shrink-0"
+                    voucherDates={jvDates}
+                />
+                <Button
+                    size={'icon'}
+                    onClick={handleOpenViewModal}
+                    variant="ghost"
+                    aria-label="View Journal Voucher"
+                >
+                    <EyeIcon />
+                </Button>
+                {!isReleased && (
+                    <JournalVoucherOtherAction
+                        refetch={refetch}
+                        journalVoucher={journalVoucher}
                     />
-                    {!isReleased && (
-                        <JournalVoucherOtherAction
-                            refetch={() => {
-                                refetch()
-                            }}
-                            journalVoucher={journalVoucher}
-                        />
-                    )}
-                </div>
-            </div>
-            <p className="text-sm text-muted-foreground line-clamp-2">
-                {journalVoucher.description ||
-                    `Reference: ${journalVoucher.reference}`}
-            </p>
-            <div className="grid grid-cols-2 gap-2 border-t pt-3">
-                <div className="text-sm">
-                    <p className="text-muted-foreground">Date</p>
-                    <p className="font-medium text-foreground">
-                        {toReadableDateTime(journalVoucher.date)}
-                    </p>
-                </div>
-                <div className="text-sm text-right">
-                    <p className="text-muted-foreground">Amount</p>
-                    <p className="font-semibold text-primary/80">
-                        {journalVoucher.total_debit > 0
-                            ? `DR ${journalVoucher.total_debit.toLocaleString()}`
-                            : `CR ${journalVoucher.total_credit.toLocaleString()}`}
-                    </p>
-                </div>
-            </div>
-            {journalVoucher.journal_voucher_tags &&
-                journalVoucher.journal_voucher_tags.length > 0 && (
-                    <div className="flex flex-wrap gap-1 pt-2 border-t">
-                        {journalVoucher.journal_voucher_tags
-                            .slice(0, 3)
-                            .map((tag) => (
-                                <span
-                                    key={tag.id}
-                                    className="text-xs px-2 py-0.5 rounded-full bg-accent/50 text-accent-foreground"
-                                >
-                                    {tag.name}
-                                </span>
-                            ))}
-                        {journalVoucher.journal_voucher_tags.length > 3 && (
-                            <span className="text-xs text-muted-foreground px-2 py-0.5">
-                                +
-                                {journalVoucher.journal_voucher_tags.length - 3}{' '}
-                                more
-                            </span>
-                        )}
-                    </div>
                 )}
+            </div>
+        </>
+    )
+}
+
+// --- Component: JournalVoucherCardCreatorInfo (Bottom row with amounts and user) ---
+
+const JournalVoucherCardCreatorInfo = ({
+    journalVoucher,
+}: Pick<IJournalVoucherCardProps, 'journalVoucher'>) => {
+    return (
+        <div className="flex items-center justify-evenly gap-x-2">
+            <div className="flex space-x-2">
+                <Button
+                    variant="secondary"
+                    size="sm"
+                    className="min-w-16 font-semibold"
+                >
+                    DR: {journalVoucher.total_debit || 0}
+                </Button>
+                <Button
+                    variant="secondary"
+                    size="sm"
+                    className="min-w-16 font-semibold"
+                >
+                    CR: {journalVoucher.total_credit || 0}
+                </Button>
+            </div>
+            <InfoTooltip
+                content={`created by ${journalVoucher.created_by?.full_name}`}
+            >
+                <div className="text-right max-w-[120px] shrink">
+                    <p className="truncate font-medium text-sm text-foreground/90">
+                        {journalVoucher.created_by?.full_name}
+                    </p>
+                    <p className="text-xs text-muted-foreground/70 truncate">
+                        @{journalVoucher.created_by?.user_name ?? '-'}{' '}
+                        {dateAgo(journalVoucher.date)}
+                    </p>
+                </div>
+            </InfoTooltip>
+            <ImageDisplay
+                className="size-8 rounded-full"
+                src={journalVoucher?.created_by?.media?.download_url}
+            />
         </div>
     )
 }
+
+// --- Component: JournalVoucherCard ---
+
+export const JournalVoucherCard = ({
+    journalVoucher,
+    className,
+    refetch,
+}: IJournalVoucherCardProps) => {
+    const jvDates: ICJournalVoucherStatusDates = {
+        printed_date: journalVoucher.printed_date,
+        approved_date: journalVoucher.approved_date,
+        released_date: journalVoucher.released_date,
+    }
+
+    // Logic for rendering tags
+    const TagsComponent = journalVoucher.journal_voucher_tags &&
+        journalVoucher.journal_voucher_tags.length > 0 && (
+            <div className="flex flex-wrap gap-1 pt-2 border-t border-border/70">
+                {journalVoucher.journal_voucher_tags.slice(0, 3).map((tag) => (
+                    <span
+                        key={tag.id}
+                        className="text-xs px-2 py-0.5 rounded-full bg-accent/50 text-accent-foreground"
+                    >
+                        {tag.name}
+                    </span>
+                ))}
+                {journalVoucher.journal_voucher_tags.length > 3 && (
+                    <span className="text-xs text-muted-foreground px-2 py-0.5">
+                        +{journalVoucher.journal_voucher_tags.length - 3} more
+                    </span>
+                )}
+            </div>
+        )
+
+    return (
+        <div
+            className={cn(
+                'group space-y-3 rounded-xl border border-border bg-card p-4 transition-shadow hover:shadow-lg hover:shadow-accent/10',
+                className
+            )}
+        >
+            <JournalVoucherCardActions
+                journalVoucher={journalVoucher}
+                jvDates={jvDates}
+                refetch={refetch}
+            />
+
+            <p className="truncate text-lg font-bold text-foreground/95">
+                {journalVoucher.name ||
+                    journalVoucher.cash_voucher_number ||
+                    'JV-Unknown'}
+            </p>
+
+            {journalVoucher.cash_voucher_number && (
+                <p className="truncate w-full bg-secondary/30 rounded-md p-1 text-muted-foreground text-xs font-mono">
+                    CV No. {journalVoucher.cash_voucher_number}
+                </p>
+            )}
+
+            <JournalVoucherCardCreatorInfo journalVoucher={journalVoucher} />
+
+            {TagsComponent}
+        </div>
+    )
+}
+
+// --- Component: JournalVoucherKanban (Main Export) ---
 
 const JournalVoucherKanban = ({ mode }: JournalVoucherKanbanProps) => {
     const { data, isLoading, refetch, isRefetching } = useGetAllJournalVoucher()
@@ -373,9 +417,7 @@ const JournalVoucherKanban = ({ mode }: JournalVoucherKanbanProps) => {
                     {dataFiltered?.map((jv) => (
                         <div key={jv.id}>
                             <JournalVoucherCard
-                                refetch={() => {
-                                    refetch()
-                                }}
+                                refetch={refetch}
                                 journalVoucher={jv}
                                 className="mb-2"
                             />

@@ -151,7 +151,6 @@ const CashCheckVoucherStatusIndicator = ({
     voucherDates,
     title = 'Cash Check Voucher Status',
 }: Props) => {
-
     const finalDates: ICashCheckVoucherStatusDates = voucherDates ?? {
         printed_date: cashCheckVoucher?.printed_date,
         approved_date: cashCheckVoucher?.approved_date,

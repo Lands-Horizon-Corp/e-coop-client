@@ -102,6 +102,7 @@ import {
     FaArrowUpLong as ArrowUpLong,
     FaBoxesStacked as BoxesStackedIcon,
     FaBusinessTime as BriefCaseClockIcon,
+    FaCheck as CheckFillIcon,
     FaFirstdraft as DraftIcon,
     FaCircleCheck as FaCheckIcon,
     FaVenusMars as GendersIcon,
@@ -207,7 +208,6 @@ import {
 } from 'react-icons/hi2'
 import { ImHammer2 as JudgeHammerIcon } from 'react-icons/im'
 import {
-    IoIosCheckmarkCircle as CheckFillIcon,
     IoIosFunnel as FunnelFilledIcon,
     IoIosCog as GearIcon,
     IoIosCode as IoIosCodeIcon,

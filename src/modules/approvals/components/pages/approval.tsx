@@ -8,7 +8,7 @@ import {
 } from '@/components/ui/resizable'
 
 import Approval from '../approval'
-import JournalVoucherKanban from '../kanbans/journal-voucher'
+import JournalVoucherKanban from '../kanbans/journal-voucher-kanban'
 
 const ApprovalPage = () => {
     return (
@@ -18,16 +18,24 @@ const ApprovalPage = () => {
                 className="w-full rounded-lg "
             >
                 <ResizablePanel
-                    defaultSize={50}
+                    defaultSize={33}
                     className="!overflow-auto h-fit"
                 >
                     <Approval className="min-h-[91dvh] " />
                 </ResizablePanel>
                 <ResizableHandle withHandle />
-                <ResizablePanel defaultSize={50} className=" h-fit ">
-                    <div className="flex h-full items-center justify-center p-6">
-                        <span className="font-semibold">Content</span>
-                    </div>
+                <ResizablePanel
+                    defaultSize={33}
+                    className=" h-fit flex p-5 space-x-5 !overflow-auto "
+                >
+                    {['draft', 'printed', 'approved', 'released'].map(
+                        (status) => (
+                            <JournalVoucherKanban
+                                key={status}
+                                mode={status as TJournalVoucherMode}
+                            />
+                        )
+                    )}
                 </ResizablePanel>
             </ResizablePanelGroup>
         </PageContainer>
