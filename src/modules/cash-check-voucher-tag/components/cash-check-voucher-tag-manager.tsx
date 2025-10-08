@@ -177,7 +177,7 @@ export function CashCheckVoucherTagsManager({
                             icon,
                             color,
                             description,
-                            loan_transaction_id: cashCheckVoucherId,
+                            cash_check_voucher_id: cashCheckVoucherId,
                         }),
                         {
                             loading: 'Adding tag...',
