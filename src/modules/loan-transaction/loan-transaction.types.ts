@@ -95,7 +95,7 @@ export interface ILoanTransaction
 
     collector_place: TLoanCollectorPlace
 
-    loan_type: TLoanType
+    loan_type?: TLoanType
     previous_loan_id?: TEntityId
     previous_loan?: ILoanTransaction
     terms: number

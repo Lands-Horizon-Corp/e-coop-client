@@ -1,6 +1,6 @@
 import { useCallback, useRef, useState } from 'react'
 
-import { useForm } from 'react-hook-form'
+import { Path, UseFormReturn, useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 
 import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
@@ -11,10 +11,7 @@ import { AccountPicker } from '@/modules/account'
 import { useAuthUserWithOrgBranch } from '@/modules/authentication/authgentication.store'
 import LoanPurposeCombobox from '@/modules/loan-purpose/components/loan-purpose-combobox'
 import LoanStatusCombobox from '@/modules/loan-status/components/loan-status-combobox'
-import {
-    LOAN_MODE_OF_PAYMENT,
-    LOAN_TYPE,
-} from '@/modules/loan-transaction/loan.constants'
+import { LOAN_MODE_OF_PAYMENT } from '@/modules/loan-transaction/loan.constants'
 import { resolveLoanDatesToStatus } from '@/modules/loan-transaction/loan.utils'
 import {
     IMemberProfile,
@@ -23,6 +20,7 @@ import {
 import MemberPicker from '@/modules/member-profile/components/member-picker'
 import MemberProfileInfoViewLoanCard from '@/modules/member-profile/components/member-profile-info-loan-view-card'
 import { IQRMemberProfileDecodedResult } from '@/modules/qr-crypto'
+import useConfirmModalStore from '@/store/confirm-modal-store'
 import { useHotkeys } from 'react-hotkeys-hook'
 
 import FormFooterResetSubmit from '@/components/form-components/form-footer-reset-submit'
@@ -42,24 +40,19 @@ import {
     UserPlusIcon,
     Users3FillIcon,
     WandSparkleIcon,
+    XIcon,
 } from '@/components/icons'
 import Modal, { IModalProps } from '@/components/modals/modal'
 import QrCodeScanner from '@/components/qrcode-scanner'
+import { Button } from '@/components/ui/button'
 import { CommandShortcut } from '@/components/ui/command'
-import { Form, FormControl, FormItem } from '@/components/ui/form'
+import { Form, FormItem } from '@/components/ui/form'
 import FormErrorMessage from '@/components/ui/form-error-message'
 import FormFieldWrapper from '@/components/ui/form-field-wrapper'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area'
-import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-} from '@/components/ui/select'
 import { Separator } from '@/components/ui/separator'
 import { Switch } from '@/components/ui/switch'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
@@ -83,8 +76,11 @@ import {
     LoanTransactionSchema,
     TLoanTransactionSchema,
 } from '../../../loan-transaction.validation'
+import LoanTypeConfirmDisplay from '../../confirm-dialog-displays/loan-type-confirm-display'
+import LoanPicker from '../../loan-picker'
 import LoanStatusIndicator from '../../loan-status-indicator'
 import { LoanTagsManagerPopover } from '../../loan-tag-manager'
+import LoanTypeCombobox from '../../loan-type-combobox'
 import WeekdayCombobox from '../../weekday-combobox'
 import LoanClearanceAnalysis from './loan-clearance-analysis'
 import LoanComakerSection from './loan-comaker-section'
@@ -260,6 +256,7 @@ const LoanTransactionCreateUpdateForm = ({
     const [startScan, setStartScan] = useState(false)
     const [customLoading, setCustomLoading] = useState(false)
     const memberPickerModal = useModalState()
+    const { onOpen } = useConfirmModalStore()
 
     const {
         currentAuth: {
@@ -718,41 +715,28 @@ const LoanTransactionCreateUpdateForm = ({
                                             labelClassName="text-right grow block"
                                             name="loan_type"
                                             render={({ field }) => (
-                                                <Select
+                                                <LoanTypeCombobox
                                                     disabled={isDisabled(
                                                         field.name
                                                     )}
-                                                    onValueChange={
-                                                        field.onChange
-                                                    }
+                                                    onChange={(loanType) => {
+                                                        onOpen({
+                                                            title: 'Change Loan Type',
+                                                            description:
+                                                                'Are you sure you want to change loan type? This action will affect loan entries.',
+                                                            content:
+                                                                LoanTypeConfirmDisplay(
+                                                                    { loanType }
+                                                                ),
+                                                            onConfirm: () => {
+                                                                field.onChange(
+                                                                    loanType
+                                                                )
+                                                            },
+                                                        })
+                                                    }}
                                                     value={field.value}
-                                                >
-                                                    <FormControl>
-                                                        <SelectTrigger className="w-full capitalize">
-                                                            <SelectValue
-                                                                className="capitalize"
-                                                                placeholder="Select Loan Type"
-                                                            />
-                                                        </SelectTrigger>
-                                                    </FormControl>
-                                                    <SelectContent>
-                                                        {LOAN_TYPE.map(
-                                                            (loan_type) => (
-                                                                <SelectItem
-                                                                    className="capitalize"
-                                                                    key={
-                                                                        loan_type
-                                                                    }
-                                                                    value={
-                                                                        loan_type
-                                                                    }
-                                                                >
-                                                                    {loan_type}
-                                                                </SelectItem>
-                                                            )
-                                                        )}
-                                                    </SelectContent>
-                                                </Select>
+                                                />
                                             )}
                                         />
                                     </div>
@@ -988,6 +972,10 @@ const LoanTransactionCreateUpdateForm = ({
                                                 )}
                                             />
                                         </div>
+                                        <LoanPickerSection
+                                            form={form}
+                                            isDisabled={isDisabled}
+                                        />
                                         <div className="space-y-4">
                                             <div className="flex max-w-full overflow-x-auto ecoop-scroll items-center gap-3">
                                                 <FormFieldWrapper
@@ -1358,6 +1346,53 @@ const LoanTransactionCreateUpdateForm = ({
                 />
             </form>
         </Form>
+    )
+}
+
+const LoanPickerSection = ({
+    form,
+}: {
+    form: UseFormReturn<TLoanTransactionSchema>
+    isDisabled: (fieldName: Path<TLoanTransactionSchema>) => boolean
+}) => {
+    const loanType = form.watch('loan_type')
+    const memberProfileId = form.watch('member_profile_id')
+
+    if (!['renewal', 'renewal without deduction'].includes(loanType)) {
+        return null
+    }
+
+    return (
+        <FormFieldWrapper
+            control={form.control}
+            label="Previous Loan"
+            name="previous_loan_id"
+            render={({ field }) => (
+                <div className="flex items-center gap-x-1">
+                    <LoanPicker
+                        memberProfileId={memberProfileId as TEntityId}
+                        mode="member-profile-released"
+                        onSelect={(loan) => {
+                            field.onChange(loan?.id)
+                            form.setValue('previous_loan', loan)
+                        }}
+                        triggerClassName="flex-1"
+                        value={form.getValues('previous_loan')}
+                    />
+                    <Button
+                        className="size-fit !p-2.5 shrink-0"
+                        onClick={() => {
+                            field.onChange(undefined)
+                            form.setValue('previous_loan', undefined)
+                        }}
+                        type="button"
+                        variant="destructive"
+                    >
+                        <XIcon />
+                    </Button>
+                </div>
+            )}
+        />
     )
 }
 

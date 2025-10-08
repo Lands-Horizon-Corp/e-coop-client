@@ -39,7 +39,6 @@ const BranchSettings = ({ className }: Props) => {
     })
 
     useSubscribe(`branch.update.${user_organization.branch_id}`, () => {
-        alert('changed')
         refetch()
     })
 

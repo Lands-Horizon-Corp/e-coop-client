@@ -17,21 +17,21 @@ const ApprovalPage = () => {
                 direction="vertical"
             >
                 <ResizablePanel
-                    className="!overflow-auto h-fit"
+                    className="!overflow-auto h-fit ecoop-scroll"
                     defaultSize={33}
                 >
                     <Approval className="min-h-[91dvh] " />
                 </ResizablePanel>
                 <ResizableHandle withHandle />
                 <ResizablePanel
-                    className="!h-fit flex p-5 space-x-5 !overflow-auto "
+                    className="!h-fit flex p-5 space-x-5 !overflow-auto ecoop-scroll"
                     defaultSize={33}
                 >
                     <JournalVoucherKanban />
                 </ResizablePanel>
                 <ResizableHandle withHandle />
                 <ResizablePanel
-                    className="!h-fit flex p-5 space-x-5 !overflow-auto  "
+                    className="!h-fit flex p-5 space-x-5 !overflow-auto  ecoop-scroll"
                     defaultSize={33}
                 >
                     <CashCheckVoucherKanban />

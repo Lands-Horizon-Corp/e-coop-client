@@ -400,7 +400,7 @@ const LoanEntriesEditor = forwardRef<
                                         onPressedChange={(state) => {
                                             toast.info(
                                                 state
-                                                    ? 'Deleted deductions showed'
+                                                    ? 'Deleted deductions shown'
                                                     : 'Deleted deductions hidden'
                                             )
                                             setShowDeleted(state)
@@ -574,6 +574,11 @@ const LoanEntryRow = memo(
                                     {entry.type === 'automatic-deduction' && (
                                         <span className="text-xs text-blue-600 font-medium">
                                             • Automatic Deduction
+                                        </span>
+                                    )}
+                                    {entry.type === 'previous' && (
+                                        <span className="text-xs text-orange-400 font-medium">
+                                            • Previous Loan
                                         </span>
                                     )}
                                     {entry.type.includes('deduction') &&

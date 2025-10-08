@@ -3,4 +3,5 @@ export const LOAN_TRANSACTION_ENTRY_TYPE = [
     'deduction',
     'automatic-deduction',
     'add-on',
+    'previous',
 ] as const
