@@ -18,6 +18,7 @@ import type {
     ILoanTransactionPrintRequest,
     ILoanTransactionRequest,
     ILoanTransactionSignatureRequest,
+    ILoanTransactionSuggestedRequest,
 } from '../loan-transaction'
 
 const {
@@ -97,6 +98,7 @@ export const {
 export type TLoanTransactionHookMode =
     | 'branch'
     | 'member-profile'
+    | 'member-profile-released'
     | 'member-profile-loan-account'
     | 'member-profile-interest-account'
 
@@ -104,6 +106,7 @@ export const useGetPaginatedLoanTransaction = ({
     mode = 'branch',
 
     memberProfileId,
+    loanAccountId,
 
     query,
     options,
@@ -112,6 +115,7 @@ export const useGetPaginatedLoanTransaction = ({
     memberProfileId?: TEntityId
 
     // loan account
+    loanAccountId?: TEntityId
 
     query?: TAPIQueryOptions
     options?: HookQueryOptions<ILoanTransactionPaginated, Error>
@@ -123,6 +127,7 @@ export const useGetPaginatedLoanTransaction = ({
             'paginated',
             mode,
             memberProfileId,
+            loanAccountId,
             query,
         ].filter(Boolean),
         queryFn: async () => {
@@ -130,6 +135,13 @@ export const useGetPaginatedLoanTransaction = ({
 
             if (mode === 'member-profile') {
                 url = `${loanTransactionAPIRoute}/member-profile/${memberProfileId}/search`
+            }
+
+            if (mode === 'member-profile-released')
+                url = `${loanTransactionAPIRoute}/member-profile/${memberProfileId}/release/search`
+
+            if (mode === 'member-profile-loan-account') {
+                url = `${loanTransactionAPIRoute}/member-profile/${memberProfileId}/loan-account/${loanAccountId}/search`
             }
 
             return getPaginatedLoanTransaction({ url, query })
@@ -278,3 +290,18 @@ export const useLoanTransactionChangeCashEquivalenceAccount =
         invalidationFn: (args) =>
             updateMutationInvalidationFn(loanTransactionBaseKey, args),
     })
+
+// Suggested Amort
+export const useLoanTransactionSuggestedAmortization = createMutationFactory<
+    { terms: number },
+    Error,
+    ILoanTransactionSuggestedRequest
+>({
+    mutationFn: async (payload) => {
+        const response = await API.post<
+            ILoanTransactionSuggestedRequest,
+            { terms: number }
+        >(`${loanTransactionAPIRoute}/suggested`, payload)
+        return response.data
+    },
+})

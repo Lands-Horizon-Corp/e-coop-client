@@ -124,6 +124,20 @@ export const WithComaker = z.discriminatedUnion(
     { error: 'Invalid comaker' }
 )
 
+export const withLoanType = z.discriminatedUnion('loan_type', [
+    z.object({
+        loan_type: z.literal('renewal'),
+        previous_loan_id: EntityIdSchema(
+            'Previous loan is required for renewal loan'
+        ),
+    }),
+    z.object({
+        loan_type: z.enum(
+            LOAN_TYPE.filter((val) => !['renewal'].includes(val))
+        ),
+    }),
+])
+
 export const LoanTransactionSchema = z
     .object({
         id: entityIdSchema.optional(),
@@ -191,7 +205,7 @@ export const LoanTransactionSchema = z
             .optional()
             .default(false),
 
-        loan_type: z.enum(LOAN_TYPE),
+        loan_type: z.enum(LOAN_TYPE).optional(),
         terms: z.coerce
             .number('Invalid Terms')
             .min(1, 'Minimum 1 term (Month)')
@@ -322,6 +336,7 @@ export const LoanTransactionSchema = z
     })
     .and(WithModeOfPayment)
     .and(WithComaker)
+    .and(withLoanType)
 
 export type TLoanTransactionSchema = z.infer<typeof LoanTransactionSchema>
 
@@ -411,4 +426,15 @@ export const LoanTransactionPrintSchema = z
 
 export type LoanTransactionPrintSchema = z.infer<
     typeof LoanTransactionPrintSchema
+>
+
+export const LoanTransactionSuggestedSchema = z.object({
+    amount: z.coerce.number().min(1, 'Amount must be at least 1'),
+    principal: z.coerce.number().min(1, 'Principal Amount Required'),
+    fixed_days: z.number().optional(),
+    mode_of_payment: z.enum(LOAN_MODE_OF_PAYMENT).default('monthly'),
+})
+
+export type TLoanTransactionSuggestedSchema = z.infer<
+    typeof LoanTransactionSuggestedSchema
 >

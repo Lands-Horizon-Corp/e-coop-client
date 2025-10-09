@@ -169,6 +169,9 @@ const CashCheckVoucherCardActions = ({
                             mode={
                                 mode as TCashCheckVoucherApproveReleaseDisplayMode
                             }
+                            onSuccess={() => {
+                                refetch()
+                            }}
                         />
                     </div>
                 )

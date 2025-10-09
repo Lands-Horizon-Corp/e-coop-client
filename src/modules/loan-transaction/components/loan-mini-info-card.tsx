@@ -78,10 +78,12 @@ const LoanMiniInfoCard = ({ className, loanTransaction }: Props) => {
                 <div>
                     <p className="text-muted-foreground text-xs">Loan Type</p>
                     <div className="text-lg">
-                        <LoanTypeBadge
-                            loanType={loanTransaction.loan_type}
-                            size="sm"
-                        />
+                        {loanTransaction.loan_type && (
+                            <LoanTypeBadge
+                                loanType={loanTransaction.loan_type}
+                                size="sm"
+                            />
+                        )}
                     </div>
                 </div>
             </div>

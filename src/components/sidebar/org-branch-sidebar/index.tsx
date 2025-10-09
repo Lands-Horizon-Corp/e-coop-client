@@ -4,7 +4,8 @@ import { Link, useParams, useRouter } from '@tanstack/react-router'
 
 import { useAuthUserWithOrgBranch } from '@/modules/authentication/authgentication.store'
 import { TUserType } from '@/modules/user'
-import { useHotkeys } from 'react-hotkeys-hook'
+
+// import { useHotkeys } from 'react-hotkeys-hook'
 
 import EcoopLogo from '@/components/ecoop-logo'
 import ActionTooltip from '@/components/tooltips/action-tooltip'
@@ -26,7 +27,7 @@ import {
     SidebarMenuButton,
     SidebarMenuItem,
     SidebarRail,
-    useSidebar,
+    // useSidebar,
 } from '@/components/ui/sidebar'
 
 import { IBaseProps } from '@/types'
@@ -34,7 +35,8 @@ import { IBaseProps } from '@/types'
 import { generateSidebarGroups } from './sidebar-routes'
 
 const OrgBranchSidebar = (props: IBaseProps) => {
-    const { toggleSidebar } = useSidebar()
+    // const { toggleSidebar } = useSidebar()
+
     const router = useRouter()
     const { orgname, branchname } = useParams({
         strict: false,
@@ -70,10 +72,10 @@ const OrgBranchSidebar = (props: IBaseProps) => {
         [memoizedSidebarRouteGroup, router]
     )
 
-    useHotkeys('bracketleft, bracketright', (e) => {
-        e.preventDefault()
-        toggleSidebar()
-    })
+    // useHotkeys('bracketleft, bracketright', (e) => {
+    //     e.preventDefault()
+    //     toggleSidebar()
+    // })
 
     const orgLogo = user_organization.organization.media?.download_url
 

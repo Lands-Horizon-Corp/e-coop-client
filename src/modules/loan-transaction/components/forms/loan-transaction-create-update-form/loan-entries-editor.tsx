@@ -99,6 +99,7 @@ const LoanEntriesEditor = forwardRef<
         const totalCredit = form.watch('total_credit') || 0
         const totalDebit = form.watch('total_debit') || 0
         const totalAddOns = form.watch('total_add_on') || 0
+        const loanType = form.watch('loan_type')
 
         const interest = form.watch('interest') || 0
 
@@ -281,7 +282,11 @@ const LoanEntriesEditor = forwardRef<
                         </Button>
                         <Button
                             className="size-fit px-2 py-0.5 text-xs"
-                            disabled={isReadOnly || isDisabled}
+                            disabled={
+                                isReadOnly ||
+                                isDisabled ||
+                                loanType === 'renewal without deduction'
+                            }
                             onClick={() =>
                                 addChargeModalState.onOpenChange(true)
                             }
@@ -397,10 +402,14 @@ const LoanEntriesEditor = forwardRef<
                                 <ActionTooltip tooltipContent="Show/Hide deleted automatic deductions">
                                     <Toggle
                                         className="!p-2 size-fit"
+                                        disabled={
+                                            loanType ===
+                                            'renewal without deduction'
+                                        }
                                         onPressedChange={(state) => {
                                             toast.info(
                                                 state
-                                                    ? 'Deleted deductions showed'
+                                                    ? 'Deleted deductions shown'
                                                     : 'Deleted deductions hidden'
                                             )
                                             setShowDeleted(state)
@@ -418,7 +427,7 @@ const LoanEntriesEditor = forwardRef<
                                     loanTransactionId={loanTransactionId}
                                 />
                                 <InfoTooltip content="Total interest to be paid for this loan.">
-                                    <span className="p-1 rounded-md bg-primary/50 font-mono terxt-primary-foreground">
+                                    <span className="py-1 px-3 rounded-md bg-primary/50 font-mono terxt-primary-foreground">
                                         {formatNumber(interest)}
                                     </span>
                                 </InfoTooltip>
@@ -574,6 +583,11 @@ const LoanEntryRow = memo(
                                     {entry.type === 'automatic-deduction' && (
                                         <span className="text-xs text-blue-600 font-medium">
                                             • Automatic Deduction
+                                        </span>
+                                    )}
+                                    {entry.type === 'previous' && (
+                                        <span className="text-xs text-orange-400 font-medium">
+                                            • Previous Loan
                                         </span>
                                     )}
                                     {entry.type.includes('deduction') &&

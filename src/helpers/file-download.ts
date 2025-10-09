@@ -38,6 +38,5 @@ export async function downloadFileService(
         a.remove()
     } catch (error) {
         console.error('Error downloading the file:', error)
-        alert('Failed to download the file. Please try again.')
     }
 }

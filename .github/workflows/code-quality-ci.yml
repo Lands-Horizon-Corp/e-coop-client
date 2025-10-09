@@ -8,12 +8,12 @@ on:
         branches:
             - staging
             - main
-            - development
+            # - development
     pull_request:
         branches:
             - staging
             - main
-            - development
+            # - development
 
 jobs:
     code_quality:

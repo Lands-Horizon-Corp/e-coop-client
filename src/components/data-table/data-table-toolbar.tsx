@@ -17,7 +17,7 @@ import { Separator } from '@/components/ui/separator'
 import { IClassProps } from '@/types'
 
 import RefreshButton, { IRefreshButtonProps } from '../buttons/refresh-button'
-import { useShortcutContext } from '../shorcuts/general-shortcuts-wrapper'
+// import { useShortcutContext } from '../shorcuts/general-shortcuts-wrapper'
 import DatatableColumnVisibility from './data-table-actions/data-table-column-visibility'
 import DataTableCreateAction, {
     IDataTableCreateActionProps,
@@ -61,7 +61,7 @@ const DataTableToolbar = <TData,>({
     refreshActionProps,
     otherActionLeft,
 }: IDataTableToolbarProps<TData>) => {
-    const { setActiveScope, activeScope } = useShortcutContext()
+    // const { setActiveScope, activeScope } = useShortcutContext()
 
     useHotkeys(
         'Enter',
@@ -77,18 +77,18 @@ const DataTableToolbar = <TData,>({
         [createActionProps, hideCreateButton]
     )
 
-    const hanldeSetScope = () => {
-        if (activeScope !== SHORTCUT_SCOPES.DATA_TABLE) {
-            setActiveScope(SHORTCUT_SCOPES.DATA_TABLE)
-        }
-    }
+    // const hanldeSetScope = () => {
+    //     if (activeScope !== SHORTCUT_SCOPES.DATA_TABLE) {
+    //         setActiveScope(SHORTCUT_SCOPES.DATA_TABLE)
+    //     }
+    // }
 
     return (
         <div
             className="ecoop-scroll flex w-full max-w-full shrink-0 items-center justify-between gap-x-2 overflow-auto"
-            onClick={hanldeSetScope}
-            onFocus={hanldeSetScope}
-            onMouseOver={hanldeSetScope}
+            // onClick={hanldeSetScope}
+            // onFocus={hanldeSetScope}
+            // onMouseOver={hanldeSetScope}
         >
             <div className="flex items-center gap-x-2">
                 {globalSearchProps ? (

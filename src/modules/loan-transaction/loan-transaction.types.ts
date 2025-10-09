@@ -22,6 +22,7 @@ import {
     LoanTransactionPrintSchema,
     LoanTransactionSchema,
     TLoanTransactionSignatureSchema,
+    TLoanTransactionSuggestedSchema,
 } from './loan-transaction.validation'
 import {
     COMPUTATION_TYPE,
@@ -95,7 +96,7 @@ export interface ILoanTransaction
 
     collector_place: TLoanCollectorPlace
 
-    loan_type: TLoanType
+    loan_type?: TLoanType
     previous_loan_id?: TEntityId
     previous_loan?: ILoanTransaction
     terms: number
@@ -260,3 +261,7 @@ export type ILoanTransactionSignatureRequest = TLoanTransactionSignatureSchema
 // Loan Transaction Print Request
 
 export type ILoanTransactionPrintRequest = LoanTransactionPrintSchema
+
+// for suggested amortization
+export type ILoanTransactionSuggested = { terms: number }
+export type ILoanTransactionSuggestedRequest = TLoanTransactionSuggestedSchema

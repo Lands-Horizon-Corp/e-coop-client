@@ -1,4 +1,9 @@
 import PageContainer from '@/components/containers/page-container'
+import {
+    BadgeCheckFillIcon,
+    BookOpenIcon,
+    MoneyCheck2Icon,
+} from '@/components/icons'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 
 import Approval from '../approval'
@@ -8,6 +13,7 @@ import JournalVoucherKanban from '../kanbans/journal-voucher-kanban'
 type journalMenuTriggerType = {
     name: string
     value: string
+    icon?: React.ReactNode
 }[]
 
 type journalVoucherItemType = {
@@ -20,14 +26,19 @@ const ApprovalPage = () => {
         {
             name: 'Approvals Dashboard',
             value: 'approvals',
+            icon: (
+                <BadgeCheckFillIcon className="size-4 text-muted-foreground" />
+            ),
         },
         {
             name: 'Journal Vouchers',
             value: 'journalVouchers',
+            icon: <BookOpenIcon className="size-4 text-muted-foreground" />,
         },
         {
             name: 'Cash Vouchers',
             value: 'cashVouchers',
+            icon: <MoneyCheck2Icon className="size-4 text-muted-foreground" />,
         },
     ]
     const journalVoucherItem: journalVoucherItemType = [
@@ -54,10 +65,11 @@ const ApprovalPage = () => {
                 <TabsList className="mb-3 sticky top-[8%] h-auto min-w-fit justify-start gap-2 rounded-none border-b bg-background px-0 py-1 text-foreground">
                     {journalMenuTrigger.map((item) => (
                         <TabsTrigger
-                            className="relative after:absolute after:inset-x-0 after:bottom-0 after:-mb-1 after:h-0.5 after:duration-300 after:ease-in-out hover:bg-accent hover:text-foreground data-[state=active]:bg-transparent data-[state=active]:shadow-none data-[state=active]:after:bg-primary data-[state=active]:hover:bg-accent"
+                            className="relative flex items-center gap-x-2 after:absolute after:inset-x-0 after:bottom-0 after:-mb-1 after:h-0.5 after:duration-300 after:ease-in-out hover:bg-accent hover:text-foreground data-[state=active]:bg-transparent data-[state=active]:shadow-none data-[state=active]:after:bg-primary data-[state=active]:hover:bg-accent"
                             key={item.value}
                             value={item.value}
                         >
+                            {item.icon}
                             {item.name}
                         </TabsTrigger>
                     ))}
