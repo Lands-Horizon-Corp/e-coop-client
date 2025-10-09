@@ -12,7 +12,6 @@ import { useModalState } from '@/hooks/use-modal-state'
 
 import { useDeleteAdjustmentEntryById } from '../..'
 import { IAdjustmentEntry } from '../../adjustment-entry.types'
-import { AdjustmentEntryCreateUpdateFormModal } from '../forms/adjustment-entry-form-modal'
 import { IAdjustmentEntryTableActionComponentProp } from './columns'
 
 interface UseAdjustmentEntryActionsProps {
@@ -69,43 +68,19 @@ export const AdjustmentEntryAction = ({
     row,
     onDeleteSuccess,
 }: IAdjustmentEntryTableActionProps) => {
-    const {
-        adjustmentEntry,
-        updateModal,
-        isDeletingEntry,
-        handleEdit,
-        handleDelete,
-    } = useAdjustmentEntryActions({ row, onDeleteSuccess })
+    const { isDeletingEntry, handleDelete } = useAdjustmentEntryActions({
+        row,
+        onDeleteSuccess,
+    })
 
     return (
         <>
-            <div onClick={(e) => e.stopPropagation()}>
-                <AdjustmentEntryCreateUpdateFormModal
-                    {...updateModal}
-                    formProps={{
-                        autoSave: true,
-                        adjustmentEntryId: adjustmentEntry.id,
-                        defaultValues: {
-                            ...adjustmentEntry,
-                            entry_date: new Date(
-                                adjustmentEntry.entry_date
-                            ).toISOString(),
-                        },
-                        onSuccess: () => updateModal.onOpenChange(false),
-                    }}
-                />
-            </div>
             <RowActionsGroup
                 canSelect
                 onDelete={{
                     text: 'Delete',
                     isAllowed: !isDeletingEntry,
                     onClick: handleDelete,
-                }}
-                onEdit={{
-                    text: 'Edit',
-                    isAllowed: true,
-                    onClick: handleEdit,
                 }}
                 otherActions={<>{/* Additional actions can be added here */}</>}
                 row={row}
@@ -125,31 +100,11 @@ export const AdjustmentEntryRowContext = ({
     children,
     onDeleteSuccess,
 }: IAdjustmentEntryRowContextProps) => {
-    const {
-        adjustmentEntry,
-        updateModal,
-        isDeletingEntry,
-        handleEdit,
-        handleDelete,
-    } = useAdjustmentEntryActions({ row, onDeleteSuccess })
+    const { isDeletingEntry, handleEdit, handleDelete } =
+        useAdjustmentEntryActions({ row, onDeleteSuccess })
 
     return (
         <>
-            {/* Modal setup */}
-            <AdjustmentEntryCreateUpdateFormModal
-                {...updateModal}
-                formProps={{
-                    adjustmentEntryId: adjustmentEntry.id,
-                    defaultValues: {
-                        ...adjustmentEntry,
-                        entry_date: new Date(
-                            adjustmentEntry.entry_date
-                        ).toISOString(),
-                    },
-                    onSuccess: () => updateModal.onOpenChange(false),
-                }}
-            />
-
             <DataTableRowContext
                 onDelete={{
                     text: 'Delete',
