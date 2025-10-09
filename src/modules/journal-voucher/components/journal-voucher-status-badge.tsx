@@ -15,18 +15,18 @@ export type TJournalVoucherStatusType =
     | 'released'
 
 const journalVoucherStatusVariants = cva(
-    'font-medium transition-colors duration-200 inline-flex items-center border rounded-full max-w-full min-w-0',
+    'font-medium transition-colors duration-200 inline-flex items-center border',
     {
         variants: {
             status: {
                 draft: cn(
-                    'bg-gray-200 text-gray-700 border-gray-300 hover:bg-gray-300/80'
+                    'bg-warning dark:bg-warning/10 text-warning-foreground border-warning-foreground/20 hover:bg-warning/20'
                 ),
                 printed: cn(
-                    'bg-blue-100 text-blue-700 border-blue-300 hover:bg-blue-200'
+                    'bg-muted text-muted-foreground border-border hover:bg-muted/80'
                 ),
                 approved: cn(
-                    'bg-success/20 text-success-foreground border-success/40 hover:bg-success/30'
+                    'bg-accent text-accent-foreground border-accent hover:bg-accent'
                 ),
                 released: cn(
                     'bg-primary text-primary-foreground border-primary hover:bg-primary/90'
@@ -79,6 +79,7 @@ const JournalVoucherStatusBadge = ({
     return (
         <div
             className={cn(
+                'rounded-full max-w-full min-w-0',
                 journalVoucherStatusVariants({ status, size, className })
             )}
             {...props}

@@ -12,7 +12,9 @@ import { useModalState } from '@/hooks/use-modal-state'
 import { ICashCheckVoucher, useDeleteCashCheckVoucherById } from '../..'
 import CashCheckEntryUpdateFormModal from '../forms/cash-check-entry-form-modal'
 import CashCheckVoucherTransactionSignatureUpdateFormModal from '../forms/cash-check-signature-form-modal'
+import CashCheckVoucherApproveReleaseDisplayModal from '../forms/cash-check-voucher-approve-release-display-modal'
 import CashCheckVoucherCreateUpdateFormModal from '../forms/cash-check-voucher-create-udate-form-modal'
+import CashCheckVoucherPrintFormModal from '../forms/cash-check-voucher-print-form-modal'
 import CashCheckVoucherOtherAction from './cash-check-other-voucher'
 import { ICashCheckVoucherTableActionComponentProp } from './columns'
 
@@ -20,6 +22,10 @@ interface UseCashCheckVoucherActionsProps {
     row: Row<ICashCheckVoucher>
     onDeleteSuccess?: () => void
 }
+export type TCashCheckVoucherApproveReleaseDisplayMode =
+    | 'approve'
+    | 'undo-approve'
+    | 'release'
 
 const useCashCheckVoucherActions = ({
     row,
@@ -28,6 +34,9 @@ const useCashCheckVoucherActions = ({
     const updateModal = useModalState()
     const checkEntry = useModalState()
     const signatureModal = useModalState()
+    const printModal = useModalState()
+    const approveModal = useModalState()
+    const releaseModal = useModalState()
     const cashCheckVoucher = row.original
     const { onOpen } = useConfirmModalStore()
     const {
@@ -59,6 +68,15 @@ const useCashCheckVoucherActions = ({
             onConfirm: () => deleteCashCheckVoucher(cashCheckVoucher.id),
         })
     }
+    const handleOpenPrintModal = () => {
+        printModal.onOpenChange(true)
+    }
+    const handleApproveModal = () => {
+        approveModal.onOpenChange(true)
+    }
+    const handleReleaseModal = () => {
+        releaseModal.onOpenChange(true)
+    }
     return {
         cashCheckVoucher,
         updateModal,
@@ -69,6 +87,12 @@ const useCashCheckVoucherActions = ({
         handleOpenCheckEntry,
         signatureModal,
         handleOpenSignature,
+        handleApproveModal,
+        handleReleaseModal,
+        printModal,
+        handleOpenPrintModal,
+        approveModal,
+        releaseModal,
     }
 }
 
@@ -92,24 +116,33 @@ export const CashCheckJournalVoucherAction = ({
         handleOpenCheckEntry,
         signatureModal,
         handleOpenSignature,
+        printModal,
+        handleOpenPrintModal,
+        approveModal,
+        releaseModal,
+        handleApproveModal,
+        handleReleaseModal,
     } = useCashCheckVoucherActions({ row, onDeleteSuccess })
 
-    const isReleased =
-        !!cashCheckVoucher.printed_date &&
-        !!cashCheckVoucher.approved_date &&
-        !!cashCheckVoucher.released_date
+    const isPrinted = !!cashCheckVoucher.printed_date
 
     return (
         <>
             <div onClick={(e) => e.stopPropagation()}>
                 <CashCheckVoucherCreateUpdateFormModal
                     {...updateModal}
-                    className="!min-w-[1200px]"
                     formProps={{
                         cashCheckVoucherId: cashCheckVoucher.id,
                         defaultValues: { ...cashCheckVoucher },
                         mode: 'update',
-                        readOnly: isReleased,
+                        readOnly: isPrinted,
+                    }}
+                />
+                <CashCheckVoucherPrintFormModal
+                    {...printModal}
+                    className="!min-w-[600px]"
+                    formProps={{
+                        cashCheckVoucherId: cashCheckVoucher.id,
                     }}
                 />
                 <CashCheckEntryUpdateFormModal
@@ -137,6 +170,21 @@ export const CashCheckJournalVoucherAction = ({
                         defaultValues: { ...cashCheckVoucher },
                     }}
                 />
+                {['approve', 'undo-approve', 'release'].map((mode) => {
+                    const modalState =
+                        mode === 'approve' ? approveModal : releaseModal
+                    return (
+                        <div key={mode}>
+                            <CashCheckVoucherApproveReleaseDisplayModal
+                                {...modalState}
+                                cashCheckVoucher={cashCheckVoucher}
+                                mode={
+                                    mode as TCashCheckVoucherApproveReleaseDisplayMode
+                                }
+                            />
+                        </div>
+                    )
+                })}
             </div>
             <RowActionsGroup
                 canSelect
@@ -154,6 +202,9 @@ export const CashCheckJournalVoucherAction = ({
                     <CashCheckVoucherOtherAction
                         handleOpenCheckEntry={handleOpenCheckEntry}
                         handleOpenSignature={handleOpenSignature}
+                        onApprove={handleApproveModal}
+                        onPrint={handleOpenPrintModal}
+                        onRelease={handleReleaseModal}
                         row={row}
                     />
                 }
@@ -174,18 +225,76 @@ export const CashCheckVoucherRowContext = ({
         isDeletingCashCheckVoucher,
         handleEdit,
         handleDelete,
+        checkEntry,
+        handleOpenCheckEntry,
+        signatureModal,
+        handleOpenSignature,
+        approveModal,
+        releaseModal,
+        handleApproveModal,
+        handleReleaseModal,
+        printModal,
+        handleOpenPrintModal,
     } = useCashCheckVoucherActions({ row, onDeleteSuccess })
+
+    const isPrinted = !!cashCheckVoucher.printed_date
 
     return (
         <>
             <CashCheckVoucherCreateUpdateFormModal
                 {...updateModal}
-                className="!min-w-[1200px]"
                 formProps={{
                     cashCheckVoucherId: cashCheckVoucher.id,
                     defaultValues: { ...cashCheckVoucher },
-                    readOnly: true,
+                    readOnly: isPrinted,
                     mode: 'update',
+                }}
+            />
+            <CashCheckVoucherPrintFormModal
+                {...printModal}
+                className="!min-w-[600px]"
+                formProps={{
+                    cashCheckVoucherId: cashCheckVoucher.id,
+                }}
+            />
+            <CashCheckEntryUpdateFormModal
+                {...checkEntry}
+                className="!min-w-[800px]"
+                formProps={{
+                    cashCheckVoucherId: cashCheckVoucher.id,
+                    defaultValues: {
+                        ...cashCheckVoucher,
+                        check_entry_account_id:
+                            cashCheckVoucher.check_entry_account_id || '',
+                        check_entry_amount:
+                            cashCheckVoucher.check_entry_amount || 0,
+                        check_entry_check_date:
+                            cashCheckVoucher.check_entry_check_date || '',
+                        check_entry_check_number:
+                            cashCheckVoucher.check_entry_check_number || '',
+                    },
+                }}
+            />
+            {['approve', 'undo-approve', 'release'].map((mode) => {
+                const modalState =
+                    mode === 'approve' ? approveModal : releaseModal
+                return (
+                    <div key={mode}>
+                        <CashCheckVoucherApproveReleaseDisplayModal
+                            {...modalState}
+                            cashCheckVoucher={cashCheckVoucher}
+                            mode={
+                                mode as TCashCheckVoucherApproveReleaseDisplayMode
+                            }
+                        />
+                    </div>
+                )
+            })}
+            <CashCheckVoucherTransactionSignatureUpdateFormModal
+                {...signatureModal}
+                formProps={{
+                    cashCheckVoucherId: cashCheckVoucher.id,
+                    defaultValues: { ...cashCheckVoucher },
                 }}
             />
             <DataTableRowContext
@@ -199,6 +308,17 @@ export const CashCheckVoucherRowContext = ({
                     isAllowed: true,
                     onClick: handleEdit,
                 }}
+                otherActions={
+                    <CashCheckVoucherOtherAction
+                        handleOpenCheckEntry={handleOpenCheckEntry}
+                        handleOpenSignature={handleOpenSignature}
+                        onApprove={handleApproveModal}
+                        onPrint={handleOpenPrintModal}
+                        onRelease={handleReleaseModal}
+                        row={row}
+                        type="context"
+                    />
+                }
                 row={row}
             >
                 {children}
@@ -207,5 +327,4 @@ export const CashCheckVoucherRowContext = ({
     )
 }
 
-// Default export for backward compatibility
 export default CashCheckJournalVoucherAction

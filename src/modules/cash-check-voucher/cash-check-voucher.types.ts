@@ -1,3 +1,5 @@
+import z from 'zod'
+
 import { IBaseEntityMeta, IPaginatedResult, TEntityId } from '@/types'
 
 import { IAccount } from '../account'
@@ -10,8 +12,11 @@ import { IMedia } from '../media'
 import { IMemberProfile } from '../member-profile'
 import { ITransactionBatch } from '../transaction-batch'
 import { IUser } from '../user'
+import {
+    CashCheckSignatureSchema,
+    CashCheckVoucherPrintSchema,
+} from './cash-check-voucher.validation'
 
-// Enum for status
 export type CashCheckVoucherStatus =
     | 'pending'
     | 'printed'
@@ -200,5 +205,11 @@ export type TCashCheckVoucherActionMode =
     | 'release'
     | 'print-only'
 
+export type TCashCheckSignatureRequest = z.infer<
+    typeof CashCheckSignatureSchema
+>
+export type TCashCheckVoucherPrintRequest = z.infer<
+    typeof CashCheckVoucherPrintSchema
+>
 export interface ICashCheckVoucherPaginated
     extends IPaginatedResult<ICashCheckVoucher> {}

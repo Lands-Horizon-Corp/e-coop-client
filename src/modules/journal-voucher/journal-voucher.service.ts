@@ -15,6 +15,7 @@ import { TAPIQueryOptions, TEntityId } from '@/types'
 import type {
     IJournalVoucher,
     IJournalVoucherPaginated,
+    IJournalVoucherPrintRequest,
     IJournalVoucherRequest,
     TJournalActionMode,
     TPrintMode,
@@ -130,6 +131,28 @@ export const useJournalVoucherActions = createMutationFactory<
         >(`${journalVoucherAPIRoute}/${journal_voucher_id}/${mode}`)
         return response.data
     },
+    invalidationFn: (args) =>
+        updateMutationInvalidationFn(journalVoucherBaseKey, args),
+})
+
+// PRINT JOURNAL VOUCHER
+const printJournalVoucher = async (data: {
+    journalVoucherId: TEntityId
+    payload: IJournalVoucherPrintRequest
+}) => {
+    const response = await API.put<
+        IJournalVoucherPrintRequest,
+        IJournalVoucher
+    >(`${journalVoucherAPIRoute}/${data.journalVoucherId}/print`, data.payload)
+    return response.data
+}
+
+export const usePrintJournalVoucherTransaction = createMutationFactory<
+    IJournalVoucher,
+    Error,
+    { journalVoucherId: TEntityId; payload: IJournalVoucherPrintRequest }
+>({
+    mutationFn: (data) => printJournalVoucher(data),
     invalidationFn: (args) =>
         updateMutationInvalidationFn(journalVoucherBaseKey, args),
 })

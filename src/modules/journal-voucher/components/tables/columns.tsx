@@ -152,23 +152,10 @@ const JournalVoucherTableColumns = (
             <DataTableColumnHeader {...props} title="Action Status" />
         ),
         cell: ({ row: { original: journalVoucher } }) => {
-            const isPrinted = !!journalVoucher.printed_date
-            const isApproved = !!journalVoucher.approved_date
-            const isReleased = !!journalVoucher.released_date
             return (
                 <JournalVoucherStatusIndicator
                     className="max-w-max"
-                    voucherDates={{
-                        printed_date: isPrinted
-                            ? journalVoucher.printed_date
-                            : null,
-                        approved_date: isApproved
-                            ? journalVoucher.approved_date
-                            : null,
-                        released_date: isReleased
-                            ? journalVoucher.released_date
-                            : null,
-                    }}
+                    journalVoucher={journalVoucher}
                 />
             )
         },

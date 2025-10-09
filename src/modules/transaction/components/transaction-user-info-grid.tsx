@@ -30,6 +30,7 @@ export const TransactionUserInfoGrid = ({
     title,
     className,
 }: UserInfoGridProps) => {
+    const length = data.length
     return (
         <div
             className={cn(
@@ -40,7 +41,12 @@ export const TransactionUserInfoGrid = ({
             <h3 className="text-sm font-semibold text-muted-foreground mb-2">
                 {title}
             </h3>
-            <div className="grid grid-cols-2 gap-4 text-xs">
+            <div
+                className={cn(
+                    'grid gap-4 text-xs',
+                    length === 1 ? 'grid-cols-1 ' : 'grid-cols-2'
+                )}
+            >
                 {data.map((item, index) => (
                     <TransactionUserInfoItem
                         key={index}

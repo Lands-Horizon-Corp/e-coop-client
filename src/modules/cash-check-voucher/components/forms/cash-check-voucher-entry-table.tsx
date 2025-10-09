@@ -240,6 +240,7 @@ export const CashCheckJournalEntryTable = ({
         'Shift+i',
         (e) => {
             e.preventDefault()
+            if (isReadOnlyMode) return
             handleAddRow(
                 e as unknown as React.MouseEvent<HTMLButtonElement, MouseEvent>
             )

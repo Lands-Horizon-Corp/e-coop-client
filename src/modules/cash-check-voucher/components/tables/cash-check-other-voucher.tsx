@@ -11,6 +11,7 @@ import {
 } from 'lucide-react'
 
 import { SignatureLightIcon } from '@/components/icons'
+import { ContextMenuItem } from '@/components/ui/context-menu'
 import { DropdownMenuItem } from '@/components/ui/dropdown-menu'
 
 import {
@@ -20,16 +21,27 @@ import {
 import { ICashCheckVoucher } from '../../cash-check-voucher.types'
 
 type ICashCheckVoucherTableActionComponentProp = {
-    row: Row<ICashCheckVoucher>
-    handleOpenCheckEntry: () => void
-    handleOpenSignature: () => void
+    row: Row<ICashCheckVoucher> | ICashCheckVoucher
+    type?: 'default' | 'context'
+    onPrint?: () => void
+    onApprove?: () => void
+    onRelease?: () => void
+    onRefetch?: () => void
+    handleOpenCheckEntry?: () => void
+    handleOpenSignature?: () => void
 }
+
 const CashCheckVoucherOtherAction = ({
     row,
+    type = 'default',
+    onPrint,
+    onApprove,
+    onRelease,
+    onRefetch,
     handleOpenCheckEntry,
     handleOpenSignature,
 }: ICashCheckVoucherTableActionComponentProp) => {
-    const CashCheckVoucher = row.original
+    const CashCheckVoucher = 'original' in row ? row.original : row
 
     const isPrinted = !!CashCheckVoucher.printed_date
     const isApproved = !!CashCheckVoucher.approved_date
@@ -37,8 +49,6 @@ const CashCheckVoucherOtherAction = ({
     const canRelease = isPrinted && isApproved
 
     const showRelease = canRelease && !CashCheckVoucher.released_date
-    // show print
-    const showPrint = isPrinted && !CashCheckVoucher.printed_date
 
     const { mutate: mutatePrint, isPending: isPrinting } =
         useEditPrintCashCheckVoucher({
@@ -48,6 +58,7 @@ const CashCheckVoucherOtherAction = ({
                         ? 'undone'
                         : 'updated'
                     toast.success(`Print status ${actionText} successfully.`)
+                    onRefetch?.()
                 },
                 onError: (error) => {
                     toast.error(
@@ -57,12 +68,13 @@ const CashCheckVoucherOtherAction = ({
             },
         })
 
-    const { mutate: performJournalAction, isPending: isActionPending } =
+    const { mutate: performCashCheckAction, isPending: isActionPending } =
         useCashCheckVoucherActions({
             options: {
                 onSuccess: (_, variables) => {
                     const modeText = variables.mode.replace('-undo', ' undone')
                     toast.success(`Voucher has been ${modeText} successfully.`)
+                    onRefetch?.()
                 },
                 onError: (error) => {
                     toast.error(error.message || 'Failed to perform action.')
@@ -72,7 +84,7 @@ const CashCheckVoucherOtherAction = ({
 
     const isProcessing = isPrinting || isActionPending
 
-    const handlePrintAction = (mode: TPrintMode) => () => {
+    const handleMutatePrintAction = (mode: TPrintMode) => () => {
         mutatePrint({
             cash_check_voucher_id: CashCheckVoucher.id,
             mode,
@@ -81,63 +93,76 @@ const CashCheckVoucherOtherAction = ({
                 : undefined,
         })
     }
+
     const handleCashCheckAction = (mode: TJournalActionMode) => () => {
-        performJournalAction({
+        performCashCheckAction({
             cash_check_voucher_id: CashCheckVoucher.id,
             mode,
         })
     }
 
+    const handlePrintAction = () => {
+        onPrint?.()
+    }
+    const handleApproveAction = () => {
+        onApprove?.()
+    }
+    const handleReleaseAction = () => {
+        onRelease?.()
+    }
+
     const menuActions = [
         {
-            label: isPrinted ? 'print-undo' : 'Print',
-            icon: <PrinterIcon className="mr-2 h-4 w-4 text-blue-500" />,
-            onSelect: handlePrintAction(isPrinted ? 'print-undo' : 'print'),
-            isVisible: showPrint,
-        },
-        {
-            label: 'Print',
-            icon: <PrinterIcon className="mr-2 h-4 w-4 text-blue-500" />,
-            onSelect: handleCashCheckAction('print-only'),
-            isVisible: true,
+            label: 'Print Voucher',
+            icon: (
+                <PrinterIcon className="mr-2 h-4 w-4 text-muted-foreground" />
+            ),
+            onSelect: handlePrintAction,
+            isVisible: !isPrinted,
         },
         {
             label: 'Undo Print',
-            icon: <Undo2Icon className="mr-2 h-4 w-4 text-orange-500" />,
-            onSelect: handlePrintAction('print-undo'),
+            icon: <Undo2Icon className="mr-2 h-4 w-4 text-muted-foreground" />,
+            onSelect: handleMutatePrintAction('print-undo'),
             isVisible: isPrinted && !isApproved,
         },
         {
             label: 'Approve',
-            icon: <CheckCircle2Icon className="mr-2 h-4 w-4 text-green-500" />,
-            onSelect: handlePrintAction('approve'),
+            icon: (
+                <CheckCircle2Icon className="mr-2 h-4 w-4 text-muted-foreground" />
+            ),
+            onSelect: handleApproveAction,
             isVisible: canApprove,
         },
         {
             label: 'Undo Approve',
-            icon: <XCircleIcon className="mr-2 h-4 w-4 text-red-500" />,
+            icon: (
+                <XCircleIcon className="mr-2 h-4 w-4 text-muted-foreground" />
+            ),
             onSelect: handleCashCheckAction('approve-undo'),
             isVisible: isApproved && !CashCheckVoucher.released_date,
         },
         {
             label: 'Release',
             icon: (
-                <SendHorizonalIcon className="mr-2 h-4 w-4 text-purple-500" />
+                <SendHorizonalIcon className="mr-2 h-4 w-4 text-muted-foreground" />
             ),
-            onSelect: handleCashCheckAction('release'),
+            onSelect: handleReleaseAction,
             isVisible: showRelease,
         },
         {
-            label: 'check entry',
+            label: 'Check Entry',
             icon: (
-                <SendHorizonalIcon className="mr-2 h-4 w-4 text-purple-500" />
+                <SendHorizonalIcon className="mr-2 h-4 w-4 text-muted-foreground" />
             ),
             onSelect: handleOpenCheckEntry,
             isVisible: true,
         },
         {
-            label: 'signature',
-            icon: <SignatureLightIcon className="mr-2 h-4 w-4" />,
+            label: 'Signature',
+            icon: (
+                <SignatureLightIcon className="mr-2 h-4 w-4 text-muted-foreground" />
+            ),
             onSelect: handleOpenSignature,
             isVisible: true,
         },
@@ -145,19 +170,29 @@ const CashCheckVoucherOtherAction = ({
 
     return (
         <div className="flex flex-col w-48 rounded-md p-1">
-            {menuActions
-                .filter((action) => action.isVisible)
-                .map((action) => (
+            {menuActions.map((action) =>
+                type === 'default' ? (
                     <DropdownMenuItem
                         className="flex items-center"
-                        disabled={isProcessing}
+                        disabled={isProcessing || !action.isVisible}
                         key={action.label}
                         onClick={action.onSelect}
                     >
                         {action.icon}
                         <span>{action.label}</span>
                     </DropdownMenuItem>
-                ))}
+                ) : (
+                    <ContextMenuItem
+                        className="flex items-center"
+                        disabled={isProcessing || !action.isVisible}
+                        key={action.label}
+                        onClick={action.onSelect}
+                    >
+                        {action.icon}
+                        <span>{action.label}</span>
+                    </ContextMenuItem>
+                )
+            )}
         </div>
     )
 }

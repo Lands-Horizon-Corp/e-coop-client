@@ -26,6 +26,7 @@ import {
 
 import { IClassProps } from '@/types'
 
+import { IJournalVoucher } from '../journal-voucher.types'
 import JournalVoucherStatusBadge, {
     TJournalVoucherStatusType,
 } from './journal-voucher-status-badge'
@@ -75,7 +76,7 @@ export const JournalVoucherStatusIndicatorDetails = ({
             key: 2,
             label: 'Printed',
             dateProp: printed_date,
-            icon: <PrinterIcon className="inline text-blue-500" />,
+            icon: <PrinterIcon className="inline text-muted-foreground" />,
             description: 'The Journal Voucher has been printed.',
         },
         {
@@ -83,7 +84,7 @@ export const JournalVoucherStatusIndicatorDetails = ({
             label: 'Approved',
             dateProp: approved_date,
             icon: (
-                <BadgeCheckFillIcon className="inline text-success-foreground" />
+                <BadgeCheckFillIcon className="inline text-muted-foreground" />
             ),
             description: 'The Journal Voucher has been approved.',
         },
@@ -149,10 +150,18 @@ export const JournalVoucherStatusIndicatorDetails = ({
 }
 
 interface Props extends IClassProps {
-    voucherDates: ICJournalVoucherStatusDates
+    journalVoucher: IJournalVoucher
 }
 
-const JournalVoucherStatusIndicator = ({ className, voucherDates }: Props) => {
+const JournalVoucherStatusIndicator = ({
+    className,
+    journalVoucher,
+}: Props) => {
+    const voucherDates: ICJournalVoucherStatusDates = {
+        printed_date: journalVoucher.printed_date,
+        approved_date: journalVoucher.approved_date,
+        released_date: journalVoucher.released_date,
+    }
     const resolvedStatus = resolveJVStatusDatesToStatus(voucherDates)
     return (
         <Popover>
