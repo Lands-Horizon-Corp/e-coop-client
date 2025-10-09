@@ -22,6 +22,7 @@ import {
     LoanTransactionPrintSchema,
     LoanTransactionSchema,
     TLoanTransactionSignatureSchema,
+    TLoanTransactionSuggestedSchema,
 } from './loan-transaction.validation'
 import {
     COMPUTATION_TYPE,
@@ -260,3 +261,7 @@ export type ILoanTransactionSignatureRequest = TLoanTransactionSignatureSchema
 // Loan Transaction Print Request
 
 export type ILoanTransactionPrintRequest = LoanTransactionPrintSchema
+
+// for suggested amortization
+export type ILoanTransactionSuggested = { terms: number }
+export type ILoanTransactionSuggestedRequest = TLoanTransactionSuggestedSchema

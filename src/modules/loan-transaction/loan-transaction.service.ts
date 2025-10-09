@@ -18,6 +18,7 @@ import type {
     ILoanTransactionPrintRequest,
     ILoanTransactionRequest,
     ILoanTransactionSignatureRequest,
+    ILoanTransactionSuggestedRequest,
 } from '../loan-transaction'
 
 const {
@@ -289,3 +290,18 @@ export const useLoanTransactionChangeCashEquivalenceAccount =
         invalidationFn: (args) =>
             updateMutationInvalidationFn(loanTransactionBaseKey, args),
     })
+
+// Suggested Amort
+export const useLoanTransactionSuggestedAmortization = createMutationFactory<
+    { terms: number },
+    Error,
+    ILoanTransactionSuggestedRequest
+>({
+    mutationFn: async (payload) => {
+        const response = await API.post<
+            ILoanTransactionSuggestedRequest,
+            { terms: number }
+        >(`${loanTransactionAPIRoute}/suggested`, payload)
+        return response.data
+    },
+})

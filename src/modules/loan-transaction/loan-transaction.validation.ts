@@ -427,3 +427,14 @@ export const LoanTransactionPrintSchema = z
 export type LoanTransactionPrintSchema = z.infer<
     typeof LoanTransactionPrintSchema
 >
+
+export const LoanTransactionSuggestedSchema = z.object({
+    amount: z.coerce.number().min(1, 'Amount must be at least 1'),
+    principal: z.coerce.number().min(1, 'Principal Amount Required'),
+    fixed_days: z.number().optional(),
+    mode_of_payment: z.enum(LOAN_MODE_OF_PAYMENT).default('monthly'),
+})
+
+export type TLoanTransactionSuggestedSchema = z.infer<
+    typeof LoanTransactionSuggestedSchema
+>

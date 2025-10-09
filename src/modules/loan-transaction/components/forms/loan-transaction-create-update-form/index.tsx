@@ -31,6 +31,7 @@ import {
     CheckIcon,
     DotsHorizontalIcon,
     HashIcon,
+    PercentIcon,
     PinLocationIcon,
     QuestionCircleIcon,
     ScanLineIcon,
@@ -82,6 +83,7 @@ import LoanStatusIndicator from '../../loan-status-indicator'
 import { LoanTagsManagerPopover } from '../../loan-tag-manager'
 import LoanTypeCombobox from '../../loan-type-combobox'
 import WeekdayCombobox from '../../weekday-combobox'
+import { LoanSuggestedAmortizationFormModal } from '../loan-suggested-amortization-form'
 import LoanClearanceAnalysis from './loan-clearance-analysis'
 import LoanComakerSection from './loan-comaker-section'
 import LoanEntriesEditor from './loan-entries-editor'
@@ -971,6 +973,9 @@ const LoanTransactionCreateUpdateForm = ({
                                                     />
                                                 )}
                                             />
+                                            <SuggestedAmortizationSection
+                                                form={form}
+                                            />
                                         </div>
                                         <LoanPickerSection
                                             form={form}
@@ -1358,7 +1363,11 @@ const LoanPickerSection = ({
     const loanType = form.watch('loan_type')
     const memberProfileId = form.watch('member_profile_id')
 
-    if (!['renewal', 'renewal without deduction'].includes(loanType)) {
+    if (
+        !['renewal', 'restructured', 'renewal without deduction'].includes(
+            loanType
+        )
+    ) {
         return null
     }
 
@@ -1393,6 +1402,46 @@ const LoanPickerSection = ({
                 </div>
             )}
         />
+    )
+}
+
+const SuggestedAmortizationSection = ({
+    form,
+}: {
+    form: UseFormReturn<TLoanTransactionSchema>
+}) => {
+    const suggestedAmortizationState = useModalState()
+    const principal = form.watch('applied_1') || 0
+    const mode_of_payment = form.watch('mode_of_payment') || 'monthly'
+    const fixed_days = form.watch('mode_of_payment_fixed_days') || 0
+
+    return (
+        <>
+            <LoanSuggestedAmortizationFormModal
+                {...suggestedAmortizationState}
+                formProps={{
+                    defaultValues: {
+                        amount: 0,
+                        principal,
+                        mode_of_payment,
+                        fixed_days,
+                    },
+                    onSuccess: (data) => {
+                        form.setValue('terms', data.terms, {
+                            shouldDirty: true,
+                        })
+                    },
+                }}
+            />
+            <Button
+                className="mt-6"
+                onClick={() => suggestedAmortizationState.onOpenChange(true)}
+                size="icon"
+                type="button"
+            >
+                <PercentIcon />
+            </Button>
+        </>
     )
 }
 
