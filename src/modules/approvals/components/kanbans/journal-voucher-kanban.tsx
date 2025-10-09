@@ -17,6 +17,7 @@ import JournalVoucherApproveReleaseDisplayModal, {
 } from '@/modules/journal-voucher/components/forms/journal-voucher-approve-release-modal'
 import JournalVoucherPrintFormModal from '@/modules/journal-voucher/components/forms/journal-voucher-create-print-modal'
 import JournalVoucherCreateUpdateFormModal from '@/modules/journal-voucher/components/forms/journal-voucher-create-update-modal'
+import { JournalVoucherSkeletonCard } from '@/modules/journal-voucher/components/journal-voucher-skeleton-card'
 import JournalVoucherStatusIndicator from '@/modules/journal-voucher/components/journal-voucher-status-indicator'
 import JournalVoucherOtherAction from '@/modules/journal-voucher/components/tables/journal-voucher-other-action'
 import { CheckCircle2Icon, PrinterIcon } from 'lucide-react'
@@ -368,7 +369,7 @@ const JournalVoucherKanbanMain = ({ mode }: JournalVoucherKanbanProps) => {
         return false
     })
 
-    if (isLoading) return <div>Loading...</div>
+    if (isLoading) return <JournalVoucherSkeletonCard />
 
     return (
         <div>

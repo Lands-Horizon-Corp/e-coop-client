@@ -45,6 +45,7 @@ import { useModalState } from '@/hooks/use-modal-state'
 
 import { IClassProps } from '@/types'
 
+import { JournalVoucherSkeletonCard } from '../../../journal-voucher/components/journal-voucher-skeleton-card'
 import { JournalKanbanInfoItem } from './journal-voucher-kanban'
 
 type UseCardKanbanActionsProps = {
@@ -353,7 +354,7 @@ const CashCheckVoucherKanbanMain = ({ mode }: CashCheckVoucherKanbanProps) => {
         return false
     })
 
-    if (isLoading) return <div>Loading...</div>
+    if (isLoading) return <JournalVoucherSkeletonCard />
 
     const modeText = mode.charAt(0).toUpperCase() + mode.slice(1)
 
