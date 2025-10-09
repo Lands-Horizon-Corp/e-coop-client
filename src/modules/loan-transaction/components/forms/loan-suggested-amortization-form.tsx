@@ -6,6 +6,7 @@ import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
 import { cn } from '@/helpers/tw-utils'
 
 import FormFooterResetSubmit from '@/components/form-components/form-footer-reset-submit'
+import { WarningFillIcon } from '@/components/icons'
 import Modal, { IModalProps } from '@/components/modals/modal'
 import { Form } from '@/components/ui/form'
 import FormFieldWrapper from '@/components/ui/form-field-wrapper'
@@ -68,7 +69,7 @@ const LoanSuggestedAmortizationForm = ({
             },
         })
 
-    const onSubmit = form.handleSubmit((formData) => {
+    const onSubmit = form.handleSubmit(async (formData) => {
         toast.promise(
             suggestedAmortizationMutation.mutateAsync({ ...formData }),
             {
@@ -83,7 +84,11 @@ const LoanSuggestedAmortizationForm = ({
         <Form {...form}>
             <form
                 className={cn('flex w-full flex-col gap-y-4', className)}
-                onSubmit={onSubmit}
+                onSubmit={(e) => {
+                    e.preventDefault()
+                    e.stopPropagation()
+                    onSubmit(e)
+                }}
                 ref={formRef}
             >
                 <fieldset
@@ -100,6 +105,9 @@ const LoanSuggestedAmortizationForm = ({
                                 autoComplete="off"
                                 disabled={isDisabled(field.name)}
                                 id={field.name}
+                                onKeyDown={(e) => {
+                                    if (e.key === 'enter') e.preventDefault()
+                                }}
                                 placeholder="Enter amount"
                             />
                         )}
@@ -107,12 +115,14 @@ const LoanSuggestedAmortizationForm = ({
                 </fieldset>
                 <FormFooterResetSubmit
                     disableSubmit={!form.formState.isDirty}
-                    isLoading={false}
+                    isLoading={suggestedAmortizationMutation.isPending}
                     onReset={() => {
                         form.reset()
                     }}
+                    onSubmit={(e) => onSubmit(e)}
                     readOnly={formProps.readOnly}
-                    submitText="Calculate"
+                    resetButtonType="button"
+                    submitText="Calculate Terms"
                 />
             </form>
         </Form>
@@ -142,6 +152,19 @@ export const LoanSuggestedAmortizationFormModal = ({
                     props.onOpenChange?.(false)
                 }}
             />
+            <div className="p-3 space-y-1 rounded-xl bg-warning/70 border border-warning dark:bg-warning/20 text-warning-foreground">
+                <h3 className="font-semibold">
+                    <span className="p-1.5 bg-warning/20 mr-1 inline-flex w-fit items-center justify-center rounded-full">
+                        <WarningFillIcon className="inline size-3 text-amber-400" />
+                    </span>{' '}
+                    Apply Suggested Terms?
+                </h3>
+                <p className="text-xs">
+                    Changing to this suggested amount will update your number of
+                    terms. Are you sure you want to proceed with this suggested
+                    payment
+                </p>
+            </div>
         </Modal>
     )
 }

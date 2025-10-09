@@ -310,6 +310,7 @@ const LoanTransactionCreateUpdateForm = ({
         'printed_date',
         'approved_date',
         'released_date',
+        'terms',
     ])
 
     const resolvedApplicationStatus = resolveLoanDatesToStatus({
