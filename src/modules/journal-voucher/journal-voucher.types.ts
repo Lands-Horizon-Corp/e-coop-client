@@ -59,6 +59,7 @@ export enum EJournalVoucherStatus {
 export type TJournalVoucherMode = 'draft' | 'printed' | 'approved' | 'released'
 
 export type TPrintMode = 'print' | 'print-undo' | 'approve'
+
 export type TJournalActionMode = 'approve-undo' | 'release' | 'print-only'
 
 export interface IJournalVoucherPaginated

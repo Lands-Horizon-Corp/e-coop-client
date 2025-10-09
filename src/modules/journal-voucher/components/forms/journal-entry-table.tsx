@@ -148,15 +148,11 @@ export const JournalEntryTable = ({
     mode,
 }: JournalEntryTableProps) => {
     const isUpdateMode = mode === 'update'
-    const isReadyOnlyMode = mode === 'readOnly'
+    const isReadOnlyMode = mode === 'readOnly'
     const [journalVoucherEntry, setJournalVoucherEntry] = useState<
         IJournalVoucherEntryRequest[]
     >(() => {
-        if (
-            rowData &&
-            rowData.length > 0 &&
-            (isUpdateMode || isReadyOnlyMode)
-        ) {
+        if (rowData && rowData.length > 0 && (isUpdateMode || isReadOnlyMode)) {
             return rowData
         }
         return []
@@ -166,12 +162,12 @@ export const JournalEntryTable = ({
         useJournalVoucherStore()
 
     useEffect(() => {
-        if (isUpdateMode || isReadyOnlyMode) {
+        if (isUpdateMode || isReadOnlyMode) {
             setSelectedJournalVoucherEntry(journalVoucherEntry)
         }
     }, [
         isUpdateMode,
-        isReadyOnlyMode,
+        isReadOnlyMode,
         journalVoucherEntry,
         setSelectedJournalVoucherEntry,
     ])
@@ -241,6 +237,7 @@ export const JournalEntryTable = ({
         'Shift+i',
         (e) => {
             e.preventDefault()
+            if (isReadOnlyMode) return
             handleAddRow(
                 e as unknown as React.MouseEvent<HTMLButtonElement, MouseEvent>
             )

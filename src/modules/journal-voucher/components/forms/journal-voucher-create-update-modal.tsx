@@ -10,7 +10,6 @@ import { cn } from '@/helpers'
 import { withToastCallbacks } from '@/helpers/callback-helper'
 import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
 import { IAccount } from '@/modules/account'
-import CashCheckVoucherStatusIndicator from '@/modules/cash-check-voucher/components/cash-check-status-indicator'
 import CompanyCombobox from '@/modules/company/components/combobox'
 import {
     IJournalVoucher,
@@ -34,15 +33,10 @@ import { useMemberPickerStore } from '@/store/member-picker-store'
 import { useHotkeys } from 'react-hotkeys-hook'
 
 import FormFooterResetSubmit from '@/components/form-components/form-footer-reset-submit'
-import { XIcon } from '@/components/icons'
+import { BookIcon, XIcon } from '@/components/icons'
 import Modal, { IModalProps } from '@/components/modals/modal'
-import {
-    Accordion,
-    AccordionContent,
-    AccordionItem,
-    AccordionTrigger,
-} from '@/components/ui/accordion'
 import { Button } from '@/components/ui/button'
+import { CommandShortcut } from '@/components/ui/command'
 import { Form } from '@/components/ui/form'
 import FormFieldWrapper from '@/components/ui/form-field-wrapper'
 import { Input } from '@/components/ui/input'
@@ -53,6 +47,7 @@ import { useFormHelper } from '@/hooks/use-form-helper'
 
 import { IClassProps, IForm, TEntityId } from '@/types'
 
+import JournalVoucherStatusIndicator from '../journal-voucher-status-indicator'
 import { JournalEntryTable } from './journal-entry-table'
 
 type TJournalVoucherFormValues = z.infer<typeof JournalVoucherSchema>
@@ -283,9 +278,14 @@ const JournalVoucherCreateUpdateForm = ({
         handleClearMember()
     })
 
+    useHotkeys('ctrl + enter', (e) => {
+        e.preventDefault()
+        if (defaultMode !== 'readOnly') {
+            onSubmit()
+        }
+    })
+
     const isPrinted = !!defaultValues?.printed_date
-    const isApproved = !!defaultValues?.approved_date
-    const isReleased = !!defaultValues?.released_date
 
     return (
         <Form {...form}>
@@ -294,34 +294,38 @@ const JournalVoucherCreateUpdateForm = ({
                 onSubmit={onSubmit}
                 ref={formRef}
             >
+                <div className="w-full flex items-center gap-2 justify-end"></div>
                 <fieldset
-                    className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4 sm:gap-y-3"
+                    className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4 sm:gap-y-4"
                     disabled={isPending || formProps.readOnly}
                 >
                     <div className="absolute top-4 right-10 z-10 flex gap-2">
                         <JournalVoucherTagsManagerPopover
                             journalVoucherId={editJournalId}
-                            readOnly={isReleased}
+                            readOnly={isPrinted}
                             size="sm"
                         />
-                        {editJournalId && (
+                        {editJournalId && defaultValues && (
                             <div className="">
-                                <CashCheckVoucherStatusIndicator
-                                    className="max-w-max"
-                                    voucherDates={{
-                                        printed_date: isPrinted
-                                            ? defaultValues?.printed_date
-                                            : null,
-                                        approved_date: isApproved
-                                            ? defaultValues?.approved_date
-                                            : null,
-                                        released_date: isReleased
-                                            ? defaultValues?.released_date
-                                            : null,
-                                    }}
+                                <JournalVoucherStatusIndicator
+                                    journalVoucher={defaultValues}
                                 />
                             </div>
                         )}
+                        <div className=" bg-muted p-1 rounded-sm -top-1 right-0 z-10 flex items-center">
+                            <Button
+                                className="size-fit px-2 py-0.5 mr-1 text-xs"
+                                size="sm"
+                                tabIndex={0}
+                                type="button"
+                                variant={'ghost'}
+                            >
+                                Select or Add Member{' '}
+                            </Button>
+                            <CommandShortcut className="bg-accent text-xs min-w-fit size-fit px-2 py-0.5 rounded-sm text-primary">
+                                Enter
+                            </CommandShortcut>
+                        </div>
                     </div>
                     <div className="col-span-1 md:col-span-4 flex flex-col">
                         <FormFieldWrapper
@@ -357,101 +361,75 @@ const JournalVoucherCreateUpdateForm = ({
                                 )
                             }}
                         />
-                        <Accordion
-                            className="w-full px-5 bg-sidebar rounded-2xl my-2"
-                            collapsible
-                            type="single"
-                        >
-                            <AccordionItem
-                                className="border-b-0"
-                                value="item-1"
-                            >
-                                <AccordionTrigger className="text-primary text-xs">
-                                    more options
-                                </AccordionTrigger>
-                                <AccordionContent className="">
-                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4 sm:gap-y-3 mt-2">
-                                        <FormFieldWrapper
-                                            control={form.control}
-                                            label="Member Profile"
-                                            name="member_id"
-                                            render={({ field }) => {
-                                                return (
-                                                    <MemberPicker
-                                                        allowShorcutCommand
-                                                        disabled={isDisabled(
-                                                            field.name
-                                                        )}
-                                                        onSelect={(
-                                                            selectedMember
-                                                        ) => {
-                                                            field.onChange(
-                                                                selectedMember?.id
-                                                            )
-                                                            form.setValue(
-                                                                'member_profile',
-                                                                selectedMember
-                                                            )
-                                                            form.setValue(
-                                                                'name',
-                                                                selectedMember?.full_name
-                                                            )
-                                                            form.setValue(
-                                                                'company_id',
-                                                                undefined
-                                                            )
-                                                            setDefaultMemberProfile(
-                                                                selectedMember
-                                                            )
-                                                        }}
-                                                        placeholder="Relative Member Profile"
-                                                        value={form.getValues(
-                                                            'member_profile'
-                                                        )}
-                                                    />
-                                                )
-                                            }}
-                                        />
-                                        <FormFieldWrapper
-                                            control={form.control}
-                                            label="Company"
-                                            name="company_id"
-                                            render={({ field }) => (
-                                                <CompanyCombobox
-                                                    {...field}
-                                                    disabled={isDisabled(
-                                                        field.name
-                                                    )}
-                                                    onChange={(
-                                                        selectedCompany
-                                                    ) => {
-                                                        field.onChange(
-                                                            selectedCompany.id
-                                                        )
-                                                        form.setValue(
-                                                            'name',
-                                                            selectedCompany.name
-                                                        )
-                                                        form.setValue(
-                                                            'member_id',
-                                                            undefined
-                                                        )
-                                                        form.setValue(
-                                                            'member_profile',
-                                                            undefined
-                                                        )
-                                                    }}
-                                                    placeholder="Select a company"
-                                                    value={field.value}
-                                                />
-                                            )}
-                                        />
-                                    </div>
-                                </AccordionContent>
-                            </AccordionItem>
-                        </Accordion>
                     </div>
 
+                    <div className="col-span-4 relative grid grid-cols-2 gap-x-2">
+                        <FormFieldWrapper
+                            className="relative"
+                            control={form.control}
+                            label="Member Profile"
+                            name="member_id"
+                            render={({ field }) => {
+                                return (
+                                    <>
+                                        <MemberPicker
+                                            allowShorcutCommand
+                                            disabled={isDisabled(field.name)}
+                                            onSelect={(selectedMember) => {
+                                                field.onChange(
+                                                    selectedMember?.id
+                                                )
+                                                form.setValue(
+                                                    'member_profile',
+                                                    selectedMember
+                                                )
+                                                form.setValue(
+                                                    'name',
+                                                    selectedMember?.full_name
+                                                )
+                                                form.setValue(
+                                                    'company_id',
+                                                    undefined
+                                                )
+                                                setDefaultMemberProfile(
+                                                    selectedMember
+                                                )
+                                            }}
+                                            placeholder="Relative Member Profile"
+                                            value={form.getValues(
+                                                'member_profile'
+                                            )}
+                                        />
+                                    </>
+                                )
+                            }}
+                        />
+                        <FormFieldWrapper
+                            control={form.control}
+                            label="Company"
+                            name="company_id"
+                            render={({ field }) => (
+                                <CompanyCombobox
+                                    {...field}
+                                    disabled={isDisabled(field.name)}
+                                    onChange={(selectedCompany) => {
+                                        field.onChange(selectedCompany.id)
+                                        form.setValue(
+                                            'name',
+                                            selectedCompany.name
+                                        )
+                                        form.setValue('member_id', undefined)
+                                        form.setValue(
+                                            'member_profile',
+                                            undefined
+                                        )
+                                    }}
+                                    placeholder="Select a company"
+                                    value={field.value}
+                                />
+                            )}
+                        />
+                    </div>
                     <FormFieldWrapper
                         control={form.control}
                         label="CV Number"
@@ -533,7 +511,6 @@ const JournalVoucherCreateUpdateForm = ({
                         />
                     </div>
                 </div>
-                {/* <FormErrorMessage errorMessage={error} /> */}
                 <FormFooterResetSubmit
                     error={error}
                     isLoading={isPending}
@@ -571,18 +548,24 @@ export const JournalVoucherCreateUpdateFormModal = ({
 }: IModalProps & {
     formProps?: Omit<IJournalVoucherCreateUpdateFormProps, 'className'>
 }) => {
-    const title = formProps?.journalVoucherId
-        ? 'Update Journal Voucher'
-        : 'Create Journal Voucher'
     const description = formProps?.journalVoucherId
         ? 'Update the details for this journal voucher.'
         : 'Fill in the details for a new journal voucher.'
 
     return (
         <Modal
-            className={cn('', className)}
-            description={description}
-            title={title}
+            className={cn('!min-w-2xl !max-w-4xl', className)}
+            title={
+                <div>
+                    <p className="font-medium">
+                        <BookIcon className="inline text-primary" /> Journal
+                        Voucher
+                    </p>
+                    <p className="text-xs text-muted-foreground">
+                        {description}
+                    </p>
+                </div>
+            }
             {...props}
         >
             <JournalVoucherCreateUpdateForm

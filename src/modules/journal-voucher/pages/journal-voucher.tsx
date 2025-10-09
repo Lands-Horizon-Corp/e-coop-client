@@ -1,6 +1,5 @@
 import { useQueryClient } from '@tanstack/react-query'
 
-import { cn } from '@/helpers'
 import { useAuthUserWithOrgBranch } from '@/modules/authentication/authgentication.store'
 
 import PageContainer from '@/components/containers/page-container'
@@ -20,9 +19,6 @@ const JournalVoucherPage = () => {
         },
     } = useAuthUserWithOrgBranch()
 
-    // const { setSelectedMember } = useMemberPickerStore()
-
-    // Subscribe to events to automatically refresh the data table
     useSubscribe(`journal_voucher.created.branch.${branch_id}`, () =>
         queryClient.invalidateQueries({
             queryKey: ['journal-voucher', 'paginated'],
@@ -61,10 +57,7 @@ const JournalVoucherPage = () => {
 
     return (
         <PageContainer>
-            <JournalVoucherCreateUpdateFormModal
-                className={cn('!min-w-2xl !max-w-5xl')}
-                {...createModal}
-            />
+            <JournalVoucherCreateUpdateFormModal {...createModal} />
             <JournalVoucherTable
                 className="max-h-[90vh] min-h-[90vh] w-full"
                 toolbarProps={{

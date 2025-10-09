@@ -1,7 +1,6 @@
 import { useQueryClient } from '@tanstack/react-query'
 import { toast } from 'sonner'
 
-import { cn } from '@/helpers'
 import { useAuthUserWithOrgBranch } from '@/modules/authentication/authgentication.store'
 import CancelledCashCheckVoucherButton from '@/modules/cancelled-cash-check-voucher/components/cancelled-button'
 import { useTransactionBatchStore } from '@/modules/transaction-batch/store/transaction-batch-store'
@@ -63,10 +62,7 @@ const CashCheckJournalVoucherPage = () => {
 
     return (
         <PageContainer>
-            <CashCheckVoucherCreateUpdateFormModal
-                className={cn('!min-w-2xl !max-w-5xl')}
-                {...createModal}
-            />
+            <CashCheckVoucherCreateUpdateFormModal {...createModal} />
             <CashCheckJournalVoucherTable
                 className="max-h-[90vh] min-h-[90vh] w-full"
                 toolbarProps={{

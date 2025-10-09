@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 
+import { useQueryClient } from '@tanstack/react-query'
 import { Path, useForm } from 'react-hook-form'
 
 import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
@@ -7,10 +8,15 @@ import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
 import { cn } from '@/helpers'
 import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
 import {
-    CashCheckVoucherSchema,
     ICashCheckVoucher,
     ICashCheckVoucherRequest,
+    TCashCheckVoucherSchema,
     useUpdateCashCheckVoucherById,
+} from '@/modules/cash-check-voucher'
+import {
+    CashCheckSignatureSchema,
+    TCashCheckSignatureRequest,
+    TCashCheckSignatureSchema,
 } from '@/modules/cash-check-voucher'
 import { IMedia } from '@/modules/media'
 
@@ -40,13 +46,14 @@ import {
 
 import { useFormHelper } from '@/hooks/use-form-helper'
 
-import { IClassProps, IForm, TEntityId } from '@/types'
+import { TEntityId } from '@/types'
+import { IClassProps, IForm } from '@/types'
 
 type Step = {
     title: string
     description?: string
     longDescription?: string
-    fields: Path<ICashCheckVoucher>[]
+    fields: Path<TCashCheckVoucherSchema>[]
 }
 
 const Steps: Step[] = [
@@ -157,7 +164,7 @@ export interface ICashCheckVoucherCreateUpdateFormProps
             ICashCheckVoucher,
             ICashCheckVoucherRequest,
             Error,
-            TCashCheckVoucherSchema
+            TCashCheckSignatureSchema
         > {
     cashCheckVoucherId: TEntityId
     defaultStep?: number
@@ -171,14 +178,15 @@ const CashCheckVoucherTransactionSignatureUpdateForm = ({
 }: ICashCheckVoucherCreateUpdateFormProps) => {
     const [step, setStep] = useState(defaultStep)
 
-    const form = useForm<ICashCheckVoucherRequest>({
-        resolver: standardSchemaResolver(CashCheckVoucherSchema),
+    const form = useForm<TCashCheckSignatureRequest>({
+        resolver: standardSchemaResolver(CashCheckSignatureSchema),
         reValidateMode: 'onChange',
         mode: 'onSubmit',
         defaultValues: {
             ...formProps.defaultValues,
         },
     })
+    const invalidateQueries = useQueryClient()
 
     const {
         error: rawError,
@@ -190,23 +198,53 @@ const CashCheckVoucherTransactionSignatureUpdateForm = ({
             onSuccess: (data) => {
                 form.reset(data)
                 formProps.onSuccess?.(data)
+                invalidateQueries.invalidateQueries({
+                    queryKey: ['cash-check-voucher'],
+                })
             },
             onError: formProps.onError,
         },
     })
 
+    const stepRefs = useRef<(HTMLElement | null)[]>([])
+
     const { formRef, handleFocusError, isDisabled } =
-        useFormHelper<TCashCheckVoucherSingatureFormValues>({
+        useFormHelper<TCashCheckSignatureSchema>({
             form,
             ...formProps,
             autoSave: true,
             autoSaveDelay: 2000,
             resetOnDefaultChange: formProps.resetOnDefaultChange,
         })
+    const onReset = () => {
+        form.reset()
+        reset()
+        setStep(defaultStep)
+    }
+    const onSubmit = form.handleSubmit((payload) => {
+        console.log({ payload })
+        const finalPayload: ICashCheckVoucherRequest = {
+            ...formProps.defaultValues,
+            ...payload,
+        }
+        mutate({
+            id: cashCheckVoucherId,
+            payload: finalPayload as ICashCheckVoucherRequest,
+        })
+    }, handleFocusError)
 
     const error = serverRequestErrExtractor({ error: rawError })
 
-    const stepRefs = useRef<(HTMLHeadingElement | null)[]>([])
+    const onNext = async (e: React.MouseEvent<HTMLElement>) => {
+        e.preventDefault()
+        const triggerValidation = await form.trigger(
+            Steps[step].fields as Path<TCashCheckSignatureRequest>[],
+            {
+                shouldFocus: true,
+            }
+        )
+        if (triggerValidation) setStep((prev) => prev + 1)
+    }
 
     useEffect(() => {
         const node = stepRefs.current[step]
@@ -215,33 +253,21 @@ const CashCheckVoucherTransactionSignatureUpdateForm = ({
             node.focus()
         }
     }, [step])
-
-    const onNext = async () => {
-        const triggerValidation = await form.trigger(Steps[step].fields, {
-            shouldFocus: true,
-        })
-
-        if (triggerValidation) setStep((prev) => prev + 1)
-    }
-
-    const onSubmit = form.handleSubmit((payload) => {
-        mutate({ id: cashCheckVoucherId, payload })
-    }, handleFocusError)
-
-    const onReset = () => {
-        form.reset()
-        reset()
-        setStep(defaultStep)
-    }
+    useEffect(() => {
+        if (formProps.defaultValues?.certified_by_name) setStep(1)
+        if (formProps.defaultValues?.check_by_name) setStep(2)
+        if (formProps.defaultValues?.approved_by_name) setStep(3)
+        if (formProps.defaultValues?.verified_by_name) setStep(4)
+        if (formProps.defaultValues?.acknowledge_by_name) setStep(5)
+        if (formProps.defaultValues?.noted_by_name) setStep(6)
+        if (formProps.defaultValues?.posted_by_name) setStep(7)
+        if (formProps.defaultValues?.paid_by_name) setStep(8)
+    }, [formProps.defaultValues, form])
 
     return (
         <Form {...form}>
-            <form
-                className={cn('flex w-full flex-col gap-y-4', className)}
-                onSubmit={onSubmit}
-                ref={formRef}
-            >
-                <div className="flex w-full gap-x-4">
+            <form onSubmit={onSubmit} ref={formRef}>
+                <div className={cn('flex w-full gap-x-4', className)}>
                     <div className="ecoop-scroll max-h-[90vh] w-[30%] gap-x-4 gap-y-4 overflow-auto sm:max-h-[73vh] [&::-webkit-scrollbar]:w-[3px] [&::-webkit-scrollbar]:hover:w-[6px]">
                         <Stepper
                             onValueChange={setStep}
@@ -256,9 +282,7 @@ const CashCheckVoucherTransactionSignatureUpdateForm = ({
                                 >
                                     <StepperTrigger
                                         className="items-start cursor-pointer rounded pb-8 last:pb-0"
-                                        disabled={
-                                            formProps.readOnly || isPending
-                                        }
+                                        disabled={formProps.readOnly}
                                         type="button"
                                     >
                                         <StepperIndicator asChild>
@@ -272,7 +296,8 @@ const CashCheckVoucherTransactionSignatureUpdateForm = ({
                                             >
                                                 {title}{' '}
                                                 {!!form.getValues(
-                                                    Steps[i].fields[0]
+                                                    Steps[i]
+                                                        .fields[0] as Path<TCashCheckSignatureRequest>
                                                 ) && (
                                                     <CheckFillIcon className="inline ml-1 text-primary" />
                                                 )}
@@ -304,7 +329,10 @@ const CashCheckVoucherTransactionSignatureUpdateForm = ({
                             <FormFieldWrapper
                                 control={form.control}
                                 label="Name"
-                                name={Steps[step].fields[0]}
+                                name={
+                                    Steps[step]
+                                        .fields[0] as Path<TCashCheckSignatureSchema>
+                                }
                                 render={({ field }) => (
                                     <Input
                                         {...field}
@@ -318,7 +346,10 @@ const CashCheckVoucherTransactionSignatureUpdateForm = ({
                             <FormFieldWrapper
                                 control={form.control}
                                 label="Position"
-                                name={Steps[step].fields[1]}
+                                name={
+                                    Steps[step]
+                                        .fields[1] as Path<TCashCheckSignatureSchema>
+                                }
                                 render={({ field }) => (
                                     <Input
                                         {...field}
@@ -332,13 +363,16 @@ const CashCheckVoucherTransactionSignatureUpdateForm = ({
                             <FormFieldWrapper
                                 control={form.control}
                                 label="Signature"
-                                name={Steps[step].fields[2]}
+                                name={
+                                    Steps[step]
+                                        .fields[2] as Path<TCashCheckSignatureSchema>
+                                }
                                 render={({ field }) => {
                                     const value = form.watch(
                                         Steps[step].fields[2].replace(
                                             '_id',
                                             ''
-                                        ) as Path<TCashCheckVoucherSingatureFormValues>
+                                        ) as Path<TCashCheckSignatureRequest>
                                     )
                                     return (
                                         <SignatureField
@@ -355,7 +389,7 @@ const CashCheckVoucherTransactionSignatureUpdateForm = ({
                                                     ].fields[2].replace(
                                                         '_id',
                                                         ''
-                                                    ) as Path<TCashCheckVoucherSingatureFormValues>,
+                                                    ) as Path<TCashCheckSignatureRequest>,
                                                     newImage
                                                 )
                                             }}
@@ -373,7 +407,7 @@ const CashCheckVoucherTransactionSignatureUpdateForm = ({
                         </fieldset>
                     </fieldset>
                 </div>
-                <Separator />
+
                 <div className="space-y-2">
                     <FormErrorMessage errorMessage={error} />
                     <div className="flex items-center justify-between gap-x-1">
@@ -401,7 +435,7 @@ const CashCheckVoucherTransactionSignatureUpdateForm = ({
                                 disabled={
                                     isPending || step === Steps.length - 1
                                 }
-                                onClick={() => onNext()}
+                                onClick={(e) => onNext(e)}
                                 size="icon"
                                 type="button"
                                 variant="secondary"

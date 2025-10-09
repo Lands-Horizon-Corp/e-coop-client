@@ -16,25 +16,33 @@ import {
     XCircleIcon,
 } from 'lucide-react'
 
+import { ContextMenuItem } from '@/components/ui/context-menu'
 import { DropdownMenuItem } from '@/components/ui/dropdown-menu'
 
 type IJournalVoucherTableActionComponentProp = {
-    row: Row<IJournalVoucher>
+    row: Row<IJournalVoucher> | IJournalVoucher
+    type?: 'default' | 'context'
+    onPrint?: () => void
+    onApprove?: () => void
+    onRelease?: () => void
+    onRefetch?: () => void
 }
 
 const JournalVoucherOtherAction = ({
     row,
+    type = 'default',
+    onPrint,
+    onApprove,
+    onRelease,
+    onRefetch,
 }: IJournalVoucherTableActionComponentProp) => {
-    const journalVoucher = row.original
-
+    const journalVoucher = 'original' in row ? row.original : row
     const isPrinted = !!journalVoucher.printed_date
     const isApproved = !!journalVoucher.approved_date
     const canApprove = isPrinted && !isApproved
     const canRelease = isPrinted && isApproved
 
     const showRelease = canRelease && !journalVoucher.released_date
-    // show print
-    const showPrint = isPrinted && !journalVoucher.printed_date
 
     const { mutate: mutatePrint, isPending: isPrinting } =
         useEditPrintJournalVoucher({
@@ -44,6 +52,7 @@ const JournalVoucherOtherAction = ({
                         ? 'undone'
                         : 'updated'
                     toast.success(`Print status ${actionText} successfully.`)
+                    onRefetch?.()
                 },
                 onError: (error) => {
                     toast.error(
@@ -59,6 +68,7 @@ const JournalVoucherOtherAction = ({
                 onSuccess: (_, variables) => {
                     const modeText = variables.mode.replace('-undo', ' undone')
                     toast.success(`Voucher has been ${modeText} successfully.`)
+                    onRefetch?.()
                 },
                 onError: (error) => {
                     toast.error(error.message || 'Failed to perform action.')
@@ -68,7 +78,7 @@ const JournalVoucherOtherAction = ({
 
     const isProcessing = isPrinting || isActionPending
 
-    const handlePrintAction = (mode: TPrintMode) => () => {
+    const handleMutatePrintAction = (mode: TPrintMode) => () => {
         mutatePrint({
             journal_voucher_id: journalVoucher.id,
             mode,
@@ -77,69 +87,89 @@ const JournalVoucherOtherAction = ({
                 : undefined,
         })
     }
+
     const handleJournalAction = (mode: TJournalActionMode) => () => {
         performJournalAction({
             journal_voucher_id: journalVoucher.id,
             mode,
         })
     }
+    const handlePrintAction = () => {
+        onPrint?.()
+    }
+    const handleApproveAction = () => {
+        onApprove?.()
+    }
+    const handleReleaseAction = () => {
+        onRelease?.()
+    }
 
     const menuActions = [
         {
             label: isPrinted ? 'print-undo' : 'Print',
-            icon: <PrinterIcon className="mr-2 h-4 w-4 text-blue-500" />,
-            onSelect: handlePrintAction(isPrinted ? 'print-undo' : 'print'),
-            isVisible: showPrint,
-        },
-        {
-            label: 'Print',
-            icon: <PrinterIcon className="mr-2 h-4 w-4 text-blue-500" />,
-            onSelect: handleJournalAction('print-only'),
-            isVisible: true,
+            icon: (
+                <PrinterIcon className="mr-2 h-4 w-4 text-muted-foreground" />
+            ),
+            onSelect: handlePrintAction,
+            isVisible: !isPrinted,
         },
         {
             label: 'Undo Print',
-            icon: <Undo2Icon className="mr-2 h-4 w-4 text-orange-500" />,
-            onSelect: handlePrintAction('print-undo'),
+            icon: <Undo2Icon className="mr-2 h-4 w-4 text-muted-foreground" />,
+            onSelect: handleMutatePrintAction('print-undo'),
             isVisible: isPrinted && !isApproved,
         },
         {
             label: 'Approve',
-            icon: <CheckCircle2Icon className="mr-2 h-4 w-4 text-green-500" />,
-            onSelect: handlePrintAction('approve'),
+            icon: (
+                <CheckCircle2Icon className="mr-2 h-4 w-4 text-muted-foreground" />
+            ),
+            onSelect: handleApproveAction,
             isVisible: canApprove,
         },
         {
             label: 'Undo Approve',
-            icon: <XCircleIcon className="mr-2 h-4 w-4 text-red-500" />,
+            icon: (
+                <XCircleIcon className="mr-2 h-4 w-4 text-muted-foreground" />
+            ),
             onSelect: handleJournalAction('approve-undo'),
             isVisible: isApproved && !journalVoucher.released_date,
         },
         {
             label: 'Release',
             icon: (
-                <SendHorizonalIcon className="mr-2 h-4 w-4 text-purple-500" />
+                <SendHorizonalIcon className="mr-2 h-4 w-4 text-muted-foreground" />
             ),
-            onSelect: handleJournalAction('release'),
+            onSelect: handleReleaseAction,
             isVisible: showRelease,
         },
     ]
 
     return (
-        <div className="flex flex-col w-48 rounded-md  p-1">
-            {menuActions
-                .filter((action) => action.isVisible)
-                .map((action) => (
+        <div className="flex flex-col w-48 rounded-md p-1">
+            {menuActions.map((action) =>
+                type === 'default' ? (
                     <DropdownMenuItem
                         className="flex items-center"
-                        disabled={isProcessing}
+                        disabled={isProcessing || !action.isVisible}
                         key={action.label}
                         onClick={action.onSelect}
                     >
                         {action.icon}
                         <span>{action.label}</span>
                     </DropdownMenuItem>
-                ))}
+                ) : (
+                    <ContextMenuItem
+                        className="flex items-center"
+                        disabled={isProcessing || !action.isVisible}
+                        key={action.label}
+                        onClick={action.onSelect}
+                    >
+                        {action.icon}
+                        <span>{action.label}</span>
+                    </ContextMenuItem>
+                )
+            )}
         </div>
     )
 }

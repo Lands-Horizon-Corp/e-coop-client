@@ -1,6 +1,7 @@
 import z from 'zod'
 
 import { descriptionTransformerSanitizer } from '@/validation'
+import { entityIdSchema } from '@/validation'
 
 export const CashCheckVoucherSchema = z.object({
     id: z.string().optional(),
@@ -12,8 +13,8 @@ export const CashCheckVoucherSchema = z.object({
         .optional(),
     description: z
         .string()
-        .optional()
-        .transform(descriptionTransformerSanitizer),
+        .transform(descriptionTransformerSanitizer)
+        .optional(),
     print_count: z.coerce.number<number>().min(0).optional(),
     pay_to: z.string().optional(),
 
@@ -88,4 +89,58 @@ export const CashCheckVoucherSchema = z.object({
     cash_check_voucher_entries_deleted: z.array(z.string()).optional(),
 })
 
+export const CashCheckSignatureSchema = z.object({
+    prepared_by_signature_media_id: entityIdSchema.optional(),
+    prepared_by_signature_media: z.any(),
+    prepared_by_name: z.coerce.string().optional(),
+    prepared_by_position: z.coerce.string().optional(),
+
+    certified_by_signature_media_id: entityIdSchema.optional(),
+    certified_by_signature_media: z.any(),
+    certified_by_name: z.coerce.string().optional(),
+    certified_by_position: z.coerce.string().optional(),
+
+    approved_by_signature_media_id: entityIdSchema.optional(),
+    approved_by_signature_media: z.any(),
+    approved_by_name: z.coerce.string().optional(),
+    approved_by_position: z.coerce.string().optional(),
+
+    verified_by_signature_media_id: entityIdSchema.optional(),
+    verified_by_signature_media: z.any(),
+    verified_by_name: z.coerce.string().optional(),
+    verified_by_position: z.coerce.string().optional(),
+
+    check_by_signature_media_id: entityIdSchema.optional(),
+    check_by_signature_media: z.any(),
+    check_by_name: z.coerce.string().optional(),
+    check_by_position: z.coerce.string().optional(),
+
+    acknowledge_by_signature_media_id: entityIdSchema.optional(),
+    acknowledge_by_signature_media: z.any(),
+    acknowledge_by_name: z.coerce.string().optional(),
+    acknowledge_by_position: z.coerce.string().optional(),
+
+    noted_by_signature_media_id: entityIdSchema.optional(),
+    noted_by_signature_media: z.any(),
+    noted_by_name: z.coerce.string().optional(),
+    noted_by_position: z.coerce.string().optional(),
+
+    posted_by_signature_media_id: entityIdSchema.optional(),
+    posted_by_signature_media: z.any(),
+    posted_by_name: z.coerce.string().optional(),
+    posted_by_position: z.coerce.string().optional(),
+
+    paid_by_signature_media_id: entityIdSchema.optional(),
+    paid_by_signature_media: z.any(),
+    paid_by_name: z.coerce.string().optional(),
+    paid_by_position: z.coerce.string().optional(),
+})
+export const CashCheckVoucherPrintSchema = z.object({
+    voucher_number: z.string().min(1, 'Voucher number is required'),
+})
+
+export type TCashCheckVoucherPrintSchema = z.infer<
+    typeof CashCheckVoucherPrintSchema
+>
 export type TCashCheckVoucherSchema = z.infer<typeof CashCheckVoucherSchema>
+export type TCashCheckSignatureSchema = z.infer<typeof CashCheckSignatureSchema>

@@ -1,5 +1,3 @@
-import { toast } from 'sonner'
-
 import { dateAgo } from '@/helpers/date-utils'
 import { cn } from '@/helpers/tw-utils'
 import KanbanContainer from '@/modules/approvals/components/kanban/kanban-container'
@@ -7,11 +5,7 @@ import KanbanItemsContainer from '@/modules/approvals/components/kanban/kanban-i
 import KanbanTitle from '@/modules/approvals/components/kanban/kanban-title'
 import {
     ICashCheckVoucher,
-    TCashCheckVoucherActionMode,
-    TCashCheckVoucherPrintMode,
     TCashCheckVoucherStatus,
-    useCashCheckVoucherActions,
-    useEditPrintCashCheckVoucher,
     useGetAllCashCheckVoucher,
 } from '@/modules/cash-check-voucher'
 import {
@@ -20,21 +14,22 @@ import {
 } from '@/modules/cash-check-voucher-tag/components/cash-check-voucher-tag-manager'
 import CashCheckVoucherStatusIndicator from '@/modules/cash-check-voucher/components/cash-check-status-indicator'
 import CashCheckVoucherTransactionSignatureUpdateFormModal from '@/modules/cash-check-voucher/components/forms/cash-check-signature-form-modal'
+import CashCheckVoucherApproveReleaseDisplayModal from '@/modules/cash-check-voucher/components/forms/cash-check-voucher-approve-release-display-modal'
 import CashCheckVoucherCreateUpdateFormModal from '@/modules/cash-check-voucher/components/forms/cash-check-voucher-create-udate-form-modal'
-import {
-    CheckCircle2Icon,
-    PrinterIcon,
-    SendHorizonalIcon,
-    Undo2Icon,
-    XCircleIcon,
-} from 'lucide-react'
+import CashCheckVoucherPrintFormModal from '@/modules/cash-check-voucher/components/forms/cash-check-voucher-print-form-modal'
+import CashCheckVoucherOtherAction from '@/modules/cash-check-voucher/components/tables/cash-check-other-voucher'
+import { TCashCheckVoucherApproveReleaseDisplayMode } from '@/modules/cash-check-voucher/components/tables/row-action-context'
+import { CheckCircle2Icon, PrinterIcon } from 'lucide-react'
 
 import {
     BadgeCheckFillIcon,
     DraftIcon,
     EyeIcon,
+    IdCardIcon,
+    MoneyBagIcon,
     PencilFillIcon,
     SignatureLightIcon,
+    TicketIcon,
 } from '@/components/icons'
 import ImageDisplay from '@/components/image-display'
 import InfoTooltip from '@/components/tooltips/info-tooltip'
@@ -42,7 +37,6 @@ import { Button } from '@/components/ui/button'
 import {
     DropdownMenu,
     DropdownMenuContent,
-    DropdownMenuItem,
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import { Separator } from '@/components/ui/separator'
@@ -50,6 +44,8 @@ import { Separator } from '@/components/ui/separator'
 import { useModalState } from '@/hooks/use-modal-state'
 
 import { IClassProps } from '@/types'
+
+import { JournalKanbanInfoItem } from './journal-voucher-kanban'
 
 type UseCardKanbanActionsProps = {
     cashCheckVoucher: ICashCheckVoucher
@@ -63,6 +59,19 @@ const useCardKanbanActions = ({
 }: UseCardKanbanActionsProps) => {
     const cashCheckVoucherModalState = useModalState(false)
     const cashCheckSignatureVoucher = useModalState(false)
+    const printModal = useModalState()
+    const approveModal = useModalState()
+    const releaseModal = useModalState()
+
+    const handleOpenPrintModal = () => {
+        printModal.onOpenChange(true)
+    }
+    const handleApproveModal = () => {
+        approveModal.onOpenChange(true)
+    }
+    const handleReleaseModal = () => {
+        releaseModal.onOpenChange(true)
+    }
 
     const handleOpenViewModal = () => {
         cashCheckVoucherModalState.onOpenChange(true)
@@ -78,16 +87,17 @@ const useCardKanbanActions = ({
         refetch,
         cashCheckSignatureVoucher,
         handleCashCheckSignatureVoucher,
+        printModal,
+        handleOpenPrintModal,
+        approveModal,
+        handleApproveModal,
+        releaseModal,
+        handleReleaseModal,
     }
 }
 
 type CashCheckVoucherKanbanProps = {
     mode: TCashCheckVoucherStatus
-}
-interface UseVoucherActionsProps {
-    cashCheckVoucher: ICashCheckVoucher
-    onDeleteSuccess?: () => void
-    refetch?: () => void
 }
 
 interface ICCVStatusDates {
@@ -101,136 +111,8 @@ interface ICashCheckVoucherCardProps extends IClassProps {
     refetch: () => void
 }
 
-const CashCheckVoucherOtherAction = ({
-    cashCheckVoucher,
-    refetch,
-}: UseVoucherActionsProps) => {
-    const isPrinted = !!cashCheckVoucher.printed_date
-    const isApproved = !!cashCheckVoucher.approved_date
-    const canApprove = isPrinted && !isApproved
-    const canRelease = isPrinted && isApproved
-
-    const showRelease = canRelease && !cashCheckVoucher.released_date
-    const showPrint = isPrinted || (!isPrinted && !canApprove && !canRelease)
-
-    const { mutate: mutatePrint, isPending: isPrinting } =
-        useEditPrintCashCheckVoucher({
-            options: {
-                onSuccess: (_, variables) => {
-                    const actionText = variables.mode.includes('undo')
-                        ? 'undone'
-                        : 'updated'
-                    toast.success(`Print status ${actionText} successfully.`)
-                    refetch?.()
-                },
-                onError: (error) => {
-                    toast.error(
-                        error.message || 'Failed to update print status.'
-                    )
-                },
-            },
-        })
-
-    const { mutate: performVoucherAction, isPending: isActionPending } =
-        useCashCheckVoucherActions({
-            options: {
-                onSuccess: (_, variables) => {
-                    const modeText = variables.mode.replace('-undo', ' undone')
-                    toast.success(`Voucher has been ${modeText} successfully.`)
-                    refetch?.()
-                },
-                onError: (error) => {
-                    toast.error(error.message || 'Failed to perform action.')
-                },
-            },
-        })
-
-    const isProcessing = isPrinting || isActionPending
-
-    const handlePrintAction = (mode: TCashCheckVoucherPrintMode) => () => {
-        mutatePrint({
-            cash_check_voucher_id: cashCheckVoucher.id,
-            mode,
-            voucher_number: cashCheckVoucher.cash_voucher_number
-                ? parseInt(cashCheckVoucher.cash_voucher_number)
-                : undefined,
-        })
-    }
-    const handleVoucherAction = (mode: TCashCheckVoucherActionMode) => () => {
-        performVoucherAction({
-            cash_check_voucher_id: cashCheckVoucher.id,
-            mode,
-        })
-    }
-
-    const menuActions = [
-        {
-            label: isPrinted ? 'Print-Undo' : 'Print',
-            icon: !isPrinted ? (
-                <PrinterIcon className="mr-2 h-4 w-4 text-blue-500" />
-            ) : (
-                <Undo2Icon className="mr-2 h-4 w-4 text-orange-500" />
-            ),
-            onSelect: handlePrintAction(isPrinted ? 'print-undo' : 'print'),
-            isVisible: showPrint,
-        },
-        {
-            label: 'Print (Only)',
-            icon: <PrinterIcon className="mr-2 h-4 w-4 text-blue-500" />,
-            onSelect: handleVoucherAction('print-only'),
-            isVisible: !isApproved && !isPrinted && !showPrint,
-        },
-        {
-            label: 'Approve',
-            icon: <CheckCircle2Icon className="mr-2 h-4 w-4 text-green-500" />,
-            onSelect: handlePrintAction('approve'),
-            isVisible: canApprove,
-        },
-        {
-            label: 'Undo Approve',
-            icon: <XCircleIcon className="mr-2 h-4 w-4 text-red-500" />,
-            onSelect: handleVoucherAction('approve-undo'),
-            isVisible: isApproved && !cashCheckVoucher.released_date,
-        },
-        {
-            label: 'Release',
-            icon: (
-                <SendHorizonalIcon className="mr-2 h-4 w-4 text-purple-500" />
-            ),
-            onSelect: handleVoucherAction('release'),
-            isVisible: showRelease,
-        },
-    ]
-
-    return (
-        <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-                <Button aria-label="More Actions" size={'icon'} variant="ghost">
-                    {<PencilFillIcon className="size-4" />}
-                </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent>
-                {menuActions
-                    .filter((action) => action.isVisible)
-                    .map((action) => (
-                        <DropdownMenuItem
-                            className="flex items-center"
-                            disabled={isProcessing}
-                            key={action.label}
-                            onClick={action.onSelect}
-                        >
-                            {action.icon}
-                            <span>{action.label}</span>
-                        </DropdownMenuItem>
-                    ))}
-            </DropdownMenuContent>
-        </DropdownMenu>
-    )
-}
-
 const CashCheckVoucherCardActions = ({
     cashCheckVoucher,
-    ccvDates,
     refetch,
 }: Pick<ICashCheckVoucherCardProps, 'cashCheckVoucher' | 'refetch'> & {
     ccvDates: ICCVStatusDates
@@ -241,19 +123,33 @@ const CashCheckVoucherCardActions = ({
         cashCheckVoucherModalState,
         cashCheckSignatureVoucher,
         handleCashCheckSignatureVoucher,
+        approveModal,
+        handleApproveModal,
+        releaseModal,
+        handleReleaseModal,
+        printModal,
+        handleOpenPrintModal,
     } = useCardKanbanActions({ cashCheckVoucher, refetch })
 
     return (
         <>
             <CashCheckVoucherCreateUpdateFormModal
-                className={cn('!min-w-2xl !max-w-5xl')}
                 {...cashCheckVoucherModalState}
                 formProps={{
                     defaultValues: cashCheckVoucher,
                     readOnly: true,
                 }}
             />
-
+            <CashCheckVoucherPrintFormModal
+                {...printModal}
+                className="!min-w-[600px]"
+                formProps={{
+                    cashCheckVoucherId: cashCheckVoucher.id,
+                    onSuccess: () => {
+                        refetch()
+                    },
+                }}
+            />
             <CashCheckVoucherTransactionSignatureUpdateFormModal
                 {...cashCheckSignatureVoucher}
                 formProps={{
@@ -262,12 +158,31 @@ const CashCheckVoucherCardActions = ({
                     readOnly: isReleased,
                 }}
             />
-            <div className="w-full flex items-center space-x-1 justify-end flex-shrink-0">
+            {['approve', 'undo-approve', 'release'].map((mode) => {
+                const modalState =
+                    mode === 'approve' ? approveModal : releaseModal
+                return (
+                    <div key={mode}>
+                        <CashCheckVoucherApproveReleaseDisplayModal
+                            {...modalState}
+                            cashCheckVoucher={cashCheckVoucher}
+                            mode={
+                                mode as TCashCheckVoucherApproveReleaseDisplayMode
+                            }
+                        />
+                    </div>
+                )
+            })}
+            <div className="w-full flex items-center space-x-1 justify-start flex-shrink-0">
                 <CashCheckVoucherTagsManagerPopover
                     cashCheckVoucherId={cashCheckVoucher.id}
                     size="sm"
                 />
-                <Button size={'sm'} variant="outline">
+                <Button
+                    className="rounded-full size-fit !p-0 border-accent !py-0.5 !px-1.5"
+                    size={'sm'}
+                    variant="outline"
+                >
                     <SignatureLightIcon className="size-4 mr-1" />
                     <span
                         className="text-sm"
@@ -276,10 +191,6 @@ const CashCheckVoucherCardActions = ({
                         Sign
                     </span>
                 </Button>
-                <CashCheckVoucherStatusIndicator
-                    className="flex-shrink-0"
-                    voucherDates={ccvDates}
-                />
                 <Button
                     aria-label="View Cash Check Voucher"
                     onClick={handleOpenViewModal}
@@ -289,57 +200,50 @@ const CashCheckVoucherCardActions = ({
                     <EyeIcon />
                 </Button>
                 {!isReleased && (
-                    <CashCheckVoucherOtherAction
-                        cashCheckVoucher={cashCheckVoucher}
-                        refetch={refetch}
-                    />
+                    <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                            <Button size={'icon'} variant="ghost">
+                                {<PencilFillIcon className="size-4" />}
+                            </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent>
+                            <CashCheckVoucherOtherAction
+                                onApprove={handleApproveModal}
+                                onPrint={handleOpenPrintModal}
+                                onRefetch={refetch}
+                                onRelease={handleReleaseModal}
+                                row={cashCheckVoucher}
+                            />
+                        </DropdownMenuContent>
+                    </DropdownMenu>
                 )}
             </div>
         </>
     )
 }
-
-const CashCheckVoucherCardCreatorInfo = ({
+export const CashCheckVoucherCardCreatorInfo = ({
     cashCheckVoucher,
 }: Pick<ICashCheckVoucherCardProps, 'cashCheckVoucher'>) => {
     return (
-        <div className="flex items-center justify-evenly gap-x-2">
-            <div className="flex space-x-2">
-                <InfoTooltip content="Total Debit">
-                    <Button
-                        className="min-w-16 font-semibold"
-                        size="sm"
-                        variant="secondary"
-                    >
-                        {cashCheckVoucher.total_debit || 0}
-                    </Button>
+        <div className="flex items-center justify-end  gap-x-2">
+            <div className=" inline-flex items-center gap-2">
+                <InfoTooltip
+                    content={`created by ${cashCheckVoucher.created_by?.full_name}`}
+                >
+                    <div className="text-right max-w-[200px] shrink">
+                        <p className="truncate font-medium text-sm text-foreground/90">
+                            {cashCheckVoucher.created_by?.full_name}
+                        </p>
+                        <p className="text-xs text-end text-muted-foreground/70 truncate">
+                            created by
+                        </p>
+                    </div>
                 </InfoTooltip>
-                <InfoTooltip content="Total Credit">
-                    <Button
-                        className="min-w-16 font-semibold"
-                        size="sm"
-                        variant="secondary"
-                    >
-                        {cashCheckVoucher.total_credit || 0}
-                    </Button>
-                </InfoTooltip>
+                <ImageDisplay
+                    className="size-8 rounded-full"
+                    src={cashCheckVoucher?.created_by?.media?.download_url}
+                />
             </div>
-            <InfoTooltip
-                content={`created by ${cashCheckVoucher.created_by?.full_name}`}
-            >
-                <div className="text-right max-w-[120px] shrink">
-                    <p className="truncate font-medium text-sm text-foreground/90">
-                        {cashCheckVoucher.created_by?.full_name}
-                    </p>
-                    <p className="text-xs text-start text-muted-foreground/70 truncate">
-                        @{cashCheckVoucher.created_by?.user_name ?? '-'}{' '}
-                    </p>
-                </div>
-            </InfoTooltip>
-            <ImageDisplay
-                className="size-8 rounded-full"
-                src={cashCheckVoucher?.created_by?.media?.download_url}
-            />
         </div>
     )
 }
@@ -354,7 +258,6 @@ export const CashCheckVoucherCard = ({
         approved_date: cashCheckVoucher.approved_date,
         released_date: cashCheckVoucher.released_date,
     }
-
     return (
         <div
             className={cn(
@@ -362,32 +265,50 @@ export const CashCheckVoucherCard = ({
                 className
             )}
         >
-            <CashCheckVoucherCardActions
-                cashCheckVoucher={cashCheckVoucher}
-                ccvDates={ccvDates}
-                refetch={refetch}
-            />
-
-            <p className="truncate text-lg font-bold text-foreground/95">
-                {cashCheckVoucher.name ||
-                    cashCheckVoucher.cash_voucher_number ||
-                    'CCV-Unknown'}
-            </p>
+            <div className="flex justify-between items-start">
+                <CashCheckVoucherStatusIndicator
+                    className="flex-shrink-0"
+                    voucherDates={ccvDates}
+                />
+                <p className="text-xs text-end text-muted-foreground/70 truncate">
+                    {dateAgo(cashCheckVoucher.created_at)}
+                </p>
+            </div>
+            <InfoTooltip content={cashCheckVoucher.name}>
+                <p className="truncate text-lg font-bold text-foreground/95">
+                    {cashCheckVoucher.name ? cashCheckVoucher.name : '-'}
+                </p>
+            </InfoTooltip>
 
             {cashCheckVoucher.cash_voucher_number && (
-                <p className="truncate w-full bg-secondary/30 rounded-md p-1 text-muted-foreground text-xs font-mono">
-                    CV No. {cashCheckVoucher.cash_voucher_number}
-                </p>
+                <JournalKanbanInfoItem
+                    content={cashCheckVoucher.cash_voucher_number}
+                    icon={<TicketIcon className="inline mr-2 size-5" />}
+                    infoTitle="Voucher Number"
+                    title="Voucher"
+                />
             )}
-
-            <p className="truncate w-full text-muted-foreground text-sm font-medium">
-                Pay To: {cashCheckVoucher.pay_to || 'N/A'}
-            </p>
-
-            <CashCheckVoucherCardCreatorInfo
-                cashCheckVoucher={cashCheckVoucher}
+            <div className="flex gap-x-2 grow">
+                <JournalKanbanInfoItem
+                    content={cashCheckVoucher.total_debit}
+                    icon={<IdCardIcon className="inline mr-2 size-5" />}
+                    infoTitle="Total Debit"
+                    title="Debit"
+                />
+                <JournalKanbanInfoItem
+                    content={cashCheckVoucher.total_credit}
+                    icon={<IdCardIcon className="inline mr-2 size-5" />}
+                    infoTitle="Total Credit"
+                    title="Credit"
+                />
+            </div>
+            <JournalKanbanInfoItem
+                content={cashCheckVoucher.pay_to || '-'}
+                icon={<MoneyBagIcon className="inline mr-2 size-5" />}
+                infoTitle="Pay To"
+                title="Pay To"
             />
-            <div className="w-full flex flex-wrap gap-1 max-h-16 overflow-x-auto ">
+            <div className="w-full flex flex-wrap gap-1 max-h-16 ecoop-scroll overflow-x-auto ">
                 {cashCheckVoucher?.cash_check_voucher_tags?.map((tag) => (
                     <CashCheckVoucherTagChip
                         key={tag.id}
@@ -398,10 +319,15 @@ export const CashCheckVoucherCard = ({
                     />
                 ))}
             </div>
+            <CashCheckVoucherCardActions
+                cashCheckVoucher={cashCheckVoucher}
+                ccvDates={ccvDates}
+                refetch={refetch}
+            />
 
-            <p className="text-xs text-end text-muted-foreground/70 truncate">
-                {dateAgo(cashCheckVoucher.created_at)}
-            </p>
+            <CashCheckVoucherCardCreatorInfo
+                cashCheckVoucher={cashCheckVoucher}
+            />
         </div>
     )
 }
@@ -430,7 +356,7 @@ const CashCheckVoucherKanbanMain = ({ mode }: CashCheckVoucherKanbanProps) => {
 
     return (
         <div>
-            <KanbanContainer className="w-[360px]">
+            <KanbanContainer className="w-[420px]">
                 <div className="flex items-center">
                     {mode === 'draft' && (
                         <DraftIcon className="mr-2 size-4 text-muted-foreground" />
@@ -473,16 +399,21 @@ const CashCheckVoucherKanbanMain = ({ mode }: CashCheckVoucherKanbanProps) => {
     )
 }
 
-const CashCheckVoucherKanban = () => {
+const CashCheckVoucherKanban = ({ className }: { className?: string }) => {
     return (
-        <>
+        <div
+            className={cn(
+                'w-full flex space-x-5 p-2 ecoop-scroll overflow-auto',
+                className
+            )}
+        >
             {['draft', 'printed', 'approved', 'released'].map((status) => (
                 <CashCheckVoucherKanbanMain
                     key={status}
                     mode={status as TCashCheckVoucherStatus}
                 />
             ))}
-        </>
+        </div>
     )
 }
 
