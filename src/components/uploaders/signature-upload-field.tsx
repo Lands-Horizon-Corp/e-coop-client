@@ -44,10 +44,10 @@ export const SignatureUploadField = forwardRef<
         return (
             <>
                 <SignaturePickerUploaderModal
-                    title="Upload Signature"
+                    className="min-w-fit bg-popover p-8"
                     description="Create,Capture or Upload your signature."
-                    open={uploaderModal}
                     onOpenChange={setUploaderModal}
+                    open={uploaderModal}
                     signatureUploadProps={{
                         onSignatureUpload: (media) => {
                             toast.success(
@@ -57,7 +57,7 @@ export const SignatureUploadField = forwardRef<
                             setUploaderModal(false)
                         },
                     }}
-                    className="min-w-fit bg-popover p-8"
+                    title="Upload Signature"
                 />
                 <div className={cn('flex items-end gap-x-1', className)}>
                     <ImageDisplay
@@ -65,12 +65,12 @@ export const SignatureUploadField = forwardRef<
                         src={mediaImage?.download_url}
                     />
                     <Button
-                        ref={ref}
-                        size="sm"
-                        type="button"
                         onClick={() => {
                             setUploaderModal(true)
                         }}
+                        ref={ref}
+                        size="sm"
+                        type="button"
                         variant="outline"
                         {...other}
                         className="relative flex !h-full max-h-none w-full grow items-center justify-between gap-x-2 rounded-md border bg-background p-2"
@@ -79,15 +79,15 @@ export const SignatureUploadField = forwardRef<
                             <>
                                 {mediaImage.file_name ?? 'unknown file'}
                                 <Button
-                                    size="icon"
-                                    type="button"
-                                    variant="secondary"
-                                    hoverVariant="destructive"
                                     className="size-fit p-1"
+                                    hoverVariant="destructive"
                                     onClick={(e) => {
                                         onChange?.(undefined)
                                         e.stopPropagation()
                                     }}
+                                    size="icon"
+                                    type="button"
+                                    variant="secondary"
                                 >
                                     <TrashIcon />
                                 </Button>

@@ -38,8 +38,8 @@ const AccountClassificationTableColumns = (
                 <HeaderToggleSelect table={table} />
                 {!column.getIsPinned() && (
                     <PushPinSlashIcon
-                        onClick={() => column.pin('left')}
                         className="mr-2 size-3.5 cursor-pointer"
+                        onClick={() => column.pin('left')}
                     />
                 )}
             </div>

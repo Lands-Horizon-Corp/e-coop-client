@@ -25,10 +25,10 @@ const CategoriesItem = ({ className }: CategoriesItemProps) => {
         >
             {!isSelectedCategoryEmmpty && (
                 <Button
-                    variant={'ghost'}
-                    size={'sm'}
-                    onClick={() => clearCategories()}
                     className="absolute right-1 top-1 max-h-6 cursor-pointer p-0 px-2 text-xs"
+                    onClick={() => clearCategories()}
+                    size={'sm'}
+                    variant={'ghost'}
                 >
                     clear
                 </Button>
@@ -42,16 +42,16 @@ const CategoriesItem = ({ className }: CategoriesItemProps) => {
                 selectedCategories.map((cat) => {
                     return (
                         <Badge
-                            key={cat.id}
                             className="relative mx-[0.15rem] mt-2 px-2.5 py-1"
+                            key={cat.id}
                         >
                             {cat.name}
                             <CloseIcon
-                                size={18}
+                                className="absolute -right-1.5 -top-2 scale-105 cursor-pointer rounded-full bg-secondary font-bold"
                                 onClick={() => {
                                     removeCategory(cat.id)
                                 }}
-                                className="absolute -right-1.5 -top-2 scale-105 cursor-pointer rounded-full bg-secondary font-bold"
+                                size={18}
                             />
                         </Badge>
                     )

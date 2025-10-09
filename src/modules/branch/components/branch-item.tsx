@@ -24,8 +24,8 @@ export const BranchItem = ({
         <div className="flex max-h-96 flex-col gap-y-2 overflow-y-auto">
             <GradientBackground gradientOnly>
                 <div
-                    key={branch.id}
                     className="relative flex min-h-16 w-full cursor-pointer items-center gap-x-2 rounded-2xl border-0 p-4 hover:bg-secondary/50 hover:no-underline"
+                    key={branch.id}
                 >
                     <ImageDisplay
                         className="size-10 rounded-xl"
@@ -40,19 +40,19 @@ export const BranchItem = ({
                         {branch.latitude && branch.longitude && (
                             <div className="mt-2">
                                 <MapPicker
+                                    className="text-xs"
+                                    disabled={false}
+                                    hideButtonCoordinates={true}
+                                    onChange={() => {}}
+                                    placeholder="View Branch Location"
+                                    size="sm"
+                                    title={`${branch.name} Location`}
                                     value={{
                                         lat: branch.latitude,
                                         lng: branch.longitude,
                                     }}
-                                    onChange={() => {}}
                                     variant="outline"
-                                    size="sm"
-                                    placeholder="View Branch Location"
-                                    title={`${branch.name} Location`}
-                                    hideButtonCoordinates={true}
-                                    disabled={false}
                                     viewOnly={true}
-                                    className="text-xs"
                                 />
                             </div>
                         )}

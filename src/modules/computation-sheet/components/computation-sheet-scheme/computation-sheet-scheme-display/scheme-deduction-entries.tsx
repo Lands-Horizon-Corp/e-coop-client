@@ -79,13 +79,13 @@ const ComputationSheetSchemeDeductionEntries = forwardRef<
                 }}
             />
             <AutomaticLoanDeductionTable
+                className="max-h-[60vh] max-w-full min-w-0 min-h-[60vh]"
+                computationSheetId={computationSheetId}
                 toolbarProps={{
                     createActionProps: {
                         onClick: () => createModal.onOpenChange(true),
                     },
                 }}
-                computationSheetId={computationSheetId}
-                className="max-h-[60vh] max-w-full min-w-0 min-h-[60vh]"
             />
         </div>
     )

@@ -44,9 +44,9 @@ const SignaturePickerUploader = ({ onSignatureUpload }: Props) => {
             {file ? (
                 <>
                     <ImageDisplay
+                        className="min-h-60 w-full rounded-lg border !bg-white"
                         fallbackClassName="rounded-none"
                         imageClassName="object-contain rounded-none"
-                        className="min-h-60 w-full rounded-lg border !bg-white"
                         src={objectUrl}
                     />
                     <FileItem
@@ -55,10 +55,10 @@ const SignaturePickerUploader = ({ onSignatureUpload }: Props) => {
                         uploadDetails={{ eta, progress, isUploading }}
                     />
                     <Button
-                        type="button"
+                        className="w-full"
                         disabled={isUploading}
                         onClick={() => uploadSignature({ file })}
-                        className="w-full"
+                        type="button"
                     >
                         {isUploading ? <LoadingSpinner /> : 'Upload Signature'}
                     </Button>
@@ -66,8 +66,8 @@ const SignaturePickerUploader = ({ onSignatureUpload }: Props) => {
             ) : (
                 <>
                     <Signature
-                        hideDownload
                         className=" border-0 bg-transparent p-0"
+                        hideDownload
                         onSignatureChange={(signature) => setFile(signature)}
                     />
                 </>

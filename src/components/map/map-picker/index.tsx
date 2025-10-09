@@ -35,24 +35,21 @@ const MapPicker = ({ onChange, mapProps, ...props }: MapPickerProps) => {
         <div className="w-full">
             <Modal
                 {...props}
-                title="Pick a Location on the Map"
                 description="Click on the map to select coordinates. You can also edit them manually below."
+                title="Pick a Location on the Map"
             >
                 <Map
                     {...mapProps}
                     center={defaultCenter}
-                    zoom={defaultZoom}
                     className="mb-4 h-[50vh] w-full"
                     onCoordinateClick={onCoordinateClick}
+                    zoom={defaultZoom}
                 />
 
                 <div className="grid grid-cols-2 gap-4">
                     <div className="flex flex-col gap-y-2">
                         <Label>Latitude</Label>
                         <Input
-                            type="number"
-                            readOnly
-                            value={coordinates?.lat ?? ''}
                             onChange={(e) =>
                                 setCoordinates((prev) => ({
                                     lat: parseFloat(e.target.value) || 0,
@@ -60,13 +57,14 @@ const MapPicker = ({ onChange, mapProps, ...props }: MapPickerProps) => {
                                 }))
                             }
                             placeholder="Latitude"
+                            readOnly
+                            type="number"
+                            value={coordinates?.lat ?? ''}
                         />
                     </div>
                     <div className="flex flex-col gap-y-2">
                         <Label>Longtitude</Label>
                         <Input
-                            readOnly
-                            value={coordinates?.lng ?? ''}
                             onChange={(e) =>
                                 setCoordinates((prev) => ({
                                     lat: prev?.lat ?? 0,
@@ -74,6 +72,8 @@ const MapPicker = ({ onChange, mapProps, ...props }: MapPickerProps) => {
                                 }))
                             }
                             placeholder="Longitude"
+                            readOnly
+                            value={coordinates?.lng ?? ''}
                         />
                     </div>
                 </div>

@@ -77,50 +77,50 @@ const LoanInquireAdvanceInterestFinesForm = ({
     return (
         <Form {...form}>
             <form
-                onSubmit={onSubmit}
                 className={cn('flex w-full flex-col gap-y-4', className)}
+                onSubmit={onSubmit}
             >
                 <fieldset className="grid gap-x-6 gap-y-4 sm:gap-y-3">
                     <fieldset className="space-y-3">
                         <FormFieldWrapper
                             control={form.control}
-                            name="current_interest"
                             label="Current Interest"
+                            name="current_interest"
                             render={({ field }) => (
                                 <Input
                                     {...field}
+                                    autoComplete="off"
                                     id={field.name}
-                                    type="number"
                                     min={0}
-                                    step="0.01"
                                     placeholder="Current Interest"
-                                    autoComplete="off"
+                                    step="0.01"
+                                    type="number"
                                 />
                             )}
                         />
                         <FormFieldWrapper
                             control={form.control}
-                            name="current_fines"
                             label="Current Fines"
+                            name="current_fines"
                             render={({ field }) => (
                                 <Input
                                     {...field}
-                                    id={field.name}
-                                    type="number"
-                                    min={0}
-                                    step="0.01"
-                                    placeholder="Current Fines"
                                     autoComplete="off"
+                                    id={field.name}
+                                    min={0}
+                                    placeholder="Current Fines"
+                                    step="0.01"
+                                    type="number"
                                 />
                             )}
                         />
                         <FormFieldWrapper
-                            control={form.control}
-                            name="entry_date"
-                            label="Date"
                             className="relative"
+                            control={form.control}
                             description="mm/dd/yyyy"
                             descriptionClassName="absolute top-0 right-0"
+                            label="Date"
+                            name="entry_date"
                             render={({ field }) => (
                                 <InputDate
                                     type="date"
@@ -132,33 +132,33 @@ const LoanInquireAdvanceInterestFinesForm = ({
                         />
                         <FormFieldWrapper
                             control={form.control}
-                            name="interest"
                             label="Interest"
+                            name="interest"
                             render={({ field }) => (
                                 <Input
                                     {...field}
-                                    id={field.name}
-                                    type="number"
-                                    min={0}
-                                    step="0.01"
-                                    placeholder="Interest"
                                     autoComplete="off"
+                                    id={field.name}
+                                    min={0}
+                                    placeholder="Interest"
+                                    step="0.01"
+                                    type="number"
                                 />
                             )}
                         />
                         <FormFieldWrapper
                             control={form.control}
-                            name="fines"
                             label="Fines"
+                            name="fines"
                             render={({ field }) => (
                                 <Input
                                     {...field}
-                                    id={field.name}
-                                    type="number"
-                                    min={0}
-                                    step="0.01"
-                                    placeholder="Fines"
                                     autoComplete="off"
+                                    id={field.name}
+                                    min={0}
+                                    placeholder="Fines"
+                                    step="0.01"
+                                    type="number"
                                 />
                             )}
                         />
@@ -188,10 +188,10 @@ const LoanInquireAdvanceInterestFinesForm = ({
                 {/* Footer Actions */}
                 <div className="flex gap-2 justify-end mt-4 sticky bottom-0">
                     <Button
-                        type="submit"
                         className="text-lg w-full"
-                        variant="default"
                         size="sm"
+                        type="submit"
+                        variant="default"
                     >
                         <CalculatorIcon className="size-4" />
                         Compute
@@ -213,9 +213,9 @@ export const LoanInquireAdvanceInterestFinesModal = ({
 }) => {
     return (
         <Modal
-            title={title}
-            description={description}
             className={cn('', className)}
+            description={description}
+            title={title}
             {...props}
         >
             <LoanInquireAdvanceInterestFinesForm

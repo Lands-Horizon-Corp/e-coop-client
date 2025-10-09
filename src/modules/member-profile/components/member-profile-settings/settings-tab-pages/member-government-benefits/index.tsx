@@ -38,15 +38,15 @@ const MemberGovernmentBenefitCard = ({
     return (
         <div className="flex flex-col gap-y-1 rounded-xl border bg-background p-4">
             <MemberGovernmentBenefitCreateUpdateFormModal
-                open={edit}
-                onOpenChange={setEdit}
-                title="Update Government Benefit"
                 description="Modify / Update this government benefit information."
                 formProps={{
                     benefitId: benefit.id,
                     memberProfileId: benefit.member_profile_id,
                     defaultValues: benefit,
                 }}
+                onOpenChange={setEdit}
+                open={edit}
+                title="Update Government Benefit"
             />
             <div className="flex justify-between">
                 <div className="flex items-center gap-x-2">
@@ -55,18 +55,17 @@ const MemberGovernmentBenefitCard = ({
                 </div>
                 <div className="flex items-center justify-end">
                     <Button
-                        size="icon"
-                        variant="ghost"
-                        hoverVariant="destructive"
                         className="!size-fit px-1.5 py-1.5 text-muted-foreground/40"
                         disabled={isDeleting}
+                        hoverVariant="destructive"
                         onClick={() => setEdit(true)}
+                        size="icon"
+                        variant="ghost"
                     >
                         <PencilFillIcon className="size-4" />
                     </Button>
                     <Button
-                        size="icon"
-                        variant="ghost"
+                        className="!size-fit px-1.5 py-1.5 text-muted-foreground/40"
                         disabled={isDeleting}
                         hoverVariant="destructive"
                         onClick={() =>
@@ -82,7 +81,8 @@ const MemberGovernmentBenefitCard = ({
                                     }),
                             })
                         }
-                        className="!size-fit px-1.5 py-1.5 text-muted-foreground/40"
+                        size="icon"
+                        variant="ghost"
                     >
                         {isDeleting ? (
                             <LoadingSpinner />
@@ -169,9 +169,6 @@ const MemberGovernmentBenefits = forwardRef<HTMLDivElement, Props>(
         return (
             <div ref={ref}>
                 <MemberGovernmentBenefitCreateUpdateFormModal
-                    open={create}
-                    onOpenChange={setCreate}
-                    title="Create Government Benefit"
                     description="Add new government benefit information."
                     formProps={{
                         memberProfileId: memberProfile.id,
@@ -181,10 +178,13 @@ const MemberGovernmentBenefits = forwardRef<HTMLDivElement, Props>(
                             organization_id: memberProfile.organization_id,
                         },
                     }}
+                    onOpenChange={setCreate}
+                    open={create}
+                    title="Create Government Benefit"
                 />
                 <div className="mb-2 flex items-start justify-between">
                     <p>Government Benefits</p>
-                    <Button size="sm" onClick={() => setCreate(true)}>
+                    <Button onClick={() => setCreate(true)} size="sm">
                         Add Benefit <PlusIcon className="ml-1" />
                     </Button>
                 </div>
@@ -192,8 +192,8 @@ const MemberGovernmentBenefits = forwardRef<HTMLDivElement, Props>(
                     {memberProfile.member_government_benefits?.map(
                         (benefit) => (
                             <MemberGovernmentBenefitCard
-                                key={benefit.id}
                                 benefit={benefit}
+                                key={benefit.id}
                             />
                         )
                     )}

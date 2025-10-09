@@ -94,38 +94,38 @@ const LoanPurposeCreateUpdateForm = ({
     return (
         <Form {...form}>
             <form
-                ref={formRef}
-                onSubmit={onSubmit}
                 className={cn('flex w-full flex-col gap-y-4', className)}
+                onSubmit={onSubmit}
+                ref={formRef}
             >
                 <fieldset
-                    disabled={isPending || formProps.readOnly}
                     className="grid gap-x-6 gap-y-4 sm:gap-y-3"
+                    disabled={isPending || formProps.readOnly}
                 >
                     <fieldset className="space-y-3">
                         <FormFieldWrapper
                             control={form.control}
-                            name="icon"
                             label="Icon"
+                            name="icon"
                             render={({ field }) => (
                                 <IconCombobox
                                     {...field}
-                                    value={field.value as TIcon}
-                                    placeholder="Select purpose icon"
                                     disabled={isDisabled(field.name)}
+                                    placeholder="Select purpose icon"
+                                    value={field.value as TIcon}
                                 />
                             )}
                         />
                         <FormFieldWrapper
                             control={form.control}
-                            name="description"
                             label="Description"
+                            name="description"
                             render={({ field }) => (
                                 <TextEditor
                                     {...field}
                                     content={field.value}
-                                    placeholder="Description"
                                     disabled={isDisabled(field.name)}
+                                    placeholder="Description"
                                     textEditorClassName="bg-background"
                                 />
                             )}
@@ -133,15 +133,15 @@ const LoanPurposeCreateUpdateForm = ({
                     </fieldset>
                 </fieldset>
                 <FormFooterResetSubmit
-                    error={error}
-                    readOnly={formProps.readOnly}
-                    isLoading={isPending}
                     disableSubmit={!form.formState.isDirty}
-                    submitText={loanPurposeId ? 'Update' : 'Create'}
+                    error={error}
+                    isLoading={isPending}
                     onReset={() => {
                         form.reset()
                         reset()
                     }}
+                    readOnly={formProps.readOnly}
+                    submitText={loanPurposeId ? 'Update' : 'Create'}
                 />
             </form>
         </Form>
@@ -159,9 +159,9 @@ export const LoanPurposeCreateUpdateFormModal = ({
 }) => {
     return (
         <Modal
-            title={title}
-            description={description}
             className={cn('', className)}
+            description={description}
+            title={title}
             {...props}
         >
             <LoanPurposeCreateUpdateForm

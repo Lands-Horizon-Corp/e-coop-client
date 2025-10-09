@@ -51,6 +51,7 @@ const MemberProfileTableColumns = (
             header: ({ table, column }) => (
                 <div className={'flex w-fit items-center gap-x-1 px-2'}>
                     <Checkbox
+                        aria-label="Select all"
                         checked={
                             table.getIsAllPageRowsSelected() ||
                             (table.getIsSomePageRowsSelected() &&
@@ -59,12 +60,11 @@ const MemberProfileTableColumns = (
                         onCheckedChange={(value) =>
                             table.toggleAllPageRowsSelected(!!value)
                         }
-                        aria-label="Select all"
                     />
                     {!column.getIsPinned() && (
                         <PushPinSlashIcon
-                            onClick={() => column.pin('left')}
                             className="mr-2 size-3.5 cursor-pointer"
+                            onClick={() => column.pin('left')}
                         />
                     )}
                 </div>
@@ -73,9 +73,9 @@ const MemberProfileTableColumns = (
                 <div className="flex w-fit items-center gap-x-1 px-0">
                     {opts?.actionComponent?.({ row })}
                     <Checkbox
+                        aria-label="Select row"
                         checked={row.getIsSelected()}
                         onCheckedChange={(value) => row.toggleSelected(!!value)}
-                        aria-label="Select row"
                     />
                 </div>
             ),
@@ -92,9 +92,9 @@ const MemberProfileTableColumns = (
                 <DataTableColumnHeader {...props} title="Full Name">
                     <ColumnActions {...props}>
                         <TextFilter
-                            field="full_name"
-                            displayText="Full Name"
                             defaultMode="contains"
+                            displayText="Full Name"
+                            field="full_name"
                         />
                     </ColumnActions>
                 </DataTableColumnHeader>
@@ -106,9 +106,9 @@ const MemberProfileTableColumns = (
             }) => (
                 <div onClick={(e) => e.stopPropagation()}>
                     <ImageNameDisplay
+                        className="mx-auto"
                         name={full_name}
                         src={media?.download_url}
-                        className="mx-auto"
                     />
                 </div>
             ),
@@ -123,9 +123,9 @@ const MemberProfileTableColumns = (
                 <DataTableColumnHeader {...props} title="First Name">
                     <ColumnActions {...props}>
                         <TextFilter
-                            field="first_name"
-                            displayText="First Name"
                             defaultMode="contains"
+                            displayText="First Name"
+                            field="first_name"
                         />
                     </ColumnActions>
                 </DataTableColumnHeader>
@@ -147,9 +147,9 @@ const MemberProfileTableColumns = (
                 <DataTableColumnHeader {...props} title="Middle Name">
                     <ColumnActions {...props}>
                         <TextFilter
-                            field="middle_name"
-                            displayText="Middle Name"
                             defaultMode="contains"
+                            displayText="Middle Name"
+                            field="middle_name"
                         />
                     </ColumnActions>
                 </DataTableColumnHeader>
@@ -170,9 +170,9 @@ const MemberProfileTableColumns = (
                 <DataTableColumnHeader {...props} title="Last Name">
                     <ColumnActions {...props}>
                         <TextFilter
-                            field="last_name"
-                            displayText="Last Name"
                             defaultMode="contains"
+                            displayText="Last Name"
+                            field="last_name"
                         />
                     </ColumnActions>
                 </DataTableColumnHeader>
@@ -193,9 +193,9 @@ const MemberProfileTableColumns = (
                 <DataTableColumnHeader {...props} title="Suffix">
                     <ColumnActions {...props}>
                         <TextFilter
-                            field="suffix"
-                            displayText="Suffix"
                             defaultMode="equal"
+                            displayText="Suffix"
+                            field="suffix"
                         />
                     </ColumnActions>
                 </DataTableColumnHeader>
@@ -217,9 +217,9 @@ const MemberProfileTableColumns = (
                 <DataTableColumnHeader {...props} title="PB">
                     <ColumnActions {...props}>
                         <TextFilter
-                            field="passbook"
-                            displayText="Passbook"
                             defaultMode="equal"
+                            displayText="Passbook"
+                            field="passbook"
                         />
                     </ColumnActions>
                 </DataTableColumnHeader>
@@ -307,9 +307,9 @@ const MemberProfileTableColumns = (
                 <DataTableColumnHeader {...props} title="Member Type">
                     <ColumnActions {...props}>
                         <TextFilter
-                            field="member_type.name"
-                            displayText="Member Type"
                             defaultMode="equal"
+                            displayText="Member Type"
+                            field="member_type.name"
                         />
                     </ColumnActions>
                 </DataTableColumnHeader>
@@ -335,11 +335,11 @@ const MemberProfileTableColumns = (
                             IMemberProfile,
                             TGeneralStatus
                         >
-                            field="status"
                             dataType="text"
-                            mode="contains"
                             defaultMode="equal"
                             displayText="Status"
+                            field="status"
+                            mode="contains"
                             multiSelectOptions={GENERAL_STATUS.map(
                                 (status) => ({
                                     label: status,
@@ -370,11 +370,11 @@ const MemberProfileTableColumns = (
                             IMemberProfile,
                             TCivilStatus
                         >
-                            field="civil_status"
                             dataType="text"
-                            mode="contains"
                             defaultMode="equal"
                             displayText="Civil Status"
+                            field="civil_status"
+                            mode="contains"
                             multiSelectOptions={CIVIL_STATUS.map((status) => ({
                                 label: status,
                                 value: status,
@@ -400,9 +400,9 @@ const MemberProfileTableColumns = (
                 <DataTableColumnHeader {...props} title="Member Group">
                     <ColumnActions {...props}>
                         <TextFilter
-                            field="member_group.name"
-                            displayText="Member Group"
                             defaultMode="equal"
+                            displayText="Member Group"
+                            field="member_group.name"
                         />
                     </ColumnActions>
                 </DataTableColumnHeader>
@@ -424,9 +424,9 @@ const MemberProfileTableColumns = (
                 <DataTableColumnHeader {...props} title="Member Center">
                     <ColumnActions {...props}>
                         <TextFilter
-                            field="member_center.name"
-                            displayText="Member Center"
                             defaultMode="equal"
+                            displayText="Member Center"
+                            field="member_center.name"
                         />
                     </ColumnActions>
                 </DataTableColumnHeader>
@@ -463,11 +463,11 @@ const MemberProfileTableColumns = (
                 <DataTableColumnHeader {...props} title="Micro Finance Member">
                     <ColumnActions {...props}>
                         <DataTableMultiSelectFilter<IMemberProfile, boolean>
-                            field="is_micro_finance_member"
                             dataType="boolean"
-                            mode="contains"
                             defaultMode="equal"
                             displayText="Micro Finance Member"
+                            field="is_micro_finance_member"
+                            mode="contains"
                             multiSelectOptions={[true, false].map((status) => ({
                                 label: status ? 'yes' : 'no',
                                 value: status,
@@ -493,11 +493,11 @@ const MemberProfileTableColumns = (
                 <DataTableColumnHeader {...props} title="Mutual Fund Member">
                     <ColumnActions {...props}>
                         <DataTableMultiSelectFilter<IMemberProfile, boolean>
-                            field="is_mutual_fund_member"
                             dataType="boolean"
-                            mode="contains"
                             defaultMode="equal"
                             displayText="Mutual Fund Member"
+                            field="is_mutual_fund_member"
+                            mode="contains"
                             multiSelectOptions={[true, false].map((status) => ({
                                 label: status ? 'yes' : 'no',
                                 value: status,
@@ -529,8 +529,6 @@ export const QrCodeCell = ({
 
     return (
         <Button
-            size="sm"
-            variant="secondary"
             className="h-auto p-1"
             onClick={(e) => {
                 e.stopPropagation()
@@ -553,6 +551,8 @@ export const QrCodeCell = ({
                     ),
                 })
             }}
+            size="sm"
+            variant="secondary"
         >
             <QrCodeIcon className="size-4" />
         </Button>

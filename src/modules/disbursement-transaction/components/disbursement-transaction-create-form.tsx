@@ -78,68 +78,68 @@ const DisbursementTransactionCreateForm = ({
     return (
         <Form {...form}>
             <form
-                ref={formRef}
-                onSubmit={onSubmit}
                 className={cn('flex w-full flex-col gap-y-4', className)}
+                onSubmit={onSubmit}
+                ref={formRef}
             >
                 <fieldset
-                    disabled={isPending || formProps.readOnly}
                     className="grid gap-x-6 gap-y-4 sm:gap-y-3"
+                    disabled={isPending || formProps.readOnly}
                 >
                     <fieldset className="space-y-3">
                         <FormFieldWrapper
                             control={form.control}
-                            name="disbursement_id"
                             label={
                                 <span>
                                     Disbursement Type *
                                     <InfoTooltip
-                                        content="Type of disbursement is required for creating a disbursement transaction"
                                         className="ml-1"
+                                        content="Type of disbursement is required for creating a disbursement transaction"
                                     />
                                 </span>
                             }
+                            name="disbursement_id"
                             render={({ field }) => (
                                 <DisbursementCombobox
-                                    value={field.value}
                                     disabled={isDisabled(field.name)}
-                                    placeholder="Select disbursement type..."
                                     onChange={(selected) => {
                                         field.onChange(selected.id)
                                     }}
+                                    placeholder="Select disbursement type..."
+                                    value={field.value}
                                 />
                             )}
                         />
 
                         <FormFieldWrapper
                             control={form.control}
-                            name="amount"
                             label="Amount"
+                            name="amount"
                             render={({ field }) => (
                                 <Input
                                     {...field}
+                                    autoComplete="off"
+                                    disabled={isDisabled(field.name)}
                                     id={field.name}
-                                    type="number"
-                                    step="0.01"
                                     min="0"
                                     placeholder="0.00"
-                                    autoComplete="off"
-                                    disabled={isDisabled(field.name)}
+                                    step="0.01"
+                                    type="number"
                                 />
                             )}
                         />
 
                         <FormFieldWrapper
                             control={form.control}
-                            name="reference_number"
                             label="Reference Number"
+                            name="reference_number"
                             render={({ field }) => (
                                 <Input
                                     {...field}
-                                    id={field.name}
-                                    placeholder="Enter reference number"
                                     autoComplete="off"
                                     disabled={isDisabled(field.name)}
+                                    id={field.name}
+                                    placeholder="Enter reference number"
                                 />
                             )}
                         />
@@ -150,14 +150,14 @@ const DisbursementTransactionCreateForm = ({
                             render={({ field }) => (
                                 <div className="flex items-center space-x-2">
                                     <Checkbox
-                                        id={field.name}
                                         checked={field.value}
-                                        onCheckedChange={field.onChange}
                                         disabled={isDisabled(field.name)}
+                                        id={field.name}
+                                        onCheckedChange={field.onChange}
                                     />
                                     <Label
-                                        htmlFor={field.name}
                                         className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                                        htmlFor={field.name}
                                     >
                                         Reference number has been verified{' '}
                                         <InfoTooltip content="Always verify reference number of disbursement" />
@@ -168,15 +168,15 @@ const DisbursementTransactionCreateForm = ({
 
                         <FormFieldWrapper
                             control={form.control}
-                            name="description"
                             label="Description"
+                            name="description"
                             render={({ field }) => (
                                 <Textarea
                                     {...field}
-                                    id={field.name}
                                     autoComplete="off"
-                                    placeholder="Enter transaction description"
                                     disabled={isDisabled(field.name)}
+                                    id={field.name}
+                                    placeholder="Enter transaction description"
                                     rows={3}
                                 />
                             )}
@@ -184,15 +184,15 @@ const DisbursementTransactionCreateForm = ({
                     </fieldset>
                 </fieldset>
                 <FormFooterResetSubmit
-                    error={error}
-                    readOnly={formProps.readOnly}
-                    isLoading={isPending}
                     disableSubmit={!form.formState.isDirty}
-                    submitText="Create"
+                    error={error}
+                    isLoading={isPending}
                     onReset={() => {
                         form.reset()
                         reset()
                     }}
+                    readOnly={formProps.readOnly}
+                    submitText="Create"
                 />
             </form>
         </Form>
@@ -210,9 +210,9 @@ export const DisbursementTransactionCreateFormModal = ({
 }) => {
     return (
         <Modal
-            title={title}
-            description={description}
             className={cn('max-w-lg', className)}
+            description={description}
+            title={title}
             {...props}
         >
             <DisbursementTransactionCreateForm

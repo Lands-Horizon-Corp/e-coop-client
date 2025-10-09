@@ -27,6 +27,7 @@ import {
 
 import { IClassProps } from '@/types'
 
+import { ICashCheckVoucher } from '../cash-check-voucher.types'
 import CashCheckVoucherStatusBadge from './cash-check-voucher-status-badge'
 
 export type CashCheckVoucherStatus =
@@ -100,12 +101,12 @@ export const CashCheckVoucherStatusIndicatorDetails = ({
             : 1
 
     return (
-        <Timeline value={lastCompleted} className="p-4 gap-y-3">
+        <Timeline className="p-4 gap-y-3" value={lastCompleted}>
             {steps.map((step) => (
                 <TimelineItem
+                    className="group-data-[orientation=vertical]/timeline:ms-10 group-data-[orientation=vertical]/timeline:not-last:pb-5"
                     key={step.key}
                     step={step.key}
-                    className="group-data-[orientation=vertical]/timeline:ms-10 group-data-[orientation=vertical]/timeline:not-last:pb-5"
                 >
                     <TimelineHeader>
                         <TimelineSeparator className="group-data-[orientation=vertical]/timeline:-left-7 group-data-[orientation=vertical]/timeline:top-2 group-data-[orientation=vertical]/timeline:h-[calc(100%-1.5rem)] group-data-[orientation=vertical]/timeline:translate-y-6.5" />
@@ -135,21 +136,35 @@ export const CashCheckVoucherStatusIndicatorDetails = ({
 }
 
 interface Props extends IClassProps {
-    voucherDates: ICashCheckVoucherStatusDates
+    cashCheckVoucher?: ICashCheckVoucher
+    voucherDates?: {
+        printed_date?: string | null
+        approved_date?: string | null
+        released_date?: string | null
+    }
+    title?: string
 }
 
 const CashCheckVoucherStatusIndicator = ({
     className,
+    cashCheckVoucher,
     voucherDates,
+    title = 'Cash Check Voucher Status',
 }: Props) => {
-    const resolvedStatus = resolveCashCheckVoucherDatesToStatus(voucherDates)
+    const finalDates: ICashCheckVoucherStatusDates = voucherDates ?? {
+        printed_date: cashCheckVoucher?.printed_date,
+        approved_date: cashCheckVoucher?.approved_date,
+        released_date: cashCheckVoucher?.released_date,
+    }
+
+    const resolvedStatus = resolveCashCheckVoucherDatesToStatus(finalDates)
 
     return (
         <Popover>
             <PopoverTrigger asChild>
                 <CashCheckVoucherStatusBadge
-                    size="sm"
                     className="cursor-pointer"
+                    size="sm"
                     status={resolvedStatus}
                 />
             </PopoverTrigger>
@@ -160,9 +175,7 @@ const CashCheckVoucherStatusIndicator = ({
                 )}
             >
                 <div className="space-y-2 px-3 py-2">
-                    <p className="text-sm font-semibold">
-                        Cash Check Voucher Status
-                    </p>
+                    <p className="text-sm font-semibold">{title}</p>
                     <p className="text-xs text-muted-foreground">
                         This is an auto generated status by system.
                     </p>

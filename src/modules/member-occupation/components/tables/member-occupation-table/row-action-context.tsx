@@ -79,18 +79,17 @@ export const MemberOccupationAction = ({
             <div onClick={(e) => e.stopPropagation()}>
                 <MemberOccupationCreateUpdateFormModal
                     {...updateModal}
+                    description="Modify/Update this member occupation..."
                     formProps={{
                         memberOccupationId: memberOccupation.id,
                         defaultValues: { ...memberOccupation },
                         onSuccess: () => updateModal.onOpenChange(false),
                     }}
                     title="Update Member Occupation"
-                    description="Modify/Update this member occupation..."
                 />
             </div>
             <RowActionsGroup
                 canSelect
-                row={row}
                 onDelete={{
                     text: 'Delete',
                     isAllowed: !isDeletingMemberOccupation,
@@ -102,6 +101,7 @@ export const MemberOccupationAction = ({
                     onClick: handleEdit,
                 }}
                 otherActions={<>{/* Additional actions can be added here */}</>}
+                row={row}
             />
         </>
     )
@@ -130,16 +130,15 @@ export const MemberOccupationRowContext = ({
         <>
             <MemberOccupationCreateUpdateFormModal
                 {...updateModal}
+                description="Modify/Update this member occupation..."
                 formProps={{
                     memberOccupationId: memberOccupation.id,
                     defaultValues: { ...memberOccupation },
                     onSuccess: () => updateModal.onOpenChange(false),
                 }}
                 title="Update Member Occupation"
-                description="Modify/Update this member occupation..."
             />
             <DataTableRowContext
-                row={row}
                 onDelete={{
                     text: 'Delete',
                     isAllowed: !isDeletingMemberOccupation,
@@ -150,6 +149,7 @@ export const MemberOccupationRowContext = ({
                     isAllowed: true,
                     onClick: handleEdit,
                 }}
+                row={row}
             >
                 {children}
             </DataTableRowContext>

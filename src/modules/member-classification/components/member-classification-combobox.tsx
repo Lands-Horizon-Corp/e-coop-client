@@ -70,8 +70,6 @@ const MemberClassificationCombobox = React.forwardRef<HTMLButtonElement, Props>(
         return (
             <>
                 <MemberClassificationCreateUpdateFormModal
-                    open={createModal}
-                    onOpenChange={setCreateModal}
                     formProps={{
                         ...memberClassificationCreateProps,
                         onSuccess: (data) => {
@@ -79,20 +77,22 @@ const MemberClassificationCombobox = React.forwardRef<HTMLButtonElement, Props>(
                             setOpen(false)
                         },
                     }}
+                    onOpenChange={setCreateModal}
+                    open={createModal}
                 />
-                <Popover modal open={open} onOpenChange={setOpen}>
+                <Popover modal onOpenChange={setOpen} open={open}>
                     <PopoverTrigger asChild>
                         <Button
                             {...other}
-                            ref={ref}
-                            variant="outline"
-                            role="combobox"
                             aria-expanded={open}
                             className={cn(
                                 'w-full justify-between px-3',
                                 className
                             )}
                             disabled={disabled || isLoading}
+                            ref={ref}
+                            role="combobox"
+                            variant="outline"
                         >
                             {value ? (
                                 data?.find((option) => option.id === value)
@@ -108,8 +108,8 @@ const MemberClassificationCombobox = React.forwardRef<HTMLButtonElement, Props>(
                     <PopoverContent className="max-h-[--radix-popover-content-available-height] w-[--radix-popover-trigger-width] p-0">
                         <Command>
                             <CommandInput
-                                placeholder="Search Member Classification..."
                                 className="h-9"
+                                placeholder="Search Member Classification..."
                             />
                             {isLoading ? (
                                 <CommandEmpty>
@@ -140,11 +140,11 @@ const MemberClassificationCombobox = React.forwardRef<HTMLButtonElement, Props>(
                                         {data?.map((option) => (
                                             <CommandItem
                                                 key={option.id}
-                                                value={option.name}
                                                 onSelect={() => {
                                                     setOpen(false)
                                                     onChange?.(option)
                                                 }}
+                                                value={option.name}
                                             >
                                                 {option.name}
                                                 <Check

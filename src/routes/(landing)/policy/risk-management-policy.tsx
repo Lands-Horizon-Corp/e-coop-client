@@ -96,8 +96,8 @@ function RouteComponent() {
                     <span>
                         <LinkTag
                             href="http://ecoop-suite.com/"
-                            target="_blank"
                             name={` (http://ecoop-suite.com/)`}
+                            target="_blank"
                         />
                     </span>
                     . Our objective is to ensure the safety, stability, and
@@ -107,8 +107,8 @@ function RouteComponent() {
 
                 {/* --- Section 1: Purpose and Scope --- */}
                 <SitePolicyItem
-                    ref={purposeScopeRef}
                     id="purpose-and-scope"
+                    ref={purposeScopeRef}
                     title="1. Purpose and Scope"
                 >
                     <div>
@@ -128,8 +128,8 @@ function RouteComponent() {
 
                 {/* --- Section 2: Risk Management Objectives --- */}
                 <SitePolicyItem
-                    ref={riskManagementObjectivesRef}
                     id="risk-management-objectives"
+                    ref={riskManagementObjectivesRef}
                     title="2. Risk Management Objectives"
                 >
                     <div>
@@ -157,8 +157,8 @@ function RouteComponent() {
 
                 {/* --- Section 3: Types of Risks Monitored --- */}
                 <SitePolicyItem
-                    ref={typesOfRisksMonitoredRef}
                     id="types-of-risks-monitored"
+                    ref={typesOfRisksMonitoredRef}
                     title="3. Types of Risks Monitored"
                 >
                     <div>
@@ -203,8 +203,8 @@ function RouteComponent() {
 
                 {/* --- Section 4: Risk Identification --- */}
                 <SitePolicyItem
-                    ref={riskIdentificationRef}
                     id="risk-identification"
+                    ref={riskIdentificationRef}
                     title="4. Risk Identification"
                 >
                     <div>
@@ -225,8 +225,8 @@ function RouteComponent() {
 
                 {/* --- Section 5: Risk Assessment and Evaluation --- */}
                 <SitePolicyItem
-                    ref={riskAssessmentEvaluationRef}
                     id="risk-assessment-and-evaluation"
+                    ref={riskAssessmentEvaluationRef}
                     title="5. Risk Assessment and Evaluation"
                 >
                     <div>
@@ -249,8 +249,8 @@ function RouteComponent() {
 
                 {/* --- Section 6: Risk Mitigation and Controls --- */}
                 <SitePolicyItem
-                    ref={riskMitigationControlsRef}
                     id="risk-mitigation-and-controls"
+                    ref={riskMitigationControlsRef}
                     title="6. Risk Mitigation and Controls"
                 >
                     <div>
@@ -277,8 +277,8 @@ function RouteComponent() {
 
                 {/* --- Section 7: Monitoring and Review --- */}
                 <SitePolicyItem
-                    ref={monitoringReviewRef}
                     id="monitoring-and-review"
+                    ref={monitoringReviewRef}
                     title="7. Monitoring and Review"
                 >
                     <div>
@@ -303,8 +303,8 @@ function RouteComponent() {
 
                 {/* --- Section 8: Roles and Responsibilities --- */}
                 <SitePolicyItem
-                    ref={rolesResponsibilitiesRef}
                     id="roles-and-responsibilities"
+                    ref={rolesResponsibilitiesRef}
                     title="8. Roles and Responsibilities"
                 >
                     <div>
@@ -326,8 +326,8 @@ function RouteComponent() {
 
                 {/* --- Section 9: Policy Review and Updates --- */}
                 <SitePolicyItem
-                    ref={policyReviewUpdatesRef}
                     id="policy-review-and-updates"
+                    ref={policyReviewUpdatesRef}
                     title="9. Policy Review and Updates"
                 >
                     <div>
@@ -348,8 +348,8 @@ function RouteComponent() {
 
                 {/* --- Section 10: Contact Us --- */}
                 <SitePolicyItem
-                    ref={contactUsRef}
                     id="contact-us"
+                    ref={contactUsRef}
                     title="10. Contact Us"
                 >
                     <div className="space-y-2 not-prose">
@@ -394,12 +394,12 @@ function RouteComponent() {
                     {articleList.map((sectionId, idx) => (
                         <li key={sectionId}>
                             <a
+                                className="block py-1 text-primary hover:underline cursor-pointer text-sm"
                                 href={`#${sectionId}`}
                                 onClick={(e) => {
                                     e.preventDefault()
                                     scrollToSection(sectionId)
                                 }}
-                                className="block py-1 text-primary hover:underline cursor-pointer text-sm"
                             >
                                 {idx + 1}
                                 {'. '}

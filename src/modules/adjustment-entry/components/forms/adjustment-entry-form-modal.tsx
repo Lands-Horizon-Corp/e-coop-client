@@ -123,23 +123,24 @@ const AdjustmentEntryCreateUpdateForm = ({
     return (
         <Form {...form}>
             <form
-                ref={formRef}
-                onSubmit={onSubmit}
                 className={cn('flex w-full flex-col gap-y-4', className)}
+                onSubmit={onSubmit}
+                ref={formRef}
             >
                 <fieldset
-                    disabled={isPending || formProps.readOnly}
                     className="grid gap-x-6 gap-y-4 sm:grid-cols-1 md:grid-cols-3 sm:gap-y-3"
+                    disabled={isPending || formProps.readOnly}
                 >
                     <FormFieldWrapper
-                        control={form.control}
-                        name="member_profile_id"
-                        label="Member Profile"
                         className="md:col-span-3"
+                        control={form.control}
+                        label="Member Profile"
+                        name="member_profile_id"
                         render={({ field }) => {
                             return (
                                 <MemberPicker
-                                    value={form.getValues('member_profile')}
+                                    allowShorcutCommand
+                                    disabled={isDisabled(field.name)}
                                     onSelect={(selectedMember) => {
                                         field.onChange(selectedMember?.id)
                                         form.setValue(
@@ -148,19 +149,19 @@ const AdjustmentEntryCreateUpdateForm = ({
                                         )
                                     }}
                                     placeholder="Relative Member Profile"
-                                    disabled={isDisabled(field.name)}
-                                    allowShorcutCommand
+                                    value={form.getValues('member_profile')}
                                 />
                             )
                         }}
                     />
                     <FormFieldWrapper
-                        control={form.control}
-                        name="account_id"
-                        label="Account"
                         className="md:col-span-3"
+                        control={form.control}
+                        label="Account"
+                        name="account_id"
                         render={({ field }) => (
                             <AccountPicker
+                                disabled={isDisabled(field.name)}
                                 onSelect={(account) => {
                                     field.onChange(account.id)
                                     form.setValue('account', account, {
@@ -169,14 +170,13 @@ const AdjustmentEntryCreateUpdateForm = ({
                                 }}
                                 placeholder="Select an account"
                                 value={form.getValues('account')}
-                                disabled={isDisabled(field.name)}
                             />
                         )}
                     />
                     <FormFieldWrapper
                         control={form.control}
-                        name="entry_date"
                         label="Entry Date"
+                        name="entry_date"
                         render={({ field }) => (
                             <InputDate {...field} value={field.value ?? ''} />
                         )}
@@ -184,74 +184,74 @@ const AdjustmentEntryCreateUpdateForm = ({
                     <FormFieldWrapper
                         control={form.control}
                         label="Payment Type"
-                        name="payment_type_id"
                         labelClassName="text-xs font-medium text-muted-foreground"
+                        name="payment_type_id"
                         render={({ field }) => (
                             <TransactionPaymentTypeComboBox
                                 {...field}
-                                value={field.value ?? undefined}
-                                placeholder="Select a payment type"
                                 disabled={isDisabled('payment_type_id')}
                                 onChange={(selectedPaymentType) => {
                                     field.onChange(selectedPaymentType.id)
                                 }}
+                                placeholder="Select a payment type"
+                                value={field.value ?? undefined}
                             />
                         )}
                     />
                     <FormFieldWrapper
                         control={form.control}
-                        name="reference_number"
                         label="Reference Number"
+                        name="reference_number"
                         render={({ field }) => (
                             <Input
                                 {...field}
-                                id={field.name}
-                                placeholder="Reference Number"
                                 autoComplete="off"
                                 disabled={isDisabled(field.name)}
+                                id={field.name}
+                                placeholder="Reference Number"
                             />
                         )}
                     />
                     <div className="md:col-span-3 grid grid-cols-1 gap-x-3 md:grid-cols-2">
                         <FormFieldWrapper
                             control={form.control}
-                            name="debit"
                             label="Debit Amount"
+                            name="debit"
                             render={({ field }) => (
                                 <TransactionAmountField
                                     {...field}
-                                    id={field.name}
-                                    type="number"
-                                    step="0.01"
-                                    isDefault
-                                    placeholder="0.00"
                                     disabled={isDisabled(field.name)}
+                                    id={field.name}
+                                    isDefault
                                     onChange={(e) => {
                                         field.onChange(
                                             parseFloat(e.target.value) || 0
                                         )
                                     }}
+                                    placeholder="0.00"
+                                    step="0.01"
+                                    type="number"
                                 />
                             )}
                         />
                         <FormFieldWrapper
                             control={form.control}
-                            name="credit"
                             label="Credit Amount"
+                            name="credit"
                             render={({ field }) => (
                                 <TransactionAmountField
                                     {...field}
-                                    id={field.name}
-                                    type="number"
-                                    step="0.01"
-                                    isDefault
-                                    placeholder="0.00"
                                     disabled={isDisabled(field.name)}
+                                    id={field.name}
+                                    isDefault
                                     onChange={(e) => {
                                         field.onChange(
                                             parseFloat(e.target.value) || 0
                                         )
                                     }}
+                                    placeholder="0.00"
+                                    step="0.01"
+                                    type="number"
                                 />
                             )}
                         />
@@ -259,16 +259,16 @@ const AdjustmentEntryCreateUpdateForm = ({
                     <div className="md:col-span-3">
                         <FormFieldWrapper
                             control={form.control}
-                            name="description"
                             label="Description"
+                            name="description"
                             render={({ field }) => (
                                 <Textarea
                                     {...field}
-                                    id={field.name}
                                     autoComplete="off"
-                                    placeholder="Description"
                                     className={cn('!max-h-32')}
                                     disabled={isDisabled(field.name)}
+                                    id={field.name}
+                                    placeholder="Description"
                                 />
                             )}
                         />
@@ -276,22 +276,16 @@ const AdjustmentEntryCreateUpdateForm = ({
                     <div className="md:col-span-3">
                         <FormFieldWrapper
                             control={form.control}
-                            name="signature_media_id"
                             label="Signature"
+                            name="signature_media_id"
                             render={({ field }) => {
                                 const value = form.watch('signature_media')
                                 return (
                                     <SignatureField
                                         {...field}
-                                        placeholder="Signature"
                                         disabled={isDisabled(
                                             'signature_media_id'
                                         )}
-                                        value={
-                                            value
-                                                ? (value as IMedia).download_url
-                                                : value
-                                        }
                                         onChange={(newImage) => {
                                             if (newImage) {
                                                 field.onChange(newImage.id)
@@ -307,6 +301,12 @@ const AdjustmentEntryCreateUpdateForm = ({
                                                 )
                                             }
                                         }}
+                                        placeholder="Signature"
+                                        value={
+                                            value
+                                                ? (value as IMedia).download_url
+                                                : value
+                                        }
                                     />
                                 )
                             }}
@@ -314,17 +314,17 @@ const AdjustmentEntryCreateUpdateForm = ({
                     </div>
                 </fieldset>
                 <FormFooterResetSubmit
-                    error={error}
-                    readOnly={formProps.readOnly}
-                    isLoading={isPending}
                     disableSubmit={!form.formState.isDirty}
-                    submitText={
-                        formProps.adjustmentEntryId ? 'Update' : 'Create'
-                    }
+                    error={error}
+                    isLoading={isPending}
                     onReset={() => {
                         form.reset()
                         reset()
                     }}
+                    readOnly={formProps.readOnly}
+                    submitText={
+                        formProps.adjustmentEntryId ? 'Update' : 'Create'
+                    }
                 />
             </form>
         </Form>
@@ -342,9 +342,9 @@ export const AdjustmentEntryCreateUpdateFormModal = ({
 }) => {
     return (
         <Modal
-            title={title}
-            description={description}
             className={cn('md:max-w-2xl lg:!min-w-[800px]', className)}
+            description={description}
+            title={title}
             {...props}
         >
             <AdjustmentEntryCreateUpdateForm

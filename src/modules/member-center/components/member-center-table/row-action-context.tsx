@@ -76,18 +76,17 @@ export const MemberCenterAction = ({
             <div onClick={(e) => e.stopPropagation()}>
                 <MemberCenterCreateUpdateFormModal
                     {...updateModal}
-                    title="Update Member Center"
                     description="Modify/Update member center..."
                     formProps={{
                         memberCenterId: memberCenter.id,
                         defaultValues: { ...memberCenter },
                         onSuccess: () => updateModal.onOpenChange(false),
                     }}
+                    title="Update Member Center"
                 />
             </div>
             <RowActionsGroup
                 canSelect
-                row={row}
                 onDelete={{
                     text: 'Delete',
                     isAllowed: !isDeletingMemberCenter,
@@ -99,6 +98,7 @@ export const MemberCenterAction = ({
                     onClick: handleEdit,
                 }}
                 otherActions={<>{/* Additional actions can be added here */}</>}
+                row={row}
             />
         </>
     )
@@ -127,16 +127,15 @@ export const MemberCenterRowContext = ({
         <>
             <MemberCenterCreateUpdateFormModal
                 {...updateModal}
-                title="Update Member Center"
                 description="Modify/Update member center..."
                 formProps={{
                     memberCenterId: memberCenter.id,
                     defaultValues: { ...memberCenter },
                     onSuccess: () => updateModal.onOpenChange(false),
                 }}
+                title="Update Member Center"
             />
             <DataTableRowContext
-                row={row}
                 onDelete={{
                     text: 'Delete',
                     isAllowed: !isDeletingMemberCenter,
@@ -147,6 +146,7 @@ export const MemberCenterRowContext = ({
                     isAllowed: true,
                     onClick: handleEdit,
                 }}
+                row={row}
             >
                 {children}
             </DataTableRowContext>

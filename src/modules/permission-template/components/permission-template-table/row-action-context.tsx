@@ -89,7 +89,6 @@ export const PermissionTemplateAction = ({
             </div>
             <RowActionsGroup
                 canSelect
-                row={row}
                 onDelete={{
                     text: 'Delete',
                     isAllowed: !isDeleting,
@@ -101,6 +100,7 @@ export const PermissionTemplateAction = ({
                     onClick: handleEdit,
                 }}
                 otherActions={<>{/* Additional actions can be added here */}</>}
+                row={row}
             />
         </>
     )
@@ -136,7 +136,6 @@ export const PermissionTemplateRowContext = ({
                 }}
             />
             <DataTableRowContext
-                row={row}
                 onDelete={{
                     text: 'Delete',
                     isAllowed: !isDeleting,
@@ -147,6 +146,7 @@ export const PermissionTemplateRowContext = ({
                     isAllowed: true,
                     onClick: handleEdit,
                 }}
+                row={row}
             >
                 {children}
             </DataTableRowContext>

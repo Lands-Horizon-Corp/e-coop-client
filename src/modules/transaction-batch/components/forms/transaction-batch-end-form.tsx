@@ -90,18 +90,18 @@ const TransactionBatchEndForm = ({
     return (
         <Form {...form}>
             <form
-                ref={formRef}
-                onSubmit={onSubmit}
                 className={cn('flex w-full flex-col gap-y-4', className)}
+                onSubmit={onSubmit}
+                ref={formRef}
             >
                 <fieldset
-                    disabled={isPending || formProps.readOnly}
                     className="grid gap-x-6 gap-y-4 sm:gap-y-3"
+                    disabled={isPending || formProps.readOnly}
                 >
                     <FormFieldWrapper
                         control={form.control}
-                        name="employee_by_signature_media_id"
                         label="Signature"
+                        name="employee_by_signature_media_id"
                         render={({ field }) => {
                             const value = form.watch(
                                 'employee_by_signature_media'
@@ -109,12 +109,7 @@ const TransactionBatchEndForm = ({
                             return (
                                 <SignatureField
                                     {...field}
-                                    placeholder="Signature"
-                                    value={
-                                        value
-                                            ? (value as IMedia).download_url
-                                            : value
-                                    }
+                                    disabled={isDisabled(field.name)}
                                     onChange={(newImage) => {
                                         if (newImage)
                                             field.onChange(newImage.id)
@@ -125,36 +120,41 @@ const TransactionBatchEndForm = ({
                                             newImage
                                         )
                                     }}
-                                    disabled={isDisabled(field.name)}
+                                    placeholder="Signature"
+                                    value={
+                                        value
+                                            ? (value as IMedia).download_url
+                                            : value
+                                    }
                                 />
                             )
                         }}
                     />
                     <FormFieldWrapper
-                        label="Employee Name"
                         control={form.control}
+                        label="Employee Name"
                         name="employee_by_name"
                         render={({ field }) => (
                             <Input
                                 {...field}
-                                id={field.name}
                                 autoComplete="off"
-                                placeholder="Employee"
                                 disabled={isDisabled(field.name)}
+                                id={field.name}
+                                placeholder="Employee"
                             />
                         )}
                     />
                     <FormFieldWrapper
                         control={form.control}
-                        name="employee_by_position"
                         label="Your Position"
+                        name="employee_by_position"
                         render={({ field }) => (
                             <Input
                                 {...field}
-                                id={field.name}
-                                placeholder="Your Position"
                                 autoComplete="off"
                                 disabled={isDisabled(field.name)}
+                                id={field.name}
+                                placeholder="Your Position"
                             />
                         )}
                     />
@@ -163,10 +163,10 @@ const TransactionBatchEndForm = ({
                     <Separator className="my-2 sm:my-4" />
                     <FormErrorMessage errorMessage={error} />
                     <Button
+                        className="mt-4 w-full self-end px-8"
+                        disabled={isPending || formProps.readOnly}
                         size="sm"
                         type="submit"
-                        disabled={isPending || formProps.readOnly}
-                        className="mt-4 w-full self-end px-8"
                     >
                         {isPending ? <LoadingSpinner /> : 'End Batch'}
                     </Button>
@@ -187,9 +187,9 @@ export const TransactionBatchEndFormModal = ({
 }) => {
     return (
         <Modal
-            title={title}
-            description={description}
             className={cn('', className)}
+            description={description}
+            title={title}
             {...props}
         >
             <TransactionBatchEndForm

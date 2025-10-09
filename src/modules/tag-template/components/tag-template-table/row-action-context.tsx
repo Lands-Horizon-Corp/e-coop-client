@@ -84,7 +84,6 @@ export const TagTemplateAction = ({
             </div>
             <RowActionsGroup
                 canSelect
-                row={row}
                 onDelete={{
                     text: 'Delete',
                     isAllowed: !isDeleting,
@@ -96,6 +95,7 @@ export const TagTemplateAction = ({
                     onClick: handleEdit,
                 }}
                 otherActions={<>{/* Additional actions can be added here */}</>}
+                row={row}
             />
         </>
     )
@@ -126,7 +126,6 @@ export const TagTemplateRowContext = ({
                 }}
             />
             <DataTableRowContext
-                row={row}
                 onDelete={{
                     text: 'Delete',
                     isAllowed: !isDeleting,
@@ -137,6 +136,7 @@ export const TagTemplateRowContext = ({
                     isAllowed: true,
                     onClick: handleEdit,
                 }}
+                row={row}
             >
                 {children}
             </DataTableRowContext>

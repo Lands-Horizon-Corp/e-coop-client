@@ -23,7 +23,6 @@ const ComputationSheetSchemeEditor = ({ className }: Props) => {
             )}
         >
             <LoanSchemeSidebar
-                selectedId={computationSheet?.id}
                 onDeletedScheme={(scheme) => {
                     if (computationSheet?.id === scheme.id)
                         setComputationSheet(undefined)
@@ -31,6 +30,7 @@ const ComputationSheetSchemeEditor = ({ className }: Props) => {
                 onSelect={(selectedScheme) =>
                     setComputationSheet(selectedScheme)
                 }
+                selectedId={computationSheet?.id}
             />
             {computationSheet === undefined ? (
                 <div className="flex-1 min-h-full flex items-center justify-center">

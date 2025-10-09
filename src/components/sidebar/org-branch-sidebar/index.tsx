@@ -4,7 +4,8 @@ import { Link, useParams, useRouter } from '@tanstack/react-router'
 
 import { useAuthUserWithOrgBranch } from '@/modules/authentication/authgentication.store'
 import { TUserType } from '@/modules/user'
-import { useHotkeys } from 'react-hotkeys-hook'
+
+// import { useHotkeys } from 'react-hotkeys-hook'
 
 import EcoopLogo from '@/components/ecoop-logo'
 import ActionTooltip from '@/components/tooltips/action-tooltip'
@@ -26,7 +27,7 @@ import {
     SidebarMenuButton,
     SidebarMenuItem,
     SidebarRail,
-    useSidebar,
+    // useSidebar,
 } from '@/components/ui/sidebar'
 
 import { IBaseProps } from '@/types'
@@ -34,7 +35,8 @@ import { IBaseProps } from '@/types'
 import { generateSidebarGroups } from './sidebar-routes'
 
 const OrgBranchSidebar = (props: IBaseProps) => {
-    const { toggleSidebar } = useSidebar()
+    // const { toggleSidebar } = useSidebar()
+
     const router = useRouter()
     const { orgname, branchname } = useParams({
         strict: false,
@@ -70,10 +72,10 @@ const OrgBranchSidebar = (props: IBaseProps) => {
         [memoizedSidebarRouteGroup, router]
     )
 
-    useHotkeys('bracketleft, bracketright', (e) => {
-        e.preventDefault()
-        toggleSidebar()
-    })
+    // useHotkeys('bracketleft, bracketright', (e) => {
+    //     e.preventDefault()
+    //     toggleSidebar()
+    // })
 
     const orgLogo = user_organization.organization.media?.download_url
 
@@ -83,12 +85,12 @@ const OrgBranchSidebar = (props: IBaseProps) => {
             <SidebarHeader>
                 <SidebarMenu>
                     <SidebarMenuItem>
-                        <SidebarMenuButton size="lg" asChild>
+                        <SidebarMenuButton asChild size="lg">
                             <Link to={baseUrl}>
                                 <EcoopLogo
-                                    lightUrl={orgLogo}
-                                    darkUrl={orgLogo}
                                     className="size-9 rounded-md"
+                                    darkUrl={orgLogo}
+                                    lightUrl={orgLogo}
                                 />
                                 <div className="grid flex-1 [[data-side=left][data-state=collapsed]_&]:hidden text-left text-sm leading-tight">
                                     <span className="truncate font-semibold">
@@ -100,8 +102,8 @@ const OrgBranchSidebar = (props: IBaseProps) => {
                                                 <span className="space-y-2 text-xs">
                                                     As{' '}
                                                     <Badge
-                                                        variant="secondary"
                                                         className="capitalize"
+                                                        variant="secondary"
                                                     >
                                                         {
                                                             user_organization.user_type
@@ -120,8 +122,8 @@ const OrgBranchSidebar = (props: IBaseProps) => {
                                                 }{' '}
                                             </span>
                                             <Badge
-                                                variant="outline"
                                                 className="capitalize"
+                                                variant="outline"
                                             >
                                                 {user_organization.user_type}
                                             </Badge>

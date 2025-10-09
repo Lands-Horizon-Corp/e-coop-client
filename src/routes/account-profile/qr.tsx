@@ -29,8 +29,8 @@ function RouteComponent() {
             <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-1 text-center">
                     <AccountQr
-                        className="!h-64 !w-64"
                         accountQrPayload={JSON.stringify(user.qr_code)}
+                        className="!h-64 !w-64"
                     />
                     <p>Account QR</p>
                 </div>

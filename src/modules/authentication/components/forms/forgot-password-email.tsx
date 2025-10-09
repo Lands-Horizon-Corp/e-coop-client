@@ -78,12 +78,12 @@ const ForgotPasswordEmail = ({
     return (
         <Form {...form}>
             <form
-                ref={formRef}
-                onSubmit={onSubmit}
                 className={cn(
                     'flex w-full flex-col gap-y-4 sm:w-[390px]',
                     className
                 )}
+                onSubmit={onSubmit}
+                ref={formRef}
             >
                 <div className="flex flex-col items-center gap-y-4 py-4 text-center">
                     <div className="relative p-8">
@@ -98,22 +98,22 @@ const ForgotPasswordEmail = ({
                     </p>
                 </div>
                 <fieldset
-                    disabled={isLoading || formProps.readOnly}
                     className="space-y-4"
+                    disabled={isLoading || formProps.readOnly}
                 >
                     <FormField
-                        name="key"
                         control={form.control}
+                        name="key"
                         render={({ field }) => (
                             <FormItem className="space-y-1">
                                 <FormControl>
                                     <div className="flex-1 space-y-2">
                                         <Input
                                             {...field}
-                                            id={field.name}
                                             autoComplete="off"
-                                            placeholder="Email address"
                                             disabled={isDisabled(field.name)}
+                                            id={field.name}
+                                            placeholder="Email address"
                                         />
                                     </div>
                                 </FormControl>
@@ -126,10 +126,10 @@ const ForgotPasswordEmail = ({
                 <div className="mt-4 flex flex-col space-y-2">
                     <FormErrorMessage errorMessage={error} />
                     <Button
+                        className="w-full max-w-xl rounded-3xl"
+                        disabled={isLoading || formProps.readOnly}
                         size="sm"
                         type="submit"
-                        disabled={isLoading || formProps.readOnly}
-                        className="w-full max-w-xl rounded-3xl"
                     >
                         {isLoading ? <LoadingSpinner /> : 'Send Code to Email'}
                     </Button>

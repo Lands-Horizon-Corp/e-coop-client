@@ -1,4 +1,3 @@
-import { cn } from '@/helpers'
 import { IJournalVoucher } from '@/modules/journal-voucher'
 import { ColumnDef, Row } from '@tanstack/react-table'
 
@@ -7,8 +6,9 @@ import { createUpdateColumns } from '@/components/data-table/data-table-common-c
 import { IGlobalSearchTargets } from '@/components/data-table/data-table-filters/data-table-global-search'
 import HeaderToggleSelect from '@/components/data-table/data-table-row-actions/header-toggle-select'
 import { PushPinIcon } from '@/components/icons'
-import { Badge } from '@/components/ui/badge'
 import { Checkbox } from '@/components/ui/checkbox'
+
+import JournalVoucherStatusIndicator from '../journal-voucher-status-indicator'
 
 export const journalVoucherGlobalSearchTargets: IGlobalSearchTargets<IJournalVoucher>[] =
     [
@@ -39,8 +39,8 @@ const JournalVoucherTableColumns = (
                 <HeaderToggleSelect table={table} />
                 {!column.getIsPinned() && (
                     <PushPinIcon
-                        onClick={() => column.pin('left')}
                         className="mr-2 size-3.5 cursor-pointer"
+                        onClick={() => column.pin('left')}
                     />
                 )}
             </div>
@@ -146,35 +146,17 @@ const JournalVoucherTableColumns = (
         minSize: 120,
     },
     {
-        id: 'status',
-        accessorKey: 'status',
-        header: (props) => <DataTableColumnHeader {...props} title="Status" />,
+        id: 'action-status',
+        accessorKey: 'action-status',
+        header: (props) => (
+            <DataTableColumnHeader {...props} title="Action Status" />
+        ),
         cell: ({ row: { original: journalVoucher } }) => {
-            const status = journalVoucher.status
-            let badgeColorClass = ''
-
-            switch (status) {
-                case 'posted':
-                    badgeColorClass = 'bg-green-500 text-white'
-                    break
-                case 'cancelled':
-                    badgeColorClass = 'bg-red-500 text-white'
-                    break
-                case 'draft':
-                default:
-                    badgeColorClass = 'bg-gray-500 text-white'
-                    break
-            }
-
             return (
-                <Badge
-                    className={cn(
-                        '!text-wrap hover:bg-primary/20',
-                        badgeColorClass
-                    )}
-                >
-                    {status}
-                </Badge>
+                <JournalVoucherStatusIndicator
+                    className="max-w-max"
+                    journalVoucher={journalVoucher}
+                />
             )
         },
         enableMultiSort: true,
@@ -217,44 +199,6 @@ const JournalVoucherTableColumns = (
         enableSorting: true,
         enableResizing: true,
         enableHiding: false,
-        size: 150,
-        minSize: 120,
-    },
-    {
-        id: 'action-status',
-        accessorKey: 'action-status',
-        header: (props) => (
-            <DataTableColumnHeader {...props} title="Action Status" />
-        ),
-        cell: ({ row: { original: journalVoucher } }) => {
-            const isPrinted = !!journalVoucher.printed_date
-            const isApproved = !!journalVoucher.approved_date
-            const isReleased = !!journalVoucher.released_date
-            let statusLabel
-
-            if (isReleased) {
-                statusLabel = 'Released'
-            } else if (isApproved) {
-                statusLabel = 'Approved'
-            } else if (isPrinted) {
-                statusLabel = 'Printed'
-            } else {
-                statusLabel = 'Pending'
-            }
-
-            return (
-                <Badge
-                    className={cn('!text-wrap', {
-                        'bg-green-500 text-white': isReleased,
-                        'bg-blue-500 text-white': isApproved && !isReleased,
-                        'bg-yellow-500 text-white': isPrinted && !isApproved,
-                        'bg-gray-500 text-white': !isPrinted,
-                    })}
-                >
-                    {statusLabel}
-                </Badge>
-            )
-        },
         size: 150,
         minSize: 120,
     },

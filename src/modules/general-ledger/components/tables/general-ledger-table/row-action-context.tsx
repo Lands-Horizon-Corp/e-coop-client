@@ -50,7 +50,6 @@ export const GeneralLedgerAction = ({
             <div onClick={(e) => e.stopPropagation()}></div>
             <RowActionsGroup
                 canSelect
-                row={row}
                 otherActions={
                     <>
                         <DropdownMenuItem onClick={handleViewDetails}>
@@ -59,6 +58,7 @@ export const GeneralLedgerAction = ({
                         </DropdownMenuItem>
                     </>
                 }
+                row={row}
             />
         </>
     )
@@ -83,7 +83,6 @@ export const GeneralLedgerRowContext = ({
     return (
         <>
             <DataTableRowContext
-                row={row}
                 otherActions={
                     <>
                         <ContextMenuItem onClick={handleViewDetails}>
@@ -92,6 +91,7 @@ export const GeneralLedgerRowContext = ({
                         </ContextMenuItem>
                     </>
                 }
+                row={row}
             >
                 {children}
             </DataTableRowContext>

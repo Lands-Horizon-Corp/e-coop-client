@@ -82,18 +82,17 @@ export const MemberClassificationAction = ({
             <div onClick={(e) => e.stopPropagation()}>
                 <MemberClassificationCreateUpdateFormModal
                     {...updateModal}
+                    description="Modify/Update the member classification..."
                     formProps={{
                         memberClassificationId: memberClassification.id,
                         defaultValues: { ...memberClassification },
                         onSuccess: () => updateModal.onOpenChange(false),
                     }}
                     title="Update Member Classification"
-                    description="Modify/Update the member classification..."
                 />
             </div>
             <RowActionsGroup
                 canSelect
-                row={row}
                 onDelete={{
                     text: 'Delete',
                     isAllowed: !isDeletingMemberClassification,
@@ -105,6 +104,7 @@ export const MemberClassificationAction = ({
                     onClick: handleEdit,
                 }}
                 otherActions={<>{/* Additional actions can be added here */}</>}
+                row={row}
             />
         </>
     )
@@ -133,16 +133,15 @@ export const MemberClassificationRowContext = ({
         <>
             <MemberClassificationCreateUpdateFormModal
                 {...updateModal}
+                description="Modify/Update the member classification..."
                 formProps={{
                     memberClassificationId: memberClassification.id,
                     defaultValues: { ...memberClassification },
                     onSuccess: () => updateModal.onOpenChange(false),
                 }}
                 title="Update Member Classification"
-                description="Modify/Update the member classification..."
             />
             <DataTableRowContext
-                row={row}
                 onDelete={{
                     text: 'Delete',
                     isAllowed: !isDeletingMemberClassification,
@@ -153,6 +152,7 @@ export const MemberClassificationRowContext = ({
                     isAllowed: true,
                     onClick: handleEdit,
                 }}
+                row={row}
             >
                 {children}
             </DataTableRowContext>

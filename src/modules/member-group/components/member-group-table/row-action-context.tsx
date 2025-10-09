@@ -79,7 +79,6 @@ export const MemberGroupAction = ({
             </div>
             <RowActionsGroup
                 canSelect
-                row={row}
                 onDelete={{
                     text: 'Delete',
                     isAllowed: !isDeletingGroup,
@@ -91,6 +90,7 @@ export const MemberGroupAction = ({
                     onClick: handleEdit,
                 }}
                 otherActions={<>{/* Additional actions can be added here */}</>}
+                row={row}
             />
         </>
     )
@@ -121,7 +121,6 @@ export const MemberGroupRowContext = ({
                 }}
             />
             <DataTableRowContext
-                row={row}
                 onDelete={{
                     text: 'Delete',
                     isAllowed: !isDeletingGroup,
@@ -132,6 +131,7 @@ export const MemberGroupRowContext = ({
                     isAllowed: true,
                     onClick: handleEdit,
                 }}
+                row={row}
             >
                 {children}
             </DataTableRowContext>

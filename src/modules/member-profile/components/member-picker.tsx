@@ -121,28 +121,9 @@ const MemberPicker = forwardRef<HTMLButtonElement, Props>(
             <>
                 <HotkeysProvider initiallyActiveScopes={['member-picker']}>
                     <GenericPicker
-                        items={data}
-                        open={state}
-                        listHeading={`Matched Results (${totalSize})`}
-                        searchPlaceHolder="Search name or PB no."
                         isLoading={isPending || isLoading || isFetching}
-                        otherSearchInputChild={
-                            <Button
-                                size="icon"
-                                variant="ghost"
-                                className="size-fit p-2 text-muted-foreground "
-                                onClick={() =>
-                                    qrScannerModal.onOpenChange(true)
-                                }
-                            >
-                                <ScanLineIcon />
-                            </Button>
-                        }
-                        onSelect={(member) => {
-                            queryClient.setQueryData(['member', value], member)
-                            onSelect?.(member)
-                            setState(false)
-                        }}
+                        items={data}
+                        listHeading={`Matched Results (${totalSize})`}
                         onOpenChange={setState}
                         onSearchChange={(searchValue) => {
                             bulkSetFilter(
@@ -164,6 +145,24 @@ const MemberPicker = forwardRef<HTMLButtonElement, Props>(
                                 }
                             )
                         }}
+                        onSelect={(member) => {
+                            queryClient.setQueryData(['member', value], member)
+                            onSelect?.(member)
+                            setState(false)
+                        }}
+                        open={state}
+                        otherSearchInputChild={
+                            <Button
+                                className="size-fit p-2 text-muted-foreground "
+                                onClick={() =>
+                                    qrScannerModal.onOpenChange(true)
+                                }
+                                size="icon"
+                                variant="ghost"
+                            >
+                                <ScanLineIcon />
+                            </Button>
+                        }
                         renderItem={(member) => (
                             <div className="flex w-full items-center justify-between py-1">
                                 <div className="flex items-center gap-x-2">
@@ -192,14 +191,9 @@ const MemberPicker = forwardRef<HTMLButtonElement, Props>(
                                 </p>
                             </div>
                         )}
+                        searchPlaceHolder="Search name or PB no."
                     >
                         <MiniPaginationBar
-                            pagination={{
-                                pageIndex: pagination.pageIndex,
-                                pageSize: pagination.pageSize,
-                                totalPage: totalPage,
-                                totalSize: totalSize,
-                            }}
                             disablePageMove={isFetching}
                             onNext={({ pageIndex }) =>
                                 setPagination((prev) => ({
@@ -213,6 +207,12 @@ const MemberPicker = forwardRef<HTMLButtonElement, Props>(
                                     pageIndex,
                                 }))
                             }
+                            pagination={{
+                                pageIndex: pagination.pageIndex,
+                                pageSize: pagination.pageSize,
+                                totalPage: totalPage,
+                                totalSize: totalSize,
+                            }}
                         />
                     </GenericPicker>
                     <MemberQrScannerModal
@@ -231,15 +231,15 @@ const MemberPicker = forwardRef<HTMLButtonElement, Props>(
                         )}
                     >
                         <Button
-                            ref={ref}
-                            type="button"
-                            variant={triggerVariant}
-                            disabled={disabled}
-                            onClick={() => setState(true)}
                             className={cn(
                                 'flex-1 items-center justify-between rounded-md border p-0 px-2 h-10',
                                 triggerClassName
                             )}
+                            disabled={disabled}
+                            onClick={() => setState(true)}
+                            ref={ref}
+                            type="button"
+                            variant={triggerVariant}
                         >
                             <span className="flex flex-1 min-w-0 items-center justify-between text-sm text-foreground/90">
                                 <span className="inline-flex flex-1 min-w-0 items-center gap-x-2">
@@ -251,11 +251,11 @@ const MemberPicker = forwardRef<HTMLButtonElement, Props>(
                                                 media={value?.media}
                                             >
                                                 <ImageDisplay
+                                                    className="h-6 w-6 rounded-full object-cover"
                                                     src={
                                                         value?.media
                                                             ?.download_url
                                                     }
-                                                    className="h-6 w-6 rounded-full object-cover"
                                                 />
                                             </PreviewMediaWrapper>
                                         )}
@@ -291,6 +291,7 @@ const MemberPicker = forwardRef<HTMLButtonElement, Props>(
 
                         {allowClear && value && (
                             <Button
+                                className="cursor-pointer rounded-full !p-0 !px-0 flex-shrink-0"
                                 onClick={(e) => {
                                     e.preventDefault()
                                     e.stopPropagation()
@@ -298,9 +299,8 @@ const MemberPicker = forwardRef<HTMLButtonElement, Props>(
                                         undefined as unknown as IMemberProfile
                                     )
                                 }}
-                                variant={'ghost'}
                                 size={'sm'}
-                                className="cursor-pointer rounded-full !p-0 !px-2 flex-shrink-0"
+                                variant={'ghost'}
                             >
                                 <XIcon className="inline h-4 w-4" />
                             </Button>

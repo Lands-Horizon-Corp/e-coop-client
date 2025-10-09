@@ -96,41 +96,41 @@ const MemberTypeReferenceCreateUpdateForm = ({
     return (
         <Form {...form}>
             <form
-                ref={formRef}
-                onSubmit={onSubmit}
                 className={cn('flex w-full flex-col gap-y-4', className)}
+                onSubmit={onSubmit}
+                ref={formRef}
             >
                 <fieldset
-                    disabled={isPending || formProps.readOnly}
                     className="grid gap-x-6 gap-y-4 sm:gap-y-3"
+                    disabled={isPending || formProps.readOnly}
                 >
                     <FormFieldWrapper
                         control={form.control}
-                        name="account_id"
                         label="Account *"
+                        name="account_id"
                         render={({ field }) => (
                             <AccountPicker
                                 {...field}
-                                value={form.getValues('account')}
                                 onSelect={(account) => {
                                     field.onChange(account.id)
                                     form.setValue('account', account, {
                                         shouldDirty: true,
                                     })
                                 }}
+                                value={form.getValues('account')}
                             />
                         )}
                     />
                     <FormFieldWrapper
                         control={form.control}
-                        name="description"
                         label="Description *"
+                        name="description"
                         render={({ field }) => (
                             <Textarea
                                 {...field}
-                                placeholder="Description"
                                 autoComplete="off"
                                 disabled={isDisabled(field.name)}
+                                placeholder="Description"
                             />
                         )}
                     />
@@ -138,54 +138,54 @@ const MemberTypeReferenceCreateUpdateForm = ({
                     <fieldset className="space-y-4">
                         <FormFieldWrapper
                             control={form.control}
-                            name="interest_rate"
                             label="Interest *"
+                            name="interest_rate"
                             render={({ field }) => (
                                 <Input
                                     {...field}
-                                    type="number"
-                                    placeholder="Interest Rate (%)"
                                     disabled={isDisabled(field.name)}
+                                    placeholder="Interest Rate (%)"
+                                    type="number"
                                 />
                             )}
                         />
 
                         <FormFieldWrapper
                             control={form.control}
-                            name="minimum_balance"
                             label="Minimum Balance *"
+                            name="minimum_balance"
                             render={({ field }) => (
                                 <Input
                                     {...field}
-                                    type="number"
+                                    disabled={isDisabled(field.name)}
                                     placeholder="Minimum Balance"
-                                    disabled={isDisabled(field.name)}
+                                    type="number"
                                 />
                             )}
                         />
                         <FormFieldWrapper
                             control={form.control}
-                            name="charges"
                             label="Charges *"
+                            name="charges"
                             render={({ field }) => (
                                 <Input
                                     {...field}
-                                    type="number"
-                                    placeholder="Charges"
                                     disabled={isDisabled(field.name)}
+                                    placeholder="Charges"
+                                    type="number"
                                 />
                             )}
                         />
                         <FormFieldWrapper
                             control={form.control}
-                            name="maintaining_balance"
                             label="Maintaining Balance *"
+                            name="maintaining_balance"
                             render={({ field }) => (
                                 <Input
                                     {...field}
-                                    type="number"
-                                    placeholder="Maintaining Balance"
                                     disabled={isDisabled(field.name)}
+                                    placeholder="Maintaining Balance"
+                                    type="number"
                                 />
                             )}
                         />
@@ -194,27 +194,27 @@ const MemberTypeReferenceCreateUpdateForm = ({
                     <fieldset className="space-y-4">
                         <FormFieldWrapper
                             control={form.control}
-                            name="active_member_ratio"
                             label="Active Member Ration *"
+                            name="active_member_ratio"
                             render={({ field }) => (
                                 <Input
                                     {...field}
-                                    type="number"
-                                    placeholder="Active Member Ratio"
                                     disabled={isDisabled(field.name)}
+                                    placeholder="Active Member Ratio"
+                                    type="number"
                                 />
                             )}
                         />
                         <FormFieldWrapper
                             control={form.control}
-                            name="active_member_minimum_balance"
                             label="Active Member Minimum Balance *"
+                            name="active_member_minimum_balance"
                             render={({ field }) => (
                                 <Input
                                     {...field}
-                                    type="number"
-                                    placeholder="Maintaining Balance"
                                     disabled={isDisabled(field.name)}
+                                    placeholder="Maintaining Balance"
+                                    type="number"
                                 />
                             )}
                         />
@@ -224,42 +224,42 @@ const MemberTypeReferenceCreateUpdateForm = ({
                     <fieldset className="space-y-4">
                         <FormFieldWrapper
                             control={form.control}
-                            name="other_interest_on_saving_computation_minimum_balance"
                             label="Other interest on saving computation minimum balance *"
+                            name="other_interest_on_saving_computation_minimum_balance"
                             render={({ field }) => (
                                 <Input
                                     {...field}
-                                    type="number"
-                                    placeholder="Maintaining Balance"
                                     disabled={isDisabled(field.name)}
+                                    placeholder="Maintaining Balance"
+                                    type="number"
                                 />
                             )}
                         />
                         <FormFieldWrapper
                             control={form.control}
-                            name="other_interest_on_saving_computation_interest_rate"
                             label="Other interest on saving computation interest rate *"
+                            name="other_interest_on_saving_computation_interest_rate"
                             render={({ field }) => (
                                 <Input
                                     {...field}
-                                    type="number"
-                                    placeholder="Maintaining Balance"
                                     disabled={isDisabled(field.name)}
+                                    placeholder="Maintaining Balance"
+                                    type="number"
                                 />
                             )}
                         />
                     </fieldset>
                 </fieldset>
                 <FormFooterResetSubmit
-                    error={error}
-                    readOnly={formProps.readOnly}
-                    isLoading={isPending}
                     disableSubmit={!form.formState.isDirty}
-                    submitText={memberTypeReferenceId ? 'Update' : 'Create'}
+                    error={error}
+                    isLoading={isPending}
                     onReset={() => {
                         form.reset()
                         reset()
                     }}
+                    readOnly={formProps.readOnly}
+                    submitText={memberTypeReferenceId ? 'Update' : 'Create'}
                 />
             </form>
         </Form>
@@ -277,9 +277,9 @@ export const MemberTypeReferenceCreateUpdateFormModal = ({
 }) => {
     return (
         <Modal
-            title={title}
-            description={description}
             className={cn('max-w-2xl', className)}
+            description={description}
+            title={title}
             {...props}
         >
             <MemberTypeReferenceCreateUpdateForm

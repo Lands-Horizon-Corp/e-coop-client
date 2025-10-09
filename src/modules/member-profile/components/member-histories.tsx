@@ -300,22 +300,22 @@ const MemberHistories = ({ profileId }: IMemberHistoriesProps) => {
                 </p>
             </div>
             <Tabs
-                defaultValue="member-occupation-history"
                 className="flex-1 flex-col"
+                defaultValue="member-occupation-history"
             >
                 <ScrollArea>
                     <TabsList className="mb-3 h-auto gap-2 rounded-none border-b bg-transparent px-0 py-1 text-foreground">
                         {historyTabs.map((tab) => (
                             <TabsTrigger
+                                className="relative after:absolute after:inset-x-0 after:bottom-0 after:-mb-1 after:h-0.5 after:duration-300 after:ease-in-out hover:bg-accent hover:text-foreground data-[state=active]:bg-transparent data-[state=active]:shadow-none data-[state=active]:after:bg-primary data-[state=active]:hover:bg-accent"
                                 key={tab.value}
                                 value={tab.value}
-                                className="relative after:absolute after:inset-x-0 after:bottom-0 after:-mb-1 after:h-0.5 after:duration-300 after:ease-in-out hover:bg-accent hover:text-foreground data-[state=active]:bg-transparent data-[state=active]:shadow-none data-[state=active]:after:bg-primary data-[state=active]:hover:bg-accent"
                             >
                                 {tab.Icon && (
                                     <tab.Icon
+                                        aria-hidden="true"
                                         className="-ms-0.5 me-1.5 opacity-60"
                                         size={16}
-                                        aria-hidden="true"
                                     />
                                 )}
                                 {tab.title}
@@ -325,7 +325,7 @@ const MemberHistories = ({ profileId }: IMemberHistoriesProps) => {
                     <ScrollBar orientation="horizontal" />
                 </ScrollArea>
                 {historyTabs.map((tab) => (
-                    <TabsContent value={tab.value} key={tab.value} asChild>
+                    <TabsContent asChild key={tab.value} value={tab.value}>
                         {tab.Component({ profileId })}
                     </TabsContent>
                 ))}
@@ -342,11 +342,11 @@ export const MemberHistoriesModal = ({
 }: IModalProps & { memberHistoryProps: IMemberHistoriesProps }) => {
     return (
         <Modal
-            title={title}
-            titleClassName="hidden"
+            className={cn('flex !max-w-[96vw] p-1', className)}
             closeButtonClassName="hidden"
             descriptionClassName="hidden"
-            className={cn('flex !max-w-[96vw] p-1', className)}
+            title={title}
+            titleClassName="hidden"
             {...other}
         >
             <MemberHistories {...memberHistoryProps} />

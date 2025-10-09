@@ -20,7 +20,7 @@ const ImageNameDisplay = ({
 }: Props) => {
     return (
         <div className={cn('flex items-center gap-x-2', className)}>
-            <ImageDisplay src={src} className={cn('size-6', imageClassName)} />
+            <ImageDisplay className={cn('size-6', imageClassName)} src={src} />
             <div>
                 <p
                     className={cn(

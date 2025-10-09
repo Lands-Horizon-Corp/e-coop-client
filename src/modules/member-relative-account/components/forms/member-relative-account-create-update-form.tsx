@@ -111,25 +111,23 @@ const MemberRelativeAccountCreateUpdateForm = ({
     return (
         <Form {...form}>
             <form
-                ref={formRef}
-                onSubmit={onSubmit}
                 className={cn('flex w-full flex-col gap-y-4', className)}
+                onSubmit={onSubmit}
+                ref={formRef}
             >
                 <fieldset
-                    disabled={isPending || formProps.readOnly}
                     className="grid gap-x-6 gap-y-4 sm:gap-y-3"
+                    disabled={isPending || formProps.readOnly}
                 >
                     <fieldset className="space-y-3">
                         <FormFieldWrapper
                             control={form.control}
-                            name="relative_member_profile_id"
                             label="Relative Member Profile *"
+                            name="relative_member_profile_id"
                             render={({ field }) => {
                                 return (
                                     <MemberPicker
-                                        value={form.getValues(
-                                            'relative_member'
-                                        )}
+                                        disabled={isDisabled(field.name)}
                                         onSelect={(selectedMember) => {
                                             if (
                                                 selectedMember.id ===
@@ -146,50 +144,52 @@ const MemberRelativeAccountCreateUpdateForm = ({
                                             )
                                         }}
                                         placeholder="Relative Member Profile"
-                                        disabled={isDisabled(field.name)}
+                                        value={form.getValues(
+                                            'relative_member'
+                                        )}
                                     />
                                 )
                             }}
                         />
                         <FormFieldWrapper
                             control={form.control}
-                            name="family_relationship"
                             label="Relationship *"
+                            name="family_relationship"
                             render={({ field }) => (
                                 <RelationshipCombobox
                                     {...field}
+                                    disabled={isDisabled(field.name)}
                                     id={field.name}
                                     placeholder="Relationship"
-                                    disabled={isDisabled(field.name)}
                                 />
                             )}
                         />
                         <FormFieldWrapper
                             control={form.control}
-                            name="description"
                             label="Description"
+                            name="description"
                             render={({ field }) => (
                                 <TextEditor
                                     {...field}
                                     content={field.value}
+                                    disabled={isDisabled(field.name)}
                                     placeholder="Description..."
                                     textEditorClassName="!max-w-none bg-background"
-                                    disabled={isDisabled(field.name)}
                                 />
                             )}
                         />
                     </fieldset>
                 </fieldset>
                 <FormFooterResetSubmit
-                    error={error}
-                    readOnly={formProps.readOnly}
-                    isLoading={isPending}
                     disableSubmit={!form.formState.isDirty}
-                    submitText={relativeAccountId ? 'Update' : 'Create'}
+                    error={error}
+                    isLoading={isPending}
                     onReset={() => {
                         form.reset()
                         reset()
                     }}
+                    readOnly={formProps.readOnly}
+                    submitText={relativeAccountId ? 'Update' : 'Create'}
                 />
             </form>
         </Form>
@@ -207,9 +207,9 @@ export const MemberRelativeAccountCreateUpdateFormModal = ({
 }) => {
     return (
         <Modal
-            title={title}
-            description={description}
             className={cn('', className)}
+            description={description}
+            title={title}
             {...props}
         >
             <MemberRelativeAccountCreateUpdateForm

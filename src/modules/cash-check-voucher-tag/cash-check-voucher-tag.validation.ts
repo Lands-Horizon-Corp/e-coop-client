@@ -9,7 +9,7 @@ import {
 
 export const CashCheckVoucherTagSchema = z.object({
     id: entityIdSchema.optional(),
-    loan_transaction_id: EntityIdSchema('Loan Transaction is required'),
+    cash_check_voucher_id: EntityIdSchema('Cash Check Voucher is required'),
     name: z.string().min(1, 'Loan Tag name is required'),
     description: z
         .string()

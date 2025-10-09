@@ -1,6 +1,6 @@
 import { toast } from 'sonner'
 
-import { SHORTCUT_SCOPES } from '@/constants'
+// import { SHORTCUT_SCOPES } from '@/constants';
 import {
     CurrentTransactionWithdrawHistory,
     QuickTransferTransactionForm,
@@ -13,7 +13,7 @@ import { useDepositWithdrawStore } from '@/store/transaction/deposit-withdraw-st
 
 import PageContainer from '@/components/containers/page-container'
 import { HandDepositIcon, HandWithdrawIcon } from '@/components/icons'
-import { useShortcutContext } from '@/components/shorcuts/general-shortcuts-wrapper'
+// import { useShortcutContext } from '@/components/shorcuts/general-shortcuts-wrapper'
 import {
     ResizableHandle,
     ResizablePanel,
@@ -25,9 +25,10 @@ import { TEntityId } from '@/types'
 const QuickDepositWithdraw = ({ mode }: { mode: TPaymentMode }) => {
     const { selectedMember, setSelectedAccount } = useDepositWithdrawStore()
     const { hasNoTransactionBatch } = useTransactionBatchStore()
-    const { setActiveScope } = useShortcutContext()
+    // const { setActiveScope } = useShortcutContext()
     return (
-        <div onMouseOver={() => setActiveScope(SHORTCUT_SCOPES.QUICK_TRANSFER)}>
+        // <div onMouseOver={() => setActiveScope(SHORTCUT_SCOPES.QUICK_TRANSFER)}>
+        <div>
             <PageContainer className="flex w-full !overflow-hidden">
                 <div className="flex w-full flex-col space-y-1">
                     <div className="flex justify-start items-center space-x-2 w-full px-5">
@@ -53,29 +54,29 @@ const QuickDepositWithdraw = ({ mode }: { mode: TPaymentMode }) => {
                     />
                 </div>
                 <ResizablePanelGroup
-                    direction="horizontal"
                     className="!h-[80vh]"
+                    direction="horizontal"
                 >
                     <ResizablePanel
+                        className=" !overflow-auto p-5 ecoop-scroll  "
                         defaultSize={35}
                         maxSize={40}
                         minSize={0}
-                        className=" !overflow-auto p-5 ecoop-scroll  "
                     >
                         <QuickTransferTransactionForm
                             mode={mode}
-                            readOnly={!hasNoTransactionBatch}
                             onSuccess={() => {
                                 toast.success(
                                     'Transaction completed successfully'
                                 )
                             }}
+                            readOnly={!hasNoTransactionBatch}
                         />
                     </ResizablePanel>
                     <ResizableHandle withHandle />
                     <ResizablePanel
-                        defaultSize={65}
                         className="!overflow-y-auto px-5 ecoop-scroll !relative"
+                        defaultSize={65}
                     >
                         <div className="w-full flex items-center justify-end">
                             <CurrentTransactionWithdrawHistory mode={mode} />

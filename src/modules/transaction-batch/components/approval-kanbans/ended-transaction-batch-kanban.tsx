@@ -54,18 +54,18 @@ const EndedTransactionBatchKanban = (_props: Props) => {
             <div className="flex items-center">
                 <LayersSharpDotIcon className="mr-2 size-4 text-primary" />
                 <KanbanTitle
-                    title="Ended Batch"
-                    totalItems={data.length}
                     isLoading={isRefetching}
                     onRefresh={() => refetch()}
+                    title="Ended Batch"
+                    totalItems={data.length}
                 />
             </div>
             <Separator />
             <KanbanItemsContainer>
                 {data.map((transactionBatch) => (
                     <TransactionBatchCard
-                        transBatch={transactionBatch}
                         key={transactionBatch.id}
+                        transBatch={transactionBatch}
                     />
                 ))}
                 {data.length === 0 && (
@@ -109,10 +109,10 @@ const TransactionBatchCard = ({
                 <p className="truncate">{transBatch.batch_name}</p>
                 <div className="flex items-center gap-x-1">
                     <Button
-                        size="icon"
-                        variant="secondary"
                         className="size-fit p-1"
                         onClick={() => viewModalState.onOpenChange(true)}
+                        size="icon"
+                        variant="secondary"
                     >
                         <EyeIcon />
                     </Button>

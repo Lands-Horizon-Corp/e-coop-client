@@ -62,8 +62,8 @@ const TimesheetTableColumns = (
             }) => (
                 <>
                     <ImageNameDisplay
-                        src={user?.media?.download_url}
                         name={user?.full_name ?? user?.user_name}
+                        src={user?.media?.download_url}
                     />
                 </>
             ),
@@ -159,9 +159,9 @@ const TimesheetTableColumns = (
                 return (
                     <DurationBadge
                         hours={hours}
+                        isOngoing={!time_out}
                         minutes={minutes}
                         seconds={seconds}
-                        isOngoing={!time_out}
                     />
                 )
             },
@@ -180,8 +180,8 @@ const TimesheetTableColumns = (
                     <HeaderToggleSelect table={table} />
                     {!column.getIsPinned() && (
                         <PushPinSlashIcon
-                            onClick={() => column.pin('left')}
                             className="mr-2 size-3.5 cursor-pointer"
+                            onClick={() => column.pin('left')}
                         />
                     )}
                 </div>
@@ -229,8 +229,8 @@ const TimeInOutPhotos = ({
             >
                 <PreviewMediaWrapper media={mediaIn}>
                     <ImageDisplay
-                        src={mediaIn?.download_url}
                         className="size-8 rounded-sm"
+                        src={mediaIn?.download_url}
                     />
                 </PreviewMediaWrapper>
             </button>
@@ -245,8 +245,8 @@ const TimeInOutPhotos = ({
             >
                 <PreviewMediaWrapper media={mediaOut}>
                     <ImageDisplay
-                        src={mediaOut?.download_url}
                         className="size-8 rounded-sm"
+                        src={mediaOut?.download_url}
                     />
                 </PreviewMediaWrapper>
             </button>
@@ -275,7 +275,6 @@ const DurationBadge = ({
 
     return (
         <Badge
-            variant={isOngoing ? 'outline' : variant}
             className={cn(
                 'flex h-6 w-fit items-center gap-1 px-2 py-0.5 font-mono text-xs',
                 isOngoing &&
@@ -285,6 +284,7 @@ const DurationBadge = ({
                     'border-primary bg-primary/10 text-primary/70 hover:bg-primary/10 dark:border-primary/70/50 dark:bg-primary/10/30 dark:text-primary dark:hover:bg-primary/10/40',
                 className
             )}
+            variant={isOngoing ? 'outline' : variant}
         >
             {isOngoing ? (
                 <>

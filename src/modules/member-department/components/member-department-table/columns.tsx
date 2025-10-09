@@ -37,8 +37,8 @@ const MemberDepartmentTableColumns = (
                 <HeaderToggleSelect table={table} />
                 {!column.getIsPinned() && (
                     <PushPinSlashIcon
-                        onClick={() => column.pin('left')}
                         className="mr-2 size-3.5 cursor-pointer"
+                        onClick={() => column.pin('left')}
                     />
                 )}
             </div>
@@ -80,7 +80,7 @@ const MemberDepartmentTableColumns = (
             <div className="flex min-w-0 items-center gap-3">
                 {icon && (
                     <div className="flex p-1 text-muted-foreground items-center justify-center rounded-full border bg-muted">
-                        <RenderIcon icon={icon as TIcon} className="size-4" />
+                        <RenderIcon className="size-4" icon={icon as TIcon} />
                     </div>
                 )}
                 <div className="flex min-w-0 flex-col">

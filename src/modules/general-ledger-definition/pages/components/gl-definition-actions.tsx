@@ -110,14 +110,14 @@ const GeneralLedgerDefinitionActions = ({
             <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                     <Button
-                        variant="outline"
-                        size={'sm'}
                         className="border-0 !px-0 bg-transparent text-xl"
+                        size={'sm'}
+                        variant="outline"
                     >
                         <DotsHorizontalIcon className="h-5 w-5 rotate-90" />
                     </Button>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent className="w-56" align="start">
+                <DropdownMenuContent align="start" className="w-56">
                     <DropdownMenuGroup>
                         <DropdownMenuItem
                             onClick={(e) =>

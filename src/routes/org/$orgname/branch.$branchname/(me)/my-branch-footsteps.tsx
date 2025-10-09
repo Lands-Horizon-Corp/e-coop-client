@@ -42,9 +42,9 @@ function RouteComponent() {
     return (
         <PageContainer>
             <FootstepTable
-                mode="me-branch"
                 actionComponent={FootstepAction}
                 className="max-h-[90vh] min-h-[90vh] w-full"
+                mode="me-branch"
             />
         </PageContainer>
     )

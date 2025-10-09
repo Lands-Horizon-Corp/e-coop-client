@@ -17,8 +17,8 @@ const MemberDescriptionDisplays = ({ descriptions }: Props) => {
         <div className="space-y-4">
             <SectionTitle
                 Icon={DetailsIcon}
-                title="Descriptions"
                 subTitle="Other descriptions about the member are shown here..."
+                title="Descriptions"
             />
             {(!descriptions || descriptions.length === 0) && (
                 <p className="w-full text-center text-xs text-muted-foreground/70">

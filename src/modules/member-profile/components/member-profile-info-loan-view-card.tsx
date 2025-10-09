@@ -69,12 +69,12 @@ const MemberProfileInfoViewLoanCard = ({ className, memberProfile }: Props) => {
                             />
                         )}
                         <Button
+                            className="size-fit col-span-3 p-1.5 text-xs opacity-80 underline"
+                            disabled={!memberProfile}
+                            onClick={() => fullInfoViewModal.onOpenChange(true)}
                             size="icon"
                             type="button"
                             variant="ghost"
-                            disabled={!memberProfile}
-                            onClick={() => fullInfoViewModal.onOpenChange(true)}
-                            className="size-fit col-span-3 p-1.5 text-xs opacity-80 underline"
                         >
                             See full info
                             <EyeIcon className="size-3" />

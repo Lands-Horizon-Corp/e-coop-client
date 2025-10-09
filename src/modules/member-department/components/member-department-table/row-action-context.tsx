@@ -88,7 +88,6 @@ export const MemberDepartmentAction = ({
             </div>
             <RowActionsGroup
                 canSelect
-                row={row}
                 onDelete={{
                     text: 'Delete',
                     isAllowed: !isDeletingMemberDepartment,
@@ -100,6 +99,7 @@ export const MemberDepartmentAction = ({
                     onClick: handleEdit,
                 }}
                 otherActions={<></>}
+                row={row}
             />
         </>
     )
@@ -135,7 +135,6 @@ export const MemberDepartmentRowContext = ({
                 }}
             />
             <DataTableRowContext
-                row={row}
                 onDelete={{
                     text: 'Delete',
                     isAllowed: !isDeletingMemberDepartment,
@@ -146,6 +145,7 @@ export const MemberDepartmentRowContext = ({
                     isAllowed: true,
                     onClick: handleEdit,
                 }}
+                row={row}
             >
                 {children}
             </DataTableRowContext>

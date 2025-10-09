@@ -41,9 +41,9 @@ export const Onboarding = () => {
             <div className="flex">
                 <OnboardingNav />
                 <OrganizationCategoryPicker
-                    open={onOpenCategoryPicker}
-                    onOpenChange={setOnOpenCategoryPicker}
                     data={Category}
+                    onOpenChange={setOnOpenCategoryPicker}
+                    open={onOpenCategoryPicker}
                 />
                 <main className="flex w-full flex-1 items-center">
                     <div className="ecoop-scroll relative flex h-screen max-h-screen w-full flex-col overflow-y-auto">

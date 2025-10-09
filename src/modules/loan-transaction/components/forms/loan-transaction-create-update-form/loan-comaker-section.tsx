@@ -63,8 +63,8 @@ const LoanComakerSection = ({ form, disabled, isDisabled }: Props) => {
 
     return (
         <fieldset
-            disabled={!memberProfile || disabled}
             className="space-y-4 rounded-xl p-4 bg-popover"
+            disabled={!memberProfile || disabled}
         >
             <div className="justify-between flex items-center">
                 <div>
@@ -82,25 +82,25 @@ const LoanComakerSection = ({ form, disabled, isDisabled }: Props) => {
             )}
             <div className="space-y-2 col-span-5">
                 <FormFieldWrapper
-                    control={form.control}
-                    name="comaker_type"
-                    label="Comaker"
                     className="shrink-0"
+                    control={form.control}
+                    label="Comaker"
+                    name="comaker_type"
                     render={({ field }) => (
                         <RadioGroup
-                            value={field.value ?? ''}
-                            onValueChange={field.onChange}
                             className="gap-x-8 py-4 flex items-center rounded-xl border-2 px-4"
+                            onValueChange={field.onChange}
+                            value={field.value ?? ''}
                         >
                             <FormItem>
                                 <div className="flex items-center gap-x-2">
                                     <RadioGroupItem
-                                        value="none"
                                         id="comaker-none"
+                                        value="none"
                                     />
                                     <Label
-                                        htmlFor="comaker-none"
                                         className="flex items-center cursor-pointer gap-2 min-w-0"
+                                        htmlFor="comaker-none"
                                     >
                                         <div className="min-w-0">
                                             <span className="text-foreground text-sm font-medium">
@@ -114,12 +114,12 @@ const LoanComakerSection = ({ form, disabled, isDisabled }: Props) => {
                             <FormItem>
                                 <div className="flex items-center gap-x-2">
                                     <RadioGroupItem
-                                        value="member"
                                         id="comaker-member"
+                                        value="member"
                                     />
                                     <Label
-                                        htmlFor="comaker-member"
                                         className="flex items-center cursor-pointer gap-2 min-w-0"
+                                        htmlFor="comaker-member"
                                     >
                                         <UserIcon
                                             aria-hidden="true"
@@ -137,12 +137,12 @@ const LoanComakerSection = ({ form, disabled, isDisabled }: Props) => {
                             <FormItem>
                                 <div className="flex items-center gap-x-2">
                                     <RadioGroupItem
-                                        value="deposit"
                                         id="comaker-deposit"
+                                        value="deposit"
                                     />
                                     <Label
-                                        htmlFor="comaker-deposit"
                                         className="flex items-center cursor-pointer gap-2 min-w-0"
+                                        htmlFor="comaker-deposit"
                                     >
                                         <HandDepositIcon
                                             aria-hidden="true"
@@ -160,12 +160,12 @@ const LoanComakerSection = ({ form, disabled, isDisabled }: Props) => {
                             <FormItem>
                                 <div className="flex items-center gap-x-2">
                                     <RadioGroupItem
-                                        value="others"
                                         id="comaker-others"
+                                        value="others"
                                     />
                                     <Label
-                                        htmlFor="comaker-others"
                                         className="flex items-center cursor-pointer gap-2 min-w-0"
+                                        htmlFor="comaker-others"
                                     >
                                         <DotsHorizontalIcon
                                             aria-hidden="true"
@@ -185,34 +185,30 @@ const LoanComakerSection = ({ form, disabled, isDisabled }: Props) => {
 
                 {comakerType === 'member' && (
                     <ComakerMemberProfileField
-                        isDisabled={isDisabled}
                         form={form}
+                        isDisabled={isDisabled}
                     />
                 )}
 
                 {comakerType === 'others' && (
                     <ComakerCollateralField
-                        isDisabled={isDisabled}
                         form={form}
+                        isDisabled={isDisabled}
                     />
                 )}
 
                 {comakerType === 'deposit' && (
                     <>
                         <FormFieldWrapper
-                            control={form.control}
-                            name="comaker_deposit_member_accounting_ledger_id"
-                            label="Comaker Member Deposit Account Ledger"
                             className="shrink-0"
+                            control={form.control}
+                            label="Comaker Member Deposit Account Ledger"
+                            name="comaker_deposit_member_accounting_ledger_id"
                             render={({ field }) => (
                                 <span className="flex gap-x-2 items-center">
                                     <MemberAccountingLedgerPicker
-                                        mode="member"
-                                        triggerClassName="flex-1"
                                         memberProfileId={memberProfile}
-                                        value={
-                                            comaker_deposit_member_accounting_ledger
-                                        }
+                                        mode="member"
                                         onSelect={(memberAccountingLedger) => {
                                             field.onChange(
                                                 memberAccountingLedger.id
@@ -235,13 +231,16 @@ const LoanComakerSection = ({ form, disabled, isDisabled }: Props) => {
                                                 )
                                             }
                                         }}
+                                        triggerClassName="flex-1"
+                                        value={
+                                            comaker_deposit_member_accounting_ledger
+                                        }
                                     />
                                     {form.getValues(
                                         'comaker_deposit_member_accounting_ledger_id'
                                     ) !== undefined && (
                                         <Button
-                                            type="button"
-                                            variant="secondary"
+                                            className="shrink-0"
                                             onClick={() => {
                                                 field.onChange(undefined)
                                                 form.setValue(
@@ -249,8 +248,9 @@ const LoanComakerSection = ({ form, disabled, isDisabled }: Props) => {
                                                     undefined
                                                 )
                                             }}
-                                            className="shrink-0"
                                             size="icon"
+                                            type="button"
+                                            variant="secondary"
                                         >
                                             <XIcon />
                                         </Button>
@@ -365,20 +365,20 @@ const ComakerMemberProfileField = ({
                 name="comaker_member_profiles"
                 render={({ field }) => (
                     <fieldset
-                        disabled={disabled}
                         className="max-w-full min-w-0"
+                        disabled={disabled}
                     >
                         <div className="flex items-center justify-between mb-4">
                             <p className="font-medium">Comaker Member</p>
                             <div className="flex items-center gap-2">
                                 <Button
-                                    size="sm"
-                                    type="button"
-                                    tabIndex={0}
                                     className="size-fit px-2 py-0.5 text-xs"
                                     onClick={() =>
                                         addComakerMemberModal.onOpenChange(true)
                                     }
+                                    size="sm"
+                                    tabIndex={0}
+                                    type="button"
                                 >
                                     Add <PlusIcon className="inline" />
                                 </Button>
@@ -391,8 +391,8 @@ const ComakerMemberProfileField = ({
                             </div>
                         </div>
                         <Table
-                            ref={field.ref}
                             onKeyDown={handleKeyDown}
+                            ref={field.ref}
                             tabIndex={0}
                             wrapperClassName="max-h-[50vh] max-w-full min-w-0 min-h-32 bg-secondary rounded-xl ecoop-scroll"
                         >
@@ -420,16 +420,16 @@ const ComakerMemberProfileField = ({
                                 {comakerMemberProfiles.map((field, index) => (
                                     <ComakerMemberRow
                                         exceptId={memberProfileId}
-                                        key={field.fieldKey}
                                         field={field}
                                         index={index}
+                                        key={field.fieldKey}
+                                        onRemove={handleRemoveInstitution}
+                                        onUpdate={handleUpdateInstitution}
                                         ref={(el) => {
                                             comakerMemberRowRefs.current[
                                                 index
                                             ] = el
                                         }}
-                                        onRemove={handleRemoveInstitution}
-                                        onUpdate={handleUpdateInstitution}
                                     />
                                 ))}
 
@@ -482,6 +482,9 @@ const ComakerMemberRow = memo(
             return (
                 <>
                     <TableRow
+                        className="*:border-border focus:bg-background focus:outline-0 odd:bg-muted/50 odd:hover:bg-muted/50 border-none hover:bg-transparent"
+                        key={field.id}
+                        onKeyDown={handleRowKeyDown}
                         ref={(el) => {
                             rowRef.current = el
                             if (typeof ref === 'function') {
@@ -490,10 +493,7 @@ const ComakerMemberRow = memo(
                                 ref.current = el
                             }
                         }}
-                        key={field.id}
-                        onKeyDown={handleRowKeyDown}
                         tabIndex={-1}
-                        className="*:border-border focus:bg-background focus:outline-0 odd:bg-muted/50 odd:hover:bg-muted/50 border-none hover:bg-transparent"
                     >
                         <TableCell>
                             <div className="flex gap-x-4">
@@ -534,13 +534,13 @@ const ComakerMemberRow = memo(
                         <TableCell>
                             <div className="flex justify-end gap-1">
                                 <Button
-                                    type="button"
-                                    variant="ghost"
-                                    size="sm"
+                                    className="size-8 p-0"
                                     onClick={() =>
                                         editModalState.onOpenChange(true)
                                     }
-                                    className="size-8 p-0"
+                                    size="sm"
+                                    type="button"
+                                    variant="ghost"
                                 >
                                     <PencilFillIcon className="size-4" />
                                     <span className="sr-only">
@@ -548,11 +548,11 @@ const ComakerMemberRow = memo(
                                     </span>
                                 </Button>
                                 <Button
+                                    className="h-8 w-8 p-0 text-destructive hover:text-destructive-foreground hover:bg-destructive"
+                                    onClick={() => onRemove(index, field.id)}
                                     size="sm"
                                     type="button"
                                     variant="ghost"
-                                    onClick={() => onRemove(index, field.id)}
-                                    className="h-8 w-8 p-0 text-destructive hover:text-destructive-foreground hover:bg-destructive"
                                 >
                                     <TrashIcon className="h-4 w-4" />
                                     <span className="sr-only">
@@ -565,13 +565,6 @@ const ComakerMemberRow = memo(
 
                     <ComakerMemberProfileCreateUpdateModal
                         {...editModalState}
-                        onOpenChange={(state) => {
-                            if (!state) {
-                                rowRef.current?.focus()
-                            }
-                            editModalState.onOpenChange(state)
-                        }}
-                        title="Edit Comaker Member"
                         description="Update Comaker Member."
                         formProps={{
                             exceptId,
@@ -580,6 +573,13 @@ const ComakerMemberRow = memo(
                                 onUpdate(index, { ...field, ...updatedData })
                             },
                         }}
+                        onOpenChange={(state) => {
+                            if (!state) {
+                                rowRef.current?.focus()
+                            }
+                            editModalState.onOpenChange(state)
+                        }}
+                        title="Edit Comaker Member"
                     />
                 </>
             )
@@ -686,22 +686,22 @@ const ComakerCollateralField = ({
                 name="comaker_collaterals"
                 render={({ field }) => (
                     <fieldset
-                        disabled={disabled}
                         className="max-w-full min-w-0"
+                        disabled={disabled}
                     >
                         <div className="flex items-center justify-between mb-4">
                             <p className="font-medium">Comaker Collateral</p>
                             <div className="flex items-center gap-2">
                                 <Button
-                                    size="sm"
-                                    type="button"
-                                    tabIndex={0}
                                     className="size-fit px-2 py-0.5 text-xs"
                                     onClick={() =>
                                         addComakerCollateralModal.onOpenChange(
                                             true
                                         )
                                     }
+                                    size="sm"
+                                    tabIndex={0}
+                                    type="button"
                                 >
                                     Add <PlusIcon className="inline" />
                                 </Button>
@@ -714,8 +714,8 @@ const ComakerCollateralField = ({
                             </div>
                         </div>
                         <Table
-                            ref={field.ref}
                             onKeyDown={handleKeyDown}
+                            ref={field.ref}
                             tabIndex={0}
                             wrapperClassName="max-h-[50vh] max-w-full min-w-0 min-h-32 bg-secondary rounded-xl ecoop-scroll"
                         >
@@ -742,16 +742,16 @@ const ComakerCollateralField = ({
                             <TableBody>
                                 {comakerCollaterals.map((field, index) => (
                                     <ComakerCollateralRow
-                                        key={field.fieldKey}
                                         field={field}
                                         index={index}
+                                        key={field.fieldKey}
+                                        onRemove={handleRemoveCollateral}
+                                        onUpdate={handleUpdateCollateral}
                                         ref={(el) => {
                                             comakerCollateralRowRefs.current[
                                                 index
                                             ] = el
                                         }}
-                                        onRemove={handleRemoveCollateral}
-                                        onUpdate={handleUpdateCollateral}
                                     />
                                 ))}
 
@@ -803,6 +803,9 @@ const ComakerCollateralRow = memo(
             return (
                 <>
                     <TableRow
+                        className="*:border-border focus:bg-background focus:outline-0 odd:bg-muted/50 odd:hover:bg-muted/50 border-none hover:bg-transparent"
+                        key={field.id}
+                        onKeyDown={handleRowKeyDown}
                         ref={(el) => {
                             rowRef.current = el
                             if (typeof ref === 'function') {
@@ -811,10 +814,7 @@ const ComakerCollateralRow = memo(
                                 ref.current = el
                             }
                         }}
-                        key={field.id}
-                        onKeyDown={handleRowKeyDown}
                         tabIndex={-1}
-                        className="*:border-border focus:bg-background focus:outline-0 odd:bg-muted/50 odd:hover:bg-muted/50 border-none hover:bg-transparent"
                     >
                         <TableCell>
                             <div className="flex gap-x-4">
@@ -842,13 +842,13 @@ const ComakerCollateralRow = memo(
                         <TableCell>
                             <div className="flex justify-end gap-1">
                                 <Button
-                                    type="button"
-                                    variant="ghost"
-                                    size="sm"
+                                    className="size-8 p-0"
                                     onClick={() =>
                                         editModalState.onOpenChange(true)
                                     }
-                                    className="size-8 p-0"
+                                    size="sm"
+                                    type="button"
+                                    variant="ghost"
                                 >
                                     <PencilFillIcon className="size-4" />
                                     <span className="sr-only">
@@ -856,11 +856,11 @@ const ComakerCollateralRow = memo(
                                     </span>
                                 </Button>
                                 <Button
+                                    className="h-8 w-8 p-0 text-destructive hover:text-destructive-foreground hover:bg-destructive"
+                                    onClick={() => onRemove(index, field.id)}
                                     size="sm"
                                     type="button"
                                     variant="ghost"
-                                    onClick={() => onRemove(index, field.id)}
-                                    className="h-8 w-8 p-0 text-destructive hover:text-destructive-foreground hover:bg-destructive"
                                 >
                                     <TrashIcon className="h-4 w-4" />
                                     <span className="sr-only">
@@ -873,13 +873,6 @@ const ComakerCollateralRow = memo(
 
                     <ComakerCollateralCreateUpdateModal
                         {...editModalState}
-                        onOpenChange={(state) => {
-                            if (!state) {
-                                rowRef.current?.focus()
-                            }
-                            editModalState.onOpenChange(state)
-                        }}
-                        title="Edit Comaker Collateral"
                         description="Update Comaker Collateral."
                         formProps={{
                             defaultValues: field,
@@ -887,6 +880,13 @@ const ComakerCollateralRow = memo(
                                 onUpdate(index, { ...field, ...updatedData })
                             },
                         }}
+                        onOpenChange={(state) => {
+                            if (!state) {
+                                rowRef.current?.focus()
+                            }
+                            editModalState.onOpenChange(state)
+                        }}
+                        title="Edit Comaker Collateral"
                     />
                 </>
             )

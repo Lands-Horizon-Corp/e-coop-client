@@ -34,13 +34,13 @@ const HoveruserInfo = ({ userId, defaultValue }: Props) => {
                         <div className="flex items-center justify-between gap-x-2">
                             <PreviewMediaWrapper media={user?.media}>
                                 <ImageDisplay
-                                    src={user?.media?.download_url}
+                                    className="size-16 border-2 border-gray-700"
                                     fallback={
                                         user?.full_name !== undefined
                                             ? user?.full_name.charAt(0)
                                             : '-'
                                     }
-                                    className="size-16 border-2 border-gray-700"
+                                    src={user?.media?.download_url}
                                 />
                             </PreviewMediaWrapper>
                             <div>

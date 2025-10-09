@@ -147,18 +147,18 @@ const ImagePreviewModal = () => {
     return (
         <TooltipProvider>
             <Dialog
-                open={isOpen}
                 onOpenChange={(isOpen) => {
                     if (!isOpen) handleResetActionState()
                     onClose()
                 }}
+                open={isOpen}
             >
                 <DialogTitle>{ImagePreviewData.title}</DialogTitle>
                 <DialogContent
-                    overlayClassName="bg-transparent"
                     className={cn(
                         '!h-max-[100vh] h-full !w-full !max-w-full  border-[0px] border-primary bg-transparent'
                     )}
+                    overlayClassName="bg-transparent"
                 >
                     <div
                         className={cn(
@@ -168,44 +168,44 @@ const ImagePreviewModal = () => {
                     >
                         <ImagePreviewActions
                             className="lg-absolute hidden lg:bottom-5 lg:right-5 lg:z-50 lg:flex"
-                            imageRef={imageRef}
                             downloadImage={downloadImage}
-                            handleResetActionState={handleResetActionState}
-                            handleRotateRight={handleRotateRight}
-                            handleRotateLeft={handleRotateLeft}
-                            handleZoomIn={handleZoomIn}
-                            handleZoomOut={handleZoomOut}
                             handleFlipHorizontal={handleFlipHorizontal}
                             handleFlipVertical={handleFlipVertical}
+                            handleResetActionState={handleResetActionState}
+                            handleRotateLeft={handleRotateLeft}
+                            handleRotateRight={handleRotateRight}
+                            handleZoomIn={handleZoomIn}
+                            handleZoomOut={handleZoomOut}
+                            imageRef={imageRef}
                         />
 
                         {isMultipleImage && (
                             <ImagePreviewPanel
                                 focusIndex={focusIndex}
                                 Images={Images}
-                                scrollToIndex={scrollToIndex}
                                 scrollIntoView={scrollIntoView}
+                                scrollToIndex={scrollToIndex}
                             />
                         )}
                         <div className="static z-50 flex min-h-12 w-full items-center justify-center overflow-auto lg:hidden">
                             <ImagePreviewActions
                                 className="min-h-12 w-full justify-center overflow-auto"
-                                imageRef={imageRef}
                                 downloadImage={downloadImage}
-                                handleResetActionState={handleResetActionState}
-                                handleRotateRight={handleRotateRight}
-                                handleRotateLeft={handleRotateLeft}
-                                handleZoomIn={handleZoomIn}
-                                handleZoomOut={handleZoomOut}
                                 handleFlipHorizontal={handleFlipHorizontal}
                                 handleFlipVertical={handleFlipVertical}
+                                handleResetActionState={handleResetActionState}
+                                handleRotateLeft={handleRotateLeft}
+                                handleRotateRight={handleRotateRight}
+                                handleZoomIn={handleZoomIn}
+                                handleZoomOut={handleZoomOut}
+                                imageRef={imageRef}
                             />
                         </div>
                         <div className="flex h-full w-full items-center justify-center backdrop-blur-none dark:bg-transparent">
                             <Carousel
+                                className="flex h-fit w-full max-w-4xl justify-center bg-transparent"
                                 opts={options}
                                 setApi={setApi}
-                                className="flex h-fit w-full max-w-4xl justify-center bg-transparent"
                             >
                                 <CarouselContent className="">
                                     {Images?.map((data, index) => {
@@ -216,10 +216,10 @@ const ImagePreviewModal = () => {
                                             >
                                                 <ImageContainer
                                                     flipScale={flipScale}
+                                                    imageRef={imageRef}
+                                                    media={data}
                                                     rotateDegree={rotateDegree}
                                                     scale={scale}
-                                                    media={data}
-                                                    imageRef={imageRef}
                                                 ></ImageContainer>
                                             </CarouselItem>
                                         )
@@ -234,11 +234,11 @@ const ImagePreviewModal = () => {
                             </Carousel>
                             {!hideCloseButton && (
                                 <ImagePreviewPrimitive.Close
-                                    onClick={handleResetActionState}
                                     className={cn(
                                         'absolute right-5 top-5 size-8 cursor-pointer rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 disabled:pointer-events-none data-[state=open]:bg-accent data-[state=open]:text-muted-foreground',
                                         closeButtonClassName
                                     )}
+                                    onClick={handleResetActionState}
                                 >
                                     <XIcon className="size-full" />
                                     <span className="sr-only">Close</span>

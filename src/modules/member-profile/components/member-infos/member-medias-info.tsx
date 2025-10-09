@@ -21,11 +21,11 @@ const MemberMediasInfo = forwardRef<HTMLDivElement, Props>(
 
         return (
             <div
-                ref={ref}
                 className={cn(
                     'flex flex-1 flex-col gap-y-4 rounded-xl bg-background p-4',
                     className
                 )}
+                ref={ref}
             >
                 <MemberFileMediaDisplay userId={data?.user_id} />
             </div>

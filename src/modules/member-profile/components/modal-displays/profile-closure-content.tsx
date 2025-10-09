@@ -23,8 +23,8 @@ const ProfileClosureContent = () => {
                 </li>
             </ul>
             <Alert
-                variant="default"
                 className="bg-rose-400/40 text-foreground dark:bg-rose-400"
+                variant="default"
             >
                 <WarningFillIcon />
                 <AlertDescription>

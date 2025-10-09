@@ -92,11 +92,11 @@ const TransactionBatch = ({
                     </div>
                 </div>
                 <Button
-                    size="sm"
-                    variant="secondary"
                     className="h-fit py-1"
                     hoverVariant="primary"
                     onClick={() => historyModal.onOpenChange(true)}
+                    size="sm"
+                    variant="secondary"
                 >
                     <EyeIcon className="mr-2 inline" /> View History
                 </Button>
@@ -109,11 +109,11 @@ const TransactionBatch = ({
                             transactionBatch={transactionBatch}
                         />
                         <DepositInBankCard
-                            transactionBatchId={transactionBatch?.id}
                             depositInBankAmount={
                                 transactionBatch?.deposit_in_bank ?? 0
                             }
                             onUpdate={() => invalidateTransactionBatch()}
+                            transactionBatchId={transactionBatch?.id}
                         />
                     </div>
                     <TransactionBatchCashCount
@@ -122,24 +122,24 @@ const TransactionBatch = ({
                     />
                     <Separator />
                     <BatchCheckRemitance
-                        transactionBatchId={transactionBatch?.id}
                         onCheckRemittanceUpdate={() =>
                             invalidateTransactionBatch()
                         }
+                        transactionBatchId={transactionBatch?.id}
                     />
                     <Separator />
                     <BatchOnlineRemittance
-                        transactionBatchId={transactionBatch?.id}
                         onOnlineRemittanceUpdate={() =>
                             invalidateTransactionBatch()
                         }
+                        transactionBatchId={transactionBatch?.id}
                     />
                     <Separator />
                     <TransactionBatchDisbursementTransaction
-                        transactionBatchId={transactionBatch?.id}
                         onDisbursementUpdate={() =>
                             invalidateTransactionBatch()
                         }
+                        transactionBatchId={transactionBatch?.id}
                     />
                 </div>
                 <BatchBlotter
@@ -147,10 +147,10 @@ const TransactionBatch = ({
                 />
             </div>
             <Button
-                size="sm"
+                className="shrink-0 rounded-xl dark:bg-secondary dark:text-secondary-foreground"
                 hoverVariant="primary"
                 onClick={() => endModal.onOpenChange(true)}
-                className="shrink-0 rounded-xl dark:bg-secondary dark:text-secondary-foreground"
+                size="sm"
             >
                 End Batch
             </Button>

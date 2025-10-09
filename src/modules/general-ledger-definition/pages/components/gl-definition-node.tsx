@@ -177,15 +177,15 @@ const GeneralLedgerDefinitionNode = ({
                         </div>
                     )}
                     <GeneralLedgerDefinitionActions
-                        depth={depth}
                         canDelete={hasAccountNode || hasChildren}
-                        node={node}
-                        isDeletingGLDefinition={isDeletingGLDefinition}
+                        depth={depth}
                         hanldeDeleteGeneralLedgerDefinition={(
                             nodeId: TEntityId
                         ) => {
                             hanldeDeleteGeneralLedgerDefinition(nodeId)
                         }}
+                        isDeletingGLDefinition={isDeletingGLDefinition}
+                        node={node}
                     />
                 </div>
                 <div className="flex flex-1 flex-col">
@@ -226,14 +226,14 @@ const GeneralLedgerDefinitionNode = ({
             <div className={`w-full ${isNodeExpanded ? 'pl-5 pr-5' : ''}`}>
                 {Array.isArray(showGLFSAccountsCardList) && (
                     <GLFSAccountsCardList
-                        removeAccount={handleRemoveAccountFromGLDefinition}
                         accounts={showGLFSAccountsCardList}
+                        removeAccount={handleRemoveAccountFromGLDefinition}
                     />
                 )}
                 <DndContext
-                    sensors={grandchildSensors}
-                    onDragEnd={handleGrandchildDragEnd}
                     collisionDetection={closestCorners}
+                    onDragEnd={handleGrandchildDragEnd}
+                    sensors={grandchildSensors}
                 >
                     {hasChildren && (
                         <SortableContext
@@ -249,16 +249,12 @@ const GeneralLedgerDefinitionNode = ({
                                     {node.general_ledger_definition?.map(
                                         (childNode) => (
                                             <GeneralLedgerDefinitionNode
-                                                key={childNode.id}
+                                                depth={depth + 1}
                                                 handleOpenAccountPicker={
                                                     handleOpenAccountPicker
                                                 }
-                                                parentPath={[
-                                                    ...parentPath,
-                                                    node.id,
-                                                ]}
-                                                onDragEndNested={
-                                                    onDragEndNested
+                                                handleRemoveAccountFromGLDefinition={
+                                                    handleRemoveAccountFromGLDefinition
                                                 }
                                                 hanldeDeleteGeneralLedgerDefinition={
                                                     hanldeDeleteGeneralLedgerDefinition
@@ -266,11 +262,15 @@ const GeneralLedgerDefinitionNode = ({
                                                 isDeletingGLDefinition={
                                                     isDeletingGLDefinition
                                                 }
-                                                handleRemoveAccountFromGLDefinition={
-                                                    handleRemoveAccountFromGLDefinition
-                                                }
+                                                key={childNode.id}
                                                 node={childNode}
-                                                depth={depth + 1}
+                                                onDragEndNested={
+                                                    onDragEndNested
+                                                }
+                                                parentPath={[
+                                                    ...parentPath,
+                                                    node.id,
+                                                ]}
                                             />
                                         )
                                     )}

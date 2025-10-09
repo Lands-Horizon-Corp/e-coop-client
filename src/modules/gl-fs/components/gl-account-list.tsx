@@ -60,8 +60,8 @@ export const GeneralLedgerAccountItem = ({
             <div className="w-full flex items-center justify-between">
                 {title}
                 <GLFSAccountActions
-                    node={account}
                     handleDeleteAccount={handleDeleteAccount}
+                    node={account}
                 />
             </div>
         </div>
@@ -132,9 +132,9 @@ export default function GLFSAccountsCardList({
     return (
         <div className="pl-4 pt-2">
             <DndContext
-                sensors={sensors}
                 collisionDetection={closestCorners}
                 onDragEnd={handleDragEnd}
+                sensors={sensors}
             >
                 <SortableContext
                     items={account}
@@ -143,10 +143,10 @@ export default function GLFSAccountsCardList({
                     <div className="flex flex-col gap-2">
                         {account.map((accountItem) => (
                             <GeneralLedgerAccountItem
-                                handleDeleteAccount={handleRemoveAcount}
                                 account={accountItem}
-                                key={accountItem.id}
+                                handleDeleteAccount={handleRemoveAcount}
                                 id={accountItem.id}
+                                key={accountItem.id}
                                 title={accountItem.name}
                             />
                         ))}

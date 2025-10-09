@@ -30,8 +30,8 @@ const memberDepartmentHistoryColumns =
                     <ColumnActions {...props}>
                         <TextFilter
                             defaultMode="contains"
-                            field="member_department.name"
                             displayText="Department"
+                            field="member_department.name"
                         />
                     </ColumnActions>
                 </DataTableColumnHeader>
@@ -40,8 +40,8 @@ const memberDepartmentHistoryColumns =
                 <div className="flex min-w-0 items-center gap-3">
                     <div className="flex size-8 items-center justify-center rounded-full border bg-muted">
                         <RenderIcon
-                            icon={row.original.member_department?.icon as TIcon}
                             className="size-4"
+                            icon={row.original.member_department?.icon as TIcon}
                         />
                     </div>
                     <div className="flex min-w-0 flex-col">
@@ -66,8 +66,8 @@ const memberDepartmentHistoryColumns =
                     <ColumnActions {...props}>
                         <TextFilter<IMemberDepartmentHistory>
                             defaultMode="contains"
-                            field="member_department.description"
                             displayText="Description"
+                            field="member_department.description"
                         />
                     </ColumnActions>
                 </DataTableColumnHeader>

@@ -118,12 +118,12 @@ export const EnabledDisabled = ({ isEnabled }: { isEnabled?: boolean }) => {
             >
                 {isEnabled ? (
                     <div className="flex items-center gap-x-2">
-                        <FaCheckIcon size={10} className="text-primary" />
+                        <FaCheckIcon className="text-primary" size={10} />
                         <p>enabled</p>
                     </div>
                 ) : (
                     <div className="flex items-center gap-x-1">
-                        <FaTimesIcon size={10} className="text-gray-500" />
+                        <FaTimesIcon className="text-gray-500" size={10} />
                         <p>disabled</p>
                     </div>
                 )}
@@ -143,8 +143,8 @@ const AccountsTableColumns = (
                     <HeaderToggleSelect table={table} />
                     {!column.getIsPinned() && (
                         <PushPinSlashIcon
-                            onClick={() => column.pin('left')}
                             className="mr-2 size-3.5 cursor-pointer text-gray-500 hover:text-gray-700"
+                            onClick={() => column.pin('left')}
                             title="Pin column to left"
                         />
                     )}
@@ -155,8 +155,8 @@ const AccountsTableColumns = (
                     <Checkbox
                         aria-label="Select row"
                         checked={row.getIsSelected()}
-                        onCheckedChange={(value) => row.toggleSelected(!!value)}
                         className="mr-2"
+                        onCheckedChange={(value) => row.toggleSelected(!!value)}
                     />
                     {opts?.actionComponent?.({ row })}{' '}
                 </div>
@@ -174,9 +174,9 @@ const AccountsTableColumns = (
                 <DataTableColumnHeader {...props} title="Account Name">
                     <ColumnActions {...props}>
                         <TextFilter
-                            field="name"
-                            displayText="Account Name"
                             defaultMode="contains"
+                            displayText="Account Name"
+                            field="name"
                         />
                     </ColumnActions>
                 </DataTableColumnHeader>
@@ -205,9 +205,9 @@ const AccountsTableColumns = (
                 <DataTableColumnHeader {...props} title="Code">
                     <ColumnActions {...props}>
                         <TextFilter
-                            field="alternative_code"
-                            displayText="Account Code"
                             defaultMode="contains"
+                            displayText="Account Code"
+                            field="alternative_code"
                         />
                     </ColumnActions>
                 </DataTableColumnHeader>
@@ -256,9 +256,9 @@ const AccountsTableColumns = (
                 <DataTableColumnHeader {...props} title="Description">
                     <ColumnActions {...props}>
                         <TextFilter
-                            field="description"
-                            displayText="Description"
                             defaultMode="contains"
+                            displayText="Description"
+                            field="description"
                         />
                     </ColumnActions>
                 </DataTableColumnHeader>
@@ -282,8 +282,8 @@ const AccountsTableColumns = (
                 <DataTableColumnHeader {...props} title="Min Amount">
                     <ColumnActions {...props}>
                         <NumberFilter
-                            field="minAmount"
                             displayText="Min Amount"
+                            field="minAmount"
                         />
                     </ColumnActions>
                 </DataTableColumnHeader>
@@ -309,8 +309,8 @@ const AccountsTableColumns = (
                 <DataTableColumnHeader {...props} title="Max Amount">
                     <ColumnActions {...props}>
                         <NumberFilter
-                            field="maxAmount"
                             displayText="Max Amount"
+                            field="maxAmount"
                         />
                     </ColumnActions>
                 </DataTableColumnHeader>
@@ -336,8 +336,8 @@ const AccountsTableColumns = (
                 <DataTableColumnHeader {...props} title="Std. Interest">
                     <ColumnActions {...props}>
                         <NumberFilter
-                            field="interest_standard"
                             displayText="Interest Standard"
+                            field="interest_standard"
                         />
                     </ColumnActions>
                 </DataTableColumnHeader>
@@ -363,8 +363,8 @@ const AccountsTableColumns = (
                 <DataTableColumnHeader {...props} title="Secured Interest">
                     <ColumnActions {...props}>
                         <NumberFilter
-                            field="interest_secured"
                             displayText="Interest Secured"
+                            field="interest_secured"
                         />
                     </ColumnActions>
                 </DataTableColumnHeader>
@@ -498,9 +498,9 @@ const AccountsTableColumns = (
                 >
                     <ColumnActions {...props}>
                         <TextFilter
-                            field="description"
-                            displayText="Alternative Description"
                             defaultMode="contains"
+                            displayText="Alternative Description"
+                            field="description"
                         />
                     </ColumnActions>
                 </DataTableColumnHeader>
@@ -546,8 +546,8 @@ const AccountsTableColumns = (
                 <DataTableColumnHeader {...props} title="Fines Amort. (%)">
                     <ColumnActions {...props}>
                         <NumberFilter
-                            field="fines_amort"
                             displayText="Fines Amortization"
+                            field="fines_amort"
                         />
                     </ColumnActions>
                 </DataTableColumnHeader>
@@ -574,8 +574,8 @@ const AccountsTableColumns = (
                 <DataTableColumnHeader {...props} title="Fines Maturity (%)">
                     <ColumnActions {...props}>
                         <NumberFilter
-                            field="fines_maturity"
                             displayText="Fines Maturity"
+                            field="fines_maturity"
                         />
                     </ColumnActions>
                 </DataTableColumnHeader>
@@ -610,11 +610,11 @@ const AccountsTableColumns = (
             }) => (
                 <div className="flex items-center justify-center">
                     {cash_on_hand ? (
-                        <FaCheckIcon size={18} className="text-primary" />
+                        <FaCheckIcon className="text-primary" size={18} />
                     ) : (
                         <FaTimesIcon
-                            size={18}
                             className="text-destructive/70"
+                            size={18}
                         />
                     )}
                 </div>
@@ -647,8 +647,8 @@ const AccountsTableColumns = (
                 <DataTableColumnHeader {...props} title="Amort. Grace Period">
                     <ColumnActions {...props}>
                         <NumberFilter
-                            field="fines_grace_period_amortization"
                             displayText="Amort. Grace Period"
+                            field="fines_grace_period_amortization"
                         />
                     </ColumnActions>
                 </DataTableColumnHeader>
@@ -673,8 +673,8 @@ const AccountsTableColumns = (
                 <DataTableColumnHeader {...props} title="Addl. Grace Period">
                     <ColumnActions {...props}>
                         <NumberFilter
-                            field="additional_grace_period"
                             displayText="Additional Grace Period"
+                            field="additional_grace_period"
                         />
                     </ColumnActions>
                 </DataTableColumnHeader>
@@ -716,8 +716,8 @@ const AccountsTableColumns = (
                 <DataTableColumnHeader {...props} title="Maturity Grace Period">
                     <ColumnActions {...props}>
                         <NumberFilter
-                            field="fines_grace_period_maturity"
                             displayText="Maturity Grace Period"
+                            field="fines_grace_period_maturity"
                         />
                     </ColumnActions>
                 </DataTableColumnHeader>
@@ -742,8 +742,8 @@ const AccountsTableColumns = (
                 <DataTableColumnHeader {...props} title="Annual Fee">
                     <ColumnActions {...props}>
                         <NumberFilter
-                            field="yearly_subscription_fee"
                             displayText="Yearly Subscription Fee"
+                            field="yearly_subscription_fee"
                         />
                     </ColumnActions>
                 </DataTableColumnHeader>
@@ -768,8 +768,8 @@ const AccountsTableColumns = (
                 <DataTableColumnHeader {...props} title="Loan Cut-Off Days">
                     <ColumnActions {...props}>
                         <NumberFilter
-                            field="loan_cut_off_days"
                             displayText="Loan Cut-Off Days"
+                            field="loan_cut_off_days"
                         />
                     </ColumnActions>
                 </DataTableColumnHeader>

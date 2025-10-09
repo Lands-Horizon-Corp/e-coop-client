@@ -111,8 +111,8 @@ const ContactForm = () => {
                             <FormLabel>Email</FormLabel>
                             <FormControl>
                                 <Input
-                                    type="email"
                                     placeholder="your.email@example.com"
+                                    type="email"
                                     {...field}
                                 />
                             </FormControl>
@@ -159,8 +159,8 @@ const ContactForm = () => {
 
                 <Button
                     className="w-full"
-                    type="submit"
                     disabled={isPending || cooldownCount > 0}
+                    type="submit"
                 >
                     {cooldownCount > 0 ? (
                         `Please wait ${cooldownCount}s`

@@ -85,8 +85,8 @@ function RouteComponent() {
                     <span>
                         <LinkTag
                             href="http://ecoop-suite.com/"
-                            target="_blank"
                             name={` (http://ecoop-suite.com/)`}
+                            target="_blank"
                         />
                     </span>
                     , operated by Lands Horizon Corp (“we”, “our”, “us”). By
@@ -99,8 +99,8 @@ function RouteComponent() {
 
                 {/* --- Section 1: Acceptance of Terms --- */}
                 <SitePolicyItem
-                    ref={acceptanceOfTermsRef}
                     id="acceptance-of-terms"
+                    ref={acceptanceOfTermsRef}
                     title="1. Acceptance of Terms"
                 >
                     <div>
@@ -121,8 +121,8 @@ function RouteComponent() {
 
                 {/* --- Section 2: Permitted Uses --- */}
                 <SitePolicyItem
-                    ref={permittedUsesRef}
                     id="permitted-uses"
+                    ref={permittedUsesRef}
                     title="2. Permitted Uses"
                 >
                     <div>
@@ -158,8 +158,8 @@ function RouteComponent() {
 
                 {/* --- Section 3: Prohibited Uses --- */}
                 <SitePolicyItem
-                    ref={prohibitedUsesRef}
                     id="prohibited-uses"
+                    ref={prohibitedUsesRef}
                     title="3. Prohibited Uses"
                 >
                     <div>
@@ -209,8 +209,8 @@ function RouteComponent() {
 
                 {/* --- Section 4: User Responsibilities --- */}
                 <SitePolicyItem
-                    ref={userResponsibilitiesRef}
                     id="user-responsibilities"
+                    ref={userResponsibilitiesRef}
                     title="4. User Responsibilities"
                 >
                     <div>
@@ -238,8 +238,8 @@ function RouteComponent() {
 
                 {/* --- Section 5: Intellectual Property --- */}
                 <SitePolicyItem
-                    ref={intellectualPropertyRef}
                     id="intellectual-property"
+                    ref={intellectualPropertyRef}
                     title="5. Intellectual Property"
                 >
                     <div>
@@ -263,8 +263,8 @@ function RouteComponent() {
 
                 {/* --- Section 6: Termination of Use --- */}
                 <SitePolicyItem
-                    ref={terminationOfUseRef}
                     id="termination-of-use"
+                    ref={terminationOfUseRef}
                     title="6. Termination of Use"
                 >
                     <div>
@@ -286,8 +286,8 @@ function RouteComponent() {
 
                 {/* --- Section 7: Changes to Terms --- */}
                 <SitePolicyItem
-                    ref={changesToTermsRef}
                     id="changes-to-terms"
+                    ref={changesToTermsRef}
                     title="7. Changes to Terms"
                 >
                     <div>
@@ -311,8 +311,8 @@ function RouteComponent() {
 
                 {/* --- Section 8: Governing Law --- */}
                 <SitePolicyItem
-                    ref={governingLawRef}
                     id="governing-law"
+                    ref={governingLawRef}
                     title="8. Governing Law"
                 >
                     <div>
@@ -331,8 +331,8 @@ function RouteComponent() {
 
                 {/* --- Section 9: Contact Us --- */}
                 <SitePolicyItem
-                    ref={contactUsRef}
                     id="contact-us"
+                    ref={contactUsRef}
                     title="9. Contact Us"
                 >
                     <div className="space-y-2 not-prose">
@@ -377,12 +377,12 @@ function RouteComponent() {
                     {articleList.map((sectionId, idx) => (
                         <li key={sectionId}>
                             <a
+                                className="block py-1 text-primary hover:underline cursor-pointer text-sm"
                                 href={`#${sectionId}`}
                                 onClick={(e) => {
                                     e.preventDefault()
                                     scrollToSection(sectionId)
                                 }}
-                                className="block py-1 text-primary hover:underline cursor-pointer text-sm"
                             >
                                 {idx + 1}
                                 {'. '}

@@ -113,17 +113,11 @@ const TransactionCurrentPaymentEntry = ({
             </div>
             <Separator />
             <TransactionCurrentPaymentItem
-                isLoading={isLoading}
-                hasPayments={hasPayments}
                 currentPayment={generalLedgerBasedTransaction?.data || []}
+                hasPayments={hasPayments}
+                isLoading={isLoading}
             />
             <MiniPaginationBar
-                pagination={{
-                    pageIndex: pagination.pageIndex,
-                    pageSize: pagination.pageSize,
-                    totalPage: generalLedgerBasedTransaction?.totalPage || 0,
-                    totalSize: generalLedgerBasedTransaction?.totalSize || 0,
-                }}
                 disablePageMove={isFetching}
                 onNext={({ pageIndex }) =>
                     setPagination((prev) => ({ ...prev, pageIndex }))
@@ -131,6 +125,12 @@ const TransactionCurrentPaymentEntry = ({
                 onPrev={({ pageIndex }) =>
                     setPagination((prev) => ({ ...prev, pageIndex }))
                 }
+                pagination={{
+                    pageIndex: pagination.pageIndex,
+                    pageSize: pagination.pageSize,
+                    totalPage: generalLedgerBasedTransaction?.totalPage || 0,
+                    totalSize: generalLedgerBasedTransaction?.totalSize || 0,
+                }}
             />
         </div>
     )

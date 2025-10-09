@@ -89,7 +89,6 @@ export const LoanStatusAction = ({
             </div>
             <RowActionsGroup
                 canSelect
-                row={row}
                 onDelete={{
                     text: 'Delete',
                     isAllowed: !isDeletingLoanStatus,
@@ -101,6 +100,7 @@ export const LoanStatusAction = ({
                     onClick: handleEdit,
                 }}
                 otherActions={<>{/* Additional actions can be added here */}</>}
+                row={row}
             />
         </>
     )
@@ -136,7 +136,6 @@ export const LoanStatusRowContext = ({
                 }}
             />
             <DataTableRowContext
-                row={row}
                 onDelete={{
                     text: 'Delete',
                     isAllowed: !isDeletingLoanStatus,
@@ -147,6 +146,7 @@ export const LoanStatusRowContext = ({
                     isAllowed: true,
                     onClick: handleEdit,
                 }}
+                row={row}
             >
                 {children}
             </DataTableRowContext>

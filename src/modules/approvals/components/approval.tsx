@@ -13,7 +13,7 @@ const Approval = ({ className }: Props) => {
     return (
         <div
             className={cn(
-                'ecoop-scroll flex h-fit w-fit max-w-full gap-x-8 overflow-x-scroll rounded-xl p-4',
+                'ecoop-scroll flex h-fit w-fit max-w-full gap-x-8 overflow-x-scroll rounded-xl p-4 ',
                 className
             )}
         >

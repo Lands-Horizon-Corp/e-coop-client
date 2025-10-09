@@ -37,6 +37,7 @@ import {
     BsFileEarmarkFill as FileFillIcon,
     BsImage as Image2Icon,
     BsFileEarmarkImageFill as ImageFileFillIcon,
+    BsFillInfoCircleFill as InfoFillCircleIcon,
     BsInfo as InfoIcon,
     BsInstagram as InstagramIcon,
     BsFileEarmarkMusicFill as MusicFileFillIcon,
@@ -102,6 +103,7 @@ import {
     FaBoxesStacked as BoxesStackedIcon,
     FaBusinessTime as BriefCaseClockIcon,
     FaCheck as CheckFillIcon,
+    FaFirstdraft as DraftIcon,
     FaCircleCheck as FaCheckIcon,
     FaVenusMars as GendersIcon,
     FaHeadset as HeadsetIcon,
@@ -202,6 +204,7 @@ import {
     HiSparkles as SparkleIcon,
     HiOutlineSun as SunIcon,
     HiTag as TagIcon,
+    HiMiniWrenchScrewdriver as WrenchIcon,
 } from 'react-icons/hi2'
 import { ImHammer2 as JudgeHammerIcon } from 'react-icons/im'
 import {
@@ -444,6 +447,7 @@ export {
     BackIcon,
     NextIcon,
     InfoIcon,
+    DraftIcon,
     GlobeIcon,
     GhostIcon,
     MoneyIcon,
@@ -492,6 +496,7 @@ export {
     Image2Icon,
     IdCardIcon,
     EyeOffIcon,
+    WrenchIcon,
     CommandIcon,
     TwitterIcon,
     EyeViewIcon,
@@ -605,6 +610,7 @@ export {
     RowSpacingIcon,
     PowerResetIcon,
     BlockQuoteIcon,
+    InfoFillCircleIcon,
     DragHandleIcon,
     CameraFillIcon,
     EditPencilIcon,
@@ -1102,6 +1108,8 @@ export const IconMap: Record<TIcon, IconType> = {
     'Command Icon': CommandIcon,
     'Code Icon': CodeIcon,
     'Clock Cancel': ClockCancelIcon,
+    'Wrench Icon': WrenchIcon,
+    'Draft Icon': DraftIcon,
 }
 
 export type TIcon = (typeof ICONS)[number]

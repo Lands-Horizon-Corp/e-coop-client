@@ -95,10 +95,10 @@ const TransactionBatchNavButton = (_props: Props) => {
         return (
             <>
                 <Button
-                    variant="secondary"
-                    hoverVariant="primary"
                     className="group rounded-full text-foreground/70"
+                    hoverVariant="primary"
                     onClick={() => modalState.onOpenChange((prev) => !prev)}
+                    variant="secondary"
                 >
                     <LayersIcon className="mr-2 duration-300 group-hover:text-inherit" />
                     Start Batch
@@ -123,10 +123,10 @@ const TransactionBatchNavButton = (_props: Props) => {
         <Popover modal>
             <PopoverTrigger asChild>
                 <Button
+                    className="group rounded-full"
+                    hoverVariant="primary"
                     size="sm"
                     variant="secondary"
-                    hoverVariant="primary"
-                    className="group rounded-full"
                 >
                     <LayersSharpDotIcon className="mr-2 text-primary duration-300 group-hover:text-inherit" />
                     Manage Batch

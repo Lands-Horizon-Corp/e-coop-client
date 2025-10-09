@@ -22,8 +22,8 @@ const DataTableHeader = <TData,>({
         {headerGroups.map((headerGroup) => {
             return (
                 <TableRow
-                    key={headerGroup.id}
                     className="text-nowrap !border-none bg-secondary first:rounded-t-xl dark:bg-popover"
+                    key={headerGroup.id}
                 >
                     <SortableContext
                         items={columnOrder}
@@ -41,13 +41,10 @@ const DataTableHeader = <TData,>({
 
                             return (
                                 <TableHead
-                                    key={header.id}
                                     className={cn(
                                         'relative h-10 border-y text-xs first:rounded-tl-lg last:rounded-tr-lg data-[pinned]:bg-muted/50 data-[pinned]:backdrop-blur-md [&:not([data-pinned]):has(+[data-pinned])_div.cursor-col-resize:last-child]:opacity-0 [&[data-last-col=left]_div.cursor-col-resize:last-child]:opacity-0 [&[data-pinned=left][data-last-col=left]]:border-r [&[data-pinned=right]:last-child_div.cursor-col-resize:last-child]:opacity-0 [&[data-pinned=right][data-last-col=right]]:border-l [&[data-pinned][data-last-col]]:border-border'
                                     )}
                                     colSpan={header.colSpan}
-                                    style={{ ...getPinningStyles(column) }}
-                                    data-pinned={isPinned || undefined}
                                     data-last-col={
                                         isLastLeftPinned
                                             ? 'left'
@@ -55,6 +52,9 @@ const DataTableHeader = <TData,>({
                                               ? 'right'
                                               : undefined
                                     }
+                                    data-pinned={isPinned || undefined}
+                                    key={header.id}
+                                    style={{ ...getPinningStyles(column) }}
                                 >
                                     {header.isPlaceholder
                                         ? null

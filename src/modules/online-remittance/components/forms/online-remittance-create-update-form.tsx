@@ -113,117 +113,111 @@ const OnlineRemittanceCreateUpdateForm = ({
     return (
         <Form {...form}>
             <form
-                ref={formRef}
-                onSubmit={onSubmit}
                 className={cn('flex w-full flex-col gap-y-4', className)}
+                onSubmit={onSubmit}
+                ref={formRef}
             >
                 <fieldset
-                    disabled={isPending || formProps.readOnly}
                     className="grid gap-x-6 gap-y-4 sm:gap-y-3"
+                    disabled={isPending || formProps.readOnly}
                 >
                     <FormFieldWrapper
                         control={form.control}
-                        name="bank_id"
                         label="Bank *"
+                        name="bank_id"
                         render={({ field }) => (
                             <BankCombobox
                                 {...field}
+                                disabled={isDisabled(field.name)}
+                                onChange={(bank) => field.onChange(bank.id)}
                                 placeholder="Select a bank"
                                 value={field.value}
-                                onChange={(bank) => field.onChange(bank.id)}
-                                disabled={isDisabled(field.name)}
                             />
                         )}
                     />
 
                     <FormFieldWrapper
                         control={form.control}
-                        name="account_name"
                         label="Account Name *"
+                        name="account_name"
                         render={({ field }) => (
                             <Input
                                 {...field}
+                                disabled={isDisabled(field.name)}
                                 placeholder="Account Name"
-                                disabled={isDisabled(field.name)}
                             />
                         )}
                     />
 
                     <FormFieldWrapper
                         control={form.control}
-                        name="reference_number"
                         label="Reference Number *"
+                        name="reference_number"
                         render={({ field }) => (
                             <Input
                                 {...field}
+                                disabled={isDisabled(field.name)}
                                 placeholder="ex: OR-20240526-001"
-                                disabled={isDisabled(field.name)}
                             />
                         )}
                     />
 
                     <FormFieldWrapper
                         control={form.control}
-                        name="amount"
                         label="Amount *"
+                        name="amount"
                         render={({ field }) => (
                             <Input
                                 {...field}
-                                type="text"
-                                placeholder="Amount"
                                 disabled={isDisabled(field.name)}
+                                placeholder="Amount"
+                                type="text"
                             />
                         )}
                     />
 
                     <FormFieldWrapper
-                        control={form.control}
-                        name="date_entry"
-                        label="Date Entry"
                         className="relative"
+                        control={form.control}
                         description="mm/dd/yyyy"
                         descriptionClassName="absolute top-0 right-0"
+                        label="Date Entry"
+                        name="date_entry"
                         render={({ field }) => (
                             <InputDate
                                 {...field}
                                 className="block"
-                                value={field.value ?? ''}
                                 disabled={isDisabled(field.name)}
+                                value={field.value ?? ''}
                             />
                         )}
                     />
 
                     <FormFieldWrapper
                         control={form.control}
-                        name="country_code"
                         label="Country Code *"
+                        name="country_code"
                         render={({ field }) => (
                             <CountryCombobox
                                 {...field}
                                 defaultValue={field.value}
+                                disabled={isDisabled(field.name)}
                                 onChange={(country) =>
                                     field.onChange(country.alpha2)
                                 }
-                                disabled={isDisabled(field.name)}
                             />
                         )}
                     />
 
                     <FormFieldWrapper
                         control={form.control}
-                        name="media_id"
                         label="Remittance Receipt"
+                        name="media_id"
                         render={({ field }) => {
                             const value = form.watch('media')
                             return (
                                 <ImageField
                                     {...field}
-                                    placeholder="Upload Remittance Screenshot"
-                                    value={
-                                        value
-                                            ? (value as IMedia).download_url
-                                            : value
-                                    }
                                     onChange={(newImage) => {
                                         if (newImage)
                                             field.onChange(newImage.id)
@@ -231,6 +225,12 @@ const OnlineRemittanceCreateUpdateForm = ({
 
                                         form.setValue('media', newImage)
                                     }}
+                                    placeholder="Upload Remittance Screenshot"
+                                    value={
+                                        value
+                                            ? (value as IMedia).download_url
+                                            : value
+                                    }
                                 />
                             )
                         }}
@@ -238,14 +238,14 @@ const OnlineRemittanceCreateUpdateForm = ({
 
                     <FormFieldWrapper
                         control={form.control}
-                        name="description"
                         label="Description"
+                        name="description"
                         render={({ field }) => (
                             <TextEditor
                                 {...field}
                                 content={field.value ?? ''}
-                                placeholder="Description..."
                                 disabled={isDisabled(field.name)}
+                                placeholder="Description..."
                                 textEditorClassName="bg-background"
                             />
                         )}
@@ -253,15 +253,15 @@ const OnlineRemittanceCreateUpdateForm = ({
                 </fieldset>
 
                 <FormFooterResetSubmit
-                    error={error}
-                    readOnly={formProps.readOnly}
-                    isLoading={isPending}
                     disableSubmit={!form.formState.isDirty}
-                    submitText={onlineRemittanceId ? 'Update' : 'Create'}
+                    error={error}
+                    isLoading={isPending}
                     onReset={() => {
                         form.reset()
                         reset()
                     }}
+                    readOnly={formProps.readOnly}
+                    submitText={onlineRemittanceId ? 'Update' : 'Create'}
                 />
             </form>
         </Form>
@@ -279,9 +279,9 @@ export const OnlineRemittanceCreateUpdateFormModal = ({
 }) => {
     return (
         <Modal
-            title={title}
-            description={description}
             className={cn('', className)}
+            description={description}
+            title={title}
             {...props}
         >
             <OnlineRemittanceCreateUpdateForm

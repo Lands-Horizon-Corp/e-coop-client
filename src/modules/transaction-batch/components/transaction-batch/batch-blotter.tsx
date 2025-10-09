@@ -47,8 +47,6 @@ const BatchBlotter = ({ transactionBatch, onBatchUpdate }: Props) => {
                                 confirm or decline
                             </p>
                             <Button
-                                size="sm"
-                                variant="outline"
                                 disabled={
                                     isRequestingView ||
                                     !!transactionBatch?.request_view
@@ -64,6 +62,8 @@ const BatchBlotter = ({ transactionBatch, onBatchUpdate }: Props) => {
                                             ),
                                     })
                                 }
+                                size="sm"
+                                variant="outline"
                             >
                                 {isRequestingView ? (
                                     <LoadingSpinner />

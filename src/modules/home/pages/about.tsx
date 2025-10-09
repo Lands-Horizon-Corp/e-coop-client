@@ -69,11 +69,11 @@ export default function AboutUsPage() {
     return (
         <div className="py-20 relative ">
             <FlickeringGrid
-                gridGap={1}
-                squareSize={64}
-                maxOpacity={0.5}
-                flickerChance={0.05}
                 className="absolute animate-in inset-0 h-screen -top-5 w-full -z-10 opacity-50 mask-r-from-30% mask-b-to-50% dark:opacity-80"
+                flickerChance={0.05}
+                gridGap={1}
+                maxOpacity={0.5}
+                squareSize={64}
             />
             <div className="to-background/0 via-background/0 from-primary/50 absolute right-0 -z-10 -mt-16 h-screen w-full bg-radial-[ellipse_at_20%_0%] to-100%" />
 
@@ -82,13 +82,13 @@ export default function AboutUsPage() {
                     <h1 className="text-foreground text-4xl font-extrabold">
                         About
                         <GradientText
-                            variant="primary"
-                            size="4xl"
                             animate="shimmer"
                             className="leading-relaxed ml-2"
+                            size="4xl"
                             style={{
                                 fontFamily: "'Knewave', cursive",
                             }}
+                            variant="primary"
                         >
                             <h1>E-coop</h1>
                         </GradientText>
@@ -112,14 +112,14 @@ export default function AboutUsPage() {
                         </p>
 
                         <div className="mt-6 flex items-center justify-center gap-3">
-                            <Button variant="default" asChild>
+                            <Button asChild variant="default">
                                 <Link to="/auth/sign-up">
                                     <UserIcon className="inline h-5 w-5" />
                                     Sign Up Now
                                     <ArrowRightIcon className="inline h-5 w-5" />
                                 </Link>
                             </Button>
-                            <Button variant="outline" asChild>
+                            <Button asChild variant="outline">
                                 <Link to="/contact">Contact Support</Link>
                             </Button>
                         </div>
@@ -134,9 +134,9 @@ export default function AboutUsPage() {
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 py-8 gap-6">
                         {LANDS_TEAM.map((member) => (
                             <TeamMemberCard
+                                className="even:mt-8 odd:mb-8"
                                 key={`${member.name}${member.position}`}
                                 teamMember={member}
-                                className="even:mt-8 odd:mb-8"
                             />
                         ))}
                     </div>

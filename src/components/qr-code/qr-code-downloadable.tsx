@@ -43,10 +43,10 @@ const QrCodeDownloadable = ({
             <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                     <Button
-                        size="sm"
-                        variant="secondary"
                         className="w-full"
                         disabled={isDownloading}
+                        size="sm"
+                        variant="secondary"
                     >
                         {isDownloading ? (
                             <LoadingSpinner />

@@ -1,8 +1,8 @@
-import { type ReactNode, useEffect } from 'react'
+import { type ReactNode } from 'react'
 
 import * as SheetPrimitive from '@radix-ui/react-dialog'
 
-import { SHORTCUT_SCOPES } from '@/constants'
+// import { SHORTCUT_SCOPES } from '@/constants'
 import { cn } from '@/helpers/tw-utils'
 import type {
     IBaseProps,
@@ -17,9 +17,7 @@ import {
     SheetTitle,
 } from '@/components/ui/sheet'
 
-import GeneralShortcutsWrapper, {
-    useShortcutContext,
-} from '../shorcuts/general-shortcuts-wrapper'
+// import GeneralShortcutsWrapper from '../shorcuts/general-shortcuts-wrapper'
 
 export interface ISheetClassNames extends IClassProps {
     titleClassName?: string
@@ -45,44 +43,41 @@ const SheetModal = ({
     descriptionClassName,
     ...other
 }: ISheetProps) => {
-    const { setActiveScope } = useShortcutContext()
+    // const { setActiveScope } = useShortcutContext()
 
-    useEffect(() => {
-        if (other.open) {
-            setActiveScope(SHORTCUT_SCOPES.SHEET)
-        }
-        return () => {
-            setActiveScope(SHORTCUT_SCOPES.GLOBAL)
-        }
-    }, [other.open, setActiveScope])
+    // useEffect(() => {
+    //     if (other.open) {
+    //         setActiveScope(SHORTCUT_SCOPES.SHEET)
+    //     }
+    //     return () => {
+    //         setActiveScope(SHORTCUT_SCOPES.GLOBAL)
+    //     }
+    // }, [other.open, setActiveScope])
 
     return (
-        <GeneralShortcutsWrapper mode={SHORTCUT_SCOPES.SHEET}>
-            <Sheet {...other}>
-                <SheetContent
+        // <GeneralShortcutsWrapper mode={SHORTCUT_SCOPES.SHEET}>
+        <Sheet {...other}>
+            <SheetContent
+                className={cn('shadow-2 ecoop-scroll font-inter', className)}
+            >
+                <SheetTitle className={cn('font-medium', titleClassName)}>
+                    {title}
+                </SheetTitle>
+                <SheetDescription
                     className={cn(
-                        'shadow-2 ecoop-scroll font-inter',
-                        className
+                        'mb-4',
+                        descriptionClassName,
+                        !description && 'hidden'
                     )}
                 >
-                    <SheetTitle className={cn('font-medium', titleClassName)}>
-                        {title}
-                    </SheetTitle>
-                    <SheetDescription
-                        className={cn(
-                            'mb-4',
-                            descriptionClassName,
-                            !description && 'hidden'
-                        )}
-                    >
-                        {description}
-                    </SheetDescription>
-                    {children}
-                    {footer && <Separator className="bg-muted/70" />}
-                    {footer}
-                </SheetContent>
-            </Sheet>
-        </GeneralShortcutsWrapper>
+                    {description}
+                </SheetDescription>
+                {children}
+                {footer && <Separator className="bg-muted/70" />}
+                {footer}
+            </SheetContent>
+        </Sheet>
+        // </GeneralShortcutsWrapper>
     )
 }
 

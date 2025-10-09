@@ -565,10 +565,10 @@ export const MapPicker: React.FC<MapPickerProps> = ({
             <Button
                 className={className}
                 disabled={disabled}
+                onClick={() => setIsOpen(true)}
                 size={size}
                 type="button"
                 variant={variant}
-                onClick={() => setIsOpen(true)}
             >
                 <PinLocationIcon className="mr-2 h-4 w-4" />
                 {value ? (
@@ -582,7 +582,7 @@ export const MapPicker: React.FC<MapPickerProps> = ({
                 )}
             </Button>
             {/* Modal */}
-            <Dialog open={isOpen} onOpenChange={setIsOpen}>
+            <Dialog onOpenChange={setIsOpen} open={isOpen}>
                 <DialogContent className="max-h-[100vh] min-w-7xl overflow-hidden p-0">
                     <DialogHeader className="p-6 pb-4">
                         <DialogTitle className="flex items-center gap-2">
@@ -606,6 +606,8 @@ export const MapPicker: React.FC<MapPickerProps> = ({
                                             width: '100%',
                                             height: '100%',
                                         }}
+                                        onClick={onMapClick}
+                                        onLoad={onMapLoad}
                                         options={{
                                             mapId:
                                                 mapId ||
@@ -624,8 +626,6 @@ export const MapPicker: React.FC<MapPickerProps> = ({
                                                     : 'LIGHT',
                                         }}
                                         zoom={mapZoom}
-                                        onClick={onMapClick}
-                                        onLoad={onMapLoad}
                                     />
                                 ) : (
                                     <div className="bg-muted text-muted-foreground flex h-full items-center justify-center">
@@ -657,13 +657,6 @@ export const MapPicker: React.FC<MapPickerProps> = ({
                                                 className="pr-10 pl-10"
                                                 disabled={!isLoaded}
                                                 id="location-search"
-                                                placeholder={
-                                                    isLoaded
-                                                        ? searchPlaceholder
-                                                        : 'Loading...'
-                                                }
-                                                ref={searchInputRef}
-                                                value={searchValue}
                                                 onChange={handleSearchChange}
                                                 onFocus={() => {
                                                     if (
@@ -672,14 +665,18 @@ export const MapPicker: React.FC<MapPickerProps> = ({
                                                         setShowSuggestions(true)
                                                     }
                                                 }}
+                                                placeholder={
+                                                    isLoaded
+                                                        ? searchPlaceholder
+                                                        : 'Loading...'
+                                                }
+                                                ref={searchInputRef}
+                                                value={searchValue}
                                             />
 
                                             {searchValue && (
                                                 <Button
                                                     className="absolute top-1/2 right-1 z-10 h-8 w-8 -translate-y-1/2 p-0"
-                                                    size="sm"
-                                                    type="button"
-                                                    variant="ghost"
                                                     onClick={() => {
                                                         setSearchValue('')
                                                         setSuggestions([])
@@ -692,6 +689,9 @@ export const MapPicker: React.FC<MapPickerProps> = ({
                                                             searchInputRef.current.focus()
                                                         }
                                                     }}
+                                                    size="sm"
+                                                    type="button"
+                                                    variant="ghost"
                                                 >
                                                     <CloseIcon className="h-4 w-4" />
                                                 </Button>
@@ -782,10 +782,10 @@ export const MapPicker: React.FC<MapPickerProps> = ({
                                                 </Label>
                                                 <Button
                                                     className="h-7 px-2"
+                                                    onClick={handleClear}
                                                     size="sm"
                                                     type="button"
                                                     variant="ghost"
-                                                    onClick={handleClear}
                                                 >
                                                     Clear
                                                 </Button>
@@ -835,16 +835,13 @@ export const MapPicker: React.FC<MapPickerProps> = ({
                                             </div>
                                             <p className="text-xs">
                                                 <CopyTextButton
-                                                    textContent={`https://www.google.com/maps/dir/?api=1&destination=${selectedLocation.lat},${selectedLocation.lng}`}
                                                     className="inline mr-2"
+                                                    textContent={`https://www.google.com/maps/dir/?api=1&destination=${selectedLocation.lat},${selectedLocation.lng}`}
                                                 />
                                                 share direction
                                             </p>
                                             <Button
                                                 className="w-full bg-transparent"
-                                                size="sm"
-                                                type="button"
-                                                variant="outline"
                                                 onClick={() => {
                                                     const googleMapsUrl = `https://www.google.com/maps/dir/?api=1&destination=${selectedLocation.lat},${selectedLocation.lng}`
                                                     window.open(
@@ -852,6 +849,9 @@ export const MapPicker: React.FC<MapPickerProps> = ({
                                                         '_blank'
                                                     )
                                                 }}
+                                                size="sm"
+                                                type="button"
+                                                variant="outline"
                                             >
                                                 <NavigationIcon className="mr-2 h-4 w-4" />
                                                 Get Directions
@@ -887,17 +887,17 @@ export const MapPicker: React.FC<MapPickerProps> = ({
                                 >
                                     <Button
                                         className="flex-1 bg-transparent"
+                                        onClick={handleCancel}
                                         type="button"
                                         variant="outline"
-                                        onClick={handleCancel}
                                     >
                                         Cancel
                                     </Button>
                                     <Button
                                         className="flex-1"
                                         disabled={!selectedLocation}
-                                        type="button"
                                         onClick={handleConfirm}
+                                        type="button"
                                     >
                                         Confirm Location
                                     </Button>
@@ -910,9 +910,9 @@ export const MapPicker: React.FC<MapPickerProps> = ({
                                 >
                                     <Button
                                         className="flex-1 bg-transparent"
+                                        onClick={handleCancel}
                                         type="button"
                                         variant="outline"
-                                        onClick={handleCancel}
                                     >
                                         Close
                                     </Button>

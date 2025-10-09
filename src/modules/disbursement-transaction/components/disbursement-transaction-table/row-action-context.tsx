@@ -46,7 +46,6 @@ export const DisbursementTransactionAction = ({
             <div onClick={(e) => e.stopPropagation()}></div>
             <RowActionsGroup
                 canSelect
-                row={row}
                 otherActions={
                     <>
                         <p className="mx-auto text-center text-muted-foreground/70 text-xs p-4">
@@ -54,6 +53,7 @@ export const DisbursementTransactionAction = ({
                         </p>
                     </>
                 }
+                row={row}
             />
         </>
     )

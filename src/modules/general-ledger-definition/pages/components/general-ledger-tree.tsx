@@ -353,20 +353,17 @@ const GeneralLedgerDefinitionTreeViewer = ({
                 />
             )} */}
             <AccountCreateUpdateFormModal
-                open={openViewAccountModal}
-                onOpenChange={setViewAccountModalOpen}
-                title="Account Details"
                 description="this account is part of the General Ledger Definition"
                 formProps={{
                     defaultValues: { ...selectedAccounts },
                     readOnly: true,
                 }}
+                onOpenChange={setViewAccountModalOpen}
+                open={openViewAccountModal}
+                title="Account Details"
             />
             {generalLedgerAccountsGroupingId && (
                 <GeneralLedgerDefinitionCreateUpdateFormModal
-                    onOpenChange={setOpenCreateGeneralLedgerModal}
-                    open={openCreateGeneralLedgerModal}
-                    title={createOrUpdateTitle}
                     description={createOrUpdateDescription}
                     formProps={{
                         defaultValues: formDefaultValues,
@@ -378,47 +375,50 @@ const GeneralLedgerDefinitionTreeViewer = ({
                         readOnly: isReadOnly,
                         onSuccess: OnSuccessCreateUpdateGLModal,
                     }}
+                    onOpenChange={setOpenCreateGeneralLedgerModal}
+                    open={openCreateGeneralLedgerModal}
+                    title={createOrUpdateTitle}
                 />
             )}
 
             <AccountPicker
-                open={openAddAccountPickerModal}
-                onOpenChange={setAddAccountPickerModalOpen}
                 modalOnly
+                onOpenChange={setAddAccountPickerModalOpen}
                 onSelect={(account) => {
                     handleAccountSelection(account)
                 }}
+                open={openAddAccountPickerModal}
             />
             <div className="flex gap-2 py-4">
                 <Button
-                    size="sm"
                     className="rounded-xl"
+                    disabled={isReadOnly || isPending}
                     onClick={() => {
                         addGeneralLedgerDefinition()
                     }}
-                    disabled={isReadOnly || isPending}
+                    size="sm"
                 >
-                    <PlusIcon size={15} className="mr-2" />
+                    <PlusIcon className="mr-2" size={15} />
                     Add GL
                 </Button>
                 <Input
-                    type="text"
                     className="rounded-2xl"
-                    placeholder="Search General Ledger..."
                     disabled={isReadOnly || !hasChildren || isPending}
-                    value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
                     onKeyDown={(e) => {
                         if (e.key === 'Enter' && isSearchOnChanged) {
                             handleSearch()
                         }
                     }}
+                    placeholder="Search General Ledger..."
+                    type="text"
+                    value={searchTerm}
                 />
                 <Button
-                    onClick={handleSearch}
-                    variant={'secondary'}
                     className="flex items-center rounded-2xl space-x-2"
                     disabled={!isSearchOnChanged || isReadOnly || isPending}
+                    onClick={handleSearch}
+                    variant={'secondary'}
                 >
                     <MagnifyingGlassIcon className="mr-2" />
                     Search
@@ -427,26 +427,26 @@ const GeneralLedgerDefinitionTreeViewer = ({
             <div className="w-full flex items-center gap-x-2 justify-start">
                 <Tooltip>
                     <TooltipTrigger
+                        className="rounded-sm p-1 hover:bg-secondary/50 text-xs"
                         onClick={() => {
                             resetExpansion()
                         }}
-                        className="rounded-sm p-1 hover:bg-secondary/50 text-xs"
                     >
                         <CollapseIcon size={15} />
                     </TooltipTrigger>
                     <TooltipContent>Collapse All</TooltipContent>
                 </Tooltip>
                 <Button
-                    disabled={isHandleOrderDisabled}
-                    variant={'outline'}
                     className="rounded-xl text-xs"
-                    size="sm"
+                    disabled={isHandleOrderDisabled}
                     onClick={() =>
                         handleUpdateOrder(
                             changedGeneralLedgerItems,
                             changedAccounts
                         )
                     }
+                    size="sm"
+                    variant={'outline'}
                 >
                     {isPending ? (
                         <LoadingSpinner className="animate-spin" />
@@ -456,7 +456,7 @@ const GeneralLedgerDefinitionTreeViewer = ({
                 </Button>
             </div>
             <DndContext
-                sensors={topLevelSensors}
+                collisionDetection={closestCorners}
                 onDragEnd={(event) =>
                     moveGeneralLedgerNode(
                         [],
@@ -464,7 +464,7 @@ const GeneralLedgerDefinitionTreeViewer = ({
                         event.over?.id || ''
                     )
                 }
-                collisionDetection={closestCorners}
+                sensors={topLevelSensors}
             >
                 <SortableContext
                     items={generalLedgerDefinitions.map((ledger) => ledger.id)}
@@ -475,18 +475,18 @@ const GeneralLedgerDefinitionTreeViewer = ({
                             {generalLedgerDefinitions?.map((node) => {
                                 return (
                                     <GeneralLedgerDefinitionNode
-                                        key={node.id}
-                                        node={node}
                                         depth={0}
-                                        parentPath={[]}
-                                        refetch={refetch}
-                                        onDragEndNested={moveGeneralLedgerNode}
-                                        hanldeDeleteGeneralLedgerDefinition={
-                                            hanldeDeleteGeneralLedgerDefinition
-                                        }
                                         handleRemoveAccountFromGLDefinition={
                                             handleRemoveAccountFromGLDefinition
                                         }
+                                        hanldeDeleteGeneralLedgerDefinition={
+                                            hanldeDeleteGeneralLedgerDefinition
+                                        }
+                                        key={node.id}
+                                        node={node}
+                                        onDragEndNested={moveGeneralLedgerNode}
+                                        parentPath={[]}
+                                        refetch={refetch}
                                     />
                                 )
                             })}
@@ -495,11 +495,11 @@ const GeneralLedgerDefinitionTreeViewer = ({
                         <div className="flex flex-col gap-y-5 items-center justify-center h-64">
                             <p>No Financial Statement Definitions found.</p>
                             <Button
-                                variant="outline"
                                 className="ml-4 z-10"
                                 onClick={addGeneralLedgerDefinition}
+                                variant="outline"
                             >
-                                <PlusIcon size={15} className="mr-2" />
+                                <PlusIcon className="mr-2" size={15} />
                                 Add General Ledger Definition
                             </Button>
                         </div>

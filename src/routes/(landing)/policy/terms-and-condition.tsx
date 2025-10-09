@@ -90,8 +90,8 @@ function RouteComponent() {
                     <span>
                         <LinkTag
                             href="http://ecoop-suite.com/"
-                            target="_blank"
                             name={` (http://ecoop-suite.com/)`}
+                            target="_blank"
                         />
                     </span>
                     , operated by Lands Horizon Corp (“we”, “our”, “us”). By
@@ -101,10 +101,10 @@ function RouteComponent() {
                     <Separator className="my-5 h-1" />
                 </p>
                 <SitePolicyItem
-                    ref={definitionsRef}
                     id="definitions"
-                    title="1. Definitions"
                     onClick={() => scrollToSection('definitions')}
+                    ref={definitionsRef}
+                    title="1. Definitions"
                 >
                     <div>
                         <ul className="list-disc pl-10 space-y-2">
@@ -132,10 +132,10 @@ function RouteComponent() {
                     </div>
                 </SitePolicyItem>
                 <SitePolicyItem
-                    ref={eligibilityRef}
                     id="eligibility-registration"
-                    title="2. Eligibility & Registration"
                     onClick={() => scrollToSection('eligibility-registration')}
+                    ref={eligibilityRef}
+                    title="2. Eligibility & Registration"
                 >
                     <ul className="list-disc pl-8 space-y-4 ">
                         <li>
@@ -188,9 +188,9 @@ function RouteComponent() {
                 </SitePolicyItem>
                 <SitePolicyItem
                     id="services-provided"
-                    title="3. Services Provided"
                     onClick={() => scrollToSection('services-provided')}
                     ref={serviceProviderRef}
+                    title="3. Services Provided"
                 >
                     <ul className="list-disc pl-8 space-y-4">
                         <li>
@@ -214,9 +214,9 @@ function RouteComponent() {
                 </SitePolicyItem>
                 <SitePolicyItem
                     id="roles-permissions"
-                    title="4. Roles & Permissions"
                     onClick={() => scrollToSection('roles-and-permissions')}
                     ref={rolePermissionsRef}
+                    title="4. Roles & Permissions"
                 >
                     <ul className="list-disc pl-8 space-y-4">
                         <li>
@@ -241,9 +241,9 @@ function RouteComponent() {
                 </SitePolicyItem>
                 <SitePolicyItem
                     id="fees-and-subscription"
-                    title="5. Fees & Subscription"
                     onClick={() => scrollToSection('fees-and-subscription')}
                     ref={feesSubscriptionRef}
+                    title="5. Fees & Subscription"
                 >
                     <ul className="list-disc pl-8 space-y-4">
                         <li>
@@ -270,9 +270,9 @@ function RouteComponent() {
                 </SitePolicyItem>
                 <SitePolicyItem
                     id="user-responsibility"
-                    title="6. User Responsibilities"
                     onClick={() => scrollToSection('user-responsibility')}
                     ref={userResponsibilityRef}
+                    title="6. User Responsibilities"
                 >
                     <ul className="list-disc pl-8 space-y-4">
                         <li>
@@ -332,9 +332,9 @@ function RouteComponent() {
                 </SitePolicyItem>
                 <SitePolicyItem
                     id="data-ownership-privacy"
-                    title="7. Data Ownership & Privacy"
                     onClick={() => scrollToSection('data-ownership-privacy')}
                     ref={dataOwnershipPrivacyRef}
+                    title="7. Data Ownership & Privacy"
                 >
                     <ul className="list-disc pl-8 space-y-4">
                         <li>
@@ -387,8 +387,8 @@ function RouteComponent() {
                             <span className="font-semibold">
                                 <LinkTag
                                     href="/site-policy/privacy-policy"
-                                    target="_blank"
                                     name="Privacy Policy."
+                                    target="_blank"
                                 />
                             </span>
                         </li>
@@ -396,9 +396,9 @@ function RouteComponent() {
                 </SitePolicyItem>
                 <SitePolicyItem
                     id="dispute-resolution"
-                    title="8. Dispute Resolution"
                     onClick={() => scrollToSection('dispute-resolution')}
                     ref={disputeResolutionRef}
+                    title="8. Dispute Resolution"
                 >
                     <ul className="list-disc pl-8 space-y-4">
                         <li>
@@ -423,11 +423,11 @@ function RouteComponent() {
                 </SitePolicyItem>
                 <SitePolicyItem
                     id="termination-and-suspension"
-                    title="9. Termination & Suspension"
                     onClick={() =>
                         scrollToSection('termination-and-suspension')
                     }
                     ref={terminationSuspensionRef}
+                    title="9. Termination & Suspension"
                 >
                     <ul className="list-disc pl-8 space-y-4">
                         <li>
@@ -452,9 +452,9 @@ function RouteComponent() {
                 </SitePolicyItem>
                 <SitePolicyItem
                     id="modification-terms"
-                    title="10. Modifications to Terms"
                     onClick={() => scrollToSection('modification-terms')}
                     ref={modificationTermsRef}
+                    title="10. Modifications to Terms"
                 >
                     <ul className="list-disc pl-8 space-y-4">
                         <li>
@@ -474,9 +474,9 @@ function RouteComponent() {
 
                 <SitePolicyItem
                     id="governing-law"
-                    title="11. Governing Law"
                     onClick={() => scrollToSection('governing-law')}
                     ref={governingLawRef}
+                    title="11. Governing Law"
                 >
                     <ul className="list-disc pl-8 space-y-4">
                         <li>
@@ -491,9 +491,9 @@ function RouteComponent() {
                 </SitePolicyItem>
                 <SitePolicyItem
                     id="contact-us"
-                    title="12. Contact Us"
                     onClick={() => scrollToSection('contact-us')}
                     ref={contactUsRef}
+                    title="12. Contact Us"
                 >
                     <div className="space-y-2 not-prose">
                         For questions, support, or legal inquiries, contact:
@@ -521,12 +521,12 @@ function RouteComponent() {
                         return (
                             <li>
                                 <a
+                                    className="text-primary min-w-64 dark:text-primary hover:underline cursor-pointer text-sm"
                                     href={`#{${sectionId}`}
                                     onClick={(e) => {
                                         e.preventDefault()
                                         scrollToSection(sectionId)
                                     }}
-                                    className="text-primary min-w-64 dark:text-primary hover:underline cursor-pointer text-sm"
                                 >
                                     {idx + 1}
                                     {'. '}

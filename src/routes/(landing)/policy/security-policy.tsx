@@ -103,8 +103,8 @@ function RouteComponent() {
                     <span>
                         <LinkTag
                             href="http://ecoop-suite.com/"
-                            target="_blank"
                             name={` (http://ecoop-suite.com/)`}
+                            target="_blank"
                         />
                     </span>
                     . Our security practices are designed to provide robust
@@ -115,8 +115,8 @@ function RouteComponent() {
 
                 {/* --- Section 1: Purpose and Scope --- */}
                 <SitePolicyItem
-                    ref={purposeScopeRef}
                     id="purpose-and-scope"
+                    ref={purposeScopeRef}
                     title="1. Purpose and Scope"
                 >
                     <div>
@@ -137,8 +137,8 @@ function RouteComponent() {
 
                 {/* --- Section 2: Physical Security Measures --- */}
                 <SitePolicyItem
-                    ref={physicalSecurityMeasuresRef}
                     id="physical-security-measures"
+                    ref={physicalSecurityMeasuresRef}
                     title="2. Physical Security Measures"
                 >
                     <div>
@@ -169,8 +169,8 @@ function RouteComponent() {
 
                 {/* --- Section 3: Digital Security Measures --- */}
                 <SitePolicyItem
-                    ref={digitalSecurityMeasuresRef}
                     id="digital-security-measures"
+                    ref={digitalSecurityMeasuresRef}
                     title="3. Digital Security Measures"
                 >
                     <div>
@@ -237,8 +237,8 @@ function RouteComponent() {
 
                 {/* --- Section 4: Data Protection and Privacy --- */}
                 <SitePolicyItem
-                    ref={dataProtectionPrivacyRef}
                     id="data-protection-and-privacy"
+                    ref={dataProtectionPrivacyRef}
                     title="4. Data Protection and Privacy"
                 >
                     <div>
@@ -262,8 +262,8 @@ function RouteComponent() {
 
                 {/* --- Section 5: Incident Response --- */}
                 <SitePolicyItem
-                    ref={incidentResponseRef}
                     id="incident-response"
+                    ref={incidentResponseRef}
                     title="5. Incident Response"
                 >
                     <div>
@@ -289,8 +289,8 @@ function RouteComponent() {
 
                 {/* --- Section 6: Member and User Responsibilities --- */}
                 <SitePolicyItem
-                    ref={memberUserResponsibilitiesRef}
                     id="member-and-user-responsibilities"
+                    ref={memberUserResponsibilitiesRef}
                     title="6. Member and User Responsibilities"
                 >
                     <div>
@@ -314,8 +314,8 @@ function RouteComponent() {
 
                 {/* --- Section 7: Security for Subscription Plans --- */}
                 <SitePolicyItem
-                    ref={securitySubscriptionPlansRef}
                     id="security-for-subscription-plans"
+                    ref={securitySubscriptionPlansRef}
                     title="7. Security for Subscription Plans"
                 >
                     <div>
@@ -336,8 +336,8 @@ function RouteComponent() {
 
                 {/* --- Section 8: Third-Party and Vendor Security --- */}
                 <SitePolicyItem
-                    ref={thirdPartyVendorSecurityRef}
                     id="third-party-and-vendor-security"
+                    ref={thirdPartyVendorSecurityRef}
                     title="8. Third-Party and Vendor Security"
                 >
                     <div>
@@ -356,8 +356,8 @@ function RouteComponent() {
 
                 {/* --- Section 9: Policy Review and Updates --- */}
                 <SitePolicyItem
-                    ref={policyReviewUpdatesRef}
                     id="policy-review-and-updates"
+                    ref={policyReviewUpdatesRef}
                     title="9. Policy Review and Updates"
                 >
                     <div>
@@ -377,8 +377,8 @@ function RouteComponent() {
 
                 {/* --- Section 10: Contact Us --- */}
                 <SitePolicyItem
-                    ref={contactUsRef}
                     id="contact-us"
+                    ref={contactUsRef}
                     title="10. Contact Us"
                 >
                     <div className="space-y-2 not-prose">
@@ -424,12 +424,12 @@ function RouteComponent() {
                     {articleList.map((sectionId, idx) => (
                         <li key={sectionId}>
                             <a
+                                className="block py-1 text-primary hover:underline cursor-pointer text-sm"
                                 href={`#${sectionId}`}
                                 onClick={(e) => {
                                     e.preventDefault()
                                     scrollToSection(sectionId)
                                 }}
-                                className="block py-1 text-primary hover:underline cursor-pointer text-sm"
                             >
                                 {idx + 1}
                                 {'. '}

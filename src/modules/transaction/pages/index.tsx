@@ -21,7 +21,7 @@ import { useHotkeys } from 'react-hotkeys-hook'
 
 import PageContainer from '@/components/containers/page-container'
 import { ResetIcon } from '@/components/icons'
-import { useShortcutContext } from '@/components/shorcuts/general-shortcuts-wrapper'
+// import { useShortcutContext } from '@/components/shorcuts/general-shortcuts-wrapper'
 import { Button } from '@/components/ui/button'
 
 import { useSubscribe } from '@/hooks/use-pubsub'
@@ -42,7 +42,7 @@ const Transaction = ({ transactionId, fullPath }: TTransactionProps) => {
     const queryClient = useQueryClient()
     const { hasNoTransactionBatch } = useTransactionBatchStore()
     const { modalData, isOpen, onClose } = useTransactionReverseSecurityStore()
-    const { setActiveScope } = useShortcutContext()
+    // const { setActiveScope } = useShortcutContext()
 
     const {
         selectedMember,
@@ -151,33 +151,34 @@ const Transaction = ({ transactionId, fullPath }: TTransactionProps) => {
 
     return (
         <div
-            onClick={() => {
-                setActiveScope(SHORTCUT_SCOPES.PAYMENT)
-            }}
+        // onClick={() => {
+        //     setActiveScope(SHORTCUT_SCOPES.PAYMENT)
+        // }}
         >
             <TransactionReverseRequestFormModal
-                open={isOpen}
-                onOpenChange={onClose}
-                title={modalData?.title || 'Request Reverse Transaction'}
                 formProps={{
                     onSuccess: () => {
                         toast.success('success request verification')
                         modalData?.onSuccess?.()
                     },
                 }}
+                onOpenChange={onClose}
+                open={isOpen}
+                title={modalData?.title || 'Request Reverse Transaction'}
             />
             <PageContainer className="flex h-fit lg:h-[90vh] w-full !overflow-hidden">
                 <div className="w-full flex justify-end pb-2">
                     <TransactionHistory fullPath={fullPath} />
                 </div>
                 <TransactionModalSuccessPayment
-                    open={openSuccessModal}
-                    onOpenChange={setOpenSuccessModal}
-                    transaction={transactionFormSuccess}
-                    onClose={handleCloseSuccessModal}
                     isOpen={openSuccessModal}
+                    onClose={handleCloseSuccessModal}
+                    onOpenChange={setOpenSuccessModal}
+                    open={openSuccessModal}
+                    transaction={transactionFormSuccess}
                 />
                 <TransactionMemberScanner
+                    className="p-2"
                     fullPath={fullPath}
                     handleSetTransactionId={() =>
                         handleSetTransactionId({
@@ -185,7 +186,6 @@ const Transaction = ({ transactionId, fullPath }: TTransactionProps) => {
                             fullPath,
                         })
                     }
-                    className="p-2"
                     transactionId={transactionId}
                 />
                 <div className="flex h-full flex-col lg:flex-row  w-full gap-2 overflow-hidden">
@@ -197,14 +197,14 @@ const Transaction = ({ transactionId, fullPath }: TTransactionProps) => {
                         />
                         {hasSelectedTransactionId && (
                             <Button
-                                size="sm"
-                                variant="outline"
+                                className="w-full mb-2"
                                 onClick={(e) => {
                                     e.preventDefault()
                                     handleResetAll()
                                     handleSetTransactionId({ fullPath })
                                 }}
-                                className="w-full mb-2"
+                                size="sm"
+                                variant="outline"
                             >
                                 <ResetIcon className="mr-2" />
                                 reset current transaction
@@ -226,10 +226,8 @@ const Transaction = ({ transactionId, fullPath }: TTransactionProps) => {
             </PageContainer>
             {selectedMember && (
                 <PaymentWithTransactionForm
-                    readOnly={!hasNoTransactionBatch}
-                    transactionId={transactionId}
-                    memberProfileId={selectedMember?.id}
                     memberJointId={selectedJointMember?.id}
+                    memberProfileId={selectedMember?.id}
                     onSuccess={(transaction) => {
                         queryClient.invalidateQueries({
                             queryKey: [
@@ -255,8 +253,10 @@ const Transaction = ({ transactionId, fullPath }: TTransactionProps) => {
                             fullPath,
                         })
                         handleOnSuccessPaymentCallBack(transaction)
-                        setActiveScope(SHORTCUT_SCOPES.PAYMENT)
+                        // setActiveScope(SHORTCUT_SCOPES.PAYMENT)
                     }}
+                    readOnly={!hasNoTransactionBatch}
+                    transactionId={transactionId}
                 />
             )}
         </div>

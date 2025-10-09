@@ -197,11 +197,14 @@ const GeneralLedgerTable = ({
                 )}
             >
                 <DataTableToolbar
+                    filterLogicProps={{
+                        filterLogic: filterState.filterLogic,
+                        setFilterLogic: filterState.setFilterLogic,
+                    }}
                     globalSearchProps={{
                         defaultMode: 'equal',
                         targets: generalLedgerGlobalSearchTargets,
                     }}
-                    table={table}
                     refreshActionProps={{
                         onClick: () => refetch(),
                         isLoading: isPending || isRefetching,
@@ -210,22 +213,19 @@ const GeneralLedgerTable = ({
                         isScrollable: tableState.isScrollable,
                         setIsScrollable: tableState.setIsScrollable,
                     }}
-                    filterLogicProps={{
-                        filterLogic: filterState.filterLogic,
-                        setFilterLogic: filterState.setFilterLogic,
-                    }}
+                    table={table}
                     {...toolbarProps}
                 />
                 <DataTable
-                    table={table}
-                    isStickyHeader
-                    isStickyFooter
                     className="mb-2"
-                    onRowClick={onRowClick}
-                    onDoubleClick={onDoubleClick}
                     isScrollable={tableState.isScrollable}
+                    isStickyFooter
+                    isStickyHeader
+                    onDoubleClick={onDoubleClick}
+                    onRowClick={onRowClick}
                     RowContextComponent={RowContextComponent}
                     setColumnOrder={tableState.setColumnOrder}
+                    table={table}
                 />
                 <DataTablePagination table={table} totalSize={totalSize} />
             </div>

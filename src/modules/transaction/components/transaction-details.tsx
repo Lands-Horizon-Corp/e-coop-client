@@ -38,9 +38,9 @@ export const TransactionDetails = ({
                     {item.member_profile?.full_name || 'Unknown Member'}
                     {item.reference_number !== '' && (
                         <Button
+                            className="text-xs rounded-sm hover:!bg-transparent text-muted-foreground "
                             size={'sm'}
                             variant="ghost"
-                            className="text-xs rounded-sm hover:!bg-transparent text-muted-foreground "
                         >
                             - {item.reference_number}
                         </Button>

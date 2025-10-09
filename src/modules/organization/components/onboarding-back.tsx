@@ -12,10 +12,10 @@ const OnboardingBack = ({ className }: { className: string }) => {
     }
     return (
         <Button
-            onClick={handleBack}
-            variant="ghost"
-            size="lg"
             className={`flex aspect-square h-fit !p-2 items-center rounded-full ${className}`}
+            onClick={handleBack}
+            size="lg"
+            variant="ghost"
         >
             <BackIcon className="size-6" />
         </Button>

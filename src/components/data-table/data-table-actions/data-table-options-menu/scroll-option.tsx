@@ -21,20 +21,20 @@ const DataTableScrollOption = ({
                 Table Sizing <RowSpacingIcon className="inline" />
             </DropdownMenuLabel>
             <DropdownMenuRadioGroup
-                value={isScrollable ? 'true' : 'false'}
                 onValueChange={(newVal) =>
                     setIsScrollable(newVal === 'true' ? true : false)
                 }
+                value={isScrollable ? 'true' : 'false'}
             >
                 <DropdownMenuRadioItem
-                    value="true"
                     onSelect={(e) => e.preventDefault()}
+                    value="true"
                 >
                     Default (Scroll)
                 </DropdownMenuRadioItem>
                 <DropdownMenuRadioItem
-                    value="false"
                     onSelect={(e) => e.preventDefault()}
+                    value="false"
                 >
                     Full (No Scroll)
                 </DropdownMenuRadioItem>

@@ -104,22 +104,22 @@ const FileUploader = ({
                 <div className="flex w-fit gap-x-2" {...getRootProps()}>
                     <input {...getInputProps()} aria-hidden="true" />
                     <Button
-                        onClick={openFile}
-                        disabled={uploadedFiles.length > 0}
-                        className="flex items-center justify-center text-xs"
                         aria-label="Select files"
+                        className="flex items-center justify-center text-xs"
+                        disabled={uploadedFiles.length > 0}
+                        onClick={openFile}
                     >
                         Select Files
                         <HardDriveUploadIcon className="ml-2" />
                     </Button>
                     <Button
-                        variant={'secondary'}
                         disabled={isEmpty}
                         onClick={(e) => {
                             e.preventDefault()
                             setUploadedFiles([])
                             selectedPhotos?.('')
                         }}
+                        variant={'secondary'}
                     >
                         replace
                         <ReplaceIcon className="ml-2" />
@@ -129,30 +129,30 @@ const FileUploader = ({
                 <div className="max-h-fit w-full">
                     <div
                         {...getRootProps()}
+                        aria-label="File upload area"
                         className={cn(
                             'mb-2 flex h-full max-h-64 min-h-64 w-full flex-col items-center justify-center gap-2 rounded-lg border-2 border-dashed border-slate-800/30 p-2 pb-4 text-sm dark:bg-background',
                             className
                         )}
-                        aria-label="File upload area"
                     >
                         <input {...getInputProps()} aria-hidden="true" />
                         <UploadIcon className="size-24 text-primary" />
                         <p>
                             <span
-                                onClick={openFile}
-                                className="cursor-pointer font-semibold underline"
                                 aria-label="Click to upload files"
+                                className="cursor-pointer font-semibold underline"
+                                onClick={openFile}
                             >
                                 Click to upload
                             </span>{' '}
                             or Drag and Drop
                         </p>
                         <Button
-                            onClick={openFile}
-                            disabled={uploadedFiles.length > 0}
-                            variant="outline"
-                            className="text-xs"
                             aria-label="Select files"
+                            className="text-xs"
+                            disabled={uploadedFiles.length > 0}
+                            onClick={openFile}
+                            variant="outline"
                         >
                             Select Files
                         </Button>
@@ -162,8 +162,8 @@ const FileUploader = ({
                             {!hasError &&
                                 uploadedFiles.map((file, idx) => (
                                     <UploadedFileItem
-                                        key={idx}
                                         file={file}
+                                        key={idx}
                                         onDelete={handleDeleteFile(idx)}
                                     />
                                 ))}
@@ -189,9 +189,9 @@ const UploadedFileItem = ({ file, onDelete }: UploadedFileItemProps) => {
                 <p className="text-xs">{formatBytes(file.size)}</p>
             </div>
             <TrashIcon
+                className="cursor-pointer text-destructive hover:scale-105"
                 onClick={onDelete}
                 size={18}
-                className="cursor-pointer text-destructive hover:scale-105"
             />
         </div>
     )

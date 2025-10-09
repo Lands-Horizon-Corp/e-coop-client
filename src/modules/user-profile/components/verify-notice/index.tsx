@@ -19,19 +19,19 @@ const VerifyNotice = () => {
             {!user.is_email_verified && (
                 <VerifyContactBar
                     key="verify-bar-email"
-                    verifyMode="email"
                     onSuccess={(newUserData) =>
                         updateCurrentAuth({ user: newUserData })
                     }
+                    verifyMode="email"
                 />
             )}
             {!user.is_contact_verified && (
                 <VerifyContactBar
                     key="verify-bar-mobile"
-                    verifyMode="mobile"
                     onSuccess={(newUserData) =>
                         updateCurrentAuth({ user: newUserData })
                     }
+                    verifyMode="mobile"
                 />
             )}
         </>

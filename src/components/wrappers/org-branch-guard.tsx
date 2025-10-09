@@ -42,23 +42,23 @@ const OrgBranchUrlGuard = ({ children }: IChildProps) => {
                 </p>
                 <div className="z-10 flex items-center gap-x-2">
                     <Button
-                        variant="secondary"
-                        hoverVariant="primary"
                         className="gap-x-2 rounded-full"
+                        hoverVariant="primary"
                         onClick={() => router.history.back()}
+                        variant="secondary"
                     >
                         <ArrowLeftIcon />
                         Go back
                     </Button>
                     <Button
-                        variant="secondary"
-                        hoverVariant="primary"
                         className="gap-x-2 rounded-full"
+                        hoverVariant="primary"
                         onClick={() =>
                             router.navigate({
                                 to: supposedOrgBranchURL as string,
                             })
                         }
+                        variant="secondary"
                     >
                         <OrganizationIcon />
                         Go to{' '}
@@ -68,23 +68,23 @@ const OrgBranchUrlGuard = ({ children }: IChildProps) => {
                         </span>
                     </Button>
                     <Button
-                        variant="secondary"
-                        hoverVariant="primary"
                         className="gap-x-2 rounded-full"
+                        hoverVariant="primary"
                         onClick={() =>
                             router.navigate({ to: '/onboarding' as string })
                         }
+                        variant="secondary"
                     >
                         <ArrowUpIcon className="rotate-45" />
                         Go to onboarding
                     </Button>
                 </div>
                 <FlickeringGrid
-                    gridGap={1}
-                    squareSize={64}
-                    maxOpacity={0.5}
-                    flickerChance={0.05}
                     className="absolute inset-0 z-0 opacity-80 [mask-image:radial-gradient(80vh_circle_at_center,white,transparent)] dark:opacity-20"
+                    flickerChance={0.05}
+                    gridGap={1}
+                    maxOpacity={0.5}
+                    squareSize={64}
                 />
             </div>
         )

@@ -27,8 +27,8 @@ const UserAvatar = ({
     return (
         <Avatar className={cn('size-6', className)}>
             <AvatarImage
-                src={src}
                 className={cn('object-cover', avatarClassname)}
+                src={src}
             />
             <AvatarFallback className={fallbackClassName}>
                 {fallback}

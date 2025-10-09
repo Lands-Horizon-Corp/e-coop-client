@@ -12,8 +12,8 @@ const TransactionNoCurrentPaymentFound = () => {
         >
             <div className="flex flex-col items-center gap-y-1">
                 <EmptyIcon
-                    size={23}
                     className="text-gray-400 dark:text-gray-300"
+                    size={23}
                 />
                 <h2 className="text-lg font-semibold text-gray-700 dark:text-gray-200">
                     No Payments Found

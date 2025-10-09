@@ -85,9 +85,9 @@ const PermissionView = ({ permissions, className }: Props) => {
                 <div className="relative">
                     <Input
                         className="rounded-xl pr-10 pl-4"
-                        value={search}
                         onChange={(e) => setSearch(e.target.value)}
                         placeholder="Search permissions, resource, or description..."
+                        value={search}
                     />
                     <MagnifyingGlassIcon className="mr-2 absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 shrink-0 opacity-50" />
                 </div>
@@ -108,7 +108,7 @@ const PermissionView = ({ permissions, className }: Props) => {
                         ]
 
                     return (
-                        <div key={resource} className="space-y-1 p-2">
+                        <div className="space-y-1 p-2" key={resource}>
                             <div className="p-2 flex items-center justify-between">
                                 <div>
                                     <p className="text-sm font-semibold">
@@ -119,7 +119,7 @@ const PermissionView = ({ permissions, className }: Props) => {
                                         {description}
                                     </p>
                                 </div>
-                                <Badge variant="secondary" className="text-xs">
+                                <Badge className="text-xs" variant="secondary">
                                     {perms.length} Permission
                                     {perms.length > 1 ? 's' : ''}
                                 </Badge>
@@ -135,8 +135,8 @@ const PermissionView = ({ permissions, className }: Props) => {
 
                                     return (
                                         <div
-                                            key={perm}
                                             className="px-4 first:rounded-t-xl first:border-t-none border-y last:border-b-none last:rounded-b-xl border-x bg-secondary/70 dark:bg-card/70 py-2 hover:bg-card/90 ease-in-out duration-200 flex items-center gap-x-1"
+                                            key={perm}
                                         >
                                             {Icon && (
                                                 <Icon className="mr-2 inline size-5" />
@@ -152,9 +152,9 @@ const PermissionView = ({ permissions, className }: Props) => {
                                                     </p>
                                                 </div>
                                                 <PermissionActionBadge
-                                                    size="sm"
                                                     action={perm}
                                                     className="shrink-none"
+                                                    size="sm"
                                                 />
                                             </div>
                                         </div>
@@ -192,17 +192,17 @@ export const PermissionViewModal = ({
     return (
         <Modal
             {...props}
-            titleClassName="!hidden"
-            closeButtonClassName="hidden"
-            descriptionClassName="!hidden"
             className={cn(
                 'max-h-[90vh] !overflow-clip max-w-[90vw] !gap-y-0 border p-0 shadow-none backdrop-blur-none sm:max-w-2xl',
                 className
             )}
+            closeButtonClassName="hidden"
+            descriptionClassName="!hidden"
+            titleClassName="!hidden"
         >
             <PermissionView
-                permissions={permissions}
                 className="max-h-[90vh]"
+                permissions={permissions}
             />
         </Modal>
     )

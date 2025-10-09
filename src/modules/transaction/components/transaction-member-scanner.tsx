@@ -2,7 +2,7 @@ import { useCallback, useState } from 'react'
 
 import { toast } from 'sonner'
 
-import { SHORTCUT_SCOPES } from '@/constants'
+// import { SHORTCUT_SCOPES } from '@/constants'
 import { cn } from '@/helpers'
 import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
 import { IQRMemberProfileDecodedResult } from '@/modules/qr-crypto'
@@ -16,7 +16,7 @@ import { useHotkeys } from 'react-hotkeys-hook'
 
 import { EyeIcon } from '@/components/icons'
 import QrCodeScanner from '@/components/qrcode-scanner'
-import { useShortcutContext } from '@/components/shorcuts/general-shortcuts-wrapper'
+// import { useShortcutContext } from '@/components/shorcuts/general-shortcuts-wrapper'
 import LoadingSpinner from '@/components/spinners/loading-spinner'
 import { Button } from '@/components/ui/button'
 import FormErrorMessage from '@/components/ui/form-error-message'
@@ -40,7 +40,7 @@ const TransactionMemberScanner = ({
     transactionId,
 }: MemberQrScannerProps) => {
     const [startScan, setStartScan] = useState(false)
-    const { setActiveScope } = useShortcutContext()
+    // const { setActiveScope } = useShortcutContext()
 
     const {
         setSelectedMember,
@@ -89,17 +89,16 @@ const TransactionMemberScanner = ({
     })
     return (
         <div
-            onClick={(e) => {
-                e.preventDefault()
-                setActiveScope(SHORTCUT_SCOPES.PAYMENT)
-            }}
             className={cn(
                 'flex flex-col xl:flex-row w-full h-fit min-h-fit ecoop-scroll rounded-2xl p-4',
                 className
             )}
+            onClick={(e) => {
+                e.preventDefault()
+                // setActiveScope(SHORTCUT_SCOPES.PAYMENT)
+            }}
         >
             <MemberPicker
-                triggerClassName="hidden"
                 modalState={{
                     open: openMemberPicker,
                     onOpenChange: setOpenMemberPicker,
@@ -108,6 +107,7 @@ const TransactionMemberScanner = ({
                     setSelectedMember(selectedMember)
                 }}
                 placeholder="Select Member"
+                triggerClassName="hidden"
             />
             {/* Left: Scanner Column */}
             <div className="flex flex-col flex-shrink-0 xl:w-[15rem] justify-center items-center w-full">
@@ -138,8 +138,8 @@ const TransactionMemberScanner = ({
                             // Placeholder box: use size-full and flex-1 to occupy space consistently
                             <div className="flex flex-col size-full aspect-square min-h-[150px] max-w-full items-center justify-center text-center gap-y-2">
                                 <ScanLineIcon
-                                    size={50}
                                     className=" text-muted-foreground/70"
+                                    size={50}
                                 />
                                 <Button
                                     disabled={
@@ -176,17 +176,17 @@ const TransactionMemberScanner = ({
                     <div className="h-full">
                         <TransactionMemberProfile
                             className="h-full"
-                            memberInfo={selectedMember}
                             hasTransaction={false}
+                            memberInfo={selectedMember}
                         />
                     </div>
                 ) : (
                     <TransactionViewNoMemberSelected
+                        disabledSelectTrigger={!!transactionId}
                         onClick={(e) => {
                             e.preventDefault()
                             setOpenMemberPicker(true)
                         }}
-                        disabledSelectTrigger={!!transactionId}
                     />
                 )}
             </div>

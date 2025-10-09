@@ -13,15 +13,15 @@ const UploadSignature = ({
 }: UploadSignatureProps) => {
     return (
         <FileUploader
+            accept={{
+                'image/png': ['.png'],
+                'image/jpeg': ['.jpg', '.jpeg'],
+            }}
             className={cn(
                 '!mx-0 w-full',
                 isFullScreenMode ? 'h-full' : 'h-fit'
             )}
             maxFiles={1}
-            accept={{
-                'image/png': ['.png'],
-                'image/jpeg': ['.jpg', '.jpeg'],
-            }}
             onFileChange={onFileChange}
         />
     )

@@ -178,15 +178,15 @@ const FinancialStatementDefinitionNode = ({
                         </div>
                     )}
                     <FinancialStatementDefinitionActions
-                        depth={depth}
                         canDelete={hasAccountNode || hasChildren}
-                        node={node}
-                        isDeletingFSDefinition={isDeletingFSDefinition}
+                        depth={depth}
                         hanldeDeleteFinancialStatemenetDefinition={(
                             nodeId: TEntityId
                         ) => {
                             hanldeDeleteFinancialStatemenetDefinition(nodeId)
                         }}
+                        isDeletingFSDefinition={isDeletingFSDefinition}
+                        node={node}
                     />
                 </div>
                 <div className="flex flex-1 flex-col">
@@ -227,14 +227,14 @@ const FinancialStatementDefinitionNode = ({
             <div className={`w-full ${isNodeExpanded ? 'pl-5 pr-5' : ''}`}>
                 {Array.isArray(showGLFSAccountsCardList) && (
                     <GLFSAccountsCardList
-                        removeAccount={handleRemoveAccountFromFSDefinition}
                         accounts={showGLFSAccountsCardList}
+                        removeAccount={handleRemoveAccountFromFSDefinition}
                     />
                 )}
                 <DndContext
-                    sensors={grandchildSensors}
-                    onDragEnd={handleGrandchildDragEnd}
                     collisionDetection={closestCorners}
+                    onDragEnd={handleGrandchildDragEnd}
+                    sensors={grandchildSensors}
                 >
                     {hasChildren && (
                         <SortableContext
@@ -250,16 +250,12 @@ const FinancialStatementDefinitionNode = ({
                                     {node.financial_statement_definition_entries?.map(
                                         (childNode) => (
                                             <FinancialStatementDefinitionNode
-                                                key={childNode.id}
+                                                depth={depth + 1}
                                                 handleOpenAccountPicker={
                                                     handleOpenAccountPicker
                                                 }
-                                                parentPath={[
-                                                    ...parentPath,
-                                                    node.id,
-                                                ]}
-                                                onDragEndNested={
-                                                    onDragEndNested
+                                                handleRemoveAccountFromFSDefinition={
+                                                    handleRemoveAccountFromFSDefinition
                                                 }
                                                 hanldeDeleteFinancialStatemenetDefinition={
                                                     hanldeDeleteFinancialStatemenetDefinition
@@ -267,11 +263,15 @@ const FinancialStatementDefinitionNode = ({
                                                 isDeletingFSDefinition={
                                                     isDeletingFSDefinition
                                                 }
-                                                handleRemoveAccountFromFSDefinition={
-                                                    handleRemoveAccountFromFSDefinition
-                                                }
+                                                key={childNode.id}
                                                 node={childNode}
-                                                depth={depth + 1}
+                                                onDragEndNested={
+                                                    onDragEndNested
+                                                }
+                                                parentPath={[
+                                                    ...parentPath,
+                                                    node.id,
+                                                ]}
                                             />
                                         )
                                     )}

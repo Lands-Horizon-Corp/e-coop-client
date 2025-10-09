@@ -68,8 +68,6 @@ const CompanyCombobox = ({
     return (
         <>
             <CompanyCreateUpdateFormModal
-                open={createModal}
-                onOpenChange={setCreateModal}
                 formProps={{
                     ...companyComboboxCreateProps,
                     onSuccess: (newCompany) => {
@@ -77,15 +75,17 @@ const CompanyCombobox = ({
                         setCreateModal(false)
                     },
                 }}
+                onOpenChange={setCreateModal}
+                open={createModal}
             />
-            <Popover modal open={open} onOpenChange={setOpen}>
+            <Popover modal onOpenChange={setOpen} open={open}>
                 <PopoverTrigger asChild>
                     <Button
-                        variant="outline"
-                        role="combobox"
                         aria-expanded={open}
                         className={cn('w-full justify-between px-3', className)}
                         disabled={disabled || isLoading}
+                        role="combobox"
+                        variant="outline"
                     >
                         {selectedCompany ? (
                             <div className="flex items-center gap-2 min-w-0">
@@ -93,10 +93,10 @@ const CompanyCombobox = ({
                                     media={selectedCompany.media}
                                 >
                                     <ImageDisplay
+                                        className="size-4 rounded-full border bg-muted object-cover flex-shrink-0"
                                         src={
                                             selectedCompany.media?.download_url
                                         }
-                                        className="size-4 rounded-full border bg-muted object-cover flex-shrink-0"
                                     />
                                 </PreviewMediaWrapper>
                                 <span className="truncate">
@@ -114,8 +114,8 @@ const CompanyCombobox = ({
                 <PopoverContent className="max-h-[--radix-popover-content-available-height] w-[--radix-popover-trigger-width] p-0">
                     <Command>
                         <CommandInput
-                            placeholder="Search Company..."
                             className="h-9"
+                            placeholder="Search Company..."
                         />
                         {isLoading ? (
                             <CommandEmpty>
@@ -145,22 +145,22 @@ const CompanyCombobox = ({
                                     {data?.map((option) => (
                                         <CommandItem
                                             key={option.id}
-                                            value={option.name}
                                             onSelect={() => {
                                                 setOpen(false)
                                                 onChange?.(option)
                                             }}
+                                            value={option.name}
                                         >
                                             <div className="flex items-center gap-2 min-w-0 flex-1">
                                                 <PreviewMediaWrapper
                                                     media={option.media}
                                                 >
                                                     <ImageDisplay
+                                                        className="h-5 w-5 rounded-full border bg-muted object-cover flex-shrink-0"
                                                         src={
                                                             option.media
                                                                 ?.download_url
                                                         }
-                                                        className="h-5 w-5 rounded-full border bg-muted object-cover flex-shrink-0"
                                                     />
                                                 </PreviewMediaWrapper>
                                                 <span className="truncate">

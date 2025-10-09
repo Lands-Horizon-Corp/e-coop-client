@@ -6,10 +6,10 @@ const OnlineEntryPage = () => {
     return (
         <PageContainer>
             <GeneralLedgerTable
+                className="max-h-[90vh] min-h-[90vh] w-full"
+                excludeColumnIds={['balance']}
                 mode="branch"
                 TEntryType="online-entry"
-                excludeColumnIds={['balance']}
-                className="max-h-[90vh] min-h-[90vh] w-full"
             />
         </PageContainer>
     )

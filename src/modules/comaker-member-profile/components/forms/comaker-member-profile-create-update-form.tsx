@@ -80,22 +80,21 @@ const ComakerMemberProfileCreateUpdateForm = ({
     return (
         <Form {...form}>
             <form
-                ref={formRef}
-                onSubmit={onSubmit}
                 className={cn(
                     'flex w-full max-w-full min-w-0 flex-col gap-y-4',
                     className
                 )}
+                onSubmit={onSubmit}
+                ref={formRef}
             >
                 <div className="space-y-4">
                     <FormFieldWrapper
                         control={form.control}
-                        name="member_profile_id"
                         label="Member Profile"
+                        name="member_profile_id"
                         render={({ field }) => (
                             <MemberPicker
-                                value={form.getValues('member_profile')}
-                                placeholder="Select Member Profile"
+                                disabled={isDisabled(field.name)}
                                 onSelect={(profile) => {
                                     if (
                                         profile?.id &&
@@ -111,19 +110,20 @@ const ComakerMemberProfileCreateUpdateForm = ({
                                         shouldDirty: true,
                                     })
                                 }}
-                                disabled={isDisabled(field.name)}
+                                placeholder="Select Member Profile"
+                                value={form.getValues('member_profile')}
                             />
                         )}
                     />
                     <FormFieldWrapper
                         control={form.control}
-                        name="amount"
                         label="Amount"
+                        name="amount"
                         render={({ field }) => (
                             <Input
                                 {...field}
-                                id={field.name}
                                 disabled={isDisabled(field.name)}
+                                id={field.name}
                                 onChange={(e) => {
                                     const value =
                                         parseFloat(e.target.value) || 0
@@ -141,58 +141,58 @@ const ComakerMemberProfileCreateUpdateForm = ({
                     <div className="grid grid-cols-2 gap-2">
                         <FormFieldWrapper
                             control={form.control}
-                            name="months_count"
                             label="Months Count"
+                            name="months_count"
                             render={({ field }) => (
                                 <Input
                                     {...field}
-                                    id={field.name}
                                     disabled={isDisabled(field.name)}
+                                    id={field.name}
                                 />
                             )}
                         />
                         <FormFieldWrapper
                             control={form.control}
-                            name="year_count"
                             label="Year Count"
+                            name="year_count"
                             render={({ field }) => (
                                 <Input
                                     {...field}
-                                    id={field.name}
                                     disabled={isDisabled(field.name)}
+                                    id={field.name}
                                 />
                             )}
                         />
                     </div>
                     <FormFieldWrapper
                         control={form.control}
-                        name="description"
                         label="Description"
+                        name="description"
                         render={({ field }) => (
                             <Textarea
                                 {...field}
+                                className="min-h-24"
+                                disabled={isDisabled(field.name)}
                                 id={field.name}
                                 placeholder="Description"
-                                disabled={isDisabled(field.name)}
-                                className="min-h-24"
                             />
                         )}
                     />
                 </div>
 
                 <FormFooterResetSubmit
-                    readOnly={readOnly}
-                    error={firstError}
-                    resetButtonType="button"
-                    submitButtonType="button"
                     disableSubmit={!form.formState.isDirty}
-                    submitText={
-                        formProps.defaultValues?.fieldKey ? 'Update' : 'Create'
-                    }
-                    onSubmit={(e) => onSubmit(e)}
+                    error={firstError}
                     onReset={() => {
                         form.reset()
                     }}
+                    onSubmit={(e) => onSubmit(e)}
+                    readOnly={readOnly}
+                    resetButtonType="button"
+                    submitButtonType="button"
+                    submitText={
+                        formProps.defaultValues?.fieldKey ? 'Update' : 'Create'
+                    }
                 />
             </form>
         </Form>
@@ -210,9 +210,9 @@ export const ComakerMemberProfileCreateUpdateModal = ({
 }) => {
     return (
         <Modal
-            title={title}
-            description={description}
             className={cn('!max-w-xl', className)}
+            description={description}
+            title={title}
             {...props}
         >
             <ComakerMemberProfileCreateUpdateForm

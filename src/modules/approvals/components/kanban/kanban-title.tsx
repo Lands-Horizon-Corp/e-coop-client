@@ -35,11 +35,11 @@ const KanbanTitle = ({
                     <LoadingSpinner className="text-muted-foreground" />
                 ) : (
                     <Button
+                        className="size-fit text-muted-foreground p-1"
+                        disabled={isLoading}
+                        onClick={() => onRefresh?.()}
                         size="icon"
                         variant="ghost"
-                        onClick={() => onRefresh?.()}
-                        disabled={isLoading}
-                        className="size-fit text-muted-foreground p-1"
                     >
                         <RefreshIcon className="size-3" />
                     </Button>

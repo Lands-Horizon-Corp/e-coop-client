@@ -16,9 +16,9 @@ const AddressesDisplay = ({ className, addresses }: Props) => {
     return (
         <div className={cn('space-y-4', className)}>
             <SectionTitle
-                title="Address"
                 Icon={MapMarkedIcon}
                 subTitle="Other address"
+                title="Address"
             />
 
             {(!addresses || addresses.length === 0) && (

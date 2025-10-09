@@ -50,18 +50,18 @@ const LandingNav = () => {
 
                     return (
                         <div
-                            key={index}
                             className="relative flex space-x-1 w-fit"
+                            key={index}
                         >
                             {isExternalLink ? (
                                 <a
-                                    href={link.path}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
                                     className={cn(
                                         'scale-effects nav-links hidden items-center gap-x-2 font-normal sm:flex',
                                         isCurrentTab && 'font-bold'
                                     )}
+                                    href={link.path}
+                                    rel="noopener noreferrer"
+                                    target="_blank"
                                 >
                                     {link.name}
                                     <div className="self-center">

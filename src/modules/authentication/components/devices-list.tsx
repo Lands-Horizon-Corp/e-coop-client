@@ -98,10 +98,10 @@ const DevicesList = ({ devices }: Props) => {
                     </div>
                 </div>
                 <Button
-                    onClick={() => signOut()}
-                    variant="destructive"
-                    size="sm"
                     className="flex items-center gap-2"
+                    onClick={() => signOut()}
+                    size="sm"
+                    variant="destructive"
                 >
                     <LogoutIcon className="h-4 w-4" />
                     Sign out all devices
@@ -111,8 +111,8 @@ const DevicesList = ({ devices }: Props) => {
             <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
                 {devices.map((user, index) => (
                     <Card
-                        key={index}
                         className="group transition-all duration-200 hover:shadow-md hover:shadow-primary/5 hover:border-primary/20"
+                        key={index}
                     >
                         <CardHeader className="pb-4">
                             <CardTitle className="flex items-center justify-between text-base">
@@ -125,8 +125,8 @@ const DevicesList = ({ devices }: Props) => {
                                     </span>
                                 </div>
                                 <Badge
-                                    variant={getDeviceVariant(user.device_type)}
                                     className="flex items-center gap-1.5"
+                                    variant={getDeviceVariant(user.device_type)}
                                 >
                                     {getDeviceIcon(user.device_type)}
                                     <span className="capitalize">

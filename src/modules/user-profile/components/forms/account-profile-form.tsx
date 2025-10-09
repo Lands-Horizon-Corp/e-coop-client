@@ -81,79 +81,79 @@ const AccountProfileForm = ({
     return (
         <Form {...form}>
             <form
-                ref={formRef}
-                onSubmit={onSubmit}
                 className={cn('flex w-full flex-col gap-y-4', className)}
+                onSubmit={onSubmit}
+                ref={formRef}
             >
                 <fieldset
-                    disabled={isPending || formProps.readOnly}
                     className="grid gap-x-6 gap-y-4 sm:gap-y-3"
+                    disabled={isPending || formProps.readOnly}
                 >
                     <fieldset className="space-y-4">
                         <FormFieldWrapper
                             control={form.control}
-                            name="first_name"
                             label="First Name"
+                            name="first_name"
                             render={({ field }) => (
                                 <Input
                                     {...field}
+                                    disabled={isDisabled(field.name)}
                                     id={field.name}
                                     placeholder="First Name"
-                                    disabled={isDisabled(field.name)}
                                 />
                             )}
                         />
                         <FormFieldWrapper
                             control={form.control}
-                            name="middle_name"
                             label="Middle Name"
+                            name="middle_name"
                             render={({ field }) => (
                                 <Input
                                     {...field}
+                                    disabled={isDisabled(field.name)}
                                     id={field.name}
                                     placeholder="Middle Name"
-                                    disabled={isDisabled(field.name)}
                                 />
                             )}
                         />
                         <FormFieldWrapper
                             control={form.control}
-                            name="last_name"
                             label="Last Name"
+                            name="last_name"
                             render={({ field }) => (
                                 <Input
                                     {...field}
+                                    disabled={isDisabled(field.name)}
                                     id={field.name}
                                     placeholder="Last Name"
-                                    disabled={isDisabled(field.name)}
                                 />
                             )}
                         />
                         <FormFieldWrapper
                             control={form.control}
-                            name="suffix"
                             label="Suffix"
+                            name="suffix"
                             render={({ field }) => (
                                 <Input
                                     {...field}
+                                    disabled={isDisabled(field.name)}
                                     id={field.name}
                                     placeholder="Suffix"
-                                    disabled={isDisabled(field.name)}
                                 />
                             )}
                         />
                     </fieldset>
                 </fieldset>
                 <FormFooterResetSubmit
-                    error={error}
-                    readOnly={formProps.readOnly}
-                    isLoading={isPending}
                     disableSubmit={!form.formState.isDirty}
-                    submitText="Update"
+                    error={error}
+                    isLoading={isPending}
                     onReset={() => {
                         form.reset()
                         reset()
                     }}
+                    readOnly={formProps.readOnly}
+                    submitText="Update"
                 />
             </form>
         </Form>

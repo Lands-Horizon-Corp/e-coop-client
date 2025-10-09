@@ -40,13 +40,13 @@ const TransactionBatchPage = () => {
     return (
         <PageContainer>
             <TransactionBatchTable
+                className="max-h-[90vh] min-h-[90vh] w-full"
                 mode="all"
                 toolbarProps={{
                     createActionProps: {
                         onClick: () => createModal.onOpenChange(true),
                     },
                 }}
-                className="max-h-[90vh] min-h-[90vh] w-full"
             />
         </PageContainer>
     )

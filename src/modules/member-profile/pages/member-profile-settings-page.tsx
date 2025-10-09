@@ -18,8 +18,8 @@ function MemberProfileSettingsPage() {
     return (
         <PageContainer>
             <MemberProfileSettings
-                memberProfileId={memberId}
                 activeTab={tab}
+                memberProfileId={memberId}
                 onTabChange={(settingsTab) =>
                     navigate({ to: '../' + settingsTab })
                 }

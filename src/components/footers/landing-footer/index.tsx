@@ -92,7 +92,7 @@ const NeonFooter = () => {
     ]
     const contacts = [
         {
-            icon: <EmailIcon size={20} className="mr-2 text-lg" />,
+            icon: <EmailIcon className="mr-2 text-lg" size={20} />,
             text: EMAIL,
         },
         {
@@ -101,7 +101,7 @@ const NeonFooter = () => {
         },
         {
             icon: (
-                <PinLocationIcon size={18} className="text-destructive mr-2" />
+                <PinLocationIcon className="text-destructive mr-2" size={18} />
             ),
             text: LOCATION,
         },
@@ -133,7 +133,7 @@ const NeonFooter = () => {
             <div className="max-w-[100rem] mx-auto flex flex-col lg:flex-row justify-between gap-10">
                 <div className="flex flex-col gap-6 w-full md:w-1/8 lg:w-[40%]">
                     <div className="mb-4">
-                        <EcoopLogo className="size-16" blurDisabled />
+                        <EcoopLogo blurDisabled className="size-16" />
                     </div>
                     <div className="flex items-center text-sm">
                         <span className="h-2 w-2 bg-primary rounded-full mr-2 animate-pulse"></span>
@@ -150,17 +150,17 @@ const NeonFooter = () => {
                         {quickLinks.map((item, index) =>
                             item.to ? (
                                 <Link
+                                    className={linkClass}
                                     key={index}
                                     to={`/policy/${item.to}` as string}
-                                    className={linkClass}
                                 >
                                     {item.label}
                                 </Link>
                             ) : (
                                 <a
+                                    className={`${linkClass} cursor-pointer`}
                                     key={index}
                                     onClick={item.onClick}
-                                    className={`${linkClass} cursor-pointer`}
                                 >
                                     {item.label}
                                 </a>
@@ -171,9 +171,9 @@ const NeonFooter = () => {
                         <h3 className="font-semibold k mb-2">Policies</h3>
                         {policies.map((item) => (
                             <Link
+                                className={linkClass}
                                 key={item.to}
                                 to={`/policy/${item.to}` as string}
-                                className={linkClass}
                             >
                                 {item.label}
                             </Link>
@@ -183,8 +183,8 @@ const NeonFooter = () => {
                         <h3 className="font-semibold  mb-2">Contacts</h3>
                         {contacts.map((item, index) => (
                             <p
-                                key={index}
                                 className=" text-wrap min-w-5  flex items-center cursor-pointer"
+                                key={index}
                             >
                                 <span className="flex items-center p-1.5">
                                     {item.icon}
@@ -200,11 +200,11 @@ const NeonFooter = () => {
                         <h3 className="font-semibold  mb-2">Follow Us</h3>
                         {socialLinks.map((item, idx) => (
                             <a
-                                key={idx}
-                                href={item.href}
-                                target="_blank"
-                                rel="noopener noreferrer"
                                 className={socialLinkClass}
+                                href={item.href}
+                                key={idx}
+                                rel="noopener noreferrer"
+                                target="_blank"
                             >
                                 {item.icon}
                                 {item.label}

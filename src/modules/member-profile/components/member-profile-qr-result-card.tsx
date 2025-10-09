@@ -116,11 +116,11 @@ const MemberProfileQrResultCard = ({ className, memberProfile }: Props) => {
                     </p>
                 </div>
                 <Button
-                    size="icon"
-                    variant="secondary"
+                    className="size-fit col-span-3 w-full p-1.5 text-xs text-muted-foreground/70"
                     disabled={!memberProfile}
                     onClick={() => fullInfoViewModal.onOpenChange(true)}
-                    className="size-fit col-span-3 w-full p-1.5 text-xs text-muted-foreground/70"
+                    size="icon"
+                    variant="secondary"
                 >
                     <EyeIcon className="mr-2" />
                     See full info

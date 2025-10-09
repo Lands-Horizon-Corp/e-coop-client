@@ -14,13 +14,13 @@ const InputDate = forwardRef<HTMLInputElement, InputDateProps>(
             <Input
                 ref={ref}
                 {...props}
-                type="date"
                 className={cn(
                     'block',
                     hideNativeCalendar &&
                         '[&::-webkit-calendar-picker-indicator]:hidden',
                     className
                 )}
+                type="date"
             />
         )
     }

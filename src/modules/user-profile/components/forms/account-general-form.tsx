@@ -87,61 +87,61 @@ const AccountGeneralForm = ({
     return (
         <Form {...form}>
             <form
-                ref={formRef}
-                onSubmit={onSubmit}
                 className={cn('flex w-full flex-col gap-y-4', className)}
+                onSubmit={onSubmit}
+                ref={formRef}
             >
                 <fieldset
-                    disabled={isPending || formProps.readOnly}
                     className="grid gap-x-6 gap-y-4 sm:gap-y-3"
+                    disabled={isPending || formProps.readOnly}
                 >
                     <fieldset className="space-y-4">
                         <FormFieldWrapper
                             control={form.control}
-                            name="user_name"
                             label="Username"
+                            name="user_name"
                             render={({ field }) => (
                                 <Input
                                     {...field}
+                                    disabled={isDisabled(field.name)}
                                     id={field.name}
                                     placeholder="Username"
-                                    disabled={isDisabled(field.name)}
                                 />
                             )}
                         />
                         <FormFieldWrapper
                             control={form.control}
-                            name="description"
                             label="Bio / About"
+                            name="description"
                             render={({ field }) => (
                                 <TextEditor
                                     {...field}
                                     content={field.value}
-                                    textEditorClassName="w-full !max-w-full"
-                                    placeholder="Write short description about yourself"
                                     disabled={isDisabled(field.name)}
+                                    placeholder="Write short description about yourself"
+                                    textEditorClassName="w-full !max-w-full"
                                 />
                             )}
                         />
                         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                             <FormFieldWrapper
                                 control={form.control}
-                                name="email"
                                 label="Email"
+                                name="email"
                                 render={({ field }) => (
                                     <Input
                                         {...field}
+                                        disabled={isDisabled(field.name)}
                                         id={field.name}
                                         placeholder="Email"
-                                        disabled={isDisabled(field.name)}
                                     />
                                 )}
                             />
 
                             <FormFieldWrapper
                                 control={form.control}
-                                name="contact_number"
                                 label="Contact Number"
+                                name="contact_number"
                                 render={({
                                     field,
                                     fieldState: { error, invalid },
@@ -167,15 +167,15 @@ const AccountGeneralForm = ({
                     </fieldset>
                 </fieldset>
                 <FormFooterResetSubmit
-                    error={error}
-                    readOnly={formProps.readOnly}
-                    isLoading={isPending}
                     disableSubmit={!form.formState.isDirty}
-                    submitText="Update"
+                    error={error}
+                    isLoading={isPending}
                     onReset={() => {
                         form.reset()
                         reset()
                     }}
+                    readOnly={formProps.readOnly}
+                    submitText="Update"
                 />
             </form>
         </Form>

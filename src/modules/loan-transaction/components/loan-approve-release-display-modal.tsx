@@ -145,11 +145,11 @@ const LoanApproveReleaseDisplayModal = ({
 
     return (
         <Modal
-            title={title}
-            titleClassName="sr-only"
+            className={cn('!max-w-2xl', className)}
             description={description}
             descriptionClassName="sr-only"
-            className={cn('!max-w-2xl', className)}
+            title={title}
+            titleClassName="sr-only"
             {...props}
         >
             <div className="space-y-4 max-w-full min-w-0">
@@ -172,7 +172,7 @@ const LoanApproveReleaseDisplayModal = ({
                         <TicketIcon className="inline mr-2 size-5" />
                         Voucher
                     </span>
-                    <Separator orientation="vertical" className="min-h-8" />
+                    <Separator className="min-h-8" orientation="vertical" />
                     <p className="font-mono text-xl text-nowrap overflow-x-scroll ecoop-scroll tracking-wider max-w-full">
                         {loanTransaction.voucher}
                     </p>
@@ -206,17 +206,17 @@ const LoanApproveReleaseDisplayModal = ({
                 )}
                 <div className="flex gap-x-2 items-center justify-end">
                     <Button
-                        variant="outline"
                         onClick={() => loanSignatureModal.onOpenChange(true)}
+                        variant="outline"
                     >
                         <SignatureLightIcon className="mr-1" />
                         Signature
                     </Button>
                     {mode === 'undo-approve' && (
                         <Button
-                            variant="destructive"
-                            onClick={handleUndoApprove}
                             disabled={undoApproveMutation.isPending || readOnly}
+                            onClick={handleUndoApprove}
+                            variant="destructive"
                         >
                             {undoApproveMutation.isPending ? (
                                 <LoadingSpinner className="mr-1" />
@@ -228,8 +228,8 @@ const LoanApproveReleaseDisplayModal = ({
                     )}
                     {mode === 'approve' && (
                         <Button
-                            onClick={handleApprove}
                             disabled={approveMutation.isPending || readOnly}
+                            onClick={handleApprove}
                         >
                             {approveMutation.isPending ? (
                                 <LoadingSpinner className="mr-1" />
@@ -241,8 +241,8 @@ const LoanApproveReleaseDisplayModal = ({
                     )}
                     {mode === 'release' && (
                         <Button
-                            onClick={handleRelease}
                             disabled={releaseMutation.isPending || readOnly}
+                            onClick={handleRelease}
                         >
                             {releaseMutation.isPending ? (
                                 <LoadingSpinner className="mr-1" />

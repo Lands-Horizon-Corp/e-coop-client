@@ -53,9 +53,9 @@ const CookieConsent = () => {
                 ECoop uses cookies to enhance the user experience.
             </AlertDescription>
             <Button
+                className="w-full rounded-xl lg:w-fit"
                 onClick={onAccept}
                 variant="secondary"
-                className="w-full rounded-xl lg:w-fit"
             >
                 I understand
             </Button>

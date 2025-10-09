@@ -63,11 +63,11 @@ function GradientText({
 
     return (
         <Comp
-            data-slot="gradient-text"
             className={cn(
                 gradientTextVariants({ variant, size, animate }),
                 className
             )}
+            data-slot="gradient-text"
             {...props}
         />
     )

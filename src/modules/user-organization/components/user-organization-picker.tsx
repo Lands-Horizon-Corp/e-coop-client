@@ -90,19 +90,9 @@ const UserOrganizationPicker = forwardRef<HTMLButtonElement, Props>(
         return (
             <>
                 <GenericPicker
-                    items={data.data}
-                    open={state}
-                    listHeading={`Matched Results (${data.totalSize})`}
-                    searchPlaceHolder="Search user organization"
                     isLoading={isPending || isLoading || isFetching}
-                    onSelect={(userOrg) => {
-                        queryClient.setQueryData(
-                            ['user-organization', value?.id],
-                            userOrg
-                        )
-                        onSelect?.(userOrg)
-                        setState(false)
-                    }}
+                    items={data.data}
+                    listHeading={`Matched Results (${data.totalSize})`}
                     onOpenChange={setState}
                     onSearchChange={(searchValue) => {
                         bulkSetFilter(
@@ -125,6 +115,15 @@ const UserOrganizationPicker = forwardRef<HTMLButtonElement, Props>(
                             }
                         )
                     }}
+                    onSelect={(userOrg) => {
+                        queryClient.setQueryData(
+                            ['user-organization', value?.id],
+                            userOrg
+                        )
+                        onSelect?.(userOrg)
+                        setState(false)
+                    }}
+                    open={state}
                     renderItem={(userOrg) => (
                         <div className="flex w-full items-center justify-between py-1">
                             <div className="flex items-center gap-x-2">
@@ -145,14 +144,9 @@ const UserOrganizationPicker = forwardRef<HTMLButtonElement, Props>(
                             </div>
                         </div>
                     )}
+                    searchPlaceHolder="Search user organization"
                 >
                     <MiniPaginationBar
-                        pagination={{
-                            pageIndex: pagination.pageIndex,
-                            pageSize: pagination.pageSize,
-                            totalPage: data.totalPage,
-                            totalSize: data.totalSize,
-                        }}
                         disablePageMove={isFetching}
                         onNext={({ pageIndex }) =>
                             setPagination((prev) => ({ ...prev, pageIndex }))
@@ -160,19 +154,25 @@ const UserOrganizationPicker = forwardRef<HTMLButtonElement, Props>(
                         onPrev={({ pageIndex }) =>
                             setPagination((prev) => ({ ...prev, pageIndex }))
                         }
+                        pagination={{
+                            pageIndex: pagination.pageIndex,
+                            pageSize: pagination.pageSize,
+                            totalPage: data.totalPage,
+                            totalSize: data.totalSize,
+                        }}
                     />
                 </GenericPicker>
                 <Button
-                    ref={ref}
-                    role="button"
-                    type="button"
-                    variant="secondary"
-                    disabled={disabled}
-                    onClick={() => setState(true)}
                     className={cn(
                         'w-full items-center justify-between rounded-md border bg-background p-0 px-2',
                         triggerClassName
                     )}
+                    disabled={disabled}
+                    onClick={() => setState(true)}
+                    ref={ref}
+                    role="button"
+                    type="button"
+                    variant="secondary"
                 >
                     <span className="justify-betweentext-sm inline-flex w-full items-center text-foreground/90">
                         <span className="inline-flex w-full items-center gap-x-2">

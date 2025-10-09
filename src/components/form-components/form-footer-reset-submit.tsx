@@ -60,9 +60,13 @@ const FormFooterResetSubmit = ({
             <div className="flex items-center justify-end gap-x-2">
                 {!hideReset && (
                     <Button
-                        size="sm"
-                        type={resetButtonType}
-                        variant="secondary"
+                        className="w-full self-end px-8 sm:w-fit"
+                        disabled={
+                            disableSubmit ||
+                            readOnly ||
+                            isLoading ||
+                            disableReset
+                        }
                         onClick={() => {
                             if (showConfirmOnReset) {
                                 return onOpen({
@@ -74,23 +78,19 @@ const FormFooterResetSubmit = ({
                             }
                             onReset?.()
                         }}
-                        disabled={
-                            disableSubmit ||
-                            readOnly ||
-                            isLoading ||
-                            disableReset
-                        }
-                        className="w-full self-end px-8 sm:w-fit"
+                        size="sm"
+                        type={resetButtonType}
+                        variant="secondary"
                     >
                         {resetText}
                     </Button>
                 )}
                 <Button
+                    className="w-full self-end px-8 sm:w-fit"
+                    disabled={isLoading || readOnly || disableSubmit}
+                    onClick={onSubmit}
                     size="sm"
                     type={onSubmit !== undefined ? 'button' : submitButtonType}
-                    onClick={onSubmit}
-                    disabled={isLoading || readOnly || disableSubmit}
-                    className="w-full self-end px-8 sm:w-fit"
                 >
                     {isLoading ? <LoadingSpinner /> : submitText}
                 </Button>

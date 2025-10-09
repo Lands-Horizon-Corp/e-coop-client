@@ -16,7 +16,6 @@ const AdjustmentEntryPage = () => {
         <PageContainer>
             <AdjustmentEntryCreateUpdateFormModal
                 {...createModal}
-                title="Create Adjustment Entry"
                 description="Enter the details for the new adjustment entry."
                 formProps={{
                     onSuccess: () => {
@@ -25,14 +24,15 @@ const AdjustmentEntryPage = () => {
                         })
                     },
                 }}
+                title="Create Adjustment Entry"
             />
             <AdjustmentEntryTable
+                className="max-h-[90vh] min-h-[80vh] w-full py-2"
                 toolbarProps={{
                     createActionProps: {
                         onClick: () => createModal.onOpenChange(true),
                     },
                 }}
-                className="max-h-[90vh] min-h-[80vh] w-full py-2"
             />
             <div className="w-full justify-end flex mb-4">
                 <AdjustmentEntryTotal />

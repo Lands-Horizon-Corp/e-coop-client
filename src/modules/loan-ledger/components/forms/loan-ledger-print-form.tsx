@@ -86,13 +86,13 @@ const LoanLedgerPrintForm = ({
     return (
         <Form {...form}>
             <form
-                ref={formRef}
-                onSubmit={onSubmit}
                 className={cn('flex w-full flex-col gap-y-4', className)}
+                onSubmit={onSubmit}
+                ref={formRef}
             >
                 <fieldset
-                    disabled={isPending || formProps.readOnly}
                     className="grid gap-x-6 gap-y-4 sm:gap-y-3"
+                    disabled={isPending || formProps.readOnly}
                 >
                     <fieldset className="space-y-3">
                         <FormFieldWrapper
@@ -103,18 +103,18 @@ const LoanLedgerPrintForm = ({
                                 return (
                                     <div className="border-input has-data-[state=checked]:border-primary/50 has-data-[state=checked]:bg-gradient-to-br from-popover to-primary/40 relative flex w-full items-start gap-2 rounded-md border p-4 shadow-xs outline-none">
                                         <Checkbox
-                                            id={id}
-                                            checked={field.value}
-                                            onCheckedChange={field.onChange}
-                                            className="order-1 after:absolute after:inset-0"
                                             aria-describedby={`${id}-description`}
+                                            checked={field.value}
+                                            className="order-1 after:absolute after:inset-0"
+                                            id={id}
+                                            onCheckedChange={field.onChange}
                                         />
                                         <div className="flex grow items-start gap-x-3">
                                             <HeadingIcon />
                                             <div className="grid gap-2">
                                                 <label
-                                                    htmlFor={id}
                                                     className="font-medium"
+                                                    htmlFor={id}
                                                 >
                                                     Include Header?{' '}
                                                     <span className="text-muted-foreground text-xs leading-[inherit] font-normal">
@@ -122,8 +122,8 @@ const LoanLedgerPrintForm = ({
                                                     </span>
                                                 </label>
                                                 <p
-                                                    id={`${id}-description`}
                                                     className="text-muted-foreground text-xs"
+                                                    id={`${id}-description`}
                                                 >
                                                     Include the header in the
                                                     printed ledger.
@@ -136,33 +136,33 @@ const LoanLedgerPrintForm = ({
                         />
                         <FormFieldWrapper
                             control={form.control}
-                            name="line_number"
                             label="Line No."
+                            name="line_number"
                             render={({ field }) => (
                                 <Input
                                     {...field}
-                                    id={field.name}
-                                    type="number"
-                                    min={0}
-                                    step="1"
-                                    placeholder="Enter line number"
                                     autoComplete="off"
                                     disabled={isDisabled(field.name)}
+                                    id={field.name}
+                                    min={0}
+                                    placeholder="Enter line number"
+                                    step="1"
+                                    type="number"
                                 />
                             )}
                         />
                     </fieldset>
                 </fieldset>
                 <FormFooterResetSubmit
-                    error={error}
-                    readOnly={formProps.readOnly}
-                    isLoading={isPending}
                     disableSubmit={!form.formState.isDirty}
-                    submitText={'Go'}
+                    error={error}
+                    isLoading={isPending}
                     onReset={() => {
                         form.reset()
                     }}
+                    readOnly={formProps.readOnly}
                     resetText="Cancel"
+                    submitText={'Go'}
                 />
             </form>
         </Form>
@@ -180,9 +180,9 @@ export const LoanLedgerPrintFormModal = ({
 }) => {
     return (
         <Modal
-            title={title}
-            description={description}
             className={cn('', className)}
+            description={description}
+            title={title}
             {...props}
         >
             <LoanLedgerPrintForm

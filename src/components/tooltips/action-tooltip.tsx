@@ -28,7 +28,7 @@ const ActionTooltip = ({
             <Tooltip delayDuration={delayDuration}>
                 <TooltipTrigger asChild>{children}</TooltipTrigger>
                 <TooltipPortal>
-                    <TooltipContent side={side} align={align}>
+                    <TooltipContent align={align} side={side}>
                         <p>{tooltipContent}</p>
                     </TooltipContent>
                 </TooltipPortal>

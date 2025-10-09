@@ -51,8 +51,8 @@ function PasswordResetPage() {
                     )}
                     {!done && !isPending && resetEntry && (
                         <ResetPasswordForm
-                            resetId={pathParams.resetId}
                             onSuccess={() => setDone(true)}
+                            resetId={pathParams.resetId}
                         />
                     )}
                     {!done && !isFetching && !resetEntry && (
@@ -72,13 +72,13 @@ function PasswordResetPage() {
                                 </p>
                             </div>
                             <Button
-                                variant="ghost"
                                 className="text-foreground/60"
                                 onClick={() => {
                                     router.navigate({
                                         to: '/auth/sign-in',
                                     })
                                 }}
+                                variant="ghost"
                             >
                                 <ArrowLeftIcon className="mr-2" /> Back to Login
                             </Button>

@@ -39,8 +39,8 @@ const DisbursementTableColumns = (
                 <HeaderToggleSelect table={table} />
                 {!column.getIsPinned() && (
                     <PushPinSlashIcon
-                        onClick={() => column.pin('left')}
                         className="mr-2 size-3.5 cursor-pointer"
+                        onClick={() => column.pin('left')}
                     />
                 )}
             </div>
@@ -82,8 +82,8 @@ const DisbursementTableColumns = (
             <div className="flex min-w-0 items-center gap-3">
                 {icon && (
                     <RenderIcon
-                        icon={icon as TIcon}
                         className="shrink-0 size-5 text-muted-foreground"
+                        icon={icon as TIcon}
                     />
                 )}
                 <div className="flex min-w-0 flex-col">
@@ -151,8 +151,8 @@ const DisbursementTableColumns = (
                     <>
                         <PreviewMediaWrapper media={organization.media}>
                             <ImageDisplay
-                                src={organization.media?.download_url}
                                 className="h-6 w-6 rounded-full border bg-muted object-cover"
+                                src={organization.media?.download_url}
                             />
                         </PreviewMediaWrapper>
                         <span className="truncate text-sm">
@@ -194,8 +194,8 @@ const DisbursementTableColumns = (
                     <>
                         <PreviewMediaWrapper media={branch.media}>
                             <ImageDisplay
-                                src={branch.media?.download_url}
                                 className="h-6 w-6 rounded-full border bg-muted object-cover"
+                                src={branch.media?.download_url}
                             />
                         </PreviewMediaWrapper>
                         <span className="truncate text-sm">{branch.name}</span>

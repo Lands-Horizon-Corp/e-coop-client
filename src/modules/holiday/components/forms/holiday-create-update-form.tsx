@@ -102,72 +102,72 @@ const HolidayCreateUpdateForm = ({
     return (
         <Form {...form}>
             <form
-                ref={formRef}
-                onSubmit={onSubmit}
                 className={cn('flex w-full flex-col gap-y-4', className)}
+                onSubmit={onSubmit}
+                ref={formRef}
             >
                 <fieldset
-                    disabled={isPending || formProps.readOnly}
                     className="grid gap-x-6 gap-y-4 sm:gap-y-3"
+                    disabled={isPending || formProps.readOnly}
                 >
                     <fieldset className="space-y-3">
                         <FormFieldWrapper
                             control={form.control}
-                            name="name"
                             label="Holiday Name"
+                            name="name"
                             render={({ field }) => (
                                 <Input
                                     {...field}
-                                    id={field.name}
                                     autoComplete="off"
-                                    placeholder="Holiday Name"
                                     disabled={isDisabled(field.name)}
+                                    id={field.name}
+                                    placeholder="Holiday Name"
                                 />
                             )}
                         />
                         <FormFieldWrapper
-                            control={form.control}
-                            name="entry_date"
-                            label="Date"
                             className="relative"
+                            control={form.control}
                             description="mm/dd/yyyy"
                             descriptionClassName="absolute top-0 right-0"
+                            label="Date"
+                            name="entry_date"
                             render={({ field }) => (
                                 <InputDate
                                     type="date"
                                     {...field}
-                                    value={field.value ?? ''}
-                                    disabled={isDisabled(field.name)}
                                     className="block"
+                                    disabled={isDisabled(field.name)}
+                                    value={field.value ?? ''}
                                 />
                             )}
                         />
                         <FormFieldWrapper
                             control={form.control}
-                            name="description"
                             label="Description"
+                            name="description"
                             render={({ field }) => (
                                 <Textarea
                                     {...field}
-                                    id={field.name}
                                     autoComplete="off"
-                                    placeholder="Description"
                                     disabled={isDisabled(field.name)}
+                                    id={field.name}
+                                    placeholder="Description"
                                 />
                             )}
                         />
                     </fieldset>
                 </fieldset>
                 <FormFooterResetSubmit
-                    error={error}
-                    readOnly={formProps.readOnly}
-                    isLoading={isPending}
                     disableSubmit={!form.formState.isDirty}
-                    submitText={holidayId ? 'Update' : 'Create'}
+                    error={error}
+                    isLoading={isPending}
                     onReset={() => {
                         form.reset()
                         reset?.()
                     }}
+                    readOnly={formProps.readOnly}
+                    submitText={holidayId ? 'Update' : 'Create'}
                 />
             </form>
         </Form>
@@ -185,9 +185,9 @@ export const HolidayCreateUpdateFormModal = ({
 }) => {
     return (
         <Modal
-            title={title}
-            description={description}
             className={cn('', className)}
+            description={description}
+            title={title}
             {...props}
         >
             <HolidayCreateUpdateForm

@@ -69,14 +69,14 @@ const MainSettingsPage = () => {
                     const Icon = item.icon
                     return (
                         <Button
-                            key={item.id}
-                            onClick={() => setPage(item.id)}
                             className={cn(
                                 'text-muted-foreground w-full justify-start',
                                 page === item.id && 'text-primary'
                             )}
-                            variant="ghost"
+                            key={item.id}
+                            onClick={() => setPage(item.id)}
                             size="sm"
+                            variant="ghost"
                         >
                             <Icon className="inline mr-2" /> {item.label}
                         </Button>

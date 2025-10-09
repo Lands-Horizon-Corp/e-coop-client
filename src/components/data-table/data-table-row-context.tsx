@@ -91,8 +91,8 @@ const DataTableRowContext = <TData,>({
                 )}
                 {onDelete && (
                     <ContextMenuItem
-                        disabled={!onDelete.isAllowed}
                         className="text-destructive focus:bg-destructive focus:text-destructive-foreground"
+                        disabled={!onDelete.isAllowed}
                         onClick={(e) => {
                             e.preventDefault()
                             onDelete.onClick()

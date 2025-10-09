@@ -5,6 +5,7 @@ import { useQueryClient } from '@tanstack/react-query'
 import { PAGINATION_INITIAL_INDEX, PICKERS_SELECT_PAGE_SIZE } from '@/constants'
 import { type TFilterObject } from '@/contexts/filter-context'
 import { cn } from '@/helpers'
+import { dateAgo, toReadableDate } from '@/helpers/date-utils'
 import { IPickerBaseProps } from '@/types/component-types/picker'
 import { PaginationState } from '@tanstack/react-table'
 
@@ -38,7 +39,10 @@ const LoanPicker = forwardRef<
     Props &
         (
             | { mode: 'branch' }
-            | { mode: 'member-profile'; memberProfileId: TEntityId }
+            | {
+                  mode: 'member-profile' | 'member-profile-released'
+                  memberProfileId: TEntityId
+              }
         )
 >(
     (
@@ -112,25 +116,15 @@ const LoanPicker = forwardRef<
         )
 
         const displayLoanInfo = (loan: ILoanTransaction) => {
-            return `${loan.loan_type || 'Unknown'} - ${loan.applied_1?.toLocaleString() || '0'}`
+            return `${loan.account?.name || 'Unknown Loan'} - ${loan.applied_1?.toLocaleString() || '0'}`
         }
 
         return (
             <>
                 <GenericPicker
-                    items={data}
-                    open={state}
-                    listHeading={`Matched Results (${totalSize})`}
-                    searchPlaceHolder="Search loan type, amount, or OR number..."
                     isLoading={isPending || isLoading || isFetching}
-                    onSelect={(loan) => {
-                        queryClient.setQueryData(
-                            ['loan-transaction', value],
-                            loan
-                        )
-                        onSelect?.(loan)
-                        setState(false)
-                    }}
+                    items={data}
+                    listHeading={`Matched Results (${totalSize})`}
                     onOpenChange={setState}
                     onSearchChange={(searchValue) => {
                         bulkSetFilter(
@@ -156,42 +150,67 @@ const LoanPicker = forwardRef<
                             }
                         )
                     }}
+                    onSelect={(loan) => {
+                        queryClient.setQueryData(
+                            ['loan-transaction', value],
+                            loan
+                        )
+                        onSelect?.(loan)
+                        setState(false)
+                    }}
+                    open={state}
                     renderItem={(loan) => (
-                        <div className="flex w-full items-center justify-between py-1">
+                        <div className="flex w-full items-end justify-between py-1">
                             <div className="flex items-center gap-x-2">
                                 <div className="flex size-8 items-center justify-center rounded-full bg-primary/10">
                                     <CreditCardIcon className="size-4 text-primary" />
                                 </div>
 
-                                <div className="flex flex-col">
+                                <div className="flex flex-col gap-y-1">
                                     <span className="text-sm text-foreground/80 capitalize">
-                                        {loan.loan_type || 'Unknown Loan Type'}
+                                        {`${loan.account?.name || 'unknown account'}`}
                                     </span>
                                     <span className="text-xs text-muted-foreground">
                                         {loan.member_profile?.full_name ||
                                             'No member'}
                                     </span>
+                                    <div className="text-xs items-center flex gap-x-4">
+                                        <div className="flex items-center gap-x-2">
+                                            <span>Amount: </span>{' '}
+                                            <p className="font-medium text-primary-foreground bg-primary px-1 py-0.5 rounded-md">
+                                                {loan.applied_1?.toLocaleString() ||
+                                                    '0'}
+                                            </p>
+                                        </div>
+                                        {loan.balance !== undefined && (
+                                            <div className="flex items-center gap-x-2">
+                                                <span>Balance: </span>{' '}
+                                                <p className="font-medium text-warning-foreground bg-warning px-1 py-0.5 rounded-md">
+                                                    {loan.applied_1?.toLocaleString() ||
+                                                        '0'}
+                                                </p>
+                                            </div>
+                                        )}
+                                    </div>
                                 </div>
                             </div>
-
                             <div className="text-right">
-                                <p className="text-sm font-medium text-foreground">
-                                    {loan.applied_1?.toLocaleString() || '0'}
-                                </p>
                                 <p className="text-xs text-muted-foreground">
                                     {loan.official_receipt_number || 'No OR'}
                                 </p>
+                                {loan.released_date && (
+                                    <span className="text-muted-foreground/60 text-xs">
+                                        Released{' '}
+                                        {toReadableDate(loan.released_date)} -
+                                        {dateAgo(loan.released_date)}
+                                    </span>
+                                )}
                             </div>
                         </div>
                     )}
+                    searchPlaceHolder="Search loan type, amount, or OR number..."
                 >
                     <MiniPaginationBar
-                        pagination={{
-                            pageIndex: pagination.pageIndex,
-                            pageSize: pagination.pageSize,
-                            totalPage: totalPage,
-                            totalSize: totalSize,
-                        }}
                         disablePageMove={isFetching}
                         onNext={({ pageIndex }) =>
                             setPagination((prev) => ({ ...prev, pageIndex }))
@@ -199,29 +218,33 @@ const LoanPicker = forwardRef<
                         onPrev={({ pageIndex }) =>
                             setPagination((prev) => ({ ...prev, pageIndex }))
                         }
+                        pagination={{
+                            pageIndex: pagination.pageIndex,
+                            pageSize: pagination.pageSize,
+                            totalPage: totalPage,
+                            totalSize: totalSize,
+                        }}
                     />
                 </GenericPicker>
-
                 <Button
-                    ref={ref}
-                    type="button"
-                    variant="secondary"
-                    disabled={disabled}
-                    onClick={() => setState(true)}
                     className={cn(
                         'w-full items-center justify-between rounded-md border p-0 px-2',
                         triggerClassName
                     )}
+                    disabled={disabled}
+                    onClick={() => setState(true)}
+                    ref={ref}
+                    type="button"
+                    variant="secondary"
                 >
                     <span className="inline-flex w-full items-center justify-between text-sm text-foreground/90">
                         <span className="inline-flex w-full items-center gap-x-2">
-                            <div className="flex size-6 items-center justify-center rounded-full bg-primary/10">
-                                {isFetching ? (
+                            {isFetching && (
+                                <div className="flex size-6 items-center justify-center rounded-full bg-primary/10">
                                     <LoadingSpinner className="size-3" />
-                                ) : (
-                                    <CreditCardIcon className="size-3 text-primary" />
-                                )}
-                            </div>
+                                    {/* <CreditCardIcon className="size-3 text-primary" /> */}
+                                </div>
+                            )}
                             {!value ? (
                                 <span className="text-foreground/70">
                                     {placeholder || 'Select loan'}

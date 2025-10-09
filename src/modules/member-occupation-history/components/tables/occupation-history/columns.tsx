@@ -29,8 +29,8 @@ const memberOccupationHistoryColumns =
                     <ColumnActions {...props}>
                         <TextFilter
                             defaultMode="contains"
-                            field="member_occupation.name"
                             displayText="Occupation"
+                            field="member_occupation.name"
                         />
                     </ColumnActions>
                 </DataTableColumnHeader>
@@ -49,8 +49,8 @@ const memberOccupationHistoryColumns =
                     <ColumnActions {...props}>
                         <TextFilter
                             defaultMode="contains"
-                            field="member_occupation.description"
                             displayText="Description"
+                            field="member_occupation.description"
                         />
                     </ColumnActions>
                 </DataTableColumnHeader>

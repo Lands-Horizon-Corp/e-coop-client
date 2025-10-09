@@ -14,8 +14,8 @@ function RouteComponent() {
     return (
         <PageContainer>
             <DisbursementTransactionTable
-                mode="current"
                 className="max-h-[90vh] min-h-[90vh] w-full"
+                mode="current"
             />
         </PageContainer>
     )

@@ -1,0 +1,286 @@
+import { ReactNode, useMemo } from 'react'
+
+import { useQueryClient } from '@tanstack/react-query'
+import { toast } from 'sonner'
+
+import { cn } from '@/helpers'
+import { dateAgo, toReadableDateTime } from '@/helpers/date-utils'
+import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
+import TagTemplatePicker from '@/modules/tag-template/components/tag-template-picker'
+import useConfirmModalStore from '@/store/confirm-modal-store'
+import { type VariantProps, cva } from 'class-variance-authority'
+
+import { PlusIcon, RenderIcon, TIcon, TagIcon, XIcon } from '@/components/icons'
+import LoadingSpinner from '@/components/spinners/loading-spinner'
+import InfoTooltip from '@/components/tooltips/info-tooltip'
+import { Button } from '@/components/ui/button'
+import {
+    Popover,
+    PopoverContent,
+    PopoverTrigger,
+} from '@/components/ui/popover'
+import { Separator } from '@/components/ui/separator'
+
+import { useModalState } from '@/hooks/use-modal-state'
+
+import { IBaseProps, IClassProps, TEntityId } from '@/types'
+
+import {
+    useCreateJournalVoucherTag,
+    useDeleteJournalVoucherTagById,
+    useGetAllJournalVoucherTag,
+} from '../journal-voucher-tag.service'
+import { IJournalVoucherTag } from '../journal-voucher-tag.types'
+
+type JournalVoucherTagManagerSize = 'sm' | 'default' | 'lg'
+
+const journalVoucherTagChipVariants = cva(
+    'flex items-center gap-x-1 rounded border bg-accent/50 text-accent-foreground',
+    {
+        variants: {
+            size: {
+                sm: 'px-2 py-1 text-xs',
+                default: 'px-2 py-px text-sm',
+                lg: 'px-3 py-1.5 text-base',
+            },
+        },
+        defaultVariants: {
+            size: 'default',
+        },
+    }
+)
+
+type JournalVoucherTagChipProps = {
+    tag: IJournalVoucherTag
+    onRemove?: () => void
+    size?: JournalVoucherTagManagerSize
+} & VariantProps<typeof journalVoucherTagChipVariants>
+
+export const JournalVoucherTagChip = ({
+    tag,
+    onRemove,
+    size = 'default',
+}: JournalVoucherTagChipProps) => {
+    const { onOpen } = useConfirmModalStore()
+    const deleteMutation = useDeleteJournalVoucherTagById({
+        options: { onSuccess: onRemove },
+    })
+
+    return (
+        <InfoTooltip
+            content={
+                <p className="text-pretty text-foreground max-w-[400px]">
+                    {tag.description}
+
+                    {tag.created_at && (
+                        <span className="text-[12px] block mt-2 text-muted-foreground">
+                            {toReadableDateTime(tag.created_at)} (
+                            {dateAgo(tag.created_at)})
+                        </span>
+                    )}
+                </p>
+            }
+            delayDuration={700}
+        >
+            <div className={journalVoucherTagChipVariants({ size })}>
+                {tag.icon && (
+                    <RenderIcon
+                        icon={tag.icon as TIcon}
+                        style={{ color: tag.color }}
+                    />
+                )}
+                <span>{tag.name}</span>
+                {onRemove && (
+                    <Button
+                        className="size-fit cursor-pointer text-xs hover:text-red-600 disabled:opacity-50"
+                        onClick={() =>
+                            onOpen({
+                                title: 'Remove Tag',
+                                description:
+                                    'Are you sure to remove this tag from this journal voucher?',
+                                confirmString: 'Remove',
+                                onConfirm: () =>
+                                    toast.promise(
+                                        deleteMutation.mutateAsync(tag.id),
+                                        {
+                                            loading: 'Deleting tag...',
+                                            success: 'Tag deleted',
+                                            error: (error) =>
+                                                serverRequestErrExtractor({
+                                                    error,
+                                                }),
+                                        }
+                                    ),
+                            })
+                        }
+                        size="icon"
+                        type="button"
+                        variant="ghost"
+                    >
+                        <XIcon className="size-4" />
+                    </Button>
+                )}
+            </div>
+        </InfoTooltip>
+    )
+}
+
+export function JournalVoucherTagsManager({
+    readOnly,
+    className,
+    journalVoucherId,
+    defaultTags,
+    onSuccess,
+    size = 'default',
+}: {
+    readOnly?: boolean
+    journalVoucherId: TEntityId
+    defaultTags?: IJournalVoucherTag[]
+    onSuccess?: () => void
+    size?: JournalVoucherTagManagerSize
+} & IClassProps) {
+    const tagPickerModal = useModalState()
+
+    const {
+        data: voucherTags = [],
+        isPending,
+        refetch,
+    } = useGetAllJournalVoucherTag({
+        mode: 'journal-voucher',
+        journalVoucherId,
+        options: { initialData: defaultTags, retry: 0 },
+    })
+
+    const invalidateQueries = useQueryClient()
+    const createTagMutation = useCreateJournalVoucherTag({
+        options: {
+            onSuccess:
+                onSuccess ??
+                (() => {
+                    refetch()
+                    invalidateQueries.invalidateQueries({
+                        queryKey: ['journal-voucher'],
+                    })
+                }),
+        },
+    })
+
+    return (
+        <div className={cn('space-y-2', className)}>
+            <TagTemplatePicker
+                modalState={tagPickerModal}
+                onSelect={({ color, name, description, icon }) => {
+                    toast.promise(
+                        createTagMutation.mutateAsync({
+                            name,
+                            icon,
+                            color,
+                            description,
+                            journal_voucher_id: journalVoucherId,
+                        }),
+                        {
+                            loading: 'Adding tag...',
+                            success: 'Tag Added',
+                            error: (error) =>
+                                serverRequestErrExtractor({ error }),
+                        }
+                    )
+                }}
+                triggerClassName="hidden"
+            />
+            <div className="w-full space-y-1">
+                <div className="flex justify-between">
+                    <p className="text-sm">Voucher Tags</p>
+                    {isPending && (
+                        <LoadingSpinner className="size-3 mt-2 text-muted-foreground/70 inline" />
+                    )}
+                </div>
+                <p className="text-xs text-muted-foreground">
+                    Tags provide a quick context about this journal voucher.
+                </p>
+            </div>
+            <Separator />
+            <div className="flex gap-1.5 flex-wrap ">
+                {!readOnly && (
+                    <Button
+                        className="border-dashed rounded !size-fit py-1 !px-1 text-xs"
+                        onClick={() => tagPickerModal.onOpenChange(true)}
+                        type="button"
+                        variant="outline"
+                    >
+                        <PlusIcon className="inline text-accent-foreground" />{' '}
+                        Add Tag
+                    </Button>
+                )}
+                {voucherTags.map((tag) => (
+                    <JournalVoucherTagChip
+                        key={tag.id}
+                        onRemove={readOnly ? undefined : refetch}
+                        size={size}
+                        tag={tag}
+                    />
+                ))}
+            </div>
+            <p className="text-xs block text-muted-foreground">
+                {voucherTags.length} tag{voucherTags.length !== 1 && 's'}
+            </p>
+        </div>
+    )
+}
+
+export const JournalVoucherTagsManagerPopover = ({
+    journalVoucherId,
+    defaultTags,
+    size = 'default',
+    readOnly,
+    className,
+    children,
+}: {
+    journalVoucherId: TEntityId
+    defaultTags?: IJournalVoucherTag[]
+    size?: JournalVoucherTagManagerSize
+    readOnly?: boolean
+} & IBaseProps & { children?: ReactNode }) => {
+    const { data: voucherTags = [], isPending } = useGetAllJournalVoucherTag({
+        mode: 'journal-voucher',
+        journalVoucherId,
+        options: {
+            initialData: defaultTags,
+            retry: 0,
+            enabled: !!journalVoucherId,
+        },
+    })
+
+    const tagCount = useMemo(() => voucherTags.length, [voucherTags])
+
+    return (
+        <Popover modal>
+            <PopoverTrigger asChild>
+                {children ? (
+                    children
+                ) : (
+                    <Button
+                        className={cn(
+                            'size-fit !p-0 border-accent rounded-full !py-0.5 !px-1.5',
+                            className
+                        )}
+                        size="sm"
+                        type="button"
+                        variant="outline"
+                    >
+                        <TagIcon />{' '}
+                        <span>{isPending ? '...' : tagCount} Tags</span>
+                    </Button>
+                )}
+            </PopoverTrigger>
+            <PopoverContent className="w-auto min-w-[220px] rounded-xl max-w-[340px]">
+                <JournalVoucherTagsManager
+                    defaultTags={defaultTags}
+                    journalVoucherId={journalVoucherId}
+                    readOnly={readOnly}
+                    size={size}
+                />
+            </PopoverContent>
+        </Popover>
+    )
+}

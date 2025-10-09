@@ -30,8 +30,8 @@ export default function FootstepDetail({ footstep }: Props) {
                 </p>
                 <div className="text-xs text-muted-foreground/70">
                     <CopyWrapper
-                        textToCopy={footstep.id}
                         copyMsg="Copied Footstep ID"
+                        textToCopy={footstep.id}
                     >
                         <span className="inline text-muted-foreground/70 group-hover/copy:text-muted-foreground truncate">
                             Copy ID
@@ -180,10 +180,10 @@ export default function FootstepDetail({ footstep }: Props) {
                     {!!footstep.latitude && !!footstep.longitude && (
                         <div className="h-64">
                             <Map
-                                viewOnly
                                 center={[footstep.latitude, footstep.longitude]}
-                                zoom={13}
                                 className="mb-4 size-full"
+                                viewOnly
+                                zoom={13}
                             />
                         </div>
                     )}
@@ -203,8 +203,8 @@ export default function FootstepDetail({ footstep }: Props) {
 
                         <div className="text-xs text-muted-foreground/70">
                             <CopyWrapper
-                                textToCopy={footstep.user_id}
                                 copyMsg="Copied User ID"
+                                textToCopy={footstep.user_id}
                             >
                                 <span className="inline text-muted-foreground/70 group-hover/copy:text-muted-foreground truncate">
                                     Copy User ID

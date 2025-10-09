@@ -54,17 +54,17 @@ const EducationalAttainmentCombobox = React.forwardRef<
         const [open, setOpen] = React.useState(false)
 
         return (
-            <Popover modal open={open} onOpenChange={setOpen}>
+            <Popover modal onOpenChange={setOpen} open={open}>
                 <PopoverTrigger asChild>
                     <Button
                         {...other}
-                        ref={ref}
-                        type="button"
-                        role="combobox"
-                        variant="outline"
-                        disabled={disabled}
                         aria-expanded={open}
                         className={cn('w-full justify-between px-3', className)}
+                        disabled={disabled}
+                        ref={ref}
+                        role="combobox"
+                        type="button"
+                        variant="outline"
                     >
                         <span className="capitalize">
                             {value || (
@@ -79,8 +79,8 @@ const EducationalAttainmentCombobox = React.forwardRef<
                 <PopoverContent className="max-h-[--radix-popover-content-available-height] w-[--radix-popover-trigger-width] p-0">
                     <Command className="bg-background">
                         <CommandInput
-                            placeholder="Search Educational Attainment..."
                             className="h-9"
+                            placeholder="Search Educational Attainment..."
                         />
                         <CommandList className="ecoop-scroll">
                             <CommandEmpty>
@@ -90,11 +90,11 @@ const EducationalAttainmentCombobox = React.forwardRef<
                                 {attainments.map((attainment) => (
                                     <CommandItem
                                         key={attainment}
-                                        value={attainment}
                                         onSelect={() => {
                                             setOpen(false)
                                             onChange?.(attainment)
                                         }}
+                                        value={attainment}
                                     >
                                         <span className="capitalize">
                                             {attainment}

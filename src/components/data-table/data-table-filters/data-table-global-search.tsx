@@ -59,11 +59,6 @@ const DataTableGlobalSearch = <T,>({
                     <span className="relative">
                         <DebouncedInput
                             className="min-w-[300px] rounded-lg bg-popover text-xs animate-in fade-in-75 focus-visible:ring-muted"
-                            value={filterVal.value}
-                            placeholder={
-                                otherProps.placeHolder ??
-                                'Global Search (Text Only)'
-                            }
                             onChange={(val) => {
                                 setFilter(accessorKey, {
                                     ...filterVal,
@@ -75,12 +70,17 @@ const DataTableGlobalSearch = <T,>({
                                 })
                                 setFilterLogic('OR')
                             }}
+                            placeholder={
+                                otherProps.placeHolder ??
+                                'Global Search (Text Only)'
+                            }
+                            value={filterVal.value}
                         />
                         <Button
-                            size="icon"
-                            variant="ghost"
                             className="p-1 absolute right-2 top-1/2 size-fit -translate-y-1/2 rounded-full"
                             onClick={() => setVisible(false)}
+                            size="icon"
+                            variant="ghost"
                         >
                             <ChevronLeftIcon className="size-4" />
                         </Button>
@@ -89,9 +89,9 @@ const DataTableGlobalSearch = <T,>({
             )}
             {!visible && (
                 <Button
+                    onClick={() => setVisible((prev) => !prev)}
                     size="sm"
                     variant="secondary"
-                    onClick={() => setVisible((prev) => !prev)}
                 >
                     <MagnifyingGlassIcon />
                 </Button>

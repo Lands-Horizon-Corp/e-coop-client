@@ -56,8 +56,8 @@ const AccountSettingsSidebar = ({ className }: Props) => {
     if (isMobile) {
         return (
             <MobileDropdown
-                settingsNavItems={settingsNavItems}
                 externalLinks={externalLinks}
+                settingsNavItems={settingsNavItems}
             />
         )
     }

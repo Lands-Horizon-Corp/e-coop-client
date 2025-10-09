@@ -70,10 +70,10 @@ const HistoryTabs: {
                 )}
             >
                 <GeneralLedgerTable
+                    className="grow"
                     mode="transaction-batch"
                     TEntryType=""
                     transactionBatchId={transactionBatchId}
-                    className="grow"
                 />
             </div>
         ),
@@ -90,10 +90,10 @@ const HistoryTabs: {
                 )}
             >
                 <GeneralLedgerTable
+                    className="grow"
                     mode="transaction-batch"
                     TEntryType="check-entry"
                     transactionBatchId={transactionBatchId}
-                    className="grow"
                 />
             </div>
         ),
@@ -110,10 +110,10 @@ const HistoryTabs: {
                 )}
             >
                 <GeneralLedgerTable
+                    className="grow"
                     mode="transaction-batch"
                     TEntryType="online-entry"
                     transactionBatchId={transactionBatchId}
-                    className="grow"
                 />
             </div>
         ),
@@ -130,10 +130,10 @@ const HistoryTabs: {
                 )}
             >
                 <GeneralLedgerTable
+                    className="grow"
                     mode="transaction-batch"
                     TEntryType="cash-entry"
                     transactionBatchId={transactionBatchId}
-                    className="grow"
                 />
             </div>
         ),
@@ -150,10 +150,10 @@ const HistoryTabs: {
                 )}
             >
                 <GeneralLedgerTable
+                    className="grow"
                     mode="transaction-batch"
                     TEntryType="payment-entry"
                     transactionBatchId={transactionBatchId}
-                    className="grow"
                 />
             </div>
         ),
@@ -170,10 +170,10 @@ const HistoryTabs: {
                 )}
             >
                 <GeneralLedgerTable
+                    className="grow"
                     mode="transaction-batch"
                     TEntryType="withdraw-entry"
                     transactionBatchId={transactionBatchId}
-                    className="grow"
                 />
             </div>
         ),
@@ -190,10 +190,10 @@ const HistoryTabs: {
                 )}
             >
                 <GeneralLedgerTable
+                    className="grow"
                     mode="transaction-batch"
                     TEntryType="deposit-entry"
                     transactionBatchId={transactionBatchId}
-                    className="grow"
                 />
             </div>
         ),
@@ -220,24 +220,24 @@ const TransactionBatchHistories = ({
     return (
         <div className="flex min-h-[90vh] w-full max-w-full flex-1 flex-col gap-y-4 p-4">
             <Tabs
-                value={value}
                 className="flex-1 flex-col"
                 defaultValue="batch-funding"
                 onValueChange={handleChange}
+                value={value}
             >
                 <ScrollArea>
                     <TabsList className="mb-3 h-auto min-w-full justify-start gap-2 rounded-none border-b bg-transparent px-0 py-1 text-foreground">
                         {HistoryTabs.map((tab) => (
                             <TabsTrigger
+                                className="relative after:absolute after:inset-x-0 after:bottom-0 after:-mb-1 after:h-0.5 after:duration-300 after:ease-in-out hover:bg-accent hover:text-foreground data-[state=active]:bg-transparent data-[state=active]:shadow-none data-[state=active]:after:bg-primary data-[state=active]:hover:bg-accent"
                                 key={tab.value}
                                 value={tab.value}
-                                className="relative after:absolute after:inset-x-0 after:bottom-0 after:-mb-1 after:h-0.5 after:duration-300 after:ease-in-out hover:bg-accent hover:text-foreground data-[state=active]:bg-transparent data-[state=active]:shadow-none data-[state=active]:after:bg-primary data-[state=active]:hover:bg-accent"
                             >
                                 {tab.Icon && (
                                     <tab.Icon
+                                        aria-hidden="true"
                                         className="-ms-0.5 me-1.5 opacity-60"
                                         size={16}
-                                        aria-hidden="true"
                                     />
                                 )}
                                 {tab.title}
@@ -247,7 +247,7 @@ const TransactionBatchHistories = ({
                     <ScrollBar orientation="horizontal" />
                 </ScrollArea>
                 {HistoryTabs.map((tab) => (
-                    <TabsContent value={tab.value} key={tab.value} asChild>
+                    <TabsContent asChild key={tab.value} value={tab.value}>
                         {tab.Component({ transactionBatchId })}
                     </TabsContent>
                 ))}
@@ -267,10 +267,10 @@ export const TransactionBatchHistoriesModal = ({
     return (
         <Modal
             {...props}
+            className={cn('flex !max-w-[95vw] px-0 pb-4 pt-0', className)}
+            closeButtonClassName="top-2 right-2"
             title={title}
             titleClassName="hidden"
-            closeButtonClassName="top-2 right-2"
-            className={cn('flex !max-w-[95vw] px-0 pb-4 pt-0', className)}
         >
             <TransactionBatchHistories {...transactionBatchHistoryProps} />
         </Modal>

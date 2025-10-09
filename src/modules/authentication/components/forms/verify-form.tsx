@@ -84,12 +84,12 @@ const VerifyForm = ({
         <>
             <Form {...form}>
                 <form
-                    ref={formRef}
-                    onSubmit={onSubmit}
                     className={cn(
                         'flex min-w-[380px] flex-col gap-y-4',
                         className
                     )}
+                    onSubmit={onSubmit}
+                    ref={formRef}
                 >
                     <div className="flex flex-col items-center justify-center gap-y-4 pt-4">
                         <p className="text-xl font-medium">
@@ -106,8 +106,8 @@ const VerifyForm = ({
                         </p>
                     </div>
                     <fieldset
-                        disabled={formProps.readOnly || isPending}
                         className="flex flex-col gap-y-4"
+                        disabled={formProps.readOnly || isPending}
                     >
                         <FormField
                             control={form.control}
@@ -117,13 +117,13 @@ const VerifyForm = ({
                                     <FormControl>
                                         <InputOTP
                                             autoFocus
+                                            containerClassName="mx-auto capitalize w-fit"
+                                            disabled={isDisabled(field.name)}
                                             maxLength={6}
                                             onComplete={() => onSubmit()}
                                             pattern={
                                                 REGEXP_ONLY_DIGITS_AND_CHARS
                                             }
-                                            containerClassName="mx-auto capitalize w-fit"
-                                            disabled={isDisabled(field.name)}
                                             {...field}
                                         >
                                             <InputOTPGroup>
@@ -145,26 +145,26 @@ const VerifyForm = ({
                         />
                         <FormErrorMessage errorMessage={error} />
                         <ResendVerifyContactButton
-                            interval={1000}
                             duration={20}
+                            interval={1000}
                             verifyMode={verifyMode}
                         />
                         <div className="flex flex-col gap-y-2">
                             {onSkip && (
                                 <Button
-                                    variant={'outline'}
                                     disabled={formProps.readOnly}
                                     onClick={(e) => {
                                         e.preventDefault()
                                         onSkip()
                                     }}
+                                    variant={'outline'}
                                 >
                                     Skip
                                 </Button>
                             )}
                             <Button
-                                type="submit"
                                 disabled={isPending || formProps.readOnly}
+                                type="submit"
                             >
                                 {isPending ? <LoadingSpinner /> : 'Submit'}
                             </Button>

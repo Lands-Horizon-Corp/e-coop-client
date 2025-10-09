@@ -18,6 +18,7 @@ import type {
     ICashCheckVoucherRequest,
     TCashCheckVoucherActionMode,
     TCashCheckVoucherPrintMode,
+    TCashCheckVoucherPrintRequest,
 } from '../cash-check-voucher'
 import { getPaginatedJournalVoucher } from '../journal-voucher'
 
@@ -129,6 +130,31 @@ export const useCashCheckVoucherActions = createMutationFactory<
         >(`${cashCheckVoucherAPIRoute}/${cash_check_voucher_id}/${mode}`)
         return response.data
     },
+    invalidationFn: (args) =>
+        updateMutationInvalidationFn(cashCheckVoucherBaseKey, args),
+})
+
+// PRINT CASH CHECK VOUCHER
+const printCashCheckVoucher = async (data: {
+    cashCheckVoucherId: TEntityId
+    payload: TCashCheckVoucherPrintRequest
+}) => {
+    const response = await API.put<
+        TCashCheckVoucherPrintRequest,
+        ICashCheckVoucher
+    >(
+        `${cashCheckVoucherAPIRoute}/${data.cashCheckVoucherId}/print`,
+        data.payload
+    )
+    return response.data
+}
+
+export const usePrintCashCheckVoucherTransaction = createMutationFactory<
+    ICashCheckVoucher,
+    Error,
+    { cashCheckVoucherId: TEntityId; payload: TCashCheckVoucherPrintRequest }
+>({
+    mutationFn: (data) => printCashCheckVoucher(data),
     invalidationFn: (args) =>
         updateMutationInvalidationFn(cashCheckVoucherBaseKey, args),
 })

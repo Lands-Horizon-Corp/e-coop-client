@@ -39,8 +39,8 @@ const UserNav = ({
             <NavContainer className="pointer-events-auto min-w-[10%]">
                 <AppSidebarToggle />
                 <PageBreadCrumb
-                    homeUrl={homeUrl}
                     className="hidden text-xs md:block"
+                    homeUrl={homeUrl}
                 />
             </NavContainer>
             <NavContainer className="pointer-events-auto">
@@ -48,14 +48,14 @@ const UserNav = ({
                     user_organization?.user_type ?? ''
                 ) && (
                     <Button
-                        variant="secondary"
-                        hoverVariant="primary"
                         className="rounded-full group"
+                        hoverVariant="primary"
                         onClick={() =>
                             router.navigate({
                                 to: '/org/$orgname/branch/$branchname/approvals' as string,
                             })
                         }
+                        variant="secondary"
                     >
                         <BadgeCheckFillIcon className="ease-out duration-500 text-primary group-hover:text-primary-foreground" />
                         Approvals

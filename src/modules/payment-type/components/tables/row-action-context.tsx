@@ -76,9 +76,7 @@ export const PaymentTypeActions = ({
             <div onClick={(e) => e.stopPropagation()}>
                 <PaymentTypeCreateUpdateFormModal
                     {...updateModal}
-                    title="Edit Payment Type"
                     description="Update details for this payment type."
-                    titleClassName="font-bold"
                     formProps={{
                         paymentTypeId: paymentType.id,
                         defaultValues: {
@@ -92,11 +90,12 @@ export const PaymentTypeActions = ({
                             updateModal.onOpenChange(false)
                         },
                     }}
+                    title="Edit Payment Type"
+                    titleClassName="font-bold"
                 />
             </div>
             <RowActionsGroup
                 canSelect
-                row={row}
                 onDelete={{
                     text: 'Delete',
                     isAllowed: !isDeletingPaymentType,
@@ -108,6 +107,7 @@ export const PaymentTypeActions = ({
                     onClick: handleEdit,
                 }}
                 otherActions={<>{/* Additional actions can be added here */}</>}
+                row={row}
             />
         </>
     )
@@ -136,9 +136,7 @@ export const PaymentTypeRowContext = ({
         <>
             <PaymentTypeCreateUpdateFormModal
                 {...updateModal}
-                title="Edit Payment Type"
                 description="Update details for this payment type."
-                titleClassName="font-bold"
                 formProps={{
                     paymentTypeId: paymentType.id,
                     defaultValues: {
@@ -149,9 +147,10 @@ export const PaymentTypeRowContext = ({
                     },
                     onSuccess: () => updateModal.onOpenChange(false),
                 }}
+                title="Edit Payment Type"
+                titleClassName="font-bold"
             />
             <DataTableRowContext
-                row={row}
                 onDelete={{
                     text: 'Delete',
                     isAllowed: !isDeletingPaymentType,
@@ -162,6 +161,7 @@ export const PaymentTypeRowContext = ({
                     isAllowed: true,
                     onClick: handleEdit,
                 }}
+                row={row}
             >
                 {children}
             </DataTableRowContext>

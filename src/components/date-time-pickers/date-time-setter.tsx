@@ -18,7 +18,7 @@ const DateTimeSetter = ({ date, onChange }: Props) => {
     return (
         <Popover modal>
             <PopoverTrigger asChild>
-                <Button variant="outline" className="w-full">
+                <Button className="w-full" variant="outline">
                     {toReadableDate(date, 'hh:mm a')}
                     <ClockIcon className="ml-auto" />
                 </Button>

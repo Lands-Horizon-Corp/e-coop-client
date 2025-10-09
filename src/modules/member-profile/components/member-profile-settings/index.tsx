@@ -146,33 +146,33 @@ const MemberProfileSettings = ({
                     <MemberProfileMiniInfoCard memberProfile={memberProfile} />
                     {memberProfile.is_closed && (
                         <MemberCloseAccountBanner
-                            showRemarksList
                             closeRemarks={memberProfile.member_close_remarks}
+                            showRemarksList
                         />
                     )}
                 </>
             )}
             <Tabs
-                value={value}
                 className="flex w-full gap-x-4"
                 onValueChange={handleChange}
+                value={value}
             >
                 <ScrollArea>
                     <TabsList className="border-bx mb-3 h-auto min-w-full flex-col justify-start gap-x-2 gap-y-1 rounded-none bg-transparent px-0 py-1 text-foreground">
                         {SettingsTabs.map((tab) => (
                             <TabsTrigger
+                                className="dara-[state=active]:border relative w-full justify-start rounded-md from-primary/20 to-transparent text-muted-foreground after:absolute after:inset-y-0 after:left-0 after:w-0.5 after:content-[''] hover:text-foreground data-[state=active]:bg-secondary data-[state=active]:bg-gradient-to-r data-[state=active]:shadow-none data-[state=active]:after:bg-primary dark:bg-transparent"
                                 key={tab.value}
                                 value={tab.value}
-                                className="dara-[state=active]:border relative w-full justify-start rounded-md from-primary/20 to-transparent text-muted-foreground after:absolute after:inset-y-0 after:left-0 after:w-0.5 after:content-[''] hover:text-foreground data-[state=active]:bg-secondary data-[state=active]:bg-gradient-to-r data-[state=active]:shadow-none data-[state=active]:after:bg-primary dark:bg-transparent"
                             >
                                 {tab.Icon && (
                                     <tab.Icon
+                                        aria-hidden="true"
                                         className={cn(
                                             '-ms-0.5 me-1.5 opacity-60 duration-300',
                                             tab.value === value && 'opacity-100'
                                         )}
                                         size={16}
-                                        aria-hidden="true"
                                     />
                                 )}
                                 {tab.title}
@@ -185,9 +185,9 @@ const MemberProfileSettings = ({
                     {memberProfile &&
                         SettingsTabs.map((tab) => (
                             <TabsContent
-                                value={tab.value}
-                                key={tab.value}
                                 asChild
+                                key={tab.value}
+                                value={tab.value}
                             >
                                 {tab.Component({
                                     memberProfile:

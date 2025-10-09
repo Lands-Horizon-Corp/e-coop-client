@@ -44,12 +44,12 @@ const LoanAmortization = ({ className, loanTransactionId }: Props) => {
                         Amortization
                     </p>
                     <Button
+                        className="size-fit p-1 cursor-pointer"
+                        disabled={isRefetching || !loanTransactionId}
+                        onClick={() => refetch()}
                         size="icon"
                         type="button"
                         variant="ghost"
-                        className="size-fit p-1 cursor-pointer"
-                        onClick={() => refetch()}
-                        disabled={isRefetching || !loanTransactionId}
                     >
                         {isRefetching ? (
                             <LoadingSpinner className="size-3" />
@@ -259,10 +259,10 @@ export const LoanAmortizationModal = ({
     return (
         <Modal
             {...props}
-            closeButtonClassName="top-2 right-2"
-            titleClassName="sr-only"
-            descriptionClassName="sr-only"
             className="!max-w-[90vw] p-0 shadow-none border-none bg-transparent gap-y-0"
+            closeButtonClassName="top-2 right-2"
+            descriptionClassName="sr-only"
+            titleClassName="sr-only"
         >
             <LoanAmortization
                 className="col-span-5 p-0 bg-transparent"

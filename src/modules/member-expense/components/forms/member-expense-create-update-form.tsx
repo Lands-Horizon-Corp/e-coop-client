@@ -109,46 +109,46 @@ const MemberExpenseCreateUpdateForm = ({
     return (
         <Form {...form}>
             <form
-                ref={formRef}
-                onSubmit={onSubmit}
                 className={cn('flex w-full flex-col gap-y-4', className)}
+                onSubmit={onSubmit}
+                ref={formRef}
             >
                 <fieldset
-                    disabled={isPending || formProps.readOnly}
                     className="grid gap-x-6 gap-y-4 sm:gap-y-3"
+                    disabled={isPending || formProps.readOnly}
                 >
                     <fieldset className="space-y-3">
                         <FormFieldWrapper
                             control={form.control}
-                            name="name"
                             label="Expense Name *"
+                            name="name"
                             render={({ field }) => (
                                 <Input
                                     {...field}
+                                    disabled={isDisabled(field.name)}
                                     id={field.name}
                                     placeholder="Expense Name"
-                                    disabled={isDisabled(field.name)}
                                 />
                             )}
                         />
                         <FormFieldWrapper
                             control={form.control}
-                            name="amount"
                             label="Amount *"
+                            name="amount"
                             render={({ field }) => (
                                 <Input
                                     {...field}
-                                    id={field.name}
-                                    type="number"
-                                    placeholder="Amount"
                                     disabled={isDisabled(field.name)}
+                                    id={field.name}
+                                    placeholder="Amount"
+                                    type="number"
                                 />
                             )}
                         />
                         <FormFieldWrapper
                             control={form.control}
-                            name="description"
                             label="Description *"
+                            name="description"
                             render={({ field }) => (
                                 <TextEditor
                                     {...field}
@@ -162,15 +162,15 @@ const MemberExpenseCreateUpdateForm = ({
                     </fieldset>
                 </fieldset>
                 <FormFooterResetSubmit
-                    error={error}
-                    readOnly={formProps.readOnly}
-                    isLoading={isPending}
                     disableSubmit={!form.formState.isDirty}
-                    submitText={expenseId ? 'Update' : 'Create'}
+                    error={error}
+                    isLoading={isPending}
                     onReset={() => {
                         form.reset()
                         reset()
                     }}
+                    readOnly={formProps.readOnly}
+                    submitText={expenseId ? 'Update' : 'Create'}
                 />
             </form>
         </Form>
@@ -188,9 +188,9 @@ export const MemberExpenseCreateUpdateFormModal = ({
 }) => {
     return (
         <Modal
-            title={title}
-            description={description}
             className={cn('', className)}
+            description={description}
+            title={title}
             {...props}
         >
             <MemberExpenseCreateUpdateForm

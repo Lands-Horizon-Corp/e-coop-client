@@ -38,6 +38,7 @@ import {
     UserTagIcon,
     Users3Icon,
     Users3LineIcon,
+    WrenchIcon,
 } from '@/components/icons'
 import {
     INavGroupItem,
@@ -499,14 +500,14 @@ export const generateSidebarGroups = (
                     userType: ['employee', 'owner'],
                     shortDescription: 'View and manage accounts',
                 },
-                {
-                    type: 'item',
-                    icon: BankIcon,
-                    title: 'Computation Type',
-                    url: `${baseUrl}/accounting/computation-type`,
-                    userType: ['employee', 'owner'],
-                    shortDescription: 'Configure computation types',
-                },
+                // {
+                //     type: 'item',
+                //     icon: CalculatorIcon,
+                //     title: 'Computation Type',
+                //     url: `${baseUrl}/accounting/computation-type`,
+                //     userType: ['employee', 'owner'],
+                //     shortDescription: 'Configure computation types',
+                // },
                 {
                     type: 'item',
                     icon: BookIcon,
@@ -525,7 +526,7 @@ export const generateSidebarGroups = (
                 },
                 {
                     type: 'item',
-                    icon: MoneyIcon,
+                    icon: WrenchIcon,
                     title: 'Adjustment Entry',
                     url: `${baseUrl}/accounting/adjustment-entry`,
                     userType: ['employee', 'owner'],

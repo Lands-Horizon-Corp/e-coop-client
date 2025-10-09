@@ -55,22 +55,22 @@ const LoanTermsAndConditionReceiptSection = ({
                         </p>
                     </div>
                     <FormFieldWrapper
+                        className="w-fit"
                         control={form.control}
                         name="remarks_payroll_deduction"
-                        className="w-fit"
                         render={({ field }) => (
                             <div className="inline-flex items-center gap-2">
                                 <Switch
-                                    id={field.name}
-                                    aria-label="Toggle payroll deduction"
                                     aria-describedby="payroll-deduction-desc"
+                                    aria-label="Toggle payroll deduction"
                                     checked={field.value || false}
-                                    onCheckedChange={field.onChange}
                                     disabled={isDisabled(field.name)}
+                                    id={field.name}
+                                    onCheckedChange={field.onChange}
                                 />
                                 <Label
-                                    htmlFor={field.name}
                                     className="text-sm font-medium"
+                                    htmlFor={field.name}
                                     id="payroll-deduction-desc"
                                 >
                                     Payroll Deduction
@@ -82,15 +82,15 @@ const LoanTermsAndConditionReceiptSection = ({
 
                 <FormFieldWrapper
                     control={form.control}
-                    name="remarks_other_terms"
                     label="Remarks"
+                    name="remarks_other_terms"
                     render={({ field }) => (
                         <Textarea
                             {...field}
+                            aria-describedby="remarks-help"
+                            disabled={isDisabled(field.name)}
                             id={field.name}
                             placeholder="Remarks other terms"
-                            disabled={isDisabled(field.name)}
-                            aria-describedby="remarks-help"
                         />
                     )}
                 />
@@ -101,43 +101,43 @@ const LoanTermsAndConditionReceiptSection = ({
 
             <LoanTermsAndConditionSuggestedPaymentField
                 form={form}
-                isReadOnly={isReadOnly}
                 isDisabled={isDisabled}
+                isReadOnly={isReadOnly}
             />
 
             <LoanTermsAndConditionReceiptField
                 form={form}
-                isReadOnly={isReadOnly}
                 isDisabled={isDisabled}
+                isReadOnly={isReadOnly}
             />
 
             <div className="grid grid-cols-2 gap-x-3">
                 <FormFieldWrapper
                     control={form.control}
-                    name="collateral_offered"
                     label="Collateral Offered"
+                    name="collateral_offered"
                     render={({ field }) => (
                         <Textarea
                             {...field}
+                            aria-describedby="collateral-help"
+                            disabled={isDisabled(field.name)}
                             id={field.name}
                             placeholder="Collateral Offered"
-                            disabled={isDisabled(field.name)}
-                            aria-describedby="collateral-help"
                         />
                     )}
                 />
 
                 <FormFieldWrapper
                     control={form.control}
-                    name="record_of_loan_payments_or_loan_status"
                     label="Record of Loan Payments / Loan Status"
+                    name="record_of_loan_payments_or_loan_status"
                     render={({ field }) => (
                         <Textarea
                             {...field}
+                            aria-describedby="payments-help"
+                            disabled={isDisabled(field.name)}
                             id={field.name}
                             placeholder="Record of loan payments or loan status"
-                            disabled={isDisabled(field.name)}
-                            aria-describedby="payments-help"
                         />
                     )}
                 />
@@ -236,9 +236,9 @@ const LoanTermsAndConditionReceiptField = ({
             />
 
             <fieldset
-                disabled={disabled}
-                className="space-y-2"
                 aria-labelledby="receipts-section"
+                className="space-y-2"
+                disabled={disabled}
             >
                 <div className="flex items-center justify-between">
                     <p className="font-medium" id="receipts-section">
@@ -246,12 +246,12 @@ const LoanTermsAndConditionReceiptField = ({
                     </p>
                     <div className="flex items-center gap-2">
                         <Button
-                            size="sm"
-                            type="button"
-                            tabIndex={0}
+                            aria-label="Add new receipt"
                             className="size-fit px-2 py-0.5 text-xs"
                             onClick={() => addReceiptModal.onOpenChange(true)}
-                            aria-label="Add new receipt"
+                            size="sm"
+                            tabIndex={0}
+                            type="button"
                         >
                             Add <PlusIcon className="inline" />
                         </Button>
@@ -268,24 +268,24 @@ const LoanTermsAndConditionReceiptField = ({
                     name="loan_terms_and_condition_amount_receipt"
                     render={({ field }) => (
                         <div
-                            ref={field.ref}
-                            role="list"
                             aria-label="Amount receipts list"
                             className="grid grid-cols-1 md:grid-cols-3 max-h-[50vh] overflow-y-auto ecoop-scroll lg:grid-cols-4 bg-muted border rounded-xl p-2 gap-4"
+                            ref={field.ref}
+                            role="list"
                         >
                             {receipts.map((receipt, index) => (
                                 <LoanTermsAndConditionReceiptCard
-                                    key={receipt.fieldKey}
-                                    receipt={receipt}
-                                    index={index}
                                     disabled={
                                         isReadOnly || isDisabled(field.name)
                                     }
+                                    index={index}
+                                    key={receipt.fieldKey}
+                                    onRemove={handleRemoveReceipt}
+                                    onUpdate={handleUpdateReceipt}
+                                    receipt={receipt}
                                     ref={(el) => {
                                         cardRefs.current[index] = el
                                     }}
-                                    onRemove={handleRemoveReceipt}
-                                    onUpdate={handleUpdateReceipt}
                                 />
                             ))}
                             {receipts.length === 0 && (
@@ -349,6 +349,9 @@ const LoanTermsAndConditionReceiptCard = memo(
             return (
                 <>
                     <div
+                        aria-label={`Receipt ${index + 1}: ${receipt.account_id || 'No account'}, Amount: ${formatNumber(receipt.amount || 0)}`}
+                        className="cursor-pointer relative group flex flex-col focus-within:bg-background transition-colors hover:bg-background focus:ring-2 focus:ring-ring focus:outline-0 rounded-lg border border-popover bg-background/60 p-4"
+                        onKeyDown={handleCardKeyDown}
                         ref={(el) => {
                             cardRef.current = el
                             if (typeof ref === 'function') {
@@ -357,11 +360,8 @@ const LoanTermsAndConditionReceiptCard = memo(
                                 ref.current = el
                             }
                         }}
-                        tabIndex={0}
                         role="listitem"
-                        onKeyDown={handleCardKeyDown}
-                        aria-label={`Receipt ${index + 1}: ${receipt.account_id || 'No account'}, Amount: ${formatNumber(receipt.amount || 0)}`}
-                        className="cursor-pointer relative group flex flex-col focus-within:bg-background transition-colors hover:bg-background focus:ring-2 focus:ring-ring focus:outline-0 rounded-lg border border-popover bg-background/60 p-4"
+                        tabIndex={0}
                     >
                         <div className="flex items-start justify-between pb-2">
                             <div className="flex-1 min-w-0">
@@ -397,28 +397,28 @@ const LoanTermsAndConditionReceiptCard = memo(
                             <ReceiptIcon className="absolute top-5 right-5 text-muted-foreground" />
                             <div className="flex absolute drop-shadow-sm opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 group-focus:opacity-100 ease-in-out duration-200 right-0 top-0 group-hover:-right-2 group-focus-within:-right-2 group-focus-within:-top-2.5 group-hover:-top-2.5">
                                 <Button
-                                    type="button"
-                                    size="icon"
-                                    variant="secondary"
+                                    aria-label={`Edit receipt ${index + 1}`}
+                                    className="size-fit p-1"
                                     onClick={(e) => {
                                         e.stopPropagation()
                                         editModalState.onOpenChange(true)
                                     }}
-                                    className="size-fit p-1"
-                                    aria-label={`Edit receipt ${index + 1}`}
+                                    size="icon"
+                                    type="button"
+                                    variant="secondary"
                                 >
                                     <PencilFillIcon className="size-3" />
                                 </Button>
                                 <Button
-                                    size="icon"
-                                    type="button"
-                                    variant="destructive"
+                                    aria-label={`Remove receipt ${index + 1}`}
+                                    className="size-fit p-1 text-destructive hover:text-destructive-foreground hover:bg-destructive"
                                     onClick={(e) => {
                                         e.stopPropagation()
                                         onRemove(index, receipt.id)
                                     }}
-                                    className="size-fit p-1 text-destructive hover:text-destructive-foreground hover:bg-destructive"
-                                    aria-label={`Remove receipt ${index + 1}`}
+                                    size="icon"
+                                    type="button"
+                                    variant="destructive"
                                 >
                                     <TrashIcon className="size-3" />
                                 </Button>
@@ -436,7 +436,6 @@ const LoanTermsAndConditionReceiptCard = memo(
 
                     <LoanTermsAndConditionAmountReceiptCreateModal
                         {...editModalState}
-                        title="Edit Amount Receipt"
                         description="Update the amount receipt details."
                         formProps={{
                             defaultValues: receipt,
@@ -444,6 +443,7 @@ const LoanTermsAndConditionReceiptCard = memo(
                                 onUpdate(index, { ...receipt, ...updatedData })
                             },
                         }}
+                        title="Edit Amount Receipt"
                     />
                 </>
             )
@@ -540,9 +540,9 @@ const LoanTermsAndConditionSuggestedPaymentField = ({
             />
 
             <fieldset
-                disabled={disabled}
-                className="space-y-2"
                 aria-labelledby="suggested-payments-section"
+                className="space-y-2"
+                disabled={disabled}
             >
                 <div className="flex items-center justify-between">
                     <p className="font-medium" id="suggested-payments-section">
@@ -550,14 +550,14 @@ const LoanTermsAndConditionSuggestedPaymentField = ({
                     </p>
                     <div className="flex items-center gap-2">
                         <Button
-                            size="sm"
-                            type="button"
-                            tabIndex={0}
+                            aria-label="Add new suggested payment"
                             className="size-fit px-2 py-0.5 text-xs"
                             onClick={() =>
                                 addSuggestedPaymentModal.onOpenChange(true)
                             }
-                            aria-label="Add new suggested payment"
+                            size="sm"
+                            tabIndex={0}
+                            type="button"
                         >
                             Add <PlusIcon className="inline" />
                         </Button>
@@ -575,21 +575,21 @@ const LoanTermsAndConditionSuggestedPaymentField = ({
                     name="loan_terms_and_condition_suggested_payment"
                     render={({ field }) => (
                         <div
-                            ref={field.ref}
-                            role="list"
                             aria-label="Suggested payment list"
                             className="grid grid-cols-1 md:grid-cols-2 max-h-[50vh] overflow-y-auto ecoop-scroll lg:grid-cols-3 bg-muted border rounded-xl p-2 gap-4"
+                            ref={field.ref}
+                            role="list"
                         >
                             {suggestedPayments.map((payment, index) => (
                                 <LoanTermsAndConditionSuggestedPaymentCard
-                                    key={payment.fieldKey}
-                                    payment={payment}
                                     index={index}
+                                    key={payment.fieldKey}
+                                    onRemove={handleRemoveSuggestedPayment}
+                                    onUpdate={handleUpdateSuggestedPayment}
+                                    payment={payment}
                                     ref={(el) => {
                                         cardRefs.current[index] = el
                                     }}
-                                    onRemove={handleRemoveSuggestedPayment}
-                                    onUpdate={handleUpdateSuggestedPayment}
                                 />
                             ))}
 
@@ -649,6 +649,9 @@ const LoanTermsAndConditionSuggestedPaymentCard = memo(
             return (
                 <>
                     <div
+                        aria-label={`Payment method ${index + 1}: ${payment.name || 'Unnamed payment method'}`}
+                        className="cursor-pointer relative group flex flex-col focus-within:bg-background transition-colors hover:bg-background focus:ring-2 focus:ring-ring focus:outline-0 rounded-lg border border-popover bg-background/60 p-4"
+                        onKeyDown={handleCardKeyDown}
                         ref={(el) => {
                             cardRef.current = el
                             if (typeof ref === 'function') {
@@ -657,11 +660,8 @@ const LoanTermsAndConditionSuggestedPaymentCard = memo(
                                 ref.current = el
                             }
                         }}
-                        tabIndex={0}
                         role="listitem"
-                        onKeyDown={handleCardKeyDown}
-                        aria-label={`Payment method ${index + 1}: ${payment.name || 'Unnamed payment method'}`}
-                        className="cursor-pointer relative group flex flex-col focus-within:bg-background transition-colors hover:bg-background focus:ring-2 focus:ring-ring focus:outline-0 rounded-lg border border-popover bg-background/60 p-4"
+                        tabIndex={0}
                     >
                         <div className="flex items-start justify-between pb-2">
                             <div className="flex-1 min-w-0">
@@ -675,28 +675,28 @@ const LoanTermsAndConditionSuggestedPaymentCard = memo(
                             </div>
                             <div className="flex absolute drop-shadow-sm opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 group-focus:opacity-100 ease-in-out duration-200 right-0 top-0 group-hover:-right-2 group-focus-within:-right-2 group-focus-within:-top-2.5 group-hover:-top-2.5">
                                 <Button
-                                    type="button"
-                                    size="icon"
-                                    variant="secondary"
+                                    aria-label={`Edit suggested payment ${index + 1}`}
+                                    className="size-fit p-1"
                                     onClick={(e) => {
                                         e.stopPropagation()
                                         editModalState.onOpenChange(true)
                                     }}
-                                    className="size-fit p-1"
-                                    aria-label={`Edit suggested payment ${index + 1}`}
+                                    size="icon"
+                                    type="button"
+                                    variant="secondary"
                                 >
                                     <PencilFillIcon className="size-3" />
                                 </Button>
                                 <Button
-                                    size="icon"
-                                    type="button"
-                                    variant="destructive"
+                                    aria-label={`Name ${index + 1}`}
+                                    className="size-fit p-1 text-destructive hover:text-destructive-foreground hover:bg-destructive"
                                     onClick={(e) => {
                                         e.stopPropagation()
                                         onRemove(index, payment.id)
                                     }}
-                                    className="size-fit p-1 text-destructive hover:text-destructive-foreground hover:bg-destructive"
-                                    aria-label={`Name ${index + 1}`}
+                                    size="icon"
+                                    type="button"
+                                    variant="destructive"
                                 >
                                     <TrashIcon className="size-3" />
                                 </Button>
@@ -713,13 +713,6 @@ const LoanTermsAndConditionSuggestedPaymentCard = memo(
 
                     <LoanTermsAndConditionSuggestedPaymentCreateModal
                         {...editModalState}
-                        onOpenChange={(state) => {
-                            if (!state) {
-                                cardRef.current?.focus()
-                            }
-                            editModalState.onOpenChange(state)
-                        }}
-                        title="Edit Suggested Payment"
                         description="Update the suggested payment details."
                         formProps={{
                             defaultValues: payment,
@@ -727,6 +720,13 @@ const LoanTermsAndConditionSuggestedPaymentCard = memo(
                                 onUpdate(index, { ...payment, ...updatedData })
                             },
                         }}
+                        onOpenChange={(state) => {
+                            if (!state) {
+                                cardRef.current?.focus()
+                            }
+                            editModalState.onOpenChange(state)
+                        }}
+                        title="Edit Suggested Payment"
                     />
                 </>
             )

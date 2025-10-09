@@ -234,7 +234,6 @@ const Signature = ({
                     )}
                 >
                     <Button
-                        variant={'outline'}
                         className={cn(
                             'text-xs w-full',
                             isCurrentMode(SignatureModes.DRAW)
@@ -242,12 +241,12 @@ const Signature = ({
                         onClick={() =>
                             handleSignaturePicking(SignatureModes.DRAW)
                         }
+                        variant={'outline'}
                     >
                         <DrawIcon className="size-4 lg:mr-2" />
                         <span className="hidden lg:block">Draw Signature</span>
                     </Button>
                     <Button
-                        variant={'outline'}
                         className={cn(
                             'text-xs w-full',
                             isCurrentMode(SignatureModes.CAPTURE)
@@ -255,6 +254,7 @@ const Signature = ({
                         onClick={() =>
                             handleSignaturePicking(SignatureModes.CAPTURE)
                         }
+                        variant={'outline'}
                     >
                         <CameraIcon className="size-4 lg:mr-2" />
                         <span className="hidden lg:block">
@@ -262,7 +262,6 @@ const Signature = ({
                         </span>
                     </Button>
                     <Button
-                        variant={'outline'}
                         className={cn(
                             'text-xs w-full',
                             isCurrentMode(SignatureModes.UPLOAD)
@@ -270,6 +269,7 @@ const Signature = ({
                         onClick={() =>
                             handleSignaturePicking(SignatureModes.UPLOAD)
                         }
+                        variant={'outline'}
                     >
                         <HardDriveUploadIcon className="size-4 lg:mr-2" />
                         <span className="hidden lg:block">
@@ -293,8 +293,8 @@ const Signature = ({
                                                     variant={'ghost'}
                                                 >
                                                     <FullscreenIcon
-                                                        size={24}
                                                         className="ease-in-out hover:scale-105 hover:cursor-pointer"
+                                                        size={24}
                                                     />
                                                 </Button>
                                             </TooltipTrigger>
@@ -318,8 +318,8 @@ const Signature = ({
                                                     variant={'ghost'}
                                                 >
                                                     <FullscreenExitIcon
-                                                        size={24}
                                                         className="ease-in-out hover:scale-105 hover:cursor-pointer"
+                                                        size={24}
                                                     />
                                                 </Button>
                                             </TooltipTrigger>
@@ -362,20 +362,20 @@ const Signature = ({
             {trimmedData && (
                 <div className="my-2 w-fit rounded-lg border-[3px] border-primary p-2">
                     <Image
-                        ref={imageRef}
-                        src={trimmedData ?? ''}
                         alt="signature"
                         className="h-auto w-16"
+                        ref={imageRef}
+                        src={trimmedData ?? ''}
                     />
                 </div>
             )}
             <div className="flex space-x-2 py-2">
                 {currentMode !== SignatureModes.UPLOAD && (
                     <Button
-                        variant={'outline'}
                         className="text-xs"
-                        size={'sm'}
                         onClick={handleClear}
+                        size={'sm'}
+                        variant={'outline'}
                     >
                         <SmallBrushIcon className="mr-2 size-4" />
                         Clear
@@ -386,8 +386,8 @@ const Signature = ({
                         <>
                             <Button
                                 className="text-xs"
-                                size={'sm'}
                                 onClick={handleGetSignatureTrimmedData}
+                                size={'sm'}
                             >
                                 render
                             </Button>
@@ -396,7 +396,6 @@ const Signature = ({
                 {currentMode === SignatureModes.CAPTURE && (
                     <Button
                         className="text-xs"
-                        size={'sm'}
                         onClick={() => {
                             if (trimmedData) {
                                 onOpen({
@@ -410,6 +409,7 @@ const Signature = ({
                                 handleCaptureImage()
                             }
                         }}
+                        size={'sm'}
                     >
                         capture
                     </Button>
@@ -417,8 +417,8 @@ const Signature = ({
                 {currentMode !== SignatureModes.UPLOAD && !hideDownload && (
                     <Button
                         className={cn('text-xs', trimmedData ? '' : 'hidden')}
-                        size={'sm'}
                         onClick={handleDownloadDrawSignature}
+                        size={'sm'}
                     >
                         <DownloadIcon className="mr-2 size-4" />
                         download

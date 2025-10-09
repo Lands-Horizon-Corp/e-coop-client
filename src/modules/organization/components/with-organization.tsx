@@ -56,39 +56,33 @@ const UserOrganizationsDashboard = ({
     const handleVisit = async (userOrganization: IUserOrganization) => {
         setSwitchingOrgId(userOrganization.id)
 
-        try {
-            const response = await switchOrganization(userOrganization.id)
+        const response = await switchOrganization(userOrganization.id)
 
-            if (response) {
-                await queryClient.invalidateQueries({
-                    queryKey: ['auth', 'context'],
-                })
+        if (response) {
+            await queryClient.invalidateQueries({
+                queryKey: ['auth', 'context'],
+            })
 
-                updateCurrentAuth({
-                    user_organization: userOrganization,
-                    user: userOrganization.user,
-                })
+            updateCurrentAuth({
+                user_organization: userOrganization,
+                user: userOrganization.user,
+            })
 
-                const orgName = userOrganization.organization.name
-                    .toLowerCase()
-                    .replace(/[^a-z0-9]+/g, '-')
-                    .replace(/^-+|-+$/g, '')
+            const orgName = userOrganization.organization.name
+                .toLowerCase()
+                .replace(/[^a-z0-9]+/g, '-')
+                .replace(/^-+|-+$/g, '')
 
-                const branchName = userOrganization.branch.name
-                    .toLowerCase()
-                    .replace(/[^a-z0-9]+/g, '-')
-                    .replace(/^-+|-+$/g, '')
+            const branchName = userOrganization.branch.name
+                .toLowerCase()
+                .replace(/[^a-z0-9]+/g, '-')
+                .replace(/^-+|-+$/g, '')
 
-                navigate({
-                    to: `/org/${orgName}/branch/${branchName}`,
-                })
-            } else {
-                toast.error("Can't switch branch")
-            }
-        } catch (error) {
-            toast.error(`Failed to switch branch ${error}`)
-        } finally {
-            setSwitchingOrgId(null)
+            navigate({
+                to: `/org/${orgName}/branch/${branchName}`,
+            })
+        } else {
+            throw new Error('Server failed to switch organization')
         }
     }
 
@@ -96,16 +90,16 @@ const UserOrganizationsDashboard = ({
         <div className="w-full">
             <div className="my-3 flex w-full justify-center space-x-2">
                 <Button
-                    onClick={() => handleProceedToSetupOrg(navigate)}
                     className={cn('w-[300px] gap-x-2 rounded-xl')}
+                    onClick={() => handleProceedToSetupOrg(navigate)}
                 >
                     <PlusIcon />
                     Create your own Organization
                 </Button>
                 <Button
-                    variant={'secondary'}
-                    onClick={() => navigate({ to: '/onboarding/organization' })}
                     className={cn('w-[300px] gap-x-2 rounded-xl')}
+                    onClick={() => navigate({ to: '/onboarding/organization' })}
+                    variant={'secondary'}
                 >
                     <BuildingIcon />
                     Join an Organization
@@ -113,9 +107,9 @@ const UserOrganizationsDashboard = ({
             </div>
             <ScrollArea className="w-full overflow-auto p-10">
                 <Accordion
-                    type="single"
-                    collapsible
                     className={cn('w-full space-y-4')}
+                    collapsible
+                    type="single"
                 >
                     {organizationsWithBranches.map((org) => {
                         const mediaUrl = org.media?.download_url
@@ -125,14 +119,14 @@ const UserOrganizationsDashboard = ({
 
                         return (
                             <AccordionItem
+                                className={cn('rounded-3xl border-0')}
                                 key={org.id}
                                 value={org.name ?? ''}
-                                className={cn('rounded-3xl border-0')}
                             >
                                 <GradientBackground
-                                    mediaUrl={mediaUrl}
                                     className="border-secondary/50 border"
                                     imageBackgroundClassName=" size-74 "
+                                    mediaUrl={mediaUrl}
                                 >
                                     <AccordionTrigger className="relative flex min-h-32 w-full cursor-pointer items-center justify-between rounded-2xl border-0 p-4 hover:bg-secondary/50 hover:no-underline">
                                         <div className="flex flex-col w-full">
@@ -146,6 +140,7 @@ const UserOrganizationsDashboard = ({
                                             </span>
                                             {(isUserOwner || isOrgCreator) && (
                                                 <span
+                                                    className="mt-2 flex w-fit items-center gap-x-2 rounded-lg border border-border bg-secondary/40 p-2 px-4 text-sm text-foreground duration-300 ease-in-out hover:scale-105 hover:bg-primary/90 hover:text-primary-foreground"
                                                     onClick={(e) => {
                                                         e.stopPropagation()
                                                         navigate({
@@ -156,7 +151,6 @@ const UserOrganizationsDashboard = ({
                                                             },
                                                         })
                                                     }}
-                                                    className="mt-2 flex w-fit items-center gap-x-2 rounded-lg border border-border bg-secondary/40 p-2 px-4 text-sm text-foreground duration-300 ease-in-out hover:scale-105 hover:bg-primary/90 hover:text-primary-foreground"
                                                 >
                                                     <GearIcon /> Manage Branches
                                                 </span>
@@ -184,13 +178,6 @@ const UserOrganizationsDashboard = ({
                                                         currentUserOrg?.id
                                                     return (
                                                         <ListOfBranches
-                                                            key={userOrg.id}
-                                                            userOrg={userOrg}
-                                                            onClick={() =>
-                                                                handleVisit(
-                                                                    userOrg
-                                                                )
-                                                            }
                                                             isCurrent={
                                                                 isCurrentOrg
                                                             }
@@ -198,6 +185,25 @@ const UserOrganizationsDashboard = ({
                                                                 switchingOrgId ===
                                                                 userOrg.id
                                                             }
+                                                            key={userOrg.id}
+                                                            onClick={() =>
+                                                                toast.promise(
+                                                                    handleVisit(
+                                                                        userOrg
+                                                                    ),
+                                                                    {
+                                                                        loading: `Switching to ${userOrg.branch?.name}...`,
+                                                                        success: `Switched to ${userOrg.branch?.name}`,
+                                                                        error: `Failed to switch to ${userOrg.branch?.name}`,
+                                                                        finally:
+                                                                            () =>
+                                                                                setSwitchingOrgId(
+                                                                                    null
+                                                                                ),
+                                                                    }
+                                                                )
+                                                            }
+                                                            userOrg={userOrg}
                                                         />
                                                     )
                                                 }
@@ -240,7 +246,7 @@ const ListOfBranches = ({
     const isPending = userOrg.application_status === 'pending'
     return (
         <div key={userOrg.branch?.id ?? ''}>
-            <GradientBackground gradientOnly className="border">
+            <GradientBackground className="border" gradientOnly>
                 <div className="relative flex min-h-16 w-full cursor-pointer items-center gap-x-2 rounded-2xl border-0 p-4 hover:bg-secondary/50 hover:no-underline">
                     <Avatar className="size-16">
                         <AvatarImage src={mediaUrl} />
@@ -262,19 +268,19 @@ const ListOfBranches = ({
                             userOrg.branch.longitude && (
                                 <div className="mt-2">
                                     <MapPicker
+                                        className="text-xs"
+                                        disabled={false}
+                                        hideButtonCoordinates={true}
+                                        onChange={() => {}} // Read-only, no changes allowed
+                                        placeholder="View Branch Location"
+                                        size="sm"
+                                        title={`${userOrg.branch.name} Location`}
                                         value={{
                                             lat: userOrg.branch.latitude,
                                             lng: userOrg.branch.longitude,
                                         }}
-                                        onChange={() => {}} // Read-only, no changes allowed
                                         variant="outline"
-                                        size="sm"
-                                        placeholder="View Branch Location"
-                                        title={`${userOrg.branch.name} Location`}
-                                        hideButtonCoordinates={true}
-                                        disabled={false}
                                         viewOnly={true}
-                                        className="text-xs"
                                     />
                                 </div>
                             )}

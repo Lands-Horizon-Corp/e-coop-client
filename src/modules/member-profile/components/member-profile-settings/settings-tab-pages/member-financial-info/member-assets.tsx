@@ -44,31 +44,30 @@ const MemberAssetCard = ({ asset }: { asset: IMemberAsset }) => {
     return (
         <div className="flex flex-col gap-y-1 rounded-xl border bg-background p-4">
             <MemberAssetCreateUpdateFormModal
-                open={edit}
-                onOpenChange={setEdit}
-                title="Update Asset"
                 description="Modify / Update this asset information."
                 formProps={{
                     assetId: asset.id,
                     memberProfileId: asset.member_profile_id,
                     defaultValues: asset,
                 }}
+                onOpenChange={setEdit}
+                open={edit}
+                title="Update Asset"
             />
             <div className="flex justify-between">
                 <p className="font-bold">{asset.name}</p>
                 <div className="flex items-center justify-end">
                     <Button
-                        size="icon"
-                        variant="ghost"
                         className="!size-fit px-1.5 py-1.5 text-muted-foreground/40"
                         disabled={isDeleting}
                         onClick={() => setEdit(true)}
+                        size="icon"
+                        variant="ghost"
                     >
                         <PencilFillIcon className="size-4" />
                     </Button>
                     <Button
-                        size="icon"
-                        variant="ghost"
+                        className="!size-fit px-1.5 py-1.5 text-muted-foreground/40"
                         disabled={isDeleting}
                         hoverVariant="destructive"
                         onClick={() =>
@@ -84,7 +83,8 @@ const MemberAssetCard = ({ asset }: { asset: IMemberAsset }) => {
                                     }),
                             })
                         }
-                        className="!size-fit px-1.5 py-1.5 text-muted-foreground/40"
+                        size="icon"
+                        variant="ghost"
                     >
                         {isDeleting ? (
                             <LoadingSpinner />
@@ -144,9 +144,6 @@ const MemberAssets = ({ memberProfile }: Props) => {
     return (
         <div>
             <MemberAssetCreateUpdateFormModal
-                open={create}
-                onOpenChange={setCreate}
-                title="Create Asset"
                 description="Add new asset information."
                 formProps={{
                     memberProfileId: memberProfile.id,
@@ -155,22 +152,25 @@ const MemberAssets = ({ memberProfile }: Props) => {
                         member_profile_id: memberProfile.id,
                     },
                 }}
+                onOpenChange={setCreate}
+                open={create}
+                title="Create Asset"
             />
             <div className="mb-2 flex items-start justify-between">
                 <p>Assets</p>
-                <Button size="sm" onClick={() => setCreate(true)}>
+                <Button onClick={() => setCreate(true)} size="sm">
                     Add Asset <PlusIcon className="ml-1" />
                 </Button>
             </div>
             <div className="grid grid-cols-3 gap-4">
                 {memberProfile.member_assets?.map((asset) => (
-                    <MemberAssetCard key={asset.id} asset={asset} />
+                    <MemberAssetCard asset={asset} key={asset.id} />
                 ))}
                 {(!memberProfile.member_assets ||
                     memberProfile.member_assets?.length === 0) && (
                     <EmptyListIndicator
-                        message="No assets yet"
                         className="col-span-3"
+                        message="No assets yet"
                     />
                 )}
             </div>

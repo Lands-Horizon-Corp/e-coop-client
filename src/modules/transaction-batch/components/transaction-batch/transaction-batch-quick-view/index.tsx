@@ -17,10 +17,10 @@ export const BatchBlotterQuickViewModal = ({
 }) => {
     return (
         <Modal
-            titleClassName="hidden"
-            descriptionClassName="hidden"
-            closeButtonClassName="hidden"
             className={cn('bg-popover p-2', className)}
+            closeButtonClassName="hidden"
+            descriptionClassName="hidden"
+            titleClassName="hidden"
             {...props}
         >
             <div className="space-y-4">

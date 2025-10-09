@@ -82,10 +82,10 @@ export const EditableCell = <T extends object>({
             return (
                 <Input
                     {...inputProps}
-                    value={value as string}
                     className={cn('text-left', inputProps?.className)}
-                    onChange={(e) => setValue(e.target.value)}
                     onBlur={handleBlur}
+                    onChange={(e) => setValue(e.target.value)}
+                    value={value as string}
                 />
             )
         case 'number':
@@ -93,22 +93,22 @@ export const EditableCell = <T extends object>({
                 <TransactionAmountField
                     {...inputProps}
                     className={cn('text-left', inputProps?.className)}
-                    value={value as number}
+                    isDefault
+                    onBlur={handleBlur}
                     onChange={(e) => {
                         handleChange(Number(e.target.value))
                     }}
-                    onBlur={handleBlur}
-                    isDefault
+                    value={value as number}
                 />
             )
         case 'select':
             return (
                 <Select
-                    onValueChange={handleChange}
-                    value={value as string}
                     defaultValue={value as string}
-                    open={open}
                     onOpenChange={setOpen}
+                    onValueChange={handleChange}
+                    open={open}
+                    value={value as string}
                 >
                     <SelectTrigger
                         className={cn(
@@ -120,7 +120,7 @@ export const EditableCell = <T extends object>({
                     </SelectTrigger>
                     <SelectContent>
                         {options.map((option) => (
-                            <SelectItem value={option.value} key={option.value}>
+                            <SelectItem key={option.value} value={option.value}>
                                 {option.label}
                             </SelectItem>
                         ))}
@@ -130,40 +130,40 @@ export const EditableCell = <T extends object>({
         case 'checkbox':
             return (
                 <Checkbox
-                    className={cn('size-8', checkboxProps?.className)}
                     checked={value as boolean}
+                    className={cn('size-8', checkboxProps?.className)}
                     onCheckedChange={handleChange}
                 />
             )
         case 'account-picker':
             return (
                 <AccountPicker
-                    value={value as IAccount}
+                    allowClear
+                    nameOnly
                     onSelect={(selectedAccount) => {
                         handleChange(selectedAccount)
                     }}
-                    triggerClassName={cn('', inputProps?.className)}
-                    nameOnly
                     placeholder="Select an Account"
-                    allowClear
+                    triggerClassName={cn('', inputProps?.className)}
+                    value={value as IAccount}
                 />
             )
         case 'member-picker':
             return (
                 <MemberPicker
-                    value={value as IMemberProfile}
+                    allowClear
                     onSelect={(selectedMember) => {
                         handleChange(selectedMember)
                     }}
-                    triggerClassName={cn('!w-full', inputProps?.className)}
-                    triggerVariant="outline"
                     placeholder="Select Member"
                     showPBNo={false}
-                    allowClear
+                    triggerClassName={cn('!w-full', inputProps?.className)}
+                    triggerVariant="outline"
+                    value={value as IMemberProfile}
                 />
             )
         case 'date':
-            return <InputDate value={value as string} onChange={handleChange} />
+            return <InputDate onChange={handleChange} value={value as string} />
         default:
             return null
     }

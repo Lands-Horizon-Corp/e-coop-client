@@ -109,110 +109,103 @@ const MemberGovernmentBenefitCreateUpdateForm = ({
     return (
         <Form {...form}>
             <form
-                ref={formRef}
-                onSubmit={onSubmit}
                 className={cn('flex flex-col gap-y-4', className)}
+                onSubmit={onSubmit}
+                ref={formRef}
             >
                 <fieldset
-                    disabled={isPending || formProps.readOnly}
                     className="grid gap-x-6 gap-y-4 sm:gap-y-3"
+                    disabled={isPending || formProps.readOnly}
                 >
                     <fieldset className="space-y-3">
                         <FormFieldWrapper
                             control={form.control}
-                            name="name"
                             label="Name *"
+                            name="name"
                             render={({ field }) => (
                                 <Input
                                     {...field}
+                                    disabled={isDisabled(field.name)}
                                     id={field.name}
                                     placeholder="Government Benefit Name"
-                                    disabled={isDisabled(field.name)}
                                 />
                             )}
                         />
                         <div className="grid w-full gap-4 sm:grid-cols-8">
                             <FormFieldWrapper
-                                control={form.control}
-                                name="country_code"
-                                label="Country *"
                                 className="col-span-full"
+                                control={form.control}
+                                label="Country *"
+                                name="country_code"
                                 render={({ field }) => (
                                     <CountryCombobox
                                         {...field}
-                                        placeholder="Country"
                                         defaultValue={field.value}
+                                        disabled={isDisabled(field.name)}
                                         onChange={(country) =>
                                             field.onChange(country.alpha2)
                                         }
-                                        disabled={isDisabled(field.name)}
+                                        placeholder="Country"
                                     />
                                 )}
                             />
                             <FormFieldWrapper
-                                control={form.control}
-                                name="value"
-                                label="Value *"
                                 className="col-span-4"
+                                control={form.control}
+                                label="Value *"
+                                name="value"
                                 render={({ field }) => (
                                     <Input
                                         {...field}
+                                        disabled={isDisabled(field.name)}
                                         id={field.name}
                                         placeholder="Value or ID No"
-                                        disabled={isDisabled(field.name)}
                                     />
                                 )}
                             />
                             <FormFieldWrapper
-                                control={form.control}
-                                name="expiry_date"
-                                label="Expiry Date *"
                                 className="relative col-span-4"
+                                control={form.control}
                                 description="mm/dd/yyyy"
                                 descriptionClassName="absolute top-0 right-0"
+                                label="Expiry Date *"
+                                name="expiry_date"
                                 render={({ field }) => (
                                     <InputDate
                                         {...field}
-                                        placeholder="Expiry Date"
                                         className="block"
-                                        value={field.value ?? ''}
                                         disabled={isDisabled(field.name)}
+                                        placeholder="Expiry Date"
+                                        value={field.value ?? ''}
                                     />
                                 )}
                             />
                         </div>
                         <FormFieldWrapper
                             control={form.control}
-                            name="description"
                             label="Description"
+                            name="description"
                             render={({ field }) => (
                                 <TextEditor
                                     {...field}
                                     content={field.value}
+                                    disabled={isDisabled(field.name)}
                                     placeholder="Description..."
                                     textEditorClassName="!max-w-none bg-background"
-                                    disabled={isDisabled(field.name)}
                                 />
                             )}
                         />
                         <div className="grid gap-4 sm:grid-cols-2">
                             <FormFieldWrapper
                                 control={form.control}
-                                name="front_media_id"
                                 label="Front ID Photo *"
+                                name="front_media_id"
                                 render={({ field }) => {
                                     const value = form.watch('front_media')
 
                                     return (
                                         <ImageField
                                             {...field}
-                                            placeholder="Upload ID Front Photo"
-                                            value={
-                                                value
-                                                    ? (value as IMedia)
-                                                          .download_url
-                                                    : value
-                                            }
                                             onChange={(newImage) => {
                                                 if (newImage)
                                                     field.onChange(newImage.id)
@@ -223,27 +216,27 @@ const MemberGovernmentBenefitCreateUpdateForm = ({
                                                     newImage
                                                 )
                                             }}
-                                        />
-                                    )
-                                }}
-                            />
-                            <FormFieldWrapper
-                                control={form.control}
-                                name="back_media_id"
-                                label="Back ID Photo *"
-                                render={({ field }) => {
-                                    const value = form.watch('back_media')
-
-                                    return (
-                                        <ImageField
-                                            {...field}
-                                            placeholder="Upload ID Back Photo"
+                                            placeholder="Upload ID Front Photo"
                                             value={
                                                 value
                                                     ? (value as IMedia)
                                                           .download_url
                                                     : value
                                             }
+                                        />
+                                    )
+                                }}
+                            />
+                            <FormFieldWrapper
+                                control={form.control}
+                                label="Back ID Photo *"
+                                name="back_media_id"
+                                render={({ field }) => {
+                                    const value = form.watch('back_media')
+
+                                    return (
+                                        <ImageField
+                                            {...field}
                                             onChange={(newImage) => {
                                                 if (newImage)
                                                     field.onChange(newImage.id)
@@ -254,6 +247,13 @@ const MemberGovernmentBenefitCreateUpdateForm = ({
                                                     newImage
                                                 )
                                             }}
+                                            placeholder="Upload ID Back Photo"
+                                            value={
+                                                value
+                                                    ? (value as IMedia)
+                                                          .download_url
+                                                    : value
+                                            }
                                         />
                                     )
                                 }}
@@ -262,15 +262,15 @@ const MemberGovernmentBenefitCreateUpdateForm = ({
                     </fieldset>
                 </fieldset>
                 <FormFooterResetSubmit
-                    error={error}
-                    readOnly={formProps.readOnly}
-                    isLoading={isPending}
                     disableSubmit={!form.formState.isDirty}
-                    submitText={benefitId ? 'Update' : 'Create'}
+                    error={error}
+                    isLoading={isPending}
                     onReset={() => {
                         form.reset()
                         reset()
                     }}
+                    readOnly={formProps.readOnly}
+                    submitText={benefitId ? 'Update' : 'Create'}
                 />
             </form>
         </Form>
@@ -288,9 +288,9 @@ export const MemberGovernmentBenefitCreateUpdateFormModal = ({
 }) => {
     return (
         <Modal
-            title={title}
-            description={description}
             className={cn('', className)}
+            description={description}
+            title={title}
             {...props}
         >
             <MemberGovernmentBenefitCreateUpdateForm

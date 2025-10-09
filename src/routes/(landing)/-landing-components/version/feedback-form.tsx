@@ -72,31 +72,31 @@ const FeedbackForm = () => {
         <div className="space-y-2 px-2">
             <Form {...feedbackForm}>
                 <form
-                    ref={formRef}
-                    onSubmit={handleFeedBackSubmit}
                     className="space-y-3"
+                    onSubmit={handleFeedBackSubmit}
+                    ref={formRef}
                 >
-                    <fieldset disabled={isPending} className="space-y-3">
+                    <fieldset className="space-y-3" disabled={isPending}>
                         <FormField
-                            name="feedback_type"
                             control={feedbackForm.control}
+                            name="feedback_type"
                             render={({ field }) => (
                                 <FormItem>
                                     <div className="flex flex-col justify-start">
                                         <FormLabel
-                                            htmlFor={field.name}
                                             className="h-[24px] w-full text-[14px]"
+                                            htmlFor={field.name}
                                         >
                                             Feedback type
                                         </FormLabel>
                                         <FormControl>
                                             <Select
-                                                onValueChange={field.onChange}
                                                 defaultValue={field.value}
-                                                name={field.name}
                                                 disabled={isDisabled(
                                                     field.name
                                                 )}
+                                                name={field.name}
+                                                onValueChange={field.onChange}
                                             >
                                                 <SelectTrigger
                                                     className={cn(
@@ -120,8 +120,8 @@ const FeedbackForm = () => {
                                                         Bug
                                                     </SelectItem>
                                                     <SelectItem
-                                                        value="general"
                                                         className="capitalize"
+                                                        value="general"
                                                     >
                                                         General
                                                     </SelectItem>
@@ -133,45 +133,45 @@ const FeedbackForm = () => {
                             )}
                         />
                         <FormField
-                            name="description"
                             control={feedbackForm.control}
+                            name="description"
                             render={({ field }) => (
                                 <FormItem className="">
                                     <FormLabel
-                                        htmlFor={field.name}
                                         className="h-[24px] w-full text-[14px]"
+                                        htmlFor={field.name}
                                     >
                                         Description
                                     </FormLabel>
                                     <FormControl>
                                         <TextEditor
                                             content={field.value}
-                                            onChange={field.onChange}
                                             disabled={isDisabled(field.name)}
+                                            onChange={field.onChange}
                                         />
                                     </FormControl>
                                 </FormItem>
                             )}
                         />
                         <FormField
-                            name="email"
                             control={feedbackForm.control}
+                            name="email"
                             render={({ field }) => (
                                 <FormItem className="max-w-80">
                                     <div className="flex flex-col justify-start">
                                         <FormLabel
-                                            htmlFor={field.name}
                                             className="h-[24px] w-full text-[14px]"
+                                            htmlFor={field.name}
                                         >
                                             Email
                                         </FormLabel>
                                         <FormControl>
                                             <div className="flex-1 space-y-2">
                                                 <Input
-                                                    id={field.name}
                                                     className={cn(
                                                         'rounded-[10px] bg-transparent placeholder:text-[#838383]'
                                                     )}
+                                                    id={field.name}
                                                     placeholder="ecoop@email.com"
                                                     {...field}
                                                     autoComplete="email"

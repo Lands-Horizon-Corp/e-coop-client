@@ -24,7 +24,7 @@ export const SinglePictureUploadModal = ({
     ...props
 }: singlePictureUploadModalProps) => {
     return (
-        <Modal title={title} className={cn('', className)} {...props}>
+        <Modal className={cn('', className)} title={title} {...props}>
             <ImageDropPicker {...props} onPhotoChoose={onPhotoChoose} />
         </Modal>
     )
@@ -63,19 +63,19 @@ export const ImageDropPicker = ({
                     ) : (
                         <>
                             <UserAvatar
+                                className="size-48"
                                 fallback="-"
                                 src={croppedImage ?? ''}
-                                className="size-48"
                             />
                             <ActionTooltip
-                                tooltipContent="ReAdjust Image"
                                 align="center"
                                 side="right"
+                                tooltipContent="ReAdjust Image"
                             >
                                 <Button
-                                    variant="secondary"
-                                    onClick={() => setReAdjust(true)}
                                     className="absolute bottom-2 right-2 size-fit rounded-full border border-transparent p-1 hover:border-foreground/20"
+                                    onClick={() => setReAdjust(true)}
+                                    variant="secondary"
                                 >
                                     <AdjustIcon className="size-4 opacity-50 duration-300 ease-in-out group-hover:opacity-80" />
                                 </Button>
@@ -95,10 +95,6 @@ export const ImageDropPicker = ({
             {shouldOpenCropper ? (
                 <PictureCrop
                     image={newImage ?? ''}
-                    onCrop={(result) => {
-                        setReAdjust(false)
-                        setCroppedImage(result)
-                    }}
                     onCancel={() => {
                         if (croppedImage) {
                             setReAdjust(false)
@@ -107,17 +103,21 @@ export const ImageDropPicker = ({
                         }
                         setReAdjust(false)
                     }}
+                    onCrop={(result) => {
+                        setReAdjust(false)
+                        setCroppedImage(result)
+                    }}
                 />
             ) : null}
 
             <div className={cn('flex justify-end gap-2', reAdjust && 'hidden')}>
                 <Button
-                    variant="secondary"
                     disabled={!newImage && !defaultImage}
                     onClick={() => {
                         setNewImage(null)
                         setCroppedImage(null)
                     }}
+                    variant="secondary"
                 >
                     Replace
                 </Button>

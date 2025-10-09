@@ -64,9 +64,9 @@ const SearchInput = ({
     return (
         <div className="relative group/search">
             <Input
-                value={rawSearch}
-                placeholder="Search resource, route, description..."
                 onChange={(e) => setRawSearch(e.target.value)}
+                placeholder="Search resource, route, description..."
+                value={rawSearch}
             />
             <MagnifyingGlassIcon className="absolute top-1/2 -translate-y-1/2 right-5 text-muted-foreground group-hover/search:text-foreground" />
         </div>
@@ -120,20 +120,20 @@ const ListConnections = <T extends { key: string; value: string }>({
                 <h2 className="text-md font-semibold">{title}</h2>
                 {items.length > DEFAULT_COUNT && (
                     <Button
-                        variant="outline"
-                        size="sm"
                         onClick={() => setShowAll(!showAll)}
+                        size="sm"
+                        variant="outline"
                     >
                         {showAll ? 'Hide' : 'Show all'}
                     </Button>
                 )}
             </div>
-            <Accordion type="multiple" className="w-full">
+            <Accordion className="w-full" type="multiple">
                 {toShow.map((item, i) => (
                     <AccordionItem
+                        className="border rounded-md mb-1"
                         key={i}
                         value={item.key}
-                        className="border rounded-md mb-1"
                     >
                         <AccordionTrigger className="px-3 py-2 text-sm font-medium bg-muted hover:bg-muted/70 rounded-md">
                             {item.key}
@@ -171,13 +171,13 @@ const RouteDetailsSheet = ({
     )
 
     return (
-        <Sheet open={open} onOpenChange={onOpenChange}>
+        <Sheet onOpenChange={onOpenChange} open={open}>
             <SheetTrigger asChild>
                 <MagnifyingGlassIcon className="p-1 m-3 cursor-pointer hover:text-primary" />
             </SheetTrigger>
             <SheetContent
-                side="right"
                 className="min-w-[50vw] max-w-[90vw] h-full max-h-screen overflow-y-auto p-8 bg-gradient-to-br from-background via-card to-muted border-l shadow-xl flex flex-col gap-8"
+                side="right"
             >
                 <SheetHeader>
                     <SheetTitle>
@@ -205,35 +205,35 @@ const RouteDetailsSheet = ({
                         </div>
                     )}
                     <InfoSection
+                        body={route.request}
                         icon={
                             <PaperPlaneIcon className="h-4 w-4 text-primary dark:text-primary" />
                         }
-                        title="Request Type"
-                        body={route.request}
                         listComponent={
                             <ListConnections
-                                title="Request Types connections"
                                 items={validRequests}
-                                showAll={showAllReq}
                                 setShowAll={setShowAllReq}
+                                showAll={showAllReq}
+                                title="Request Types connections"
                             />
                         }
+                        title="Request Type"
                     />
                     <Separator />
                     <InfoSection
+                        body={route.response}
                         icon={
                             <CurlyBracketIcon className="h-4 w-4 text-blue-600 dark:text-blue-400" />
                         }
-                        title="Response Type"
-                        body={route.response}
                         listComponent={
                             <ListConnections
-                                title="Response Type connections"
                                 items={validResponses}
-                                showAll={showAllResp}
                                 setShowAll={setShowAllResp}
+                                showAll={showAllResp}
+                                title="Response Type connections"
                             />
                         }
+                        title="Response Type"
                     />
                 </div>
             </SheetContent>
@@ -257,14 +257,14 @@ const RouteCard = ({
     return (
         <Card className="w-full mx-auto bg-popover/70 shadow-lg border-0">
             <CardContent className="p-0">
-                <Accordion type="single" collapsible className="w-full">
+                <Accordion className="w-full" collapsible type="single">
                     <AccordionItem
-                        value="route-group"
                         className="border rounded-lg shadow-sm hover:shadow-md transition-all duration-200"
+                        value="route-group"
                     >
                         <AccordionTrigger
-                            disableIcon
                             className="px-6 py-4 hover:no-underline group"
+                            disableIcon
                         >
                             <div className="flex items-center gap-3 w-full">
                                 <div className="p-2 bg-secondary rounded-lg">
@@ -282,8 +282,8 @@ const RouteCard = ({
                                     </p>
                                 </div>
                                 <Badge
-                                    variant="secondary"
                                     className="px-3 py-1 bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300"
+                                    variant="secondary"
                                 >
                                     API Group
                                 </Badge>
@@ -316,19 +316,19 @@ const RouteCard = ({
                                         : route.route
                                     return (
                                         <div
-                                            key={`${route.route}-${index}`}
                                             className="flex items-center gap-x-2 py-3 border bg-card rounded-lg transition-colors"
+                                            key={`${route.route}-${index}`}
                                         >
                                             <RouteDetailsSheet
-                                                route={route}
-                                                showFullRoute={!!showFullRoute}
-                                                rawData={rawData}
-                                                open={openSheetIndex === index}
                                                 onOpenChange={(open) =>
                                                     setOpenSheetIndex(
                                                         open ? index : null
                                                     )
                                                 }
+                                                open={openSheetIndex === index}
+                                                rawData={rawData}
+                                                route={route}
+                                                showFullRoute={!!showFullRoute}
                                             />
                                             <div>
                                                 <div className="flex items-center gap-3 mb-3">
@@ -446,8 +446,8 @@ const APIRoutes = ({ className }: Props) => {
                         data-state={showFull ? 'checked' : 'unchecked'}
                     >
                         <span
-                            onClick={() => setShowFull(true)}
                             className="group-data-[state=checked]:text-primary text-muted-foreground/70 flex-1 cursor-pointer text-right text-sm font-medium"
+                            onClick={() => setShowFull(true)}
                         >
                             Show Full URL
                         </span>
@@ -457,10 +457,10 @@ const APIRoutes = ({ className }: Props) => {
                         />
                     </div>
                     <Button
-                        size="icon"
                         className="gap-x-2 bg-secondary/70 hover:bg-secondary"
                         disabled={isPending || isFetching}
                         onClick={() => refetch()}
+                        size="icon"
                     >
                         {isFetching ? <LoadingSpinner /> : <RefreshIcon />}
                     </Button>
@@ -473,13 +473,13 @@ const APIRoutes = ({ className }: Props) => {
                     Filter by method:
                 </span>
                 {methods.map((method) => (
-                    <div key={method} className="flex items-center space-x-2">
+                    <div className="flex items-center space-x-2" key={method}>
                         <Checkbox
-                            id={method}
                             checked={selectedMethods.includes(method)}
+                            id={method}
                             onCheckedChange={() => handleMethodToggle(method)}
                         />
-                        <label htmlFor={method} className="cursor-pointer">
+                        <label className="cursor-pointer" htmlFor={method}>
                             <APIRequestMethodBadge
                                 method={
                                     method as (typeof REQUEST_METHOD)[number]
@@ -490,10 +490,10 @@ const APIRoutes = ({ className }: Props) => {
                 ))}
                 {selectedMethods.length > 0 && (
                     <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => setSelectedMethods([])}
                         className="ml-2"
+                        onClick={() => setSelectedMethods([])}
+                        size="sm"
+                        variant="outline"
                     >
                         Clear all
                     </Button>
@@ -518,11 +518,11 @@ const APIRoutes = ({ className }: Props) => {
             <div className="space-y-2">
                 {filteredGroupRoutes.map((groupRoute) => (
                     <RouteCard
-                        searchedRoute={searchTerm}
-                        key={groupRoute.key}
-                        showFullRoute={showFull}
                         groupedRoute={groupRoute}
+                        key={groupRoute.key}
                         rawData={rawData}
+                        searchedRoute={searchTerm}
+                        showFullRoute={showFull}
                     />
                 ))}
             </div>
@@ -535,8 +535,8 @@ function highlightMatch(text: string, search: string) {
     return text.split(regex).map((part, i) =>
         regex.test(part) ? (
             <span
-                key={i}
                 className="bg-primary/50  text-foreground rounded  py-0.5"
+                key={i}
             >
                 {part}
             </span>

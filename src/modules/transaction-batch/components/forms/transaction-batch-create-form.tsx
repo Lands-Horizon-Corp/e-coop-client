@@ -80,25 +80,25 @@ const TransactionBatchCreateForm = ({
     return (
         <Form {...form}>
             <form
-                ref={formRef}
-                onSubmit={onSubmit}
                 className={cn('flex w-full flex-col gap-y-4', className)}
+                onSubmit={onSubmit}
+                ref={formRef}
             >
                 <fieldset
-                    disabled={isPending || formProps.readOnly}
                     className="grid gap-x-6 gap-y-4 sm:gap-y-3"
+                    disabled={isPending || formProps.readOnly}
                 >
                     <fieldset className="space-y-3">
                         <FormFieldWrapper
                             control={form.control}
-                            name="name"
                             label="Batch Name"
+                            name="name"
                             render={({ field }) => (
                                 <Input
                                     {...field}
+                                    disabled={isDisabled(field.name)}
                                     id={field.name}
                                     placeholder="Batch Name"
-                                    disabled={isDisabled(field.name)}
                                 />
                             )}
                         />
@@ -107,30 +107,28 @@ const TransactionBatchCreateForm = ({
                             <div className="grid gap-x-4 space-y-4">
                                 <FormFieldWrapper
                                     control={form.control}
-                                    name="amount"
                                     label="Amount *"
+                                    name="amount"
                                     render={({ field }) => (
                                         <Input
                                             {...field}
-                                            id={field.name}
-                                            type="number"
-                                            step="1"
-                                            placeholder="Amount"
                                             disabled={isDisabled(field.name)}
+                                            id={field.name}
+                                            placeholder="Amount"
+                                            step="1"
+                                            type="number"
                                         />
                                     )}
                                 />
 
                                 <FormFieldWrapper
                                     control={form.control}
-                                    name="provided_by_user_id"
                                     label="Provided By *"
+                                    name="provided_by_user_id"
                                     render={({ field }) => (
                                         <EmployeePicker
                                             {...field}
-                                            value={form.getValues(
-                                                'provided_by_user'
-                                            )}
+                                            disabled={isDisabled(field.name)}
                                             onSelect={(value) => {
                                                 field.onChange(value?.user_id)
                                                 form.setValue(
@@ -139,28 +137,26 @@ const TransactionBatchCreateForm = ({
                                                 )
                                             }}
                                             placeholder="Select Employee"
-                                            disabled={isDisabled(field.name)}
+                                            value={form.getValues(
+                                                'provided_by_user'
+                                            )}
                                         />
                                     )}
                                 />
 
                                 <FormFieldWrapper
                                     control={form.control}
-                                    name="signature_media_id"
                                     label="Provider Signature"
+                                    name="signature_media_id"
                                     render={({ field }) => {
                                         const value =
                                             form.watch('signature_media')
                                         return (
                                             <SignatureField
                                                 {...field}
-                                                placeholder="Signature of the provider that gives the fund"
-                                                value={
-                                                    value
-                                                        ? (value as IMedia)
-                                                              .download_url
-                                                        : value
-                                                }
+                                                disabled={isDisabled(
+                                                    field.name
+                                                )}
                                                 onChange={(newImage) => {
                                                     if (newImage)
                                                         field.onChange(
@@ -176,9 +172,13 @@ const TransactionBatchCreateForm = ({
                                                         newImage
                                                     )
                                                 }}
-                                                disabled={isDisabled(
-                                                    field.name
-                                                )}
+                                                placeholder="Signature of the provider that gives the fund"
+                                                value={
+                                                    value
+                                                        ? (value as IMedia)
+                                                              .download_url
+                                                        : value
+                                                }
                                             />
                                         )
                                     }}
@@ -188,14 +188,14 @@ const TransactionBatchCreateForm = ({
 
                         <FormFieldWrapper
                             control={form.control}
-                            name="description"
                             label="Description"
+                            name="description"
                             render={({ field }) => (
                                 <TextEditor
                                     {...field}
                                     content={field.value}
-                                    placeholder="Description"
                                     disabled={isDisabled(field.name)}
+                                    placeholder="Description"
                                     textEditorClassName="!max-w-none bg-background"
                                 />
                             )}
@@ -203,16 +203,16 @@ const TransactionBatchCreateForm = ({
                     </fieldset>
                 </fieldset>
                 <FormFooterResetSubmit
-                    error={error}
                     className="sticky bottom-0"
-                    readOnly={formProps.readOnly}
-                    isLoading={isPending}
                     disableSubmit={!form.formState.isDirty}
-                    submitText="Create"
+                    error={error}
+                    isLoading={isPending}
                     onReset={() => {
                         form.reset()
                         reset()
                     }}
+                    readOnly={formProps.readOnly}
+                    submitText="Create"
                 />
             </form>
         </Form>
@@ -230,9 +230,9 @@ export const TransactionBatchCreateFormModal = ({
 }) => {
     return (
         <Modal
-            title={title}
-            description={description}
             className={cn('', className)}
+            description={description}
+            title={title}
             {...props}
         >
             <TransactionBatchCreateForm

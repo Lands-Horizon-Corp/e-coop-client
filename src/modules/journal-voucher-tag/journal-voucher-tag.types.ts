@@ -1,8 +1,4 @@
-import z from 'zod'
-
 import { IBaseEntityMeta, IPaginatedResult, TEntityId } from '@/types'
-
-import { JournalVoucherTagSchema } from './journal-voucher-tag.validation'
 
 export interface IJournalVoucherTag extends IBaseEntityMeta {
     journal_voucher_id?: TEntityId
@@ -13,7 +9,7 @@ export interface IJournalVoucherTag extends IBaseEntityMeta {
     icon: string
 }
 
-export type JournalVoucherTagRequest = {
+export type IJournalVoucherTagRequest = {
     journal_voucher_id?: TEntityId
     name?: string
     description?: string
@@ -21,7 +17,6 @@ export type JournalVoucherTagRequest = {
     color?: string
     icon?: string
 }
-export type IJournalVoucherTagRequest = z.infer<typeof JournalVoucherTagSchema>
 
 export interface IJournalVoucherTagPaginated
     extends IPaginatedResult<IJournalVoucherTag> {}

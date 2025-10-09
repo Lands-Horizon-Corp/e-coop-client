@@ -78,10 +78,10 @@ const ActionSecurityModal = () => {
 
     return (
         <Modal
-            open={isOpen}
-            titleClassName="hidden"
             descriptionClassName="hidden"
             onOpenChange={onClose}
+            open={isOpen}
+            titleClassName="hidden"
         >
             <div className="flex flex-col items-center justify-center gap-y-2">
                 {success ? (
@@ -101,8 +101,8 @@ const ActionSecurityModal = () => {
                         )}
                     >
                         <fieldset
-                            disabled={isPending}
                             className="flex w-full flex-col gap-y-4"
+                            disabled={isPending}
                         >
                             <FormFieldWrapper
                                 control={form.control}
@@ -110,8 +110,8 @@ const ActionSecurityModal = () => {
                                 render={({ field }) => (
                                     <PasswordInput
                                         {...field}
-                                        id="password-field"
                                         autoComplete="off"
+                                        id="password-field"
                                         placeholder="Password"
                                     />
                                 )}
@@ -120,10 +120,10 @@ const ActionSecurityModal = () => {
 
                             <div className="flex justify-end gap-x-2">
                                 <Button
+                                    className="w-full px-8"
+                                    disabled={isPending}
                                     size="sm"
                                     type="submit"
-                                    disabled={isPending}
-                                    className="w-full px-8"
                                 >
                                     {isPending ? <LoadingSpinner /> : 'Proceed'}
                                 </Button>

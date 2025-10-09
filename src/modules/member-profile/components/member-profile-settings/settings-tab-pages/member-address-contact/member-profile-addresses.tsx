@@ -41,36 +41,35 @@ const MemberAddressCard = ({ address }: { address: IMemberAddress }) => {
     return (
         <div className="flex flex-col gap-y-1 rounded-xl border bg-background p-4">
             <MemberAddressCreateUpdateFormModal
-                open={edit}
-                onOpenChange={setEdit}
-                title="Update Address"
                 description="Modify / Update this educational attainment information."
                 formProps={{
                     memberProfileId: address.member_profile_id,
                     memberAddressId: address.id,
                     defaultValues: address,
                 }}
+                onOpenChange={setEdit}
+                open={edit}
+                title="Update Address"
             />
             <div className="flex justify-between">
                 <div className="flex items-center gap-x-2">
                     <p className="font-bold">{address.label}</p>
                 </div>
                 <fieldset
-                    disabled={isDeleting}
                     className="flex items-center justify-end"
+                    disabled={isDeleting}
                 >
                     <Button
+                        className="!size-fit px-1.5 py-1.5 text-muted-foreground/40"
+                        hoverVariant="destructive"
+                        onClick={() => setEdit(true)}
                         size="icon"
                         variant="ghost"
-                        hoverVariant="destructive"
-                        className="!size-fit px-1.5 py-1.5 text-muted-foreground/40"
-                        onClick={() => setEdit(true)}
                     >
                         <PencilFillIcon className="size-4" />
                     </Button>
                     <Button
-                        size="icon"
-                        variant="ghost"
+                        className="!size-fit px-1.5 py-1.5 text-muted-foreground/40"
                         hoverVariant="destructive"
                         onClick={() =>
                             onOpen({
@@ -85,7 +84,8 @@ const MemberAddressCard = ({ address }: { address: IMemberAddress }) => {
                                     }),
                             })
                         }
-                        className="!size-fit px-1.5 py-1.5 text-muted-foreground/40"
+                        size="icon"
+                        variant="ghost"
                     >
                         {isDeleting ? (
                             <LoadingSpinner />
@@ -156,24 +156,24 @@ const MemberProfileAddress = ({ memberProfile }: Props) => {
     return (
         <div>
             <MemberAddressCreateUpdateFormModal
-                open={create}
-                onOpenChange={setCreate}
-                title="Create Address"
                 description="Add new address information."
                 formProps={{
                     memberProfileId: memberProfile.id,
                     defaultValues: { member_profile_id: memberProfile.id },
                 }}
+                onOpenChange={setCreate}
+                open={create}
+                title="Create Address"
             />
             <div className="mb-2 flex items-start justify-between">
                 <p>Addresses</p>
-                <Button size="sm" onClick={() => setCreate(true)}>
+                <Button onClick={() => setCreate(true)} size="sm">
                     Add Address <PlusIcon className="ml-1" />
                 </Button>
             </div>
             <div className="space-y-4">
                 {memberProfile.member_addresses?.map((address) => (
-                    <MemberAddressCard key={address.id} address={address} />
+                    <MemberAddressCard address={address} key={address.id} />
                 ))}
                 {(!memberProfile.member_addresses ||
                     memberProfile.member_addresses.length === 0) && (

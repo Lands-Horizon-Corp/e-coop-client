@@ -154,10 +154,10 @@ const DataTableExport = <TData,>({
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
                 <Button
+                    className="gap-x-1 rounded-md"
+                    disabled={disabled || isLoading || forceDisabled}
                     size="sm"
                     variant={'secondary'}
-                    disabled={disabled || isLoading || forceDisabled}
-                    className="gap-x-1 rounded-md"
                 >
                     <ExportIcon className="mr-1 size-4" />
                     {isLoading ? <LoadingSpinner /> : 'Export'}

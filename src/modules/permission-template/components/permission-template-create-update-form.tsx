@@ -114,44 +114,44 @@ const PermissionTemplateCreateUpdateForm = ({
     return (
         <Form {...form}>
             <form
-                ref={formRef}
-                onSubmit={onSubmit}
                 className={cn('w-full max-w-full min-w-0 space-y-4', className)}
+                onSubmit={onSubmit}
+                ref={formRef}
             >
                 <fieldset
-                    disabled={isPending || formProps.readOnly}
                     className="space-y-4 sm:space-y-3 w-full min-w-0 max-w-full "
+                    disabled={isPending || formProps.readOnly}
                 >
                     <FormFieldWrapper
                         control={form.control}
-                        name="name"
                         label="Name"
+                        name="name"
                         render={({ field }) => (
                             <Input
                                 {...field}
-                                placeholder="Template Name"
-                                disabled={isDisabled(field.name)}
                                 className="input"
+                                disabled={isDisabled(field.name)}
+                                placeholder="Template Name"
                             />
                         )}
                     />
                     <FormFieldWrapper
                         control={form.control}
-                        name="description"
                         label="Description"
+                        name="description"
                         render={({ field }) => (
                             <Textarea
                                 {...field}
-                                placeholder="Short Description"
-                                disabled={isDisabled(field.name)}
                                 className="textarea"
+                                disabled={isDisabled(field.name)}
+                                placeholder="Short Description"
                             />
                         )}
                     />
                     <FormFieldWrapper
                         control={form.control}
-                        name="permissions"
                         label="Permissions"
+                        name="permissions"
                         render={({ field }) => (
                             <PermissionMatrix
                                 controlledState={{
@@ -169,15 +169,15 @@ const PermissionTemplateCreateUpdateForm = ({
                 </fieldset>
                 <FormFooterResetSubmit
                     className="sticky bottom-2"
-                    error={error}
-                    readOnly={formProps.readOnly}
-                    isLoading={isPending}
                     disableSubmit={!form.formState.isDirty}
-                    submitText={permissionTemplateId ? 'Update' : 'Create'}
+                    error={error}
+                    isLoading={isPending}
                     onReset={() => {
                         form.reset()
                         reset()
                     }}
+                    readOnly={formProps.readOnly}
+                    submitText={permissionTemplateId ? 'Update' : 'Create'}
                 />
             </form>
         </Form>
@@ -195,9 +195,9 @@ export const PermissionTemplateCreateUpdateFormModal = ({
 }) => {
     return (
         <Modal
-            title={title}
-            description={description}
             className={cn('!max-w-6xl', className)}
+            description={description}
+            title={title}
             {...props}
         >
             <PermissionTemplateCreateUpdateForm

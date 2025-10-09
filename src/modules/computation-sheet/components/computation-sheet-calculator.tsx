@@ -74,35 +74,35 @@ const ComputationSheetCalculator = ({
                 <div className="space-y-2 bg-secondary dark:bg-transparent p-4 dark:p-0 rounded">
                     <p>Mock Loan Input</p>
                     <MockLoanInputForm
+                        className="max-h-[60vh] overflow-y-auto ecoop-scroll"
+                        initialData={defaultInput}
                         loading={isPending}
                         onSubmit={handleCompute}
-                        initialData={defaultInput}
-                        className="max-h-[60vh] overflow-y-auto ecoop-scroll"
                     />
                 </div>
                 <div className="space-y-2 rounded">
                     <p>Deductions</p>
                     <DeductionTable
+                        deductionEntries={
+                            schemeCalculatorResponse?.entries || []
+                        }
                         totalCredit={
                             schemeCalculatorResponse?.total_credit || 0
                         }
                         totalDebit={schemeCalculatorResponse?.total_debit || 0}
-                        deductionEntries={
-                            schemeCalculatorResponse?.entries || []
-                        }
                     />
                 </div>
             </div>
             <div className="bg-popover p-4 space-y-2 rounded-xl">
                 <p>Amortization</p>
                 <AmortizationTable
-                    amortizationSummary={
-                        schemeCalculatorResponse?.amortization
-                            .amortization_summary
-                    }
                     amortizationPayments={
                         schemeCalculatorResponse?.amortization.amortizations ||
                         []
+                    }
+                    amortizationSummary={
+                        schemeCalculatorResponse?.amortization
+                            .amortization_summary
                     }
                 />
             </div>
@@ -134,9 +134,9 @@ const DeductionTable = ({
             <TableBody>
                 {deductionEntries.map((entry, index) => (
                     <TableRow
-                        tabIndex={0}
-                        key={index}
                         className="focus:bg-background/20"
+                        key={index}
+                        tabIndex={0}
                     >
                         <TableCell className="py-2 h-fit">
                             <div className="flex flex-col">

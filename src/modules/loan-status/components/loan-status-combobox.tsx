@@ -80,8 +80,6 @@ const LoanStatusCombobox = React.forwardRef<HTMLButtonElement, Props>(
         return (
             <>
                 <LoanStatusCreateUpdateFormModal
-                    open={createModal}
-                    onOpenChange={setCreateModal}
                     formProps={{
                         ...loanStatusComboboxCreateProps,
                         onSuccess: (newLoanStatus) => {
@@ -89,28 +87,30 @@ const LoanStatusCombobox = React.forwardRef<HTMLButtonElement, Props>(
                             setCreateModal(false)
                         },
                     }}
+                    onOpenChange={setCreateModal}
+                    open={createModal}
                 />
-                <Popover modal open={open} onOpenChange={setOpen}>
+                <Popover modal onOpenChange={setOpen} open={open}>
                     <PopoverTrigger asChild>
                         <Button
                             {...other}
-                            ref={ref}
-                            variant="outline"
-                            role="combobox"
                             aria-expanded={open}
-                            tabIndex={0}
                             className={cn(
                                 'w-full justify-between px-3',
                                 className
                             )}
                             disabled={disabled || isLoading}
+                            ref={ref}
+                            role="combobox"
+                            tabIndex={0}
+                            variant="outline"
                         >
                             {selectedOption ? (
                                 <>
                                     {selectedOption.icon && (
                                         <RenderIcon
-                                            icon={selectedOption.icon as TIcon}
                                             className="inline mr-1"
+                                            icon={selectedOption.icon as TIcon}
                                             style={{
                                                 color: selectedOption.color,
                                             }}
@@ -129,8 +129,8 @@ const LoanStatusCombobox = React.forwardRef<HTMLButtonElement, Props>(
                     <PopoverContent className="max-h-[--radix-popover-content-available-height] w-[--radix-popover-trigger-width] p-0">
                         <Command>
                             <CommandInput
-                                placeholder="Search Loan Status..."
                                 className="h-9"
+                                placeholder="Search Loan Status..."
                             />
                             {isLoading ? (
                                 <CommandEmpty>
@@ -146,10 +146,10 @@ const LoanStatusCombobox = React.forwardRef<HTMLButtonElement, Props>(
                                         <>
                                             <CommandGroup>
                                                 <CommandItem
+                                                    onClick={() => {}}
                                                     onSelect={() => {
                                                         setCreateModal(true)
                                                     }}
-                                                    onClick={() => {}}
                                                 >
                                                     <PlusIcon /> Create new loan
                                                     status
@@ -162,18 +162,18 @@ const LoanStatusCombobox = React.forwardRef<HTMLButtonElement, Props>(
                                         {data?.map((option) => (
                                             <CommandItem
                                                 key={option.id}
-                                                value={option.id}
                                                 onSelect={() => {
                                                     setOpen(false)
                                                     onChange?.(option)
                                                 }}
+                                                value={option.id}
                                             >
                                                 <span className="flex items-center">
                                                     <RenderIcon
+                                                        className="inline mr-1.5"
                                                         icon={
                                                             option.icon as TIcon
                                                         }
-                                                        className="inline mr-1.5"
                                                         style={{
                                                             color: option.color,
                                                         }}

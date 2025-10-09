@@ -90,13 +90,14 @@ const Image = forwardRef<HTMLImageElement, ImageProps>(
 
         return (
             <div
+                aria-label={isLoaded ? alt : ariaLoadingLabel} // Dynamic aria-label for loading state
                 className={cn('relative overflow-hidden', className)}
                 role="img" // Improved accessibility: treat wrapper as image role
-                aria-label={isLoaded ? alt : ariaLoadingLabel} // Dynamic aria-label for loading state
             >
                 {/* Placeholder/Blur background */}
                 {isPlaceholderVisible && (
                     <div
+                        aria-hidden="true" // Hide from screen readers
                         className="absolute inset-0"
                         style={{
                             backgroundImage: placeholder
@@ -109,41 +110,40 @@ const Image = forwardRef<HTMLImageElement, ImageProps>(
                             filter: `blur(${blurRadius}px)`,
                             transform: 'scale(1.1)',
                         }}
-                        aria-hidden="true" // Hide from screen readers
                     />
                 )}
 
                 {/* Loading skeleton */}
                 {!isLoaded && !isPlaceholderVisible && (
                     <div
-                        className="absolute inset-0 animate-pulse"
                         aria-hidden="true" // Hide from screen readers
+                        className="absolute inset-0 animate-pulse"
                     />
                 )}
 
                 {/* Main image */}
                 <img
                     {...imgProps}
-                    ref={ref}
-                    src={currentSrc}
                     alt={alt}
-                    width={width}
-                    height={height}
-                    loading={priority ? 'eager' : loading}
-                    sizes={sizes}
-                    srcSet={srcSet} // Added: Support for responsive images
-                    onLoad={handleLoad}
-                    onError={handleError}
                     className={cn(
                         'h-full w-full transition-opacity duration-300 select-none pointer-events-none',
                         isLoaded ? 'opacity-100' : 'opacity-0',
                         hasError && 'opacity-50'
                     )}
-                    style={imageStyle}
                     decoding="async"
                     draggable={false}
+                    height={height}
+                    loading={priority ? 'eager' : loading}
                     onContextMenu={(e) => e.preventDefault()}
                     onDragStart={(e) => e.preventDefault()}
+                    onError={handleError}
+                    onLoad={handleLoad}
+                    ref={ref}
+                    sizes={sizes}
+                    src={currentSrc}
+                    srcSet={srcSet} // Added: Support for responsive images
+                    style={imageStyle}
+                    width={width}
                 />
             </div>
         )

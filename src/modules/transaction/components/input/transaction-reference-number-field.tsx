@@ -17,7 +17,6 @@ const TransactionReferenceNumber = forwardRef<
         <div className={`relative flex items-center ${className}`}>
             <Input
                 {...rest}
-                ref={ref}
                 className={cn(
                     'border !border-primary/20',
                     isDefault
@@ -25,6 +24,7 @@ const TransactionReferenceNumber = forwardRef<
                         : 'text-lg font-bold text-primary placeholder:text-sm placeholder:font-normal placeholder:text-foreground/40',
                     InputClassName
                 )}
+                ref={ref}
             />
         </div>
     )

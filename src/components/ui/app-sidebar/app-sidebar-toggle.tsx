@@ -8,9 +8,9 @@ const AppSidebarToggle = () => {
 
     return (
         <Button
+            className="size-fit p-2"
             onClick={() => toggleSidebar()}
             variant="secondary"
-            className="size-fit p-2"
         >
             <SidebarLeftIcon />
         </Button>

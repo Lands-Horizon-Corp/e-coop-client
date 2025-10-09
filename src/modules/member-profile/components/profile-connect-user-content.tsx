@@ -21,22 +21,22 @@ const ProfileConnectUserModalDisplay = ({ memberProfile, userOrg }: Props) => {
                     <div className="flex items-center gap-3">
                         <PreviewMediaWrapper media={memberProfile.media}>
                             <ImageDisplay
+                                className="h-12 w-12 border-2 border-white shadow-sm dark:border-gray-700"
+                                fallback={
+                                    memberProfile.first_name.charAt(0) ?? '-'
+                                }
                                 src={
                                     memberProfile.media?.download_url ||
                                     '/placeholder.svg'
                                 }
-                                fallback={
-                                    memberProfile.first_name.charAt(0) ?? '-'
-                                }
-                                className="h-12 w-12 border-2 border-white shadow-sm dark:border-gray-700"
                             />
                         </PreviewMediaWrapper>
                         <div className="min-w-0 flex-1">
                             <div className="mb-1 flex items-center gap-2">
                                 <UserIcon className="h-4 w-4 text-blue-600 dark:text-blue-400" />
                                 <Badge
-                                    variant="secondary"
                                     className="bg-blue-100 text-xs text-blue-700 hover:bg-blue-100 dark:bg-blue-900 dark:text-blue-300 dark:hover:bg-blue-900"
+                                    variant="secondary"
                                 >
                                     Member Profile
                                 </Badge>
@@ -67,22 +67,22 @@ const ProfileConnectUserModalDisplay = ({ memberProfile, userOrg }: Props) => {
                     <div className="flex items-center gap-3">
                         <PreviewMediaWrapper media={userOrg.user.media}>
                             <ImageDisplay
+                                className="h-12 w-12 border-2 border-white shadow-sm dark:border-gray-700"
+                                fallback={
+                                    userOrg.user.user_name.charAt(0) ?? '-'
+                                }
                                 src={
                                     userOrg.user.media?.download_url ||
                                     '/placeholder.svg'
                                 }
-                                fallback={
-                                    userOrg.user.user_name.charAt(0) ?? '-'
-                                }
-                                className="h-12 w-12 border-2 border-white shadow-sm dark:border-gray-700"
                             />
                         </PreviewMediaWrapper>
                         <div className="min-w-0 flex-1">
                             <div className="mb-1 flex items-center gap-2">
                                 <ShieldIcon className="h-4 w-4 text-primary dark:text-primary" />
                                 <Badge
-                                    variant="secondary"
                                     className="bg-primary/10 text-xs text-primary/80 hover:bg-primary/10 dark:bg-primary/10 dark:text-primary dark:hover:bg-primary/10"
+                                    variant="secondary"
                                 >
                                     User Account
                                 </Badge>

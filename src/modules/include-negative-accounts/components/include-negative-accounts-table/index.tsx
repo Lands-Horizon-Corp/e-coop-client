@@ -140,16 +140,6 @@ const IncludeNegativeAccountTable = ({
         <FilterContext.Provider value={filterState}>
             <div className={cn('flex h-full flex-col gap-y-2', className)}>
                 <DataTableToolbar
-                    globalSearchProps={{
-                        defaultMode: 'equal',
-                        defaultVisible: false,
-                        targets: includeNegativeAccountGlobalSearchTargets,
-                    }}
-                    table={table}
-                    refreshActionProps={{
-                        onClick: () => refetch(),
-                        isLoading: isPending || isRefetching,
-                    }}
                     deleteActionProps={{
                         onDeleteSuccess: () =>
                             queryClient.invalidateQueries({
@@ -160,21 +150,31 @@ const IncludeNegativeAccountTable = ({
                                 ids: selected.map((item) => item.id),
                             }),
                     }}
-                    scrollableProps={{ isScrollable, setIsScrollable }}
                     filterLogicProps={{
                         filterLogic: filterState.filterLogic,
                         setFilterLogic: filterState.setFilterLogic,
                     }}
+                    globalSearchProps={{
+                        defaultMode: 'equal',
+                        defaultVisible: false,
+                        targets: includeNegativeAccountGlobalSearchTargets,
+                    }}
+                    refreshActionProps={{
+                        onClick: () => refetch(),
+                        isLoading: isPending || isRefetching,
+                    }}
+                    scrollableProps={{ isScrollable, setIsScrollable }}
+                    table={table}
                     {...toolbarProps}
                 />
                 <DataTable
-                    table={table}
-                    isStickyHeader
-                    isStickyFooter
                     className="mb-2"
                     isScrollable={isScrollable}
-                    setColumnOrder={setColumnOrder}
+                    isStickyFooter
+                    isStickyHeader
                     RowContextComponent={RowContextComponent}
+                    setColumnOrder={setColumnOrder}
+                    table={table}
                 />
             </div>
         </FilterContext.Provider>

@@ -39,7 +39,6 @@ const BranchSettings = ({ className }: Props) => {
     })
 
     useSubscribe(`branch.update.${user_organization.branch_id}`, () => {
-        alert('changed')
         refetch()
     })
 
@@ -54,7 +53,6 @@ const BranchSettings = ({ className }: Props) => {
             </div>
             {user_organization.branch && (
                 <BranchSettingsForm
-                    resetOnDefaultChange
                     defaultValues={user_organization.branch.branch_setting}
                     onSuccess={(data) =>
                         updateCurrentAuth({
@@ -67,6 +65,7 @@ const BranchSettings = ({ className }: Props) => {
                             },
                         })
                     }
+                    resetOnDefaultChange
                 />
             )}
             {!user_organization.branch && (

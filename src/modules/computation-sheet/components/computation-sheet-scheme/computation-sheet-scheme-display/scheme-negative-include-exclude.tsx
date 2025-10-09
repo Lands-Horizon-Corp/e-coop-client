@@ -32,6 +32,8 @@ const NegativeIncludeExclude = forwardRef<HTMLDivElement, Props>(
                         }}
                     />
                     <IncludeNegativeAccountTable
+                        className="max-h-[40vh] max-w-full min-w-0 min-h-[40vh]"
+                        computationSheetId={computationSheetId}
                         toolbarProps={{
                             createActionProps: {
                                 onClick: () =>
@@ -40,8 +42,6 @@ const NegativeIncludeExclude = forwardRef<HTMLDivElement, Props>(
                                     ),
                             },
                         }}
-                        computationSheetId={computationSheetId}
-                        className="max-h-[40vh] max-w-full min-w-0 min-h-[40vh]"
                     />
                 </div>
                 <div className="space-y-2 bg-popover rounded-xl p-4 ">
@@ -55,6 +55,8 @@ const NegativeIncludeExclude = forwardRef<HTMLDivElement, Props>(
                         }}
                     />
                     <BrowseExcludeIncludeAccountTable
+                        className="max-h-[45vh] max-w-full min-w-0 min-h-[45vh]"
+                        computationSheetId={computationSheetId}
                         toolbarProps={{
                             createActionProps: {
                                 onClick: () =>
@@ -63,8 +65,6 @@ const NegativeIncludeExclude = forwardRef<HTMLDivElement, Props>(
                                     ),
                             },
                         }}
-                        computationSheetId={computationSheetId}
-                        className="max-h-[45vh] max-w-full min-w-0 min-h-[45vh]"
                     />
                 </div>
             </div>

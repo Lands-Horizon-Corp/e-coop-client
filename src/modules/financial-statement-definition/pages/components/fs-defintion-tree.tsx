@@ -363,20 +363,17 @@ const FinancialStatementDefinitionTreeViewer = ({
                 />
             )} */}
             <AccountCreateUpdateFormModal
-                open={openViewAccountModal}
-                onOpenChange={setViewAccountModalOpen}
-                title="Account Details"
                 description="this account is part of the General Ledger Definition"
                 formProps={{
                     defaultValues: { ...selectedAccounts },
                     readOnly: true,
                 }}
+                onOpenChange={setViewAccountModalOpen}
+                open={openViewAccountModal}
+                title="Account Details"
             />
             {financialStatementAccountsGroupingId && (
                 <FinancialStatementCreateUpdateFormModal
-                    onOpenChange={setOpenCreateFinancialStatementModal}
-                    open={openCreateFinancialStatementModal}
-                    title={createOrUpdateTitle}
                     description={createOrUpdateDescription}
                     formProps={{
                         defaultValues: formDefaultValues,
@@ -388,32 +385,32 @@ const FinancialStatementDefinitionTreeViewer = ({
                         readOnly: isReadOnly,
                         onSuccess: OnSuccessCreateUpdateFSModal,
                     }}
+                    onOpenChange={setOpenCreateFinancialStatementModal}
+                    open={openCreateFinancialStatementModal}
+                    title={createOrUpdateTitle}
                 />
             )}
 
             <AccountPicker
-                open={openAddAccountPickerModal}
-                onOpenChange={setAddAccountPickerModalOpen}
                 modalOnly
+                onOpenChange={setAddAccountPickerModalOpen}
                 onSelect={(account) => {
                     handleAccountSelection(account)
                 }}
+                open={openAddAccountPickerModal}
             />
             <div className="flex gap-2 py-4">
                 <Button
-                    size="sm"
                     className="rounded-xl"
-                    onClick={addfinancialStatementDefinitionEntriesId}
                     disabled={isReadOnly || isPending}
+                    onClick={addfinancialStatementDefinitionEntriesId}
+                    size="sm"
                 >
-                    <PlusIcon size={15} className="mr-2" />
+                    <PlusIcon className="mr-2" size={15} />
                     Add FS
                 </Button>
                 <Input
-                    type="text"
                     className="rounded-2xl"
-                    placeholder="Search General Ledger..."
-                    value={searchTerm}
                     disabled={isReadOnly || isPending || !hasChildren}
                     onChange={(e) => setSearchTerm(e.target.value)}
                     onKeyDown={(e) => {
@@ -421,10 +418,11 @@ const FinancialStatementDefinitionTreeViewer = ({
                             handleSearch()
                         }
                     }}
+                    placeholder="Search General Ledger..."
+                    type="text"
+                    value={searchTerm}
                 />
                 <Button
-                    onClick={handleSearch}
-                    variant={'secondary'}
                     className="flex items-center rounded-2xl space-x-2"
                     disabled={
                         !isSearchOnChanged ||
@@ -432,6 +430,8 @@ const FinancialStatementDefinitionTreeViewer = ({
                         isReadOnly ||
                         isPending
                     }
+                    onClick={handleSearch}
+                    variant={'secondary'}
                 >
                     <MagnifyingGlassIcon className="mr-2" />
                     Search
@@ -441,13 +441,13 @@ const FinancialStatementDefinitionTreeViewer = ({
                 <Tooltip>
                     <TooltipTrigger>
                         <Button
-                            size={'sm'}
-                            variant={'outline'}
                             className="rounded-xl text-xs"
                             disabled={isReadOnly || isPending || !treeData}
                             onClick={() => {
                                 resetExpansion()
                             }}
+                            size={'sm'}
+                            variant={'outline'}
                         >
                             <CollapseIcon />
                         </Button>
@@ -455,16 +455,16 @@ const FinancialStatementDefinitionTreeViewer = ({
                     <TooltipContent>Collapse All</TooltipContent>
                 </Tooltip>
                 <Button
-                    disabled={isHandleOrderDisabled}
-                    variant={'outline'}
                     className="rounded-xl text-xs"
-                    size="sm"
+                    disabled={isHandleOrderDisabled}
                     onClick={() =>
                         handleUpdateOrder(
                             changedFinancialStatementItems,
                             changedAccounts
                         )
                     }
+                    size="sm"
+                    variant={'outline'}
                 >
                     {isPending ? (
                         <LoadingSpinner className="animate-spin" />
@@ -474,7 +474,7 @@ const FinancialStatementDefinitionTreeViewer = ({
                 </Button>
             </div>
             <DndContext
-                sensors={topLevelSensors}
+                collisionDetection={closestCorners}
                 onDragEnd={(event) =>
                     moveFinancialStatementLedgerNode(
                         [],
@@ -482,7 +482,7 @@ const FinancialStatementDefinitionTreeViewer = ({
                         event.over?.id || ''
                     )
                 }
-                collisionDetection={closestCorners}
+                sensors={topLevelSensors}
             >
                 <SortableContext
                     items={financialStatementDefinition.map(
@@ -496,20 +496,20 @@ const FinancialStatementDefinitionTreeViewer = ({
                             ?.map((node) => {
                                 return (
                                     <FinancialStatementDefinitionNode
-                                        key={node.id}
-                                        node={node}
                                         depth={0}
-                                        parentPath={[]}
-                                        refetch={refetch}
-                                        onDragEndNested={
-                                            moveFinancialStatementLedgerNode
+                                        handleRemoveAccountFromFSDefinition={
+                                            handleRemoveAccountFromFSDefinition
                                         }
                                         hanldeDeleteFinancialStatemenetDefinition={
                                             hanldeDeletefinancialStatementDefinitionEntriesId
                                         }
-                                        handleRemoveAccountFromFSDefinition={
-                                            handleRemoveAccountFromFSDefinition
+                                        key={node.id}
+                                        node={node}
+                                        onDragEndNested={
+                                            moveFinancialStatementLedgerNode
                                         }
+                                        parentPath={[]}
+                                        refetch={refetch}
                                     />
                                 )
                             })
@@ -517,14 +517,14 @@ const FinancialStatementDefinitionTreeViewer = ({
                         <div className="flex flex-col gap-y-5 items-center justify-center h-64">
                             <p>No Financial Statement Definitions found.</p>
                             <Button
-                                variant="outline"
                                 className="ml-4"
+                                disabled={isReadOnly}
                                 onClick={
                                     addfinancialStatementDefinitionEntriesId
                                 }
-                                disabled={isReadOnly}
+                                variant="outline"
                             >
-                                <PlusIcon size={15} className="mr-2" />
+                                <PlusIcon className="mr-2" size={15} />
                                 Add Financial Statement Definition
                             </Button>
                         </div>

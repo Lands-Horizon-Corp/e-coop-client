@@ -61,20 +61,20 @@ const TransactionBatchMiniViewCard = ({
                 </div>
                 <div className="flex items-center gap-x-1">
                     <Button
+                        className="size-fit bg-primary p-2 text-xs text-primary-foreground dark:bg-secondary dark:text-secondary-foreground"
+                        hoverVariant="primary"
+                        onClick={() => summaryModal.onOpenChange(true)}
                         size="sm"
                         type="button"
-                        hoverVariant="primary"
-                        className="size-fit bg-primary p-2 text-xs text-primary-foreground dark:bg-secondary dark:text-secondary-foreground"
-                        onClick={() => summaryModal.onOpenChange(true)}
                     >
                         Summary
                     </Button>
                     <Button
+                        className="size-fit bg-primary p-2 text-xs text-primary-foreground dark:bg-secondary dark:text-secondary-foreground"
+                        hoverVariant="primary"
+                        onClick={() => historyModal.onOpenChange(true)}
                         size="sm"
                         type="button"
-                        hoverVariant="primary"
-                        className="size-fit bg-primary p-2 text-xs text-primary-foreground dark:bg-secondary dark:text-secondary-foreground"
-                        onClick={() => historyModal.onOpenChange(true)}
                     >
                         History
                     </Button>

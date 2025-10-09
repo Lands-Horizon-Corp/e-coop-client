@@ -28,8 +28,8 @@ const memberGenderHistoryColumns = (): ColumnDef<IMemberGenderHistory>[] => [
                 <ColumnActions {...props}>
                     <TextFilter
                         defaultMode="contains"
-                        field="memberGender.name"
                         displayText="Gender"
+                        field="memberGender.name"
                     />
                 </ColumnActions>
             </DataTableColumnHeader>
@@ -46,8 +46,8 @@ const memberGenderHistoryColumns = (): ColumnDef<IMemberGenderHistory>[] => [
                 <ColumnActions {...props}>
                     <TextFilter<IMemberGenderHistory>
                         defaultMode="contains"
-                        field="memberGender.description"
                         displayText="Description"
+                        field="memberGender.description"
                     />
                 </ColumnActions>
             </DataTableColumnHeader>

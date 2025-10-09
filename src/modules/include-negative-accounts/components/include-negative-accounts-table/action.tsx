@@ -83,15 +83,15 @@ const IncludeNegativeAccountAction = ({
             </div>
 
             <RowActionsGroup
-                onEdit={{
-                    text: 'Edit',
-                    isAllowed: true,
-                    onClick: handleEdit,
-                }}
                 onDelete={{
                     text: 'Delete',
                     isAllowed: !isDeleting,
                     onClick: handleDelete,
+                }}
+                onEdit={{
+                    text: 'Edit',
+                    isAllowed: true,
+                    onClick: handleEdit,
                 }}
             />
         </>
@@ -123,7 +123,6 @@ export const IncludeNegativeAccountRowContext = ({
             />
 
             <DataTableRowContext
-                row={row}
                 onDelete={{
                     text: 'Delete',
                     isAllowed: !isDeleting,
@@ -134,6 +133,7 @@ export const IncludeNegativeAccountRowContext = ({
                     isAllowed: true,
                     onClick: handleEdit,
                 }}
+                row={row}
             >
                 {children}
             </DataTableRowContext>

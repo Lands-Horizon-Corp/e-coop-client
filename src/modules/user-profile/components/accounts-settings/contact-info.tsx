@@ -18,10 +18,10 @@ export const ContactInfo = () => {
 
             <div className="space-y-0.5">
                 <Link
-                    to="/contact"
-                    target="_blank"
-                    rel="noopener noreferrer"
                     className="flex items-center gap-1.5 px-2 py-1 text-muted-foreground hover:text-foreground transition-colors duration-200 rounded-md hover:bg-accent"
+                    rel="noopener noreferrer"
+                    target="_blank"
+                    to="/contact"
                 >
                     <ChatBubbleIcon className="size-4 inline" />
                     Support

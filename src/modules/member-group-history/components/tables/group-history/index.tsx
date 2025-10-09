@@ -134,16 +134,6 @@ const MemberGroupHistoryTable = ({
                 )}
             >
                 <DataTableToolbar
-                    globalSearchProps={{
-                        defaultMode: 'equal',
-                        targets: memberGroupHistoryGlobalSearchTargets,
-                    }}
-                    table={table}
-                    refreshActionProps={{
-                        onClick: () => refetch(),
-                        isLoading: isPending || isRefetching,
-                    }}
-                    scrollableProps={{ isScrollable, setIsScrollable }}
                     // exportActionProps={{
                     //     pagination,
                     //     isLoading: isPending,
@@ -154,19 +144,29 @@ const MemberGroupHistoryTable = ({
                         filterLogic: filterState.filterLogic,
                         setFilterLogic: filterState.setFilterLogic,
                     }}
+                    globalSearchProps={{
+                        defaultMode: 'equal',
+                        targets: memberGroupHistoryGlobalSearchTargets,
+                    }}
+                    refreshActionProps={{
+                        onClick: () => refetch(),
+                        isLoading: isPending || isRefetching,
+                    }}
+                    scrollableProps={{ isScrollable, setIsScrollable }}
+                    table={table}
                     {...toolbarProps}
                 />
                 <DataTable
-                    table={table}
-                    isStickyHeader
-                    isStickyFooter
                     isScrollable={isScrollable}
+                    isStickyFooter
+                    isStickyHeader
                     setColumnOrder={setColumnOrder}
+                    table={table}
                 />
                 <DataTablePagination
+                    pageSizes={PAGE_SIZES_SMALL.slice(1)}
                     table={table}
                     totalSize={totalSize}
-                    pageSizes={PAGE_SIZES_SMALL.slice(1)}
                 />
             </div>
         </FilterContext.Provider>

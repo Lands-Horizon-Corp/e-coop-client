@@ -25,9 +25,9 @@ function SidePanelPoster() {
 
                 {/* Main image */}
                 <ImageMatch
-                    src="/pictures/go-up.png"
                     alt="Cooperative community working together"
                     containerClassName="overflow-hidden rounded-3xl max-w-xs transform group-hover:scale-105 transition-transform duration-300"
+                    src="/pictures/go-up.png"
                 />
                 <RandomDots count={50} />
             </div>

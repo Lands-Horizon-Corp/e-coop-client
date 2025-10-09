@@ -40,12 +40,12 @@ const MemberGroupPage = () => {
         <PageContainer>
             <MemberGroupCreateUpdateFormModal {...createModal} />
             <MemberGroupTable
+                className="max-h-[90vh] min-h-[90vh] w-full"
                 toolbarProps={{
                     createActionProps: {
                         onClick: () => createModal.onOpenChange(true),
                     },
                 }}
-                className="max-h-[90vh] min-h-[90vh] w-full"
             />
         </PageContainer>
     )

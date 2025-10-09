@@ -83,41 +83,41 @@ const MemberOccupationCreateUpdateForm = ({
     return (
         <Form {...form}>
             <form
-                ref={formRef}
-                onSubmit={onSubmit}
                 className={cn('flex w-full flex-col gap-y-4', className)}
+                onSubmit={onSubmit}
+                ref={formRef}
             >
                 <fieldset
-                    disabled={isPending || formProps.readOnly}
                     className="grid gap-x-6 gap-y-4 sm:gap-y-3"
+                    disabled={isPending || formProps.readOnly}
                 >
                     <fieldset className="space-y-3">
                         <FormFieldWrapper
                             control={form.control}
-                            name="name"
                             label="Name"
+                            name="name"
                             render={({ field }) => (
                                 <Input
                                     {...field}
-                                    id={field.name}
-                                    placeholder="Member Occupation Name"
                                     autoComplete="member-occupation-name"
                                     disabled={isDisabled(field.name)}
+                                    id={field.name}
+                                    placeholder="Member Occupation Name"
                                 />
                             )}
                         />
 
                         <FormFieldWrapper
                             control={form.control}
-                            name="description"
                             label="Description"
+                            name="description"
                             render={({ field }) => (
                                 <Textarea
                                     {...field}
-                                    id={field.name}
-                                    placeholder="Description"
                                     autoComplete="member-occupation-description"
                                     disabled={isDisabled(field.name)}
+                                    id={field.name}
+                                    placeholder="Description"
                                 />
                             )}
                         />
@@ -125,15 +125,15 @@ const MemberOccupationCreateUpdateForm = ({
                 </fieldset>
 
                 <FormFooterResetSubmit
-                    error={error}
-                    readOnly={formProps.readOnly}
-                    isLoading={isPending}
                     disableSubmit={!form.formState.isDirty}
-                    submitText={memberOccupationId ? 'Update' : 'Create'}
+                    error={error}
+                    isLoading={isPending}
                     onReset={() => {
                         form.reset()
                         reset()
                     }}
+                    readOnly={formProps.readOnly}
+                    submitText={memberOccupationId ? 'Update' : 'Create'}
                 />
             </form>
         </Form>
@@ -151,9 +151,9 @@ export const MemberOccupationCreateUpdateFormModal = ({
 }) => {
     return (
         <Modal
-            title={title}
-            description={description}
             className={cn('', className)}
+            description={description}
+            title={title}
             {...props}
         >
             <MemberOccupationCreateUpdateForm

@@ -75,9 +75,9 @@ export const CreateBranch = () => {
     return (
         <div className="w-full">
             <OrganizationHeader
-                organizationId={organizationId}
                 isPending={isPendingOrganization}
                 organization={organization}
+                organizationId={organizationId}
             />
             <BranchesList
                 branches={branches}
@@ -147,15 +147,14 @@ function OrganizationHeader({
 
     return (
         <GradientBackground
-            imageBackgroundClassName="size-100 !opacity-20 !-z-40 "
             className="p-7 "
+            imageBackgroundClassName="size-100 !opacity-20 !-z-40 "
             mediaUrl={organization?.cover_media?.url}
         >
             <div className="flex gap-x-5 z-[999]">
                 <CreateUpdateBranchFormModal
                     {...createModal}
                     className="w-full min-w-[80rem] max-w-[80rem]"
-                    title="Create Branch"
                     description="Fill out the form to add new branch"
                     formProps={{
                         organizationId,
@@ -170,6 +169,7 @@ function OrganizationHeader({
                             })
                         },
                     }}
+                    title="Create Branch"
                 />
                 <UpdateOrganizationFormModal
                     {...updateModal}
@@ -225,9 +225,9 @@ function OrganizationHeader({
                         Add Branch
                     </Button>
                     <Button
-                        variant={'secondary'}
-                        onClick={() => updateModal.onOpenChange(true)}
                         className="w-full"
+                        onClick={() => updateModal.onOpenChange(true)}
+                        variant={'secondary'}
                     >
                         <EditPencilIcon className="mr-2" />
                         Edit Organization
@@ -255,7 +255,7 @@ function BranchesList({
         return (
             <div className="flex flex-col gap-y-3 px-2 py-5">
                 {Array.from({ length: 2 }).map((_, index) => (
-                    <div key={index} className="flex gap-x-5 px-2 py-5">
+                    <div className="flex gap-x-5 px-2 py-5" key={index}>
                         <div className="relative flex min-h-10 w-full rounded-2xl border-0 p-5">
                             <Skeleton className="size-16 rounded-full" />
                             <div className="ml-2 flex grow flex-col">
@@ -299,9 +299,9 @@ function BranchesList({
                 <div className="flex  flex-col gap-y-3 overflow-y-auto">
                     {branches.map((branch) => (
                         <BranchBar
-                            key={branch.id}
                             branch={branch}
                             isSeeding={isSeeding}
+                            key={branch.id}
                             organizationId={organizationId}
                         />
                     ))}
@@ -353,9 +353,8 @@ export const BranchBar = ({
         <>
             <CreateUpdateBranchFormModal
                 {...updateModal}
-                title="Update Branch"
-                description="Fill out the form to update branch"
                 className="w-full min-w-[80rem] max-w-[80rem]"
+                description="Fill out the form to update branch"
                 formProps={{
                     organizationId,
                     branchId: branch.id,
@@ -373,10 +372,11 @@ export const BranchBar = ({
                         })
                     },
                 }}
+                title="Update Branch"
             />
             <GradientBackground
-                mediaUrl={branch.media?.url ?? ''}
                 className="border-[0.5px] border-secondary/50"
+                mediaUrl={branch.media?.url ?? ''}
             >
                 <div className="relative flex min-h-0 w-full cursor-pointer items-center gap-x-2 rounded-2xl border-0 p-5 hover:bg-secondary/50 hover:no-underline">
                     <ImageDisplay
@@ -399,44 +399,44 @@ export const BranchBar = ({
                         {branch.latitude && branch.longitude && (
                             <div className="mt-2">
                                 <MapPicker
+                                    className="text-xs"
+                                    disabled={false}
+                                    hideButtonCoordinates={true}
+                                    onChange={() => {}} // Read-only, no changes allowed
+                                    placeholder="View Branch Location"
+                                    size="sm"
+                                    title={`${branch.name} Location`}
                                     value={{
                                         lat: branch.latitude,
                                         lng: branch.longitude,
                                     }}
-                                    onChange={() => {}} // Read-only, no changes allowed
                                     variant="outline"
-                                    size="sm"
-                                    placeholder="View Branch Location"
-                                    title={`${branch.name} Location`}
-                                    hideButtonCoordinates={true}
-                                    disabled={false}
                                     viewOnly={true}
-                                    className="text-xs"
                                 />
                             </div>
                         )}
                     </div>
                     <div className="flex flex-col gap-1 text-xs">
                         <Button
-                            size={'sm'}
-                            onClick={() => updateModal.onOpenChange(true)}
-                            variant={'default'}
-                            disabled={isSeeding}
                             className={cn(
                                 'flex max-h-7 space-x-2 text-xs cursor-pointer '
                             )}
+                            disabled={isSeeding}
+                            onClick={() => updateModal.onOpenChange(true)}
+                            size={'sm'}
+                            variant={'default'}
                         >
                             <span>edit</span>
                             <EditPencilIcon />
                         </Button>
                         <Button
-                            size={'sm'}
-                            disabled={isSeeding}
-                            onClick={handleDelete}
-                            variant={'ghost'}
                             className={cn(
                                 'flex max-h-7 space-x-2 text-xs cursor-pointer'
                             )}
+                            disabled={isSeeding}
+                            onClick={handleDelete}
+                            size={'sm'}
+                            variant={'ghost'}
                         >
                             <span> delete</span>
                             <TrashIcon />

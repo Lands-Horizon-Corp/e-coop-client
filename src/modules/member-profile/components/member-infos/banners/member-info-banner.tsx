@@ -28,36 +28,34 @@ const MemberInfoBanner = ({ className, memberProfile }: Props) => {
     return (
         <div className={cn('space-y-2', className)}>
             <MemberProfileCloseFormModal
-                open={closeMemberAccount}
-                onOpenChange={setCloseMemberAccount}
                 formProps={{
                     profileId: memberProfile.id,
                     defaultValues: {
                         remarks: memberProfile.member_close_remarks ?? [],
                     },
                 }}
+                onOpenChange={setCloseMemberAccount}
+                open={closeMemberAccount}
             />
             <MemberProfileMiniInfoCard memberProfile={memberProfile} />
             <div className="shadow-xs inline-flex -space-x-px rounded-md rtl:space-x-reverse">
                 <Button
-                    size="sm"
-                    variant="outline"
+                    className="rounded-none shadow-none first:rounded-s-lg last:rounded-e-lg focus-visible:z-10"
                     hoverVariant="secondary"
                     onClick={() => {
                         router.navigate({
                             to: `/org/$orgname/branch/$branchname/member-profile/${memberProfile.id}/personal-info` as string,
                         })
                     }}
-                    className="rounded-none shadow-none first:rounded-s-lg last:rounded-e-lg focus-visible:z-10"
+                    size="sm"
+                    variant="outline"
                 >
                     <PencilFillIcon className="mr-2 size-4" /> Edit Profile
                 </Button>
                 <Button
-                    size="sm"
-                    variant="outline"
-                    hoverVariant="destructive"
-                    disabled={memberProfile.is_closed}
                     className="group rounded-none shadow-none first:rounded-s-lg last:rounded-e-lg focus-visible:z-10"
+                    disabled={memberProfile.is_closed}
+                    hoverVariant="destructive"
                     onClick={() =>
                         onOpen({
                             title: (
@@ -75,6 +73,8 @@ const MemberInfoBanner = ({ className, memberProfile }: Props) => {
                             },
                         })
                     }
+                    size="sm"
+                    variant="outline"
                 >
                     <HeartBreakFillIcon className="mr-2 size-4 text-muted-foreground/40 duration-500 ease-out group-hover:text-inherit" />{' '}
                     Close Account

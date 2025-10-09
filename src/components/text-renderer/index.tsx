@@ -12,10 +12,10 @@ interface Props extends IClassProps {
 const TextRenderer = ({ className, content }: Props) => {
     return (
         <div
+            className={cn('', className)}
             dangerouslySetInnerHTML={{
                 __html: sanitizeHtml(content),
             }}
-            className={cn('', className)}
         />
     )
 }

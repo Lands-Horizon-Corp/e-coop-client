@@ -146,18 +146,19 @@ export const AccountAction = ({
                 <Modal
                     {...ledgerTableModal}
                     className="!max-w-[95vw]"
-                    title={getModalTitle()}
                     description={`You are viewing account (${account.name}) ${getModalTitle().toLowerCase()}`}
+                    title={getModalTitle()}
                 >
                     <GeneralLedgerTable
-                        mode="account"
-                        TEntryType={selectedEntryType}
                         accountId={account.id}
                         className="min-h-[90vh] !max-w-[90vw] min-w-0 max-h-[90vh]"
+                        mode="account"
+                        TEntryType={selectedEntryType}
                     />
                 </Modal>
                 <AccountCreateUpdateFormModal
                     {...updateModal}
+                    description="Modify/Update account..."
                     formProps={{
                         accountId: account.id,
                         defaultValues: account,
@@ -167,12 +168,10 @@ export const AccountAction = ({
                         },
                     }}
                     title="Update Account"
-                    description="Modify/Update account..."
                 />
             </div>
             <RowActionsGroup
                 canSelect
-                row={row}
                 onDelete={{
                     text: 'Delete',
                     isAllowed: !isDeletingAccount,
@@ -329,6 +328,7 @@ export const AccountAction = ({
                         </DropdownMenuSub>
                     </>
                 }
+                row={row}
             />
         </>
     )
@@ -361,18 +361,19 @@ export const AccountRowContext = ({
             <Modal
                 {...ledgerTableModal}
                 className="!max-w-[95vw]"
-                title={getModalTitle()}
                 description={`You are viewing account (${account.name}) ${getModalTitle().toLowerCase()}`}
+                title={getModalTitle()}
             >
                 <GeneralLedgerTable
-                    mode="account"
-                    TEntryType={selectedEntryType}
                     accountId={account.id}
                     className="min-h-[90vh] min-w-0 max-h-[90vh]"
+                    mode="account"
+                    TEntryType={selectedEntryType}
                 />
             </Modal>
             <AccountCreateUpdateFormModal
                 {...updateModal}
+                description="Modify/Update account..."
                 formProps={{
                     accountId: account.id,
                     defaultValues: account,
@@ -382,10 +383,8 @@ export const AccountRowContext = ({
                     },
                 }}
                 title="Update Account"
-                description="Modify/Update account..."
             />
             <DataTableRowContext
-                row={row}
                 onDelete={{
                     text: 'Delete',
                     isAllowed: !isDeletingAccount,
@@ -542,6 +541,7 @@ export const AccountRowContext = ({
                         </ContextMenuSub>
                     </>
                 }
+                row={row}
             >
                 {children}
             </DataTableRowContext>
@@ -554,7 +554,7 @@ const AccountTableAction = ({
     row,
     onDeleteSuccess,
 }: IAccountTableActionProps) => {
-    return <AccountAction row={row} onDeleteSuccess={onDeleteSuccess} />
+    return <AccountAction onDeleteSuccess={onDeleteSuccess} row={row} />
 }
 
 export default AccountTableAction

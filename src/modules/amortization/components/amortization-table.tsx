@@ -27,8 +27,8 @@ const AmortizationTable = ({
 } & IClassProps) => {
     return (
         <Table
-            wrapperClassName="ecoop-scroll max-w-full bg-background/40 px-4 rounded"
             className="table-fixed w-full"
+            wrapperClassName="ecoop-scroll max-w-full bg-background/40 px-4 rounded"
         >
             <TableHeader className="bg-transparent sticky top-0">
                 <TableRow className="hover:bg-transparent">
@@ -53,8 +53,8 @@ const AmortizationTable = ({
             <TableBody className="[&_td:first-child]:rounded-l-lg [&_td:last-child]:rounded-r-lg">
                 {amortizationPayments?.map((payment, index) => (
                     <TableRow
-                        key={index}
                         className="odd:bg-muted/80 odd:hover:bg-muted/50 border-none hover:bg-transparent"
+                        key={index}
                     >
                         <TableCell className="py-2.5">
                             {toReadableDate(payment.date, 'MMM dd, yyyy')}
@@ -81,8 +81,8 @@ const AmortizationTable = ({
                     amortizationPayments.length === 0) && (
                     <TableRow className="hover:bg-transparent">
                         <TableCell
-                            colSpan={7}
                             className="py-8 text-center text-muted-foreground"
+                            colSpan={7}
                         >
                             No amortization schedule available
                         </TableCell>

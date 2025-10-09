@@ -198,15 +198,15 @@ export const MemberProfileAction = ({
                         <Modal
                             {...ledgerTableModal}
                             className="!max-w-[95vw]"
-                            title={getModalTitle()}
                             description={`You are viewing ${member.full_name}'s ${getModalTitle().toLowerCase()}`}
+                            title={getModalTitle()}
                         >
                             <GeneralLedgerTable
-                                mode="member"
-                                memberProfileId={member.id}
-                                TEntryType={selectedEntryType}
-                                excludeColumnIds={['balance']}
                                 className="min-h-[75vh] min-w-0 max-h-[75vh]"
+                                excludeColumnIds={['balance']}
+                                memberProfileId={member.id}
+                                mode="member"
+                                TEntryType={selectedEntryType}
                             />
                         </Modal>
 
@@ -234,11 +234,12 @@ export const MemberProfileAction = ({
                         <Modal
                             {...footstepModal}
                             className="!max-w-[95vw]"
+                            description={`You are viewing ${member.full_name}'s footstep`}
                             title={
                                 <div className="flex gap-x-2 items-center">
                                     <ImageDisplay
-                                        src={member.media?.download_url}
                                         className="rounded-xl size-12"
+                                        src={member.media?.download_url}
                                     />
                                     <div className="space-y-1">
                                         <p>{member.full_name}</p>
@@ -248,50 +249,49 @@ export const MemberProfileAction = ({
                                     </div>
                                 </div>
                             }
-                            description={`You are viewing ${member.full_name}'s footstep`}
                         >
                             <FootstepTable
-                                mode="member-profile"
-                                memberProfileId={member.id}
                                 className="min-h-[90vh] min-w-0 max-h-[90vh]"
+                                memberProfileId={member.id}
+                                mode="member-profile"
                             />
                         </Modal>
 
                         <Modal
                             {...transactionModal}
                             className="!max-w-[95vw]"
-                            title="Transactions"
                             description={`You are viewing ${member.full_name}'s transactions`}
+                            title="Transactions"
                         >
                             <TransactionsTable
+                                className="min-h-[90vh] min-w-0 max-h-[90vh]"
+                                memberProfileId={member.id}
                                 mode="member-profile"
                                 onRowClick={() => {}}
-                                memberProfileId={member.id}
-                                className="min-h-[90vh] min-w-0 max-h-[90vh]"
                             />
                         </Modal>
 
                         <Modal
                             {...accountingLedgerModal}
-                            title={`${member.first_name}'s Accounting Ledger`}
                             className="!max-w-[95vw]"
+                            title={`${member.first_name}'s Accounting Ledger`}
                         >
                             <MemberAccountingLedgerTable
-                                mode="member"
-                                memberProfileId={member.id}
                                 className="min-h-[75vh] min-w-0 max-h-[75vh]"
+                                memberProfileId={member.id}
+                                mode="member"
                             />
                         </Modal>
 
                         <Modal
                             {...loanListModal}
-                            title={`${member.first_name}'s Loans`}
                             className="!max-w-[95vw]"
+                            title={`${member.first_name}'s Loans`}
                         >
                             <LoanTransactionTable
-                                mode="member-profile"
-                                memberProfileId={member.id}
                                 className="min-h-[80vh] min-w-0 max-h-[80vh]"
+                                memberProfileId={member.id}
+                                mode="member-profile"
                             />
                         </Modal>
                     </>
@@ -299,16 +299,15 @@ export const MemberProfileAction = ({
             </div>
             <RowActionsGroup
                 canSelect
-                row={row}
-                onEdit={{
-                    text: 'Edit',
-                    isAllowed: true,
-                    onClick: handleEdit,
-                }}
                 onDelete={{
                     text: 'Delete',
                     isAllowed: !isDeleting,
                     onClick: handleDelete,
+                }}
+                onEdit={{
+                    text: 'Edit',
+                    isAllowed: true,
+                    onClick: handleEdit,
                 }}
                 otherActions={
                     <>
@@ -517,6 +516,7 @@ export const MemberProfileAction = ({
                         </DropdownMenuItem>
                     </>
                 }
+                row={row}
             />
         </>
     )
@@ -559,27 +559,27 @@ export const MemberProfileRowContext = ({
                     <Modal
                         {...ledgerTableModal}
                         className="!max-w-[95vw]"
-                        title={getModalTitle()}
                         description={`You are viewing ${member.full_name}'s ${getModalTitle().toLowerCase()}`}
+                        title={getModalTitle()}
                     >
                         <GeneralLedgerTable
-                            mode="member"
-                            memberProfileId={member.id}
-                            TEntryType={selectedEntryType}
-                            excludeColumnIds={['balance']}
                             className="min-h-[75vh] min-w-0 max-h-[75vh]"
+                            excludeColumnIds={['balance']}
+                            memberProfileId={member.id}
+                            mode="member"
+                            TEntryType={selectedEntryType}
                         />
                     </Modal>
 
                     <Modal
                         {...accountingLedgerModal}
-                        title={`${member.first_name}'s Accounting Ledger`}
                         className="!max-w-[95vw]"
+                        title={`${member.first_name}'s Accounting Ledger`}
                     >
                         <MemberAccountingLedgerTable
-                            mode="member"
-                            memberProfileId={member.id}
                             className="min-h-[75vh] min-w-0 max-h-[75vh]"
+                            memberProfileId={member.id}
+                            mode="member"
                         />
                     </Modal>
 
@@ -607,11 +607,12 @@ export const MemberProfileRowContext = ({
                     <Modal
                         {...footstepModal}
                         className="!max-w-[95vw]"
+                        description={`You are viewing ${member.full_name}'s footstep`}
                         title={
                             <div className="flex gap-x-2 items-center">
                                 <ImageDisplay
-                                    src={member.media?.download_url}
                                     className="rounded-xl size-12"
+                                    src={member.media?.download_url}
                                 />
                                 <div className="space-y-1">
                                     <p>{member.full_name}</p>
@@ -621,53 +622,51 @@ export const MemberProfileRowContext = ({
                                 </div>
                             </div>
                         }
-                        description={`You are viewing ${member.full_name}'s footstep`}
                     >
                         <FootstepTable
-                            mode="member-profile"
-                            memberProfileId={member.id}
                             className="min-h-[90vh] min-w-0 max-h-[90vh]"
+                            memberProfileId={member.id}
+                            mode="member-profile"
                         />
                     </Modal>
 
                     <Modal
                         {...transactionModal}
                         className="!max-w-[95vw]"
-                        title="Transactions"
                         description={`You are viewing ${member.full_name}'s transactions`}
+                        title="Transactions"
                     >
                         <TransactionsTable
+                            className="min-h-[90vh] min-w-0 max-h-[90vh]"
+                            memberProfileId={member.id}
                             mode="member-profile"
                             onRowClick={() => {}}
-                            memberProfileId={member.id}
-                            className="min-h-[90vh] min-w-0 max-h-[90vh]"
                         />
                     </Modal>
 
                     <Modal
                         {...loanListModal}
-                        title={`${member.first_name}'s Loans`}
                         className="!max-w-[95vw]"
+                        title={`${member.first_name}'s Loans`}
                     >
                         <LoanTransactionTable
-                            mode="member-profile"
-                            memberProfileId={member.id}
                             className="min-h-[80vh] min-w-0 max-h-[80vh]"
+                            memberProfileId={member.id}
+                            mode="member-profile"
                         />
                     </Modal>
                 </>
             )}
             <DataTableRowContext
-                row={row}
-                onEdit={{
-                    text: 'Edit',
-                    isAllowed: true,
-                    onClick: handleEdit,
-                }}
                 onDelete={{
                     text: 'Delete',
                     isAllowed: !isDeleting,
                     onClick: handleDelete,
+                }}
+                onEdit={{
+                    text: 'Edit',
+                    isAllowed: true,
+                    onClick: handleEdit,
                 }}
                 otherActions={
                     <>
@@ -876,6 +875,7 @@ export const MemberProfileRowContext = ({
                         </ContextMenuItem>
                     </>
                 }
+                row={row}
             >
                 {children}
             </DataTableRowContext>

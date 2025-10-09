@@ -48,17 +48,17 @@ export const QuickActions = () => {
 
             <div className="space-y-0.5">
                 <Link
-                    to="/onboarding"
                     className="flex items-center gap-1.5 px-2 py-1 text-muted-foreground hover:text-foreground transition-colors duration-200 rounded-md hover:bg-accent"
+                    to="/onboarding"
                 >
                     <span>Onboarding</span>
                     <ArrowRightIcon className="size-3" />
                 </Link>
 
                 <button
-                    onClick={handleSignOutClick}
-                    disabled={isSigningOut}
                     className="flex items-center gap-1.5 px-2 py-1 text-destructive hover:text-destructive/80 transition-colors duration-200 disabled:opacity-50 rounded-md hover:bg-accent w-full text-left"
+                    disabled={isSigningOut}
+                    onClick={handleSignOutClick}
                 >
                     <span>Sign Out</span>
                     {isSigningOut ? (
@@ -69,8 +69,8 @@ export const QuickActions = () => {
                 </button>
 
                 <button
-                    onClick={() => router.history.back()}
                     className="flex items-center gap-1.5 px-2 py-1 text-muted-foreground hover:text-foreground transition-colors duration-200 rounded-md hover:bg-accent w-full text-left"
+                    onClick={() => router.history.back()}
                 >
                     <span>Back</span>
                     <ArrowLeftIcon className="size-3" />

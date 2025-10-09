@@ -126,8 +126,8 @@ const MemberLoanTableSummaryColumns = (
                     {account && (
                         <>
                             <RenderIcon
-                                icon={account.icon as TIcon}
                                 className="inline mr-1"
+                                icon={account.icon as TIcon}
                             />
                             <span>{account.name}</span>
                         </>
@@ -197,11 +197,11 @@ const MemberLoanTableSummaryColumns = (
                 <div className="!text-wrap text-muted-foreground">
                     {loan_status && (
                         <InfoTooltip content={loan_status.description}>
-                            <Badge variant="outline" className="font-normal">
+                            <Badge className="font-normal" variant="outline">
                                 <span>
                                     <RenderIcon
-                                        icon={loan_status.icon as TIcon}
                                         className="mr-1 inline size-3"
+                                        icon={loan_status.icon as TIcon}
                                         style={{ color: loan_status.color }}
                                     />
                                     {loan_status.name}
@@ -441,19 +441,19 @@ const MemberLoanTableSummaryColumns = (
             }) => (
                 <div className="flex gap-1.5 flex-wrap items-baseline">
                     {loan_tags.slice(0, 3).map((tag) => (
-                        <LoanTagChip tag={tag} key={tag.id} size="sm" />
+                        <LoanTagChip key={tag.id} size="sm" tag={tag} />
                     ))}
                     {loan_tags.length > 3 && (
                         <LoanTagsManagerPopover
-                            readOnly
-                            loanTransactionId={''}
                             defaultLoanTags={loan_tags}
+                            loanTransactionId={''}
+                            readOnly
                         >
                             <Button
+                                className="size-fit !p-0 border-none cursor-pointer text-xs !bg-transparent !py-0.5 !px-1.5"
                                 size="sm"
                                 type="button"
                                 variant="outline"
-                                className="size-fit !p-0 border-none cursor-pointer text-xs !bg-transparent !py-0.5 !px-1.5"
                             >
                                 <TagIcon />{' '}
                                 <span>{loan_tags.length - 1} more...</span>
@@ -491,8 +491,8 @@ const MemberLoanTableSummaryColumns = (
                 <div className="!text-wrap text-muted-foreground">
                     {employee_user && (
                         <ImageNameDisplay
-                            src={employee_user.media_id}
                             name={employee_user.full_name}
+                            src={employee_user.media_id}
                         />
                     )}
                 </div>
@@ -526,10 +526,10 @@ const MemberLoanTableSummaryColumns = (
                 <div className="!text-wrap text-muted-foreground">
                     {collector_place && (
                         <LoanCollectorPlaceBadge
-                            size="sm"
                             collectorPlace={
                                 collector_place as TLoanCollectorPlace
                             }
+                            size="sm"
                         />
                     )}
                 </div>

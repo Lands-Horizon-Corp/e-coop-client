@@ -28,12 +28,12 @@ const DataTableFooter = <TData,>({
         >
             {table.getFooterGroups().map((footerGroup) => (
                 <TableRow
-                    key={footerGroup.id}
-                    data-footer-row-id={footerGroup.id}
                     className={cn(
                         'text-nowrap bg-secondary hover:bg-popover dark:bg-popover',
                         footerTrClassName
                     )}
+                    data-footer-row-id={footerGroup.id}
+                    key={footerGroup.id}
                 >
                     {footerGroup.headers.map((header) => {
                         const { column } = header
@@ -47,12 +47,7 @@ const DataTableFooter = <TData,>({
 
                         return (
                             <TableCell
-                                key={header.id}
                                 className="size-fit text-nowrap font-medium data-[pinned]:bg-muted/60 data-[pinned]:backdrop-blur-sm [&[data-pinned=left][data-last-col=left]]:border-r [&[data-pinned=right][data-last-col=right]]:border-l [&[data-pinned][data-last-col]]:border-border"
-                                style={{
-                                    ...getPinningStyles(column),
-                                }}
-                                data-pinned={isPinned || undefined}
                                 data-last-col={
                                     isLastLeftPinned
                                         ? 'left'
@@ -60,6 +55,11 @@ const DataTableFooter = <TData,>({
                                           ? 'right'
                                           : undefined
                                 }
+                                data-pinned={isPinned || undefined}
+                                key={header.id}
+                                style={{
+                                    ...getPinningStyles(column),
+                                }}
                             >
                                 {header.isPlaceholder
                                     ? null

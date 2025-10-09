@@ -196,21 +196,21 @@ const Toolbar = ({
                 if (item.type === 'toggle') {
                     return (
                         <ActionTooltip
-                            key={item.id}
                             align="center"
+                            key={item.id}
                             side="top"
                             tooltipContent={item.tooltipContent}
                         >
                             <Toggle
-                                pressed={isActive}
+                                aria-label={item.ariaLabel}
                                 onClick={item.command(editor)}
                                 onPressedChange={
                                     item.onPressedChange
                                         ? item.onPressedChange(editor)
                                         : undefined
                                 }
+                                pressed={isActive}
                                 size="sm"
-                                aria-label={item.ariaLabel}
                             >
                                 {IconComponent ? (
                                     <IconComponent className="size-4" />
@@ -223,17 +223,17 @@ const Toolbar = ({
                 } else {
                     return (
                         <ActionTooltip
-                            key={item.id}
                             align="center"
+                            key={item.id}
                             side="top"
                             tooltipContent={item.tooltipContent}
                         >
                             <Button
+                                aria-label={item.ariaLabel}
+                                className={cn(isActive && 'is-active')}
+                                onClick={item.command(editor)}
                                 type="button"
                                 variant={'ghost'}
-                                onClick={item.command(editor)}
-                                className={cn(isActive && 'is-active')}
-                                aria-label={item.ariaLabel}
                             >
                                 {IconComponent ? (
                                     <IconComponent className="size-4" />
@@ -252,19 +252,19 @@ const Toolbar = ({
                         const level = (i + 1) as THeadingLevel
                         return (
                             <ActionTooltip
-                                key={`h-${level}`}
                                 align="center"
+                                key={`h-${level}`}
                                 side="top"
                                 tooltipContent={`Heading ${level}`}
                             >
                                 <Toggle
+                                    aria-label={`Toggle Heading ${level}`}
                                     onClick={() => toggleHeading(level)}
                                     pressed={
                                         activeHeading === level &&
                                         editor.isFocused
                                     }
                                     size="sm"
-                                    aria-label={`Toggle Heading ${level}`}
                                 >
                                     {`H${level}`}
                                 </Toggle>

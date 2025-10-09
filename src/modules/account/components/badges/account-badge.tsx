@@ -53,7 +53,7 @@ const AccountBadge = ({
             {...props}
         >
             {showIcon && (
-                <RenderIcon icon={icon} className="flex-shrink-0 h-4 w-4" />
+                <RenderIcon className="flex-shrink-0 h-4 w-4" icon={icon} />
             )}
             <span className="truncate capitalize">{name}</span>
         </div>

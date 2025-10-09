@@ -110,9 +110,9 @@ const AppSidebarQruickNavigate = ({ groups }: Props) => {
     return (
         <>
             <Button
-                size="sm"
-                onClick={() => setOpen((prev) => !prev)}
                 className="group/quick-search w-full gap-x-2 text-xs font-normal text-primary-foreground/90 hover:text-primary-foreground"
+                onClick={() => setOpen((prev) => !prev)}
+                size="sm"
             >
                 <MagnifyingGlassIcon className="inline duration-500 ease-out group-hover/quick-search:text-foreground" />
                 {sidebarOpen && (
@@ -125,22 +125,22 @@ const AppSidebarQruickNavigate = ({ groups }: Props) => {
                 )}
             </Button>
             <CommandDialog
-                open={open}
+                contentClassName="rounded-2xl"
                 onOpenChange={(open) => {
                     setOpen(open)
                     if (!open) {
                         setSearchQuery('')
                     }
                 }}
-                contentClassName="rounded-2xl"
+                open={open}
                 overlayClassName="backdrop-blur-sm text-gray-400"
             >
                 <CommandInput
+                    onValueChange={setSearchQuery}
                     placeholder="Search or navigate to..."
                     value={searchQuery}
-                    onValueChange={setSearchQuery}
                 />
-                <CommandList ref={commandListRef} className="ecoop-scroll">
+                <CommandList className="ecoop-scroll" ref={commandListRef}>
                     <CommandEmpty>No results found.</CommandEmpty>
                     {filteredGroups.map((group, index) => {
                         return (
@@ -148,12 +148,12 @@ const AppSidebarQruickNavigate = ({ groups }: Props) => {
                                 <CommandGroup heading={group.title}>
                                     {group.items.map((groupItem) => (
                                         <CommandItem
+                                            className="group items-start gap-x-2 rounded-xl !px-3 text-sm font-normal"
                                             key={groupItem.url}
                                             onSelect={() => {
                                                 groupItem.onClick?.(groupItem)
                                                 setOpen(false)
                                             }}
-                                            className="group items-start gap-x-2 rounded-xl !px-3 text-sm font-normal"
                                         >
                                             {groupItem.icon && (
                                                 <groupItem.icon className="text-foreground/50 delay-150 duration-200 ease-out group-hover:text-foreground" />
@@ -167,12 +167,12 @@ const AppSidebarQruickNavigate = ({ groups }: Props) => {
                                             </div>
                                             <div className="w-fit">
                                                 <Link
-                                                    target="_blank"
-                                                    to={groupItem.url}
+                                                    className="text-xs text-muted-foreground duration-200 hover:text-foreground"
                                                     onClick={(e) =>
                                                         e.stopPropagation()
                                                     }
-                                                    className="text-xs text-muted-foreground duration-200 hover:text-foreground"
+                                                    target="_blank"
+                                                    to={groupItem.url}
                                                 >
                                                     Open new tab{' '}
                                                     <ArrowRightIcon className="inline !size-3 -rotate-45" />

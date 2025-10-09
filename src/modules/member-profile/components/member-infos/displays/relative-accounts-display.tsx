@@ -23,9 +23,9 @@ const RelativeAccountsDisplay = ({ relativeAccounts }: Props) => {
     return (
         <div className="space-y-4">
             <SectionTitle
-                title="Relative Accounts"
-                subTitle="Accounts of your registered relative for reference"
                 Icon={FamilyIcon}
+                subTitle="Accounts of your registered relative for reference"
+                title="Relative Accounts"
             />
             {(!relativeAccounts || relativeAccounts.length === 0) && (
                 <p className="w-full text-center text-xs text-muted-foreground/70">
@@ -34,19 +34,19 @@ const RelativeAccountsDisplay = ({ relativeAccounts }: Props) => {
             )}
             {relativeAccounts?.map((relativeAcc) => (
                 <div
-                    key={relativeAcc.id}
                     className="space-y-2 rounded-xl bg-secondary/20 p-4"
+                    key={relativeAcc.id}
                 >
                     <div className="flex items-center gap-x-4">
                         <PreviewMediaWrapper
                             media={relativeAcc.relative_member_profile?.media}
                         >
                             <ImageDisplay
+                                className="size-16 rounded-xl"
                                 src={
                                     relativeAcc.relative_member_profile?.media
                                         ?.download_url
                                 }
-                                className="size-16 rounded-xl"
                             />
                         </PreviewMediaWrapper>
                         <div className="grid flex-1 gap-2 md:grid-cols-5">
@@ -107,7 +107,7 @@ const RelativeAccountsDisplay = ({ relativeAccounts }: Props) => {
                             </div>
                         </div>
                     </div>
-                    <Accordion collapsible type="single" className="w-full">
+                    <Accordion className="w-full" collapsible type="single">
                         <AccordionItem value="item-1">
                             <AccordionTrigger className="font-normal">
                                 Description

@@ -77,9 +77,9 @@ export const TransactionDetailsCard = ({
 
                     <div className="flex items-center gap-4">
                         <LedgerSourceBadge
-                            source={source}
                             className="ml-2 rounded-sm flex items-center justify-center size-8"
                             showValue={false}
+                            source={source}
                         />
                         <div className="flex-1">
                             <p className="font-semibold text-white text-sm">
@@ -99,20 +99,20 @@ export const TransactionDetailsCard = ({
                 {/* User Information */}
                 <TransactionUserInfoGrid
                     className="mt-1"
-                    title="Member Information"
                     data={[
                         { label: 'Name', value: userName },
                         { label: 'Passbook', value: passbook },
                         { label: 'Phone Number', value: userPhoneNumber },
                         { label: 'Member Since', value: memberSince },
                     ]}
+                    title="Member Information"
                 />
                 <div className="w-full px-5 dark:hidden">
                     <Separator className=" w-full" />
                 </div>
                 <PaymentsEntryItem
-                    label="Other Details"
                     className="font-bold"
+                    label="Other Details"
                 />
                 <PaymentsEntryItem
                     label="Type of Payment"
@@ -122,7 +122,7 @@ export const TransactionDetailsCard = ({
                     label="Print Number"
                     value={String(transaction.print_number) || 'N/A'}
                 />
-                <PaymentsEntryItem label="Signature" className="font-bold" />
+                <PaymentsEntryItem className="font-bold" label="Signature" />
                 <div>
                     <PreviewMediaWrapper
                         media={transaction.signature_media || undefined}
@@ -139,8 +139,8 @@ export const TransactionDetailsCard = ({
                     <>
                         <Separator className="my-2" />
                         <PaymentsEntryItem
-                            label="Bank Details"
                             className="font-bold"
+                            label="Bank Details"
                         />
                         <PaymentsEntryItem
                             label="name"
@@ -155,8 +155,8 @@ export const TransactionDetailsCard = ({
                             value={toReadableDate(transaction.entry_date)}
                         /> */}
                         <PaymentsEntryItem
-                            label="Proof of Payment"
                             className="font-bold"
+                            label="Proof of Payment"
                         />
                         <PreviewMediaWrapper
                             media={
@@ -192,9 +192,9 @@ const TransactionDepositWithdrawCardListItem = ({
                 <Sheet>
                     <SheetTrigger asChild className="text-xs">
                         <LedgerSourceBadge
-                            source={item.source}
                             className="rounded-lg size-10 flex items-center justify-center"
                             showValue={false}
+                            source={item.source}
                         />
                     </SheetTrigger>
                     <SheetContent className="min-w-full max-w-[400px] md:min-w-[500px] overflow-y-auto ecoop-scroll p-0 border m-5 pt-4 rounded-lg ">
@@ -279,8 +279,8 @@ const CurrentTransactionWithdrawHistoryData = ({
                 <div className="w-full flex items-center justify-end">
                     <RefreshButton
                         className="bg-transparent size-7 "
-                        onClick={refetchCurrentTransaction}
                         isLoading={isLoadingCurrentTransaction}
+                        onClick={refetchCurrentTransaction}
                     />
                 </div>
                 <div className="w-full flex flex-col h-[80vh] space-y-1.5">
@@ -296,12 +296,6 @@ const CurrentTransactionWithdrawHistoryData = ({
             </ScrollArea>
             <div className="sticky bottom-0 left-0 right-0 bg-background pt-2">
                 <MiniPaginationBar
-                    pagination={{
-                        pageIndex: pagination.pageIndex,
-                        pageSize: pagination.pageSize,
-                        totalPage: currentGeneralLedger?.totalPage ?? 0,
-                        totalSize: currentGeneralLedger?.totalSize ?? 0,
-                    }}
                     disablePageMove={isFetchingCurrentTransaction}
                     onNext={({ pageIndex }) =>
                         setPagination((prev) => ({
@@ -315,6 +309,12 @@ const CurrentTransactionWithdrawHistoryData = ({
                             pageIndex,
                         }))
                     }
+                    pagination={{
+                        pageIndex: pagination.pageIndex,
+                        pageSize: pagination.pageSize,
+                        totalPage: currentGeneralLedger?.totalPage ?? 0,
+                        totalSize: currentGeneralLedger?.totalSize ?? 0,
+                    }}
                 />
             </div>
         </>
@@ -342,35 +342,35 @@ const CurrentTransactionWithdrawHistory = ({
     return (
         <div>
             <Button
-                variant="ghost"
                 className=""
-                size="sm"
                 onClick={() => setOnOpen(true)}
+                size="sm"
+                variant="ghost"
             >
                 <HistoryIcon className="mr-2" />
                 History
             </Button>
             <SheetModal
-                open={onOpen}
-                onOpenChange={setOnOpen}
                 className=" min-w-full max-w-[500px] md:min-w-[600px] "
+                onOpenChange={setOnOpen}
+                open={onOpen}
             >
                 <div>
                     <div className="overflow-y-auto ecoop-scroll w-full p-5">
-                        <Tabs defaultValue={modeState} className="">
+                        <Tabs className="" defaultValue={modeState}>
                             <div className="items-center flex h-full ">
                                 <TabsList className="bg-muted/30 relative rounded-lg p-1 h-full">
                                     <TabsTrigger
                                         className="w-24 min-w-24"
-                                        value="current"
                                         onClick={() => setModeState('current')}
+                                        value="current"
                                     >
                                         My History
                                     </TabsTrigger>
                                     <TabsTrigger
                                         className="w-24 min-w-24"
-                                        value="branch"
                                         onClick={() => setModeState('branch')}
+                                        value="branch"
                                     >
                                         All
                                     </TabsTrigger>
@@ -378,8 +378,8 @@ const CurrentTransactionWithdrawHistory = ({
                             </div>
                             <TabsContent value={modeState}>
                                 <CurrentTransactionWithdrawHistoryData
-                                    modeState={modeState}
                                     mode={mode}
+                                    modeState={modeState}
                                 />
                             </TabsContent>
                         </Tabs>

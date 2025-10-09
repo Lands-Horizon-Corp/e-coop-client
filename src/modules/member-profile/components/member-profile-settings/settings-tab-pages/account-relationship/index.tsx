@@ -12,7 +12,7 @@ type Props = { memberProfile: IMemberProfile }
 const MemberAccountRelationship = forwardRef<HTMLDivElement, Props>(
     ({ memberProfile }, ref) => {
         return (
-            <div ref={ref} className="space-y-4">
+            <div className="space-y-4" ref={ref}>
                 <MemberJointAccounts memberProfile={memberProfile} />
                 <Separator />
                 <MemberRelativeAccounts memberProfile={memberProfile} />

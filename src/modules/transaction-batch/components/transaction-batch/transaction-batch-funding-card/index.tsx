@@ -35,8 +35,6 @@ const BeginningBalanceCard = ({
             )}
         >
             <BatchFundingCreateFormModal
-                open={addModal}
-                onOpenChange={setAddModal}
                 formProps={{
                     transactionBatchId: transactionBatch?.id,
                     defaultValues: {
@@ -48,6 +46,8 @@ const BeginningBalanceCard = ({
                         onAdd?.()
                     },
                 }}
+                onOpenChange={setAddModal}
+                open={addModal}
             />
             <p className="text-lg">
                 {formatNumber(transactionBatch.beginning_balance, 2)}
@@ -56,10 +56,10 @@ const BeginningBalanceCard = ({
                 Beginning Balance
             </p>
             <Button
-                size="icon"
-                variant="default"
                 className="absolute right-2 top-1.5 size-fit p-1"
                 onClick={() => setAddModal(true)}
+                size="icon"
+                variant="default"
             >
                 <PlusIcon />
             </Button>

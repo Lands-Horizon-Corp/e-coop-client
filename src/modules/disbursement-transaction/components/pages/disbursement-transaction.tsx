@@ -6,8 +6,8 @@ const DisbursementTransactionPage = () => {
     return (
         <PageContainer>
             <DisbursementTransactionTable
-                mode="branch"
                 className="max-h-[90vh] min-h-[90vh] w-full"
+                mode="branch"
             />
         </PageContainer>
     )

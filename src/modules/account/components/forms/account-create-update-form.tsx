@@ -32,6 +32,7 @@ import {
 import { AccountCategoryComboBox } from '@/modules/account-category'
 import { AccountClassificationComboBox } from '@/modules/account-classification'
 import { useAuthUserWithOrgBranch } from '@/modules/authentication/authgentication.store'
+import ComputationSheetCombobox from '@/modules/computation-sheet/components/computation-sheet-combobox'
 import MemberTypeCombobox from '@/modules/member-type/components/member-type-combobox'
 
 import IconCombobox from '@/components/comboboxes/icon-combobox'
@@ -146,40 +147,41 @@ const AccountCreateUpdateForm = ({
     return (
         <Form {...form}>
             <form
-                ref={formRef}
-                onSubmit={onSubmit}
                 className={cn('w-full', className)}
+                onSubmit={onSubmit}
+                ref={formRef}
             >
                 <FormErrorMessage errorMessage={error} />
                 <div className="flex w-full flex-col gap-5 md:flex-row">
                     <fieldset
-                        disabled={formProps.readOnly}
                         className="space-y-3 md:w-[80%]"
+                        disabled={formProps.readOnly}
                     >
                         <FormFieldWrapper
                             control={form.control}
-                            name="name"
-                            label="Account Name *"
                             disabled={isLoading}
+                            label="Account Name *"
+                            name="name"
                             render={({ field }) => (
                                 <Input
                                     {...field}
-                                    id={field.name}
-                                    value={field.value ?? ''}
-                                    placeholder="Account Name"
                                     autoComplete="off"
+                                    id={field.name}
+                                    placeholder="Account Name"
+                                    value={field.value ?? ''}
                                 />
                             )}
                         />
                         <FormFieldWrapper
+                            className="col-span-4"
                             control={form.control}
+                            disabled={isLoading}
                             label="Account type"
                             name="type"
-                            className="col-span-4"
-                            disabled={isLoading}
                             render={({ field }) => (
                                 <FormControl>
                                     <Select
+                                        defaultValue={field.value}
                                         disabled={
                                             formProps.readOnly || isLoading
                                         }
@@ -187,7 +189,6 @@ const AccountCreateUpdateForm = ({
                                             field.onChange(selectedValue)
                                             setSelectedItem(selectedValue)
                                         }}
-                                        defaultValue={field.value}
                                     >
                                         <SelectTrigger className="w-full">
                                             {field.value ||
@@ -213,57 +214,57 @@ const AccountCreateUpdateForm = ({
                         />
                         <FormFieldWrapper
                             control={form.control}
-                            name="alternative_code"
-                            label="Alternative Code"
                             disabled={isLoading}
+                            label="Alternative Code"
+                            name="alternative_code"
                             render={({ field }) => (
                                 <Input
                                     {...field}
+                                    autoComplete="off"
                                     id={field.name}
                                     placeholder="Account Name"
-                                    autoComplete="off"
                                 />
                             )}
                         />
                         <FormFieldWrapper
-                            control={form.control}
-                            name="member_type_id"
-                            label="Member Type"
                             className="col-span-1"
+                            control={form.control}
+                            label="Member Type"
+                            name="member_type_id"
                             render={({ field }) => (
                                 <MemberTypeCombobox
                                     {...field}
-                                    placeholder="Select Member Type"
                                     disabled={isDisabled(field.name)}
                                     onChange={(selected) =>
                                         field.onChange(selected.id)
                                     }
+                                    placeholder="Select Member Type"
                                 />
                             )}
                         />
 
                         <FormFieldWrapper
                             control={form.control}
-                            name="account_classification_id"
                             label="Account Classification"
+                            name="account_classification_id"
                             render={({ field }) => (
                                 <AccountClassificationComboBox
-                                    onChange={(selected) =>
-                                        field.onChange(selected.id)
-                                    }
-                                    value={field.value}
-                                    placeholder="Select Account Classification"
                                     disabled={
                                         isDisabled(field.name) || isLoading
                                     }
+                                    onChange={(selected) =>
+                                        field.onChange(selected.id)
+                                    }
+                                    placeholder="Select Account Classification"
+                                    value={field.value}
                                 />
                             )}
                         />
                         <FormFieldWrapper
                             control={form.control}
-                            name="icon"
-                            label="Icon"
                             disabled={isLoading}
+                            label="Icon"
+                            name="icon"
                             render={({ field }) => (
                                 <IconCombobox
                                     {...field}
@@ -274,28 +275,28 @@ const AccountCreateUpdateForm = ({
                         />
                         <FormFieldWrapper
                             control={form.control}
-                            name="account_category_id"
-                            label="Account Category"
                             disabled={isLoading}
+                            label="Account Category"
+                            name="account_category_id"
                             render={({ field }) => (
                                 <AccountCategoryComboBox
-                                    onChange={(selected) =>
-                                        field.onChange(selected.id)
-                                    }
-                                    value={field.value}
-                                    placeholder="Select Account Category"
                                     disabled={
                                         isDisabled(field.name) || isLoading
                                     }
+                                    onChange={(selected) =>
+                                        field.onChange(selected.id)
+                                    }
+                                    placeholder="Select Account Category"
+                                    value={field.value}
                                 />
                             )}
                         />
 
                         <FormFieldWrapper
+                            className="col-span-4"
                             control={form.control}
                             label="Account Description"
                             name="description"
-                            className="col-span-4"
                             render={({ field }) => {
                                 const { ref: _ref, ...rest } = field
                                 return (
@@ -305,29 +306,32 @@ const AccountCreateUpdateForm = ({
                                         disabled={
                                             isDisabled(field.name) || isLoading
                                         }
-                                        textEditorClassName="!max-w-none !h-32"
                                         placeholder="Write some description about the account..."
+                                        textEditorClassName="!max-w-none !h-32"
                                     />
                                 )
                             }}
                         />
                         <div className="">
                             <FormFieldWrapper
+                                className=""
                                 control={form.control}
                                 name="account_exclusive_setting_type"
-                                className=""
                                 render={({ field }) => (
                                     <>
                                         {/* Checkbox for Is Internal */}
                                         <GradientBackground gradientOnly>
                                             <div className="shadow-xs relative flex w-full items-start gap-2 rounded-2xl border border-input p-4 outline-none duration-200 ease-out has-[:checked]:border-primary/30 has-[:checked]:bg-primary/40">
                                                 <Checkbox
-                                                    disabled={isLoading}
-                                                    id="is_internal_checkbox"
+                                                    aria-describedby="is_internal_description"
                                                     checked={
                                                         field.value ===
                                                         AccountExclusiveSettingTypeEnum.IsInternal
                                                     }
+                                                    className="order-1 after:absolute after:inset-0"
+                                                    disabled={isLoading}
+                                                    id="is_internal_checkbox"
+                                                    name={field.name}
                                                     onCheckedChange={(
                                                         checked: boolean
                                                     ) =>
@@ -337,9 +341,6 @@ const AccountCreateUpdateForm = ({
                                                                 : AccountExclusiveSettingTypeEnum.None
                                                         )
                                                     }
-                                                    name={field.name}
-                                                    className="order-1 after:absolute after:inset-0"
-                                                    aria-describedby="is_internal_description"
                                                 />
                                                 <div className="flex grow items-center gap-3">
                                                     <div className="size-fit rounded-full bg-secondary p-2">
@@ -350,8 +351,8 @@ const AccountCreateUpdateForm = ({
                                                             Is Internal Account
                                                         </Label>
                                                         <p
-                                                            id="is_internal_description"
                                                             className="text-xs text-muted-foreground"
+                                                            id="is_internal_description"
                                                         >
                                                             Mark this account as
                                                             for internal use
@@ -366,12 +367,15 @@ const AccountCreateUpdateForm = ({
                                         <GradientBackground gradientOnly>
                                             <div className="shadow-xs relative flex w-full items-start gap-2 rounded-2xl border border-input p-4 outline-none duration-200 ease-out has-[:checked]:border-primary/30 has-[:checked]:bg-primary/40">
                                                 <Checkbox
-                                                    id="cash_on_hand_checkbox"
+                                                    aria-describedby="cash_on_hand_description"
                                                     checked={
                                                         field.value ===
                                                         AccountExclusiveSettingTypeEnum.CashOnHand
                                                     }
+                                                    className="order-1 after:absolute after:inset-0"
                                                     disabled={isLoading}
+                                                    id="cash_on_hand_checkbox"
+                                                    name={field.name}
                                                     onCheckedChange={(
                                                         checked: boolean
                                                     ) =>
@@ -381,9 +385,6 @@ const AccountCreateUpdateForm = ({
                                                                 : AccountExclusiveSettingTypeEnum.None
                                                         )
                                                     }
-                                                    name={field.name}
-                                                    className="order-1 after:absolute after:inset-0"
-                                                    aria-describedby="cash_on_hand_description"
                                                 />
                                                 <div className="flex grow items-center gap-3">
                                                     <div className="size-fit rounded-full bg-secondary p-2">
@@ -394,8 +395,8 @@ const AccountCreateUpdateForm = ({
                                                             Cash on Hand
                                                         </Label>
                                                         <p
-                                                            id="cash_on_hand_description"
                                                             className="text-xs text-muted-foreground"
+                                                            id="cash_on_hand_description"
                                                         >
                                                             Designate this as a
                                                             Cash on Hand
@@ -410,12 +411,15 @@ const AccountCreateUpdateForm = ({
                                         <GradientBackground gradientOnly>
                                             <div className="shadow-xs relative flex w-full items-start gap-2 rounded-2xl border border-input p-4 outline-none duration-200 ease-out has-[:checked]:border-primary/30 has-[:checked]:bg-primary/40">
                                                 <Checkbox
-                                                    disabled={isLoading}
-                                                    id="paid_up_share_capital_checkbox"
+                                                    aria-describedby="paid_up_share_capital_description"
                                                     checked={
                                                         field.value ===
                                                         AccountExclusiveSettingTypeEnum.PaidUpShareCapital
                                                     }
+                                                    className="order-1 after:absolute after:inset-0"
+                                                    disabled={isLoading}
+                                                    id="paid_up_share_capital_checkbox"
+                                                    name={field.name}
                                                     onCheckedChange={(
                                                         checked: boolean
                                                     ) =>
@@ -425,9 +429,6 @@ const AccountCreateUpdateForm = ({
                                                                 : AccountExclusiveSettingTypeEnum.None
                                                         )
                                                     }
-                                                    name={field.name}
-                                                    className="order-1 after:absolute after:inset-0"
-                                                    aria-describedby="paid_up_share_capital_description"
                                                 />
                                                 <div className="flex grow items-center gap-3">
                                                     <div className="size-fit rounded-full bg-secondary p-2">
@@ -439,8 +440,8 @@ const AccountCreateUpdateForm = ({
                                                             Capital
                                                         </Label>
                                                         <p
-                                                            id="paid_up_share_capital_description"
                                                             className="text-xs text-muted-foreground"
+                                                            id="paid_up_share_capital_description"
                                                         >
                                                             This account
                                                             represents paid-up
@@ -457,16 +458,15 @@ const AccountCreateUpdateForm = ({
                         <fieldset className="grid grid-cols-3 gap-2">
                             <legend>Reporting & Display Configuration</legend>
                             <FormFieldWrapper
+                                className="grow"
                                 control={form.control}
+                                disabled={isLoading}
                                 label="Header Row"
                                 name="header_row"
-                                className="grow"
-                                disabled={isLoading}
                                 render={({ field }) => (
                                     <div className="flex grow flex-col gap-y-2">
                                         <Input
                                             {...field}
-                                            value={field.value ?? ''}
                                             onChange={(e) =>
                                                 field.onChange(
                                                     e.target.value === ''
@@ -478,21 +478,21 @@ const AccountCreateUpdateForm = ({
                                                 )
                                             }
                                             placeholder="Header Row"
+                                            value={field.value ?? ''}
                                         />
                                     </div>
                                 )}
                             />
                             <FormFieldWrapper
+                                className="grow"
                                 control={form.control}
+                                disabled={isLoading}
                                 label="Center Row"
                                 name="center_row"
-                                className="grow"
-                                disabled={isLoading}
                                 render={({ field }) => (
                                     <div className="flex grow flex-col gap-y-2">
                                         <Input
                                             {...field}
-                                            value={field.value ?? ''}
                                             onChange={(e) =>
                                                 field.onChange(
                                                     e.target.value === ''
@@ -504,21 +504,21 @@ const AccountCreateUpdateForm = ({
                                                 )
                                             }
                                             placeholder="Center Row"
+                                            value={field.value ?? ''}
                                         />
                                     </div>
                                 )}
                             />
                             <FormFieldWrapper
+                                className="grow"
                                 control={form.control}
+                                disabled={isLoading}
                                 label="Total Row"
                                 name="total_row"
-                                className="grow"
-                                disabled={isLoading}
                                 render={({ field }) => (
                                     <div className="flex grow flex-col gap-y-2">
                                         <Input
                                             {...field}
-                                            value={field.value ?? ''}
                                             onChange={(e) =>
                                                 field.onChange(
                                                     e.target.value === ''
@@ -530,38 +530,39 @@ const AccountCreateUpdateForm = ({
                                                 )
                                             }
                                             placeholder="Total Row"
+                                            value={field.value ?? ''}
                                         />
                                     </div>
                                 )}
                             />
                         </fieldset>
                         <FormFieldWrapper
-                            control={form.control}
-                            name="interest_fines_computation_diminishing"
-                            label="Diminishing Balance Computation Method"
                             className="col-span-2"
+                            control={form.control}
+                            label="Diminishing Balance Computation Method"
+                            name="interest_fines_computation_diminishing"
                             render={({ field }) => (
                                 <GradientBackground
-                                    gradientOnly
                                     className="p-5"
+                                    gradientOnly
                                 >
                                     <RadioGroup
+                                        className="grid grid-cols-1 gap-4 sm:grid-cols-2"
+                                        disabled={isLoading}
                                         onValueChange={field.onChange}
                                         value={field.value}
-                                        disabled={isLoading}
-                                        className="grid grid-cols-1 gap-4 sm:grid-cols-2"
                                     >
                                         {Object.values(
                                             InterestFinesComputationDiminishingEnum
                                         ).map((type) => (
                                             <div
-                                                key={type}
                                                 className="shadow-xs relative flex w-full items-center gap-2 rounded-2xl border border-input p-4 outline-none duration-200 ease-out has-[:checked]:border-primary/30 has-[:checked]:bg-primary/40"
+                                                key={type}
                                             >
                                                 <RadioGroupItem
-                                                    value={type}
-                                                    id={`interest-fines-diminishing-${type}`}
                                                     className="order-1 after:absolute after:inset-0"
+                                                    id={`interest-fines-diminishing-${type}`}
+                                                    value={type}
                                                 />
                                                 <div className="flex grow items-center gap-3">
                                                     <div className="grid gap-2">
@@ -571,8 +572,8 @@ const AccountCreateUpdateForm = ({
                                                             {type}
                                                         </Label>
                                                         <p
-                                                            id={`interest-fines-diminishing-${type}-description`}
                                                             className="text-xs text-muted-foreground"
+                                                            id={`interest-fines-diminishing-${type}-description`}
                                                         >
                                                             {type ===
                                                                 InterestFinesComputationDiminishingEnum.None &&
@@ -590,33 +591,33 @@ const AccountCreateUpdateForm = ({
                             )}
                         />
                         <FormFieldWrapper
-                            control={form.control}
-                            name="interest_fines_computation_diminishing_straight_diminishing_yearly"
-                            label="Detailed Diminishing/Straight/Yearly Computation"
                             className="col-span-2"
+                            control={form.control}
+                            label="Detailed Diminishing/Straight/Yearly Computation"
+                            name="interest_fines_computation_diminishing_straight_diminishing_yearly"
                             render={({ field }) => (
                                 <GradientBackground
+                                    className="p-5"
                                     gradientOnly
                                     opacity={0.03}
-                                    className="p-5"
                                 >
                                     <RadioGroup
-                                        onValueChange={field.onChange}
-                                        value={field.value}
                                         className="grid grid-cols-1 gap-4"
                                         disabled={isLoading}
+                                        onValueChange={field.onChange}
+                                        value={field.value}
                                     >
                                         {Object.values(
                                             InterestFinesComputationDiminishingStraightDiminishingYearlyEnum
                                         ).map((type) => (
                                             <div
-                                                key={type}
                                                 className="shadow-xs relative flex w-full items-center gap-2 rounded-2xl border border-input p-4 outline-none duration-200 ease-out has-[:checked]:border-primary/30 has-[:checked]:bg-primary/40"
+                                                key={type}
                                             >
                                                 <RadioGroupItem
-                                                    value={type}
-                                                    id={`interest-fines-yearly-${type}`}
                                                     className="order-1 after:absolute after:inset-0"
+                                                    id={`interest-fines-yearly-${type}`}
+                                                    value={type}
                                                 />
                                                 <div className="flex grow items-center gap-3">
                                                     <div className="grid gap-2">
@@ -626,8 +627,8 @@ const AccountCreateUpdateForm = ({
                                                             {type}
                                                         </Label>
                                                         <p
-                                                            id={`interest-fines-yearly-${type}-description`}
                                                             className="text-xs text-muted-foreground"
+                                                            id={`interest-fines-yearly-${type}-description`}
                                                         >
                                                             {type ===
                                                                 InterestFinesComputationDiminishingStraightDiminishingYearlyEnum.None &&
@@ -650,10 +651,10 @@ const AccountCreateUpdateForm = ({
                             <fieldset className="grid w-full grid-cols-2 gap-x-2">
                                 <legend>Deposit</legend>
                                 <FormFieldWrapper
+                                    className="grow"
                                     control={form.control}
                                     label="Min Amount"
                                     name="minAmount"
-                                    className="grow"
                                     render={({ field }) => (
                                         <div className="flex grow flex-col gap-y-2">
                                             <Input
@@ -662,7 +663,6 @@ const AccountCreateUpdateForm = ({
                                                     isDisabled(field.name) ||
                                                     isLoading
                                                 }
-                                                value={field.value ?? ''}
                                                 onChange={(e) =>
                                                     field.onChange(
                                                         e.target.value === ''
@@ -673,20 +673,20 @@ const AccountCreateUpdateForm = ({
                                                     )
                                                 }
                                                 placeholder="Min Amount"
+                                                value={field.value ?? ''}
                                             />
                                         </div>
                                     )}
                                 />
                                 <FormFieldWrapper
+                                    className="grow"
                                     control={form.control}
                                     label="Max Amount"
                                     name="maxAmount"
-                                    className="grow"
                                     render={({ field }) => (
                                         <div className="flex grow flex-col gap-y-2">
                                             <Input
                                                 {...field}
-                                                value={field.value ?? ''}
                                                 disabled={
                                                     isDisabled(field.name) ||
                                                     isLoading
@@ -701,6 +701,7 @@ const AccountCreateUpdateForm = ({
                                                     )
                                                 }
                                                 placeholder="Max Amount"
+                                                value={field.value ?? ''}
                                             />
                                         </div>
                                     )}
@@ -711,13 +712,16 @@ const AccountCreateUpdateForm = ({
                             <fieldset className="flex flex-col gap-2">
                                 <legend>Loan</legend>
                                 <FormFieldWrapper
+                                    className="col-span-4"
                                     control={form.control}
                                     label="Computation type"
                                     name="computation_type"
-                                    className="col-span-4"
                                     render={({ field }) => (
                                         <FormControl>
                                             <Select
+                                                defaultValue={
+                                                    field.value || undefined
+                                                }
                                                 disabled={
                                                     isDisabled(field.name) ||
                                                     isLoading
@@ -729,9 +733,6 @@ const AccountCreateUpdateForm = ({
                                                         selectedValue
                                                     )
                                                 }}
-                                                defaultValue={
-                                                    field.value || undefined
-                                                }
                                             >
                                                 <SelectTrigger className="w-full">
                                                     {field.value ||
@@ -755,18 +756,38 @@ const AccountCreateUpdateForm = ({
                                         </FormControl>
                                     )}
                                 />
+                                <FormFieldWrapper
+                                    className="col-span-4"
+                                    control={form.control}
+                                    disabled={isLoading}
+                                    label="Computation Sheet/Scheme"
+                                    name="computation_sheet_id"
+                                    render={({ field }) => (
+                                        <ComputationSheetCombobox
+                                            onChange={(computationSheet) =>
+                                                field.onChange(
+                                                    computationSheet.id
+                                                )
+                                            }
+                                            value={
+                                                field.value
+                                                    ? String(field.value)
+                                                    : undefined
+                                            }
+                                        />
+                                    )}
+                                />
                                 <div className="grid grid-cols-4 gap-2">
                                     <FormFieldWrapper
+                                        className="grow"
                                         control={form.control}
+                                        disabled={isLoading}
                                         label="Fines Amortization"
                                         name="fines_amort"
-                                        className="grow"
-                                        disabled={isLoading}
                                         render={({ field }) => (
                                             <div className="flex grow flex-col gap-y-2">
                                                 <Input
                                                     {...field}
-                                                    value={field.value ?? ''}
                                                     disabled={
                                                         isDisabled(
                                                             field.name
@@ -784,21 +805,21 @@ const AccountCreateUpdateForm = ({
                                                         )
                                                     }
                                                     placeholder="Fines Amortization"
+                                                    value={field.value ?? ''}
                                                 />
                                             </div>
                                         )}
                                     />
                                     <FormFieldWrapper
+                                        className="grow"
                                         control={form.control}
+                                        disabled={isLoading}
                                         label="Fines Maturity"
                                         name="fines_maturity"
-                                        className="grow"
-                                        disabled={isLoading}
                                         render={({ field }) => (
                                             <div className="flex grow flex-col gap-y-2">
                                                 <Input
                                                     {...field}
-                                                    value={field.value ?? ''}
                                                     disabled={
                                                         isDisabled(
                                                             field.name
@@ -816,21 +837,21 @@ const AccountCreateUpdateForm = ({
                                                         )
                                                     }
                                                     placeholder="Fines Maturity"
+                                                    value={field.value ?? ''}
                                                 />
                                             </div>
                                         )}
                                     />
                                     <FormFieldWrapper
+                                        className="grow"
                                         control={form.control}
+                                        disabled={isLoading}
                                         label="Interest Standard"
                                         name="interest_standard"
-                                        className="grow"
-                                        disabled={isLoading}
                                         render={({ field }) => (
                                             <div className="flex grow flex-col gap-y-2">
                                                 <Input
                                                     {...field}
-                                                    value={field.value ?? ''}
                                                     disabled={
                                                         isDisabled(
                                                             field.name
@@ -848,21 +869,21 @@ const AccountCreateUpdateForm = ({
                                                         )
                                                     }
                                                     placeholder="Interest Standard"
+                                                    value={field.value ?? ''}
                                                 />
                                             </div>
                                         )}
                                     />
                                     <FormFieldWrapper
+                                        className="grow"
                                         control={form.control}
+                                        disabled={isLoading}
                                         label="Interest Secured"
                                         name="interest_secured"
-                                        className="grow"
-                                        disabled={isLoading}
                                         render={({ field }) => (
                                             <div className="flex grow flex-col gap-y-2">
                                                 <Input
                                                     {...field}
-                                                    value={field.value ?? ''}
                                                     disabled={
                                                         isDisabled(
                                                             field.name
@@ -880,21 +901,21 @@ const AccountCreateUpdateForm = ({
                                                         )
                                                     }
                                                     placeholder="Interest Secured"
+                                                    value={field.value ?? ''}
                                                 />
                                             </div>
                                         )}
                                     />
                                     <FormFieldWrapper
+                                        className="col-span-2"
                                         control={form.control}
+                                        disabled={isLoading}
                                         label="Fines Grace Period Maturity (Days)"
                                         name="fines_grace_period_maturity"
-                                        className="col-span-2"
-                                        disabled={isLoading}
                                         render={({ field }) => (
                                             <div className="flex grow flex-col gap-y-2">
                                                 <Input
                                                     {...field}
-                                                    value={field.value ?? ''}
                                                     disabled={
                                                         isDisabled(
                                                             field.name
@@ -913,20 +934,20 @@ const AccountCreateUpdateForm = ({
                                                         )
                                                     }
                                                     placeholder="Fines Grace Period Maturity"
+                                                    value={field.value ?? ''}
                                                 />
                                             </div>
                                         )}
                                     />
                                     <FormFieldWrapper
                                         control={form.control}
+                                        disabled={isLoading}
                                         label="Yearly Subscription Fee"
                                         name="yearly_subscription_fee"
-                                        disabled={isLoading}
                                         render={({ field }) => (
                                             <div className="flex grow flex-col gap-y-2">
                                                 <Input
                                                     {...field}
-                                                    value={field.value ?? ''}
                                                     disabled={
                                                         isDisabled(
                                                             field.name
@@ -944,20 +965,20 @@ const AccountCreateUpdateForm = ({
                                                         )
                                                     }
                                                     placeholder="Yearly Subscription Fee"
+                                                    value={field.value ?? ''}
                                                 />
                                             </div>
                                         )}
                                     />
                                     <FormFieldWrapper
                                         control={form.control}
+                                        disabled={isLoading}
                                         label="Loan Cut-Off Days"
                                         name="loan_cut_off_days"
-                                        disabled={isLoading}
                                         render={({ field }) => (
                                             <div className="flex grow flex-col gap-y-2">
                                                 <Input
                                                     {...field}
-                                                    value={field.value ?? ''}
                                                     disabled={
                                                         isDisabled(
                                                             field.name
@@ -976,18 +997,22 @@ const AccountCreateUpdateForm = ({
                                                         )
                                                     }
                                                     placeholder="Loan Cut-Off Days"
+                                                    value={field.value ?? ''}
                                                 />
                                             </div>
                                         )}
                                     />
                                     <FormFieldWrapper
+                                        className="col-span-4"
                                         control={form.control}
                                         label="Interest Standard Computation"
                                         name="interest_standard_computation"
-                                        className="col-span-4"
                                         render={({ field }) => (
                                             <FormControl>
                                                 <Select
+                                                    defaultValue={
+                                                        field.value || undefined
+                                                    }
                                                     disabled={
                                                         isDisabled(
                                                             field.name
@@ -1000,9 +1025,6 @@ const AccountCreateUpdateForm = ({
                                                             selectedValue
                                                         )
                                                     }}
-                                                    defaultValue={
-                                                        field.value || undefined
-                                                    }
                                                 >
                                                     <SelectTrigger className="w-full">
                                                         {field.value ||
@@ -1036,35 +1058,35 @@ const AccountCreateUpdateForm = ({
                                     />
                                 </div>
                                 <FormFieldWrapper
-                                    control={form.control}
-                                    name="earned_unearned_interest"
-                                    label="Earned/Unearned Interest Calculation"
                                     className="col-span-2"
+                                    control={form.control}
+                                    label="Earned/Unearned Interest Calculation"
+                                    name="earned_unearned_interest"
                                     render={({ field }) => (
                                         <GradientBackground
-                                            gradientOnly
                                             className="p-5"
+                                            gradientOnly
                                         >
                                             <RadioGroup
-                                                onValueChange={field.onChange}
-                                                value={field.value}
                                                 className="grid grid-cols-1 gap-4 sm:grid-cols-2"
                                                 disabled={
                                                     isDisabled(field.name) ||
                                                     isLoading
                                                 }
+                                                onValueChange={field.onChange}
+                                                value={field.value}
                                             >
                                                 {Object.values(
                                                     EarnedUnearnedInterestEnum
                                                 ).map((type) => (
                                                     <div
-                                                        key={type}
                                                         className="shadow-xs relative flex w-full items-center gap-2 rounded-2xl border border-input p-4 outline-none duration-200 ease-out has-[:checked]:border-primary/30 has-[:checked]:bg-primary/40"
+                                                        key={type}
                                                     >
                                                         <RadioGroupItem
-                                                            value={type}
-                                                            id={`earned-unearned-${type}`}
                                                             className="order-1 after:absolute after:inset-0"
+                                                            id={`earned-unearned-${type}`}
+                                                            value={type}
                                                         />
                                                         <div className="flex grow items-center gap-3">
                                                             <div className="grid gap-2">
@@ -1074,8 +1096,8 @@ const AccountCreateUpdateForm = ({
                                                                     {type}
                                                                 </Label>
                                                                 <p
-                                                                    id={`earned-unearned-${type}-description`}
                                                                     className="text-xs text-muted-foreground"
+                                                                    id={`earned-unearned-${type}-description`}
                                                                 >
                                                                     {type ===
                                                                         EarnedUnearnedInterestEnum.None &&
@@ -1098,35 +1120,35 @@ const AccountCreateUpdateForm = ({
 
                                 {/* --- Loan Saving Type Field --- */}
                                 <FormFieldWrapper
-                                    control={form.control}
-                                    name="loan_saving_type"
-                                    label="Loan/Saving Ledger Type"
                                     className="col-span-2"
+                                    control={form.control}
+                                    label="Loan/Saving Ledger Type"
+                                    name="loan_saving_type"
                                     render={({ field }) => (
                                         <GradientBackground
-                                            gradientOnly
                                             className="p-5"
+                                            gradientOnly
                                         >
                                             <RadioGroup
-                                                onValueChange={field.onChange}
-                                                value={field.value}
                                                 className="grid grid-cols-1 gap-4 sm:grid-cols-2"
                                                 disabled={
                                                     isDisabled(field.name) ||
                                                     isLoading
                                                 }
+                                                onValueChange={field.onChange}
+                                                value={field.value}
                                             >
                                                 {Object.values(
                                                     LoanSavingTypeEnum
                                                 ).map((type) => (
                                                     <div
-                                                        key={type}
                                                         className="shadow-xs relative flex w-full items-center gap-2 rounded-2xl border border-input p-4 outline-none duration-200 ease-out has-[:checked]:border-primary/30 has-[:checked]:bg-primary/40"
+                                                        key={type}
                                                     >
                                                         <RadioGroupItem
-                                                            value={type}
-                                                            id={`loan-saving-${type}`}
                                                             className="order-1 after:absolute after:inset-0"
+                                                            id={`loan-saving-${type}`}
+                                                            value={type}
                                                         />
                                                         <div className="flex grow items-center gap-3">
                                                             <div className="grid gap-2">
@@ -1136,8 +1158,8 @@ const AccountCreateUpdateForm = ({
                                                                     {type}
                                                                 </Label>
                                                                 <p
-                                                                    id={`loan-saving-${type}-description`}
                                                                     className="text-xs text-muted-foreground"
+                                                                    id={`loan-saving-${type}-description`}
                                                                 >
                                                                     {type ===
                                                                         LoanSavingTypeEnum.Separate &&
@@ -1160,32 +1182,32 @@ const AccountCreateUpdateForm = ({
 
                                 {/* --- Interest Deduction Field --- */}
                                 <FormFieldWrapper
-                                    control={form.control}
-                                    name="interest_deduction"
-                                    label="Interest Deduction Method"
                                     className="col-span-2"
+                                    control={form.control}
+                                    label="Interest Deduction Method"
+                                    name="interest_deduction"
                                     render={({ field }) => (
                                         <GradientBackground
-                                            gradientOnly
                                             className="p-5"
+                                            gradientOnly
                                         >
                                             <RadioGroup
-                                                onValueChange={field.onChange}
-                                                value={field.value}
                                                 className="grid grid-cols-1 gap-4 sm:grid-cols-2"
                                                 disabled={isLoading}
+                                                onValueChange={field.onChange}
+                                                value={field.value}
                                             >
                                                 {Object.values(
                                                     InterestDeductionEnum
                                                 ).map((type) => (
                                                     <div
-                                                        key={type}
                                                         className="shadow-xs relative flex w-full items-center gap-2 rounded-2xl border border-input p-4 outline-none duration-200 ease-out has-[:checked]:border-primary/30 has-[:checked]:bg-primary/40"
+                                                        key={type}
                                                     >
                                                         <RadioGroupItem
-                                                            value={type}
-                                                            id={`interest-deduction-${type}`}
                                                             className="order-1 after:absolute after:inset-0"
+                                                            id={`interest-deduction-${type}`}
+                                                            value={type}
                                                         />
                                                         <div className="flex grow items-center gap-3">
                                                             <div className="grid gap-2">
@@ -1195,8 +1217,8 @@ const AccountCreateUpdateForm = ({
                                                                     {type}
                                                                 </Label>
                                                                 <p
-                                                                    id={`interest-deduction-${type}-description`}
                                                                     className="text-xs text-muted-foreground"
+                                                                    id={`interest-deduction-${type}-description`}
                                                                 >
                                                                     {type ===
                                                                         InterestDeductionEnum.Above &&
@@ -1218,21 +1240,21 @@ const AccountCreateUpdateForm = ({
                         <fieldset className="my-5 flex flex-col gap-y-2">
                             <legend className="text-primary">Other</legend>
                             <FormFieldWrapper
+                                className="col-span-4"
                                 control={form.control}
                                 label="General Ledger Type *"
                                 name="general_ledger_type"
-                                className="col-span-4"
                                 render={({ field }) => (
                                     <FormControl>
                                         <Select
-                                            onValueChange={(selectedValue) => {
-                                                field.onChange(selectedValue)
-                                            }}
+                                            defaultValue={field.value}
                                             disabled={
                                                 isDisabled(field.name) ||
                                                 isLoading
                                             }
-                                            defaultValue={field.value}
+                                            onValueChange={(selectedValue) => {
+                                                field.onChange(selectedValue)
+                                            }}
                                         >
                                             <SelectTrigger className="w-full">
                                                 {field.value ||
@@ -1257,21 +1279,21 @@ const AccountCreateUpdateForm = ({
                                 )}
                             />
                             <FormFieldWrapper
+                                className="col-span-4"
                                 control={form.control}
                                 label="Financial Statement Type *"
                                 name="financial_statement_type"
-                                className="col-span-4"
                                 render={({ field }) => (
                                     <FormControl>
                                         <Select
-                                            onValueChange={(selectedValue) => {
-                                                field.onChange(selectedValue)
-                                            }}
                                             defaultValue={field.value}
                                             disabled={
                                                 isDisabled(field.name) ||
                                                 isLoading
                                             }
+                                            onValueChange={(selectedValue) => {
+                                                field.onChange(selectedValue)
+                                            }}
                                         >
                                             <SelectTrigger className="w-full">
                                                 {field.value ||
@@ -1304,19 +1326,19 @@ const AccountCreateUpdateForm = ({
                                             <GradientBackground gradientOnly>
                                                 <div className="shadow-xs relative flex w-full items-start gap-2 rounded-2xl border border-input p-4 outline-none duration-200 ease-out has-[:checked]:border-primary/30 has-[:checked]:bg-primary/40">
                                                     <Checkbox
-                                                        id={field.name}
+                                                        aria-describedby={`${field.name}`}
                                                         checked={field.value}
-                                                        onCheckedChange={
-                                                            field.onChange
-                                                        }
+                                                        className="order-1 after:absolute after:inset-0"
                                                         disabled={
                                                             isDisabled(
                                                                 field.name
                                                             ) || isLoading
                                                         }
+                                                        id={field.name}
                                                         name={field.name}
-                                                        className="order-1 after:absolute after:inset-0"
-                                                        aria-describedby={`${field.name}`}
+                                                        onCheckedChange={
+                                                            field.onChange
+                                                        }
                                                     />
                                                     <div className="flex grow items-center gap-3">
                                                         <div className="size-fit rounded-full bg-secondary p-2">
@@ -1332,8 +1354,8 @@ const AccountCreateUpdateForm = ({
                                                                 ledger grouping
                                                             </Label>
                                                             <p
-                                                                id={`${field.name}`}
                                                                 className="text-xs text-muted-foreground"
+                                                                id={`${field.name}`}
                                                             >
                                                                 Exclude the
                                                                 General ledger
@@ -1354,19 +1376,19 @@ const AccountCreateUpdateForm = ({
                                             <GradientBackground gradientOnly>
                                                 <div className="shadow-xs relative flex w-full items-start gap-2 rounded-2xl border border-input p-4 outline-none duration-200 ease-out has-[:checked]:border-primary/30 has-[:checked]:bg-primary/40">
                                                     <Checkbox
-                                                        id={field.name}
+                                                        aria-describedby={`${field.name}`}
                                                         checked={field.value}
-                                                        onCheckedChange={
-                                                            field.onChange
-                                                        }
-                                                        name={field.name}
+                                                        className="order-1 after:absolute after:inset-0"
                                                         disabled={
                                                             isDisabled(
                                                                 field.name
                                                             ) || isLoading
                                                         }
-                                                        className="order-1 after:absolute after:inset-0"
-                                                        aria-describedby={`${field.name}`}
+                                                        id={field.name}
+                                                        name={field.name}
+                                                        onCheckedChange={
+                                                            field.onChange
+                                                        }
                                                     />
                                                     <div className="flex grow items-center gap-3">
                                                         <div className="size-fit rounded-full bg-secondary p-2">
@@ -1382,8 +1404,8 @@ const AccountCreateUpdateForm = ({
                                                                 Period Daily
                                                             </Label>
                                                             <p
-                                                                id={`${field.name}`}
                                                                 className="text-xs text-muted-foreground"
+                                                                id={`${field.name}`}
                                                             >
                                                                 Enable daily
                                                                 grace period
@@ -1400,35 +1422,35 @@ const AccountCreateUpdateForm = ({
 
                             {/* --- Lumpsum Computation Type Field --- */}
                             <FormFieldWrapper
-                                control={form.control}
-                                name="lumpsum_computation_type"
-                                label="Select Lumpsum Computation Type"
                                 className="col-span-2"
+                                control={form.control}
+                                label="Select Lumpsum Computation Type"
+                                name="lumpsum_computation_type"
                                 render={({ field }) => (
                                     <GradientBackground
-                                        gradientOnly
                                         className="p-5"
+                                        gradientOnly
                                     >
                                         <RadioGroup
-                                            value={field.value}
+                                            className="grid grid-cols-1 gap-4 sm:grid-cols-2"
                                             disabled={
                                                 isDisabled(field.name) ||
                                                 isLoading
                                             }
                                             onValueChange={field.onChange}
-                                            className="grid grid-cols-1 gap-4 sm:grid-cols-2"
+                                            value={field.value}
                                         >
                                             {Object.values(
                                                 LumpsumComputationTypeEnum
                                             ).map((type) => (
                                                 <div
-                                                    key={type}
                                                     className="shadow-xs relative flex w-full items-center gap-2 rounded-2xl border border-input p-4 outline-none duration-200 ease-out has-[:checked]:border-primary/30 has-[:checked]:bg-primary/40"
+                                                    key={type}
                                                 >
                                                     <RadioGroupItem
-                                                        value={type}
-                                                        id={`lumpsum-type-${type}`}
                                                         className="order-1 after:absolute after:inset-0"
+                                                        id={`lumpsum-type-${type}`}
+                                                        value={type}
                                                     />
                                                     <div className="flex grow items-center gap-3">
                                                         <div className="grid gap-2">
@@ -1438,8 +1460,8 @@ const AccountCreateUpdateForm = ({
                                                                 {type}
                                                             </Label>
                                                             <p
-                                                                id={`lumpsum-type-${type}-description`}
                                                                 className="text-xs text-muted-foreground"
+                                                                id={`lumpsum-type-${type}-description`}
                                                             >
                                                                 {type ===
                                                                     LumpsumComputationTypeEnum.None &&
@@ -1465,35 +1487,35 @@ const AccountCreateUpdateForm = ({
 
                             {/* --- Other Deduction Entry Field --- */}
                             <FormFieldWrapper
-                                control={form.control}
-                                name="other_deduction_entry"
-                                label="Other Deduction Entry"
                                 className="col-span-2"
+                                control={form.control}
+                                label="Other Deduction Entry"
+                                name="other_deduction_entry"
                                 render={({ field }) => (
                                     <GradientBackground
-                                        gradientOnly
                                         className="p-5"
+                                        gradientOnly
                                     >
                                         <RadioGroup
-                                            value={field.value}
+                                            className="grid grid-cols-1 gap-4 sm:grid-cols-2"
                                             disabled={
                                                 isDisabled(field.name) ||
                                                 isLoading
                                             }
                                             onValueChange={field.onChange}
-                                            className="grid grid-cols-1 gap-4 sm:grid-cols-2"
+                                            value={field.value}
                                         >
                                             {Object.values(
                                                 OtherDeductionEntryEnum
                                             ).map((type) => (
                                                 <div
-                                                    key={type}
                                                     className="shadow-xs relative flex w-full items-center gap-2 rounded-2xl border border-input p-4 outline-none duration-200 ease-out has-[:checked]:border-primary/30 has-[:checked]:bg-primary/40"
+                                                    key={type}
                                                 >
                                                     <RadioGroupItem
-                                                        value={type}
-                                                        id={`other-deduction-${type}`}
                                                         className="order-1 after:absolute after:inset-0"
+                                                        id={`other-deduction-${type}`}
+                                                        value={type}
                                                     />
                                                     <div className="flex grow items-center gap-3">
                                                         <div className="grid gap-2">
@@ -1503,8 +1525,8 @@ const AccountCreateUpdateForm = ({
                                                                 {type}
                                                             </Label>
                                                             <p
-                                                                id={`other-deduction-${type}-description`}
                                                                 className="text-xs text-muted-foreground"
+                                                                id={`other-deduction-${type}-description`}
                                                             >
                                                                 {type ===
                                                                     OtherDeductionEntryEnum.None &&
@@ -1524,35 +1546,35 @@ const AccountCreateUpdateForm = ({
 
                             {/* --- Interest Saving Type Diminishing Straight Field --- */}
                             <FormFieldWrapper
-                                control={form.control}
-                                name="interest_saving_type_diminishing_straight"
-                                label="Interest Saving Type (Diminishing/Straight)"
                                 className="col-span-2"
+                                control={form.control}
+                                label="Interest Saving Type (Diminishing/Straight)"
+                                name="interest_saving_type_diminishing_straight"
                                 render={({ field }) => (
                                     <GradientBackground
-                                        gradientOnly
                                         className="p-5"
+                                        gradientOnly
                                     >
                                         <RadioGroup
-                                            onValueChange={field.onChange}
-                                            value={field.value}
                                             className="grid grid-cols-1 gap-4 sm:grid-cols-2"
                                             disabled={
                                                 isDisabled(field.name) ||
                                                 isLoading
                                             }
+                                            onValueChange={field.onChange}
+                                            value={field.value}
                                         >
                                             {Object.values(
                                                 InterestSavingTypeDiminishingStraightEnum
                                             ).map((type) => (
                                                 <div
-                                                    key={type}
                                                     className="shadow-xs relative flex w-full items-center gap-2 rounded-2xl border border-input p-4 outline-none duration-200 ease-out has-[:checked]:border-primary/30 has-[:checked]:bg-primary/40"
+                                                    key={type}
                                                 >
                                                     <RadioGroupItem
-                                                        value={type}
-                                                        id={`interest-saving-type-${type}`}
                                                         className="order-1 after:absolute after:inset-0"
+                                                        id={`interest-saving-type-${type}`}
+                                                        value={type}
                                                     />
                                                     <div className="flex grow items-center gap-3">
                                                         <div className="grid gap-2">
@@ -1562,8 +1584,8 @@ const AccountCreateUpdateForm = ({
                                                                 {type}
                                                             </Label>
                                                             <p
-                                                                id={`interest-saving-type-${type}-description`}
                                                                 className="text-xs text-muted-foreground"
+                                                                id={`interest-saving-type-${type}-description`}
                                                             >
                                                                 {type ===
                                                                     InterestSavingTypeDiminishingStraightEnum.Spread &&
@@ -1583,36 +1605,36 @@ const AccountCreateUpdateForm = ({
 
                             {/* --- Other Information Of An Account Field --- */}
                             <FormFieldWrapper
-                                control={form.control}
-                                name="other_information_of_an_account"
-                                label="Other Account Information / Classification"
                                 className="col-span-2"
+                                control={form.control}
+                                label="Other Account Information / Classification"
+                                name="other_information_of_an_account"
                                 render={({ field }) => (
                                     <GradientBackground
+                                        className="p-5"
                                         gradientOnly
                                         opacity={0.03}
-                                        className="p-5"
                                     >
                                         <RadioGroup
-                                            onValueChange={field.onChange}
-                                            value={field.value}
                                             className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3"
                                             disabled={
                                                 isDisabled(field.name) ||
                                                 isLoading
                                             }
+                                            onValueChange={field.onChange}
+                                            value={field.value}
                                         >
                                             {Object.values(
                                                 OtherInformationOfAnAccountEnum
                                             ).map((type) => (
                                                 <div
-                                                    key={type}
                                                     className="shadow-xs relative flex w-full items-center gap-2 rounded-2xl border border-input p-4 outline-none duration-200 ease-out has-[:checked]:border-primary/30 has-[:checked]:bg-primary/40"
+                                                    key={type}
                                                 >
                                                     <RadioGroupItem
-                                                        value={type}
-                                                        id={`other-info-${type}`}
                                                         className="order-1 after:absolute after:inset-0"
+                                                        id={`other-info-${type}`}
+                                                        value={type}
                                                     />
                                                     <div className="flex grow items-center gap-3">
                                                         <div className="grid gap-2">
@@ -1622,8 +1644,8 @@ const AccountCreateUpdateForm = ({
                                                                 {type}
                                                             </Label>
                                                             <p
-                                                                id={`other-info-${type}-description`}
                                                                 className="text-xs text-muted-foreground"
+                                                                id={`other-info-${type}-description`}
                                                             >
                                                                 {type ===
                                                                     OtherInformationOfAnAccountEnum.None &&
@@ -1660,17 +1682,17 @@ const AccountCreateUpdateForm = ({
                                         <GradientBackground gradientOnly>
                                             <div className="shadow-xs relative flex w-full items-start gap-2 rounded-2xl border border-input p-4 outline-none duration-200 ease-out has-[:checked]:border-primary/30 has-[:checked]:bg-primary/40">
                                                 <Checkbox
-                                                    id={field.name}
                                                     checked={field.value}
-                                                    onCheckedChange={
-                                                        field.onChange
-                                                    }
+                                                    className="order-1 after:absolute after:inset-0"
                                                     disabled={
                                                         isDisabled(
                                                             field.name
                                                         ) || isLoading
                                                     }
-                                                    className="order-1 after:absolute after:inset-0"
+                                                    id={field.name}
+                                                    onCheckedChange={
+                                                        field.onChange
+                                                    }
                                                 />
                                                 <div className="flex grow items-center gap-3">
                                                     <div className="size-fit rounded-full bg-secondary p-2">
@@ -1697,15 +1719,17 @@ const AccountCreateUpdateForm = ({
 
                                 <FormFieldWrapper
                                     control={form.control}
-                                    name="compassion_fund_amount"
                                     label="Compassion Fund Amount"
+                                    name="compassion_fund_amount"
                                     render={({ field }) => (
                                         <Input
                                             {...field}
-                                            type="number"
+                                            disabled={
+                                                isDisabled(field.name) ||
+                                                isLoading ||
+                                                !isCompassionFundEnabled
+                                            }
                                             min="0"
-                                            step="0.01"
-                                            value={field.value ?? ''}
                                             onChange={(e) =>
                                                 field.onChange(
                                                     e.target.value === ''
@@ -1716,11 +1740,9 @@ const AccountCreateUpdateForm = ({
                                                 )
                                             }
                                             placeholder="Enter compassion fund amount"
-                                            disabled={
-                                                isDisabled(field.name) ||
-                                                isLoading ||
-                                                !isCompassionFundEnabled
-                                            }
+                                            step="0.01"
+                                            type="number"
+                                            value={field.value ?? ''}
                                         />
                                     )}
                                 />
@@ -1741,14 +1763,14 @@ const AccountCreateUpdateForm = ({
                                 <GradientBackground gradientOnly>
                                     <div className="shadow-xs relative flex w-full items-start gap-2 rounded-2xl border border-input p-4 outline-none duration-200 ease-out has-[:checked]:border-primary/30 has-[:checked]:bg-primary/40">
                                         <Checkbox
-                                            id={field.name}
                                             checked={field.value}
-                                            onCheckedChange={field.onChange}
+                                            className="order-1 after:absolute after:inset-0"
                                             disabled={
                                                 isDisabled(field.name) ||
                                                 isLoading
                                             }
-                                            className="order-1 after:absolute after:inset-0"
+                                            id={field.name}
+                                            onCheckedChange={field.onChange}
                                         />
                                         <div className="flex grow items-center gap-3">
                                             <div className="size-fit rounded-full bg-secondary p-2">
@@ -1776,14 +1798,14 @@ const AccountCreateUpdateForm = ({
                                 <GradientBackground gradientOnly>
                                     <div className="shadow-xs relative flex w-full items-start gap-2 rounded-2xl border border-input p-4 outline-none duration-200 ease-out has-[:checked]:border-primary/30 has-[:checked]:bg-primary/40">
                                         <Checkbox
-                                            id={field.name}
                                             checked={field.value}
-                                            onCheckedChange={field.onChange}
+                                            className="order-1 after:absolute after:inset-0"
                                             disabled={
                                                 isDisabled(field.name) ||
                                                 isLoading
                                             }
-                                            className="order-1 after:absolute after:inset-0"
+                                            id={field.name}
+                                            onCheckedChange={field.onChange}
                                         />
                                         <div className="flex grow items-center gap-3">
                                             <div className="size-fit rounded-full bg-secondary p-2">
@@ -1811,14 +1833,14 @@ const AccountCreateUpdateForm = ({
                                 <GradientBackground gradientOnly>
                                     <div className="shadow-xs relative flex w-full items-start gap-2 rounded-2xl border border-input p-4 outline-none duration-200 ease-out has-[:checked]:border-primary/30 has-[:checked]:bg-primary/40">
                                         <Checkbox
-                                            id={field.name}
                                             checked={field.value}
-                                            onCheckedChange={field.onChange}
+                                            className="order-1 after:absolute after:inset-0"
                                             disabled={
                                                 isDisabled(field.name) ||
                                                 isLoading
                                             }
-                                            className="order-1 after:absolute after:inset-0"
+                                            id={field.name}
+                                            onCheckedChange={field.onChange}
                                         />
                                         <div className="flex grow items-center gap-3">
                                             <div className="size-fit rounded-full bg-secondary p-2">
@@ -1846,14 +1868,14 @@ const AccountCreateUpdateForm = ({
                                 <GradientBackground gradientOnly>
                                     <div className="shadow-xs relative flex w-full items-start gap-2 rounded-2xl border border-input p-4 outline-none duration-200 ease-out has-[:checked]:border-primary/30 has-[:checked]:bg-primary/40">
                                         <Checkbox
-                                            id={field.name}
                                             checked={field.value}
-                                            onCheckedChange={field.onChange}
+                                            className="order-1 after:absolute after:inset-0"
                                             disabled={
                                                 isDisabled(field.name) ||
                                                 isLoading
                                             }
-                                            className="order-1 after:absolute after:inset-0"
+                                            id={field.name}
+                                            onCheckedChange={field.onChange}
                                         />
                                         <div className="flex grow items-center gap-3">
                                             <div className="size-fit rounded-full bg-secondary p-2">
@@ -1881,14 +1903,14 @@ const AccountCreateUpdateForm = ({
                                 <GradientBackground gradientOnly>
                                     <div className="shadow-xs relative flex w-full items-start gap-2 rounded-2xl border border-input p-4 outline-none duration-200 ease-out has-[:checked]:border-primary/30 has-[:checked]:bg-primary/40">
                                         <Checkbox
-                                            id={field.name}
                                             checked={field.value}
-                                            onCheckedChange={field.onChange}
+                                            className="order-1 after:absolute after:inset-0"
                                             disabled={
                                                 isDisabled(field.name) ||
                                                 isLoading
                                             }
-                                            className="order-1 after:absolute after:inset-0"
+                                            id={field.name}
+                                            onCheckedChange={field.onChange}
                                         />
                                         <div className="flex grow items-center gap-3">
                                             <div className="size-fit rounded-full bg-secondary p-2">
@@ -1916,14 +1938,14 @@ const AccountCreateUpdateForm = ({
                                 <GradientBackground gradientOnly>
                                     <div className="shadow-xs relative flex w-full items-start gap-2 rounded-2xl border border-input p-4 outline-none duration-200 ease-out has-[:checked]:border-primary/30 has-[:checked]:bg-primary/40">
                                         <Checkbox
-                                            id={field.name}
                                             checked={field.value}
-                                            onCheckedChange={field.onChange}
+                                            className="order-1 after:absolute after:inset-0"
                                             disabled={
                                                 isDisabled(field.name) ||
                                                 isLoading
                                             }
-                                            className="order-1 after:absolute after:inset-0"
+                                            id={field.name}
+                                            onCheckedChange={field.onChange}
                                         />
                                         <div className="flex grow items-center gap-3">
                                             <div className="size-fit rounded-full bg-secondary p-2">
@@ -1951,14 +1973,14 @@ const AccountCreateUpdateForm = ({
                                 <GradientBackground gradientOnly>
                                     <div className="shadow-xs relative flex w-full items-start gap-2 rounded-2xl border border-input p-4 outline-none duration-200 ease-out has-[:checked]:border-primary/30 has-[:checked]:bg-primary/40">
                                         <Checkbox
-                                            id={field.name}
                                             checked={field.value}
-                                            onCheckedChange={field.onChange}
+                                            className="order-1 after:absolute after:inset-0"
                                             disabled={
                                                 isDisabled(field.name) ||
                                                 isLoading
                                             }
-                                            className="order-1 after:absolute after:inset-0"
+                                            id={field.name}
+                                            onCheckedChange={field.onChange}
                                         />
                                         <div className="flex grow items-center gap-3">
                                             <div className="size-fit rounded-full bg-secondary p-2">
@@ -1985,28 +2007,28 @@ const AccountCreateUpdateForm = ({
                     <div className="space-y-2 sticky bottom-0">
                         <div className="flex items-center justify-end gap-x-2">
                             <Button
-                                size="sm"
-                                type="button"
-                                variant="ghost"
+                                className="w-full self-end px-8 sm:w-fit"
                                 disabled={isLoading}
                                 onClick={() => {
                                     form.reset()
                                 }}
-                                className="w-full self-end px-8 sm:w-fit"
+                                size="sm"
+                                type="button"
+                                variant="ghost"
                             >
                                 Reset
                             </Button>
                             <Button
-                                type="submit"
-                                disabled={isLoading}
                                 className=""
+                                disabled={isLoading}
+                                type="submit"
                             >
                                 {isLoading ? (
                                     <div className="flex space-x-2">
                                         {accountId ? 'updating ' : 'Creating '}{' '}
                                         <LoadingSpinnerIcon
-                                            size={18}
                                             className="ml-2 animate-spin"
+                                            size={18}
                                         />
                                     </div>
                                 ) : (
@@ -2032,9 +2054,9 @@ export const AccountCreateUpdateFormModal = ({
 }) => {
     return (
         <Modal
-            title={title}
-            description={description}
             className={cn('!max-w-[95vw]', className)}
+            description={description}
+            title={title}
             {...props}
         >
             <AccountCreateUpdateForm

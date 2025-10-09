@@ -356,15 +356,15 @@ export default function ColorPicker({
                                 )}
                         </Button>
                     </PopoverTrigger>
-                    <PopoverContent className="w-auto p-3" align="start">
+                    <PopoverContent align="start" className="w-auto p-3">
                         <div className="color-picker space-y-3">
                             <div className="relative">
                                 <Button
-                                    variant="ghost"
-                                    size="icon"
                                     className="absolute -top-1.5 -left-1 z-10 flex h-7 w-7 items-center gap-1 bg-transparent hover:bg-transparent"
-                                    onClick={handleEyeDropper}
                                     disabled={!isEyeDropperAvailable()}
+                                    onClick={handleEyeDropper}
+                                    size="icon"
+                                    variant="ghost"
                                 >
                                     <PipetteIcon className="h-3 w-3" />
                                 </Button>
@@ -384,8 +384,8 @@ export default function ColorPicker({
                             </div>
                             <div className="flex gap-2">
                                 <Select
-                                    value={colorFormat}
                                     onValueChange={setColorFormat}
+                                    value={colorFormat}
                                 >
                                     <SelectTrigger className="!h-7 !w-[4.8rem] rounded-sm px-2 py-1 !text-sm">
                                         <SelectValue placeholder="Color" />
@@ -394,20 +394,20 @@ export default function ColorPicker({
                                         {alpha ? (
                                             <>
                                                 <SelectItem
-                                                    value="HEXA"
                                                     className="text-sm h-7"
+                                                    value="HEXA"
                                                 >
                                                     HEXA
                                                 </SelectItem>
                                                 <SelectItem
-                                                    value="RGBA"
                                                     className="text-sm h-7"
+                                                    value="RGBA"
                                                 >
                                                     RGBA
                                                 </SelectItem>
                                                 <SelectItem
-                                                    value="HSLA"
                                                     className="text-sm h-7"
+                                                    value="HSLA"
                                                 >
                                                     HSLA
                                                 </SelectItem>
@@ -415,20 +415,20 @@ export default function ColorPicker({
                                         ) : (
                                             <>
                                                 <SelectItem
-                                                    value="HEX"
                                                     className="text-sm h-7"
+                                                    value="HEX"
                                                 >
                                                     HEX
                                                 </SelectItem>
                                                 <SelectItem
-                                                    value="RGB"
                                                     className="text-sm h-7"
+                                                    value="RGB"
                                                 >
                                                     RGB
                                                 </SelectItem>
                                                 <SelectItem
-                                                    value="HSL"
                                                     className="text-sm h-7"
+                                                    value="HSL"
                                                 >
                                                     HSL
                                                 </SelectItem>
@@ -440,20 +440,20 @@ export default function ColorPicker({
                                 colorFormat === 'HEXA' ? (
                                     <Input
                                         className="h-7 w-[160px] rounded-sm text-sm"
-                                        value={getCurrentHexValue()}
+                                        maxLength={alpha ? 9 : 7}
                                         onChange={(e) =>
                                             handleHexChange(e.target.value)
                                         }
                                         placeholder={
                                             alpha ? '#FF0000FF' : '#FF0000'
                                         }
-                                        maxLength={alpha ? 9 : 7}
+                                        value={getCurrentHexValue()}
                                     />
                                 ) : colorFormat === 'RGB' ? (
                                     <div className="flex items-center">
                                         <Input
                                             className="h-7 w-13 rounded-l-sm rounded-r-none text-center text-sm "
-                                            value={colorValues.rgb.r}
+                                            maxLength={3}
                                             onChange={(e) =>
                                                 handleRgbChange(
                                                     'r',
@@ -461,11 +461,11 @@ export default function ColorPicker({
                                                 )
                                             }
                                             placeholder="255"
-                                            maxLength={3}
+                                            value={colorValues.rgb.r}
                                         />
                                         <Input
                                             className="h-7 w-13 rounded-none border-x-0 text-center text-sm"
-                                            value={colorValues.rgb.g}
+                                            maxLength={3}
                                             onChange={(e) =>
                                                 handleRgbChange(
                                                     'g',
@@ -473,11 +473,11 @@ export default function ColorPicker({
                                                 )
                                             }
                                             placeholder="255"
-                                            maxLength={3}
+                                            value={colorValues.rgb.g}
                                         />
                                         <Input
                                             className="h-7 w-13 rounded-l-none rounded-r-sm text-center text-sm"
-                                            value={colorValues.rgb.b}
+                                            maxLength={3}
                                             onChange={(e) =>
                                                 handleRgbChange(
                                                     'b',
@@ -485,7 +485,7 @@ export default function ColorPicker({
                                                 )
                                             }
                                             placeholder="255"
-                                            maxLength={3}
+                                            value={colorValues.rgb.b}
                                         />
                                     </div>
                                 ) : colorFormat === 'RGBA' &&
@@ -494,7 +494,7 @@ export default function ColorPicker({
                                     <div className="flex items-center">
                                         <Input
                                             className="h-7 w-10 rounded-l-sm rounded-r-none text-center text-sm px-1"
-                                            value={colorValues.rgba.r}
+                                            maxLength={3}
                                             onChange={(e) =>
                                                 handleRgbaChange(
                                                     'r',
@@ -502,11 +502,11 @@ export default function ColorPicker({
                                                 )
                                             }
                                             placeholder="255"
-                                            maxLength={3}
+                                            value={colorValues.rgba.r}
                                         />
                                         <Input
                                             className="h-7 w-10 rounded-none border-x-0 text-center text-sm px-1"
-                                            value={colorValues.rgba.g}
+                                            maxLength={3}
                                             onChange={(e) =>
                                                 handleRgbaChange(
                                                     'g',
@@ -514,11 +514,11 @@ export default function ColorPicker({
                                                 )
                                             }
                                             placeholder="255"
-                                            maxLength={3}
+                                            value={colorValues.rgba.g}
                                         />
                                         <Input
                                             className="h-7 w-10 rounded-none border-x-0 text-center text-sm px-1"
-                                            value={colorValues.rgba.b}
+                                            maxLength={3}
                                             onChange={(e) =>
                                                 handleRgbaChange(
                                                     'b',
@@ -526,13 +526,11 @@ export default function ColorPicker({
                                                 )
                                             }
                                             placeholder="255"
-                                            maxLength={3}
+                                            value={colorValues.rgba.b}
                                         />
                                         <Input
                                             className="h-7 w-10 rounded-l-none rounded-r-sm text-center text-sm px-1"
-                                            value={colorValues.rgba.a.toFixed(
-                                                2
-                                            )}
+                                            maxLength={4}
                                             onChange={(e) =>
                                                 handleRgbaChange(
                                                     'a',
@@ -540,14 +538,16 @@ export default function ColorPicker({
                                                 )
                                             }
                                             placeholder="1.00"
-                                            maxLength={4}
+                                            value={colorValues.rgba.a.toFixed(
+                                                2
+                                            )}
                                         />
                                     </div>
                                 ) : colorFormat === 'HSL' ? (
                                     <div className="flex items-center">
                                         <Input
                                             className="h-7 w-13 rounded-l-sm rounded-r-none text-center text-sm"
-                                            value={colorValues.hsl.h}
+                                            maxLength={3}
                                             onChange={(e) =>
                                                 handleHslChange(
                                                     'h',
@@ -555,11 +555,11 @@ export default function ColorPicker({
                                                 )
                                             }
                                             placeholder="360"
-                                            maxLength={3}
+                                            value={colorValues.hsl.h}
                                         />
                                         <Input
                                             className="h-7 w-13 rounded-none border-x-0 text-center text-sm"
-                                            value={colorValues.hsl.s}
+                                            maxLength={3}
                                             onChange={(e) =>
                                                 handleHslChange(
                                                     's',
@@ -567,11 +567,11 @@ export default function ColorPicker({
                                                 )
                                             }
                                             placeholder="100"
-                                            maxLength={3}
+                                            value={colorValues.hsl.s}
                                         />
                                         <Input
                                             className="h-7 w-13 rounded-l-none rounded-r-sm text-center text-sm"
-                                            value={colorValues.hsl.l}
+                                            maxLength={3}
                                             onChange={(e) =>
                                                 handleHslChange(
                                                     'l',
@@ -579,7 +579,7 @@ export default function ColorPicker({
                                                 )
                                             }
                                             placeholder="100"
-                                            maxLength={3}
+                                            value={colorValues.hsl.l}
                                         />
                                     </div>
                                 ) : colorFormat === 'HSLA' &&
@@ -588,7 +588,7 @@ export default function ColorPicker({
                                     <div className="flex items-center">
                                         <Input
                                             className="h-7 w-10 px-1 rounded-l-sm rounded-r-none text-center text-sm"
-                                            value={colorValues.hsla.h}
+                                            maxLength={3}
                                             onChange={(e) =>
                                                 handleHslaChange(
                                                     'h',
@@ -596,11 +596,11 @@ export default function ColorPicker({
                                                 )
                                             }
                                             placeholder="360"
-                                            maxLength={3}
+                                            value={colorValues.hsla.h}
                                         />
                                         <Input
                                             className="h-7 w-10 px-1 rounded-none border-x-0 text-center text-sm"
-                                            value={colorValues.hsla.s}
+                                            maxLength={3}
                                             onChange={(e) =>
                                                 handleHslaChange(
                                                     's',
@@ -608,11 +608,11 @@ export default function ColorPicker({
                                                 )
                                             }
                                             placeholder="100"
-                                            maxLength={3}
+                                            value={colorValues.hsla.s}
                                         />
                                         <Input
                                             className="h-7 w-10 px-1 rounded-none border-x-0 text-center text-sm"
-                                            value={colorValues.hsla.l}
+                                            maxLength={3}
                                             onChange={(e) =>
                                                 handleHslaChange(
                                                     'l',
@@ -620,13 +620,11 @@ export default function ColorPicker({
                                                 )
                                             }
                                             placeholder="100"
-                                            maxLength={3}
+                                            value={colorValues.hsla.l}
                                         />
                                         <Input
                                             className="h-7 w-10 px-1 rounded-l-none rounded-r-sm text-center text-sm"
-                                            value={colorValues.hsla.a.toFixed(
-                                                2
-                                            )}
+                                            maxLength={4}
                                             onChange={(e) =>
                                                 handleHslaChange(
                                                     'a',
@@ -634,7 +632,9 @@ export default function ColorPicker({
                                                 )
                                             }
                                             placeholder="1.00"
-                                            maxLength={4}
+                                            value={colorValues.hsla.a.toFixed(
+                                                2
+                                            )}
                                         />
                                     </div>
                                 ) : null}
@@ -644,14 +644,14 @@ export default function ColorPicker({
                 </Popover>
                 <div className="relative flex-1 sm:flex-none">
                     <Input
-                        placeholder={label}
-                        value={getCurrentHexValue()}
-                        onChange={(e) => handleHexChange(e.target.value)}
-                        onBlur={onBlur}
                         className={cn(
                             `h-12 uppercase ${error ? 'border-destructive' : ''},`,
                             inputClassName
                         )}
+                        onBlur={onBlur}
+                        onChange={(e) => handleHexChange(e.target.value)}
+                        placeholder={label}
+                        value={getCurrentHexValue()}
                     />
                     {isLoading && (
                         <span className="absolute inset-y-0 right-0 flex items-center pr-4">

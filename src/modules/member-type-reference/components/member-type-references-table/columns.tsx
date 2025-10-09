@@ -42,8 +42,8 @@ const MemberTypeReferenceTableColumns = (
                 <HeaderToggleSelect table={table} />
                 {!column.getIsPinned() && (
                     <PushPinSlashIcon
-                        onClick={() => column.pin('left')}
                         className="mr-2 size-3.5 cursor-pointer"
+                        onClick={() => column.pin('left')}
                     />
                 )}
             </div>
@@ -70,7 +70,7 @@ const MemberTypeReferenceTableColumns = (
         header: (props) => (
             <DataTableColumnHeader {...props} title="Description">
                 <ColumnActions {...props}>
-                    <TextFilter field="description" displayText="Description" />
+                    <TextFilter displayText="Description" field="description" />
                 </ColumnActions>
             </DataTableColumnHeader>
         ),

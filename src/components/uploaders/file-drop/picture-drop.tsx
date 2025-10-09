@@ -59,22 +59,22 @@ const PictureDrop = ({ onFileSelect, children }: Props) => {
                 <p className="text-foreground/80">Drop Here Desu</p>
             </div>
             <div>
-                <Label htmlFor="picture" className="group z-10 cursor-pointer">
+                <Label className="group z-10 cursor-pointer" htmlFor="picture">
                     <div
-                        onDrop={handleDrop}
-                        onDragOver={(e) => {
-                            e.preventDefault()
-                            setIsDragging(true)
-                        }}
-                        onDragLeave={(e) => {
-                            e.preventDefault()
-                            setIsDragging(false)
-                        }}
                         className={cn(
                             'min-h-[322px] text-foreground/60 hover:text-foreground/80',
                             'flex flex-col items-center justify-center space-y-4 rounded-xl border-2 border-dashed p-8 duration-700 ease-in-out',
                             isDragging && 'border-primary text-foreground'
                         )}
+                        onDragLeave={(e) => {
+                            e.preventDefault()
+                            setIsDragging(false)
+                        }}
+                        onDragOver={(e) => {
+                            e.preventDefault()
+                            setIsDragging(true)
+                        }}
+                        onDrop={handleDrop}
                     >
                         {children}
                         {!children && (
@@ -84,10 +84,9 @@ const PictureDrop = ({ onFileSelect, children }: Props) => {
                     </div>
                 </Label>
                 <Input
-                    id="picture"
-                    type="file"
                     accept="image/png, image/jpeg, image/jpg, image/webm"
                     className="hidden"
+                    id="picture"
                     onChange={(e) => {
                         if (e.target.files) {
                             if (isFileAllowed(e.target.files[0]))
@@ -98,6 +97,7 @@ const PictureDrop = ({ onFileSelect, children }: Props) => {
                                 )
                         }
                     }}
+                    type="file"
                 />
             </div>
         </>

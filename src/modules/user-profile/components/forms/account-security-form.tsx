@@ -87,25 +87,25 @@ const AccountSecurityForm = ({
     return (
         <Form {...form}>
             <form
-                ref={formRef}
-                onSubmit={onSubmit}
                 className={cn('flex w-full flex-col gap-y-4', className)}
+                onSubmit={onSubmit}
+                ref={formRef}
             >
                 <fieldset
-                    disabled={isPending || formProps.readOnly}
                     className="grid gap-x-6 gap-y-4 sm:gap-y-3"
+                    disabled={isPending || formProps.readOnly}
                 >
                     <fieldset className="space-y-4">
                         <FormFieldWrapper
                             control={form.control}
-                            name="old_password"
                             label="Old Password"
+                            name="old_password"
                             render={({ field }) => (
                                 <PasswordInput
                                     {...field}
+                                    disabled={isDisabled(field.name)}
                                     id={field.name}
                                     placeholder="Old Password"
-                                    disabled={isDisabled(field.name)}
                                 />
                             )}
                         />
@@ -116,14 +116,12 @@ const AccountSecurityForm = ({
                                 <FormItem>
                                     <PasswordInput
                                         {...field}
-                                        id={field.name}
-                                        placeholder="+8 Character Password"
                                         autoComplete="new-password"
                                         disabled={isDisabled(field.name)}
+                                        id={field.name}
+                                        placeholder="+8 Character Password"
                                     />
                                     <ValueChecklistMeter
-                                        value={field.value}
-                                        hideOnComplete
                                         checkList={ChecklistTemplate[
                                             'password-checklist'
                                         ].concat([
@@ -132,36 +130,38 @@ const AccountSecurityForm = ({
                                                 text: 'No more than 50 characters',
                                             },
                                         ])}
+                                        hideOnComplete
+                                        value={field.value}
                                     />
                                 </FormItem>
                             )}
                         />
                         <FormFieldWrapper
                             control={form.control}
-                            name="confirm_password"
                             label="Confirm Password"
+                            name="confirm_password"
                             render={({ field }) => (
                                 <Input
                                     {...field}
-                                    id={field.name}
-                                    type="password"
-                                    placeholder="Confirm your new password"
                                     disabled={isDisabled(field.name)}
+                                    id={field.name}
+                                    placeholder="Confirm your new password"
+                                    type="password"
                                 />
                             )}
                         />
                     </fieldset>
                 </fieldset>
                 <FormFooterResetSubmit
-                    error={error}
-                    readOnly={formProps.readOnly}
-                    isLoading={isPending}
                     disableSubmit={!form.formState.isDirty}
-                    submitText="Update"
+                    error={error}
+                    isLoading={isPending}
                     onReset={() => {
                         form.reset()
                         reset()
                     }}
+                    readOnly={formProps.readOnly}
+                    submitText="Update"
                 />
             </form>
         </Form>

@@ -97,84 +97,84 @@ const LoanStatusCreateUpdateForm = ({
     return (
         <Form {...form}>
             <form
-                ref={formRef}
-                onSubmit={onSubmit}
                 className={cn('flex w-full flex-col gap-y-4', className)}
+                onSubmit={onSubmit}
+                ref={formRef}
             >
                 <fieldset
-                    disabled={isPending || formProps.readOnly}
                     className="grid gap-x-6 gap-y-4 sm:gap-y-3"
+                    disabled={isPending || formProps.readOnly}
                 >
                     <fieldset className="space-y-3">
                         <FormFieldWrapper
                             control={form.control}
-                            name="name"
                             label="Name *"
+                            name="name"
                             render={({ field }) => (
                                 <Input
                                     {...field}
-                                    id={field.name}
-                                    placeholder="Loan Status Name"
                                     autoComplete="loan-status-name"
                                     disabled={isDisabled(field.name)}
+                                    id={field.name}
+                                    placeholder="Loan Status Name"
                                 />
                             )}
                         />
                         <div className="grid gap-x-2 md:grid-cols-2">
                             <FormFieldWrapper
                                 control={form.control}
-                                name="icon"
                                 label="Icon *"
+                                name="icon"
                                 render={({ field }) => (
                                     <IconCombobox
                                         {...field}
-                                        value={field.value as TIcon}
-                                        placeholder="Select status icon"
                                         disabled={isDisabled(field.name)}
+                                        placeholder="Select status icon"
+                                        value={field.value as TIcon}
                                     />
                                 )}
                             />
                             <FormFieldWrapper
                                 control={form.control}
-                                name="color"
                                 label={'color'}
+                                name="color"
                                 render={({ field }) => (
                                     <Input
                                         {...field}
-                                        type="color"
-                                        id={field.name}
-                                        placeholder="Color"
                                         autoComplete="loan-status-color"
                                         disabled={isDisabled(field.name)}
+                                        id={field.name}
+                                        placeholder="Color"
+                                        type="color"
                                     />
                                 )}
                             />
                         </div>
                         <FormFieldWrapper
                             control={form.control}
-                            name="description"
                             label="Description"
+                            name="description"
                             render={({ field }) => (
                                 <Textarea
                                     {...field}
                                     content={field.value}
-                                    placeholder="Description"
                                     disabled={isDisabled(field.name)}
+                                    placeholder="Description"
                                 />
                             )}
                         />
                     </fieldset>
                 </fieldset>
                 <FormFooterResetSubmit
-                    error={error}
-                    readOnly={formProps.readOnly}
-                    isLoading={isPending}
                     disableSubmit={!form.formState.isDirty}
-                    submitText={loanStatusId ? 'Update' : 'Create'}
+                    error={error}
+                    isLoading={isPending}
                     onReset={() => {
                         form.reset()
                         reset?.()
                     }}
+                    readOnly={formProps.readOnly}
+                    submitText={loanStatusId ? 'Update' : 'Create'}
                 />
             </form>
         </Form>
@@ -192,9 +192,9 @@ export const LoanStatusCreateUpdateFormModal = ({
 }) => {
     return (
         <Modal
-            title={title}
-            description={description}
             className={cn('', className)}
+            description={description}
+            title={title}
             {...props}
         >
             <LoanStatusCreateUpdateForm

@@ -116,9 +116,9 @@ const BatchCheckRemitance = ({
                     </p>
                 </div>
                 <Button
-                    size="icon"
                     className="size-fit p-1"
                     onClick={() => modalState.onOpenChange(true)}
+                    size="icon"
                 >
                     <PlusIcon />
                 </Button>
@@ -147,9 +147,9 @@ const RemittanceList = ({
                 list.map((checkRemittance) => {
                     return (
                         <RemittanceListRow
+                            checkRemittance={checkRemittance}
                             key={checkRemittance.id}
                             onUpdate={onUpdate}
-                            checkRemittance={checkRemittance}
                         />
                     )
                 })
@@ -182,25 +182,25 @@ const RemittanceListRow = ({
 
     return (
         <div
-            key={checkRemittance.id}
             className="space-y-4 rounded-xl bg-background p-4 text-xs"
+            key={checkRemittance.id}
         >
             <CheckRemittanceCreateUpdateFormModal
                 {...modalState}
-                title="Edit Check Remittance"
                 description="edit/update check remittance details"
                 formProps={{
                     onSuccess: onUpdate,
                     checkRemittanceId: checkRemittance.id,
                     defaultValues: checkRemittance,
                 }}
+                title="Edit Check Remittance"
             />
             <div className="flex items-center justify-between">
                 <div className="flex min-w-0 items-center gap-3">
                     <PreviewMediaWrapper media={checkRemittance.bank?.media}>
                         <ImageDisplay
-                            src={checkRemittance.bank?.media?.download_url}
                             className="h-9 w-9 rounded-full border bg-muted object-cover"
+                            src={checkRemittance.bank?.media?.download_url}
                         />
                     </PreviewMediaWrapper>
                     <div className="flex flex-col items-start">
@@ -215,20 +215,18 @@ const RemittanceListRow = ({
                 <div className="text-right">
                     <div className="flex justify-end gap-1">
                         <Button
-                            size="icon"
-                            variant="ghost"
                             className="!size-fit px-1.5 py-1.5 text-muted-foreground/40"
                             disabled={isDeleting}
                             onClick={() => modalState.onOpenChange(true)}
+                            size="icon"
+                            variant="ghost"
                         >
                             <PencilFillIcon className="size-4" />
                         </Button>
                         <Button
-                            size="icon"
-                            variant="ghost"
-                            hoverVariant="destructive"
                             className="!size-fit px-1.5 py-1.5 text-muted-foreground/40"
                             disabled={isDeleting}
+                            hoverVariant="destructive"
                             onClick={() =>
                                 onOpen({
                                     title: 'Delete Check Remittance',
@@ -240,6 +238,8 @@ const RemittanceListRow = ({
                                         ),
                                 })
                             }
+                            size="icon"
+                            variant="ghost"
                         >
                             {isDeleting ? (
                                 <LoadingSpinner />

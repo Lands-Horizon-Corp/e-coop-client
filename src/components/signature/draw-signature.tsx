@@ -32,19 +32,19 @@ const DrawSignature = ({
 
     return (
         <div
-            ref={SignaturePadParent}
             className={cn('w-full', isFullScreenMode ? 'h-full' : 'h-[300px]')}
+            ref={SignaturePadParent}
         >
             <ReactSignatureCanvas
-                ref={signatureRef}
-                clearOnResize={true}
-                velocityFilterWeight={isFullScreenMode ? 0 : 0.9}
                 canvasProps={{
                     className:
                         'sigCanvas w-full h-full rounded-lg border dark:bg-secondary',
                     width: dimensions.width,
                     height: dimensions.height,
                 }}
+                clearOnResize={true}
+                ref={signatureRef}
+                velocityFilterWeight={isFullScreenMode ? 0 : 0.9}
             />
         </div>
     )
