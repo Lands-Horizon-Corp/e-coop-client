@@ -9,7 +9,7 @@ import { useHotkeys } from 'react-hotkeys-hook'
 
 import { CheckFillIcon, DoorExitFillIcon } from '@/components/icons'
 import Modal, { IModalProps } from '@/components/modals/modal'
-import { useShortcutContext } from '@/components/shorcuts/general-shortcuts-wrapper'
+// import { useShortcutContext } from '@/components/shorcuts/general-shortcuts-wrapper';
 import { Button } from '@/components/ui/button'
 
 import { TEntityId } from '@/types'
@@ -26,7 +26,7 @@ const TransactionModalSuccessPayment = ({
     isOpen,
     ...props
 }: PaymentSuccessModalProps) => {
-    const { setActiveScope } = useShortcutContext()
+    // const { setActiveScope } = useShortcutContext()
 
     const { mutate: printGeneralLedgerTransaction } =
         usePrintGeneralLedgerTransaction({
@@ -58,7 +58,7 @@ const TransactionModalSuccessPayment = ({
         {
             scopes: [SHORTCUT_SCOPES.MODAL],
         },
-        [transaction, isOpen, onClose, setActiveScope]
+        [transaction, isOpen, onClose /*, setActiveScope*/]
     )
 
     const paymentType =

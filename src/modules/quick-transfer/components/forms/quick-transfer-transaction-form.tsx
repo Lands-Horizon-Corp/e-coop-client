@@ -32,7 +32,7 @@ import { useDepositWithdrawStore } from '@/store/transaction/deposit-withdraw-st
 import { useHotkeys } from 'react-hotkeys-hook'
 
 import FormFooterResetSubmit from '@/components/form-components/form-footer-reset-submit'
-import { useShortcutContext } from '@/components/shorcuts/general-shortcuts-wrapper'
+// import { useShortcutContext } from '@/components/shorcuts/general-shortcuts-wrapper'
 import { Checkbox } from '@/components/ui/checkbox'
 import { CommandShortcut } from '@/components/ui/command'
 import { Form } from '@/components/ui/form'
@@ -64,7 +64,7 @@ export const QuickTransferTransactionForm = ({
     defaultValues,
     disabledFields,
 }: TransactionEntryFormProps) => {
-    const { setActiveScope } = useShortcutContext()
+    // const { setActiveScope } = useShortcutContext()
     const {
         userSettingOR,
         settings_accounting_withdraw_default_value,
@@ -180,9 +180,9 @@ export const QuickTransferTransactionForm = ({
             form.setValue('member_profile_id', selectedMember?.id)
         }
 
-        setActiveScope(SHORTCUT_SCOPES.QUICK_TRANSFER)
+        // setActiveScope(SHORTCUT_SCOPES.QUICK_TRANSFER)
         form.setFocus('amount')
-    }, [selectedAccount, form, selectedMember, setActiveScope])
+    }, [selectedAccount, form, selectedMember /*, setActiveScope*/])
 
     useHotkeys('A', (e) => {
         form.setFocus('amount')

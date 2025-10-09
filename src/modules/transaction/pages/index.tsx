@@ -21,7 +21,7 @@ import { useHotkeys } from 'react-hotkeys-hook'
 
 import PageContainer from '@/components/containers/page-container'
 import { ResetIcon } from '@/components/icons'
-import { useShortcutContext } from '@/components/shorcuts/general-shortcuts-wrapper'
+// import { useShortcutContext } from '@/components/shorcuts/general-shortcuts-wrapper'
 import { Button } from '@/components/ui/button'
 
 import { useSubscribe } from '@/hooks/use-pubsub'
@@ -42,7 +42,7 @@ const Transaction = ({ transactionId, fullPath }: TTransactionProps) => {
     const queryClient = useQueryClient()
     const { hasNoTransactionBatch } = useTransactionBatchStore()
     const { modalData, isOpen, onClose } = useTransactionReverseSecurityStore()
-    const { setActiveScope } = useShortcutContext()
+    // const { setActiveScope } = useShortcutContext()
 
     const {
         selectedMember,
@@ -151,9 +151,9 @@ const Transaction = ({ transactionId, fullPath }: TTransactionProps) => {
 
     return (
         <div
-            onClick={() => {
-                setActiveScope(SHORTCUT_SCOPES.PAYMENT)
-            }}
+        // onClick={() => {
+        //     setActiveScope(SHORTCUT_SCOPES.PAYMENT)
+        // }}
         >
             <TransactionReverseRequestFormModal
                 formProps={{
@@ -253,7 +253,7 @@ const Transaction = ({ transactionId, fullPath }: TTransactionProps) => {
                             fullPath,
                         })
                         handleOnSuccessPaymentCallBack(transaction)
-                        setActiveScope(SHORTCUT_SCOPES.PAYMENT)
+                        // setActiveScope(SHORTCUT_SCOPES.PAYMENT)
                     }}
                     readOnly={!hasNoTransactionBatch}
                     transactionId={transactionId}
