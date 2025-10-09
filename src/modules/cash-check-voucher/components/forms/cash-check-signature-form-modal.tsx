@@ -222,7 +222,6 @@ const CashCheckVoucherTransactionSignatureUpdateForm = ({
         setStep(defaultStep)
     }
     const onSubmit = form.handleSubmit((payload) => {
-        console.log({ payload })
         const finalPayload: ICashCheckVoucherRequest = {
             ...formProps.defaultValues,
             ...payload,

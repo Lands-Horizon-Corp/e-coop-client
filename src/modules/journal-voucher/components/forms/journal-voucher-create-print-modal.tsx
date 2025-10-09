@@ -39,7 +39,7 @@ const JournalVoucherPrintForm = ({
     ...formProps
 }: IJournalVoucherPrintFormProps) => {
     const form = useForm<TJournalVoucherPrintSchema>({
-        resolver: standardSchemaResolver(JournalVoucherPrintSchema as any),
+        resolver: standardSchemaResolver(JournalVoucherPrintSchema),
         mode: 'onSubmit',
         reValidateMode: 'onChange',
         defaultValues: {
