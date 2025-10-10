@@ -80,6 +80,12 @@ const LoanView = ({
 
     return (
         <div className={cn('space-y-4 p-4 w-full ', className)}>
+            {errorMessage && (
+                <FormErrorMessage
+                    className="mx-auto"
+                    errorMessage={errorMessage}
+                />
+            )}
             {(isPending || !data) && isEnabled && <LoanViewSkeleton />}
             {data && (
                 <>
@@ -88,12 +94,6 @@ const LoanView = ({
                     <LoanLedgerTable className="h-[50vh] w-full rounded-lg" />
                     <LoanQuickSummary loanTransaction={data} />
                 </>
-            )}
-            {errorMessage && (
-                <FormErrorMessage
-                    className="w-fit mx-auto"
-                    errorMessage={errorMessage}
-                />
             )}
         </div>
     )

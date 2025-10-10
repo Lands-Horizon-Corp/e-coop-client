@@ -52,13 +52,39 @@ export const {
     useCreate: useCreateCashCheckVoucher,
     useUpdateById: useUpdateCashCheckVoucherById,
 
-    useGetAll: useGetAllCashCheckVoucher,
+    // useGetAll: useGetAllCashCheckVoucher,
     useGetById: useGetCashCheckVoucherById,
     useGetPaginated: useGetPaginatedCashCheckVoucher,
 
     useDeleteById: useDeleteCashCheckVoucherById,
     useDeleteMany: useDeleteManyCashCheckVoucher,
 } = apiCrudHooks
+
+type TCashCheckVoucherMode = 'draft' | 'printed' | 'approved' | 'released'
+
+export const useGetAllCashCheckVoucher = ({
+    mode,
+    query,
+    options,
+}: {
+    mode?: TCashCheckVoucherMode
+    query?: TAPIQueryOptions
+    options?: HookQueryOptions<ICashCheckVoucher[], Error>
+}) => {
+    return useQuery<ICashCheckVoucher[], Error>({
+        ...options,
+        queryKey: ['cash-check-voucher', 'all', mode, query].filter(Boolean),
+        queryFn: async () => {
+            let url = `${cashCheckVoucherAPIRoute}`
+
+            if (mode) {
+                url = `${cashCheckVoucherAPIRoute}/${mode}`
+            }
+
+            return getAllCashCheckVoucher({ url, query })
+        },
+    })
+}
 
 export const useFilteredPaginatedCashCheckVoucher = ({
     mode,

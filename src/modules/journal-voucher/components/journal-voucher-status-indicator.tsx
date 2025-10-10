@@ -31,14 +31,14 @@ import JournalVoucherStatusBadge, {
     TJournalVoucherStatusType,
 } from './journal-voucher-status-badge'
 
-export interface ICJournalVoucherStatusDates {
+export interface IJournalVoucherStatusDates {
     printed_date?: string | null
     approved_date?: string | null
     released_date?: string | null
 }
 
 export const resolveJVStatusDatesToStatus = (
-    dates: ICJournalVoucherStatusDates
+    dates: IJournalVoucherStatusDates
 ): TJournalVoucherStatusType => {
     if (dates.released_date) {
         return 'released'
@@ -56,7 +56,7 @@ export const JournalVoucherStatusIndicatorDetails = ({
     printed_date,
     approved_date,
     released_date,
-}: ICJournalVoucherStatusDates) => {
+}: IJournalVoucherStatusDates) => {
     const currentStatus = resolveJVStatusDatesToStatus({
         printed_date,
         approved_date,
@@ -157,7 +157,7 @@ const JournalVoucherStatusIndicator = ({
     className,
     journalVoucher,
 }: Props) => {
-    const voucherDates: ICJournalVoucherStatusDates = {
+    const voucherDates: IJournalVoucherStatusDates = {
         printed_date: journalVoucher.printed_date,
         approved_date: journalVoucher.approved_date,
         released_date: journalVoucher.released_date,

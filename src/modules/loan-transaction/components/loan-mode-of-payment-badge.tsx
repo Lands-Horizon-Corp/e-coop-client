@@ -3,7 +3,7 @@ import { VariantProps, cva } from 'class-variance-authority'
 
 import {
     BadgeCheckFillIcon,
-    CalendarIcon,
+    CalendarNumberIcon,
     ClockIcon,
     FileFillIcon,
     MoneyStackIcon,
@@ -16,9 +16,9 @@ import { TLoanModeOfPayment } from '../loan-transaction.types'
 const loanModeOfPaymentIcons = {
     day: ClockIcon,
     daily: ClockIcon,
-    weekly: CalendarIcon,
+    weekly: CalendarNumberIcon,
     'semi-monthly': PrinterIcon,
-    monthly: CalendarIcon,
+    monthly: CalendarNumberIcon,
     quarterly: FileFillIcon,
     'semi-annual': BadgeCheckFillIcon,
     lumpsum: MoneyStackIcon,

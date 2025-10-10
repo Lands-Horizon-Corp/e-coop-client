@@ -5,7 +5,9 @@ import { useNavigate } from '@tanstack/react-router'
 import { toast } from 'sonner'
 
 import { SHORTCUT_SCOPES } from '@/constants'
+import { AccountTypeEnum } from '@/modules/account'
 import { IGeneralLedger } from '@/modules/general-ledger'
+import LoanPicker from '@/modules/loan-transaction/components/loan-picker'
 import {
     ITransaction,
     TransactionCurrentPaymentEntry,
@@ -24,6 +26,7 @@ import { ResetIcon } from '@/components/icons'
 // import { useShortcutContext } from '@/components/shorcuts/general-shortcuts-wrapper'
 import { Button } from '@/components/ui/button'
 
+import { useModalState } from '@/hooks/use-modal-state'
 import { useSubscribe } from '@/hooks/use-pubsub'
 import { useQeueryHookCallback } from '@/hooks/use-query-hook-cb'
 
@@ -42,6 +45,7 @@ const Transaction = ({ transactionId, fullPath }: TTransactionProps) => {
     const queryClient = useQueryClient()
     const { hasNoTransactionBatch } = useTransactionBatchStore()
     const { modalData, isOpen, onClose } = useTransactionReverseSecurityStore()
+    const loanPickerState = useModalState()
     // const { setActiveScope } = useShortcutContext()
 
     const {
@@ -166,6 +170,14 @@ const Transaction = ({ transactionId, fullPath }: TTransactionProps) => {
                 open={isOpen}
                 title={modalData?.title || 'Request Reverse Transaction'}
             />
+            {selectedMember && (
+                <LoanPicker
+                    memberProfileId={selectedMember.id}
+                    modalState={loanPickerState}
+                    mode="member-profile"
+                    triggerClassName="hidden"
+                />
+            )}
             <PageContainer className="flex h-fit lg:h-[90vh] w-full !overflow-hidden">
                 <div className="w-full flex justify-end pb-2">
                     <TransactionHistory fullPath={fullPath} />
@@ -216,6 +228,14 @@ const Transaction = ({ transactionId, fullPath }: TTransactionProps) => {
                         <TransactionAccountMemberLedger
                             memberProfileId={selectedMember?.id as TEntityId}
                             onRowClick={(data) => {
+                                console.log(data.original.account?.type)
+                                if (
+                                    data.original.account?.type ===
+                                    AccountTypeEnum.Loan
+                                ) {
+                                    return loanPickerState.onOpenChange(true)
+                                }
+
                                 setSelectedAccountId(data.original.account_id)
                                 setSelectedAccount(data.original.account)
                             }}

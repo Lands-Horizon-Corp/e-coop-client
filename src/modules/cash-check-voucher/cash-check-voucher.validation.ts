@@ -136,7 +136,7 @@ export const CashCheckSignatureSchema = z.object({
     paid_by_position: z.coerce.string().optional(),
 })
 export const CashCheckVoucherPrintSchema = z.object({
-    voucher_number: z.string().min(1, 'Voucher number is required'),
+    cash_voucher_number: z.string().min(1, 'Voucher number is required'),
 })
 
 export type TCashCheckVoucherPrintSchema = z.infer<

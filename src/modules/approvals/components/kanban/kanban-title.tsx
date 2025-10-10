@@ -12,6 +12,8 @@ interface Props extends IClassProps {
     currentItems?: number
     isLoading?: boolean
     onRefresh?: () => void
+    titleClassName?: string
+    otherActions?: React.ReactNode
 }
 
 const KanbanTitle = ({
@@ -21,6 +23,8 @@ const KanbanTitle = ({
     totalItems,
     currentItems,
     onRefresh,
+    titleClassName,
+    otherActions,
 }: Props) => {
     return (
         <div
@@ -29,20 +33,23 @@ const KanbanTitle = ({
                 className
             )}
         >
-            <p>{title}</p>
+            <p className={cn('', titleClassName)}>{title}</p>
             <div className="flex justify-end gap-x-2 items-center">
                 {isLoading ? (
                     <LoadingSpinner className="text-muted-foreground" />
                 ) : (
-                    <Button
-                        className="size-fit text-muted-foreground p-1"
-                        disabled={isLoading}
-                        onClick={() => onRefresh?.()}
-                        size="icon"
-                        variant="ghost"
-                    >
-                        <RefreshIcon className="size-3" />
-                    </Button>
+                    <>
+                        {otherActions}
+                        <Button
+                            className="size-fit text-muted-foreground p-1"
+                            disabled={isLoading}
+                            onClick={() => onRefresh?.()}
+                            size="icon"
+                            variant="ghost"
+                        >
+                            <RefreshIcon className="size-3" />
+                        </Button>
+                    </>
                 )}
                 <div
                     className={cn(

@@ -211,12 +211,10 @@ const CashCheckVoucherTableColumns = (
         ),
         cell: ({
             row: {
-                original: { released_by_user },
+                original: { released_by },
             },
         }) => (
-            <div className="!text-wrap">
-                {released_by_user?.first_name ?? '-'}
-            </div>
+            <div className="!text-wrap">{released_by?.first_name ?? '-'}</div>
         ),
         enableMultiSort: true,
         enableSorting: true,
