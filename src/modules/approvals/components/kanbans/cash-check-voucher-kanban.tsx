@@ -377,7 +377,8 @@ const CashCheckVoucherKanbanMain = ({ mode }: CashCheckVoucherKanbanProps) => {
                     <KanbanTitle
                         isLoading={isRefetching}
                         onRefresh={() => refetch()}
-                        title={`Cash Check Vouchers - ${modeText}`}
+                        title={`${modeText}`}
+                        titleClassName="Capitalize"
                         totalItems={dataFiltered?.length}
                     />
                 </div>
