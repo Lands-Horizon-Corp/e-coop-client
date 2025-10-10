@@ -15,6 +15,7 @@ import { IAmortizationSchedule } from '../amortization'
 import type {
     ILoanTransaction,
     ILoanTransactionPaginated,
+    ILoanTransactionPayableAccounts,
     ILoanTransactionPrintRequest,
     ILoanTransactionRequest,
     ILoanTransactionSignatureRequest,
@@ -85,7 +86,7 @@ export const {
     useCreate: useCreateLoanTransaction,
     useUpdateById: useUpdateLoanTransactionById,
 
-    useGetAll: useGetAllLoanTransaction,
+    // useGetAll: useGetAllLoanTransaction,
     useGetById: useGetLoanTransactionById,
     // useGetPaginated: useGetPaginatedLoanTransaction,
 
@@ -93,16 +94,13 @@ export const {
     useDeleteMany: useDeleteManyLoanTransaction,
 } = apiCrudHooks
 
-// custom hooks can go here
-
-export type TLoanTransactionHookMode =
+// get all loan transaction
+export type TLoanTransactionHookModeGetAll =
     | 'branch'
     | 'member-profile'
-    | 'member-profile-released'
     | 'member-profile-loan-account'
-    | 'member-profile-interest-account'
 
-export const useGetPaginatedLoanTransaction = ({
+export const useGetAllLoanTransaction = ({
     mode = 'branch',
 
     memberProfileId,
@@ -111,11 +109,56 @@ export const useGetPaginatedLoanTransaction = ({
     query,
     options,
 }: {
+    mode: TLoanTransactionHookModeGetAll
+    memberProfileId?: TEntityId
+    loanAccountId?: TEntityId
+
+    query?: TAPIQueryOptions
+    options?: HookQueryOptions<ILoanTransaction[], Error>
+}) => {
+    return useQuery<ILoanTransaction[], Error>({
+        ...options,
+        queryKey: [
+            loanTransactionBaseKey,
+            'all',
+            mode,
+            memberProfileId,
+            loanAccountId,
+            query,
+        ].filter(Boolean),
+        queryFn: async () => {
+            let url = `${loanTransactionAPIRoute}`
+
+            if (mode === 'member-profile') {
+                url = `${loanTransactionAPIRoute}/member-profile/${memberProfileId}`
+            }
+
+            if (mode === 'member-profile-loan-account') {
+                url = `${loanTransactionAPIRoute}/member-profile/${memberProfileId}/account/${loanAccountId}`
+            }
+
+            return getAllLoanTransaction({ url, query })
+        },
+    })
+}
+
+// custom hooks can go here
+
+export type TLoanTransactionHookMode =
+    | 'branch'
+    | 'member-profile'
+    | 'member-profile-released'
+
+export const useGetPaginatedLoanTransaction = ({
+    mode = 'branch',
+
+    memberProfileId,
+
+    query,
+    options,
+}: {
     mode: TLoanTransactionHookMode
     memberProfileId?: TEntityId
-
-    // loan account
-    loanAccountId?: TEntityId
 
     query?: TAPIQueryOptions
     options?: HookQueryOptions<ILoanTransactionPaginated, Error>
@@ -127,7 +170,6 @@ export const useGetPaginatedLoanTransaction = ({
             'paginated',
             mode,
             memberProfileId,
-            loanAccountId,
             query,
         ].filter(Boolean),
         queryFn: async () => {
@@ -139,10 +181,6 @@ export const useGetPaginatedLoanTransaction = ({
 
             if (mode === 'member-profile-released')
                 url = `${loanTransactionAPIRoute}/member-profile/${memberProfileId}/release/search`
-
-            if (mode === 'member-profile-loan-account') {
-                url = `${loanTransactionAPIRoute}/member-profile/${memberProfileId}/loan-account/${loanAccountId}/search`
-            }
 
             return getPaginatedLoanTransaction({ url, query })
         },
@@ -165,6 +203,30 @@ export const useGetLoanAmortization = ({
                 `${loanTransactionAPIRoute}/${loanTransactionId}/amortization-schedule`
             )
 
+            return response.data
+        },
+    })
+}
+
+// GET Loan Transaction Payable Accounts
+export const useGetLoanTransactionPayableAccounts = ({
+    loanTransactionId,
+    options,
+}: {
+    loanTransactionId: TEntityId
+    options?: HookQueryOptions<ILoanTransactionPayableAccounts, Error>
+}) => {
+    return useQuery<ILoanTransactionPayableAccounts, Error>({
+        ...options,
+        queryKey: [
+            loanTransactionBaseKey,
+            loanTransactionId,
+            'payable-accounts',
+        ],
+        queryFn: async () => {
+            const response = await API.get<ILoanTransactionPayableAccounts>(
+                `${loanTransactionAPIRoute}/${loanTransactionId}/payable-accounts`
+            )
             return response.data
         },
     })
@@ -193,7 +255,6 @@ export const usePrintLoanTransaction = createMutationFactory<
 })
 
 // RE-PRINT
-
 export const useReprintLoanTransaction = createMutationFactory<
     ILoanTransaction,
     Error,
@@ -210,7 +271,6 @@ export const useReprintLoanTransaction = createMutationFactory<
 })
 
 // UNDO PRINT
-
 export const useUndoPrintLoanTransaction = createMutationFactory<
     ILoanTransaction,
     Error,

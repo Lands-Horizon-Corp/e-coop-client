@@ -265,3 +265,15 @@ export type ILoanTransactionPrintRequest = LoanTransactionPrintSchema
 // for suggested amortization
 export type ILoanTransactionSuggested = { terms: number }
 export type ILoanTransactionSuggestedRequest = TLoanTransactionSuggestedSchema
+
+// A loan transaction payable account with suggested payment amount
+export interface ILoanPayableAccount {
+    account: IAccount
+    account_id: TEntityId
+    last_payment_date?: string
+    suggested_payment_amount: number
+}
+
+export interface ILoanTransactionPayableAccounts {
+    payable_accounts: ILoanPayableAccount[]
+}
