@@ -5,7 +5,6 @@ import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
 
 import { cn } from '@/helpers'
 import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
-// NOTE: Assuming CashCheckVoucherPrintSchema and related types are defined and imported
 import {
     CashCheckVoucherPrintSchema,
     ICashCheckVoucher,
@@ -44,7 +43,7 @@ const CashCheckVoucherPrintForm = ({
         mode: 'onSubmit',
         reValidateMode: 'onChange',
         defaultValues: {
-            voucher_number: '',
+            cash_voucher_number: '',
             ...formProps.defaultValues,
         },
     })
@@ -64,7 +63,7 @@ const CashCheckVoucherPrintForm = ({
 
     const onSubmit = form.handleSubmit(async (payload) => {
         const apiPayload = {
-            voucher_number: payload.voucher_number,
+            cash_voucher_number: payload.cash_voucher_number,
         }
 
         toast.promise(
@@ -99,7 +98,7 @@ const CashCheckVoucherPrintForm = ({
                     <FormFieldWrapper
                         control={form.control}
                         label="Voucher *"
-                        name="voucher_number"
+                        name="cash_voucher_number"
                         render={({ field }) => (
                             <Input
                                 {...field}
