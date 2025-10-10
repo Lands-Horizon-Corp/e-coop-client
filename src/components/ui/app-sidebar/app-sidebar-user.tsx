@@ -1,4 +1,4 @@
-import { useParams, useRouter } from '@tanstack/react-router'
+import { useRouter } from '@tanstack/react-router'
 import { toast } from 'sonner'
 
 import { useSignOut } from '@/modules/authentication'
@@ -8,11 +8,7 @@ import { useTheme } from '@/modules/settings/provider/theme-provider'
 import useConfirmModalStore from '@/store/confirm-modal-store'
 
 import {
-    BookOpenIcon,
     ChevronsUpDownIcon,
-    CurlyBracketIcon,
-    DevIcon,
-    KeySharpIcon,
     LogoutIcon,
     MoonIcon,
     QuestionCircleIcon,
@@ -48,10 +44,6 @@ const AppSidebarUser = () => {
         currentAuth: { user },
         resetAuth,
     } = useAuthUser()
-
-    const { orgname, branchname } = useParams({
-        strict: false,
-    }) as { orgname: string; branchname: string }
 
     const { mutate: handleSignout } = useSignOut({
         options: {
@@ -130,7 +122,7 @@ const AppSidebarUser = () => {
                                     </DropdownMenuSubContent>
                                 </DropdownMenuPortal>
                             </DropdownMenuSub>
-                            <DropdownMenuSub>
+                            {/* <DropdownMenuSub>
                                 <DropdownMenuSubTrigger>
                                     <DevIcon className="mr-2 size-4 duration-150 ease-in-out" />
                                     <span>For Developer</span>
@@ -170,7 +162,7 @@ const AppSidebarUser = () => {
                                         </DropdownMenuItem>
                                     </DropdownMenuSubContent>
                                 </DropdownMenuPortal>
-                            </DropdownMenuSub>
+                            </DropdownMenuSub> */}
                             <DropdownMenuItem
                                 onClick={() =>
                                     onOpen({

@@ -11,6 +11,7 @@ import {
     BriefCaseIcon,
     CalendarDotsIcon,
     ChecksGridIcon,
+    CurlyBracketIcon,
     DashboardIcon,
     FinanceReportsIcon,
     FootstepsIcon,
@@ -817,6 +818,21 @@ export const generateSidebarGroups = (
                     url: `${baseUrl}/settings`,
                     userType: ['employee', 'member', 'owner'],
                     shortDescription: 'Application settings and preferences',
+                },
+            ],
+        },
+
+        {
+            title: 'Developers',
+            userType: ['employee'],
+            navItems: [
+                {
+                    type: 'item',
+                    icon: CurlyBracketIcon,
+                    title: 'API Documentation',
+                    url: `${baseUrl}/dev/documentation`,
+                    userType: ['employee', 'owner'],
+                    shortDescription: 'View developer api documentation',
                 },
             ],
         },
