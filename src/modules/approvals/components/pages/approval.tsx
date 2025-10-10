@@ -3,12 +3,14 @@ import {
     BadgeCheckFillIcon,
     BookOpenIcon,
     MoneyCheck2Icon,
+    MoneyCheckIcon,
 } from '@/components/icons'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 
 import Approval from '../approval'
-import CashCheckVoucherKanban from '../kanbans/journal-voucher/cash-check-voucher/cash-check-voucher-kanban'
+import CashCheckVoucherKanban from '../kanbans/cash-check-voucher/cash-check-voucher-kanban'
 import JournalVoucherKanban from '../kanbans/journal-voucher/journal-voucher-kanban'
+import LoanKanban from '../kanbans/loan/loan-kanban'
 
 type journalMenuTriggerType = {
     name: string
@@ -40,6 +42,11 @@ const ApprovalPage = () => {
             value: 'cashVouchers',
             icon: <MoneyCheck2Icon className="size-4 text-muted-foreground" />,
         },
+        {
+            name: 'Loan Transactions',
+            value: 'loans',
+            icon: <MoneyCheckIcon className="size-4 text-muted-foreground" />,
+        },
     ]
     const journalVoucherItem: journalVoucherItemType = [
         {
@@ -54,10 +61,14 @@ const ApprovalPage = () => {
             value: 'cashVouchers',
             content: <CashCheckVoucherKanban className="min-h-[91dvh]" />,
         },
+        {
+            value: 'loans',
+            content: <LoanKanban className="min-h-[91dvh]" />,
+        },
     ]
 
     return (
-        <PageContainer className="h-[100vh] lg:h-[90vh] flex overflow-auto flex-col">
+        <PageContainer className="h-[100vh] lg:h-[90vh] flex ecoop-scroll overflow-auto flex-col">
             <Tabs
                 className="w-full h-full flex flex-col"
                 defaultValue="approvals"

@@ -44,25 +44,53 @@ export const JournalKanbanInfoItem = ({
 export const JournalVoucherCardCreatorInfo = ({
     journalVoucher,
 }: Pick<IJournalVoucherCardProps, 'journalVoucher'>) => {
+    const isPrinted = !!journalVoucher.printed_by
+    const isApproved = !!journalVoucher.approved_by && isPrinted
+    const isReleased = !!journalVoucher.released_by && isApproved && isPrinted
+
+    const label = isReleased
+        ? `Released by `
+        : isApproved
+          ? `Approved by`
+          : isPrinted
+            ? `Printed by `
+            : journalVoucher.posted_by
+              ? `Created by`
+              : 'No Creator Info'
+
+    const name = isReleased
+        ? ` ${journalVoucher.released_by?.full_name}`
+        : isApproved
+          ? ` ${journalVoucher.approved_by?.full_name}`
+          : isPrinted
+            ? ` ${journalVoucher.printed_by?.full_name}`
+            : journalVoucher.posted_by
+              ? ` ${journalVoucher.posted_by?.full_name}`
+              : ''
+
+    const mediaUrl = isReleased
+        ? journalVoucher.released_by?.media?.url
+        : isApproved
+          ? journalVoucher.approved_by?.media?.url
+          : isPrinted
+            ? journalVoucher.printed_by?.media?.url
+            : journalVoucher.posted_by
+              ? journalVoucher.posted_by?.media?.url
+              : ''
     return (
         <div className="flex items-center justify-end gap-x-2">
             <div className=" inline-flex items-center gap-2">
-                <InfoTooltip
-                    content={`created by ${journalVoucher.created_by?.full_name}`}
-                >
+                <InfoTooltip content={`${label} ${name}`}>
                     <div className="text-right max-w-[200px] shrink">
                         <p className="truncate font-medium text-sm text-foreground/90">
-                            {journalVoucher.created_by?.full_name}
+                            {name}
                         </p>
                         <p className="text-xs text-end text-muted-foreground/70 truncate">
-                            created by
+                            {label}
                         </p>
                     </div>
                 </InfoTooltip>
-                <ImageDisplay
-                    className="size-8 rounded-full"
-                    src={journalVoucher?.created_by?.media?.download_url}
-                />
+                <ImageDisplay className="size-8 rounded-full" src={mediaUrl} />
             </div>
         </div>
     )

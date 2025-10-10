@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState } from 'react'
+import { useState } from 'react'
 
 import { cn } from '@/helpers'
 import { dateAgo } from '@/helpers/date-utils'
@@ -6,7 +6,6 @@ import KanbanContainer from '@/modules/approvals/components/kanban/kanban-contai
 import KanbanItemsContainer from '@/modules/approvals/components/kanban/kanban-items-container'
 import KanbanTitle from '@/modules/approvals/components/kanban/kanban-title'
 import {
-    ICashCheckVoucher,
     TCashCheckVoucherStatus,
     useGetAllCashCheckVoucher,
 } from '@/modules/cash-check-voucher'
@@ -23,7 +22,7 @@ import {
 import { Button } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
 
-import { JournalVoucherSkeletonCard } from '../../../../../journal-voucher/components/journal-voucher-skeleton-card'
+import { JournalVoucherSkeletonCard } from '../../../../journal-voucher/components/journal-voucher-skeleton-card'
 import {
     CashCheckVoucherCard,
     CashCheckVoucherCardCreatorInfo,
@@ -37,68 +36,41 @@ type CashCheckVoucherKanbanProps = {
     mode: TCashCheckVoucherStatus
     icon: React.ReactNode
 }
-
-const useFilteredVouchers = (
-    data: ICashCheckVoucher[] | undefined,
-    mode: TCashCheckVoucherStatus
-) => {
-    return useMemo(() => {
-        if (!data) return []
-
-        return data.filter((jv) => {
-            const hasPrinted = !!jv.printed_date
-            const hasApproved = !!jv.approved_date
-            const hasReleased = !!jv.released_date
-
-            switch (mode) {
-                case 'draft':
-                    return !hasPrinted
-                case 'printed':
-                    return hasPrinted && !hasApproved && !hasReleased
-                case 'approved':
-                    return hasPrinted && hasApproved && !hasReleased
-                case 'released':
-                    return hasPrinted && hasApproved && hasReleased
-                default:
-                    return false
-            }
-        })
-    }, [data, mode])
-}
-
 export const CashCheckVoucherKanbanMain = ({
     mode,
     icon,
 }: CashCheckVoucherKanbanProps) => {
-    const { data, isLoading, refetch, isRefetching } =
-        useGetAllCashCheckVoucher()
-
-    const dataFiltered = useFilteredVouchers(data, mode)
-
-    const allIds = useMemo(
-        () => dataFiltered.map((jv) => jv.id),
-        [dataFiltered]
-    )
     const [openVouchers, setOpenVouchers] = useState<string[]>([])
 
-    const handleExpandAll = useCallback(() => {
-        setOpenVouchers(allIds)
-    }, [allIds])
+    const {
+        data: cashCheckVouchers,
+        isLoading,
+        refetch,
+        isRefetching,
+    } = useGetAllCashCheckVoucher({ mode })
 
-    const handleCollapseAll = useCallback(() => {
+    if (!cashCheckVouchers) return
+
+    const allIds = () => cashCheckVouchers.map((jv) => jv.id)
+
+    const handleExpandAll = () => {
+        setOpenVouchers(allIds)
+    }
+
+    const handleCollapseAll = () => {
         setOpenVouchers([])
-    }, [])
+    }
 
     const isExpanded = openVouchers.length > 0
-    const hasItem = dataFiltered.length > 0
+    const hasItem = cashCheckVouchers.length > 0
 
-    const handleExpandedToggle = useCallback(() => {
+    const handleExpandedToggle = () => {
         if (isExpanded) {
             handleCollapseAll()
         } else {
             handleExpandAll()
         }
-    }, [isExpanded, handleExpandAll, handleCollapseAll])
+    }
 
     if (isLoading) return <JournalVoucherSkeletonCard />
 
@@ -125,21 +97,21 @@ export const CashCheckVoucherKanbanMain = ({
                             }
                             title={mode}
                             titleClassName="capitalize"
-                            totalItems={dataFiltered.length}
+                            totalItems={cashCheckVouchers.length}
                         />
                     </div>
                 </div>
                 <Separator />
 
                 <KanbanItemsContainer>
-                    {dataFiltered.length > 0 ? (
+                    {cashCheckVouchers.length > 0 ? (
                         <Accordion
                             className="w-full space-y-2"
                             onValueChange={setOpenVouchers}
                             type="multiple"
                             value={openVouchers}
                         >
-                            {dataFiltered.map((cashCheckVoucher) => {
+                            {cashCheckVouchers.map((cashCheckVoucher) => {
                                 const ccvDates: ICCVStatusDates = {
                                     printed_date: cashCheckVoucher.printed_date,
                                     approved_date:

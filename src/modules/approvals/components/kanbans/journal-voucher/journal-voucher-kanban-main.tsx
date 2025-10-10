@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState } from 'react'
+import { useState } from 'react'
 
 import { dateAgo } from '@/helpers/date-utils'
 import { cn } from '@/helpers/tw-utils'
@@ -6,7 +6,6 @@ import KanbanContainer from '@/modules/approvals/components/kanban/kanban-contai
 import KanbanItemsContainer from '@/modules/approvals/components/kanban/kanban-items-container'
 import KanbanTitle from '@/modules/approvals/components/kanban/kanban-title'
 import {
-    IJournalVoucher,
     TJournalVoucherMode,
     useGetAllJournalVoucher,
 } from '@/modules/journal-voucher'
@@ -37,65 +36,44 @@ type JournalVoucherKanbanProps = {
     icon: React.ReactNode
     isExpanded?: boolean
 }
-const useFilteredVouchers = (
-    data: IJournalVoucher[] | undefined,
-    mode: TJournalVoucherMode
-) => {
-    return useMemo(() => {
-        if (!data) return []
-
-        return data.filter((jv) => {
-            const hasPrinted = !!jv.printed_date
-            const hasApproved = !!jv.approved_date
-            const hasReleased = !!jv.released_date
-
-            switch (mode) {
-                case 'draft':
-                    return !hasPrinted
-                case 'printed':
-                    return hasPrinted && !hasApproved && !hasReleased
-                case 'approved':
-                    return hasPrinted && hasApproved && !hasReleased
-                case 'released':
-                    return hasPrinted && hasApproved && hasReleased
-                default:
-                    return false
-            }
-        })
-    }, [data, mode])
-}
 
 export const JournalVoucherKanbanMain = ({
     mode,
     icon,
 }: JournalVoucherKanbanProps) => {
-    const { data, isLoading, refetch, isRefetching } = useGetAllJournalVoucher()
-    const dataFiltered = useFilteredVouchers(data, mode)
-
-    const allIds = useMemo(
-        () => dataFiltered.map((jv) => jv.id),
-        [dataFiltered]
-    )
     const [openVouchers, setOpenVouchers] = useState<string[]>([])
 
-    const handleExpandAll = useCallback(() => {
-        setOpenVouchers(allIds)
-    }, [allIds])
+    const {
+        data: JournalVouchers,
+        isLoading,
+        refetch,
+        isRefetching,
+    } = useGetAllJournalVoucher({
+        mode: mode,
+    })
 
-    const handleCollapseAll = useCallback(() => {
+    if (!JournalVouchers) return
+
+    const allIds = JournalVouchers.map((jv) => jv.id)
+
+    const handleExpandAll = () => {
+        setOpenVouchers(allIds)
+    }
+
+    const handleCollapseAll = () => {
         setOpenVouchers([])
-    }, [])
+    }
 
     const isExpanded = openVouchers.length > 0
-    const hasItem = dataFiltered.length > 0
+    const hasItem = JournalVouchers.length > 0
 
-    const handleExpandedToggle = useCallback(() => {
+    const handleExpandedToggle = () => {
         if (!isExpanded) {
             handleExpandAll()
         } else {
             handleCollapseAll()
         }
-    }, [isExpanded, handleExpandAll, handleCollapseAll])
+    }
 
     if (isLoading) return <JournalVoucherSkeletonCard className="w-[420px]" />
 
@@ -121,21 +99,21 @@ export const JournalVoucherKanbanMain = ({
                         }
                         title={mode}
                         titleClassName="capitalize"
-                        totalItems={dataFiltered.length}
+                        totalItems={JournalVouchers.length}
                     />
                 </div>
             </div>
             <Separator />
 
             <KanbanItemsContainer>
-                {dataFiltered.length > 0 ? (
+                {JournalVouchers.length > 0 ? (
                     <Accordion
                         className="w-full space-y-2"
                         onValueChange={setOpenVouchers}
                         type="multiple"
                         value={openVouchers}
                     >
-                        {dataFiltered.map((journalVoucher) => {
+                        {JournalVouchers.map((journalVoucher) => {
                             const jvDates: IJournalVoucherStatusDates = {
                                 printed_date: journalVoucher.printed_date,
                                 approved_date: journalVoucher.approved_date,

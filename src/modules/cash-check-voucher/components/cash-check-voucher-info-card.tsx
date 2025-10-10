@@ -189,8 +189,7 @@ export const CashCheckVoucherCard = ({
                         {
                             label: 'Printed By',
                             value:
-                                cashCheckVoucher.printed_by_user?.full_name ||
-                                '-',
+                                cashCheckVoucher.printed_by?.full_name || '-',
                         },
                     ]}
                     title="Print Information"
@@ -200,8 +199,7 @@ export const CashCheckVoucherCard = ({
                         {
                             label: 'Approved By',
                             value:
-                                cashCheckVoucher.approved_by_user?.full_name ||
-                                '-',
+                                cashCheckVoucher.approved_by?.full_name || '-',
                         },
                         {
                             label: 'Approved Date',
@@ -212,8 +210,7 @@ export const CashCheckVoucherCard = ({
                         {
                             label: 'Released By',
                             value:
-                                cashCheckVoucher.released_by_user?.full_name ||
-                                '-',
+                                cashCheckVoucher.released_by?.full_name || '-',
                         },
                         {
                             label: 'Released Date',

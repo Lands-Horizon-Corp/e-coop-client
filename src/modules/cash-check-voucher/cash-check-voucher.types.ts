@@ -44,13 +44,13 @@ export interface ICashCheckVoucher extends IBaseEntityMeta {
     transaction_batch?: ITransactionBatch
 
     printed_by_user_id?: string
-    printed_by_user?: IUser
+    printed_by?: IUser
 
     approved_by_user_id?: string
-    approved_by_user?: IUser
+    approved_by?: IUser
 
     released_by_user_id?: string
-    released_by_user?: IUser
+    released_by?: IUser
 
     pay_to?: string
 

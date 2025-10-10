@@ -1,32 +1,30 @@
 import { cn } from '@/helpers/tw-utils'
-import { IJournalVoucher } from '@/modules/journal-voucher'
+import { ILoanTransaction, TLoanStatusType } from '@/modules/loan-transaction'
 import { CheckCircle2Icon, PrinterIcon } from 'lucide-react'
 
 import { BadgeCheckFillIcon, DraftIcon } from '@/components/icons'
 
 import { IClassProps } from '@/types'
 
-import { JournalVoucherKanbanMain } from './journal-voucher-kanban-main'
+import { LoanKanbanMain } from './loan-kanban-main'
 
-type TJournalVoucherMode = 'draft' | 'printed' | 'approved' | 'released'
-
-export interface IJournalVoucherStatusDates {
+export interface ILoanStatusDates {
     printed_date?: string | null
     approved_date?: string | null
     released_date?: string | null
 }
 
-export interface IJournalVoucherCardProps extends IClassProps {
-    journalVoucher: IJournalVoucher
+export interface ILoanCardProps extends IClassProps {
+    loan: ILoanTransaction
     refetch: () => void
 }
 
-export type TJournalVoucherKanbanItem = {
+export type TLoanKanbanItem = {
     name: string
-    value: TJournalVoucherMode
+    value: TLoanStatusType
     icon: React.ReactNode
 }
-const JournalVoucherMenu: TJournalVoucherKanbanItem[] = [
+const LoanKanbanMenu: TLoanKanbanItem[] = [
     {
         name: 'Draft',
         value: 'draft',
@@ -50,7 +48,8 @@ const JournalVoucherMenu: TJournalVoucherKanbanItem[] = [
         icon: <BadgeCheckFillIcon className="mr-2 size-4 text-purple-500" />,
     },
 ]
-const JournalVoucherKanban = ({ className }: { className?: string }) => {
+
+const LoanKanban = ({ className }: { className?: string }) => {
     return (
         <div
             className={cn(
@@ -58,8 +57,8 @@ const JournalVoucherKanban = ({ className }: { className?: string }) => {
                 className
             )}
         >
-            {JournalVoucherMenu.map((item) => (
-                <JournalVoucherKanbanMain
+            {LoanKanbanMenu.map((item) => (
+                <LoanKanbanMain
                     icon={item.icon}
                     key={item.value}
                     mode={item.value}
@@ -68,4 +67,4 @@ const JournalVoucherKanban = ({ className }: { className?: string }) => {
         </div>
     )
 }
-export default JournalVoucherKanban
+export default LoanKanban

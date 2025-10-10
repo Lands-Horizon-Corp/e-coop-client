@@ -195,6 +195,15 @@ export interface ILoanTransaction
     total_amortization?: number
     first_irr?: number
     first_dq?: number
+
+    printed_by_user_id?: string
+    printed_by?: IUser
+
+    approved_by_user_id?: string
+    approved_by?: IUser
+
+    released_by_user_id?: string
+    released_by?: IUser
 }
 
 export interface ILoanTransactionStatusDates {

@@ -53,13 +53,41 @@ export const {
     useCreate: useCreateJournalVoucher,
     useUpdateById: useUpdateJournalVoucherById,
 
-    useGetAll: useGetAllJournalVoucher,
+    // useGetAll: useGetAllJournalVoucher,
     useGetById: useGetJournalVoucherById,
     useGetPaginated: useGetPaginatedJournalVoucher,
 
     useDeleteById: useDeleteJournalVoucherById,
     useDeleteMany: useDeleteManyJournalVoucher,
 } = apiCrudHooks
+
+type TloanTransactionMode = 'draft' | 'printed' | 'approved' | 'released'
+
+export const useGetAllJournalVoucher = ({
+    mode,
+
+    query,
+    options,
+}: {
+    mode?: TloanTransactionMode
+
+    query?: TAPIQueryOptions
+    options?: HookQueryOptions<IJournalVoucher[], Error>
+}) => {
+    return useQuery<IJournalVoucher[], Error>({
+        ...options,
+        queryKey: ['all', mode, query].filter(Boolean),
+        queryFn: async () => {
+            let url = `${journalVoucherAPIRoute}`
+
+            if (mode) {
+                url = `${journalVoucherAPIRoute}/${mode}`
+            }
+
+            return getAllJournalVoucher({ url, query })
+        },
+    })
+}
 
 export const useFilteredPaginatedJournalVoucher = ({
     mode,

@@ -94,11 +94,13 @@ export const {
     useDeleteMany: useDeleteManyLoanTransaction,
 } = apiCrudHooks
 
+type TloanTransactionMode = 'draft' | 'printed' | 'approved' | 'released'
 // get all loan transaction
 export type TLoanTransactionHookModeGetAll =
     | 'branch'
     | 'member-profile'
     | 'member-profile-loan-account'
+    | TloanTransactionMode
 
 export const useGetAllLoanTransaction = ({
     mode = 'branch',
@@ -109,7 +111,7 @@ export const useGetAllLoanTransaction = ({
     query,
     options,
 }: {
-    mode: TLoanTransactionHookModeGetAll
+    mode?: TLoanTransactionHookModeGetAll
     memberProfileId?: TEntityId
     loanAccountId?: TEntityId
 
@@ -135,6 +137,10 @@ export const useGetAllLoanTransaction = ({
 
             if (mode === 'member-profile-loan-account') {
                 url = `${loanTransactionAPIRoute}/member-profile/${memberProfileId}/account/${loanAccountId}`
+            }
+
+            if (mode) {
+                url = `${loanTransactionAPIRoute}/${mode}`
             }
 
             return getAllLoanTransaction({ url, query })

@@ -8,7 +8,7 @@ import InfoTooltip from '@/components/tooltips/info-tooltip'
 
 import { IClassProps } from '@/types'
 
-import { JournalKanbanInfoItem } from '../journal-voucher-card'
+import { JournalKanbanInfoItem } from '../journal-voucher/journal-voucher-card'
 
 interface ICashCheckVoucherCardProps extends IClassProps {
     cashCheckVoucher: ICashCheckVoucher
@@ -18,25 +18,54 @@ interface ICashCheckVoucherCardProps extends IClassProps {
 export const CashCheckVoucherCardCreatorInfo = ({
     cashCheckVoucher,
 }: Pick<ICashCheckVoucherCardProps, 'cashCheckVoucher'>) => {
+    const isPrinted = !!cashCheckVoucher.printed_by
+    const isApproved = !!cashCheckVoucher.approved_by && isPrinted
+    const isReleased = !!cashCheckVoucher.released_by && isApproved && isPrinted
+
+    const label = isReleased
+        ? `Released by `
+        : isApproved
+          ? `Approved by`
+          : isPrinted
+            ? `Printed by `
+            : cashCheckVoucher.employee_user
+              ? `Created by`
+              : 'No Creator Info'
+
+    const name = isReleased
+        ? ` ${cashCheckVoucher.released_by?.full_name}`
+        : isApproved
+          ? ` ${cashCheckVoucher.approved_by?.full_name}`
+          : isPrinted
+            ? ` ${cashCheckVoucher.printed_by?.full_name}`
+            : cashCheckVoucher.employee_user
+              ? ` ${cashCheckVoucher.employee_user?.full_name}`
+              : ''
+
+    const mediaUrl = isReleased
+        ? cashCheckVoucher.released_by?.media?.url
+        : isApproved
+          ? cashCheckVoucher.approved_by?.media?.url
+          : isPrinted
+            ? cashCheckVoucher.printed_by?.media?.url
+            : cashCheckVoucher.employee_user
+              ? cashCheckVoucher.employee_user?.media?.url
+              : ''
+
     return (
         <div className="flex items-center justify-end  gap-x-2">
             <div className=" inline-flex items-center gap-2">
-                <InfoTooltip
-                    content={`created by ${cashCheckVoucher.created_by?.full_name}`}
-                >
+                <InfoTooltip content={label}>
                     <div className="text-right max-w-[200px] shrink">
                         <p className="truncate font-medium text-sm text-foreground/90">
-                            {cashCheckVoucher.created_by?.full_name}
+                            {name}
                         </p>
                         <p className="text-xs text-end text-muted-foreground/70 truncate">
-                            created by
+                            {label}
                         </p>
                     </div>
                 </InfoTooltip>
-                <ImageDisplay
-                    className="size-8 rounded-full"
-                    src={cashCheckVoucher?.created_by?.media?.download_url}
-                />
+                <ImageDisplay className="size-8 rounded-full" src={mediaUrl} />
             </div>
         </div>
     )
