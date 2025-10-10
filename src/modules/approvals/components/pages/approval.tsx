@@ -7,8 +7,8 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 
 import Approval from '../approval'
-import CashCheckVoucherKanban from '../kanbans/cash-check-voucher-kanban'
-import JournalVoucherKanban from '../kanbans/journal-voucher-kanban'
+import CashCheckVoucherKanban from '../kanbans/journal-voucher/cash-check-voucher/cash-check-voucher-kanban'
+import JournalVoucherKanban from '../kanbans/journal-voucher/journal-voucher-kanban'
 
 type journalMenuTriggerType = {
     name: string

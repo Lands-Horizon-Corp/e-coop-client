@@ -2,7 +2,7 @@ import { toast } from 'sonner'
 
 import { cn } from '@/helpers'
 import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
-import { JournalKanbanInfoItem } from '@/modules/approvals/components/kanbans/journal-voucher-kanban'
+import { JournalKanbanInfoItem } from '@/modules/approvals/components/kanbans/journal-voucher/journal-voucher-card'
 import useConfirmModalStore from '@/store/confirm-modal-store'
 
 import {
