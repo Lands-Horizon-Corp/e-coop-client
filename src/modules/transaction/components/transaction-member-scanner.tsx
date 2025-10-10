@@ -110,57 +110,59 @@ const TransactionMemberScanner = ({
                 triggerClassName="hidden"
             />
             {/* Left: Scanner Column */}
-            <div className="flex flex-col flex-shrink-0 xl:w-[15rem] justify-center items-center w-full">
-                {/* Inner Scanner Wrapper: Removed mr-1/mb-1. Added consistent p-2 for spacing. */}
-                <div className="w-full xl:p-2 flex justify-center">
-                    <div
-                        className={cn(
-                            // Apply styles for the active scanner state
-                            startScan && !selectedMember
-                                ? 'xl:w-fit w-full aspect-square min-h-[150px] md:w-[50%] max-w-full rounded-2xl overflow-hidden'
-                                : // Apply padding for the static placeholder state
-                                  'p-4'
-                        )}
-                    >
-                        {startScan && !selectedMember ? (
-                            <QrCodeScanner<IQRMemberProfileDecodedResult>
-                                allowMultiple
-                                onSuccessDecode={(data) => {
-                                    if (data.type !== 'member-qr') {
-                                        return toast.error(
-                                            'Invalid QR. Please use a valid Member Profile QR'
-                                        )
-                                    }
-                                    setDecodedMemberProfile(data.data)
-                                }}
-                            />
-                        ) : (
-                            // Placeholder box: use size-full and flex-1 to occupy space consistently
-                            <div className="flex flex-col size-full aspect-square min-h-[150px] max-w-full items-center justify-center text-center gap-y-2">
-                                <ScanLineIcon
-                                    className=" text-muted-foreground/70"
-                                    size={50}
+            {!selectedMember && (
+                <div className="flex flex-col flex-shrink-0 xl:w-[15rem] justify-center items-center w-full">
+                    {/* Inner Scanner Wrapper: Removed mr-1/mb-1. Added consistent p-2 for spacing. */}
+                    <div className="w-full xl:p-2 flex justify-center">
+                        <div
+                            className={cn(
+                                // Apply styles for the active scanner state
+                                startScan && !selectedMember
+                                    ? 'xl:w-fit w-full aspect-square min-h-[150px] md:w-[50%] max-w-full rounded-2xl overflow-hidden'
+                                    : // Apply padding for the static placeholder state
+                                      'p-4'
+                            )}
+                        >
+                            {startScan && !selectedMember ? (
+                                <QrCodeScanner<IQRMemberProfileDecodedResult>
+                                    allowMultiple
+                                    onSuccessDecode={(data) => {
+                                        if (data.type !== 'member-qr') {
+                                            return toast.error(
+                                                'Invalid QR. Please use a valid Member Profile QR'
+                                            )
+                                        }
+                                        setDecodedMemberProfile(data.data)
+                                    }}
                                 />
-                                <Button
-                                    disabled={
-                                        !!transactionId || !!selectedMember
-                                    }
-                                    onClick={() =>
-                                        setStartScan((start) => !start)
-                                    }
-                                    size="sm"
-                                >
-                                    <EyeIcon className="mr-1 h-4 w-4" />
-                                    Start
-                                </Button>
-                                <p className="text-muted-foreground/70 text-xs">
-                                    Click start to scan member QR
-                                </p>
-                            </div>
-                        )}
+                            ) : (
+                                // Placeholder box: use size-full and flex-1 to occupy space consistently
+                                <div className="flex flex-col size-full aspect-square min-h-[150px] max-w-full items-center justify-center text-center gap-y-2">
+                                    <ScanLineIcon
+                                        className=" text-muted-foreground/70"
+                                        size={50}
+                                    />
+                                    <Button
+                                        disabled={
+                                            !!transactionId || !!selectedMember
+                                        }
+                                        onClick={() =>
+                                            setStartScan((start) => !start)
+                                        }
+                                        size="sm"
+                                    >
+                                        <EyeIcon className="mr-1 h-4 w-4" />
+                                        Start
+                                    </Button>
+                                    <p className="text-muted-foreground/70 text-xs">
+                                        Click start to scan member QR
+                                    </p>
+                                </div>
+                            )}
+                        </div>
                     </div>
                 </div>
-            </div>
+            )}
 
             {/* Right: Content Column */}
             {/* Use 'flex-1 min-w-0' to make it take up the rest of the space in xl:flex-row */}

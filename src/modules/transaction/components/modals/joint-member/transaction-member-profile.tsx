@@ -140,7 +140,7 @@ const TransactionMemberProfile = ({
                         <div className="flex flex-wrap md:flex-nowrap md:items-center md:justify-between">
                             <div className="w-full flex items-center gap-x-2 justify-between">
                                 <div className="flex w-fit items-center gap-x-2">
-                                    <h2 className="truncate font-bold text-lg sm:text-xl">
+                                    <h2 className="truncate font-bold text-lg">
                                         {memberInfo.full_name}
                                     </h2>
                                     {memberInfo.status === 'verified' && (

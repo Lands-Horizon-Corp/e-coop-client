@@ -14,7 +14,6 @@ import {
     CreditCardIcon,
     RefreshIcon,
 } from '@/components/icons'
-import MiniPaginationBar from '@/components/pagination-bars/mini-pagination-bar'
 import GenericPicker from '@/components/pickers/generic-picker'
 import LoadingSpinner from '@/components/spinners/loading-spinner'
 import { Button } from '@/components/ui/button'
@@ -27,26 +26,31 @@ import { TEntityId } from '@/types'
 
 import {
     ILoanTransaction,
-    TLoanTransactionHookMode,
-    useGetPaginatedLoanTransaction,
+    TLoanTransactionHookModeGetAll,
+    useGetAllLoanTransaction,
 } from '..'
 
 interface Props extends IPickerBaseProps<ILoanTransaction> {
-    mode?: TLoanTransactionHookMode
+    mode?: TLoanTransactionHookModeGetAll
     memberProfileId?: TEntityId
     defaultFilter?: TFilterObject
     allowShorcutCommand?: boolean
     accountId?: TEntityId
 }
 
-const LoanPicker = forwardRef<
+const LoanPickerAll = forwardRef<
     HTMLButtonElement,
     Props &
         (
             | { mode: 'branch' }
             | {
-                  mode: 'member-profile' | 'member-profile-released'
+                  mode: 'member-profile'
                   memberProfileId: TEntityId
+              }
+            | {
+                  mode: 'member-profile-loan-account'
+                  memberProfileId: TEntityId
+                  accountId: TEntityId
               }
         )
 >(
@@ -60,6 +64,7 @@ const LoanPicker = forwardRef<
             memberProfileId,
             allowShorcutCommand = false,
             triggerClassName,
+            accountId,
             onSelect,
         },
         ref
@@ -86,14 +91,15 @@ const LoanPicker = forwardRef<
         })
 
         const {
-            data: { data = [], totalPage = 1, totalSize = 0 } = {},
+            data = [],
             isPending,
             isLoading,
             isFetching,
             refetch,
-        } = useGetPaginatedLoanTransaction({
+        } = useGetAllLoanTransaction({
             mode,
             memberProfileId,
+            loanAccountId: accountId,
             query: {
                 filter: finalFilterPayloadBase64,
                 ...pagination,
@@ -134,7 +140,7 @@ const LoanPicker = forwardRef<
                 <GenericPicker
                     isLoading={isPending || isLoading || isFetching}
                     items={data}
-                    listHeading={`Matched Results (${totalSize})`}
+                    listHeading={`Matched Results (${data.length})`}
                     onOpenChange={setState}
                     onSearchChange={(searchValue) => {
                         bulkSetFilter(
@@ -234,23 +240,7 @@ const LoanPicker = forwardRef<
                         </div>
                     )}
                     searchPlaceHolder="Search loan type, amount, or OR number..."
-                >
-                    <MiniPaginationBar
-                        disablePageMove={isFetching}
-                        onNext={({ pageIndex }) =>
-                            setPagination((prev) => ({ ...prev, pageIndex }))
-                        }
-                        onPrev={({ pageIndex }) =>
-                            setPagination((prev) => ({ ...prev, pageIndex }))
-                        }
-                        pagination={{
-                            pageIndex: pagination.pageIndex,
-                            pageSize: pagination.pageSize,
-                            totalPage: totalPage,
-                            totalSize: totalSize,
-                        }}
-                    />
-                </GenericPicker>
+                />
                 <Button
                     className={cn(
                         'w-full items-center justify-between rounded-md border p-0 px-2',
@@ -294,6 +284,6 @@ const LoanPicker = forwardRef<
     }
 )
 
-LoanPicker.displayName = 'Loan Picker'
+LoanPickerAll.displayName = 'Loan Picker'
 
-export default LoanPicker
+export default LoanPickerAll

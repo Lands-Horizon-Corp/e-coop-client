@@ -1,6 +1,7 @@
 import { ReactNode, useState } from 'react'
 
 import { useRouter } from '@tanstack/react-router'
+import { toast } from 'sonner'
 
 import FootstepTable from '@/modules/footstep/components/footsteps-table'
 import { TEntryType } from '@/modules/general-ledger'
@@ -9,6 +10,7 @@ import LoanTransactionTable from '@/modules/loan-transaction/components/loan-tra
 import MemberAccountingLedgerTable from '@/modules/member-accounting-ledger/components/member-accounting-ledger-table'
 import { MemberProfileCloseFormModal } from '@/modules/member-close-remark/components/forms/member-profile-close-form'
 import { TransactionsTable } from '@/modules/transaction'
+import useConfirmModalStore from '@/store/confirm-modal-store'
 import { useInfoModalStore } from '@/store/info-modal-store'
 import { Row } from '@tanstack/react-table'
 
@@ -68,6 +70,7 @@ const useMemberProfileActions = ({
     const member = row.original
     const router = useRouter()
     const { onOpen } = useInfoModalStore()
+    const { onOpen: onOpenConfirm } = useConfirmModalStore()
 
     const infoModal = useModalState(false)
     const loanListModal = useModalState(false)
@@ -80,7 +83,7 @@ const useMemberProfileActions = ({
 
     const [selectedEntryType, setSelectedEntryType] = useState<TEntryType>('')
 
-    const { mutate: deleteProfile, isPending: isDeleting } =
+    const { mutateAsync: deleteProfile, isPending: isDeleting } =
         useDeleteMemberProfileById({
             options: {
                 onSuccess: onDeleteSuccess,
@@ -93,7 +96,21 @@ const useMemberProfileActions = ({
         })
     }
 
-    const handleDelete = () => deleteProfile(member.id)
+    const handleDelete = () => {
+        onOpenConfirm({
+            title: 'Delete Member Profile',
+            description: `Are you sure you want to delete ${member.full_name}'s profile? This action cannot be undone.`,
+            onConfirm: () =>
+                toast.promise(deleteProfile(member.id), {
+                    loading: 'Deleting member profile...',
+                    success: 'Member profile deleted successfully.',
+                    error: (err) =>
+                        `Failed to delete member profile. ${
+                            err?.message ?? 'Please try again later.'
+                        }`,
+                }),
+        })
+    }
 
     const openLedgerModal = (entryType: TEntryType) => {
         setSelectedEntryType(entryType)
@@ -182,7 +199,6 @@ export const MemberProfileAction = ({
         ledgerTableModal,
         selectedEntryType,
         accountingLedgerModal,
-        isDeleting,
         handleEdit,
         handleDelete,
         openLedgerModal,
@@ -301,8 +317,8 @@ export const MemberProfileAction = ({
                 canSelect
                 onDelete={{
                     text: 'Delete',
-                    isAllowed: !isDeleting,
-                    onClick: handleDelete,
+                    isAllowed: true,
+                    onClick: () => handleDelete(),
                 }}
                 onEdit={{
                     text: 'Edit',

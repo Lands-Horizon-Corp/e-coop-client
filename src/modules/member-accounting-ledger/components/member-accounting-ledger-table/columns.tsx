@@ -1,4 +1,4 @@
-import { toReadableDateTime } from '@/helpers/date-utils'
+import { dateAgo, toReadableDate } from '@/helpers/date-utils'
 import { formatNumber } from '@/helpers/number-utils'
 import { IMemberAccountingLedger } from '@/modules/member-account-ledger'
 import { ColumnDef, Row } from '@tanstack/react-table'
@@ -290,10 +290,22 @@ const MemberAccountingLedgerTableColumns = (
                 </ColumnActions>
             </DataTableColumnHeader>
         ),
-        cell: ({ row: { original } }) => (
-            <span>
-                {original.last_pay ? toReadableDateTime(original.last_pay) : ''}
-            </span>
+        cell: ({
+            row: {
+                original: { last_pay },
+            },
+        }) => (
+            <div>
+                <p>{last_pay ? toReadableDate(last_pay) : ''} </p>
+                {last_pay ? (
+                    <p className="text-xs text-muted-foreground/60">
+                        {toReadableDate(last_pay, 'h:mm a -')}{' '}
+                        {dateAgo(last_pay)}
+                    </p>
+                ) : (
+                    ''
+                )}
+            </div>
         ),
         enableMultiSort: true,
         enableSorting: true,

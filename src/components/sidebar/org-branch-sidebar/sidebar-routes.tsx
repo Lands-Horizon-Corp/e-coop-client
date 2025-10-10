@@ -101,6 +101,14 @@ export const generateSidebarGroups = (
                     shortDescription: 'Manage fund transfers and movements',
                 },
                 {
+                    type: 'item',
+                    icon: HandCoinsIcon,
+                    title: 'Loan Payment',
+                    url: `${baseUrl}/transaction/loan-payment`,
+                    userType: ['employee', 'owner'],
+                    shortDescription: 'Pay Loan',
+                },
+                {
                     title: 'Quick Payment',
                     userType: ['employee', 'owner'],
                     url: `${baseUrl}/transaction/quick-transfer`,
