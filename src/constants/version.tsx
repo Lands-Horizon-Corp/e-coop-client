@@ -6,7 +6,7 @@ import { APP_VERSION } from './envs'
 
 export const softwareUpdates: SoftwareUpdates = {
     name: 'e-Coop Beta',
-    version: APP_VERSION,
+    version: `v${APP_VERSION}`,
     description: 'Updated version with performance improvements.',
     date: new Date('2024-09-15'),
     updates: [

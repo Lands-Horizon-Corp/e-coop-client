@@ -76,6 +76,7 @@ import {
     FaBook as BookThickIcon,
     FaBug as BugIcon,
     FaRegCircle as CircleIcon,
+    FaCloud as CloudIcon,
     FaCode as CodeIcon,
     FaCreditCard as CreditCardIcon,
     FaFileCsv as CsvIcon,
@@ -102,10 +103,15 @@ import {
     FaArrowUpLong as ArrowUpLong,
     FaBoxesStacked as BoxesStackedIcon,
     FaBusinessTime as BriefCaseClockIcon,
+    FaChartBar as ChartBarIcon,
     FaCheck as CheckFillIcon,
+    FaDatabase as DatabaseIcon,
+    FaDocker as DockerIcon,
     FaFirstdraft as DraftIcon,
     FaCircleCheck as FaCheckIcon,
     FaVenusMars as GendersIcon,
+    FaGithub as GithubIcon,
+    FaGolang as GolangIcon,
     FaHeadset as HeadsetIcon,
     FaHouseChimneyWindow as HouseIcon,
     FaHouseLock as HouseLockIcon,
@@ -118,6 +124,7 @@ import {
     FaChartPie as PieChartIcon,
     FaPlay as PlayIcon,
     FaQuestion as QuestionIcon,
+    FaReact as ReactIcon,
     FaSchool as SchoolIcon,
     FaShapes as ShapesIcon,
     FaStop as StopIcon,
@@ -254,7 +261,7 @@ import {
     LiaUser as UserIcon,
     LiaUserTagSolid as UserTagIcon,
 } from 'react-icons/lia'
-import type { IconBaseProps, IconType } from 'react-icons/lib'
+import type { IconBaseProps } from 'react-icons/lib'
 import {
     LuCalendarCheck as CalendarCheckIcon,
     LuCalendar as CalendarIcon,
@@ -403,12 +410,19 @@ import {
 } from 'react-icons/vsc'
 
 export {
+    GolangIcon,
+    ReactIcon,
+    GithubIcon,
+    DockerIcon,
+    DatabaseIcon,
+    CloudIcon,
     RobotIcon,
     RocketIcon,
     PulseIcon,
     SidebarLeftIcon,
     ArrowChevronUpIcon,
     CircleIcon,
+    ChartBarIcon,
     PipetteIcon,
     HeadsetIcon,
     CodeIcon,
@@ -761,7 +775,12 @@ export {
     GripVerticalIcon,
 }
 
-export const IconMap: Record<TIcon, IconType> = {
+export const IconMap = {
+    'Transaction Dollar': TransactionDollarIcon,
+    Golang: GolangIcon,
+    React: ReactIcon,
+    Github: GithubIcon,
+    Docker: DockerIcon,
     Robot: RobotIcon,
     Rocket: RocketIcon,
     Pulse: PulseIcon,
@@ -1110,6 +1129,9 @@ export const IconMap: Record<TIcon, IconType> = {
     'Clock Cancel': ClockCancelIcon,
     'Wrench Icon': WrenchIcon,
     'Draft Icon': DraftIcon,
+    'Chart Bar': ChartBarIcon,
+    Cloud: CloudIcon,
+    Database: DatabaseIcon,
 }
 
 export type TIcon = (typeof ICONS)[number]

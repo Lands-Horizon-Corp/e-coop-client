@@ -8,30 +8,28 @@ import { cn } from '@/helpers'
 import APIRequestMethodBadge, {
     REQUEST_METHOD,
 } from '@/modules/developer/components/api-request-method-badge'
-import {
-    FaChartBar,
-    FaCloud,
-    FaCogs,
-    FaDatabase,
-    FaDocker,
-    FaGithub,
-    FaMobileAlt,
-    FaMoneyBillWave,
-    FaReact,
-    FaShieldAlt,
-    FaUsers,
-} from 'react-icons/fa'
-import { FaGolang } from 'react-icons/fa6'
 
 import {
     ArrowRightIcon,
+    ChartBarIcon,
+    CloudIcon,
     CurlyBracketIcon,
+    DatabaseIcon,
+    DockerIcon,
+    GithubIcon,
+    GolangIcon,
     KeySharpIcon,
     MagnifyingGlassIcon,
     MessagesIcon,
+    MoneyIcon,
     PaperPlaneIcon,
+    ReactIcon,
     RefreshIcon,
+    SettingsIcon,
+    ShieldIcon,
+    TelephoneIcon,
     TextFileFillIcon,
+    Users3Icon,
 } from '@/components/icons'
 import LoadingSpinner from '@/components/spinners/loading-spinner'
 import {
@@ -528,50 +526,50 @@ const APIRoutes = ({ className }: Props) => {
                 {/* Tech Stack Section */}
                 <div className="space-y-2">
                     <h3 className="text-lg font-semibold text-primary flex items-center gap-2">
-                        <FaCogs /> Tech Stack & Integrations
+                        <SettingsIcon /> Tech Stack & Integrations
                     </h3>
                     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2 text-sm">
                         <div className="flex items-center gap-2">
-                            <FaGolang />
+                            <GolangIcon />
                             <span>Go 1.21</span>
                         </div>
                         <div className="flex items-center gap-2">
-                            <FaReact />
+                            <ReactIcon />
                             <span>React 19+</span>
                         </div>
                         <div className="flex items-center gap-2">
-                            <FaDatabase />
+                            <DatabaseIcon />
                             <span>PostgreSQL 18+</span>
                         </div>
                         <div className="flex items-center gap-2">
-                            <FaDocker />
+                            <DockerIcon />
                             <span>Docker</span>
                         </div>
                         <div className="flex items-center gap-2">
-                            <FaGithub />
+                            <GithubIcon />
                             <span>GitHub Actions Workflow</span>
                         </div>
                         <div className="flex items-center gap-2">
-                            <FaCloud />
+                            <CloudIcon />
                             <span>FlyIO</span>
                         </div>
                         <div className="flex items-center gap-2">
-                            <FaShieldAlt />
+                            <ShieldIcon />
                             <span>RBAC & CSRF Token Management</span>
                         </div>
                         <div className="flex items-center gap-2">
-                            <FaChartBar />
+                            <ChartBarIcon />
                             <span>Prometheus + Grafana</span>
                         </div>
                         <div className="flex items-center gap-2">
-                            <FaUsers />
+                            <Users3Icon />
                             <span>
                                 Gin, Gorm, Uber FX, Playground Validator,
                                 ShopSpring Decimal
                             </span>
                         </div>
                         <div className="flex items-center gap-2">
-                            <FaReact />
+                            <ReactIcon />
                             <span>TypeScript 5.x, HTML5, Tailwind</span>
                         </div>
                     </div>
@@ -592,22 +590,22 @@ const APIRoutes = ({ className }: Props) => {
                     </p>
                     <ul className="list-disc ml-6 text-base text-muted-foreground space-y-1">
                         <li className="flex items-center gap-2">
-                            <FaMoneyBillWave />
+                            <MoneyIcon />
                             Integrate with e-wallets, payment gateways, and
                             SMS/email notification services
                         </li>
                         <li className="flex items-center gap-2">
-                            <FaCogs />
+                            <SettingsIcon />
                             Develop custom modules for loans, dividends, or
                             savings automation
                         </li>
                         <li className="flex items-center gap-2">
-                            <FaMobileAlt />
+                            <TelephoneIcon />
                             Extend member experience with mobile or kiosk-based
                             apps
                         </li>
                         <li className="flex items-center gap-2">
-                            <FaChartBar />
+                            <ChartBarIcon />
                             Monitor operations and analytics in real time
                         </li>
                     </ul>
@@ -621,7 +619,7 @@ const APIRoutes = ({ className }: Props) => {
                 <div className="flex items-center justify-between">
                     <p className="text-sm text-muted-foreground">
                         Search API Routes{' '}
-                        <Badge variant="outline">{APP_VERSION}</Badge>
+                        <Badge variant="outline">v{APP_VERSION}</Badge>
                     </p>
                     <div className="inline-flex items-center gap-x-2">
                         <APIKeyGenModal
