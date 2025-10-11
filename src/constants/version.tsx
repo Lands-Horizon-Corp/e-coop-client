@@ -1,6 +1,7 @@
 import { SoftwareUpdates } from '@/modules/feedback'
 
 import { BugIcon, PlantGrowthIcon } from '@/components/icons'
+
 import { APP_VERSION } from './envs'
 
 export const softwareUpdates: SoftwareUpdates = {
