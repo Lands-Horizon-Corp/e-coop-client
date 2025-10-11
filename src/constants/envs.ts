@@ -1,9 +1,11 @@
 // App Environment
 export const APP_ENV = import.meta.env.VITE_APP_ENV || 'development'
 
+export const APP_VERSION = import.meta.env.VITE_APP_VERSION || '0.0.0'
+
 // API / BACKEND SERVER
 export const API_URL =
-    import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000/api/'
+    import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000'
 
 // WS
 export const WS_URL = import.meta.env.VITE_WS_URL || 'ws://localhost:8080'
