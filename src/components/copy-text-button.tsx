@@ -25,7 +25,7 @@ const CopyTextButton = <TErr = Error,>({
     onCopyError,
     onCopySuccess,
 }: Props<TErr>) => {
-    const [copied, setCopied] = useState(false)
+    const [copied, setCopied] = useState(false) 
 
     const handleCopy = useCallback(() => {
         navigator.clipboard

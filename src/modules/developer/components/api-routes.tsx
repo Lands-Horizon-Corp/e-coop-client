@@ -3,7 +3,7 @@ import { useEffect, useMemo, useState } from 'react'
 import { Link } from '@tanstack/react-router'
 import Fuse from 'fuse.js'
 
-import { API_URL } from '@/constants'
+import { API_URL, APP_VERSION } from '@/constants'
 import { cn } from '@/helpers'
 import APIRequestMethodBadge, {
     REQUEST_METHOD,
@@ -621,7 +621,7 @@ const APIRoutes = ({ className }: Props) => {
                 <div className="flex items-center justify-between">
                     <p className="text-sm text-muted-foreground">
                         Search API Routes{' '}
-                        <Badge variant="outline">v0.0.1</Badge>
+                        <Badge variant="outline">{APP_VERSION}</Badge>
                     </p>
                     <div className="inline-flex items-center gap-x-2">
                         <APIKeyGenModal

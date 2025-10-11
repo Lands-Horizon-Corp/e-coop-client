@@ -5,6 +5,7 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 
 import { GOOGLE_MAPS_API_KEY } from '@/constants'
 import { cn } from '@/helpers'
+import { getCurrentLocationWithDefault } from '@/helpers/map-utils'
 import { useTheme } from '@/modules/settings/provider/theme-provider'
 import { GoogleMap, useJsApiLoader } from '@react-google-maps/api'
 
@@ -16,6 +17,7 @@ import {
     MagnifyingGlassIcon,
     NavigationIcon,
     PinLocationIcon,
+    TargetArrowIcon,
 } from '@/components/icons'
 import { Button } from '@/components/ui/button'
 import {
@@ -126,7 +128,6 @@ export const MapPicker: React.FC<MapPickerProps> = ({
     searchPlaceholder = 'Search for a location...',
     title = 'Select Location',
     showAddress = true,
-    // _mapContainerStyle = defaultMapContainerStyle,
     placeholder = 'Select location',
     variant = 'outline',
     size = 'default',
@@ -138,7 +139,6 @@ export const MapPicker: React.FC<MapPickerProps> = ({
     const { isLoaded, loadError } = useJsApiLoader({
         id: 'google-maps-script',
         googleMapsApiKey: GOOGLE_MAPS_API_KEY ?? '',
-        // libraries: GOOGLE_MAPS_LIBRARIES,
     })
 
     // Internal modal state
@@ -157,6 +157,7 @@ export const MapPicker: React.FC<MapPickerProps> = ({
     const [showSuggestions, setShowSuggestions] = useState<boolean>(false)
     const [isLoadingSuggestions, setIsLoadingSuggestions] =
         useState<boolean>(false)
+    const [isGettingLocation, setIsGettingLocation] = useState<boolean>(false)
 
     const mapRef = useRef<google.maps.Map | null>(null)
     const geocoderRef = useRef<google.maps.Geocoder | null>(null)
@@ -543,6 +544,36 @@ export const MapPicker: React.FC<MapPickerProps> = ({
         }
     }
 
+    // New function to get user's current location
+    const handleGetCurrentLocation = useCallback(async () => {
+        setIsGettingLocation(true)
+        try {
+            const currentLocation = await getCurrentLocationWithDefault(
+                propDefaultCenter.lat,
+                propDefaultCenter.lng
+            )
+
+            setSelectedLocation(currentLocation)
+            setMapCenter(currentLocation)
+            setMapZoom(15)
+
+            if (mapRef.current) {
+                mapRef.current.panTo(currentLocation)
+                mapRef.current.setZoom(15)
+            }
+
+            setTimeout(() => {
+                createOrMoveMarker(currentLocation)
+            }, 100)
+
+            reverseGeocode(currentLocation)
+        } catch (error) {
+            console.error('Error getting current location:', error)
+        } finally {
+            setIsGettingLocation(false)
+        }
+    }, [propDefaultCenter, createOrMoveMarker, reverseGeocode])
+
     if (!GOOGLE_MAPS_API_KEY) {
         return (
             <div className="rounded border border-red-200 p-2 text-sm text-destructive">
@@ -581,6 +612,7 @@ export const MapPicker: React.FC<MapPickerProps> = ({
                     placeholder
                 )}
             </Button>
+
             {/* Modal */}
             <Dialog onOpenChange={setIsOpen} open={isOpen}>
                 <DialogContent className="max-h-[100vh] min-w-7xl overflow-hidden p-0">
@@ -649,6 +681,24 @@ export const MapPicker: React.FC<MapPickerProps> = ({
                                         <Label htmlFor="location-search">
                                             Search Location
                                         </Label>
+
+                                        {/* Current Location Button */}
+                                        <Button
+                                            className="w-full"
+                                            disabled={
+                                                !isLoaded || isGettingLocation
+                                            }
+                                            onClick={handleGetCurrentLocation}
+                                            size="sm"
+                                            type="button"
+                                            variant="outline"
+                                        >
+                                            <TargetArrowIcon className="mr-1 h-4 w-4" />
+                                            {isGettingLocation
+                                                ? 'Getting location...'
+                                                : 'Use My Location'}
+                                        </Button>
+
                                         <div className="relative">
                                             <MagnifyingGlassIcon className="text-muted-foreground absolute top-1/2 left-3 z-10 h-4 w-4 -translate-y-1/2" />
 
