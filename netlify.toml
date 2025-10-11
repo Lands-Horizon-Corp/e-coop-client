@@ -2,5 +2,6 @@
   from = "/*"
   to = "/"
   status = 200
+  
 [build.environment]
   SECRETS_SCAN_SMART_DETECTION_ENABLED = "false"
