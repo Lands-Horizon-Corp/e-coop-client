@@ -1,9 +1,14 @@
+'use client'
+
+import { useState } from 'react'
+
 import { useRouter } from '@tanstack/react-router'
 
 import { cn } from '@/helpers/tw-utils'
 import { useAuthStore } from '@/modules/authentication/authgentication.store'
 import TransactionBatchNavButton from '@/modules/transaction-batch/components/batch-nav-button'
 import NavProfileMenu from '@/modules/user-profile/components/nav/nav-profile-menu'
+import { ChevronLeft, ChevronRight } from 'lucide-react'
 
 import { BadgeCheckFillIcon } from '@/components/icons'
 import LiveToggle from '@/components/live-toggle'
@@ -28,6 +33,62 @@ const UserNav = ({
     } = useAuthStore()
 
     const router = useRouter()
+    const [isOpen, setIsOpen] = useState(true)
+
+    // Secondary nav items (collapsible)
+    const SECONDARY_NAV_ITEMS = [
+        {
+            important: false,
+            component: ['employee', 'owner'].includes(
+                user_organization?.user_type ?? ''
+            ) ? (
+                <Button
+                    className="rounded-full group"
+                    hoverVariant="primary"
+                    onClick={() =>
+                        router.navigate({
+                            to: '/org/$orgname/branch/$branchname/approvals' as string,
+                        })
+                    }
+                    variant="secondary"
+                >
+                    <BadgeCheckFillIcon className="ease-out duration-500 text-primary group-hover:text-primary-foreground" />
+                    Approvals
+                </Button>
+            ) : null,
+        },
+        {
+            important: false,
+            component: user ? <TransactionBatchNavButton /> : null,
+        },
+        {
+            important: false,
+            component:
+                user && user_organization?.user_type === 'employee' ? (
+                    <NavTimeInBar />
+                ) : null,
+        },
+        {
+            important: false,
+            component: user ? <LiveToggle size="default" /> : null,
+        },
+        {
+            important: false,
+            component: <GeneralButtonShortcuts />,
+        },
+        {
+            important: false,
+            component: <NavThemeToggle />,
+        },
+    ]
+
+    // Important nav items (always visible)
+    const IMPORTANT_NAV_ITEMS = [
+        {
+            important: true,
+            component: user ? <NavProfileMenu /> : null,
+        },
+    ]
 
     return (
         <RootNav
@@ -43,35 +104,54 @@ const UserNav = ({
                     homeUrl={homeUrl}
                 />
             </NavContainer>
+
             <NavContainer className="pointer-events-auto">
-                {['employee', 'owner'].includes(
-                    user_organization?.user_type ?? ''
-                ) && (
+                <div className="flex items-center gap-2">
+                    {/* Collapsible secondary navigation */}
+                    <div className="relative overflow-hidden">
+                        <div
+                            className={`flex items-center gap-2 transition-all duration-300 ease-out ${
+                                isOpen
+                                    ? 'translate-x-0 opacity-100'
+                                    : '-translate-x-8 opacity-0 pointer-events-none'
+                            }`}
+                            style={{
+                                maxWidth: isOpen ? '800px' : '0px',
+                            }}
+                        >
+                            {SECONDARY_NAV_ITEMS.map((navItem, index) => (
+                                <div className="whitespace-nowrap" key={index}>
+                                    {navItem.component}
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+
+                    {/* Toggle button */}
                     <Button
-                        className="rounded-full group"
-                        hoverVariant="primary"
-                        onClick={() =>
-                            router.navigate({
-                                to: '/org/$orgname/branch/$branchname/approvals' as string,
-                            })
+                        aria-label={
+                            isOpen ? 'Hide more options' : 'Show more options'
                         }
-                        variant="secondary"
+                        className="shrink-0"
+                        onClick={() => setIsOpen(!isOpen)}
+                        size="icon"
+                        variant="ghost"
                     >
-                        <BadgeCheckFillIcon className="ease-out duration-500 text-primary group-hover:text-primary-foreground" />
-                        Approvals
+                        {isOpen ? (
+                            <ChevronLeft className="h-4 w-4" />
+                        ) : (
+                            <ChevronRight className="h-4 w-4" />
+                        )}
                     </Button>
-                )}
 
-                {user && <TransactionBatchNavButton />}
-                {user && user_organization?.user_type === 'employee' && (
-                    <NavTimeInBar />
-                )}
+                    {/* Divider */}
+                    <div className="mx-2 h-6 w-px bg-border" />
 
-                {user && <LiveToggle size="default" />}
-
-                <GeneralButtonShortcuts />
-                <NavProfileMenu />
-                <NavThemeToggle />
+                    {/* Important items - always visible */}
+                    {IMPORTANT_NAV_ITEMS.map((navItem, index) => (
+                        <div key={index}>{navItem.component}</div>
+                    ))}
+                </div>
             </NavContainer>
         </RootNav>
     )
