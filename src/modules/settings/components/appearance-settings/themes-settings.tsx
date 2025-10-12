@@ -33,6 +33,12 @@ const ThemesSettings = ({ className }: Props) => {
         applyCustomThemeColors,
         mouseTrailEnabled,
         setMouseTrailEnabled,
+        autoThemeEnabled,
+        setAutoThemeEnabled,
+        lightModeTime,
+        setLightModeTime,
+        darkModeTime,
+        setDarkModeTime,
     } = useTheme()
     const [selectedTheme, setSelectedTheme] = useState<string>(customTheme)
     const [currentMode, setCurrentMode] = useState<'light' | 'dark'>(
@@ -141,6 +147,56 @@ const ThemesSettings = ({ className }: Props) => {
                     checked={mouseTrailEnabled}
                     onCheckedChange={setMouseTrailEnabled}
                 />
+            </div>
+
+            {/* Automatic Theme Switching */}
+            <div className="space-y-4 p-4 rounded-lg border bg-card">
+                <div className="flex items-center justify-between">
+                    <div className="space-y-1">
+                        <p className="text-sm font-medium">
+                            Automatic Theme Switching
+                        </p>
+                        <p className="text-xs text-muted-foreground">
+                            Automatically switch between light and dark modes
+                            based on time
+                        </p>
+                    </div>
+                    <Switch
+                        checked={autoThemeEnabled}
+                        onCheckedChange={setAutoThemeEnabled}
+                    />
+                </div>
+
+                {autoThemeEnabled && (
+                    <div className="grid grid-cols-2 gap-4 pt-2 border-t">
+                        <div className="space-y-2">
+                            <label className="text-xs font-medium text-muted-foreground">
+                                Light Mode Time
+                            </label>
+                            <Input
+                                className="text-sm"
+                                onChange={(e) =>
+                                    setLightModeTime(e.target.value)
+                                }
+                                type="time"
+                                value={lightModeTime}
+                            />
+                        </div>
+                        <div className="space-y-2">
+                            <label className="text-xs font-medium text-muted-foreground">
+                                Dark Mode Time
+                            </label>
+                            <Input
+                                className="text-sm"
+                                onChange={(e) =>
+                                    setDarkModeTime(e.target.value)
+                                }
+                                type="time"
+                                value={darkModeTime}
+                            />
+                        </div>
+                    </div>
+                )}
             </div>
 
             {/* Search Input and Reset Button */}
@@ -339,7 +395,9 @@ const ThemesSettings = ({ className }: Props) => {
                     automatically adapt to your current light/dark mode setting.
                     Theme preferences are saved and will persist across
                     sessions. Changes are applied instantly to the entire
-                    application.
+                    application. When automatic theme switching is enabled, the
+                    system will override manual theme selection based on your
+                    configured times.
                 </p>
             </div>
         </div>
