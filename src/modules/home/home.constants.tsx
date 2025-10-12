@@ -94,6 +94,49 @@ export const KEY_FEATURES: IFeatureCardData[] = [
     },
 ]
 
+export const COOPERATIVE_ADVANTAGES: IFeatureCardData[] = [
+    {
+        id: 'development-speed',
+        title: 'Accelerated Development Time',
+        description:
+            'Leverage the power of a proven cooperative banking infrastructure trusted by financial institutions. Integrate once, launch your cooperative in days with our comprehensive suite of pre-built banking modules.',
+        icon: <CodeIcon className="inline size-10 mr-2" />,
+        imageSrc: '/pictures/home/save-time.svg',
+        imageAlt: 'Fast development and deployment',
+        useImageMatch: true,
+    },
+    {
+        id: 'cost-reduction',
+        title: 'Reduce Operational Costs',
+        description:
+            'Our flexible pricing plans offer the best cost-to-performance ratio for cooperative banking. Get access to the full banking suite and member management features. Scale up or down based on your cooperative size.',
+        icon: <BankIcon className="inline size-10 mr-2" />,
+        imageSrc: '/pictures/home/reduce-cost.svg',
+        imageAlt: 'Cost reduction and flexible pricing',
+        useImageMatch: true,
+    },
+    {
+        id: 'enterprise-security',
+        title: 'Enterprise-Grade Security',
+        description:
+            'We apply bank-level encryption to all member data, transaction processing, and financial records. Multi-layer security with encryption at rest, in transit, and in memory for all sensitive cooperative information.',
+        icon: <Users3FillIcon className="inline size-10 mr-2" />,
+        imageSrc: '/pictures/home/security.svg',
+        imageAlt: 'Enterprise security for cooperatives',
+        useImageMatch: true,
+    },
+    {
+        id: 'unified-dashboard',
+        title: 'All-in-One Cooperative Dashboard',
+        description:
+            'One comprehensive dashboard for all your cooperative operations. Manage members, process loans, track shares, generate financial reports, setup automated workflows, monitor transactions, and access detailed analytics.',
+        icon: <CodeIcon className="inline size-10 mr-2" />,
+        imageSrc: '/pictures/home/dashboard.svg',
+        imageAlt: 'Unified cooperative management dashboard',
+        useImageMatch: true,
+    },
+]
+
 export const LANDS_TEAM: ILandsTeamMember[] = [
     {
         name: 'Zalven Lemuel S. Dayao',

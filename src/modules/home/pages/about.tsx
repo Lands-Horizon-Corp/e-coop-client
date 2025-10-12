@@ -1,14 +1,26 @@
 'use client'
 
+import { Link } from '@tanstack/react-router'
+
+import ImageMatch from '@/components/image-match'
+import { Particles } from '@/components/ui/background-particles'
+import { Button } from '@/components/ui/button'
 import { GradientText } from '@/components/ui/gradient-text'
 
 import TeamMemberCard from '../components/about/team-member-card'
 import OurServices from '../components/home/our-services'
-import { LANDS_TEAM } from '../home.constants'
+import { COOPERATIVE_ADVANTAGES, LANDS_TEAM } from '../home.constants'
 
 export default function AboutUsPage() {
     return (
         <div className="py-20 relative ">
+            <Particles
+                className="absolute inset-0"
+                color="#ffffff"
+                ease={80}
+                quantity={100}
+                refresh
+            />
             <div className="to-background/0 via-background/0 from-primary/50 absolute right-0 -z-10 -mt-16 h-screen w-full bg-radial-[ellipse_at_20%_0%] to-100%" />
 
             <div className="container mx-auto px-4  max-w-6xl">
@@ -25,16 +37,63 @@ export default function AboutUsPage() {
                         >
                             <h1>E-coop</h1>
                         </GradientText>
-                        <p className="font-bold">
+                        <p className="font-bold text-2xl mt-4">
                             Empowering cooperatives. Building communities.
                         </p>
-                        <p className="font-bold text-lg">Whats yours?</p>
+                        <p className="font-light text-lg mt-6 text-muted-foreground max-w-3xl mx-auto">
+                            Transforming cooperative banking with cutting-edge
+                            technology, secure infrastructure, and
+                            member-focused solutions that drive financial
+                            inclusion and community growth.
+                        </p>
                     </h1>
                 </div>
 
-                <section className="mt-16">
+                <section className="">
                     <OurServices />
                 </section>
+
+                {/* Full-width benefits section */}
+            </div>
+
+            <section>
+                <div className="bg-primary py-16">
+                    <div className="container mx-auto max-w-6xl">
+                        <div className="text-center text-primary-foreground">
+                            <h2 className="text-3xl md:text-4xl font-bold mb-4">
+                                The benefits of using Cooperative Banking API
+                            </h2>
+                            <p className="text-xl md:text-2xl font-light opacity-90">
+                                Developed to save time. Designed to be robust.
+                            </p>
+                            <div className="mt-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 items-start">
+                                {COOPERATIVE_ADVANTAGES.map((advantage) => (
+                                    <div
+                                        className="text-center grid grid-rows-[80px_auto_1fr] gap-4"
+                                        key={advantage.id}
+                                    >
+                                        <div className="size-16 mx-auto overflow-hidden">
+                                            <ImageMatch
+                                                alt={advantage.imageAlt}
+                                                className="w-full h-full"
+                                                color="bg-primary-foreground/20"
+                                                src={advantage.imageSrc}
+                                            />
+                                        </div>
+                                        <h3 className="text-lg font-semibold">
+                                            {advantage.title}
+                                        </h3>
+                                        <p className="opacity-80 text-sm">
+                                            {advantage.description}
+                                        </p>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <div className="container mx-auto px-4 max-w-6xl">
                 <section>
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 py-8 gap-6">
                         {LANDS_TEAM.map((member) => (
@@ -61,6 +120,13 @@ export default function AboutUsPage() {
                         experience — where growth, security, and trust are
                         always at the heart of what we do.
                     </p>
+                    <div className="mt-8">
+                        <Link to="/contact">
+                            <Button className="bg-primary hover:bg-primary/90 text-primary-foreground px-8 py-3 text-lg font-semibold rounded-lg transition-colors">
+                                Let's talk
+                            </Button>
+                        </Link>
+                    </div>
                 </section>
             </div>
         </div>
