@@ -76,7 +76,7 @@ export const ThemeProvider = ({
     const [mouseTrailEnabled, setMouseTrailEnabledState] = useState<boolean>(
         () => {
             const stored = localStorage.getItem('ecoop-mouse-trail-enabled')
-            return stored !== null ? stored === 'true' : true
+            return stored !== null ? stored === 'true' : false
         }
     )
 

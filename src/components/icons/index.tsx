@@ -83,6 +83,7 @@ import {
     FaBold as FaBoldIcon,
     FaCalendarCheck as FaCalendarCheckIcon,
     FaTimesCircle as FaTimesIcon,
+    FaFingerprint as FingerPrintIcon,
     FaGripHorizontal as GripHorizontalIcon,
     FaGripVertical as GripVerticalIcon,
     FaHandsHelping as HandsHelpingIcon,
@@ -388,6 +389,7 @@ import {
     TbSquareF1 as F1Icon,
     TbSquareF2 as F2Icon,
     TbSquareF3 as F3Icon,
+    TbFingerprintScan as FingerprintScanIcon,
     TbGhost2Filled as GhostIcon,
     TbHeartHandshake as HandShakeHeartIcon,
     TbMinus as MinusIcon,
@@ -411,6 +413,8 @@ import {
 } from 'react-icons/vsc'
 
 export {
+    FingerprintScanIcon,
+    FingerPrintIcon,
     ArrowUpLongIcon,
     GolangIcon,
     ReactIcon,
@@ -778,6 +782,8 @@ export {
 }
 
 export const IconMap = {
+    'Fingerprint Scan': FingerprintScanIcon,
+    Fingerprint: FingerPrintIcon,
     'Transaction Dollar': TransactionDollarIcon,
     Golang: GolangIcon,
     React: ReactIcon,

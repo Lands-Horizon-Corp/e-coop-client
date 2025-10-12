@@ -195,9 +195,7 @@ const FAQ_ITEMS: {
                     className="underline underline-offset-4 text-primary/70"
                     rel="noopener noreferrer"
                     target="_blank"
-                    to={
-                        '/policy/complaint-handling-and-dispute-policy' as string
-                    }
+                    to="/policy/complaint-handling-and-dispute-policy"
                 >
                     Complaint Handling and Dispute Resolution Policy
                 </Link>{' '}
