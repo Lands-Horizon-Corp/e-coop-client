@@ -28,11 +28,11 @@ const IntroSection = () => {
             <div className="mx-auto">
                 <div className="mx-auto w-full max-w-5xl rounded-2xl">
                     <div className="grid grid-cols-1 gap-6 md:grid-cols-2 md:gap-12">
-                        <div className="relative order-2 aspect-[4/3] overflow-hidden rounded-lg md:order-1">
+                        <div className="relative order-2 a overflow-hidden rounded-lg md:order-1">
                             <ImageMatch
                                 alt="Cooperative community working together"
                                 containerClassName="shadow-card overflow-hidden rounded-2xl"
-                                src="/pictures/home/software.png"
+                                src="/pictures/home/trade.png"
                             />
                         </div>
                         <div className="order-1 md:order-2">

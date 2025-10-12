@@ -1,3 +1,4 @@
+// assuming you have this utility
 import FaqSection from '../components/home/faq-section'
 import FeatureSection from '../components/home/feature-section'
 import HeroHome from '../components/home/hero-home'
@@ -13,4 +14,5 @@ export const HomePage = () => {
         </div>
     )
 }
+
 export default HomePage
