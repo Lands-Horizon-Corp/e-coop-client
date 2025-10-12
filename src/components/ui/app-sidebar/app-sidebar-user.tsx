@@ -1,29 +1,21 @@
-import { useRouter } from '@tanstack/react-router'
+import { Link, useRouter } from '@tanstack/react-router'
 import { toast } from 'sonner'
 
 import { useSignOut } from '@/modules/authentication'
 import { useAuthUser } from '@/modules/authentication/authgentication.store'
 import { APIKeyGenModal } from '@/modules/developer/components/api-key-gen'
-import { useTheme } from '@/modules/settings/provider/theme-provider'
 import useConfirmModalStore from '@/store/confirm-modal-store'
 
 import {
     ChevronsUpDownIcon,
     LogoutIcon,
-    MoonIcon,
-    QuestionCircleIcon,
-    SunIcon,
-    SunMoonIcon,
+    SettingsIcon,
 } from '@/components/icons'
 import ImageDisplay from '@/components/image-display'
 import {
     DropdownMenu,
     DropdownMenuContent,
     DropdownMenuItem,
-    DropdownMenuPortal,
-    DropdownMenuSub,
-    DropdownMenuSubContent,
-    DropdownMenuSubTrigger,
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import {
@@ -38,7 +30,6 @@ const AppSidebarUser = () => {
     const router = useRouter()
     const apiKeyGenModal = useModalState()
     const { onOpen } = useConfirmModalStore()
-    const { setTheme, resolvedTheme } = useTheme()
 
     const {
         currentAuth: { user },
@@ -86,83 +77,12 @@ const AppSidebarUser = () => {
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end" side="right">
                             <DropdownMenuItem>
-                                <QuestionCircleIcon className="mr-2 size-4 duration-150 ease-in-out" />
-                                <span>Help</span>
+                                <Link to="/account-profile">
+                                    <SettingsIcon className="inline mr-2 size-4 duration-150 ease-in-out" />
+                                    <span>Manage Profile</span>
+                                </Link>
                             </DropdownMenuItem>
-                            <DropdownMenuSub>
-                                <DropdownMenuSubTrigger>
-                                    {resolvedTheme === 'light' && (
-                                        <SunIcon className="mr-2 size-4" />
-                                    )}
-                                    {resolvedTheme === 'dark' && (
-                                        <MoonIcon className="mr-2 size-4" />
-                                    )}
-                                    <span>Theme</span>
-                                </DropdownMenuSubTrigger>
-                                <DropdownMenuPortal>
-                                    <DropdownMenuSubContent>
-                                        <DropdownMenuItem
-                                            onClick={() => setTheme('light')}
-                                        >
-                                            <SunIcon className="mr-2 size-4" />
-                                            <span>Light</span>
-                                        </DropdownMenuItem>
-                                        <DropdownMenuItem
-                                            onClick={() => setTheme('dark')}
-                                        >
-                                            <MoonIcon className="mr-2 size-4" />
-                                            <span>Dark</span>
-                                        </DropdownMenuItem>
-                                        <DropdownMenuItem
-                                            onClick={() => setTheme('system')}
-                                        >
-                                            <SunMoonIcon className="mr-2 size-4" />
-                                            <span>System</span>
-                                        </DropdownMenuItem>
-                                    </DropdownMenuSubContent>
-                                </DropdownMenuPortal>
-                            </DropdownMenuSub>
-                            {/* <DropdownMenuSub>
-                                <DropdownMenuSubTrigger>
-                                    <DevIcon className="mr-2 size-4 duration-150 ease-in-out" />
-                                    <span>For Developer</span>
-                                </DropdownMenuSubTrigger>
-                                <DropdownMenuPortal>
-                                    <DropdownMenuSubContent>
-                                        <DropdownMenuItem
-                                            onClick={() =>
-                                                apiKeyGenModal.onOpenChange(
-                                                    true
-                                                )
-                                            }
-                                        >
-                                            <KeySharpIcon className="mr-2 size-4" />
-                                            <span>API Key</span>
-                                        </DropdownMenuItem>
-                                        <DropdownMenuItem
-                                            onClick={() =>
-                                                window.open(
-                                                    '/developers',
-                                                    '_blank'
-                                                )
-                                            }
-                                        >
-                                            <CurlyBracketIcon className="mr-2 size-4" />
-                                            <span>Developer Policy</span>
-                                        </DropdownMenuItem>
-                                        <DropdownMenuItem
-                                            onClick={() =>
-                                                router.navigate({
-                                                    to: `/org/${orgname}/branch/${branchname}/dev/documentation` as string,
-                                                })
-                                            }
-                                        >
-                                            <BookOpenIcon className="mr-2 size-4" />
-                                            <span>Documentation</span>
-                                        </DropdownMenuItem>
-                                    </DropdownMenuSubContent>
-                                </DropdownMenuPortal>
-                            </DropdownMenuSub> */}
+
                             <DropdownMenuItem
                                 onClick={() =>
                                     onOpen({
