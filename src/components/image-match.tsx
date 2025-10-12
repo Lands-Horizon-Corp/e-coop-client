@@ -8,9 +8,10 @@ interface ImageMatchProps {
     className?: string
     color?: string
     containerClassName?: string
+    glow?: boolean
 }
 
-const ImageMatch = ({
+const ImageMatcher = ({
     src,
     alt,
     className,
@@ -19,6 +20,8 @@ const ImageMatch = ({
 }: ImageMatchProps) => {
     return (
         <div className={cn('relative', containerClassName)}>
+            {/* Glow effect - blurred background image */}
+
             <Image
                 alt={alt}
                 className={cn(
@@ -43,6 +46,23 @@ const ImageMatch = ({
                 )}
                 src={src}
             />
+        </div>
+    )
+}
+
+const ImageMatch = (data: ImageMatchProps) => {
+    if (!data.glow) {
+        return <ImageMatcher {...data} />
+    }
+    return (
+        <div className="relative">
+            <ImageMatcher {...data} />
+
+            <div className="absolute inset-0 flex items-center justify-center blur-2xl">
+                <div className="scale-125 ">
+                    <ImageMatcher {...data} />
+                </div>
+            </div>
         </div>
     )
 }

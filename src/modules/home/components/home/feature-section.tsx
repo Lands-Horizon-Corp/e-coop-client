@@ -2,8 +2,9 @@ import { Link } from '@tanstack/react-router'
 
 import { Button } from '@/components/ui/button'
 
+import { KEY_FEATURES } from '../../home.constants'
 import FeatureCard from './feature-card'
-import { featureCardsData } from '../../constants'
+
 export default function FeatureSection() {
     return (
         <section className="flex items-center bg-none px-5 my-16">
@@ -20,7 +21,7 @@ export default function FeatureSection() {
                     </p>
 
                     <div className="space-y-4 md:grid md:grid-cols-3 md:gap-8 md:space-y-0">
-                        {featureCardsData.map((card) => (
+                        {KEY_FEATURES.map((card) => (
                             <FeatureCard
                                 description={card.description}
                                 icon={card.icon}

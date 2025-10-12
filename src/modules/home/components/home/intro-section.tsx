@@ -1,8 +1,30 @@
 import ImageMatch from '@/components/image-match'
 
-import { featureItems } from '../../constants'
-import FeatureItem from './feature-item'
+import { SERVICES } from '../../home.constants'
 
+const FeatureItem = ({
+    icon,
+    title,
+    alt,
+}: {
+    icon: string
+    title: string
+    alt?: string
+}) => {
+    return (
+        <div className="flex items-center space-x-3 p-2">
+            <ImageMatch
+                alt={alt || `${title} feature icon`}
+                containerClassName="shadow-card overflow-hidden rounded-2xl size-12 flex-shrink-0"
+                glow
+                src={icon}
+            />
+            <p className="font-bold text-sm md:text-base antialiased font-smooth">
+                {title}
+            </p>
+        </div>
+    )
+}
 const IntroSection = () => {
     return (
         <section className="flex items-center justify-center ">
@@ -32,7 +54,7 @@ const IntroSection = () => {
                                 Launch date: January 6, 2026
                             </p>
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-x-3 gap-y-1">
-                                {featureItems.map((item, index) => (
+                                {SERVICES.map((item, index) => (
                                     <FeatureItem
                                         alt={item.alt}
                                         icon={item.icon}
