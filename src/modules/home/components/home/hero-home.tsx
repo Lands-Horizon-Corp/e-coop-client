@@ -1,6 +1,5 @@
 import { Link } from '@tanstack/react-router'
 
-import RandomDots from '@/components/backgrounds/random-dots'
 import { GradientBackground } from '@/components/gradient-background/gradient-background'
 import {
     ArrowChevronRight,
@@ -21,7 +20,6 @@ const HeroHome = () => {
     return (
         <section className=" min-h-screen overflow-hidden">
             {/* Background gradients */}
-            <RandomDots count={50} />
 
             <div className="to-background/0 via-background/0 from-primary/50 absolute right-0 -z-10 -mt-16 h-screen w-full bg-radial-[ellipse_at_20%_0%] to-100%" />
 

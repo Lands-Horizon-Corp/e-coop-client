@@ -9,6 +9,7 @@ import Themes from '@/modules/settings/data/themes.json'
 import { PaintIcon, XIcon } from '@/components/icons'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
+import { Switch } from '@/components/ui/switch'
 
 import { IClassProps } from '@/types'
 
@@ -30,6 +31,8 @@ const ThemesSettings = ({ className }: Props) => {
         customTheme,
         setCustomTheme,
         applyCustomThemeColors,
+        mouseTrailEnabled,
+        setMouseTrailEnabled,
     } = useTheme()
     const [selectedTheme, setSelectedTheme] = useState<string>(customTheme)
     const [currentMode, setCurrentMode] = useState<'light' | 'dark'>(
@@ -123,6 +126,21 @@ const ThemesSettings = ({ className }: Props) => {
                     Choose from predefined color themes that work in both light
                     and dark modes
                 </p>
+            </div>
+
+            {/* Mouse Trail Toggle */}
+            <div className="flex items-center justify-between p-4 rounded-lg border bg-card">
+                <div className="space-y-1">
+                    <p className="text-sm font-medium">Mouse Trail Effect</p>
+                    <p className="text-xs text-muted-foreground">
+                        Enable animated cursor trail that follows your mouse
+                        movement
+                    </p>
+                </div>
+                <Switch
+                    checked={mouseTrailEnabled}
+                    onCheckedChange={setMouseTrailEnabled}
+                />
             </div>
 
             {/* Search Input and Reset Button */}

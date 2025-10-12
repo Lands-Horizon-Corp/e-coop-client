@@ -8,13 +8,17 @@ import {
 import { MutationCache } from '@tanstack/react-query';
 import { RouterProvider, createRouter } from '@tanstack/react-router';
 
-import { ThemeProvider } from '@/modules/settings/provider/theme-provider';
+import {
+    ThemeProvider,
+    useTheme,
+} from '@/modules/settings/provider/theme-provider';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 
 import SpySvg from '../src/assets/spy.svg';
 import PageContainer from './components/containers/page-container';
 import Image from './components/image';
 import LoadingSpinner from './components/spinners/loading-spinner';
+import MouseTrailEffect from './components/ui/mouse-trail-effect';
 import { APP_ENV } from './constants';
 import { useIncognitoDetector } from './hooks/use-incognito-detector';
 import { routeTree } from './routeTree.gen';
@@ -26,6 +30,23 @@ declare module '@tanstack/react-router' {
         router: typeof router;
     }
 }
+
+const AppContent = () => {
+    const { mouseTrailEnabled } = useTheme();
+
+    return (
+        <>
+            <MouseTrailEffect
+                color="primary"
+                effect="dots"
+                enabled={mouseTrailEnabled}
+                maxPoints={1000}
+                size={10}
+            />
+            <RouterProvider router={router} />
+        </>
+    );
+};
 
 const App = () => {
     const [queryClient] = useState(
@@ -81,7 +102,7 @@ const App = () => {
     return (
         <QueryClientProvider client={queryClient}>
             <ThemeProvider>
-                <RouterProvider router={router} />
+                <AppContent />
             </ThemeProvider>
             <ReactQueryDevtools initialIsOpen={false} />
         </QueryClientProvider>

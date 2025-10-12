@@ -293,6 +293,7 @@ import {
     MdManageAccounts as AccountSettingIcon,
     MdOutlineManageAccounts as AccountSetupIcon,
     MdAccountBalance as AccountsIcon,
+    MdOutlineKeyboardArrowUp as ArrowUpLongIcon,
     MdAutoAwesome as AutoAwesomeIcon,
     MdOutlineAccountBalance as BankIcon,
     MdFlipCameraAndroid as CameraFlipIcon,
@@ -410,6 +411,7 @@ import {
 } from 'react-icons/vsc'
 
 export {
+    ArrowUpLongIcon,
     GolangIcon,
     ReactIcon,
     GithubIcon,
@@ -969,7 +971,7 @@ export const IconMap = {
     'Wood Signs': WoodSignsIcon,
     'User Group': UserGroupIcon,
     'Book Thick': BookThickIcon,
-    'Arrow Up Long': ArrowUpLong,
+    'Arrow Up Long': ArrowUpLongIcon,
     Unavailable: UnavailableIcon,
     Maintenance: MaintenanceIcon,
     'Collapse All': CollapseIcon,

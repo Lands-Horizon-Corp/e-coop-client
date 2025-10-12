@@ -137,9 +137,13 @@ html {
     --sidebar-accent-foreground: oklch(0.3729 0.0306 259.7328);
     --sidebar-border: oklch(0.9276 0.0058 264.5313);
     --sidebar-ring: oklch(0.7227 0.192 149.5793);
-    --font-sans: DM Sans, sans-serif;
-    --font-serif: Lora, serif;
-    --font-mono: IBM Plex Mono, monospace;
+    --font-sans:
+        -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text',
+        'San Francisco', system-ui, sans-serif;
+    --font-serif: 'New York', Georgia, 'Times New Roman', Times, serif;
+    --font-mono:
+        'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas,
+        'Courier New', monospace;
     --shadow-color: hsl(0 0% 0%);
     --shadow-opacity: 0.1;
     --shadow-blur: 8px;
@@ -204,9 +208,13 @@ html {
     --sidebar-accent-foreground: oklch(0.7118 0.0129 286.0665);
     --sidebar-border: oklch(0.4461 0.0263 256.8018);
     --sidebar-ring: oklch(0.7729 0.1535 163.2231);
-    --font-sans: DM Sans, sans-serif;
-    --font-serif: Lora, serif;
-    --font-mono: IBM Plex Mono, monospace;
+    --font-sans:
+        -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text',
+        'San Francisco', system-ui, sans-serif;
+    --font-serif: 'New York', Georgia, 'Times New Roman', Times, serif;
+    --font-mono:
+        'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas,
+        'Courier New', monospace;
     --shadow-color: hsl(0 0% 0%);
     --shadow-opacity: 0.1;
     --shadow-blur: 8px;

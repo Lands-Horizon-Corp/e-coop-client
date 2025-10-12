@@ -26,9 +26,11 @@ type ThemeProviderState = {
     resolvedTheme: ResolvedTheme
     customTheme: string
     animationVariant: AnimationVariant
+    mouseTrailEnabled: boolean
     setTheme: (theme: Theme) => void
     setCustomTheme: (themeName: string) => void
     setAnimationVariant: (variant: AnimationVariant) => void
+    setMouseTrailEnabled: (enabled: boolean) => void
     applyCustomThemeColors: (
         colors: CustomThemeColors,
         themeName: string
@@ -40,9 +42,11 @@ const initialState: ThemeProviderState = {
     resolvedTheme: 'light',
     customTheme: 'Default',
     animationVariant: 'circle',
+    mouseTrailEnabled: true,
     setTheme: () => null,
     setCustomTheme: () => null,
     setAnimationVariant: () => null,
+    setMouseTrailEnabled: () => null,
     applyCustomThemeColors: () => null,
 }
 
@@ -69,6 +73,12 @@ export const ThemeProvider = ({
                 ) as AnimationVariant) || 'circle'
             )
         })
+    const [mouseTrailEnabled, setMouseTrailEnabledState] = useState<boolean>(
+        () => {
+            const stored = localStorage.getItem('ecoop-mouse-trail-enabled')
+            return stored !== null ? stored === 'true' : true
+        }
+    )
 
     const removeClassTheme = useCallback((root: HTMLElement) => {
         if (!root) return
@@ -92,6 +102,11 @@ export const ThemeProvider = ({
     const setAnimationVariant = useCallback((variant: AnimationVariant) => {
         setAnimationVariantState(variant)
         localStorage.setItem('ecoop-animation-variant', variant)
+    }, [])
+
+    const setMouseTrailEnabled = useCallback((enabled: boolean) => {
+        setMouseTrailEnabledState(enabled)
+        localStorage.setItem('ecoop-mouse-trail-enabled', enabled.toString())
     }, [])
 
     const applyCustomThemeColors = useCallback(
@@ -213,12 +228,14 @@ export const ThemeProvider = ({
         resolvedTheme,
         customTheme,
         animationVariant,
+        mouseTrailEnabled,
         setTheme: (theme: Theme) => {
             localStorage.setItem(storageKey, theme)
             setTheme(theme)
         },
         setCustomTheme,
         setAnimationVariant,
+        setMouseTrailEnabled,
         applyCustomThemeColors,
     }
 
