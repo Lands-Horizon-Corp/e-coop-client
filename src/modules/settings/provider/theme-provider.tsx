@@ -27,10 +27,16 @@ type ThemeProviderState = {
     customTheme: string
     animationVariant: AnimationVariant
     mouseTrailEnabled: boolean
+    autoThemeEnabled: boolean
+    lightModeTime: string
+    darkModeTime: string
     setTheme: (theme: Theme) => void
     setCustomTheme: (themeName: string) => void
     setAnimationVariant: (variant: AnimationVariant) => void
     setMouseTrailEnabled: (enabled: boolean) => void
+    setAutoThemeEnabled: (enabled: boolean) => void
+    setLightModeTime: (time: string) => void
+    setDarkModeTime: (time: string) => void
     applyCustomThemeColors: (
         colors: CustomThemeColors,
         themeName: string
@@ -43,10 +49,16 @@ const initialState: ThemeProviderState = {
     customTheme: 'Default',
     animationVariant: 'circle',
     mouseTrailEnabled: true,
+    autoThemeEnabled: false,
+    lightModeTime: '07:00',
+    darkModeTime: '17:00',
     setTheme: () => null,
     setCustomTheme: () => null,
     setAnimationVariant: () => null,
     setMouseTrailEnabled: () => null,
+    setAutoThemeEnabled: () => null,
+    setLightModeTime: () => null,
+    setDarkModeTime: () => null,
     applyCustomThemeColors: () => null,
 }
 
@@ -76,9 +88,21 @@ export const ThemeProvider = ({
     const [mouseTrailEnabled, setMouseTrailEnabledState] = useState<boolean>(
         () => {
             const stored = localStorage.getItem('ecoop-mouse-trail-enabled')
-            return stored !== null ? stored === 'true' : true
+            return stored !== null ? stored === 'true' : false
         }
     )
+    const [autoThemeEnabled, setAutoThemeEnabledState] = useState<boolean>(
+        () => {
+            const stored = localStorage.getItem('ecoop-auto-theme-enabled')
+            return stored !== null ? stored === 'true' : false
+        }
+    )
+    const [lightModeTime, setLightModeTimeState] = useState<string>(() => {
+        return localStorage.getItem('ecoop-light-mode-time') || '07:00'
+    })
+    const [darkModeTime, setDarkModeTimeState] = useState<string>(() => {
+        return localStorage.getItem('ecoop-dark-mode-time') || '17:00'
+    })
 
     const removeClassTheme = useCallback((root: HTMLElement) => {
         if (!root) return
@@ -107,6 +131,21 @@ export const ThemeProvider = ({
     const setMouseTrailEnabled = useCallback((enabled: boolean) => {
         setMouseTrailEnabledState(enabled)
         localStorage.setItem('ecoop-mouse-trail-enabled', enabled.toString())
+    }, [])
+
+    const setAutoThemeEnabled = useCallback((enabled: boolean) => {
+        setAutoThemeEnabledState(enabled)
+        localStorage.setItem('ecoop-auto-theme-enabled', enabled.toString())
+    }, [])
+
+    const setLightModeTime = useCallback((time: string) => {
+        setLightModeTimeState(time)
+        localStorage.setItem('ecoop-light-mode-time', time)
+    }, [])
+
+    const setDarkModeTime = useCallback((time: string) => {
+        setDarkModeTimeState(time)
+        localStorage.setItem('ecoop-dark-mode-time', time)
     }, [])
 
     const applyCustomThemeColors = useCallback(
@@ -223,12 +262,60 @@ export const ThemeProvider = ({
             }
         }
     }, [resolvedTheme, customTheme])
+
+    // Automatic theme switching based on time
+    useEffect(() => {
+        if (!autoThemeEnabled) return
+
+        const checkTimeAndUpdateTheme = () => {
+            const now = new Date()
+            const currentTime = now.getHours() * 60 + now.getMinutes()
+
+            const [lightHour, lightMinute] = lightModeTime
+                .split(':')
+                .map(Number)
+            const [darkHour, darkMinute] = darkModeTime.split(':').map(Number)
+
+            const lightTime = lightHour * 60 + lightMinute
+            const darkTime = darkHour * 60 + darkMinute
+
+            let shouldBeDark = false
+
+            if (lightTime < darkTime) {
+                // Normal case: light mode in morning, dark mode in evening
+                shouldBeDark =
+                    currentTime >= darkTime || currentTime < lightTime
+            } else {
+                // Edge case: dark mode time is before light mode time (crosses midnight)
+                shouldBeDark =
+                    currentTime >= darkTime && currentTime < lightTime
+            }
+
+            const targetTheme: Theme = shouldBeDark ? 'dark' : 'light'
+
+            if (theme !== targetTheme) {
+                localStorage.setItem(storageKey, targetTheme)
+                setTheme(targetTheme)
+            }
+        }
+
+        // Check immediately
+        checkTimeAndUpdateTheme()
+
+        // Check every minute
+        const interval = setInterval(checkTimeAndUpdateTheme, 60000)
+
+        return () => clearInterval(interval)
+    }, [autoThemeEnabled, lightModeTime, darkModeTime, theme, storageKey])
     const value = {
         theme,
         resolvedTheme,
         customTheme,
         animationVariant,
         mouseTrailEnabled,
+        autoThemeEnabled,
+        lightModeTime,
+        darkModeTime,
         setTheme: (theme: Theme) => {
             localStorage.setItem(storageKey, theme)
             setTheme(theme)
@@ -236,6 +323,9 @@ export const ThemeProvider = ({
         setCustomTheme,
         setAnimationVariant,
         setMouseTrailEnabled,
+        setAutoThemeEnabled,
+        setLightModeTime,
+        setDarkModeTime,
         applyCustomThemeColors,
     }
 
