@@ -22,7 +22,7 @@ const ImageMatch = ({
             <Image
                 alt={alt}
                 className={cn(
-                    'h-full w-full object-contain grayscale brightness-100 dark:brightness-0 dark:opacity-100 opacity-0',
+                    'h-full w-full object-cover grayscale brightness-100 dark:brightness-0 dark:opacity-100 opacity-0',
                     className
                 )}
                 src={src}
@@ -30,15 +30,15 @@ const ImageMatch = ({
             <div
                 className={cn('absolute inset-0', color)}
                 style={{
-                    mask: `url(${src}) no-repeat center/contain`,
-                    WebkitMask: `url(${src}) no-repeat center/contain`,
+                    mask: `url(${src}) no-repeat center/cover`,
+                    WebkitMask: `url(${src}) no-repeat center/cover`,
                 }}
             />
             <div className="absolute inset-0 bg-none mix-blend-color-dodge opacity-100" />
             <Image
                 alt={alt}
                 className={cn(
-                    'top-0 left-0 h-full w-full object-contain absolute grayscale mix-blend-hard-light',
+                    'top-0 left-0 h-full w-full object-cover absolute grayscale mix-blend-hard-light',
                     className
                 )}
                 src={src}

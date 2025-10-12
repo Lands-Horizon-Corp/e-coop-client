@@ -41,11 +41,6 @@ const IntroSection = () => {
                                     />
                                 ))}
                             </div>
-
-                            {/* <FeatureList
-                                items={features}
-                                title="What we offer"
-                            /> */}
                         </div>
                     </div>
                 </div>

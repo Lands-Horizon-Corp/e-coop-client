@@ -1,3 +1,5 @@
+import { BankIcon, CodeIcon, Users3FillIcon } from '@/components/icons'
+
 export const featureItems = [
     {
         icon: 'pictures/icons/wallet.svg',
@@ -54,5 +56,38 @@ export const featureItems = [
         alt: 'Data Storage & APIs feature',
         description:
             'Secure cloud storage with RESTful APIs for seamless integration with existing systems and third-party applications.',
+    },
+]
+
+export const featureCardsData = [
+    {
+        id: 'membership',
+        title: 'Membership Management',
+        description:
+            'Easy onboarding and KYC verification. Member records, profiles, and digital ID. Automated membership renewals and status tracking.',
+        icon: <Users3FillIcon className="inline size-5 mr-2" />,
+        imageSrc: '/pictures/home/membership-poster.png',
+        imageAlt: 'Membership management',
+        useImageMatch: true,
+    },
+    {
+        id: 'api',
+        title: 'API & Integrations',
+        description:
+            'Developer API access for custom integrations (with organization membership). Seamless connection to third-party apps and services.',
+        icon: <CodeIcon className="inline size-4 mr-2" />,
+        imageSrc: '/pictures/home/api-poster.png',
+        imageAlt: 'API & Integrations feature',
+        useImageMatch: true,
+    },
+    {
+        id: 'banking',
+        title: 'Digital Cooperative Banking',
+        description:
+            'Secure online account management for members and cooperatives. Digital transactions, savings, loans, and payments. Real-time balance and transaction history.',
+        icon: <BankIcon className="inline size-4 mr-2" />,
+        imageSrc: '/pictures/home/bank-poster.png',
+        imageAlt: 'Digital cooperative banking',
+        useImageMatch: true,
     },
 ]
