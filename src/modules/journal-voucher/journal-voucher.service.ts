@@ -76,7 +76,7 @@ export const useGetAllJournalVoucher = ({
 }) => {
     return useQuery<IJournalVoucher[], Error>({
         ...options,
-        queryKey: ['all', mode, query].filter(Boolean),
+        queryKey: ['get-all-journal-voucher', mode, query].filter(Boolean),
         queryFn: async () => {
             let url = `${journalVoucherAPIRoute}`
 
@@ -100,7 +100,7 @@ export const useFilteredPaginatedJournalVoucher = ({
 }) => {
     return useQuery<IJournalVoucherPaginated, Error>({
         ...options,
-        queryKey: ['general-ledger', 'filtered-paginated', mode, query].filter(
+        queryKey: ['journal-voucher', 'filtered-paginated', mode, query].filter(
             Boolean
         ),
         queryFn: async () => {

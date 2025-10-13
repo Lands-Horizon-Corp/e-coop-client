@@ -8,7 +8,7 @@ export const JournalVoucherSchema = z.object({
     date: z.string().min(1, 'Date is required'),
     reference: z.coerce.string<string>().optional(),
     status: z
-        .enum(['draft', 'posted', 'cancelled'])
+        .enum(['draft', 'printed', 'approved', 'released'])
         .default('draft')
         .optional(),
     description: z

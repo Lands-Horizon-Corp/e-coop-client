@@ -1,5 +1,7 @@
 import { useState } from 'react'
 
+import { useQueryClient } from '@tanstack/react-query'
+
 import { dateAgo } from '@/helpers/date-utils'
 import { cn } from '@/helpers/tw-utils'
 import KanbanContainer from '@/modules/approvals/components/kanban/kanban-container'
@@ -41,6 +43,7 @@ export const JournalVoucherKanbanMain = ({
     mode,
     icon,
 }: JournalVoucherKanbanProps) => {
+    const invalidate = useQueryClient()
     const [openVouchers, setOpenVouchers] = useState<string[]>([])
 
     const {
@@ -77,6 +80,11 @@ export const JournalVoucherKanbanMain = ({
 
     if (isLoading) return <JournalVoucherSkeletonCard className="w-[420px]" />
 
+    const handleInvalidate = () => {
+        invalidate.invalidateQueries({
+            queryKey: ['get-all-journal-voucher'],
+        })
+    }
     return (
         <KanbanContainer className="w-[420px] shrink-0 relative ">
             <div className="flex flex-col gap-2 p-2">
@@ -104,7 +112,6 @@ export const JournalVoucherKanbanMain = ({
                 </div>
             </div>
             <Separator />
-
             <KanbanItemsContainer>
                 {JournalVouchers.length > 0 ? (
                     <Accordion
@@ -131,7 +138,7 @@ export const JournalVoucherKanbanMain = ({
                                             journalVoucher={journalVoucher}
                                         />
                                         <p className="text-xs  right-3 top-1 text-end text-muted-foreground/70 truncate">
-                                            {dateAgo(journalVoucher.date)}
+                                            {dateAgo(journalVoucher.created_at)}
                                         </p>
                                     </div>
 
@@ -151,18 +158,23 @@ export const JournalVoucherKanbanMain = ({
                                                 </p>
                                             </AccordionTrigger>
                                         </InfoTooltip>
-
                                         <AccordionContent className="px-2 py-2 text-muted-foreground">
                                             <JournalVoucherCard
                                                 journalVoucher={journalVoucher}
-                                                refetch={refetch}
+                                                refetch={() => {
+                                                    handleInvalidate()
+                                                    refetch()
+                                                }}
                                             />
                                         </AccordionContent>
                                     </AccordionItem>
                                     <JournalVoucherCardActions
                                         journalVoucher={journalVoucher}
                                         jvDates={jvDates}
-                                        refetch={refetch}
+                                        refetch={() => {
+                                            handleInvalidate()
+                                            refetch()
+                                        }}
                                     />
                                     <JournalVoucherCardCreatorInfo
                                         journalVoucher={journalVoucher}

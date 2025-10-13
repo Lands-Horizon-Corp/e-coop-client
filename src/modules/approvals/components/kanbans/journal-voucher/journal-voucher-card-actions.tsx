@@ -27,20 +27,17 @@ interface UseJournalVoucherActionsProps {
     onDeleteSuccess?: () => void
     refetch?: () => void
 }
-
-type UseCardKanbanActionsProps = {
-    journalVoucher: IJournalVoucher
-    onDeleteSuccess?: () => void
-    refetch?: () => void
-}
-
 const useJournalVoucherActions = ({
     journalVoucher,
 }: UseJournalVoucherActionsProps) => {
     const printModal = useModalState()
     const approveModal = useModalState()
     const releaseModal = useModalState()
+    const journalVoucherModalState = useModalState(false)
 
+    const handleOpenViewModal = () => {
+        journalVoucherModalState.onOpenChange(true)
+    }
     const handleOpenPrintModal = () => {
         printModal.onOpenChange(true)
     }
@@ -59,23 +56,8 @@ const useJournalVoucherActions = ({
         handleApproveModal,
         releaseModal,
         handleReleaseModal,
-    }
-}
-const useCardKanbanActions = ({
-    journalVoucher,
-    refetch,
-}: UseCardKanbanActionsProps) => {
-    const journalVoucherModalState = useModalState(false)
-
-    const handleOpenViewModal = () => {
-        journalVoucherModalState.onOpenChange(true)
-    }
-
-    return {
         handleOpenViewModal,
         journalVoucherModalState,
-        journalVoucher,
-        refetch,
     }
 }
 export const JournalVoucherCardActions = ({
@@ -91,12 +73,11 @@ export const JournalVoucherCardActions = ({
         handleApproveModal,
         releaseModal,
         handleReleaseModal,
+        handleOpenViewModal,
+        journalVoucherModalState,
     } = useJournalVoucherActions({ journalVoucher, refetch })
 
     const isReleased = !!journalVoucher.released_date
-
-    const { handleOpenViewModal, journalVoucherModalState } =
-        useCardKanbanActions({ journalVoucher, refetch })
 
     return (
         <>

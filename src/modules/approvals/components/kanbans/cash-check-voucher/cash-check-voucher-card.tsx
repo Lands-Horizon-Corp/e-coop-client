@@ -18,9 +18,9 @@ interface ICashCheckVoucherCardProps extends IClassProps {
 export const CashCheckVoucherCardCreatorInfo = ({
     cashCheckVoucher,
 }: Pick<ICashCheckVoucherCardProps, 'cashCheckVoucher'>) => {
-    const isPrinted = !!cashCheckVoucher.printed_by
-    const isApproved = !!cashCheckVoucher.approved_by && isPrinted
-    const isReleased = !!cashCheckVoucher.released_by && isApproved && isPrinted
+    const isReleased = cashCheckVoucher.status === 'released'
+    const isApproved = cashCheckVoucher.status === 'approved'
+    const isPrinted = cashCheckVoucher.status === 'printed'
 
     const label = isReleased
         ? `Released by `
@@ -28,7 +28,7 @@ export const CashCheckVoucherCardCreatorInfo = ({
           ? `Approved by`
           : isPrinted
             ? `Printed by `
-            : cashCheckVoucher.employee_user
+            : cashCheckVoucher.created_by
               ? `Created by`
               : 'No Creator Info'
 
@@ -38,8 +38,8 @@ export const CashCheckVoucherCardCreatorInfo = ({
           ? ` ${cashCheckVoucher.approved_by?.full_name}`
           : isPrinted
             ? ` ${cashCheckVoucher.printed_by?.full_name}`
-            : cashCheckVoucher.employee_user
-              ? ` ${cashCheckVoucher.employee_user?.full_name}`
+            : cashCheckVoucher.created_by
+              ? ` ${cashCheckVoucher.created_by?.full_name}`
               : ''
 
     const mediaUrl = isReleased
@@ -48,8 +48,8 @@ export const CashCheckVoucherCardCreatorInfo = ({
           ? cashCheckVoucher.approved_by?.media?.url
           : isPrinted
             ? cashCheckVoucher.printed_by?.media?.url
-            : cashCheckVoucher.employee_user
-              ? cashCheckVoucher.employee_user?.media?.url
+            : cashCheckVoucher.created_by
+              ? cashCheckVoucher.created_by?.media?.url
               : ''
 
     return (
