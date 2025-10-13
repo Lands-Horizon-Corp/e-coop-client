@@ -134,11 +134,6 @@ export default defineConfig({
                 purpose: 'maskable'
               }
             ]
-          },
-          devOptions: {
-            enabled: true,
-            suppressWarnings: true,
-            type: 'module'
           }
         }),
     ],

@@ -4,10 +4,10 @@ import { toast } from 'sonner'
 import { useAuthStore } from '@/modules/authentication/authgentication.store'
 import useConfirmModalStore from '@/store/confirm-modal-store'
 
+import { FingerprintOffIcon } from '@/components/icons'
 import { Button } from '@/components/ui/button'
 
 import { useSignOut } from '../../authentication.service'
-import { FingerprintOffIcon } from '@/components/icons'
 
 const NavSignOut = () => {
     const router = useRouter()
@@ -43,7 +43,7 @@ const NavSignOut = () => {
             }
             variant="outline"
         >
-         <FingerprintOffIcon/>   Sign-Out
+            <FingerprintOffIcon /> Sign-Out
         </Button>
     )
 }
