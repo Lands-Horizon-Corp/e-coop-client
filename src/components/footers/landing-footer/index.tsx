@@ -4,6 +4,7 @@ import { useAuthStore } from '@/modules/authentication/authgentication.store'
 
 import EcoopLogo from '@/components/ecoop-logo'
 import {
+    DownloadIcon,
     EmailIcon,
     FacebookIcon,
     PhoneIcon,
@@ -11,6 +12,9 @@ import {
     TwitterIcon,
     YoutubeIcon,
 } from '@/components/icons'
+import { Button } from '@/components/ui/button'
+
+import usePWA from '@/hooks/pwa-hook'
 
 import {
     EMAIL,
@@ -26,6 +30,8 @@ const NeonFooter = () => {
     const {
         currentAuth: { user_organization },
     } = useAuthStore()
+
+    const { installApp, isDevelopment } = usePWA()
 
     const handleGetStarted = () => {
         if (!user_organization?.organization || !user_organization?.branch) {
@@ -143,6 +149,18 @@ const NeonFooter = () => {
                         <p>Made for Cooperatives, Powered by Trust</p>
                         <p>Copyright © 2025 - 2026 Lands Horizon Corp.</p>
                     </div>
+                    {!isDevelopment && (
+                        <>
+                            <Button
+                                className="w-fit"
+                                onClick={installApp}
+                                variant="outline"
+                            >
+                                <DownloadIcon className="mr-1 inline" />
+                                Install APP as PWA
+                            </Button>
+                        </>
+                    )}
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-8 md:gap-12 lg:gap-16 w-full md:w-full lg:w-4/5">
                     <div className="flex flex-col gap-3 text-sm">

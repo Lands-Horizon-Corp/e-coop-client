@@ -2,7 +2,7 @@
   "name": "e-coop-suite | Empowering Cooperatives",
   "short_name": "e-coop-suite",
   "description": "Secure digital banking platform for Philippine cooperatives. Complete coop management solution with online banking, member portal, and analytics.",
-  "start_url": "/",
+  "start_url": "https://ecoop-suite.com/",
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#1f2937",
