@@ -38,8 +38,9 @@ const AppContent = () => {
         <>
             <MouseTrailEffect
                 color="primary"
-                effect="dots"
+                effect="inverted"
                 enabled={mouseTrailEnabled}
+                invertColors={true}
                 maxPoints={1000}
                 size={10}
             />
