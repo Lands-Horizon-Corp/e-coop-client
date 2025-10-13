@@ -6,14 +6,18 @@ import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
 
 import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
 import { cn } from '@/helpers/tw-utils'
+import { FingerprintIcon } from 'lucide-react'
 
+import EcoopLogo from '@/components/ecoop-logo'
 import LoadingSpinner from '@/components/spinners/loading-spinner'
 import { Button } from '@/components/ui/button'
+import { Checkbox } from '@/components/ui/checkbox'
 import {
     Form,
     FormControl,
     FormField,
     FormItem,
+    FormLabel,
     FormMessage,
 } from '@/components/ui/form'
 import FormErrorMessage from '@/components/ui/form-error-message'
@@ -72,90 +76,132 @@ const SignInForm = ({ className, ...formProps }: ISignInFormProps) => {
     const error = serverRequestErrExtractor({ error: responseError })
 
     return (
-        <Form {...form}>
-            <form
-                className={cn('flex w-full flex-col gap-y-4', className)}
-                onSubmit={onSubmit}
-                ref={formRef}
-            >
-                <div className="flex items-center gap-x-2 py-4 font-medium">
-                    <p className="text-lg font-medium md:text-5xl">Sign In</p>
+        <div className=" flex items-center justify-center p-4 w-full">
+            <div className="w-full flex justify-center flex-col items-center ">
+                {/* Logo */}
+                <div className="flex justify-center mb-8">
+                    <EcoopLogo className="w-16 h-16" themeMode="dynamic" />
                 </div>
-                <fieldset
-                    className="space-y-3"
-                    disabled={isPending || formProps.readOnly}
-                >
-                    <FormField
-                        control={form.control}
-                        name="key"
-                        render={({ field }) => (
-                            <FormItem className="space-y-1">
-                                <FormControl>
-                                    <Input
-                                        {...field}
-                                        autoComplete="off"
-                                        disabled={isDisabled(field.name)}
-                                        id={field.name}
-                                        placeholder="Email Address"
-                                    />
-                                </FormControl>
-                                <FormMessage className="text-xs" />
-                            </FormItem>
-                        )}
-                    />
-                    <Link
-                        className="mt-4 text-right text-sm text-muted-foreground hover:text-foreground hover:underline"
-                        search={{
-                            key: form.getValues('key'),
-                        }}
-                        to={'/auth/forgot-password' as string}
-                    >
-                        Forgot Password
-                    </Link>
-                    <FormField
-                        control={form.control}
-                        name="password"
-                        render={({ field }) => (
-                            <FormItem className="space-y-1">
-                                <FormControl>
-                                    <PasswordInput
-                                        {...field}
-                                        autoComplete="off"
-                                        disabled={isDisabled(field.name)}
-                                        id="password-field"
-                                        placeholder="Password"
-                                    />
-                                </FormControl>
-                                <FormMessage className="text-xs" />
-                            </FormItem>
-                        )}
-                    />
-                </fieldset>
-                <div className="mt-6 flex flex-col space-y-2">
-                    <FormErrorMessage errorMessage={error} />
-                    <Button
-                        className="w-full max-w-xl rounded-3xl"
-                        disabled={isPending || formProps.readOnly}
-                        size="sm"
-                        type="submit"
-                    >
-                        {isPending ? <LoadingSpinner /> : 'Login'}
-                    </Button>
 
-                    <span className="my-5">
-                        New to Ecoop?{' '}
+                {/* Welcome heading */}
+                <div className="text-center mb-6">
+                    <h1 className="text-foreground text-2xl font-semibold mb-2">
+                        Welcome back!
+                    </h1>
+                    <p className="text-muted-foreground text-sm">
+                        Don't have an account yet?{' '}
                         <Link
-                            className="mt-2 hover:text-foreground hover:underline"
+                            className="text-primary hover:underline"
                             to={'/auth/sign-up' as string}
                         >
-                            <span className="text-primary">
-                                Sign up for an account
-                            </span>
+                            Sign up now
                         </Link>
-                    </span>
+                    </p>
                 </div>
-            </form>
-        </Form>
+
+                <Form {...form}>
+                    <form
+                        className={cn('flex flex-col gap-y-4', className)}
+                        onSubmit={onSubmit}
+                        ref={formRef}
+                    >
+                        <fieldset
+                            className="space-y-4"
+                            disabled={isPending || formProps.readOnly}
+                        >
+                            {/* Email Field */}
+                            <FormField
+                                control={form.control}
+                                name="key"
+                                render={({ field }) => (
+                                    <FormItem className="space-y-1">
+                                        <FormLabel className="text-foreground text-sm">
+                                            Email address
+                                        </FormLabel>
+                                        <FormControl>
+                                            <Input
+                                                {...field}
+                                                autoComplete="email"
+                                                className="bg-card border-border text-foreground placeholder:text-muted-foreground focus:border-primary rounded-lg h-12"
+                                                disabled={isDisabled(
+                                                    field.name
+                                                )}
+                                                id={field.name}
+                                                placeholder="sample@email.com"
+                                            />
+                                        </FormControl>
+                                        <FormMessage className="text-xs text-destructive" />
+                                    </FormItem>
+                                )}
+                            />
+
+                            {/* Password Field */}
+                            <FormField
+                                control={form.control}
+                                name="password"
+                                render={({ field }) => (
+                                    <FormItem className="space-y-1">
+                                        <FormLabel className="text-foreground text-sm">
+                                            Password
+                                        </FormLabel>
+                                        <FormControl>
+                                            <PasswordInput
+                                                {...field}
+                                                autoComplete="current-password"
+                                                className="bg-card border-border text-foreground placeholder:text-muted-foreground focus:border-primary rounded-lg h-12"
+                                                disabled={isDisabled(
+                                                    field.name
+                                                )}
+                                                id="password-field"
+                                                placeholder="••••••••••••••"
+                                            />
+                                        </FormControl>
+                                        <FormMessage className="text-xs text-destructive" />
+                                    </FormItem>
+                                )}
+                            />
+
+                            {/* Remember me and Forgot password */}
+                            <div className="flex items-center justify-between pt-2">
+                                <div className="flex items-center space-x-2">
+                                    <Checkbox
+                                        className="border-border data-[state=checked]:bg-primary data-[state=checked]:border-primary"
+                                        id="remember"
+                                    />
+                                    <label
+                                        className="text-sm text-foreground cursor-pointer"
+                                        htmlFor="remember"
+                                    >
+                                        Remember me
+                                    </label>
+                                </div>
+                                <Link
+                                    className="text-sm text-primary hover:underline"
+                                    search={{
+                                        key: form.getValues('key'),
+                                    }}
+                                    to={'/auth/forgot-password' as string}
+                                >
+                                    Forgot password?
+                                </Link>
+                            </div>
+                        </fieldset>
+
+                        <div className="mt-6  flex flex-col items-center space-y-4">
+                            <FormErrorMessage errorMessage={error} />
+                            <Button
+                                className="max-w-32 w-full rounded-lg font-medium"
+                                disabled={isPending || formProps.readOnly}
+                                type="submit"
+                            >
+                                <FingerprintIcon className="mr-1 size-4" />
+                                {isPending ? <LoadingSpinner /> : 'Log in'}
+                            </Button>
+                        </div>
+                    </form>
+                </Form>
+            </div>
+        </div>
     )
 }
 
