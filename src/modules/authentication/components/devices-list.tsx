@@ -6,10 +6,10 @@ import { toast } from 'sonner'
 import useActionSecurityStore from '@/store/action-security-store'
 
 import {
+    FingerprintOffIcon,
     GlobeIcon,
     LanguageIcon,
     LocationPinIcon,
-    LogoutIcon,
     MonitorIcon,
     NavigationIcon,
     SmartphoneIcon,
@@ -103,7 +103,7 @@ const DevicesList = ({ devices }: Props) => {
                     size="sm"
                     variant="destructive"
                 >
-                    <LogoutIcon className="h-4 w-4" />
+                    <FingerprintOffIcon className="h-4 w-4" />
                     Sign out all devices
                 </Button>
             </div>

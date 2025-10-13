@@ -30,6 +30,7 @@ type ThemeProviderState = {
     autoThemeEnabled: boolean
     lightModeTime: string
     darkModeTime: string
+    manualOverride: boolean
     setTheme: (theme: Theme) => void
     setCustomTheme: (themeName: string) => void
     setAnimationVariant: (variant: AnimationVariant) => void
@@ -52,6 +53,7 @@ const initialState: ThemeProviderState = {
     autoThemeEnabled: false,
     lightModeTime: '07:00',
     darkModeTime: '17:00',
+    manualOverride: false,
     setTheme: () => null,
     setCustomTheme: () => null,
     setAnimationVariant: () => null,
@@ -103,6 +105,24 @@ export const ThemeProvider = ({
     const [darkModeTime, setDarkModeTimeState] = useState<string>(() => {
         return localStorage.getItem('ecoop-dark-mode-time') || '17:00'
     })
+    const [manualOverride, setManualOverride] = useState<boolean>(() => {
+        const stored = localStorage.getItem('ecoop-manual-override')
+        const storedTime = localStorage.getItem('ecoop-manual-override-time')
+
+        if (stored === 'true' && storedTime) {
+            const overrideTime = parseInt(storedTime, 10)
+            const now = Date.now()
+
+            // Clear override if it's been more than 30 minutes
+            if (now - overrideTime > 30 * 60 * 1000) {
+                localStorage.removeItem('ecoop-manual-override')
+                localStorage.removeItem('ecoop-manual-override-time')
+                return false
+            }
+            return true
+        }
+        return false
+    })
 
     const removeClassTheme = useCallback((root: HTMLElement) => {
         if (!root) return
@@ -136,6 +156,13 @@ export const ThemeProvider = ({
     const setAutoThemeEnabled = useCallback((enabled: boolean) => {
         setAutoThemeEnabledState(enabled)
         localStorage.setItem('ecoop-auto-theme-enabled', enabled.toString())
+
+        // Clear manual override when auto theme is re-enabled
+        if (enabled) {
+            setManualOverride(false)
+            localStorage.removeItem('ecoop-manual-override')
+            localStorage.removeItem('ecoop-manual-override-time')
+        }
     }, [])
 
     const setLightModeTime = useCallback((time: string) => {
@@ -265,7 +292,7 @@ export const ThemeProvider = ({
 
     // Automatic theme switching based on time
     useEffect(() => {
-        if (!autoThemeEnabled) return
+        if (!autoThemeEnabled || manualOverride) return
 
         const checkTimeAndUpdateTheme = () => {
             const now = new Date()
@@ -306,7 +333,14 @@ export const ThemeProvider = ({
         const interval = setInterval(checkTimeAndUpdateTheme, 60000)
 
         return () => clearInterval(interval)
-    }, [autoThemeEnabled, lightModeTime, darkModeTime, theme, storageKey])
+    }, [
+        autoThemeEnabled,
+        manualOverride,
+        lightModeTime,
+        darkModeTime,
+        theme,
+        storageKey,
+    ])
     const value = {
         theme,
         resolvedTheme,
@@ -316,9 +350,30 @@ export const ThemeProvider = ({
         autoThemeEnabled,
         lightModeTime,
         darkModeTime,
+        manualOverride,
         setTheme: (theme: Theme) => {
             localStorage.setItem(storageKey, theme)
             setTheme(theme)
+
+            // Set manual override flag when theme is manually changed
+            if (autoThemeEnabled && (theme === 'light' || theme === 'dark')) {
+                setManualOverride(true)
+                localStorage.setItem('ecoop-manual-override', 'true')
+                localStorage.setItem(
+                    'ecoop-manual-override-time',
+                    Date.now().toString()
+                )
+
+                // Clear manual override after 30 minutes
+                setTimeout(
+                    () => {
+                        setManualOverride(false)
+                        localStorage.removeItem('ecoop-manual-override')
+                        localStorage.removeItem('ecoop-manual-override-time')
+                    },
+                    30 * 60 * 1000
+                )
+            }
         },
         setCustomTheme,
         setAnimationVariant,

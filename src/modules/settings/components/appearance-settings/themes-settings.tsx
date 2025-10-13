@@ -39,6 +39,7 @@ const ThemesSettings = ({ className }: Props) => {
         setLightModeTime,
         darkModeTime,
         setDarkModeTime,
+        manualOverride,
     } = useTheme()
     const [selectedTheme, setSelectedTheme] = useState<string>(customTheme)
     const [currentMode, setCurrentMode] = useState<'light' | 'dark'>(
@@ -153,12 +154,24 @@ const ThemesSettings = ({ className }: Props) => {
             <div className="space-y-4 p-4 rounded-lg border bg-card">
                 <div className="flex items-center justify-between">
                     <div className="space-y-1">
-                        <p className="text-sm font-medium">
-                            Automatic Theme Switching
-                        </p>
+                        <div className="flex items-center gap-2">
+                            <p className="text-sm font-medium">
+                                Automatic Theme Switching
+                            </p>
+                            {autoThemeEnabled && manualOverride && (
+                                <span className="text-xs px-2 py-1 bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-200 rounded-full">
+                                    Override Active
+                                </span>
+                            )}
+                        </div>
                         <p className="text-xs text-muted-foreground">
                             Automatically switch between light and dark modes
                             based on time
+                            {autoThemeEnabled && manualOverride && (
+                                <span className="block mt-1 text-orange-600 dark:text-orange-400">
+                                    Manual override active for 30 minutes
+                                </span>
+                            )}
                         </p>
                     </div>
                     <Switch
@@ -395,9 +408,10 @@ const ThemesSettings = ({ className }: Props) => {
                     automatically adapt to your current light/dark mode setting.
                     Theme preferences are saved and will persist across
                     sessions. Changes are applied instantly to the entire
-                    application. When automatic theme switching is enabled, the
-                    system will override manual theme selection based on your
-                    configured times.
+                    application. When automatic theme switching is enabled, you
+                    can still manually override by switching themes directly -
+                    the override will last for 30 minutes before automatic
+                    switching resumes.
                 </p>
             </div>
         </div>

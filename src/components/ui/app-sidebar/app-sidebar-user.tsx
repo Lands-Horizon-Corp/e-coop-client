@@ -8,7 +8,7 @@ import useConfirmModalStore from '@/store/confirm-modal-store'
 
 import {
     ChevronsUpDownIcon,
-    LogoutIcon,
+    FingerprintOffIcon,
     SettingsIcon,
 } from '@/components/icons'
 import ImageDisplay from '@/components/image-display'
@@ -93,7 +93,7 @@ const AppSidebarUser = () => {
                                     })
                                 }
                             >
-                                <LogoutIcon className="mr-2 size-4 duration-150 ease-in-out" />
+                                <FingerprintOffIcon className="mr-2 size-4 duration-150 ease-in-out" />
                                 <span>Sign Out</span>
                             </DropdownMenuItem>
                         </DropdownMenuContent>
