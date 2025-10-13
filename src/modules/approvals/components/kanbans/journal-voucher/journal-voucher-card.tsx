@@ -54,7 +54,7 @@ export const JournalVoucherCardCreatorInfo = ({
           ? `Approved by`
           : isPrinted
             ? `Printed by `
-            : journalVoucher.posted_by
+            : journalVoucher.created_by
               ? `Created by`
               : 'No Creator Info'
 
@@ -64,7 +64,7 @@ export const JournalVoucherCardCreatorInfo = ({
           ? ` ${journalVoucher.approved_by?.full_name}`
           : isPrinted
             ? ` ${journalVoucher.printed_by?.full_name}`
-            : journalVoucher.posted_by
+            : journalVoucher.created_by
               ? ` ${journalVoucher.posted_by?.full_name}`
               : ''
 

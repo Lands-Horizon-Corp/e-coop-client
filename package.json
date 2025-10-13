@@ -12,7 +12,8 @@
         "test": "vitest run .",
         "testw": "vitest",
         "lint": "eslint .",
-        "preview": "vite preview",
+        "preview": "vite preview --port 4173 --host",
+        "pwa-test": "bun run build && bun run preview",
         "fc": "prettier . -c",
         "fcf": "prettier -c",
         "fw": "prettier . -w",
@@ -147,6 +148,8 @@
         "unhead": "^2.0.17",
         "vaul": "^1.1.2",
         "vite-plugin-node-polyfills": "^0.24.0",
+        "vite-plugin-pwa": "^1.0.3",
+        "vite-ssg": "^28.2.1",
         "vitest": "^3.2.4",
         "vm-browserify": "^1.1.2",
         "zod": "^4.1.9",
@@ -183,6 +186,7 @@
         "vite-plugin-compression2": "^2.2.1",
         "vite-plugin-dts": "^4.5.4",
         "vite-plugin-manifest-sri": "^0.2.0",
+        "vite-plugin-sitemap": "^0.8.2",
         "vite-tsconfig-paths": "^5.1.4"
     },
     "overrides": {

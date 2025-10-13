@@ -58,7 +58,12 @@ export interface IJournalVoucherPrintRequest {
     cash_voucher_number: string
 }
 
-export type TJournalVoucherStatus = 'draft' | 'posted' | 'cancelled'
+export type TJournalVoucherStatus =
+    | 'draft'
+    | 'printed'
+    | 'approved'
+    | 'released'
+
 export enum EJournalVoucherStatus {
     Draft = 'draft',
     Posted = 'posted',

@@ -389,6 +389,7 @@ import {
     TbSquareF1 as F1Icon,
     TbSquareF2 as F2Icon,
     TbSquareF3 as F3Icon,
+    TbFingerprintOff as FingerprintOffIcon,
     TbFingerprintScan as FingerprintScanIcon,
     TbGhost2Filled as GhostIcon,
     TbHeartHandshake as HandShakeHeartIcon,
@@ -413,6 +414,7 @@ import {
 } from 'react-icons/vsc'
 
 export {
+    FingerprintOffIcon,
     FingerprintScanIcon,
     FingerPrintIcon,
     ArrowUpLongIcon,
@@ -782,6 +784,7 @@ export {
 }
 
 export const IconMap = {
+    'Fingerprint Off': FingerprintOffIcon,
     'Fingerprint Scan': FingerprintScanIcon,
     Fingerprint: FingerPrintIcon,
     'Transaction Dollar': TransactionDollarIcon,

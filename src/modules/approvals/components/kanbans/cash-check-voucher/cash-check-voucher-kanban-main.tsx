@@ -1,5 +1,7 @@
 import { useState } from 'react'
 
+import { useQueryClient } from '@tanstack/react-query'
+
 import { cn } from '@/helpers'
 import { dateAgo } from '@/helpers/date-utils'
 import KanbanContainer from '@/modules/approvals/components/kanban/kanban-container'
@@ -41,7 +43,7 @@ export const CashCheckVoucherKanbanMain = ({
     icon,
 }: CashCheckVoucherKanbanProps) => {
     const [openVouchers, setOpenVouchers] = useState<string[]>([])
-
+    const invalidate = useQueryClient()
     const {
         data: cashCheckVouchers,
         isLoading,
@@ -73,6 +75,12 @@ export const CashCheckVoucherKanbanMain = ({
     }
 
     if (isLoading) return <JournalVoucherSkeletonCard />
+
+    const handleInvalidate = () => {
+        invalidate.invalidateQueries({
+            queryKey: ['cash-check-voucher'],
+        })
+    }
 
     return (
         <div>
@@ -161,14 +169,20 @@ export const CashCheckVoucherKanbanMain = ({
                                                     cashCheckVoucher={
                                                         cashCheckVoucher
                                                     }
-                                                    refetch={refetch}
+                                                    refetch={() => {
+                                                        handleInvalidate()
+                                                        refetch()
+                                                    }}
                                                 />
                                             </AccordionContent>
                                         </AccordionItem>
                                         <CashCheckVoucherCardActions
                                             cashCheckVoucher={cashCheckVoucher}
                                             ccvDates={ccvDates}
-                                            refetch={refetch}
+                                            refetch={() => {
+                                                handleInvalidate()
+                                                refetch()
+                                            }}
                                         />
                                         <CashCheckVoucherCardCreatorInfo
                                             cashCheckVoucher={cashCheckVoucher}

@@ -159,7 +159,7 @@ export function JournalVoucherTagsManager({
                 (() => {
                     refetch()
                     invalidateQueries.invalidateQueries({
-                        queryKey: ['journal-voucher'],
+                        queryKey: ['get-all-journal-voucher'],
                     })
                 }),
         },

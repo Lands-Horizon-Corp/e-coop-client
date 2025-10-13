@@ -1,5 +1,5 @@
 /// <reference types="vite/client" />
-
+/// <reference types="vite-plugin-pwa/client" />
 // CSS Modules
 declare module '*.css'
 
