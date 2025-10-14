@@ -432,3 +432,8 @@ body[data-scroll-locked] {
         transform: translateY(-2px);
     }
 }
+
+/* Custom text-destructive utility class */
+.text-destructive {
+    color: oklch(var(--destructive));
+}
