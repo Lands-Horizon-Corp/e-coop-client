@@ -1,3 +1,4 @@
+import { Logger } from '@/helpers/loggers'
 import { createDataLayerFactory } from '@/providers/repositories/data-layer-factory'
 
 import type {
@@ -47,4 +48,4 @@ export const {
     useDeleteMany: useDeleteManyAdjustmentEntryTag,
 } = apiCrudHooks
 
-// custom hooks can go here
+export const logger = Logger.getInstance('adjustment-entry-tag')

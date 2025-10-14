@@ -1,6 +1,7 @@
 import { useQuery } from '@tanstack/react-query'
 import qs from 'query-string'
 
+import { Logger } from '@/helpers/loggers'
 import {
     API,
     IUserOrganizationPaginated,
@@ -89,3 +90,5 @@ export const useDeleteEmployeeById = createMutationFactory<
     invalidationFn: (args) =>
         deleteMutationInvalidationFn(employeeBaseKey, args),
 })
+
+export const logger = Logger.getInstance('employee')

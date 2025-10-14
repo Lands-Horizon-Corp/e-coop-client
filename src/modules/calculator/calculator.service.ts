@@ -1,3 +1,4 @@
+import { Logger } from '@/helpers/loggers'
 import { createDataLayerFactory } from '@/providers/repositories/data-layer-factory'
 
 import type { ICalculator, ICalculatorRequest } from '../calculator'
@@ -23,3 +24,4 @@ export const {
 export { calculatorBaseKey } // Exported in case it's needed outside
 
 // custom hooks can go here
+export const logger = Logger.getInstance('calculator')

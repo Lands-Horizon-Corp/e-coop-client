@@ -1,3 +1,4 @@
+import { Logger } from '@/helpers/loggers'
 import { createDataLayerFactory } from '@/providers/repositories/data-layer-factory'
 
 import type {
@@ -56,3 +57,5 @@ export const {
     useGetPaginated: useGetPaginatedCashCounts,
     useUpdateById: useUpdateCashCountById,
 } = apiCrudHooks
+
+export const logger = Logger.getInstance('cash-check-voucher-tag')

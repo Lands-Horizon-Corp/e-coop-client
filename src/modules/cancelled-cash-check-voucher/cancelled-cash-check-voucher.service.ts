@@ -1,3 +1,4 @@
+import { Logger } from '@/helpers/loggers'
 import { createDataLayerFactory } from '@/providers/repositories/data-layer-factory'
 
 import type {
@@ -45,3 +46,5 @@ export const {
     useDeleteById: useDeleteCancelledCashCheckVoucherById,
     useDeleteMany: useDeleteManyCancelledCashCheckVoucher,
 } = apiCrudHooks
+
+export const logger = Logger.getInstance('cancelled-cash-check-voucher')

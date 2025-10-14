@@ -1,5 +1,6 @@
 import { useMutation, useQuery } from '@tanstack/react-query'
 
+import { Logger } from '@/helpers/loggers'
 import {
     HookQueryOptions,
     createDataLayerFactory,
@@ -81,3 +82,5 @@ export const usePostBranchByOrganizationId = () => {
         mutationFn: postBranchByOrganizationId,
     })
 }
+
+export const logger = Logger.getInstance('branch')

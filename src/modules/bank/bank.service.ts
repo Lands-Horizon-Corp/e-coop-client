@@ -1,3 +1,4 @@
+import { Logger } from '@/helpers/loggers'
 import { createDataLayerFactory } from '@/providers/repositories/data-layer-factory'
 
 import type { IBank, IBankRequest } from '../bank'
@@ -44,3 +45,5 @@ export const {
 } = apiCrudHooks
 
 // write ur custom hook here and export it
+
+export const logger = Logger.getInstance('bank')

@@ -1,5 +1,6 @@
 import { useQuery } from '@tanstack/react-query'
 
+import { Logger } from '@/helpers/loggers'
 import {
     HookQueryOptions,
     createDataLayerFactory,
@@ -85,3 +86,4 @@ export const useGetAllCashCheckVoucherTag = ({
         },
     })
 }
+export const logger = Logger.getInstance('cash-check-voucher-tag')

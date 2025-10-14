@@ -47,39 +47,39 @@ class Logger {
         if (this.isDevelopment) {
             this.log = (...args) => {
                 console.log(...args)
-                this.footstep('info', args.join(' '), 'log')
+                this.footstep('info', args.join(' '), 'client_log')
             }
             this.warn = (...args) => {
                 console.warn(...args)
-                this.footstep('warning', args.join(' '), 'warning_log')
+                this.footstep('warning', args.join(' '), 'client_warning_log')
             }
             this.error = (...args) => {
                 console.error(...args)
-                this.footstep('error', args.join(' '), 'error_log')
+                this.footstep('error', args.join(' '), 'client_error_log')
             }
             this.info = (...args) => {
                 console.info(...args)
-                this.footstep('info', args.join(' '), 'info_log')
+                this.footstep('info', args.join(' '), 'client_info_log')
             }
             this.debug = (...args) => {
                 console.debug(...args)
-                this.footstep('debug', args.join(' '), 'debug_log')
+                this.footstep('debug', args.join(' '), 'client_debug_log')
             }
         } else {
             this.log = (...args) => {
-                this.footstep('info', args.join(' '), 'log')
+                this.footstep('info', args.join(' '), 'client_log')
             }
             this.warn = (...args) => {
-                this.footstep('warning', args.join(' '), 'warning_log')
+                this.footstep('warning', args.join(' '), 'client_warning_log')
             }
             this.error = (...args) => {
-                this.footstep('error', args.join(' '), 'error_log')
+                this.footstep('error', args.join(' '), 'client_error_log')
             }
             this.info = (...args) => {
-                this.footstep('info', args.join(' '), 'info_log')
+                this.footstep('info', args.join(' '), 'client_info_log')
             }
             this.debug = (...args) => {
-                this.footstep('debug', args.join(' '), 'debug_log')
+                this.footstep('debug', args.join(' '), 'client_debug_log')
             }
             console.log = (..._args) => {}
             console.warn = (..._args) => {}
@@ -115,3 +115,17 @@ export default Logger.getInstance()
 
 // Export the Logger class for module-specific instances
 export { Logger }
+
+/**
+import { Logger } from '@/helpers/loggers/logger'
+
+const authLogger = Logger.getInstance('authentication')
+const userLogger = Logger.getInstance('user-management') 
+const paymentLogger = Logger.getInstance('payment-processing')
+
+authLogger.log('User attempting to login')
+authLogger.warn('Multiple failed login attempts detected')
+authLogger.error('Authentication failed')
+authLogger.info('Login successful')
+authLogger.debug('Token validation in progress')
+ */

@@ -1,5 +1,6 @@
 import { useQuery } from '@tanstack/react-query'
 
+import { Logger } from '@/helpers/loggers'
 import {
     HookQueryOptions,
     createDataLayerFactory,
@@ -71,3 +72,5 @@ export const useAdjustmentEntryTotal = ({
         },
     })
 }
+
+export const logger = Logger.getInstance('adjustment-entry')

@@ -1,3 +1,4 @@
+import { Logger } from '@/helpers/loggers'
 import { createDataLayerFactory } from '@/providers/repositories/data-layer-factory'
 
 import type { ICompany, ICompanyRequest } from '../company'
@@ -45,3 +46,4 @@ export const {
 } = apiCrudHooks
 
 // custom hooks can go here
+export const logger = Logger.getInstance('company')

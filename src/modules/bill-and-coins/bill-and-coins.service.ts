@@ -1,3 +1,4 @@
+import { Logger } from '@/helpers/loggers'
 import { createDataLayerFactory } from '@/providers/repositories/data-layer-factory'
 
 import type {
@@ -41,3 +42,5 @@ export const {
     useGetPaginated: useGetPaginatedBillsAndCoins,
     useUpdateById: useUpdateBillsAndCoinsById,
 } = apiCrudHooks
+
+export const logger = Logger.getInstance('bills-and-coins')

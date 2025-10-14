@@ -1,6 +1,7 @@
 import { useQuery } from '@tanstack/react-query'
 import qs from 'query-string'
 
+import { Logger } from '@/helpers/loggers'
 import {
     HookQueryOptions,
     createDataLayerFactory,
@@ -135,3 +136,5 @@ export const useFilteredPaginatedDisbursementTransaction = ({
         },
     })
 }
+
+export const logger = Logger.getInstance('disbursement-transaction')

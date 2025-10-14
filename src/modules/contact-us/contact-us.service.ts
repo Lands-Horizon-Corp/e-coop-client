@@ -1,3 +1,4 @@
+import { Logger } from '@/helpers/loggers'
 import { createDataLayerFactory } from '@/providers/repositories/data-layer-factory'
 
 import { IContactUs, IContactUsRequest } from './contact-us.types'
@@ -21,3 +22,5 @@ export const {
 } = apiCrudHooks
 
 export const ContactUsAPI = apiCrudService
+
+export const logger = Logger.getInstance('contact-us')
