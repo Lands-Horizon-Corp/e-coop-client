@@ -1,6 +1,5 @@
 import { ReactNode, useMemo } from 'react'
 
-import { useQueryClient } from '@tanstack/react-query'
 import { toast } from 'sonner'
 
 import { cn } from '@/helpers'
@@ -62,6 +61,7 @@ export const JournalVoucherTagChip = ({
     size = 'default',
 }: JournalVoucherTagChipProps) => {
     const { onOpen } = useConfirmModalStore()
+
     const deleteMutation = useDeleteJournalVoucherTagById({
         options: { onSuccess: onRemove },
     })
@@ -151,16 +151,12 @@ export function JournalVoucherTagsManager({
         options: { initialData: defaultTags, retry: 0 },
     })
 
-    const invalidateQueries = useQueryClient()
     const createTagMutation = useCreateJournalVoucherTag({
         options: {
             onSuccess:
                 onSuccess ??
                 (() => {
                     refetch()
-                    invalidateQueries.invalidateQueries({
-                        queryKey: ['get-all-journal-voucher'],
-                    })
                 }),
         },
     })
@@ -212,7 +208,7 @@ export function JournalVoucherTagsManager({
                         Add Tag
                     </Button>
                 )}
-                {voucherTags.map((tag) => (
+                {voucherTags?.map((tag) => (
                     <JournalVoucherTagChip
                         key={tag.id}
                         onRemove={readOnly ? undefined : refetch}
@@ -235,11 +231,13 @@ export const JournalVoucherTagsManagerPopover = ({
     readOnly,
     className,
     children,
+    onSuccess,
 }: {
     journalVoucherId: TEntityId
     defaultTags?: IJournalVoucherTag[]
     size?: JournalVoucherTagManagerSize
     readOnly?: boolean
+    onSuccess?: () => void
 } & IBaseProps & { children?: ReactNode }) => {
     const { data: voucherTags = [], isPending } = useGetAllJournalVoucherTag({
         mode: 'journal-voucher',
@@ -277,6 +275,7 @@ export const JournalVoucherTagsManagerPopover = ({
                 <JournalVoucherTagsManager
                     defaultTags={defaultTags}
                     journalVoucherId={journalVoucherId}
+                    onSuccess={onSuccess}
                     readOnly={readOnly}
                     size={size}
                 />

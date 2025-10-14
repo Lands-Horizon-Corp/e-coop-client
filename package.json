@@ -24,6 +24,7 @@
         "build": "tsc -b && vite build",
         "vc": "eslint . && prettier . -c && vitest run && tsc -b --verbose && vite build",
         "deploy": "bun run format && bun run vc",
+        "dp":"bun run deploy",
         "gen-mod": "bunx plop module-gen",
         "unused": "knip"
     },

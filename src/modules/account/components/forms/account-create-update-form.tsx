@@ -31,6 +31,7 @@ import {
 } from '@/modules/account'
 import { AccountCategoryComboBox } from '@/modules/account-category'
 import { AccountClassificationComboBox } from '@/modules/account-classification'
+import { AccountTagsManagerPopover } from '@/modules/account-tag/components/account-tag-management'
 import { useAuthUserWithOrgBranch } from '@/modules/authentication/authgentication.store'
 import ComputationSheetCombobox from '@/modules/computation-sheet/components/computation-sheet-combobox'
 import MemberTypeCombobox from '@/modules/member-type/components/member-type-combobox'
@@ -151,6 +152,14 @@ const AccountCreateUpdateForm = ({
                 onSubmit={onSubmit}
                 ref={formRef}
             >
+                {accountId && (
+                    <div className="absolute top-4 right-10">
+                        <AccountTagsManagerPopover
+                            accountId={accountId}
+                            size="sm"
+                        />
+                    </div>
+                )}
                 <FormErrorMessage errorMessage={error} />
                 <div className="flex w-full flex-col gap-5 md:flex-row">
                     <fieldset
@@ -1750,7 +1759,6 @@ const AccountCreateUpdateForm = ({
                         </div>
                     </div>
                 </div>
-                {/* General Ledger Source Visibility Settings */}
                 <div className="space-y-2">
                     <h4 className="text-sm font-medium text-muted-foreground">
                         General Ledger Source Visibility
