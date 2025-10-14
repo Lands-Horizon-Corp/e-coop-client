@@ -1,11 +1,13 @@
 import { APP_ENV } from '@/constants'
+import { TFootstepLevel, createFootstep } from '@/modules/footstep'
 
 /* eslint-disable no-console */
 type LogMethod = (...args: unknown[]) => void
 
 class Logger {
-    private static instance: Logger
+    private static instances: Map<string, Logger> = new Map()
     private isDevelopment: boolean
+    private module: string
 
     public log: LogMethod
     public warn: LogMethod
@@ -13,7 +15,8 @@ class Logger {
     public info: LogMethod
     public debug: LogMethod
 
-    private constructor() {
+    private constructor(module: string = 'default') {
+        this.module = module
         console.log(
             '\n                  ......                                    \n            .,,,,,,,,,,,,,,,,,,,                             \n        ,,,,,,,,,,,,,,,,,,,,,,,,,,                          \n      ,,,,,,,,,,,,,,  .,,,,,,,,,,,,,                        \n    ,,,,,,,,,,           ,,,,,,,,,,,,                       \n      ,,,,,,,          .,,,,,,,,,,,                          \n  ,*,,,,,,          ,,,,,,,,,,,,                             \n.**,,,,.**      .,,,,,,,,,,,                                \n.,,,,,,,**    ,,,,,,,,,,,                                   \n  .,,,,.**       ,,,,,,                                      \n    *******       ,                                         \n    **********              **,                             \n      ************,,  ,,*********,                          \n        **************************                          \n            ********************                             \n                  ******.\n'
         )
@@ -42,32 +45,73 @@ class Logger {
         }
 
         if (this.isDevelopment) {
-            this.log = console.log.bind(console)
-            this.warn = console.warn.bind(console)
-            this.error = console.error.bind(console)
-            this.info = console.info.bind(console)
-            this.debug = console.debug.bind(console)
+            this.log = (...args) => {
+                console.log(...args)
+                this.footstep('info', args.join(' '), 'log')
+            }
+            this.warn = (...args) => {
+                console.warn(...args)
+                this.footstep('warning', args.join(' '), 'warning_log')
+            }
+            this.error = (...args) => {
+                console.error(...args)
+                this.footstep('error', args.join(' '), 'error_log')
+            }
+            this.info = (...args) => {
+                console.info(...args)
+                this.footstep('info', args.join(' '), 'info_log')
+            }
+            this.debug = (...args) => {
+                console.debug(...args)
+                this.footstep('debug', args.join(' '), 'debug_log')
+            }
         } else {
-            this.log = () => {}
-            this.warn = () => {}
-            this.error = () => {}
-            this.info = () => {}
-            this.debug = () => {}
-
-            console.log = () => {}
-            console.warn = () => {}
-            console.error = () => {}
-            console.info = () => {}
-            console.debug = () => {}
+            this.log = (...args) => {
+                this.footstep('info', args.join(' '), 'log')
+            }
+            this.warn = (...args) => {
+                this.footstep('warning', args.join(' '), 'warning_log')
+            }
+            this.error = (...args) => {
+                this.footstep('error', args.join(' '), 'error_log')
+            }
+            this.info = (...args) => {
+                this.footstep('info', args.join(' '), 'info_log')
+            }
+            this.debug = (...args) => {
+                this.footstep('debug', args.join(' '), 'debug_log')
+            }
+            console.log = (..._args) => {}
+            console.warn = (..._args) => {}
+            console.error = (..._args) => {}
+            console.info = (..._args) => {}
+            console.debug = (..._args) => {}
         }
     }
 
-    public static getInstance(): Logger {
-        if (!Logger.instance) {
-            Logger.instance = new Logger()
+    public async footstep(
+        level: TFootstepLevel,
+        description: string,
+        activity: string
+    ) {
+        await createFootstep({
+            level,
+            description,
+            activity,
+            module: this.module,
+        })
+    }
+
+    public static getInstance(module: string = 'default'): Logger {
+        if (!Logger.instances.has(module)) {
+            Logger.instances.set(module, new Logger(module))
         }
-        return Logger.instance
+        return Logger.instances.get(module)!
     }
 }
 
+// Default logger instance
 export default Logger.getInstance()
+
+// Export the Logger class for module-specific instances
+export { Logger }

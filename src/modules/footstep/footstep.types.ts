@@ -9,6 +9,7 @@ import {
 import { IBranch } from '../branch'
 import { IOrganization } from '../organization'
 
+export type TFootstepLevel = 'info' | 'warning' | 'error' | 'debug'
 export interface IFootstep extends ITimeStamps, IAuditable {
     id: TEntityId
 
@@ -33,6 +34,13 @@ export interface IFootstep extends ITimeStamps, IAuditable {
     referer: string | null
     location: string | null
     accept_language: string | null
+}
+
+export interface IFootstepRequest {
+    level: TFootstepLevel
+    description: string
+    activity: string
+    module: string
 }
 
 export interface IFootstepPaginated extends IPaginatedResult<IFootstep> {}
