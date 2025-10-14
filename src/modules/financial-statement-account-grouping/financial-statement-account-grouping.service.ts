@@ -1,3 +1,4 @@
+import { Logger } from '@/helpers/loggers'
 import { createDataLayerFactory } from '@/providers/repositories/data-layer-factory'
 
 import {
@@ -14,3 +15,5 @@ const { apiCrudHooks } = createDataLayerFactory<
 })
 
 export const { useGetAll, useUpdateById } = apiCrudHooks
+
+export const logger = Logger.getInstance('financial-statement-account-grouping')

@@ -1,5 +1,6 @@
 import { useQuery } from '@tanstack/react-query'
 
+import { Logger } from '@/helpers/loggers'
 import {
     HookQueryOptions,
     createDataLayerFactory,
@@ -53,3 +54,5 @@ export const useUserMedias = ({
         queryFn: async () => getUserMedias(userId),
     })
 }
+
+export const logger = Logger.getInstance('user')

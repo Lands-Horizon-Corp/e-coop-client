@@ -1,6 +1,7 @@
 import { useQuery } from '@tanstack/react-query'
 import qs from 'query-string'
 
+import { Logger } from '@/helpers/loggers'
 import {
     HookQueryOptions,
     createDataLayerFactory,
@@ -184,3 +185,5 @@ export const usePrintJournalVoucherTransaction = createMutationFactory<
     invalidationFn: (args) =>
         updateMutationInvalidationFn(journalVoucherBaseKey, args),
 })
+
+export const logger = Logger.getInstance('journal-voucher')

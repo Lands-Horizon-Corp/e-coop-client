@@ -1,5 +1,6 @@
 import { useQuery } from '@tanstack/react-query'
 
+import { Logger } from '@/helpers/loggers'
 import {
     HookQueryOptions,
     createDataLayerFactory,
@@ -83,3 +84,5 @@ export const useGetAllLoanClearanceAnalysis = ({
             }),
     })
 }
+
+export const logger = Logger.getInstance('loan-clearance-analysis')

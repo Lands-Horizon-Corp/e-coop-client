@@ -1,5 +1,6 @@
 import { useMutation, useQuery } from '@tanstack/react-query'
 
+import { Logger } from '@/helpers/loggers'
 import API from '@/providers/api'
 import { HookQueryOptions } from '@/providers/repositories/data-layer-factory'
 import { HookMutationOptions } from '@/providers/repositories/mutation-factory'
@@ -73,3 +74,5 @@ export const useSendHeartbeatStatus = ({
         mutationFn: async (status) => await sendHeartbeatStatus(status),
     })
 }
+
+export const logger = Logger.getInstance('heartbeat')

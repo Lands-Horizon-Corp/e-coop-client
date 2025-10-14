@@ -1,3 +1,4 @@
+import { Logger } from '@/helpers/loggers'
 import { createDataLayerFactory } from '@/providers/repositories/data-layer-factory'
 import { createMutationFactory } from '@/providers/repositories/mutation-factory'
 
@@ -98,3 +99,5 @@ export const useUpdateUserProfilePhoto = createMutationFactory<
 >({
     mutationFn: updateUserProfilePhoto,
 })
+
+export const logger = Logger.getInstance('user-profile')

@@ -1,6 +1,7 @@
 import { useQuery } from '@tanstack/react-query'
 import qs from 'query-string'
 
+import { Logger } from '@/helpers/loggers'
 import {
     HookQueryOptions,
     createDataLayerFactory,
@@ -84,3 +85,5 @@ export const useMemberClassificationHistory = ({
         queryFn: () => getMemberClassificationHistoryById({ profileId, query }),
     })
 }
+
+export const logger = Logger.getInstance('member-classification-history')

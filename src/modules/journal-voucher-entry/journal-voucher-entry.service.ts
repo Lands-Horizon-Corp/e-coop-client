@@ -1,3 +1,4 @@
+import { Logger } from '@/helpers/loggers'
 import { createDataLayerFactory } from '@/providers/repositories/data-layer-factory'
 
 import type {
@@ -46,3 +47,5 @@ export const {
     useDeleteById: useDeleteJournalVoucherEntryById,
     useDeleteMany: useDeleteManyJournalVoucherEntry,
 } = apiCrudHooks
+
+export const logger = Logger.getInstance('journal-voucher-entry')

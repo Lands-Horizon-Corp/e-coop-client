@@ -1,5 +1,6 @@
 import { useQuery } from '@tanstack/react-query'
 
+import { Logger } from '@/helpers/loggers'
 import {
     HookQueryOptions,
     createDataLayerFactory,
@@ -100,3 +101,5 @@ export const useTimeInOut = createMutationFactory<
     mutationFn: async (variables) => await timeInOut(variables),
     defaultInvalidates: [[baseQueryKey]],
 })
+
+export const logger = Logger.getInstance('timesheet')

@@ -1,5 +1,6 @@
 import { useQuery } from '@tanstack/react-query'
 
+import { Logger } from '@/helpers/loggers'
 import {
     HookQueryOptions,
     createDataLayerFactory,
@@ -89,3 +90,5 @@ export const useCurrentBatchOnlineRemittances = ({
         queryFn: async () => await currentTransactionBatchOnlineRemittances(),
     })
 }
+
+export const logger = Logger.getInstance('online-remittance')

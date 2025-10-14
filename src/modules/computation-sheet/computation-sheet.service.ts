@@ -1,3 +1,4 @@
+import { Logger } from '@/helpers/loggers'
 import { createDataLayerFactory } from '@/providers/repositories/data-layer-factory'
 import {
     createMutationFactory,
@@ -83,3 +84,5 @@ export const useCalculateSchemeAmortization = createMutationFactory<
         return response.data
     },
 })
+
+export const logger = Logger.getInstance('computation-sheet')

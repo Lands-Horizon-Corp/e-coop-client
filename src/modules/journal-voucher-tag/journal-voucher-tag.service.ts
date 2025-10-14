@@ -1,5 +1,6 @@
 import { useQuery } from '@tanstack/react-query'
 
+import { Logger } from '@/helpers/loggers'
 import {
     HookQueryOptions,
     createDataLayerFactory,
@@ -86,3 +87,5 @@ export const useGetAllJournalVoucherTag = ({
         },
     })
 }
+
+export const logger = Logger.getInstance('journal-voucher-tag')

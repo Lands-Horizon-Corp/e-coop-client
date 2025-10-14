@@ -1,3 +1,4 @@
+import { Logger } from '@/helpers/loggers'
 import {
     IGeneralLedgerAccountGrouping,
     IGeneralLedgerAccountGroupingRequest,
@@ -13,3 +14,5 @@ const { apiCrudHooks } = createDataLayerFactory<
 })
 
 export const { useGetAll, useUpdateById } = apiCrudHooks
+
+export const logger = Logger.getInstance('general-ledger-account-grouping')

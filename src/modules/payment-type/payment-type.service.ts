@@ -1,3 +1,4 @@
+import { Logger } from '@/helpers/loggers'
 import { createDataLayerFactory } from '@/providers/repositories/data-layer-factory'
 
 import { IPaymentType, IPaymentTypeRequest } from './payment-type.types'
@@ -21,3 +22,5 @@ export const {
 } = apiCrudHooks
 
 export const { deleteById, deleteMany } = apiCrudService
+
+export const logger = Logger.getInstance('payment-type')

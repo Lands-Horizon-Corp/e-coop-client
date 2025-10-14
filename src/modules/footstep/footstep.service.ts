@@ -1,5 +1,6 @@
 import { useQuery } from '@tanstack/react-query'
 
+import { Logger } from '@/helpers/loggers'
 import { createAPIRepository } from '@/providers/repositories/api-crud-factory'
 import {
     HookQueryOptions,
@@ -94,3 +95,5 @@ export const useFilteredPaginatedFootsteps = ({
         },
     })
 }
+
+export const logger = Logger.getInstance('footstep')

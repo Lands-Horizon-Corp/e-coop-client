@@ -3,6 +3,7 @@ import { toast } from 'sonner'
 
 import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
 import { withCatchAsync } from '@/helpers/function-utils'
+import { Logger } from '@/helpers/loggers'
 import {
     HookQueryOptions,
     createDataLayerFactory,
@@ -193,3 +194,5 @@ export const useAllReverseTransaction = createMutationFactory<
     invalidationFn: (args) =>
         createMutationInvalidateFn('all-reverse-transaction', args),
 })
+
+export const logger = Logger.getInstance('transaction')

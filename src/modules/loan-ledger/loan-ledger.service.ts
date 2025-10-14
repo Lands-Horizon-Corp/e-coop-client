@@ -1,3 +1,4 @@
+import { Logger } from '@/helpers/loggers'
 import { createDataLayerFactory } from '@/providers/repositories/data-layer-factory'
 import {
     createMutationFactory,
@@ -81,3 +82,5 @@ export const useChangeLoanLedgerLineNumber = createMutationFactory<
         updateMutationInvalidationFn(loanLedgerBaseKey, args)
     },
 })
+
+export const logger = Logger.getInstance('loan-ledger')

@@ -1,3 +1,4 @@
+import { Logger } from '@/helpers/loggers'
 import { createDataLayerFactory } from '@/providers/repositories/data-layer-factory'
 import { createMutationFactory } from '@/providers/repositories/mutation-factory'
 
@@ -119,3 +120,5 @@ export const useDeleteMemberProfileContactReference = createMutationFactory<
         })
     },
 })
+
+export const logger = Logger.getInstance('member-contact-reference')

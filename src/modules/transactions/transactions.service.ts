@@ -1,5 +1,6 @@
 import { useQuery } from '@tanstack/react-query'
 
+import { Logger } from '@/helpers/loggers'
 import { HookQueryOptions } from '@/providers/repositories/data-layer-factory'
 
 import { TAPIQueryOptions } from '@/types'
@@ -86,3 +87,5 @@ export const useFilteredPaginatedTransaction = ({
         },
     })
 }
+
+export const logger = Logger.getInstance('transactions')

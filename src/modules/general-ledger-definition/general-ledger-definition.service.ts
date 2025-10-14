@@ -1,3 +1,4 @@
+import { Logger } from '@/helpers/loggers'
 import { ConnectAccountType } from '@/modules/gl-fs'
 import { createGLSFSService } from '@/modules/gl-fs/gl-fs.services'
 
@@ -21,3 +22,5 @@ export const {
     connectAccountMutationKey: 'connect-account-to-general-ledger-definition',
     updateIndexMutationKey: 'update-general-ledger-index',
 })
+
+export const logger = Logger.getInstance('general-ledger-definition')

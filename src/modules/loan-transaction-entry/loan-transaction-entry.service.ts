@@ -1,3 +1,4 @@
+import { Logger } from '@/helpers/loggers'
 import { createDataLayerFactory } from '@/providers/repositories/data-layer-factory'
 import {
     createMutationFactory,
@@ -146,3 +147,5 @@ export const useLoanTransactionEntryRestoreById = createMutationFactory<
         })
     },
 })
+
+export const logger = Logger.getInstance('loan-transaction-entry')
