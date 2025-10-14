@@ -205,6 +205,9 @@ export interface IMemberProfile extends ITimeStamps, IAuditable {
     member_government_benefits?: IMemberGovernmentBenefit[]
     // memberMutualFundsHistory?: IMemberMutualFundsHistory[]
     member_contact_references?: IMemberContactReference[]
+
+    longitude?: number
+    latitude?: number
 }
 
 export interface IMemberProfilePaginated

@@ -181,3 +181,24 @@ export type TMemberProfileMembershipInfoSchema = z.infer<
 export const MemberProfileAccountSchema = z.object({
     user_id: entityIdSchema.optional(),
 })
+
+export const MemberProfileCoordinatesSchema = z.object({
+    longitude: z
+        .number({
+            error: 'Longitude must be a number',
+        })
+        .min(-180, 'Longitude must be between -180 and 180')
+        .max(180, 'Longitude must be between -180 and 180')
+        .optional(),
+    latitude: z
+        .number({
+            error: 'Latitude must be a number',
+        })
+        .min(-90, 'Latitude must be between -90 and 90')
+        .max(90, 'Latitude must be between -90 and 90')
+        .optional(),
+})
+
+export type TMemberProfileCoordinatesSchema = z.infer<
+    typeof MemberProfileCoordinatesSchema
+>
