@@ -1,6 +1,5 @@
 import z from 'zod'
 
-import { Logger } from '@/helpers/loggers'
 import {
     EntityIdSchema,
     descriptionTransformerSanitizer,
@@ -26,4 +25,4 @@ export const ComakerCollateralSchema = z.object({
 
 export type TComakerCollateralSchema = z.infer<typeof ComakerCollateralSchema>
 
-export const logger = Logger.getInstance('comaker-collateral')
+// export const logger = Logger.getInstance('comaker-collateral')

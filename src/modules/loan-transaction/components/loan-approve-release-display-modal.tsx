@@ -216,7 +216,6 @@ const LoanApproveReleaseDisplayModal = ({
                         <Button
                             disabled={undoApproveMutation.isPending || readOnly}
                             onClick={() => {
-                                console.log('clicked')
                                 handleUndoApprove()
                             }}
                             variant="destructive"
