@@ -34,9 +34,9 @@ export const JournalKanbanInfoItem = ({
                     {title}
                 </span>
                 <Separator className="min-h-8" orientation="vertical" />
-                <p className="font-mono text-xs text-nowrap overflow-x-scroll ecoop-scroll tracking-wider max-w-full">
+                <span className="font-mono text-xs font-medium truncate">
                     {content}
-                </p>
+                </span>
             </div>
         </InfoTooltip>
     )

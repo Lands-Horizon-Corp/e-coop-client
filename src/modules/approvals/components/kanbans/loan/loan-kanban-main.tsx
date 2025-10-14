@@ -71,9 +71,10 @@ export const LoanKanbanMain = ({ mode, icon }: LoanTransactionKanbanProps) => {
     }
 
     if (isLoading) return <JournalVoucherSkeletonCard className="w-[420px]" />
+
     const handleInvalidate = () => {
         invalidate.invalidateQueries({
-            queryKey: ['all', mode],
+            queryKey: ['loan-transaction', 'all'],
         })
     }
     return (

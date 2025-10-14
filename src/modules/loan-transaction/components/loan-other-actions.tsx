@@ -96,9 +96,7 @@ const LoanTransactionOtherAction = ({
                     className="flex items-center"
                     disabled={!action.isVisible}
                     key={action.label}
-                    onClick={() => {
-                        action.onSelect()
-                    }}
+                    onClick={action.onSelect}
                 >
                     {action.icon}
                     <span>{action.label}</span>
