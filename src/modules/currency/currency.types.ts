@@ -11,6 +11,12 @@ export interface ICurrency extends IAuditable {
     currency_code: string
     symbol?: string
     emoji?: string
+    iso_3166_alpha2?: string // ISO 3166-1 alpha-2
+    iso_3166_alpha3?: string // ISO 3166-1 alpha-3
+    iso_3166_numeric?: string // ISO 3166-1 numeric
+    phone_code?: string // Country phone code
+    domain?: string // Country top-level domain
+    locale?: string // Country locale code
 }
 
 export type ICurrencyRequest = z.infer<typeof CurrencySchema>
