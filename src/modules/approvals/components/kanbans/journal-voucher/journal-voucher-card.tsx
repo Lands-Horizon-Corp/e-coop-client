@@ -25,7 +25,7 @@ export const JournalKanbanInfoItem = ({
         <InfoTooltip content={infoTitle}>
             <div
                 className={cn(
-                    'px-1 max-w-full mx-auto min-w-0 grow flex items-center gap-x-4 rounded bg-secondary/40 ring-2 ring-secondary/60 ',
+                    'px-1 max-w-full mx-auto min-w-0 grow flex items-center gap-x-4 rounded ring-2 ring-secondary/60 ',
                     className
                 )}
             >

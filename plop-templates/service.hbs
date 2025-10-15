@@ -1,5 +1,8 @@
 import { createDataLayerFactory } from '@/providers/repositories/data-layer-factory'
 
+
+import { Logger } from '@/helpers/loggers'
+
 import type { I{{pascalCase name}}, I{{pascalCase name}}Request } from '../{{kebabCase name}}'
 
 const { apiCrudHooks, apiCrudService, baseQueryKey : {{camelCase name}}BaseKey } = createDataLayerFactory<
@@ -43,4 +46,5 @@ export const {
     useDeleteMany: useDeleteMany{{pascalCase name}},
 } = apiCrudHooks
 
+export const logger = Logger.getInstance('{{kebabCase name}}')
 // custom hooks can go here

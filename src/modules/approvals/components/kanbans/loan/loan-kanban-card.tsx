@@ -119,10 +119,10 @@ export const LoanTransactionCard = ({
                     title="Purpose"
                 />
                 <JournalKanbanInfoItem
-                    content={loan.member_profile?.full_name || 'N/A'}
+                    content={loan.mode_of_payment || 'N/A'}
                     icon={<InfoFillCircleIcon className="inline mr-2 size-5" />}
                     infoTitle="Mode of Payment"
-                    title="Mode Of"
+                    title="Mode Of Payment"
                 />
             </div>
         </div>
