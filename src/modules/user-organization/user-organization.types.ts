@@ -3,6 +3,7 @@ import { IBaseEntityMeta, IPaginatedResult, TEntityId } from '@/types/common'
 
 import { IAccount } from '../account'
 import { IBranch } from '../branch'
+import { ICurrency } from '../currency'
 import { IOrganization } from '../organization'
 import { IPaymentType } from '../payment-type/payment-type.types'
 import { TPermission } from '../permission'
@@ -96,6 +97,9 @@ export interface IUserOrganizationSettings {
 
     settings_payment_type_default_value_id?: TEntityId | null
     settings_payment_type_default_value?: IPaymentType
+
+    settings_currency_default_value_id?: TEntityId | null
+    settings_currency_default_value?: ICurrency
 }
 
 export interface IUserOrganizationSettingsRequest

@@ -58,9 +58,6 @@ export const BranchSettingsSchema = z.object({
     default_member_type_id: entityIdSchema,
 
     loan_applied_equal_to_balance: z.boolean().default(true),
-
-    currency_id: entityIdSchema,
-    currency: z.any(),
 })
 
 export type TBranchSettingsSchema = z.infer<typeof BranchSettingsSchema>
