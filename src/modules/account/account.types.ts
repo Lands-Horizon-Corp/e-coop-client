@@ -5,6 +5,7 @@ import {
     TEntityId,
 } from '@/types/common'
 
+import { ICurrency } from '../currency'
 import { ACCOUNT_INTEREST_STANDARD_COMPUTATION } from './account.constants'
 
 export enum AccountTypeEnum {
@@ -203,6 +204,9 @@ export interface IAccount extends IAuditable, ITimeStamps {
 
     compassion_fund: boolean // this is damayan in OLD coop
     compassion_fund_amount: number // this is damayan in OLD coop
+
+    currency_id: TEntityId
+    currency?: ICurrency
 }
 
 export interface IAccountRequest {
