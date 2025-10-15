@@ -36,15 +36,15 @@ const AppContent = () => {
 
     return (
         <>
+            <RouterProvider router={router} />
             <MouseTrailEffect
                 color="primary"
-                effect="inverted"
+                effect="glow"
                 enabled={mouseTrailEnabled}
                 invertColors={true}
                 maxPoints={1000}
                 size={10}
             />
-            <RouterProvider router={router} />
         </>
     );
 };

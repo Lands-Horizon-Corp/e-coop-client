@@ -10,8 +10,8 @@ import { AccountPicker } from '@/modules/account'
 import { IMedia } from '@/modules/media/media.types'
 import MemberPicker from '@/modules/member-profile/components/member-picker'
 import {
+    PaymentTypeCombobox,
     TransactionAmountField,
-    TransactionPaymentTypeComboBox,
 } from '@/modules/transaction'
 
 import FormFooterResetSubmit from '@/components/form-components/form-footer-reset-submit'
@@ -187,7 +187,7 @@ const AdjustmentEntryCreateUpdateForm = ({
                         labelClassName="text-xs font-medium text-muted-foreground"
                         name="payment_type_id"
                         render={({ field }) => (
-                            <TransactionPaymentTypeComboBox
+                            <PaymentTypeCombobox
                                 {...field}
                                 disabled={isDisabled('payment_type_id')}
                                 onChange={(selectedPaymentType) => {

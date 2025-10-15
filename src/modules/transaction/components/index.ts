@@ -40,4 +40,4 @@ export { default as TransactionDetails } from './transaction-details'
 export { default as TransactionCardItem } from './transaction-card-item'
 
 //export combobox
-export { default as TransactionPaymentTypeComboBox } from './combobox/payment-type-combobox'
+export { default as PaymentTypeCombobox } from '../../payment-type/components/combobox/payment-type-combobox'

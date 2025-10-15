@@ -31,7 +31,7 @@ interface Props {
     onChange?: (selected: IPaymentType) => void
 }
 
-const TransactionPaymentTypeComboBox = ({
+const PaymentTypeCombobox = ({
     value,
     className,
     disabled = false,
@@ -113,4 +113,4 @@ const TransactionPaymentTypeComboBox = ({
     )
 }
 
-export default TransactionPaymentTypeComboBox
+export default PaymentTypeCombobox

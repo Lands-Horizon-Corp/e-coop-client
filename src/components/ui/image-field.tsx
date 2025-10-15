@@ -53,7 +53,7 @@ const ImageField = forwardRef<HTMLButtonElement, ImageFieldProps>(
                     ref={ref}
                     {...props}
                     className={cn(
-                        'has-disabled:pointer-events-none has-disabled:opacity-50 relative flex h-52 w-full cursor-pointer flex-col items-center justify-center overflow-hidden rounded-xl border border-dashed border-primary/60 bg-primary/5 p-4 transition-colors hover:border-foreground hover:bg-primary/20 dark:border-primary/20 dark:bg-background/40',
+                        'has-disabled:pointer-events-none has-disabled:opacity-50 relative flex h-52 w-full cursor-pointer flex-col items-center justify-center overflow-hidden rounded-md border border-dashed border-primary/60 bg-primary/5 p-4 transition-colors hover:border-foreground hover:bg-primary/20 dark:border-primary/20 dark:bg-background/40',
                         value &&
                             'border-none border-ring ring-2 ring-muted-foreground/20 ring-offset-1',
                         className
@@ -70,7 +70,7 @@ const ImageField = forwardRef<HTMLButtonElement, ImageFieldProps>(
                             onClick={(e) => e.stopPropagation()}
                         >
                             <ImageDisplay
-                                className="block size-full rounded-none"
+                                className="block size-full rounded-none border-none outline-none"
                                 src={value}
                             />
                             <span

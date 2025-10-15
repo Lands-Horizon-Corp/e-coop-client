@@ -33,7 +33,11 @@ export const { apiCrudHooks, apiCrudService } = createDataLayerFactory<
     ITransactionRequest
 >({ url: '/api/v1/transaction', baseKey: 'transaction' })
 
-export const { useGetById, useGetAll, useCreate } = apiCrudHooks
+export const {
+    useGetById,
+    useGetAll,
+    useCreate: useCreateTransaction,
+} = apiCrudHooks
 
 export const { route, API, create, getPaginated } = apiCrudService
 
@@ -196,3 +200,23 @@ export const useAllReverseTransaction = createMutationFactory<
 })
 
 export const logger = Logger.getInstance('transaction')
+
+// For Jervx Loan Payment Multiple Payable Account since loan may have multiple accounts
+// to be paid
+export const useCreateMultiTransactionPayment = createMutationFactory<
+    IGeneralLedger,
+    Error,
+    { transactionId: TEntityId; payments: IPaymentRequest[] }
+>({
+    mutationFn: async ({ payments, transactionId }) =>
+        (
+            await API.post<IPaymentRequest[], IGeneralLedger>(
+                `${route}/${transactionId}/multi-payment`,
+                payments
+            )
+        ).data,
+    invalidationFn: (args) => {
+        createMutationInvalidateFn('transaction', args)
+        createMutationInvalidateFn('general-ledger', args)
+    },
+})

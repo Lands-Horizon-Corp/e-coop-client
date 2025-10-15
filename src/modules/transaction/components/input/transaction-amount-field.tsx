@@ -22,7 +22,7 @@ const TransactionAmountField = forwardRef<HTMLInputElement, AmountFieldProps>(
             onChange,
             InputClassName,
             className,
-            isDefault = false,
+            isDefault = true,
             ...field
         },
         ref

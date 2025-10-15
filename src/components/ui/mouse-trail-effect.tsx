@@ -304,7 +304,9 @@ const MouseTrailEffect: React.FC<MouseTrailEffectProps> = ({
     if (!enabled) return null
 
     return (
-        <div className={`pointer-events-none fixed inset-0 z-50 ${className}`}>
+        <div
+            className={`pointer-events-none fixed inset-0 z-[999999999] ${className}`}
+        >
             {effect === 'line' && trail.length > 1 && (
                 <svg className="pointer-events-none absolute inset-0 h-full w-full">
                     <path
