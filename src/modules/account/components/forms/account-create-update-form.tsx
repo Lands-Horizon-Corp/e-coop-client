@@ -34,6 +34,7 @@ import { AccountClassificationComboBox } from '@/modules/account-classification'
 import { AccountTagsManagerPopover } from '@/modules/account-tag/components/account-tag-management'
 import { useAuthUserWithOrgBranch } from '@/modules/authentication/authgentication.store'
 import ComputationSheetCombobox from '@/modules/computation-sheet/components/computation-sheet-combobox'
+import CurrencyCombobox from '@/modules/currency/components/currency-combobox'
 import MemberTypeCombobox from '@/modules/member-type/components/member-type-combobox'
 
 import IconCombobox from '@/components/comboboxes/icon-combobox'
@@ -178,6 +179,24 @@ const AccountCreateUpdateForm = ({
                                     id={field.name}
                                     placeholder="Account Name"
                                     value={field.value ?? ''}
+                                />
+                            )}
+                        />
+                        <FormFieldWrapper
+                            control={form.control}
+                            disabled={isLoading}
+                            label="Currency *"
+                            name="currency_id"
+                            render={({ field }) => (
+                                <CurrencyCombobox
+                                    disabled={
+                                        isDisabled(field.name) || isLoading
+                                    }
+                                    onChange={(selected) =>
+                                        field.onChange(selected.id)
+                                    }
+                                    placeholder="Select Currency"
+                                    value={field.value}
                                 />
                             )}
                         />
