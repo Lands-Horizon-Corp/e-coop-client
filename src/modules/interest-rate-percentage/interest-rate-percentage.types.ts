@@ -5,7 +5,7 @@ import {
     TEntityId,
 } from '@/types/common'
 
-import { IMemberClassificationInterestRateResponse } from '../member-classification-interest-rate'
+import { IMemberClassificationInterestRate } from '../member-classification-interest-rate'
 
 export interface IInterestRatePercentageRequest {
     name?: string
@@ -15,7 +15,7 @@ export interface IInterestRatePercentageRequest {
     member_classification_interest_rate_id?: TEntityId
 }
 
-export interface IInterestRatePercentageResponse
+export interface IInterestRatePercentage
     extends ITimeStamps,
         IAuditable,
         IOrgBranchIdentity {
@@ -25,5 +25,5 @@ export interface IInterestRatePercentageResponse
     months: number
     interest_rate: number
     member_classification_interest_rate_id: TEntityId
-    member_classification_interest_rate?: IMemberClassificationInterestRateResponse
+    member_classification_interest_rate?: IMemberClassificationInterestRate
 }

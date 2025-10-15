@@ -5,7 +5,7 @@ import {
     TEntityId,
 } from '@/types/common'
 
-import { ITimeDepositComputationResponse } from '../time-deposit-computation'
+import { ITimeDepositComputation } from '../time-deposit-computation'
 
 export interface ITimeDepositTypeRequest {
     name: string
@@ -26,7 +26,7 @@ export interface ITimeDepositTypeRequest {
     header_11?: number
 }
 
-export interface ITimeDepositTypeResponse
+export interface ITimeDepositType
     extends ITimeStamps,
         IAuditable,
         IOrgBranchIdentity {
@@ -47,6 +47,6 @@ export interface ITimeDepositTypeResponse
     header_9: number
     header_10: number
     header_11: number
-    time_deposit_computations?: ITimeDepositComputationResponse[]
-    time_deposit_computation_pre_matures?: ITimeDepositComputationResponse[]
+    time_deposit_computations?: ITimeDepositComputation[]
+    time_deposit_computation_pre_matures?: ITimeDepositComputation[]
 }

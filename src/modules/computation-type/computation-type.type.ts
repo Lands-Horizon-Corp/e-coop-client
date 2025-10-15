@@ -7,7 +7,7 @@ export interface IAccountsComputationTypeRequest {
     description: string
 }
 
-export interface IAccountsComputationTypeResource extends ITimeStamps {
+export interface IAccountsComputationType extends ITimeStamps {
     id: TEntityId
     companyId: TEntityId
     name: string
@@ -16,5 +16,5 @@ export interface IAccountsComputationTypeResource extends ITimeStamps {
     updatedBy: TEntityId
 }
 
-export interface IAccountsComputationTypePaginatedResource
-    extends IPaginatedResult<IAccountsComputationTypeResource> {}
+export interface IAccountsComputationTypePaginated
+    extends IPaginatedResult<IAccountsComputationType> {}

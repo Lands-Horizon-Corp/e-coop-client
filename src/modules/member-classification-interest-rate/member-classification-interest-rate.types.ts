@@ -9,7 +9,7 @@ import {
 import { entityIdSchema } from '@/validation'
 
 import { IInterestRateByTermsHeaderResponse } from '../interest-rate-by-terms-header'
-import { IInterestRateSchemeResponse } from '../interest-rate-scheme'
+import { IInterestRateScheme } from '../interest-rate-scheme'
 import { IMemberClassification } from '../member-classification/member-classification.types'
 
 export interface IMemberClassificationInterestRateRequest {
@@ -20,7 +20,7 @@ export interface IMemberClassificationInterestRateRequest {
     interest_rate_by_terms_header_id?: TEntityId
 }
 
-export interface IMemberClassificationInterestRateResponse
+export interface IMemberClassificationInterestRate
     extends ITimeStamps,
         IAuditable,
         IOrgBranchIdentity {
@@ -28,7 +28,7 @@ export interface IMemberClassificationInterestRateResponse
     name: string
     description: string
     interest_rate_scheme_id?: TEntityId
-    interest_rate_scheme?: IInterestRateSchemeResponse
+    interest_rate_scheme?: IInterestRateScheme
     member_classification_id?: TEntityId
     member_classification?: IMemberClassification
     interest_rate_by_terms_header_id?: TEntityId

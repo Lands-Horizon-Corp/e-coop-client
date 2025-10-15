@@ -4,7 +4,16 @@ import { IBranch } from '../branch'
 import { IChargesRateSchemeRequest } from '../charges-rate-scheme'
 import { IOrganization } from '../organization'
 
-export interface IChargesRateByTermBase {
+export type TChargesModeOfPaymentType =
+    | 'daily'
+    | 'weekly'
+    | 'monthly'
+    | 'quarterly'
+    | 'semi-annually'
+    | 'annually'
+    | 'lumpsum'
+
+export interface IChargesRateByTerm {
     id: string
     organization_id: string
     branch_id: string
@@ -12,7 +21,7 @@ export interface IChargesRateByTermBase {
 
     name: string
     description: string
-    mode_of_payment: string // ChargesModeOfPaymentType
+    mode_of_payment: TChargesModeOfPaymentType
 
     rate_1: number
     rate_2: number
@@ -39,7 +48,7 @@ export interface IChargesRateByTermBase {
 }
 
 export interface IChargesRateByTermResponse
-    extends IChargesRateByTermBase,
+    extends IChargesRateByTerm,
         ITimeStamps {
     created_by_id: TEntityId
     updated_by_id: TEntityId

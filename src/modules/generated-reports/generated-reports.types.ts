@@ -12,6 +12,15 @@ import { IUserBase } from '../user/user.types'
 
 export type TGenerateReportType = 'pending' | 'canceled' | 'error' | 'completed'
 
+export interface IGeneratedReportsRequest {
+    user_id: TEntityId
+    organization_id: TEntityId
+    branch_id: TEntityId
+    media_id: TEntityId
+    status: TGenerateReportType
+    progress?: number
+}
+
 export interface IGeneratedReport extends ITimeStamps, IAuditable {
     id: TEntityId
 

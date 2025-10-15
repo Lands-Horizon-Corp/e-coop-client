@@ -10,7 +10,7 @@ export interface ILoanGuaranteedFundRequest {
     increasing_rate: number
 }
 
-export interface ILoanGuaranteedFundResponse
+export interface ILoanGuaranteedFund
     extends ITimeStamps,
         IAuditable,
         IOrgBranchIdentity {

@@ -10,7 +10,7 @@ export interface IInterestRateSchemeRequest {
     description?: string
 }
 
-export interface IInterestRateSchemeResponse
+export interface IInterestRateScheme
     extends ITimeStamps,
         IAuditable,
         IOrgBranchIdentity {

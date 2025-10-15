@@ -20,7 +20,7 @@ export interface IOrganizationDailyUsageRequest {
     total_report_render_time: number
 }
 
-export interface IOrganizationDailyUsageResponse {
+export interface IOrganizationDailyUsage {
     id: TEntityId
     created_at: string
     updated_at: string

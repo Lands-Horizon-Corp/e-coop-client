@@ -1,12 +1,4 @@
-import z from 'zod'
-
-import {
-    IAuditable,
-    IOrgBranchIdentity,
-    ITimeStamps,
-    TEntityId,
-} from '@/types/common'
-import { entityIdSchema } from '@/validation'
+import { IBaseEntityMeta, TEntityId } from '@/types/common'
 
 import { IUser } from '../user/user.types'
 
@@ -18,10 +10,7 @@ export interface IUserRatingRequest {
     remark?: string
 }
 
-export interface IUserRatingResponse
-    extends ITimeStamps,
-        IAuditable,
-        IOrgBranchIdentity {
+export interface IUserRating extends IBaseEntityMeta {
     id: TEntityId
     ratee_user_id: TEntityId
     ratee_user?: IUser
@@ -30,11 +19,3 @@ export interface IUserRatingResponse
     rate: number
     remark: string
 }
-
-export const userRatingRequestSchema = z.object({
-    id: entityIdSchema.optional(),
-    ratee_user_id: entityIdSchema,
-    rater_user_id: entityIdSchema,
-    rate: z.number().min(1).max(5),
-    remark: z.string().max(2000).optional(),
-})

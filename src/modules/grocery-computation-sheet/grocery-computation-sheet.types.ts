@@ -10,7 +10,7 @@ export interface IGroceryComputationSheetRequest {
     description?: string
 }
 
-export interface IGroceryComputationSheetResponse
+export interface IGroceryComputationSheet
     extends ITimeStamps,
         IAuditable,
         IOrgBranchIdentity {

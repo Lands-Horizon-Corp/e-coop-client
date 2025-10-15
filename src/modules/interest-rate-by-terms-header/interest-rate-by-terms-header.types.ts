@@ -5,7 +5,7 @@ import {
     TEntityId,
 } from '@/types/common'
 
-import { IMemberClassificationInterestRateResponse } from '../member-classification-interest-rate'
+import { IMemberClassificationInterestRate } from '../member-classification-interest-rate'
 
 export interface IInterestRateByTermsHeaderRequest {
     member_classification_interest_rate_id: TEntityId
@@ -39,7 +39,7 @@ export interface IInterestRateByTermsHeaderResponse
         IOrgBranchIdentity {
     id: TEntityId
     member_classification_interest_rate_id: TEntityId
-    member_classification_interest_rate?: IMemberClassificationInterestRateResponse
+    member_classification_interest_rate?: IMemberClassificationInterestRate
     header_1: number
     header_2: number
     header_3: number
