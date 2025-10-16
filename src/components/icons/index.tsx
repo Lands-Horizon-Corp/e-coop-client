@@ -54,6 +54,7 @@ import {
     BsFileEarmarkPlayFill as VideoFileFillIcon,
     BsZoomIn as ZoomInIcon,
     BsZoomOut as ZoomOutIcon,
+    BsCompassFill as CompassIcon,
 } from 'react-icons/bs'
 import {
     CgDetailsLess as DetailsIcon,
@@ -572,6 +573,7 @@ export {
     PieChartIcon,
     AccountsIcon,
     PaymentsIcon,
+    CompassIcon,
     HomeFillIcon,
     FacebookIcon,
     SettingsIcon,
@@ -896,6 +898,7 @@ export const IconMap = {
     'FA Bold': FaBoldIcon,
     'QR Code': QrCodeIcon,
     'Dot Big': DotBigIcon,
+    'Compass' : CompassIcon,
     Landmark: LandmarkIcon,
     Language: LanguageIcon,
     Accounts: AccountsIcon,

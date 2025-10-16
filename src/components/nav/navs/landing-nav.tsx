@@ -1,10 +1,13 @@
-import { ReactNode, useState } from 'react'
+import { ReactNode, useState } from 'react';
+
+
 
 import { Link, useLocation } from '@tanstack/react-router'
 
 import { cn } from '@/helpers/tw-utils'
 import { HiBars3 } from 'react-icons/hi2'
 
+import { CompassIcon } from '@/components/icons'
 import NavAuthGroup from '@/components/nav/nav-components/nav-auth-group'
 import NavEcoopLogo from '@/components/nav/nav-components/nav-ecoop-logo'
 import NavThemeToggle from '@/components/nav/nav-components/nav-theme-toggle'
@@ -41,6 +44,11 @@ const navLinks: NavLink[] = [
     {
         name: 'Subscription',
         path: '/subscription',
+    },
+    {
+        name: 'Explore',
+        path: '/explore',
+        icon: <CompassIcon />,
     },
 ]
 
