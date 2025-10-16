@@ -4,7 +4,7 @@ import { IOrganization } from '@/modules/organization'
 
 import { MapMarkedIcon, OpenExternalLinkIcon } from '@/components/icons'
 import ImageDisplay from '@/components/image-display'
-import OpenExternalMap from '@/components/map/open-external-map'
+import { OpenExternalMap } from '@/components/map'
 import PreviewMediaWrapper from '@/components/wrappers/preview-media-wrapper'
 
 import { IClassProps } from '@/types'

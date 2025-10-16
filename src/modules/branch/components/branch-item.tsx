@@ -3,7 +3,7 @@ import { IBranch } from '@/modules/branch'
 
 import { GradientBackground } from '@/components/gradient-background/gradient-background'
 import ImageDisplay from '@/components/image-display'
-import MapPicker from '@/components/map/map-picker/map-picker'
+import MapPicker from '@/components/map/map-picker'
 import { Button } from '@/components/ui/button'
 import { PlainTextEditor } from '@/components/ui/text-editor'
 

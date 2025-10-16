@@ -4,20 +4,25 @@ import { toast } from 'sonner'
 
 import { cn } from '@/helpers/tw-utils'
 
+import { IBaseProps } from '@/types'
+
 import { CheckIcon, CopyIcon } from './icons'
 
-interface Props<TErr = Error> {
+interface Props<TErr = Error> extends IBaseProps {
     textContent: string
     copyInterval?: number
     className?: string
     successText?: string
     successClassName?: string
+    iconClassName?: string
     onCopySuccess?: () => void
     onCopyError?: (error: TErr) => void
 }
 
 const CopyTextButton = <TErr = Error,>({
+    children,
     className,
+    iconClassName,
     textContent,
     successText,
     successClassName,
@@ -42,17 +47,6 @@ const CopyTextButton = <TErr = Error,>({
             })
     }, [copyInterval, onCopyError, onCopySuccess, successText, textContent])
 
-    if (copied)
-        return (
-            <CheckIcon
-                className={cn(
-                    'inline text-primary',
-                    className,
-                    successClassName
-                )}
-            />
-        )
-
     return (
         <button
             className={cn(
@@ -65,7 +59,18 @@ const CopyTextButton = <TErr = Error,>({
                 handleCopy()
             }}
         >
-            <CopyIcon className="size-full" />
+            {copied ? (
+                <CheckIcon
+                    className={cn(
+                        'inline text-primary size-4 mr-1',
+                        className,
+                        successClassName
+                    )}
+                />
+            ) : (
+                <CopyIcon className={cn('inline size-4 mr-1', iconClassName)} />
+            )}
+            {children}
         </button>
     )
 }

@@ -17,6 +17,7 @@ import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import SpySvg from '../src/assets/spy.svg';
 import PageContainer from './components/containers/page-container';
 import Image from './components/image';
+import MapProvider from './components/map/map.provider';
 import LoadingSpinner from './components/spinners/loading-spinner';
 import MouseTrailEffect from './components/ui/mouse-trail-effect';
 import { APP_ENV } from './constants';
@@ -103,7 +104,9 @@ const App = () => {
     return (
         <QueryClientProvider client={queryClient}>
             <ThemeProvider>
-                <AppContent />
+                <MapProvider>
+                    <AppContent />
+                </MapProvider>
             </ThemeProvider>
             <ReactQueryDevtools initialIsOpen={false} />
         </QueryClientProvider>

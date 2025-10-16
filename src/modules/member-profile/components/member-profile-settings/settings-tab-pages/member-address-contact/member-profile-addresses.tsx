@@ -7,10 +7,13 @@ import { useDeleteMemberProfileAddress } from '@/modules/member-address/member-a
 import { IMemberProfile } from '@/modules/member-profile'
 import useConfirmModalStore from '@/store/confirm-modal-store'
 
+import CopyTextButton from '@/components/copy-text-button'
 import {
     BarcodeScanIcon,
     LocationPinIcon,
     MapIcon,
+    MapMarkedIcon,
+    NavigationIcon,
     ParkIcon,
     PencilFillIcon,
     PlusIcon,
@@ -19,6 +22,12 @@ import {
     VillageIcon,
     WoodSignsIcon,
 } from '@/components/icons'
+import MapView from '@/components/map'
+import {
+    constructGoogleMapsViewUrl,
+    redirectToGoogleMapsDirection,
+    redirectToGoogleMapsView,
+} from '@/components/map/map.utils'
 import LoadingSpinner from '@/components/spinners/loading-spinner'
 import { Button } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
@@ -56,9 +65,54 @@ const MemberAddressCard = ({ address }: { address: IMemberAddress }) => {
                     <p className="font-bold">{address.label}</p>
                 </div>
                 <fieldset
-                    className="flex items-center justify-end"
+                    className="flex items-center gap-x-2 justify-end"
                     disabled={isDeleting}
                 >
+                    {address.longitude && address.latitude && (
+                        <>
+                            <CopyTextButton
+                                className="inline mr-2 "
+                                textContent={constructGoogleMapsViewUrl(
+                                    address.latitude as number,
+                                    address.longitude as number
+                                )}
+                            >
+                                Share Direction
+                            </CopyTextButton>
+                            <Button
+                                className="text-sm w-fit bg-transparent"
+                                onClick={() =>
+                                    redirectToGoogleMapsView(
+                                        address.latitude as number,
+                                        address.longitude as number,
+                                        true
+                                    )
+                                }
+                                size="sm"
+                                type="button"
+                                variant="outline"
+                            >
+                                <MapMarkedIcon className="size-4" /> View in
+                                Maps
+                            </Button>
+                            <Button
+                                className="w-fit text-sm bg-transparent"
+                                onClick={() =>
+                                    redirectToGoogleMapsDirection(
+                                        address.latitude as number,
+                                        address.longitude as number,
+                                        true
+                                    )
+                                }
+                                size="sm"
+                                type="button"
+                                variant="outline"
+                            >
+                                <NavigationIcon className="size-4 mr-1" /> Get
+                                Direction
+                            </Button>
+                        </>
+                    )}
                     <Button
                         className="!size-fit px-1.5 py-1.5 text-muted-foreground/40"
                         hoverVariant="destructive"
@@ -103,43 +157,64 @@ const MemberAddressCard = ({ address }: { address: IMemberAddress }) => {
                         No Address <WoodSignsIcon className="ml-1 inline" />
                     </span>
                 )}
-                <div className="grid grid-cols-2 gap-4 gap-y-2 py-4 text-sm">
-                    <span className="text-muted-foreground">
-                        <MapIcon className="mr-2 inline text-muted-foreground" />
-                        Country
-                    </span>
-                    <p>{address.country_code}</p>
-                    <span className="text-muted-foreground">
-                        <WoodSignsIcon className="mr-2 inline font-light text-muted-foreground" />
-                        State / Province
-                    </span>
-                    <p>{address.province_state}</p>
-                    <span className="text-muted-foreground">
-                        <TreeCityIcon className="mr-2 inline font-light text-muted-foreground" />
-                        City
-                    </span>
-                    <p>{address.city}</p>
-                    <span className="text-muted-foreground">
-                        <BarcodeScanIcon className="mr-2 inline text-muted-foreground" />
-                        Postal Code
-                    </span>
-                    <p>{address.postal_code}</p>
+                <div className="grid grid-cols-12">
+                    <div className="grid grid-cols-2 col-span-4 gap-4 z-10 gap-y-2 py-4 shrink-0 w-[180%] text-sm">
+                        <span className="text-muted-foreground">
+                            <MapIcon className="mr-2 inline text-muted-foreground" />
+                            Country
+                        </span>
+                        <p>{address.country_code}</p>
+                        <span className="text-muted-foreground">
+                            <WoodSignsIcon className="mr-2 inline font-light text-muted-foreground" />
+                            State / Province
+                        </span>
+                        <p>{address.province_state}</p>
+                        <span className="text-muted-foreground">
+                            <TreeCityIcon className="mr-2 inline font-light text-muted-foreground" />
+                            City
+                        </span>
+                        <p>{address.city}</p>
+                        <span className="text-muted-foreground">
+                            <BarcodeScanIcon className="mr-2 inline text-muted-foreground" />
+                            Postal Code
+                        </span>
+                        <p>{address.postal_code}</p>
 
-                    {address.barangay && (
-                        <>
-                            <span className="text-muted-foreground">
-                                <VillageIcon className="mr-2 inline text-muted-foreground" />
-                                Barangay
-                            </span>
-                            <p>{address.barangay}</p>
-                        </>
+                        {address.barangay && (
+                            <>
+                                <span className="text-muted-foreground">
+                                    <VillageIcon className="mr-2 inline text-muted-foreground" />
+                                    Barangay
+                                </span>
+                                <p>{address.barangay}</p>
+                            </>
+                        )}
+
+                        <span className="text-muted-foreground">
+                            <ParkIcon className="mr-2 inline text-muted-foreground" />
+                            Landmark
+                        </span>
+                        <p>{address.landmark}</p>
+                    </div>
+                    {address.id && address.latitude && address.longitude && (
+                        <div className="relative col-span-8">
+                            <div className="absolute top-0 right-0 inset-0">
+                                <div className="relative size-full overflow-clip shrink-0">
+                                    <MapView
+                                        locations={[
+                                            {
+                                                title: address?.label || '',
+                                                lat: address?.latitude,
+                                                lng: address?.longitude,
+                                            },
+                                        ]}
+                                        viewOnly
+                                    />
+                                    <div className="absolute pointer-events-none inset-0 bg-gradient-to-l from-transparent to-background" />
+                                </div>
+                            </div>
+                        </div>
                     )}
-
-                    <span className="text-muted-foreground">
-                        <ParkIcon className="mr-2 inline text-muted-foreground" />
-                        Landmark
-                    </span>
-                    <p>{address.landmark}</p>
                 </div>
             </div>
         </div>

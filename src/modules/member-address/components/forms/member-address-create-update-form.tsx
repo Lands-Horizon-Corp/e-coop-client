@@ -9,6 +9,7 @@ import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
 
 import { CountryCombobox } from '@/components/comboboxes/country-combobox'
 import FormFooterResetSubmit from '@/components/form-components/form-footer-reset-submit'
+import MapPicker from '@/components/map/map-picker'
 import Modal, { IModalProps } from '@/components/modals/modal'
 import { Form } from '@/components/ui/form'
 import FormFieldWrapper from '@/components/ui/form-field-wrapper'
@@ -59,6 +60,8 @@ const MemberAddressCreateUpdateForm = ({
             barangay: '',
             landmark: '',
             address: '',
+            longitude: 121.046351,
+            latitude: 14.780043,
             ...formProps.defaultValues,
         },
     })
@@ -234,6 +237,34 @@ const MemberAddressCreateUpdateForm = ({
                                     placeholder="Landmark"
                                 />
                             )}
+                        />
+                        <MapPicker
+                            className="w-full"
+                            disabled={isPending || formProps.readOnly}
+                            onChange={(location) => {
+                                if (location) {
+                                    form.setValue('latitude', location.lat, {
+                                        shouldDirty: true,
+                                    })
+                                    form.setValue('longitude', location.lng, {
+                                        shouldDirty: true,
+                                    })
+                                } else {
+                                    form.setValue('latitude', 0, {
+                                        shouldDirty: true,
+                                    })
+                                    form.setValue('longitude', 0, {
+                                        shouldDirty: true,
+                                    })
+                                }
+                            }}
+                            placeholder="Choose/Select exact location on map"
+                            title="Pinpoint Address Location"
+                            value={{
+                                lat: form.watch('latitude') || 14.780043,
+                                lng: form.watch('longitude') || 121.046351,
+                            }}
+                            variant="outline"
                         />
                     </fieldset>
                 </fieldset>

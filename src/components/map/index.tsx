@@ -1,200 +1,292 @@
-import { useCallback, useEffect, useRef, useState } from 'react'
+'use client'
 
-import logger from '@/helpers/loggers/logger'
+import React, { forwardRef, useCallback, useEffect, useRef } from 'react'
+
 import { cn } from '@/helpers/tw-utils'
-import { Pin, TMainMapProps, TMapWithClickProps } from '@/types/map/map'
-import L, { LatLngExpression, latLng } from 'leaflet'
-import 'leaflet/dist/leaflet.css'
-import {
-    MapContainer,
-    TileLayer,
-    ZoomControl,
-    useMapEvent,
-} from 'react-leaflet'
+import { useTheme } from '@/modules/settings/provider/theme-provider'
+import { GoogleMap, type GoogleMapProps } from '@react-google-maps/api'
 
-import LayerControl from './layer-control'
-import MapSearch from './map-search'
+import { IBaseProps } from '@/types'
 
-const getLocationDescription = async (latlng: LatLngExpression) => {
-    const { lat, lng } = latLng(latlng)
-    const reverseGeocodeUrl = `https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lng}&format=json`
-    try {
-        const response = await fetch(reverseGeocodeUrl)
-        const data = await response.json()
-        return data.display_name || 'Address not found'
-    } catch (error) {
-        logger.error('Error fetching reverse geocode data:', error)
-    }
+import { SadFaceIcon } from '../icons'
+import { useMap } from './map.provider'
+import { constructGoogleMapsViewUrl } from './map.utils'
+
+export interface MapLocation {
+    lat: number
+    lng: number
+    title?: string
 }
 
-const MapWithClick = ({ onLocationFound }: TMapWithClickProps) => {
-    useMapEvent('click', async (e) => {
-        onLocationFound(e.latlng)
-    })
-    return null
+export interface MapViewProps extends GoogleMapProps {
+    viewOnly?: boolean
+    locations: MapLocation[]
+    height?: string
+    width?: string
+    zoom?: number
+    selectedLocation?: `${number}-${number}`
+    onLocationSelect?: (location: MapLocation) => void
+    showActions?: boolean
+    className?: string
+    mapContainerClassName?: string
+    style?: React.CSSProperties
+    mapOptions?: google.maps.MapOptions
+    children?: React.ReactNode
 }
 
-const Map = ({
-    zoom,
-    style,
-    center,
-    minZoom,
-    maxZoom,
-    children,
-    className,
-    hideControls,
-    searchClassName,
+const defaultMapContainerStyle: React.CSSProperties = {
+    width: '100%',
+}
+
+export const MapView: React.FC<MapViewProps> = ({
+    locations,
+    zoom = 10,
+    selectedLocation,
+    onLocationSelect,
     viewOnly = false,
-    zoomControl = false,
-    multiplePins = false,
+    className,
+    style,
     mapContainerClassName,
-    scrollWheelZoom = true,
-    defaultMarkerPins = [],
-    hideLayersControl = false,
-    whenReady,
-    onCoordinateClick,
-    onMultipleCoordinatesChange,
-}: TMainMapProps) => {
-    const [, setSearchedAddress] = useState('')
-    const [, setSelectedPins] = useState<Pin[]>([])
-    const [map, setMap] = useState<L.Map | null>(null)
-    const markerRefs = useRef<{ [key: string]: L.Marker }>({})
+    mapOptions = {
+        fullscreenControl: false,
+        zoomControl: false,
+        keyboardShortcuts: false,
+        mapTypeControl: false,
+        streetViewControl: false,
+    },
+    ...props
+}) => {
+    const { isLoaded, loadError, errorMessage } = useMap()
 
-    const handleMapReady = useCallback((mapInstance: L.Map | null) => {
-        setMap(mapInstance)
+    const { resolvedTheme } = useTheme()
+    const mapRef = useRef<google.maps.Map | null>(null)
+    const markersRef = useRef<
+        Map<`${number}-${number}`, google.maps.marker.AdvancedMarkerElement>
+    >(new Map())
+
+    // Calculate center from locations
+    const center = React.useMemo(() => {
+        if (locations.length === 0) {
+            return { lat: 0, lng: 0 }
+        }
+
+        if (locations.length === 1) {
+            return { lat: locations[0].lat, lng: locations[0].lng }
+        }
+
+        // Calculate center manually for multiple locations
+        const latSum = locations.reduce((sum, loc) => sum + loc.lat, 0)
+        const lngSum = locations.reduce((sum, loc) => sum + loc.lng, 0)
+
+        return {
+            lat: latSum / locations.length,
+            lng: lngSum / locations.length,
+        }
+    }, [locations])
+
+    // Create bounds after Google Maps is loaded
+    const createBounds = useCallback(() => {
+        if (!window.google?.maps || locations.length <= 1) {
+            return null
+        }
+
+        const bounds = new window.google.maps.LatLngBounds()
+        locations.forEach((location) => {
+            bounds.extend({ lat: location.lat, lng: location.lng })
+        })
+
+        return bounds
+    }, [locations])
+
+    const createMarkers = useCallback(async () => {
+        if (
+            !mapRef.current ||
+            !window.google?.maps ||
+            !isLoaded ||
+            locations.length === 0
+        )
+            return
+
+        // Clear existing markers
+        markersRef.current.forEach((marker) => {
+            marker.map = null
+        })
+        markersRef.current.clear()
+
+        try {
+            // Import the marker library dynamically
+            const { AdvancedMarkerElement, PinElement } =
+                (await window.google.maps.importLibrary(
+                    'marker'
+                )) as google.maps.MarkerLibrary
+
+            // Create markers for each location
+            locations.forEach((location) => {
+                // Create pin element with custom styling
+                const pinElement = new PinElement({
+                    background: '#ef4444',
+                    borderColor: '#dc2626',
+                    glyphColor: 'white',
+                    scale: 1,
+                })
+
+                const marker = new AdvancedMarkerElement({
+                    map: mapRef.current,
+                    position: { lat: location.lat, lng: location.lng },
+                    title: location.title,
+                    content: pinElement.element,
+                })
+
+                // Add click listener to marker
+                marker.addListener('click', () => {
+                    onLocationSelect?.(location)
+                })
+
+                markersRef.current.set(
+                    `${location.lat}-${location.lng}`,
+                    marker
+                )
+            })
+
+            // Focus on selected location if provided
+            if (selectedLocation) {
+                const selectedLoc = locations.find(
+                    (loc) => `${loc.lat}-${loc.lng}` === selectedLocation
+                )
+                if (selectedLoc && mapRef.current) {
+                    mapRef.current.panTo({
+                        lat: selectedLoc.lat,
+                        lng: selectedLoc.lng,
+                    })
+                    mapRef.current.setZoom(15)
+                }
+            }
+        } catch {
+            // Silently handle marker creation failure
+            // The map will still be functional without the markers
+        }
+    }, [locations, selectedLocation, onLocationSelect, isLoaded])
+
+    const onMapLoad = useCallback(
+        (map: google.maps.Map) => {
+            mapRef.current = map
+
+            // Fit bounds if multiple locations
+            if (locations.length > 1) {
+                const bounds = createBounds()
+                if (bounds) {
+                    map.fitBounds(bounds, 50)
+                }
+            }
+
+            // Create markers after a short delay
+            setTimeout(() => createMarkers(), 100)
+        },
+        [locations.length, createBounds, createMarkers]
+    )
+
+    // Update markers when locations or selection changes
+    useEffect(() => {
+        if (isLoaded && mapRef.current) {
+            createMarkers()
+        }
+    }, [locations, selectedLocation, createMarkers, isLoaded])
+
+    // Cleanup on unmount
+    useEffect(() => {
+        const t = markersRef.current
+
+        return () => {
+            t.forEach((marker) => {
+                marker.map = null
+            })
+            t.clear()
+        }
     }, [])
 
-    const addMarker = useCallback(
-        async (latLng: LatLngExpression) => {
-            const { lat, lng } = latLng as L.LatLngLiteral
-            const markerKey = `${lat},${lng}`
-
-            if (!multiplePins) {
-                Object.values(markerRefs.current).forEach((marker) =>
-                    marker.remove()
-                )
-                markerRefs.current = {}
-                setSelectedPins([])
-            }
-
-            if (markerRefs.current[markerKey]) {
-                markerRefs.current[markerKey].remove()
-            }
-
-            const marker = L.marker(latLng).addTo(map as L.Map)
-            markerRefs.current[markerKey] = marker
-
-            const address = await getLocationDescription(latLng)
-            marker.bindPopup(address).openPopup()
-        },
-        [map, multiplePins]
-    )
-
-    const handleLocationFound = useCallback(
-        async (latLng: LatLngExpression) => {
-            const newPin: Pin = { id: Date.now(), position: latLng }
-
-            if (multiplePins) {
-                setSelectedPins((prevPins) => {
-                    const updatedPins = [...prevPins, newPin]
-
-                    if (onMultipleCoordinatesChange) {
-                        const newSelectedPositions = updatedPins.map(
-                            (pin) => pin.position
-                        )
-                        onMultipleCoordinatesChange(newSelectedPositions)
-                    }
-
-                    return updatedPins
-                })
-            } else {
-                if (onCoordinateClick) {
-                    onCoordinateClick(latLng as L.LatLngLiteral)
-                }
-                setSelectedPins([newPin])
-            }
-            addMarker(latLng)
-        },
-        [
-            addMarker,
-            multiplePins,
-            onMultipleCoordinatesChange,
-            onCoordinateClick,
-        ]
-    )
-
-    useEffect(() => {
-        if (handleMapReady) {
-            handleMapReady(map)
-        }
-        if (map && defaultMarkerPins.length > 0) {
-            const container = map.getContainer()
-            const layerControlElement = container.querySelector(
-                '.leaflet-control-layers.leaflet-control'
-            ) as HTMLElement | null
-
-            if (layerControlElement) {
-                if (hideLayersControl) {
-                    layerControlElement.classList.add('hidden')
-                } else {
-                    layerControlElement.classList.remove('hidden')
-                }
-            }
-
-            defaultMarkerPins.forEach(({ lat, lng }) => {
-                const latLng: LatLngExpression = { lat, lng }
-                const markerKey = `${lat},${lng}`
-
-                if (!markerRefs.current[markerKey]) {
-                    const marker = L.marker(latLng).addTo(map)
-                    markerRefs.current[markerKey] = marker
-                }
-            })
-        }
-    }, [map, defaultMarkerPins, handleMapReady, hideLayersControl])
+    const mapContainerStyle: React.CSSProperties = {
+        ...defaultMapContainerStyle,
+        ...style,
+    }
 
     return (
         <div
             className={cn(
-                'relative flex w-full flex-col gap-4',
-                viewOnly ? 'p-0' : 'p-5 shadow-sm',
-                className
+                'size-full rounded-md overflow-clip',
+                className,
+                viewOnly && 'pointer-events-none'
             )}
         >
-            {!viewOnly && (
-                <MapSearch
-                    className={searchClassName}
-                    map={map}
-                    onLocationFound={handleLocationFound}
-                    setSearchedAddress={setSearchedAddress}
-                />
+            {errorMessage && (
+                <div className="text-center size-full flex items-center justify-center">
+                    <div>
+                        <SadFaceIcon />
+                        <p className="text-sm text-center px-4 py-1 rounded-md text-muted-foreground">
+                            {errorMessage}
+                        </p>
+                    </div>
+                </div>
             )}
-            <MapContainer
-                center={center}
-                className={cn(
-                    `!z-0 size-full flex-grow rounded-lg`,
-                    mapContainerClassName
-                )}
-                maxZoom={maxZoom}
-                minZoom={minZoom}
-                ref={setMap}
-                scrollWheelZoom={scrollWheelZoom}
-                style={style}
-                whenReady={whenReady}
-                zoom={zoom}
-                zoomControl={zoomControl}
-            >
-                <TileLayer
-                    attribution="&copy; OpenStreetMap contributors"
-                    url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                />
-                <LayerControl />
-                <MapWithClick onLocationFound={handleLocationFound} />
-                {!hideControls && <ZoomControl position="bottomright" />}
-                {children}
-            </MapContainer>
+            {!isLoaded && !loadError && (
+                <div className="text-center size-full flex items-center justify-center">
+                    <div>
+                        <div className="border-primary mx-auto mb-2 size-4 animate-spin rounded-full border-b-2" />
+                        <p className="text-sm">Loading map...</p>
+                    </div>
+                </div>
+            )}
+            {isLoaded && !loadError && (
+                <>
+                    <GoogleMap
+                        center={center}
+                        key={resolvedTheme}
+                        mapContainerClassName={cn(
+                            'size-full',
+                            mapContainerClassName
+                        )}
+                        mapContainerStyle={mapContainerStyle}
+                        onLoad={onMapLoad}
+                        options={{
+                            disableDefaultUI: true,
+                            zoomControl: true,
+                            streetViewControl: false,
+                            mapTypeControl: false,
+                            fullscreenControl: true,
+                            gestureHandling: 'cooperative' as const,
+                            clickableIcons: false,
+                            colorScheme: resolvedTheme.toUpperCase(),
+                            mapId: '7315fed6ff6d5145e4c926ff',
+                            ...mapOptions,
+                        }}
+                        zoom={zoom}
+                        {...props}
+                    />
+
+                    {viewOnly && (
+                        <div className="absolute size-full inset-0 z-50 bg-black-400" />
+                    )}
+                </>
+            )}
         </div>
     )
 }
 
-export default Map
+export const OpenExternalMap = forwardRef<
+    HTMLAnchorElement,
+    IBaseProps & {
+        lon: number
+        lat: number
+    }
+>(({ lon, lat, className, ...props }, ref) => {
+    return (
+        <a
+            className={cn('', className)}
+            href={constructGoogleMapsViewUrl(lat, lon)}
+            ref={ref}
+            target="_blank"
+            {...props}
+        />
+    )
+})
+
+export default MapView

@@ -31,7 +31,7 @@ import {
     TrashIcon,
 } from '@/components/icons'
 import ImageDisplay from '@/components/image-display'
-import MapPicker from '@/components/map/map-picker/map-picker'
+import MapPicker from '@/components/map/map-picker'
 import { Button } from '@/components/ui/button'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { Skeleton } from '@/components/ui/skeleton'

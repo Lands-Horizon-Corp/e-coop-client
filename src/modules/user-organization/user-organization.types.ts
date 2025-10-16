@@ -98,6 +98,9 @@ export interface IUserOrganizationSettings {
     settings_payment_type_default_value_id?: TEntityId | null
     settings_payment_type_default_value?: IPaymentType
 
+    // TODO: Jervx
+    // - Add to user org settings with Currency Picker
+
     settings_currency_default_value_id?: TEntityId | null
     settings_currency_default_value?: ICurrency
 }

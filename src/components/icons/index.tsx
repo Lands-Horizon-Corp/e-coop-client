@@ -401,6 +401,7 @@ import {
     TbTransactionDollar as TransactionDollarIcon,
     TbUnlink as UnlinkIcon,
 } from 'react-icons/tb'
+import { TfiFaceSad as SadFaceIcon } from 'react-icons/tfi'
 import { TiBook as BookIcon, TiPipette as PipetteIcon } from 'react-icons/ti'
 import {
     VscBracketError as BracketErrorIcon,
@@ -520,6 +521,7 @@ export {
     EyeOffIcon,
     WrenchIcon,
     CommandIcon,
+    SadFaceIcon,
     TwitterIcon,
     EyeViewIcon,
     CodeSandBox,
@@ -925,6 +927,7 @@ export const IconMap = {
     'User Tag': UserTagIcon,
     'FA Check': FaCheckIcon,
     'FA Times': FaTimesIcon,
+    'Sad Face': SadFaceIcon,
     Devices: DevicesIcon,
     Footsteps: FootstepsIcon,
     Dashboard: DashboardIcon,
