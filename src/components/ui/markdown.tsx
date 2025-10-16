@@ -171,10 +171,11 @@ const CodeBlock = memo(function CodeBlock({
     }
 
     return (
-        <div className="relative group my-4" id={id}>
+        <div className="relative group my-4 ecoop-scroll" id={id}>
             {allowCopy && <CopyButton text={code} />}
             {isVisible ? (
                 <SyntaxHighlighter
+                    className="ecoop-scroll"
                     customStyle={{
                         margin: 0,
                         borderRadius: '0.5rem',
@@ -437,7 +438,7 @@ export const Markdown = memo(function Markdown({
             ) : (
                 <CodeBlock
                     allowCopy={allowCopy}
-                    className={className}
+                    className={cn('ecoop-scroll', className)}
                     disableHighlighting={disableHighlighting}
                     showLineNumbers={showLineNumbers}
                     theme={theme}
@@ -458,7 +459,7 @@ export const Markdown = memo(function Markdown({
     if (!content || !content.trim()) return null
 
     return (
-        <div className={cn('max-w-none', className)}>
+        <div className={cn('max-w-none ecoop-scroll', className)}>
             <ErrorBoundary>
                 <ReactMarkdown
                     components={components}
