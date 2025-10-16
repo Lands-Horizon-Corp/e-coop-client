@@ -5,12 +5,16 @@ import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
 import { cn } from '@/helpers'
 import { withToastCallbacks } from '@/helpers/callback-helper'
 import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
-import { AccountPicker } from '@/modules/account'
-import { PaymentTypeCombobox } from '@/modules/transaction'
+import { AccountPicker } from '@/modules/account';
+import CurrencyCombobox from '@/modules/currency/components/currency-combobox';
+import { PaymentTypeCombobox } from '@/modules/transaction';
 
-import FormFooterResetSubmit from '@/components/form-components/form-footer-reset-submit'
+
+
+import FormFooterResetSubmit from '@/components/form-components/form-footer-reset-submit';
 import {
     BillIcon,
+    CoinsStackIcon,
     CreditCardIcon,
     InfoIcon,
     ReceiptIcon,
@@ -546,6 +550,42 @@ const UserOrgSettingsForm = ({
                                     value={form.getValues(
                                         'settings_accounting_withdraw_default_value'
                                     )}
+                                />
+                            )}
+                        />
+                    </div>
+
+                    <Separator />
+
+                    <div className="space-y-4 p-4 bg-secondary/60 dark:bg-popover rounded-xl">
+                        <div className="flex items-center gap-3">
+                            <div className="size-fit rounded-full bg-purple-100 p-2 dark:bg-purple-900/20">
+                                <CoinsStackIcon className="h-5 w-5 text-purple-600 dark:text-purple-400" />
+                            </div>
+                            <div>
+                                <h3 className="font-semibold">Currency</h3>
+                                <p className="text-xs text-muted-foreground">
+                                    Manage currency settings
+                                </p>
+                            </div>
+                        </div>
+
+                        <FormFieldWrapper
+                            control={form.control}
+                            label={
+                                <span>
+                                    Default Payment Type{' '}
+                                    <InfoTooltip content="Select the default payment type to be used for payment transactions. This type will be automatically selected during payment operations, ensuring consistency and efficiency." />
+                                </span>
+                            }
+                            name="settings_currency_default_value_id"
+                            render={({ field }) => (
+                                <CurrencyCombobox
+                                    {...field}
+                                    onChange={(currency) => {
+                                        field.onChange(currency?.id)
+                                    }}
+                                    value={field.value}
                                 />
                             )}
                         />

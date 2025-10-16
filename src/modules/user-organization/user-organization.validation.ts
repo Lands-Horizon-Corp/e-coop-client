@@ -1,8 +1,16 @@
-import z from 'zod'
+import z from 'zod';
 
-import { descriptionTransformerSanitizer, entityIdSchema } from '@/validation'
 
-import { USER_TYPE } from '../user/user.constants'
+
+import { descriptionTransformerSanitizer, entityIdSchema } from '@/validation';
+
+
+
+import { USER_TYPE } from '../user/user.constants';
+
+
+
+
 
 export const UserOrgPermissionSchema = z.object({
     permission_name: z.string().min(1, 'Permission name is required'),
@@ -68,7 +76,7 @@ export const UserOrganizationSettingsSchema = z.object({
         .nullable(),
     settings_accounting_withdraw_default_value: z.any().optional(),
 
-    settings_currency_default_value_id: entityIdSchema.optional().nullable(),
+    settings_currency_default_value_id: entityIdSchema.optional(),
     settings_currency_default_value: z.any().optional(),
 })
 
