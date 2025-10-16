@@ -1,14 +1,17 @@
-import { useEffect } from 'react'
+import { useEffect } from 'react';
 
-import { useQueryClient } from '@tanstack/react-query'
+
+
+import { useQueryClient } from '@tanstack/react-query';
 import { Path, useForm } from 'react-hook-form'
 
-import { zodResolver } from '@hookform/resolvers/zod'
+import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
 
 import { SHORTCUT_SCOPES } from '@/constants'
 import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
 import { AccountPicker } from '@/modules/account'
 import BankCombobox from '@/modules/bank/components/bank-combobox'
+import { CurrencyInput } from '@/modules/currency'
 import { IGeneralLedger } from '@/modules/general-ledger'
 import { IMedia } from '@/modules/media'
 import MemberPicker from '@/modules/member-profile/components/member-picker'
@@ -21,7 +24,7 @@ import {
 } from '@/modules/quick-transfer'
 import {
     PaymentTypeCombobox,
-    TransactionAmountField,
+    // TransactionAmountField,
     TransactionModalJointMember,
     TransactionNoFoundBatch,
     TransactionReferenceNumber,
@@ -88,7 +91,7 @@ export const QuickTransferTransactionForm = ({
     } = useDepositWithdrawStore()
 
     const form = useForm<TQuickWithdrawSchemaFormValues>({
-        resolver: zodResolver(QuickWithdrawSchema),
+        resolver: standardSchemaResolver(QuickWithdrawSchema),
         defaultValues: {
             ...defaultValues,
             account: defaultAccount,
@@ -365,6 +368,7 @@ export const QuickTransferTransactionForm = ({
                         render={({ field }) => (
                             <AccountPicker
                                 disabled={isDisabled('account_id')}
+                                nameOnly
                                 onSelect={(account) => {
                                     if (isDisabled('account_id')) return
                                     field.onChange(account.id)
@@ -386,10 +390,13 @@ export const QuickTransferTransactionForm = ({
                         control={form.control}
                         label="Amount"
                         name="amount"
-                        render={({ field }) => (
-                            <TransactionAmountField
+                        render={({ field: { onChange, ...field } }) => (
+                            <CurrencyInput
                                 {...field}
+                                currency={form.watch('account')?.currency}
                                 disabled={isDisabled('amount')}
+                                onValueChange={(newValue) => onChange(newValue)}
+                                placeholder="Amount"
                             />
                         )}
                     />

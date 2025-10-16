@@ -9,67 +9,63 @@ import { formatNumber } from '@/helpers'
 import { dateAgo, toInputDateString } from '@/helpers/date-utils'
 import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
 import { AccountTypeBadge } from '@/modules/account'
-import { useAuthUserWithOrgBranch } from '@/modules/authentication/authgentication.store'
-import BankCombobox from '@/modules/bank/components/bank-combobox'
-import { TGeneralLedgerSource } from '@/modules/general-ledger'
-import { ILoanPayableAccount } from '@/modules/loan-transaction'
-import { IMedia } from '@/modules/media'
-import { IPaymentType } from '@/modules/payment-type'
-import {
-    ITransaction,
-    PaymentTypeCombobox,
-    TransactionAmountField,
-    useCreateMultiTransactionPayment,
-    useCreateTransaction,
-} from '@/modules/transaction'
+import { useAuthUserWithOrgBranch } from '@/modules/authentication/authgentication.store';
+import BankCombobox from '@/modules/bank/components/bank-combobox';
+import { ICurrency } from '@/modules/currency';
+import CurrencyInput from '@/modules/currency/components/currency-input';
+import { TGeneralLedgerSource } from '@/modules/general-ledger';
+import { ILoanPayableAccount } from '@/modules/loan-transaction';
+import { IMedia } from '@/modules/media';
+import { IPaymentType } from '@/modules/payment-type';
+import { ITransaction, PaymentTypeCombobox, useCreateMultiTransactionPayment, useCreateTransaction } from '@/modules/transaction';
 
-import FormFooterResetSubmit from '@/components/form-components/form-footer-reset-submit'
-import {
-    CalendarNumberIcon,
-    HashIcon,
-    SignatureLightIcon,
-    TextFileFillIcon,
-    WandSparkleIcon,
-} from '@/components/icons'
-import { Button } from '@/components/ui/button'
-import { Form } from '@/components/ui/form'
-import FormFieldWrapper from '@/components/ui/form-field-wrapper'
-import ImageField from '@/components/ui/image-field'
-import { Input } from '@/components/ui/input'
-import InputDate from '@/components/ui/input-date'
-import {
-    Popover,
-    PopoverContent,
-    PopoverTrigger,
-} from '@/components/ui/popover'
-import { Separator } from '@/components/ui/separator'
-import SignatureField from '@/components/ui/signature-field'
-import { Textarea } from '@/components/ui/textarea'
 
-import { useFormHelper } from '@/hooks/use-form-helper'
 
-import { IForm, TEntityId } from '@/types'
+import FormFooterResetSubmit from '@/components/form-components/form-footer-reset-submit';
+import { CalendarNumberIcon, HashIcon, SignatureLightIcon, TextFileFillIcon, WandSparkleIcon } from '@/components/icons';
+import { Button } from '@/components/ui/button';
+import { Form } from '@/components/ui/form';
+import FormFieldWrapper from '@/components/ui/form-field-wrapper';
+import ImageField from '@/components/ui/image-field';
+import { Input } from '@/components/ui/input';
+import InputDate from '@/components/ui/input-date';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { Separator } from '@/components/ui/separator';
+import SignatureField from '@/components/ui/signature-field';
+import { Textarea } from '@/components/ui/textarea';
 
-import {
-    LoanPayablePaymentSchema,
-    TLoanPayablePaymentSchema,
-} from '../../loan-payment.validation'
+
+
+import { useFormHelper } from '@/hooks/use-form-helper';
+
+
+
+import { IForm, TEntityId } from '@/types';
+
+
+
+import { LoanPayablePaymentSchema, TLoanPayablePaymentSchema } from '../../loan-payment.validation';
+
+
+
+
 
 export interface LoanPayablesFormProps
     extends IForm<
         Partial<TLoanPayablePaymentSchema>,
-        any,
+        ITransaction,
         Error,
         TLoanPayablePaymentSchema
     > {
     payables: ILoanPayableAccount[]
     memberProfileId: TEntityId
-    loanTransacitonId: TEntityId
+    currency?: ICurrency
     className?: string
 }
 
 const LoanPayablesForm = ({
     payables,
+    currency,
     className,
     ...formProps
 }: LoanPayablesFormProps) => {
@@ -98,6 +94,7 @@ const LoanPayablesForm = ({
             is_reference_number_checked: false,
             payables: payables.map((p) => ({
                 account_id: p.account_id,
+                account: p.account,
                 reference_number: '',
                 amount: p.suggested_payment_amount || 0,
                 payment_type: settings_payment_type_default_value || undefined,
@@ -121,10 +118,8 @@ const LoanPayablesForm = ({
         0
     )
 
-    const handleTotalAmountChange = (
-        e: React.ChangeEvent<HTMLInputElement>
-    ) => {
-        let remaining = Number(e.target.value)
+    const handleTotalAmountChange = (amount: number) => {
+        let remaining = amount
         if (isNaN(remaining)) return
 
         const newPayables = payables.map((p) => {
@@ -133,6 +128,7 @@ const LoanPayablesForm = ({
             remaining -= alloc
             return {
                 account_id: p.account_id,
+                account: p.account,
                 reference_number: form.getValues('reference_number'),
                 amount: parseFloat(alloc.toFixed(2)),
                 entry_date: toInputDateString(new Date()),
@@ -140,7 +136,7 @@ const LoanPayablesForm = ({
             }
         })
 
-        form.setValue('total_amount', Number(e.target.value))
+        form.setValue('total_amount', amount)
         form.setValue('payables', newPayables)
     }
 
@@ -181,7 +177,7 @@ const LoanPayablesForm = ({
                     })),
                 })
                 toast.success('Payment complete!', { id: toastId })
-                formProps.onSuccess?.(data)
+                formProps.onSuccess?.(focusedTransaction)
             }
         } catch (error) {
             toast.error(
@@ -223,15 +219,16 @@ const LoanPayablesForm = ({
                         control={form.control}
                         label="Disbursable Amount"
                         name="total_amount"
-                        render={({ field }) => (
-                            <TransactionAmountField
+                        render={({ field: { onChange, ...field } }) => (
+                            <CurrencyInput
                                 {...field}
-                                className="font-semibold"
+                                currency={currency}
                                 disabled={isDisabled(field.name)}
-                                isDefault
-                                onChange={(e) => {
-                                    field.onChange(e)
-                                    handleTotalAmountChange(e)
+                                onValueChange={(newValue) => {
+                                    onChange(newValue)
+                                    handleTotalAmountChange(
+                                        newValue ? Number(newValue) : 0
+                                    )
                                 }}
                                 placeholder="Disbursable Amount"
                             />
@@ -360,54 +357,33 @@ const LoanPayablesForm = ({
                                         )}
                                     />
                                     <FormFieldWrapper
-                                        className="w-2/6"
+                                        className="w-3/6"
                                         control={form.control}
                                         label="Amount"
                                         name={`payables.${idx}.amount`}
-                                        render={({ field }) => (
-                                            <TransactionAmountField
-                                                id={field.name}
-                                                isDefault
+                                        render={({
+                                            field: { onChange, ...field },
+                                        }) => (
+                                            <CurrencyInput
                                                 {...field}
+                                                currency={
+                                                    form.watch(
+                                                        `payables.${idx}.account`
+                                                    )?.currency
+                                                }
                                                 disabled={isDisabled(
                                                     `payables.${idx}.amount`
                                                 )}
-                                                onChange={(value) => {
-                                                    field.onChange(value)
+                                                id={field.name}
+                                                onValueChange={(newValue) => {
+                                                    onChange(newValue)
                                                     handlePayableAmountChange(
                                                         idx,
-                                                        Number(
-                                                            value.target.value
-                                                        ) || 0
+                                                        Number(newValue) || 0
                                                     )
                                                 }}
+                                                placeholder="Amount"
                                             />
-                                            // <Input
-                                            //     {...field}
-                                            //     autoComplete="off"
-                                            //     className=""
-                                            //     disabled={isDisabled(
-                                            //         field.name
-                                            //     )}
-                                            //     id={field.name}
-                                            //     min={0}
-                                            //     onChange={(e) => {
-                                            //         field.onChange(
-                                            //             parseFloat(
-                                            //                 e.target.value
-                                            //             ) || 0
-                                            //         )
-                                            //         handlePayableAmountChange(
-                                            //             idx,
-                                            //             parseFloat(
-                                            //                 e.target.value
-                                            //             ) || 0
-                                            //         )
-                                            //     }}
-                                            //     placeholder="Amount"
-                                            //     step="0.01"
-                                            //     type="number"
-                                            // />
                                         )}
                                     />
 

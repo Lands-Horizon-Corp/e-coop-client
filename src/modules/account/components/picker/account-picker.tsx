@@ -150,6 +150,7 @@ const AccountPicker = ({
                                 </span>
                             )}
                             <span className="text-ellipsis text-left text-foreground/80">
+                                {Account.currency?.emoji ? `${Account.currency?.emoji} ` : '🏳️ '}
                                 {Account.name}
                                 <br />
                                 <span className="text-xs text-muted-foreground/70">
@@ -207,7 +208,7 @@ const AccountPicker = ({
                 >
                     <Button
                         className={cn(
-                            'w-full items-center justify-between rounded-md border bg-background p-0 px-2',
+                            'w-full items-center justify-between rounded-md border bg-background p-0 px-1',
                             triggerClassName
                         )}
                         disabled={disabled}

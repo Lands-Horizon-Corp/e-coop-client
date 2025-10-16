@@ -84,6 +84,7 @@ const AccountCreateUpdateForm = ({
             compassion_fund: false,
             compassion_fund_amount: 0,
             icon: 'Money Bag',
+            computation_type: ComputationTypeEnum.Straight,
             currency_id:
                 currentAuth.user_organization
                     .settings_currency_default_value_id,

@@ -1,14 +1,21 @@
-import { useCallback, useRef, useState } from 'react'
+import { useCallback, useRef, useState } from 'react';
 
-import { Path, UseFormReturn, useForm } from 'react-hook-form'
-import { toast } from 'sonner'
 
-import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
 
-import { cn } from '@/helpers'
-import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
-import { AccountPicker } from '@/modules/account'
+import { Path, UseFormReturn, useForm } from 'react-hook-form';
+import { toast } from 'sonner';
+
+
+
+import { standardSchemaResolver } from '@hookform/resolvers/standard-schema';
+
+
+
+import { cn } from '@/helpers';
+import { serverRequestErrExtractor } from '@/helpers/error-message-extractor';
+import { AccountPicker } from '@/modules/account';
 import { useAuthUserWithOrgBranch } from '@/modules/authentication/authgentication.store'
+import { CurrencyInput } from '@/modules/currency'
 import LoanPurposeCombobox from '@/modules/loan-purpose/components/loan-purpose-combobox'
 import LoanStatusCombobox from '@/modules/loan-status/components/loan-status-combobox'
 import { LOAN_MODE_OF_PAYMENT } from '@/modules/loan-transaction/loan.constants'
@@ -943,15 +950,27 @@ const LoanTransactionCreateUpdateForm = ({
                                                 control={form.control}
                                                 label="Applied Amount *"
                                                 name="applied_1"
-                                                render={({ field }) => (
-                                                    <Input
+                                                render={({
+                                                    field: {
+                                                        onChange,
+                                                        ...field
+                                                    },
+                                                }) => (
+                                                    <CurrencyInput
                                                         {...field}
-                                                        className="border-primary/70 border-2"
+                                                        currency={
+                                                            form.watch(
+                                                                'account'
+                                                            )?.currency
+                                                        }
                                                         disabled={isDisabled(
                                                             field.name
                                                         )}
                                                         id={field.name}
-                                                        placeholder="Applied Amount"
+                                                        onValueChange={(
+                                                            newValue
+                                                        ) => onChange(newValue)}
+                                                        placeholder="Applied amount"
                                                     />
                                                 )}
                                             />
