@@ -6,6 +6,7 @@ import {
 } from '@/types/common'
 
 import { IMedia } from '../media/media.types'
+import { IOrganizationMedia } from '../organization-media'
 import { ISubscriptionPlan } from '../subscription-plan'
 import { IUserOrganization } from '../user-organization'
 
@@ -48,6 +49,8 @@ export interface IOrganization extends ITimeStamps, IAuditable {
     database_password?: string
     database_migration_status: TOrganizationMigrationStatus
     database_remark?: string
+
+    organization_medias: IOrganizationMedia[]
 
     // branches: IBranch[]
 }
