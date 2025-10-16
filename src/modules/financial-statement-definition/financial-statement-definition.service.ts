@@ -1,3 +1,4 @@
+import { Logger } from '@/helpers/loggers'
 import { createGLSFSService } from '@/modules/gl-fs/gl-fs.services'
 
 import { ConnectAccountType } from '../gl-fs'
@@ -30,3 +31,5 @@ export {
     useUpdateIndex as useFinancialStatementUpdateIndex,
     useConnectAccount as useConnectAccountToFinancialStatementDefinition,
 }
+
+export const logger = Logger.getInstance('financial-statement-definition')

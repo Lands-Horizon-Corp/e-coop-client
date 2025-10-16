@@ -1,3 +1,4 @@
+import { Logger } from '@/helpers/loggers'
 import { createDataLayerFactory } from '@/providers/repositories/data-layer-factory'
 import { createMutationFactory } from '@/providers/repositories/mutation-factory'
 
@@ -110,3 +111,5 @@ export const useDeleteMemberProfileIncome = createMutationFactory<
         })
     },
 })
+
+export const logger = Logger.getInstance('member-income')

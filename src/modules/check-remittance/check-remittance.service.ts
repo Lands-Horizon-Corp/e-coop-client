@@ -1,5 +1,6 @@
 import { useQuery } from '@tanstack/react-query'
 
+import { Logger } from '@/helpers/loggers'
 import {
     HookQueryOptions,
     createDataLayerFactory,
@@ -69,3 +70,5 @@ export const useCurrentBatchCheckRemittances = ({
 }
 
 export const useDeleteBatchCheckRemittance = useDeleteById
+
+export const logger = Logger.getInstance('check-remittance')

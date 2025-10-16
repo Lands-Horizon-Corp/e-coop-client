@@ -1,5 +1,6 @@
 import { useQuery } from '@tanstack/react-query'
 
+import { Logger } from '@/helpers/loggers'
 import {
     HookQueryOptions,
     createDataLayerFactory,
@@ -21,10 +22,9 @@ const {
     baseKey: 'journal-voucher-tag',
 })
 
-// ⚙️🛠️ API SERVICE HERE
 export const {
-    API, // rarely used, for raw calls
-    route: journalVoucherTagAPIRoute, // matches url above
+    API,
+    route: journalVoucherTagAPIRoute,
 
     create: createJournalVoucherTag,
     updateById: updateJournalVoucherTagById,
@@ -86,3 +86,5 @@ export const useGetAllJournalVoucherTag = ({
         },
     })
 }
+
+export const logger = Logger.getInstance('journal-voucher-tag')

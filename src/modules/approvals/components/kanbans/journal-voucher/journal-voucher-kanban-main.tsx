@@ -185,7 +185,7 @@ export const JournalVoucherKanbanMain = ({
                     </Accordion>
                 ) : (
                     <p className="text-center text-xs text-muted-foreground/60 p-4">
-                        No {mode} requests.
+                        No {mode} Journal Vouchers.
                     </p>
                 )}
             </KanbanItemsContainer>

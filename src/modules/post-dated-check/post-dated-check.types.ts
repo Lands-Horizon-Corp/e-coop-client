@@ -25,7 +25,7 @@ export interface IPostDatedCheckRequest {
     description?: string
 }
 
-export interface IPostDatedCheckResponse
+export interface IPostDatedCheck
     extends ITimeStamps,
         IAuditable,
         IOrgBranchIdentity {

@@ -1,3 +1,4 @@
+import { Logger } from '@/helpers/loggers'
 import { createDataLayerFactory } from '@/providers/repositories/data-layer-factory'
 
 import type { IMemberType, IMemberTypeRequest } from './member-type.types'
@@ -25,3 +26,5 @@ export const {
 // Add custom API query hooks here if needed
 
 export const MemberTypeAPI = apiCrudService
+
+export const logger = Logger.getInstance('member-type')

@@ -13,4 +13,7 @@ export const MemberAddressSchema = z.object({
     province_state: z.string().optional(),
     barangay: z.string().optional(),
     landmark: z.string().optional(),
+
+    longitude: z.number().optional(),
+    latitude: z.number().optional(),
 })

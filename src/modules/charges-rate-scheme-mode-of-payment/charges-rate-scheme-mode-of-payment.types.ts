@@ -1,21 +1,13 @@
-import {
-    IAuditable,
-    IOrgBranchIdentity,
-    ITimeStamps,
-    TEntityId,
-} from '@/types/common'
+import { IBaseEntityMeta, TEntityId } from '@/types/common'
 
-export interface IChargesRateMemberTypeModeOfPaymentRequest {
+export interface IChargesRateSchemeModeOfPaymentRequest {
     member_type_id: TEntityId
     mode_of_payment?: string
     name?: string
     description?: string
 }
 
-export interface IChargesRateMemberTypeModeOfPaymentResponse
-    extends ITimeStamps,
-        IAuditable,
-        IOrgBranchIdentity {
+export interface IChargesRateSchemeModeOfPayment extends IBaseEntityMeta {
     id: TEntityId
     member_type_id: TEntityId
     member_type?: {

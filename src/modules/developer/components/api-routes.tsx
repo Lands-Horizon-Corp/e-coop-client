@@ -102,7 +102,7 @@ const InfoSection = ({
     body?: string
     listComponent?: React.ReactNode
 }) => (
-    <div className="space-y-2">
+    <div className="space-y-2 ecoop-scroll">
         <div className="flex items-center gap-2">
             {icon}
             <h4 className="text-md font-semibold">{title}</h4>
@@ -133,7 +133,7 @@ const ListConnections = <T extends { key: string; value: string }>({
     const toShow = showAll ? items : items.slice(0, DEFAULT_COUNT)
     if (!items.length) return null
     return (
-        <div className="flex flex-col gap-2 w-full">
+        <div className="flex flex-col gap-2 w-full ecoop-scroll">
             <div className="flex items-center justify-between mb-2">
                 <h2 className="text-md font-semibold">{title}</h2>
                 {items.length > DEFAULT_COUNT && (
@@ -156,7 +156,7 @@ const ListConnections = <T extends { key: string; value: string }>({
                         <AccordionTrigger className="px-3 py-2 text-sm font-medium bg-muted hover:bg-muted/70 rounded-md">
                             {item.key}
                         </AccordionTrigger>
-                        <AccordionContent className="px-3 py-2 text-xs">
+                        <AccordionContent className="ecoop-scroll px-3 py-2 text-xs ecoop-scroll">
                             <Markdown content={item.value} />
                         </AccordionContent>
                     </AccordionItem>
@@ -194,7 +194,7 @@ const RouteDetailsSheet = ({
                 <MagnifyingGlassIcon className="p-1 m-3 cursor-pointer shrink-0 size-6 hover:text-primary" />
             </SheetTrigger>
             <SheetContent
-                className="min-w-[50vw] max-w-[90vw] h-full max-h-screen overflow-y-auto p-8 bg-gradient-to-br from-background via-card to-muted border-l shadow-xl flex flex-col gap-8"
+                className="min-w-[50vw] max-w-[90vw] ecoop-scroll sh-full max-h-screen overflow-y-auto p-8 bg-gradient-to-br from-background via-card to-muted border-l shadow-xl flex flex-col gap-8"
                 side="right"
             >
                 <SheetHeader>
@@ -215,7 +215,7 @@ const RouteDetailsSheet = ({
                         </span>
                     </SheetTitle>
                 </SheetHeader>
-                <div className="space-y-6">
+                <div className="space-y-6 ecoop-scroll">
                     {route.note && (
                         <div className="flex items-start gap-2 rounded-lg bg-muted/40 px-4 py-2 text-muted-foreground">
                             <MessagesIcon className="h-4 w-4 mt-0.5 flex-shrink-0" />
@@ -308,7 +308,7 @@ const RouteCard = ({
                                 <ArrowRightIcon className="size-4 text-gray-400 dark:text-gray-500 group-data-[state=open]:rotate-90 transition-transform duration-200" />
                             </div>
                         </AccordionTrigger>
-                        <AccordionContent className="px-4 pb-4">
+                        <AccordionContent className="px-4 pb-4 ecoop-scroll ">
                             <div className="space-y-3 pt-2">
                                 {groupedRoute.routes.map((route, index) => {
                                     if (
@@ -334,7 +334,7 @@ const RouteCard = ({
                                         : route.route
                                     return (
                                         <div
-                                            className="flex items-center gap-x-2 py-3 border bg-card rounded-lg transition-colors"
+                                            className="ecoop-scroll flex items-center gap-x-2 py-3 border bg-card rounded-lg transition-colors"
                                             key={`${route.route}-${index}`}
                                         >
                                             <RouteDetailsSheet

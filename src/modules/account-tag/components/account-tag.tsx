@@ -3,7 +3,7 @@ import { useMemo, useState } from 'react'
 import {
     AccountTagFormModal,
     IAccountTag,
-    useDeleteById,
+    useDeleteAccountTagById,
     useGetAll,
 } from '@/modules/account-tag'
 
@@ -36,7 +36,7 @@ const AccountTag = () => {
     const debouncedSearch = useDebounce(search, 200)
 
     const { data: accountTags, refetch } = useGetAll()
-    const { mutate: removeAccountTag } = useDeleteById()
+    const { mutate: removeAccountTag } = useDeleteAccountTagById()
 
     const handleRemveAccountTag = (tagId: string) => {
         removeAccountTag(tagId, {

@@ -56,7 +56,6 @@ const LoanApproveReleaseDisplayModal = ({
     const loanSignatureModal = useModalState()
     const { onOpen } = useConfirmModalStore()
     const memberProfile = loanTransaction.member_profile
-
     const approveMutation = useApproveLoanTransaction({
         options: {
             onSuccess: (data) => {
@@ -83,6 +82,7 @@ const LoanApproveReleaseDisplayModal = ({
     })
 
     const handleUndoApprove = () => {
+        console.log('clicked')
         onOpen({
             title: 'Unapprove Loan',
             description: 'Do you want to Unapprove this Loan?',
@@ -215,7 +215,9 @@ const LoanApproveReleaseDisplayModal = ({
                     {mode === 'undo-approve' && (
                         <Button
                             disabled={undoApproveMutation.isPending || readOnly}
-                            onClick={handleUndoApprove}
+                            onClick={() => {
+                                handleUndoApprove()
+                            }}
                             variant="destructive"
                         >
                             {undoApproveMutation.isPending ? (

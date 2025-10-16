@@ -1,3 +1,4 @@
+import { Logger } from '@/helpers/loggers'
 import { createDataLayerFactory } from '@/providers/repositories/data-layer-factory'
 
 import type { IFeedback, IFeedbackRequest } from './feedback.types'
@@ -26,3 +27,4 @@ export const {
 
 // Export the base API for direct API calls
 export const FeedbackAPI = apiCrudService
+export const logger = Logger.getInstance('feedback')

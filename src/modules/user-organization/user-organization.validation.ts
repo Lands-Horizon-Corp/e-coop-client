@@ -67,6 +67,9 @@ export const UserOrganizationSettingsSchema = z.object({
         .optional()
         .nullable(),
     settings_accounting_withdraw_default_value: z.any().optional(),
+
+    settings_currency_default_value_id: entityIdSchema.optional().nullable(),
+    settings_currency_default_value: z.any().optional(),
 })
 
 export type TUserOrganizationSettingsSchema = z.infer<

@@ -5,7 +5,7 @@ import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
 import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
 import { cn } from '@/helpers/tw-utils'
 import { AccountPicker } from '@/modules/account'
-import { useCreate, useUpdateById } from '@/modules/account-tag'
+import { useCreateAccountTag, useUpdateById } from '@/modules/account-tag'
 import { TAG_CATEGORY } from '@/modules/tag-template/tag.constants'
 
 import IconCombobox from '@/components/comboboxes/icon-combobox'
@@ -66,7 +66,7 @@ const AccountTagCreateUpdateForm = ({
         isPending: isCreating,
         reset: resetCreate,
         mutate: createAccountTag,
-    } = useCreate({ options: { onSuccess: formProps.onSuccess } })
+    } = useCreateAccountTag({ options: { onSuccess: formProps.onSuccess } })
 
     const {
         error: updateError,

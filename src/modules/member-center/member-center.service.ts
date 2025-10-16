@@ -1,3 +1,4 @@
+import { Logger } from '@/helpers/loggers'
 import { createDataLayerFactory } from '@/providers/repositories/data-layer-factory'
 
 import type { IMemberCenter, IMemberCenterRequest } from './member-center.types'
@@ -23,3 +24,5 @@ export const {
     useGetPaginated,
     useUpdateById,
 } = apiCrudHooks
+
+export const logger = Logger.getInstance('member-center')

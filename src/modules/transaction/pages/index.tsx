@@ -228,7 +228,6 @@ const Transaction = ({ transactionId, fullPath }: TTransactionProps) => {
                         <TransactionAccountMemberLedger
                             memberProfileId={selectedMember?.id as TEntityId}
                             onRowClick={(data) => {
-                                console.log(data.original.account?.type)
                                 if (
                                     data.original.account?.type ===
                                     AccountTypeEnum.Loan

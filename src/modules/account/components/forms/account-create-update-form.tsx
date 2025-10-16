@@ -31,8 +31,10 @@ import {
 } from '@/modules/account'
 import { AccountCategoryComboBox } from '@/modules/account-category'
 import { AccountClassificationComboBox } from '@/modules/account-classification'
+import { AccountTagsManagerPopover } from '@/modules/account-tag/components/account-tag-management'
 import { useAuthUserWithOrgBranch } from '@/modules/authentication/authgentication.store'
 import ComputationSheetCombobox from '@/modules/computation-sheet/components/computation-sheet-combobox'
+import CurrencyCombobox from '@/modules/currency/components/currency-combobox'
 import MemberTypeCombobox from '@/modules/member-type/components/member-type-combobox'
 
 import IconCombobox from '@/components/comboboxes/icon-combobox'
@@ -151,6 +153,14 @@ const AccountCreateUpdateForm = ({
                 onSubmit={onSubmit}
                 ref={formRef}
             >
+                {accountId && (
+                    <div className="absolute top-4 right-10">
+                        <AccountTagsManagerPopover
+                            accountId={accountId}
+                            size="sm"
+                        />
+                    </div>
+                )}
                 <FormErrorMessage errorMessage={error} />
                 <div className="flex w-full flex-col gap-5 md:flex-row">
                     <fieldset
@@ -169,6 +179,24 @@ const AccountCreateUpdateForm = ({
                                     id={field.name}
                                     placeholder="Account Name"
                                     value={field.value ?? ''}
+                                />
+                            )}
+                        />
+                        <FormFieldWrapper
+                            control={form.control}
+                            disabled={isLoading}
+                            label="Currency *"
+                            name="currency_id"
+                            render={({ field }) => (
+                                <CurrencyCombobox
+                                    disabled={
+                                        isDisabled(field.name) || isLoading
+                                    }
+                                    onChange={(selected) =>
+                                        field.onChange(selected.id)
+                                    }
+                                    placeholder="Select Currency"
+                                    value={field.value}
                                 />
                             )}
                         />
@@ -1750,7 +1778,6 @@ const AccountCreateUpdateForm = ({
                         </div>
                     </div>
                 </div>
-                {/* General Ledger Source Visibility Settings */}
                 <div className="space-y-2">
                     <h4 className="text-sm font-medium text-muted-foreground">
                         General Ledger Source Visibility

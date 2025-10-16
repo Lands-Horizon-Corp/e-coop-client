@@ -193,7 +193,7 @@ export const CashCheckVoucherKanbanMain = ({
                         </Accordion>
                     ) : (
                         <p className="text-center text-xs text-muted-foreground/60 p-4">
-                            No {mode} requests.
+                            No {mode} Cash Check Vouchers.
                         </p>
                     )}
                 </KanbanItemsContainer>

@@ -5,7 +5,7 @@ import {
     TEntityId,
 } from '@/types/common'
 
-import { ITimeDepositTypeResponse } from '../time-deposit-type'
+import { ITimeDepositType } from '../time-deposit-type'
 
 export interface ITimeDepositComputationRequest {
     minimum_amount?: number
@@ -23,13 +23,13 @@ export interface ITimeDepositComputationRequest {
     header11?: number
 }
 
-export interface ITimeDepositComputationResponse
+export interface ITimeDepositComputation
     extends ITimeStamps,
         IAuditable,
         IOrgBranchIdentity {
     id: TEntityId
     time_deposit_type_id: TEntityId
-    time_deposit_type?: ITimeDepositTypeResponse
+    time_deposit_type?: ITimeDepositType
     minimum_amount: number
     maximum_amount: number
     header_1: number

@@ -16,7 +16,7 @@ export interface ICollectorsMemberAccountEntryRequest {
     description?: string
 }
 
-export interface ICollectorsMemberAccountEntryResponse
+export interface ICollectorsMemberAccountEntry
     extends ITimeStamps,
         IAuditable,
         IOrgBranchIdentity {

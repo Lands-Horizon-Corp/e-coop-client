@@ -1,3 +1,4 @@
+import { Logger } from '@/helpers/loggers'
 import { createDataLayerFactory } from '@/providers/repositories/data-layer-factory'
 
 import type {
@@ -26,3 +27,5 @@ export const {
 
 // Export the base API for direct API calls
 export const SubscriptionPlanAPI = apiCrudService
+
+export const logger = Logger.getInstance('subscription-plan')

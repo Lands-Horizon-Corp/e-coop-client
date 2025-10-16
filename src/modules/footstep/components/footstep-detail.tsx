@@ -7,7 +7,7 @@ import {
     TextFileFillIcon,
 } from '@/components/icons'
 import ImageDisplay from '@/components/image-display'
-import Map from '@/components/map'
+import MapView from '@/components/map'
 import { Separator } from '@/components/ui/separator'
 import CopyWrapper from '@/components/wrappers/copy-wrapper'
 
@@ -179,9 +179,14 @@ export default function FootstepDetail({ footstep }: Props) {
 
                     {!!footstep.latitude && !!footstep.longitude && (
                         <div className="h-64">
-                            <Map
-                                center={[footstep.latitude, footstep.longitude]}
+                            <MapView
                                 className="mb-4 size-full"
+                                locations={[
+                                    {
+                                        lat: footstep.latitude,
+                                        lng: footstep.longitude,
+                                    },
+                                ]}
                                 viewOnly
                                 zoom={13}
                             />

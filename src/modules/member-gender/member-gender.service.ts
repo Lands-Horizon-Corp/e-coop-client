@@ -1,3 +1,4 @@
+import { Logger } from '@/helpers/loggers'
 import { createDataLayerFactory } from '@/providers/repositories/data-layer-factory'
 
 import type { IMemberGender, IMemberGenderRequest } from './member-gender.types'
@@ -23,3 +24,5 @@ export const {
     useGetPaginated,
     useUpdateById,
 } = apiCrudHooks
+
+export const logger = Logger.getInstance('member-gender')

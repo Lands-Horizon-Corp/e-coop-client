@@ -1,10 +1,10 @@
-import { formatCurrency } from '@/helpers'
+import { formatNumber } from '@/helpers'
 import { cn } from '@/helpers/tw-utils'
 import { ILoanTransaction } from '@/modules/loan-transaction'
 
 import {
     ClockIcon,
-    IdCardIcon,
+    InfoFillCircleIcon,
     MoneyBagIcon,
     TicketIcon,
 } from '@/components/icons'
@@ -89,7 +89,7 @@ export const LoanTransactionCard = ({
                 className
             )}
         >
-            <div className="grid grid-cols-2 gap-2">
+            <div className="space-y-2">
                 {loan.voucher && (
                     <JournalKanbanInfoItem
                         className="w-full"
@@ -101,10 +101,10 @@ export const LoanTransactionCard = ({
                 )}
                 <JournalKanbanInfoItem
                     className="w-full"
-                    content={loan.balance ? formatCurrency(loan.balance) : '-'}
+                    content={formatNumber(loan.applied_1, 2) || '-'}
                     icon={<MoneyBagIcon className="inline mr-2 size-5" />}
-                    infoTitle="Amount Granted"
-                    title="Balance"
+                    infoTitle="Amount Applied"
+                    title="Amount Applied"
                 />
                 <JournalKanbanInfoItem
                     content={`${loan.terms} months`}
@@ -114,9 +114,15 @@ export const LoanTransactionCard = ({
                 />
                 <JournalKanbanInfoItem
                     content={loan.check_number}
-                    icon={<IdCardIcon className="inline mr-2 size-5" />}
+                    icon={<InfoFillCircleIcon className="inline mr-2 size-5" />}
                     infoTitle="Loan Purpose"
                     title="Purpose"
+                />
+                <JournalKanbanInfoItem
+                    content={loan.mode_of_payment || 'N/A'}
+                    icon={<InfoFillCircleIcon className="inline mr-2 size-5" />}
+                    infoTitle="Mode of Payment"
+                    title="Mode Of Payment"
                 />
             </div>
         </div>

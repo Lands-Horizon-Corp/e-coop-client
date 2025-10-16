@@ -2,6 +2,7 @@ import { useQuery } from '@tanstack/react-query'
 import qs from 'query-string'
 
 import { downloadFile } from '@/helpers/common-helper'
+import { Logger } from '@/helpers/loggers'
 import { createAPIRepository } from '@/providers/repositories/api-crud-factory'
 import {
     HookQueryOptions,
@@ -132,3 +133,5 @@ export const useFilteredPaginatedAccount = ({
         ...options,
     })
 }
+
+export const logger = Logger.getInstance('account')

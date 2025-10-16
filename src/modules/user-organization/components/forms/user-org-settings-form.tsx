@@ -6,7 +6,7 @@ import { cn } from '@/helpers'
 import { withToastCallbacks } from '@/helpers/callback-helper'
 import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
 import { AccountPicker } from '@/modules/account'
-import { TransactionPaymentTypeComboBox } from '@/modules/transaction'
+import { PaymentTypeCombobox } from '@/modules/transaction'
 
 import FormFooterResetSubmit from '@/components/form-components/form-footer-reset-submit'
 import {
@@ -454,7 +454,7 @@ const UserOrgSettingsForm = ({
                             }
                             name="settings_payment_type_default_value_id"
                             render={({ field }) => (
-                                <TransactionPaymentTypeComboBox
+                                <PaymentTypeCombobox
                                     onChange={(paymentType) => {
                                         field.onChange(paymentType?.id)
                                     }}

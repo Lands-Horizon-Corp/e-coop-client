@@ -1,10 +1,9 @@
 import * as React from 'react'
 
-import { cn } from '@/helpers'
-import { IPaymentType, useGetAll } from '@/modules/payment-type'
-import { Check } from 'lucide-react'
+import { cn } from '@/helpers/tw-utils'
+import { ICurrency, useGetAllCurrency } from '@/modules/currency'
 
-import { ChevronDownIcon } from '@/components/icons'
+import { CheckIcon, ChevronDownIcon } from '@/components/icons'
 import LoadingSpinner from '@/components/spinners/loading-spinner'
 import { Button } from '@/components/ui/button'
 import {
@@ -28,22 +27,28 @@ interface Props {
     disabled?: boolean
     className?: string
     placeholder?: string
-    onChange?: (selected: IPaymentType) => void
+    onChange?: (selected: ICurrency) => void
 }
 
-const TransactionPaymentTypeComboBox = ({
+const CurrencyCombobox = ({
     value,
     className,
     disabled = false,
-    placeholder = 'Select Payment Type...',
+    placeholder = 'Select Currency...',
     onChange,
 }: Props) => {
     const [open, setOpen] = React.useState(false)
 
-    // Using the provided hook
-    const { data: paymentTypes, isLoading } = useGetAll()
+    const { data, isLoading } = useGetAllCurrency({
+        options: {
+            enabled: !disabled,
+        },
+    })
 
-    const selected = paymentTypes?.find((option) => option.id === value)
+    const selectedCurrency = React.useMemo(
+        () => data?.find((currency) => currency.id === value),
+        [data, value]
+    )
 
     return (
         <>
@@ -56,21 +61,31 @@ const TransactionPaymentTypeComboBox = ({
                         role="combobox"
                         variant="outline"
                     >
-                        {value ? (
-                            selected?.name
+                        {selectedCurrency ? (
+                            <div className="flex items-center gap-2 min-w-0">
+                                {selectedCurrency.emoji && (
+                                    <span className="text-lg flex-shrink-0">
+                                        {selectedCurrency.emoji}
+                                    </span>
+                                )}
+                                <span className="truncate">
+                                    {selectedCurrency.name} (
+                                    {selectedCurrency.currency_code})
+                                </span>
+                            </div>
                         ) : (
                             <span className="text-muted-foreground">
                                 {placeholder}
                             </span>
                         )}
-                        <ChevronDownIcon className="opacity-50" />
+                        <ChevronDownIcon className="opacity-50 flex-shrink-0" />
                     </Button>
                 </PopoverTrigger>
                 <PopoverContent className="max-h-[--radix-popover-content-available-height] w-[--radix-popover-trigger-width] p-0">
                     <Command>
                         <CommandInput
                             className="h-9"
-                            placeholder="Search Payment Type..."
+                            placeholder="Search Currency..."
                         />
                         {isLoading ? (
                             <CommandEmpty>
@@ -79,23 +94,38 @@ const TransactionPaymentTypeComboBox = ({
                             </CommandEmpty>
                         ) : (
                             <CommandList className="ecoop-scroll">
-                                <CommandEmpty>
-                                    No Payment Type found
-                                </CommandEmpty>
+                                <CommandEmpty>No Currency found.</CommandEmpty>
                                 <CommandGroup>
-                                    {paymentTypes?.map((option) => (
+                                    {data?.map((option) => (
                                         <CommandItem
                                             key={option.id}
                                             onSelect={() => {
                                                 setOpen(false)
                                                 onChange?.(option)
                                             }}
-                                            value={option.name}
+                                            value={`${option.name} ${option.currency_code} ${option.country}`}
                                         >
-                                            {option.name}
-                                            <Check
+                                            <div className="flex items-center gap-2 min-w-0 flex-1">
+                                                {option.emoji && (
+                                                    <span className="text-lg flex-shrink-0">
+                                                        {option.emoji}
+                                                    </span>
+                                                )}
+                                                <div className="flex flex-col min-w-0">
+                                                    <span className="truncate font-medium">
+                                                        {option.name} (
+                                                        {option.currency_code})
+                                                    </span>
+                                                    <span className="truncate text-xs text-muted-foreground">
+                                                        {option.country}
+                                                        {option.symbol &&
+                                                            ` • ${option.symbol}`}
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            <CheckIcon
                                                 className={cn(
-                                                    'ml-auto',
+                                                    'ml-auto flex-shrink-0',
                                                     value === option.id
                                                         ? 'opacity-100'
                                                         : 'opacity-0'
@@ -113,4 +143,4 @@ const TransactionPaymentTypeComboBox = ({
     )
 }
 
-export default TransactionPaymentTypeComboBox
+export default CurrencyCombobox

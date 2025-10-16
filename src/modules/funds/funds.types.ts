@@ -15,10 +15,7 @@ export interface IFundsRequest {
     gl_books?: string
 }
 
-export interface IFundsResponse
-    extends ITimeStamps,
-        IAuditable,
-        IOrgBranchIdentity {
+export interface IFunds extends ITimeStamps, IAuditable, IOrgBranchIdentity {
     id: TEntityId
     account_id?: TEntityId | null
     account?: IAccount

@@ -20,10 +20,10 @@ import {
     TQuickWithdrawSchemaFormValues,
 } from '@/modules/quick-transfer'
 import {
+    PaymentTypeCombobox,
     TransactionAmountField,
     TransactionModalJointMember,
     TransactionNoFoundBatch,
-    TransactionPaymentTypeComboBox,
     TransactionReferenceNumber,
     useCreateQuickTransactionPayment,
 } from '@/modules/transaction'
@@ -401,7 +401,7 @@ export const QuickTransferTransactionForm = ({
                         label="Payment Type"
                         name="payment_type_id"
                         render={({ field }) => (
-                            <TransactionPaymentTypeComboBox
+                            <PaymentTypeCombobox
                                 disabled={isDisabled('payment_type_id')}
                                 onChange={(selectedPaymentType) => {
                                     if (isDisabled('payment_type_id')) return

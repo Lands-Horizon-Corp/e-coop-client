@@ -14,13 +14,13 @@ export interface IFinesMaturityRequest {
     rate: number
 }
 
-export interface IFinesMaturityResponse
+export interface IFinesMaturity
     extends ITimeStamps,
         IAuditable,
         IOrgBranchIdentity {
     id: TEntityId
     account_id?: TEntityId
-    account?: IAccount // Assuming IAccount is defined in common or another module
+    account?: IAccount
     from: number
     to: number
     rate: number

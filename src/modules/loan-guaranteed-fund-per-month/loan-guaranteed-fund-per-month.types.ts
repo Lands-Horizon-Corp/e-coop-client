@@ -10,7 +10,7 @@ export interface ILoanGuaranteedFundPerMonthRequest {
     loan_guaranteed_fund?: number
 }
 
-export interface ILoanGuaranteedFundPerMonthResponse
+export interface ILoanGuaranteedFundPerMonth
     extends ITimeStamps,
         IAuditable,
         IOrgBranchIdentity {

@@ -24,3 +24,5 @@ export const ComakerCollateralSchema = z.object({
 })
 
 export type TComakerCollateralSchema = z.infer<typeof ComakerCollateralSchema>
+
+// export const logger = Logger.getInstance('comaker-collateral')

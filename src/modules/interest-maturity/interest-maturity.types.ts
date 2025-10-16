@@ -14,7 +14,7 @@ export interface IInterestMaturityRequest {
     rate: number
 }
 
-export interface IInterestMaturityResponse
+export interface IInterestMaturity
     extends ITimeStamps,
         IAuditable,
         IOrgBranchIdentity {

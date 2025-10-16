@@ -3,6 +3,7 @@ import { toast } from 'sonner'
 
 import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
 import { withCatchAsync } from '@/helpers/function-utils'
+import { Logger } from '@/helpers/loggers'
 import { createAPIRepository } from '@/providers/repositories/api-crud-factory'
 
 import { IOperationCallbacks } from './qr-crypto.types'
@@ -44,3 +45,5 @@ export const useQrDecryptData = <TResult = unknown>({
         },
     })
 }
+
+export const logger = Logger.getInstance('qr-crypto')

@@ -1,3 +1,4 @@
+import { Logger } from '@/helpers/loggers'
 import {
     createMutationFactory,
     createMutationInvalidateFn,
@@ -117,3 +118,5 @@ export const useUpdateMemberProfileUserAccount = createMutationFactory<
     invalidationFn: (args) =>
         updateMutationInvalidationFn(memberProfileBaseKey, args),
 })
+
+export const logger = Logger.getInstance('member-user-account')

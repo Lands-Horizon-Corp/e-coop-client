@@ -19,6 +19,9 @@ export interface IMemberAddress extends IBaseEntityMeta {
     province_state?: string
     barangay?: string
     landmark?: string
+
+    longitude?: number
+    latitude?: number
 }
 
 // LATEST FROM ERD

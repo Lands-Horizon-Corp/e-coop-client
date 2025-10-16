@@ -14,11 +14,11 @@ import { useGetAll } from '@/modules/payment-type'
 import { IPaymentRequest } from '@/modules/quick-transfer'
 import {
     ITransactionRequest,
+    PaymentTypeCombobox,
     PaymentWithTransactionSchema,
     TPaymentWithTransactionFormValues,
     TransactionAmountField,
     TransactionNoFoundBatch,
-    TransactionPaymentTypeComboBox,
     useCreateTransactionPaymentByMode,
 } from '@/modules/transaction'
 import { useGetUserSettings } from '@/modules/user-profile'
@@ -453,7 +453,7 @@ const PaymentWithTransactionForm = ({
                                     labelClassName="text-xs font-medium text-muted-foreground"
                                     name="payment_type_id"
                                     render={({ field }) => (
-                                        <TransactionPaymentTypeComboBox
+                                        <PaymentTypeCombobox
                                             {...field}
                                             disabled={isDisabled(
                                                 'payment_type_id'

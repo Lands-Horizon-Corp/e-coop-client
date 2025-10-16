@@ -1,3 +1,4 @@
+import { Logger } from '@/helpers/loggers'
 import { createDataLayerFactory } from '@/providers/repositories/data-layer-factory'
 import {
     createMutationFactory,
@@ -72,3 +73,5 @@ export const useUpdateCurrentBranchSettings = createMutationFactory<
     invalidationFn: (args) =>
         updateMutationInvalidationFn('branch-settings', args),
 })
+
+export const logger = Logger.getInstance('branch-settings')

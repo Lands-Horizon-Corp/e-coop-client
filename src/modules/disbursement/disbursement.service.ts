@@ -1,3 +1,4 @@
+import { Logger } from '@/helpers/loggers'
 import { createDataLayerFactory } from '@/providers/repositories/data-layer-factory'
 
 import type { IDisbursement, IDisbursementRequest } from './disbursement.types'
@@ -38,3 +39,5 @@ export const {
     useGetPaginated: useGetPaginatedDisbursements,
     useUpdateById: useUpdateDisbursementById,
 } = apiCrudHooks
+
+export const logger = Logger.getInstance('disbursement')

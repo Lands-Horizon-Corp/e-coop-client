@@ -1,6 +1,7 @@
 import { useQuery } from '@tanstack/react-query'
 import qs from 'query-string'
 
+import { Logger } from '@/helpers/loggers'
 import APIService from '@/providers/api'
 import { createAPIRepository } from '@/providers/repositories/api-crud-factory'
 import { HookQueryOptions } from '@/providers/repositories/data-layer-factory'
@@ -154,3 +155,5 @@ export const useMemberAccountGeneralLedgerTotal = ({
             getMemberAccountGeneralLedgerTotal({ memberProfileId, accountId }),
     })
 }
+
+export const logger = Logger.getInstance('member-accounting-ledger')

@@ -1,5 +1,6 @@
 import { useQuery } from '@tanstack/react-query'
 
+import { Logger } from '@/helpers/loggers'
 import { createDataLayerFactory } from '@/providers/repositories/data-layer-factory'
 import { HookQueryOptions } from '@/providers/repositories/data-layer-factory'
 import {
@@ -314,3 +315,5 @@ export const useTransBatchUpdateSignApproval = createMutationFactory<
 >({
     mutationFn: (data) => updateEndedBatchApprovalsSignature(data),
 })
+
+export const logger = Logger.getInstance('transaction-batch')

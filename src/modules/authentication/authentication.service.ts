@@ -1,5 +1,6 @@
 import { useMutation, useQuery } from '@tanstack/react-query'
 
+import { Logger } from '@/helpers/loggers'
 import { createAPIRepository } from '@/providers/repositories/api-crud-factory'
 import { HookQueryOptions } from '@/providers/repositories/data-layer-factory'
 import {
@@ -345,3 +346,5 @@ export const useRequestReverseTransaction = createMutationFactory<
 >({
     mutationFn: async (data) => await verifyWithPasswordAdmin(data),
 })
+
+export const logger = Logger.getInstance('authentication')

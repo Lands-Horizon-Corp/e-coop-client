@@ -1,6 +1,7 @@
 import qs from 'query-string'
 
 import { downloadFile } from '@/helpers/common-helper'
+import { Logger } from '@/helpers/loggers'
 import { createAPIRepository } from '@/providers/repositories/api-crud-factory'
 import { createDataLayerFactory } from '@/providers/repositories/data-layer-factory'
 
@@ -58,3 +59,5 @@ export const exportSelected = async (ids: TEntityId[]) => {
 
     await downloadFile(url, 'selected_account-classification_export.xlsx')
 }
+
+export const logger = Logger.getInstance('account-category')

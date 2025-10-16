@@ -2,8 +2,7 @@ import { useState } from 'react'
 
 import { toast } from 'sonner'
 
-import { dateAgo } from '@/helpers/date-utils'
-import { AccountTypeBadge, AccountTypeEnum, IAccount } from '@/modules/account'
+import { AccountTypeEnum, IAccount } from '@/modules/account'
 import {
     ILoanTransaction,
     useGetLoanTransactionPayableAccounts,
@@ -18,19 +17,19 @@ import { IMemberProfile } from '@/modules/member-profile'
 import MemberPicker from '@/modules/member-profile/components/member-picker'
 
 import PageContainer from '@/components/containers/page-container'
-import { CalendarNumberIcon, HandCoinsIcon, XIcon } from '@/components/icons'
+import { HandCoinsIcon, XIcon } from '@/components/icons'
 import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
 import {
     ResizableHandle,
     ResizablePanel,
     ResizablePanelGroup,
 } from '@/components/ui/resizable'
-import { Separator } from '@/components/ui/separator'
 
 import { useModalState } from '@/hooks/use-modal-state'
 
 import { TEntityId } from '@/types'
+
+import LoanPayablesForm from '../components/forms/loan-payables-form'
 
 function LoanPaymentPage() {
     const [member, setMember] = useState<IMemberProfile>()
@@ -53,8 +52,12 @@ function LoanPaymentPage() {
                             type: AccountTypeEnum.Loan,
                         } as IAccount,
                         account_id: 'XXXX-XXXX',
-                        suggested_payment_amount: 500,
+                        suggested_payment_amount: 200,
                         last_payment_date: new Date('10-1-2025').toISOString(),
+                        is_past_due: false,
+                        supposed_payment_date: new Date(
+                            '10-15-2025'
+                        ).toISOString(),
                     },
                     {
                         account: {
@@ -62,8 +65,12 @@ function LoanPaymentPage() {
                             type: AccountTypeEnum.Interest,
                         } as IAccount,
                         account_id: 'XXXX-XXX1',
-                        suggested_payment_amount: 500,
+                        suggested_payment_amount: 100,
                         last_payment_date: new Date('10-2-2025').toISOString(),
+                        is_past_due: true,
+                        supposed_payment_date: new Date(
+                            '10-10-2025'
+                        ).toISOString(),
                     },
                     {
                         account: {
@@ -71,8 +78,12 @@ function LoanPaymentPage() {
                             type: AccountTypeEnum.Fines,
                         } as IAccount,
                         account_id: 'XXXX-XXX2',
-                        suggested_payment_amount: 500,
+                        suggested_payment_amount: 50,
                         last_payment_date: new Date('10-1-2025').toISOString(),
+                        is_past_due: false,
+                        supposed_payment_date: new Date(
+                            '10-15-2025'
+                        ).toISOString(),
                     },
                 ],
             },
@@ -121,9 +132,9 @@ function LoanPaymentPage() {
             <ResizablePanelGroup className="!h-[80dvh]" direction="horizontal">
                 <ResizablePanel
                     className="!overflow-auto flex flex-col gap-y-4 pr-4 ecoop-scroll"
-                    defaultSize={40}
-                    maxSize={40}
-                    minSize={30}
+                    defaultSize={70}
+                    maxSize={70}
+                    minSize={60}
                 >
                     <div className="flex items-center gap-x-2 w-full">
                         <MemberPicker
@@ -158,65 +169,18 @@ function LoanPaymentPage() {
                             }
                         />
                     </div>
-                    <div className="space-y-2 bg-popover/40 rounded-xl p-4">
-                        <p>Payable Accounts</p>
-                        <div className="flex items-center justify-between gap-x-4">
-                            <Input />
-                            <Button>
-                                <CalendarNumberIcon /> Amort
-                            </Button>
-                        </div>
-                        <Separator />
-                        <div className="space-y-4">
-                            {payableAccounts?.payable_accounts.map(
-                                (payable) => (
-                                    <div
-                                        className="rounded-xl p-3 space-y-1 bg-popover"
-                                        key={payable.account_id}
-                                    >
-                                        <div className="flex items-center justify-between">
-                                            <div className="mb-2">
-                                                <p className="inline mr-1">
-                                                    {payable?.account?.name || (
-                                                        <span className="text-xs text-muted-foreground/80">
-                                                            Unknown
-                                                        </span>
-                                                    )}
-                                                </p>
-                                                {payable?.account?.type && (
-                                                    <AccountTypeBadge
-                                                        type={
-                                                            payable.account.type
-                                                        }
-                                                    />
-                                                )}
-                                            </div>
-                                            {payable?.last_payment_date && (
-                                                <p className="text-xs text-right text-muted-foreground/60">
-                                                    Last Pay :{' '}
-                                                    {dateAgo(
-                                                        payable.last_payment_date
-                                                    )}
-                                                </p>
-                                            )}
-                                        </div>
-                                        <div className="flex items-center gap-x-2">
-                                            <Input placeholder="Reference no" />
-                                            <Input
-                                                className="w-6/12"
-                                                placeholder="Amount"
-                                            />
-                                        </div>
-                                    </div>
-                                )
-                            )}
-                        </div>
-                    </div>
+                    {member && (
+                        <LoanPayablesForm
+                            loanTransacitonId={loanTransactionId as TEntityId}
+                            memberProfileId={member.id}
+                            payables={payableAccounts?.payable_accounts || []}
+                        />
+                    )}
                 </ResizablePanel>
                 <ResizableHandle withHandle />
                 <ResizablePanel
                     className="!overflow-y-auto px-5 ecoop-scroll !relative"
-                    defaultSize={65}
+                    defaultSize={30}
                 >
                     {member ? (
                         <MemberAccountingLedgerTable

@@ -1,5 +1,6 @@
 import { useQuery } from '@tanstack/react-query'
 
+import { Logger } from '@/helpers/loggers'
 import {
     HookQueryOptions,
     createDataLayerFactory,
@@ -84,3 +85,5 @@ export const useGetAllAutomaticLoanDeductionsByComputationSheetSchemeId = ({
             }),
     })
 }
+
+export const logger = Logger.getInstance('automatic-loan-deduction')

@@ -23,7 +23,7 @@ import {
     PinLocationIcon,
     PlusIcon,
 } from '@/components/icons'
-import MapPicker from '@/components/map/map-picker/map-picker'
+import MapPicker from '@/components/map/map-picker'
 import OrganizationPolicies from '@/components/policies'
 import {
     Accordion,

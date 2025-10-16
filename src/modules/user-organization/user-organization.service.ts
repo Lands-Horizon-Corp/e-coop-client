@@ -6,6 +6,7 @@ import {
 import { toast } from 'sonner'
 
 import { groupBy, withCatchAsync } from '@/helpers/function-utils'
+import { Logger } from '@/helpers/loggers'
 import {
     HookQueryOptions,
     createDataLayerFactory,
@@ -403,3 +404,5 @@ export const useUpdateUserOrganizationSettings = createMutationFactory<
         updateMutationInvalidationFn('user-organization', args)
     },
 })
+
+export const logger = Logger.getInstance('user-organization')

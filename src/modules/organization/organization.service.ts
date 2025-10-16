@@ -1,5 +1,6 @@
 import { useQuery } from '@tanstack/react-query'
 
+import { Logger } from '@/helpers/loggers'
 import {
     HookQueryOptions,
     createDataLayerFactory,
@@ -62,3 +63,5 @@ export const useGetOrganizationById = ({
         ...options,
     })
 }
+
+export const logger = Logger.getInstance('organization')

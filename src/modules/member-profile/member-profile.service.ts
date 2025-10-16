@@ -1,6 +1,7 @@
 import { useQuery } from '@tanstack/react-query'
 import qs from 'query-string'
 
+import { Logger } from '@/helpers/loggers'
 import {
     HookQueryOptions,
     createDataLayerFactory,
@@ -20,6 +21,7 @@ import type {
     IMemberProfileQuickCreateRequest,
     IMemberProfileRequest,
 } from './member-profile.types'
+import { TMemberProfileCoordinatesSchema } from './member-profile.validation'
 
 export const {
     apiCrudHooks,
@@ -91,6 +93,21 @@ export const {
     useGetPaginated: useGetPaginatedMemberProfiles,
     useUpdateById: useUpdateMemberProfileById,
 } = apiCrudHooks
+
+export const useMemberProfileCoordinates = createMutationFactory<
+    IMemberProfile,
+    Error,
+    { memberId: TEntityId; data: TMemberProfileCoordinatesSchema }
+>({
+    mutationFn: async ({ memberId, data }) =>
+        await updateMemberProfileById({
+            id: memberId,
+            payload: data,
+            targetUrl: `/coordinates`,
+        }),
+    invalidationFn: (args) =>
+        updateMutationInvalidationFn(memberProfileBaseKey, args),
+})
 
 // 🪝 Custom Hook for Quick Create Member Profile
 export const useQuickCreateMemberProfile = createMutationFactory<
@@ -177,3 +194,5 @@ export const useAllPendingMemberProfiles = ({
             }),
     })
 }
+
+export const logger = Logger.getInstance('member-profile')

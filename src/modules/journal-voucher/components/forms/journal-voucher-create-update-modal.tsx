@@ -300,11 +300,13 @@ const JournalVoucherCreateUpdateForm = ({
                     disabled={isPending || formProps.readOnly}
                 >
                     <div className="absolute top-4 right-10 z-10 flex gap-2">
-                        <JournalVoucherTagsManagerPopover
-                            journalVoucherId={editJournalId}
-                            readOnly={isPrinted}
-                            size="sm"
-                        />
+                        {isUpdate && (
+                            <JournalVoucherTagsManagerPopover
+                                journalVoucherId={editJournalId}
+                                readOnly={isPrinted}
+                                size="sm"
+                            />
+                        )}
                         {editJournalId && defaultValues && (
                             <div className="">
                                 <JournalVoucherStatusIndicator

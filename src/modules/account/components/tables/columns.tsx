@@ -4,6 +4,7 @@ import { toReadableDate } from '@/helpers/date-utils'
 import { cn } from '@/helpers/tw-utils'
 import { AccountTypeBadge } from '@/modules/account'
 import { ComputationTypeBadge } from '@/modules/computation-type/components/computation-type-badge'
+import { CurrencyBadge } from '@/modules/currency/components/currency-badge'
 import { GeneralLedgerTypeBadge } from '@/modules/general-ledger/components/general-ledger-type-badge'
 import { ColumnDef, Row } from '@tanstack/react-table'
 
@@ -197,6 +198,36 @@ const AccountsTableColumns = (
             ),
             enableMultiSort: true,
             size: 200,
+        },
+        {
+            id: 'currency',
+            accessorKey: 'currency',
+            header: (props) => (
+                <DataTableColumnHeader {...props} title="Currency">
+                    <ColumnActions {...props}>
+                        <TextFilter
+                            defaultMode="contains"
+                            displayText="Currency"
+                            field="currency"
+                        />
+                    </ColumnActions>
+                </DataTableColumnHeader>
+            ),
+            cell: ({
+                row: {
+                    original: { currency },
+                },
+            }) =>
+                currency && (
+                    <CurrencyBadge
+                        currency={currency}
+                        displayFormat="code"
+                        size="sm"
+                        variant="outline"
+                    />
+                ),
+            enableMultiSort: true,
+            size: 130,
         },
         {
             id: 'accountCode',

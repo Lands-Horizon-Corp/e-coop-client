@@ -1,11 +1,14 @@
 import { APP_ENV } from '@/constants'
+import { TFootstepLevel, createFootstep } from '@/modules/footstep'
 
 /* eslint-disable no-console */
 type LogMethod = (...args: unknown[]) => void
 
 class Logger {
-    private static instance: Logger
+    private static instances: Map<string, Logger> = new Map()
     private isDevelopment: boolean
+    private module: string
+    private static hasLoggedAsciiArt: boolean = false
 
     public log: LogMethod
     public warn: LogMethod
@@ -13,10 +16,14 @@ class Logger {
     public info: LogMethod
     public debug: LogMethod
 
-    private constructor() {
-        console.log(
-            '\n                  ......                                    \n            .,,,,,,,,,,,,,,,,,,,                             \n        ,,,,,,,,,,,,,,,,,,,,,,,,,,                          \n      ,,,,,,,,,,,,,,  .,,,,,,,,,,,,,                        \n    ,,,,,,,,,,           ,,,,,,,,,,,,                       \n      ,,,,,,,          .,,,,,,,,,,,                          \n  ,*,,,,,,          ,,,,,,,,,,,,                             \n.**,,,,.**      .,,,,,,,,,,,                                \n.,,,,,,,**    ,,,,,,,,,,,                                   \n  .,,,,.**       ,,,,,,                                      \n    *******       ,                                         \n    **********              **,                             \n      ************,,  ,,*********,                          \n        **************************                          \n            ********************                             \n                  ******.\n'
-        )
+    private constructor(module: string = 'default') {
+        this.module = module
+        if (!Logger.hasLoggedAsciiArt) {
+            console.log(
+                '\n                  ......                                    \n            .,,,,,,,,,,,,,,,,,,,                             \n        ,,,,,,,,,,,,,,,,,,,,,,,,,,                          \n      ,,,,,,,,,,,,,,  .,,,,,,,,,,,,,                        \n    ,,,,,,,,,,           ,,,,,,,,,,,,                       \n      ,,,,,,,          .,,,,,,,,,,,                          \n  ,*,,,,,,          ,,,,,,,,,,,,                             \n.**,,,,.**      .,,,,,,,,,,,                                \n.,,,,,,,**    ,,,,,,,,,,,                                   \n  .,,,,.**       ,,,,,,                                      \n    *******       ,                                         \n    **********              **,                             \n      ************,,  ,,*********,                          \n        **************************                          \n            ********************                             \n                  ******.\n'
+            )
+            Logger.hasLoggedAsciiArt = true
+        }
 
         this.isDevelopment = ['development', 'local'].includes(APP_ENV)
 
@@ -42,32 +49,87 @@ class Logger {
         }
 
         if (this.isDevelopment) {
-            this.log = console.log.bind(console)
-            this.warn = console.warn.bind(console)
-            this.error = console.error.bind(console)
-            this.info = console.info.bind(console)
-            this.debug = console.debug.bind(console)
+            this.log = (...args) => {
+                console.log(...args)
+                this.footstep('info', args.join(' '), 'client_log')
+            }
+            this.warn = (...args) => {
+                console.warn(...args)
+                this.footstep('warning', args.join(' '), 'client_warning_log')
+            }
+            this.error = (...args) => {
+                console.error(...args)
+                this.footstep('error', args.join(' '), 'client_error_log')
+            }
+            this.info = (...args) => {
+                console.info(...args)
+                this.footstep('info', args.join(' '), 'client_info_log')
+            }
+            this.debug = (...args) => {
+                console.debug(...args)
+                this.footstep('debug', args.join(' '), 'client_debug_log')
+            }
         } else {
-            this.log = () => {}
-            this.warn = () => {}
-            this.error = () => {}
-            this.info = () => {}
-            this.debug = () => {}
-
-            console.log = () => {}
-            console.warn = () => {}
-            console.error = () => {}
-            console.info = () => {}
-            console.debug = () => {}
+            this.log = (...args) => {
+                this.footstep('info', args.join(' '), 'client_log')
+            }
+            this.warn = (...args) => {
+                this.footstep('warning', args.join(' '), 'client_warning_log')
+            }
+            this.error = (...args) => {
+                this.footstep('error', args.join(' '), 'client_error_log')
+            }
+            this.info = (...args) => {
+                this.footstep('info', args.join(' '), 'client_info_log')
+            }
+            this.debug = (...args) => {
+                this.footstep('debug', args.join(' '), 'client_debug_log')
+            }
+            console.log = (..._args) => {}
+            console.warn = (..._args) => {}
+            console.error = (..._args) => {}
+            console.info = (..._args) => {}
+            console.debug = (..._args) => {}
         }
     }
 
-    public static getInstance(): Logger {
-        if (!Logger.instance) {
-            Logger.instance = new Logger()
+    public async footstep(
+        level: TFootstepLevel,
+        description: string,
+        activity: string
+    ) {
+        await createFootstep({
+            level,
+            description,
+            activity,
+            module: this.module,
+        })
+    }
+
+    public static getInstance(module: string = 'default'): Logger {
+        if (!Logger.instances.has(module)) {
+            Logger.instances.set(module, new Logger(module))
         }
-        return Logger.instance
+        return Logger.instances.get(module)!
     }
 }
 
+// Default logger instance
 export default Logger.getInstance()
+
+// Export the Logger class for module-specific instances
+export { Logger }
+
+/**
+import { Logger } from '@/helpers/loggers/logger'
+
+const authLogger = Logger.getInstance('authentication')
+const userLogger = Logger.getInstance('user-management') 
+const paymentLogger = Logger.getInstance('payment-processing')
+
+authLogger.log('User attempting to login')
+authLogger.warn('Multiple failed login attempts detected')
+authLogger.error('Authentication failed')
+authLogger.info('Login successful')
+authLogger.debug('Token validation in progress')
+ */

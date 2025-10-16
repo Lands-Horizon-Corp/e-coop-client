@@ -1,9 +1,16 @@
-import { ILoanTransaction } from '@/modules/loan-transaction'
+import { toast } from 'sonner'
+
+import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
+import {
+    ILoanTransaction,
+    useUndoPrintLoanTransaction,
+} from '@/modules/loan-transaction'
 import { LoanTransactionPrintFormModal } from '@/modules/loan-transaction/components/forms/loan-print-form'
 import { LoanTransactionCreateUpdateFormModal } from '@/modules/loan-transaction/components/forms/loan-transaction-create-update-form'
 import LoanApproveReleaseDisplayModal from '@/modules/loan-transaction/components/loan-approve-release-display-modal'
 import LoanTransactionOtherAction from '@/modules/loan-transaction/components/loan-other-actions'
 import { LoanTagsManagerPopover } from '@/modules/loan-transaction/components/loan-tag-manager'
+import useConfirmModalStore from '@/store/confirm-modal-store'
 
 import { EyeIcon, PencilFillIcon } from '@/components/icons'
 import { Button } from '@/components/ui/button'
@@ -15,9 +22,7 @@ import {
 
 import { useModalState } from '@/hooks/use-modal-state'
 
-interface IClassProps {
-    className?: string
-}
+import { IClassProps } from '@/types'
 
 export interface ILoanTransactionStatusDates {
     printed_date?: string | null
@@ -47,9 +52,39 @@ const useCardKanbanActions = ({
     const printModal = useModalState()
     const approveModal = useModalState()
     const releaseModal = useModalState()
-
     const openViewModal = useModalState()
+    const undoApproveModal = useModalState()
+    const { onOpen } = useConfirmModalStore()
+    const unprintMutation = useUndoPrintLoanTransaction({
+        options: {
+            onSuccess: () => {
+                refetch?.()
+            },
+        },
+    })
 
+    const handleUnprint = () => {
+        onOpen({
+            title: 'Unprint Loan',
+            description:
+                'Unprinting loan will remove the set voucher number. Are you sure to unprint?',
+            confirmString: 'Unprint Loan',
+            onConfirm: () =>
+                toast.promise(
+                    unprintMutation.mutateAsync({
+                        loanTransactionId: loanTransaction.id,
+                    }),
+                    {
+                        loading: <span>Unprinting... Please wait...</span>,
+                        success: 'Unprinted',
+                        error: (error) =>
+                            serverRequestErrExtractor({
+                                error,
+                            }),
+                    }
+                ),
+        })
+    }
     const handleOpenPrintModal = () => {
         printModal.onOpenChange(true)
     }
@@ -62,6 +97,10 @@ const useCardKanbanActions = ({
     const handleOpenViewModal = () => {
         openViewModal.onOpenChange(true)
     }
+    const handleUndoApprove = () => {
+        undoApproveModal.onOpenChange(true)
+    }
+
     return {
         handleOpenViewModal,
         openViewModal,
@@ -73,6 +112,9 @@ const useCardKanbanActions = ({
         handleApproveModal,
         releaseModal,
         handleReleaseModal,
+        undoApproveModal,
+        handleUndoApprove,
+        handleUnprint,
     }
 }
 
@@ -91,6 +133,9 @@ export const LoanTransactionCardActions = ({
         handleApproveModal,
         releaseModal,
         handleReleaseModal,
+        undoApproveModal,
+        handleUndoApprove,
+        handleUnprint,
     } = useCardKanbanActions({ loanTransaction, refetch })
 
     const isReleased = !!loanTransaction.released_date
@@ -116,12 +161,19 @@ export const LoanTransactionCardActions = ({
                 }}
             />
             {['approve', 'undo-approve', 'release'].map((mode) => {
-                const modalState =
-                    mode === 'approve' ? approveModal : releaseModal
+                let modalState
+                if (mode === 'approve') {
+                    modalState = approveModal
+                } else if (mode === 'undo-approve') {
+                    modalState = undoApproveModal
+                } else {
+                    modalState = releaseModal
+                }
                 return (
                     <div key={mode}>
                         <LoanApproveReleaseDisplayModal
                             {...modalState}
+                            className="w-[55vw] min-w-[55vw] !max-w-[80vw]"
                             loanTransaction={loanTransaction}
                             mode={
                                 mode as TLoanTransactionApproveReleaseDisplayMode
@@ -158,7 +210,9 @@ export const LoanTransactionCardActions = ({
                                 loanTransaction={loanTransaction}
                                 onApprove={handleApproveModal}
                                 onPrint={handleOpenPrintModal}
+                                onPrintUndo={handleUnprint}
                                 onRelease={handleReleaseModal}
+                                onUndoApprove={handleUndoApprove}
                             />
                         </DropdownMenuContent>
                     </DropdownMenu>

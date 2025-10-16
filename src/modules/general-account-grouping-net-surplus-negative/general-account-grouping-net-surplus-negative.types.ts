@@ -15,7 +15,7 @@ export interface IGeneralAccountGroupingNetSurplusNegativeRequest {
     percentage_2?: number
 }
 
-export interface IGeneralAccountGroupingNetSurplusNegativeResponse
+export interface IGeneralAccountGroupingNetSurplusNegative
     extends ITimeStamps,
         IAuditable,
         IOrgBranchIdentity {

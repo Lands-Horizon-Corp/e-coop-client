@@ -30,7 +30,7 @@ jobs:
               with:
                   node-version: "22.18.0"
 
-            - name: 📦 Install bu
+            - name: 📦 Install bun
               run: npm i -g bun@1.2.20
 
             - name: 📦 Install dependencies

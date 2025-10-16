@@ -1,3 +1,4 @@
+import { Logger } from '@/helpers/loggers'
 import { createDataLayerFactory } from '@/providers/repositories/data-layer-factory'
 
 import type { ICategory } from '../category'
@@ -16,3 +17,5 @@ export const { useDeleteById, useGetAll, useGetById, useGetPaginated } =
     apiCrudHooks
 
 export const CategoryAPI = apiCrudService
+
+export const logger = Logger.getInstance('cash-check-voucher-tag')

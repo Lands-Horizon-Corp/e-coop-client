@@ -1,5 +1,6 @@
 import { useMutation } from '@tanstack/react-query'
 
+import { Logger } from '@/helpers/loggers'
 import { createDataLayerFactory } from '@/providers/repositories/data-layer-factory'
 import { HookMutationOptions } from '@/providers/repositories/mutation-factory'
 
@@ -72,3 +73,5 @@ export const useCloseMemberProfile = ({
             await closeMemberProfileAccount(profileId, data),
     })
 }
+
+export const logger = Logger.getInstance('member-close-remark')

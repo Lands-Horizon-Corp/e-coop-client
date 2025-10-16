@@ -1,3 +1,4 @@
+import { Logger } from '@/helpers/loggers'
 import { createDataLayerFactory } from '@/providers/repositories/data-layer-factory'
 
 import type {
@@ -51,3 +52,7 @@ export const {
 } = apiCrudHooks
 
 // custom hooks can go here
+
+export const logger = Logger.getInstance(
+    'loan-terms-and-condition-amount-receipt'
+)
