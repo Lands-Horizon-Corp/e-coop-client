@@ -47,9 +47,9 @@ export const Onboarding = () => {
                 />
                 <main className="flex w-full flex-1 items-center">
                     <div className="ecoop-scroll relative flex h-screen max-h-screen w-full flex-col overflow-y-auto">
-                        <div className="relative mx-auto my-5 flex w-[80%] flex-1 flex-col py-8">
+                        <div className="relative mx-auto my-5 flex w-[90%] flex-1 flex-col py-8">
                             {!isCreateBranchRoute && user_organization && (
-                                <OnboardingBack className="absolute right-5 top-10 max-w-24" />
+                                <OnboardingBack className="absolute right-5 top-10 max-w-full" />
                             )}
                             <Outlet />
                         </div>
