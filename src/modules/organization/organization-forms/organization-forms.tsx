@@ -456,7 +456,6 @@ const OrganizationForm = () => {
                                                 textAlign="right"
                                                 title="Cover Photo"
                                             />
-
                                             <BranchInfoItem
                                                 content={form.getValues(
                                                     'email'

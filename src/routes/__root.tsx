@@ -11,8 +11,6 @@ import { useAuthStore } from '@/modules/authentication/authgentication.store'
 import { ActionSecurityProvider } from '@/providers/action-security-provider'
 import ConnectionProvider from '@/providers/connection-provider'
 
-// import { HotkeysProvider } from 'react-hotkeys-hook'
-
 import CookieConsent from '@/components/cookie-consent'
 import {
     CheckFillIcon,
@@ -23,7 +21,6 @@ import {
 import ImagePreviewModal from '@/components/image-preview/image-preview-modal'
 import ConfirmModal from '@/components/modals/confirm-modal'
 import InfoModal from '@/components/modals/info-modal'
-// import { ShortcutProvider } from '@/components/shorcuts/general-shortcuts-wrapper'
 import LoadingSpinner from '@/components/spinners/loading-spinner'
 import { Toaster } from '@/components/ui/sonner'
 
@@ -80,8 +77,6 @@ function RootLayout() {
     })
     useNatsConnect({ user: NATS_USER, pass: NATS_PASS })
     return (
-        // <HotkeysProvider>
-        //     <ShortcutProvider>
         <div className="relative">
             <DndProvider backend={HTML5Backend}>
                 <Toaster
@@ -138,7 +133,5 @@ function RootLayout() {
                 <ActionSecurityProvider />
             </DndProvider>
         </div>
-        // </ShortcutProvider>
-        //</HotkeysProvider> */}
     )
 }

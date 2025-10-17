@@ -17,31 +17,18 @@ import {
     useUpdateOrganization,
 } from '@/modules/organization'
 
-import { GradientBackground } from '@/components/gradient-background/gradient-background'
-import {
-    BuildingBranchIcon,
-    PlusIcon,
-    ReplaceIcon,
-    VerifiedPatchIcon,
-} from '@/components/icons'
-import ImageDisplay from '@/components/image-display'
+import { VerifiedPatchIcon } from '@/components/icons'
 import Modal, { IModalProps } from '@/components/modals/modal'
-import { SinglePictureUploadModal } from '@/components/single-image-uploader/single-picture-uploader'
 import LoadingSpinner from '@/components/spinners/loading-spinner'
 import TextEditor from '@/components/text-editor'
-import ActionTooltip from '@/components/tooltips/action-tooltip'
 import { Button } from '@/components/ui/button'
-import { Checkbox } from '@/components/ui/checkbox'
-import FileUploader from '@/components/ui/file-uploader'
 import { Form, FormControl } from '@/components/ui/form'
 import FormErrorMessage from '@/components/ui/form-error-message'
 import FormFieldWrapper from '@/components/ui/form-field-wrapper'
+import ImageField from '@/components/ui/image-field'
 import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
 import { PhoneInput } from '@/components/ui/phone-input'
-import { Separator } from '@/components/ui/separator'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { PlainTextEditor } from '@/components/ui/text-editor'
 
 import { useFormHelper } from '@/hooks/use-form-helper'
 import { useLocationInfo } from '@/hooks/use-location-info'
@@ -71,7 +58,6 @@ const UpdateOrganizationForm = ({
     ...formProps
 }: IEditOrganizationFormProps) => {
     const { countryCode } = useLocationInfo()
-    const [openImagePicker, setOpenImagePicker] = useState(false)
 
     const [selectedLogoMedia, setSelectedLogoMedia] = useState<string>(
         media?.url || ''
@@ -105,7 +91,6 @@ const UpdateOrganizationForm = ({
                 toast.success(`Successfully updated ${data.name} organization`)
                 setSelectedLogoMedia('')
                 setSelectedCoverMedia('')
-                setOpenImagePicker(false)
             },
         },
     })
@@ -161,16 +146,6 @@ const UpdateOrganizationForm = ({
         }
     }, handleFocusError)
 
-    const HeaderTitleDisplay =
-        form.watch('name') === ''
-            ? 'Sample Organization Title'
-            : form.watch('name')
-
-    const DescriptionDisplay =
-        form.watch('description') === ''
-            ? 'This is sample description for your banner'
-            : form.watch('description')
-
     const errorMessage = serverRequestErrExtractor({ error })
 
     return (
@@ -180,259 +155,155 @@ const UpdateOrganizationForm = ({
                 onSubmit={onSubmit}
                 ref={formRef}
             >
-                <div className="w-full col-span-2 flex flex-col gap-y-2">
+                <div className="grid w-full grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+                    <div className="col-span-full flex flex-col sm:flex-row gap-4 w-full">
+                        <FormFieldWrapper
+                            className="flex-1"
+                            control={form.control}
+                            label="Organization Photo"
+                            name="media_id"
+                            render={({ field }) => {
+                                const value = form.watch('media')
+                                return (
+                                    <ImageField
+                                        {...field}
+                                        className="w-full"
+                                        onChange={(newImage) => {
+                                            if (newImage)
+                                                field.onChange(newImage.id)
+                                            else field.onChange(undefined)
+
+                                            form.setValue('media', newImage)
+                                        }}
+                                        placeholder="Upload Organization Photo"
+                                        value={
+                                            value
+                                                ? (value as IMedia).download_url
+                                                : value
+                                        }
+                                    />
+                                )
+                            }}
+                        />
+                        <FormFieldWrapper
+                            className="flex-1"
+                            control={form.control}
+                            label="Organization Cover Photo"
+                            name="cover_media_id"
+                            render={({ field }) => {
+                                const value = form.watch('cover_media')
+                                return (
+                                    <ImageField
+                                        {...field}
+                                        className="w-full"
+                                        onChange={(newImage) => {
+                                            if (newImage)
+                                                field.onChange(newImage.id)
+                                            else field.onChange(undefined)
+
+                                            form.setValue(
+                                                'cover_media',
+                                                newImage
+                                            )
+                                        }}
+                                        placeholder="Upload Organization Cover Photo"
+                                        value={
+                                            value
+                                                ? (value as IMedia).download_url
+                                                : value
+                                        }
+                                    />
+                                )
+                            }}
+                        />
+                    </div>
                     <FormFieldWrapper
-                        className="col-span-4"
+                        className="col-span-full sm:col-span-2 lg:col-span-3"
                         control={form.control}
-                        hiddenFields={formProps.hiddenFields}
-                        label="Organization Photo"
-                        name="media_id"
+                        label="Organization Name"
+                        name="name"
+                        render={({ field }) => (
+                            <Input
+                                {...field}
+                                autoComplete="org-name"
+                                id={field.name}
+                                placeholder="enter organization name"
+                            />
+                        )}
+                    />
+                    <FormFieldWrapper
+                        className="col-span-full sm:col-span-2 lg:col-span-1"
+                        control={form.control}
+                        label="Organization Email"
+                        name="email"
+                        render={({ field }) => (
+                            <Input
+                                {...field}
+                                autoComplete="organization email"
+                                id={field.name}
+                                placeholder="enter email"
+                            />
+                        )}
+                    />
+                    <FormFieldWrapper
+                        className="col-span-full sm:col-span-1 lg:col-span-2"
+                        control={form.control}
+                        label="Organization Contact Number"
+                        name="contact_number"
+                        render={({ field, fieldState: { invalid, error } }) => (
+                            <div className="relative flex flex-1 items-center gap-x-2">
+                                <VerifiedPatchIcon
+                                    className={cn(
+                                        'absolute right-2 top-1/2 z-20 size-4 -translate-y-1/2 text-primary delay-300 duration-300 ease-in-out',
+                                        (invalid || error) && 'text-destructive'
+                                    )}
+                                />
+                                <PhoneInput
+                                    {...field}
+                                    className="w-full"
+                                    defaultCountry={countryCode}
+                                />
+                            </div>
+                        )}
+                    />
+                    <FormFieldWrapper
+                        className="col-span-full sm:col-span-1 lg:col-span-2"
+                        control={form.control}
+                        label="Organization Address"
+                        name="address"
+                        render={({ field }) => (
+                            <Input
+                                {...field}
+                                autoComplete="organization address"
+                                id={field.name}
+                                placeholder="enter organization address"
+                            />
+                        )}
+                    />
+                    <FormFieldWrapper
+                        className="col-span-full h-52"
+                        control={form.control}
+                        label="Organization Description"
+                        name="description"
                         render={({ field }) => {
+                            const { ref: _ref, ...rest } = field
                             return (
                                 <FormControl>
-                                    <div className="relative mx-auto size-fit">
-                                        <SinglePictureUploadModal
-                                            defaultImage={selectedLogoMedia}
-                                            onOpenChange={setOpenImagePicker}
-                                            onPhotoChoose={(newImage) => {
-                                                field.onChange(newImage)
-                                                setSelectedLogoMedia(newImage)
-                                            }}
-                                            open={openImagePicker}
-                                            title="Choose Organization Logo"
-                                        />
-                                        <ImageDisplay
-                                            className="size-36 rounded-lg"
-                                            src={selectedLogoMedia}
-                                        />
-                                        <ActionTooltip
-                                            align="center"
-                                            side="right"
-                                            tooltipContent={
-                                                field.value
-                                                    ? 'Replace'
-                                                    : 'Insert'
-                                            }
-                                        >
-                                            <Button
-                                                className="absolute bottom-2 right-2  size-fit  rounded-full border border-transparent p-2"
-                                                disabled={isDisabled(
-                                                    field.name
-                                                )}
-                                                onClick={(e) => {
-                                                    e.preventDefault()
-                                                    setOpenImagePicker(true)
-                                                }}
-                                                variant="secondary"
-                                            >
-                                                {field.value ? (
-                                                    <ReplaceIcon size={20} />
-                                                ) : (
-                                                    <PlusIcon />
-                                                )}
-                                            </Button>
-                                        </ActionTooltip>
-                                    </div>
+                                    <TextEditor
+                                        {...rest}
+                                        className="h-full w-full"
+                                        content={field.value || ''}
+                                        placeholder="Write some description about your Organization..."
+                                        textEditorClassName="!max-w-none !h-full"
+                                    />
                                 </FormControl>
                             )
                         }}
                     />
-                    <FormFieldWrapper
-                        className="md:col-span-4"
-                        control={form.control}
-                        hiddenFields={formProps.hiddenFields}
-                        label="Banner Background"
-                        name="cover_media_id"
-                        render={({ field }) => {
-                            const hasNoImageSelected =
-                                form.watch('media_id') === ''
-                            return (
-                                <div>
-                                    <GradientBackground
-                                        className="w-full"
-                                        mediaUrl={
-                                            selectedCoverMedia || field.value
-                                        }
-                                    >
-                                        <div className="flex min-h-32 cursor-pointer items-center justify-between gap-x-2 rounded-2xl border-0 p-4 hover:bg-secondary/50 hover:no-underline">
-                                            <ImageDisplay
-                                                className="size-24 rounded-lg"
-                                                src={selectedLogoMedia}
-                                                style={{
-                                                    opacity: hasNoImageSelected
-                                                        ? 0.1
-                                                        : 1,
-                                                }}
-                                            />
-
-                                            <div className="flex grow flex-col">
-                                                <p className="touch-pan-up text-start text-2xl font-bold">
-                                                    {HeaderTitleDisplay}
-                                                </p>
-                                                <PlainTextEditor
-                                                    className="overflow max-h-7 min-w-96 max-w-[30rem] overflow-y-hidden"
-                                                    content={DescriptionDisplay}
-                                                />
-                                            </div>
-                                        </div>
-                                    </GradientBackground>
-                                    <div className="flex w-full justify-end py-2">
-                                        <FileUploader
-                                            accept={{
-                                                'image/png': ['.png'],
-                                                'image/jpeg': ['.jpg', '.jpeg'],
-                                            }}
-                                            buttonOnly
-                                            disabled={isDisabled(field.name)}
-                                            maxFiles={1}
-                                            selectedPhotos={(selectedPhoto) => {
-                                                field.onChange(selectedPhoto)
-                                                setSelectedCoverMedia(
-                                                    selectedPhoto
-                                                )
-                                            }}
-                                        />
-                                    </div>
-                                </div>
-                            )
-                        }}
-                    />
                 </div>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-5 w-full">
-                    <div className="flex flex-col gap-y-2 w-full">
-                        <FormFieldWrapper
-                            control={form.control}
-                            hiddenFields={formProps.hiddenFields}
-                            label="Organization Name"
-                            name="name"
-                            render={({ field }) => (
-                                <Input
-                                    {...field}
-                                    autoComplete="org-name"
-                                    disabled={isDisabled(field.name)}
-                                    id={field.name}
-                                    placeholder="enter organization name"
-                                />
-                            )}
-                        />
-                        <FormFieldWrapper
-                            className="col-span-2"
-                            control={form.control}
-                            hiddenFields={formProps.hiddenFields}
-                            label="Organization Contact Number"
-                            name="contact_number"
-                            render={({
-                                field,
-                                fieldState: { invalid, error },
-                            }) => (
-                                <div className="relative flex flex-1 items-center gap-x-2">
-                                    <VerifiedPatchIcon
-                                        className={cn(
-                                            'absolute right-2 top-1/2 z-20 size-4 -translate-y-1/2 text-primary delay-300 duration-300 ease-in-out',
-                                            (invalid || error) &&
-                                                'text-destructive'
-                                        )}
-                                    />
-                                    <PhoneInput
-                                        {...field}
-                                        className="w-full"
-                                        defaultCountry={countryCode}
-                                        disabled={isDisabled(field.name)}
-                                    />
-                                </div>
-                            )}
-                        />
-                        <FormFieldWrapper
-                            className="col-span-2"
-                            control={form.control}
-                            hiddenFields={formProps.hiddenFields}
-                            label="Organization Address"
-                            name="address"
-                            render={({ field }) => (
-                                <Input
-                                    {...field}
-                                    autoComplete="organization address"
-                                    className=""
-                                    disabled={isDisabled(field.name)}
-                                    id={field.name}
-                                    placeholder="enter organization address"
-                                />
-                            )}
-                        />
-                        <FormFieldWrapper
-                            control={form.control}
-                            hiddenFields={formProps.hiddenFields}
-                            name="is_private"
-                            render={({ field }) => {
-                                return (
-                                    <GradientBackground gradientOnly>
-                                        <div className="shadow-xs relative flex w-full items-start gap-2 rounded-2xl border border-input p-4 outline-none duration-200 ease-out has-[:checked]:border-primary/30 has-[:checked]:bg-primary/40">
-                                            <Checkbox
-                                                checked={field.value}
-                                                className="order-1 after:absolute after:inset-0"
-                                                disabled={isDisabled(
-                                                    field.name
-                                                )}
-                                                id={field.name}
-                                                name={field.name}
-                                                onCheckedChange={field.onChange}
-                                            />
-                                            <div className="flex grow items-center gap-3">
-                                                <div className="size-fit rounded-sm bg-secondary p-2">
-                                                    <BuildingBranchIcon />
-                                                </div>
-                                                <div className="grid gap-2">
-                                                    <Label htmlFor={field.name}>
-                                                        Make this Organization
-                                                        Private
-                                                    </Label>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </GradientBackground>
-                                )
-                            }}
-                        />
-                    </div>
-                    <div className=" flex flex-col gap-y-2 w-full">
-                        <FormFieldWrapper
-                            className="col-span-4"
-                            control={form.control}
-                            hiddenFields={formProps.hiddenFields}
-                            label="Organization Description"
-                            name="description"
-                            render={({ field }) => {
-                                const { ref: _ref, ...rest } = field
-                                return (
-                                    <FormControl>
-                                        <TextEditor
-                                            {...rest}
-                                            className="w-full "
-                                            content={field.value || ''}
-                                            disabled={isDisabled(field.name)}
-                                            placeholder="Write some description about your Organization..."
-                                            textEditorClassName=" !max-w-none"
-                                            toolBarClassName="bg-background/50 rounded-lg my-2 p-2"
-                                        />
-                                    </FormControl>
-                                )
-                            }}
-                        />
-                    </div>
-                </div>
-                <Separator />
-                <div className="w-full flex flex-col gap-y-5">
-                    <div className="my-5">
-                        <h2 className="text-2xl font-semibold">
-                            {' '}
-                            Add Policies
-                        </h2>
-                        <p className="text-xs text-muted-foreground">
-                            This Policies will only apply to this organization.
-                        </p>
-                    </div>
+                <div className="w-full pt-5 flex flex-col gap-y-5">
                     <Tabs className="w-full" defaultValue="privacy_policy">
-                        <TabsList className="bg-transparent flex flex-wrap justify-start gap-2">
+                        <TabsList className="sticky top-[0%] w-full z-50 backdrop-blur-2xl backdrop h-auto min-w-fit justify-start gap-2 rounded-none border-b bg-background/50 px-0 py-1 text-foreground">
                             {[
                                 'privacy_policy',
                                 'cookie_policy',
@@ -441,7 +312,7 @@ const UpdateOrganizationForm = ({
                                 'user_agreement',
                             ].map((policyType) => (
                                 <TabsTrigger
-                                    className="capitalize"
+                                    className="relative flex items-center gap-x-2 after:absolute after:inset-x-0 after:bottom-0 after:-mb-1 after:h-0.5 after:duration-300 after:ease-in-out hover:bg-accent hover:text-foreground data-[state=active]:bg-transparent data-[state=active]:shadow-none data-[state=active]:after:bg-primary data-[state=active]:hover:bg-accent"
                                     key={policyType}
                                     value={policyType}
                                 >
@@ -643,7 +514,7 @@ export const UpdateOrganizationFormModal = ({
 }) => {
     return (
         <Modal
-            className={cn(' max-w-[80rem]', className)}
+            className={cn('', className)}
             description={description}
             title={title}
             {...props}

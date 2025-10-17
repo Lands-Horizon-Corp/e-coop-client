@@ -13,7 +13,7 @@ import {
     AngryIcon,
     ArrowUpRightIcon,
     CheckFillIcon,
-    ChevronLeftIcon,
+    // ChevronLeftIcon,
     ChevronRightIcon,
     CookieBiteIcon,
     DatabaseLockIcon,
@@ -58,45 +58,45 @@ export const Route = createFileRoute('/account-profile')({
     component: RouteComponent,
 })
 
-const BackButton = () => {
-    const router = useRouter()
-    const {
-        currentAuth: { user_organization },
-    } = useAuthUser()
+// const BackButton = () => {
+//     const router = useRouter()
+//     const {
+//         currentAuth: { user_organization },
+//     } = useAuthUser()
 
-    const handleBack = () => {
-        if (user_organization)
-            return router.navigate({
-                to: `/org/${user_organization.organization.name
-                    .toLowerCase()
-                    .replace(/[^a-z0-9]+/g, '-')
-                    .replace(
-                        /^-+|-+$/g,
-                        ''
-                    )}/branch/${user_organization.branch.name
-                    .toLowerCase()
-                    .replace(/[^a-z0-9]+/g, '-')
-                    .replace(/^-+|-+$/g, '')}`,
-            })
+//     const handleBack = () => {
+//         if (user_organization)
+//             return router.navigate({
+//                 to: `/org/${user_organization.organization.name
+//                     .toLowerCase()
+//                     .replace(/[^a-z0-9]+/g, '-')
+//                     .replace(
+//                         /^-+|-+$/g,
+//                         ''
+//                     )}/branch/${user_organization.branch.name
+//                     .toLowerCase()
+//                     .replace(/[^a-z0-9]+/g, '-')
+//                     .replace(/^-+|-+$/g, '')}`,
+//             })
 
-        router.history.back()
-    }
+//         router.history.back()
+//     }
 
-    if (!user_organization) return
+//     if (!user_organization) return
 
-    return (
-        <SidebarMenuButton
-            asChild
-            className="last:border-b-0 group/sidebar-item transition-colors ease-in-out duration-75 px-2 py-5 rounded-none border-b-1"
-            onClick={handleBack}
-        >
-            <span className="flex items-center gap-x-2 px-4">
-                <ChevronLeftIcon />
-                <p>Back</p>
-            </span>
-        </SidebarMenuButton>
-    )
-}
+//     return (
+//         <SidebarMenuButton
+//             asChild
+//             className="last:border-b-0 group/sidebar-item transition-colors ease-in-out duration-75 px-2 py-5 rounded-none border-b-1"
+//             onClick={handleBack}
+//         >
+//             <span className="flex items-center gap-x-2 px-4">
+//                 <ChevronLeftIcon />
+//                 <p>Back</p>
+//             </span>
+//         </SidebarMenuButton>
+//     )
+// }
 
 function RouteComponent() {
     return (
@@ -249,7 +249,7 @@ function RouteComponent() {
                                         <LinkIcon className="ml-auto text-sidebar-foreground/40 group-hover/sidebar-item:text-sidebar-accent-foreground" />
                                     </Link>
                                 </SidebarMenuButton>
-                                <BackButton />
+                                {/* <BackButton /> */}
                                 <SignOutButton />
                             </div>
                         </div>
@@ -446,8 +446,7 @@ function RouteComponent() {
             </SidebarProvider>
             {/* <div className="flex">
                 <main className="flex w-full flex-1 items-center">
-                    <div className="ecoop-scroll relative flex h-screen max-h-screen w-full flex-col items-center justify-center overflow-y-auto">
-                        <BackButton />
+                    <div className="ecoop-scroll  relative flex h-screen max-h-screen w-full flex-col items-center justify-center overflow-y-auto">
                         <div className="relative mt-24 flex min-h-[80vh] w-full max-w-7xl flex-1 flex-col space-y-4">
                             
                             <div className="flex flex-1 gap-x-8">

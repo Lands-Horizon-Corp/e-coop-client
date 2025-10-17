@@ -30,7 +30,7 @@ const TextEditor = forwardRef<HTMLDivElement, Props>(
     (
         {
             className,
-            disabled = false,
+            // disabled = false,
             content = '',
             spellCheck = true,
             showToolbar = true,
@@ -79,7 +79,6 @@ const TextEditor = forwardRef<HTMLDivElement, Props>(
         }, [content, editor])
 
         useImperativeHandle(ref, () => {
-            // You can expose methods if needed, or just return the DOM node
             return editor?.view.dom as HTMLDivElement
         }, [editor])
 
@@ -89,12 +88,7 @@ const TextEditor = forwardRef<HTMLDivElement, Props>(
         }
 
         return (
-            <div
-                className={cn(
-                    `relative w-full after:absolute after:top-0 after:size-full after:rounded-lg after:bg-background/20 after:content-[''] ${disabled ? 'cursor-not-allowed after:block after:blur-sm' : 'after:hidden'}`,
-                    className
-                )}
-            >
+            <div className={cn('flex flex-col h-full', className)}>
                 {showToolbar && editor && (
                     <Toolbar
                         activeHeading={activeHeading}
@@ -105,7 +99,10 @@ const TextEditor = forwardRef<HTMLDivElement, Props>(
                         toggleHeading={toggleHeading}
                     />
                 )}
-                <EditorContent disabled={disabled} editor={editor} />
+                <EditorContent
+                    className="text-editor-content"
+                    editor={editor}
+                />
             </div>
         )
     }

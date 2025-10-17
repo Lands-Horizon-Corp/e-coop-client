@@ -395,7 +395,7 @@ export const CreateUpdateBranchByOrgForm = ({
                                 }}
                             />
                             <FormFieldWrapper
-                                className="col-span-4"
+                                className="col-span-4 max-w-full"
                                 control={form.control}
                                 label="Branch Description"
                                 name="description"
@@ -405,6 +405,7 @@ export const CreateUpdateBranchByOrgForm = ({
                                         <FormControl>
                                             <TextEditor
                                                 {...rest}
+                                                className="max-w-[500px] w-full"
                                                 content={field.value ?? ''}
                                                 disabled={isLoading}
                                                 placeholder="Write some description about your branch..."
