@@ -324,3 +324,8 @@ export type TDeleteAccountFromGLFSType = {
     id: TEntityId
     mode: string
 }
+
+export type TAccountComputationsheetConnect = {
+    computation_sheet_id: TEntityId
+    account_id: TEntityId
+}

@@ -19,6 +19,7 @@ import {
     IAccount,
     IAccountPaginated,
     IAccountRequest,
+    TAccountComputationsheetConnect,
     TDeleteAccountFromGLFSType,
     TPaginatedAccountHookMode,
 } from './account.types'
@@ -133,5 +134,72 @@ export const useFilteredPaginatedAccount = ({
         ...options,
     })
 }
+
+export const useAccountsComputation = ({
+    options,
+    query,
+    computationSheetId,
+}: {
+    computationSheetId: TEntityId
+    query?: Record<string, unknown>
+    options?: HookQueryOptions<IAccount[], Error>
+}) => {
+    return useQuery<IAccount[], Error>({
+        queryKey: ['account', 'computation-sheet', computationSheetId, query],
+        queryFn: async () => {
+            return apiCrudService.getAll<IAccount>({
+                url: `${apiCrudService.route}/computation-sheet/${computationSheetId}`,
+                query,
+            })
+        },
+        ...options,
+    })
+}
+
+export const useAccountComputationConnect = createMutationFactory<
+    IAccount,
+    Error,
+    TAccountComputationsheetConnect
+>({
+    mutationFn: async ({ computation_sheet_id, account_id }) => {
+        return (
+            await API.post<TAccountComputationsheetConnect, IAccount>(
+                `${apiCrudService.route}/computation-sheet/${computation_sheet_id}/connect`,
+                { computation_sheet_id, account_id }
+            )
+        ).data
+    },
+    invalidationFn: (args) => {
+        return args.queryClient.invalidateQueries({
+            queryKey: [
+                'computation-sheet',
+                args.variables.computation_sheet_id,
+            ],
+        })
+    },
+})
+
+export const useAccountComputationDisconnect = createMutationFactory<
+    IAccount,
+    Error,
+    TAccountComputationsheetConnect
+>({
+    mutationFn: async ({ computation_sheet_id, account_id }) => {
+        return (
+            await API.post<TAccountComputationsheetConnect, IAccount>(
+                `${apiCrudService.route}/computation-sheet/${computation_sheet_id}/disconnect`,
+                { computation_sheet_id, account_id }
+            )
+        ).data
+    },
+    invalidationFn: (args) => {
+        return args.queryClient.invalidateQueries({
+            queryKey: [
+                'computation-sheet',
+                args.variables.computation_sheet_id,
+            ],
+        })
+    },
+})
 
 export const logger = Logger.getInstance('account')
