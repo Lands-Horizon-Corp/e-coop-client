@@ -1,14 +1,20 @@
-import { useState } from 'react'
+import { useState } from 'react';
 
-import { useForm } from 'react-hook-form'
-import { toast } from 'sonner'
 
-import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
 
-import { formatNumber } from '@/helpers'
-import { dateAgo, toInputDateString } from '@/helpers/date-utils'
-import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
-import { AccountTypeBadge } from '@/modules/account'
+import { useForm } from 'react-hook-form';
+import { toast } from 'sonner';
+
+
+
+import { standardSchemaResolver } from '@hookform/resolvers/standard-schema';
+
+
+
+import { formatNumber } from '@/helpers';
+import { dateAgo, toInputDateString } from '@/helpers/date-utils';
+import { serverRequestErrExtractor } from '@/helpers/error-message-extractor';
+import { AccountTypeBadge } from '@/modules/account';
 import { useAuthUserWithOrgBranch } from '@/modules/authentication/authgentication.store';
 import BankCombobox from '@/modules/bank/components/bank-combobox';
 import { ICurrency } from '@/modules/currency';
@@ -157,7 +163,7 @@ const LoanPayablesForm = ({
                     reference_number: data.reference_number,
                     is_reference_number_checked:
                         data.is_reference_number_checked,
-                    description: `Loan payment for loan transaction ID: ${formProps.loanTransacitonId}`,
+                    description: `Loan payment`,
                 }
 
                 const createdTransaction =
