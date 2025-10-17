@@ -1,6 +1,4 @@
-import { useEffect } from 'react';
-
-
+import { useEffect } from 'react'
 
 import { Path, useForm } from 'react-hook-form'
 

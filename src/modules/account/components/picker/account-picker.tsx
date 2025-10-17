@@ -150,7 +150,9 @@ const AccountPicker = ({
                                 </span>
                             )}
                             <span className="text-ellipsis text-left text-foreground/80">
-                                {Account.currency?.emoji ? `${Account.currency?.emoji} ` : '🏳️ '}
+                                {Account.currency?.emoji
+                                    ? `${Account.currency?.emoji} `
+                                    : '🏳️ '}
                                 {Account.name}
                                 <br />
                                 <span className="text-xs text-muted-foreground/70">

@@ -1,19 +1,13 @@
-import { useCallback, useRef, useState } from 'react';
+import { useCallback, useRef, useState } from 'react'
 
+import { Path, UseFormReturn, useForm } from 'react-hook-form'
+import { toast } from 'sonner'
 
+import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
 
-import { Path, UseFormReturn, useForm } from 'react-hook-form';
-import { toast } from 'sonner';
-
-
-
-import { standardSchemaResolver } from '@hookform/resolvers/standard-schema';
-
-
-
-import { cn } from '@/helpers';
-import { serverRequestErrExtractor } from '@/helpers/error-message-extractor';
-import { AccountPicker } from '@/modules/account';
+import { cn } from '@/helpers'
+import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
+import { AccountPicker } from '@/modules/account'
 import { useAuthUserWithOrgBranch } from '@/modules/authentication/authgentication.store'
 import { CurrencyInput } from '@/modules/currency'
 import LoanPurposeCombobox from '@/modules/loan-purpose/components/loan-purpose-combobox'
