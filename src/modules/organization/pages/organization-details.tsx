@@ -165,7 +165,7 @@ function BranchesSection({ organizationId }: BranchesSectionProps) {
                     <BranchIcon className="mr-2" />
                     List of Branches
                 </p>
-                <div className="grid grid-cols-1 gap-2">
+                <div className="grid grid-cols-3 gap-2">
                     {joinableBranches.map(({ branch, isUserCanJoin }) => (
                         <div key={branch.id}>
                             <Branch

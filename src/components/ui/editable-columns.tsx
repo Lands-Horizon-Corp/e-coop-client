@@ -5,9 +5,9 @@ import * as SelectPrimitive from '@radix-ui/react-select'
 import { cn } from '@/helpers'
 import { IAccount } from '@/modules/account'
 import { AccountPicker } from '@/modules/account/components'
+import { CurrencyInput, ICurrency } from '@/modules/currency'
 import { IMemberProfile } from '@/modules/member-profile'
 import MemberPicker from '@/modules/member-profile/components/member-picker'
-import { TransactionAmountField } from '@/modules/transaction'
 import { CellContext, Row } from '@tanstack/react-table'
 
 import { Checkbox } from '@/components/ui/checkbox'
@@ -44,7 +44,7 @@ interface CustomCellContext<TData extends object>
         | 'account-picker'
         | 'member-picker'
     options?: { label: string; value: string }[]
-    inputProps?: InputProps
+    inputProps?: InputProps & { currency?: ICurrency }
     selectTriggerProps?: React.ComponentProps<typeof SelectPrimitive.Trigger>
     checkboxProps?: React.ComponentProps<typeof Checkbox>
 }
@@ -88,19 +88,22 @@ export const EditableCell = <T extends object>({
                     value={value as string}
                 />
             )
-        case 'number':
+        case 'number': {
+            // @ts-expect-error defaultValue and step is not used in CurrencyInput
+            const { defaultValue: _def, step: _step, ...props } = inputProps
+
             return (
-                <TransactionAmountField
-                    {...inputProps}
-                    className={cn('text-left', inputProps?.className)}
-                    isDefault
+                <CurrencyInput
+                    {...props}
+                    className={cn('text-left', props?.className)}
                     onBlur={handleBlur}
-                    onChange={(e) => {
-                        handleChange(Number(e.target.value))
+                    onValueChange={(newValue) => {
+                        handleChange(newValue)
                     }}
                     value={value as number}
                 />
             )
+        }
         case 'select':
             return (
                 <Select

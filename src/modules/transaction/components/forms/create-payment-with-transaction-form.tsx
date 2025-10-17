@@ -2,12 +2,13 @@ import { useEffect } from 'react'
 
 import { Path, useForm } from 'react-hook-form'
 
-import { zodResolver } from '@hookform/resolvers/zod'
+import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
 
 import { cn } from '@/helpers'
 import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
 import { AccountPicker } from '@/modules/account'
 import BankCombobox from '@/modules/bank/components/bank-combobox'
+import { CurrencyInput } from '@/modules/currency'
 import { IGeneralLedger } from '@/modules/general-ledger'
 import { IMedia } from '@/modules/media'
 import { useGetAll } from '@/modules/payment-type'
@@ -17,7 +18,6 @@ import {
     PaymentTypeCombobox,
     PaymentWithTransactionSchema,
     TPaymentWithTransactionFormValues,
-    TransactionAmountField,
     TransactionNoFoundBatch,
     useCreateTransactionPaymentByMode,
 } from '@/modules/transaction'
@@ -82,7 +82,7 @@ const PaymentWithTransactionForm = ({
     } = useGetUserSettings()
 
     const form = useForm<TPaymentWithTransactionFormValues>({
-        resolver: zodResolver(PaymentWithTransactionSchema),
+        resolver: standardSchemaResolver(PaymentWithTransactionSchema),
         defaultValues: {
             ...defaultValues,
             account_id:
@@ -412,15 +412,21 @@ const PaymentWithTransactionForm = ({
                                     label="Amount"
                                     labelClassName="text-xs font-medium text-muted-foreground"
                                     name="amount"
-                                    render={({ field }) => {
-                                        return (
-                                            <TransactionAmountField
-                                                isDefault
-                                                {...field}
-                                                disabled={isDisabled('amount')}
-                                            />
-                                        )
-                                    }}
+                                    render={({
+                                        field: { onChange, ...field },
+                                    }) => (
+                                        <CurrencyInput
+                                            {...field}
+                                            currency={
+                                                form.watch('account')?.currency
+                                            }
+                                            disabled={isDisabled('amount')}
+                                            onValueChange={(newValue) =>
+                                                onChange(newValue)
+                                            }
+                                            placeholder="Amount"
+                                        />
+                                    )}
                                 />
                                 <FormFieldWrapper
                                     control={form.control}

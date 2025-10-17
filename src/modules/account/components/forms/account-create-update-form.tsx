@@ -34,6 +34,7 @@ import { AccountClassificationComboBox } from '@/modules/account-classification'
 import { AccountTagsManagerPopover } from '@/modules/account-tag/components/account-tag-management'
 import { useAuthUserWithOrgBranch } from '@/modules/authentication/authgentication.store'
 import ComputationSheetCombobox from '@/modules/computation-sheet/components/computation-sheet-combobox'
+import { CurrencyInput } from '@/modules/currency'
 import CurrencyCombobox from '@/modules/currency/components/currency-combobox'
 import MemberTypeCombobox from '@/modules/member-type/components/member-type-combobox'
 
@@ -104,6 +105,10 @@ const AccountCreateUpdateForm = ({
             compassion_fund: false,
             compassion_fund_amount: 0,
             icon: 'Money Bag',
+            computation_type: ComputationTypeEnum.Straight,
+            currency_id:
+                currentAuth.user_organization
+                    .settings_currency_default_value_id,
             ...formProps.defaultValues,
         },
     })
@@ -683,27 +688,20 @@ const AccountCreateUpdateForm = ({
                                     control={form.control}
                                     label="Min Amount"
                                     name="minAmount"
-                                    render={({ field }) => (
-                                        <div className="flex grow flex-col gap-y-2">
-                                            <Input
-                                                {...field}
-                                                disabled={
-                                                    isDisabled(field.name) ||
-                                                    isLoading
-                                                }
-                                                onChange={(e) =>
-                                                    field.onChange(
-                                                        e.target.value === ''
-                                                            ? undefined
-                                                            : parseFloat(
-                                                                  e.target.value
-                                                              )
-                                                    )
-                                                }
-                                                placeholder="Min Amount"
-                                                value={field.value ?? ''}
-                                            />
-                                        </div>
+                                    render={({
+                                        field: { onChange, ...field },
+                                    }) => (
+                                        <CurrencyInput
+                                            {...field}
+                                            disabled={
+                                                isDisabled(field.name) ||
+                                                isLoading
+                                            }
+                                            onValueChange={(newValue) => {
+                                                onChange(newValue)
+                                            }}
+                                            placeholder="Min Amount"
+                                        />
                                     )}
                                 />
                                 <FormFieldWrapper
@@ -711,27 +709,20 @@ const AccountCreateUpdateForm = ({
                                     control={form.control}
                                     label="Max Amount"
                                     name="maxAmount"
-                                    render={({ field }) => (
-                                        <div className="flex grow flex-col gap-y-2">
-                                            <Input
-                                                {...field}
-                                                disabled={
-                                                    isDisabled(field.name) ||
-                                                    isLoading
-                                                }
-                                                onChange={(e) =>
-                                                    field.onChange(
-                                                        e.target.value === ''
-                                                            ? undefined
-                                                            : parseFloat(
-                                                                  e.target.value
-                                                              )
-                                                    )
-                                                }
-                                                placeholder="Max Amount"
-                                                value={field.value ?? ''}
-                                            />
-                                        </div>
+                                    render={({
+                                        field: { onChange, ...field },
+                                    }) => (
+                                        <CurrencyInput
+                                            {...field}
+                                            disabled={
+                                                isDisabled(field.name) ||
+                                                isLoading
+                                            }
+                                            onValueChange={(newValue) => {
+                                                onChange(newValue)
+                                            }}
+                                            placeholder="Max Amount"
+                                        />
                                     )}
                                 />
                             </fieldset>
@@ -972,30 +963,20 @@ const AccountCreateUpdateForm = ({
                                         disabled={isLoading}
                                         label="Yearly Subscription Fee"
                                         name="yearly_subscription_fee"
-                                        render={({ field }) => (
-                                            <div className="flex grow flex-col gap-y-2">
-                                                <Input
-                                                    {...field}
-                                                    disabled={
-                                                        isDisabled(
-                                                            field.name
-                                                        ) || isLoading
-                                                    }
-                                                    onChange={(e) =>
-                                                        field.onChange(
-                                                            e.target.value ===
-                                                                ''
-                                                                ? undefined
-                                                                : parseFloat(
-                                                                      e.target
-                                                                          .value
-                                                                  )
-                                                        )
-                                                    }
-                                                    placeholder="Yearly Subscription Fee"
-                                                    value={field.value ?? ''}
-                                                />
-                                            </div>
+                                        render={({
+                                            field: { onChange, ...field },
+                                        }) => (
+                                            <CurrencyInput
+                                                {...field}
+                                                disabled={
+                                                    isDisabled(field.name) ||
+                                                    isLoading
+                                                }
+                                                onValueChange={(newValue) => {
+                                                    onChange(newValue)
+                                                }}
+                                                placeholder="Yearly Subscription Fee"
+                                            />
                                         )}
                                     />
                                     <FormFieldWrapper
@@ -1749,28 +1730,20 @@ const AccountCreateUpdateForm = ({
                                     control={form.control}
                                     label="Compassion Fund Amount"
                                     name="compassion_fund_amount"
-                                    render={({ field }) => (
-                                        <Input
+                                    render={({
+                                        field: { onChange, ...field },
+                                    }) => (
+                                        <CurrencyInput
                                             {...field}
                                             disabled={
                                                 isDisabled(field.name) ||
                                                 isLoading ||
                                                 !isCompassionFundEnabled
                                             }
-                                            min="0"
-                                            onChange={(e) =>
-                                                field.onChange(
-                                                    e.target.value === ''
-                                                        ? 0
-                                                        : parseFloat(
-                                                              e.target.value
-                                                          )
-                                                )
-                                            }
+                                            onValueChange={(newValue) => {
+                                                onChange(newValue)
+                                            }}
                                             placeholder="Enter compassion fund amount"
-                                            step="0.01"
-                                            type="number"
-                                            value={field.value ?? ''}
                                         />
                                     )}
                                 />

@@ -3,6 +3,7 @@ import { useForm } from 'react-hook-form'
 import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
 
 import { cn } from '@/helpers/tw-utils'
+import { CurrencyInput } from '@/modules/currency'
 
 import FormFooterResetSubmit from '@/components/form-components/form-footer-reset-submit'
 import Modal, { IModalProps } from '@/components/modals/modal'
@@ -103,15 +104,12 @@ const LoanClearanceAnalysisCreateUpdateForm = ({
                         control={form.control}
                         label="Regular Deduction Amount"
                         name="regular_deduction_amount"
-                        render={({ field }) => (
-                            <Input
+                        render={({ field: { onChange, ...field } }) => (
+                            <CurrencyInput
                                 {...field}
                                 disabled={isDisabled(field.name)}
-                                id={field.name}
-                                onChange={(e) => {
-                                    const value =
-                                        parseFloat(e.target.value) || 0
-                                    field.onChange(value)
+                                onValueChange={(newValue) => {
+                                    onChange(newValue)
                                 }}
                                 placeholder="0.00"
                             />
@@ -140,16 +138,14 @@ const LoanClearanceAnalysisCreateUpdateForm = ({
                             control={form.control}
                             label="Balances Amount"
                             name="balances_amount"
-                            render={({ field }) => (
-                                <Input
+                            render={({ field: { onChange, ...field } }) => (
+                                <CurrencyInput
                                     {...field}
                                     disabled={isDisabled(field.name)}
-                                    id={field.name}
-                                    onChange={(e) => {
-                                        const value =
-                                            parseFloat(e.target.value) || 0
-                                        field.onChange(value)
+                                    onValueChange={(newValue) => {
+                                        onChange(newValue)
                                     }}
+                                    placeholder="0.00"
                                 />
                             )}
                         />

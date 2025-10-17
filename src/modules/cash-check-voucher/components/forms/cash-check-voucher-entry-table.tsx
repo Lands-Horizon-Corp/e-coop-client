@@ -36,7 +36,7 @@ const columns: ColumnDef<ICashCheckVoucherEntryRequest>[] = [
         accessorKey: 'account',
         header: 'Account',
         minSize: 200,
-        size: 350,
+        size: 250,
         cell: (props) => {
             return (
                 <EditableCell
@@ -85,10 +85,11 @@ const columns: ColumnDef<ICashCheckVoucherEntryRequest>[] = [
         accessorKey: 'debit',
         header: 'Debit',
         minSize: 100,
-        size: 120,
+        size: 220,
         cell: (props) => (
             <EditableCell
                 inputProps={{
+                    currency: props.row.original.account?.currency,
                     className: '!w-full !min-w-0',
                 }}
                 inputType="number"
@@ -100,10 +101,11 @@ const columns: ColumnDef<ICashCheckVoucherEntryRequest>[] = [
         accessorKey: 'credit',
         header: 'Credit',
         minSize: 100,
-        size: 120,
+        size: 220,
         cell: (props) => (
             <EditableCell
                 inputProps={{
+                    currency: props.row.original.account?.currency,
                     className: '!w-full !min-w-0',
                 }}
                 inputType="number"

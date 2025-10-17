@@ -4,6 +4,7 @@ import { Path, UseFormReturn, useFieldArray } from 'react-hook-form'
 import { toast } from 'sonner'
 
 import { formatNumber } from '@/helpers'
+import { CurrencyInput } from '@/modules/currency'
 import { ILoanClearanceAnalysisRequest } from '@/modules/loan-clearance-analysis'
 import { ILoanClearanceAnalysisInstitutionRequest } from '@/modules/loan-clearance-analysis-institution'
 import { LoanClearanceAnalysisInstitutionCreateUpdateModal } from '@/modules/loan-clearance-analysis-institution/components/form/loan-clearance-analysis-institution'
@@ -57,11 +58,13 @@ const LoanClearanceAnalysis = forwardRef<
                         control={form.control}
                         label="Amount to be closed "
                         name="mount_to_be_closed"
-                        render={({ field }) => (
-                            <Input
+                        render={({ field: { onChange, ...field } }) => (
+                            <CurrencyInput
                                 {...field}
                                 disabled={isDisabled(field.name)}
-                                id={field.name}
+                                onValueChange={(newValue) => {
+                                    onChange(newValue)
+                                }}
                                 placeholder="Amount"
                             />
                         )}
@@ -70,11 +73,13 @@ const LoanClearanceAnalysis = forwardRef<
                         control={form.control}
                         label="Share Capital"
                         name="share_capital"
-                        render={({ field }) => (
-                            <Input
+                        render={({ field: { onChange, ...field } }) => (
+                            <CurrencyInput
                                 {...field}
                                 disabled={isDisabled(field.name)}
-                                id={field.name}
+                                onValueChange={(newValue) => {
+                                    onChange(newValue)
+                                }}
                                 placeholder="Share capital amount"
                             />
                         )}
@@ -83,11 +88,13 @@ const LoanClearanceAnalysis = forwardRef<
                         control={form.control}
                         label="Damayan Fund"
                         name="damayan_fund"
-                        render={({ field }) => (
-                            <Input
+                        render={({ field: { onChange, ...field } }) => (
+                            <CurrencyInput
                                 {...field}
                                 disabled={isDisabled(field.name)}
-                                id={field.name}
+                                onValueChange={(newValue) => {
+                                    onChange(newValue)
+                                }}
                                 placeholder="Amount"
                             />
                         )}
@@ -108,7 +115,7 @@ const LoanClearanceAnalysis = forwardRef<
                                 {...field}
                                 disabled={isDisabled(field.name)}
                                 id={field.name}
-                                placeholder="Amount"
+                                placeholder=""
                             />
                         )}
                     />

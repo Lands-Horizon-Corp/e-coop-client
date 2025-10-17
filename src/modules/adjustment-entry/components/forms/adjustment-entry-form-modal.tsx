@@ -7,12 +7,10 @@ import { withToastCallbacks } from '@/helpers/callback-helper'
 import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
 import { cn } from '@/helpers/tw-utils'
 import { AccountPicker } from '@/modules/account'
+import { CurrencyInput } from '@/modules/currency'
 import { IMedia } from '@/modules/media/media.types'
 import MemberPicker from '@/modules/member-profile/components/member-picker'
-import {
-    PaymentTypeCombobox,
-    TransactionAmountField,
-} from '@/modules/transaction'
+import { PaymentTypeCombobox } from '@/modules/transaction'
 
 import FormFooterResetSubmit from '@/components/form-components/form-footer-reset-submit'
 import Modal, { IModalProps } from '@/components/modals/modal'
@@ -217,20 +215,15 @@ const AdjustmentEntryCreateUpdateForm = ({
                             control={form.control}
                             label="Debit Amount"
                             name="debit"
-                            render={({ field }) => (
-                                <TransactionAmountField
+                            render={({ field: { onChange, ...field } }) => (
+                                <CurrencyInput
                                     {...field}
+                                    currency={form.watch('account')?.currency}
                                     disabled={isDisabled(field.name)}
-                                    id={field.name}
-                                    isDefault
-                                    onChange={(e) => {
-                                        field.onChange(
-                                            parseFloat(e.target.value) || 0
-                                        )
+                                    onValueChange={(newValue) => {
+                                        onChange(newValue)
                                     }}
                                     placeholder="0.00"
-                                    step="0.01"
-                                    type="number"
                                 />
                             )}
                         />
@@ -238,20 +231,15 @@ const AdjustmentEntryCreateUpdateForm = ({
                             control={form.control}
                             label="Credit Amount"
                             name="credit"
-                            render={({ field }) => (
-                                <TransactionAmountField
+                            render={({ field: { onChange, ...field } }) => (
+                                <CurrencyInput
                                     {...field}
+                                    currency={form.watch('account')?.currency}
                                     disabled={isDisabled(field.name)}
-                                    id={field.name}
-                                    isDefault
-                                    onChange={(e) => {
-                                        field.onChange(
-                                            parseFloat(e.target.value) || 0
-                                        )
+                                    onValueChange={(newValue) => {
+                                        onChange(newValue)
                                     }}
                                     placeholder="0.00"
-                                    step="0.01"
-                                    type="number"
                                 />
                             )}
                         />

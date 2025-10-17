@@ -5,6 +5,7 @@ import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
 
 import { cn } from '@/helpers'
 import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
+import { CurrencyInput } from '@/modules/currency'
 import {
     GeneralLedgerDefinitionSchema,
     GeneralLedgerTypeEnum,
@@ -280,37 +281,29 @@ const GeneralLedgerDefinitionCreateUpdateForm = ({
                         control={form.control}
                         label="Beginning Balance (Credit)"
                         name="beginning_balance_of_the_year_credit"
-                        render={({ field }) => (
-                            <Input
+                        render={({ field: { onChange, ...field } }) => (
+                            <CurrencyInput
                                 {...field}
                                 disabled={isDisabled(field.name)}
-                                onChange={(e) =>
-                                    field.onChange(
-                                        parseFloat(e.target.value) || undefined
-                                    )
-                                }
-                                pattern="\d*"
+                                onValueChange={(newValue) => {
+                                    onChange(newValue)
+                                }}
                                 placeholder="e.g., 5000.00"
-                                value={field.value ?? ''}
                             />
                         )}
                     />
                     <FormFieldWrapper
                         control={form.control}
-                        label="Beginning Balance"
+                        label="Beginning Balance (Debit)"
                         name="beginning_balance_of_the_year_debit"
-                        render={({ field }) => (
-                            <Input
+                        render={({ field: { onChange, ...field } }) => (
+                            <CurrencyInput
                                 {...field}
                                 disabled={isDisabled(field.name)}
-                                onChange={(e) =>
-                                    field.onChange(
-                                        parseFloat(e.target.value) || undefined
-                                    )
-                                }
-                                pattern="\d*"
+                                onValueChange={(newValue) => {
+                                    onChange(newValue)
+                                }}
                                 placeholder="e.g., 5000.00"
-                                value={field.value ?? ''}
                             />
                         )}
                     />

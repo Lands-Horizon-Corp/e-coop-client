@@ -7,6 +7,7 @@ import { cn } from '@/helpers'
 import { toInputDateString } from '@/helpers/date-utils'
 import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
 import BankCombobox from '@/modules/bank/components/bank-combobox'
+import { CurrencyInput } from '@/modules/currency'
 import { IMedia } from '@/modules/media'
 
 import { CountryCombobox } from '@/components/comboboxes/country-combobox'
@@ -159,16 +160,14 @@ const CheckRemittanceCreateUpdateForm = ({
                         control={form.control}
                         label="Amount *"
                         name="amount"
-                        render={({ field }) => (
-                            <Input
+                        render={({ field: { onChange, ...field } }) => (
+                            <CurrencyInput
                                 {...field}
                                 disabled={isDisabled(field.name)}
-                                id={field.name}
-                                onChange={(e) =>
-                                    field.onChange(Number(e.target.value))
-                                }
+                                onValueChange={(newValue) => {
+                                    onChange(newValue)
+                                }}
                                 placeholder="Amount"
-                                type="number"
                             />
                         )}
                     />

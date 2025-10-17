@@ -12,6 +12,8 @@ export const DisbursementTransactionSchema = z.object({
         .transform(descriptionTransformerSanitizer),
     is_reference_number_checked: z.boolean(),
     reference_number: z.coerce.string(),
+    currnecyId: entityIdSchema.optional(),
+    currency: z.any(),
     amount: z.coerce.number(),
 })
 

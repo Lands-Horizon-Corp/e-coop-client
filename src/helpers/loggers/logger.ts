@@ -99,10 +99,12 @@ class Logger {
         activity: string
     ) {
         await createFootstep({
-            level,
-            description,
-            activity,
-            module: this.module,
+            payload: {
+                level,
+                description,
+                activity,
+                module: this.module,
+            },
         })
     }
 

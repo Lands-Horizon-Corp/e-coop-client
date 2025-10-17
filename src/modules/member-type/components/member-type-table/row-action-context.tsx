@@ -111,11 +111,11 @@ export const MemberTypeAction = ({
                 />
                 <Modal
                     {...referenceTableModal}
-                    className="!max-w-[90vw] w-fit p-3"
+                    className="!max-w-[95vw]"
                     title={`Member type reference for member type ${memberType.name}`}
                 >
                     <MemberTypeReferenceTable
-                        className="max-h-[90vh] min-h-[90vh] w-full"
+                        className="flex min-h-[80vh] max-w-full min-w-0 flex-1 flex-col gap-y-4 rounded-xl bg-background"
                         memberTypeId={memberType.id}
                         mode="specific"
                         toolbarProps={{
@@ -200,11 +200,11 @@ export const MemberTypeRowContext = ({
             />
             <Modal
                 {...referenceTableModal}
-                className="!max-w-[90vw] w-fit p-3"
+                className="!max-w-[95vw]"
                 title={`Member type reference for member type ${memberType.name}`}
             >
                 <MemberTypeReferenceTable
-                    className="max-h-[90vh] min-h-[90vh] w-full"
+                    className="flex min-h-[80vh] max-w-full min-w-0 flex-1 flex-col gap-y-4 rounded-xl bg-background"
                     memberTypeId={memberType.id}
                     mode="specific"
                     toolbarProps={{

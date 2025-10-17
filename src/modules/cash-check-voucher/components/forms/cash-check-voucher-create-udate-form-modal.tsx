@@ -24,9 +24,9 @@ import {
 } from '@/modules/cash-check-voucher-entry'
 import { CashCheckVoucherTagsManagerPopover } from '@/modules/cash-check-voucher-tag/components/cash-check-voucher-tag-manager'
 import CompanyCombobox from '@/modules/company/components/combobox'
+import { currencyFormat } from '@/modules/currency'
 import { IMemberProfile } from '@/modules/member-profile'
 import MemberPicker from '@/modules/member-profile/components/member-picker'
-import { TransactionAmountField } from '@/modules/transaction'
 import { useTransactionBatchStore } from '@/modules/transaction-batch/store/transaction-batch-store'
 import { useCashCheckVoucherStore } from '@/store/cash-check-voucher-store'
 import { useMemberPickerStore } from '@/store/member-picker-store'
@@ -493,19 +493,18 @@ const CashCheckVoucherCreateUpdateForm = ({
                 </fieldset>
                 <div className="w-full flex justify-end gap-4">
                     <div className="max-w-[130px] flex-col flex justify-end">
-                        <TransactionAmountField
-                            className="text-primary font-bold text-left [&_.input]:text-right [&_.input]:font-bold"
-                            isDefault
-                            readOnly
-                            value={defaultValues?.total_debit || 0}
-                        />
+                        <p className="text-primary bg-background border py-1 text-left rounded-md pl-8 pr-10 text-lg font-bold">
+                            {currencyFormat(defaultValues?.total_debit || 0, {
+                                showSymbol: false,
+                            })}
+                        </p>
                     </div>
                     <div className="max-w-[130px]">
-                        <TransactionAmountField
-                            className="text-primary font-bold [&_.input]:text-right [&_.input]:font-bold"
-                            isDefault
-                            value={defaultValues?.total_credit || 0}
-                        />
+                        <p className="text-primary bg-background border py-1 text-left rounded-md pl-8 pr-10 text-lg font-bold">
+                            {currencyFormat(defaultValues?.total_credit || 0, {
+                                showSymbol: false,
+                            })}
+                        </p>
                     </div>
                 </div>
                 <FormFooterResetSubmit
@@ -547,7 +546,7 @@ export const CashCheckVoucherCreateUpdateFormModal = ({
 
     return (
         <Modal
-            className={cn('!min-w-2xl !max-w-4xl', className)}
+            className={cn('!min-w-2xl !max-w-5xl', className)}
             title={
                 <div>
                     <p className="font-medium">

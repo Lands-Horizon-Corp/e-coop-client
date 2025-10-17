@@ -4,6 +4,8 @@ import { useAuthUser } from '@/modules/authentication/authgentication.store'
 import { IUserBase } from '@/modules/user'
 import AccountProfileForm from '@/modules/user-profile/components/forms/account-profile-form'
 
+import PageContainer from '@/components/containers/page-container'
+
 import { useSubscribe } from '@/hooks/use-pubsub'
 
 export const Route = createFileRoute('/account-profile/profile')({
@@ -21,8 +23,8 @@ function RouteComponent() {
     })
 
     return (
-        <div>
+        <PageContainer>
             <AccountProfileForm defaultValues={user} />
-        </div>
+        </PageContainer>
     )
 }

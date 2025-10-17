@@ -100,7 +100,7 @@ const TransactionBatchNavButton = (_props: Props) => {
                     onClick={() => modalState.onOpenChange((prev) => !prev)}
                     variant="secondary"
                 >
-                    <LayersIcon className="mr-2 duration-300 group-hover:text-inherit" />
+                    <LayersIcon className="duration-300 group-hover:text-inherit" />
                     Start Batch
                 </Button>
                 <TransactionBatchCreateFormModal
@@ -128,7 +128,7 @@ const TransactionBatchNavButton = (_props: Props) => {
                     size="sm"
                     variant="secondary"
                 >
-                    <LayersSharpDotIcon className="mr-2 text-primary duration-300 group-hover:text-inherit" />
+                    <LayersSharpDotIcon className="text-primary duration-300 group-hover:text-inherit" />
                     Manage Batch
                 </Button>
             </PopoverTrigger>

@@ -1,6 +1,5 @@
 import { useQuery } from '@tanstack/react-query'
 
-import { createAPIRepository } from '@/providers/repositories/api-crud-factory'
 import {
     HookQueryOptions,
     createDataLayerFactory,
@@ -22,14 +21,6 @@ const { apiCrudHooks, apiCrudService } = createDataLayerFactory<
     baseKey: 'footstep',
 })
 
-const { API, route: authenticationAPIRoute } = createAPIRepository(
-    '/api/v1/authentication'
-)
-export const createFootstep = async (data: IFootstepRequest) => {
-    const endpoint = `${authenticationAPIRoute}/register`
-    return (await API.post<IFootstepRequest, IFootstep>(endpoint, data)).data
-}
-
 // Expose CRUD hooks
 export const {
     useCreate,
@@ -40,6 +31,8 @@ export const {
     useGetPaginated,
     useUpdateById,
 } = apiCrudHooks
+
+export const { create: createFootstep } = apiCrudService
 
 // Expose API for custom queries
 export const FootstepAPI = apiCrudService

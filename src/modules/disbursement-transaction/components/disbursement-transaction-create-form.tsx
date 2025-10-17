@@ -4,6 +4,7 @@ import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
 
 import { cn } from '@/helpers'
 import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
+import { CurrencyInput } from '@/modules/currency'
 import DisbursementCombobox from '@/modules/disbursement/components/disbursement-combobox'
 
 import FormFooterResetSubmit from '@/components/form-components/form-footer-reset-submit'
@@ -115,16 +116,14 @@ const DisbursementTransactionCreateForm = ({
                             control={form.control}
                             label="Amount"
                             name="amount"
-                            render={({ field }) => (
-                                <Input
+                            render={({ field: { onChange, ...field } }) => (
+                                <CurrencyInput
                                     {...field}
-                                    autoComplete="off"
                                     disabled={isDisabled(field.name)}
-                                    id={field.name}
-                                    min="0"
-                                    placeholder="0.00"
-                                    step="0.01"
-                                    type="number"
+                                    onValueChange={(newValue) => {
+                                        onChange(newValue)
+                                    }}
+                                    placeholder="Amount"
                                 />
                             )}
                         />

@@ -15,7 +15,7 @@ import {
     cashCheckVoucherBaseKey,
     useUpdateCashCheckVoucherById,
 } from '@/modules/cash-check-voucher'
-import { TransactionAmountField } from '@/modules/transaction'
+import { CurrencyInput } from '@/modules/currency'
 import { useHotkeys } from 'react-hotkeys-hook'
 
 import FormFooterResetSubmit from '@/components/form-components/form-footer-reset-submit'
@@ -148,19 +148,17 @@ const CashCheckEntryCreateUpdateForm = ({
                         control={form.control}
                         label="Amount"
                         name="check_entry_amount"
-                        render={({ field }) => (
-                            <TransactionAmountField
+                        render={({ field: { onChange, ...field } }) => (
+                            <CurrencyInput
                                 {...field}
+                                currency={
+                                    form.watch('check_entry_account')?.currency
+                                }
                                 disabled={isDisabled(field.name)}
-                                id={field.name}
-                                onChange={(e) => {
-                                    field.onChange(
-                                        parseFloat(e.target.value) || 0
-                                    )
+                                onValueChange={(newValue) => {
+                                    onChange(newValue)
                                 }}
                                 placeholder="0.00"
-                                step="0.01"
-                                type="number"
                             />
                         )}
                     />

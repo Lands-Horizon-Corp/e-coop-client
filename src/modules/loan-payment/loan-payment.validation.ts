@@ -9,6 +9,8 @@ import {
 
 export const LoanPayableAccountSchema = z.object({
     account_id: z.string().min(1, 'Account ID is required'),
+    account: z.any().optional(),
+
     transaction_id: z.string().optional(),
     amount: z.coerce.number().min(0, 'Amount must be at least 0'),
     member_profile_id: entityIdSchema.optional(),

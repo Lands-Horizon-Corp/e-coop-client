@@ -192,7 +192,7 @@ export interface ILoanTransaction
     fines_paid?: number
     collection_progress?: number // percentage
     interest_amortization?: number
-    total_amortization?: number
+    amortization?: number
     first_irr?: number
     first_dq?: number
 

@@ -3,10 +3,11 @@ import { KeyboardEvent, forwardRef, memo, useRef, useState } from 'react'
 import { UseFormReturn } from 'react-hook-form'
 import { toast } from 'sonner'
 
-import { cn, formatNumber } from '@/helpers'
+import { cn } from '@/helpers'
 import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
 import { AccountPicker, IAccount } from '@/modules/account'
 import AccountMiniCard from '@/modules/account/components/account-mini-card'
+import { currencyFormat } from '@/modules/currency'
 import {
     ILoanTransactionEntry,
     useDeleteLoanTransactionEntryById,
@@ -101,7 +102,7 @@ const LoanEntriesEditor = forwardRef<
         const totalAddOns = form.watch('total_add_on') || 0
         const loanType = form.watch('loan_type')
 
-        const interest = form.watch('interest') || 0
+        const amortization = form.watch('amortization') || 0
 
         const deductionsTotal = loanEntries.reduce(
             (sum, entry) =>
@@ -249,19 +250,34 @@ const LoanEntriesEditor = forwardRef<
                             >
                                 {isBalanced
                                     ? '✓ Balanced'
-                                    : `⚠ Difference: ${formatNumber(difference)}`}
+                                    : `⚠ Difference: ${currencyFormat(
+                                          difference,
+                                          {
+                                              currency:
+                                                  form.watch('account')
+                                                      ?.currency,
+                                          }
+                                      )}`}
                             </span>
                         </p>
                         {deductionsTotal > 0 && (
                             <p className="text-xs text-muted-foreground">
                                 <span className="ml-1 text-orange-600">
-                                    ({formatNumber(deductionsTotal)} deducted)
+                                    (
+                                    {currencyFormat(deductionsTotal, {
+                                        currency:
+                                            form.watch('account')?.currency,
+                                    })}{' '}
+                                    deducted)
                                 </span>
                             </p>
                         )}
                         {totalAddOns > 0 && (
                             <p className="text-xs text-green-600">
-                                Add-on charges: {formatNumber(totalAddOns)}
+                                Add-on charges:{' '}
+                                {currencyFormat(totalAddOns, {
+                                    currency: form.watch('account')?.currency,
+                                })}
                             </p>
                         )}
                     </div>
@@ -428,15 +444,22 @@ const LoanEntriesEditor = forwardRef<
                                 />
                                 <InfoTooltip content="Total interest to be paid for this loan.">
                                     <span className="py-1 px-3 rounded-md bg-primary/50 font-mono terxt-primary-foreground">
-                                        {formatNumber(interest)}
+                                        {currencyFormat(amortization, {
+                                            currency:
+                                                form.watch('account')?.currency,
+                                        })}
                                     </span>
                                 </InfoTooltip>
                             </TableCell>
                             <TableCell className="text-right font-semibold">
-                                {formatNumber(totalDebit)}
+                                {currencyFormat(totalDebit, {
+                                    currency: form.watch('account')?.currency,
+                                })}
                             </TableCell>
                             <TableCell className="text-right font-semibold">
-                                {formatNumber(totalCredit)}
+                                {currencyFormat(totalCredit, {
+                                    currency: form.watch('account')?.currency,
+                                })}
                             </TableCell>
                             <TableCell>
                                 <div
@@ -600,11 +623,17 @@ const LoanEntryRow = memo(
                             </div>
                         </TableCell>
                         <TableCell className="text-right py-2 h-fit">
-                            {entry.debit ? `${formatNumber(entry.debit)}` : ''}
+                            {entry.debit
+                                ? `${currencyFormat(entry.debit, {
+                                      currency: form.watch('account')?.currency,
+                                  })}`
+                                : ''}
                         </TableCell>
                         <TableCell className="text-right py-2 h-fit">
                             {entry.credit
-                                ? `${formatNumber(entry.credit)}`
+                                ? `${currencyFormat(entry.credit, {
+                                      currency: form.watch('account')?.currency,
+                                  })}`
                                 : ''}
                         </TableCell>
                         <TableCell className="text-right py-2 h-fit">

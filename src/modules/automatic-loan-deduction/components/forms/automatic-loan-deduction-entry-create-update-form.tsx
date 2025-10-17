@@ -6,6 +6,7 @@ import { cn } from '@/helpers'
 import { withToastCallbacks } from '@/helpers/callback-helper'
 import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
 import { AccountPicker } from '@/modules/account'
+import { CurrencyInput } from '@/modules/currency'
 
 import FormFooterResetSubmit from '@/components/form-components/form-footer-reset-submit'
 import { MoonIcon, NotAllowedIcon, PlusIcon } from '@/components/icons'
@@ -201,11 +202,16 @@ export const AutomaticLoanDeductionCreateUpdateForm = ({
                                     control={form.control}
                                     label="Charges Amount"
                                     name="charges_amount"
-                                    render={({ field }) => (
-                                        <Input
-                                            type="number"
+                                    render={({
+                                        field: { onChange, ...field },
+                                    }) => (
+                                        <CurrencyInput
                                             {...field}
                                             disabled={isDisabled(field.name)}
+                                            onValueChange={(newValue) => {
+                                                onChange(newValue)
+                                            }}
+                                            placeholder="Amount"
                                         />
                                     )}
                                 />
@@ -255,13 +261,18 @@ export const AutomaticLoanDeductionCreateUpdateForm = ({
                                         control={form.control}
                                         label="Min Amount"
                                         name="min_amount"
-                                        render={({ field }) => (
-                                            <Input
-                                                type="number"
+                                        render={({
+                                            field: { onChange, ...field },
+                                        }) => (
+                                            <CurrencyInput
                                                 {...field}
                                                 disabled={isDisabled(
                                                     field.name
                                                 )}
+                                                onValueChange={(newValue) => {
+                                                    onChange(newValue)
+                                                }}
+                                                placeholder="Min Amount"
                                             />
                                         )}
                                     />
@@ -270,13 +281,18 @@ export const AutomaticLoanDeductionCreateUpdateForm = ({
                                         control={form.control}
                                         label="Max Amount"
                                         name="max_amount"
-                                        render={({ field }) => (
-                                            <Input
-                                                type="number"
+                                        render={({
+                                            field: { onChange, ...field },
+                                        }) => (
+                                            <CurrencyInput
                                                 {...field}
                                                 disabled={isDisabled(
                                                     field.name
                                                 )}
+                                                onValueChange={(newValue) => {
+                                                    onChange(newValue)
+                                                }}
+                                                placeholder="Max Amount"
                                             />
                                         )}
                                     />

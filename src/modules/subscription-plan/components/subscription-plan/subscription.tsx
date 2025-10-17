@@ -1,18 +1,16 @@
-import { cn } from '@/helpers/tw-utils'
+import { useState } from 'react'
 
-import { CheckFillIcon } from '@/components/icons'
+import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
+import { cn } from '@/helpers/tw-utils'
+import PlanCard from '@/modules/home/components/subscription/subscription-plan-card'
+
 import { Button } from '@/components/ui/button'
-import {
-    Card,
-    CardContent,
-    CardFooter,
-    CardHeader,
-    CardTitle,
-} from '@/components/ui/card'
+import { Card, CardContent } from '@/components/ui/card'
+import FormErrorMessage from '@/components/ui/form-error-message'
 
 import { TEntityId } from '@/types'
 
-import { ISubscriptionPlan, useGetAll } from '../../'
+import { ISubscriptionPlan, TPricingPlanMode, useGetAll } from '../../'
 
 interface SubscriptionProps {
     onChange?: (value: TEntityId) => void
@@ -26,9 +24,10 @@ const SubscriptionPlanPicker = ({
     onSelect,
     value,
 }: SubscriptionProps) => {
-    const { data } = useGetAll()
+    const [mode, setMode] = useState<TPricingPlanMode>('monthly')
+    const { data: subscriptionPlans, error: responseError } = useGetAll()
 
-    // TODO: Add error handling for query
+    const error = serverRequestErrExtractor({ error: responseError })
 
     const isSelected = (id: TEntityId) => id === value
 
@@ -42,78 +41,62 @@ const SubscriptionPlanPicker = ({
 
     return (
         <div>
-            <div className="flex w-full flex-row gap-2">
-                <div className="grid grid-cols-3 gap-5">
-                    {data?.map((item) => {
-                        return (
-                            <Card
-                                className={`w-full cursor-pointer items-center justify-between rounded-2xl border-0 p-2 ${isSelected(item.id) ? 'border border-primary' : ''}`}
-                                key={item.id}
-                                onClick={() => {
-                                    handlePlanClick(item)
-                                }}
+            <div className="flex w-full flex-col gap-2">
+                <div className="flex w-full justify-center items-center">
+                    <div className="p-1 bg-muted rounded-full inline-flex  gap-x-1 ">
+                        {(['monthly', 'yearly'] as const).map((value) => (
+                            <Button
+                                className={cn(
+                                    'rounded-full px-4 cursor-pointer hover:bg-background/70 py-1 text-sm transition-all',
+                                    mode === value &&
+                                        'bg-background shadow-sm text-foreground'
+                                )}
+                                key={value}
+                                onClick={() => setMode(value)}
+                                variant="ghost"
                             >
-                                <CardHeader>
-                                    <CardTitle className="text-lg font-semibold">
-                                        {item.name}
-                                    </CardTitle>
-                                    <span className="text-sm text-gray-500">
-                                        {item.description}
-                                    </span>
-                                </CardHeader>
-                                <CardContent>
-                                    <span className="text-3xl font-semibold">
-                                        {item.cost} {''}
-                                        <span className="text-lg text-card-foreground/50">
-                                            /month
-                                        </span>
-                                    </span>
-                                    <div className="flex flex-col gap-2 p-5">
-                                        <span className="flex items-center gap-2 text-sm text-gray-500">
-                                            <CheckFillIcon className="text-primary" />
-                                            Max Branches {item.max_branches}
-                                        </span>
-                                        <span className="flex items-center gap-2 text-sm text-gray-500">
-                                            <CheckFillIcon className="text-primary" />
-                                            Max Employees {item.max_employees}
-                                        </span>
-                                        <span className="flex items-center gap-2 text-sm text-gray-500">
-                                            <CheckFillIcon className="text-primary" />
-                                            Max Members per Branch{' '}
-                                            {item.max_members_per_branch}
-                                        </span>
-                                        <span className="flex items-center gap-2 text-sm text-gray-500">
-                                            <CheckFillIcon className="text-primary" />
-                                            Timespan {item.timespan} months
-                                        </span>
-                                    </div>
-                                </CardContent>
-                                <CardFooter>
-                                    <Button
-                                        className={cn(
-                                            'w-full rounded-full border-2',
-                                            isSelected(item.id)
-                                                ? 'border-0'
-                                                : 'border-1 border-primary'
-                                        )}
-                                        onClick={(e) => {
-                                            e.preventDefault()
-                                            e.stopPropagation()
-                                            handlePlanClick(item)
-                                        }}
-                                        variant={
-                                            isSelected(item.id)
-                                                ? 'default'
-                                                : 'ghost'
-                                        }
-                                    >
-                                        Get Plan
-                                    </Button>
-                                </CardFooter>
-                            </Card>
-                        )
-                    })}
+                                {value === 'monthly' ? 'Monthly' : 'Yearly'}
+                            </Button>
+                        ))}
+                    </div>
                 </div>
+                <FormErrorMessage className="my-24" errorMessage={error} />
+                {subscriptionPlans && (
+                    <>
+                        <div className="flex flex-wrap gap-2 py-8 min-w-fit">
+                            {subscriptionPlans.map((subscriptionPlan) => (
+                                <Card
+                                    className="max-w-[300px] border-0 bg-transparent flex-1"
+                                    key={subscriptionPlan.id}
+                                    onClick={() =>
+                                        handlePlanClick(subscriptionPlan)
+                                    }
+                                >
+                                    <CardContent className="p-0 h-full">
+                                        <PlanCard
+                                            className={cn(
+                                                'max-w-[300px] !min-h-[50vh] !h-full flex-1',
+                                                isSelected(subscriptionPlan.id)
+                                                    ? 'border-2 border-primary'
+                                                    : ''
+                                            )}
+                                            key={subscriptionPlan.id}
+                                            planMode={mode}
+                                            subscriptionPlan={subscriptionPlan}
+                                        />
+                                    </CardContent>
+                                </Card>
+                            ))}
+                        </div>
+                        {subscriptionPlans.length === 0 && (
+                            <div className="flex items-center min-h-[60vh] w-full justify-center">
+                                <p className="text-muted-foreground/80">
+                                    No available plans yet.
+                                </p>
+                            </div>
+                        )}
+                    </>
+                )}
             </div>
         </div>
     )

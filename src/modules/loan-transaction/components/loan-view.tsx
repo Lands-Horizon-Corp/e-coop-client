@@ -746,7 +746,7 @@ const LoanQuickSummary = ({
         fines_paid,
         collection_progress,
         interest_amortization,
-        total_amortization,
+        amortization,
         first_irr,
         first_dq,
     } = loanTransaction
@@ -945,8 +945,8 @@ const LoanQuickSummary = ({
                             Total Amort.:
                         </span>
                         <span className="px-2 py-1 rounded-md border border-border bg-secondary font-mono text-xs text-right">
-                            {typeof total_amortization === 'number' ? (
-                                formatNumber(total_amortization, 2)
+                            {typeof amortization === 'number' ? (
+                                formatNumber(amortization, 2)
                             ) : (
                                 <span className="text-xs text-muted-foreground">
                                     ...

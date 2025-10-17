@@ -332,7 +332,7 @@ export const LoanTransactionSchema = z
         paid_by_name: z.string().optional(),
         paid_by_position: z.string().optional(),
 
-        interest: z.coerce.number().optional(), //For UI only
+        amortization: z.coerce.number().optional(), //For UI only
     })
     .and(WithModeOfPayment)
     .and(WithComaker)

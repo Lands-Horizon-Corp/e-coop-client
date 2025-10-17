@@ -5,6 +5,7 @@ import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
 
 import { cn } from '@/helpers'
 import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
+import { CurrencyInput } from '@/modules/currency'
 import {
     IFinancialStatementAccountGrouping,
     IFinancialStatementAccountGroupingRequest,
@@ -134,13 +135,14 @@ const FinancialStatementAccountsGroupingUpdateForm = ({
                             control={form.control}
                             label="Debit"
                             name="debit"
-                            render={({ field }) => (
-                                <Input
+                            render={({ field: { onChange, ...field } }) => (
+                                <CurrencyInput
                                     {...field}
-                                    autoComplete="off"
                                     disabled={isDisabled(field.name)}
-                                    id={field.name}
-                                    placeholder="debit"
+                                    onValueChange={(newValue) => {
+                                        onChange(newValue)
+                                    }}
+                                    placeholder="Debit"
                                 />
                             )}
                         />
@@ -148,16 +150,14 @@ const FinancialStatementAccountsGroupingUpdateForm = ({
                             control={form.control}
                             label="Credit"
                             name="credit"
-                            render={({ field }) => (
-                                <Input
+                            render={({ field: { onChange, ...field } }) => (
+                                <CurrencyInput
                                     {...field}
-                                    autoComplete="off"
                                     disabled={isDisabled(field.name)}
-                                    id={field.name}
-                                    onChange={(e) => {
-                                        field.onChange(parseInt(e.target.value))
+                                    onValueChange={(newValue) => {
+                                        onChange(newValue)
                                     }}
-                                    placeholder="credit"
+                                    placeholder="Credit"
                                 />
                             )}
                         />

@@ -25,9 +25,11 @@ import { Route as AuthForgotPasswordRouteImport } from './routes/auth/forgot-pas
 import { Route as AccountProfileSecurityRouteImport } from './routes/account-profile/security'
 import { Route as AccountProfileQrRouteImport } from './routes/account-profile/qr'
 import { Route as AccountProfileProfileRouteImport } from './routes/account-profile/profile'
+import { Route as AccountProfileAppearanceRouteImport } from './routes/account-profile/appearance'
 import { Route as AccountProfileActivityLogsRouteImport } from './routes/account-profile/activity-logs'
 import { Route as landingSubscriptionRouteImport } from './routes/(landing)/subscription'
 import { Route as landingFrequentlyAskedQuestionsRouteImport } from './routes/(landing)/frequently-asked-questions'
+import { Route as landingExploreRouteImport } from './routes/(landing)/explore'
 import { Route as landingDevelopersRouteImport } from './routes/(landing)/developers'
 import { Route as landingContactRouteImport } from './routes/(landing)/contact'
 import { Route as landingAboutRouteImport } from './routes/(landing)/about'
@@ -206,6 +208,12 @@ const AccountProfileProfileRoute = AccountProfileProfileRouteImport.update({
   path: '/profile',
   getParentRoute: () => AccountProfileRouteRoute,
 } as any)
+const AccountProfileAppearanceRoute =
+  AccountProfileAppearanceRouteImport.update({
+    id: '/appearance',
+    path: '/appearance',
+    getParentRoute: () => AccountProfileRouteRoute,
+  } as any)
 const AccountProfileActivityLogsRoute =
   AccountProfileActivityLogsRouteImport.update({
     id: '/activity-logs',
@@ -223,6 +231,11 @@ const landingFrequentlyAskedQuestionsRoute =
     path: '/frequently-asked-questions',
     getParentRoute: () => landingRouteRoute,
   } as any)
+const landingExploreRoute = landingExploreRouteImport.update({
+  id: '/explore',
+  path: '/explore',
+  getParentRoute: () => landingRouteRoute,
+} as any)
 const landingDevelopersRoute = landingDevelopersRouteImport.update({
   id: '/developers',
   path: '/developers',
@@ -924,9 +937,11 @@ export interface FileRoutesByFullPath {
   '/about': typeof landingAboutRoute
   '/contact': typeof landingContactRoute
   '/developers': typeof landingDevelopersRoute
+  '/explore': typeof landingExploreRoute
   '/frequently-asked-questions': typeof landingFrequentlyAskedQuestionsRoute
   '/subscription': typeof landingSubscriptionRoute
   '/account-profile/activity-logs': typeof AccountProfileActivityLogsRoute
+  '/account-profile/appearance': typeof AccountProfileAppearanceRoute
   '/account-profile/profile': typeof AccountProfileProfileRoute
   '/account-profile/qr': typeof AccountProfileQrRoute
   '/account-profile/security': typeof AccountProfileSecurityRoute
@@ -1040,9 +1055,11 @@ export interface FileRoutesByTo {
   '/about': typeof landingAboutRoute
   '/contact': typeof landingContactRoute
   '/developers': typeof landingDevelopersRoute
+  '/explore': typeof landingExploreRoute
   '/frequently-asked-questions': typeof landingFrequentlyAskedQuestionsRoute
   '/subscription': typeof landingSubscriptionRoute
   '/account-profile/activity-logs': typeof AccountProfileActivityLogsRoute
+  '/account-profile/appearance': typeof AccountProfileAppearanceRoute
   '/account-profile/profile': typeof AccountProfileProfileRoute
   '/account-profile/qr': typeof AccountProfileQrRoute
   '/account-profile/security': typeof AccountProfileSecurityRoute
@@ -1161,9 +1178,11 @@ export interface FileRoutesById {
   '/(landing)/about': typeof landingAboutRoute
   '/(landing)/contact': typeof landingContactRoute
   '/(landing)/developers': typeof landingDevelopersRoute
+  '/(landing)/explore': typeof landingExploreRoute
   '/(landing)/frequently-asked-questions': typeof landingFrequentlyAskedQuestionsRoute
   '/(landing)/subscription': typeof landingSubscriptionRoute
   '/account-profile/activity-logs': typeof AccountProfileActivityLogsRoute
+  '/account-profile/appearance': typeof AccountProfileAppearanceRoute
   '/account-profile/profile': typeof AccountProfileProfileRoute
   '/account-profile/qr': typeof AccountProfileQrRoute
   '/account-profile/security': typeof AccountProfileSecurityRoute
@@ -1284,9 +1303,11 @@ export interface FileRouteTypes {
     | '/about'
     | '/contact'
     | '/developers'
+    | '/explore'
     | '/frequently-asked-questions'
     | '/subscription'
     | '/account-profile/activity-logs'
+    | '/account-profile/appearance'
     | '/account-profile/profile'
     | '/account-profile/qr'
     | '/account-profile/security'
@@ -1400,9 +1421,11 @@ export interface FileRouteTypes {
     | '/about'
     | '/contact'
     | '/developers'
+    | '/explore'
     | '/frequently-asked-questions'
     | '/subscription'
     | '/account-profile/activity-logs'
+    | '/account-profile/appearance'
     | '/account-profile/profile'
     | '/account-profile/qr'
     | '/account-profile/security'
@@ -1520,9 +1543,11 @@ export interface FileRouteTypes {
     | '/(landing)/about'
     | '/(landing)/contact'
     | '/(landing)/developers'
+    | '/(landing)/explore'
     | '/(landing)/frequently-asked-questions'
     | '/(landing)/subscription'
     | '/account-profile/activity-logs'
+    | '/account-profile/appearance'
     | '/account-profile/profile'
     | '/account-profile/qr'
     | '/account-profile/security'
@@ -1747,6 +1772,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AccountProfileProfileRouteImport
       parentRoute: typeof AccountProfileRouteRoute
     }
+    '/account-profile/appearance': {
+      id: '/account-profile/appearance'
+      path: '/appearance'
+      fullPath: '/account-profile/appearance'
+      preLoaderRoute: typeof AccountProfileAppearanceRouteImport
+      parentRoute: typeof AccountProfileRouteRoute
+    }
     '/account-profile/activity-logs': {
       id: '/account-profile/activity-logs'
       path: '/activity-logs'
@@ -1766,6 +1798,13 @@ declare module '@tanstack/react-router' {
       path: '/frequently-asked-questions'
       fullPath: '/frequently-asked-questions'
       preLoaderRoute: typeof landingFrequentlyAskedQuestionsRouteImport
+      parentRoute: typeof landingRouteRoute
+    }
+    '/(landing)/explore': {
+      id: '/(landing)/explore'
+      path: '/explore'
+      fullPath: '/explore'
+      preLoaderRoute: typeof landingExploreRouteImport
       parentRoute: typeof landingRouteRoute
     }
     '/(landing)/developers': {
@@ -2522,6 +2561,7 @@ interface landingRouteRouteChildren {
   landingAboutRoute: typeof landingAboutRoute
   landingContactRoute: typeof landingContactRoute
   landingDevelopersRoute: typeof landingDevelopersRoute
+  landingExploreRoute: typeof landingExploreRoute
   landingFrequentlyAskedQuestionsRoute: typeof landingFrequentlyAskedQuestionsRoute
   landingSubscriptionRoute: typeof landingSubscriptionRoute
   landingIndexRoute: typeof landingIndexRoute
@@ -2532,6 +2572,7 @@ const landingRouteRouteChildren: landingRouteRouteChildren = {
   landingAboutRoute: landingAboutRoute,
   landingContactRoute: landingContactRoute,
   landingDevelopersRoute: landingDevelopersRoute,
+  landingExploreRoute: landingExploreRoute,
   landingFrequentlyAskedQuestionsRoute: landingFrequentlyAskedQuestionsRoute,
   landingSubscriptionRoute: landingSubscriptionRoute,
   landingIndexRoute: landingIndexRoute,
@@ -2543,6 +2584,7 @@ const landingRouteRouteWithChildren = landingRouteRoute._addFileChildren(
 
 interface AccountProfileRouteRouteChildren {
   AccountProfileActivityLogsRoute: typeof AccountProfileActivityLogsRoute
+  AccountProfileAppearanceRoute: typeof AccountProfileAppearanceRoute
   AccountProfileProfileRoute: typeof AccountProfileProfileRoute
   AccountProfileQrRoute: typeof AccountProfileQrRoute
   AccountProfileSecurityRoute: typeof AccountProfileSecurityRoute
@@ -2553,6 +2595,7 @@ interface AccountProfileRouteRouteChildren {
 
 const AccountProfileRouteRouteChildren: AccountProfileRouteRouteChildren = {
   AccountProfileActivityLogsRoute: AccountProfileActivityLogsRoute,
+  AccountProfileAppearanceRoute: AccountProfileAppearanceRoute,
   AccountProfileProfileRoute: AccountProfileProfileRoute,
   AccountProfileQrRoute: AccountProfileQrRoute,
   AccountProfileSecurityRoute: AccountProfileSecurityRoute,

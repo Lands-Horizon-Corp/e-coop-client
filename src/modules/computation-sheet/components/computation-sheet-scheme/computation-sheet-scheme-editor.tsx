@@ -5,6 +5,7 @@ import { cn } from '@/helpers'
 import { IClassProps } from '@/types'
 
 import { IComputationSheet } from '../../computation-sheet.types'
+import ComputationSheetAccounts from '../computation-sheet-account'
 import LoanSchemeSidebar from './computation-schemes-sidebar'
 import LoanSchemeDisplay from './computation-sheet-scheme-display'
 
@@ -23,6 +24,7 @@ const ComputationSheetSchemeEditor = ({ className }: Props) => {
             )}
         >
             <LoanSchemeSidebar
+                className="sticky top-0"
                 onDeletedScheme={(scheme) => {
                     if (computationSheet?.id === scheme.id)
                         setComputationSheet(undefined)
@@ -39,7 +41,13 @@ const ComputationSheetSchemeEditor = ({ className }: Props) => {
                     </p>
                 </div>
             ) : (
-                <LoanSchemeDisplay selectedId={computationSheet.id} />
+                <>
+                    <LoanSchemeDisplay selectedId={computationSheet.id} />
+                    <ComputationSheetAccounts
+                        className="w-64"
+                        computationSheetId={computationSheet.id}
+                    />
+                </>
             )}
         </div>
     )

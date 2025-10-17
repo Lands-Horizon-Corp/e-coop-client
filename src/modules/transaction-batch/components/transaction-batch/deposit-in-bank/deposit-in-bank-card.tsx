@@ -1,7 +1,7 @@
 import { useState } from 'react'
 
 import { cn } from '@/helpers'
-import { formatNumber } from '@/helpers/number-utils'
+import { currencyFormat } from '@/modules/currency'
 
 import { PencilFillIcon } from '@/components/icons'
 import { Button } from '@/components/ui/button'
@@ -37,7 +37,7 @@ const DepositInBankCard = ({
                 className
             )}
         >
-            <p className="text-lg">{formatNumber(depositInBankAmount)}</p>
+            <p className="text-lg">{currencyFormat(depositInBankAmount)}</p>
             <p className="text-sm text-muted-foreground/70">
                 Total Deposit in Bank
             </p>

@@ -5,6 +5,7 @@ import {
     TEntityId,
 } from '@/types/common'
 
+import { ICurrency } from '../currency'
 import { IDisbursement } from '../disbursement/disbursement.types'
 import { ITransactionBatch } from '../transaction-batch'
 import { IEmployee } from '../user'
@@ -20,6 +21,8 @@ export interface IDisbursementTransaction extends ITimeStamps, IAuditable {
 
     disbursement_id?: TEntityId
     disbursement?: IDisbursement
+
+    currenct?: ICurrency
 
     transaction_batch_id?: TEntityId
     transaction_batch?: ITransactionBatch

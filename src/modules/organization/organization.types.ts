@@ -6,6 +6,8 @@ import {
 } from '@/types/common'
 
 import { IMedia } from '../media/media.types'
+import { IOrganizationCategory } from '../organization-category'
+import { IOrganizationMedia } from '../organization-media'
 import { ISubscriptionPlan } from '../subscription-plan'
 import { IUserOrganization } from '../user-organization'
 
@@ -49,6 +51,9 @@ export interface IOrganization extends ITimeStamps, IAuditable {
     database_migration_status: TOrganizationMigrationStatus
     database_remark?: string
 
+    organization_medias: IOrganizationMedia[]
+
+    organization_categories?: IOrganizationCategory[]
     // branches: IBranch[]
 }
 
@@ -76,7 +81,6 @@ export interface IOrganizationRequest {
     refund_policy?: string
     user_agreement?: string
     is_private?: boolean
-    // organization_categories?: IOrganizationCategoryRequest[]
 }
 
 export interface IOrganizationPaginated
