@@ -1,14 +1,14 @@
 import { createFileRoute } from '@tanstack/react-router'
 
 import { useAuthUser } from '@/modules/authentication/authgentication.store'
+import AppearanceSettings from '@/modules/settings/components/appearance-settings'
 import { IUserBase } from '@/modules/user'
-import AccountProfileForm from '@/modules/user-profile/components/forms/account-profile-form'
 
 import PageContainer from '@/components/containers/page-container'
 
 import { useSubscribe } from '@/hooks/use-pubsub'
 
-export const Route = createFileRoute('/account-profile/profile')({
+export const Route = createFileRoute('/account-profile/appearance')({
     component: RouteComponent,
 })
 
@@ -24,7 +24,7 @@ function RouteComponent() {
 
     return (
         <PageContainer>
-            <AccountProfileForm defaultValues={user} />
+            <AppearanceSettings />
         </PageContainer>
     )
 }

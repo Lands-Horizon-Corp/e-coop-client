@@ -10,6 +10,8 @@ interface InputDateProps extends React.InputHTMLAttributes<HTMLInputElement> {
 
 const InputDate = forwardRef<HTMLInputElement, InputDateProps>(
     ({ className, hideNativeCalendar, ...props }, ref) => {
+        // USE THIS IF YOU WANNA HIDE THE NATIVE CALENDAR ICON/PICKER
+        // [&::-webkit-calendar-picker-indicator]:hidden
         return (
             <Input
                 ref={ref}
