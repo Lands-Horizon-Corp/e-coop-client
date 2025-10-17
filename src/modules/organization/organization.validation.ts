@@ -3,6 +3,7 @@ import z from 'zod'
 import {
     descriptionSchema,
     descriptionTransformerSanitizer,
+    emailSchema,
     entityIdSchema,
 } from '@/validation'
 
@@ -19,21 +20,15 @@ export const OrganizationSchema = z.object({
     name: z.string().min(1, 'Organization name is required'),
     subscription_plan_id: entityIdSchema,
     address: z.string().optional(),
-    email: z
-        .string()
-        .min(1, 'Email is Required')
-        .refine((val) => !val || /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val), {
-            message: 'Invalid email',
-        }),
+    email: emailSchema.min(1, 'Organization email is required'),
     contact_number: z.string().optional(),
-    description: descriptionSchema
-        .transform(descriptionTransformerSanitizer)
-        .optional(),
+    description: descriptionSchema.transform(descriptionTransformerSanitizer),
+
     media_id: z.string().min(1, 'Organization Logo is required'),
     cover_media_id: z.string().min(1, 'Cover media is required'),
+
     media: z.any().optional(),
     cover_media: z.any().optional(),
-
     subscription_plan: z.any().optional(),
 })
 

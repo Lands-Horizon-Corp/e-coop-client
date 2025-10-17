@@ -26,6 +26,7 @@ import {
     UnavailableIcon,
     VerifiedPatchIcon,
 } from '@/components/icons'
+import ImageDisplay from '@/components/image-display'
 import TextEditor from '@/components/text-editor'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
@@ -36,6 +37,8 @@ import FormFieldWrapper from '@/components/ui/form-field-wrapper'
 import ImageField from '@/components/ui/image-field'
 import { Input } from '@/components/ui/input'
 import { PhoneInput } from '@/components/ui/phone-input'
+import { PlainTextEditor } from '@/components/ui/text-editor'
+import PreviewMediaWrapper from '@/components/wrappers/preview-media-wrapper'
 
 import { useAlertBeforeClosing } from '@/hooks/use-alert-before-closing'
 import { useLocationInfo } from '@/hooks/use-location-info'
@@ -99,6 +102,7 @@ const OrganizationForm = () => {
     })
 
     const handleSubmit = async (data: TOrganizationFormValues) => {
+        if (!form.formState.isValid) return
         const requestData = {
             ...data,
             organization_categories: selectedCategories.map((catItem) => ({
@@ -402,16 +406,62 @@ const OrganizationForm = () => {
                                         </p>
                                     </div>
                                     <div className="mt-4 space-y-2">
+                                        <BranchInfoItem
+                                            content={form.getValues('name')}
+                                            textAlign="right"
+                                            title="Organization Name"
+                                        />
                                         <div className="space-y-2 sm:space-y-1">
                                             <BranchInfoItem
-                                                content={form.getValues('name')}
+                                                content={
+                                                    <PreviewMediaWrapper
+                                                        media={form.getValues(
+                                                            'media'
+                                                        )}
+                                                    >
+                                                        <ImageDisplay
+                                                            className="size-10 rounded-md"
+                                                            src={
+                                                                form.getValues(
+                                                                    'media'
+                                                                )
+                                                                    .download_url as string
+                                                            }
+                                                        />
+                                                    </PreviewMediaWrapper>
+                                                }
+                                                contentClassName="flex justify-end"
                                                 textAlign="right"
-                                                title="Organization Name"
+                                                title="Organization logo"
                                             />
+                                            <BranchInfoItem
+                                                content={
+                                                    <PreviewMediaWrapper
+                                                        media={form.getValues(
+                                                            'cover_media'
+                                                        )}
+                                                    >
+                                                        <ImageDisplay
+                                                            className="size-10 rounded-md"
+                                                            src={
+                                                                form.getValues(
+                                                                    'cover_media'
+                                                                )
+                                                                    .download_url as string
+                                                            }
+                                                        />
+                                                    </PreviewMediaWrapper>
+                                                }
+                                                contentClassName="flex justify-end"
+                                                textAlign="right"
+                                                title="Cover Photo"
+                                            />
+
                                             <BranchInfoItem
                                                 content={form.getValues(
                                                     'email'
                                                 )}
+                                                contentClassName=" text-link underline underline-offset-2 text-blue-600"
                                                 textAlign="right"
                                                 title="Email"
                                             />
@@ -430,9 +480,13 @@ const OrganizationForm = () => {
                                                 title="Address"
                                             />
                                             <BranchInfoItem
-                                                content={form.getValues(
-                                                    'description'
-                                                )}
+                                                content={
+                                                    <PlainTextEditor
+                                                        content={form.getValues(
+                                                            'description'
+                                                        )}
+                                                    />
+                                                }
                                                 textAlign="right"
                                                 title="Description"
                                             />
@@ -483,7 +537,7 @@ const OrganizationForm = () => {
                             )}
                         </div>
                     </CardContent>
-                    <CardFooter className="flex flex-col gap-3 px-4 sm:px-6 py-4 bg-background/95 backdrop-blur-sm border-t z-10">
+                    <CardFooter className="flex flex-col gap-3 px-4 sm:px-6 lg:px-0 py-4 bg-background/95 backdrop-blur-sm border-t z-10">
                         {stepperNavigation.isFinalStep && (
                             <Button
                                 className="w-full"
@@ -508,7 +562,6 @@ const OrganizationForm = () => {
                             </Button>
                         )}
                         <FormErrorMessage errorMessage={errorMessage} />
-
                         {/* Mobile-first responsive navigation */}
                         <div className="flex sticky bottom-0 flex-col justify-end sm:flex-row w-full items-center gap-3 sm:gap-2">
                             <div className="flex items-center gap-x-2 text-card-foreground/70 order-1 sm:order-2">
@@ -527,6 +580,8 @@ const OrganizationForm = () => {
                                     onClick={(e) => {
                                         e.preventDefault()
                                         form.reset()
+                                        clearCategories()
+                                        stepperNavigation.goToStep(0)
                                     }}
                                     size="sm"
                                     variant="ghost"
@@ -553,7 +608,6 @@ const OrganizationForm = () => {
                                         </span>
                                         Back
                                     </Button>
-
                                     <Button
                                         className="text-xs sm:text-sm"
                                         disabled={stepperNavigation.isFinalStep}
@@ -561,7 +615,7 @@ const OrganizationForm = () => {
                                             handleNextStep({ e, activeStep })
                                         }}
                                         size="sm"
-                                        variant="ghost"
+                                        variant="secondary"
                                     >
                                         Next
                                         <span className="hidden sm:inline">

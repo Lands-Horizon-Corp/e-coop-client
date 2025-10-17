@@ -1,14 +1,16 @@
+import { Logger } from '@/helpers/loggers'
 import { createDataLayerFactory } from '@/providers/repositories/data-layer-factory'
 
-
-import { Logger } from '@/helpers/loggers'
-
-import type { IOrganizationMedia, IOrganizationMediaRequest } from '../organization-media'
-
-const { apiCrudHooks, apiCrudService, baseQueryKey : organizationMediaBaseKey } = createDataLayerFactory<
+import type {
     IOrganizationMedia,
-    IOrganizationMediaRequest
->({
+    IOrganizationMediaRequest,
+} from '../organization-media'
+
+const {
+    apiCrudHooks,
+    apiCrudService,
+    baseQueryKey: organizationMediaBaseKey,
+} = createDataLayerFactory<IOrganizationMedia, IOrganizationMediaRequest>({
     url: '/api/v1/organization-media',
     baseKey: 'organization-media',
 })

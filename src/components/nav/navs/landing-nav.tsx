@@ -1,6 +1,4 @@
-import { ReactNode, useState } from 'react';
-
-
+import { ReactNode, useState } from 'react'
 
 import { Link, useLocation } from '@tanstack/react-router'
 

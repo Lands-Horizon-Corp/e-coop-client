@@ -31,6 +31,7 @@ import {
     BsBuildingGear as BuildingGearIcon,
     BsCameraFill as CameraFillIcon,
     BsUiChecksGrid as ChecksGridIcon,
+    BsCompassFill as CompassIcon,
     BsDashSquareDotted as DashSquareDottedIcon,
     BsFileEarmarkWordFill as DocumentFileFillIcon,
     BsFileEarmarkExcelFill as ExcelFileFillIcon,
@@ -54,7 +55,6 @@ import {
     BsFileEarmarkPlayFill as VideoFileFillIcon,
     BsZoomIn as ZoomInIcon,
     BsZoomOut as ZoomOutIcon,
-    BsCompassFill as CompassIcon,
 } from 'react-icons/bs'
 import {
     CgDetailsLess as DetailsIcon,
@@ -898,7 +898,7 @@ export const IconMap = {
     'FA Bold': FaBoldIcon,
     'QR Code': QrCodeIcon,
     'Dot Big': DotBigIcon,
-    'Compass' : CompassIcon,
+    Compass: CompassIcon,
     Landmark: LandmarkIcon,
     Language: LanguageIcon,
     Accounts: AccountsIcon,

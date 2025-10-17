@@ -1,6 +1,6 @@
 type Props = {}
 
-const ExplorePage = (props: Props) => {
+const ExplorePage = (_: Props) => {
     return <div>ExplorePage</div>
 }
 

@@ -32,8 +32,7 @@ export const organizationSteps: StepConfig[] = [
 
 export const organizationStepValidations: Record<number, StepValidation> = {
     0: {
-        fields: ['name', 'media_id', 'email'],
-        // Optional: Add custom validation for step 1
+        fields: ['name', 'media_id', 'email', 'cover_media_id', 'description'],
         // validator: async (form) => {
         //     // Example: Check if organization name is unique
         //     const name = form.getValues('name')
@@ -48,7 +47,6 @@ export const organizationStepValidations: Record<number, StepValidation> = {
     },
     1: {
         fields: ['subscription_plan_id'],
-        // Example: Custom validation for subscription step
         // validator: async (form) => {
         //     const planId = form.getValues('subscription_plan_id')
         //     if (!planId) {
@@ -60,16 +58,8 @@ export const organizationStepValidations: Record<number, StepValidation> = {
     },
     2: {
         fields: [],
-        // validator: async (form) => {
-        //     return true
-        // }
     },
     3: {
         fields: [],
-        // validator: async (form) => {
-        //     const values = form.getValues()
-        //     console.log('Final step validation:', values)
-        //     return !!(values.name && values.email && values.subscription_plan_id)
-        // }
     },
 }

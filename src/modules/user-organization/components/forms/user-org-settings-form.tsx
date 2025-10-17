@@ -5,13 +5,11 @@ import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
 import { cn } from '@/helpers'
 import { withToastCallbacks } from '@/helpers/callback-helper'
 import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
-import { AccountPicker } from '@/modules/account';
-import CurrencyCombobox from '@/modules/currency/components/currency-combobox';
-import { PaymentTypeCombobox } from '@/modules/transaction';
+import { AccountPicker } from '@/modules/account'
+import CurrencyCombobox from '@/modules/currency/components/currency-combobox'
+import { PaymentTypeCombobox } from '@/modules/transaction'
 
-
-
-import FormFooterResetSubmit from '@/components/form-components/form-footer-reset-submit';
+import FormFooterResetSubmit from '@/components/form-components/form-footer-reset-submit'
 import {
     BillIcon,
     CoinsStackIcon,
