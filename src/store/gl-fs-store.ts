@@ -4,7 +4,7 @@ import { create } from 'zustand'
 import { UpdateIndexRequest } from '@/types'
 
 export interface GLFSStoreProps {
-    openAddAccountPickerModal?: boolean
+    openAddAccountPickerModal: boolean
     openViewAccountModal?: boolean
     selectedAccounts?: IAccount | null
     openGeneralLedgerAccountTableModal?: boolean
@@ -22,7 +22,7 @@ export interface GLFSStoreProps {
     setTargetNodeId: (nodeId: string | null) => void
     clearTargetNodeIdAfterScroll: (nodeId: string) => void
     resetExpansion: () => void
-    setAddAccountPickerModalOpen?: (open: boolean) => void
+    setAddAccountPickerModalOpen: (open: boolean) => void
 }
 
 export const useGLFSStore = create<GLFSStoreProps>((set, get) => ({

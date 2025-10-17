@@ -1,5 +1,6 @@
 import z from 'zod'
 
+import { ICONS } from '@/constants'
 import { descriptionTransformerSanitizer, entityIdSchema } from '@/validation'
 
 import { ACCOUNT_INTEREST_STANDARD_COMPUTATION } from './account.constants'
@@ -167,7 +168,7 @@ export const IAccountRequestSchema = z.object({
 
     general_ledger_grouping_exclude_account: z.boolean().optional(),
 
-    icon: z.string().default(''),
+    icon: z.enum(ICONS).default('Money'),
     show_in_general_ledger_source_withdraw: z.boolean().default(true),
     show_in_general_ledger_source_deposit: z.boolean().default(true),
     show_in_general_ledger_source_journal: z.boolean().default(true),

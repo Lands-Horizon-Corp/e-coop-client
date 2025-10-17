@@ -34,7 +34,7 @@ interface FinancialStatementAccountsGroupingStore {
     ) => void
     setOnCreate?: (onCreate: boolean) => void
     setIsReadyOnly?: (isReadyOnly: boolean) => void
-    setOpenCreateFinancialStatementModal?: (open: boolean) => void
+    setOpenCreateFinancialStatementModal: (open: boolean) => void
 
     setSelectedFinancialStatementDefinition?: (
         financialStatementDefinition: IFinancialStatementDefinition | null

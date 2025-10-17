@@ -163,15 +163,22 @@ export const useAccountComputationConnect = createMutationFactory<
 >({
     mutationFn: async ({ computation_sheet_id, account_id }) => {
         return (
-            await API.post<TAccountComputationsheetConnect, IAccount>(
-                `${apiCrudService.route}/computation-sheet/${computation_sheet_id}/connect`,
+            await API.put<TAccountComputationsheetConnect, IAccount>(
+                `${apiCrudService.route}/${account_id}/computation-sheet/${computation_sheet_id}/connect`,
                 { computation_sheet_id, account_id }
             )
         ).data
     },
     invalidationFn: (args) => {
-        return args.queryClient.invalidateQueries({
+        args.queryClient.invalidateQueries({
             queryKey: [
+                'computation-sheet',
+                args.variables.computation_sheet_id,
+            ],
+        })
+        args.queryClient.invalidateQueries({
+            queryKey: [
+                'account',
                 'computation-sheet',
                 args.variables.computation_sheet_id,
             ],
@@ -186,15 +193,22 @@ export const useAccountComputationDisconnect = createMutationFactory<
 >({
     mutationFn: async ({ computation_sheet_id, account_id }) => {
         return (
-            await API.post<TAccountComputationsheetConnect, IAccount>(
-                `${apiCrudService.route}/computation-sheet/${computation_sheet_id}/disconnect`,
+            await API.put<TAccountComputationsheetConnect, IAccount>(
+                `${apiCrudService.route}/${account_id}/computation-sheet/disconnect`,
                 { computation_sheet_id, account_id }
             )
         ).data
     },
     invalidationFn: (args) => {
-        return args.queryClient.invalidateQueries({
+        args.queryClient.invalidateQueries({
             queryKey: [
+                'computation-sheet',
+                args.variables.computation_sheet_id,
+            ],
+        })
+        args.queryClient.invalidateQueries({
+            queryKey: [
+                'account',
                 'computation-sheet',
                 args.variables.computation_sheet_id,
             ],

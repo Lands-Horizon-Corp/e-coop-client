@@ -383,11 +383,18 @@ const GeneralLedgerDefinitionTreeViewer = ({
 
             <AccountPicker
                 modalOnly
-                onOpenChange={setAddAccountPickerModalOpen}
+                modalState={{
+                    open: openAddAccountPickerModal,
+                    onOpenChange: (newState) =>
+                        setAddAccountPickerModalOpen(
+                            typeof newState === 'boolean'
+                                ? newState
+                                : newState(openAddAccountPickerModal)
+                        ),
+                }}
                 onSelect={(account) => {
                     handleAccountSelection(account)
                 }}
-                open={openAddAccountPickerModal}
             />
             <div className="flex gap-2 py-4">
                 <Button

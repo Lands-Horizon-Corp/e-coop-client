@@ -100,9 +100,15 @@ const ComputationSchemesSidebar = ({
                 />
                 <MagnifyingGlassIcon className="inline text-muted-foreground/70 duration-200 ease-out group-hover:text-foreground absolute top-1/2 -translate-y-1/2 right-4" />
             </div>
-
             <div className="flex items-center justify-between gap-x-2">
-                <ComputationSheetCreateUpdateFormModal {...createModal} />
+                <ComputationSheetCreateUpdateFormModal
+                    {...createModal}
+                    formProps={{
+                        onSuccess: (createdScheme) => {
+                            handleSelect(createdScheme)
+                        },
+                    }}
+                />
                 <Button
                     className="flex-1"
                     onClick={() => createModal.onOpenChange(true)}

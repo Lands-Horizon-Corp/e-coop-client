@@ -28,9 +28,7 @@ import { useShortcut } from '@/hooks/use-shorcuts'
 interface Props extends IPickerBaseProps<IAccount> {
     allowShorcutCommand?: boolean
     modalOnly?: boolean
-    open?: boolean
     defaultOpen?: boolean
-    onOpenChange?(open: boolean): void
     mode?: TPaginatedAccountHookMode
     nameOnly?: boolean
     hideDescription?: boolean
@@ -45,8 +43,6 @@ const AccountPicker = ({
     placeholder,
     onSelect,
     modalOnly = false,
-    onOpenChange,
-    open,
     nameOnly = false,
     hideDescription = false,
     modalState,
@@ -117,7 +113,7 @@ const AccountPicker = ({
                 isLoading={isPending || isLoading || isFetching}
                 items={data}
                 listHeading={`Matched Results (${totalSize})`}
-                onOpenChange={modalOnly ? onOpenChange : setState}
+                onOpenChange={setState}
                 onSearchChange={(searchValue) => {
                     bulkSetFilter(
                         [
@@ -140,7 +136,7 @@ const AccountPicker = ({
                     onSelect?.(account)
                     setState(false)
                 }}
-                open={modalOnly ? open : state}
+                open={state}
                 renderItem={(Account) => (
                     <div className="flex w-full items-center justify-between py-1">
                         <div className="flex items-center gap-x-2">
