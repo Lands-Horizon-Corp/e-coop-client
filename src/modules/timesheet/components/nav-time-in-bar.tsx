@@ -34,7 +34,7 @@ const NavTimeInBar = () => {
                         {isLoading && !timesheet ? (
                             <LoadingSpinner className="size-4" />
                         ) : (
-                            <BriefCaseClockIcon />
+                            <BriefCaseClockIcon className="text-primary" />
                         )}
                         Work Time
                     </Button>

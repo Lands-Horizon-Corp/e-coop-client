@@ -4,6 +4,7 @@ import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
 
 import { cn } from '@/helpers'
 import { AccountCreateUpdateFormModal, AccountPicker } from '@/modules/account'
+import { CurrencyInput } from '@/modules/currency'
 import WeekdayCombobox from '@/modules/loan-transaction/components/weekday-combobox'
 import { LOAN_MODE_OF_PAYMENT } from '@/modules/loan-transaction/loan.constants'
 
@@ -100,11 +101,15 @@ const MockLoanInputForm = ({
                             control={inputForm.control}
                             label="Applied Amount *"
                             name="applied_1"
-                            render={({ field }) => (
-                                <Input
+                            render={({ field: { onChange, ...field } }) => (
+                                <CurrencyInput
                                     {...field}
-                                    autoComplete="off"
-                                    id={field.name}
+                                    currency={
+                                        inputForm.watch('account')?.currency
+                                    }
+                                    onValueChange={(newValue) => {
+                                        onChange(newValue)
+                                    }}
                                     placeholder="Applied Amount"
                                 />
                             )}

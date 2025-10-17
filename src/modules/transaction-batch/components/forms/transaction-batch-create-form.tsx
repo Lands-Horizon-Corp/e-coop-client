@@ -6,6 +6,7 @@ import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
 import { cn } from '@/helpers'
 import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
 import { IBatchFundingRequest } from '@/modules/batch-funding'
+import { CurrencyInput } from '@/modules/currency'
 import EmployeePicker from '@/modules/employee/components/employee-picker'
 import { IMedia } from '@/modules/media'
 
@@ -109,14 +110,16 @@ const TransactionBatchCreateForm = ({
                                     control={form.control}
                                     label="Amount *"
                                     name="amount"
-                                    render={({ field }) => (
-                                        <Input
+                                    render={({
+                                        field: { onChange, ...field },
+                                    }) => (
+                                        <CurrencyInput
                                             {...field}
                                             disabled={isDisabled(field.name)}
-                                            id={field.name}
+                                            onValueChange={(newValue) => {
+                                                onChange(newValue)
+                                            }}
                                             placeholder="Amount"
-                                            step="1"
-                                            type="number"
                                         />
                                     )}
                                 />

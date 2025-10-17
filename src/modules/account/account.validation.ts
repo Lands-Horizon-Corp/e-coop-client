@@ -35,8 +35,14 @@ export const IAccountRequestSchema = z.object({
         .optional()
         .transform(descriptionTransformerSanitizer),
 
-    minAmount: z.number().min(0, 'Min amount must be non-negative').optional(),
-    maxAmount: z.number().min(0, 'Max amount must be non-negative').optional(),
+    minAmount: z.coerce
+        .number()
+        .min(0, 'Min amount must be non-negative')
+        .optional(),
+    maxAmount: z.coerce
+        .number()
+        .min(0, 'Max amount must be non-negative')
+        .optional(),
     index: z.coerce
         .number()
         .min(0, 'Index must be non-negative integer')
@@ -141,7 +147,7 @@ export const IAccountRequestSchema = z.object({
     additional_grace_period: z.number().int().min(0).optional(),
     number_grace_period_daily: z.boolean().optional(),
     fines_grace_period_maturity: z.number().int().min(0).optional(),
-    yearly_subscription_fee: z.number().min(0).optional(),
+    yearly_subscription_fee: z.coerce.number().min(0).optional(),
     loan_cut_off_days: z.number().int().min(0).optional(),
 
     lumpsum_computation_type: z.enum(LumpsumComputationTypeEnum).optional(),

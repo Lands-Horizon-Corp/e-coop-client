@@ -1,9 +1,9 @@
 import { useState } from 'react'
 
 import { cn } from '@/helpers'
-import { formatNumber } from '@/helpers/number-utils'
 import { useAuthUserWithOrg } from '@/modules/authentication/authgentication.store'
 import { BatchFundingCreateFormModal } from '@/modules/batch-funding/components/batch-funding-create-form'
+import { currencyFormat } from '@/modules/currency'
 import { TTransactionBatchFullorMin } from '@/modules/transaction-batch/transaction-batch.types'
 
 import { PlusIcon } from '@/components/icons'
@@ -50,7 +50,9 @@ const BeginningBalanceCard = ({
                 open={addModal}
             />
             <p className="text-lg">
-                {formatNumber(transactionBatch.beginning_balance, 2)}
+                {currencyFormat(transactionBatch.beginning_balance, {
+                    showSymbol: false,
+                })}
             </p>
             <p className="text-sm text-muted-foreground/70">
                 Beginning Balance

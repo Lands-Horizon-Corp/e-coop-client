@@ -5,6 +5,7 @@ import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
 
 import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
 import { cn } from '@/helpers/tw-utils'
+import { CurrencyInput } from '@/modules/currency'
 import { IMedia } from '@/modules/media'
 
 import { CountryCombobox } from '@/components/comboboxes/country-combobox'
@@ -128,23 +129,6 @@ const BillsAndCoinCreateUpdateForm = ({
                         />
                         <FormFieldWrapper
                             control={form.control}
-                            label="Value *"
-                            name="value"
-                            render={({ field }) => (
-                                <Input
-                                    {...field}
-                                    autoComplete="off"
-                                    disabled={isDisabled(field.name)}
-                                    id={field.name}
-                                    placeholder="Value"
-                                    step="0.01"
-                                    type="number"
-                                />
-                            )}
-                        />
-
-                        <FormFieldWrapper
-                            control={form.control}
                             label="Country Code *"
                             name="country_code"
                             render={({ field }) => (
@@ -154,6 +138,21 @@ const BillsAndCoinCreateUpdateForm = ({
                                     onChange={(country) =>
                                         field.onChange(country.alpha2)
                                     }
+                                />
+                            )}
+                        />
+                        <FormFieldWrapper
+                            control={form.control}
+                            label="Value *"
+                            name="value"
+                            render={({ field: { onChange, ...field } }) => (
+                                <CurrencyInput
+                                    {...field}
+                                    disabled={isDisabled(field.name)}
+                                    onValueChange={(newValue) => {
+                                        onChange(newValue)
+                                    }}
+                                    placeholder="Value"
                                 />
                             )}
                         />

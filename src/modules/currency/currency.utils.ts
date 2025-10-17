@@ -1,32 +1,50 @@
 import { ICurrency } from './currency.types'
 
+export interface ICurrencyFormatOptions {
+    /**
+     * Whether to show the currency symbol (e.g., $, €, ¥)
+     * @default true
+     */
+    showSymbol?: boolean
+    /**
+     * Optional currency configuration object
+     */
+    currency?: ICurrency
+}
+
 /**
  * Format a number value to a localized currency string with proper symbol and formatting
  *
  * @param value - The numeric value to format
- * @param currency - Optional currency configuration object
- * @returns Formatted currency string with symbol (e.g., "$1,600" for US locale)
+ * @param options - Optional formatting options
+ * @returns Formatted currency string with or without symbol
  *
  * @example
- * currencyFormat(1600, { locale: 'en-US', currency_code: 'USD' }) // "$1,600"
- * currencyFormat(1600, { locale: 'fr-FR', currency_code: 'EUR' }) // "1 600 €"
- * currencyFormat(1600, { locale: 'de-DE', currency_code: 'EUR' }) // "1.600 €"
- * currencyFormat(1600.50, { locale: 'en-US', currency_code: 'USD' }) // "$1,600.50"
- * currencyFormat(1600, { locale: 'ja-JP', currency_code: 'JPY' }) // "¥1,600"
+ * currencyFormat(1600, { currency: { locale: 'en-US', currency_code: 'USD' } }) // "$1,600"
+ * currencyFormat(1600, { currency: { locale: 'en-US', currency_code: 'USD' }, showSymbol: false }) // "1,600"
+ * currencyFormat(1600, { currency: { locale: 'fr-FR', currency_code: 'EUR' } }) // "1 600 €"
+ * currencyFormat(1600, { currency: { locale: 'de-DE', currency_code: 'EUR' } }) // "1.600 €"
+ * currencyFormat(1600.50, { currency: { locale: 'en-US', currency_code: 'USD' } }) // "$1,600.50"
+ * currencyFormat(1600, { currency: { locale: 'ja-JP', currency_code: 'JPY' } }) // "¥1,600"
  * currencyFormat(1600) // "$1,600" (defaults to en-US/USD)
  */
 export const currencyFormat = (
     value: number | string | undefined | null,
-    currency?: ICurrency
+    options: ICurrencyFormatOptions = {}
 ): string => {
+    const { showSymbol = false, currency } = options
+
     // Handle null/undefined values
     if (value === null || value === undefined || value === '') {
-        return currency?.symbol
-            ? `${currency.symbol}0`
-            : new Intl.NumberFormat('en-US', {
-                  style: 'currency',
-                  currency: 'USD',
-              }).format(0)
+        if (showSymbol && currency?.symbol) {
+            return `${currency.symbol}0`
+        }
+        return new Intl.NumberFormat('en-US', {
+            style: showSymbol ? 'currency' : 'decimal',
+            currency: showSymbol ? 'USD' : undefined,
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2,
+        }).format(0)
     }
 
     // Convert string to number if needed
@@ -34,12 +52,15 @@ export const currencyFormat = (
 
     // Handle invalid numbers
     if (isNaN(numericValue)) {
-        return currency?.symbol
-            ? `${currency.symbol}0`
-            : new Intl.NumberFormat('en-US', {
-                  style: 'currency',
-                  currency: 'USD',
-              }).format(0)
+        if (showSymbol && currency?.symbol) {
+            return `${currency.symbol}0`
+        }
+        return new Intl.NumberFormat('en-US', {
+            style: showSymbol ? 'currency' : 'decimal',
+            currency: showSymbol ? 'USD' : undefined,
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2,
+        }).format(0)
     }
 
     // Default locale and currency
@@ -73,8 +94,8 @@ export const currencyFormat = (
 
     try {
         return new Intl.NumberFormat(locale, {
-            style: 'currency',
-            currency: currencyCode,
+            style: showSymbol ? 'currency' : 'decimal',
+            currency: showSymbol ? currencyCode : undefined,
             minimumFractionDigits,
             maximumFractionDigits,
         }).format(numericValue)
@@ -84,8 +105,8 @@ export const currencyFormat = (
             error
         )
         return new Intl.NumberFormat('en-US', {
-            style: 'currency',
-            currency: 'USD',
+            style: showSymbol ? 'currency' : 'decimal',
+            currency: showSymbol ? 'USD' : undefined,
             minimumFractionDigits: 2,
             maximumFractionDigits: 2,
         }).format(numericValue)

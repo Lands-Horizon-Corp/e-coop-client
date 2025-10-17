@@ -5,6 +5,7 @@ import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
 
 import { cn } from '@/helpers'
 import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
+import { CurrencyInput } from '@/modules/currency'
 import {
     ITransactionBatch,
     ITransactionBatchDepositInBankRequest,
@@ -16,7 +17,6 @@ import FormFooterResetSubmit from '@/components/form-components/form-footer-rese
 import Modal, { IModalProps } from '@/components/modals/modal'
 import { Form } from '@/components/ui/form'
 import FormFieldWrapper from '@/components/ui/form-field-wrapper'
-import { Input } from '@/components/ui/input'
 
 import { useFormHelper } from '@/hooks/use-form-helper'
 
@@ -97,15 +97,14 @@ const DepositInBankCreateForm = ({
                         control={form.control}
                         label="Deposit in Bank"
                         name="deposit_in_bank"
-                        render={({ field }) => (
-                            <Input
+                        render={({ field: { onChange, ...field } }) => (
+                            <CurrencyInput
                                 {...field}
-                                autoComplete="off"
                                 disabled={isDisabled(field.name)}
-                                id={field.name}
+                                onValueChange={(newValue) => {
+                                    onChange(newValue)
+                                }}
                                 placeholder="Enter total deposit amount"
-                                step="0.01"
-                                type="number"
                             />
                         )}
                     />

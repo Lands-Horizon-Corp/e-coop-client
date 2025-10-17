@@ -7,6 +7,7 @@ import { cn } from '@/helpers'
 import { withToastCallbacks } from '@/helpers/callback-helper'
 import { toInputDateString } from '@/helpers/date-utils'
 import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
+import { CurrencyInput } from '@/modules/currency'
 import { IMedia } from '@/modules/media'
 
 import FormFooterResetSubmit from '@/components/form-components/form-footer-reset-submit'
@@ -136,18 +137,19 @@ const MemberAssetCreateUpdateForm = ({
                                 />
                             )}
                         />
-                        <div className="grid grid-cols-2 gap-x-2">
+                        <div className="grid grid-cols-1 gap-x-6 sm:grid-cols-2">
                             <FormFieldWrapper
                                 control={form.control}
                                 label="Asset Cost *"
                                 name="cost"
-                                render={({ field }) => (
-                                    <Input
+                                render={({ field: { onChange, ...field } }) => (
+                                    <CurrencyInput
                                         {...field}
                                         disabled={isDisabled(field.name)}
-                                        id={field.name}
+                                        onValueChange={(newValue) => {
+                                            onChange(newValue)
+                                        }}
                                         placeholder="Cost"
-                                        type="number"
                                     />
                                 )}
                             />
@@ -161,7 +163,7 @@ const MemberAssetCreateUpdateForm = ({
                                 render={({ field }) => (
                                     <InputDate
                                         {...field}
-                                        className="block [&::-webkit-calendar-picker-indicator]:hidden"
+                                        className="block"
                                         disabled={isDisabled(field.name)}
                                         placeholder="Entry Date"
                                         value={field.value ?? ''}
@@ -213,6 +215,7 @@ const MemberAssetCreateUpdateForm = ({
                     </fieldset>
                 </fieldset>
                 <FormFooterResetSubmit
+                    className="sticky bottom-0 bg-background/80"
                     disableSubmit={!form.formState.isDirty}
                     error={error}
                     isLoading={isPending}
@@ -239,7 +242,7 @@ export const MemberAssetCreateUpdateFormModal = ({
 }) => {
     return (
         <Modal
-            className={cn('', className)}
+            className={cn('!max-w-4xl', className)}
             description={description}
             title={title}
             {...props}

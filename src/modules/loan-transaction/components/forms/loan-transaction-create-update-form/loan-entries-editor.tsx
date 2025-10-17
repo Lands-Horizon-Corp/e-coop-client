@@ -252,7 +252,11 @@ const LoanEntriesEditor = forwardRef<
                                     ? '✓ Balanced'
                                     : `⚠ Difference: ${currencyFormat(
                                           difference,
-                                          form.watch('account').currency
+                                          {
+                                              currency:
+                                                  form.watch('account')
+                                                      ?.currency,
+                                          }
                                       )}`}
                             </span>
                         </p>
@@ -260,10 +264,10 @@ const LoanEntriesEditor = forwardRef<
                             <p className="text-xs text-muted-foreground">
                                 <span className="ml-1 text-orange-600">
                                     (
-                                    {currencyFormat(
-                                        deductionsTotal,
-                                        form.watch('account').currency
-                                    )}{' '}
+                                    {currencyFormat(deductionsTotal, {
+                                        currency:
+                                            form.watch('account')?.currency,
+                                    })}{' '}
                                     deducted)
                                 </span>
                             </p>
@@ -271,10 +275,9 @@ const LoanEntriesEditor = forwardRef<
                         {totalAddOns > 0 && (
                             <p className="text-xs text-green-600">
                                 Add-on charges:{' '}
-                                {currencyFormat(
-                                    totalAddOns,
-                                    form.watch('account').currency
-                                )}
+                                {currencyFormat(totalAddOns, {
+                                    currency: form.watch('account')?.currency,
+                                })}
                             </p>
                         )}
                     </div>
@@ -441,24 +444,22 @@ const LoanEntriesEditor = forwardRef<
                                 />
                                 <InfoTooltip content="Total interest to be paid for this loan.">
                                     <span className="py-1 px-3 rounded-md bg-primary/50 font-mono terxt-primary-foreground">
-                                        {currencyFormat(
-                                            amortization,
-                                            form.watch('account').currency
-                                        )}
+                                        {currencyFormat(amortization, {
+                                            currency:
+                                                form.watch('account')?.currency,
+                                        })}
                                     </span>
                                 </InfoTooltip>
                             </TableCell>
                             <TableCell className="text-right font-semibold">
-                                {currencyFormat(
-                                    totalDebit,
-                                    form.watch('account').currency
-                                )}
+                                {currencyFormat(totalDebit, {
+                                    currency: form.watch('account')?.currency,
+                                })}
                             </TableCell>
                             <TableCell className="text-right font-semibold">
-                                {currencyFormat(
-                                    totalCredit,
-                                    form.watch('account').currency
-                                )}
+                                {currencyFormat(totalCredit, {
+                                    currency: form.watch('account')?.currency,
+                                })}
                             </TableCell>
                             <TableCell>
                                 <div
@@ -623,18 +624,16 @@ const LoanEntryRow = memo(
                         </TableCell>
                         <TableCell className="text-right py-2 h-fit">
                             {entry.debit
-                                ? `${currencyFormat(
-                                      entry.debit,
-                                      form.watch('account').currency
-                                  )}`
+                                ? `${currencyFormat(entry.debit, {
+                                      currency: form.watch('account')?.currency,
+                                  })}`
                                 : ''}
                         </TableCell>
                         <TableCell className="text-right py-2 h-fit">
                             {entry.credit
-                                ? `${currencyFormat(
-                                      entry.credit,
-                                      form.watch('account').currency
-                                  )}`
+                                ? `${currencyFormat(entry.credit, {
+                                      currency: form.watch('account')?.currency,
+                                  })}`
                                 : ''}
                         </TableCell>
                         <TableCell className="text-right py-2 h-fit">

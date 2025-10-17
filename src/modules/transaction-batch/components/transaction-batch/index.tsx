@@ -147,7 +147,7 @@ const TransactionBatch = ({
                 />
             </div>
             <Button
-                className="shrink-0 rounded-xl dark:bg-secondary dark:text-secondary-foreground"
+                className="shrink-0 sticky bottom-0 rounded-xl dark:bg-secondary dark:text-secondary-foreground"
                 hoverVariant="primary"
                 onClick={() => endModal.onOpenChange(true)}
                 size="sm"

@@ -7,6 +7,7 @@ import { cn } from '@/helpers'
 import { withToastCallbacks } from '@/helpers/callback-helper'
 import { toInputDateString } from '@/helpers/date-utils'
 import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
+import { CurrencyInput } from '@/modules/currency'
 import { IMedia } from '@/modules/media'
 
 import FormFooterResetSubmit from '@/components/form-components/form-footer-reset-submit'
@@ -155,13 +156,14 @@ const MemberIncomeCreateUpdateForm = ({
                                 control={form.control}
                                 label="Amount *"
                                 name="amount"
-                                render={({ field }) => (
-                                    <Input
+                                render={({ field: { onChange, ...field } }) => (
+                                    <CurrencyInput
                                         {...field}
                                         disabled={isDisabled(field.name)}
-                                        id={field.name}
+                                        onValueChange={(newValue) => {
+                                            onChange(newValue)
+                                        }}
                                         placeholder="Amount"
-                                        type="number"
                                     />
                                 )}
                             />

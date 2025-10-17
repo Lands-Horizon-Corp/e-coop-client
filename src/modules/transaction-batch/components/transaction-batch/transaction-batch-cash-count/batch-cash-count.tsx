@@ -11,6 +11,7 @@ import {
     ICashCount,
     ICashCountBatchRequest,
 } from '@/modules/cash-count'
+import { currencyFormat } from '@/modules/currency'
 import { useUpdateBatchCashCounts } from '@/modules/transaction-batch/transaction-batch.service'
 
 import FormFooterResetSubmit from '@/components/form-components/form-footer-reset-submit'
@@ -269,10 +270,7 @@ const BatchCashCount = ({
                             Cash Count Total
                         </p>
                         <p className="text-xl">
-                            {cashCountTotal.toLocaleString(undefined, {
-                                minimumFractionDigits: 2,
-                                maximumFractionDigits: 2,
-                            })}
+                            {currencyFormat(cashCountTotal)}
                         </p>
                     </div>
                     <Separator className="bg-muted-foreground/10 dark:bg-background/80" />
@@ -281,10 +279,7 @@ const BatchCashCount = ({
                             Grand Total
                         </p>
                         <p className="text-xl text-primary">
-                            {grandTotal.toLocaleString(undefined, {
-                                minimumFractionDigits: 2,
-                                maximumFractionDigits: 2,
-                            })}
+                            {currencyFormat(grandTotal)}
                         </p>
                     </div>
                 </div>

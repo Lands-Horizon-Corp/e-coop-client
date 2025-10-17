@@ -6,6 +6,7 @@ import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
 import { cn } from '@/helpers'
 import { withToastCallbacks } from '@/helpers/callback-helper'
 import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
+import { CurrencyInput } from '@/modules/currency'
 
 import FormFooterResetSubmit from '@/components/form-components/form-footer-reset-submit'
 import Modal, { IModalProps } from '@/components/modals/modal'
@@ -135,13 +136,14 @@ const MemberExpenseCreateUpdateForm = ({
                             control={form.control}
                             label="Amount *"
                             name="amount"
-                            render={({ field }) => (
-                                <Input
+                            render={({ field: { onChange, ...field } }) => (
+                                <CurrencyInput
                                     {...field}
                                     disabled={isDisabled(field.name)}
-                                    id={field.name}
+                                    onValueChange={(newValue) => {
+                                        onChange(newValue)
+                                    }}
                                     placeholder="Amount"
-                                    type="number"
                                 />
                             )}
                         />

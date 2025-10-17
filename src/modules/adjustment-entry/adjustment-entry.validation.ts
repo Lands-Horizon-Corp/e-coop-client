@@ -5,6 +5,7 @@ import { descriptionTransformerSanitizer, entityIdSchema } from '@/validation'
 export const AdjustmentEntrySchema = z.object({
     signature_media_id: entityIdSchema.optional(),
     account_id: entityIdSchema,
+    account: z.any().optional(), // for UI
     member_profile_id: entityIdSchema.optional(),
     employee_user_id: entityIdSchema.optional(),
     payment_type_id: entityIdSchema.optional(),
@@ -19,13 +20,12 @@ export const AdjustmentEntrySchema = z.object({
     entry_date: z.string().refine((date) => !isNaN(Date.parse(date)), {
         message: 'Invalid date format',
     }),
-    debit: z.number().min(0),
-    credit: z.number().min(0),
+    debit: z.coerce.number().min(0),
+    credit: z.coerce.number().min(0),
 
     member_profile: z.any().optional(),
     employee_user: z.any().optional(),
     signature_media: z.any().optional(),
-    account: z.any().optional(),
 })
 
 export type TAdjustmentEntrySchema = z.infer<typeof AdjustmentEntrySchema>

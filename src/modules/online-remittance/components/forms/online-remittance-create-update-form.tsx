@@ -8,6 +8,7 @@ import { withToastCallbacks } from '@/helpers/callback-helper'
 import { toInputDateString } from '@/helpers/date-utils'
 import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
 import BankCombobox from '@/modules/bank/components/bank-combobox'
+import { CurrencyInput } from '@/modules/currency'
 import { IMedia } from '@/modules/media'
 
 import { CountryCombobox } from '@/components/comboboxes/country-combobox'
@@ -60,7 +61,7 @@ const OnlineRemittanceCreateUpdateForm = ({
             country_code: 'PH',
             reference_number: '',
             account_name: '',
-            amount: 1,
+            amount: 0,
             description: '',
             ...formProps.defaultValues,
             date_entry: toInputDateString(
@@ -166,12 +167,14 @@ const OnlineRemittanceCreateUpdateForm = ({
                         control={form.control}
                         label="Amount *"
                         name="amount"
-                        render={({ field }) => (
-                            <Input
+                        render={({ field: { onChange, ...field } }) => (
+                            <CurrencyInput
                                 {...field}
                                 disabled={isDisabled(field.name)}
+                                onValueChange={(newValue) => {
+                                    onChange(newValue)
+                                }}
                                 placeholder="Amount"
-                                type="text"
                             />
                         )}
                     />

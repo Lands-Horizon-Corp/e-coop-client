@@ -6,6 +6,7 @@ import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
 import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
 import { cn } from '@/helpers/tw-utils'
 import { AccountPicker } from '@/modules/account'
+import { CurrencyInput } from '@/modules/currency'
 import {
     ILoanTransactionEntry,
     LoanTransactionEntrySchema,
@@ -18,7 +19,6 @@ import FormFooterResetSubmit from '@/components/form-components/form-footer-rese
 import Modal, { IModalProps } from '@/components/modals/modal'
 import { Form } from '@/components/ui/form'
 import FormFieldWrapper from '@/components/ui/form-field-wrapper'
-import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Switch } from '@/components/ui/switch'
 import { Textarea } from '@/components/ui/textarea'
@@ -145,21 +145,13 @@ const LoanTransactionEntryCreateUpdate = ({
                         control={form.control}
                         label="Amount"
                         name="amount"
-                        render={({ field }) => (
-                            <Input
+                        render={({ field: { onChange, ...field } }) => (
+                            <CurrencyInput
                                 {...field}
+                                currency={form.watch('account')?.currency}
                                 disabled={isDisabled(field.name)}
-                                id={field.name}
-                                onChange={(e) => {
-                                    const value =
-                                        parseFloat(e.target.value) || 0
-                                    field.onChange(value)
-                                }}
-                                onKeyDown={(e) => {
-                                    if (e.key === 'Enter') {
-                                        onSubmit()
-                                        e.preventDefault()
-                                    }
+                                onValueChange={(newValue) => {
+                                    onChange(newValue)
                                 }}
                                 placeholder="0.00"
                             />
