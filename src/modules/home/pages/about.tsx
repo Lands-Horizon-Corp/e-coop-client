@@ -1,17 +1,40 @@
 'use client'
 
+import { useEffect, useState } from 'react'
+
 import { Link } from '@tanstack/react-router'
 
 import ImageMatch from '@/components/image-match'
 import { Particles } from '@/components/ui/background-particles'
 import { Button } from '@/components/ui/button'
 import { GradientText } from '@/components/ui/gradient-text'
+import { InteractiveGridPattern } from '@/components/ui/grid-pattern'
 
 import TeamMemberCard from '../components/about/team-member-card'
 import OurServices from '../components/home/our-services'
 import { COOPERATIVE_ADVANTAGES, LANDS_TEAM } from '../home.constants'
 
+const useGridDimensions = (): [number, number] => {
+    const [dimensions, setDimensions] = useState([20, 20])
+
+    useEffect(() => {
+        const updateDimensions = () => {
+            const width = Math.floor(window.innerWidth / 10)
+            const height = Math.floor((window.innerHeight * 0.5) / 10)
+            setDimensions([width, height])
+        }
+
+        updateDimensions()
+        window.addEventListener('resize', updateDimensions)
+        return () => window.removeEventListener('resize', updateDimensions)
+    }, [])
+
+    return [dimensions[0], dimensions[1]]
+}
+
 export default function AboutUsPage() {
+    const gridSquares = useGridDimensions()
+
     return (
         <div className="py-20 relative ">
             <Particles
@@ -21,7 +44,7 @@ export default function AboutUsPage() {
                 quantity={100}
                 refresh
             />
-            <div className="to-background/0 via-background/0 from-primary/50 absolute right-0 -z-10 -mt-16 h-screen w-full bg-radial-[ellipse_at_20%_0%] to-100%" />
+            <div className="to-background/0 via-background/0 from-primary/50 absolute right-0 -z-10 -mt-16 h-screen w-full bg-radial-[ellipse_at_20%_0%] to-100% dark:block hidden" />
 
             <div className="container mx-auto px-4  max-w-6xl">
                 <div className="mx-auto max-w-5xl text-center">
@@ -57,8 +80,16 @@ export default function AboutUsPage() {
             </div>
 
             <section>
-                <div className="bg-primary py-16">
-                    <div className="container mx-auto max-w-6xl">
+                <div className="bg-gradient-to-tl from-primary to-primary/60 py-16 relative overflow-hidden">
+                    <InteractiveGridPattern
+                        className="absolute inset-0 opacity-60"
+                        height={40}
+                        squares={gridSquares}
+                        squaresClassName="fill-white/20 hover:fill-white/60 transition-colors duration-300"
+                        width={40}
+                    />
+
+                    <div className="container mx-auto max-w-6xl relative z-10">
                         <div className="text-center text-primary-foreground">
                             <h2 className="text-3xl md:text-4xl font-bold mb-4">
                                 The benefits of using Cooperative Banking API
