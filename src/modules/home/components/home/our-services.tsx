@@ -5,7 +5,7 @@ import { IFeatureItem } from '../../home.types'
 
 const ServiceCard = ({ icon, title, description, alt }: IFeatureItem) => {
     return (
-        <div className="bg-background backdrop-blur-sm hover:border-primary border border-border/50 rounded-2xl p-6 hover:bg-card/95 transition-all duration-300 hover:shadow-lg hover:shadow-primary/10">
+        <div className="bg-card dark:bg-background dark:shadow-none shadow backdrop-blur-sm hover:border-primary border border-border/50 rounded-2xl p-6 hover:bg-card/95 transition-all duration-300 hover:shadow-lg hover:shadow-primary/10">
             {/* Icon at the top */}
             <div className="flex justify-center mb-4">
                 <div className="relative">

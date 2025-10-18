@@ -15,18 +15,26 @@ import OurServices from '../components/home/our-services'
 import { COOPERATIVE_ADVANTAGES, LANDS_TEAM } from '../home.constants'
 
 const useGridDimensions = (): [number, number] => {
-    const [dimensions, setDimensions] = useState([20, 20])
+    const [dimensions, setDimensions] = useState([60, 30])
 
     useEffect(() => {
+        let timeoutId: NodeJS.Timeout
+
         const updateDimensions = () => {
-            const width = Math.floor(window.innerWidth / 10)
-            const height = Math.floor((window.innerHeight * 0.5) / 10)
-            setDimensions([width, height])
+            clearTimeout(timeoutId)
+            timeoutId = setTimeout(() => {
+                const width = Math.max(40, Math.floor(window.innerWidth / 20))
+                const height = Math.max(20, Math.floor(window.innerHeight / 30))
+                setDimensions([width, height])
+            }, 100) // Debounce for 100ms
         }
 
         updateDimensions()
-        window.addEventListener('resize', updateDimensions)
-        return () => window.removeEventListener('resize', updateDimensions)
+        window.addEventListener('resize', updateDimensions, { passive: true })
+        return () => {
+            clearTimeout(timeoutId)
+            window.removeEventListener('resize', updateDimensions)
+        }
     }, [])
 
     return [dimensions[0], dimensions[1]]
@@ -82,11 +90,11 @@ export default function AboutUsPage() {
             <section>
                 <div className="bg-gradient-to-tl from-primary to-primary/60 py-16 relative overflow-hidden">
                     <InteractiveGridPattern
-                        className="absolute inset-0 opacity-60"
-                        height={40}
+                        className="absolute inset-0 opacity-20"
+                        height={50}
                         squares={gridSquares}
-                        squaresClassName="fill-white/20 hover:fill-white/60 transition-colors duration-300"
-                        width={40}
+                        squaresClassName="fill-white/10 hover:fill-white/30 transition-colors duration-500"
+                        width={50}
                     />
 
                     <div className="container mx-auto max-w-6xl relative z-10">
