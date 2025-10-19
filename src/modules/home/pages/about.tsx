@@ -14,8 +14,14 @@ import TeamMemberCard from '../components/about/team-member-card'
 import OurServices from '../components/home/our-services'
 import { COOPERATIVE_ADVANTAGES, LANDS_TEAM } from '../home.constants'
 
+const INITIAL_GRID_WIDTH = 60
+const INITIAL_GRID_HEIGHT = 30
+
 const useGridDimensions = (): [number, number] => {
-    const [dimensions, setDimensions] = useState([60, 30])
+    const [dimensions, setDimensions] = useState([
+        INITIAL_GRID_WIDTH,
+        INITIAL_GRID_HEIGHT,
+    ])
 
     useEffect(() => {
         let timeoutId: NodeJS.Timeout
