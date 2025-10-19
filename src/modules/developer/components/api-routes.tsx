@@ -4,7 +4,7 @@ import { Link } from '@tanstack/react-router'
 import Fuse from 'fuse.js'
 
 import { API_URL, APP_VERSION } from '@/constants'
-import { cn } from '@/helpers'
+import { cn, formatNumber } from '@/helpers'
 import APIRequestMethodBadge, {
     REQUEST_METHOD,
 } from '@/modules/developer/components/api-request-method-badge'
@@ -617,10 +617,22 @@ const APIRoutes = ({ className }: Props) => {
             </div>
             <div className="space-y-4 z-10 sticky top-16 pt-1 pb-4 bg-background/80 backdrop-blur-sm">
                 <div className="flex items-center justify-between">
-                    <p className="text-sm text-muted-foreground">
-                        Search API Routes{' '}
-                        <Badge variant="outline">v{APP_VERSION}</Badge>
-                    </p>
+                    <div className="flex items-center gap-2">
+                        <p className="text-sm text-muted-foreground">
+                            Search API Routes{' '}
+                            <Badge variant="outline">v{APP_VERSION}</Badge>
+                        </p>
+                        <Badge className="text-xs" variant="secondary">
+                            {formatNumber(
+                                data.reduce(
+                                    (total, group) =>
+                                        total + group.routes.length,
+                                    0
+                                )
+                            )}{' '}
+                            total available routes
+                        </Badge>
+                    </div>
                     <div className="inline-flex items-center gap-x-2">
                         <APIKeyGenModal
                             descriptionClassName="hidden"

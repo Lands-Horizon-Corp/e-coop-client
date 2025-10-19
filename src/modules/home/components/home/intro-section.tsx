@@ -28,7 +28,7 @@ const FeatureItem = ({
 const IntroSection = () => {
     return (
         <section className="flex items-center justify-center ">
-            <div className="to-background via-background from-primary/20 absolute right-0 -z-10 h-screen w-full bg-radial-[ellipse_at_100%_40%] to-100%" />
+            <div className="to-background via-background from-primary/20 absolute right-0 -z-10 h-screen w-full bg-radial-[ellipse_at_100%_40%] to-100% dark:block hidden" />
 
             <div className="mx-auto">
                 <div className="mx-auto w-full max-w-7xl rounded-2xl">
