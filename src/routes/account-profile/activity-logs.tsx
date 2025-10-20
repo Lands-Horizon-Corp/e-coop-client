@@ -81,7 +81,7 @@ function RouteComponent() {
     })
 
     return (
-        <PageContainer className="max-w-4xl bg-secondary/40 text-secondary-foreground rounded-3xl mx-auto p-4">
+        <PageContainer className="max-w-4xl bg-secondary/20 text-secondary-foreground rounded-3xl mx-auto p-4">
             <div className="flex justify-between w-full items-center">
                 <div className="space-y-2">
                     <p className="text-4xl">Activity Logs</p>
