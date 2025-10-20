@@ -4,13 +4,16 @@ import z from 'zod'
 import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
 
 import { cn } from '@/helpers'
+import { toInputDateString } from '@/helpers/date-utils'
 import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
 import useActionSecurityStore from '@/store/action-security-store'
 
 import FormFooterResetSubmit from '@/components/form-components/form-footer-reset-submit'
+import Modal, { IModalProps } from '@/components/modals/modal'
 import { Form } from '@/components/ui/form'
 import FormFieldWrapper from '@/components/ui/form-field-wrapper'
 import { Input } from '@/components/ui/input'
+import InputDate from '@/components/ui/input-date'
 
 import { useFormHelper } from '@/hooks/use-form-helper'
 
@@ -39,6 +42,9 @@ const AccountProfileForm = ({
             middle_name: '',
             last_name: '',
             suffix: '',
+            birthdate: toInputDateString(
+                formProps.defaultValues?.birthdate ?? new Date()
+            ),
             ...formProps.defaultValues,
         },
     })
@@ -72,7 +78,11 @@ const AccountProfileForm = ({
             title: 'Protected Action',
             description:
                 'This action carries significant impact and requires your password for verification.',
-            onSuccess: () => mutate(formData),
+            onSuccess: () =>
+                mutate({
+                    ...formData,
+                    full_name: `${formData.first_name || ''} ${formData.middle_name || ''} ${formData.last_name || ''} ${formData.suffix || ''}`,
+                }),
         })
     }, handleFocusError)
 
@@ -142,6 +152,22 @@ const AccountProfileForm = ({
                                 />
                             )}
                         />
+                        <FormFieldWrapper
+                            className="relative"
+                            control={form.control}
+                            description="mm/dd/yyyy"
+                            descriptionClassName="absolute top-0 right-0"
+                            hiddenFields={formProps.hiddenFields}
+                            label="Date of Birth"
+                            name="birthdate"
+                            render={({ field }) => (
+                                <InputDate
+                                    {...field}
+                                    disabled={isDisabled(field.name)}
+                                    value={field.value ?? ''}
+                                />
+                            )}
+                        />
                     </fieldset>
                 </fieldset>
                 <FormFooterResetSubmit
@@ -157,6 +183,33 @@ const AccountProfileForm = ({
                 />
             </form>
         </Form>
+    )
+}
+
+export const AccountProfileFormModal = ({
+    title = 'Edit profile details',
+    description = 'Update your profile information here. Changes will be reflected across the platform.',
+    className,
+    formProps,
+    ...props
+}: IModalProps & {
+    formProps?: Omit<IAccountProfileFormProps, 'className'>
+}) => {
+    return (
+        <Modal
+            className={cn('', className)}
+            description={description}
+            title={title}
+            {...props}
+        >
+            <AccountProfileForm
+                {...formProps}
+                onSuccess={(createdData) => {
+                    formProps?.onSuccess?.(createdData)
+                    props.onOpenChange?.(false)
+                }}
+            />
+        </Modal>
     )
 }
 

@@ -33,10 +33,7 @@ export const updateUserProfileGeneral = async (
 export const updateUserProfile = async (
     data: IUserProfileRequest
 ): Promise<IUserBase> => {
-    const res = await API.put<IUserProfileRequest, IUserBase>(
-        `${route}/profile`,
-        data
-    )
+    const res = await API.put<IUserProfileRequest, IUserBase>(`${route}`, data)
     return res.data
 }
 

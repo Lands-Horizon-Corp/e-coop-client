@@ -5,6 +5,8 @@ export interface IUserProfileRequest {
     middle_name?: string
     last_name: string
     suffix?: string
+    birthdate?: string
+    full_name?: string
 }
 
 export interface IUserProfilePhotoUpdateRequest {

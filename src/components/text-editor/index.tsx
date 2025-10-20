@@ -62,7 +62,7 @@ const TextEditor = forwardRef<HTMLDivElement, Props>(
                 attributes: {
                     spellcheck: spellCheck ? 'true' : 'false',
                     class: cn(
-                        'w-full ecoop-scroll toolbar-custom',
+                        'w-full ecoop-scroll !p-4 toolbar-custom',
                         textEditorClassName
                     ),
                 },

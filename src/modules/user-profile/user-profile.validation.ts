@@ -1,10 +1,12 @@
 import { z } from 'zod'
 
 import {
+    dateToISOTransformer,
     descriptionSchema,
     descriptionTransformerSanitizer,
     entityIdSchema,
     passwordSchema,
+    stringDateSchema,
 } from '@/validation'
 
 export const UserProfileSecuritySchema = z
@@ -23,6 +25,7 @@ export const UserProfileSchema = z.object({
     middle_name: z.string().optional(),
     last_name: z.string().min(1, 'Last name is required'),
     suffix: z.string().optional(),
+    birthdate: stringDateSchema.transform(dateToISOTransformer),
 })
 
 export const UserProfilePhotoUpdateSchema = z.object({
