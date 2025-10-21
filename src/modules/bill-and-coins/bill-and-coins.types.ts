@@ -1,21 +1,12 @@
 import { IPaginatedResult, ITimeStamps, TEntityId } from '@/types/common'
 
 import { IBranch } from '../branch/branch.types'
+import { ICurrency } from '../currency'
 import { IMedia } from '../media/media.types'
 import { IOrganization } from '../organization/organization.types'
+import { TBillsAndCoinSchema } from './bill-and-coins.validation'
 
-export interface IBillsAndCoinRequest {
-    id?: TEntityId
-
-    organization_id?: TEntityId
-    branch_id?: TEntityId
-
-    media_id?: TEntityId
-
-    name: string
-    value: number
-    country_code: string
-}
+export type IBillsAndCoinRequest = TBillsAndCoinSchema
 
 export interface IBillsAndCoin extends ITimeStamps {
     id: TEntityId
@@ -35,7 +26,9 @@ export interface IBillsAndCoin extends ITimeStamps {
 
     name: string
     value: number
-    country_code: string
+
+    currency_id: TEntityId
+    currency: ICurrency
 }
 
 export interface IBillsAndCoinPaginated

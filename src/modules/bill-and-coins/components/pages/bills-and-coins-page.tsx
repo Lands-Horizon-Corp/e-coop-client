@@ -14,7 +14,12 @@ export default function BillsAndCoinsPage() {
     const createModal = useModalState(false)
     const {
         currentAuth: {
-            user_organization: { branch_id, organization_id },
+            user_organization: {
+                branch_id,
+                branch: {
+                    branch_setting: { currency_id, currency },
+                },
+            },
         },
     } = useAuthUserWithOrgBranch()
 
@@ -42,8 +47,8 @@ export default function BillsAndCoinsPage() {
                 {...createModal}
                 formProps={{
                     defaultValues: {
-                        branch_id,
-                        organization_id,
+                        currency_id: currency_id,
+                        currency: currency,
                     },
                     onSuccess: () => {},
                 }}

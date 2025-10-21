@@ -1,5 +1,6 @@
 import { ReactNode } from 'react'
 
+import { currencyFormat } from '@/modules/currency'
 import { ColumnDef, Row } from '@tanstack/react-table'
 
 import DataTableColumnHeader from '@/components/data-table/data-table-column-header'
@@ -79,7 +80,7 @@ const BillsAndCoinsTableColumns = (
         ),
         cell: ({
             row: {
-                original: { name, media, country_code },
+                original: { name, media, currency },
             },
         }) => (
             <div className="flex min-w-0 items-center gap-3">
@@ -94,7 +95,10 @@ const BillsAndCoinsTableColumns = (
                         {name || '-'}
                     </span>
                     <span className="truncate text-xs text-muted-foreground/70">
-                        {country_code || '-'}
+                        {currency.emoji || '-'}
+                        <span className="ml-1.5">
+                            {currency.currency_code || '-'}
+                        </span>
                     </span>
                 </div>
             </div>
@@ -121,14 +125,12 @@ const BillsAndCoinsTableColumns = (
         ),
         cell: ({
             row: {
-                original: { value },
+                original: { value, currency },
             },
         }) => (
             <div>
                 <span className="text-sm font-semibold">
-                    {value?.toLocaleString(undefined, {
-                        minimumFractionDigits: 2,
-                    })}
+                    {currencyFormat(value, { currency })}
                 </span>
             </div>
         ),
