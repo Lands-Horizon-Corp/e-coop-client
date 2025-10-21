@@ -1,8 +1,8 @@
 import { useState } from 'react'
 
 import { cn } from '@/helpers'
-import { formatNumber } from '@/helpers/number-utils'
 import { IAccount } from '@/modules/account'
+import { ICurrency, currencyFormat } from '@/modules/currency'
 import GeneralLedgerTable from '@/modules/general-ledger/components/tables/general-ledger-table'
 import MemberAccountingLedgerTable from '@/modules/member-accounting-ledger/components/member-accounting-ledger-table'
 import { useMemberAccountingLedgerTotal } from '@/modules/member-accounting-ledger/member-accounting-ledger.service'
@@ -30,9 +30,11 @@ interface Props extends IBaseProps {
 
 interface MemberAccountingLedgerTotalProps extends IBaseProps {
     memberProfileId: TEntityId
+    currency?: ICurrency
 }
 
 export const MemberAccountingLedgerTotal = ({
+    currency,
     className,
     memberProfileId,
 }: MemberAccountingLedgerTotalProps) => {
@@ -62,9 +64,12 @@ export const MemberAccountingLedgerTotal = ({
             </Button>
             <div className="p-2 space-y-1">
                 <p className="text-primary text-xl font-bold">
-                    {formatNumber(
+                    {currencyFormat(
                         data.total_share_capital_plus_fixed_savings,
-                        2
+                        {
+                            currency,
+                            showSymbol: !!currency,
+                        }
                     )}
                 </p>
 
@@ -75,7 +80,10 @@ export const MemberAccountingLedgerTotal = ({
 
             <div className="p-2 space-y-1">
                 <p className="text-primary text-xl font-bold">
-                    {formatNumber(data.total_deposits, 2)}
+                    {currencyFormat(data.total_deposits, {
+                        currency,
+                        showSymbol: !!currency,
+                    })}
                 </p>
 
                 <p className="text-xs text-muted-foreground truncate shrink">
@@ -85,7 +93,10 @@ export const MemberAccountingLedgerTotal = ({
 
             <div className="p-2 space-y-1">
                 <p className="text-primary text-xl font-bold">
-                    {formatNumber(data.total_loans, 2)}
+                    {currencyFormat(data.total_loans, {
+                        currency,
+                        showSymbol: !!currency,
+                    })}
                 </p>
 
                 <p className="text-xs text-muted-foreground shrink truncate">

@@ -1,35 +1,44 @@
-import { useMemo } from 'react'
+import { useMemo } from 'react';
 
-import { cn } from '@/helpers'
-import { downloadFile, formatBytes } from '@/helpers/common-helper'
-import { toReadableDate } from '@/helpers/date-utils'
-import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
-import { IMedia } from '@/modules/media'
-import { useUserMedias } from '@/modules/user'
-import {
-    ColumnDef,
-    getCoreRowModel,
-    getSortedRowModel,
-    useReactTable,
-} from '@tanstack/react-table'
 
-import CopyTextButton from '@/components/copy-text-button'
-import DataTable from '@/components/data-table'
-import DataTableColumnHeader from '@/components/data-table/data-table-column-header'
-import ColumnActions from '@/components/data-table/data-table-column-header/column-actions'
-import { useDataTableSorting } from '@/components/data-table/use-datatable-sorting'
+
+import { cn } from '@/helpers';
+import { downloadFile, formatBytes } from '@/helpers/common-helper';
+import { toReadableDate } from '@/helpers/date-utils';
+import { serverRequestErrExtractor } from '@/helpers/error-message-extractor';
+import { IMedia } from '@/modules/media';
+import MediaResourceFileIcon from '@/modules/media/components/media-resource-file-icon';
+import { useUserMedias } from '@/modules/user';
+import { ColumnDef, getCoreRowModel, getSortedRowModel, useReactTable } from '@tanstack/react-table';
+
+
+
+import CopyTextButton from '@/components/copy-text-button';
+import DataTable from '@/components/data-table';
+import DataTableColumnHeader from '@/components/data-table/data-table-column-header';
+import ColumnActions from '@/components/data-table/data-table-column-header/column-actions';
+import { useDataTableSorting } from '@/components/data-table/use-datatable-sorting';
 import useDataTableState from '@/components/data-table/use-datatable-state'
 import { DownloadIcon, FolderFillIcon, WarningIcon } from '@/components/icons'
-import MediaResourceFileIcon from '@/components/icons/media-resource-file-icon'
-import LoadingSpinner from '@/components/spinners/loading-spinner'
-import { Button } from '@/components/ui/button'
-import FormErrorMessage from '@/components/ui/form-error-message'
+import LoadingSpinner from '@/components/spinners/loading-spinner';
+import { Button } from '@/components/ui/button';
+import FormErrorMessage from '@/components/ui/form-error-message';
 
-import { usePagination } from '@/hooks/use-pagination'
 
-import { IClassProps, TEntityId } from '@/types'
 
-import SectionTitle from '../section-title'
+import { usePagination } from '@/hooks/use-pagination';
+
+
+
+import { IClassProps, TEntityId } from '@/types';
+
+
+
+import SectionTitle from '../section-title';
+
+
+
+
 
 const FileMediaColumns = (): ColumnDef<IMedia>[] => {
     return [
