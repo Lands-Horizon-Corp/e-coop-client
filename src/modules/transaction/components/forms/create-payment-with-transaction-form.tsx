@@ -14,6 +14,7 @@ import { IMedia } from '@/modules/media'
 import { useGetAll } from '@/modules/payment-type'
 import { IPaymentRequest } from '@/modules/quick-transfer'
 import {
+    ITransaction,
     ITransactionRequest,
     PaymentTypeCombobox,
     PaymentWithTransactionSchema,
@@ -58,6 +59,7 @@ interface PaymentWithTransactionFormProps
             string,
             TPaymentWithTransactionFormValues
         > {
+    transaction?: ITransaction
     transactionId?: TEntityId
     memberProfileId?: TEntityId
     memberJointId?: TEntityId
@@ -66,6 +68,7 @@ interface PaymentWithTransactionFormProps
 const PaymentWithTransactionForm = ({
     defaultValues,
     onSuccess,
+    transaction,
     transactionId,
     memberProfileId,
     memberJointId,
@@ -435,8 +438,15 @@ const PaymentWithTransactionForm = ({
                                     name="account_id"
                                     render={({ field }) => (
                                         <AccountPicker
+                                            currencyId={
+                                                transaction?.currency_id
+                                            }
                                             disabled={isDisabled('account_id')}
-                                            mode={focusTypePayment}
+                                            mode={
+                                                transaction
+                                                    ? 'currency-payment'
+                                                    : focusTypePayment
+                                            }
                                             nameOnly
                                             onSelect={(account) => {
                                                 field.onChange(account.id)

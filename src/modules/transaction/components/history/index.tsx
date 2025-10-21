@@ -21,11 +21,14 @@ import { ScrollArea } from '@/components/ui/scroll-area'
 
 import useDatableFilterState from '@/hooks/use-filter-state'
 
-import { TEntityId } from '@/types'
+import { IClassProps, TEntityId } from '@/types'
 
 import TransactionNoFound from './transaction-no-found'
 
-export const TransactionHistory = ({ fullPath }: { fullPath: string }) => {
+export const TransactionHistory = ({
+    fullPath,
+    className,
+}: { fullPath: string } & IClassProps) => {
     const navigate = useNavigate()
     const [onOpen, setOnOpen] = useState(false)
     const [pagination, setPagination] = useState<PaginationState>({
@@ -77,13 +80,13 @@ export const TransactionHistory = ({ fullPath }: { fullPath: string }) => {
     return (
         <>
             <Button
-                className=""
+                className={className}
                 onClick={() => setOnOpen(true)}
                 size="sm"
                 variant="outline"
             >
-                <HistoryIcon className="mr-2" />
-                History
+                <HistoryIcon />
+                {/* History */}
             </Button>
             <SheetModal
                 className="min-w-full h-full max-w-[500px] p-5 md:min-w-[600px] overflow-hidden"

@@ -2,6 +2,7 @@ import { IPaymentRequest } from '@/modules/quick-transfer'
 import { IBaseEntityMeta, IPaginatedResult, TEntityId } from '@/types/common'
 
 import { IAccount } from '../account'
+import { ICurrency } from '../currency'
 import { TGeneralLedgerSource } from '../general-ledger'
 import { IMedia } from '../media/media.types'
 import { IMemberJointAccount } from '../member-joint-account'
@@ -42,6 +43,9 @@ export interface ITransaction extends IBaseEntityMeta {
 
     member_joint_account_id: TEntityId
     member_joint_account: IMemberJointAccount | null
+
+    currency_id: TEntityId
+    currency: ICurrency
 
     loan_balance: number
     loan_due: number

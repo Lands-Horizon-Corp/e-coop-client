@@ -4,7 +4,7 @@ import { toast } from 'sonner'
 
 import { PAGINATION_INITIAL_INDEX } from '@/constants'
 import { cn } from '@/helpers'
-import { commaSeparators } from '@/helpers/common-helper'
+import { currencyFormat } from '@/modules/currency'
 import { useFilteredPaginatedGeneralLedger } from '@/modules/general-ledger'
 import { PaginationState } from '@tanstack/react-table'
 
@@ -19,6 +19,8 @@ import { useQeueryHookCallback } from '@/hooks/use-query-hook-cb'
 
 import { TEntityId } from '@/types'
 
+import { ITransaction } from '../..'
+import TransactionHistory from '../history'
 import TransactionCurrentPaymentItem from './transaction-current-payment-item'
 
 type itemgBadgeTypeProps = {
@@ -37,10 +39,14 @@ type itemgBadgeTypeProps = {
 
 type CurrentPaymentsEntryListProps = {
     transactionId: TEntityId
+    transaction: ITransaction
     totalAmount?: number
+    fullPath: string
 }
 const TransactionCurrentPaymentEntry = ({
+    fullPath,
     transactionId,
+    transaction,
     totalAmount,
 }: CurrentPaymentsEntryListProps) => {
     const [pagination, setPagination] = useState<PaginationState>({
@@ -98,15 +104,16 @@ const TransactionCurrentPaymentEntry = ({
                 <div className=" flex-grow rounded-xl py-2">
                     <div className="flex items-center justify-between gap-x-2">
                         <div className="flex items-center gap-x-2">
-                            <label className="text-sm font-bold uppercase text-muted-foreground">
+                            <TransactionHistory fullPath={fullPath} />
+                            <p className="text-sm font-bold uppercase text-muted-foreground">
                                 Total Amount
-                            </label>
+                            </p>
                         </div>
                         <p className="text-lg font-bold text-primary dark:text-primary">
-                            ₱{' '}
-                            {totalAmount
-                                ? commaSeparators(totalAmount.toString())
-                                : '0.00'}
+                            {currencyFormat(totalAmount || 0, {
+                                currency: transaction?.currency,
+                                showSymbol: !!transaction?.currency,
+                            })}
                         </p>
                     </div>
                 </div>

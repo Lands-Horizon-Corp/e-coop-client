@@ -2,8 +2,8 @@ import { useQueryClient } from '@tanstack/react-query'
 import { toast } from 'sonner'
 
 import { cn } from '@/helpers'
-import { commaSeparators } from '@/helpers/common-helper'
 import { dateAgo, toReadableDate } from '@/helpers/date-utils'
+import { currencyFormat } from '@/modules/currency'
 import { IGeneralLedger } from '@/modules/general-ledger'
 import { LedgerSourceBadge } from '@/modules/general-ledger/components/ledger-source-badge'
 import { useSingleReverseTransaction } from '@/modules/transaction'
@@ -147,14 +147,17 @@ const TransactionCurrentPaymentItem = ({
                                                                 0
                                                                     ? 'Credit'
                                                                     : 'Debit'}
-                                                            </span>
-                                                            ₱{' '}
-                                                            {commaSeparators(
-                                                                (
-                                                                    payment.credit ||
+                                                            </span>{' '}
+                                                            {currencyFormat(
+                                                                payment.credit ||
                                                                     payment.debit ||
-                                                                    0
-                                                                ).toString()
+                                                                    0,
+                                                                {
+                                                                    currency:
+                                                                        payment.currency,
+                                                                    showSymbol:
+                                                                        !!payment.currency,
+                                                                }
                                                             )}
                                                         </p>
                                                     </div>

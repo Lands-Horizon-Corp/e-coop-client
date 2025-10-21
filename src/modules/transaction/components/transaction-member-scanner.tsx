@@ -90,7 +90,7 @@ const TransactionMemberScanner = ({
     return (
         <div
             className={cn(
-                'flex flex-col xl:flex-row w-full h-fit min-h-fit ecoop-scroll rounded-2xl p-4',
+                'flex flex-col xl:flex-row w-full h-fit min-h-fit ecoop-scroll rounded-2xl',
                 className
             )}
             onClick={(e) => {
@@ -111,14 +111,14 @@ const TransactionMemberScanner = ({
             />
             {/* Left: Scanner Column */}
             {!selectedMember && (
-                <div className="flex flex-col flex-shrink-0 xl:w-[15rem] justify-center items-center w-full">
+                <div className="flex flex-col flex-shrink-0 justify-center items-center">
                     {/* Inner Scanner Wrapper: Removed mr-1/mb-1. Added consistent p-2 for spacing. */}
-                    <div className="w-full xl:p-2 flex justify-center">
+                    <div className="w-full  flex justify-center">
                         <div
                             className={cn(
                                 // Apply styles for the active scanner state
                                 startScan && !selectedMember
-                                    ? 'xl:w-fit w-full aspect-square min-h-[150px] md:w-[50%] max-w-full rounded-2xl overflow-hidden'
+                                    ? 'size-40'
                                     : // Apply padding for the static placeholder state
                                       'p-4'
                             )}
@@ -137,11 +137,8 @@ const TransactionMemberScanner = ({
                                 />
                             ) : (
                                 // Placeholder box: use size-full and flex-1 to occupy space consistently
-                                <div className="flex flex-col size-full aspect-square min-h-[150px] max-w-full items-center justify-center text-center gap-y-2">
-                                    <ScanLineIcon
-                                        className=" text-muted-foreground/70"
-                                        size={50}
-                                    />
+                                <div className="flex flex-col size-full aspect-square items-center justify-center text-center gap-y-2">
+                                    <ScanLineIcon className=" text-muted-foreground/70 size-[40%]" />
                                     <Button
                                         disabled={
                                             !!transactionId || !!selectedMember
@@ -166,7 +163,7 @@ const TransactionMemberScanner = ({
 
             {/* Right: Content Column */}
             {/* Use 'flex-1 min-w-0' to make it take up the rest of the space in xl:flex-row */}
-            <div className="flex flex-col flex-1 w-full h-full p-2">
+            <div className="flex flex-col flex-1 h-full">
                 {isPending && decodedMemberProfile !== undefined && (
                     <p className="text-muted-foreground/70 flex items-center">
                         <LoadingSpinner className="mr-2 h-4 w-4" />
@@ -177,9 +174,11 @@ const TransactionMemberScanner = ({
                 {selectedMember ? (
                     <div className="h-full">
                         <TransactionMemberProfile
+                            allowRemoveButton
                             className="h-full"
                             hasTransaction={false}
                             memberInfo={selectedMember}
+                            onRemove={() => setSelectedMember(null)}
                         />
                     </div>
                 ) : (

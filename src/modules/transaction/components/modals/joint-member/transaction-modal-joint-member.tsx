@@ -1,5 +1,8 @@
-import React, { useState } from 'react'
+import React, { useState } from 'react';
 
+
+
+import { cn } from '@/helpers'
 import { IMemberJointAccount } from '@/modules/member-joint-account'
 
 import { EmptyIcon, UserPlusIcon } from '@/components/icons'
@@ -23,6 +26,7 @@ interface JointMemberModalProps extends IModalProps {
     memberJointProfile: IMemberJointAccount[]
     triggerClassName?: string
     triggerProps?: React.ButtonHTMLAttributes<HTMLButtonElement>
+    triggerContentMode?: 'icon' | 'full'
 }
 
 const TransactionModalJointMember = ({
@@ -31,6 +35,7 @@ const TransactionModalJointMember = ({
     triggerClassName,
     triggerProps,
     value,
+    triggerContentMode = 'icon',
     ...rest
 }: JointMemberModalProps) => {
     const [openPicker, setOpenPicker] = useState(false)
@@ -96,33 +101,37 @@ const TransactionModalJointMember = ({
                 </div>
             </Modal>
             <Button
-                className={`w-full ${hasSelectedMember ? 'justify-start' : ''} gap-x-2 px-2 ${triggerClassName}`}
+                className={cn(
+                    `${hasSelectedMember ? 'justify-start' : ''} items-center gap-x-2  px-2`,
+                    triggerClassName,
+                    triggerContentMode === 'full' && 'w-full'
+                )}
                 onClick={(e) => {
                     e.preventDefault()
                     setOpenPicker(true)
                 }}
+                size={triggerContentMode === 'icon' ? 'icon' : 'default'}
                 variant={'outline'}
                 {...triggerProps}
             >
                 {hasSelectedMember ? (
-                    <span className="w-full flex justify-between items-center">
-                        <span className="flex">
-                            <ImageDisplay
-                                className="mr-2"
-                                src={selectedJointMember?.picture_media.url}
-                            />
-                            {selectedJointMember?.full_name}
-                        </span>
-                        <span className="text-xs text-muted-foreground">
-                            {selectedJointMember.family_relationship}
-                        </span>
-                    </span>
+                    <p className="items-center flex">
+                        <ImageDisplay
+                            className="size-5 shrink-0"
+                            src={selectedJointMember?.picture_media.url}
+                        />
+                        {triggerContentMode === 'full' && (
+                            <span className="ml-2 inline-block truncate">
+                                {selectedJointMember?.full_name}
+                            </span>
+                        )}
+                    </p>
                 ) : (
                     <>
-                        <UserPlusIcon className="" />
-                        <span className="text-xs text-muted-foreground">
-                            Select Joint Member
-                        </span>
+                        <UserPlusIcon className="inline" />
+                        {triggerContentMode === 'full' && (
+                            <span className="ml-2">Add Joint Member</span>
+                        )}
                     </>
                 )}
             </Button>

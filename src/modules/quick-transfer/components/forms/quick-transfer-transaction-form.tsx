@@ -297,7 +297,8 @@ export const QuickTransferTransactionForm = ({
                                         jointMember
                                     )
                                 }}
-                                triggerClassName="hover:bg-secondary/40"
+                                triggerClassName="hover:bg-secondary/40 block"
+                                triggerContentMode='full'
                                 triggerProps={{
                                     disabled:
                                         form.watch('member_profile_id') ===
@@ -366,6 +367,7 @@ export const QuickTransferTransactionForm = ({
                         render={({ field }) => (
                             <AccountPicker
                                 disabled={isDisabled('account_id')}
+                                mode="all"
                                 nameOnly
                                 onSelect={(account) => {
                                     if (isDisabled('account_id')) return

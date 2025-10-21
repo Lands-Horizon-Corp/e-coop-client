@@ -7,11 +7,9 @@ import { toast } from 'sonner'
 import { SHORTCUT_SCOPES } from '@/constants'
 import { AccountTypeEnum } from '@/modules/account'
 import { IGeneralLedger } from '@/modules/general-ledger'
-import LoanPicker from '@/modules/loan-transaction/components/loan-picker'
 import {
     ITransaction,
     TransactionCurrentPaymentEntry,
-    TransactionHistory,
     TransactionModalSuccessPayment,
     useGetById,
 } from '@/modules/transaction'
@@ -170,18 +168,15 @@ const Transaction = ({ transactionId, fullPath }: TTransactionProps) => {
                 open={isOpen}
                 title={modalData?.title || 'Request Reverse Transaction'}
             />
-            {selectedMember && (
+            {/* {selectedMember && (
                 <LoanPicker
                     memberProfileId={selectedMember.id}
                     modalState={loanPickerState}
                     mode="member-profile"
                     triggerClassName="hidden"
                 />
-            )}
+            )} */}
             <PageContainer className="flex h-fit lg:h-[90vh] w-full !overflow-hidden">
-                <div className="w-full flex justify-end pb-2">
-                    <TransactionHistory fullPath={fullPath} />
-                </div>
                 <TransactionModalSuccessPayment
                     isOpen={openSuccessModal}
                     onClose={handleCloseSuccessModal}
@@ -189,22 +184,14 @@ const Transaction = ({ transactionId, fullPath }: TTransactionProps) => {
                     open={openSuccessModal}
                     transaction={transactionFormSuccess}
                 />
-                <TransactionMemberScanner
-                    className="p-2"
-                    fullPath={fullPath}
-                    handleSetTransactionId={() =>
-                        handleSetTransactionId({
-                            transactionId: undefined,
-                            fullPath,
-                        })
-                    }
-                    transactionId={transactionId}
-                />
+
                 <div className="flex h-full flex-col lg:flex-row  w-full gap-2 overflow-hidden">
                     {/* Left Section (Payment) */}
                     <div className="w-full lg:w-[40%] ecoop-scroll flex flex-col py-2 overflow-y-auto">
                         <TransactionCurrentPaymentEntry
+                            fullPath={fullPath}
                             totalAmount={transaction?.amount}
+                            transaction={transaction as ITransaction}
                             transactionId={transactionId}
                         />
                         {hasSelectedTransactionId && (
@@ -225,6 +212,17 @@ const Transaction = ({ transactionId, fullPath }: TTransactionProps) => {
                     </div>
                     {/* Right Section (Ledger Table) */}
                     <div className="flex-1 w-full flex flex-col p-2 rounded-2xl bg-background ecoop-scroll overflow-y-auto">
+                        <TransactionMemberScanner
+                            className="p-2"
+                            fullPath={fullPath}
+                            handleSetTransactionId={() =>
+                                handleSetTransactionId({
+                                    transactionId: undefined,
+                                    fullPath,
+                                })
+                            }
+                            transactionId={transactionId}
+                        />
                         <TransactionAccountMemberLedger
                             memberProfileId={selectedMember?.id as TEntityId}
                             onRowClick={(data) => {
@@ -275,6 +273,7 @@ const Transaction = ({ transactionId, fullPath }: TTransactionProps) => {
                         // setActiveScope(SHORTCUT_SCOPES.PAYMENT)
                     }}
                     readOnly={!hasNoTransactionBatch}
+                    transaction={transaction}
                     transactionId={transactionId}
                 />
             )}

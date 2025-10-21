@@ -1,6 +1,6 @@
 import { ReactNode } from 'react'
 
-import { formatNumber } from '@/helpers/number-utils'
+import { currencyFormat } from '@/modules/currency'
 import { LedgerSourceBadge } from '@/modules/general-ledger/components/ledger-source-badge'
 import { GENERAL_LEDGER_SOURCES } from '@/modules/general-ledger/constants'
 import {
@@ -161,11 +161,16 @@ const GeneralLedgerTableColumns = (
             ),
             cell: ({
                 row: {
-                    original: { credit },
+                    original: { credit, currency },
                 },
             }) => (
                 <p className="text-right font-medium">
-                    {credit ? formatNumber(credit, 2) : ''}
+                    {credit
+                        ? currencyFormat(credit, {
+                              currency,
+                              showSymbol: !!currency,
+                          })
+                        : ''}
                 </p>
             ),
             enableMultiSort: true,
@@ -189,11 +194,16 @@ const GeneralLedgerTableColumns = (
             ),
             cell: ({
                 row: {
-                    original: { debit },
+                    original: { debit, currency },
                 },
             }) => (
                 <p className="text-right font-medium">
-                    {debit ? formatNumber(debit, 2) : ''}
+                    {debit
+                        ? currencyFormat(debit, {
+                              currency,
+                              showSymbol: !!currency,
+                          })
+                        : ''}
                 </p>
             ),
             enableMultiSort: true,
@@ -218,11 +228,16 @@ const GeneralLedgerTableColumns = (
             ),
             cell: ({
                 row: {
-                    original: { balance },
+                    original: { balance, currency },
                 },
             }) => (
                 <p className="text-right font-semibold">
-                    {balance ? formatNumber(balance, 2) : ''}
+                    {balance
+                        ? currencyFormat(balance, {
+                              currency,
+                              showSymbol: !!currency,
+                          })
+                        : ''}
                 </p>
             ),
             enableMultiSort: true,

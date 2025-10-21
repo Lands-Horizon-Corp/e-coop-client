@@ -2,6 +2,7 @@ import { IBaseEntityMeta, IPaginatedResult, TEntityId } from '@/types/common'
 
 import { IAccount } from '../account'
 import { IBank } from '../bank'
+import { ICurrency } from '../currency'
 import { IMedia } from '../media/media.types'
 import { IMemberJointAccount } from '../member-joint-account'
 import { IMemberProfile } from '../member-profile'
@@ -70,6 +71,10 @@ export interface IGeneralLedger extends IBaseEntityMeta {
     credit: number
     debit: number
     balance: number
+
+    // FOR CURRENCY
+    currency_id: TEntityId
+    currency: ICurrency
 
     entry_date: TEntityId
     bank_reference_number: string
