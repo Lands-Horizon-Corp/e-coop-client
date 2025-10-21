@@ -424,7 +424,7 @@ const PaymentWithTransactionForm = ({
                                                 form.watch('account')?.currency
                                             }
                                             disabled={isDisabled('amount')}
-                                            onValueChange={(newValue) =>
+                                            onValueChange={(newValue = '') =>
                                                 onChange(newValue)
                                             }
                                             placeholder="Amount"

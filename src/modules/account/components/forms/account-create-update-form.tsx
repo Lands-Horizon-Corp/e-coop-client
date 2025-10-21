@@ -698,7 +698,7 @@ const AccountCreateUpdateForm = ({
                                                 isLoading
                                             }
                                             onValueChange={(newValue) => {
-                                                onChange(newValue)
+                                                onChange(newValue ?? '')
                                             }}
                                             placeholder="Min Amount"
                                         />
@@ -718,7 +718,7 @@ const AccountCreateUpdateForm = ({
                                                 isDisabled(field.name) ||
                                                 isLoading
                                             }
-                                            onValueChange={(newValue) => {
+                                            onValueChange={(newValue = '') => {
                                                 onChange(newValue)
                                             }}
                                             placeholder="Max Amount"
@@ -972,7 +972,9 @@ const AccountCreateUpdateForm = ({
                                                     isDisabled(field.name) ||
                                                     isLoading
                                                 }
-                                                onValueChange={(newValue) => {
+                                                onValueChange={(
+                                                    newValue = ''
+                                                ) => {
                                                     onChange(newValue)
                                                 }}
                                                 placeholder="Yearly Subscription Fee"
@@ -1740,7 +1742,7 @@ const AccountCreateUpdateForm = ({
                                                 isLoading ||
                                                 !isCompassionFundEnabled
                                             }
-                                            onValueChange={(newValue) => {
+                                            onValueChange={(newValue = '') => {
                                                 onChange(newValue)
                                             }}
                                             placeholder="Enter compassion fund amount"

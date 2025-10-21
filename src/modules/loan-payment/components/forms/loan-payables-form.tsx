@@ -230,7 +230,7 @@ const LoanPayablesForm = ({
                                 {...field}
                                 currency={currency}
                                 disabled={isDisabled(field.name)}
-                                onValueChange={(newValue) => {
+                                onValueChange={(newValue = '') => {
                                     onChange(newValue)
                                     handleTotalAmountChange(
                                         newValue ? Number(newValue) : 0
@@ -381,7 +381,9 @@ const LoanPayablesForm = ({
                                                     `payables.${idx}.amount`
                                                 )}
                                                 id={field.name}
-                                                onValueChange={(newValue) => {
+                                                onValueChange={(
+                                                    newValue = ''
+                                                ) => {
                                                     onChange(newValue)
                                                     handlePayableAmountChange(
                                                         idx,

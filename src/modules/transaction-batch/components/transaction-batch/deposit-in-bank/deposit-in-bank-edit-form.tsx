@@ -97,8 +97,8 @@ const DepositInBankCreateForm = ({
                                 {...field}
                                 currency={form.watch('currency')}
                                 disabled={isDisabled(field.name)}
-                                onValueChange={(newValue) => {
-                                    onChange(newValue || '')
+                                onValueChange={(newValue = '') => {
+                                    onChange(newValue)
                                 }}
                                 placeholder="Enter total deposit amount"
                             />

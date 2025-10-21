@@ -146,7 +146,7 @@ const MemberAssetCreateUpdateForm = ({
                                     <CurrencyInput
                                         {...field}
                                         disabled={isDisabled(field.name)}
-                                        onValueChange={(newValue) => {
+                                        onValueChange={(newValue = '') => {
                                             onChange(newValue)
                                         }}
                                         placeholder="Cost"

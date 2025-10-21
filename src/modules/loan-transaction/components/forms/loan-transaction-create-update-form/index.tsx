@@ -962,12 +962,8 @@ const LoanTransactionCreateUpdateForm = ({
                                                         )}
                                                         id={field.name}
                                                         onValueChange={(
-                                                            newValue
-                                                        ) =>
-                                                            onChange(
-                                                                newValue ?? ''
-                                                            )
-                                                        }
+                                                            newValue = ''
+                                                        ) => onChange(newValue)}
                                                         placeholder="Applied amount"
                                                     />
                                                 )}

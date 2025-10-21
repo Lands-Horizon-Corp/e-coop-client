@@ -285,7 +285,7 @@ const GeneralLedgerDefinitionCreateUpdateForm = ({
                             <CurrencyInput
                                 {...field}
                                 disabled={isDisabled(field.name)}
-                                onValueChange={(newValue) => {
+                                onValueChange={(newValue = '') => {
                                     onChange(newValue)
                                 }}
                                 placeholder="e.g., 5000.00"
@@ -300,7 +300,7 @@ const GeneralLedgerDefinitionCreateUpdateForm = ({
                             <CurrencyInput
                                 {...field}
                                 disabled={isDisabled(field.name)}
-                                onValueChange={(newValue) => {
+                                onValueChange={(newValue = '') => {
                                     onChange(newValue)
                                 }}
                                 placeholder="e.g., 5000.00"

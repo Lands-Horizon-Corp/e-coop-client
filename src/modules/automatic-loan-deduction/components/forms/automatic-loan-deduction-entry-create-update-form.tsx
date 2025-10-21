@@ -210,7 +210,7 @@ export const AutomaticLoanDeductionCreateUpdateForm = ({
                                         <CurrencyInput
                                             {...field}
                                             disabled={isDisabled(field.name)}
-                                            onValueChange={(newValue) => {
+                                            onValueChange={(newValue = '') => {
                                                 onChange(newValue)
                                             }}
                                             placeholder="Amount"
@@ -271,7 +271,9 @@ export const AutomaticLoanDeductionCreateUpdateForm = ({
                                                 disabled={isDisabled(
                                                     field.name
                                                 )}
-                                                onValueChange={(newValue) => {
+                                                onValueChange={(
+                                                    newValue = ''
+                                                ) => {
                                                     onChange(newValue)
                                                 }}
                                                 placeholder="Min Amount"
@@ -291,7 +293,9 @@ export const AutomaticLoanDeductionCreateUpdateForm = ({
                                                 disabled={isDisabled(
                                                     field.name
                                                 )}
-                                                onValueChange={(newValue) => {
+                                                onValueChange={(
+                                                    newValue = ''
+                                                ) => {
                                                     onChange(newValue)
                                                 }}
                                                 placeholder="Max Amount"

@@ -124,7 +124,7 @@ const DisbursementTransactionCreateForm = ({
                                         form.watch('disbursement')?.currency
                                     }
                                     disabled={isDisabled(field.name)}
-                                    onValueChange={(newValue) => {
+                                    onValueChange={(newValue = '') => {
                                         onChange(newValue)
                                     }}
                                     placeholder="Amount"

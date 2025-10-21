@@ -163,7 +163,7 @@ const CheckRemittanceCreateUpdateForm = ({
                                 {...field}
                                 currency={form.watch('currency')}
                                 disabled={isDisabled(field.name)}
-                                onValueChange={(newValue) => {
+                                onValueChange={(newValue = '') => {
                                     onChange(newValue)
                                 }}
                                 placeholder="Amount"

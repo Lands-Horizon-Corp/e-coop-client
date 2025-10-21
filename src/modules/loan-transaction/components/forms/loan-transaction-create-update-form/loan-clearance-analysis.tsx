@@ -62,7 +62,7 @@ const LoanClearanceAnalysis = forwardRef<
                             <CurrencyInput
                                 {...field}
                                 disabled={isDisabled(field.name)}
-                                onValueChange={(newValue) => {
+                                onValueChange={(newValue = '') => {
                                     onChange(newValue)
                                 }}
                                 placeholder="Amount"
@@ -77,7 +77,7 @@ const LoanClearanceAnalysis = forwardRef<
                             <CurrencyInput
                                 {...field}
                                 disabled={isDisabled(field.name)}
-                                onValueChange={(newValue) => {
+                                onValueChange={(newValue = '') => {
                                     onChange(newValue)
                                 }}
                                 placeholder="Share capital amount"
@@ -92,7 +92,7 @@ const LoanClearanceAnalysis = forwardRef<
                             <CurrencyInput
                                 {...field}
                                 disabled={isDisabled(field.name)}
-                                onValueChange={(newValue) => {
+                                onValueChange={(newValue = '') => {
                                     onChange(newValue)
                                 }}
                                 placeholder="Amount"

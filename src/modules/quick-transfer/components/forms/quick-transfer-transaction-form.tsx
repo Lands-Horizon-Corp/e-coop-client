@@ -395,7 +395,9 @@ export const QuickTransferTransactionForm = ({
                                 {...field}
                                 currency={form.watch('account')?.currency}
                                 disabled={isDisabled('amount')}
-                                onValueChange={(newValue) => onChange(newValue)}
+                                onValueChange={(newValue = '') =>
+                                    onChange(newValue)
+                                }
                                 placeholder="Amount"
                             />
                         )}

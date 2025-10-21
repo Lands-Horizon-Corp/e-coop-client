@@ -154,8 +154,8 @@ const LoanTransactionEntryCreateUpdate = ({
                                 {...field}
                                 currency={form.watch('account')?.currency}
                                 disabled={isDisabled(field.name)}
-                                onValueChange={(newValue) => {
-                                    onChange(newValue ?? '')
+                                onValueChange={(newValue = '') => {
+                                    onChange(newValue)
                                 }}
                                 placeholder="0.00"
                             />

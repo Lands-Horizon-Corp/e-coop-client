@@ -98,7 +98,7 @@ export const EditableCell = <T extends object>({
                     className={cn('text-left', props?.className)}
                     onBlur={handleBlur}
                     onValueChange={(newValue) => {
-                        handleChange(newValue)
+                        handleChange(newValue ?? '')
                     }}
                     value={value as number}
                 />
