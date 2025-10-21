@@ -4,6 +4,7 @@ import { IBaseEntityMeta, IPaginatedResult, TEntityId } from '@/types'
 
 import { IAccount } from '../account'
 import { IAmortizationPayment, IAmortizationSummary } from '../amortization'
+import { ICurrency } from '../currency'
 import { TLoanModeOfPayment } from '../loan-transaction'
 import { ComputationSheetSchema } from './computation-sheet.validation'
 
@@ -16,6 +17,9 @@ export interface IComputationSheet extends IBaseEntityMeta {
     interest_account: boolean
     comaker_account: number
     exist_account: boolean
+
+    currency_id: TEntityId
+    currency: ICurrency
 
     created_at: string
     updated_at: string

@@ -58,6 +58,7 @@ const ComputationSheetAccounts = ({
             <AccountPicker
                 modalOnly
                 modalState={accountPickerState}
+                mode="all"
                 onSelect={(selectedAccount) => {
                     toast.promise(
                         connectAccountMutation.mutateAsync({
