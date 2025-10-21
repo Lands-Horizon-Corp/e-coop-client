@@ -146,6 +146,10 @@ export const useFilteredPaginatedAccount = ({
                 targetUrl = currencyId
                     ? `currency/${currencyId}/paid-up-shared-capital/search`
                     : 'search'
+            } else if (mode === 'currency-loan') {
+                targetUrl = currencyId
+                    ? `currency/${currencyId}/loan/search`
+                    : 'search'
             } else {
                 targetUrl = mode ? `${mode}/search` : 'search'
             }

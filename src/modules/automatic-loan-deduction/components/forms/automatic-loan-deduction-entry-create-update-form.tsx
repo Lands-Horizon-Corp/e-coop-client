@@ -6,7 +6,7 @@ import { cn } from '@/helpers'
 import { withToastCallbacks } from '@/helpers/callback-helper'
 import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
 import { AccountPicker } from '@/modules/account'
-import { CurrencyInput } from '@/modules/currency'
+import { CurrencyInput, ICurrency } from '@/modules/currency'
 
 import FormFooterResetSubmit from '@/components/form-components/form-footer-reset-submit'
 import { MoonIcon, NotAllowedIcon, PlusIcon } from '@/components/icons'
@@ -39,12 +39,14 @@ export interface IAutomaticLoanDeductionFormProps
         Error
     > {
     automaticLoanDeductionId?: TEntityId
+    currency?: ICurrency
     className?: string
 }
 
 export const AutomaticLoanDeductionCreateUpdateForm = ({
     className,
     automaticLoanDeductionId,
+    currency,
     ...formProps
 }: IAutomaticLoanDeductionFormProps) => {
     const form = useForm<TAutomaticLoanDeductionSchema>({
@@ -135,9 +137,12 @@ export const AutomaticLoanDeductionCreateUpdateForm = ({
                                     render={({ field }) => (
                                         <AccountPicker
                                             {...field}
+                                            currencyId={
+                                                currency?.id as TEntityId
+                                            }
                                             disabled={isDisabled(field.name)}
                                             hideDescription
-                                            mode="all"
+                                            mode="currency"
                                             onSelect={(account) => {
                                                 field.onChange(account.id)
                                                 form.setValue(
@@ -157,9 +162,12 @@ export const AutomaticLoanDeductionCreateUpdateForm = ({
                                     render={({ field }) => (
                                         <AccountPicker
                                             {...field}
+                                            currencyId={
+                                                currency?.id as TEntityId
+                                            }
                                             disabled={isDisabled(field.name)}
                                             hideDescription
-                                            mode="all"
+                                            mode="currency"
                                             onSelect={(account) => {
                                                 field.onChange(account.id)
                                                 form.setValue(
@@ -209,6 +217,7 @@ export const AutomaticLoanDeductionCreateUpdateForm = ({
                                     }) => (
                                         <CurrencyInput
                                             {...field}
+                                            currency={currency}
                                             disabled={isDisabled(field.name)}
                                             onValueChange={(newValue = '') => {
                                                 onChange(newValue)
@@ -236,11 +245,17 @@ export const AutomaticLoanDeductionCreateUpdateForm = ({
                                     control={form.control}
                                     label="Charges Divisor"
                                     name="charges_divisor"
-                                    render={({ field }) => (
-                                        <Input
-                                            type="number"
+                                    render={({
+                                        field: { onChange, ...field },
+                                    }) => (
+                                        <CurrencyInput
                                             {...field}
+                                            currency={currency}
                                             disabled={isDisabled(field.name)}
+                                            onValueChange={(newValue = '') => {
+                                                onChange(newValue)
+                                            }}
+                                            placeholder="charges divisor amount"
                                         />
                                     )}
                                 />
@@ -268,6 +283,7 @@ export const AutomaticLoanDeductionCreateUpdateForm = ({
                                         }) => (
                                             <CurrencyInput
                                                 {...field}
+                                                currency={currency}
                                                 disabled={isDisabled(
                                                     field.name
                                                 )}
@@ -290,6 +306,7 @@ export const AutomaticLoanDeductionCreateUpdateForm = ({
                                         }) => (
                                             <CurrencyInput
                                                 {...field}
+                                                currency={currency}
                                                 disabled={isDisabled(
                                                     field.name
                                                 )}

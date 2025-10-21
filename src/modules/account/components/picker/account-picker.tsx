@@ -44,6 +44,7 @@ type FinalProp = PickerProp &
               mode: Exclude<
                   TPaginatedAccountHookMode,
                   | 'currency'
+                  | 'currency-loan'
                   | 'currency-payment'
                   | 'currency-cash-and-cash-equivalence'
                   | 'currency-paid-up-shared-capital'
@@ -53,6 +54,7 @@ type FinalProp = PickerProp &
               mode:
                   | 'currency'
                   | 'currency-payment'
+                  | 'currency-loan'
                   | 'currency-cash-and-cash-equivalence'
                   | 'currency-paid-up-shared-capital'
               currencyId: TEntityId

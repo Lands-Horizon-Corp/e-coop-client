@@ -7,6 +7,7 @@ import { useAuthContext } from '@/modules/authentication'
 import { automaticLoanDeductionBaseKey } from '@/modules/automatic-loan-deduction'
 import AutomaticLoanDeductionTable from '@/modules/automatic-loan-deduction/components/automatic-loan-deductions-table'
 import { AutomaticLoanDeductionCreateUpdateFormModal } from '@/modules/automatic-loan-deduction/components/forms/automatic-loan-deduction-entry-create-update-form'
+import { ICurrency } from '@/modules/currency'
 
 import { useModalState } from '@/hooks/use-modal-state'
 import { useSubscribe } from '@/hooks/use-pubsub'
@@ -15,12 +16,13 @@ import { IClassProps, TEntityId } from '@/types'
 
 interface Props extends IClassProps {
     computationSheetId: TEntityId
+    currency?: ICurrency
 }
 
 const ComputationSheetSchemeDeductionEntries = forwardRef<
     HTMLDivElement,
     Props
->(({ className, computationSheetId }, ref) => {
+>(({ className, computationSheetId, currency }, ref) => {
     const autContext = useAuthContext()
     const createModal = useModalState()
     const queryClient = useQueryClient()
@@ -73,6 +75,7 @@ const ComputationSheetSchemeDeductionEntries = forwardRef<
             <AutomaticLoanDeductionCreateUpdateFormModal
                 {...createModal}
                 formProps={{
+                    currency,
                     defaultValues: {
                         computation_sheet_id: computationSheetId,
                     },

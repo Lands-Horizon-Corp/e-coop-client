@@ -4,6 +4,7 @@ import Fuse from 'fuse.js'
 
 import { cn } from '@/helpers'
 import { withToastCallbacks } from '@/helpers/callback-helper'
+import { CurrencyBadge } from '@/modules/currency/components/currency-badge'
 import useConfirmModalStore from '@/store/confirm-modal-store'
 
 import {
@@ -50,6 +51,7 @@ import { ComputationSheetCreateUpdateFormModal } from '../forms/computation-shee
 
 interface Props extends IClassProps {
     selectedId?: TEntityId
+    defaultCurrencyId?: TEntityId
     onDeletedScheme?: (scheme: IComputationSheet) => void
     onSelect?: (selectedComputationSheet: IComputationSheet) => void
 }
@@ -57,6 +59,7 @@ interface Props extends IClassProps {
 const ComputationSchemesSidebar = ({
     className,
     selectedId,
+    defaultCurrencyId,
     onSelect,
     onDeletedScheme,
 }: Props) => {
@@ -104,6 +107,9 @@ const ComputationSchemesSidebar = ({
                 <ComputationSheetCreateUpdateFormModal
                     {...createModal}
                     formProps={{
+                        defaultValues: {
+                            currency_id: defaultCurrencyId,
+                        },
                         onSuccess: (createdScheme) => {
                             handleSelect(createdScheme)
                         },
@@ -214,11 +220,20 @@ const LoanComputationSheet = ({
                             }}
                             hideOnSuccess={false}
                         />
-                        <p>{scheme.name}</p>
+                        <div className=" flex-1">
+                            <p className="truncate">
+                                <span>{scheme.name}</span>
+                            </p>
+                            <CurrencyBadge
+                                currency={scheme.currency}
+                                displayFormat="symbol-code"
+                                size="sm"
+                            />
+                        </div>
                         <DropdownMenu>
                             <DropdownMenuTrigger asChild>
                                 <Button
-                                    className="opacity-40 hover:opacity-100 size-fit p-1 rounded-full"
+                                    className="opacity-40 hover:opacity-100 size-fit shrink-0 p-1 rounded-full"
                                     size="icon"
                                     variant="ghost"
                                 >

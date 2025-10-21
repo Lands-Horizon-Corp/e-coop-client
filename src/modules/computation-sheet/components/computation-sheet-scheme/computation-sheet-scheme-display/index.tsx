@@ -91,6 +91,7 @@ const LoanSchemeDisplay = ({ selectedId, defaultData, className }: Props) => {
                             <ComputationSheetSchemeDeductionEntries
                                 className=""
                                 computationSheetId={selectedId}
+                                currency={computationSheet?.currency}
                             />
                         </TabsContent>
                         <TabsContent value="negative-excluded-included">
