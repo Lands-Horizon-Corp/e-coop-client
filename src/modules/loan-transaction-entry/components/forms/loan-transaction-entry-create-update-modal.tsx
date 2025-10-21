@@ -5,27 +5,31 @@ import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
 
 import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
 import { cn } from '@/helpers/tw-utils'
-import { AccountPicker } from '@/modules/account'
-import { CurrencyInput } from '@/modules/currency'
-import {
-    ILoanTransactionEntry,
-    LoanTransactionEntrySchema,
-    TLoanTransactionEntrySchema,
-    useCreateLoanTransactionEntry,
-    useUpdateLoanTransactionEntryById,
-} from '@/modules/loan-transaction-entry'
+import { AccountPicker } from '@/modules/account';
+import { CurrencyInput, ICurrency } from '@/modules/currency';
+import { ILoanTransactionEntry, LoanTransactionEntrySchema, TLoanTransactionEntrySchema, useCreateLoanTransactionEntry, useUpdateLoanTransactionEntryById } from '@/modules/loan-transaction-entry';
 
-import FormFooterResetSubmit from '@/components/form-components/form-footer-reset-submit'
-import Modal, { IModalProps } from '@/components/modals/modal'
-import { Form } from '@/components/ui/form'
-import FormFieldWrapper from '@/components/ui/form-field-wrapper'
-import { Label } from '@/components/ui/label'
-import { Switch } from '@/components/ui/switch'
-import { Textarea } from '@/components/ui/textarea'
 
-import { useFormHelper } from '@/hooks/use-form-helper'
 
-import { IClassProps, IForm, TEntityId } from '@/types'
+import FormFooterResetSubmit from '@/components/form-components/form-footer-reset-submit';
+import Modal, { IModalProps } from '@/components/modals/modal';
+import { Form } from '@/components/ui/form';
+import FormFieldWrapper from '@/components/ui/form-field-wrapper';
+import { Label } from '@/components/ui/label';
+import { Switch } from '@/components/ui/switch';
+import { Textarea } from '@/components/ui/textarea';
+
+
+
+import { useFormHelper } from '@/hooks/use-form-helper';
+
+
+
+import { IClassProps, IForm, TEntityId } from '@/types';
+
+
+
+
 
 export interface IChargeFormProps
     extends IClassProps,
@@ -37,6 +41,7 @@ export interface IChargeFormProps
         > {
     id?: TEntityId
     loanTransactionId: TEntityId
+    currency?: ICurrency
 }
 
 const LoanTransactionEntryCreateUpdate = ({
@@ -44,6 +49,7 @@ const LoanTransactionEntryCreateUpdate = ({
     onSuccess,
     id,
     readOnly,
+    currency,
     loanTransactionId,
     ...formProps
 }: IChargeFormProps) => {
@@ -119,11 +125,13 @@ const LoanTransactionEntryCreateUpdate = ({
                         name="account_id"
                         render={({ field }) => (
                             <AccountPicker
+                                currencyId={currency?.id as TEntityId}
                                 disabled={
                                     isDisabled(field.name) ||
                                     deductionType === 'automatic-deduction'
                                 }
                                 hideDescription
+                                mode={currency ? 'currency' : 'all'}
                                 onSelect={(account) => {
                                     field.onChange(account?.id)
                                     form.setValue('account', account, {
@@ -151,7 +159,7 @@ const LoanTransactionEntryCreateUpdate = ({
                                 currency={form.watch('account')?.currency}
                                 disabled={isDisabled(field.name)}
                                 onValueChange={(newValue) => {
-                                    onChange(newValue)
+                                    onChange(newValue ?? '')
                                 }}
                                 placeholder="0.00"
                             />

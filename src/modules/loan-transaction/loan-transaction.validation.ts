@@ -214,7 +214,6 @@ export const LoanTransactionSchema = z
         previous_loan_id: entityIdSchema.optional(),
         previous_loan: z.any(),
 
-        amortization_amount: z.coerce.number().optional(),
         is_add_on: z.boolean().optional(),
 
         applied_1: z.coerce

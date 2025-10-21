@@ -1,38 +1,33 @@
-import z from 'zod'
+import z from 'zod';
 
-import { IBaseEntityMeta, IPaginatedResult, TEntityId } from '@/types'
 
-import { IAccount } from '../account'
-import { IComakerCollateral } from '../comaker-collateral'
-import { IComakerMemberProfile } from '../comaker-member-profile'
-import { ILoanClearanceAnalysis } from '../loan-clearance-analysis'
-import { ILoanClearanceAnalysisInstitution } from '../loan-clearance-analysis-institution'
-import { ILoanPurpose } from '../loan-purpose'
-import { ILoanStatus } from '../loan-status'
-import { ILoanTag } from '../loan-tag'
-import { ILoanTermsAndConditionAmountReceipt } from '../loan-terms-and-condition-amount-receipt'
-import { ILoanTermsAndConditionSuggestedPayment } from '../loan-terms-and-condition-suggested-payment'
-import { ILoanTransactionEntry } from '../loan-transaction-entry'
-import { IMedia } from '../media'
-import { IMemberAccountingLedger } from '../member-account-ledger'
-import { IMemberProfile } from '../member-profile'
-import { ITransactionBatch } from '../transaction-batch'
-import { IUser } from '../user'
-import {
-    LoanTransactionPrintSchema,
-    LoanTransactionSchema,
-    TLoanTransactionSignatureSchema,
-    TLoanTransactionSuggestedSchema,
-} from './loan-transaction.validation'
-import {
-    COMPUTATION_TYPE,
-    LOAN_AMORTIZATION_TYPE,
-    LOAN_COLLECTOR_PLACE,
-    LOAN_COMAKER_TYPE,
-    LOAN_MODE_OF_PAYMENT,
-    LOAN_TYPE,
-    WEEKDAYS,
-} from './loan.constants'
+
+import { IBaseEntityMeta, IPaginatedResult, TEntityId } from '@/types';
+
+
+
+import { IAccount } from '../account';
+import { IComakerCollateral } from '../comaker-collateral';
+import { IComakerMemberProfile } from '../comaker-member-profile';
+import { ILoanClearanceAnalysis } from '../loan-clearance-analysis';
+import { ILoanClearanceAnalysisInstitution } from '../loan-clearance-analysis-institution';
+import { ILoanPurpose } from '../loan-purpose';
+import { ILoanStatus } from '../loan-status';
+import { ILoanTag } from '../loan-tag';
+import { ILoanTermsAndConditionAmountReceipt } from '../loan-terms-and-condition-amount-receipt';
+import { ILoanTermsAndConditionSuggestedPayment } from '../loan-terms-and-condition-suggested-payment';
+import { ILoanTransactionEntry } from '../loan-transaction-entry';
+import { IMedia } from '../media';
+import { IMemberAccountingLedger } from '../member-account-ledger';
+import { IMemberProfile } from '../member-profile';
+import { ITransactionBatch } from '../transaction-batch';
+import { IUser } from '../user';
+import { LoanTransactionPrintSchema, LoanTransactionSchema, TLoanTransactionSignatureSchema, TLoanTransactionSuggestedSchema } from './loan-transaction.validation';
+import { COMPUTATION_TYPE, LOAN_AMORTIZATION_TYPE, LOAN_COLLECTOR_PLACE, LOAN_COMAKER_TYPE, LOAN_MODE_OF_PAYMENT, LOAN_TYPE, WEEKDAYS } from './loan.constants';
+
+
+
+
 
 export type TLoanModeOfPayment = (typeof LOAN_MODE_OF_PAYMENT)[number]
 
@@ -101,7 +96,7 @@ export interface ILoanTransaction
     previous_loan?: ILoanTransaction
     terms: number
 
-    amortization_amount: number
+    amortization: number
     is_add_on: boolean
 
     applied_1: number
@@ -192,7 +187,6 @@ export interface ILoanTransaction
     fines_paid?: number
     collection_progress?: number // percentage
     interest_amortization?: number
-    amortization?: number
     first_irr?: number
     first_dq?: number
 

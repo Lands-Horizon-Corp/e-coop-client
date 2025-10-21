@@ -1,9 +1,11 @@
 import { toast } from 'sonner'
 
 import { cn } from '@/helpers'
-import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
+import { serverRequestErrExtractor } from '@/helpers/error-message-extractor';
 import MemberProfileInfoViewLoanCard from '@/modules/member-profile/components/member-profile-info-loan-view-card'
+import { useTransactionBatchStore } from '@/modules/transaction-batch/store/transaction-batch-store'
 import useConfirmModalStore from '@/store/confirm-modal-store'
+import { useInfoModalStore } from '@/store/info-modal-store'
 
 import {
     BadgeCheckFillIcon,
@@ -30,6 +32,10 @@ import {
 import { ILoanTransaction } from '../loan-transaction.types'
 import { LoanTransactionSignatureUpdateFormModal } from './forms/loan-transaction-signature-form'
 import LoanMiniInfoCard from './loan-mini-info-card'
+import {
+    LoanReleaseCurrencyMismatchDisplay,
+    LoanReleaseNoTransactionBatchDisplay,
+} from './modal-displays/loan-release-invalid'
 
 export interface ILoanTransactionPrintFormProps extends IClassProps {}
 
@@ -54,6 +60,9 @@ const LoanApproveReleaseDisplayModal = ({
     loanTransaction: ILoanTransaction
 }) => {
     const loanSignatureModal = useModalState()
+    const { onOpen: onOpenInfoModal } = useInfoModalStore()
+    const { data: currentTransactionBatch } = useTransactionBatchStore()
+
     const { onOpen } = useConfirmModalStore()
     const memberProfile = loanTransaction.member_profile
     const approveMutation = useApproveLoanTransaction({
@@ -82,7 +91,6 @@ const LoanApproveReleaseDisplayModal = ({
     })
 
     const handleUndoApprove = () => {
-        console.log('clicked')
         onOpen({
             title: 'Unapprove Loan',
             description: 'Do you want to Unapprove this Loan?',
@@ -126,7 +134,32 @@ const LoanApproveReleaseDisplayModal = ({
             description:
                 'Once released, this loan is final and cannot be undone. Are you sure you want to release?',
             confirmString: 'Release Loan',
-            onConfirm: () =>
+            onConfirm: () => {
+                if (currentTransactionBatch === null)
+                    return onOpenInfoModal({
+                        title: '',
+                        hideSeparator: true,
+                        confirmString: 'Okay',
+                        classNames: {
+                            footerActionClassName: 'justify-center',
+                            closeButtonClassName: 'w-full',
+                        },
+                        component: <LoanReleaseNoTransactionBatchDisplay />,
+                    })
+
+                if (
+                    currentTransactionBatch?.currency?.id !==
+                    loanTransaction.account?.currency?.id
+                )
+                    return onOpenInfoModal({
+                        hideSeparator: true,
+                        classNames: {
+                            footerActionClassName: 'justify-center',
+                            closeButtonClassName: 'w-full',
+                        },
+                        component: <LoanReleaseCurrencyMismatchDisplay />,
+                    })
+
                 toast.promise(
                     releaseMutation.mutateAsync({
                         loanTransactionId: loanTransaction.id,
@@ -139,7 +172,8 @@ const LoanApproveReleaseDisplayModal = ({
                                 error,
                             }),
                     }
-                ),
+                )
+            },
         })
     }
 
