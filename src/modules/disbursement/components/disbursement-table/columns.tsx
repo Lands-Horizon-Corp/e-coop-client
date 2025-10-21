@@ -1,3 +1,4 @@
+import { CurrencyBadge } from '@/modules/currency/components/currency-badge'
 import { ColumnDef, Row } from '@tanstack/react-table'
 
 import DataTableColumnHeader from '@/components/data-table/data-table-column-header'
@@ -125,8 +126,42 @@ const DisbursementTableColumns = (
         enableSorting: true,
         enableResizing: true,
         enableHiding: false,
-        size: 180,
-        minSize: 180,
+        size: 250,
+        minSize: 400,
+    },
+    {
+        id: 'currency',
+        accessorKey: 'currency_id',
+        header: (props) => (
+            <DataTableColumnHeader {...props} title="Organization">
+                <ColumnActions {...props} />
+            </DataTableColumnHeader>
+        ),
+        cell: ({
+            row: {
+                original: { currency },
+            },
+        }) => (
+            <div className="flex min-w-0 items-center gap-2">
+                {currency ? (
+                    <>
+                        <CurrencyBadge
+                            currency={currency}
+                            displayFormat="symbol-code"
+                            size="sm"
+                        />
+                    </>
+                ) : (
+                    <span className="text-muted-foreground">-</span>
+                )}
+            </div>
+        ),
+        enableMultiSort: true,
+        enableSorting: true,
+        enableResizing: true,
+        enableHiding: true,
+        size: 250,
+        minSize: 250,
     },
     {
         id: 'organization',

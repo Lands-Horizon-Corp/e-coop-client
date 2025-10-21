@@ -26,7 +26,7 @@ import {
 import { IDisbursement, IDisbursementRequest } from '../../disbursement.types'
 import { DisbursementSchema } from '../../disbursement.validation'
 
-type TDisbursementFormValues = z.infer<typeof DisbursementSchema>
+type TDisbursementSchema = z.infer<typeof DisbursementSchema>
 
 export interface IDisbursementFormProps
     extends IClassProps,
@@ -34,7 +34,7 @@ export interface IDisbursementFormProps
             Partial<IDisbursementRequest>,
             IDisbursement,
             Error,
-            TDisbursementFormValues
+            TDisbursementSchema
         > {
     disbursementId?: TEntityId
 }
@@ -44,7 +44,7 @@ const DisbursementCreateUpdateForm = ({
     className,
     ...formProps
 }: IDisbursementFormProps) => {
-    const form = useForm<TDisbursementFormValues>({
+    const form = useForm<TDisbursementSchema>({
         resolver: standardSchemaResolver(DisbursementSchema),
         reValidateMode: 'onChange',
         mode: 'onSubmit',
@@ -70,7 +70,7 @@ const DisbursementCreateUpdateForm = ({
     })
 
     const { formRef, handleFocusError, isDisabled } =
-        useFormHelper<TDisbursementFormValues>({
+        useFormHelper<TDisbursementSchema>({
             form,
             ...formProps,
         })
@@ -117,7 +117,6 @@ const DisbursementCreateUpdateForm = ({
                                 />
                             )}
                         />
-
                         <FormFieldWrapper
                             control={form.control}
                             description="Enter an emoji or icon character"

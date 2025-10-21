@@ -1,6 +1,10 @@
 import z from 'zod'
 
-import { descriptionTransformerSanitizer, entityIdSchema } from '@/validation'
+import {
+    EntityIdSchema,
+    descriptionTransformerSanitizer,
+    entityIdSchema,
+} from '@/validation'
 
 export const DisbursementSchema = z.object({
     id: entityIdSchema.optional(),
@@ -13,6 +17,9 @@ export const DisbursementSchema = z.object({
         .string()
         .optional()
         .transform(descriptionTransformerSanitizer),
+
+    currency: z.any(),
+    currency_id: EntityIdSchema('Currncy is required'),
 })
 
-export type TDisbursementFormValues = z.infer<typeof DisbursementSchema>
+export type TDisbursementSchema = z.infer<typeof DisbursementSchema>

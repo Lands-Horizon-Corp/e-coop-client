@@ -15,7 +15,12 @@ const DisbursementPage = () => {
     const queryClient = useQueryClient()
     const {
         currentAuth: {
-            user_organization: { branch_id },
+            user_organization: {
+                branch_id,
+                branch: {
+                    branch_setting: { currency, currency_id },
+                },
+            },
         },
     } = useAuthUserWithOrgBranch()
 
@@ -39,7 +44,15 @@ const DisbursementPage = () => {
 
     return (
         <PageContainer>
-            <DisbursementCreateUpdateFormModal {...createModal} />
+            <DisbursementCreateUpdateFormModal
+                {...createModal}
+                formProps={{
+                    defaultValues: {
+                        currency,
+                        currency_id,
+                    },
+                }}
+            />
             <DisbursementTable
                 className="max-h-[90vh] min-h-[90vh] w-full"
                 toolbarProps={{
