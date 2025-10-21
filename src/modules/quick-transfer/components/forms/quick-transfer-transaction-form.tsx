@@ -298,7 +298,7 @@ export const QuickTransferTransactionForm = ({
                                     )
                                 }}
                                 triggerClassName="hover:bg-secondary/40 block"
-                                triggerContentMode='full'
+                                triggerContentMode="full"
                                 triggerProps={{
                                     disabled:
                                         form.watch('member_profile_id') ===

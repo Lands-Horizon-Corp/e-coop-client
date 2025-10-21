@@ -1,4 +1,4 @@
-import { cn } from '@/helpers';
+import { cn } from '@/helpers'
 import { CurrencyBadge } from '@/modules/currency/components/currency-badge'
 
 import {

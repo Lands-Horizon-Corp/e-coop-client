@@ -1,46 +1,72 @@
-import { useState } from 'react';
+import { useState } from 'react'
 
+import { useForm } from 'react-hook-form'
 
+import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
 
-import { useForm } from 'react-hook-form';
+import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
+import { cn } from '@/helpers/tw-utils'
+import {
+    ACCOUNT_INTEREST_STANDARD_COMPUTATION,
+    AccountExclusiveSettingTypeEnum,
+    AccountTypeEnum,
+    ComputationTypeEnum,
+    EarnedUnearnedInterestEnum,
+    FinancialStatementTypeEnum,
+    GeneralLedgerTypeEnum,
+    IAccount,
+    IAccountRequest,
+    IAccountRequestSchema,
+    InterestDeductionEnum,
+    InterestFinesComputationDiminishingEnum,
+    InterestFinesComputationDiminishingStraightDiminishingYearlyEnum,
+    InterestSavingTypeDiminishingStraightEnum,
+    LoanSavingTypeEnum,
+    LumpsumComputationTypeEnum,
+    OtherDeductionEntryEnum,
+    OtherInformationOfAnAccountEnum,
+    TAccountFormValues,
+    useCreate,
+    useUpdateById,
+} from '@/modules/account'
+import { AccountCategoryComboBox } from '@/modules/account-category'
+import { AccountClassificationComboBox } from '@/modules/account-classification'
+import { AccountTagsManagerPopover } from '@/modules/account-tag/components/account-tag-management'
+import { useAuthUserWithOrgBranch } from '@/modules/authentication/authgentication.store'
+import ComputationSheetCombobox from '@/modules/computation-sheet/components/computation-sheet-combobox'
+import { CurrencyInput } from '@/modules/currency'
+import CurrencyCombobox from '@/modules/currency/components/currency-combobox'
+import MemberTypeCombobox from '@/modules/member-type/components/member-type-combobox'
 
-
-
-import { standardSchemaResolver } from '@hookform/resolvers/standard-schema';
-
-
-
-import { serverRequestErrExtractor } from '@/helpers/error-message-extractor';
-import { cn } from '@/helpers/tw-utils';
-import { ACCOUNT_INTEREST_STANDARD_COMPUTATION, AccountExclusiveSettingTypeEnum, AccountTypeEnum, ComputationTypeEnum, EarnedUnearnedInterestEnum, FinancialStatementTypeEnum, GeneralLedgerTypeEnum, IAccount, IAccountRequest, IAccountRequestSchema, InterestDeductionEnum, InterestFinesComputationDiminishingEnum, InterestFinesComputationDiminishingStraightDiminishingYearlyEnum, InterestSavingTypeDiminishingStraightEnum, LoanSavingTypeEnum, LumpsumComputationTypeEnum, OtherDeductionEntryEnum, OtherInformationOfAnAccountEnum, TAccountFormValues, useCreate, useUpdateById } from '@/modules/account';
-import { AccountCategoryComboBox } from '@/modules/account-category';
-import { AccountClassificationComboBox } from '@/modules/account-classification';
-import { AccountTagsManagerPopover } from '@/modules/account-tag/components/account-tag-management';
-import { useAuthUserWithOrgBranch } from '@/modules/authentication/authgentication.store';
-import ComputationSheetCombobox from '@/modules/computation-sheet/components/computation-sheet-combobox';
-import { CurrencyInput } from '@/modules/currency';
-import CurrencyCombobox from '@/modules/currency/components/currency-combobox';
-import MemberTypeCombobox from '@/modules/member-type/components/member-type-combobox';
-
-
-
-import IconCombobox from '@/components/comboboxes/icon-combobox';
-import { GradientBackground } from '@/components/gradient-background/gradient-background';
-import { ExcludeIcon, FaCalendarCheckIcon, HandCoinsIcon, InternalIcon, LoadingSpinnerIcon, MoneyBagIcon, MoneyIcon, TIcon } from '@/components/icons';
-import Modal, { IModalProps } from '@/components/modals/modal';
-import TextEditor from '@/components/text-editor';
-import { Button } from '@/components/ui/button';
-import { Checkbox } from '@/components/ui/checkbox';
-import { Form, FormControl } from '@/components/ui/form';
-import FormErrorMessage from '@/components/ui/form-error-message';
-import FormFieldWrapper from '@/components/ui/form-field-wrapper';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
-import { Select, SelectContent, SelectItem, SelectTrigger } from '@/components/ui/select';
-import { Switch } from '@/components/ui/switch';
-
-
+import IconCombobox from '@/components/comboboxes/icon-combobox'
+import { GradientBackground } from '@/components/gradient-background/gradient-background'
+import {
+    ExcludeIcon,
+    FaCalendarCheckIcon,
+    HandCoinsIcon,
+    InternalIcon,
+    LoadingSpinnerIcon,
+    MoneyBagIcon,
+    MoneyIcon,
+    TIcon,
+} from '@/components/icons'
+import Modal, { IModalProps } from '@/components/modals/modal'
+import TextEditor from '@/components/text-editor'
+import { Button } from '@/components/ui/button'
+import { Checkbox } from '@/components/ui/checkbox'
+import { Form, FormControl } from '@/components/ui/form'
+import FormErrorMessage from '@/components/ui/form-error-message'
+import FormFieldWrapper from '@/components/ui/form-field-wrapper'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+} from '@/components/ui/select'
+import { Switch } from '@/components/ui/switch'
 
 import { useFormHelper } from '@/hooks/use-form-helper'
 

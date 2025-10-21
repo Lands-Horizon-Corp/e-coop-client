@@ -1,54 +1,66 @@
-import { KeyboardEvent, forwardRef, memo, useRef, useState } from 'react';
+import { KeyboardEvent, forwardRef, memo, useRef, useState } from 'react'
 
+import { UseFormReturn } from 'react-hook-form'
+import { toast } from 'sonner'
 
+import { cn } from '@/helpers'
+import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
+import { AccountPicker, IAccount } from '@/modules/account'
+import AccountMiniCard from '@/modules/account/components/account-mini-card'
+import { currencyFormat } from '@/modules/currency'
+import {
+    ILoanTransactionEntry,
+    useDeleteLoanTransactionEntryById,
+    useLoanTransactionEntryRestoreById,
+} from '@/modules/loan-transaction-entry'
+import { LoanTransactionEntryCreateUpdateModal } from '@/modules/loan-transaction-entry/components/forms/loan-transaction-entry-create-update-modal'
+import {
+    getLoanTransactionById,
+    useLoanTransactionChangeCashEquivalenceAccount,
+} from '@/modules/loan-transaction/loan-transaction.service'
+import { ILoanTransaction } from '@/modules/loan-transaction/loan-transaction.types'
+import useConfirmModalStore from '@/store/confirm-modal-store'
+import { useHotkeys } from 'react-hotkeys-hook'
 
-import { UseFormReturn } from 'react-hook-form';
-import { toast } from 'sonner';
+import {
+    ArrowDownIcon,
+    CalendarNumberIcon,
+    EyeIcon,
+    EyeNoneIcon,
+    PencilFillIcon,
+    PlusIcon,
+    RefreshIcon,
+    RenderIcon,
+    ShapesIcon,
+    SwapArrowIcon,
+    TIcon,
+    TrashIcon,
+} from '@/components/icons'
+import Modal from '@/components/modals/modal'
+import ActionTooltip from '@/components/tooltips/action-tooltip'
+import InfoTooltip from '@/components/tooltips/info-tooltip'
+import { Button } from '@/components/ui/button'
+import { CommandShortcut } from '@/components/ui/command'
+import FormFieldWrapper from '@/components/ui/form-field-wrapper'
+import { Label } from '@/components/ui/label'
+import { Switch } from '@/components/ui/switch'
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableFooter,
+    TableHead,
+    TableHeader,
+    TableRow,
+} from '@/components/ui/table'
+import { Toggle } from '@/components/ui/toggle'
 
+import { useModalState } from '@/hooks/use-modal-state'
 
+import { TEntityId } from '@/types'
 
-import { cn } from '@/helpers';
-import { serverRequestErrExtractor } from '@/helpers/error-message-extractor';
-import { AccountPicker, IAccount } from '@/modules/account';
-import AccountMiniCard from '@/modules/account/components/account-mini-card';
-import { currencyFormat } from '@/modules/currency';
-import { ILoanTransactionEntry, useDeleteLoanTransactionEntryById, useLoanTransactionEntryRestoreById } from '@/modules/loan-transaction-entry';
-import { LoanTransactionEntryCreateUpdateModal } from '@/modules/loan-transaction-entry/components/forms/loan-transaction-entry-create-update-modal';
-import { getLoanTransactionById, useLoanTransactionChangeCashEquivalenceAccount } from '@/modules/loan-transaction/loan-transaction.service';
-import { ILoanTransaction } from '@/modules/loan-transaction/loan-transaction.types';
-import useConfirmModalStore from '@/store/confirm-modal-store';
-import { useHotkeys } from 'react-hotkeys-hook';
-
-
-
-import { ArrowDownIcon, CalendarNumberIcon, EyeIcon, EyeNoneIcon, PencilFillIcon, PlusIcon, RefreshIcon, RenderIcon, ShapesIcon, SwapArrowIcon, TIcon, TrashIcon } from '@/components/icons';
-import Modal from '@/components/modals/modal';
-import ActionTooltip from '@/components/tooltips/action-tooltip';
-import InfoTooltip from '@/components/tooltips/info-tooltip';
-import { Button } from '@/components/ui/button';
-import { CommandShortcut } from '@/components/ui/command';
-import FormFieldWrapper from '@/components/ui/form-field-wrapper';
-import { Label } from '@/components/ui/label';
-import { Switch } from '@/components/ui/switch';
-import { Table, TableBody, TableCell, TableFooter, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { Toggle } from '@/components/ui/toggle';
-
-
-
-import { useModalState } from '@/hooks/use-modal-state';
-
-
-
-import { TEntityId } from '@/types';
-
-
-
-import { TLoanTransactionSchema } from '../../../loan-transaction.validation';
-import LoanAmortization from '../../loan-amortization';
-
-
-
-
+import { TLoanTransactionSchema } from '../../../loan-transaction.validation'
+import LoanAmortization from '../../loan-amortization'
 
 // Loan Entires Tab Content
 const LoanEntriesEditor = forwardRef<

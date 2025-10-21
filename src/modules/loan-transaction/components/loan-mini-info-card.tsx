@@ -1,4 +1,4 @@
-import { cn, formatNumber } from '@/helpers';
+import { cn, formatNumber } from '@/helpers'
 import { currencyFormat } from '@/modules/currency'
 
 import { CalendarNumberIcon, EyeIcon } from '@/components/icons'

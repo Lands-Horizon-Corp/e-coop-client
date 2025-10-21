@@ -1,7 +1,7 @@
 import { toast } from 'sonner'
 
 import { cn } from '@/helpers'
-import { serverRequestErrExtractor } from '@/helpers/error-message-extractor';
+import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
 import MemberProfileInfoViewLoanCard from '@/modules/member-profile/components/member-profile-info-loan-view-card'
 import { useTransactionBatchStore } from '@/modules/transaction-batch/store/transaction-batch-store'
 import useConfirmModalStore from '@/store/confirm-modal-store'
