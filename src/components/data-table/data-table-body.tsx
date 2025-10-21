@@ -1,21 +1,23 @@
-import { ReactNode } from 'react'
+import { ReactNode } from 'react';
+
+
 
 import { cn } from '@/helpers/tw-utils'
-import { Row, flexRender } from '@tanstack/react-table';
+import { Row, flexRender } from '@tanstack/react-table'
 
 
 
-import {
-    Empty,
-    EmptyDescription,
-    EmptyHeader,
-    EmptyMedia,
-    EmptyTitle,
-} from '@/components/ui/empty'
-import { TableBody, TableCell, TableRow } from '@/components/ui/table'
+import { Empty, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from '@/components/ui/empty';
+import { TableBody, TableCell, TableRow } from '@/components/ui/table';
 
-import { MagnifyingGlassIcon } from '../icons'
-import { getPinningStyles } from './data-table-utils'
+
+
+import { MagnifyingGlassIcon } from '../icons';
+import { getPinningStyles } from './data-table-utils';
+
+
+
+
 
 const DataTableBody = <TData,>({
     rows,
