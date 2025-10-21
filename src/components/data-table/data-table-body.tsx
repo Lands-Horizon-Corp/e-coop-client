@@ -1,8 +1,17 @@
 import { ReactNode } from 'react'
 
 import { cn } from '@/helpers/tw-utils'
-import { Row, flexRender } from '@tanstack/react-table'
+import { Row, flexRender } from '@tanstack/react-table';
 
+
+
+import {
+    Empty,
+    EmptyDescription,
+    EmptyHeader,
+    EmptyMedia,
+    EmptyTitle,
+} from '@/components/ui/empty'
 import { TableBody, TableCell, TableRow } from '@/components/ui/table'
 
 import { MagnifyingGlassIcon } from '../icons'
@@ -91,11 +100,19 @@ const DataTableBody = <TData,>({
             })}
             {rows.length === 0 && (
                 <TableRow>
-                    <TableCell className="h-24 text-center" colSpan={colCount}>
-                        <span className="w-full text-center text-xs text-muted-foreground/60">
-                            <MagnifyingGlassIcon className="mr-2 inline" /> no
-                            data to display
-                        </span>
+                    <TableCell className="h-64" colSpan={colCount}>
+                        <Empty>
+                            <EmptyHeader>
+                                <EmptyMedia variant="icon">
+                                    <MagnifyingGlassIcon />
+                                </EmptyMedia>
+                                <EmptyTitle>No Data Available</EmptyTitle>
+                                <EmptyDescription>
+                                    There are no records to display at this
+                                    time.
+                                </EmptyDescription>
+                            </EmptyHeader>
+                        </Empty>
                     </TableCell>
                 </TableRow>
             )}

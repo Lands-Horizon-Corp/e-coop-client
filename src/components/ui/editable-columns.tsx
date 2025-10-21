@@ -142,6 +142,7 @@ export const EditableCell = <T extends object>({
             return (
                 <AccountPicker
                     allowClear
+                    mode="all"
                     nameOnly
                     onSelect={(selectedAccount) => {
                         handleChange(selectedAccount)
