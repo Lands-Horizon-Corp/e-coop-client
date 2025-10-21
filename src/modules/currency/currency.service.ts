@@ -50,26 +50,26 @@ export const {
 } = apiCrudHooks
 
 // custom hooks can go here
-export const getCurrencyByCountryCode = async (
-    countryCode: string
+export const getCurrencyByTimezone = async (
+    timezone: string
 ): Promise<ICurrency> => {
     const response = await API.get<ICurrency>(
-        `${currencyAPIRoute}/country-code/${countryCode}`
+        `${currencyAPIRoute}/timezone/${timezone}`
     )
     return response.data
 }
 
 export const useGetCurrency = ({
-    countryCode,
+    timezone,
     options,
 }: {
-    countryCode: string
+    timezone: string
     options?: HookQueryOptions<ICurrency, Error>
 }) => {
     return useQuery<ICurrency, Error>({
         ...options,
-        queryKey: [currencyBaseKey, countryCode],
-        queryFn: async () => await getCurrencyByCountryCode(countryCode),
+        queryKey: [currencyBaseKey, timezone],
+        queryFn: async () => await getCurrencyByTimezone(timezone),
     })
 }
 
@@ -78,8 +78,7 @@ export const useGetCurrentCurrency = ({
 }: {
     options?: HookQueryOptions<ICurrency, Error>
 } = {}) => {
-    const locale = navigator.language || navigator.languages[0]
-    const countryCode = locale.split('-')[1]?.toUpperCase() || 'US'
+    const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone
 
-    return useGetCurrency({ countryCode, options })
+    return useGetCurrency({ timezone, options })
 }
