@@ -19,7 +19,6 @@ export const OnlineRemittanceSchema = z.object({
     organization_id: entityIdSchema.optional(),
     branch_id: entityIdSchema.optional(),
 
-    country_code: z.string().min(1, 'Country Code is required'),
     reference_number: z.string().min(1, 'Reference Number is required'),
     account_name: z.string().min(1, 'Account Name is required'),
 
@@ -27,8 +26,13 @@ export const OnlineRemittanceSchema = z.object({
 
     date_entry: stringDateWithTransformSchema,
 
+    currency_id: entityIdSchema,
+    currency: z.any().optional(),
+
     description: z
         .string()
         .optional()
         .transform(descriptionTransformerSanitizer),
 })
+
+export type TOnlineRemittanceSchema = z.infer<typeof OnlineRemittanceSchema>

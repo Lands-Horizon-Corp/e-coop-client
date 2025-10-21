@@ -1,9 +1,11 @@
 import { IBaseEntityMeta, TEntityId } from '@/types'
 
 import { IBank } from '../bank'
+import { ICurrency } from '../currency'
 import { IMedia } from '../media'
 import { ITransactionBatch } from '../transaction-batch'
 import { IUserBase } from '../user'
+import { TOnlineRemittanceSchema } from './online-remittance.validation'
 
 export interface IOnlineRemittance extends IBaseEntityMeta {
     id: TEntityId
@@ -20,7 +22,9 @@ export interface IOnlineRemittance extends IBaseEntityMeta {
     transaction_batch_id: TEntityId
     transaction_batch: ITransactionBatch
 
-    country_code: string
+    currency_id: TEntityId
+    currency: ICurrency
+
     reference_number: string
     account_name: string
     amount: number
@@ -28,21 +32,4 @@ export interface IOnlineRemittance extends IBaseEntityMeta {
     description?: string
 }
 
-export interface IOnlineRemittanceRequest {
-    id?: TEntityId
-
-    bank_id: TEntityId
-    media_id?: TEntityId
-    transaction_batch_id?: TEntityId // IDK IF SERVER AUTO PLACE THIS IN BACKEND
-
-    employee_user_id?: TEntityId
-    organization_id?: TEntityId
-    branch_id?: TEntityId
-
-    country_code: string
-    reference_number: string
-    account_name: string
-    amount: number
-    date_entry?: string
-    description?: string
-}
+export type IOnlineRemittanceRequest = TOnlineRemittanceSchema
