@@ -1,31 +1,41 @@
-import { useState } from 'react'
+import { useState } from 'react';
 
-import { useQueryClient } from '@tanstack/react-query'
 
-import { PAGINATION_INITIAL_INDEX, PICKERS_SELECT_PAGE_SIZE } from '@/constants'
-import { cn } from '@/helpers'
-import {
-    IAccount,
-    TPaginatedAccountHookMode,
-    useFilteredPaginatedAccount,
-} from '@/modules/account'
-import { AccountTypeBadge } from '@/modules/account'
-import { FinancialStatementTypeBadge } from '@/modules/financial-statement-definition/components/financial-statement-type-badge'
-import { GeneralLedgerTypeBadge } from '@/modules/general-ledger/components/general-ledger-type-badge'
-import { IPickerBaseProps } from '@/types/component-types/picker'
-import { PaginationState } from '@tanstack/react-table'
 
-import { ChevronDownIcon, RenderIcon, TIcon, XIcon } from '@/components/icons'
-import MiniPaginationBar from '@/components/pagination-bars/mini-pagination-bar'
-import GenericPicker from '@/components/pickers/generic-picker'
-import LoadingSpinner from '@/components/spinners/loading-spinner'
-import { Button } from '@/components/ui/button'
+import { useQueryClient } from '@tanstack/react-query';
 
-import useFilterState from '@/hooks/use-filter-state'
-import { useInternalState } from '@/hooks/use-internal-state'
-import { useShortcut } from '@/hooks/use-shorcuts'
 
-import { TEntityId } from '@/types'
+
+import { PAGINATION_INITIAL_INDEX, PICKERS_SELECT_PAGE_SIZE } from '@/constants';
+import { cn } from '@/helpers';
+import { IAccount, TPaginatedAccountHookMode, useFilteredPaginatedAccount } from '@/modules/account';
+import { AccountTypeBadge } from '@/modules/account';
+import { FinancialStatementTypeBadge } from '@/modules/financial-statement-definition/components/financial-statement-type-badge';
+import { GeneralLedgerTypeBadge } from '@/modules/general-ledger/components/general-ledger-type-badge';
+import { IPickerBaseProps } from '@/types/component-types/picker';
+import { PaginationState } from '@tanstack/react-table';
+
+
+
+import { ChevronDownIcon, RenderIcon, TIcon, XIcon } from '@/components/icons';
+import MiniPaginationBar from '@/components/pagination-bars/mini-pagination-bar';
+import GenericPicker from '@/components/pickers/generic-picker';
+import LoadingSpinner from '@/components/spinners/loading-spinner';
+import { Button } from '@/components/ui/button';
+
+
+
+import useFilterState from '@/hooks/use-filter-state';
+import { useInternalState } from '@/hooks/use-internal-state';
+import { useShortcut } from '@/hooks/use-shorcuts';
+
+
+
+import { TEntityId } from '@/types';
+
+
+
+
 
 interface PickerProp extends IPickerBaseProps<IAccount> {
     allowShorcutCommand?: boolean
@@ -41,10 +51,18 @@ interface PickerProp extends IPickerBaseProps<IAccount> {
 type FinalProp = PickerProp &
     (
         | {
-              mode: Exclude<TPaginatedAccountHookMode, 'currency'>
+              mode: Exclude<
+                  TPaginatedAccountHookMode,
+                  | 'currency'
+                  | 'currency-payment'
+                  | 'currency-cash-and-cash-equivalence'
+              >
           }
         | {
-              mode: 'currency' | 'currency-payment'
+              mode:
+                  | 'currency'
+                  | 'currency-payment'
+                  | 'currency-cash-and-cash-equivalence'
               currencyId: TEntityId
           }
     )

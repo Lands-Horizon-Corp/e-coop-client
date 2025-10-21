@@ -143,6 +143,8 @@ export const IAccountRequestSchema = z.object({
 
     alternative_code: z.string().optional().default(''),
 
+    cash_and_cash_equivalence: z.boolean().default(false),
+
     fines_grace_period_amortization: z.number().int().min(0).optional(),
     additional_grace_period: z.number().int().min(0).optional(),
     number_grace_period_daily: z.boolean().optional(),

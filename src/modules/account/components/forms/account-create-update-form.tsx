@@ -1,71 +1,46 @@
-import { useState } from 'react'
+import { useState } from 'react';
 
-import { useForm } from 'react-hook-form'
 
-import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
 
-import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
-import { cn } from '@/helpers/tw-utils'
-import {
-    ACCOUNT_INTEREST_STANDARD_COMPUTATION,
-    AccountExclusiveSettingTypeEnum,
-    AccountTypeEnum,
-    ComputationTypeEnum,
-    EarnedUnearnedInterestEnum,
-    FinancialStatementTypeEnum,
-    GeneralLedgerTypeEnum,
-    IAccount,
-    IAccountRequest,
-    IAccountRequestSchema,
-    InterestDeductionEnum,
-    InterestFinesComputationDiminishingEnum,
-    InterestFinesComputationDiminishingStraightDiminishingYearlyEnum,
-    InterestSavingTypeDiminishingStraightEnum,
-    LoanSavingTypeEnum,
-    LumpsumComputationTypeEnum,
-    OtherDeductionEntryEnum,
-    OtherInformationOfAnAccountEnum,
-    TAccountFormValues,
-    useCreate,
-    useUpdateById,
-} from '@/modules/account'
-import { AccountCategoryComboBox } from '@/modules/account-category'
-import { AccountClassificationComboBox } from '@/modules/account-classification'
-import { AccountTagsManagerPopover } from '@/modules/account-tag/components/account-tag-management'
-import { useAuthUserWithOrgBranch } from '@/modules/authentication/authgentication.store'
-import ComputationSheetCombobox from '@/modules/computation-sheet/components/computation-sheet-combobox'
-import { CurrencyInput } from '@/modules/currency'
-import CurrencyCombobox from '@/modules/currency/components/currency-combobox'
-import MemberTypeCombobox from '@/modules/member-type/components/member-type-combobox'
+import { useForm } from 'react-hook-form';
 
-import IconCombobox from '@/components/comboboxes/icon-combobox'
-import { GradientBackground } from '@/components/gradient-background/gradient-background'
-import {
-    ExcludeIcon,
-    FaCalendarCheckIcon,
-    HandCoinsIcon,
-    InternalIcon,
-    LoadingSpinnerIcon,
-    MoneyBagIcon,
-    MoneyIcon,
-    TIcon,
-} from '@/components/icons'
-import Modal, { IModalProps } from '@/components/modals/modal'
-import TextEditor from '@/components/text-editor'
-import { Button } from '@/components/ui/button'
-import { Checkbox } from '@/components/ui/checkbox'
-import { Form, FormControl } from '@/components/ui/form'
-import FormErrorMessage from '@/components/ui/form-error-message'
-import FormFieldWrapper from '@/components/ui/form-field-wrapper'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
-import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-} from '@/components/ui/select'
+
+
+import { standardSchemaResolver } from '@hookform/resolvers/standard-schema';
+
+
+
+import { serverRequestErrExtractor } from '@/helpers/error-message-extractor';
+import { cn } from '@/helpers/tw-utils';
+import { ACCOUNT_INTEREST_STANDARD_COMPUTATION, AccountExclusiveSettingTypeEnum, AccountTypeEnum, ComputationTypeEnum, EarnedUnearnedInterestEnum, FinancialStatementTypeEnum, GeneralLedgerTypeEnum, IAccount, IAccountRequest, IAccountRequestSchema, InterestDeductionEnum, InterestFinesComputationDiminishingEnum, InterestFinesComputationDiminishingStraightDiminishingYearlyEnum, InterestSavingTypeDiminishingStraightEnum, LoanSavingTypeEnum, LumpsumComputationTypeEnum, OtherDeductionEntryEnum, OtherInformationOfAnAccountEnum, TAccountFormValues, useCreate, useUpdateById } from '@/modules/account';
+import { AccountCategoryComboBox } from '@/modules/account-category';
+import { AccountClassificationComboBox } from '@/modules/account-classification';
+import { AccountTagsManagerPopover } from '@/modules/account-tag/components/account-tag-management';
+import { useAuthUserWithOrgBranch } from '@/modules/authentication/authgentication.store';
+import ComputationSheetCombobox from '@/modules/computation-sheet/components/computation-sheet-combobox';
+import { CurrencyInput } from '@/modules/currency';
+import CurrencyCombobox from '@/modules/currency/components/currency-combobox';
+import MemberTypeCombobox from '@/modules/member-type/components/member-type-combobox';
+
+
+
+import IconCombobox from '@/components/comboboxes/icon-combobox';
+import { GradientBackground } from '@/components/gradient-background/gradient-background';
+import { ExcludeIcon, FaCalendarCheckIcon, HandCoinsIcon, InternalIcon, LoadingSpinnerIcon, MoneyBagIcon, MoneyIcon, TIcon } from '@/components/icons';
+import Modal, { IModalProps } from '@/components/modals/modal';
+import TextEditor from '@/components/text-editor';
+import { Button } from '@/components/ui/button';
+import { Checkbox } from '@/components/ui/checkbox';
+import { Form, FormControl } from '@/components/ui/form';
+import FormErrorMessage from '@/components/ui/form-error-message';
+import FormFieldWrapper from '@/components/ui/form-field-wrapper';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import { Select, SelectContent, SelectItem, SelectTrigger } from '@/components/ui/select';
+import { Switch } from '@/components/ui/switch';
+
+
 
 import { useFormHelper } from '@/hooks/use-form-helper'
 
@@ -107,8 +82,7 @@ const AccountCreateUpdateForm = ({
             icon: 'Money Bag',
             computation_type: ComputationTypeEnum.Straight,
             currency_id:
-                currentAuth.user_organization
-                    .settings_currency_default_value_id,
+                currentAuth.user_organization.branch.branch_setting.currency_id,
             ...formProps.defaultValues,
         },
     })
@@ -1749,6 +1723,41 @@ const AccountCreateUpdateForm = ({
                                 />
                             </div>
                         </div>
+
+                        <FormFieldWrapper
+                            className="grow"
+                            control={form.control}
+                            label="Cash and Cash Equivalence"
+                            name="cash_and_cash_equivalence"
+                            render={({ field }) => (
+                                <div className="relative flex w-full items-start gap-2 rounded-2xl border border-input p-4 shadow-xs outline-none has-data-[state=checked]:border-primary/50 has-data-[state=checked]:bg-primary/20">
+                                    <Switch
+                                        aria-describedby={`${field.name}-description`}
+                                        checked={field.value}
+                                        className="order-1 h-4 w-6 after:absolute after:inset-0 [&_span]:size-3 data-[state=checked]:[&_span]:translate-x-2 data-[state=checked]:[&_span]:rtl:-translate-x-2"
+                                        id={field.name}
+                                        onCheckedChange={(e) =>
+                                            field.onChange(e)
+                                        }
+                                    />
+                                    <div className="grid grow gap-2">
+                                        <Label htmlFor={field.name}>
+                                            Cash and Cash Equivalence{' '}
+                                        </Label>
+                                        <p
+                                            className="text-xs text-muted-foreground"
+                                            id={`${field.name}-description`}
+                                        >
+                                            Cash and cash equivalents represent
+                                            the company’s funds that are readily
+                                            available for use in operations,
+                                            payments, or investment without
+                                            significant risk of value change.
+                                        </p>
+                                    </div>
+                                </div>
+                            )}
+                        />
                     </div>
                 </div>
                 <div className="space-y-2">
