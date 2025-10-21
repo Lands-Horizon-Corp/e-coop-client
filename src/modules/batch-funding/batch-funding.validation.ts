@@ -14,6 +14,10 @@ export const BatchFundingSchema = z.object({
     transaction_batch_id: entityIdSchema.min(1, 'Batch is required'),
     provided_by_user_id: entityIdSchema.min(1, 'Provider is required'),
     provided_by_user: z.any(),
+
+    currency_id: entityIdSchema,
+    currency: z.any(),
+
     signature_media_id: z.string().optional(),
     signature_media: z.any(),
 })
