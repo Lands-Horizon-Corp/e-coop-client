@@ -105,6 +105,7 @@ const DisbursementTransactionCreateForm = ({
                                     disabled={isDisabled(field.name)}
                                     onChange={(selected) => {
                                         field.onChange(selected.id)
+                                        form.setValue('disbursement', selected)
                                     }}
                                     placeholder="Select disbursement type..."
                                     value={field.value}
@@ -119,6 +120,9 @@ const DisbursementTransactionCreateForm = ({
                             render={({ field: { onChange, ...field } }) => (
                                 <CurrencyInput
                                     {...field}
+                                    currency={
+                                        form.watch('disbursement')?.currency
+                                    }
                                     disabled={isDisabled(field.name)}
                                     onValueChange={(newValue) => {
                                         onChange(newValue)
