@@ -111,6 +111,7 @@ const MemberTypeReferenceCreateUpdateForm = ({
                         render={({ field }) => (
                             <AccountPicker
                                 {...field}
+                                mode="all"
                                 onSelect={(account) => {
                                     field.onChange(account.id)
                                     form.setValue('account', account, {

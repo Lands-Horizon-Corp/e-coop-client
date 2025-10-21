@@ -1,5 +1,6 @@
+import { formatNumber } from '@/helpers'
 import { dateAgo, toReadableDate } from '@/helpers/date-utils'
-import { formatNumber } from '@/helpers/number-utils'
+import { currencyFormat } from '@/modules/currency'
 import { IMemberAccountingLedger } from '@/modules/member-account-ledger'
 import { ColumnDef, Row } from '@tanstack/react-table'
 
@@ -85,7 +86,12 @@ const MemberAccountingLedgerTableColumns = (
         ),
         cell: ({ row: { original } }) => (
             <p className="text-right">
-                {original.balance ? formatNumber(original.balance, 2) : '-'}
+                {original.balance
+                    ? currencyFormat(original.balance, {
+                          currency: original.account.currency,
+                          showSymbol: !!original.account.currency,
+                      })
+                    : '-'}
             </p>
         ),
         enableMultiSort: true,
@@ -109,7 +115,14 @@ const MemberAccountingLedgerTableColumns = (
             </DataTableColumnHeader>
         ),
         cell: ({ row: { original } }) => (
-            <span>{original.hold_out ?? '-'}</span>
+            <p className="text-right">
+                {original.hold_out
+                    ? currencyFormat(original.hold_out, {
+                          currency: original.account.currency,
+                          showSymbol: !!original.account.currency,
+                      })
+                    : '-'}
+            </p>
         ),
         enableMultiSort: true,
         enableSorting: true,
@@ -161,7 +174,12 @@ const MemberAccountingLedgerTableColumns = (
         ),
         cell: ({ row: { original } }) => (
             <p className="text-right">
-                {original.fines ? formatNumber(original.fines, 2) : '-'}
+                {original.fines
+                    ? currencyFormat(original.fines, {
+                          currency: original.account.currency,
+                          showSymbol: !!original.account.currency,
+                      })
+                    : '-'}
             </p>
         ),
         enableMultiSort: true,
@@ -186,7 +204,12 @@ const MemberAccountingLedgerTableColumns = (
         ),
         cell: ({ row: { original } }) => (
             <p className="text-right">
-                {original.due ? formatNumber(original.due, 2) : '-'}
+                {original.due
+                    ? currencyFormat(original.due, {
+                          currency: original.account.currency,
+                          showSymbol: !!original.account.currency,
+                      })
+                    : '-'}
             </p>
         ),
         enableMultiSort: true,
@@ -212,7 +235,10 @@ const MemberAccountingLedgerTableColumns = (
         cell: ({ row: { original } }) => (
             <p className="text-right">
                 {original.carried_forward_due
-                    ? formatNumber(original.carried_forward_due, 2)
+                    ? currencyFormat(original.carried_forward_due, {
+                          currency: original.account.currency,
+                          showSymbol: !!original.account.currency,
+                      })
                     : '-'}
             </p>
         ),
@@ -239,7 +265,10 @@ const MemberAccountingLedgerTableColumns = (
         cell: ({ row: { original } }) => (
             <p className="text-right">
                 {original.stored_value_facility
-                    ? formatNumber(original.stored_value_facility, 2)
+                    ? currencyFormat(original.stored_value_facility, {
+                          currency: original.account.currency,
+                          showSymbol: !!original.account.currency,
+                      })
                     : '-'}
             </p>
         ),
@@ -266,7 +295,10 @@ const MemberAccountingLedgerTableColumns = (
         cell: ({ row: { original } }) => (
             <p className="text-right">
                 {original.principal_due
-                    ? formatNumber(original.principal_due, 2)
+                    ? currencyFormat(original.principal_due, {
+                          currency: original.account.currency,
+                          showSymbol: !!original.account.currency,
+                      })
                     : '-'}
             </p>
         ),
