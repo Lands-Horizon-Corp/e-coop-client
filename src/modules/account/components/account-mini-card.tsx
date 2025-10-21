@@ -1,4 +1,5 @@
-import { cn } from '@/helpers'
+import { cn } from '@/helpers';
+import { CurrencyBadge } from '@/modules/currency/components/currency-badge'
 
 import {
     HashIcon,
@@ -40,18 +41,26 @@ const AccountMiniCard = ({ accountId, defaultAccount, className }: Props) => {
             <CardHeader className="pb-3">
                 <div className="flex items-start justify-between">
                     <div className="flex-1 min-w-0">
-                        <h3
-                            className="font-semibold text-primary text-lg leading-tight truncate"
-                            title={data?.name ?? '...'}
-                        >
-                            {data?.icon && (
-                                <RenderIcon
-                                    className="inline mr-1"
-                                    icon={data.icon as TIcon}
+                        <div className="space-y-1">
+                            <h3
+                                className="font-semibold text-primary text-lg leading-tight truncate"
+                                title={data?.name ?? '...'}
+                            >
+                                {data?.icon && (
+                                    <RenderIcon
+                                        className="inline mr-1"
+                                        icon={data.icon as TIcon}
+                                    />
+                                )}
+                                {data?.name ?? '...'}
+                            </h3>
+                            {data?.currency && (
+                                <CurrencyBadge
+                                    currency={data?.currency}
+                                    size="sm"
                                 />
                             )}
-                            {data?.name ?? '...'}
-                        </h3>
+                        </div>
                         {data?.alternative_code && (
                             <div className="flex items-center gap-1 mt-1 text-sm text-muted-foreground">
                                 <HashIcon className="h-3 w-3" />

@@ -324,6 +324,11 @@ export type TPaginatedAccountHookMode =
     | 'check-voucher'
     | 'loan'
     | 'cash-and-cash-equivalence'
+    | 'currency'
+    | 'currency-payment'
+    | 'currency-cash-and-cash-equivalence'
+    | 'currency-paid-up-shared-capital'
+    | 'all'
 
 export type TDeleteAccountFromGLFSType = {
     id: TEntityId

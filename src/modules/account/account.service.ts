@@ -116,15 +116,39 @@ export const useFilteredPaginatedAccount = ({
     mode,
     options,
     query,
+    currencyId,
 }: {
     mode?: TPaginatedAccountHookMode
     query?: Record<string, unknown>
     options?: HookQueryOptions<IAccountPaginated, Error>
+    currencyId?: TEntityId
 }) => {
     return useQuery<IAccountPaginated, Error>({
-        queryKey: ['account', 'paginated', mode, query],
+        queryKey: ['account', 'paginated', mode, currencyId, query].filter(
+            Boolean
+        ),
         queryFn: async () => {
-            const targetUrl = mode ? `${mode}/search` : 'search'
+            let targetUrl = ''
+            if (mode === 'all') targetUrl = 'search'
+            else if (mode === 'currency') {
+                targetUrl = currencyId
+                    ? `currency/${currencyId}/search`
+                    : 'search'
+            } else if (mode === 'currency-payment') {
+                targetUrl = currencyId
+                    ? `currency/${currencyId}/payment/search`
+                    : 'search'
+            } else if (mode === 'currency-cash-and-cash-equivalence') {
+                targetUrl = currencyId
+                    ? `currency/${currencyId}/cash-and-cash-equivalence/search`
+                    : 'search'
+            } else if (mode === 'currency-paid-up-shared-capital') {
+                targetUrl = currencyId
+                    ? `currency/${currencyId}/paid-up-shared-capital/search`
+                    : 'search'
+            } else {
+                targetUrl = mode ? `${mode}/search` : 'search'
+            }
 
             return apiCrudService.getPaginated<IAccount>({
                 url: `${apiCrudService.route}/${targetUrl}`,

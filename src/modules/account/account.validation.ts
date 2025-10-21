@@ -174,7 +174,7 @@ export const IAccountRequestSchema = z.object({
 
     general_ledger_grouping_exclude_account: z.boolean().optional(),
 
-    icon: z.enum(ICONS).default('Money'),
+    icon: z.enum(ICONS, { error: 'Invalid icon' }).default('Money'),
     show_in_general_ledger_source_withdraw: z.boolean().default(true),
     show_in_general_ledger_source_deposit: z.boolean().default(true),
     show_in_general_ledger_source_journal: z.boolean().default(true),

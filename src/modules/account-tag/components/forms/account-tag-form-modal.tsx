@@ -127,6 +127,7 @@ const AccountTagCreateUpdateForm = ({
                         render={({ field }) => (
                             <AccountPicker
                                 disabled={isDisabled(field.name)}
+                                mode="all"
                                 onSelect={(account) => {
                                     field.onChange(account.id)
                                     form.setValue('account', account, {

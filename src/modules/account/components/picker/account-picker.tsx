@@ -25,18 +25,32 @@ import useFilterState from '@/hooks/use-filter-state'
 import { useInternalState } from '@/hooks/use-internal-state'
 import { useShortcut } from '@/hooks/use-shorcuts'
 
-interface Props extends IPickerBaseProps<IAccount> {
+import { TEntityId } from '@/types'
+
+interface PickerProp extends IPickerBaseProps<IAccount> {
     allowShorcutCommand?: boolean
     modalOnly?: boolean
     defaultOpen?: boolean
-    mode?: TPaginatedAccountHookMode
     nameOnly?: boolean
     hideDescription?: boolean
     allowClear?: boolean
+
+    mode: TPaginatedAccountHookMode
 }
 
+type FinalProp = PickerProp &
+    (
+        | {
+              mode: Exclude<TPaginatedAccountHookMode, 'currency'>
+          }
+        | {
+              mode: 'currency' | 'currency-payment'
+              currencyId: TEntityId
+          }
+    )
+
 const AccountPicker = ({
-    mode,
+    mode = 'all',
     value,
     disabled,
     allowShorcutCommand = false,
@@ -47,8 +61,9 @@ const AccountPicker = ({
     hideDescription = false,
     modalState,
     triggerClassName,
+    currencyId,
     allowClear = false,
-}: Props) => {
+}: FinalProp & { currencyId?: TEntityId }) => {
     const queryClient = useQueryClient()
 
     const [state, setState] = useInternalState(
@@ -78,6 +93,7 @@ const AccountPicker = ({
         isFetching,
     } = useFilteredPaginatedAccount({
         mode,
+        currencyId,
         query: {
             pagination,
             showMessage: false,
