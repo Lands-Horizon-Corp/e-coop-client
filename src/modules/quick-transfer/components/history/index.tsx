@@ -4,7 +4,7 @@ import { PAGINATION_INITIAL_INDEX } from '@/constants'
 import { formatCurrency, formatDate } from '@/helpers/common-helper'
 import { dateAgo, toReadableDateTime } from '@/helpers/date-utils'
 import {
-    IGeneralLedgerResponse,
+    IGeneralLedger,
     useFilteredPaginatedGeneralLedger,
 } from '@/modules/general-ledger'
 import { LedgerSourceBadge } from '@/modules/general-ledger/components/ledger-source-badge'
@@ -32,7 +32,7 @@ import { useShortcut } from '@/hooks/use-shorcuts'
 import { TPaymentMode } from '../../quick-transfer.types'
 
 interface TransactionDetailsCardProps {
-    transaction: IGeneralLedgerResponse
+    transaction: IGeneralLedger
 }
 
 export const TransactionDetailsCard = ({
@@ -179,7 +179,7 @@ export const TransactionDetailsCard = ({
 }
 
 type TransactionDepositWithdrawCardListItemProps = {
-    item: IGeneralLedgerResponse
+    item: IGeneralLedger
     onClick?: () => void
 }
 const TransactionDepositWithdrawCardListItem = ({

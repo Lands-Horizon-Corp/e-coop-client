@@ -4,7 +4,7 @@ import { toast } from 'sonner'
 import { cn } from '@/helpers'
 import { commaSeparators } from '@/helpers/common-helper'
 import { dateAgo, toReadableDate } from '@/helpers/date-utils'
-import { IGeneralLedgerResponse } from '@/modules/general-ledger'
+import { IGeneralLedger } from '@/modules/general-ledger'
 import { LedgerSourceBadge } from '@/modules/general-ledger/components/ledger-source-badge'
 import { useSingleReverseTransaction } from '@/modules/transaction'
 import { useTransactionReverseSecurityStore } from '@/store/transaction-reverse-security-store'
@@ -32,7 +32,7 @@ import TransactionNoCurrentPaymentFound from './transaction-no-current-payment-f
 type TTransactionCurrentPaymentItemProps = {
     isLoading: boolean
     hasPayments?: boolean
-    currentPayment: IGeneralLedgerResponse[]
+    currentPayment: IGeneralLedger[]
 }
 
 const TransactionCurrentPaymentItem = ({

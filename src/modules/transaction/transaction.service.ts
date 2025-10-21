@@ -15,7 +15,7 @@ import {
 
 import { TEntityId } from '@/types'
 
-import { IGeneralLedger, IGeneralLedgerResponse } from '../general-ledger'
+import { IGeneralLedger } from '../general-ledger'
 import {
     IPaymentQuickRequest,
     IPaymentRequest,
@@ -119,13 +119,13 @@ export const useCreateQuickTransactionPayment = createMutationFactory<
 })
 
 export const usePrintGeneralLedgerTransaction = createMutationFactory<
-    IGeneralLedgerResponse,
+    IGeneralLedger,
     Error,
     { id: string }
 >({
     mutationFn: async ({ id }) =>
         (
-            await API.post<void, IGeneralLedgerResponse>(
+            await API.post<void, IGeneralLedger>(
                 `${route}/general-ledger/${id}/print`
             )
         ).data,

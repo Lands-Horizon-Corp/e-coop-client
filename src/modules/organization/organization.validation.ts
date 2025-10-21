@@ -26,6 +26,7 @@ export const OrganizationSchema = z.object({
 
     media_id: z.string().min(1, 'Organization Logo is required'),
     cover_media_id: z.string().min(1, 'Cover media is required'),
+    currency_id: entityIdSchema,
 
     media: z.any().optional(),
     cover_media: z.any().optional(),
@@ -42,6 +43,7 @@ export const EditOrganizationSchema = OrganizationSchema.extend({
     user_agreement: z.string().optional(),
     media_id: z.string().optional(),
     cover_media_id: z.string().optional(),
+    currency_id: entityIdSchema,
 })
 
 export type TOrganizationFormValues = z.infer<typeof OrganizationSchema>
