@@ -61,7 +61,8 @@ const TransactionBatchCashCount = ({
             )
 
             return {
-                country_code: billCoin.country_code,
+                currency: billCoin.currency,
+                currency_id: billCoin.currency_id,
                 bill_amount: billCoin.value,
                 amount: '' as unknown as number,
                 quantity: '' as unknown as number,
@@ -117,6 +118,7 @@ const TransactionBatchCashCount = ({
                     <LoadingSpinner className="mx-auto my-4" />
                 )}
                 <BatchCashCount
+                    currency={transactionBatch.currency}
                     defaultValues={defaultValues}
                     onSuccess={(data) => {
                         onCashCountUpdate?.(data)

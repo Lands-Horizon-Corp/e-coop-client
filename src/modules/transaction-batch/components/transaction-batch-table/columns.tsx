@@ -1,7 +1,7 @@
 import { ReactNode } from 'react'
 
 import { toReadableDateTime } from '@/helpers/date-utils'
-import { formatNumber } from '@/helpers/number-utils'
+import { currencyFormat } from '@/modules/currency'
 import { ColumnDef, Row } from '@tanstack/react-table'
 
 import DataTableColumnHeader from '@/components/data-table/data-table-column-header'
@@ -149,11 +149,14 @@ const TransactionBatchTableColumns = (
             ),
             cell: ({
                 row: {
-                    original: { beginning_balance },
+                    original: { beginning_balance, currency },
                 },
             }) => (
                 <div className="text-right">
-                    {formatNumber(beginning_balance, 2)}
+                    {currencyFormat(beginning_balance, {
+                        currency,
+                        showSymbol: !!currency,
+                    })}
                 </div>
             ),
             enableMultiSort: true,
@@ -171,11 +174,14 @@ const TransactionBatchTableColumns = (
             ),
             cell: ({
                 row: {
-                    original: { deposit_in_bank },
+                    original: { deposit_in_bank, currency },
                 },
             }) => (
                 <div className="text-right">
-                    {formatNumber(deposit_in_bank, 2)}
+                    {currencyFormat(deposit_in_bank, {
+                        currency,
+                        showSymbol: !!currency,
+                    })}
                 </div>
             ),
             enableMultiSort: true,
@@ -193,11 +199,14 @@ const TransactionBatchTableColumns = (
             ),
             cell: ({
                 row: {
-                    original: { cash_count_total },
+                    original: { cash_count_total, currency },
                 },
             }) => (
                 <div className="text-right">
-                    {formatNumber(cash_count_total, 2)}
+                    {currencyFormat(cash_count_total, {
+                        currency,
+                        showSymbol: !!currency,
+                    })}
                 </div>
             ),
             enableMultiSort: true,
@@ -215,17 +224,22 @@ const TransactionBatchTableColumns = (
             ),
             cell: ({
                 row: {
-                    original: { grand_total },
+                    original: { grand_total, currency },
                 },
             }) => (
-                <div className="text-right">{formatNumber(grand_total, 2)}</div>
+                <div className="text-right">
+                    {currencyFormat(grand_total, {
+                        currency,
+                        showSymbol: !!currency,
+                    })}
+                </div>
             ),
             enableMultiSort: true,
             enableSorting: true,
             enableResizing: true,
             enableHiding: true,
-            size: 120,
-            minSize: 100,
+            size: 160,
+            minSize: 160,
         },
         {
             id: 'ended',

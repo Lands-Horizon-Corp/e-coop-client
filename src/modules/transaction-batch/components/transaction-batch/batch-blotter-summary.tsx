@@ -1,5 +1,5 @@
 import { cn } from '@/helpers'
-import { formatNumber } from '@/helpers/number-utils'
+import { currencyFormat } from '@/modules/currency'
 
 import { Separator } from '@/components/ui/separator'
 
@@ -22,6 +22,8 @@ export const BatchBlotterSummaryView = ({
         total_supposed_remitance: transBatch?.total_supposed_remitance,
     })
 
+    const currency = transBatch?.currency
+
     return (
         <div className="space-y-2">
             <p className="text-center font-medium">
@@ -31,8 +33,8 @@ export const BatchBlotterSummaryView = ({
                 <div className="flex items-center justify-between gap-x-4">
                     <p className="grow-1">Collection</p>
                     <Separator className="flex-1" />
-                    <p className="grow-1 font-semibold">
-                        {formatNumber(
+                    <p className="grow-1 text-right font-semibold">
+                        {currencyFormat(
                             getCollectionTotal({
                                 total_cash_collection:
                                     transBatch.total_cash_collection,
@@ -40,7 +42,10 @@ export const BatchBlotterSummaryView = ({
                                     transBatch.total_deposit_entry,
                                 beginning_balance: transBatch.beginning_balance,
                             }),
-                            2
+                            {
+                                currency,
+                                showSymbol: !!currency,
+                            }
                         )}
                     </p>
                 </div>
@@ -48,18 +53,31 @@ export const BatchBlotterSummaryView = ({
                     <div className="flex items-center justify-between border-b border-b-muted-foreground/5 px-4 py-2 last:border-b-0">
                         <p className="text-muted-foreground">OR Collection</p>
                         <p>
-                            {formatNumber(transBatch.total_cash_collection, 2)}
+                            {currencyFormat(transBatch.total_cash_collection, {
+                                currency,
+                                showSymbol: !!currency,
+                            })}
                         </p>
                     </div>
                     <div className="flex items-center justify-between border-b border-b-muted-foreground/5 px-4 py-2 last:border-b-0">
                         <p className="text-muted-foreground">Deposit Entry</p>
-                        <p>{formatNumber(transBatch.total_deposit_entry, 2)}</p>
+                        <p>
+                            {currencyFormat(transBatch.total_deposit_entry, {
+                                currency,
+                                showSymbol: !!currency,
+                            })}
+                        </p>
                     </div>
                     <div className="flex items-center justify-between border-b border-b-muted-foreground/5 px-4 py-2 last:border-b-0">
                         <p className="text-muted-foreground">
                             Teller Beginning Balance
                         </p>
-                        <p>{formatNumber(transBatch.beginning_balance, 2)}</p>
+                        <p>
+                            {currencyFormat(transBatch.beginning_balance, {
+                                currency,
+                                showSymbol: !!currency,
+                            })}
+                        </p>
                     </div>
                 </div>
             </div>
@@ -68,8 +86,8 @@ export const BatchBlotterSummaryView = ({
                 <div className="flex items-center justify-between gap-x-4">
                     <p className="grow-1">Less (Disbursements)</p>
                     <Separator className="flex-1" />
-                    <p className="grow-1 font-semibold">
-                        {formatNumber(
+                    <p className="grow-1 text-right font-semibold">
+                        {currencyFormat(
                             getLessTotal({
                                 petty_cash: transBatch.petty_cash,
                                 loan_releases: transBatch.loan_releases,
@@ -78,7 +96,10 @@ export const BatchBlotterSummaryView = ({
                                 savings_withdrawal:
                                     transBatch.savings_withdrawal,
                             }),
-                            2
+                            {
+                                currency,
+                                showSymbol: !!currency,
+                            }
                         )}
                     </p>
                 </div>
@@ -87,30 +108,53 @@ export const BatchBlotterSummaryView = ({
                         <p className="text-muted-foreground">
                             Savings Withdrawal
                         </p>
-                        <p>{formatNumber(transBatch.savings_withdrawal, 2)}</p>
+                        <p>
+                            {currencyFormat(transBatch.savings_withdrawal, {
+                                currency,
+                                showSymbol: !!currency,
+                            })}
+                        </p>
                     </div>
                     <div className="flex items-center justify-between border-b border-b-muted-foreground/5 px-4 py-2 last:border-b-0">
                         <p className="text-muted-foreground">
                             Time Dep. Withdrawal
                         </p>
                         <p>
-                            {formatNumber(
+                            {currencyFormat(
                                 transBatch.time_deposit_withdrawal,
-                                2
+                                {
+                                    currency,
+                                    showSymbol: !!currency,
+                                }
                             )}
                         </p>
                     </div>
                     <div className="flex items-center justify-between border-b border-b-muted-foreground/5 px-4 py-2 last:border-b-0">
                         <p className="text-muted-foreground">Loan Releases</p>
-                        <p>{formatNumber(transBatch.loan_releases, 2)}</p>
+                        <p>
+                            {currencyFormat(transBatch.loan_releases, {
+                                currency,
+                                showSymbol: !!currency,
+                            })}
+                        </p>
                     </div>
                     <div className="flex items-center justify-between border-b border-b-muted-foreground/5 px-4 py-2 last:border-b-0">
                         <p className="text-muted-foreground">Petty Cash</p>
-                        <p>{formatNumber(transBatch.petty_cash, 2)}</p>
+                        <p>
+                            {currencyFormat(transBatch.petty_cash, {
+                                currency,
+                                showSymbol: !!currency,
+                            })}
+                        </p>
                     </div>
                     <div className="flex items-center justify-between border-b border-b-muted-foreground/5 px-4 py-2 last:border-b-0">
                         <p className="text-muted-foreground">Petty Cash</p>
-                        <p>{formatNumber(transBatch.petty_cash, 2)}</p>
+                        <p>
+                            {currencyFormat(transBatch.petty_cash, {
+                                currency,
+                                showSymbol: !!currency,
+                            })}
+                        </p>
                     </div>
                     {/*
                             <div className="flex items-center justify-between border-b border-b-muted-foreground/5 px-4 py-2 last:border-b-0">
@@ -130,9 +174,12 @@ export const BatchBlotterSummaryView = ({
                             Total Supposed Remittance
                         </p>
                         <p>
-                            {formatNumber(
+                            {currencyFormat(
                                 transBatch.total_supposed_remitance,
-                                2
+                                {
+                                    currency,
+                                    showSymbol: !!currency,
+                                }
                             )}
                         </p>
                     </div>
@@ -141,14 +188,22 @@ export const BatchBlotterSummaryView = ({
                             Total Cash on Hand
                         </p>
 
-                        <p>{formatNumber(transBatch.total_cash_on_hand, 2)}</p>
+                        <p>
+                            {currencyFormat(transBatch.total_cash_on_hand, {
+                                currency,
+                                showSymbol: !!currency,
+                            })}
+                        </p>
                     </div>
                     <div className="flex items-center justify-between border-b border-b-muted-foreground/5 px-4 py-2 last:border-b-0">
                         <p className="text-muted-foreground">
                             Total Check Remitance
                         </p>
                         <p>
-                            {formatNumber(transBatch.total_check_remittance, 2)}
+                            {currencyFormat(transBatch.total_check_remittance, {
+                                currency,
+                                showSymbol: !!currency,
+                            })}
                         </p>
                     </div>
                     <div className="flex items-center justify-between border-b border-b-muted-foreground/5 px-4 py-2 last:border-b-0">
@@ -156,7 +211,10 @@ export const BatchBlotterSummaryView = ({
                             Total Deposit in Bank
                         </p>
                         <p>
-                            {formatNumber(transBatch.total_deposit_in_bank, 2)}
+                            {currencyFormat(transBatch.total_deposit_in_bank, {
+                                currency,
+                                showSymbol: !!currency,
+                            })}
                         </p>
                     </div>
                     <div className="flex items-center justify-between border-b border-b-muted-foreground/5 px-4 py-2 last:border-b-0">
@@ -164,9 +222,12 @@ export const BatchBlotterSummaryView = ({
                             Total Actual Remittance
                         </p>
                         <p>
-                            {formatNumber(
+                            {currencyFormat(
                                 transBatch.total_actual_remittance,
-                                2
+                                {
+                                    currency,
+                                    showSymbol: !!currency,
+                                }
                             )}
                         </p>
                     </div>
@@ -186,9 +247,12 @@ export const BatchBlotterSummaryView = ({
                 >
                     <p>{transactionStatus}</p>
                     <p className="text-xl">
-                        {formatNumber(
+                        {currencyFormat(
                             transBatch.total_actual_supposed_comparison,
-                            2
+                            {
+                                currency,
+                                showSymbol: !!currency,
+                            }
                         )}
                     </p>
                 </div>

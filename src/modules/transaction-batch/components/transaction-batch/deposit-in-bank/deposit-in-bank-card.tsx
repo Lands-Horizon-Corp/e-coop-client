@@ -1,7 +1,7 @@
 import { useState } from 'react'
 
 import { cn } from '@/helpers'
-import { currencyFormat } from '@/modules/currency'
+import { ICurrency, currencyFormat } from '@/modules/currency'
 
 import { PencilFillIcon } from '@/components/icons'
 import { Button } from '@/components/ui/button'
@@ -18,7 +18,8 @@ import DepositInBankCreateForm from './deposit-in-bank-edit-form'
 interface Props extends IClassProps {
     transactionBatchId: TEntityId
     depositInBankAmount: number
-
+    currency_id: TEntityId
+    currency: ICurrency
     onUpdate?: () => void
 }
 
@@ -26,6 +27,8 @@ const DepositInBankCard = ({
     className,
     depositInBankAmount,
     transactionBatchId,
+    currency,
+    currency_id,
     onUpdate,
 }: Props) => {
     const [edit, setEdit] = useState(false)
@@ -37,7 +40,12 @@ const DepositInBankCard = ({
                 className
             )}
         >
-            <p className="text-lg">{currencyFormat(depositInBankAmount)}</p>
+            <p className="text-lg">
+                {currencyFormat(depositInBankAmount, {
+                    currency,
+                    showSymbol: !!currency,
+                })}
+            </p>
             <p className="text-sm text-muted-foreground/70">
                 Total Deposit in Bank
             </p>
@@ -55,6 +63,8 @@ const DepositInBankCard = ({
                     <DepositInBankCreateForm
                         defaultValues={{
                             deposit_in_bank: depositInBankAmount,
+                            currency,
+                            currency_id,
                         }}
                         onSuccess={() => {
                             setEdit(false)

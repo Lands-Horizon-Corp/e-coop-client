@@ -4,13 +4,11 @@ import { useAuthUserWithOrgBranch } from '@/modules/authentication/authgenticati
 
 import PageContainer from '@/components/containers/page-container'
 
-import { useModalState } from '@/hooks/use-modal-state'
 import { useSubscribe } from '@/hooks/use-pubsub'
 
 import TransactionBatchTable from '../transaction-batch-table'
 
 const TransactionBatchPage = () => {
-    const createModal = useModalState()
     const {
         currentAuth: {
             user_organization: { branch_id },
@@ -42,11 +40,6 @@ const TransactionBatchPage = () => {
             <TransactionBatchTable
                 className="max-h-[90vh] min-h-[90vh] w-full"
                 mode="all"
-                toolbarProps={{
-                    createActionProps: {
-                        onClick: () => createModal.onOpenChange(true),
-                    },
-                }}
             />
         </PageContainer>
     )

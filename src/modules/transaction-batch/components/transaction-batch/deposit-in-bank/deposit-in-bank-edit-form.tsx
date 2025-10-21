@@ -1,5 +1,4 @@
 import { useForm } from 'react-hook-form'
-import z from 'zod'
 
 import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
 
@@ -7,9 +6,11 @@ import { cn } from '@/helpers'
 import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
 import { CurrencyInput } from '@/modules/currency'
 import {
+    DepositInBankSchema,
     ITransactionBatch,
     ITransactionBatchDepositInBankRequest,
     ITransactionBatchMinimal,
+    TDepositInBankSchema,
     useTransactionBatchSetDepositInBank,
 } from '@/modules/transaction-batch'
 
@@ -22,19 +23,13 @@ import { useFormHelper } from '@/hooks/use-form-helper'
 
 import { IClassProps, IForm, TEntityId } from '@/types'
 
-const depositInBankSchema = z.object({
-    deposit_in_bank: z.coerce.number().min(0, 'Deposit in bank is required'),
-})
-
-type TDepositInBankFormValues = z.infer<typeof depositInBankSchema>
-
 export interface IDepositInBankCreateFormProps
     extends IClassProps,
         IForm<
             Partial<ITransactionBatchDepositInBankRequest>,
             ITransactionBatchMinimal | ITransactionBatch,
             Error,
-            TDepositInBankFormValues
+            TDepositInBankSchema
         > {
     transactionBatchId: TEntityId
 }
@@ -44,8 +39,8 @@ const DepositInBankCreateForm = ({
     transactionBatchId,
     ...formProps
 }: IDepositInBankCreateFormProps) => {
-    const form = useForm<TDepositInBankFormValues>({
-        resolver: standardSchemaResolver(depositInBankSchema),
+    const form = useForm<TDepositInBankSchema>({
+        resolver: standardSchemaResolver(DepositInBankSchema),
         reValidateMode: 'onChange',
         mode: 'onSubmit',
         defaultValues: {
@@ -67,7 +62,7 @@ const DepositInBankCreateForm = ({
     })
 
     const { formRef, handleFocusError, isDisabled } =
-        useFormHelper<TDepositInBankFormValues>({
+        useFormHelper<ITransactionBatchDepositInBankRequest>({
             form,
             ...formProps,
             autoSave: false,
@@ -76,7 +71,7 @@ const DepositInBankCreateForm = ({
     const onSubmit = form.handleSubmit(async (formData) => {
         setDepositInBank({
             id: transactionBatchId,
-            payload: { deposit_in_bank: formData.deposit_in_bank },
+            payload: formData,
         })
     }, handleFocusError)
 
@@ -100,9 +95,10 @@ const DepositInBankCreateForm = ({
                         render={({ field: { onChange, ...field } }) => (
                             <CurrencyInput
                                 {...field}
+                                currency={form.watch('currency')}
                                 disabled={isDisabled(field.name)}
                                 onValueChange={(newValue) => {
-                                    onChange(newValue)
+                                    onChange(newValue || '')
                                 }}
                                 placeholder="Enter total deposit amount"
                             />

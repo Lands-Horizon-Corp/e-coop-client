@@ -6,7 +6,7 @@ import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
 import { cn } from '@/helpers'
 import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
 import { IBatchFundingRequest } from '@/modules/batch-funding'
-import { CurrencyInput } from '@/modules/currency'
+import { CurrencyCombobox, CurrencyInput } from '@/modules/currency'
 import EmployeePicker from '@/modules/employee/components/employee-picker'
 import { IMedia } from '@/modules/media'
 
@@ -108,6 +108,24 @@ const TransactionBatchCreateForm = ({
                             <div className="grid gap-x-4 space-y-4">
                                 <FormFieldWrapper
                                     control={form.control}
+                                    label="Currency *"
+                                    name="currency_id"
+                                    render={({ field }) => (
+                                        <CurrencyCombobox
+                                            {...field}
+                                            onChange={(currency) => {
+                                                field.onChange(currency?.id)
+                                                form.setValue(
+                                                    'currency',
+                                                    currency
+                                                )
+                                            }}
+                                            value={field.value}
+                                        />
+                                    )}
+                                />
+                                <FormFieldWrapper
+                                    control={form.control}
                                     label="Amount *"
                                     name="amount"
                                     render={({
@@ -115,15 +133,15 @@ const TransactionBatchCreateForm = ({
                                     }) => (
                                         <CurrencyInput
                                             {...field}
+                                            currency={form.watch('currency')}
                                             disabled={isDisabled(field.name)}
                                             onValueChange={(newValue) => {
-                                                onChange(newValue)
+                                                onChange(newValue || '')
                                             }}
                                             placeholder="Amount"
                                         />
                                     )}
                                 />
-
                                 <FormFieldWrapper
                                     control={form.control}
                                     label="Provided By *"

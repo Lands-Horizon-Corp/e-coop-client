@@ -7,6 +7,7 @@ import {
     useDeleteBatchCheckRemittance,
 } from '@/modules/check-remittance'
 import { CheckRemittanceCreateUpdateFormModal } from '@/modules/check-remittance/components/forms/check-remittance-create-update-form'
+import { ICurrency } from '@/modules/currency'
 import useConfirmModalStore from '@/store/confirm-modal-store'
 
 import {
@@ -27,11 +28,13 @@ import { TEntityId } from '@/types'
 
 type Props = {
     transactionBatchId: TEntityId
+    currency?: ICurrency
     onCheckRemittanceUpdate?: () => void
 }
 
 const BatchCheckRemitance = ({
     transactionBatchId,
+    currency,
     onCheckRemittanceUpdate,
 }: Props) => {
     const queryClient = useQueryClient()
@@ -104,6 +107,8 @@ const BatchCheckRemitance = ({
                         onCheckRemittanceUpdate?.()
                     },
                     defaultValues: {
+                        currency: currency,
+                        currency_id: currency?.id as TEntityId,
                         transaction_batch_id: transactionBatchId,
                     },
                 }}
