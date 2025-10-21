@@ -439,7 +439,7 @@ const PaymentWithTransactionForm = ({
                                     render={({ field }) => (
                                         <AccountPicker
                                             currencyId={
-                                                transaction?.currency_id
+                                                transaction?.currency_id as TEntityId
                                             }
                                             disabled={isDisabled('account_id')}
                                             mode={

@@ -1,7 +1,6 @@
 import { ReactNode } from 'react'
 
 import { ColumnDef, Row } from '@tanstack/react-table'
-import { CircleFlag } from 'react-circle-flags'
 
 import DataTableColumnHeader from '@/components/data-table/data-table-column-header'
 import ColumnActions from '@/components/data-table/data-table-column-header/column-actions'
@@ -89,41 +88,6 @@ const CashCountTableColumns = (
             enableHiding: false,
             size: 180,
             minSize: 180,
-        },
-        {
-            id: 'country_code',
-            accessorKey: 'country_code',
-            header: (props) => (
-                <DataTableColumnHeader {...props} title="Country">
-                    <ColumnActions {...props}>
-                        <TextFilter<ICashCount>
-                            displayText="Country Code"
-                            field="country_code"
-                        />
-                    </ColumnActions>
-                </DataTableColumnHeader>
-            ),
-            cell: ({
-                row: {
-                    original: { country_code },
-                },
-            }) => (
-                <div className="flex items-center gap-2">
-                    <div className="inline-flex h-5 w-5 shrink-0 items-center justify-center overflow-hidden rounded-full">
-                        <CircleFlag
-                            countryCode={country_code?.toLowerCase()}
-                            height={20}
-                        />
-                    </div>
-                    <span className="font-mono">{country_code}</span>
-                </div>
-            ),
-            enableMultiSort: true,
-            enableSorting: true,
-            enableResizing: true,
-            enableHiding: false,
-            size: 140,
-            minSize: 140,
         },
         {
             id: 'bill_amount',
