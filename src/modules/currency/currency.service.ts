@@ -1,4 +1,9 @@
-import { createDataLayerFactory } from '@/providers/repositories/data-layer-factory'
+import { useQuery } from '@tanstack/react-query'
+
+import {
+    HookQueryOptions,
+    createDataLayerFactory,
+} from '@/providers/repositories/data-layer-factory'
 
 import type { ICurrency, ICurrencyRequest } from '../currency'
 
@@ -45,3 +50,36 @@ export const {
 } = apiCrudHooks
 
 // custom hooks can go here
+export const getCurrencyByCountryCode = async (
+    countryCode: string
+): Promise<ICurrency> => {
+    const response = await API.get<ICurrency>(
+        `${currencyAPIRoute}/country-code/${countryCode}`
+    )
+    return response.data
+}
+
+export const useGetCurrency = ({
+    countryCode,
+    options,
+}: {
+    countryCode: string
+    options?: HookQueryOptions<ICurrency, Error>
+}) => {
+    return useQuery<ICurrency, Error>({
+        ...options,
+        queryKey: [currencyBaseKey, countryCode],
+        queryFn: async () => await getCurrencyByCountryCode(countryCode),
+    })
+}
+
+export const useGetCurrentCurrency = ({
+    options,
+}: {
+    options?: HookQueryOptions<ICurrency, Error>
+} = {}) => {
+    const locale = navigator.language || navigator.languages[0]
+    const countryCode = locale.split('-')[1]?.toUpperCase() || 'US'
+
+    return useGetCurrency({ countryCode, options })
+}
