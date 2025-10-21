@@ -7,6 +7,7 @@ import {
 
 import type {
     IBranchSettings,
+    IBranchSettingsCurrencyRequest,
     IBranchSettingsRequest,
 } from '../branch-settings'
 
@@ -70,6 +71,24 @@ export const useUpdateCurrentBranchSettings = createMutationFactory<
     IBranchSettingsRequest
 >({
     mutationFn: (data) => updateCurrentBranchSettings(data),
+    invalidationFn: (args) =>
+        updateMutationInvalidationFn('branch-settings', args),
+})
+
+//  For branch settings currency
+
+export const useUpdateBranchSettingsCurrency = createMutationFactory<
+    IBranchSettings,
+    Error,
+    IBranchSettingsCurrencyRequest
+>({
+    mutationFn: async (data) => {
+        const response = await API.put<
+            IBranchSettingsCurrencyRequest,
+            IBranchSettings
+        >(`${branchSettingsAPIRoute}/currency`, data)
+        return response.data
+    },
     invalidationFn: (args) =>
         updateMutationInvalidationFn('branch-settings', args),
 })

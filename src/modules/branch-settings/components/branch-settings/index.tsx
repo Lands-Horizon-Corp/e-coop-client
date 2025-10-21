@@ -11,6 +11,7 @@ import { useQeueryHookCallback } from '@/hooks/use-query-hook-cb'
 
 import { IClassProps } from '@/types'
 
+import BranchSettingsCurrencyForm from '../forms/branch-settings-currency-form'
 import BranchSettingsForm from '../forms/branch-settings-form'
 
 interface Props extends IClassProps {}
@@ -51,6 +52,26 @@ const BranchSettings = ({ className }: Props) => {
                     operations.
                 </p>
             </div>
+            {user_organization.branch && (
+                <div className="rounded-3xl min-w-0 bg-popover">
+                    <BranchSettingsCurrencyForm
+                        defaultValues={user_organization.branch.branch_setting}
+                        onSuccess={(data) =>
+                            updateCurrentAuth({
+                                user_organization: {
+                                    ...user_organization,
+                                    branch: {
+                                        ...user_organization.branch,
+                                        branch_setting: data,
+                                    },
+                                },
+                            })
+                        }
+                        resetOnDefaultChange
+                    />
+                </div>
+            )}
+
             {user_organization.branch && (
                 <BranchSettingsForm
                     defaultValues={user_organization.branch.branch_setting}

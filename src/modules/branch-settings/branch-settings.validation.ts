@@ -61,3 +61,18 @@ export const BranchSettingsSchema = z.object({
 })
 
 export type TBranchSettingsSchema = z.infer<typeof BranchSettingsSchema>
+
+export const BranchSettingsCurrencySchema = z.object({
+    currency_id: entityIdSchema,
+    currency: z.any(),
+
+    cash_on_hand_account_id: entityIdSchema,
+    cash_on_hand_account: z.any(),
+
+    paid_up_shared_capital_account_id: entityIdSchema,
+    paid_up_shared_capital_account: z.any(),
+})
+
+export type TBranchSettingsCurrencySchema = z.infer<
+    typeof BranchSettingsCurrencySchema
+>
