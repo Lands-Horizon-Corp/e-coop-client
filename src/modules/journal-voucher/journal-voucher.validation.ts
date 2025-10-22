@@ -1,6 +1,12 @@
-import z from 'zod'
+import z from 'zod';
 
-import { EntityIdSchema, descriptionTransformerSanitizer } from '@/validation'
+
+
+import { EntityIdSchema, descriptionTransformerSanitizer } from '@/validation';
+
+
+
+
 
 export const JournalVoucherSchema = z.object({
     id: z.string().optional(),
@@ -20,6 +26,9 @@ export const JournalVoucherSchema = z.object({
 
     currency_id: EntityIdSchema('Currency is required'),
     currency: z.any(),
+
+    total_credit: z.number().min(0).optional(),
+    total_debit: z.number().min(0).optional(),
 
     company_id: z.string().optional(),
     member_id: z.string().optional(),

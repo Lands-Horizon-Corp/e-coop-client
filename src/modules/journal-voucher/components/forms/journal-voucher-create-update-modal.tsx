@@ -177,6 +177,7 @@ const JournalVoucherCreateUpdateForm = ({
             ...withToastCallbacks({
                 textSuccess: 'Journal Voucher Created',
                 onSuccess: (data) => {
+                    form.reset(data)
                     formProps.onSuccess?.(data)
                     setEditJournalId(data.id)
                     setSelectedJournalVoucherEntry([])
@@ -197,8 +198,8 @@ const JournalVoucherCreateUpdateForm = ({
             ...withToastCallbacks({
                 textSuccess: 'Journal Voucher updated',
                 onSuccess: (data) => {
-                    formProps.onSuccess?.(data)
                     form.reset(data)
+                    formProps.onSuccess?.(data)
                     resetJournalVoucherDeleted()
                 },
                 onError: formProps.onError,
@@ -526,7 +527,7 @@ const JournalVoucherCreateUpdateForm = ({
                 <div className="w-full flex justify-end gap-4">
                     <div className="max-w-[130px] flex-col flex justify-end">
                         <p className="text-primary bg-background border text-left rounded-md pl-8 pr-10 py-1 text-lg font-bold">
-                            {currencyFormat(defaultValues?.total_debit || 0, {
+                            {currencyFormat(form.watch('total_debit') || 0, {
                                 currency: form.watch('currency'),
                                 showSymbol: !!form.watch('currency'),
                             })}
@@ -534,7 +535,7 @@ const JournalVoucherCreateUpdateForm = ({
                     </div>
                     <div className="max-w-[130px]">
                         <p className="text-primary bg-background border text-left rounded-md pl-8 pr-10 py-1 text-lg font-bold">
-                            {currencyFormat(defaultValues?.total_credit || 0, {
+                            {currencyFormat(form.watch('total_credit') || 0, {
                                 currency: form.watch('currency'),
                                 showSymbol: !!form.watch('currency'),
                             })}
