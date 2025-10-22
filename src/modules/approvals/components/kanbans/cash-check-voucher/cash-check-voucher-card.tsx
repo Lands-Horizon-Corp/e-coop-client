@@ -1,6 +1,7 @@
 import { cn } from '@/helpers/tw-utils'
 import { ICashCheckVoucher } from '@/modules/cash-check-voucher'
 import { CashCheckVoucherTagChip } from '@/modules/cash-check-voucher-tag/components/cash-check-voucher-tag-manager'
+import { currencyFormat } from '@/modules/currency'
 
 import { IdCardIcon, MoneyBagIcon, TicketIcon } from '@/components/icons'
 import ImageDisplay from '@/components/image-display'
@@ -93,13 +94,19 @@ export const CashCheckVoucherCard = ({
             )}
             <div className="flex gap-x-2 grow">
                 <JournalKanbanInfoItem
-                    content={cashCheckVoucher.total_debit}
+                    content={currencyFormat(cashCheckVoucher.total_debit, {
+                        currency: cashCheckVoucher.currency,
+                        showSymbol: !!cashCheckVoucher.currency,
+                    })}
                     icon={<IdCardIcon className="inline mr-2 size-5" />}
                     infoTitle="Total Debit"
                     title="Debit"
                 />
                 <JournalKanbanInfoItem
-                    content={cashCheckVoucher.total_credit}
+                    content={currencyFormat(cashCheckVoucher.total_credit, {
+                        currency: cashCheckVoucher.currency,
+                        showSymbol: !!cashCheckVoucher.currency,
+                    })}
                     icon={<IdCardIcon className="inline mr-2 size-5" />}
                     infoTitle="Total Credit"
                     title="Credit"

@@ -1,5 +1,5 @@
-import { formatNumber } from '@/helpers'
 import { cn } from '@/helpers/tw-utils'
+import { currencyFormat } from '@/modules/currency'
 import { ILoanTransaction } from '@/modules/loan-transaction'
 
 import {
@@ -101,7 +101,10 @@ export const LoanTransactionCard = ({
                 )}
                 <JournalKanbanInfoItem
                     className="w-full"
-                    content={formatNumber(loan.applied_1, 2) || '-'}
+                    content={currencyFormat(loan.applied_1 || 0, {
+                        currency: loan.account?.currency,
+                        showSymbol: !!loan.account?.currency,
+                    })}
                     icon={<MoneyBagIcon className="inline mr-2 size-5" />}
                     infoTitle="Amount Applied"
                     title="Amount Applied"

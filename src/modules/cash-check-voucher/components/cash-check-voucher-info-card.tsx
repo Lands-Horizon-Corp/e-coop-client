@@ -1,5 +1,6 @@
 import { cn, formatCurrency } from '@/helpers'
 import { dateAgo, toReadableDate } from '@/helpers/date-utils'
+import { currencyFormat } from '@/modules/currency'
 import TransactionUserInfoGrid from '@/modules/transaction/components/transaction-user-info-grid'
 
 import { EyeIcon } from '@/components/icons'
@@ -75,14 +76,22 @@ export const CashCheckVoucherCard = ({
                         },
                         {
                             label: 'Total Debit',
-                            value: formatCurrency(
-                                cashCheckVoucher.total_debit ?? 0
+                            value: currencyFormat(
+                                cashCheckVoucher.total_debit ?? 0,
+                                {
+                                    currency: cashCheckVoucher.currency,
+                                    showSymbol: !!cashCheckVoucher.currency,
+                                }
                             ),
                         },
                         {
                             label: 'Total Credit',
-                            value: formatCurrency(
-                                cashCheckVoucher.total_credit ?? 0
+                            value: currencyFormat(
+                                cashCheckVoucher.total_credit ?? 0,
+                                {
+                                    currency: cashCheckVoucher.currency,
+                                    showSymbol: !!cashCheckVoucher.currency,
+                                }
                             ),
                         },
                         {
