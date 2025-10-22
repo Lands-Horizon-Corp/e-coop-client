@@ -1,29 +1,39 @@
-import { cn } from '@/helpers'
+import { RefreshCcwIcon } from 'lucide-react'
 
 import { EmptyIcon } from '@/components/icons'
-import { Card } from '@/components/ui/card'
+import { Button } from '@/components/ui/button'
+import {
+    Empty,
+    EmptyContent,
+    EmptyDescription,
+    EmptyHeader,
+    EmptyMedia,
+    EmptyTitle,
+} from '@/components/ui/empty'
 
 const TransactionNoCurrentPaymentFound = () => {
     return (
-        <Card
-            className={cn(
-                'flex h-full min-h-60 border-0 shadow-none flex-col items-center justify-center gap-2 rounded-3xl bg-background p-2 '
-            )}
-        >
-            <div className="flex flex-col items-center gap-y-1">
-                <EmptyIcon
-                    className="text-gray-400 dark:text-gray-300"
-                    size={23}
-                />
-                <h2 className="text-lg font-semibold text-gray-700 dark:text-gray-200">
-                    No Payments Found
-                </h2>
-                <p className="text-center text-sm text-muted-foreground dark:text-secondary">
+        <Empty className="flex-1 h-full">
+            <EmptyHeader>
+                <EmptyMedia variant="icon">
+                    <EmptyIcon
+                        className="text-gray-400 dark:text-gray-300"
+                        size={23}
+                    />
+                </EmptyMedia>
+                <EmptyTitle>No Payments Found</EmptyTitle>
+                <EmptyDescription>
                     There are currently no processed payments. Try reloading the
                     page.
-                </p>
-            </div>
-        </Card>
+                </EmptyDescription>
+            </EmptyHeader>
+            <EmptyContent>
+                <Button size="sm" variant="outline">
+                    <RefreshCcwIcon />
+                    Refresh
+                </Button>
+            </EmptyContent>
+        </Empty>
     )
 }
 

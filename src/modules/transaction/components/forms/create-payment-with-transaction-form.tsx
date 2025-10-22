@@ -22,6 +22,7 @@ import {
     TransactionNoFoundBatch,
     useCreateTransactionPaymentByMode,
 } from '@/modules/transaction'
+import { TTransactionBatchFullorMin } from '@/modules/transaction-batch'
 import { useGetUserSettings } from '@/modules/user-profile'
 import { useTransactionReverseSecurityStore } from '@/store/transaction-reverse-security-store'
 import { useTransactionStore } from '@/store/transaction/transaction-store'
@@ -59,6 +60,7 @@ interface PaymentWithTransactionFormProps
             string,
             TPaymentWithTransactionFormValues
         > {
+    currentTransactionBatch?: TTransactionBatchFullorMin | null
     transaction?: ITransaction
     transactionId?: TEntityId
     memberProfileId?: TEntityId
@@ -73,6 +75,7 @@ const PaymentWithTransactionForm = ({
     memberProfileId,
     memberJointId,
     disabledFields,
+    currentTransactionBatch,
     readOnly,
 }: PaymentWithTransactionFormProps) => {
     const { focusTypePayment, selectedAccount } = useTransactionStore()
@@ -439,11 +442,13 @@ const PaymentWithTransactionForm = ({
                                     render={({ field }) => (
                                         <AccountPicker
                                             currencyId={
-                                                transaction?.currency_id as TEntityId
+                                                (transaction?.currency_id ||
+                                                    currentTransactionBatch?.currency_id) as TEntityId
                                             }
                                             disabled={isDisabled('account_id')}
                                             mode={
-                                                transaction
+                                                transaction ||
+                                                currentTransactionBatch
                                                     ? 'currency-payment'
                                                     : focusTypePayment
                                             }

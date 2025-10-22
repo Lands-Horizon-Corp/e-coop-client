@@ -41,7 +41,8 @@ type TTransactionProps = {
 
 const Transaction = ({ transactionId, fullPath }: TTransactionProps) => {
     const queryClient = useQueryClient()
-    const { hasNoTransactionBatch } = useTransactionBatchStore()
+    const { hasNoTransactionBatch, data: currentTransactionBatch } =
+        useTransactionBatchStore()
     const { modalData, isOpen, onClose } = useTransactionReverseSecurityStore()
     const loanPickerState = useModalState()
     // const { setActiveScope } = useShortcutContext()
@@ -226,11 +227,26 @@ const Transaction = ({ transactionId, fullPath }: TTransactionProps) => {
                         <TransactionAccountMemberLedger
                             memberProfileId={selectedMember?.id as TEntityId}
                             onRowClick={(data) => {
+                                if (!currentTransactionBatch) {
+                                    return toast.warning(
+                                        'You do not have an active transaction batch. Please create a transaction batch to proceed.'
+                                    )
+                                }
+
                                 if (
                                     data.original.account?.type ===
                                     AccountTypeEnum.Loan
                                 ) {
                                     return loanPickerState.onOpenChange(true)
+                                }
+
+                                if (
+                                    data.original.account.currency_id !==
+                                    currentTransactionBatch?.currency_id
+                                ) {
+                                    return toast.warning(
+                                        'The account currency does not match the current transaction batch currency.'
+                                    )
                                 }
 
                                 setSelectedAccountId(data.original.account_id)
@@ -243,6 +259,7 @@ const Transaction = ({ transactionId, fullPath }: TTransactionProps) => {
             </PageContainer>
             {selectedMember && (
                 <PaymentWithTransactionForm
+                    currentTransactionBatch={currentTransactionBatch}
                     memberJointId={selectedJointMember?.id}
                     memberProfileId={selectedMember?.id}
                     onSuccess={(transaction) => {

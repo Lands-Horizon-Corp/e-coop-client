@@ -12,7 +12,6 @@ import CopyTextButton from '@/components/copy-text-button'
 import { useDataTableSorting } from '@/components/data-table/use-datatable-sorting'
 import MiniPaginationBar from '@/components/pagination-bars/mini-pagination-bar'
 import { Badge } from '@/components/ui/badge'
-import { Separator } from '@/components/ui/separator'
 
 import useFilterState from '@/hooks/use-filter-state'
 import { useQeueryHookCallback } from '@/hooks/use-query-hook-cb'
@@ -99,7 +98,7 @@ const TransactionCurrentPaymentEntry = ({
         generalLedgerBasedTransaction.data.length > 0
 
     return (
-        <div className="!h-full flex flex-col gap-y-2 overflow-hidden">
+        <div className="flex min-h-[100%] h-fit flex-col gap-y-2 p-4 overflow-hidden  rounded-2xl bg-card">
             <div className="flex items-center gap-x-2">
                 <div className=" flex-grow rounded-xl py-2">
                     <div className="flex items-center justify-between gap-x-2">
@@ -118,7 +117,7 @@ const TransactionCurrentPaymentEntry = ({
                     </div>
                 </div>
             </div>
-            <Separator />
+            {/* <Separator /> */}
             <TransactionCurrentPaymentItem
                 currentPayment={generalLedgerBasedTransaction?.data || []}
                 hasPayments={hasPayments}
