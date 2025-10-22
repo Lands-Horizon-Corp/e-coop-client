@@ -3,7 +3,9 @@ import { toast } from 'sonner'
 import { cn } from '@/helpers'
 import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
 import { JournalKanbanInfoItem } from '@/modules/approvals/components/kanbans/journal-voucher/journal-voucher-card'
+import { useTransactionBatchStore } from '@/modules/transaction-batch/store/transaction-batch-store'
 import useConfirmModalStore from '@/store/confirm-modal-store'
+import { useInfoModalStore } from '@/store/info-modal-store'
 
 import {
     BadgeCheckFillIcon,
@@ -24,6 +26,10 @@ import {
 } from '../../journal-voucher.service'
 import { IJournalVoucher } from '../../journal-voucher.types'
 import { JournalVoucherCard } from '../Journal-voucher-card'
+import {
+    JournalVoucherReleaseCurrencyMismatchDisplay,
+    JournalVoucherReleaseNoTransactionBatchDisplay,
+} from '../modal-displays/journal-voucher-release-invalid'
 
 export interface IJournalVoucherApproveReleaseDisplayModalProps
     extends IClassProps {}
@@ -49,6 +55,8 @@ const JournalVoucherApproveReleaseDisplayModal = ({
     journalVoucher: IJournalVoucher
 }) => {
     const { onOpen } = useConfirmModalStore()
+    const { data: currentTransactionBatch } = useTransactionBatchStore()
+    const { onOpen: onOpenInfoModal } = useInfoModalStore()
 
     const handleJournalAction = useJournalVoucherActions({
         options: {
@@ -204,7 +212,42 @@ const JournalVoucherApproveReleaseDisplayModal = ({
                     {mode === 'release' && (
                         <Button
                             disabled={handleJournalAction.isPending || readOnly}
-                            onClick={handleRelease}
+                            onClick={() => {
+                                if (!currentTransactionBatch)
+                                    return onOpenInfoModal({
+                                        title: '',
+                                        hideSeparator: true,
+                                        confirmString: 'Okay',
+                                        classNames: {
+                                            footerActionClassName:
+                                                'justify-center',
+                                            closeButtonClassName: 'w-full',
+                                        },
+                                        component: (
+                                            <JournalVoucherReleaseNoTransactionBatchDisplay />
+                                        ),
+                                    })
+
+                                if (
+                                    journalVoucher.currency_id !==
+                                    currentTransactionBatch?.currency_id
+                                )
+                                    return onOpenInfoModal({
+                                        title: '',
+                                        hideSeparator: true,
+                                        confirmString: 'Okay',
+                                        classNames: {
+                                            footerActionClassName:
+                                                'justify-center',
+                                            closeButtonClassName: 'w-full',
+                                        },
+                                        component: (
+                                            <JournalVoucherReleaseCurrencyMismatchDisplay />
+                                        ),
+                                    })
+
+                                handleRelease()
+                            }}
                         >
                             {handleJournalAction.isPending ? (
                                 <LoadingSpinner className="mr-1" />

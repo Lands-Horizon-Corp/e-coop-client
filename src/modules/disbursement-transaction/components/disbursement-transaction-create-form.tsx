@@ -1,10 +1,11 @@
 import { useForm } from 'react-hook-form'
+import { toast } from 'sonner'
 
 import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
 
 import { cn } from '@/helpers'
 import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
-import { CurrencyInput } from '@/modules/currency'
+import { CurrencyInput, ICurrency } from '@/modules/currency'
 import DisbursementCombobox from '@/modules/disbursement/components/disbursement-combobox'
 
 import FormFooterResetSubmit from '@/components/form-components/form-footer-reset-submit'
@@ -35,10 +36,13 @@ export interface IDisbursementTransactionFormProps
             IDisbursementTransaction,
             Error,
             TDisbursementTransactionFormValue
-        > {}
+        > {
+    targetCurrency?: ICurrency
+}
 
 const DisbursementTransactionCreateForm = ({
     className,
+    targetCurrency,
     ...formProps
 }: IDisbursementTransactionFormProps) => {
     const form = useForm<TDisbursementTransactionFormValue>({
@@ -104,6 +108,15 @@ const DisbursementTransactionCreateForm = ({
                                 <DisbursementCombobox
                                     disabled={isDisabled(field.name)}
                                     onChange={(selected) => {
+                                        if (
+                                            targetCurrency &&
+                                            selected.currency.id !==
+                                                targetCurrency.id
+                                        )
+                                            return toast.warning(
+                                                'It is not allowed to select a disbursement currency that is different from your current transaction batch.'
+                                            )
+
                                         field.onChange(selected.id)
                                         form.setValue('disbursement', selected)
                                     }}

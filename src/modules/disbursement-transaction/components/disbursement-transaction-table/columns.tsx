@@ -1,6 +1,6 @@
 import { ReactNode } from 'react'
 
-import { formatNumber } from '@/helpers/number-utils'
+import { currencyFormat } from '@/modules/currency'
 import { ColumnDef, Row } from '@tanstack/react-table'
 
 import DataTableColumnHeader from '@/components/data-table/data-table-column-header'
@@ -115,11 +115,16 @@ const DisbursementTransactionTableColumns = (
             ),
             cell: ({
                 row: {
-                    original: { amount },
+                    original: { amount, disbursement },
                 },
             }) => (
                 <p className="text-right font-medium">
-                    {amount ? formatNumber(amount, 2) : '-'}
+                    {amount
+                        ? currencyFormat(amount, {
+                              currency: disbursement?.currency,
+                              showSymbol: !!disbursement?.currency,
+                          })
+                        : '-'}
                 </p>
             ),
             enableMultiSort: true,

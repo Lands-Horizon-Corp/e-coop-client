@@ -1,3 +1,4 @@
+import { currencyFormat } from '@/modules/currency'
 import { ColumnDef, Row } from '@tanstack/react-table'
 
 import DataTableColumnHeader from '@/components/data-table/data-table-column-header'
@@ -154,10 +155,15 @@ const CashCheckVoucherTableColumns = (
         ),
         cell: ({
             row: {
-                original: { total_debit },
+                original: { total_debit, currency },
             },
         }) => (
-            <div className="!text-wrap">{total_debit?.toFixed(2) ?? '-'}</div>
+            <div className="!text-wrap">
+                {currencyFormat(total_debit, {
+                    currency,
+                    showSymbol: !!currency,
+                })}
+            </div>
         ),
         enableMultiSort: true,
         enableSorting: true,
@@ -174,10 +180,15 @@ const CashCheckVoucherTableColumns = (
         ),
         cell: ({
             row: {
-                original: { total_credit },
+                original: { total_credit, currency },
             },
         }) => (
-            <div className="!text-wrap">{total_credit?.toFixed(2) ?? '-'}</div>
+            <div className="!text-wrap">
+                {currencyFormat(total_credit, {
+                    currency,
+                    showSymbol: !!currency,
+                })}
+            </div>
         ),
         enableMultiSort: true,
         enableSorting: true,

@@ -1,7 +1,6 @@
 import { useQueryClient } from '@tanstack/react-query'
 
-import { formatNumber } from '@/helpers/number-utils'
-import { ICurrency } from '@/modules/currency'
+import { ICurrency, currencyFormat } from '@/modules/currency'
 import {
     IOnlineRemittance,
     onlineRemittanceBaseKey,
@@ -115,7 +114,10 @@ const BatchOnlineRemittance = ({
                 <div>
                     <p>Online Remittance</p>
                     <p className="text-sm font-bold text-primary">
-                        {formatNumber(totalRemittance, 2)}
+                        {currencyFormat(totalRemittance, {
+                            currency: currency,
+                            showSymbol: !!currency,
+                        })}
                     </p>
                 </div>
                 <Button
@@ -272,7 +274,10 @@ const OnlineRemittanceListRow = ({
                 </div>
                 <div className="flex flex-col items-end">
                     <span className="text-sm font-semibold">
-                        {formatNumber(onlineRemittance.amount ?? 0, 2)}
+                        {currencyFormat(onlineRemittance.amount ?? 0, {
+                            currency: onlineRemittance.currency,
+                            showSymbol: !!onlineRemittance.currency,
+                        })}
                     </span>
                     <span className="text-xs text-muted-foreground/70">
                         Amount

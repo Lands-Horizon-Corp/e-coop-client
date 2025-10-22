@@ -4,10 +4,10 @@ import { cn } from '@/helpers'
 import { toReadableDate } from '@/helpers/date-utils'
 import { useAuthUserWithOrg } from '@/modules/authentication/authgentication.store'
 import { ICurrency } from '@/modules/currency'
+import { CurrencyBadge } from '@/modules/currency/components/currency-badge'
 
 import { EyeIcon, LayersSharpDotIcon } from '@/components/icons'
 import { Button } from '@/components/ui/button'
-import { Separator } from '@/components/ui/separator'
 
 import { useModalState } from '@/hooks/use-modal-state'
 
@@ -83,7 +83,14 @@ const TransactionBatch = ({
                 <div className="flex items-start gap-x-2">
                     <LayersSharpDotIcon className="mt-1 inline text-primary" />{' '}
                     <div>
-                        <p>Transaction Batch</p>
+                        <p>
+                            Transaction Batch{' '}
+                            <CurrencyBadge
+                                currency={transactionBatch.currency}
+                                displayFormat="symbol-code"
+                                size="sm"
+                            />
+                        </p>
                         <p className="text-xs text-muted-foreground dark:text-muted-foreground/40">
                             {toReadableDate(
                                 transactionBatch?.created_at,
@@ -126,7 +133,6 @@ const TransactionBatch = ({
                         onCashCountUpdate={() => invalidateTransactionBatch()}
                         transactionBatch={transactionBatch}
                     />
-                    <Separator />
                     <BatchCheckRemitance
                         currency={transactionBatch?.currency}
                         onCheckRemittanceUpdate={() =>
@@ -134,7 +140,6 @@ const TransactionBatch = ({
                         }
                         transactionBatchId={transactionBatch?.id}
                     />
-                    <Separator />
                     <BatchOnlineRemittance
                         currency={transactionBatch?.currency}
                         onOnlineRemittanceUpdate={() =>
@@ -142,8 +147,8 @@ const TransactionBatch = ({
                         }
                         transactionBatchId={transactionBatch?.id}
                     />
-                    <Separator />
                     <TransactionBatchDisbursementTransaction
+                        currency={transactionBatch.currency}
                         onDisbursementUpdate={() =>
                             invalidateTransactionBatch()
                         }

@@ -64,6 +64,79 @@ export type TDisbursementTransactionHookMode =
     | 'employee'
     | 'transaction-batch'
 
+export const useGetDisbursementTransaction = ({
+    mode = 'branch',
+    userOrganizationId,
+    transactionBatchId,
+    query,
+    options,
+}: {
+    mode?: TDisbursementTransactionHookMode
+    userOrganizationId?: TEntityId
+    transactionBatchId?: TEntityId
+    query?: TAPIQueryOptions
+    options?: HookQueryOptions<IDisbursementTransaction[], Error>
+}) => {
+    return useQuery<IDisbursementTransaction[], Error>({
+        ...options,
+        queryKey: [
+            'disbursement-transaction',
+            'filtered-paginated',
+            mode,
+            userOrganizationId,
+            transactionBatchId,
+            query,
+        ].filter(Boolean),
+        queryFn: async () => {
+            let url: string = `${apiCrudService.route}/branch`
+
+            switch (mode) {
+                case 'branch':
+                    url = `${apiCrudService.route}/branch`
+                    break
+
+                case 'current':
+                    url = `${apiCrudService.route}/current`
+                    break
+
+                case 'employee':
+                    if (!userOrganizationId) {
+                        throw new Error(
+                            'userOrganizationId is required for employee mode'
+                        )
+                    }
+                    url = `${apiCrudService.route}/employee/${userOrganizationId}`
+                    break
+
+                case 'transaction-batch':
+                    if (!transactionBatchId) {
+                        throw new Error(
+                            'transactionBatchId is required for transaction-batch mode'
+                        )
+                    }
+                    url = `${apiCrudService.route}/transaction-batch/${transactionBatchId}`
+                    break
+
+                default:
+                    throw new Error(`Unsupported mode: ${mode}`)
+            }
+
+            const finalUrl = qs.stringifyUrl(
+                {
+                    url,
+                    query,
+                },
+                { skipNull: true }
+            )
+
+            return await getAllDisbursmentTransaction({
+                url: finalUrl,
+                query,
+            })
+        },
+    })
+}
+
 export const useFilteredPaginatedDisbursementTransaction = ({
     mode = 'branch',
     userOrganizationId,

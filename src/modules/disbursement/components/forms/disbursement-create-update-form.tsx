@@ -5,6 +5,7 @@ import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
 
 import { cn } from '@/helpers'
 import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
+import { CurrencyCombobox } from '@/modules/currency'
 
 import IconCombobox from '@/components/comboboxes/icon-combobox'
 import FormFooterResetSubmit from '@/components/form-components/form-footer-reset-submit'
@@ -114,6 +115,24 @@ const DisbursementCreateUpdateForm = ({
                                     disabled={isDisabled(field.name)}
                                     id={field.name}
                                     placeholder="Enter disbursement name"
+                                />
+                            )}
+                        />
+                        <FormFieldWrapper
+                            control={form.control}
+                            disabled={isPending}
+                            label="Currency *"
+                            name="currency_id"
+                            render={({ field }) => (
+                                <CurrencyCombobox
+                                    disabled={
+                                        isDisabled(field.name) || isPending
+                                    }
+                                    onChange={(selected) =>
+                                        field.onChange(selected.id)
+                                    }
+                                    placeholder="Select Currency"
+                                    value={field.value}
                                 />
                             )}
                         />
