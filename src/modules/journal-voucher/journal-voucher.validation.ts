@@ -1,6 +1,12 @@
 import z from 'zod'
 
-import { EntityIdSchema, descriptionTransformerSanitizer } from '@/validation'
+import {
+    EntityIdSchema,
+    descriptionTransformerSanitizer,
+    entityIdSchema,
+} from '@/validation'
+
+import { JournalVoucherEntrySchema } from '../journal-voucher-entry'
 
 export const JournalVoucherSchema = z.object({
     id: z.string().optional(),
@@ -16,7 +22,7 @@ export const JournalVoucherSchema = z.object({
         .optional()
         .transform(descriptionTransformerSanitizer),
 
-    name: z.string().optional(),
+    name: z.string().min(1, 'Name is required'),
 
     currency_id: EntityIdSchema('Currency is required'),
     currency: z.any(),
@@ -27,6 +33,46 @@ export const JournalVoucherSchema = z.object({
     company_id: z.string().optional(),
     member_id: z.string().optional(),
     member_profile: z.any().optional(),
+    journal_voucher_entries: z
+        .array(JournalVoucherEntrySchema)
+        .optional()
+        .default([])
+        .refine(
+            (entries) => {
+                const hasAllAccounts = entries.every(
+                    (entry) =>
+                        entry.account_id !== undefined &&
+                        entry.account_id !== ''
+                )
+                return hasAllAccounts
+            },
+            {
+                message:
+                    'All journal voucher entries must have an Account selected.',
+            }
+        )
+        .refine(
+            (entries) => {
+                if (entries.length === 0) return true
+                const totalDebit = entries.reduce(
+                    (acc, entry) => acc + entry.debit,
+                    0
+                )
+                const totalCredit = entries.reduce(
+                    (acc, entry) => acc + entry.credit,
+                    0
+                )
+                return totalDebit === totalCredit
+            },
+            {
+                message:
+                    'Total debit and credit must be equal and greater than zero.',
+            }
+        ),
+    journal_voucher_entries_deleted: z
+        .array(entityIdSchema)
+        .optional()
+        .default([]),
 })
 
 export const JournalVoucherPrintSchema = z.object({

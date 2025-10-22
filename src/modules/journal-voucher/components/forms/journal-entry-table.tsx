@@ -1,10 +1,12 @@
-import { useEffect, useState } from 'react'
+import { useCallback, useMemo } from 'react'
+
+import { UseFormReturn } from 'react-hook-form'
 
 import { cn } from '@/helpers'
+import { IAccount } from '@/modules/account'
 import { ICurrency } from '@/modules/currency'
 import { IJournalVoucherEntryRequest } from '@/modules/journal-voucher-entry'
 import { IMemberProfile } from '@/modules/member-profile'
-import { useJournalVoucherStore } from '@/store/journal-voucher-store'
 import { entityIdSchema } from '@/validation'
 import {
     ColumnDef,
@@ -29,6 +31,8 @@ import {
 } from '@/components/ui/table'
 
 import { TEntityId } from '@/types'
+
+import { TJournalVoucherSchema } from '../../journal-voucher.validation'
 
 const columns: ColumnDef<IJournalVoucherEntryRequest>[] = [
     {
@@ -143,6 +147,8 @@ type JournalEntryTableProps = {
     TableClassName?: string
     transactionBatchId?: TEntityId
     mode: 'readOnly' | 'update' | 'create'
+    ref: React.Ref<HTMLDivElement>
+    form: UseFormReturn<TJournalVoucherSchema>
 }
 
 declare module '@tanstack/react-table' {
@@ -158,100 +164,142 @@ declare module '@tanstack/react-table' {
 }
 
 export const JournalEntryTable = ({
-    rowData,
     className,
     currency,
     TableClassName,
     defaultMemberProfile,
     transactionBatchId,
     mode,
+    form,
 }: JournalEntryTableProps) => {
     const isUpdateMode = mode === 'update'
     const isReadOnlyMode = mode === 'readOnly'
-    const [journalVoucherEntry, setJournalVoucherEntry] = useState<
-        IJournalVoucherEntryRequest[]
-    >(() => {
-        if (rowData && rowData.length > 0 && (isUpdateMode || isReadOnlyMode)) {
-            return rowData
-        }
-        return []
-    })
 
-    const { setSelectedJournalVoucherEntry, setJournalVoucherEntriesDeleted } =
-        useJournalVoucherStore()
+    const watchedJournalEntries = form.watch('journal_voucher_entries')
+    const watchedDeletedEntries = form.watch('journal_voucher_entries_deleted')
 
-    useEffect(() => {
-        if (isUpdateMode || isReadOnlyMode) {
-            setSelectedJournalVoucherEntry(journalVoucherEntry)
-        }
-    }, [
-        isUpdateMode,
-        isReadOnlyMode,
-        journalVoucherEntry,
-        setSelectedJournalVoucherEntry,
-    ])
+    const journalVoucherEntry = useMemo(
+        () => watchedJournalEntries || [],
+        [watchedJournalEntries]
+    )
 
-    const handleDeleteRow = (row: Row<IJournalVoucherEntryRequest>) => {
-        const id = row.original.id
-        const rowId = row.original.rowId
-        if (isUpdateMode) {
-            const validation = entityIdSchema.safeParse(id)
-            if (validation.success) {
-                setJournalVoucherEntriesDeleted(id as TEntityId)
-                const updatedData = journalVoucherEntry.filter(
-                    (data) => data.id !== id
-                )
-                setJournalVoucherEntry(updatedData)
+    const deletedJournalVoucherEntries = useMemo(
+        () => watchedDeletedEntries || [],
+        [watchedDeletedEntries]
+    )
+
+    const handleDeleteRow = useCallback(
+        (row: Row<IJournalVoucherEntryRequest>) => {
+            if (isReadOnlyMode) return
+            const id = row.original.id
+            if (isUpdateMode && id) {
+                const validation = entityIdSchema.safeParse(id)
+                if (validation.success) {
+                    form.setValue('journal_voucher_entries_deleted', [
+                        ...deletedJournalVoucherEntries,
+                        id as TEntityId,
+                    ])
+                    const updatedData = journalVoucherEntry.filter(
+                        (data) => data.id !== id
+                    )
+                    form.setValue('journal_voucher_entries', updatedData)
+                    form.trigger('journal_voucher_entries')
+                }
             } else {
                 const updatedData = journalVoucherEntry.filter(
-                    (data) => data.rowId !== rowId
+                    (_, index) => index !== row.index
                 )
-                setJournalVoucherEntry(updatedData)
+                form.setValue('journal_voucher_entries', updatedData)
+                form.trigger('journal_voucher_entries')
             }
-        }
-    }
+        },
+        [
+            isUpdateMode,
+            isReadOnlyMode,
+            form,
+            journalVoucherEntry,
+            deletedJournalVoucherEntries,
+        ]
+    )
+
+    const handleAddRow = useCallback(
+        (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+            e.preventDefault()
+
+            if (isReadOnlyMode) return
+
+            const newRow: IJournalVoucherEntryRequest = {
+                debit: 0,
+                credit: 0,
+                rowId: crypto.randomUUID(),
+                cash_check_voucher_number: '',
+                member_profile_id: defaultMemberProfile?.id,
+                member_profile: defaultMemberProfile,
+                account_id: '' as TEntityId,
+                transaction_batch_id: transactionBatchId ?? undefined,
+            }
+
+            const updatedEntries = [...journalVoucherEntry, newRow]
+            form.setValue('journal_voucher_entries', updatedEntries)
+            form.trigger('journal_voucher_entries')
+        },
+        [
+            isReadOnlyMode,
+            defaultMemberProfile,
+            transactionBatchId,
+            journalVoucherEntry,
+            form,
+        ]
+    )
+
+    const updateData = useCallback(
+        <TValue,>(
+            rowIndex: number,
+            columnId: keyof IJournalVoucherEntryRequest,
+            value: TValue
+        ) => {
+            const updatedEntries = journalVoucherEntry.map((entry, index) => {
+                if (index === rowIndex) {
+                    const updatedEntry = { ...entry }
+
+                    if (columnId === 'debit') {
+                        updatedEntry.debit = value as number
+                        updatedEntry.credit = 0 // Clear credit when debit is set
+                    } else if (columnId === 'credit') {
+                        updatedEntry.credit = value as number
+                        updatedEntry.debit = 0 // Clear debit when credit is set
+                    } else if (columnId === 'account') {
+                        updatedEntry.account = value
+                        updatedEntry.account_id = (value as IAccount)
+                            ?.id as TEntityId
+                    } else if (columnId === 'member_profile') {
+                        updatedEntry.member_profile = value
+                        updatedEntry.member_profile_id = (
+                            value as IMemberProfile
+                        )?.id as TEntityId
+                    }
+
+                    return updatedEntry
+                }
+                return entry
+            })
+
+            form.setValue('journal_voucher_entries', updatedEntries)
+            form.trigger('journal_voucher_entries')
+        },
+        [journalVoucherEntry, form]
+    )
+
     const table = useReactTable<IJournalVoucherEntryRequest>({
         data: journalVoucherEntry,
         columns: columns,
         getCoreRowModel: getCoreRowModel(),
         meta: {
             defaultCurrency: currency,
-            updateData: (rowIndex, columnId, value) => {
-                const updatedEntries = (journalVoucherEntry ?? []).map(
-                    (entry, index) => {
-                        if (index === rowIndex) {
-                            const updatedEntry = { ...entry, [columnId]: value }
-                            if (columnId === 'debit') {
-                                updatedEntry.credit = 0
-                            } else if (columnId === 'credit') {
-                                updatedEntry.debit = 0
-                            }
-                            return updatedEntry
-                        }
-                        return entry
-                    }
-                )
-                setJournalVoucherEntry(updatedEntries)
-            },
-            handleDeleteRow: handleDeleteRow,
+            updateData,
+            handleDeleteRow,
         },
     })
-
-    const handleAddRow = (
-        e: React.MouseEvent<HTMLButtonElement, MouseEvent>
-    ) => {
-        e.preventDefault()
-        const newRow: IJournalVoucherEntryRequest = {
-            debit: 0,
-            credit: 0,
-            rowId: crypto.randomUUID(),
-            cash_check_voucher_number: '',
-            member_profile_id: defaultMemberProfile?.id,
-            member_profile: defaultMemberProfile,
-            transaction_batch_id: transactionBatchId ?? undefined,
-        }
-        setJournalVoucherEntry([...journalVoucherEntry, newRow])
-    }
 
     useHotkeys(
         'Shift+i',
@@ -262,7 +310,9 @@ export const JournalEntryTable = ({
                 e as unknown as React.MouseEvent<HTMLButtonElement, MouseEvent>
             )
         },
-        [journalVoucherEntry]
+        {
+            enabled: !isReadOnlyMode,
+        }
     )
 
     return (
@@ -271,9 +321,10 @@ export const JournalEntryTable = ({
                 <h1 className="text-lg font-semibold">Journal Entries</h1>
                 <div className="flex py-2 items-center space-x-2">
                     <Button
-                        aria-label="Add new suggested payment"
+                        aria-label="Add new journal entry"
                         className="size-fit px-2 py-0.5 text-xs"
-                        onClick={(e) => handleAddRow(e)}
+                        disabled={isReadOnlyMode}
+                        onClick={handleAddRow}
                         size="sm"
                         tabIndex={0}
                         type="button"
@@ -285,7 +336,8 @@ export const JournalEntryTable = ({
                     </CommandShortcut>
                 </div>
             </div>
-            {/* Increased max-height for better vertical space management */}
+
+            {/* Table */}
             <Table
                 wrapperClassName={cn(
                     'max-h-[400px] ecoop-scroll',
@@ -320,23 +372,34 @@ export const JournalEntryTable = ({
                     ))}
                 </TableHeader>
                 <TableBody>
-                    {table.getRowModel().rows.map((row) => (
-                        <TableRow
-                            className={cn(
-                                'hover:bg-background !border-b-[0.5px] border-b-primary/20'
-                            )}
-                            key={row.id}
-                        >
-                            {row.getVisibleCells().map((cell) => (
-                                <TableCell className="!p-1" key={cell.id}>
-                                    {flexRender(
-                                        cell.column.columnDef.cell,
-                                        cell.getContext()
-                                    )}
-                                </TableCell>
-                            ))}
+                    {table.getRowModel().rows.length === 0 ? (
+                        <TableRow>
+                            <TableCell
+                                className="text-center py-8 text-muted-foreground"
+                                colSpan={columns.length}
+                            >
+                                No journal entries. Click "Add" to create one.
+                            </TableCell>
                         </TableRow>
-                    ))}
+                    ) : (
+                        table.getRowModel().rows.map((row) => (
+                            <TableRow
+                                className={cn(
+                                    'hover:bg-background !border-b-[0.5px] border-b-primary/20'
+                                )}
+                                key={row.id}
+                            >
+                                {row.getVisibleCells().map((cell) => (
+                                    <TableCell className="!p-1" key={cell.id}>
+                                        {flexRender(
+                                            cell.column.columnDef.cell,
+                                            cell.getContext()
+                                        )}
+                                    </TableCell>
+                                ))}
+                            </TableRow>
+                        ))
+                    )}
                 </TableBody>
             </Table>
         </div>
