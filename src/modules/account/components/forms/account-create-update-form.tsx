@@ -201,7 +201,7 @@ const AccountCreateUpdateForm = ({
                                         field.onChange(selected.id)
                                     }
                                     placeholder="Select Currency"
-                                    value={field.value}
+                                    value={form.watch('currency')}
                                 />
                             )}
                         />

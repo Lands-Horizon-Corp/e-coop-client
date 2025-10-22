@@ -142,7 +142,7 @@ const BranchSettingsCurrencyForm = ({
                                             undefined
                                         )
                                     }}
-                                    value={field.value}
+                                    value={form.watch('currency')}
                                 />
                             )}
                         />

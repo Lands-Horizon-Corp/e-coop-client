@@ -120,7 +120,7 @@ const TransactionBatchCreateForm = ({
                                                     currency
                                                 )
                                             }}
-                                            value={field.value}
+                                            value={form.watch('currency')}
                                         />
                                     )}
                                 />
