@@ -1,6 +1,7 @@
 import { formatNumber } from '@/helpers'
 import { dateAgo, toReadableDate } from '@/helpers/date-utils'
 import { currencyFormat } from '@/modules/currency'
+import { CurrencyBadge } from '@/modules/currency/components/currency-badge'
 import { IMemberAccountingLedger } from '@/modules/member-account-ledger'
 import { ColumnDef, Row } from '@tanstack/react-table'
 
@@ -62,7 +63,16 @@ const MemberAccountingLedgerTableColumns = (
             </DataTableColumnHeader>
         ),
         cell: ({ row: { original } }) => (
-            <span>{original.account?.name || '-'}</span>
+            <p>
+                <span className="mr-1">{original.account?.name || '-'}</span>
+                {original.account?.currency && (
+                    <CurrencyBadge
+                        currency={original.account.currency}
+                        displayFormat="symbol-code"
+                        size="sm"
+                    />
+                )}
+            </p>
         ),
         enableMultiSort: true,
         enableSorting: true,

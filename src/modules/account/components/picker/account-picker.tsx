@@ -76,6 +76,7 @@ const AccountPicker = ({
     currencyId,
     allowClear = false,
 }: FinalProp & { currencyId?: TEntityId }) => {
+    console.log(currencyId)
     const queryClient = useQueryClient()
 
     const [state, setState] = useInternalState(
