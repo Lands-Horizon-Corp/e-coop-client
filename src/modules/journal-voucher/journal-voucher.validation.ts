@@ -1,12 +1,6 @@
-import z from 'zod';
+import z from 'zod'
 
-
-
-import { EntityIdSchema, descriptionTransformerSanitizer } from '@/validation';
-
-
-
-
+import { EntityIdSchema, descriptionTransformerSanitizer } from '@/validation'
 
 export const JournalVoucherSchema = z.object({
     id: z.string().optional(),

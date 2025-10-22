@@ -397,6 +397,7 @@ const LoanEntriesEditor = forwardRef<
                             })
                             .map((loanEntry, index) => (
                                 <LoanEntryRow
+                                    disabled={isReadOnly || isDisabled}
                                     entry={loanEntry}
                                     form={form}
                                     key={`${loanEntry.id}`}
