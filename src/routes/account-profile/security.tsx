@@ -4,6 +4,7 @@ import { toast } from 'sonner'
 import { useAuthStore } from '@/modules/authentication/authgentication.store'
 import DevicesList from '@/modules/authentication/components/devices-list'
 import AccountSecurityForm from '@/modules/user-profile/components/forms/account-security-form'
+import AccountProfileInactivity from '@/modules/user-profile/components/forms/account.inactivity'
 
 import { ShieldLockIcon } from '@/components/icons'
 
@@ -31,6 +32,7 @@ function RouteComponent() {
                     toast.info('Please Sign in again.')
                 }}
             />
+            <AccountProfileInactivity />
             <DevicesList />
         </div>
     )

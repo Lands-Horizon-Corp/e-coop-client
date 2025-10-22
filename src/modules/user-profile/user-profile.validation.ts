@@ -9,6 +9,8 @@ import {
     stringDateSchema,
 } from '@/validation'
 
+import { USER_PROFILE_DURATION_UNITS } from './user-profile.constants'
+
 export const UserProfileSecuritySchema = z
     .object({
         old_password: z.string().min(1, 'Old password is required'),
@@ -40,3 +42,19 @@ export const UserProfileGeneralSchema = z.object({
     email: z.email('Invalid email format').optional(),
     contact_number: z.string().optional(),
 })
+
+// Validation Schema
+export const AccountInactivitySchema = z.object({
+    isEnabled: z.boolean(),
+    timeValue: z.string().refine(
+        (val) => {
+            const num = parseInt(val)
+            return !isNaN(num) && num >= 1 && num <= 999
+        },
+        { message: 'Time value must be between 1 and 999' }
+    ),
+    timeUnit: z.enum(USER_PROFILE_DURATION_UNITS),
+})
+export type TAccountInactivityFormValues = z.infer<
+    typeof AccountInactivitySchema
+>
