@@ -20,7 +20,12 @@ const CashCheckJournalVoucherPage = () => {
 
     const {
         currentAuth: {
-            user_organization: { branch_id },
+            user_organization: {
+                branch_id,
+                branch: {
+                    branch_setting: { currency },
+                },
+            },
         },
     } = useAuthUserWithOrgBranch()
 
@@ -62,7 +67,15 @@ const CashCheckJournalVoucherPage = () => {
 
     return (
         <PageContainer>
-            <CashCheckVoucherCreateUpdateFormModal {...createModal} />
+            <CashCheckVoucherCreateUpdateFormModal
+                {...createModal}
+                formProps={{
+                    defaultValues: {
+                        currency,
+                        currency_id: currency.id,
+                    },
+                }}
+            />
             <CashCheckJournalVoucherTable
                 className="max-h-[90vh] min-h-[90vh] w-full"
                 toolbarProps={{

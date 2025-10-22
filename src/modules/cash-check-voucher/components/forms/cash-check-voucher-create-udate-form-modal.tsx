@@ -24,7 +24,7 @@ import {
 } from '@/modules/cash-check-voucher-entry'
 import { CashCheckVoucherTagsManagerPopover } from '@/modules/cash-check-voucher-tag/components/cash-check-voucher-tag-manager'
 import CompanyCombobox from '@/modules/company/components/combobox'
-import { currencyFormat } from '@/modules/currency'
+import { CurrencyCombobox, currencyFormat } from '@/modules/currency'
 import { IMemberProfile } from '@/modules/member-profile'
 import MemberPicker from '@/modules/member-profile/components/member-picker'
 import { useTransactionBatchStore } from '@/modules/transaction-batch/store/transaction-batch-store'
@@ -57,7 +57,7 @@ export type TCashCheckVoucherModalMode = 'create' | 'update' | 'readOnly'
 export interface ICashCheckVoucherCreateUpdateFormProps
     extends IClassProps,
         IForm<
-            ICashCheckVoucher,
+            Partial<ICashCheckVoucher>,
             ICashCheckVoucherRequest,
             Error,
             TCashCheckVoucherFormValues
@@ -126,7 +126,8 @@ const ValidateCashCheckEntry = ({
 
     return {
         isValid: true,
-        validatedEntries: transformedEntries,
+        // validatedEntries: transformedEntries,
+        validatedEntries: parsedEntries.data, // Fixed: Use parsedEntries.data instead to get the validated entries since transformedEntries is not validated/not parsed/ not safe /nottransformed
     }
 }
 
@@ -202,6 +203,7 @@ const CashCheckVoucherCreateUpdateForm = ({
                 textSuccess: 'Cash Check Voucher updated',
                 onSuccess: (data) => {
                     formProps.onSuccess?.(data)
+                    form.reset(data)
                 },
                 onError: formProps.onError,
             }),
@@ -295,7 +297,9 @@ const CashCheckVoucherCreateUpdateForm = ({
                     )}
                     {defaultValues && (
                         <CashCheckVoucherStatusIndicator
-                            cashCheckVoucher={defaultValues}
+                            cashCheckVoucher={
+                                defaultValues as ICashCheckVoucher
+                            }
                             className="max-w-max"
                         />
                     )}
@@ -319,40 +323,63 @@ const CashCheckVoucherCreateUpdateForm = ({
                     disabled={isPending || formProps.readOnly}
                 >
                     <div className="col-span-1 md:col-span-3 flex flex-col">
-                        <FormFieldWrapper
-                            className="w-full"
-                            control={form.control}
-                            name="name"
-                            render={({ field }) => {
-                                return (
-                                    <div className="relative w-full">
-                                        <Input
-                                            className="!text-md p-5 font-semibold h-12"
-                                            {...field}
-                                            id={field.name}
-                                            value={field.value || ''}
-                                        />
-                                        <Button
-                                            className="absolute m-auto top-0 bottom-0 right-1 hover:!bg-primary/20"
-                                            onClick={(e) => {
-                                                e.preventDefault()
-                                                form.reset({
-                                                    company_id: undefined,
-                                                    member_profile: undefined,
-                                                    member_profile_id:
-                                                        undefined,
-                                                    name: '',
-                                                })
-                                            }}
-                                            size={'sm'}
-                                            variant="ghost"
-                                        >
-                                            <XIcon />
-                                        </Button>
-                                    </div>
-                                )
-                            }}
-                        />
+                        <div className="grid grid-cols-2 gap-x-2">
+                            <FormFieldWrapper
+                                className="w-full"
+                                control={form.control}
+                                label="Name *"
+                                name="name"
+                                render={({ field }) => {
+                                    return (
+                                        <div className="relative w-full">
+                                            <Input
+                                                className="!text-md font-semibold pr-10"
+                                                {...field}
+                                                id={field.name}
+                                                value={field.value || ''}
+                                            />
+                                            <Button
+                                                className="absolute m-auto top-0 bottom-0 right-1 hover:!bg-primary/20"
+                                                onClick={(e) => {
+                                                    e.preventDefault()
+                                                    form.reset({
+                                                        company_id: undefined,
+                                                        member_profile:
+                                                            undefined,
+                                                        member_profile_id:
+                                                            undefined,
+                                                        name: '',
+                                                    })
+                                                }}
+                                                size={'sm'}
+                                                variant="ghost"
+                                            >
+                                                <XIcon />
+                                            </Button>
+                                        </div>
+                                    )
+                                }}
+                            />
+                            <FormFieldWrapper
+                                control={form.control}
+                                label="Currency *"
+                                name="currency_id"
+                                render={({ field }) => (
+                                    <CurrencyCombobox
+                                        {...field}
+                                        disabled={
+                                            isDisabled(field.name) ||
+                                            !!cashCheckVoucherId
+                                        }
+                                        onChange={(currency) => {
+                                            field.onChange(currency?.id)
+                                            form.setValue('currency', currency)
+                                        }}
+                                        value={field.value}
+                                    />
+                                )}
+                            />
+                        </div>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4 sm:gap-y-3 mt-2">
                             <FormFieldWrapper
                                 control={form.control}
@@ -483,6 +510,7 @@ const CashCheckVoucherCreateUpdateForm = ({
                     />
                     {defaultMode !== 'create' && (
                         <CashCheckJournalEntryTable
+                            cashCheckCurrency={form.watch('currency')}
                             cashCheckVoucherId={cashCheckVoucherId ?? ''}
                             className="col-span-1 md:col-span-3"
                             defaultMemberProfile={defaultMember}
@@ -495,14 +523,16 @@ const CashCheckVoucherCreateUpdateForm = ({
                     <div className="max-w-[130px] flex-col flex justify-end">
                         <p className="text-primary bg-background border py-1 text-left rounded-md pl-8 pr-10 text-lg font-bold">
                             {currencyFormat(defaultValues?.total_debit || 0, {
-                                showSymbol: false,
+                                currency: form.watch('currency'),
+                                showSymbol: !!form.watch('currency'),
                             })}
                         </p>
                     </div>
                     <div className="max-w-[130px]">
                         <p className="text-primary bg-background border py-1 text-left rounded-md pl-8 pr-10 text-lg font-bold">
                             {currencyFormat(defaultValues?.total_credit || 0, {
-                                showSymbol: false,
+                                currency: form.watch('currency'),
+                                showSymbol: !!form.watch('currency'),
                             })}
                         </p>
                     </div>

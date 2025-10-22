@@ -1,6 +1,6 @@
 import z from 'zod'
 
-import { descriptionTransformerSanitizer } from '@/validation'
+import { EntityIdSchema, descriptionTransformerSanitizer } from '@/validation'
 
 export const JournalVoucherSchema = z.object({
     id: z.string().optional(),
@@ -17,6 +17,9 @@ export const JournalVoucherSchema = z.object({
         .transform(descriptionTransformerSanitizer),
 
     name: z.string().optional(),
+
+    currency_id: EntityIdSchema('Currency is required'),
+    currency: z.any(),
 
     company_id: z.string().optional(),
     member_id: z.string().optional(),

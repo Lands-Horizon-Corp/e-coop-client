@@ -1,6 +1,6 @@
 import z from 'zod'
 
-import { descriptionTransformerSanitizer } from '@/validation'
+import { EntityIdSchema, descriptionTransformerSanitizer } from '@/validation'
 import { entityIdSchema } from '@/validation'
 
 export const CashCheckVoucherSchema = z.object({
@@ -17,6 +17,9 @@ export const CashCheckVoucherSchema = z.object({
         .optional(),
     print_count: z.coerce.number<number>().min(0).optional(),
     pay_to: z.string().optional(),
+
+    currency_id: EntityIdSchema('Currency is required'),
+    currency: z.any(),
 
     // Totals - Added
     total_debit: z.coerce.number().optional(),

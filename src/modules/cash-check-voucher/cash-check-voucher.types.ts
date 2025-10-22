@@ -8,6 +8,7 @@ import {
     ICashCheckVoucherEntryRequest,
 } from '../cash-check-voucher-entry'
 import { ICashCheckVoucherTag } from '../cash-check-voucher-tag'
+import { ICurrency } from '../currency'
 import { IMedia } from '../media'
 import { IMemberProfile } from '../member-profile'
 import { ITransactionBatch } from '../transaction-batch'
@@ -36,6 +37,9 @@ export interface ICashCheckVoucher extends IBaseEntityMeta {
     name?: string
     member_profile_id?: string
     member_profile?: IMemberProfile
+
+    currency_id: TEntityId
+    currency: ICurrency
 
     employee_user_id?: string
     employee_user?: IUser
@@ -129,6 +133,9 @@ export interface ICashCheckVoucherRequest {
     printed_by_user_id?: string
     approved_by_user_id?: string
     released_by_user_id?: string
+
+    currency_id: string
+    currency: ICurrency
 
     pay_to?: string
     status?: CashCheckVoucherStatus

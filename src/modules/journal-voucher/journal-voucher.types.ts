@@ -1,5 +1,6 @@
 import { IBaseEntityMeta, IPaginatedResult, TEntityId } from '@/types'
 
+import { ICurrency } from '../currency'
 import {
     IJournalVoucherEntry,
     IJournalVoucherEntryRequest,
@@ -15,6 +16,9 @@ export interface IJournalVoucher extends IBaseEntityMeta {
     reference: string
     status: TJournalVoucherStatus
     name?: string
+
+    currency_id: TEntityId
+    currency: ICurrency
 
     printed_by_user_id?: string
     printed_by?: IUser
@@ -49,6 +53,9 @@ export interface IJournalVoucherRequest {
     description?: string
     reference?: string
     status?: string
+
+    currency_id: TEntityId
+    currency: ICurrency
 
     journal_voucher_entries?: IJournalVoucherEntryRequest[]
     journal_voucher_entries_deleted?: TEntityId[]

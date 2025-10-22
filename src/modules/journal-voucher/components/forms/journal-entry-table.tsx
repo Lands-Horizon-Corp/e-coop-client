@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 
 import { cn } from '@/helpers'
+import { ICurrency } from '@/modules/currency'
 import { IJournalVoucherEntryRequest } from '@/modules/journal-voucher-entry'
 import { IMemberProfile } from '@/modules/member-profile'
 import { useJournalVoucherStore } from '@/store/journal-voucher-store'
@@ -39,6 +40,7 @@ const columns: ColumnDef<IJournalVoucherEntryRequest>[] = [
             return (
                 <EditableCell
                     inputProps={{
+                        currency: props.table.options.meta?.defaultCurrency,
                         className: '!w-full !min-w-0 flex-1',
                     }}
                     inputType="account-picker"
@@ -82,11 +84,12 @@ const columns: ColumnDef<IJournalVoucherEntryRequest>[] = [
     {
         accessorKey: 'debit',
         header: 'Debit',
-        minSize: 100,
-        size: 120,
+        minSize: 200,
+        size: 200,
         cell: (props) => (
             <EditableCell
                 inputProps={{
+                    currency: props.row.original.account?.currency,
                     className: '!w-full !min-w-0',
                 }}
                 inputType="number"
@@ -97,11 +100,12 @@ const columns: ColumnDef<IJournalVoucherEntryRequest>[] = [
     {
         accessorKey: 'credit',
         header: 'Credit',
-        minSize: 100,
-        size: 120,
+        minSize: 200,
+        size: 200,
         cell: (props) => (
             <EditableCell
                 inputProps={{
+                    currency: props.row.original.account?.currency,
                     className: '!w-full !min-w-0',
                 }}
                 inputType="number"
@@ -135,13 +139,28 @@ type JournalEntryTableProps = {
     journalVoucherId: TEntityId
     rowData?: IJournalVoucherEntryRequest[]
     className?: string
+    currency?: ICurrency
     TableClassName?: string
     transactionBatchId?: TEntityId
     mode: 'readOnly' | 'update' | 'create'
 }
+
+declare module '@tanstack/react-table' {
+    interface TableMeta<TData> {
+        updateData: <TValue>(
+            rowIndex: number,
+            columnId: keyof TData,
+            value: TValue
+        ) => void
+        handleDeleteRow: (row: Row<TData>) => void
+        defaultCurrency?: ICurrency
+    }
+}
+
 export const JournalEntryTable = ({
     rowData,
     className,
+    currency,
     TableClassName,
     defaultMemberProfile,
     transactionBatchId,
@@ -191,11 +210,12 @@ export const JournalEntryTable = ({
             }
         }
     }
-    const table = useReactTable({
+    const table = useReactTable<IJournalVoucherEntryRequest>({
         data: journalVoucherEntry,
         columns: columns,
         getCoreRowModel: getCoreRowModel(),
         meta: {
+            defaultCurrency: currency,
             updateData: (rowIndex, columnId, value) => {
                 const updatedEntries = (journalVoucherEntry ?? []).map(
                     (entry, index) => {
@@ -266,7 +286,12 @@ export const JournalEntryTable = ({
                 </div>
             </div>
             {/* Increased max-height for better vertical space management */}
-            <Table wrapperClassName={cn('max-h-[400px]', TableClassName)}>
+            <Table
+                wrapperClassName={cn(
+                    'max-h-[400px] ecoop-scroll',
+                    TableClassName
+                )}
+            >
                 <TableHeader className={cn('sticky top-0 z-10')}>
                     {table.getHeaderGroups().map((headerGroup) => (
                         <TableRow

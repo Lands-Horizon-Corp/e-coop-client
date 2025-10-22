@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 
 import { cn } from '@/helpers'
 import { ICashCheckVoucherEntryRequest } from '@/modules/cash-check-voucher-entry'
+import { ICurrency } from '@/modules/currency'
 import { IMemberProfile } from '@/modules/member-profile'
 import { useCashCheckVoucherStore } from '@/store/cash-check-voucher-store'
 import { entityIdSchema } from '@/validation'
@@ -41,6 +42,7 @@ const columns: ColumnDef<ICashCheckVoucherEntryRequest>[] = [
             return (
                 <EditableCell
                     inputProps={{
+                        currency: props.table.options.meta?.defaultCurrency,
                         className: '!w-full !min-w-0 flex-1',
                     }}
                     inputType="account-picker"
@@ -135,6 +137,18 @@ const columns: ColumnDef<ICashCheckVoucherEntryRequest>[] = [
     },
 ]
 
+declare module '@tanstack/react-table' {
+    interface TableMeta<TData> {
+        updateData: <TValue>(
+            rowIndex: number,
+            columnId: keyof TData,
+            value: TValue
+        ) => void
+        handleDeleteRow: (row: Row<TData>) => void
+        defaultCurrency?: ICurrency
+    }
+}
+
 type CashCheckJournalEntryTableProps = {
     defaultMemberProfile?: IMemberProfile
     cashCheckVoucherId: TEntityId
@@ -142,6 +156,7 @@ type CashCheckJournalEntryTableProps = {
     className?: string
     TableClassName?: string
     mode: TCashCheckVoucherModalMode
+    cashCheckCurrency?: ICurrency
 }
 
 export const CashCheckJournalEntryTable = ({
@@ -149,6 +164,7 @@ export const CashCheckJournalEntryTable = ({
     mode = 'create',
     rowData,
     className,
+    cashCheckCurrency,
     TableClassName,
 }: CashCheckJournalEntryTableProps) => {
     const isUpdateMode = mode === 'update'
@@ -220,6 +236,7 @@ export const CashCheckJournalEntryTable = ({
                 setCashCheckVoucherEntry(updatedEntries)
             },
             handleDeleteRow: handleDeleteRow,
+            defaultCurrency: cashCheckCurrency,
         },
     })
     const handleAddRow = (
@@ -270,7 +287,12 @@ export const CashCheckJournalEntryTable = ({
                     </CommandShortcut>
                 </div>
             </div>
-            <Table wrapperClassName={cn('max-h-[400px]', TableClassName)}>
+            <Table
+                wrapperClassName={cn(
+                    'max-h-[400px]  ecoop-scroll',
+                    TableClassName
+                )}
+            >
                 <TableHeader className={cn('sticky top-0 z-10')}>
                     {table.getHeaderGroups().map((headerGroup) => (
                         <TableRow
