@@ -20,6 +20,8 @@ import {
     SelectValue,
 } from '@/components/ui/select'
 
+import { TEntityId } from '@/types'
+
 import InputDate from './input-date'
 
 declare module '@tanstack/react-table' {
@@ -44,7 +46,10 @@ interface CustomCellContext<TData extends object>
         | 'account-picker'
         | 'member-picker'
     options?: { label: string; value: string }[]
-    inputProps?: InputProps & { currency?: ICurrency }
+    inputProps?: InputProps & {
+        currency?: ICurrency
+        defaultCurrency?: ICurrency
+    }
     selectTriggerProps?: React.ComponentProps<typeof SelectPrimitive.Trigger>
     checkboxProps?: React.ComponentProps<typeof Checkbox>
 }
@@ -96,6 +101,7 @@ export const EditableCell = <T extends object>({
                 <CurrencyInput
                     {...props}
                     className={cn('text-left', props?.className)}
+                    currency={inputProps?.currency}
                     onBlur={handleBlur}
                     onValueChange={(newValue) => {
                         handleChange(newValue ?? '')
@@ -142,7 +148,8 @@ export const EditableCell = <T extends object>({
             return (
                 <AccountPicker
                     allowClear
-                    mode="all"
+                    currencyId={inputProps?.defaultCurrency?.id as TEntityId}
+                    mode={inputProps?.defaultCurrency ? 'currency' : 'all'}
                     nameOnly
                     onSelect={(selectedAccount) => {
                         handleChange(selectedAccount)
