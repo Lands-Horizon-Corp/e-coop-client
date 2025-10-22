@@ -7,6 +7,7 @@ import FilterContext from '@/contexts/filter-context/filter-context'
 import { cn } from '@/helpers/tw-utils'
 import {
     IAdjustmentEntry,
+    TAdjustmentEntryHookMode,
     deleteManyAdjustmentEntry,
     useGetPaginatedAdjustmentEntry,
 } from '@/modules/adjustment-entry'
@@ -28,6 +29,8 @@ import useDataTableState from '@/components/data-table/use-datatable-state'
 import useDatableFilterState from '@/hooks/use-filter-state'
 import { usePagination } from '@/hooks/use-pagination'
 
+import { TEntityId } from '@/types'
+
 import AdjustmentEntryTableColumns, {
     IAdjustmentEntryTableColumnProps,
     adjustmentEntryGlobalSearchTargets,
@@ -37,7 +40,7 @@ import {
     AdjustmentEntryRowContext,
 } from './row-action-context'
 
-export interface AdjustmentEntryTableProps
+export interface BaseAdjustmentEntryTableProps
     extends TableProps<IAdjustmentEntry>,
         IAdjustmentEntryTableColumnProps {
     toolbarProps?: Omit<
@@ -50,7 +53,29 @@ export interface AdjustmentEntryTableProps
         | 'exportActionProps'
         | 'deleteActionProps'
     >
+    currencyId?: TEntityId
+    userOrganizationId?: TEntityId
+    mode?: TAdjustmentEntryHookMode
 }
+
+export type TAdjustmentTableProps = BaseAdjustmentEntryTableProps &
+    (
+        | {
+              mode: Exclude<
+                  TAdjustmentEntryHookMode,
+                  'currency' | 'currency-employee'
+              >
+          }
+        | {
+              mode: 'currency'
+              currencyId: TEntityId
+          }
+        | {
+              mode: 'currency-employee'
+              currencyId: TEntityId
+              userOrganizationId: TEntityId
+          }
+    )
 
 const AdjustmentEntryTable = ({
     className,
@@ -63,7 +88,10 @@ const AdjustmentEntryTable = ({
     },
     actionComponent = AdjustmentEntryAction,
     RowContextComponent = AdjustmentEntryRowContext,
-}: AdjustmentEntryTableProps) => {
+    mode = 'all',
+    currencyId,
+    userOrganizationId,
+}: TAdjustmentTableProps) => {
     const queryClient = useQueryClient()
     const { pagination, setPagination } = usePagination()
     const { sortingStateBase64, tableSorting, setTableSorting } =
@@ -108,6 +136,9 @@ const AdjustmentEntryTable = ({
         data: { data = [], totalPage = 1, pageSize = 10, totalSize = 0 } = {},
         refetch,
     } = useGetPaginatedAdjustmentEntry({
+        mode,
+        currencyId,
+        userOrganizationId,
         query: {
             ...pagination,
             sort: sortingStateBase64,

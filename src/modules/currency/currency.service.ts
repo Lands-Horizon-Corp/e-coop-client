@@ -5,7 +5,13 @@ import {
     createDataLayerFactory,
 } from '@/providers/repositories/data-layer-factory'
 
-import type { ICurrency, ICurrencyRequest } from '../currency'
+import { TAPIQueryOptions } from '@/types'
+
+import type {
+    ICurrency,
+    ICurrencyRequest,
+    TCurrencyHookMode,
+} from '../currency'
 
 const {
     apiCrudHooks,
@@ -41,13 +47,40 @@ export const {
     useCreate: useCreateCurrency,
     useUpdateById: useUpdateCurrencyById,
 
-    useGetAll: useGetAllCurrency,
+    // useGetAll: useGetAllCurrency,
     useGetById: useGetCurrencyById,
     useGetPaginated: useGetPaginatedCurrency,
 
     useDeleteById: useDeleteCurrencyById,
     useDeleteMany: useDeleteManyCurrency,
 } = apiCrudHooks
+
+export const useGetAllCurrency = ({
+    query,
+    options,
+    mode = 'all',
+}: {
+    query?: TAPIQueryOptions
+    mode?: TCurrencyHookMode
+    options?: HookQueryOptions<ICurrency[], Error>
+} = {}) => {
+    return useQuery<ICurrency[], Error>({
+        ...options,
+        queryKey: [currencyBaseKey, mode, query].filter(Boolean),
+        queryFn: async () => {
+            let url = currencyAPIRoute
+
+            if (mode === 'available') {
+                url = `${currencyAPIRoute}/available`
+            }
+
+            return getAllCurrency({
+                query,
+                url,
+            })
+        },
+    })
+}
 
 // custom hooks can go here
 export const getCurrencyByTimezone = async (

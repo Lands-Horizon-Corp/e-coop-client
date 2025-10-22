@@ -6,9 +6,13 @@ import {
     createDataLayerFactory,
 } from '@/providers/repositories/data-layer-factory'
 
+import { TAPIQueryOptions, TEntityId } from '@/types'
+
 import type {
     IAdjustmentEntry,
+    IAdjustmentEntryPaginated,
     IAdjustmentEntryRequest,
+    TAdjustmentEntryHookMode,
 } from '../adjustment-entry'
 
 const {
@@ -47,7 +51,7 @@ export const {
 
     useGetAll: useGetAllAdjustmentEntry,
     useGetById: useGetAdjustmentEntryById,
-    useGetPaginated: useGetPaginatedAdjustmentEntry,
+    // useGetPaginated: useGetPaginatedAdjustmentEntry,
 
     useDeleteById: useDeleteAdjustmentEntryById,
     useDeleteMany: useDeleteManyAdjustmentEntry,
@@ -60,15 +64,83 @@ type AdjustmentEntryTotal = {
 
 export const useAdjustmentEntryTotal = ({
     options,
+    mode = 'all',
+    userOrganizationId,
+    currencyId,
 }: {
+    mode?: TAdjustmentEntryHookMode
     options?: HookQueryOptions<AdjustmentEntryTotal, Error>
+    userOrganizationId?: TEntityId
+    currencyId?: TEntityId
 }) => {
     return useQuery<AdjustmentEntryTotal, Error>({
         ...options,
-        queryKey: ['adjustment-entry', 'total'],
+        queryKey: [
+            'adjustment-entry',
+            'total',
+            mode,
+            userOrganizationId,
+            currencyId,
+        ].filter(Boolean),
         queryFn: async (): Promise<AdjustmentEntryTotal> => {
-            const res = await API.get('/api/v1/adjustment-entry/total')
+            let url = `${adjustmentEntryAPIRoute}/total`
+
+            if (mode === 'currency' && userOrganizationId && currencyId) {
+                url = `${adjustmentEntryAPIRoute}/currency/${currencyId}/total`
+            }
+
+            if (
+                mode === 'currency-employee' &&
+                userOrganizationId &&
+                currencyId
+            ) {
+                url = `${adjustmentEntryAPIRoute}/currency/${currencyId}/employee/${userOrganizationId}/total`
+            }
+
+            const res = await API.get(url)
             return res.data as AdjustmentEntryTotal
+        },
+    })
+}
+
+export const useGetPaginatedAdjustmentEntry = ({
+    query,
+    options,
+    mode = 'all',
+    userOrganizationId,
+    currencyId,
+}: {
+    query?: TAPIQueryOptions
+    options?: HookQueryOptions<IAdjustmentEntryPaginated, Error>
+    mode?: TAdjustmentEntryHookMode
+    userOrganizationId?: TEntityId
+    currencyId?: TEntityId
+}) => {
+    return useQuery<IAdjustmentEntryPaginated, Error>({
+        ...options,
+        queryKey: [
+            adjustmentEntryBaseKey,
+            'paginated',
+            mode,
+            userOrganizationId,
+            query,
+        ].filter(Boolean),
+        queryFn: async () => {
+            let url = `${adjustmentEntryAPIRoute}/search`
+
+            if (mode === 'currency' && userOrganizationId && currencyId) {
+                url = `${adjustmentEntryAPIRoute}/currency/${currencyId}/search`
+            }
+
+            if (
+                mode === 'currency-employee' &&
+                userOrganizationId &&
+                currencyId
+            ) {
+                url = `${adjustmentEntryAPIRoute}/currency/${currencyId}/employee/${userOrganizationId}/search`
+            }
+
+            return getPaginatedAdjustmentEntry({ query, url })
         },
     })
 }

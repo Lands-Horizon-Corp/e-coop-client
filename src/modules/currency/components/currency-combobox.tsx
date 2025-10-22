@@ -1,7 +1,11 @@
 import * as React from 'react'
 
 import { cn } from '@/helpers/tw-utils'
-import { ICurrency, useGetAllCurrency } from '@/modules/currency'
+import {
+    ICurrency,
+    TCurrencyHookMode,
+    useGetAllCurrency,
+} from '@/modules/currency'
 
 import { CheckIcon, ChevronDownIcon } from '@/components/icons'
 import LoadingSpinner from '@/components/spinners/loading-spinner'
@@ -27,12 +31,14 @@ interface Props {
     disabled?: boolean
     className?: string
     placeholder?: string
+    mode?: TCurrencyHookMode
     onChange?: (selected: ICurrency) => void
 }
 
 const CurrencyCombobox = ({
     value,
     className,
+    mode = 'all',
     disabled = false,
     placeholder = 'Select Currency...',
     onChange,
@@ -40,6 +46,7 @@ const CurrencyCombobox = ({
     const [open, setOpen] = React.useState(false)
 
     const { data, isLoading } = useGetAllCurrency({
+        mode,
         options: {
             enabled: !disabled,
         },
