@@ -128,7 +128,7 @@ const BillsAndCoinCreateUpdateForm = ({
                                         field.onChange(currency?.id)
                                         form.setValue('currency', currency)
                                     }}
-                                    value={form.watch('currency')}
+                                    value={field.value}
                                 />
                             )}
                         />

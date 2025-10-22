@@ -20,8 +20,10 @@ import {
     PopoverTrigger,
 } from '@/components/ui/popover'
 
+import { TEntityId } from '@/types'
+
 interface Props {
-    value?: ICurrency
+    value?: TEntityId
     disabled?: boolean
     className?: string
     placeholder?: string
@@ -43,6 +45,11 @@ const CurrencyCombobox = ({
         },
     })
 
+    const selectedCurrency = React.useMemo(
+        () => data?.find((currency) => currency.id === value),
+        [data, value]
+    )
+
     return (
         <>
             <Popover modal onOpenChange={setOpen} open={open}>
@@ -54,15 +61,16 @@ const CurrencyCombobox = ({
                         role="combobox"
                         variant="outline"
                     >
-                        {value ? (
+                        {selectedCurrency ? (
                             <div className="flex items-center gap-2 min-w-0">
-                                {value.emoji && (
+                                {selectedCurrency.emoji && (
                                     <span className="text-lg flex-shrink-0">
-                                        {value.emoji}
+                                        {selectedCurrency.emoji}
                                     </span>
                                 )}
                                 <span className="truncate">
-                                    {value.name} ({value.currency_code})
+                                    {selectedCurrency.name} (
+                                    {selectedCurrency.currency_code})
                                 </span>
                             </div>
                         ) : (
@@ -118,7 +126,7 @@ const CurrencyCombobox = ({
                                             <CheckIcon
                                                 className={cn(
                                                     'ml-auto flex-shrink-0',
-                                                    value?.id === option.id
+                                                    value === option.id
                                                         ? 'opacity-100'
                                                         : 'opacity-0'
                                                 )}
