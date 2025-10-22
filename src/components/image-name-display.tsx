@@ -19,19 +19,22 @@ const ImageNameDisplay = ({
     imageClassName,
 }: Props) => {
     return (
-        <div className={cn('flex items-center gap-x-2', className)}>
+        <div
+            className={cn(
+                'flex items-center gap-x-2 max-w-full min-w-0',
+                className
+            )}
+        >
             <ImageDisplay className={cn('size-6', imageClassName)} src={src} />
-            <div>
-                <p
-                    className={cn(
-                        '',
-                        !name && 'text-muted-foreground/70',
-                        nameClassName
-                    )}
-                >
-                    {name ? name : 'No name'}
-                </p>
-            </div>
+            <p
+                className={cn(
+                    'truncate min-w-0 max-w-full',
+                    !name && 'text-muted-foreground/70',
+                    nameClassName
+                )}
+            >
+                {name ? name : 'No name'}
+            </p>
         </div>
     )
 }
