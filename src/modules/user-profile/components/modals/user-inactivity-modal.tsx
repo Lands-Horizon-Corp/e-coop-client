@@ -18,6 +18,8 @@ import {
     EmptyTitle,
 } from '@/components/ui/empty'
 
+import { systemNativeNotify } from '@/hooks/use-system-notify'
+
 import { DEFAULT_AUTO_SIGNOUT_MODAL_DURATION } from '../../user-profile.constants'
 
 export const UserInactivityPromptModal = ({
@@ -79,10 +81,12 @@ export const UserInactivityPromptModal = ({
             })
         }, 1000)
 
+        systemNativeNotify('Ecoop Security', {
+            tag: '#notification',
+            body: ' 🔒You have been inactive for a while and you are about to be signed out. Hurry go back now!',
+        })
         return () => clearInterval(interval)
     }, [props.open])
-
-    useEffect(() => {}, [])
 
     return (
         <Modal

@@ -119,7 +119,7 @@ const DevicesList = ({ defaultDevices }: Props) => {
                     </div>
                 </div>
                 <Button
-                    className="flex items-center gap-2"
+                    className="flex items-center cursor-pointer gap-2"
                     onClick={() => signOut()}
                     size="sm"
                     variant="destructive"

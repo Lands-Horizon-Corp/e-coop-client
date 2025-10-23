@@ -9,6 +9,7 @@ import { NATS_PASS, NATS_USER } from '@/constants'
 import { IAuthContext, useAuthContext } from '@/modules/authentication'
 import { useAuthStore } from '@/modules/authentication/authgentication.store'
 import UserProfileInactivityPrompter from '@/modules/user-profile/components/user-profile-inactivity-prompter'
+import { ActionSecurityProvider } from '@/providers/action-security-provider'
 import ConnectionProvider from '@/providers/connection-provider'
 
 import CookieConsent from '@/components/cookie-consent'
@@ -136,6 +137,7 @@ function RootLayout() {
                 <InfoModal />
 
                 <UserProfileInactivityPrompter />
+                <ActionSecurityProvider />
                 {/* <TanStackRouterDevtools /> */}
             </DndProvider>
         </div>
