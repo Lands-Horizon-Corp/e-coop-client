@@ -83,14 +83,14 @@ const TransactionBatch = ({
                 <div className="flex items-start gap-x-2">
                     <LayersSharpDotIcon className="mt-1 inline text-primary" />{' '}
                     <div>
-                        <p>
+                        <div>
                             Transaction Batch{' '}
                             <CurrencyBadge
                                 currency={transactionBatch.currency}
                                 displayFormat="symbol-code"
                                 size="sm"
                             />
-                        </p>
+                        </div>
                         <p className="text-xs text-muted-foreground dark:text-muted-foreground/40">
                             {toReadableDate(
                                 transactionBatch?.created_at,
