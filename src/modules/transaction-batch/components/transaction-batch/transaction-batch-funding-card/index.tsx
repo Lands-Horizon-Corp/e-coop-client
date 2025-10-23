@@ -24,7 +24,7 @@ const BeginningBalanceCard = ({
     onAdd,
 }: Props) => {
     const {
-        currentAuth: { user },
+        currentAuth: { user, user_organization },
     } = useAuthUserWithOrg()
 
     const [addModal, setAddModal] = useState(false)
@@ -40,7 +40,7 @@ const BeginningBalanceCard = ({
                 formProps={{
                     transactionBatchId: transactionBatch?.id,
                     defaultValues: {
-                        provided_by_user: user,
+                        provided_by_user: user_organization,
                         provided_by_user_id: user.id,
                         currency,
                         currency_id: currency.id,
