@@ -7,7 +7,7 @@ import { currencyFormat } from '@/modules/currency'
 import LoanLedgerTable from '@/modules/loan-ledger/components/loan-ledger-table'
 import {
     ILoanTransaction,
-    TLoanModeOfPayment,
+    TLoanStatusTypeOfPayment,
     useGetLoanTransactionById,
 } from '@/modules/loan-transaction'
 import LoanModeOfPaymentBadge from '@/modules/loan-transaction/components/loan-mode-of-payment-badge'
@@ -680,7 +680,9 @@ const LoanDetails = ({
                         Mode:
                         {mode_of_payment ? (
                             <LoanModeOfPaymentBadge
-                                mode={mode_of_payment as TLoanModeOfPayment}
+                                mode={
+                                    mode_of_payment as TLoanStatusTypeOfPayment
+                                }
                                 size="sm"
                             />
                         ) : (

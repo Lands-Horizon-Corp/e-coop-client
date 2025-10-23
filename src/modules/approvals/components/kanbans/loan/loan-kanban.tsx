@@ -1,5 +1,5 @@
 import { cn } from '@/helpers/tw-utils'
-import { ILoanTransaction, TLoanStatusType } from '@/modules/loan-transaction'
+import { ILoanTransaction, TLoanMode } from '@/modules/loan-transaction'
 import { CheckCircle2Icon, PrinterIcon } from 'lucide-react'
 
 import { BadgeCheckFillIcon, DraftIcon } from '@/components/icons'
@@ -21,7 +21,7 @@ export interface ILoanCardProps extends IClassProps {
 
 export type TLoanKanbanItem = {
     name: string
-    value: TLoanStatusType
+    value: TLoanMode
     icon: React.ReactNode
 }
 const LoanKanbanMenu: TLoanKanbanItem[] = [
@@ -44,7 +44,7 @@ const LoanKanbanMenu: TLoanKanbanItem[] = [
     },
     {
         name: 'Released',
-        value: 'released',
+        value: 'release-today',
         icon: <BadgeCheckFillIcon className="mr-2 size-4 text-purple-500" />,
     },
 ]

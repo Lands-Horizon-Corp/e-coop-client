@@ -34,7 +34,7 @@ import {
     WEEKDAYS,
 } from './loan.constants'
 
-export type TLoanModeOfPayment = (typeof LOAN_MODE_OF_PAYMENT)[number]
+export type TLoanStatusTypeOfPayment = (typeof LOAN_MODE_OF_PAYMENT)[number]
 
 export type TWeekdays = (typeof WEEKDAYS)[number]
 
@@ -50,6 +50,13 @@ export type TComputationType = (typeof COMPUTATION_TYPE)[number]
 
 // NOT SERVER/ONLY CLIENT GENERATED
 export type TLoanStatusType = 'draft' | 'printed' | 'approved' | 'released'
+
+export type TLoanMode =
+    | 'draft'
+    | 'printed'
+    | 'approved'
+    | 'released'
+    | 'release-today'
 
 export interface ILoanTransaction
     extends IBaseEntityMeta,
@@ -78,7 +85,7 @@ export interface ILoanTransaction
     fines?: number
     interest?: number
 
-    mode_of_payment: TLoanModeOfPayment
+    mode_of_payment: TLoanStatusTypeOfPayment
     mode_of_payment_weekly: TWeekdays
     mode_of_payment_fixed_days?: number
     mode_of_payment_semi_monthly_pay_1: number

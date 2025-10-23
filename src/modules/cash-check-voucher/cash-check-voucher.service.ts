@@ -18,6 +18,7 @@ import type {
     ICashCheckVoucherPaginated,
     ICashCheckVoucherRequest,
     TCashCheckVoucherActionMode,
+    TCashCheckVoucherMode,
     TCashCheckVoucherPrintMode,
     TCashCheckVoucherPrintRequest,
 } from '../cash-check-voucher'
@@ -61,8 +62,6 @@ export const {
     useDeleteMany: useDeleteManyCashCheckVoucher,
 } = apiCrudHooks
 
-type TCashCheckVoucherMode = 'draft' | 'printed' | 'approved' | 'released'
-
 export const useGetAllCashCheckVoucher = ({
     mode,
     query,
@@ -80,6 +79,9 @@ export const useGetAllCashCheckVoucher = ({
 
             if (mode) {
                 url = `${cashCheckVoucherAPIRoute}/${mode}`
+            }
+            if (mode === 'release-today') {
+                url = `${cashCheckVoucherAPIRoute}/released/today`
             }
 
             return getAllCashCheckVoucher({ url, query })

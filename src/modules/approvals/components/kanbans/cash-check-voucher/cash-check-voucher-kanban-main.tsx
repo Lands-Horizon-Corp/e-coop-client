@@ -8,7 +8,7 @@ import KanbanContainer from '@/modules/approvals/components/kanban/kanban-contai
 import KanbanItemsContainer from '@/modules/approvals/components/kanban/kanban-items-container'
 import KanbanTitle from '@/modules/approvals/components/kanban/kanban-title'
 import {
-    TCashCheckVoucherStatus,
+    TCashCheckVoucherMode,
     useGetAllCashCheckVoucher,
 } from '@/modules/cash-check-voucher'
 import CashCheckVoucherStatusIndicator from '@/modules/cash-check-voucher/components/cash-check-status-indicator'
@@ -35,7 +35,7 @@ import {
 } from './cash-check-voucher-card-actions'
 
 type CashCheckVoucherKanbanProps = {
-    mode: TCashCheckVoucherStatus
+    mode: TCashCheckVoucherMode
     icon: React.ReactNode
 }
 export const CashCheckVoucherKanbanMain = ({

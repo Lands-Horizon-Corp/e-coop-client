@@ -14,7 +14,6 @@ export interface IJournalVoucher extends IBaseEntityMeta {
     date: string
     description?: string
     reference: string
-    status: TJournalVoucherStatus
     name: string
 
     currency_id: TEntityId
@@ -65,19 +64,18 @@ export interface IJournalVoucherPrintRequest {
     cash_voucher_number: string
 }
 
-export type TJournalVoucherStatus =
-    | 'draft'
-    | 'printed'
-    | 'approved'
-    | 'released'
-
 export enum EJournalVoucherStatus {
     Draft = 'draft',
     Posted = 'posted',
     Cancelled = 'cancelled',
 }
 
-export type TJournalVoucherMode = 'draft' | 'printed' | 'approved' | 'released'
+export type TJournalVoucherMode =
+    | 'draft'
+    | 'printed'
+    | 'approved'
+    | 'released'
+    | 'release-today'
 
 export type TPrintMode = 'print' | 'print-undo' | 'approve'
 

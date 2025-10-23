@@ -1,5 +1,5 @@
 import { cn } from '@/helpers/tw-utils'
-import { TCashCheckVoucherStatus } from '@/modules/cash-check-voucher'
+import { TCashCheckVoucherMode } from '@/modules/cash-check-voucher'
 import { CheckCircle2Icon, PrinterIcon } from 'lucide-react'
 
 import { BadgeCheckFillIcon, DraftIcon } from '@/components/icons'
@@ -8,7 +8,7 @@ import { CashCheckVoucherKanbanMain } from './cash-check-voucher-kanban-main'
 
 type TCashCheckVoucherKanbanItem = {
     name: string
-    value: TCashCheckVoucherStatus
+    value: TCashCheckVoucherMode
     icon: React.ReactNode
 }
 const CashCheckVoucherMenu: TCashCheckVoucherKanbanItem[] = [
@@ -31,7 +31,7 @@ const CashCheckVoucherMenu: TCashCheckVoucherKanbanItem[] = [
     },
     {
         name: 'Released',
-        value: 'released',
+        value: 'release-today',
         icon: <BadgeCheckFillIcon className="mr-2 size-4 text-purple-500" />,
     },
 ]
@@ -44,13 +44,15 @@ const CashCheckVoucherKanban = ({ className }: { className?: string }) => {
                 className
             )}
         >
-            {CashCheckVoucherMenu.map((item) => (
-                <CashCheckVoucherKanbanMain
-                    icon={item.icon}
-                    key={item.value}
-                    mode={item.value}
-                />
-            ))}
+            {CashCheckVoucherMenu.map((item) => {
+                return (
+                    <CashCheckVoucherKanbanMain
+                        icon={item.icon}
+                        key={item.value}
+                        mode={item.value}
+                    />
+                )
+            })}
         </div>
     )
 }
