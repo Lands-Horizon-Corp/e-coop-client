@@ -332,7 +332,7 @@ const OrganizationForm = () => {
                                         )}
                                     />
                                     <FormFieldWrapper
-                                        className="col-span-full"
+                                        className="col-span-full !h-fit"
                                         control={form.control}
                                         label="Organization Description"
                                         name="description"

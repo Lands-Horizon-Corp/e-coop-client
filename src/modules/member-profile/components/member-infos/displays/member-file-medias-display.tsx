@@ -5,6 +5,7 @@ import { downloadFile, formatBytes } from '@/helpers/common-helper'
 import { toReadableDate } from '@/helpers/date-utils'
 import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
 import { IMedia } from '@/modules/media'
+import MediaResourceFileIcon from '@/modules/media/components/media-resource-file-icon'
 import { useUserMedias } from '@/modules/user'
 import {
     ColumnDef,
@@ -20,7 +21,6 @@ import ColumnActions from '@/components/data-table/data-table-column-header/colu
 import { useDataTableSorting } from '@/components/data-table/use-datatable-sorting'
 import useDataTableState from '@/components/data-table/use-datatable-state'
 import { DownloadIcon, FolderFillIcon, WarningIcon } from '@/components/icons'
-import MediaResourceFileIcon from '@/components/icons/media-resource-file-icon'
 import LoadingSpinner from '@/components/spinners/loading-spinner'
 import { Button } from '@/components/ui/button'
 import FormErrorMessage from '@/components/ui/form-error-message'

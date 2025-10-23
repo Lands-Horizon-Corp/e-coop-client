@@ -1,6 +1,7 @@
 import { useState } from 'react'
 
 import { cn } from '@/helpers'
+import { useAuthUserWithOrgBranch } from '@/modules/authentication/authgentication.store'
 
 import { IClassProps } from '@/types'
 
@@ -16,6 +17,16 @@ const ComputationSheetSchemeEditor = ({ className }: Props) => {
         IComputationSheet | undefined
     >()
 
+    const {
+        currentAuth: {
+            user_organization: {
+                branch: {
+                    branch_setting: { currency_id },
+                },
+            },
+        },
+    } = useAuthUserWithOrgBranch()
+
     return (
         <div
             className={cn(
@@ -25,6 +36,7 @@ const ComputationSheetSchemeEditor = ({ className }: Props) => {
         >
             <LoanSchemeSidebar
                 className="sticky top-0"
+                defaultCurrencyId={currency_id}
                 onDeletedScheme={(scheme) => {
                     if (computationSheet?.id === scheme.id)
                         setComputationSheet(undefined)
@@ -46,6 +58,7 @@ const ComputationSheetSchemeEditor = ({ className }: Props) => {
                     <ComputationSheetAccounts
                         className="w-64"
                         computationSheetId={computationSheet.id}
+                        currencyId={computationSheet.currency_id}
                     />
                 </>
             )}

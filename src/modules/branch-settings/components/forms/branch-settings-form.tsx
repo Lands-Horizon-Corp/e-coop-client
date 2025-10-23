@@ -5,19 +5,16 @@ import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
 import { cn } from '@/helpers'
 import { withToastCallbacks } from '@/helpers/callback-helper'
 import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
-import { AccountPicker } from '@/modules/account'
 import MemberTypeCombobox from '@/modules/member-type/components/member-type-combobox'
 
 import FormFooterResetSubmit from '@/components/form-components/form-footer-reset-submit'
 import {
-    BankIcon,
     CalendarIcon,
     CheckIcon,
     CreditCardIcon,
     HandCoinsIcon,
     InfoIcon,
     MoneyCheckIcon,
-    MoneyIcon,
     ReceiptIcon,
     UserIcon,
 } from '@/components/icons'
@@ -98,6 +95,7 @@ const BranchSettingsForm = ({
             check_voucher_use_date_or: false,
 
             loan_applied_equal_to_balance: true,
+
             ...formProps.defaultValues,
         },
     })
@@ -199,120 +197,6 @@ const BranchSettingsForm = ({
                                     }}
                                     placeholder="Select default member type"
                                     value={field.value}
-                                />
-                            )}
-                        />
-                    </div>
-                    <Separator />
-
-                    {/* Default accounts */}
-                    <div className="space-y-4 p-4 bg-secondary/60 dark:bg-popover rounded-xl">
-                        <div className="flex items-center gap-3">
-                            <div className="size-fit rounded-full bg-yellow-100 p-2 dark:bg-yellow-900/20">
-                                <BankIcon className="size-5 " />
-                            </div>
-                            <div>
-                                <h3 className="font-semibold">
-                                    Default Accounts
-                                </h3>
-                                <p className="text-xs text-muted-foreground">
-                                    Configure default settings for accounts.
-                                </p>
-                            </div>
-                        </div>
-
-                        <FormFieldWrapper
-                            control={form.control}
-                            label={
-                                <span>
-                                    Paid Up Share Capital{' '}
-                                    <InfoTooltip
-                                        content={
-                                            <div className="flex gap-2 text-muted-foreground max-w-[400px]">
-                                                <InfoIcon
-                                                    aria-hidden="true"
-                                                    className="size-6 shrink-0 opacity-60"
-                                                    size={16}
-                                                />
-                                                <div className="space-y-1">
-                                                    <p className="text-[13px] font-medium">
-                                                        Paid up share capital
-                                                        account
-                                                    </p>
-                                                    <p className="text-muted-foreground text-xs">
-                                                        Indicates the account
-                                                        containing paid up share
-                                                        capital
-                                                    </p>
-                                                </div>
-                                            </div>
-                                        }
-                                    />
-                                </span>
-                            }
-                            name="paid_up_shared_capital_account_id"
-                            render={({ field }) => (
-                                <AccountPicker
-                                    disabled
-                                    onSelect={(selectedAccount) => {
-                                        field.onChange(selectedAccount?.id)
-                                        form.setValue(
-                                            'paid_up_shared_capital_account',
-                                            selectedAccount,
-                                            { shouldDirty: true }
-                                        )
-                                    }}
-                                    placeholder="Select default account"
-                                    value={form.getValues(
-                                        'paid_up_shared_capital_account'
-                                    )}
-                                />
-                            )}
-                        />
-
-                        <FormFieldWrapper
-                            control={form.control}
-                            label={
-                                <span>
-                                    Cash On Hand (COH) account
-                                    <InfoTooltip
-                                        content={
-                                            <div className="flex gap-2 text-muted-foreground max-w-[400px]">
-                                                <MoneyIcon
-                                                    aria-hidden="true"
-                                                    className="size-6 shrink-0 opacity-60"
-                                                    size={16}
-                                                />
-                                                <div className="space-y-1">
-                                                    <p className="text-[13px] font-medium">
-                                                        Cash on Hand Account
-                                                    </p>
-                                                    <p className="text-muted-foreground text-xs">
-                                                        Indicates the Cash on
-                                                        Hand account
-                                                    </p>
-                                                </div>
-                                            </div>
-                                        }
-                                    />
-                                </span>
-                            }
-                            name="cash_on_hand_account_id"
-                            render={({ field }) => (
-                                <AccountPicker
-                                    disabled
-                                    onSelect={(selectedAccount) => {
-                                        field.onChange(selectedAccount?.id)
-                                        form.setValue(
-                                            'cash_on_hand_account',
-                                            selectedAccount,
-                                            { shouldDirty: true }
-                                        )
-                                    }}
-                                    placeholder="Select default account"
-                                    value={form.getValues(
-                                        'cash_on_hand_account'
-                                    )}
                                 />
                             )}
                         />

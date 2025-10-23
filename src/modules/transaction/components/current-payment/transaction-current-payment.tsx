@@ -4,7 +4,7 @@ import { toast } from 'sonner'
 
 import { PAGINATION_INITIAL_INDEX } from '@/constants'
 import { cn } from '@/helpers'
-import { commaSeparators } from '@/helpers/common-helper'
+import { currencyFormat } from '@/modules/currency'
 import { useFilteredPaginatedGeneralLedger } from '@/modules/general-ledger'
 import { PaginationState } from '@tanstack/react-table'
 
@@ -12,13 +12,14 @@ import CopyTextButton from '@/components/copy-text-button'
 import { useDataTableSorting } from '@/components/data-table/use-datatable-sorting'
 import MiniPaginationBar from '@/components/pagination-bars/mini-pagination-bar'
 import { Badge } from '@/components/ui/badge'
-import { Separator } from '@/components/ui/separator'
 
 import useFilterState from '@/hooks/use-filter-state'
 import { useQeueryHookCallback } from '@/hooks/use-query-hook-cb'
 
 import { TEntityId } from '@/types'
 
+import { ITransaction } from '../..'
+import TransactionHistory from '../history'
 import TransactionCurrentPaymentItem from './transaction-current-payment-item'
 
 type itemgBadgeTypeProps = {
@@ -37,10 +38,14 @@ type itemgBadgeTypeProps = {
 
 type CurrentPaymentsEntryListProps = {
     transactionId: TEntityId
+    transaction: ITransaction
     totalAmount?: number
+    fullPath: string
 }
 const TransactionCurrentPaymentEntry = ({
+    fullPath,
     transactionId,
+    transaction,
     totalAmount,
 }: CurrentPaymentsEntryListProps) => {
     const [pagination, setPagination] = useState<PaginationState>({
@@ -93,25 +98,26 @@ const TransactionCurrentPaymentEntry = ({
         generalLedgerBasedTransaction.data.length > 0
 
     return (
-        <div className="!h-full flex flex-col gap-y-2 overflow-hidden">
+        <div className="flex min-h-[100%] h-fit flex-col gap-y-2 p-4 overflow-hidden  rounded-2xl bg-card">
             <div className="flex items-center gap-x-2">
                 <div className=" flex-grow rounded-xl py-2">
                     <div className="flex items-center justify-between gap-x-2">
                         <div className="flex items-center gap-x-2">
-                            <label className="text-sm font-bold uppercase text-muted-foreground">
+                            <TransactionHistory fullPath={fullPath} />
+                            <p className="text-sm font-bold uppercase text-muted-foreground">
                                 Total Amount
-                            </label>
+                            </p>
                         </div>
                         <p className="text-lg font-bold text-primary dark:text-primary">
-                            ₱{' '}
-                            {totalAmount
-                                ? commaSeparators(totalAmount.toString())
-                                : '0.00'}
+                            {currencyFormat(totalAmount || 0, {
+                                currency: transaction?.currency,
+                                showSymbol: !!transaction?.currency,
+                            })}
                         </p>
                     </div>
                 </div>
             </div>
-            <Separator />
+            {/* <Separator /> */}
             <TransactionCurrentPaymentItem
                 currentPayment={generalLedgerBasedTransaction?.data || []}
                 hasPayments={hasPayments}

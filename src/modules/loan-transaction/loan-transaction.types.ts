@@ -101,7 +101,7 @@ export interface ILoanTransaction
     previous_loan?: ILoanTransaction
     terms: number
 
-    amortization_amount: number
+    amortization: number
     is_add_on: boolean
 
     applied_1: number
@@ -192,7 +192,6 @@ export interface ILoanTransaction
     fines_paid?: number
     collection_progress?: number // percentage
     interest_amortization?: number
-    amortization?: number
     first_irr?: number
     first_dq?: number
 

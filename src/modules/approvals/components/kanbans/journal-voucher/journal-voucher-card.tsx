@@ -1,4 +1,5 @@
 import { cn } from '@/helpers/tw-utils'
+import { currencyFormat } from '@/modules/currency'
 import { JournalVoucherTagChip } from '@/modules/journal-voucher-tag/components/journal-voucher-tag-management'
 
 import { IdCardIcon, TicketIcon } from '@/components/icons'
@@ -18,7 +19,7 @@ export const JournalKanbanInfoItem = ({
     className?: string
     title?: string
     infoTitle?: string
-    content?: string | number | React.ReactNode
+    content?: React.ReactNode
     icon?: React.ReactNode
 }) => {
     return (
@@ -122,13 +123,19 @@ export const JournalVoucherCard = ({
             )}
             <div className="flex gap-x-2 grow">
                 <JournalKanbanInfoItem
-                    content={journalVoucher.total_debit}
+                    content={currencyFormat(journalVoucher.total_debit, {
+                        currency: journalVoucher.currency,
+                        showSymbol: !!journalVoucher.currency,
+                    })}
                     icon={<IdCardIcon className="inline mr-2 size-5" />}
                     infoTitle="Total Debit"
                     title="Debit"
                 />
                 <JournalKanbanInfoItem
-                    content={journalVoucher.total_credit}
+                    content={currencyFormat(journalVoucher.total_credit, {
+                        currency: journalVoucher.currency,
+                        showSymbol: !!journalVoucher.currency,
+                    })}
                     icon={<IdCardIcon className="inline mr-2 size-5" />}
                     infoTitle="Total Credit"
                     title="Credit"

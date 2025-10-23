@@ -22,3 +22,5 @@ export interface ICurrency extends IAuditable {
 export type ICurrencyRequest = z.infer<typeof CurrencySchema>
 
 export interface ICurrencyPaginated extends IPaginatedResult<ICurrency> {}
+
+export type TCurrencyHookMode = 'all' | 'available'

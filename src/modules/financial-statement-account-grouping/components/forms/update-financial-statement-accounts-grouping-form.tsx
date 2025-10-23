@@ -139,7 +139,7 @@ const FinancialStatementAccountsGroupingUpdateForm = ({
                                 <CurrencyInput
                                     {...field}
                                     disabled={isDisabled(field.name)}
-                                    onValueChange={(newValue) => {
+                                    onValueChange={(newValue = '') => {
                                         onChange(newValue)
                                     }}
                                     placeholder="Debit"
@@ -154,7 +154,7 @@ const FinancialStatementAccountsGroupingUpdateForm = ({
                                 <CurrencyInput
                                     {...field}
                                     disabled={isDisabled(field.name)}
-                                    onValueChange={(newValue) => {
+                                    onValueChange={(newValue = '') => {
                                         onChange(newValue)
                                     }}
                                     placeholder="Credit"

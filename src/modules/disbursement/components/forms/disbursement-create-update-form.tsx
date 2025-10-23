@@ -5,6 +5,7 @@ import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
 
 import { cn } from '@/helpers'
 import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
+import { CurrencyCombobox } from '@/modules/currency'
 
 import IconCombobox from '@/components/comboboxes/icon-combobox'
 import FormFooterResetSubmit from '@/components/form-components/form-footer-reset-submit'
@@ -26,7 +27,7 @@ import {
 import { IDisbursement, IDisbursementRequest } from '../../disbursement.types'
 import { DisbursementSchema } from '../../disbursement.validation'
 
-type TDisbursementFormValues = z.infer<typeof DisbursementSchema>
+type TDisbursementSchema = z.infer<typeof DisbursementSchema>
 
 export interface IDisbursementFormProps
     extends IClassProps,
@@ -34,7 +35,7 @@ export interface IDisbursementFormProps
             Partial<IDisbursementRequest>,
             IDisbursement,
             Error,
-            TDisbursementFormValues
+            TDisbursementSchema
         > {
     disbursementId?: TEntityId
 }
@@ -44,7 +45,7 @@ const DisbursementCreateUpdateForm = ({
     className,
     ...formProps
 }: IDisbursementFormProps) => {
-    const form = useForm<TDisbursementFormValues>({
+    const form = useForm<TDisbursementSchema>({
         resolver: standardSchemaResolver(DisbursementSchema),
         reValidateMode: 'onChange',
         mode: 'onSubmit',
@@ -70,7 +71,7 @@ const DisbursementCreateUpdateForm = ({
     })
 
     const { formRef, handleFocusError, isDisabled } =
-        useFormHelper<TDisbursementFormValues>({
+        useFormHelper<TDisbursementSchema>({
             form,
             ...formProps,
         })
@@ -117,7 +118,24 @@ const DisbursementCreateUpdateForm = ({
                                 />
                             )}
                         />
-
+                        <FormFieldWrapper
+                            control={form.control}
+                            disabled={isPending}
+                            label="Currency *"
+                            name="currency_id"
+                            render={({ field }) => (
+                                <CurrencyCombobox
+                                    disabled={
+                                        isDisabled(field.name) || isPending
+                                    }
+                                    onChange={(selected) =>
+                                        field.onChange(selected.id)
+                                    }
+                                    placeholder="Select Currency"
+                                    value={field.value}
+                                />
+                            )}
+                        />
                         <FormFieldWrapper
                             control={form.control}
                             description="Enter an emoji or icon character"

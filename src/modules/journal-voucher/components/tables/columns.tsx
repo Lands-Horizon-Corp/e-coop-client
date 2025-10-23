@@ -1,3 +1,4 @@
+import { currencyFormat } from '@/modules/currency'
 import { IJournalVoucher } from '@/modules/journal-voucher'
 import { ColumnDef, Row } from '@tanstack/react-table'
 
@@ -174,9 +175,16 @@ const JournalVoucherTableColumns = (
         ),
         cell: ({
             row: {
-                original: { total_debit },
+                original: { total_debit, currency },
             },
-        }) => <div className="!text-wrap">{total_debit.toFixed(2)}</div>,
+        }) => (
+            <div className="!text-wrap">
+                {currencyFormat(total_debit, {
+                    currency: currency,
+                    showSymbol: !!currency,
+                })}
+            </div>
+        ),
         enableMultiSort: true,
         enableSorting: true,
         enableResizing: true,
@@ -192,9 +200,16 @@ const JournalVoucherTableColumns = (
         ),
         cell: ({
             row: {
-                original: { total_credit },
+                original: { total_credit, currency },
             },
-        }) => <div className="!text-wrap">{total_credit.toFixed(2)}</div>,
+        }) => (
+            <div className="!text-wrap">
+                {currencyFormat(total_credit, {
+                    currency: currency,
+                    showSymbol: !!currency,
+                })}
+            </div>
+        ),
         enableMultiSort: true,
         enableSorting: true,
         enableResizing: true,

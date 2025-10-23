@@ -119,7 +119,7 @@ const AccountGeneralForm = ({
                                     content={field.value}
                                     disabled={isDisabled(field.name)}
                                     placeholder="Write short description about yourself"
-                                    textEditorClassName="w-full !max-w-full"
+                                    textEditorClassName="w-full bg-popover/60 !rounded-xl max-h-32 !max-w-full"
                                 />
                             )}
                         />

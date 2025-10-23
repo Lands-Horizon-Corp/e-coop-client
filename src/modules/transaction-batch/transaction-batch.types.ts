@@ -2,9 +2,11 @@ import { IAuditable, IPaginatedResult, ITimeStamps, TEntityId } from '@/types'
 
 import { IBatchFundingRequest } from '../batch-funding'
 import { IBranch } from '../branch'
+import { ICurrency } from '../currency'
 import { IMedia } from '../media'
 import { IOrganization } from '../organization'
 import { IUserBase } from '../user'
+import { TDepositInBankSchema } from './transaction-batch.validation'
 
 export type TBatchBalanceStatus =
     | 'balanced'
@@ -69,6 +71,9 @@ export interface ITransactionBatch
 
     ended_at?: string
     total_batch_time?: string
+
+    currency_id: TEntityId
+    currency: ICurrency
 }
 
 export interface ITransactionBatchMinimal
@@ -148,9 +153,7 @@ export interface ITransactionBatchSignatures {
     paid_by_position?: string
 }
 
-export interface ITransactionBatchDepositInBankRequest {
-    deposit_in_bank: number
-}
+export type ITransactionBatchDepositInBankRequest = TDepositInBankSchema
 
 export interface ITransactionBatchEndRequest {
     employee_by_signature_media_id: TEntityId

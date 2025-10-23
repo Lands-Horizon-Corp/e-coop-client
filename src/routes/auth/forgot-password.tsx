@@ -21,8 +21,6 @@ const ForgotPasswordPage = () => {
 
     const [error, setError] = useState<string>()
 
-    console.log({ preFilledValues })
-
     return (
         <GuestGuard>
             <div className="flex min-h-full flex-col items-center justify-center">

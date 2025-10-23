@@ -21,13 +21,14 @@ function RouteComponent() {
     })
 
     return (
-        <div className="space-y-4">
+        <div className="space-y-4 max-w-4xl bg-secondary/50 rounded-3xl mx-auto p-4 ">
             <p className="text-xl">Your QR Code</p>
             <p className="!mt-1 text-sm text-muted-foreground">
-                You can download and use these QR Codes
+                You can download and use these QR Codes. Coop can quickly scan
+                and identify your account by scanning these code we provided.
             </p>
-            <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-1 text-center">
+            <div className="flex items-center gap-4">
+                <div className="space-y-1 text-center bg-accent/10 hover:bg-accent/30 ease-in-out duration-300 text-accent-foreground p-4 rounded-2xl">
                     <AccountQr
                         accountQrPayload={JSON.stringify(user.qr_code)}
                         className="!h-64 !w-64"

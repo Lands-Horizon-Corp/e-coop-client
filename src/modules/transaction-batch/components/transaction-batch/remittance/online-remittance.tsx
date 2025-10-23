@@ -1,6 +1,6 @@
 import { useQueryClient } from '@tanstack/react-query'
 
-import { formatNumber } from '@/helpers/number-utils'
+import { ICurrency, currencyFormat } from '@/modules/currency'
 import {
     IOnlineRemittance,
     onlineRemittanceBaseKey,
@@ -28,11 +28,13 @@ import { TEntityId } from '@/types'
 
 type Props = {
     transactionBatchId: TEntityId
+    currency?: ICurrency
     onOnlineRemittanceUpdate?: () => void
 }
 
 const BatchOnlineRemittance = ({
     transactionBatchId,
+    currency,
     onOnlineRemittanceUpdate,
 }: Props) => {
     const queryClient = useQueryClient()
@@ -102,6 +104,8 @@ const BatchOnlineRemittance = ({
                         refetch()
                     },
                     defaultValues: {
+                        currency,
+                        currency_id: currency?.id as TEntityId,
                         transaction_batch_id: transactionBatchId,
                     },
                 }}
@@ -110,7 +114,10 @@ const BatchOnlineRemittance = ({
                 <div>
                     <p>Online Remittance</p>
                     <p className="text-sm font-bold text-primary">
-                        {formatNumber(totalRemittance, 2)}
+                        {currencyFormat(totalRemittance, {
+                            currency: currency,
+                            showSymbol: !!currency,
+                        })}
                     </p>
                 </div>
                 <Button
@@ -267,7 +274,10 @@ const OnlineRemittanceListRow = ({
                 </div>
                 <div className="flex flex-col items-end">
                     <span className="text-sm font-semibold">
-                        {formatNumber(onlineRemittance.amount ?? 0, 2)}
+                        {currencyFormat(onlineRemittance.amount ?? 0, {
+                            currency: onlineRemittance.currency,
+                            showSymbol: !!onlineRemittance.currency,
+                        })}
                     </span>
                     <span className="text-xs text-muted-foreground/70">
                         Amount

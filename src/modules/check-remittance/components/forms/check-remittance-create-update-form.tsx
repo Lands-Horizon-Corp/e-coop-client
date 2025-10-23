@@ -10,7 +10,6 @@ import BankCombobox from '@/modules/bank/components/bank-combobox'
 import { CurrencyInput } from '@/modules/currency'
 import { IMedia } from '@/modules/media'
 
-import { CountryCombobox } from '@/components/comboboxes/country-combobox'
 import FormFooterResetSubmit from '@/components/form-components/form-footer-reset-submit'
 import Modal, { IModalProps } from '@/components/modals/modal'
 import TextEditor from '@/components/text-editor'
@@ -54,10 +53,9 @@ const CheckRemittanceCreateUpdateForm = ({
         reValidateMode: 'onChange',
         mode: 'onSubmit',
         defaultValues: {
-            country_code: 'PH',
             reference_number: '',
             account_name: '',
-            amount: 1,
+            amount: 0,
             description: '',
             ...formProps.defaultValues,
             date_entry: toInputDateString(
@@ -163,8 +161,9 @@ const CheckRemittanceCreateUpdateForm = ({
                         render={({ field: { onChange, ...field } }) => (
                             <CurrencyInput
                                 {...field}
+                                currency={form.watch('currency')}
                                 disabled={isDisabled(field.name)}
-                                onValueChange={(newValue) => {
+                                onValueChange={(newValue = '') => {
                                     onChange(newValue)
                                 }}
                                 placeholder="Amount"
@@ -186,21 +185,6 @@ const CheckRemittanceCreateUpdateForm = ({
                                 disabled={isDisabled(field.name)}
                                 placeholder="Release Date"
                                 value={field.value ?? ''}
-                            />
-                        )}
-                    />
-                    <FormFieldWrapper
-                        control={form.control}
-                        label="Country Code *"
-                        name="country_code"
-                        render={({ field }) => (
-                            <CountryCombobox
-                                {...field}
-                                defaultValue={field.value}
-                                disabled={isDisabled(field.name)}
-                                onChange={(country) =>
-                                    field.onChange(country.alpha2)
-                                }
                             />
                         )}
                     />

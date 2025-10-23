@@ -1,4 +1,5 @@
 import { cn, formatNumber } from '@/helpers'
+import { currencyFormat } from '@/modules/currency'
 
 import { CalendarNumberIcon, EyeIcon } from '@/components/icons'
 import Modal from '@/components/modals/modal'
@@ -58,7 +59,10 @@ const LoanMiniInfoCard = ({ className, loanTransaction }: Props) => {
                         Ammount Applied
                     </p>
                     <div className="text-lg">
-                        {formatNumber(loanTransaction.applied_1, 2)}
+                        {currencyFormat(loanTransaction.applied_1, {
+                            currency: loanTransaction.account?.currency,
+                            showSymbol: !!loanTransaction.account?.currency,
+                        })}
                     </div>
                 </div>
                 <div>

@@ -1,9 +1,9 @@
 import { useQueryClient } from '@tanstack/react-query'
 
-import { formatNumber } from '@/helpers/number-utils'
+import { ICurrency, currencyFormat } from '@/modules/currency'
 import {
     IDisbursementTransaction,
-    useFilteredPaginatedDisbursementTransaction,
+    useGetDisbursementTransaction,
 } from '@/modules/disbursement-transaction'
 import { DisbursementTransactionCreateFormModal } from '@/modules/disbursement-transaction/components/disbursement-transaction-create-form'
 
@@ -16,25 +16,25 @@ import { useSubscribe } from '@/hooks/use-pubsub'
 import { TEntityId } from '@/types'
 
 type Props = {
+    currency?: ICurrency
     transactionBatchId: TEntityId
     onDisbursementUpdate?: () => void
 }
 
 const TransactionBatchDisbursementTransaction = ({
+    currency,
     transactionBatchId,
     onDisbursementUpdate,
 }: Props) => {
     const queryClient = useQueryClient()
     const modalState = useModalState()
-    const { data: { data = [] } = {}, refetch } =
-        useFilteredPaginatedDisbursementTransaction({
-            mode: 'transaction-batch',
-            transactionBatchId,
-            query: {
-                pageIndex: 0,
-                pageSize: 100,
-            },
-        })
+    const { data = [], refetch } = useGetDisbursementTransaction({
+        mode: 'current',
+        query: {
+            pageIndex: 0,
+            pageSize: 100,
+        },
+    })
 
     useSubscribe<IDisbursementTransaction>(
         `disbursement-transaction.transaction-batch.${transactionBatchId}.create`,
@@ -64,6 +64,7 @@ const TransactionBatchDisbursementTransaction = ({
             <DisbursementTransactionCreateFormModal
                 {...modalState}
                 formProps={{
+                    targetCurrency: currency,
                     onSuccess: () => {
                         refetch()
                         onDisbursementUpdate?.()
@@ -77,7 +78,10 @@ const TransactionBatchDisbursementTransaction = ({
                 <div>
                     <p>Disbursements</p>
                     <p className="text-sm font-bold text-primary">
-                        {formatNumber(totalDisbursements, 2)}
+                        {currencyFormat(totalDisbursements, {
+                            currency,
+                            showSymbol: !!currency,
+                        })}
                     </p>
                 </div>
                 <Button
@@ -161,7 +165,12 @@ const DisbursementListRow = ({
             <div className="flex items-center justify-between">
                 <span className="text-xs text-muted-foreground/70">Amount</span>
                 <span className="text-sm text-right font-semibold">
-                    {formatNumber(disbursementTransaction.amount ?? 0, 2)}
+                    {currencyFormat(disbursementTransaction.amount ?? 0, {
+                        currency:
+                            disbursementTransaction.disbursement?.currency,
+                        showSymbol:
+                            !!disbursementTransaction.disbursement?.currency,
+                    })}
                 </span>
             </div>
         </div>

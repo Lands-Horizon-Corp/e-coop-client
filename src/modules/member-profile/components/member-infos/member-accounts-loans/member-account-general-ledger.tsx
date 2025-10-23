@@ -1,7 +1,7 @@
 import { cn } from '@/helpers'
-import { formatNumber } from '@/helpers/number-utils'
 import { IAccount } from '@/modules/account'
 import AccountMiniCard from '@/modules/account/components/account-mini-card'
+import { currencyFormat } from '@/modules/currency'
 import GeneralLedgerTable from '@/modules/general-ledger/components/tables/general-ledger-table'
 import { useMemberAccountGeneralLedgerTotal } from '@/modules/member-accounting-ledger/member-accounting-ledger.service'
 
@@ -15,9 +15,11 @@ export const MemberAccountLedgerTotal = ({
     className,
     memberProfileId,
     accountId,
+    account,
 }: {
     memberProfileId: TEntityId
     accountId: TEntityId
+    account?: IAccount
 } & IBaseProps) => {
     const { data, isPending, refetch } = useMemberAccountGeneralLedgerTotal({
         memberProfileId,
@@ -26,6 +28,8 @@ export const MemberAccountLedgerTotal = ({
             retry: 0,
         },
     })
+
+    const currency = account?.currency
 
     return (
         <div
@@ -49,7 +53,12 @@ export const MemberAccountLedgerTotal = ({
             </Button>
             <div className="p-2 space-y-1">
                 <p className="text-primary text-xl font-bold">
-                    {(data && formatNumber(data.total_credit, 2)) || '-'}
+                    {data
+                        ? currencyFormat(data.total_credit, {
+                              currency,
+                              showSymbol: !!currency,
+                          })
+                        : '-'}
                 </p>
 
                 <p className="text-xs text-muted-foreground shrink truncate">
@@ -59,7 +68,12 @@ export const MemberAccountLedgerTotal = ({
 
             <div className="p-2 space-y-1">
                 <p className="text-primary text-xl font-bold">
-                    {(data && formatNumber(data.total_debit, 2)) || '-'}
+                    {data
+                        ? currencyFormat(data.total_debit, {
+                              currency,
+                              showSymbol: !!currency,
+                          })
+                        : '-'}
                 </p>
 
                 <p className="text-xs text-muted-foreground truncate shrink">
@@ -69,7 +83,12 @@ export const MemberAccountLedgerTotal = ({
 
             <div className="p-2 space-y-1">
                 <p className="text-primary text-xl font-bold">
-                    {(data && formatNumber(data.balance, 2)) || '-'}
+                    {data
+                        ? currencyFormat(data.balance, {
+                              currency,
+                              showSymbol: !!currency,
+                          })
+                        : '-'}
                 </p>
 
                 <p className="text-xs text-muted-foreground shrink truncate">

@@ -128,6 +128,7 @@ const CashCheckEntryCreateUpdateForm = ({
                         render={({ field }) => (
                             <AccountPicker
                                 disabled={isDisabled(field.name)}
+                                mode="all"
                                 onSelect={(account) => {
                                     field.onChange(account.id)
                                     form.setValue(
@@ -155,7 +156,7 @@ const CashCheckEntryCreateUpdateForm = ({
                                     form.watch('check_entry_account')?.currency
                                 }
                                 disabled={isDisabled(field.name)}
-                                onValueChange={(newValue) => {
+                                onValueChange={(newValue = '') => {
                                     onChange(newValue)
                                 }}
                                 placeholder="0.00"

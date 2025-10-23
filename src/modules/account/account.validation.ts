@@ -143,6 +143,8 @@ export const IAccountRequestSchema = z.object({
 
     alternative_code: z.string().optional().default(''),
 
+    cash_and_cash_equivalence: z.boolean().default(false),
+
     fines_grace_period_amortization: z.number().int().min(0).optional(),
     additional_grace_period: z.number().int().min(0).optional(),
     number_grace_period_daily: z.boolean().optional(),
@@ -174,7 +176,7 @@ export const IAccountRequestSchema = z.object({
 
     general_ledger_grouping_exclude_account: z.boolean().optional(),
 
-    icon: z.enum(ICONS).default('Money'),
+    icon: z.enum(ICONS, { error: 'Invalid icon' }).default('Money'),
     show_in_general_ledger_source_withdraw: z.boolean().default(true),
     show_in_general_ledger_source_deposit: z.boolean().default(true),
     show_in_general_ledger_source_journal: z.boolean().default(true),

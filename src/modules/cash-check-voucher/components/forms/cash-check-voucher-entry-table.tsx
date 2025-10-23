@@ -1,9 +1,12 @@
-import { useEffect, useState } from 'react'
+import { useCallback, useMemo } from 'react'
+
+import { UseFormReturn } from 'react-hook-form'
 
 import { cn } from '@/helpers'
+import { IAccount } from '@/modules/account'
 import { ICashCheckVoucherEntryRequest } from '@/modules/cash-check-voucher-entry'
+import { ICurrency } from '@/modules/currency'
 import { IMemberProfile } from '@/modules/member-profile'
-import { useCashCheckVoucherStore } from '@/store/cash-check-voucher-store'
 import { entityIdSchema } from '@/validation'
 import {
     ColumnDef,
@@ -29,6 +32,7 @@ import {
 
 import { TEntityId } from '@/types'
 
+import { TCashCheckVoucherSchema } from '../../cash-check-voucher.validation'
 import { TCashCheckVoucherModalMode } from './cash-check-voucher-create-udate-form-modal'
 
 const columns: ColumnDef<ICashCheckVoucherEntryRequest>[] = [
@@ -41,6 +45,7 @@ const columns: ColumnDef<ICashCheckVoucherEntryRequest>[] = [
             return (
                 <EditableCell
                     inputProps={{
+                        currency: props.table.options.meta?.defaultCurrency,
                         className: '!w-full !min-w-0 flex-1',
                     }}
                     inputType="account-picker"
@@ -135,108 +140,148 @@ const columns: ColumnDef<ICashCheckVoucherEntryRequest>[] = [
     },
 ]
 
+declare module '@tanstack/react-table' {
+    interface TableMeta<TData> {
+        updateData: <TValue>(
+            rowIndex: number,
+            columnId: keyof TData,
+            value: TValue
+        ) => void
+        handleDeleteRow: (row: Row<TData>) => void
+        defaultCurrency?: ICurrency
+    }
+}
+
 type CashCheckJournalEntryTableProps = {
     defaultMemberProfile?: IMemberProfile
     cashCheckVoucherId: TEntityId
-    rowData?: ICashCheckVoucherEntryRequest[]
     className?: string
     TableClassName?: string
     mode: TCashCheckVoucherModalMode
+    cashCheckCurrency?: ICurrency
+    form: UseFormReturn<TCashCheckVoucherSchema>
+    ref: React.Ref<HTMLDivElement>
 }
 
 export const CashCheckJournalEntryTable = ({
     defaultMemberProfile,
     mode = 'create',
-    rowData,
     className,
+    cashCheckCurrency,
     TableClassName,
+    form,
 }: CashCheckJournalEntryTableProps) => {
     const isUpdateMode = mode === 'update'
     const isReadOnlyMode = mode === 'readOnly'
-    const [cashCheckVoucherEntry, setCashCheckVoucherEntry] = useState<
-        ICashCheckVoucherEntryRequest[]
-    >(() => {
-        if (rowData && rowData.length > 0 && (isUpdateMode || isReadOnlyMode)) {
-            return rowData
-        }
-        return []
-    })
-    const {
-        setCashCheckVoucherEntriesDeleted,
-        setSelectedCashCheckVoucherEntry,
-    } = useCashCheckVoucherStore()
 
-    useEffect(() => {
-        if (isUpdateMode || isReadOnlyMode) {
-            setSelectedCashCheckVoucherEntry(cashCheckVoucherEntry)
-        }
-    }, [
-        isUpdateMode,
-        isReadOnlyMode,
-        cashCheckVoucherEntry,
-        setSelectedCashCheckVoucherEntry,
-    ])
+    const watchCashCheckVoucherEntries =
+        form.watch('cash_check_voucher_entries') || []
 
+    const watchDeleteCashCheckVoucherEntries =
+        form.watch('cash_check_voucher_entries_deleted') || []
+
+    const cashCheckVoucherEntries = useMemo(
+        () => watchCashCheckVoucherEntries,
+        [watchCashCheckVoucherEntries]
+    )
+    const deletedCashCheckVoucherEntries = useMemo(
+        () => watchDeleteCashCheckVoucherEntries,
+        [watchDeleteCashCheckVoucherEntries]
+    )
+
+    const updateData = useCallback(
+        <TValue,>(
+            rowIndex: number,
+            columnId: keyof ICashCheckVoucherEntryRequest,
+            value: TValue
+        ) => {
+            const updatedEntries = cashCheckVoucherEntries.map(
+                (entry, index) => {
+                    if (index === rowIndex) {
+                        const updatedEntry = { ...entry }
+
+                        if (columnId === 'debit') {
+                            updatedEntry.debit = value as number
+                            updatedEntry.credit = 0
+                        } else if (columnId === 'credit') {
+                            updatedEntry.credit = value as number
+                            updatedEntry.debit = 0
+                        } else if (columnId === 'account') {
+                            updatedEntry.account = value
+                            updatedEntry.account_id = (value as IAccount)
+                                ?.id as TEntityId
+                        } else if (columnId === 'member_profile') {
+                            updatedEntry.member_profile = value
+                            updatedEntry.member_profile_id = (
+                                value as IMemberProfile
+                            )?.id as TEntityId
+                        }
+
+                        return updatedEntry
+                    }
+                    return entry
+                }
+            )
+
+            form.setValue('cash_check_voucher_entries', updatedEntries)
+            form.trigger('cash_check_voucher_entries')
+        },
+        [cashCheckVoucherEntries, form]
+    )
     const handleDeleteRow = (row: Row<ICashCheckVoucherEntryRequest>) => {
         const id = row.original.id
-        const rowId = row.original.rowId
         if (isUpdateMode) {
             const validation = entityIdSchema.safeParse(id)
             if (validation.success) {
-                setCashCheckVoucherEntriesDeleted(id as TEntityId)
-                const updatedData = cashCheckVoucherEntry.filter(
+                form.setValue('cash_check_voucher_entries_deleted', [
+                    ...deletedCashCheckVoucherEntries,
+                    id as TEntityId,
+                ])
+                const updatedData = cashCheckVoucherEntries.filter(
                     (data) => data.id !== id
                 )
-                setCashCheckVoucherEntry(updatedData)
+                form.setValue('cash_check_voucher_entries', updatedData)
+                form.trigger('cash_check_voucher_entries')
             } else {
-                const updatedData = cashCheckVoucherEntry.filter(
-                    (data) => data.rowId !== rowId
+                const updatedData = cashCheckVoucherEntries.filter(
+                    (_, index) => index !== row.index
                 )
-                setCashCheckVoucherEntry(updatedData)
+                form.setValue('cash_check_voucher_entries', updatedData)
+                form.trigger('cash_check_voucher_entries')
             }
         }
     }
 
     const table = useReactTable({
-        data: cashCheckVoucherEntry,
+        data: cashCheckVoucherEntries,
         columns: columns,
         getCoreRowModel: getCoreRowModel(),
         meta: {
-            updateData: (rowIndex, columnId, value) => {
-                const updatedEntries = (cashCheckVoucherEntry ?? []).map(
-                    (entry, index) => {
-                        if (index === rowIndex) {
-                            const updatedEntry = { ...entry, [columnId]: value }
-                            if (columnId === 'debit') {
-                                updatedEntry.credit = 0
-                            } else if (columnId === 'credit') {
-                                updatedEntry.debit = 0
-                            }
-                            return updatedEntry
-                        }
-                        return entry
-                    }
-                )
-                setCashCheckVoucherEntry(updatedEntries)
-            },
-            handleDeleteRow: handleDeleteRow,
+            updateData,
+            handleDeleteRow,
+            defaultCurrency: cashCheckCurrency,
         },
     })
-    const handleAddRow = (
-        e: React.MouseEvent<HTMLButtonElement, MouseEvent>
-    ) => {
-        e.preventDefault()
-        const newRow: ICashCheckVoucherEntryRequest = {
-            account_id: '',
-            description: '',
-            debit: 0,
-            credit: 0,
-            rowId: crypto.randomUUID(),
-            member_profile_id: defaultMemberProfile?.id,
-            member_profile: defaultMemberProfile,
-        }
-        setCashCheckVoucherEntry([...cashCheckVoucherEntry, newRow])
-    }
+    const handleAddRow = useCallback(
+        (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+            e.preventDefault()
+            const newRow: ICashCheckVoucherEntryRequest = {
+                description: '',
+                debit: 0,
+                credit: 0,
+                rowId: crypto.randomUUID(),
+                account_id: '' as TEntityId,
+                member_profile_id: defaultMemberProfile?.id,
+                member_profile: defaultMemberProfile,
+            }
+            form.setValue('cash_check_voucher_entries', [
+                ...cashCheckVoucherEntries,
+                newRow,
+            ])
+            form.trigger('cash_check_voucher_entries')
+        },
+        [defaultMemberProfile, isReadOnlyMode, cashCheckVoucherEntries]
+    )
 
     useHotkeys(
         'Shift+i',
@@ -247,7 +292,7 @@ export const CashCheckJournalEntryTable = ({
                 e as unknown as React.MouseEvent<HTMLButtonElement, MouseEvent>
             )
         },
-        [cashCheckVoucherEntry]
+        [cashCheckVoucherEntries, isReadOnlyMode, handleAddRow]
     )
 
     return (
@@ -270,7 +315,12 @@ export const CashCheckJournalEntryTable = ({
                     </CommandShortcut>
                 </div>
             </div>
-            <Table wrapperClassName={cn('max-h-[400px]', TableClassName)}>
+            <Table
+                wrapperClassName={cn(
+                    'max-h-[400px]  ecoop-scroll',
+                    TableClassName
+                )}
+            >
                 <TableHeader className={cn('sticky top-0 z-10')}>
                     {table.getHeaderGroups().map((headerGroup) => (
                         <TableRow

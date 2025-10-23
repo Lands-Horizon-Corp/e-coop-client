@@ -1,3 +1,4 @@
+import { cn } from '@/helpers'
 import { useInfoModalStore } from '@/store/info-modal-store'
 
 import { Button } from '@/components/ui/button'
@@ -15,19 +16,28 @@ const InfoModal = () => {
             classNames,
             hideConfirm,
             confirmString,
+            hideSeparator = false,
             ...rest
         },
     } = useInfoModalStore()
 
     return (
         <Modal onOpenChange={onClose} open={isOpen} {...rest} {...classNames}>
-            <Separator className="bg-muted/70" />
+            {!hideSeparator && <Separator className="bg-muted/70" />}
             {component}
-            <Separator className="bg-muted/70" />
+            {!hideSeparator && <Separator className="bg-muted/70" />}
             {!hideConfirm && (
-                <div className="flex justify-end gap-x-2">
+                <div
+                    className={cn(
+                        'flex justify-end gap-x-2',
+                        classNames?.footerActionClassName
+                    )}
+                >
                     <Button
-                        className="bg-muted/60 hover:bg-muted"
+                        className={cn(
+                            'bg-muted/60 hover:bg-muted',
+                            classNames?.closeButtonClassName
+                        )}
                         onClick={onConfirm}
                         variant={'ghost'}
                     >

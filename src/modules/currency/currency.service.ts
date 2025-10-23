@@ -1,6 +1,17 @@
-import { createDataLayerFactory } from '@/providers/repositories/data-layer-factory'
+import { useQuery } from '@tanstack/react-query'
 
-import type { ICurrency, ICurrencyRequest } from '../currency'
+import {
+    HookQueryOptions,
+    createDataLayerFactory,
+} from '@/providers/repositories/data-layer-factory'
+
+import { TAPIQueryOptions } from '@/types'
+
+import type {
+    ICurrency,
+    ICurrencyRequest,
+    TCurrencyHookMode,
+} from '../currency'
 
 const {
     apiCrudHooks,
@@ -36,7 +47,7 @@ export const {
     useCreate: useCreateCurrency,
     useUpdateById: useUpdateCurrencyById,
 
-    useGetAll: useGetAllCurrency,
+    // useGetAll: useGetAllCurrency,
     useGetById: useGetCurrencyById,
     useGetPaginated: useGetPaginatedCurrency,
 
@@ -44,4 +55,63 @@ export const {
     useDeleteMany: useDeleteManyCurrency,
 } = apiCrudHooks
 
+export const useGetAllCurrency = ({
+    query,
+    options,
+    mode = 'all',
+}: {
+    query?: TAPIQueryOptions
+    mode?: TCurrencyHookMode
+    options?: HookQueryOptions<ICurrency[], Error>
+} = {}) => {
+    return useQuery<ICurrency[], Error>({
+        ...options,
+        queryKey: [currencyBaseKey, mode, query].filter(Boolean),
+        queryFn: async () => {
+            let url = currencyAPIRoute
+
+            if (mode === 'available') {
+                url = `${currencyAPIRoute}/available`
+            }
+
+            return getAllCurrency({
+                query,
+                url,
+            })
+        },
+    })
+}
+
 // custom hooks can go here
+export const getCurrencyByTimezone = async (
+    timezone: string
+): Promise<ICurrency> => {
+    const response = await API.get<ICurrency>(
+        `${currencyAPIRoute}/timezone/${timezone}`
+    )
+    return response.data
+}
+
+export const useGetCurrency = ({
+    timezone,
+    options,
+}: {
+    timezone: string
+    options?: HookQueryOptions<ICurrency, Error>
+}) => {
+    return useQuery<ICurrency, Error>({
+        ...options,
+        queryKey: [currencyBaseKey, timezone],
+        queryFn: async () => await getCurrencyByTimezone(timezone),
+    })
+}
+
+export const useGetCurrentCurrency = ({
+    options,
+}: {
+    options?: HookQueryOptions<ICurrency, Error>
+} = {}) => {
+    const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone
+
+    return useGetCurrency({ timezone, options })
+}

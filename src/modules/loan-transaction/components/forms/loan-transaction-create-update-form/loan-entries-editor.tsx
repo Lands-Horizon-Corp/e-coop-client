@@ -228,12 +228,19 @@ const LoanEntriesEditor = forwardRef<
             })
         }
 
+        const currency = form.watch('account')?.currency
+
         return (
             <div className="relative">
                 <AccountPicker
+                    currencyId={currency?.id}
                     disabled={isReadOnly || isDisabled}
                     modalState={cashAccountPickerModal}
-                    mode="cash-and-cash-equivalence"
+                    mode={
+                        currency
+                            ? 'currency-cash-and-cash-equivalence'
+                            : 'cash-and-cash-equivalence'
+                    }
                     onSelect={handleChangeCashEntryAccount}
                     triggerClassName="sr-only"
                 />
@@ -265,8 +272,8 @@ const LoanEntriesEditor = forwardRef<
                                 <span className="ml-1 text-orange-600">
                                     (
                                     {currencyFormat(deductionsTotal, {
-                                        currency:
-                                            form.watch('account')?.currency,
+                                        currency,
+                                        showSymbol: !!currency,
                                     })}{' '}
                                     deducted)
                                 </span>
@@ -276,7 +283,8 @@ const LoanEntriesEditor = forwardRef<
                             <p className="text-xs text-green-600">
                                 Add-on charges:{' '}
                                 {currencyFormat(totalAddOns, {
-                                    currency: form.watch('account')?.currency,
+                                    currency,
+                                    showSymbol: !!currency,
                                 })}
                             </p>
                         )}
@@ -366,6 +374,7 @@ const LoanEntriesEditor = forwardRef<
                         <LoanTransactionEntryCreateUpdateModal
                             {...addChargeModalState}
                             formProps={{
+                                currency,
                                 onSuccess: (newLoanTransaction) =>
                                     form.reset(newLoanTransaction),
                                 loanTransactionId,
@@ -388,6 +397,7 @@ const LoanEntriesEditor = forwardRef<
                             })
                             .map((loanEntry, index) => (
                                 <LoanEntryRow
+                                    disabled={isReadOnly || isDisabled}
                                     entry={loanEntry}
                                     form={form}
                                     key={`${loanEntry.id}`}
@@ -445,20 +455,22 @@ const LoanEntriesEditor = forwardRef<
                                 <InfoTooltip content="Total interest to be paid for this loan.">
                                     <span className="py-1 px-3 rounded-md bg-primary/50 font-mono terxt-primary-foreground">
                                         {currencyFormat(amortization, {
-                                            currency:
-                                                form.watch('account')?.currency,
+                                            currency,
+                                            showSymbol: !!currency,
                                         })}
                                     </span>
                                 </InfoTooltip>
                             </TableCell>
                             <TableCell className="text-right font-semibold">
                                 {currencyFormat(totalDebit, {
-                                    currency: form.watch('account')?.currency,
+                                    currency,
+                                    showSymbol: !!currency,
                                 })}
                             </TableCell>
                             <TableCell className="text-right font-semibold">
                                 {currencyFormat(totalCredit, {
-                                    currency: form.watch('account')?.currency,
+                                    currency,
+                                    showSymbol: !!currency,
                                 })}
                             </TableCell>
                             <TableCell>
@@ -520,6 +532,8 @@ const LoanEntryRow = memo(
                     },
                 })
             }
+
+            const currency = form.watch('account')?.currency
 
             const handleRowKeyDown = (
                 e: KeyboardEvent<HTMLTableRowElement>
@@ -625,14 +639,16 @@ const LoanEntryRow = memo(
                         <TableCell className="text-right py-2 h-fit">
                             {entry.debit
                                 ? `${currencyFormat(entry.debit, {
-                                      currency: form.watch('account')?.currency,
+                                      currency,
+                                      showSymbol: !!currency,
                                   })}`
                                 : ''}
                         </TableCell>
                         <TableCell className="text-right py-2 h-fit">
                             {entry.credit
                                 ? `${currencyFormat(entry.credit, {
-                                      currency: form.watch('account')?.currency,
+                                      currency,
+                                      showSymbol: !!currency,
                                   })}`
                                 : ''}
                         </TableCell>
@@ -710,6 +726,7 @@ const LoanEntryRow = memo(
                             defaultValues: entry,
                             loanTransactionId: entry.loan_transaction_id,
                             id: entry.id,
+                            currency,
                             onSuccess: (updatedData) => {
                                 form.reset(updatedData)
                             },

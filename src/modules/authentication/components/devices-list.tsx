@@ -6,25 +6,39 @@ import { toast } from 'sonner'
 import useActionSecurityStore from '@/store/action-security-store'
 
 import {
+    DevicesIcon,
     FingerprintOffIcon,
     GlobeIcon,
     LanguageIcon,
     LocationPinIcon,
     MonitorIcon,
     NavigationIcon,
+    RefreshIcon,
     SmartphoneIcon,
     UserIcon,
 } from '@/components/icons'
+import LoadingSpinner from '@/components/spinners/loading-spinner'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import {
+    Empty,
+    EmptyContent,
+    EmptyDescription,
+    EmptyHeader,
+    EmptyMedia,
+    EmptyTitle,
+} from '@/components/ui/empty'
 
-import { useCurrentLoggedInUserLogout } from '../authentication.service'
+import {
+    useCurrentLoggedInUser,
+    useCurrentLoggedInUserLogout,
+} from '../authentication.service'
 import type { ILoggedInUser } from '../authentication.types'
 import { useAuthUser } from '../authgentication.store'
 
 interface Props {
-    devices: ILoggedInUser[]
+    defaultDevices?: ILoggedInUser[]
 }
 
 const getDeviceIcon = (deviceType: string) => {
@@ -51,9 +65,16 @@ const getDeviceVariant = (
     }
 }
 
-const DevicesList = ({ devices }: Props) => {
+const DevicesList = ({ defaultDevices }: Props) => {
     const router = useRouter()
     const { resetAuth } = useAuthUser()
+
+    const {
+        data: devices = [],
+        refetch,
+        isRefetching,
+        isPending,
+    } = useCurrentLoggedInUser({ options: { initialData: defaultDevices } })
 
     const { onOpenSecurityAction } = useActionSecurityStore()
     const { mutate: handleSignout } = useCurrentLoggedInUserLogout({
@@ -75,12 +96,12 @@ const DevicesList = ({ devices }: Props) => {
         })
     }
 
-    if (devices.length <= 0) {
-        return <></>
-    }
+    // if (devices.length <= 0) {
+    //     return <></>
+    // }
 
     return (
-        <div className="container mx-auto p-6 space-y-6">
+        <div className="container mx-auto space-y-6">
             <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                 <div className="flex items-center gap-3">
                     <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10">
@@ -98,7 +119,7 @@ const DevicesList = ({ devices }: Props) => {
                     </div>
                 </div>
                 <Button
-                    className="flex items-center gap-2"
+                    className="flex items-center cursor-pointer gap-2"
                     onClick={() => signOut()}
                     size="sm"
                     variant="destructive"
@@ -107,7 +128,36 @@ const DevicesList = ({ devices }: Props) => {
                     Sign out all devices
                 </Button>
             </div>
-
+            {isPending && <LoadingSpinner className="mx-auto" />}
+            {devices.length === 0 && !isPending && (
+                <Empty className="from-muted/50 mx-auto to-background h-full bg-gradient-to-b from-30%">
+                    <EmptyHeader>
+                        <EmptyMedia variant="icon">
+                            <DevicesIcon />
+                        </EmptyMedia>
+                        <EmptyTitle>No Notifications</EmptyTitle>
+                        <EmptyDescription>
+                            You&apos;re all caught up. New notifications will
+                            appear here.
+                        </EmptyDescription>
+                    </EmptyHeader>
+                    <EmptyContent>
+                        <Button
+                            disabled={isPending || isRefetching}
+                            onClick={() => refetch()}
+                            size="sm"
+                            variant="outline"
+                        >
+                            {isRefetching || isPending ? (
+                                <LoadingSpinner />
+                            ) : (
+                                <RefreshIcon />
+                            )}
+                            Refresh
+                        </Button>
+                    </EmptyContent>
+                </Empty>
+            )}
             <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
                 {devices.map((user, index) => (
                     <Card

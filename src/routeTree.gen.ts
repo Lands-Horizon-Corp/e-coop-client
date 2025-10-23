@@ -24,7 +24,6 @@ import { Route as AuthSignInRouteImport } from './routes/auth/sign-in'
 import { Route as AuthForgotPasswordRouteImport } from './routes/auth/forgot-password'
 import { Route as AccountProfileSecurityRouteImport } from './routes/account-profile/security'
 import { Route as AccountProfileQrRouteImport } from './routes/account-profile/qr'
-import { Route as AccountProfileProfileRouteImport } from './routes/account-profile/profile'
 import { Route as AccountProfileAppearanceRouteImport } from './routes/account-profile/appearance'
 import { Route as AccountProfileActivityLogsRouteImport } from './routes/account-profile/activity-logs'
 import { Route as landingSubscriptionRouteImport } from './routes/(landing)/subscription'
@@ -201,11 +200,6 @@ const AccountProfileSecurityRoute = AccountProfileSecurityRouteImport.update({
 const AccountProfileQrRoute = AccountProfileQrRouteImport.update({
   id: '/qr',
   path: '/qr',
-  getParentRoute: () => AccountProfileRouteRoute,
-} as any)
-const AccountProfileProfileRoute = AccountProfileProfileRouteImport.update({
-  id: '/profile',
-  path: '/profile',
   getParentRoute: () => AccountProfileRouteRoute,
 } as any)
 const AccountProfileAppearanceRoute =
@@ -942,7 +936,6 @@ export interface FileRoutesByFullPath {
   '/subscription': typeof landingSubscriptionRoute
   '/account-profile/activity-logs': typeof AccountProfileActivityLogsRoute
   '/account-profile/appearance': typeof AccountProfileAppearanceRoute
-  '/account-profile/profile': typeof AccountProfileProfileRoute
   '/account-profile/qr': typeof AccountProfileQrRoute
   '/account-profile/security': typeof AccountProfileSecurityRoute
   '/auth/forgot-password': typeof AuthForgotPasswordRoute
@@ -1060,7 +1053,6 @@ export interface FileRoutesByTo {
   '/subscription': typeof landingSubscriptionRoute
   '/account-profile/activity-logs': typeof AccountProfileActivityLogsRoute
   '/account-profile/appearance': typeof AccountProfileAppearanceRoute
-  '/account-profile/profile': typeof AccountProfileProfileRoute
   '/account-profile/qr': typeof AccountProfileQrRoute
   '/account-profile/security': typeof AccountProfileSecurityRoute
   '/auth/forgot-password': typeof AuthForgotPasswordRoute
@@ -1183,7 +1175,6 @@ export interface FileRoutesById {
   '/(landing)/subscription': typeof landingSubscriptionRoute
   '/account-profile/activity-logs': typeof AccountProfileActivityLogsRoute
   '/account-profile/appearance': typeof AccountProfileAppearanceRoute
-  '/account-profile/profile': typeof AccountProfileProfileRoute
   '/account-profile/qr': typeof AccountProfileQrRoute
   '/account-profile/security': typeof AccountProfileSecurityRoute
   '/auth/forgot-password': typeof AuthForgotPasswordRoute
@@ -1308,7 +1299,6 @@ export interface FileRouteTypes {
     | '/subscription'
     | '/account-profile/activity-logs'
     | '/account-profile/appearance'
-    | '/account-profile/profile'
     | '/account-profile/qr'
     | '/account-profile/security'
     | '/auth/forgot-password'
@@ -1426,7 +1416,6 @@ export interface FileRouteTypes {
     | '/subscription'
     | '/account-profile/activity-logs'
     | '/account-profile/appearance'
-    | '/account-profile/profile'
     | '/account-profile/qr'
     | '/account-profile/security'
     | '/auth/forgot-password'
@@ -1548,7 +1537,6 @@ export interface FileRouteTypes {
     | '/(landing)/subscription'
     | '/account-profile/activity-logs'
     | '/account-profile/appearance'
-    | '/account-profile/profile'
     | '/account-profile/qr'
     | '/account-profile/security'
     | '/auth/forgot-password'
@@ -1763,13 +1751,6 @@ declare module '@tanstack/react-router' {
       path: '/qr'
       fullPath: '/account-profile/qr'
       preLoaderRoute: typeof AccountProfileQrRouteImport
-      parentRoute: typeof AccountProfileRouteRoute
-    }
-    '/account-profile/profile': {
-      id: '/account-profile/profile'
-      path: '/profile'
-      fullPath: '/account-profile/profile'
-      preLoaderRoute: typeof AccountProfileProfileRouteImport
       parentRoute: typeof AccountProfileRouteRoute
     }
     '/account-profile/appearance': {
@@ -2585,7 +2566,6 @@ const landingRouteRouteWithChildren = landingRouteRoute._addFileChildren(
 interface AccountProfileRouteRouteChildren {
   AccountProfileActivityLogsRoute: typeof AccountProfileActivityLogsRoute
   AccountProfileAppearanceRoute: typeof AccountProfileAppearanceRoute
-  AccountProfileProfileRoute: typeof AccountProfileProfileRoute
   AccountProfileQrRoute: typeof AccountProfileQrRoute
   AccountProfileSecurityRoute: typeof AccountProfileSecurityRoute
   AccountProfileIndexRoute: typeof AccountProfileIndexRoute
@@ -2596,7 +2576,6 @@ interface AccountProfileRouteRouteChildren {
 const AccountProfileRouteRouteChildren: AccountProfileRouteRouteChildren = {
   AccountProfileActivityLogsRoute: AccountProfileActivityLogsRoute,
   AccountProfileAppearanceRoute: AccountProfileAppearanceRoute,
-  AccountProfileProfileRoute: AccountProfileProfileRoute,
   AccountProfileQrRoute: AccountProfileQrRoute,
   AccountProfileSecurityRoute: AccountProfileSecurityRoute,
   AccountProfileIndexRoute: AccountProfileIndexRoute,

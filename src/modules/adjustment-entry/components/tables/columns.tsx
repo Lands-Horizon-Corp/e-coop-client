@@ -122,10 +122,10 @@ const AdjustmentEntryTableColumns = (
             <DataTableColumnHeader {...props} title="Debit (DR)" />
         ),
         cell: ({ row: { original } }) => (
-            <div className="min-w-[100px] text-right font-mono font-medium text-green-600">
+            <div className="min-w-[100px] text-right font-mono text-primary font-bold">
                 {original.debit.toLocaleString('en-US', {
                     style: 'currency',
-                    currency: 'PHP', // Adjust currency as needed
+                    currency: 'PHP',
                 })}
             </div>
         ),
@@ -144,10 +144,10 @@ const AdjustmentEntryTableColumns = (
             <DataTableColumnHeader {...props} title="Credit (CR)" />
         ),
         cell: ({ row: { original } }) => (
-            <div className="min-w-[100px] text-right font-mono font-medium text-red-600">
+            <div className="min-w-[100px] text-right font-mono text-primary font-bold">
                 {original.credit.toLocaleString('en-US', {
                     style: 'currency',
-                    currency: 'PHP', // Adjust currency as needed
+                    currency: 'PHP',
                 })}
             </div>
         ),

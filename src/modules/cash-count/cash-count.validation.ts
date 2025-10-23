@@ -9,7 +9,9 @@ export const CashCountSchema = z.object({
     transaction_batch_id: entityIdSchema.optional(),
     employee_user_id: entityIdSchema.optional(),
 
-    country_code: z.string().min(2, 'Invalid country'),
+    currency_id: entityIdSchema,
+    currency: z.any(),
+
     name: z.string().min(1, 'name required'),
     bill_amount: z.coerce.number(),
     quantity: z.coerce.number(),
@@ -18,7 +20,7 @@ export const CashCountSchema = z.object({
 
 export const CashCountBatchSchema = z.object({
     cash_counts: z.array(CashCountSchema),
-    deleted_cash_counts: z.array(z.string().uuid()).optional(),
+    deleted_cash_counts: z.array(z.uuid()).optional(),
     deposit_in_bank: z.coerce.number().optional(),
     cash_count_total: z.coerce.number().optional(),
     grand_total: z.coerce.number().optional(),

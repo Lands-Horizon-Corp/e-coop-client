@@ -142,7 +142,6 @@ const LoanPayablesForm = ({
             }
         })
 
-        form.setValue('total_amount', amount)
         form.setValue('payables', newPayables)
     }
 
@@ -200,7 +199,6 @@ const LoanPayablesForm = ({
             payables.reduce((sum, p) => sum + (Number(p.amount) || 0), 0) +
                 amount || 0
         form.setValue('total_amount', payableTotals)
-        form.setValue(`payables.${index}.amount`, amount)
     }
 
     return (
@@ -230,7 +228,7 @@ const LoanPayablesForm = ({
                                 {...field}
                                 currency={currency}
                                 disabled={isDisabled(field.name)}
-                                onValueChange={(newValue) => {
+                                onValueChange={(newValue = '') => {
                                     onChange(newValue)
                                     handleTotalAmountChange(
                                         newValue ? Number(newValue) : 0
@@ -381,7 +379,9 @@ const LoanPayablesForm = ({
                                                     `payables.${idx}.amount`
                                                 )}
                                                 id={field.name}
-                                                onValueChange={(newValue) => {
+                                                onValueChange={(
+                                                    newValue = ''
+                                                ) => {
                                                     onChange(newValue)
                                                     handlePayableAmountChange(
                                                         idx,

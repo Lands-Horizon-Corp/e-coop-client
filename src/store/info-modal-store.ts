@@ -7,6 +7,7 @@ interface IInfoDatas {
     description?: string | ReactNode
     component?: ReactNode | string
     confirmString?: string
+    hideSeparator?: boolean
     hideConfirm?: boolean
     onConfirm?: () => void
     classNames?: {
@@ -16,6 +17,7 @@ interface IInfoDatas {
         closeButtonClassName?: string
         overlayClassName?: string
         className?: string
+        footerActionClassName?: string
     }
 }
 

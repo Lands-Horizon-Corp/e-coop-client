@@ -1,3 +1,4 @@
+import { useQueryClient } from '@tanstack/react-query'
 import { useForm } from 'react-hook-form'
 import z from 'zod'
 
@@ -7,7 +8,7 @@ import { withToastCallbacks } from '@/helpers/callback-helper'
 import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
 import { cn } from '@/helpers/tw-utils'
 import { AccountPicker } from '@/modules/account'
-import { CurrencyInput } from '@/modules/currency'
+import { CurrencyInput, ICurrency } from '@/modules/currency'
 import { IMedia } from '@/modules/media/media.types'
 import MemberPicker from '@/modules/member-profile/components/member-picker'
 import { PaymentTypeCombobox } from '@/modules/transaction'
@@ -46,12 +47,15 @@ export interface IAdjustmentEntryFormProps
             TAdjustmentEntryFormValues
         > {
     adjustmentEntryId?: TEntityId
+    baseCurrency: ICurrency
 }
 
 const AdjustmentEntryCreateUpdateForm = ({
     className,
+    baseCurrency,
     ...formProps
 }: IAdjustmentEntryFormProps) => {
+    const queryClient = useQueryClient()
     const form = useForm<TAdjustmentEntryFormValues>({
         resolver: standardSchemaResolver(AdjustmentEntrySchema),
         reValidateMode: 'onChange',
@@ -69,7 +73,12 @@ const AdjustmentEntryCreateUpdateForm = ({
         options: {
             ...withToastCallbacks({
                 textSuccess: 'Adjustment Entry Created',
-                onSuccess: formProps.onSuccess,
+                onSuccess: (data) => {
+                    queryClient.invalidateQueries({
+                        queryKey: ['adjustment-entry', 'total'],
+                    })
+                    formProps?.onSuccess?.(data)
+                },
                 onError: formProps.onError,
             }),
         },
@@ -78,7 +87,12 @@ const AdjustmentEntryCreateUpdateForm = ({
         options: {
             ...withToastCallbacks({
                 textSuccess: 'Adjustment Entry Updated',
-                onSuccess: formProps.onSuccess,
+                onSuccess: (data) => {
+                    queryClient.invalidateQueries({
+                        queryKey: ['adjustment-entry', 'total'],
+                    })
+                    formProps?.onSuccess?.(data)
+                },
                 onError: formProps.onError,
             }),
         },
@@ -159,7 +173,9 @@ const AdjustmentEntryCreateUpdateForm = ({
                         name="account_id"
                         render={({ field }) => (
                             <AccountPicker
+                                currencyId={baseCurrency.id}
                                 disabled={isDisabled(field.name)}
+                                mode="currency"
                                 onSelect={(account) => {
                                     field.onChange(account.id)
                                     form.setValue('account', account, {
@@ -220,7 +236,7 @@ const AdjustmentEntryCreateUpdateForm = ({
                                     {...field}
                                     currency={form.watch('account')?.currency}
                                     disabled={isDisabled(field.name)}
-                                    onValueChange={(newValue) => {
+                                    onValueChange={(newValue = '') => {
                                         onChange(newValue)
                                     }}
                                     placeholder="0.00"
@@ -236,7 +252,7 @@ const AdjustmentEntryCreateUpdateForm = ({
                                     {...field}
                                     currency={form.watch('account')?.currency}
                                     disabled={isDisabled(field.name)}
-                                    onValueChange={(newValue) => {
+                                    onValueChange={(newValue = '') => {
                                         onChange(newValue)
                                     }}
                                     placeholder="0.00"
@@ -326,7 +342,7 @@ export const AdjustmentEntryCreateUpdateFormModal = ({
     formProps,
     ...props
 }: IModalProps & {
-    formProps?: Omit<IAdjustmentEntryFormProps, 'className'>
+    formProps: Omit<IAdjustmentEntryFormProps, 'className'>
 }) => {
     return (
         <Modal

@@ -1,6 +1,6 @@
 import { ReactNode } from 'react'
 
-import { formatNumber } from '@/helpers/number-utils'
+import { currencyFormat } from '@/modules/currency'
 import { ColumnDef, Row } from '@tanstack/react-table'
 
 import DataTableColumnHeader from '@/components/data-table/data-table-column-header'
@@ -48,7 +48,7 @@ const BatchFundingTableColumns = (
                 </ColumnActions>
             </DataTableColumnHeader>
         ),
-        cell: ({ row }) => <span>{row.original.name}</span>,
+        cell: ({ row }) => <div className="truncate">{row.original.name}</div>,
         enableMultiSort: true,
         enableSorting: true,
         enableResizing: true,
@@ -70,7 +70,12 @@ const BatchFundingTableColumns = (
             </DataTableColumnHeader>
         ),
         cell: ({ row }) => (
-            <p className="text-right">{formatNumber(row.original.amount, 2)}</p>
+            <p className="text-right">
+                {currencyFormat(row.original.amount, {
+                    currency: row.original.currency,
+                    showSymbol: !!row.original.currency,
+                })}
+            </p>
         ),
         enableMultiSort: true,
         enableSorting: true,
@@ -137,7 +142,7 @@ const BatchFundingTableColumns = (
                 original: { provided_by_user, signature_media },
             },
         }) => (
-            <span className="inline-flex gap-x-2">
+            <div className="inline-flex max-w-full gap-x-2">
                 {signature_media && (
                     <>
                         <PreviewMediaWrapper media={signature_media}>
@@ -159,7 +164,7 @@ const BatchFundingTableColumns = (
                 ) : (
                     '-'
                 )}
-            </span>
+            </div>
         ),
         enableMultiSort: true,
         enableSorting: true,

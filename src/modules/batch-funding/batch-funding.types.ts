@@ -3,6 +3,7 @@ import z from 'zod'
 import { IBaseEntityMeta, IPaginatedResult, TEntityId } from '@/types/common'
 
 import { IBranch } from '../branch/branch.types'
+import { ICurrency } from '../currency'
 import { IMedia } from '../media/media.types'
 import { IOrganization } from '../organization/organization.types'
 import { ITransactionBatch } from '../transaction-batch'
@@ -14,6 +15,9 @@ export interface IBatchFunding extends IBaseEntityMeta {
 
     organization_id: TEntityId
     organization: IOrganization
+
+    currency_id: TEntityId
+    currency: ICurrency
 
     branch_id: TEntityId
     branch: IBranch

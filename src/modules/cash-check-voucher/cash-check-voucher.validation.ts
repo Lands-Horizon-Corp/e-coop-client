@@ -1,7 +1,9 @@
 import z from 'zod'
 
-import { descriptionTransformerSanitizer } from '@/validation'
+import { EntityIdSchema, descriptionTransformerSanitizer } from '@/validation'
 import { entityIdSchema } from '@/validation'
+
+import { CashCheckVoucherEntrySchema } from '../cash-check-voucher-entry'
 
 export const CashCheckVoucherSchema = z.object({
     id: z.string().optional(),
@@ -17,6 +19,9 @@ export const CashCheckVoucherSchema = z.object({
         .optional(),
     print_count: z.coerce.number<number>().min(0).optional(),
     pay_to: z.string().optional(),
+
+    currency_id: EntityIdSchema('Currency is required'),
+    currency: z.any(),
 
     // Totals - Added
     total_debit: z.coerce.number().optional(),
@@ -76,7 +81,6 @@ export const CashCheckVoucherSchema = z.object({
     paid_by_name: z.string().optional(),
     paid_by_position: z.string().optional(),
 
-    // Check Entry Fields - Added
     check_entry_amount: z.coerce.number().optional(),
     check_entry_check_number: z.string().optional(),
     check_entry_check_date: z.string().optional(),
@@ -84,9 +88,45 @@ export const CashCheckVoucherSchema = z.object({
 
     check_entry_account: z.any().optional(),
 
-    // Entries Arrays - Added
-    cash_check_voucher_entries: z.array(z.any()).optional(),
-    cash_check_voucher_entries_deleted: z.array(z.string()).optional(),
+    cash_check_voucher_entries: z
+        .array(CashCheckVoucherEntrySchema)
+        .optional()
+        .default([])
+        .refine(
+            (entries) => {
+                const hasAllAccounts = entries.every(
+                    (entry) =>
+                        entry.account_id !== undefined &&
+                        entry.account_id !== ''
+                )
+                return hasAllAccounts
+            },
+            {
+                message:
+                    'All cash check voucher entries must have an Account selected.',
+            }
+        )
+        .refine(
+            (entries) => {
+                if (entries.length === 0) return true
+                const totalDebit = entries.reduce(
+                    (acc, entry) => acc + entry.debit,
+                    0
+                )
+                const totalCredit = entries.reduce(
+                    (acc, entry) => acc + entry.credit,
+                    0
+                )
+                return totalDebit === totalCredit
+            },
+            {
+                message: 'Total debit and credit must be equal.',
+            }
+        ),
+    cash_check_voucher_entries_deleted: z
+        .array(entityIdSchema)
+        .optional()
+        .default([]),
 })
 
 export const CashCheckSignatureSchema = z.object({
@@ -135,6 +175,7 @@ export const CashCheckSignatureSchema = z.object({
     paid_by_name: z.coerce.string().optional(),
     paid_by_position: z.coerce.string().optional(),
 })
+
 export const CashCheckVoucherPrintSchema = z.object({
     cash_voucher_number: z.string().min(1, 'Voucher number is required'),
 })
@@ -142,5 +183,6 @@ export const CashCheckVoucherPrintSchema = z.object({
 export type TCashCheckVoucherPrintSchema = z.infer<
     typeof CashCheckVoucherPrintSchema
 >
+
 export type TCashCheckVoucherSchema = z.infer<typeof CashCheckVoucherSchema>
 export type TCashCheckSignatureSchema = z.infer<typeof CashCheckSignatureSchema>

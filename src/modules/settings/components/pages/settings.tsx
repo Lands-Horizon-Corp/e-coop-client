@@ -5,13 +5,12 @@ import { useAuthUserWithOrg } from '@/modules/authentication/authgentication.sto
 import BranchSettings from '@/modules/branch-settings/components/branch-settings'
 
 import PageContainer from '@/components/containers/page-container'
-import { BuildingGearIcon, GearIcon, PaintBrushIcon } from '@/components/icons'
+import { BuildingGearIcon, GearIcon } from '@/components/icons'
 import { Button } from '@/components/ui/button'
 
 import UserOrganizationSettings from '../../../user-organization/components/user-org-settings'
-import AppearanceSettings from '../appearance-settings'
 
-type TSettingPage = 'appearance' | 'my-settings' | 'branch-settings'
+type TSettingPage = 'my-settings' | 'branch-settings'
 
 interface SettingsNavItem {
     id: TSettingPage
@@ -22,12 +21,6 @@ interface SettingsNavItem {
 }
 
 const settingsNavItems: SettingsNavItem[] = [
-    {
-        id: 'appearance',
-        label: 'Appearance',
-        icon: PaintBrushIcon,
-        component: AppearanceSettings,
-    },
     {
         id: 'my-settings',
         label: 'My Settings',
@@ -50,7 +43,7 @@ const MainSettingsPage = () => {
             user_organization: { user_type },
         },
     } = useAuthUserWithOrg()
-    const [page, setPage] = useState<TSettingPage>('appearance')
+    const [page, setPage] = useState<TSettingPage>('my-settings')
 
     const currentPageItem = settingsNavItems.find((item) => item.id === page)
     const CurrentComponent = currentPageItem?.component

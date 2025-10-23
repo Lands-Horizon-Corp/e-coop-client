@@ -3,7 +3,7 @@ import { forwardRef, useState } from 'react'
 import { useQueryClient } from '@tanstack/react-query'
 
 import { PAGINATION_INITIAL_INDEX, PICKERS_SELECT_PAGE_SIZE } from '@/constants'
-import { IUserBase } from '@/modules/user'
+import { cn } from '@/helpers'
 import { IUserOrganization } from '@/modules/user-organization'
 import { PaginationState } from '@tanstack/react-table'
 
@@ -23,12 +23,13 @@ import {
 } from '../employee.service'
 
 interface Props {
-    value?: IUserBase
+    value?: IUserOrganization
     disabled?: boolean
     placeholder?: string
     onSelect?: (selectedEmployee: IUserOrganization) => void
     allowShorcutCommand?: boolean
     mode?: TEmployeesPaginatedHookMode
+    triggerClassName?: string
 }
 
 const EmployeePicker = forwardRef<HTMLButtonElement, Props>(
@@ -39,6 +40,7 @@ const EmployeePicker = forwardRef<HTMLButtonElement, Props>(
             disabled,
             allowShorcutCommand = false,
             placeholder,
+            triggerClassName,
             onSelect,
         },
         ref
@@ -176,7 +178,10 @@ const EmployeePicker = forwardRef<HTMLButtonElement, Props>(
                     />
                 </GenericPicker>
                 <Button
-                    className="w-full items-center justify-between rounded-md border bg-background p-0 px-2"
+                    className={cn(
+                        'w-full items-center justify-between rounded-md border bg-background p-0 px-2',
+                        triggerClassName
+                    )}
                     disabled={disabled}
                     onClick={() => setState((prev) => !prev)}
                     ref={ref}
@@ -187,9 +192,9 @@ const EmployeePicker = forwardRef<HTMLButtonElement, Props>(
                     <span className="justify-betweentext-sm inline-flex w-full items-center text-foreground/90">
                         <span className="inline-flex w-full items-center gap-x-2">
                             <div>
-                                <PreviewMediaWrapper media={value?.media}>
+                                <PreviewMediaWrapper media={value?.user?.media}>
                                     <ImageDisplay
-                                        src={value?.media?.download_url}
+                                        src={value?.user.media?.download_url}
                                     />
                                 </PreviewMediaWrapper>
                             </div>
@@ -198,7 +203,7 @@ const EmployeePicker = forwardRef<HTMLButtonElement, Props>(
                                     {value || placeholder || 'Select employee'}
                                 </span>
                             ) : (
-                                <span>{value?.full_name}</span>
+                                <span>{value?.user?.full_name}</span>
                             )}
                         </span>
                         {allowShorcutCommand && (

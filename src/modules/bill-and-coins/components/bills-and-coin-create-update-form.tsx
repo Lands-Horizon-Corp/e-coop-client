@@ -5,10 +5,9 @@ import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
 
 import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
 import { cn } from '@/helpers/tw-utils'
-import { CurrencyInput } from '@/modules/currency'
+import { CurrencyCombobox, CurrencyInput } from '@/modules/currency'
 import { IMedia } from '@/modules/media'
 
-import { CountryCombobox } from '@/components/comboboxes/country-combobox'
 import FormFooterResetSubmit from '@/components/form-components/form-footer-reset-submit'
 import Modal, { IModalProps } from '@/components/modals/modal'
 import { Form } from '@/components/ui/form'
@@ -25,18 +24,9 @@ import {
     useUpdateBillsAndCoinsById,
 } from '../bill-and-coins.service'
 import { IBillsAndCoin, IBillsAndCoinRequest } from '../bill-and-coins.types'
+import { BillsAndCoinSchema } from '../bill-and-coins.validation'
 
-const billsAndCoinSchema = z.object({
-    name: z.string().min(1, 'Name is required'),
-    value: z.coerce.number().min(0, 'Value is required'),
-    country_code: z.string().min(1, 'Country code is required'),
-    media_id: z.string().optional(),
-    media: z.any(),
-    branch_id: z.string().optional(),
-    organization_id: z.string().optional(),
-})
-
-type TBillsAndCoinFormValues = z.infer<typeof billsAndCoinSchema>
+type TBillsAndCoinSchema = z.infer<typeof BillsAndCoinSchema>
 
 export interface IBillsAndCoinFormProps
     extends IClassProps,
@@ -44,7 +34,7 @@ export interface IBillsAndCoinFormProps
             Partial<IBillsAndCoinRequest>,
             IBillsAndCoin,
             Error,
-            TBillsAndCoinFormValues
+            TBillsAndCoinSchema
         > {
     billsAndCoinId?: TEntityId
 }
@@ -54,14 +44,13 @@ const BillsAndCoinCreateUpdateForm = ({
     className,
     ...formProps
 }: IBillsAndCoinFormProps) => {
-    const form = useForm<TBillsAndCoinFormValues>({
-        resolver: standardSchemaResolver(billsAndCoinSchema),
+    const form = useForm<TBillsAndCoinSchema>({
+        resolver: standardSchemaResolver(BillsAndCoinSchema),
         reValidateMode: 'onChange',
         mode: 'onSubmit',
         defaultValues: {
             name: '',
             value: 0,
-            country_code: '',
             ...formProps.defaultValues,
         },
     })
@@ -80,7 +69,7 @@ const BillsAndCoinCreateUpdateForm = ({
     })
 
     const { formRef, handleFocusError, isDisabled } =
-        useFormHelper<TBillsAndCoinFormValues>({
+        useFormHelper<TBillsAndCoinSchema>({
             form,
             ...formProps,
         })
@@ -127,20 +116,23 @@ const BillsAndCoinCreateUpdateForm = ({
                                 />
                             )}
                         />
+
                         <FormFieldWrapper
                             control={form.control}
-                            label="Country Code *"
-                            name="country_code"
+                            label="Currency *"
+                            name="currency_id"
                             render={({ field }) => (
-                                <CountryCombobox
+                                <CurrencyCombobox
                                     {...field}
-                                    defaultValue={field.value}
-                                    onChange={(country) =>
-                                        field.onChange(country.alpha2)
-                                    }
+                                    onChange={(currency) => {
+                                        field.onChange(currency?.id)
+                                        form.setValue('currency', currency)
+                                    }}
+                                    value={field.value}
                                 />
                             )}
                         />
+
                         <FormFieldWrapper
                             control={form.control}
                             label="Value *"
@@ -148,8 +140,9 @@ const BillsAndCoinCreateUpdateForm = ({
                             render={({ field: { onChange, ...field } }) => (
                                 <CurrencyInput
                                     {...field}
+                                    currency={form.watch('currency')}
                                     disabled={isDisabled(field.name)}
-                                    onValueChange={(newValue) => {
+                                    onValueChange={(newValue = '') => {
                                         onChange(newValue)
                                     }}
                                     placeholder="Value"

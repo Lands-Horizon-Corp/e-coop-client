@@ -1,8 +1,8 @@
-import { formatNumber } from '@/helpers/number-utils'
 import KanbanContainer from '@/modules/approvals/components/kanban/kanban-container'
 import KanbanItemsContainer from '@/modules/approvals/components/kanban/kanban-items-container'
 import KanbanTitle from '@/modules/approvals/components/kanban/kanban-title'
 import { useAuthUserWithOrgBranch } from '@/modules/authentication/authgentication.store'
+import { currencyFormat } from '@/modules/currency'
 import {
     ITransactionBatch,
     useTransactionBatchAcceptBlotterView,
@@ -146,7 +146,10 @@ const TransactionBatchCard = ({
             <div className="grid grid-cols-2 gap-2">
                 <p className="text-muted-foreground">Beginning Bal.</p>{' '}
                 <p className="text-right">
-                    {formatNumber(transBatch.beginning_balance, 2)}
+                    {currencyFormat(transBatch.beginning_balance, {
+                        currency: transBatch.currency,
+                        showSymbol: !!transBatch.currency,
+                    })}
                 </p>
                 <p className="text-muted-foreground">Status</p>
                 <TransactionBatchStatusIndicator

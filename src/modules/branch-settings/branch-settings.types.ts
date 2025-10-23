@@ -3,8 +3,12 @@ import z from 'zod'
 import { IBaseEntityMeta, IPaginatedResult, TEntityId } from '@/types'
 
 import { IAccount } from '../account'
+import { ICurrency } from '../currency'
 import { IMemberType } from '../member-type'
-import { BranchSettingsSchema } from './branch-settings.validation'
+import {
+    BranchSettingsSchema,
+    TBranchSettingsCurrencySchema,
+} from './branch-settings.validation'
 
 export interface IBranchSettings extends IBaseEntityMeta {
     id: TEntityId
@@ -73,6 +77,9 @@ export interface IBranchSettings extends IBaseEntityMeta {
     default_member_type_id: TEntityId
     default_member_type: IMemberType
 
+    currency_id: TEntityId
+    currency: ICurrency
+
     loan_applied_equal_to_balance: boolean
 }
 
@@ -80,3 +87,7 @@ export type IBranchSettingsRequest = z.infer<typeof BranchSettingsSchema>
 
 export interface IBranchSettingsPaginated
     extends IPaginatedResult<IBranchSettings> {}
+
+//  FOR BRANCH SETTINGS CURRENCY
+
+export type IBranchSettingsCurrencyRequest = TBranchSettingsCurrencySchema

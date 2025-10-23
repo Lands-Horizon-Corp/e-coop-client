@@ -137,7 +137,7 @@ const GLAccountsGroupingUpdateFormModal = ({
                                 <CurrencyInput
                                     {...field}
                                     disabled={isDisabled(field.name)}
-                                    onValueChange={(newValue) => {
+                                    onValueChange={(newValue = '') => {
                                         onChange(newValue)
                                     }}
                                     placeholder="Debit"
@@ -152,7 +152,7 @@ const GLAccountsGroupingUpdateFormModal = ({
                                 <CurrencyInput
                                     {...field}
                                     disabled={isDisabled(field.name)}
-                                    onValueChange={(newValue) => {
+                                    onValueChange={(newValue = '') => {
                                         onChange(newValue)
                                     }}
                                     placeholder="Credit"

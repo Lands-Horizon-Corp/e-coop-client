@@ -21,6 +21,14 @@ import LoadingSpinner from '@/components/spinners/loading-spinner'
 import ActionTooltip from '@/components/tooltips/action-tooltip'
 import { Button } from '@/components/ui/button'
 import { ButtonGroup, ButtonGroupSeparator } from '@/components/ui/button-group'
+import {
+    Empty,
+    EmptyContent,
+    EmptyDescription,
+    EmptyHeader,
+    EmptyMedia,
+    EmptyTitle,
+} from '@/components/ui/empty'
 
 import { useModalState } from '@/hooks/use-modal-state'
 
@@ -30,10 +38,12 @@ import { logger } from '../computation-sheet.service'
 
 type Props = {
     computationSheetId: TEntityId
+    currencyId?: TEntityId
 }
 
 const ComputationSheetAccounts = ({
     className,
+    currencyId,
     computationSheetId,
 }: Props & IClassProps) => {
     const accountPickerState = useModalState()
@@ -51,13 +61,15 @@ const ComputationSheetAccounts = ({
     return (
         <div
             className={cn(
-                'p-4 border rounded-md flex flex-col gap-4 bg-popover',
+                'p-4 rounded-xl flex flex-col gap-4 bg-popover',
                 className
             )}
         >
             <AccountPicker
+                currencyId={currencyId as TEntityId}
                 modalOnly
                 modalState={accountPickerState}
+                mode="currency-loan"
                 onSelect={(selectedAccount) => {
                     toast.promise(
                         connectAccountMutation.mutateAsync({
@@ -107,7 +119,32 @@ const ComputationSheetAccounts = ({
                 </ButtonGroup>
             </div>
             {isPending && <p>Loading accounts...</p>}
-            {!isPending && data.length === 0 && <p>No accounts found.</p>}
+            {!isPending && data.length === 0 && (
+                <Empty className="from-muted/50 to-background h-full bg-gradient-to-b from-30%">
+                    <EmptyHeader>
+                        <EmptyMedia variant="icon">
+                            <LinkIcon />
+                        </EmptyMedia>
+                        <EmptyTitle>No Accounts Connected</EmptyTitle>
+                        <EmptyDescription>
+                            Connect an account to get started. Click the button
+                            above to link your first account.
+                        </EmptyDescription>
+                    </EmptyHeader>
+                    <EmptyContent>
+                        <Button
+                            onClick={() =>
+                                accountPickerState.onOpenChange(true)
+                            }
+                            size="sm"
+                            variant="outline"
+                        >
+                            <LinkIcon className="size-4" />
+                            Connect Account
+                        </Button>
+                    </EmptyContent>
+                </Empty>
+            )}
             {!isPending && data.length > 0 && (
                 <ul className="space-y-2">
                     {data.map((account) => (

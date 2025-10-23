@@ -9,10 +9,19 @@ import { cn } from '@/helpers/tw-utils'
 import { FootstepAPI, IFootstep } from '@/modules/footstep'
 import FootstepDetail from '@/modules/footstep/components/footstep-detail'
 
-import { RefreshIcon } from '@/components/icons'
+import PageContainer from '@/components/containers/page-container'
+import { FootstepsIcon, RefreshIcon } from '@/components/icons'
 import LoadingSpinner from '@/components/spinners/loading-spinner'
 import ActionTooltip from '@/components/tooltips/action-tooltip'
 import { Button } from '@/components/ui/button'
+import {
+    Empty,
+    EmptyContent,
+    EmptyDescription,
+    EmptyHeader,
+    EmptyMedia,
+    EmptyTitle,
+} from '@/components/ui/empty'
 import { Sheet, SheetContent } from '@/components/ui/sheet'
 import { Skeleton } from '@/components/ui/skeleton'
 
@@ -38,7 +47,7 @@ function RouteComponent() {
                 const [error, result] = await withCatchAsync(
                     FootstepAPI.getPaginated<IFootstep>({
                         query: { pageIndex, pageSize },
-                        url: `${FootstepAPI.route}/branch/search`,
+                        url: `${FootstepAPI.route}/me/search`,
                     })
                 )
 
@@ -72,8 +81,8 @@ function RouteComponent() {
     })
 
     return (
-        <div className="space-y-4">
-            <div className="flex justify-between items-center">
+        <PageContainer className="max-w-4xl bg-secondary/20 text-secondary-foreground rounded-3xl mx-auto p-4">
+            <div className="flex justify-between w-full items-center">
                 <div className="space-y-2">
                     <p className="text-4xl">Activity Logs</p>
                     <p className="text-sm text-muted-foreground/80">
@@ -82,6 +91,7 @@ function RouteComponent() {
                 </div>
                 <Button
                     className="size-fit p-2"
+                    disabled={isPending || isFetching}
                     onClick={() => refetch()}
                     size="icon"
                     variant="secondary"
@@ -93,41 +103,67 @@ function RouteComponent() {
                     )}
                 </Button>
             </div>
-            <div className="border rounded-xl">
-                {ActivityLogs.length === 0 && !isFetching && (
-                    <p className="w-full text-center py-24 text-muted-foreground text-sm">
-                        No activity yet
-                    </p>
-                )}
-                {ActivityLogs.map((footstep) => (
-                    <ActivityItem
-                        className="last:border-b-0 border-b"
-                        footstep={footstep}
-                        key={footstep.id}
-                    />
-                ))}
-                {!hasNextPage && !isFetching && (
-                    <p className="text-center text-xs last:border-b-0 border-0 text-muted-foreground/70 py-4">
-                        no more to load
-                    </p>
-                )}
-                {isFetching ? (
-                    <div className="rounded-none p-4 w-full flex items-center justify-between">
-                        <div className="space-y-2">
-                            <Skeleton className="w-56 h-6" />
-                            <div className="flex items-center gap-x-2">
-                                <Skeleton className="w-16 h-4" />
-                                <Skeleton className="w-48 h-4" />
-                                <Skeleton className="w-16 h-4" />
+            {isPending && <LoadingSpinner className="mx-auto" />}
+            {ActivityLogs.length === 0 && !isPending && (
+                <Empty className="from-muted/50 w-full to-background h-full bg-gradient-to-b from-30%">
+                    <EmptyHeader>
+                        <EmptyMedia variant="icon">
+                            <FootstepsIcon />
+                        </EmptyMedia>
+                        <EmptyTitle>No Activity Logs</EmptyTitle>
+                        <EmptyDescription>
+                            No activity recorded yet. Your actions will appear
+                            here.
+                        </EmptyDescription>
+                    </EmptyHeader>
+                    <EmptyContent>
+                        <Button
+                            disabled={isPending || isFetching}
+                            onClick={() => refetch()}
+                            size="sm"
+                            variant="outline"
+                        >
+                            {isFetching || isPending ? (
+                                <LoadingSpinner />
+                            ) : (
+                                <RefreshIcon />
+                            )}
+                            Refresh
+                        </Button>
+                    </EmptyContent>
+                </Empty>
+            )}
+            {ActivityLogs.length > 0 && (
+                <div className="border rounded-xl w-full">
+                    {ActivityLogs.map((footstep) => (
+                        <ActivityItem
+                            className="last:border-b-0 border-b"
+                            footstep={footstep}
+                            key={footstep.id}
+                        />
+                    ))}
+                    {!hasNextPage && !isFetching && (
+                        <p className="text-center text-xs last:border-b-0 border-0 text-muted-foreground/70 py-4">
+                            no more to load
+                        </p>
+                    )}
+                    {isFetching && (
+                        <div className="rounded-none p-4 w-full flex items-center justify-between">
+                            <div className="space-y-2">
+                                <Skeleton className="w-56 h-6" />
+                                <div className="flex items-center gap-x-2">
+                                    <Skeleton className="w-16 h-4" />
+                                    <Skeleton className="w-48 h-4" />
+                                    <Skeleton className="w-16 h-4" />
+                                </div>
                             </div>
+                            <Skeleton className="w-16 h-4" />
                         </div>
-                        <Skeleton className="w-16 h-4" />
-                    </div>
-                ) : (
-                    <span ref={ref} />
-                )}
-            </div>
-        </div>
+                    )}
+                    {!isFetching && <span ref={ref} />}
+                </div>
+            )}
+        </PageContainer>
     )
 }
 

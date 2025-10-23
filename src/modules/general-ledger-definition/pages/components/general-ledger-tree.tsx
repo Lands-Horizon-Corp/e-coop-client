@@ -392,6 +392,7 @@ const GeneralLedgerDefinitionTreeViewer = ({
                                 : newState(openAddAccountPickerModal)
                         ),
                 }}
+                mode="all"
                 onSelect={(account) => {
                     handleAccountSelection(account)
                 }}

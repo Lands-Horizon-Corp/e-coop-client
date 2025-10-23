@@ -3,14 +3,15 @@ import { useQueryClient } from '@tanstack/react-query'
 import { cn } from '@/helpers'
 import { toReadableDate } from '@/helpers/date-utils'
 import { useAuthUserWithOrg } from '@/modules/authentication/authgentication.store'
+import { ICurrency } from '@/modules/currency'
+import { CurrencyBadge } from '@/modules/currency/components/currency-badge'
 
 import { EyeIcon, LayersSharpDotIcon } from '@/components/icons'
 import { Button } from '@/components/ui/button'
-import { Separator } from '@/components/ui/separator'
 
 import { useModalState } from '@/hooks/use-modal-state'
 
-import { IClassProps } from '@/types'
+import { IClassProps, TEntityId } from '@/types'
 
 import {
     ITransactionBatch,
@@ -56,7 +57,7 @@ const TransactionBatch = ({
     return (
         <div
             className={cn(
-                'ecoop-scroll flex max-h-[90vh] min-w-[900px] flex-col gap-y-3 overflow-auto rounded-2xl border-2 bg-secondary p-4 ring-offset-1 dark:bg-popover',
+                'ecoop-scroll flex max-h-[90vh] w-full flex-col gap-y-3 overflow-auto rounded-2xl border-2 bg-secondary p-4 ring-offset-1 dark:bg-popover',
                 'shadow-xl',
                 className
             )}
@@ -82,7 +83,14 @@ const TransactionBatch = ({
                 <div className="flex items-start gap-x-2">
                     <LayersSharpDotIcon className="mt-1 inline text-primary" />{' '}
                     <div>
-                        <p>Transaction Batch</p>
+                        <div>
+                            Transaction Batch{' '}
+                            <CurrencyBadge
+                                currency={transactionBatch.currency}
+                                displayFormat="symbol-code"
+                                size="sm"
+                            />
+                        </div>
                         <p className="text-xs text-muted-foreground dark:text-muted-foreground/40">
                             {toReadableDate(
                                 transactionBatch?.created_at,
@@ -101,14 +109,19 @@ const TransactionBatch = ({
                     <EyeIcon className="mr-2 inline" /> View History
                 </Button>
             </div>
-            <div className="flex min-h-[40vh] w-full shrink-0 gap-x-2">
+            <div className="flex min-h-[40vh] w-full max-w-7xl shrink-0 gap-x-2">
                 <div className="flex-1 space-y-2 rounded-2xl border bg-background p-4">
                     <div className="flex gap-x-2">
                         <BeginningBalanceCard
+                            currency={transactionBatch.currency}
                             onAdd={() => invalidateTransactionBatch()}
                             transactionBatch={transactionBatch}
                         />
                         <DepositInBankCard
+                            currency={transactionBatch?.currency as ICurrency}
+                            currency_id={
+                                transactionBatch?.currency_id as TEntityId
+                            }
                             depositInBankAmount={
                                 transactionBatch?.deposit_in_bank ?? 0
                             }
@@ -120,22 +133,22 @@ const TransactionBatch = ({
                         onCashCountUpdate={() => invalidateTransactionBatch()}
                         transactionBatch={transactionBatch}
                     />
-                    <Separator />
                     <BatchCheckRemitance
+                        currency={transactionBatch?.currency}
                         onCheckRemittanceUpdate={() =>
                             invalidateTransactionBatch()
                         }
                         transactionBatchId={transactionBatch?.id}
                     />
-                    <Separator />
                     <BatchOnlineRemittance
+                        currency={transactionBatch?.currency}
                         onOnlineRemittanceUpdate={() =>
                             invalidateTransactionBatch()
                         }
                         transactionBatchId={transactionBatch?.id}
                     />
-                    <Separator />
                     <TransactionBatchDisbursementTransaction
+                        currency={transactionBatch.currency}
                         onDisbursementUpdate={() =>
                             invalidateTransactionBatch()
                         }

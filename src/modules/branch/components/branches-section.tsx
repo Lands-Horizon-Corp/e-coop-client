@@ -1,10 +1,6 @@
 import { IBranch } from '@/modules/branch'
 
-import {
-    BranchIcon,
-    // PlusIcon
-} from '@/components/icons'
-// import { Button } from '@/components/ui/button'
+import { BranchIcon } from '@/components/icons'
 import { ScrollArea } from '@/components/ui/scroll-area'
 
 import { TEntityId } from '@/types'

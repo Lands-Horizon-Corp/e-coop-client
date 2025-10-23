@@ -6,6 +6,7 @@ import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
 import { cn } from '@/helpers'
 import { withToastCallbacks } from '@/helpers/callback-helper'
 import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
+import { CurrencyCombobox } from '@/modules/currency'
 
 import FormFooterResetSubmit from '@/components/form-components/form-footer-reset-submit'
 import {
@@ -127,6 +128,25 @@ const ComputationSheetCreateUpdateForm = ({
                                 disabled={isDisabled(field.name)}
                                 placeholder="Computation Sheet Name"
                                 type="text"
+                            />
+                        )}
+                    />
+                    <FormFieldWrapper
+                        control={form.control}
+                        description="WARN: This is uneditable once saved"
+                        label="Currency *"
+                        name="currency_id"
+                        render={({ field }) => (
+                            <CurrencyCombobox
+                                disabled={
+                                    isDisabled(field.name) ||
+                                    computationSheetId !== undefined
+                                }
+                                onChange={(selected) =>
+                                    field.onChange(selected.id)
+                                }
+                                placeholder="Select Currency"
+                                value={field.value}
                             />
                         )}
                     />

@@ -3,6 +3,7 @@ import { toReadableDate } from '@/helpers/date-utils'
 import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
 import AccountBadge from '@/modules/account/components/badges/account-badge'
 import GeneralStatusBadge from '@/modules/authentication/components/general-status-badge'
+import { currencyFormat } from '@/modules/currency'
 import LoanLedgerTable from '@/modules/loan-ledger/components/loan-ledger-table'
 import {
     ILoanTransaction,
@@ -271,7 +272,7 @@ const LoanDetails = ({
         applied_1,
         due_date,
         amount_granted,
-        amortization_amount,
+        amortization,
         add_on_amount,
 
         deducted_interest,
@@ -387,7 +388,11 @@ const LoanDetails = ({
                         Amount Applied:
                         <span className="px-2 py-1 rounded-md bg-primary/40 border border-primary text-primary-foreground font-mono text-xs">
                             {typeof applied_1 === 'number' ? (
-                                formatNumber(applied_1, 2)
+                                currencyFormat(applied_1, {
+                                    currency: loanTransaction.account?.currency,
+                                    showSymbol:
+                                        !!loanTransaction.account?.currency,
+                                })
                             ) : (
                                 <span className="text-xs text-muted-foreground">
                                     ...
@@ -399,7 +404,11 @@ const LoanDetails = ({
                         Amount Granted:
                         <span className="px-2 py-1 rounded-md border border-green-400/40 bg-green-300/20 text-green-400 font-mono text-xs">
                             {typeof amount_granted === 'number' ? (
-                                formatNumber(amount_granted, 2)
+                                currencyFormat(amount_granted, {
+                                    currency: loanTransaction.account?.currency,
+                                    showSymbol:
+                                        !!loanTransaction.account?.currency,
+                                })
                             ) : (
                                 <span className="text-xs text-muted-foreground">
                                     ...
@@ -410,8 +419,12 @@ const LoanDetails = ({
                     <div className="flex text-muted-foreground text-xs items-center gap-1">
                         Amortization:
                         <span className="px-2 py-1 rounded-md border border-border bg-secondary font-mono text-xs">
-                            {typeof amortization_amount === 'number' ? (
-                                formatNumber(amortization_amount, 2)
+                            {typeof amortization === 'number' ? (
+                                currencyFormat(amortization, {
+                                    currency: loanTransaction.account?.currency,
+                                    showSymbol:
+                                        !!loanTransaction.account?.currency,
+                                })
                             ) : (
                                 <span className="text-xs text-muted-foreground">
                                     ...
@@ -423,7 +436,11 @@ const LoanDetails = ({
                         Add-On Amount:
                         <span className="px-2 py-1 rounded-md border border-border bg-secondary font-mono text-xs">
                             {typeof add_on_amount === 'number' ? (
-                                formatNumber(add_on_amount, 2)
+                                currencyFormat(add_on_amount, {
+                                    currency: loanTransaction.account?.currency,
+                                    showSymbol:
+                                        !!loanTransaction.account?.currency,
+                                })
                             ) : (
                                 <span className="text-xs text-muted-foreground">
                                     ...
@@ -492,7 +509,10 @@ const LoanDetails = ({
                     </span>
                     <span className="px-2 py-1 rounded-md border border-border bg-secondary font-mono text-xs text-center">
                         {typeof unpaid_principal_amount === 'number' ? (
-                            formatNumber(unpaid_principal_amount, 2)
+                            currencyFormat(unpaid_principal_amount, {
+                                currency: loanTransaction.account?.currency,
+                                showSymbol: !!loanTransaction.account?.currency,
+                            })
                         ) : (
                             <span className="text-xs text-muted-foreground">
                                 ...
@@ -501,7 +521,10 @@ const LoanDetails = ({
                     </span>
                     <span className="px-2 py-1 rounded-md border border-border bg-secondary font-mono text-xs text-center">
                         {typeof unpaid_interest_amount === 'number' ? (
-                            formatNumber(unpaid_interest_amount, 2)
+                            currencyFormat(unpaid_interest_amount, {
+                                currency: loanTransaction.account?.currency,
+                                showSymbol: !!loanTransaction.account?.currency,
+                            })
                         ) : (
                             <span className="text-xs text-muted-foreground">
                                 ...
@@ -544,7 +567,11 @@ const LoanDetails = ({
                         Deducted Interest:
                         <span className="px-2 py-1 rounded-md border border-border bg-secondary font-mono text-xs">
                             {typeof deducted_interest === 'number' ? (
-                                formatNumber(deducted_interest, 2)
+                                currencyFormat(deducted_interest, {
+                                    currency: loanTransaction.account?.currency,
+                                    showSymbol:
+                                        !!loanTransaction.account?.currency,
+                                })
                             ) : (
                                 <span className="text-xs text-muted-foreground">
                                     ...
@@ -556,7 +583,11 @@ const LoanDetails = ({
                         Advance Payment:
                         <span className="px-2 py-1 rounded-md border border-border bg-secondary font-mono text-xs">
                             {typeof advance_payment === 'number' ? (
-                                formatNumber(advance_payment, 2)
+                                currencyFormat(advance_payment, {
+                                    currency: loanTransaction.account?.currency,
+                                    showSymbol:
+                                        !!loanTransaction.account?.currency,
+                                })
                             ) : (
                                 <span className="text-xs text-muted-foreground">
                                     ...
@@ -601,7 +632,11 @@ const LoanDetails = ({
                         Arrears:
                         <span className="px-2 py-1 rounded-md border border-border bg-secondary font-mono text-xs">
                             {typeof arrears === 'number' ? (
-                                formatNumber(arrears, 2)
+                                currencyFormat(arrears, {
+                                    currency: loanTransaction.account?.currency,
+                                    showSymbol:
+                                        !!loanTransaction.account?.currency,
+                                })
                             ) : (
                                 <span className="text-xs text-muted-foreground">
                                     ...
@@ -613,7 +648,11 @@ const LoanDetails = ({
                         Interest:
                         <span className="px-2 py-1 rounded-md border border-border bg-secondary font-mono text-xs">
                             {typeof interest === 'number' ? (
-                                formatNumber(interest, 2)
+                                currencyFormat(interest, {
+                                    currency: loanTransaction.account?.currency,
+                                    showSymbol:
+                                        !!loanTransaction.account?.currency,
+                                })
                             ) : (
                                 <span className="text-xs text-muted-foreground">
                                     ...
@@ -625,7 +664,11 @@ const LoanDetails = ({
                         Fines:
                         <span className="px-2 py-1 rounded-md border border-border bg-secondary font-mono text-xs">
                             {typeof fines === 'number' ? (
-                                formatNumber(fines, 2)
+                                currencyFormat(fines, {
+                                    currency: loanTransaction.account?.currency,
+                                    showSymbol:
+                                        !!loanTransaction.account?.currency,
+                                })
                             ) : (
                                 <span className="text-xs text-muted-foreground">
                                     ...
@@ -820,7 +863,14 @@ const LoanQuickSummary = ({
                                     </TableCell>
                                     <TableCell className="w-1/3 text-right font-mono">
                                         {typeof amount === 'number' ? (
-                                            formatNumber(amount, 2)
+                                            currencyFormat(amount, {
+                                                currency:
+                                                    loanTransaction.account
+                                                        ?.currency,
+                                                showSymbol:
+                                                    !!loanTransaction.account
+                                                        ?.currency,
+                                            })
                                         ) : (
                                             <span className="text-xs text-muted-foreground">
                                                 ...
@@ -844,7 +894,11 @@ const LoanQuickSummary = ({
                         </span>
                         <span className="px-2 py-1 rounded-md border border-border bg-secondary font-mono text-xs text-right">
                             {typeof principal_paid === 'number' ? (
-                                formatNumber(principal_paid, 2)
+                                currencyFormat(principal_paid, {
+                                    currency: loanTransaction.account?.currency,
+                                    showSymbol:
+                                        !!loanTransaction.account?.currency,
+                                })
                             ) : (
                                 <span className="text-xs text-muted-foreground">
                                     ...
@@ -858,7 +912,11 @@ const LoanQuickSummary = ({
                         </span>
                         <span className="px-2 py-1 rounded-md border border-border bg-secondary font-mono text-xs text-right">
                             {typeof previous_interest_paid === 'number' ? (
-                                formatNumber(previous_interest_paid, 2)
+                                currencyFormat(previous_interest_paid, {
+                                    currency: loanTransaction.account?.currency,
+                                    showSymbol:
+                                        !!loanTransaction.account?.currency,
+                                })
                             ) : (
                                 <span className="text-xs text-muted-foreground">
                                     ...
@@ -872,7 +930,11 @@ const LoanQuickSummary = ({
                         </span>
                         <span className="px-2 py-1 rounded-md border border-border bg-secondary font-mono text-xs text-right">
                             {typeof previous_fines_paid === 'number' ? (
-                                formatNumber(previous_fines_paid, 2)
+                                currencyFormat(previous_fines_paid, {
+                                    currency: loanTransaction.account?.currency,
+                                    showSymbol:
+                                        !!loanTransaction.account?.currency,
+                                })
                             ) : (
                                 <span className="text-xs text-muted-foreground">
                                     ...
@@ -886,7 +948,11 @@ const LoanQuickSummary = ({
                         </span>
                         <span className="px-2 py-1 rounded-md border border-border bg-secondary font-mono text-xs text-right">
                             {typeof interest_paid === 'number' ? (
-                                formatNumber(interest_paid, 2)
+                                currencyFormat(interest_paid, {
+                                    currency: loanTransaction.account?.currency,
+                                    showSymbol:
+                                        !!loanTransaction.account?.currency,
+                                })
                             ) : (
                                 <span className="text-xs text-muted-foreground">
                                     ...
@@ -900,7 +966,11 @@ const LoanQuickSummary = ({
                         </span>
                         <span className="px-2 py-1 rounded-md border border-border bg-secondary font-mono text-xs text-right">
                             {typeof fines_paid === 'number' ? (
-                                formatNumber(fines_paid, 2)
+                                currencyFormat(fines_paid, {
+                                    currency: loanTransaction.account?.currency,
+                                    showSymbol:
+                                        !!loanTransaction.account?.currency,
+                                })
                             ) : (
                                 <span className="text-xs text-muted-foreground">
                                     ...

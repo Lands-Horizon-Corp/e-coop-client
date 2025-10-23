@@ -1,6 +1,10 @@
 import z from 'zod'
 
-import { descriptionTransformerSanitizer, entityIdSchema } from '@/validation'
+import {
+    EntityIdSchema,
+    descriptionTransformerSanitizer,
+    entityIdSchema,
+} from '@/validation'
 
 export const ComputationSheetSchema = z.object({
     id: entityIdSchema.optional(),
@@ -13,6 +17,9 @@ export const ComputationSheetSchema = z.object({
         .string()
         .optional()
         .transform(descriptionTransformerSanitizer),
+
+    currency_id: EntityIdSchema('Currency is required'),
+    currency: z.any().optional(),
 
     deliquent_account: z.boolean(),
     fines_account: z.boolean(),

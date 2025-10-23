@@ -9,9 +9,8 @@ import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
 import { cn } from '@/helpers'
 import { withToastCallbacks } from '@/helpers/callback-helper'
 import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
-import { IAccount } from '@/modules/account'
 import CompanyCombobox from '@/modules/company/components/combobox'
-import { currencyFormat } from '@/modules/currency'
+import { CurrencyCombobox, currencyFormat } from '@/modules/currency'
 import {
     IJournalVoucher,
     IJournalVoucherRequest,
@@ -20,15 +19,10 @@ import {
     useCreateJournalVoucher,
     useUpdateJournalVoucherById,
 } from '@/modules/journal-voucher'
-import {
-    IJournalVoucherEntryRequest,
-    JournalVoucherEntrySchema,
-} from '@/modules/journal-voucher-entry'
 import { JournalVoucherTagsManagerPopover } from '@/modules/journal-voucher-tag/components/journal-voucher-tag-management'
 import { IMemberProfile } from '@/modules/member-profile'
 import MemberPicker from '@/modules/member-profile/components/member-picker'
 import { useTransactionBatchStore } from '@/modules/transaction-batch/store/transaction-batch-store'
-import { useJournalVoucherStore } from '@/store/journal-voucher-store'
 import { useMemberPickerStore } from '@/store/member-picker-store'
 import { useHotkeys } from 'react-hotkeys-hook'
 
@@ -41,7 +35,6 @@ import { Form } from '@/components/ui/form'
 import FormFieldWrapper from '@/components/ui/form-field-wrapper'
 import { Input } from '@/components/ui/input'
 import InputDate from '@/components/ui/input-date'
-import { Textarea } from '@/components/ui/textarea'
 
 import { useFormHelper } from '@/hooks/use-form-helper'
 
@@ -55,74 +48,13 @@ type TJournalVoucherFormValues = z.infer<typeof JournalVoucherSchema>
 export interface IJournalVoucherCreateUpdateFormProps
     extends IClassProps,
         IForm<
-            IJournalVoucher,
+            Partial<IJournalVoucher>,
             IJournalVoucherRequest,
             Error,
             TJournalVoucherFormValues
         > {
     journalVoucherId?: TEntityId
     mode?: 'create' | 'update' | 'readOnly'
-}
-
-type TValidateResult =
-    | {
-          isValid: true
-          validatedEntries: IJournalVoucherEntryRequest[]
-      }
-    | {
-          isValid: false
-          error: string
-      }
-type TValidateJournalEntryProps = {
-    data: IJournalVoucherEntryRequest[]
-}
-
-const ValidateJournalEntry = ({
-    data,
-}: TValidateJournalEntryProps): TValidateResult => {
-    const transformedEntries = data.map((entry) => {
-        const memberProfile = entry.member_profile as
-            | IMemberProfile
-            | undefined
-            | null
-        const account = entry.account as IAccount | undefined | null
-
-        return {
-            cash_check_voucher_number: entry.cash_check_voucher_number,
-            id: entry.id,
-            credit: entry.credit,
-            debit: entry.debit,
-            member_profile_id: memberProfile?.id,
-            account_id: account?.id,
-        }
-    })
-
-    const parsedEntries = z
-        .array(JournalVoucherEntrySchema)
-        .safeParse(transformedEntries)
-
-    if (!parsedEntries.success) {
-        const firstError = parsedEntries.error.issues[0]
-        const fieldPath = firstError.path
-
-        const fieldName = String(fieldPath[fieldPath.length - 1])
-        const errorMessage = firstError.message
-
-        const errorLocation =
-            fieldPath.length > 1
-                ? `Entry ${parseInt(String(fieldPath[0])) + 1}: `
-                : ''
-
-        return {
-            isValid: false,
-            error: `Field Error: ${errorLocation}name: ${fieldName} message: ${errorMessage}`,
-        }
-    }
-
-    return {
-        isValid: true,
-        validatedEntries: transformedEntries,
-    }
 }
 
 const JournalVoucherCreateUpdateForm = ({
@@ -148,13 +80,6 @@ const JournalVoucherCreateUpdateForm = ({
     )
     const isUpdate = !!editJournalId
 
-    const {
-        selectedJournalVoucherEntry,
-        setSelectedJournalVoucherEntry,
-        journalVoucherEntriesDeleted,
-        resetJournalVoucherDeleted,
-    } = useJournalVoucherStore()
-
     const { setSelectedMember } = useMemberPickerStore()
 
     const form = useForm<TJournalVoucherFormValues>({
@@ -176,9 +101,9 @@ const JournalVoucherCreateUpdateForm = ({
             ...withToastCallbacks({
                 textSuccess: 'Journal Voucher Created',
                 onSuccess: (data) => {
+                    form.reset(data)
                     formProps.onSuccess?.(data)
                     setEditJournalId(data.id)
-                    setSelectedJournalVoucherEntry([])
                     setDefaultMode('update')
                 },
                 onError: formProps.onError,
@@ -196,8 +121,8 @@ const JournalVoucherCreateUpdateForm = ({
             ...withToastCallbacks({
                 textSuccess: 'Journal Voucher updated',
                 onSuccess: (data) => {
+                    form.reset(data)
                     formProps.onSuccess?.(data)
-                    resetJournalVoucherDeleted()
                 },
                 onError: formProps.onError,
             }),
@@ -216,24 +141,11 @@ const JournalVoucherCreateUpdateForm = ({
             ...formData,
             date: new Date(formData.date).toISOString(),
         }
-        const validateResult = ValidateJournalEntry({
-            data: selectedJournalVoucherEntry,
-        })
 
-        if (isUpdate && validateResult.isValid) {
+        if (isUpdate) {
             updateJournalVoucher({
                 id: editJournalId,
-                payload: {
-                    ...payload,
-                    journal_voucher_entries: validateResult.validatedEntries,
-                    journal_voucher_entries_deleted:
-                        journalVoucherEntriesDeleted,
-                },
-            })
-        } else if (!validateResult.isValid) {
-            form.setError('root', {
-                type: 'custom',
-                message: validateResult.error,
+                payload: payload,
             })
         } else {
             createJournalVoucher(payload)
@@ -247,23 +159,9 @@ const JournalVoucherCreateUpdateForm = ({
         serverRequestErrExtractor({ error: rawError }) ||
         form.formState.errors?.root?.message
 
-    const JournalEntries =
-        defaultValues?.journal_voucher_entries?.map((entry) => ({
-            id: entry.id,
-            account_id: entry.account_id,
-            member_profile_id: entry.member_profile_id,
-            member_profile: entry.member_profile,
-            account: entry.account,
-            employee_user_id: entry.employee_user_id,
-            cash_check_voucher_number: entry.cash_check_voucher_number,
-            description: entry.description,
-            debit: entry.debit,
-            credit: entry.credit,
-        })) ?? []
-
     const handleSetMemberProfile = useCallback(
         (memberProfile: IMemberProfile | undefined) => {
-            form.setValue('name', memberProfile?.id)
+            form.setValue('name', memberProfile?.full_name || '')
             form.setValue('member_profile', memberProfile)
         },
         [form]
@@ -310,7 +208,9 @@ const JournalVoucherCreateUpdateForm = ({
                         {editJournalId && defaultValues && (
                             <div className="">
                                 <JournalVoucherStatusIndicator
-                                    journalVoucher={defaultValues}
+                                    journalVoucher={
+                                        defaultValues as IJournalVoucher
+                                    }
                                 />
                             </div>
                         )}
@@ -329,16 +229,17 @@ const JournalVoucherCreateUpdateForm = ({
                             </CommandShortcut>
                         </div>
                     </div>
-                    <div className="col-span-1 md:col-span-4 flex flex-col">
+                    <div className="col-span-1 md:col-span-4 gap-2 grid grid-cols-2">
                         <FormFieldWrapper
-                            className="w-full "
+                            className="w-full"
                             control={form.control}
+                            label="Name *"
                             name="name"
                             render={({ field }) => {
                                 return (
                                     <div className="relative w-full">
                                         <Input
-                                            className="!text-md p-5 font-semibold h-12"
+                                            className="!text-md pr-12 font-semibold"
                                             {...field}
                                             id={field.name}
                                             value={field.value || ''}
@@ -363,8 +264,27 @@ const JournalVoucherCreateUpdateForm = ({
                                 )
                             }}
                         />
+                        <FormFieldWrapper
+                            control={form.control}
+                            label="Currency *"
+                            name="currency_id"
+                            render={({ field }) => (
+                                <CurrencyCombobox
+                                    {...field}
+                                    disabled={
+                                        isDisabled(field.name) ||
+                                        (!!editJournalId &&
+                                            !!form.watch('currency_id'))
+                                    }
+                                    onChange={(currency) => {
+                                        field.onChange(currency?.id)
+                                        form.setValue('currency', currency)
+                                    }}
+                                    value={field.value}
+                                />
+                            )}
+                        />
                     </div>
-
                     <div className="col-span-4 relative grid grid-cols-2 gap-x-2">
                         <FormFieldWrapper
                             className="relative"
@@ -470,44 +390,48 @@ const JournalVoucherCreateUpdateForm = ({
                             />
                         )}
                     />
-                    <FormFieldWrapper
-                        className="col-span-1 md:col-span-4 !max-h-xs"
-                        control={form.control}
-                        label="Particulars"
-                        name="description"
-                        render={({ field }) => (
-                            <Textarea
-                                {...field}
-                                className="!max-h-[100px] h-[70px] resize-y"
-                                disabled={isDisabled(field.name)}
-                                id={field.name}
-                                placeholder="Particulars"
-                            />
-                        )}
-                    />
+
                     {defaultMode !== 'create' && (
-                        <JournalEntryTable
-                            className="col-span-1 md:col-span-4"
-                            defaultMemberProfile={defaultMemberProfile}
-                            journalVoucherId={journalVoucherId ?? ''}
-                            mode={defaultMode}
-                            rowData={JournalEntries}
-                            transactionBatchId={data?.id}
-                        />
+                        <>
+                            <FormFieldWrapper
+                                className="col-span-1 md:col-span-4 !max-h-xs"
+                                control={form.control}
+                                label="Particulars"
+                                name="journal_voucher_entries"
+                                render={({ field }) => (
+                                    <JournalEntryTable
+                                        className="col-span-1 md:col-span-4"
+                                        currency={form.watch('currency')}
+                                        defaultMemberProfile={
+                                            defaultMemberProfile
+                                        }
+                                        form={form}
+                                        journalVoucherId={
+                                            journalVoucherId ?? ''
+                                        }
+                                        mode={defaultMode}
+                                        ref={field.ref}
+                                        transactionBatchId={data?.id}
+                                    />
+                                )}
+                            />
+                        </>
                     )}
                 </fieldset>
                 <div className="w-full flex justify-end gap-4">
                     <div className="max-w-[130px] flex-col flex justify-end">
                         <p className="text-primary bg-background border text-left rounded-md pl-8 pr-10 py-1 text-lg font-bold">
-                            {currencyFormat(defaultValues?.total_debit || 0, {
-                                showSymbol: false,
+                            {currencyFormat(form.watch('total_debit') || 0, {
+                                currency: form.watch('currency'),
+                                showSymbol: !!form.watch('currency'),
                             })}
                         </p>
                     </div>
                     <div className="max-w-[130px]">
                         <p className="text-primary bg-background border text-left rounded-md pl-8 pr-10 py-1 text-lg font-bold">
-                            {currencyFormat(defaultValues?.total_credit || 0, {
-                                showSymbol: false,
+                            {currencyFormat(form.watch('total_credit') || 0, {
+                                currency: form.watch('currency'),
+                                showSymbol: !!form.watch('currency'),
                             })}
                         </p>
                     </div>
@@ -528,7 +452,6 @@ const JournalVoucherCreateUpdateForm = ({
                             form.reset()
                             resetCreate()
                         }
-                        setSelectedJournalVoucherEntry([])
                         setSelectedMember(null)
                         queryClient.invalidateQueries({
                             queryKey: [journalVoucherBaseKey, 'paginated'],
@@ -555,7 +478,7 @@ export const JournalVoucherCreateUpdateFormModal = ({
 
     return (
         <Modal
-            className={cn('!min-w-2xl !max-w-4xl', className)}
+            className={cn('!min-w-2xl !max-w-7xl', className)}
             title={
                 <div>
                     <p className="font-medium">

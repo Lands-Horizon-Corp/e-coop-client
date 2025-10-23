@@ -15,7 +15,12 @@ const JournalVoucherPage = () => {
     const createModal = useModalState(false)
     const {
         currentAuth: {
-            user_organization: { branch_id },
+            user_organization: {
+                branch_id,
+                branch: {
+                    branch_setting: { currency },
+                },
+            },
         },
     } = useAuthUserWithOrgBranch()
 
@@ -57,7 +62,15 @@ const JournalVoucherPage = () => {
 
     return (
         <PageContainer>
-            <JournalVoucherCreateUpdateFormModal {...createModal} />
+            <JournalVoucherCreateUpdateFormModal
+                {...createModal}
+                formProps={{
+                    defaultValues: {
+                        currency,
+                        currency_id: currency.id,
+                    },
+                }}
+            />
             <JournalVoucherTable
                 className="max-h-[90vh] min-h-[90vh] w-full"
                 toolbarProps={{

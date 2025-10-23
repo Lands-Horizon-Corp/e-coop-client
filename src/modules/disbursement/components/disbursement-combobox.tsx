@@ -1,6 +1,7 @@
 import * as React from 'react'
 
 import { cn } from '@/helpers'
+import { CurrencyBadge } from '@/modules/currency/components/currency-badge'
 
 import {
     CheckIcon,
@@ -160,6 +161,16 @@ const DisbursementCombobox = ({
                                                 />
                                                 <div className="flex flex-col min-w-0">
                                                     <span className="truncate font-medium">
+                                                        {option.currency && (
+                                                            <CurrencyBadge
+                                                                className="mr-1"
+                                                                currency={
+                                                                    option.currency
+                                                                }
+                                                                displayFormat="code"
+                                                                size="sm"
+                                                            />
+                                                        )}
                                                         {option.name}
                                                     </span>
                                                     {option.description && (

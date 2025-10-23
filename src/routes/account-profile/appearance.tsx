@@ -23,7 +23,7 @@ function RouteComponent() {
     })
 
     return (
-        <PageContainer>
+        <PageContainer className="max-w-4xl bg-secondary/40 text-secondary-foreground rounded-3xl mx-auto p-4">
             <AppearanceSettings />
         </PageContainer>
     )

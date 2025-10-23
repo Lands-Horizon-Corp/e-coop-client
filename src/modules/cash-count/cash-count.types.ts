@@ -1,5 +1,6 @@
 import { IBaseEntityMeta, IPaginatedResult, TEntityId } from '@/types/common'
 
+import { ICurrency } from '../currency'
 import { IUserBase } from '../user/user.types'
 
 export interface ICashCount extends IBaseEntityMeta {
@@ -10,7 +11,9 @@ export interface ICashCount extends IBaseEntityMeta {
 
     transaction_batch_id?: string
 
-    country_code: string
+    currency_id: string
+    currency: ICurrency
+
     name: string // this is just for comparison of coins
     bill_amount: number
     quantity: number
@@ -27,7 +30,6 @@ export interface ICashCountRequest {
     employee_user_id?: TEntityId
 
     name: string
-    country_code: string
     bill_amount: number // this is just for comparison of coins
     quantity: number
     amount: number

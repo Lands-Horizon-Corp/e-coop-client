@@ -111,6 +111,7 @@ const AccountSecurityForm = ({
                         />
                         <FormFieldWrapper
                             control={form.control}
+                            label="New Password"
                             name="new_password"
                             render={({ field }) => (
                                 <FormItem>

@@ -3,7 +3,9 @@ import { toast } from 'sonner'
 import { cn } from '@/helpers'
 import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
 import { JournalKanbanInfoItem } from '@/modules/approvals/components/kanbans/journal-voucher/journal-voucher-card'
+import { useTransactionBatchStore } from '@/modules/transaction-batch/store/transaction-batch-store'
 import useConfirmModalStore from '@/store/confirm-modal-store'
+import { useInfoModalStore } from '@/store/info-modal-store'
 
 import {
     BadgeCheckFillIcon,
@@ -24,6 +26,10 @@ import {
 } from '../../cash-check-voucher.service'
 import { ICashCheckVoucher } from '../../cash-check-voucher.types'
 import { CashCheckVoucherCard } from '../cash-check-voucher-info-card'
+import {
+    CashCheckVoucherReleaseCurrencyMismatchDisplay,
+    CashCheckVoucherReleaseNoTransactionBatchDisplay,
+} from '../modal-displays/cash-check-voucher-release-invalid'
 
 export interface ICashCheckVoucherApproveReleaseDisplayModalProps
     extends IClassProps {}
@@ -49,6 +55,8 @@ const CashCheckVoucherApproveReleaseDisplayModal = ({
     cashCheckVoucher: ICashCheckVoucher
 }) => {
     const { onOpen } = useConfirmModalStore()
+    const { data: currentTransactionBatch } = useTransactionBatchStore()
+    const { onOpen: onOpenInfoModal } = useInfoModalStore()
 
     // Hook for 'undo-approve' and 'release' actions
     const handleCashCheckAction = useCashCheckVoucherActions({
@@ -226,7 +234,42 @@ const CashCheckVoucherApproveReleaseDisplayModal = ({
                             disabled={
                                 handleCashCheckAction.isPending || readOnly
                             }
-                            onClick={handleRelease}
+                            onClick={() => {
+                                if (!currentTransactionBatch)
+                                    return onOpenInfoModal({
+                                        title: '',
+                                        hideSeparator: true,
+                                        confirmString: 'Okay',
+                                        classNames: {
+                                            footerActionClassName:
+                                                'justify-center',
+                                            closeButtonClassName: 'w-full',
+                                        },
+                                        component: (
+                                            <CashCheckVoucherReleaseNoTransactionBatchDisplay />
+                                        ),
+                                    })
+
+                                if (
+                                    cashCheckVoucher.currency_id !==
+                                    currentTransactionBatch?.currency_id
+                                )
+                                    return onOpenInfoModal({
+                                        title: '',
+                                        hideSeparator: true,
+                                        confirmString: 'Okay',
+                                        classNames: {
+                                            footerActionClassName:
+                                                'justify-center',
+                                            closeButtonClassName: 'w-full',
+                                        },
+                                        component: (
+                                            <CashCheckVoucherReleaseCurrencyMismatchDisplay />
+                                        ),
+                                    })
+
+                                handleRelease()
+                            }}
                         >
                             {handleCashCheckAction.isPending ? (
                                 <LoadingSpinner className="mr-1" />

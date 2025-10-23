@@ -66,6 +66,7 @@ import {
     SelectItem,
     SelectTrigger,
 } from '@/components/ui/select'
+import { Switch } from '@/components/ui/switch'
 
 import { useFormHelper } from '@/hooks/use-form-helper'
 
@@ -107,8 +108,7 @@ const AccountCreateUpdateForm = ({
             icon: 'Money Bag',
             computation_type: ComputationTypeEnum.Straight,
             currency_id:
-                currentAuth.user_organization
-                    .settings_currency_default_value_id,
+                currentAuth.user_organization.branch.branch_setting.currency_id,
             ...formProps.defaultValues,
         },
     })
@@ -698,7 +698,7 @@ const AccountCreateUpdateForm = ({
                                                 isLoading
                                             }
                                             onValueChange={(newValue) => {
-                                                onChange(newValue)
+                                                onChange(newValue ?? '')
                                             }}
                                             placeholder="Min Amount"
                                         />
@@ -718,7 +718,7 @@ const AccountCreateUpdateForm = ({
                                                 isDisabled(field.name) ||
                                                 isLoading
                                             }
-                                            onValueChange={(newValue) => {
+                                            onValueChange={(newValue = '') => {
                                                 onChange(newValue)
                                             }}
                                             placeholder="Max Amount"
@@ -972,7 +972,9 @@ const AccountCreateUpdateForm = ({
                                                     isDisabled(field.name) ||
                                                     isLoading
                                                 }
-                                                onValueChange={(newValue) => {
+                                                onValueChange={(
+                                                    newValue = ''
+                                                ) => {
                                                     onChange(newValue)
                                                 }}
                                                 placeholder="Yearly Subscription Fee"
@@ -1740,7 +1742,7 @@ const AccountCreateUpdateForm = ({
                                                 isLoading ||
                                                 !isCompassionFundEnabled
                                             }
-                                            onValueChange={(newValue) => {
+                                            onValueChange={(newValue = '') => {
                                                 onChange(newValue)
                                             }}
                                             placeholder="Enter compassion fund amount"
@@ -1749,6 +1751,41 @@ const AccountCreateUpdateForm = ({
                                 />
                             </div>
                         </div>
+
+                        <FormFieldWrapper
+                            className="grow"
+                            control={form.control}
+                            label="Cash and Cash Equivalence"
+                            name="cash_and_cash_equivalence"
+                            render={({ field }) => (
+                                <div className="relative flex w-full items-start gap-2 rounded-2xl border border-input p-4 shadow-xs outline-none has-data-[state=checked]:border-primary/50 has-data-[state=checked]:bg-primary/20">
+                                    <Switch
+                                        aria-describedby={`${field.name}-description`}
+                                        checked={field.value}
+                                        className="order-1 h-4 w-6 after:absolute after:inset-0 [&_span]:size-3 data-[state=checked]:[&_span]:translate-x-2 data-[state=checked]:[&_span]:rtl:-translate-x-2"
+                                        id={field.name}
+                                        onCheckedChange={(e) =>
+                                            field.onChange(e)
+                                        }
+                                    />
+                                    <div className="grid grow gap-2">
+                                        <Label htmlFor={field.name}>
+                                            Cash and Cash Equivalence{' '}
+                                        </Label>
+                                        <p
+                                            className="text-xs text-muted-foreground"
+                                            id={`${field.name}-description`}
+                                        >
+                                            Cash and cash equivalents represent
+                                            the company’s funds that are readily
+                                            available for use in operations,
+                                            payments, or investment without
+                                            significant risk of value change.
+                                        </p>
+                                    </div>
+                                </div>
+                            )}
+                        />
                     </div>
                 </div>
                 <div className="space-y-2">

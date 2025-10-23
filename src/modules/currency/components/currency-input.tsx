@@ -75,36 +75,36 @@ const CurrencyInput = React.forwardRef<HTMLInputElement, Props>(
             return 2 // Default for most currencies
         }, [currency?.currency_code, decimalsLimit])
 
-        // Get currency symbol with proper positioning
-        const prefix = React.useMemo(() => {
-            if (!currency) return undefined
+        // // Get currency symbol with proper positioning
+        // const prefix = React.useMemo(() => {
+        //     if (!currency) return undefined
 
-            // For RTL currencies or currencies that prefix the symbol
-            const prefixCurrencies = ['USD', 'GBP', 'PHP', 'SAR', 'AED', 'KWD']
-            if (
-                currency.currency_code &&
-                prefixCurrencies.includes(currency.currency_code)
-            ) {
-                return currency.symbol || currency.currency_code
-            }
+        //     // For RTL currencies or currencies that prefix the symbol
+        //     const prefixCurrencies = ['USD', 'GBP', 'PHP', 'SAR', 'AED', 'KWD']
+        //     if (
+        //         currency.currency_code &&
+        //         prefixCurrencies.includes(currency.currency_code)
+        //     ) {
+        //         return currency.symbol || currency.currency_code
+        //     }
 
-            return undefined
-        }, [currency])
+        //     return undefined
+        // }, [currency])
 
-        const suffix = React.useMemo(() => {
-            if (!currency) return undefined
+        // const suffix = React.useMemo(() => {
+        //     if (!currency) return undefined
 
-            // For currencies that suffix the symbol (e.g., EUR in some locales)
-            const suffixCurrencies = ['EUR']
-            if (
-                currency.currency_code &&
-                suffixCurrencies.includes(currency.currency_code)
-            ) {
-                return ` ${currency.symbol || currency.currency_code}`
-            }
+        //     // For currencies that suffix the symbol (e.g., EUR in some locales)
+        //     const suffixCurrencies = ['EUR']
+        //     if (
+        //         currency.currency_code &&
+        //         suffixCurrencies.includes(currency.currency_code)
+        //     ) {
+        //         return ` ${currency.symbol || currency.currency_code}`
+        //     }
 
-            return undefined
-        }, [currency])
+        //     return undefined
+        // }, [currency])
 
         return (
             <div className="relative flex rounded-md shadow-xs">
@@ -125,9 +125,7 @@ const CurrencyInput = React.forwardRef<HTMLInputElement, Props>(
                     intlConfig={{ locale, currency: currency?.currency_code }}
                     onValueChange={onValueChange}
                     placeholder={placeholder || '0.00'}
-                    prefix={prefix}
                     ref={ref}
-                    suffix={suffix}
                     value={value}
                     {...props}
                 />

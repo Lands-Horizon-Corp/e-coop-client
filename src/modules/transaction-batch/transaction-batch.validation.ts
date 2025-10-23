@@ -15,6 +15,10 @@ export const TransactionBatchCreateSchema = z.object({
     provided_by_user_id: entityIdSchema
         .min(1, 'Provider is required')
         .optional(),
+
+    currency_id: entityIdSchema,
+    currency: z.any(),
+
     provided_by_user: z.any(),
     signature_media_id: z.string().optional(),
     signature_media: z.any(),
@@ -78,3 +82,12 @@ export const BatchSignSchema = z.object({
     paid_by_name: z.coerce.string().optional(),
     paid_by_position: z.coerce.string().optional(),
 })
+
+// FOR Transaction Batch DEPOSIT IN BANK
+export const DepositInBankSchema = z.object({
+    deposit_in_bank: z.coerce.number().min(0, 'Deposit in bank is required'),
+    currency: z.any().optional(),
+    currency_id: entityIdSchema,
+})
+
+export type TDepositInBankSchema = z.infer<typeof DepositInBankSchema>

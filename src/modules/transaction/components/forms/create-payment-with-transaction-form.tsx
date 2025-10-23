@@ -14,6 +14,7 @@ import { IMedia } from '@/modules/media'
 import { useGetAll } from '@/modules/payment-type'
 import { IPaymentRequest } from '@/modules/quick-transfer'
 import {
+    ITransaction,
     ITransactionRequest,
     PaymentTypeCombobox,
     PaymentWithTransactionSchema,
@@ -21,6 +22,7 @@ import {
     TransactionNoFoundBatch,
     useCreateTransactionPaymentByMode,
 } from '@/modules/transaction'
+import { TTransactionBatchFullorMin } from '@/modules/transaction-batch'
 import { useGetUserSettings } from '@/modules/user-profile'
 import { useTransactionReverseSecurityStore } from '@/store/transaction-reverse-security-store'
 import { useTransactionStore } from '@/store/transaction/transaction-store'
@@ -58,6 +60,8 @@ interface PaymentWithTransactionFormProps
             string,
             TPaymentWithTransactionFormValues
         > {
+    currentTransactionBatch?: TTransactionBatchFullorMin | null
+    transaction?: ITransaction
     transactionId?: TEntityId
     memberProfileId?: TEntityId
     memberJointId?: TEntityId
@@ -66,10 +70,12 @@ interface PaymentWithTransactionFormProps
 const PaymentWithTransactionForm = ({
     defaultValues,
     onSuccess,
+    transaction,
     transactionId,
     memberProfileId,
     memberJointId,
     disabledFields,
+    currentTransactionBatch,
     readOnly,
 }: PaymentWithTransactionFormProps) => {
     const { focusTypePayment, selectedAccount } = useTransactionStore()
@@ -421,7 +427,7 @@ const PaymentWithTransactionForm = ({
                                                 form.watch('account')?.currency
                                             }
                                             disabled={isDisabled('amount')}
-                                            onValueChange={(newValue) =>
+                                            onValueChange={(newValue = '') =>
                                                 onChange(newValue)
                                             }
                                             placeholder="Amount"
@@ -435,8 +441,17 @@ const PaymentWithTransactionForm = ({
                                     name="account_id"
                                     render={({ field }) => (
                                         <AccountPicker
+                                            currencyId={
+                                                (transaction?.currency_id ||
+                                                    currentTransactionBatch?.currency_id) as TEntityId
+                                            }
                                             disabled={isDisabled('account_id')}
-                                            mode={focusTypePayment}
+                                            mode={
+                                                transaction ||
+                                                currentTransactionBatch
+                                                    ? 'currency-payment'
+                                                    : focusTypePayment
+                                            }
                                             nameOnly
                                             onSelect={(account) => {
                                                 field.onChange(account.id)

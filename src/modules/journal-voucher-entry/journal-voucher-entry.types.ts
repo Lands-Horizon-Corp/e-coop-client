@@ -33,7 +33,7 @@ export interface IJournalVoucherEntryRequest {
     employee_user_id?: TEntityId
 
     account?: IAccount
-    account_id?: TEntityId
+    account_id: TEntityId
 
     member_profile?: IMemberProfile
     member_profile_id?: TEntityId

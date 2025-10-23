@@ -1,12 +1,12 @@
 import { useQueryClient } from '@tanstack/react-query'
 
-import { formatNumber } from '@/helpers/number-utils'
 import {
     ICheckRemittance,
     useCurrentBatchCheckRemittances,
     useDeleteBatchCheckRemittance,
 } from '@/modules/check-remittance'
 import { CheckRemittanceCreateUpdateFormModal } from '@/modules/check-remittance/components/forms/check-remittance-create-update-form'
+import { ICurrency, currencyFormat } from '@/modules/currency'
 import useConfirmModalStore from '@/store/confirm-modal-store'
 
 import {
@@ -27,11 +27,13 @@ import { TEntityId } from '@/types'
 
 type Props = {
     transactionBatchId: TEntityId
+    currency?: ICurrency
     onCheckRemittanceUpdate?: () => void
 }
 
 const BatchCheckRemitance = ({
     transactionBatchId,
+    currency,
     onCheckRemittanceUpdate,
 }: Props) => {
     const queryClient = useQueryClient()
@@ -104,6 +106,8 @@ const BatchCheckRemitance = ({
                         onCheckRemittanceUpdate?.()
                     },
                     defaultValues: {
+                        currency: currency,
+                        currency_id: currency?.id as TEntityId,
                         transaction_batch_id: transactionBatchId,
                     },
                 }}
@@ -112,7 +116,10 @@ const BatchCheckRemitance = ({
                 <div>
                     <p>Check Remittance</p>
                     <p className="text-sm font-bold text-primary">
-                        {formatNumber(totalRemittance, 2)}
+                        {currencyFormat(totalRemittance, {
+                            currency,
+                            showSymbol: !!currency,
+                        })}
                     </p>
                 </div>
                 <Button
@@ -269,7 +276,10 @@ const RemittanceListRow = ({
                 </div>
                 <div className="flex flex-col items-end">
                     <span className="text-sm font-semibold">
-                        {formatNumber(checkRemittance.amount ?? 0, 2)}
+                        {currencyFormat(checkRemittance.amount ?? 0, {
+                            currency: checkRemittance.currency,
+                            showSymbol: !!checkRemittance.currency,
+                        })}
                     </span>
                     <span className="text-xs text-muted-foreground/70">
                         Amount

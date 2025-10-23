@@ -108,7 +108,7 @@ const LoanClearanceAnalysisCreateUpdateForm = ({
                             <CurrencyInput
                                 {...field}
                                 disabled={isDisabled(field.name)}
-                                onValueChange={(newValue) => {
+                                onValueChange={(newValue = '') => {
                                     onChange(newValue)
                                 }}
                                 placeholder="0.00"
@@ -142,7 +142,7 @@ const LoanClearanceAnalysisCreateUpdateForm = ({
                                 <CurrencyInput
                                     {...field}
                                     disabled={isDisabled(field.name)}
-                                    onValueChange={(newValue) => {
+                                    onValueChange={(newValue = '') => {
                                         onChange(newValue)
                                     }}
                                     placeholder="0.00"

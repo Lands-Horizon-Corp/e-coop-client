@@ -51,6 +51,12 @@ const TransactionBatchNavButton = (_props: Props) => {
         [setData]
     )
 
+    const {
+        branch: {
+            branch_setting: { currency },
+        },
+    } = user_organization
+
     useQeueryHookCallback({
         isSuccess,
         data,
@@ -110,8 +116,10 @@ const TransactionBatchNavButton = (_props: Props) => {
                             name: `${user.user_name}'s-batch-${toReadableDate(new Date(), 'MM-dd-yyyy')}`.toLowerCase(),
                             branch_id: user_organization.branch_id,
                             organization_id: user_organization.organization_id,
-                            provided_by_user: user,
+                            provided_by_user: user_organization,
                             provided_by_user_id: user.id,
+                            currency,
+                            currency_id: currency.id,
                         },
                         onSuccess: setData,
                     }}

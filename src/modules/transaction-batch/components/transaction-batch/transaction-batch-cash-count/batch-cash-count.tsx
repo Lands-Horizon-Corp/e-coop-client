@@ -1,17 +1,17 @@
 import { Path, useFieldArray, useForm } from 'react-hook-form'
+import { toast } from 'sonner'
 
 import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
 
 import { cn } from '@/helpers'
 import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
-import { formatNumber } from '@/helpers/number-utils'
 import {
     CashCountBatchFormValues,
     CashCountBatchSchema,
     ICashCount,
     ICashCountBatchRequest,
 } from '@/modules/cash-count'
-import { currencyFormat } from '@/modules/currency'
+import { ICurrency, currencyFormat } from '@/modules/currency'
 import { useUpdateBatchCashCounts } from '@/modules/transaction-batch/transaction-batch.service'
 
 import FormFooterResetSubmit from '@/components/form-components/form-footer-reset-submit'
@@ -41,10 +41,13 @@ export interface IBatchCashCountFormProps
             ICashCount[],
             Error,
             TFormValues
-        > {}
+        > {
+    currency?: ICurrency
+}
 
 const BatchCashCount = ({
     className,
+    currency,
     ...formProps
 }: IBatchCashCountFormProps) => {
     const form = useForm<TFormValues>({
@@ -59,7 +62,7 @@ const BatchCashCount = ({
     })
 
     const {
-        mutate,
+        mutateAsync,
         isPending,
         error: rawError,
         reset,
@@ -97,18 +100,29 @@ const BatchCashCount = ({
             autoSave: false,
         })
 
-    const onSubmit = form.handleSubmit((data) => {
-        mutate({
-            cash_counts: data.cash_counts.filter((entry) => entry.quantity > 0),
-            deleted_cash_counts: [
-                ...(data.deleted_cash_counts || []),
-                ...data.cash_counts
-                    .filter((entry) => entry.quantity === 0 && entry.id)
-                    .map((entry) => entry.id as TEntityId),
-            ],
-            cash_count_total: cashCountTotal,
-            grand_total: grandTotal,
-        })
+    const onSubmit = form.handleSubmit(async (data) => {
+        toast.promise(
+            mutateAsync({
+                cash_counts: data.cash_counts.filter(
+                    (entry) => entry.quantity > 0
+                ),
+                deleted_cash_counts: [
+                    ...(data.deleted_cash_counts || []),
+                    ...data.cash_counts
+                        .filter((entry) => entry.quantity === 0 && entry.id)
+                        .map((entry) => entry.id as TEntityId),
+                ],
+                cash_count_total: cashCountTotal,
+                grand_total: grandTotal,
+            }),
+            {
+                loading: 'Saving cash counts...',
+                success: 'Cash counts saved successfully.',
+                error: (e) =>
+                    serverRequestErrExtractor({ error: e }) ||
+                    'Failed to save cash counts.',
+            }
+        )
     }, handleFocusError)
 
     const error = serverRequestErrExtractor({ error: rawError })
@@ -223,7 +237,7 @@ const BatchCashCount = ({
                                                 </TableCell>
                                                 <TableCell className="h-fit py-1.5 text-right">
                                                     <span>
-                                                        {formatNumber(
+                                                        {currencyFormat(
                                                             Number(
                                                                 watchedCashCounts?.[
                                                                     index
@@ -238,7 +252,13 @@ const BatchCashCount = ({
                                                                         ?.quantity ||
                                                                         0
                                                                 ),
-                                                            2
+                                                            {
+                                                                currency:
+                                                                    watchedCashCounts[
+                                                                        index
+                                                                    ].currency,
+                                                                showSymbol: true,
+                                                            }
                                                         )}
                                                     </span>
                                                 </TableCell>
@@ -270,7 +290,10 @@ const BatchCashCount = ({
                             Cash Count Total
                         </p>
                         <p className="text-xl">
-                            {currencyFormat(cashCountTotal)}
+                            {currencyFormat(cashCountTotal, {
+                                currency,
+                                showSymbol: !!currency,
+                            })}
                         </p>
                     </div>
                     <Separator className="bg-muted-foreground/10 dark:bg-background/80" />
@@ -279,7 +302,10 @@ const BatchCashCount = ({
                             Grand Total
                         </p>
                         <p className="text-xl text-primary">
-                            {currencyFormat(grandTotal)}
+                            {currencyFormat(grandTotal, {
+                                currency,
+                                showSymbol: !!currency,
+                            })}
                         </p>
                     </div>
                 </div>

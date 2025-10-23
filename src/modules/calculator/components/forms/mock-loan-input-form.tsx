@@ -107,7 +107,7 @@ const MockLoanInputForm = ({
                                     currency={
                                         inputForm.watch('account')?.currency
                                     }
-                                    onValueChange={(newValue) => {
+                                    onValueChange={(newValue = '') => {
                                         onChange(newValue)
                                     }}
                                     placeholder="Applied Amount"

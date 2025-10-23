@@ -2,6 +2,7 @@ import { IBaseEntityMeta, IPaginatedResult, TEntityId } from '@/types/common'
 
 import { IAccount } from '../account'
 import { IBank } from '../bank'
+import { ICurrency } from '../currency'
 import { IMedia } from '../media/media.types'
 import { IMemberJointAccount } from '../member-joint-account'
 import { IMemberProfile } from '../member-profile'
@@ -71,55 +72,9 @@ export interface IGeneralLedger extends IBaseEntityMeta {
     debit: number
     balance: number
 
-    entry_date: TEntityId
-    bank_reference_number: string
-    description: string
-}
-
-export interface IGeneralLedgerResponse extends IBaseEntityMeta {
-    account_id: TEntityId
-    account: IAccount | null
-
-    transaction_id: TEntityId
-    transaction: ITransaction | null
-
-    transaction_batch_id: TEntityId
-    transaction_batch: ITransactionBatch | null
-
-    employee_user_id: TEntityId
-    employee_user: IUserBase | null
-
-    member_profile_id: TEntityId
-    member_profile: IMemberProfile | null
-
-    member_joint_account_id: TEntityId
-    member_joint_account: IMemberJointAccount | null
-
-    payment_type_id: TEntityId
-    payment_type: IPaymentType | null
-
-    signature_media_id: TEntityId
-    signature_media: IMedia | null
-
-    bank_id: TEntityId
-    bank: IBank | null
-
-    proof_of_payment_media_id: TEntityId | null
-    proof_of_payment_media: IMedia | null
-
-    transaction_reference_number: string
-    reference_number: string
-
-    source: TGeneralLedgerSource
-    journal_voucher_id: TEntityId
-    adjustment_entry_id: TEntityId
-
-    // adjustment_entry:  | null
-
-    type_of_payment_type: string
-    credit: number
-    debit: number
-    balance: number
+    // FOR CURRENCY
+    currency_id: TEntityId
+    currency: ICurrency
 
     entry_date: TEntityId
     bank_reference_number: string
@@ -134,4 +89,4 @@ export interface IMemberGeneralLedgerTotal {
 }
 
 export interface IGeneralLedgerPaginated
-    extends IPaginatedResult<IGeneralLedgerResponse> {}
+    extends IPaginatedResult<IGeneralLedger> {}

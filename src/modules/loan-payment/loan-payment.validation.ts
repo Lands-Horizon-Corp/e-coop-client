@@ -33,7 +33,7 @@ export const LoanPayableAccountSchema = z.object({
 
 export const LoanPayablePaymentSchema = z.object({
     is_reference_number_checked: z.boolean().optional(),
-    total_amount: z.number().min(0, 'Total amount must be at least 0'),
+    total_amount: z.coerce.number().min(0, 'Total amount must be at least 0'),
     payables: z.array(LoanPayableAccountSchema),
     reference_number: z.string().optional(),
 })

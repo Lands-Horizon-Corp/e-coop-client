@@ -55,3 +55,5 @@ export interface IAdjustmentEntryRequest {
 
 export interface IAdjustmentEntryPaginated
     extends IPaginatedResult<IAdjustmentEntry> {}
+
+export type TAdjustmentEntryHookMode = 'all' | 'currency' | 'currency-employee'
