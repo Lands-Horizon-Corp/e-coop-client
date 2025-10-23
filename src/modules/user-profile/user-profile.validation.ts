@@ -44,17 +44,16 @@ export const UserProfileGeneralSchema = z.object({
 })
 
 // Validation Schema
-export const AccountInactivitySchema = z.object({
-    isEnabled: z.boolean(),
-    timeValue: z.string().refine(
-        (val) => {
-            const num = parseInt(val)
-            return !isNaN(num) && num >= 1 && num <= 999
-        },
-        { message: 'Time value must be between 1 and 999' }
-    ),
-    timeUnit: z.enum(USER_PROFILE_DURATION_UNITS),
+export const UserProfileInactivitySettingsSchema = z.object({
+    enabled: z.boolean(),
+    duration: z.coerce
+        .number()
+        .min(1, 'Duration must be at least 1')
+        .max(9999, 'Duration is too large')
+        .default(1),
+    timeUnit: z.enum(USER_PROFILE_DURATION_UNITS).default('minutes'),
 })
-export type TAccountInactivityFormValues = z.infer<
-    typeof AccountInactivitySchema
+
+export type TUserProfileInactivitySettings = z.infer<
+    typeof UserProfileInactivitySettingsSchema
 >

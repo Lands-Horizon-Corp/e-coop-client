@@ -1,5 +1,7 @@
 'use client'
 
+import { useEffect } from 'react'
+
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 
@@ -33,46 +35,60 @@ import {
 } from '@/components/ui/select'
 import { Switch } from '@/components/ui/switch'
 
+import {
+    DEFAULT_INACTIVITY_SETTINGS,
+    loadUserProfileInactivitySettings,
+    saveUserProfileInactivitySettings,
+} from '../../hooks/use-user-profile-inactivity-hook'
+import { useInactivityStore } from '../../store/profile-inactivity-store'
 import { USER_PROFILE_DURATION_UNITS } from '../../user-profile.constants'
 import {
-    AccountInactivitySchema,
-    TAccountInactivityFormValues,
+    TUserProfileInactivitySettings,
+    UserProfileInactivitySettingsSchema,
 } from '../../user-profile.validation'
 
 const AccountProfileInactivity = () => {
-    const form = useForm<TAccountInactivityFormValues>({
-        resolver: standardSchemaResolver(AccountInactivitySchema),
+    const { setInactivityConfig } = useInactivityStore()
+
+    const form = useForm<TUserProfileInactivitySettings>({
+        resolver: standardSchemaResolver(UserProfileInactivitySettingsSchema),
         reValidateMode: 'onChange',
         mode: 'onSubmit',
-        defaultValues: {
-            isEnabled: false,
-            timeValue: '15',
-            timeUnit: 'minutes',
-        },
+        defaultValues: DEFAULT_INACTIVITY_SETTINGS,
     })
 
+    // Load saved settings from localStorage on mount
+    useEffect(() => {
+        const savedSettings = loadUserProfileInactivitySettings()
+        if (savedSettings) {
+            form.reset(savedSettings)
+        }
+    }, [form])
+
     const onSubmit = form.handleSubmit((formData) => {
+        // Save to localStorage
+        saveUserProfileInactivitySettings(formData)
+        setInactivityConfig(formData)
         toast.success('Account inactivity settings saved successfully!', {
-            description: formData.isEnabled
-                ? `Auto logout enabled after ${formData.timeValue} ${formData.timeUnit}`
+            description: formData.enabled
+                ? `Auto logout enabled after ${formData.duration} ${formData.timeUnit}`
                 : 'Auto logout disabled',
         })
         form.reset(formData)
     })
 
     const handleReset = () => {
-        form.reset({
-            isEnabled: false,
-            timeValue: '15',
-            timeUnit: 'minutes',
-        })
+        form.reset(DEFAULT_INACTIVITY_SETTINGS)
+        saveUserProfileInactivitySettings(DEFAULT_INACTIVITY_SETTINGS)
         toast.info('Settings reset to default values')
     }
-    const isEnabled = form.watch('isEnabled')
+
+    const isEnabled = form.watch('enabled')
+
     return (
         <Form {...form}>
             <form onSubmit={onSubmit}>
-                <Card className="w-full max-w-full">
+                <Card className="w-full bg-popover/40 border-none shadow-none rounded-3xl max-w-full">
                     <CardHeader className="space-y-1">
                         <div className="flex items-center gap-2">
                             <Clock className="h-5 w-5 text-muted-foreground" />
@@ -84,8 +100,7 @@ const AccountProfileInactivity = () => {
                         </CardDescription>
                     </CardHeader>
                     <CardContent className="space-y-6">
-                        {/* Enable/Disable Toggle */}
-                        <div className="flex items-center justify-between p-4 rounded-lg border bg-card">
+                        <div className="flex items-center justify-between p-4 rounded-lg border bg-popover">
                             <div className="space-y-1">
                                 <div className="flex items-center gap-2">
                                     <Power className="h-4 w-4 text-muted-foreground" />
@@ -107,7 +122,7 @@ const AccountProfileInactivity = () => {
                                 </p>
                                 <FormFieldWrapper
                                     control={form.control}
-                                    name="isEnabled"
+                                    name="enabled"
                                     render={({ field }) => (
                                         <Switch
                                             checked={field.value}
@@ -121,7 +136,7 @@ const AccountProfileInactivity = () => {
                                 <InputGroup className="w-auto">
                                     <FormFieldWrapper
                                         control={form.control}
-                                        name="timeValue"
+                                        name="duration"
                                         render={({ field }) => (
                                             <InputGroupInput
                                                 {...field}
@@ -131,7 +146,6 @@ const AccountProfileInactivity = () => {
                                                 max="999"
                                                 min="1"
                                                 placeholder="15"
-                                                type="number"
                                             />
                                         )}
                                     />

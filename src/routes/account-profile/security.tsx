@@ -26,7 +26,7 @@ function RouteComponent() {
                 </h1>
             </div>
             <AccountSecurityForm
-                className="bg-accent/40 dark:bg-popover/20 p-4 rounded-3xl"
+                className=" bg-popover/40 border dark:border-none dark:bg-popover/20 p-4 rounded-3xl"
                 onSuccess={() => {
                     resetAuth()
                     toast.info('Please Sign in again.')

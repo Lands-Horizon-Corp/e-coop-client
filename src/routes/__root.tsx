@@ -8,7 +8,7 @@ import { HTML5Backend } from 'react-dnd-html5-backend'
 import { NATS_PASS, NATS_USER } from '@/constants'
 import { IAuthContext, useAuthContext } from '@/modules/authentication'
 import { useAuthStore } from '@/modules/authentication/authgentication.store'
-import { ActionSecurityProvider } from '@/providers/action-security-provider'
+import UserProfileInactivityPrompter from '@/modules/user-profile/components/user-profile-inactivity-prompter'
 import ConnectionProvider from '@/providers/connection-provider'
 
 import CookieConsent from '@/components/cookie-consent'
@@ -45,6 +45,7 @@ function RootLayout() {
             retry: 0,
         },
     })
+
     const handleSuccess = useCallback(
         (authorizationContext: IAuthContext) => {
             setCurrentAuth(authorizationContext)
@@ -52,6 +53,7 @@ function RootLayout() {
         },
         [setAuthStatus, setCurrentAuth]
     )
+
     const handleError = useCallback(
         (rawError: Error) => {
             if (rawError instanceof AxiosError && rawError.status === 401) {
@@ -67,6 +69,7 @@ function RootLayout() {
         },
         [resetAuth, setAuthStatus]
     )
+
     useQeueryHookCallback({
         data,
         error,
@@ -75,7 +78,9 @@ function RootLayout() {
         onSuccess: handleSuccess,
         onError: handleError,
     })
+
     useNatsConnect({ user: NATS_USER, pass: NATS_PASS })
+
     return (
         <div className="relative">
             <DndProvider backend={HTML5Backend}>
@@ -129,8 +134,9 @@ function RootLayout() {
                 <ImagePreviewModal />
                 <ConfirmModal />
                 <InfoModal />
+
+                <UserProfileInactivityPrompter />
                 {/* <TanStackRouterDevtools /> */}
-                <ActionSecurityProvider />
             </DndProvider>
         </div>
     )
