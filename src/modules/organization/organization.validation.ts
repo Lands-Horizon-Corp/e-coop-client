@@ -31,6 +31,7 @@ export const OrganizationSchema = z.object({
     media: z.any().optional(),
     cover_media: z.any().optional(),
     subscription_plan: z.any().optional(),
+    is_private: z.boolean().optional(),
 })
 
 export const EditOrganizationSchema = OrganizationSchema.extend({

@@ -330,6 +330,11 @@ export const OrganizationMiniCard = ({
                 customHeader={CustomHeader()}
                 imageAlt={`${organizationName} organization`}
                 imageSrc={getImageSrc()}
+                label={
+                    organization.is_private && (
+                        <Badge variant={'secondary'}>private</Badge>
+                    )
+                }
                 onCardClick={handleCardClick}
                 onImageClick={
                     onCardClick ? () => onCardClick(organization) : undefined

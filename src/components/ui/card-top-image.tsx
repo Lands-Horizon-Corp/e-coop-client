@@ -65,7 +65,7 @@ const CardTopImage = ({
     cardContentClassName,
     cardHeaderClassName,
     cardFooterClassName,
-    // cardLabelClassName,
+    cardLabelClassName,
     primaryAction,
     secondaryAction,
     customFooter,
@@ -75,7 +75,7 @@ const CardTopImage = ({
     hideHeader = false,
     onCardClick,
     onImageClick,
-    // label,
+    label,
 }: CardTopImageProps) => {
     const renderFooter = () => {
         if (hideFooter) return null
@@ -143,6 +143,16 @@ const CardTopImage = ({
             )}
             onClick={onCardClick}
         >
+            {label && (
+                <div
+                    className={cn(
+                        'absolute top-3 right-3 z-10',
+                        cardLabelClassName
+                    )}
+                >
+                    {label}
+                </div>
+            )}
             <CardContent
                 className={cn(
                     'p-0 border-0 rounded-t-xl',

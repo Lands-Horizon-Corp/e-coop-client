@@ -55,6 +55,7 @@ export interface IOrganization extends ITimeStamps, IAuditable {
 
     organization_categories?: IOrganizationCategory[]
     currency_id: TEntityId
+    is_private?: boolean
 }
 
 // Organization Request

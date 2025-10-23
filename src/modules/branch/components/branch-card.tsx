@@ -216,7 +216,7 @@ export const BranchCardHeaderContent = ({
                                 {branchDescription}
                             </span>
                         </TooltipTrigger>
-                        <TooltipContent className="max-w-xs text-sm bg-background border py-2">
+                        <TooltipContent className="max-w-xs text-sm text-pirmary bg-background border py-2">
                             <p>{branchDescription}</p>
                         </TooltipContent>
                     </Tooltip>
