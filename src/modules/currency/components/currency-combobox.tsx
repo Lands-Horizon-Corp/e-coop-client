@@ -26,12 +26,22 @@ import {
 
 import { TEntityId } from '@/types'
 
+type TFormatDisplay =
+    | 'emoji-name-code' // 🇵🇭 Philippine Peso (PHP)
+    | 'symbol-name-code' // ₱ Philippine Peso (PHP)
+    | 'currency' // Philippine Peso (PHP)
+    | 'country-currency' // Philippines - Philippine Peso (PHP)
+    | 'country' // Philippines
+    | 'country-code' // Philippines (PHP)
+    | 'country-symbol' // Philippines (₱)
+
 interface Props {
     value?: TEntityId
     disabled?: boolean
     className?: string
     placeholder?: string
     mode?: TCurrencyHookMode
+    formatDisplay?: TFormatDisplay
     onChange?: (selected: ICurrency) => void
 }
 
@@ -41,6 +51,7 @@ const CurrencyCombobox = ({
     mode = 'all',
     disabled = false,
     placeholder = 'Select Currency...',
+    formatDisplay = 'emoji-name-code',
     onChange,
 }: Props) => {
     const [open, setOpen] = React.useState(false)
@@ -57,6 +68,89 @@ const CurrencyCombobox = ({
         [data, value]
     )
 
+    const formatCurrencyDisplay = (
+        formatMode: TFormatDisplay,
+        currency: ICurrency
+    ) => {
+        switch (formatMode) {
+            case 'emoji-name-code':
+                return (
+                    <div className="flex items-center gap-2 min-w-0">
+                        {currency.emoji && (
+                            <span className="text-lg flex-shrink-0">
+                                {currency.emoji}
+                            </span>
+                        )}
+                        <span className="truncate">
+                            {currency.name} ({currency.currency_code})
+                        </span>
+                    </div>
+                )
+            case 'symbol-name-code':
+                return (
+                    <div className="flex items-center gap-2 min-w-0">
+                        {currency.symbol && (
+                            <span className="text-lg flex-shrink-0">
+                                {currency.symbol}
+                            </span>
+                        )}
+                        <span className="truncate">
+                            {currency.name} ({currency.currency_code})
+                        </span>
+                    </div>
+                )
+            case 'currency':
+                return (
+                    <span className="truncate">
+                        {currency.name} ({currency.currency_code})
+                    </span>
+                )
+            case 'country-currency':
+                return (
+                    <span className="truncate">
+                        {currency.country} - {currency.name} (
+                        {currency.currency_code})
+                    </span>
+                )
+            case 'country':
+                return (
+                    <div className="flex items-center gap-2 min-w-0">
+                        {currency.emoji && (
+                            <span className="text-lg flex-shrink-0">
+                                {currency.emoji}
+                            </span>
+                        )}
+
+                        <p className="truncate">
+                            {currency.country}{' '}
+                            <span className=" text-xs text-muted-foreground">
+                                ({currency.timezone})
+                            </span>
+                        </p>
+                    </div>
+                )
+            case 'country-code':
+                return (
+                    <span className="truncate">
+                        {currency.country} ({currency.currency_code})
+                    </span>
+                )
+            case 'country-symbol':
+                return (
+                    <span className="truncate">
+                        {currency.country} (
+                        {currency.symbol || currency.currency_code})
+                    </span>
+                )
+            default:
+                return (
+                    <span className="truncate">
+                        {currency.name} ({currency.currency_code})
+                    </span>
+                )
+        }
+    }
+
     return (
         <>
             <Popover modal onOpenChange={setOpen} open={open}>
@@ -69,17 +163,10 @@ const CurrencyCombobox = ({
                         variant="outline"
                     >
                         {selectedCurrency ? (
-                            <div className="flex items-center gap-2 min-w-0">
-                                {selectedCurrency.emoji && (
-                                    <span className="text-lg flex-shrink-0">
-                                        {selectedCurrency.emoji}
-                                    </span>
-                                )}
-                                <span className="truncate">
-                                    {selectedCurrency.name} (
-                                    {selectedCurrency.currency_code})
-                                </span>
-                            </div>
+                            formatCurrencyDisplay(
+                                formatDisplay,
+                                selectedCurrency
+                            )
                         ) : (
                             <span className="text-muted-foreground">
                                 {placeholder}

@@ -6,6 +6,7 @@ import { cn } from '@/helpers'
 import { withToastCallbacks } from '@/helpers/callback-helper'
 import { toInputDateString } from '@/helpers/date-utils'
 import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
+import CurrencyCombobox from '@/modules/currency/components/currency-combobox'
 
 import FormFooterResetSubmit from '@/components/form-components/form-footer-reset-submit'
 import Modal, { IModalProps } from '@/components/modals/modal'
@@ -122,6 +123,22 @@ const HolidayCreateUpdateForm = ({
                                     disabled={isDisabled(field.name)}
                                     id={field.name}
                                     placeholder="Holiday Name"
+                                />
+                            )}
+                        />
+                        <FormFieldWrapper
+                            control={form.control}
+                            label="Currency *"
+                            name="currency_id"
+                            render={({ field }) => (
+                                <CurrencyCombobox
+                                    disabled={isDisabled(field.name)}
+                                    formatDisplay="country"
+                                    onChange={(selected) =>
+                                        field.onChange(selected.id)
+                                    }
+                                    placeholder="Select Currency"
+                                    value={field.value}
                                 />
                             )}
                         />
