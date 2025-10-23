@@ -122,7 +122,6 @@ const JournalVoucherCreateUpdateForm = ({
                 textSuccess: 'Journal Voucher updated',
                 onSuccess: (data) => {
                     form.reset(data)
-                    console.log('Updated data:', data)
                     formProps.onSuccess?.(data)
                 },
                 onError: formProps.onError,
@@ -185,8 +184,6 @@ const JournalVoucherCreateUpdateForm = ({
     })
 
     const isPrinted = !!defaultValues?.printed_date
-
-    console.log('Form Errors:', form.formState.errors)
 
     return (
         <Form {...form}>

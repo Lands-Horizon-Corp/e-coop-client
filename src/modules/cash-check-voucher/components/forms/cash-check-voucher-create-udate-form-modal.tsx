@@ -9,7 +9,6 @@ import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
 import { cn } from '@/helpers'
 import { withToastCallbacks } from '@/helpers/callback-helper'
 import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
-import { IAccount } from '@/modules/account'
 import {
     CashCheckVoucherSchema,
     ICashCheckVoucher,
@@ -18,17 +17,12 @@ import {
     useCreateCashCheckVoucher,
     useUpdateCashCheckVoucherById,
 } from '@/modules/cash-check-voucher'
-import {
-    CashCheckVoucherEntrySchema,
-    ICashCheckVoucherEntryRequest,
-} from '@/modules/cash-check-voucher-entry'
 import { CashCheckVoucherTagsManagerPopover } from '@/modules/cash-check-voucher-tag/components/cash-check-voucher-tag-manager'
 import CompanyCombobox from '@/modules/company/components/combobox'
 import { CurrencyCombobox, currencyFormat } from '@/modules/currency'
 import { IMemberProfile } from '@/modules/member-profile'
 import MemberPicker from '@/modules/member-profile/components/member-picker'
 import { useTransactionBatchStore } from '@/modules/transaction-batch/store/transaction-batch-store'
-import { useCashCheckVoucherStore } from '@/store/cash-check-voucher-store'
 import { useMemberPickerStore } from '@/store/member-picker-store'
 import { useHotkeys } from 'react-hotkeys-hook'
 
@@ -66,71 +60,6 @@ export interface ICashCheckVoucherCreateUpdateFormProps
     mode?: TCashCheckVoucherModalMode
 }
 
-export type TValidateResultCashCheckVoucher = {
-    data: ICashCheckVoucherEntryRequest[]
-}
-type TValidateResult =
-    | {
-          isValid: true
-          validatedEntries: ICashCheckVoucherEntryRequest[]
-      }
-    | {
-          isValid: false
-          error: string
-      }
-
-const ValidateCashCheckEntry = ({
-    data,
-}: TValidateResultCashCheckVoucher): TValidateResult => {
-    if (data.length === 0) {
-        return {
-            isValid: true,
-            validatedEntries: [],
-        }
-    }
-
-    const transformedEntries = data.map((entry) => {
-        const memberProfile = entry.member_profile as IMemberProfile
-        const account = entry.account as IAccount
-
-        return {
-            id: entry.id,
-            credit: entry.credit,
-            debit: entry.debit,
-            member_profile_id: memberProfile?.id,
-            account_id: account?.id,
-            cash_check_voucher_number: entry.cash_check_voucher_number,
-        }
-    })
-    const parsedEntries = z
-        .array(CashCheckVoucherEntrySchema)
-        .safeParse(transformedEntries)
-
-    if (!parsedEntries.success) {
-        const firstError = parsedEntries.error.issues[0]
-        const fieldPath = firstError.path
-
-        const fieldName = String(fieldPath[fieldPath.length - 1])
-        const errorMessage = firstError.message
-
-        const errorLocation =
-            fieldPath.length > 1
-                ? `Entry ${parseInt(String(fieldPath[0])) + 1}: `
-                : ''
-
-        return {
-            isValid: false,
-            error: `Field Error: ${errorLocation}name: ${fieldName} message: ${errorMessage}`,
-        }
-    }
-
-    return {
-        isValid: true,
-        // validatedEntries: transformedEntries,
-        validatedEntries: parsedEntries.data, // Fixed: Use parsedEntries.data instead to get the validated entries since transformedEntries is not validated/not parsed/ not safe /nottransformed
-    }
-}
-
 const CashCheckVoucherCreateUpdateForm = ({
     className,
     cashCheckVoucherId,
@@ -156,11 +85,6 @@ const CashCheckVoucherCreateUpdateForm = ({
     const isUpdate = !!editCashCheckVoucherId
 
     const { setSelectedMember } = useMemberPickerStore()
-    const {
-        selectedCashCheckVoucherEntry,
-        setSelectedCashCheckVoucherEntry,
-        cashCheckVoucherEntriesDeleted,
-    } = useCashCheckVoucherStore()
 
     const form = useForm<TCashCheckVoucherFormValues>({
         resolver: standardSchemaResolver(CashCheckVoucherSchema),
@@ -184,7 +108,6 @@ const CashCheckVoucherCreateUpdateForm = ({
                 onSuccess: (data) => {
                     formProps.onSuccess?.(data)
                     setEditCashCheckVoucherId(data.id)
-                    setSelectedCashCheckVoucherEntry([])
                     setDefaultMode('update')
                 },
                 onError: formProps.onError,
@@ -229,28 +152,14 @@ const CashCheckVoucherCreateUpdateForm = ({
             released_date: handleDate(formData.released_date),
             transaction_batch_id: data?.id,
         }
-        const validateResult = ValidateCashCheckEntry({
-            data: selectedCashCheckVoucherEntry,
-        })
+
         if (isUpdate) {
-            if (validateResult.isValid) {
-                updateCashCheckVoucher({
-                    id: editCashCheckVoucherId,
-                    payload: {
-                        ...payload,
-                        cash_check_voucher_entries:
-                            validateResult.validatedEntries,
-                        cash_check_voucher_entries_deleted:
-                            cashCheckVoucherEntriesDeleted,
-                    },
-                })
-            } else {
-                form.setError('root', {
-                    type: 'custom',
-                    message: validateResult.error,
-                })
-                return
-            }
+            updateCashCheckVoucher({
+                id: editCashCheckVoucherId,
+                payload: {
+                    ...payload,
+                },
+            })
         } else {
             createCashCheckVoucher(payload)
         }
@@ -261,20 +170,6 @@ const CashCheckVoucherCreateUpdateForm = ({
     const error =
         serverRequestErrExtractor({ error: rawError }) ||
         form.formState.errors?.root?.message
-
-    const CashCheckEntries =
-        defaultValues?.cash_check_voucher_entries?.map((entry) => ({
-            id: entry.id,
-            account_id: entry.account_id,
-            member_profile_id: entry.member_profile_id,
-            employee_user_id: entry.employee_user_id,
-            cash_check_voucher_number: entry.cash_check_voucher_number,
-            description: entry.description,
-            member_profile: entry.member_profile,
-            account: entry.account,
-            debit: entry.debit,
-            credit: entry.credit,
-        })) ?? []
 
     useHotkeys('Enter', (e) => {
         e.preventDefault()
@@ -509,20 +404,31 @@ const CashCheckVoucherCreateUpdateForm = ({
                         )}
                     />
                     {defaultMode !== 'create' && (
-                        <CashCheckJournalEntryTable
-                            cashCheckCurrency={form.watch('currency')}
-                            cashCheckVoucherId={cashCheckVoucherId ?? ''}
-                            className="col-span-1 md:col-span-3"
-                            defaultMemberProfile={defaultMember}
-                            mode={defaultMode}
-                            rowData={CashCheckEntries}
+                        <FormFieldWrapper
+                            className="col-span-1 md:col-span-3 !max-h-xs"
+                            control={form.control}
+                            label="Particulars"
+                            name="cash_check_voucher_entries"
+                            render={({ field }) => (
+                                <CashCheckJournalEntryTable
+                                    cashCheckCurrency={form.watch('currency')}
+                                    cashCheckVoucherId={
+                                        cashCheckVoucherId ?? ''
+                                    }
+                                    className="col-span-1 md:col-span-3"
+                                    defaultMemberProfile={defaultMember}
+                                    form={form}
+                                    mode={defaultMode}
+                                    ref={field.ref}
+                                />
+                            )}
                         />
                     )}
                 </fieldset>
                 <div className="w-full flex justify-end gap-4">
                     <div className="max-w-[130px] flex-col flex justify-end">
                         <p className="text-primary bg-background border py-1 text-left rounded-md pl-8 pr-10 text-lg font-bold">
-                            {currencyFormat(defaultValues?.total_debit || 0, {
+                            {currencyFormat(form.watch('total_debit'), {
                                 currency: form.watch('currency'),
                                 showSymbol: !!form.watch('currency'),
                             })}
@@ -530,7 +436,7 @@ const CashCheckVoucherCreateUpdateForm = ({
                     </div>
                     <div className="max-w-[130px]">
                         <p className="text-primary bg-background border py-1 text-left rounded-md pl-8 pr-10 text-lg font-bold">
-                            {currencyFormat(defaultValues?.total_credit || 0, {
+                            {currencyFormat(form.watch('total_credit'), {
                                 currency: form.watch('currency'),
                                 showSymbol: !!form.watch('currency'),
                             })}
