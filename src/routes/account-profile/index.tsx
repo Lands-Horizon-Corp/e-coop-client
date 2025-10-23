@@ -3,6 +3,7 @@ import { createFileRoute } from '@tanstack/react-router'
 import { dateAgo, toReadableDate } from '@/helpers/date-utils'
 import { useAuthUser } from '@/modules/authentication/authgentication.store'
 import { IUserBase } from '@/modules/user'
+// import { useUserProfileInactivity } from '@/modules/user-profile'
 import AccountProfilePicture from '@/modules/user-profile/components/account-profile-picture'
 import AccountGeneralForm from '@/modules/user-profile/components/forms/account-general-form'
 import { AccountProfileFormModal } from '@/modules/user-profile/components/forms/account-profile-form'
@@ -27,6 +28,8 @@ function RouteComponent() {
     useSubscribe<IUserBase>(`user.update.${user.id}`, (newUserData) => {
         updateCurrentAuth({ user: newUserData })
     })
+
+    // useUserProfileInactivity({})
 
     return (
         <div className="space-y-4 max-w-4xl rounded-3xl mx-auto p-4">
@@ -60,7 +63,7 @@ function RouteComponent() {
                 }}
             />
             <AccountGeneralForm
-                className="mt-8 bg-accent/40 dark:bg-popover/20 p-4 rounded-xl"
+                className="mt-8 bg-popover/40 border dark:border-none dark:bg-popover/20 p-4 rounded-xl"
                 defaultValues={user}
             />
         </div>
