@@ -2,7 +2,6 @@ import { useState } from 'react'
 
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
-import z from 'zod'
 
 import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
 
@@ -14,6 +13,7 @@ import { IMedia } from '@/modules/media/media.types'
 import {
     EditOrganizationSchema,
     IOrganizationRequest,
+    TEditOrganizationFormValues,
     useUpdateOrganization,
 } from '@/modules/organization'
 
@@ -34,8 +34,6 @@ import { useFormHelper } from '@/hooks/use-form-helper'
 import { useLocationInfo } from '@/hooks/use-location-info'
 
 import { IClassProps, IForm, TEntityId } from '@/types'
-
-type TEditOrganizationFormValues = z.infer<typeof EditOrganizationSchema>
 
 export interface IEditOrganizationFormProps
     extends IClassProps,
@@ -58,7 +56,6 @@ const UpdateOrganizationForm = ({
     ...formProps
 }: IEditOrganizationFormProps) => {
     const { countryCode } = useLocationInfo()
-
     const [selectedLogoMedia, setSelectedLogoMedia] = useState<string>(
         media?.url || ''
     )
@@ -77,7 +74,6 @@ const UpdateOrganizationForm = ({
             media_id: media?.id,
         },
     })
-
     const {
         mutate: updateMutation,
         error,
@@ -147,7 +143,6 @@ const UpdateOrganizationForm = ({
     }, handleFocusError)
 
     const errorMessage = serverRequestErrExtractor({ error })
-
     return (
         <Form {...form}>
             <form
@@ -281,7 +276,7 @@ const UpdateOrganizationForm = ({
                         )}
                     />
                     <FormFieldWrapper
-                        className="col-span-full h-52"
+                        className="col-span-full "
                         control={form.control}
                         label="Organization Description"
                         name="description"
@@ -291,7 +286,7 @@ const UpdateOrganizationForm = ({
                                 <FormControl>
                                     <TextEditor
                                         {...rest}
-                                        className="h-full w-full"
+                                        className="w-full"
                                         content={field.value || ''}
                                         placeholder="Write some description about your Organization..."
                                         textEditorClassName="!max-w-none !h-full"

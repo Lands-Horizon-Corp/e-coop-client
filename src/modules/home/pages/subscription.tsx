@@ -31,7 +31,6 @@ const SubscriptionPage = () => {
             <div className="to-background/0 via-background/0 from-primary/50 absolute right-0 -z-10 -mt-16 h-screen w-full bg-radial-[ellipse_at_100%_0%] to-100%" />
 
             <FlickeringGrid
-                className="absolute inset-0 h-full -z-10 opacity-80 [mask-image:radial-gradient(80vh_circle_at_center,white,transparent)] dark:opacity-20"
                 flickerChance={0.05}
                 gridGap={1}
                 maxOpacity={0.5}

@@ -15,11 +15,6 @@ const ContactPage = () => {
             <div className="absolute inset-0 -z-10 h-screen w-full bg-radial-[ellipse_at_0%_50%] from-primary/20 via-background/0 to-background/0 to-100%" />
 
             <FlickeringGrid
-                className="absolute inset-0 -bottom-1/2 -z-10 h-screen w-full opacity-20 dark:opacity-10
-    [mask-image:linear-gradient(to_bottom,transparent_0%,white_0%,white_0%,transparent_100%)]
-    [-webkit-mask-image:linear-gradient(to_bottom,transparent_0%,white_0%,white_0%,transparent_100%)]
-    [mask-repeat:no-repeat] [-webkit-mask-repeat:no-repeat]
-    [mask-size:100%_100%] [-webkit-mask-size:100%_100%]"
                 flickerChance={0.05}
                 gridGap={1}
                 maxOpacity={0.5}

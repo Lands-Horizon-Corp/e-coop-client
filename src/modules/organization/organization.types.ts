@@ -81,7 +81,7 @@ export interface IOrganizationRequest {
     refund_policy?: string
     user_agreement?: string
     is_private?: boolean
-    currency_id: TEntityId
+    currency_id?: TEntityId
 }
 
 export interface IOrganizationPaginated

@@ -43,7 +43,6 @@ export const EditOrganizationSchema = OrganizationSchema.extend({
     user_agreement: z.string().optional(),
     media_id: z.string().optional(),
     cover_media_id: z.string().optional(),
-    currency_id: entityIdSchema,
-})
-
+}).omit({ currency_id: true })
+export type TEditOrganizationFormValues = z.infer<typeof EditOrganizationSchema>
 export type TOrganizationFormValues = z.infer<typeof OrganizationSchema>

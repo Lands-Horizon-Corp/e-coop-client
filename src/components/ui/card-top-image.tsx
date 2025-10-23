@@ -17,7 +17,7 @@ import {
 import TruncatedText from './truncated-text'
 
 interface ActionProps {
-    label: string | ReactNode
+    label?: string | ReactNode
     onClick: () => void
     variant?:
         | 'default'
@@ -31,92 +31,71 @@ interface ActionProps {
     size?: 'xs' | 'sm' | 'icon' | 'lg' | 'default' | 'default' | 'nostyle'
 }
 
-interface CardTopImageProps {
-    // Image props
+export interface CardTopImageProps {
     mediaSrc?: IMedia
     imageSrc?: string
-    imageAlt: string
+    imageAlt?: string
     imageClassName?: string
-
-    // Content props
-    title: string
+    title?: string
     description?: string
-
-    // Card styling
     className?: string
     cardContentClassName?: string
     cardHeaderClassName?: string
     cardFooterClassName?: string
-
-    // Footer actions
+    cardLabelClassName?: string
     primaryAction?: ActionProps
     secondaryAction?: ActionProps
-
-    // Custom footer content (overrides actions)
     customFooter?: ReactNode
-
-    // Custom header content
     customHeader?: ReactNode
-
-    // Layout options
+    label?: ReactNode
     footerDirection?: 'row' | 'column'
     hideFooter?: boolean
     hideHeader?: boolean
-
-    // Click handlers
     onCardClick?: () => void
     onImageClick?: () => void
 }
 
 const CardTopImage = ({
-    // Image props
     mediaSrc,
     imageSrc,
-    // imageAlt,
     imageClassName,
-
-    // Content props
     title,
     description,
-
-    // Card styling
     className,
     cardContentClassName,
     cardHeaderClassName,
     cardFooterClassName,
-
-    // Actions
+    // cardLabelClassName,
     primaryAction,
     secondaryAction,
     customFooter,
     customHeader,
-
-    // Layout
     footerDirection = 'row',
     hideFooter = false,
     hideHeader = false,
-
-    // Handlers
     onCardClick,
     onImageClick,
+    // label,
 }: CardTopImageProps) => {
     const renderFooter = () => {
         if (hideFooter) return null
-
         if (customFooter) {
             return (
-                <CardFooter className={cn('gap-3', cardFooterClassName)}>
+                <CardFooter
+                    className={cn(
+                        'gap-3 h-full px-2 py-1 rounded-b-2xl',
+                        cardFooterClassName
+                    )}
+                >
                     {customFooter}
                 </CardFooter>
             )
         }
-
         if (!primaryAction && !secondaryAction) return null
-
         return (
             <CardFooter
                 className={cn(
-                    'gap-3',
+                    'gap-3 ',
                     footerDirection === 'column'
                         ? 'flex-col items-stretch'
                         : 'max-sm:flex-col max-sm:items-stretch',
@@ -158,7 +137,7 @@ const CardTopImage = ({
     return (
         <Card
             className={cn(
-                'max-w-sm pt-0 border-0',
+                'max-w-sm pt-0 border-0 !h-fit relative',
                 onCardClick && 'cursor-pointer ',
                 className
             )}
@@ -201,7 +180,6 @@ const CardTopImage = ({
                     )}
                 </CardHeader>
             )}
-
             {renderFooter()}
         </Card>
     )

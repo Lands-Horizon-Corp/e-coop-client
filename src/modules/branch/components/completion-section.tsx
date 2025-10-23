@@ -22,11 +22,11 @@ export const CompletionSection = ({
     }
 
     return (
-        <Card className="border-primary bg-primary dark:border-primary dark:bg-primary/10">
+        <Card className="border-primary bg-secondary dark:border-primary dark:bg-primary/10">
             <CardContent className="flex items-center justify-between p-6">
                 <div className="flex items-center gap-3">
-                    <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary dark:bg-primary/50">
-                        <RocketIcon className="h-5 w-5 text-primary " />
+                    <div className="flex h-10 w-10 items-center justify-center border border-primary rounded-full bg-primary/20 dark:bg-primary/50">
+                        <RocketIcon className="h-5 w-5 text-primary" />
                     </div>
                     <div>
                         <h3 className="font-semibold ">Ready to launch!</h3>

@@ -9,6 +9,7 @@ import {
     AiOutlineMessage as MessageOutlineIcon,
     AiOutlineRotateLeft as RotateBoxLeftIcon,
     AiOutlineRotateRight as RotateBoxRightIcon,
+    AiFillShop as ShopIcon,
     AiOutlineClear as SmallBrushIcon,
 } from 'react-icons/ai'
 import { BiErrorCircle as WarningIcon } from 'react-icons/bi'
@@ -37,6 +38,7 @@ import {
     BsFileEarmarkWordFill as DocumentFileFillIcon,
     BsFileEarmarkExcelFill as ExcelFileFillIcon,
     BsFileEarmarkFill as FileFillIcon,
+    BsGrid1X2Fill as GridIcon,
     BsImage as Image2Icon,
     BsFileEarmarkImageFill as ImageFileFillIcon,
     BsFillInfoCircleFill as InfoFillCircleIcon,
@@ -88,6 +90,7 @@ import {
     FaCalendarCheck as FaCalendarCheckIcon,
     FaTimesCircle as FaTimesIcon,
     FaFingerprint as FingerPrintIcon,
+    FaGlobeAsia as GlobeAsiaIcon,
     FaGripHorizontal as GripHorizontalIcon,
     FaGripVertical as GripVerticalIcon,
     FaHandsHelping as HandsHelpingIcon,
@@ -480,6 +483,7 @@ export {
     BackIcon,
     NextIcon,
     InfoIcon,
+    ShopIcon,
     DraftIcon,
     GlobeIcon,
     GhostIcon,
@@ -625,6 +629,7 @@ export {
     TelephoneIcon,
     UserGroupIcon,
     SwapArrowIcon,
+    GlobeAsiaIcon,
     ThumbsDownIcon,
     CookieBiteIcon,
     Users3LineIcon,
@@ -800,6 +805,7 @@ export {
     PaintIcon,
     GripHorizontalIcon,
     GripVerticalIcon,
+    GridIcon,
 }
 
 export const IconMap = {
@@ -1170,6 +1176,9 @@ export const IconMap = {
     'Chart Bar': ChartBarIcon,
     Cloud: CloudIcon,
     Database: DatabaseIcon,
+    'Globe Asia': GlobeAsiaIcon,
+    'Shop Icon': ShopIcon,
+    'Grid Icon': GridIcon,
 }
 
 export type TIcon = (typeof ICONS)[number]

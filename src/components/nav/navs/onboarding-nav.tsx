@@ -12,7 +12,7 @@ const OnboardingNav = ({ className }: IClassProps) => {
     return (
         <RootNav
             className={cn(
-                'pointer-events-none fixed w-full bg-popover/70 backdrop-blur-sm sm:bg-transparent sm:backdrop-blur-none',
+                'pointer-events-none fixed w-full backdrop-blur-2xl',
                 className
             )}
         >

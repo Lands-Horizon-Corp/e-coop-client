@@ -1,7 +1,6 @@
 import { IBranch } from '@/modules/branch'
 
 import { BranchIcon } from '@/components/icons'
-import { ScrollArea } from '@/components/ui/scroll-area'
 
 import { TEntityId } from '@/types'
 
@@ -14,6 +13,7 @@ interface BranchesSectionProps {
     isSeeding: boolean
     organizationId: TEntityId
     onCreateBranch: () => void
+    showActions?: boolean
 }
 
 export const BranchesSection = ({
@@ -22,6 +22,7 @@ export const BranchesSection = ({
     isSeeding,
     organizationId,
     onCreateBranch,
+    showActions = true,
 }: BranchesSectionProps) => {
     if (isPending) {
         return <div>Loading branches...</div>
@@ -37,7 +38,7 @@ export const BranchesSection = ({
     }
 
     return (
-        <div className="space-y-4">
+        <div className="space-y-4 px-6">
             <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
                     <BranchIcon className="text-primary" />
@@ -46,13 +47,12 @@ export const BranchesSection = ({
                     </h2>
                 </div>
             </div>
-            <ScrollArea className="h-fit">
-                <BranchesGrid
-                    branches={branches}
-                    isSeeding={isSeeding}
-                    organizationId={organizationId}
-                />
-            </ScrollArea>
+            <BranchesGrid
+                branches={branches}
+                isSeeding={isSeeding}
+                organizationId={organizationId}
+                showActions={showActions}
+            />
         </div>
     )
 }

@@ -8,6 +8,12 @@ import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
 
 import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
 import { cn } from '@/helpers/tw-utils'
+import {
+    CurrencyCombobox,
+    useGetCurrencyById,
+    useGetCurrentCurrency,
+} from '@/modules/currency'
+import { CurrencyBadge } from '@/modules/currency/components/currency-badge'
 import { IMedia } from '@/modules/media'
 import {
     ICreateOrganizationResponse,
@@ -59,6 +65,7 @@ type handleStepChange = {
 const OrganizationForm = () => {
     const { countryCode } = useLocationInfo()
     const [activeStep, setActiveStep] = useState(0)
+    const { data: defaultCurrency } = useGetCurrentCurrency()
     const { selectedCategories, clearCategories, setOnOpenCategoryPicker } =
         useCategoryStore()
 
@@ -77,7 +84,12 @@ const OrganizationForm = () => {
             subscription_plan_id: '',
             media_id: '',
             cover_media_id: '',
+            currency_id: defaultCurrency?.id || undefined,
         },
+    })
+
+    const { data: currencyData } = useGetCurrencyById({
+        id: form.watch('currency_id'),
     })
 
     const {
@@ -293,7 +305,7 @@ const OrganizationForm = () => {
                                         )}
                                     />
                                     <FormFieldWrapper
-                                        className="col-span-full sm:col-span-1 lg:col-span-2"
+                                        className="col-span-full sm:col-span-1 lg:col-span-1"
                                         control={form.control}
                                         label="Organization Contact Number"
                                         name="contact_number"
@@ -318,6 +330,25 @@ const OrganizationForm = () => {
                                         )}
                                     />
                                     <FormFieldWrapper
+                                        className="col-span-full sm:col-span-1 lg:col-span-1"
+                                        control={form.control}
+                                        label="Currency"
+                                        name="currency_id"
+                                        render={({ field }) => (
+                                            <CurrencyCombobox
+                                                {...field}
+                                                onChange={(selected) =>
+                                                    field.onChange(selected.id)
+                                                }
+                                                placeholder="Select Currency"
+                                                value={
+                                                    field.value ||
+                                                    defaultCurrency?.id
+                                                }
+                                            />
+                                        )}
+                                    />
+                                    <FormFieldWrapper
                                         className="col-span-full sm:col-span-1 lg:col-span-2"
                                         control={form.control}
                                         label="Organization Address"
@@ -328,6 +359,7 @@ const OrganizationForm = () => {
                                                 autoComplete="organization address"
                                                 id={field.name}
                                                 placeholder="enter organization address"
+                                                value={field.value || ''}
                                             />
                                         )}
                                     />
@@ -471,6 +503,22 @@ const OrganizationForm = () => {
                                                 textAlign="right"
                                                 title="Contact Number"
                                             />
+                                            {currencyData && (
+                                                <BranchInfoItem
+                                                    content={
+                                                        <CurrencyBadge
+                                                            currency={
+                                                                currencyData
+                                                            }
+                                                            displayFormat="code"
+                                                            size={'sm'}
+                                                            variant="primary"
+                                                        />
+                                                    }
+                                                    textAlign="right"
+                                                    title="Currency"
+                                                />
+                                            )}
                                             <BranchInfoItem
                                                 content={form.getValues(
                                                     'address'
