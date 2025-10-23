@@ -78,6 +78,7 @@ interface CurrencyBadgeProps
     displayFormat?:
         | 'name'
         | 'code'
+        | 'country'
         | 'name-code'
         | 'symbol-name'
         | 'symbol-code'
@@ -98,6 +99,8 @@ export function CurrencyBadge({
         switch (displayFormat) {
             case 'name':
                 return currency.name
+            case 'country':
+                return currency.country
             case 'code':
                 return currency.currency_code
             case 'name-code':

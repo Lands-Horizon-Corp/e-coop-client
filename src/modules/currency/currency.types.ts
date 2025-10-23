@@ -9,6 +9,7 @@ export interface ICurrency extends IAuditable {
     name: string
     country: string
     currency_code: string
+    timezone: string
     symbol?: string
     emoji?: string
     iso_3166_alpha2?: string // ISO 3166-1 alpha-2
