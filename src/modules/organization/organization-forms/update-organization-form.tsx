@@ -129,7 +129,7 @@ const UpdateOrganizationForm = ({
                 await handleUploadPhoto(selectedCoverMedia)
             CoverMedia = uploadedCoverPhoto
         } else {
-            CoverMedia = data.cover_media_id || ''
+            CoverMedia = data.cover_media_id || null
         }
 
         const requestData = {
