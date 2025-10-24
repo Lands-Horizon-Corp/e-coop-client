@@ -1,7 +1,18 @@
-import { useState } from 'react'
+import { useState } from 'react';
 
-import { cn } from '@/helpers'
+
+
+import { cn } from '@/helpers';
 import { useAuthUserWithOrgBranch } from '@/modules/authentication/authgentication.store'
+
+import { GridFillIcon } from '@/components/icons'
+import {
+    Empty,
+    EmptyDescription,
+    EmptyHeader,
+    EmptyMedia,
+    EmptyTitle,
+} from '@/components/ui/empty'
 
 import { IClassProps } from '@/types'
 
@@ -46,11 +57,18 @@ const ChargesRateSchemeEditor = ({ className }: Props) => {
                 selectedId={chargesRateScheme?.id}
             />
             {chargesRateScheme === undefined ? (
-                <div className="flex-1 min-h-full flex items-center justify-center">
-                    <p className="text-center text-xs text-muted-foreground/70">
-                        No scheme selected or invalid scheme id
-                    </p>
-                </div>
+                <Empty className="from-muted/50 to-background h-full bg-gradient-to-b from-30%">
+                    <EmptyHeader>
+                        <EmptyMedia variant="icon">
+                            <GridFillIcon />
+                        </EmptyMedia>
+                        <EmptyTitle>No Charges Rate Scheme Selected</EmptyTitle>
+                        <EmptyDescription>
+                            Select or Create a Charges Rate Scheme to view or
+                            edit
+                        </EmptyDescription>
+                    </EmptyHeader>
+                </Empty>
             ) : (
                 <>
                     <ChargesRateSchemeCreateUpdateForm className="w-64" />
