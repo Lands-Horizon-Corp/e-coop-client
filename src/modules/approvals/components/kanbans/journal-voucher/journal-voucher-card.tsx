@@ -66,7 +66,7 @@ export const JournalVoucherCardCreatorInfo = ({
           : isPrinted
             ? ` ${journalVoucher.printed_by?.full_name}`
             : journalVoucher.created_by
-              ? ` ${journalVoucher.posted_by?.full_name}`
+              ? ` ${journalVoucher.created_by?.full_name}`
               : ''
 
     const mediaUrl = isReleased
@@ -75,8 +75,8 @@ export const JournalVoucherCardCreatorInfo = ({
           ? journalVoucher.approved_by?.media?.url
           : isPrinted
             ? journalVoucher.printed_by?.media?.url
-            : journalVoucher.posted_by
-              ? journalVoucher.posted_by?.media?.url
+            : journalVoucher.created_by
+              ? journalVoucher.created_by?.media?.url
               : ''
     return (
         <div className="flex items-center justify-end gap-x-2">
