@@ -1,7 +1,18 @@
 import { useState } from 'react'
 
 import { cn } from '@/helpers'
-import { useAuthUserWithOrgBranch } from '@/modules/authentication/authgentication.store'
+import { useAuthUserWithOrgBranch } from '@/modules/authentication/authgentication.store';
+
+
+
+import { LayersIcon } from '@/components/icons'
+import {
+    Empty,
+    EmptyDescription,
+    EmptyHeader,
+    EmptyMedia,
+    EmptyTitle,
+} from '@/components/ui/empty'
 
 import { IClassProps } from '@/types'
 
@@ -47,11 +58,17 @@ const ComputationSheetSchemeEditor = ({ className }: Props) => {
                 selectedId={computationSheet?.id}
             />
             {computationSheet === undefined ? (
-                <div className="flex-1 min-h-full flex items-center justify-center">
-                    <p className="text-center text-xs text-muted-foreground/70">
-                        No scheme selected or invalid scheme id
-                    </p>
-                </div>
+                <Empty className="from-muted/50 to-background h-full bg-gradient-to-b from-30%">
+                    <EmptyHeader>
+                        <EmptyMedia variant="icon">
+                            <LayersIcon />
+                        </EmptyMedia>
+                        <EmptyTitle>No Computation Sheet Selected</EmptyTitle>
+                        <EmptyDescription>
+                            Select or Create a Computation Sheet to view or edit
+                        </EmptyDescription>
+                    </EmptyHeader>
+                </Empty>
             ) : (
                 <>
                     <LoanSchemeDisplay selectedId={computationSheet.id} />
