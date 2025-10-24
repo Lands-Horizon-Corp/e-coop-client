@@ -8,6 +8,12 @@ import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
 
 import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
 import { cn } from '@/helpers/tw-utils'
+import {
+    CurrencyCombobox,
+    useGetCurrencyById,
+    useGetCurrentCurrency,
+} from '@/modules/currency'
+import { CurrencyBadge } from '@/modules/currency/components/currency-badge'
 import { IMedia } from '@/modules/media'
 import {
     ICreateOrganizationResponse,
@@ -19,7 +25,9 @@ import { IOrganizationCategoryRequest } from '@/modules/organization-category'
 import SubscriptionPlanPicker from '@/modules/subscription-plan/components/subscription-plan/subscription'
 import { useCategoryStore } from '@/store/onboarding/category-store'
 
+import { GradientBackground } from '@/components/gradient-background/gradient-background'
 import {
+    BuildingBranchIcon,
     LoadingSpinnerIcon,
     NextIcon,
     RocketIcon,
@@ -31,11 +39,13 @@ import TextEditor from '@/components/text-editor'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card'
+import { Checkbox } from '@/components/ui/checkbox'
 import { Form, FormControl } from '@/components/ui/form'
 import FormErrorMessage from '@/components/ui/form-error-message'
 import FormFieldWrapper from '@/components/ui/form-field-wrapper'
 import ImageField from '@/components/ui/image-field'
 import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
 import { PhoneInput } from '@/components/ui/phone-input'
 import { PlainTextEditor } from '@/components/ui/text-editor'
 import PreviewMediaWrapper from '@/components/wrappers/preview-media-wrapper'
@@ -59,6 +69,7 @@ type handleStepChange = {
 const OrganizationForm = () => {
     const { countryCode } = useLocationInfo()
     const [activeStep, setActiveStep] = useState(0)
+    const { data: defaultCurrency } = useGetCurrentCurrency()
     const { selectedCategories, clearCategories, setOnOpenCategoryPicker } =
         useCategoryStore()
 
@@ -77,7 +88,12 @@ const OrganizationForm = () => {
             subscription_plan_id: '',
             media_id: '',
             cover_media_id: '',
+            currency_id: defaultCurrency?.id || undefined,
         },
+    })
+
+    const { data: currencyData } = useGetCurrencyById({
+        id: form.watch('currency_id'),
     })
 
     const {
@@ -144,7 +160,7 @@ const OrganizationForm = () => {
             >
                 <Card
                     className={cn(
-                        'flex-1 w-full max-w-full shadow-none rounded-none sm:rounded-lg border-none sm:border bg-transparent sm:bg-card/50  flex flex-col'
+                        'flex-1 w-full max-w-full min-w-6xl shadow-none rounded-none sm:rounded-lg border-none sm:border bg-transparent sm:bg-card/50  flex flex-col'
                     )}
                 >
                     <CardHeader className="text-lg px-4 sm:px-6"></CardHeader>
@@ -293,7 +309,7 @@ const OrganizationForm = () => {
                                         )}
                                     />
                                     <FormFieldWrapper
-                                        className="col-span-full sm:col-span-1 lg:col-span-2"
+                                        className="col-span-full sm:col-span-1 lg:col-span-1"
                                         control={form.control}
                                         label="Organization Contact Number"
                                         name="contact_number"
@@ -317,6 +333,26 @@ const OrganizationForm = () => {
                                             </div>
                                         )}
                                     />
+
+                                    <FormFieldWrapper
+                                        className="col-span-full sm:col-span-1 lg:col-span-1"
+                                        control={form.control}
+                                        label="Currency"
+                                        name="currency_id"
+                                        render={({ field }) => (
+                                            <CurrencyCombobox
+                                                {...field}
+                                                onChange={(selected) =>
+                                                    field.onChange(selected.id)
+                                                }
+                                                placeholder="Select Currency"
+                                                value={
+                                                    field.value ||
+                                                    defaultCurrency?.id
+                                                }
+                                            />
+                                        )}
+                                    />
                                     <FormFieldWrapper
                                         className="col-span-full sm:col-span-1 lg:col-span-2"
                                         control={form.control}
@@ -328,6 +364,7 @@ const OrganizationForm = () => {
                                                 autoComplete="organization address"
                                                 id={field.name}
                                                 placeholder="enter organization address"
+                                                value={field.value || ''}
                                             />
                                         )}
                                     />
@@ -343,6 +380,9 @@ const OrganizationForm = () => {
                                                     <TextEditor
                                                         {...rest}
                                                         className="w-full"
+                                                        content={
+                                                            field.value ?? ''
+                                                        }
                                                         placeholder="Write some description about your Organization..."
                                                         textEditorClassName="!max-w-none"
                                                     />
@@ -350,6 +390,55 @@ const OrganizationForm = () => {
                                             )
                                         }}
                                     />
+                                    <div className="col-span-4 w-full grid-cols-1 gap-x-2 gap-y-2">
+                                        <FormFieldWrapper
+                                            control={form.control}
+                                            name="is_private"
+                                            render={({ field }) => (
+                                                <GradientBackground
+                                                    gradientOnly
+                                                >
+                                                    <div className="shadow-xs relative flex w-full items-start gap-2 rounded-2xl border border-input p-2 outline-none duration-200 ease-out has-[:checked]:border-primary/30 has-[:checked]:bg-primary/40">
+                                                        <Checkbox
+                                                            checked={
+                                                                field.value
+                                                            }
+                                                            className="order-1 after:absolute after:inset-0"
+                                                            id={field.name}
+                                                            onCheckedChange={
+                                                                field.onChange
+                                                            }
+                                                        />
+                                                        <div className="flex grow items-center gap-3">
+                                                            <div className="size-fit rounded-full bg-secondary p-2">
+                                                                <BuildingBranchIcon className="size-4" />
+                                                            </div>
+                                                            <div className="grid gap-2">
+                                                                <Label
+                                                                    htmlFor={
+                                                                        field.name
+                                                                    }
+                                                                >
+                                                                    Make
+                                                                    Organization
+                                                                    Private
+                                                                </Label>
+                                                                <p className="text-xs text-muted-foreground">
+                                                                    Making the
+                                                                    organization
+                                                                    private will
+                                                                    restrict
+                                                                    access to
+                                                                    members
+                                                                    only.
+                                                                </p>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </GradientBackground>
+                                            )}
+                                        />
+                                    </div>
                                 </div>
                             )}
                             {activeStep === 1 && (
@@ -381,7 +470,7 @@ const OrganizationForm = () => {
                                 />
                             )}
                             {activeStep === 2 && (
-                                <div className="flex min-h-[40vh] sm:min-h-[50vh] w-full flex-col items-center justify-center gap-4 p-4 sm:p-6 rounded-lg border">
+                                <div className="flex min-h-[40vh] sm:min-h-[50vh] flex-col items-center justify-center gap-4 p-4 sm:p-6 rounded-lg">
                                     <UnavailableIcon
                                         className="items-center"
                                         size={60}
@@ -408,6 +497,7 @@ const OrganizationForm = () => {
                                     <div className="mt-4 space-y-2">
                                         <BranchInfoItem
                                             content={form.getValues('name')}
+                                            contentClassName="font-bold text-md"
                                             textAlign="right"
                                             title="Organization Name"
                                         />
@@ -430,7 +520,7 @@ const OrganizationForm = () => {
                                                         />
                                                     </PreviewMediaWrapper>
                                                 }
-                                                contentClassName="flex justify-end"
+                                                contentClassName="flex justify-end "
                                                 textAlign="right"
                                                 title="Organization logo"
                                             />
@@ -460,7 +550,7 @@ const OrganizationForm = () => {
                                                 content={form.getValues(
                                                     'email'
                                                 )}
-                                                contentClassName=" text-link underline underline-offset-2 text-blue-600"
+                                                contentClassName=" text-link underline font-bold text-md underline-offset-2 text-blue-600"
                                                 textAlign="right"
                                                 title="Email"
                                             />
@@ -468,9 +558,27 @@ const OrganizationForm = () => {
                                                 content={form.getValues(
                                                     'contact_number'
                                                 )}
+                                                contentClassName="font-bold text-md"
                                                 textAlign="right"
                                                 title="Contact Number"
                                             />
+                                            {currencyData && (
+                                                <BranchInfoItem
+                                                    content={
+                                                        <CurrencyBadge
+                                                            currency={
+                                                                currencyData
+                                                            }
+                                                            displayFormat="code"
+                                                            size={'sm'}
+                                                            variant="primary"
+                                                        />
+                                                    }
+                                                    contentClassName="font-bold text-md"
+                                                    textAlign="right"
+                                                    title="Currency"
+                                                />
+                                            )}
                                             <BranchInfoItem
                                                 content={form.getValues(
                                                     'address'
@@ -486,8 +594,30 @@ const OrganizationForm = () => {
                                                         )}
                                                     />
                                                 }
+                                                contentClassName="font-bold text-md"
                                                 textAlign="right"
                                                 title="Description"
+                                            />
+                                            <BranchInfoItem
+                                                content={
+                                                    <Badge
+                                                        variant={
+                                                            form.getValues(
+                                                                'is_private'
+                                                            )
+                                                                ? 'default'
+                                                                : 'secondary'
+                                                        }
+                                                    >
+                                                        {form.getValues(
+                                                            'is_private'
+                                                        )
+                                                            ? 'Private'
+                                                            : 'Not Private'}
+                                                    </Badge>
+                                                }
+                                                textAlign="right"
+                                                title="Private"
                                             />
                                             <BranchInfoItem
                                                 content={

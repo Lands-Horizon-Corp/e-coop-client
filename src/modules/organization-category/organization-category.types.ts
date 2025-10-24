@@ -7,7 +7,7 @@ export interface IOrganizationCategory extends ITimeStamps, IAuditable {
     id: TEntityId
     organization_id: TEntityId
     organization: IOrganization
-
+    name: string
     category_id: TEntityId
     category: ICategory
 }

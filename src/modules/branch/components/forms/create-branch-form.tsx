@@ -8,19 +8,16 @@ import { cn } from '@/helpers/tw-utils'
 import { IMedia } from '@/modules/media'
 
 import { CountryCombobox } from '@/components/comboboxes/country-combobox'
-import { GradientBackground } from '@/components/gradient-background/gradient-background'
-import { HouseIcon, LoadingSpinnerIcon } from '@/components/icons'
+import { LoadingSpinnerIcon } from '@/components/icons'
 import MapPicker from '@/components/map/map-picker'
 import Modal, { IModalProps } from '@/components/modals/modal'
 import TextEditor from '@/components/text-editor'
 import { Button } from '@/components/ui/button'
-import { Checkbox } from '@/components/ui/checkbox'
 import { Form, FormControl } from '@/components/ui/form'
 import FormErrorMessage from '@/components/ui/form-error-message'
 import FormFieldWrapper from '@/components/ui/form-field-wrapper'
 import ImageField from '@/components/ui/image-field'
 import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
 import { PhoneInput } from '@/components/ui/phone-input'
 import {
     Select,
@@ -314,56 +311,6 @@ export const CreateUpdateBranchByOrgForm = ({
                                     )}
                                 />
                             </div>
-
-                            <FormFieldWrapper
-                                className="col-span-2 bg-destructive"
-                                control={form.control}
-                                hiddenFields={formProps.hiddenFields}
-                                label="Set as Main Branch"
-                                name="is_main_branch"
-                                render={({ field }) => {
-                                    return (
-                                        <GradientBackground gradientOnly>
-                                            <div className="shadow-xs relative flex w-full items-start gap-2 rounded-2xl border border-input p-4 outline-none duration-200 ease-out has-[:checked]:border-primary/30 has-[:checked]:bg-primary/40">
-                                                <Checkbox
-                                                    aria-describedby={`${field.name}`}
-                                                    checked={field.value}
-                                                    className="order-1 after:absolute after:inset-0"
-                                                    disabled={isLoading}
-                                                    id={field.name}
-                                                    name={field.name}
-                                                    onCheckedChange={
-                                                        field.onChange
-                                                    }
-                                                />
-                                                <div className="flex grow items-center gap-3">
-                                                    <div className="size-fit rounded-full bg-secondary p-2">
-                                                        <HouseIcon />
-                                                    </div>
-                                                    <div className="grid gap-2">
-                                                        <Label
-                                                            htmlFor={field.name}
-                                                        >
-                                                            Set as Main Branch
-                                                        </Label>
-                                                        <p
-                                                            className="text-xs text-muted-foreground"
-                                                            id={`${field.name}`}
-                                                        >
-                                                            This will designate
-                                                            the branch as the
-                                                            primary or
-                                                            headquarters
-                                                            location for the
-                                                            organization.
-                                                        </p>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </GradientBackground>
-                                    )
-                                }}
-                            />
                         </div>
                         <div className="grid grid-cols-1">
                             <FormFieldWrapper

@@ -1,5 +1,8 @@
 import { cn } from '@/helpers/tw-utils'
 import { type VariantProps, cva } from 'class-variance-authority'
+import { CircleFlag } from 'react-circle-flags'
+
+import { findCountry } from '@/components/comboboxes/country-combobox'
 
 import { ICurrency } from '../currency.types'
 
@@ -78,6 +81,7 @@ interface CurrencyBadgeProps
     displayFormat?:
         | 'name'
         | 'code'
+        | 'country'
         | 'name-code'
         | 'symbol-name'
         | 'symbol-code'
@@ -98,6 +102,8 @@ export function CurrencyBadge({
         switch (displayFormat) {
             case 'name':
                 return currency.name
+            case 'country':
+                return currency.country
             case 'code':
                 return currency.currency_code
             case 'name-code':
@@ -115,6 +121,9 @@ export function CurrencyBadge({
         }
     }
 
+    const alpha2 =
+        currency.iso_3166_alpha2 || findCountry(currency?.country)?.alpha2 || ''
+
     return (
         <div
             className={cn(
@@ -125,11 +134,19 @@ export function CurrencyBadge({
             title={`${currency.name} - ${currency.country}`}
             {...props}
         >
-            {showEmoji && currency.emoji && (
-                <span className={emojiSizeVariants({ size })}>
+            <CircleFlag
+                className={cn(
+                    'inline-flex h-5 w-5 shrink-0 items-center justify-center overflow-hidden rounded-full',
+                    emojiSizeVariants({ size })
+                )}
+                countryCode={alpha2.toLowerCase()}
+                height={20}
+            />
+            {/* {
+                <span className={)}>
                     {currency.emoji}
                 </span>
-            )}
+            } */}
             {showSymbol && currency.symbol && !showEmoji && (
                 <span className={symbolSizeVariants({ size })}>
                     {currency.symbol}

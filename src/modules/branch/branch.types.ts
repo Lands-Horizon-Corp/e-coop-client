@@ -46,15 +46,15 @@ export interface IBranch extends ITimeStamps, IAuditable {
 export interface IBranchRequest {
     id?: TEntityId
 
-    media_id: string | null
+    media_id?: string
 
     type: branchTypeEnum
     name: string
     email: string
 
-    description: string
-    country_code: string
-    contact_number: string
+    description?: string
+    country_code?: string
+    contact_number?: string
 
     address: string
     province: string
@@ -66,7 +66,7 @@ export interface IBranchRequest {
     latitude?: number
     longitude?: number
 
-    is_main_branch: boolean
+    is_main_branch?: boolean
     is_admin_verified?: boolean
 }
 

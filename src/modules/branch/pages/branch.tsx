@@ -26,7 +26,7 @@ const Branch = ({ branch, organization, isUserCanJoin }: BranchesProps) => {
     const { mutate: JoinOrganization } = useJoinOrganization({
         onSuccess: () => {
             toast.success('You have successfully joined the organization')
-            navigate({ to: `/onboarding` })
+            navigate({ to: `/onboarding` as string })
         },
         onError: () => {
             toast.error('Failed to join organization. Please try again.')

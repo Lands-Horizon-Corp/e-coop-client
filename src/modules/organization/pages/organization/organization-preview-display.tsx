@@ -9,12 +9,8 @@ import {
 import { BranchInfoItem } from '@/modules/organization/organization-forms/branch-card-info'
 
 import {
-    BuildingIcon,
     CalendarIcon,
     EditPencilIcon,
-    PinLocationIcon as LocationIcon,
-    EmailIcon as MailIcon,
-    PhoneIcon,
     PlusIcon,
     StarIcon,
     TagIcon,
@@ -35,34 +31,35 @@ import PreviewMediaWrapper from '@/components/wrappers/preview-media-wrapper'
 
 import { useModalState } from '@/hooks/use-modal-state'
 
-type OrganizationCardProps = {
+type OrganizationPreviewDisplayProps = {
     organization?: IOrganization
     onCreateBranch?: () => void
     isLoading?: boolean
     variant?: 'default' | 'compact' | 'detailed'
     showActions?: boolean
     className?: string
+    onClick?: () => void
+    isEditMode?: boolean
 }
 
-const OrganizationCard = ({
+const OrganizationPreviewDisplay = ({
     organization,
     onCreateBranch,
     isLoading,
     variant = 'default',
     showActions = true,
     className,
-}: OrganizationCardProps) => {
+}: OrganizationPreviewDisplayProps) => {
     const updateModal = useModalState(false)
     const queryClient = useQueryClient()
 
     if (isLoading) {
-        return <OrganizationCardSkeleton variant={variant} />
+        return <OrganizationPreviewDisplaySkeleton variant={variant} />
     }
 
     if (!organization) {
         return null
     }
-
     const mediaUrl = organization?.cover_media?.url
     const categories = organization?.organization_categories ?? []
     const organizationId = organization?.id || ''
@@ -107,17 +104,20 @@ const OrganizationCard = ({
 
     return (
         <TooltipProvider>
-            <div
-                className={cn(
-                    'flex relative w-full bg-fixed bg-cover rounded-t-4xl bg-top flex-col gap-y-2 ecoop-scroll overflow-y-auto',
-                    getContainerHeight(),
-                    'max-h-screen',
-                    className
-                )}
-                style={{
-                    backgroundImage: `url(${mediaUrl})`,
-                }}
-            >
+            <div>
+                <div
+                    className={cn(
+                        'flex relative w-full bg-cover !h-[50vh] bg-center flex-col gap-y-2 ecoop-scroll',
+                        getContainerHeight(),
+                        'max-h-screen',
+                        className
+                    )}
+                    style={{
+                        backgroundImage: `url(${mediaUrl})`,
+                    }}
+                >
+                    <div className="  absolute w-full min-h-52 bottom-0 px-4 sm:px-8  bg-gradient-to-t from-background via-[80%] via-background/20  to-transparent" />
+                </div>
                 <UpdateOrganizationFormModal
                     {...updateModal}
                     className="w-full min-w-[70rem] max-w-[80rem]"
@@ -135,9 +135,8 @@ const OrganizationCard = ({
                         },
                     }}
                 />
-
                 {/* Gradient Overlay */}
-                <div className="absolute w-full bottom-0 pb-10 overflow-auto h-fit px-4 sm:px-8 pt-20 sm:pt-50 bg-gradient-to-t from-background via-background/95 via-30% to-transparent">
+                <div className=" w-full -mt-20 inset-0 z-30 px-4 sm:px-8">
                     {/* Organization Logo */}
                     <div className="mb-4">
                         <PreviewMediaWrapper media={organization?.media}>
@@ -155,7 +154,6 @@ const OrganizationCard = ({
                             </div>
                         </PreviewMediaWrapper>
                     </div>
-
                     {/* Main Content */}
                     <div className="flex flex-col lg:flex-row gap-4 mb-6">
                         {/* Organization Name & Basic Info */}
@@ -165,7 +163,7 @@ const OrganizationCard = ({
                                     <TooltipTrigger asChild>
                                         <h1
                                             className={cn(
-                                                'font-sans font-black leading-tight cursor-pointer',
+                                                'font-sans font-black  !leading-[52px] cursor-pointer',
                                                 getTextSize(),
                                                 'hover:text-primary/80 transition-colors'
                                             )}
@@ -180,21 +178,18 @@ const OrganizationCard = ({
 
                                 {/* Organization Stats */}
                                 <div className="flex flex-wrap items-center gap-4 text-sm text-muted-foreground">
-                                    {/* Note: Branch and member counts not available in IOrganization type */}
                                     {/* {branchCount > 0 && (
                                         <div className="flex items-center gap-1">
                                             <BuildingIcon className="h-4 w-4" />
                                             <span>{branchCount} {branchCount === 1 ? 'branch' : 'branches'}</span>
                                         </div>
                                     )}
-                                    
                                     {memberCount > 0 && (
                                         <div className="flex items-center gap-1">
                                             <UsersIcon className="h-4 w-4" />
                                             <span>{memberCount} {memberCount === 1 ? 'member' : 'members'}</span>
                                         </div>
                                     )} */}
-
                                     {organization?.created_at && (
                                         <div className="flex items-center gap-1">
                                             <CalendarIcon className="h-4 w-4" />
@@ -206,172 +201,66 @@ const OrganizationCard = ({
                                             </span>
                                         </div>
                                     )}
-
-                                    {/* Organization Key */}
-                                    <div className="flex items-center gap-1">
-                                        <BuildingIcon className="h-4 w-4" />
-                                        <span className="text-xs font-mono bg-muted px-2 py-1 rounded">
-                                            {organization.organization_key}
-                                        </span>
-                                    </div>
                                 </div>
                             </div>
+                            {variant !== 'compact' && (
+                                <>
+                                    <div className="text-muted-foreground mt-3">
+                                        <TruncatedText
+                                            className="text-muted-foreground !bg-inherit max-h-52 overflow-auto ecoop-scroll text-sm sm:text-base"
+                                            maxLength={
+                                                variant === 'detailed'
+                                                    ? 400
+                                                    : 250
+                                            }
+                                            showLessText="Read less"
+                                            showMoreText="Read more"
+                                            text={description}
+                                        />
+                                    </div>
+                                </>
+                            )}
                         </div>
 
                         {/* Organization Details */}
-                        <div className="flex-1 space-y-3">
-                            {/* Categories */}
-                            <BranchInfoItem
-                                className=""
-                                content={
-                                    categories.length > 0 ? (
-                                        <div className="flex flex-wrap gap-1">
-                                            <TagIcon className="h-4 w-4 text-muted-foreground mr-1" />
-                                            {categories.map((catItem) => (
-                                                <Badge
-                                                    className="mr-1 mb-1"
-                                                    key={catItem.id}
-                                                    variant="secondary"
-                                                >
-                                                    {catItem.category?.name}
-                                                </Badge>
-                                            ))}
-                                        </div>
-                                    ) : (
-                                        <div className="flex items-center gap-2 text-muted-foreground">
-                                            <TagIcon className="h-4 w-4" />
-                                            <span>No categories selected</span>
-                                        </div>
-                                    )
-                                }
-                                contentClassName="flex items-center"
-                                textAlign="left"
-                                title="Categories:"
-                            />
-
+                        <div className="flex-1 flex-col !h-full space-y-1">
                             {/* Subscription Plan */}
                             <BranchInfoItem
+                                className="w-full"
                                 content={
-                                    <div className="flex items-center gap-2">
-                                        <StarIcon className="h-4 w-4 text-muted-foreground" />
+                                    <div className="flex gap-2 ">
                                         <Badge variant="secondary">
                                             {organization?.subscription_plan
                                                 ?.name || 'No plan selected'}
                                         </Badge>
                                     </div>
                                 }
-                                contentClassName="translate-y-1"
+                                contentClassName="translate-y-1 "
+                                iconClassName="size-4 text-muted-foreground"
+                                textAlign="left"
                                 title="Plan:"
+                                TitleIcon={StarIcon}
                             />
-
-                            {/* Database Migration Status */}
-                            {variant === 'detailed' &&
-                                organization?.database_migration_status && (
-                                    <BranchInfoItem
-                                        content={
-                                            <div className="flex items-center gap-2">
-                                                <div
-                                                    className={cn(
-                                                        'h-2 w-2 rounded-full',
-                                                        organization.database_migration_status ===
-                                                            'completed' &&
-                                                            'bg-green-500',
-                                                        organization.database_migration_status ===
-                                                            'pending' &&
-                                                            'bg-yellow-500',
-                                                        organization.database_migration_status ===
-                                                            'migrating' &&
-                                                            'bg-blue-500',
-                                                        organization.database_migration_status ===
-                                                            'error' &&
-                                                            'bg-red-500'
-                                                    )}
-                                                />
-                                                <span className="text-sm capitalize">
-                                                    {
-                                                        organization.database_migration_status
-                                                    }
-                                                </span>
-                                            </div>
-                                        }
-                                        title="Status:"
-                                    />
-                                )}
-
-                            {/* Contact Information */}
-                            {variant === 'detailed' && (
-                                <>
-                                    {organization?.email && (
-                                        <BranchInfoItem
-                                            content={
-                                                <div className="flex items-center gap-2">
-                                                    <MailIcon className="h-4 w-4 text-muted-foreground" />
-                                                    <a
-                                                        className="text-primary hover:underline text-sm"
-                                                        href={`mailto:${organization.email}`}
-                                                    >
-                                                        {organization.email}
-                                                    </a>
-                                                </div>
-                                            }
-                                            title="Email:"
-                                        />
-                                    )}
-
-                                    {organization?.contact_number && (
-                                        <BranchInfoItem
-                                            content={
-                                                <div className="flex items-center gap-2">
-                                                    <PhoneIcon className="h-4 w-4 text-muted-foreground" />
-                                                    <a
-                                                        className="text-primary hover:underline text-sm"
-                                                        href={`tel:${organization.contact_number}`}
-                                                    >
-                                                        {
-                                                            organization.contact_number
-                                                        }
-                                                    </a>
-                                                </div>
-                                            }
-                                            title="Phone:"
-                                        />
-                                    )}
-
-                                    {organization?.address && (
-                                        <BranchInfoItem
-                                            content={
-                                                <div className="flex items-start gap-2">
-                                                    <LocationIcon className="h-4 w-4 text-muted-foreground mt-0.5 flex-shrink-0" />
-                                                    <span className="text-sm">
-                                                        {organization.address}
-                                                    </span>
-                                                </div>
-                                            }
-                                            title="Address:"
-                                        />
-                                    )}
-                                </>
-                            )}
+                            {/* Categories */}
+                            <div className="flex flex-wrap gap-1">
+                                <span className="text-xs font-semibold">
+                                    Categories:
+                                    <TagIcon className="inline-block ml-1 mb-0.5 size-4 text-muted-foreground" />
+                                </span>
+                                {categories.map((catItem) => (
+                                    <Badge
+                                        className="mr-1 mb-1"
+                                        key={catItem.id}
+                                        variant="secondary"
+                                    >
+                                        {catItem.category?.name}
+                                    </Badge>
+                                ))}
+                            </div>
                         </div>
                     </div>
 
                     {/* Description */}
-                    {variant !== 'compact' && (
-                        <>
-                            <Separator className="mb-4" />
-                            <div className="text-muted-foreground">
-                                <TruncatedText
-                                    className="text-muted-foreground text-sm sm:text-base"
-                                    maxLength={
-                                        variant === 'detailed' ? 400 : 250
-                                    }
-                                    showLessText="Read less"
-                                    showMoreText="Read more"
-                                    text={description}
-                                />
-                            </div>
-                        </>
-                    )}
 
                     {/* Actions */}
                     {showActions && (
@@ -409,10 +298,12 @@ const OrganizationCard = ({
     )
 }
 
-const OrganizationCardSkeleton = ({
+export const OrganizationPreviewDisplaySkeleton = ({
     variant = 'default',
+    className,
 }: {
     variant?: 'default' | 'compact' | 'detailed'
+    className?: string
 }) => {
     const getContainerHeight = () => {
         switch (variant) {
@@ -439,8 +330,9 @@ const OrganizationCardSkeleton = ({
     return (
         <div
             className={cn(
-                'flex relative w-full bg-gray-200 rounded-t-4xl animate-pulse',
-                getContainerHeight()
+                'flex relative w-full min-w-5xl bg-secondary rounded-t-4xl animate-pulse',
+                getContainerHeight(),
+                className
             )}
         >
             <div className="absolute w-full bottom-0 pb-10 px-4 sm:px-8 pt-20 sm:pt-50 bg-gradient-to-t from-background via-background/95 via-30% to-transparent">
@@ -496,4 +388,4 @@ const OrganizationCardSkeleton = ({
     )
 }
 
-export default OrganizationCard
+export default OrganizationPreviewDisplay

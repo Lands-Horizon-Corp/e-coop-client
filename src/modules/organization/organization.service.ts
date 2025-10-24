@@ -22,7 +22,7 @@ const { apiCrudHooks, apiCrudService } = createDataLayerFactory<
 const {
     useCreate: useCreateOrganization,
     useUpdateById: useUpdateOrganization,
-    useGetById,
+    useGetById: useGetOrganizationById,
     useGetAll,
 } = apiCrudHooks
 
@@ -31,10 +31,10 @@ const { getById: getOrganizationById, route, API } = apiCrudService
 export {
     useCreateOrganization,
     useUpdateOrganization,
-    useGetById,
     useGetAll,
     apiCrudHooks,
     apiCrudService,
+    useGetOrganizationById,
 }
 
 interface Options<TData = IOrganization[]> {
@@ -53,7 +53,7 @@ export const useGetAllOrganizations = ({
     })
 }
 
-export const useGetOrganizationById = ({
+export const useGetOrganizationWithPoliciesById = ({
     options,
     organizationId,
 }: Options<IOrganizationWithPolicies> & { organizationId: TEntityId }) => {

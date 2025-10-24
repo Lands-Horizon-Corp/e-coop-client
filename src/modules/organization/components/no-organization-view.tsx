@@ -32,7 +32,7 @@ const NoOrganizationView = () => {
             <Button
                 className={cn('w-[300px] gap-x-2 rounded-xl')}
                 onClick={() => {
-                    navigate({ to: '/onboarding/organization' })
+                    navigate({ to: '/onboarding/organization' as string })
                 }}
                 variant={'secondary'}
             >

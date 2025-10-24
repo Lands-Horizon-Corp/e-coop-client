@@ -55,7 +55,10 @@ const TruncatedText = ({
                     'h-auto p-0 cursor-pointer hover:no-underline text-xs text-primary hover:text-primary/80',
                     buttonClassName
                 )}
-                onClick={handleToggle}
+                onClick={(e) => {
+                    e.stopPropagation()
+                    handleToggle()
+                }}
                 size="sm"
                 variant="link"
             >

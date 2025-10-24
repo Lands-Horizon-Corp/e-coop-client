@@ -9,6 +9,7 @@ import {
     AiOutlineMessage as MessageOutlineIcon,
     AiOutlineRotateLeft as RotateBoxLeftIcon,
     AiOutlineRotateRight as RotateBoxRightIcon,
+    AiFillShop as ShopIcon,
     AiOutlineClear as SmallBrushIcon,
 } from 'react-icons/ai'
 import { BiErrorCircle as WarningIcon } from 'react-icons/bi'
@@ -37,6 +38,8 @@ import {
     BsFileEarmarkWordFill as DocumentFileFillIcon,
     BsFileEarmarkExcelFill as ExcelFileFillIcon,
     BsFileEarmarkFill as FileFillIcon,
+    BsFillGridFill as GridFillIcon,
+    BsGrid1X2Fill as GridIcon,
     BsImage as Image2Icon,
     BsFileEarmarkImageFill as ImageFileFillIcon,
     BsFillInfoCircleFill as InfoFillCircleIcon,
@@ -88,6 +91,7 @@ import {
     FaCalendarCheck as FaCalendarCheckIcon,
     FaTimesCircle as FaTimesIcon,
     FaFingerprint as FingerPrintIcon,
+    FaGlobeAsia as GlobeAsiaIcon,
     FaGripHorizontal as GripHorizontalIcon,
     FaGripVertical as GripVerticalIcon,
     FaHandsHelping as HandsHelpingIcon,
@@ -392,6 +396,7 @@ import {
 import { SlOptions as OptionsIcon } from 'react-icons/sl'
 import {
     TbBlockquote as BlockQuoteIcon,
+    TbClockDollar as CashClockIcon,
     TbClockCancel as ClockCancelIcon,
     TbCreditCard as CreditCardIcon2,
     TbCurrencyDollar as DollarIcon,
@@ -480,6 +485,7 @@ export {
     BackIcon,
     NextIcon,
     InfoIcon,
+    ShopIcon,
     DraftIcon,
     GlobeIcon,
     GhostIcon,
@@ -526,6 +532,7 @@ export {
     AdjustIcon,
     UploadIcon,
     WalletIcon,
+    GridFillIcon,
     SchoolIcon,
     Image2Icon,
     IdCardIcon,
@@ -535,6 +542,7 @@ export {
     CommandIcon,
     SadFaceIcon,
     TwitterIcon,
+    CashClockIcon,
     EyeViewIcon,
     CodeSandBox,
     ExcludeIcon,
@@ -625,6 +633,7 @@ export {
     TelephoneIcon,
     UserGroupIcon,
     SwapArrowIcon,
+    GlobeAsiaIcon,
     ThumbsDownIcon,
     CookieBiteIcon,
     Users3LineIcon,
@@ -800,6 +809,7 @@ export {
     PaintIcon,
     GripHorizontalIcon,
     GripVerticalIcon,
+    GridIcon,
 }
 
 export const IconMap = {
@@ -932,6 +942,8 @@ export const IconMap = {
     Running: RunningIcon,
     'Arrow Up': ArrowUpIcon,
     'User Cog': UserCogIcon,
+    Grid: GridFillIcon,
+    'Cash Clock': CashClockIcon,
     'Eye View': EyeViewIcon,
     'Push Pin': PushPinIcon,
     'Sun Moon': SunMoonIcon,
@@ -1170,6 +1182,9 @@ export const IconMap = {
     'Chart Bar': ChartBarIcon,
     Cloud: CloudIcon,
     Database: DatabaseIcon,
+    'Globe Asia': GlobeAsiaIcon,
+    'Shop Icon': ShopIcon,
+    'Grid Icon': GridIcon,
 }
 
 export type TIcon = (typeof ICONS)[number]

@@ -8,7 +8,7 @@ import {
     TextFileFillIcon,
 } from '@/components/icons'
 
-export type TJournalVoucherStatusType =
+export type TJournalVoucherModeType =
     | 'draft'
     | 'printed'
     | 'approved'
@@ -63,7 +63,7 @@ export interface JournalVoucherStatusBadgeProps
     extends VariantProps<typeof journalVoucherStatusVariants> {
     className?: string
     showIcon?: boolean
-    status: TJournalVoucherStatusType
+    status: TJournalVoucherModeType
 }
 
 const JournalVoucherStatusBadge = ({

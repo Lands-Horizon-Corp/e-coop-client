@@ -1,3 +1,6 @@
+import { compareAsc, compareDesc, parseISO, startOfDay } from 'date-fns'
+import { formatInTimeZone, toDate } from 'date-fns-tz'
+
 import { ICurrency } from './currency.types'
 
 export interface ICurrencyFormatOptions {
@@ -111,4 +114,128 @@ export const currencyFormat = (
             maximumFractionDigits: 2,
         }).format(numericValue)
     }
+}
+
+/**
+ * Check if a date is today in the currency's timezone
+ *
+ * @param date - The date to check (ISO string or Date object)
+ * @param currency - Currency object containing timezone information
+ * @returns True if the date is today in the currency's timezone
+ *
+ * @example
+ * isToday('2025-10-24', { timezone: 'America/New_York' }) // true if today in NY
+ * isToday(new Date(), { timezone: 'Asia/Tokyo' }) // checks against Tokyo time
+ */
+export const isToday = (
+    date: string | Date,
+    currency?: Pick<ICurrency, 'timezone'>
+): boolean => {
+    const timezone = currency?.timezone || 'UTC'
+    const parsedDate = typeof date === 'string' ? parseISO(date) : date
+
+    const todayStr = formatInTimeZone(new Date(), timezone, 'yyyy-MM-dd')
+    const dateStr = formatInTimeZone(parsedDate, timezone, 'yyyy-MM-dd')
+
+    return todayStr === dateStr
+}
+
+/**
+ * Check if a date is in the past in the currency's timezone
+ *
+ * @param date - The date to check (ISO string or Date object)
+ * @param currency - Currency object containing timezone information
+ * @returns True if the date is in the past in the currency's timezone
+ *
+ * @example
+ * isPast('2024-01-01', { timezone: 'America/New_York' }) // true
+ * isPast('2026-01-01', { timezone: 'Asia/Tokyo' }) // false
+ */
+export const isPast = (
+    date: string | Date,
+    currency?: Pick<ICurrency, 'timezone'>
+): boolean => {
+    const timezone = currency?.timezone || 'UTC'
+    const parsedDate = typeof date === 'string' ? parseISO(date) : date
+
+    // Get start of today in the currency's timezone
+    const todayInTz = toDate(
+        formatInTimeZone(new Date(), timezone, 'yyyy-MM-dd'),
+        { timeZone: timezone }
+    )
+    const dateInTz = toDate(
+        formatInTimeZone(parsedDate, timezone, 'yyyy-MM-dd'),
+        { timeZone: timezone }
+    )
+
+    return compareAsc(dateInTz, startOfDay(todayInTz)) < 0
+}
+
+/**
+ * Check if a date is in the future in the currency's timezone
+ *
+ * @param date - The date to check (ISO string or Date object)
+ * @param currency - Currency object containing timezone information
+ * @returns True if the date is in the future in the currency's timezone
+ *
+ * @example
+ * isFuture('2026-01-01', { timezone: 'America/New_York' }) // true
+ * isFuture('2024-01-01', { timezone: 'Asia/Tokyo' }) // false
+ */
+export const isFuture = (
+    date: string | Date,
+    currency?: Pick<ICurrency, 'timezone'>
+): boolean => {
+    const timezone = currency?.timezone || 'UTC'
+    const parsedDate = typeof date === 'string' ? parseISO(date) : date
+
+    // Get start of today in the currency's timezone
+    const todayInTz = toDate(
+        formatInTimeZone(new Date(), timezone, 'yyyy-MM-dd'),
+        { timeZone: timezone }
+    )
+    const dateInTz = toDate(
+        formatInTimeZone(parsedDate, timezone, 'yyyy-MM-dd'),
+        { timeZone: timezone }
+    )
+
+    return compareAsc(dateInTz, startOfDay(todayInTz)) > 0
+}
+
+/**
+ * Sort an array of objects by a date field, respecting the currency's timezone
+ *
+ * @param key - The key of the date field to sort by
+ * @param data - Array of objects to sort
+ * @param sort - Sort direction ('asc' or 'desc')
+ * @returns Sorted array
+ *
+ * @example
+ * sortByCurrency('entry_date', holidays, 'asc')
+ * sortByCurrency('created_at', transactions, 'desc')
+ */
+export const sortByCurrency = <T extends Record<string, any>>(
+    key: keyof T,
+    data: T[],
+    sort: 'asc' | 'desc' = 'asc'
+): T[] => {
+    return [...data].sort((a, b) => {
+        const dateA = a[key]
+        const dateB = b[key]
+
+        // Handle null/undefined values
+        if (!dateA && !dateB) return 0
+        if (!dateA) return sort === 'asc' ? 1 : -1
+        if (!dateB) return sort === 'asc' ? -1 : 1
+
+        const parsedDateA = typeof dateA === 'string' ? parseISO(dateA) : dateA
+        const parsedDateB = typeof dateB === 'string' ? parseISO(dateB) : dateB
+
+        const comparison =
+            sort === 'asc'
+                ? compareAsc(parsedDateA, parsedDateB)
+                : compareDesc(parsedDateA, parsedDateB)
+
+        return comparison
+    })
 }

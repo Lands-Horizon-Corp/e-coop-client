@@ -1,4 +1,5 @@
 import { cn } from '@/helpers'
+import { IconType } from 'react-icons/lib'
 
 import { Separator } from '@/components/ui/separator'
 
@@ -11,6 +12,7 @@ type BranchInfoItemProps = {
     contentClassName?: string
     textAlign?: 'left' | 'center' | 'right'
     hideSeparator?: boolean
+    TitleIcon?: IconType
 }
 
 export const BranchInfoItem = ({
@@ -22,6 +24,7 @@ export const BranchInfoItem = ({
     contentClassName,
     textAlign = 'left',
     hideSeparator = true,
+    TitleIcon,
 }: BranchInfoItemProps) => {
     return (
         <div
@@ -30,13 +33,18 @@ export const BranchInfoItem = ({
                 className
             )}
         >
-            <span className=" text-xs font-bold shrink-0">
+            <span className=" inline-flex space-x-2 text-xs font-bold shrink-0">
                 {icon && (
                     <span className={cn('shrink-0', iconClassName)}>
                         {icon}
                     </span>
                 )}
-                {title}
+                <span>{title}</span>
+                {TitleIcon && (
+                    <span className={cn('shrink-0', iconClassName)}>
+                        <TitleIcon />
+                    </span>
+                )}
             </span>
             {!hideSeparator && (
                 <Separator className="min-h-8" orientation="vertical" />

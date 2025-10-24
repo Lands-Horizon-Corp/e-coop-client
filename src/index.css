@@ -2,6 +2,32 @@
 @import 'tailwindcss';
 @plugin "tailwindcss-animate";
 
+.ecoop::-webkit-scrollbar {
+    @apply h-2 w-[.5vw];
+}
+
+html::-webkit-scrollbar,
+.ecoop-scroll::-webkit-scrollbar {
+    @apply h-2 w-[.5vw];
+}
+
+html::-webkit-scrollbar-thumb,
+.ecoop-scroll::-webkit-scrollbar-thumb {
+    background-color: var(--scrollbar-thumb-color);
+    @apply rounded-full;
+}
+
+html::-webkit-scrollbar-track,
+.ecoop-scroll::-webkit-scrollbar-track {
+    @apply bg-transparent;
+}
+
+/* hover effects */
+html::-webkit-scrollbar-thumb:hover,
+.ecoop-scroll::-webkit-scrollbar-thumb:hover {
+    background-color: var(--scrollbar-thumb-hover-color);
+}
+
 /* ProseMirror CSS - Required for TipTap editor */
 .ProseMirror {
     white-space: pre-wrap;
@@ -249,32 +275,18 @@ html {
 }
 
 :root {
-    --scrollbar-thumb-color: rgba(
+    --scrollbar-thumb-color: rgba(168, 172, 190, 0.4);
+    --scrollbar-thumb-hover-color: rgba(
         168,
         172,
         190,
-        0.4
-    ); /* Tailwind's stone-800 with opacity */
+        0.6
+    ); /* Add hover color */
 }
 
 .dark {
-    --scrollbar-thumb-color: rgba(
-        59,
-        61,
-        80,
-        0.4
-    ); /* Tailwind's stone-400 with opacity */
-}
-
-/* Your original scrollbar styles */
-.ecoop-scroll::-webkit-scrollbar {
-    @apply h-2 w-[.5vw];
-}
-
-.ecoop-scroll::-webkit-scrollbar-thumb {
-    /* Use the CSS variable here */
-    background-color: var(--scrollbar-thumb-color);
-    @apply rounded-full;
+    --scrollbar-thumb-color: rgba(59, 61, 80, 0.4);
+    --scrollbar-thumb-hover-color: rgba(59, 61, 80, 0.6); /* Add hover color */
 }
 
 .scale-effects {

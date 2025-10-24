@@ -4,7 +4,7 @@ import LoanSchemeEditor from '../computation-sheet-scheme/computation-sheet-sche
 
 const ComputationSheetPage = () => {
     return (
-        <PageContainer>
+        <PageContainer className="!p-0">
             <LoanSchemeEditor />
         </PageContainer>
     )

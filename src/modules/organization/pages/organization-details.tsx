@@ -4,7 +4,7 @@ import { orgBannerList } from '@/assets/pre-organization-banner-background'
 import { Branch } from '@/modules/branch'
 import {
     IOrganizationWithPolicies,
-    useGetOrganizationById,
+    useGetOrganizationWithPoliciesById,
 } from '@/modules/organization'
 import { useCanJoinMember } from '@/modules/user-organization'
 
@@ -21,7 +21,7 @@ const OrganizationDetails = () => {
     })
 
     const { data: organization, isPending: isPendingOrganization } =
-        useGetOrganizationById({
+        useGetOrganizationWithPoliciesById({
             organizationId: organizationId,
             options: { enabled: !!organizationId },
         })

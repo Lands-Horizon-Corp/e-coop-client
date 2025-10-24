@@ -10,7 +10,7 @@ import KanbanTitle from '@/modules/approvals/components/kanban/kanban-title'
 import { JournalVoucherSkeletonCard } from '@/modules/journal-voucher/components/journal-voucher-skeleton-card'
 import {
     ILoanTransactionStatusDates,
-    TLoanStatusType,
+    TLoanMode,
     useGetAllLoanTransaction,
 } from '@/modules/loan-transaction'
 import LoanStatusIndicator from '@/modules/loan-transaction/components/loan-status-indicator'
@@ -34,7 +34,7 @@ import {
 import { LoanTransactionCardActions } from './loan-kanban-card-actions'
 
 type LoanTransactionKanbanProps = {
-    mode: TLoanStatusType
+    mode: TLoanMode
     icon: React.ReactNode
 }
 

@@ -1,5 +1,5 @@
 import { cn } from '@/helpers/tw-utils'
-import { IJournalVoucher } from '@/modules/journal-voucher'
+import { IJournalVoucher, TJournalVoucherMode } from '@/modules/journal-voucher'
 import { CheckCircle2Icon, PrinterIcon } from 'lucide-react'
 
 import { BadgeCheckFillIcon, DraftIcon } from '@/components/icons'
@@ -7,8 +7,6 @@ import { BadgeCheckFillIcon, DraftIcon } from '@/components/icons'
 import { IClassProps } from '@/types'
 
 import { JournalVoucherKanbanMain } from './journal-voucher-kanban-main'
-
-type TJournalVoucherMode = 'draft' | 'printed' | 'approved' | 'released'
 
 export interface IJournalVoucherStatusDates {
     printed_date?: string | null
@@ -46,7 +44,7 @@ const JournalVoucherMenu: TJournalVoucherKanbanItem[] = [
     },
     {
         name: 'Released',
-        value: 'released',
+        value: 'release-today',
         icon: <BadgeCheckFillIcon className="mr-2 size-4 text-purple-500" />,
     },
 ]

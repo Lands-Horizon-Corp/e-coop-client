@@ -11,11 +11,14 @@ export const branchSchema = z.object({
     type: z.enum(branchTypeEnum),
     name: z.string({ error: 'Name is Required' }).min(1),
     email: z.string({ error: 'Email is Required' }).email(),
-    description: descriptionSchema.transform(descriptionTransformerSanitizer),
+    description: descriptionSchema
+        .transform(descriptionTransformerSanitizer)
+        .optional(),
     country_code: z.string({ error: 'Country code is required' }).min(2),
     contact_number: z
         .string({ error: 'Contact Number is at least 11 Characters' })
-        .min(11),
+        .min(11)
+        .optional(),
     address: z.string({ error: 'Address is required' }).min(1),
     province: z.string({ error: 'Province is required' }).min(1),
     city: z.string({ error: 'City is required' }).min(1),
@@ -24,7 +27,7 @@ export const branchSchema = z.object({
     postal_code: z.string({ error: 'Postal code is required' }).min(4),
     latitude: z.coerce.number<number>().optional(),
     longitude: z.coerce.number<number>().optional(),
-    is_main_branch: z.boolean().catch(false),
+    is_main_branch: z.boolean().catch(false).optional(),
     media_id: z.string('Branch Photo is Required').min(1),
     media: z.any(),
 })
