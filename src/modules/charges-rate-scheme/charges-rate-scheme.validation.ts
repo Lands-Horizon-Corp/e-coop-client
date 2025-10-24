@@ -1,6 +1,10 @@
 import z from 'zod'
 
-import { descriptionTransformerSanitizer, entityIdSchema } from '@/validation'
+import {
+    EntityIdSchema,
+    descriptionTransformerSanitizer,
+    entityIdSchema,
+} from '@/validation'
 
 export const ChargesRateSchemeSchema = z.object({
     id: entityIdSchema.optional(),
@@ -10,6 +14,10 @@ export const ChargesRateSchemeSchema = z.object({
         .min(10, 'Min 10 character description')
         .optional()
         .transform(descriptionTransformerSanitizer),
+
+    icon: z.string().optional(),
+
+    currency_id: EntityIdSchema('Currency is required'),
 })
 
 export type TChargesRateSchemeSchema = z.infer<typeof ChargesRateSchemeSchema>

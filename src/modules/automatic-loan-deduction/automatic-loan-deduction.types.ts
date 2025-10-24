@@ -3,6 +3,7 @@ import z from 'zod'
 import { IBaseEntityMeta, IPaginatedResult, TEntityId } from '@/types'
 
 import { AccountTypeEnum, IAccount } from '../account'
+import { IChargesRateScheme } from '../charges-rate-scheme'
 import { IComputationSheet } from '../computation-sheet'
 import { AutomaticLoanDeductionSchema } from './automatic-loan-deduction.validation'
 
@@ -26,8 +27,9 @@ export interface IAutomaticLoanDeduction extends IBaseEntityMeta {
 
     anum: number // months , if naka 1 compute interest based number of months
     // number_of_months integer
-    link_account_id?: TEntityId
-    link_account?: IAccount
+
+    charges_rate_scheme_id?: TEntityId
+    charges_rate_scheme?: IChargesRateScheme
 
     add_on: boolean // add onn para buo loan
     ao_rest: boolean // def: false

@@ -5,9 +5,13 @@ import {
     TEntityId,
 } from '@/types/common'
 
+import { ICurrency } from '../currency'
 import { ITimeDepositType } from '../time-deposit-type'
 
 export interface ITimeDepositComputationRequest {
+    currency_id?: TEntityId
+    name: string
+
     minimum_amount?: number
     maximum_amount?: number
     header1?: number
@@ -28,6 +32,11 @@ export interface ITimeDepositComputation
         IAuditable,
         IOrgBranchIdentity {
     id: TEntityId
+
+    currency_id?: TEntityId
+    currency: ICurrency
+    name: string
+
     time_deposit_type_id: TEntityId
     time_deposit_type?: ITimeDepositType
     minimum_amount: number

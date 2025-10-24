@@ -6,6 +6,7 @@ import { cn } from '@/helpers'
 import { withToastCallbacks } from '@/helpers/callback-helper'
 import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
 import { AccountPicker } from '@/modules/account'
+import ChargesRateSchemeCombobox from '@/modules/charges-rate-scheme/components/charges-rate-combobox'
 import { CurrencyInput, ICurrency } from '@/modules/currency'
 
 import FormFooterResetSubmit from '@/components/form-components/form-footer-reset-submit'
@@ -157,28 +158,18 @@ export const AutomaticLoanDeductionCreateUpdateForm = ({
                                 />
                                 <FormFieldWrapper
                                     control={form.control}
-                                    label="Linked Account"
-                                    name="link_account_id"
+                                    label="Charges Rate Scheme"
+                                    name="charges_rate_scheme_id"
                                     render={({ field }) => (
-                                        <AccountPicker
+                                        <ChargesRateSchemeCombobox
                                             {...field}
-                                            currencyId={
-                                                currency?.id as TEntityId
-                                            }
                                             disabled={isDisabled(field.name)}
-                                            hideDescription
-                                            mode="currency"
-                                            onSelect={(account) => {
-                                                field.onChange(account.id)
-                                                form.setValue(
-                                                    'link_account',
-                                                    account,
-                                                    { shouldDirty: true }
+                                            onChange={(chargesScheme) => {
+                                                field.onChange(
+                                                    chargesScheme?.id
                                                 )
                                             }}
-                                            value={form.getValues(
-                                                'link_account'
-                                            )}
+                                            value={field.value}
                                         />
                                     )}
                                 />

@@ -24,8 +24,7 @@ export const AutomaticLoanDeductionSchema = z.object({
 
     anum: z.coerce.number().int(),
 
-    link_account_id: entityIdSchema.optional(),
-    link_account: z.any().optional(),
+    charges_rate_scheme_id: entityIdSchema.optional(),
 
     add_on: z.boolean().default(false),
     ao_rest: z.boolean().default(false),

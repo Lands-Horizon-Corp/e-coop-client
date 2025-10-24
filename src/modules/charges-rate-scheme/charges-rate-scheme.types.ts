@@ -7,6 +7,7 @@ import { IChargesRateByTerm } from '../charges-rate-by-term'
 import { IChargesRateByTermHeader } from '../charges-rate-by-term-header'
 import { IChargesRateSchemeAccount } from '../charges-rate-scheme-account'
 import { IChargesRateSchemeModeOfPayment } from '../charges-rate-scheme-mode-of-payment'
+import { ICurrency } from '../currency'
 import { IMemberType } from '../member-type'
 import { ChargesRateSchemeSchema } from './charges-rate-scheme.validation'
 
@@ -19,6 +20,9 @@ export interface IChargesRateScheme extends IBaseEntityMeta {
     name: string
     description: string
     icon: string
+
+    currency_id: TEntityId
+    currency: ICurrency
 
     charges_rate_scheme_accounts?: IChargesRateSchemeAccount[]
     charges_rate_by_range_or_minimum_amounts?: IChargesRateByRangeOrMinimumAmount[]
@@ -80,3 +84,7 @@ export type IChargesRateSchemeRequest = z.infer<typeof ChargesRateSchemeSchema>
 
 export interface IChargesRateSchemePaginated
     extends IPaginatedResult<IChargesRateScheme> {}
+
+// FOR SERVICE HOOKS
+
+export type TChargesRateSchemeHookMode = 'all' | 'currency'

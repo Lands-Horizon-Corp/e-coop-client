@@ -1,6 +1,8 @@
 import z from 'zod'
 
 export const timeDepositComputationSchema = z.object({
+    name: z.string(),
+
     minimum_amount: z.number().optional(),
     maximum_amount: z.number().optional(),
     header1: z.number().optional(),
