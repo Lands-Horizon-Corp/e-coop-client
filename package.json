@@ -97,6 +97,7 @@
         "country-data-list": "^1.5.5",
         "crypto-browserify": "^3.12.1",
         "date-fns": "^4.1.0",
+        "date-fns-tz": "^3.2.0",
         "detectincognitojs": "^1.6.1",
         "dompurify": "^3.2.7",
         "embla-carousel-react": "^8.6.0",

@@ -1,13 +1,14 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 
 import { useQueryClient } from '@tanstack/react-query'
+import Fuse from 'fuse.js'
 import { toast } from 'sonner'
 
 import { cn } from '@/helpers'
 import { dateAgo, toReadableDate } from '@/helpers/date-utils'
 import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
 import { useAuthUserWithOrgBranch } from '@/modules/authentication/authgentication.store'
-import { CurrencyCombobox } from '@/modules/currency'
+import { CurrencyCombobox, isPast, isToday } from '@/modules/currency'
 import { CurrencyBadge } from '@/modules/currency/components/currency-badge'
 import useConfirmModalStore from '@/store/confirm-modal-store'
 import { setYear as dateFnsSetYear } from 'date-fns'
@@ -16,6 +17,8 @@ import {
     CalendarNumberIcon,
     ChevronDownIcon,
     CopyIcon,
+    MagnifyingGlassIcon,
+    PencilFillIcon,
     PlusIcon,
     RefreshIcon,
     TrashIcon,
@@ -37,6 +40,11 @@ import {
     DropdownMenuItem,
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
+import {
+    InputGroup,
+    InputGroupAddon,
+    InputGroupInput,
+} from '@/components/ui/input-group'
 
 import { useModalState } from '@/hooks/use-modal-state'
 
@@ -73,6 +81,7 @@ const HolidayEditor = ({ className }: Props) => {
     >(defaultCurrency)
     const [year, setYear] = useState<number>(new Date().getFullYear())
     const [templateYear, setTemplateYear] = useState<number | undefined>()
+    const [debouncedSearchQuery, setDebouncedSearchQuery] = useState('')
 
     const yearMode = !selectedCurrency ? 'all' : 'currency'
 
@@ -96,7 +105,46 @@ const HolidayEditor = ({ className }: Props) => {
         mode,
         year,
         currencyId: selectedCurrency?.id,
+        options: {
+            select: (data) =>
+                data.sort((a, b) => a.entry_date.localeCompare(b.entry_date)),
+        },
     })
+
+    // Fuse.js configuration
+    const fuse = useMemo(() => {
+        // Transform holidays to include searchable date formats
+        const searchableHolidays = holidays.map((holiday) => ({
+            ...holiday,
+            searchableDate: toReadableDate(holiday.entry_date),
+            searchableMonth: new Date(holiday.entry_date).toLocaleString(
+                'en-US',
+                { month: 'long' }
+            ),
+            searchableYear: new Date(holiday.entry_date)
+                .getFullYear()
+                .toString(),
+        }))
+
+        return new Fuse(searchableHolidays, {
+            keys: [
+                { name: 'name', weight: 2 },
+                { name: 'searchableDate', weight: 1.5 },
+                { name: 'searchableMonth', weight: 1 },
+                { name: 'searchableYear', weight: 0.5 },
+            ],
+            threshold: 0.3,
+            includeScore: true,
+        })
+    }, [holidays])
+
+    // Filtered holidays based on search
+    const filteredHolidays = useMemo(() => {
+        if (!debouncedSearchQuery.trim()) {
+            return holidays
+        }
+        return fuse.search(debouncedSearchQuery).map((result) => result.item)
+    }, [holidays, fuse, debouncedSearchQuery])
 
     const yearAvailable = availableYears.filter((years) => years.count > 0)
 
@@ -112,11 +160,7 @@ const HolidayEditor = ({ className }: Props) => {
         setTemplateYear(lastYearWithHolidays?.year)
     }, [availableYears, templateYear, setTemplateYear])
 
-    const {
-        data: templateHolidays = [],
-        // isPending: isPendingTemplate,
-        // isRefetching: isRefetchingTemplate,
-    } = useGetAllHolidays({
+    const { data: templateHolidays = [] } = useGetAllHolidays({
         mode: templateMode,
         year: templateYear,
         currencyId: selectedCurrency?.id,
@@ -249,95 +293,110 @@ const HolidayEditor = ({ className }: Props) => {
                     <CarouselNext className="-right-14" />
                 </Carousel>
             </div>
-
+            {/* SEARCH */}
+            <HolidayInputSearch
+                defaultValue=""
+                onDebounceValue={(val) => setDebouncedSearchQuery(val)}
+                resultCount={filteredHolidays.length}
+            />
             {/* Holidays */}
-            <div>
-                {holidays.map((holiday) => (
+            <div className="space-y-2">
+                {filteredHolidays.map((holiday) => (
                     <HolidayItem
                         holiday={holiday}
                         isGhost={false}
                         key={holiday.id}
                     />
                 ))}{' '}
-                {templateHolidays.length > 0 && holidays.length === 0 && (
-                    <>
-                        {/*  Template Control  */}
-                        <div className="flex items-center gap-x-2 mb-4">
-                            <ButtonGroup className="flex-1 items-center p-4 border border-primary rounded-xl">
-                                <ButtonGroup className="w-full flex flex-col">
-                                    <span className="block">
-                                        Copy {templateYear} holidays for this
-                                        year
-                                    </span>
-                                    <span className="text-xs block text-muted-foreground">
-                                        Holidays from year&apos; {year} holidays
-                                        will be copied to {templateYear}
-                                    </span>
-                                </ButtonGroup>
-                                <ButtonGroup>
-                                    <Button
-                                        className="flex"
-                                        disabled={
-                                            copyYearHolidayMutation.isPending
-                                        }
-                                        onClick={() =>
-                                            handleCopyYearHoliday(
-                                                year,
-                                                selectedCurrency?.id as TEntityId,
-                                                templateYear!
-                                            )
-                                        }
-                                        variant="default"
-                                    >
-                                        {copyYearHolidayMutation.isPending ? (
-                                            <LoadingSpinner className="size-4" />
-                                        ) : (
-                                            <>
-                                                <CopyIcon className="size-4 mr-2" />
-                                                Copy Holidays
-                                            </>
-                                        )}
-                                    </Button>
-                                    <DropdownMenu>
-                                        <DropdownMenuTrigger asChild>
-                                            <Button
-                                                className="!pl-2"
-                                                variant="outline"
-                                            >
-                                                <ChevronDownIcon />
-                                            </Button>
-                                        </DropdownMenuTrigger>
-                                        <DropdownMenuContent
-                                            align="end"
-                                            className="[--radius:1rem]"
-                                        >
-                                            {yearAvailable.map(
-                                                (availableYear) => (
-                                                    <DropdownMenuItem
-                                                        key={availableYear.year}
-                                                        onClick={() =>
-                                                            setTemplateYear(
-                                                                availableYear.year
-                                                            )
-                                                        }
-                                                    >
-                                                        {availableYear.year}
-                                                    </DropdownMenuItem>
+                {templateHolidays.length > 0 &&
+                    filteredHolidays.length === 0 &&
+                    !debouncedSearchQuery && (
+                        <>
+                            {/*  Template Control  */}
+                            <div className="flex items-center gap-x-2 mb-4">
+                                <ButtonGroup className="flex-1 items-center p-4 border border-primary rounded-xl">
+                                    <ButtonGroup className="w-full flex flex-col">
+                                        <span className="block">
+                                            Copy {templateYear} holidays for
+                                            this year
+                                        </span>
+                                        <span className="text-xs block text-muted-foreground">
+                                            Holidays from year&apos; {year}{' '}
+                                            holidays will be copied to{' '}
+                                            {templateYear}
+                                        </span>
+                                    </ButtonGroup>
+                                    <ButtonGroup>
+                                        <Button
+                                            className="flex"
+                                            disabled={
+                                                copyYearHolidayMutation.isPending
+                                            }
+                                            onClick={() =>
+                                                handleCopyYearHoliday(
+                                                    year,
+                                                    selectedCurrency?.id as TEntityId,
+                                                    templateYear!
                                                 )
+                                            }
+                                            variant="default"
+                                        >
+                                            {copyYearHolidayMutation.isPending ? (
+                                                <LoadingSpinner className="size-4" />
+                                            ) : (
+                                                <>
+                                                    <CopyIcon className="size-4 mr-2" />
+                                                    Copy Holidays
+                                                </>
                                             )}
-                                        </DropdownMenuContent>
-                                    </DropdownMenu>
+                                        </Button>
+                                        <DropdownMenu>
+                                            <DropdownMenuTrigger asChild>
+                                                <Button
+                                                    className="!pl-2"
+                                                    variant="outline"
+                                                >
+                                                    <ChevronDownIcon />
+                                                </Button>
+                                            </DropdownMenuTrigger>
+                                            <DropdownMenuContent
+                                                align="end"
+                                                className="[--radius:1rem]"
+                                            >
+                                                {yearAvailable.map(
+                                                    (availableYear) => (
+                                                        <DropdownMenuItem
+                                                            key={
+                                                                availableYear.year
+                                                            }
+                                                            onClick={() =>
+                                                                setTemplateYear(
+                                                                    availableYear.year
+                                                                )
+                                                            }
+                                                        >
+                                                            {availableYear.year}
+                                                        </DropdownMenuItem>
+                                                    )
+                                                )}
+                                            </DropdownMenuContent>
+                                        </DropdownMenu>
+                                    </ButtonGroup>
                                 </ButtonGroup>
-                            </ButtonGroup>
-                        </div>
-                        {templateHolidays.map((holiday) => (
-                            <HolidayItem
-                                holiday={holiday}
-                                isGhost={true}
-                                key={holiday.id}
-                            />
-                        ))}
-                    </>
+                            </div>
+                            {templateHolidays.map((holiday) => (
+                                <HolidayItem
+                                    holiday={holiday}
+                                    isGhost={true}
+                                    key={holiday.id}
+                                />
+                            ))}
+                        </>
+                    )}
+                {debouncedSearchQuery && filteredHolidays.length === 0 && (
+                    <div className="text-center py-8 text-muted-foreground">
+                        No holidays found matching "{debouncedSearchQuery}"
+                    </div>
                 )}
             </div>
         </div>
@@ -350,6 +409,7 @@ const HolidayItem = ({
     isGhost = false,
 }: { holiday: IHoliday; isGhost: boolean } & IClassProps) => {
     const { onOpen: onOpenConfirm } = useConfirmModalStore()
+    const editModalState = useModalState()
     const queryClient = useQueryClient()
 
     const deleteHolidayMutation = useDeleteHolidayById()
@@ -382,6 +442,15 @@ const HolidayItem = ({
             className={cn('flex items-start gap-x-2', isGhost && 'opacity-60')}
             key={holiday.id}
         >
+            <HolidayCreateUpdateFormModal
+                {...editModalState}
+                description="Update the holiday details and save the changes."
+                formProps={{
+                    holidayId: holiday.id,
+                    defaultValues: holiday,
+                }}
+                title="Edit Holiday"
+            />
             <CurrencyBadge
                 currency={holiday.currency}
                 displayFormat="country"
@@ -389,31 +458,95 @@ const HolidayItem = ({
             />
             <div
                 className={cn(
-                    'p-4 mb-2 flex-1 border border-border rounded-lg',
-                    className,
-                    isGhost && 'border border-dashed'
+                    'flex-1 rounded-lg',
+                    isToday(holiday.entry_date, holiday.currency) &&
+                        'bg-gradient-to-r from-primary/30 border-l-4 border-primary to-transparent text-foreground'
                 )}
             >
-                <div className="flex items-center justify-between">
-                    <p className="font-medium">{holiday.name}</p>
-                    {!isGhost && (
-                        <Button
-                            className="size-fit p-2 "
-                            disabled={deleteHolidayMutation.isPending}
-                            onClick={() => handleDelete()}
-                            size="icon"
-                            variant="destructive"
-                        >
-                            <TrashIcon className="size-4" />
-                        </Button>
+                <div
+                    className={cn(
+                        'p-4 flex-1 border border-border rounded-lg',
+                        className,
+                        isPast(holiday.entry_date, holiday.currency) &&
+                            'opacity-60 border border-dashed',
+                        isGhost && 'border border-dashed'
                     )}
+                >
+                    <div className="flex items-center justify-between">
+                        <p className="font-medium">{holiday.name}</p>
+                        <div className="flex items-center gap-x-2">
+                            {!isGhost && (
+                                <>
+                                    <Button
+                                        className="size-fit p-2 "
+                                        onClick={() =>
+                                            editModalState.onOpenChange(true)
+                                        }
+                                        size="icon"
+                                        variant="secondary"
+                                    >
+                                        <PencilFillIcon className="size-4" />
+                                    </Button>
+                                    <Button
+                                        className="size-fit p-2 "
+                                        disabled={
+                                            deleteHolidayMutation.isPending
+                                        }
+                                        onClick={() => handleDelete()}
+                                        size="icon"
+                                        variant="destructive"
+                                    >
+                                        <TrashIcon className="size-4" />
+                                    </Button>
+                                </>
+                            )}
+                        </div>
+                    </div>
+                    <p className="text-sm text-muted-foreground">
+                        {toReadableDate(holiday.entry_date)} -{' '}
+                        {dateAgo(holiday.entry_date)}
+                    </p>
                 </div>
-                <p className="text-sm text-muted-foreground">
-                    {toReadableDate(holiday.entry_date)} -{' '}
-                    {dateAgo(holiday.entry_date)}
-                </p>
             </div>
         </div>
+    )
+}
+
+const HolidayInputSearch = ({
+    resultCount = 0,
+    defaultValue = '',
+    onDebounceValue,
+}: {
+    defaultValue: string
+    resultCount: number
+    onDebounceValue: (search: string) => void
+}) => {
+    const [searchQuery, setSearchQuery] = useState(defaultValue)
+
+    // Debounce search query
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            onDebounceValue(searchQuery)
+        }, 800)
+
+        return () => clearTimeout(timer)
+    }, [searchQuery, onDebounceValue])
+
+    return (
+        <InputGroup>
+            <InputGroupInput
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder="Search holidays..."
+                value={searchQuery}
+            />
+            <InputGroupAddon>
+                <MagnifyingGlassIcon />
+            </InputGroupAddon>
+            <InputGroupAddon align="inline-end">
+                {resultCount} Result
+                {resultCount ? 's' : ''}
+            </InputGroupAddon>
+        </InputGroup>
     )
 }
 

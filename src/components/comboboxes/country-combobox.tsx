@@ -1,4 +1,12 @@
-import React, { forwardRef, useCallback, useEffect, useState } from 'react'
+import React, {
+    forwardRef,
+    useCallback,
+    useEffect,
+    useMemo,
+    useState,
+} from 'react'
+
+import Fuse from 'fuse.js'
 
 import { cn } from '@/helpers/tw-utils'
 import { countries } from 'country-data-list'
@@ -32,6 +40,69 @@ export interface Country {
     status: string
 }
 
+// Filtered country list (excluding deleted and PRK)
+export const availableCountries = countries.all.filter(
+    (country: Country) =>
+        country.emoji && country.status !== 'deleted' && country.ioc !== 'PRK'
+)
+
+// Initialize Fuse.js instance for country search
+const countryFuse = new Fuse(availableCountries, {
+    keys: [
+        { name: 'name', weight: 3 },
+        { name: 'alpha2', weight: 2 },
+        { name: 'alpha3', weight: 2 },
+    ],
+    threshold: 0.3,
+    includeScore: true,
+    shouldSort: true,
+})
+
+/**
+ * Search for countries using fuzzy search
+ * @param query - Search query (country name, alpha2, or alpha3 code)
+ * @param limit - Maximum number of results to return (default: 10)
+ * @returns Array of matching countries
+ */
+export const searchCountries = (
+    query: string,
+    limit: number = 10
+): Country[] => {
+    if (!query.trim()) {
+        return availableCountries.slice(0, limit)
+    }
+
+    const results = countryFuse.search(query, { limit })
+    return results.map((result) => result.item)
+}
+
+/**
+ * Find a single country by exact or fuzzy match
+ * @param query - Search query (country name, alpha2, or alpha3 code)
+ * @returns Matching country or undefined
+ */
+export const findCountry = (query: string): Country | undefined => {
+    if (!query.trim()) {
+        return undefined
+    }
+
+    // Try exact match first
+    const exactMatch = availableCountries.find(
+        (country) =>
+            country.name.toLowerCase() === query.toLowerCase() ||
+            country.alpha2.toLowerCase() === query.toLowerCase() ||
+            country.alpha3.toLowerCase() === query.toLowerCase()
+    )
+
+    if (exactMatch) {
+        return exactMatch
+    }
+
+    // Fall back to fuzzy search
+    const results = countryFuse.search(query, { limit: 1 })
+    return results[0]?.item
+}
+
 interface CountryDropdownProps {
     options?: Country[]
     onChange?: (country: Country) => void
@@ -43,12 +114,7 @@ interface CountryDropdownProps {
 
 const CountryComboboxComponent = (
     {
-        options = countries.all.filter(
-            (country: Country) =>
-                country.emoji &&
-                country.status !== 'deleted' &&
-                country.ioc !== 'PRK'
-        ),
+        options = availableCountries,
         onChange,
         defaultValue,
         disabled = false,
@@ -62,30 +128,33 @@ const CountryComboboxComponent = (
     const [selectedCountry, setSelectedCountry] = useState<Country | undefined>(
         undefined
     )
+    const [searchQuery, setSearchQuery] = useState('')
+
+    // Memoize filtered countries based on search
+    const filteredCountries = useMemo(() => {
+        if (!searchQuery.trim()) {
+            return options
+        }
+        return searchCountries(searchQuery, 50).filter((country) =>
+            options.some((opt) => opt.alpha2 === country.alpha2)
+        )
+    }, [searchQuery, options])
 
     useEffect(() => {
         if (defaultValue) {
-            const initialCountry = options.find((country) => {
-                return (
-                    country.name === defaultValue ||
-                    country.alpha2 === defaultValue
-                )
-            })
-            if (initialCountry) {
-                setSelectedCountry(initialCountry)
-            } else {
-                setSelectedCountry(undefined)
-            }
+            const initialCountry = findCountry(defaultValue)
+            setSelectedCountry(initialCountry)
         } else {
             setSelectedCountry(undefined)
         }
-    }, [defaultValue, options])
+    }, [defaultValue])
 
     const handleSelect = useCallback(
         (country: Country) => {
             setSelectedCountry(country)
             onChange?.(country)
             setOpen(false)
+            setSearchQuery('')
         },
         [onChange]
     )
@@ -139,14 +208,21 @@ const CountryComboboxComponent = (
                 collisionPadding={10}
                 side="bottom"
             >
-                <Command className="max-h-[200px] w-full sm:max-h-[270px]">
+                <Command
+                    className="max-h-[200px] w-full sm:max-h-[270px]"
+                    shouldFilter={false}
+                >
                     <CommandList className="ecoop-scroll">
                         <div className="sticky top-0 z-10 bg-popover">
-                            <CommandInput placeholder="Search country..." />
+                            <CommandInput
+                                onValueChange={setSearchQuery}
+                                placeholder="Search country..."
+                                value={searchQuery}
+                            />
                         </div>
                         <CommandEmpty>No country found.</CommandEmpty>
                         <CommandGroup>
-                            {options
+                            {filteredCountries
                                 .filter((x) => x.name)
                                 .map((option, key: number) => (
                                     <CommandItem

@@ -6,7 +6,9 @@ import {
     TCurrencyHookMode,
     useGetAllCurrency,
 } from '@/modules/currency'
+import { CircleFlag } from 'react-circle-flags'
 
+import { findCountry } from '@/components/comboboxes/country-combobox'
 import { CheckIcon, ChevronDownIcon } from '@/components/icons'
 import LoadingSpinner from '@/components/spinners/loading-spinner'
 import { Button } from '@/components/ui/button'
@@ -68,6 +70,10 @@ const CurrencyCombobox = ({
         [data, value]
     )
 
+    const alpha2 =
+        selectedCurrency?.iso_3166_alpha2 ||
+        findCountry(selectedCurrency?.country || '')?.alpha2
+
     const formatCurrencyDisplay = (
         formatMode: TFormatDisplay,
         currency: ICurrency
@@ -76,11 +82,15 @@ const CurrencyCombobox = ({
             case 'emoji-name-code':
                 return (
                     <div className="flex items-center gap-2 min-w-0">
-                        {currency.emoji && (
-                            <span className="text-lg flex-shrink-0">
-                                {currency.emoji}
-                            </span>
-                        )}
+                        <CircleFlag
+                            className={cn(
+                                'inline-flex size-5 shrink-0 items-center justify-center overflow-hidden rounded-full'
+                            )}
+                            countryCode={(
+                                alpha2?.toLowerCase() || 'US'
+                            ).toLowerCase()}
+                            height={20}
+                        />
                         <span className="truncate">
                             {currency.name} ({currency.currency_code})
                         </span>
@@ -115,11 +125,18 @@ const CurrencyCombobox = ({
             case 'country':
                 return (
                     <div className="flex items-center gap-2 min-w-0">
-                        {currency.emoji && (
-                            <span className="text-lg flex-shrink-0">
-                                {currency.emoji}
-                            </span>
-                        )}
+                        <CircleFlag
+                            className={cn(
+                                'inline-flex size-5 shrink-0 items-center justify-center overflow-hidden rounded-full'
+                            )}
+                            countryCode={(
+                                selectedCurrency?.iso_3166_alpha2 ||
+                                findCountry(selectedCurrency?.country || '')
+                                    ?.alpha2 ||
+                                'US'
+                            ).toLowerCase()}
+                            height={20}
+                        />
 
                         <p className="truncate">
                             {currency.country}{' '}
@@ -200,10 +217,22 @@ const CurrencyCombobox = ({
                                             value={`${option.name} ${option.currency_code} ${option.country}`}
                                         >
                                             <div className="flex items-center gap-2 min-w-0 flex-1">
-                                                {option.emoji && (
-                                                    <span className="text-lg flex-shrink-0">
-                                                        {option.emoji}
-                                                    </span>
+                                                {(option.iso_3166_alpha2 ||
+                                                    option.country) && (
+                                                    <CircleFlag
+                                                        className={cn(
+                                                            'inline-flex size-5 shrink-0 items-center justify-center overflow-hidden rounded-full'
+                                                        )}
+                                                        countryCode={(
+                                                            option?.iso_3166_alpha2 ||
+                                                            findCountry(
+                                                                option?.country ||
+                                                                    ''
+                                                            )?.alpha2 ||
+                                                            'US'
+                                                        ).toLowerCase()}
+                                                        height={20}
+                                                    />
                                                 )}
                                                 <div className="flex flex-col min-w-0">
                                                     <span className="truncate font-medium">
