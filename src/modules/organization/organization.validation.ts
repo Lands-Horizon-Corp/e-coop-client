@@ -22,7 +22,10 @@ export const OrganizationSchema = z.object({
     address: z.string().optional(),
     email: emailSchema.min(1, 'Organization email is required'),
     contact_number: z.string().optional(),
-    description: descriptionSchema.transform(descriptionTransformerSanitizer),
+    description: z.preprocess((val) => {
+        if (val === '') return ''
+        return val
+    }, z.string().transform(descriptionTransformerSanitizer)),
 
     media_id: z.string().min(1, 'Organization Logo is required'),
     cover_media_id: z.string().min(1, 'Cover media is required'),

@@ -108,8 +108,8 @@ const UpdateOrganizationForm = ({
     }
 
     const onSubmit = form.handleSubmit(async (data) => {
-        let logoMedia = ''
-        let CoverMedia = ''
+        let logoMedia = null
+        let CoverMedia = null
         if (
             selectedLogoMedia &&
             selectedLogoMedia.startsWith('data:') &&
@@ -118,7 +118,7 @@ const UpdateOrganizationForm = ({
             const uploadedPhoto = await handleUploadPhoto(selectedLogoMedia)
             logoMedia = uploadedPhoto
         } else {
-            logoMedia = data.media_id || ''
+            logoMedia = data.media_id || null
         }
         if (
             selectedCoverMedia &&
