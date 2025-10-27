@@ -1,14 +1,19 @@
 import { cn, formatNumber } from '@/helpers'
+import { currencyFormat } from '@/modules/currency'
 import {
     ISubscriptionPlan,
     TPricingPlanMode,
 } from '@/modules/subscription-plan'
 
 import {
+    BrainIcon,
     BuildingBranchIcon,
     ClockIcon,
+    CodeIcon,
+    RobotIcon,
     UserShieldIcon,
     Users3FillIcon,
+    UsersAddIcon,
 } from '@/components/icons'
 import { Badge } from '@/components/ui/badge'
 
@@ -33,85 +38,189 @@ const PlanCard = ({
             : subscriptionPlan.discounted_yearly_price
 
     return (
-        <div className={cn('rounded-2xl border pb-8 bg-background', className)}>
-            <div className="space-y-2 pt-8 pb-4 px-8 relative">
-                <p className="text-xl">{subscriptionPlan.name}</p>
-                <p className="text-sm text-muted-foreground/80">
-                    {subscriptionPlan.description}
-                </p>
-            </div>
-            <div className="px-8 py-6 space-y-2">
-                <p className="text-5xl text-foreground">
-                    {/* {formatNumber(finalPricing, 2)} */}
-                    {formatNumber(finalPricing, 2)}
-                    <span className="text-muted-foreground/70 text-sm font-normal">
-                        / month
-                    </span>
-                </p>
+        <div
+            className={cn(
+                'relative rounded-3xl border border-border/50 bg-card/80 backdrop-blur-sm overflow-hidden group',
+                'hover:bg-card/90 transition-all duration-300',
+                className
+            )}
+        >
+            {/* Recommended Badge */}
+            {subscriptionPlan.is_recommended && (
+                <div className="absolute top-0 left-1/2 -translate-x-1/2 z-10">
+                    <div className="bg-primary text-primary-foreground text-xs font-medium px-3 py-1 rounded-b-lg">
+                        Recommended
+                    </div>
+                </div>
+            )}
 
-                <div className="flex items-center gap-x-2">
-                    {finalPricing !== subscriptionPlan.cost && (
-                        <p className="text-xl relative inline-flex text-muted-foreground/70">
-                            {formatNumber(
-                                planMode === 'monthly'
-                                    ? subscriptionPlan.monthly_price
-                                    : subscriptionPlan.yearly_price,
-                                2
+            <div className="p-8 space-y-6">
+                {/* Plan Header */}
+                <div className="space-y-2">
+                    <h3 className="text-lg font-semibold text-foreground">
+                        {subscriptionPlan.name}
+                    </h3>
+                    <p className="text-sm text-muted-foreground leading-relaxed">
+                        {subscriptionPlan.description}
+                    </p>
+                </div>
+
+                {/* Pricing */}
+                <div className="space-y-3">
+                    <div className="flex items-baseline gap-2">
+                        <span className="text-4xl font-bold text-foreground">
+                            {currencyFormat(finalPricing, {
+                                currency: subscriptionPlan.currency,
+                                showSymbol: !!subscriptionPlan.currency,
+                            })}
+                        </span>
+                        <span className="text-muted-foreground/70 text-sm">
+                            /{planMode === 'monthly' ? 'month' : 'year'}
+                        </span>
+                    </div>
+
+                    {(finalPricing !== subscriptionPlan.cost ||
+                        discountPercent > 0) && (
+                        <div className="flex items-center gap-2 flex-wrap">
+                            {finalPricing !== subscriptionPlan.cost && (
+                                <span className="text-sm text-muted-foreground/60 line-through">
+                                    $
+                                    {formatNumber(
+                                        planMode === 'monthly'
+                                            ? subscriptionPlan.monthly_price
+                                            : subscriptionPlan.yearly_price,
+                                        0
+                                    )}
+                                </span>
                             )}
-                            <span className="w-full absolute left-0 top-1/2 bg-primary -translate-y-1/2 h-0.5 rounded-full -rotate-6" />
-                        </p>
-                    )}
-                    {discountPercent > 0 && (
-                        <Badge
-                            className="text-muted-foreground bg-primary/10 border-primary/70"
-                            variant="secondary"
-                        >
-                            {discountPercent}% Discount
-                        </Badge>
+                            {discountPercent > 0 && (
+                                <Badge
+                                    className="text-xs bg-primary/10 text-primary border-primary/20 hover:bg-primary/20"
+                                    variant="secondary"
+                                >
+                                    Save {discountPercent}%
+                                </Badge>
+                            )}
+                        </div>
                     )}
                 </div>
-            </div>
-            <div className="px-8 space-y-6 pt-6 text-sm">
-                <p className="text-muted-foreground">
-                    <span className=" mr-4 text-muted-foreground/70 p-1.5 bg-secondary/60 rounded-md">
-                        <BuildingBranchIcon className="inline" />
-                    </span>
-                    <span className="text-foreground">
-                        {subscriptionPlan.max_branches}
-                    </span>{' '}
-                    Max Branch
-                </p>
 
-                <p className="text-muted-foreground">
-                    <span className=" mr-4 text-muted-foreground/70 p-1.5 bg-secondary/60 rounded-md">
-                        <UserShieldIcon className="inline" />
-                    </span>
-                    <span className="text-foreground">
-                        {subscriptionPlan.max_employees}{' '}
-                    </span>{' '}
-                    Max Employee
-                </p>
+                {/* Features List */}
+                <div className="space-y-4">
+                    {/* Limits Section */}
+                    <div className="space-y-3">
+                        <div className="flex items-center gap-3">
+                            <div className="flex-shrink-0 w-8 h-8 bg-primary/10 rounded-lg flex items-center justify-center">
+                                <BuildingBranchIcon className="h-4 w-4 text-primary" />
+                            </div>
+                            <div className="text-sm">
+                                <span className="font-medium text-foreground">
+                                    {subscriptionPlan.max_branches === -1
+                                        ? 'Unlimited'
+                                        : subscriptionPlan.max_branches}
+                                </span>
+                                <span className="text-muted-foreground ml-1">
+                                    Branches
+                                </span>
+                            </div>
+                        </div>
 
-                <p className="text-muted-foreground">
-                    <span className=" mr-4 text-muted-foreground/70 p-1.5 bg-secondary/60 rounded-md">
-                        <Users3FillIcon className="inline" />
-                    </span>
-                    <span className="text-foreground">
-                        {subscriptionPlan.max_members_per_branch}
-                    </span>{' '}
-                    Max Member / Branch
-                </p>
+                        <div className="flex items-center gap-3">
+                            <div className="flex-shrink-0 w-8 h-8 bg-primary/10 rounded-lg flex items-center justify-center">
+                                <UserShieldIcon className="h-4 w-4 text-primary" />
+                            </div>
+                            <div className="text-sm">
+                                <span className="font-medium text-foreground">
+                                    {subscriptionPlan.max_employees === -1
+                                        ? 'Unlimited'
+                                        : subscriptionPlan.max_employees}
+                                </span>
+                                <span className="text-muted-foreground ml-1">
+                                    Employees
+                                </span>
+                            </div>
+                        </div>
 
-                <p className="text-muted-foreground">
-                    <span className=" mr-4 text-muted-foreground/70 p-1.5 bg-secondary/60 rounded-md">
-                        <ClockIcon className="inline" />
-                    </span>
-                    Up to{' '}
-                    <span className="text-foreground">
-                        {subscriptionPlan.max_members_per_branch}
-                    </span>{' '}
-                    Months
-                </p>
+                        <div className="flex items-center gap-3">
+                            <div className="flex-shrink-0 w-8 h-8 bg-primary/10 rounded-lg flex items-center justify-center">
+                                <Users3FillIcon className="h-4 w-4 text-primary" />
+                            </div>
+                            <div className="text-sm">
+                                <span className="font-medium text-foreground">
+                                    {subscriptionPlan.max_members_per_branch ===
+                                    -1
+                                        ? 'Unlimited'
+                                        : subscriptionPlan.max_members_per_branch}
+                                </span>
+                                <span className="text-muted-foreground ml-1">
+                                    Members per Branch
+                                </span>
+                            </div>
+                        </div>
+
+                        {subscriptionPlan.max_api_calls_per_month > 0 && (
+                            <div className="flex items-center gap-3">
+                                <div className="flex-shrink-0 w-8 h-8 bg-primary/10 rounded-lg flex items-center justify-center">
+                                    <ClockIcon className="h-4 w-4 text-primary" />
+                                </div>
+                                <div className="text-sm">
+                                    <span className="font-medium text-foreground">
+                                        {subscriptionPlan.max_api_calls_per_month.toLocaleString()}
+                                    </span>
+                                    <span className="text-muted-foreground ml-1">
+                                        API calls/month
+                                    </span>
+                                </div>
+                            </div>
+                        )}
+                    </div>
+
+                    {/* Core Features Section */}
+                    {(subscriptionPlan.has_api_access ||
+                        subscriptionPlan.has_flexible_org_structures ||
+                        subscriptionPlan.has_ai_enabled ||
+                        subscriptionPlan.has_machine_learning) && (
+                        <div className="border-t border-border/30 pt-4">
+                            <h4 className="text-xs font-medium text-muted-foreground uppercase tracking-wide mb-3">
+                                Features Included
+                            </h4>
+                            <div className="space-y-2">
+                                {subscriptionPlan.has_api_access && (
+                                    <div className="flex items-center gap-2">
+                                        <span className="text-sm text-foreground">
+                                            <CodeIcon className="inline size-4 mr-1 text-primary" />{' '}
+                                            API Access
+                                        </span>
+                                    </div>
+                                )}
+                                {subscriptionPlan.has_flexible_org_structures && (
+                                    <div className="flex items-center gap-2">
+                                        <span className="text-sm text-foreground">
+                                            <UsersAddIcon className="inline size-4 mr-1 text-primary" />{' '}
+                                            Flexible Organization Structures
+                                        </span>
+                                    </div>
+                                )}
+                                {subscriptionPlan.has_ai_enabled && (
+                                    <div className="flex items-center gap-2">
+                                        <span className="text-sm text-foreground">
+                                            <RobotIcon className="inline size-4 mr-1 text-primary" />{' '}
+                                            AI Enabled
+                                        </span>
+                                    </div>
+                                )}
+                                {subscriptionPlan.has_machine_learning && (
+                                    <div className="flex items-center gap-2">
+                                        <span className="text-sm text-foreground">
+                                            <BrainIcon className="inline size-4 mr-1 text-primary" />{' '}
+                                            Machine Learning
+                                        </span>
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+                    )}
+                </div>
             </div>
         </div>
     )

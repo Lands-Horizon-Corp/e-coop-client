@@ -161,6 +161,7 @@ import {
 } from 'react-icons/fi'
 import {
     GiBorderedShield as BorderedShieldIcon,
+    GiBrain as BrainIcon,
     GiTreeBranch as BranchIcon,
     GiGasMask as GasMaskIcon,
     GiClockwork as GiClockIcon,
@@ -429,6 +430,7 @@ import {
 } from 'react-icons/vsc'
 
 export {
+    BrainIcon,
     FingerprintOffIcon,
     FingerprintScanIcon,
     FingerPrintIcon,
@@ -813,6 +815,7 @@ export {
 }
 
 export const IconMap = {
+    Brain: BrainIcon,
     'Fingerprint Off': FingerprintOffIcon,
     'Fingerprint Scan': FingerprintScanIcon,
     Fingerprint: FingerPrintIcon,
