@@ -72,7 +72,7 @@ function RouteComponent() {
 
     return (
         <PageContainer className="w-full flex flex-row flex-grow">
-            <div className="flex-1 overflow-y-auto px-4 py-8 border-r border-gray-200 dark:border-gray-700 h-[calc(100vh-theme(spacing.16))]">
+            <div className="flex-1 overflow-y-auto ecoop-scroll px-4 py-8   h-[calc(100vh-theme(spacing.16))]">
                 <h1 className="text-3xl font-bold mb-4">
                     Lands Horizon Terms of Use
                 </h1>
@@ -369,7 +369,7 @@ function RouteComponent() {
             </div>
 
             {/* Table of Contents (Right Sidebar) */}
-            <div className="hidden lg:block w-80 flex-shrink-0 border-l border-gray-200 dark:border-gray-700 px-4 py-8 sticky top-0 h-screen overflow-y-auto">
+            <div className="hidden lg:block w-80 flex-shrink-0   px-4 py-8 sticky top-0 h-screen overflow-y-auto">
                 <h4 className="text-xl font-bold mb-3 text-gray-900 dark:text-white">
                     In this article
                 </h4>{' '}
