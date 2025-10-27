@@ -14,6 +14,8 @@ import { JournalKanbanInfoItem } from '../journal-voucher/journal-voucher-card'
 interface ICashCheckVoucherCardProps extends IClassProps {
     cashCheckVoucher: ICashCheckVoucher
     refetch: () => void
+    searchTerm?: string
+    highlightMatch: (text: string, searchTerm: string) => React.ReactNode
 }
 
 export const CashCheckVoucherCardCreatorInfo = ({

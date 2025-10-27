@@ -4,9 +4,11 @@ import { Link } from '@tanstack/react-router'
 
 import { cn } from '@/helpers'
 import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
-import { TPricingPlanMode, useGetAll } from '@/modules/subscription-plan'
+import {
+    TPricingPlanMode,
+    useGetAllSubscriptionPlans,
+} from '@/modules/subscription-plan'
 
-import { FlickeringGrid } from '@/components/backgrounds/flickering-grid'
 import PageContainer from '@/components/containers/page-container'
 import { PaperPlaneIcon } from '@/components/icons'
 import LoadingSpinner from '@/components/spinners/loading-spinner'
@@ -22,93 +24,132 @@ const SubscriptionPage = () => {
         data: subscriptionPlans,
         isPending,
         error: responseError,
-    } = useGetAll()
+    } = useGetAllSubscriptionPlans({
+        mode: 'timezone',
+    })
 
     const error = serverRequestErrExtractor({ error: responseError })
 
     return (
-        <PageContainer className="py-8 space-y-2 relative min-h-[40vh] bg-background/10 backdrop-blur-sm mb-24 pt-20 pb-16">
-            <div className="to-background/0 via-background/0 from-primary/50 absolute right-0 -z-10 -mt-16 h-screen w-full bg-radial-[ellipse_at_100%_0%] to-100%" />
+        <PageContainer className="relative min-h-screen bg-background">
+            {/* Dark background with subtle grid pattern */}
+            <div className="absolute inset-0 bg-gradient-to-br from-background via-background to-muted/20" />
+            {/* Header Section */}
+            <div className="relative z-10 pt-24 pb-2 text-center space-y-6">
+                <div className="space-y-10">
+                    <GradientText
+                        animate="shimmer"
+                        className="text-6xl font-bold tracking-tight"
+                        style={{
+                            fontFamily: "'Knewave', cursive",
+                        }}
+                        variant="primary"
+                    >
+                        E-coop
+                    </GradientText>
+                </div>
 
-            <FlickeringGrid
-                flickerChance={0.05}
-                gridGap={1}
-                maxOpacity={0.5}
-                squareSize={64}
-            />
+                <p className="text-muted-foreground text-lg max-w-2xl mx-auto leading-relaxed">
+                    Choose the perfect plan for your cooperative. Flexible
+                    pricing that grows with your organization.
+                </p>
+            </div>
+            {/* Error and Loading States */}
+            <div className="relative z-10">
+                <FormErrorMessage
+                    className="text-center mb-8"
+                    errorMessage={error}
+                />
+                {isPending && <LoadingSpinner className="mx-auto mb-8" />}
+            </div>
 
-            <h1 className="text-foreground text-4xl font-extrabold">
-                <GradientText
-                    animate="shimmer"
-                    className="leading-relaxed mr-2"
-                    size="5xl"
-                    style={{
-                        fontFamily: "'Knewave', cursive",
-                    }}
-                    variant="primary"
-                >
-                    <h1>E-coop</h1>
-                </GradientText>
-                Pricing Plans
-            </h1>
-
-            <p className="text-muted-foreground text-center mx-auto max-w-2xl text-xl">
-                Flexible and transparent pricing designed to fit cooperatives of
-                all sizes, pay only for what you need as you grow.
-            </p>
-            <FormErrorMessage className="my-24" errorMessage={error} />
-            {isPending && <LoadingSpinner className="mx-auto my-24" />}
             {subscriptionPlans && (
-                <>
-                    <div className="p-1 bg-muted rounded-full inline-flex border !mt-9 gap-x-1 border-border">
-                        {(['monthly', 'yearly'] as const).map((value) => (
-                            <Button
-                                className={cn(
-                                    'rounded-full px-4 cursor-pointer hover:bg-background/70 py-1 text-sm transition-all',
-                                    mode === value &&
-                                        'bg-background shadow-sm text-foreground'
-                                )}
-                                key={value}
-                                onClick={() => setMode(value)}
-                                variant="ghost"
-                            >
-                                {value === 'monthly' ? 'Monthly' : 'Yearly'}
-                            </Button>
-                        ))}
+                <div className="relative z-10 space-y-8">
+                    {/* Pricing Toggle */}
+                    <div className="flex justify-center">
+                        <div className="inline-flex items-center p-1 bg-muted/50 backdrop-blur-sm rounded-xl border border-border/50">
+                            {(['monthly', 'yearly'] as const).map((value) => (
+                                <Button
+                                    className={cn(
+                                        'rounded-lg px-6 py-2 text-sm font-medium transition-all duration-200 hover:bg-accent/50',
+                                        mode === value
+                                            ? 'bg-background shadow-md text-foreground border border-border/20'
+                                            : 'text-muted-foreground hover:text-foreground'
+                                    )}
+                                    key={value}
+                                    onClick={() => setMode(value)}
+                                    variant="ghost"
+                                >
+                                    {value === 'monthly' ? 'Monthly' : 'Yearly'}
+                                    {value === 'yearly' && (
+                                        <span className="ml-2 text-xs bg-primary/10 text-primary px-2 py-0.5 rounded-full">
+                                            Save 20%
+                                        </span>
+                                    )}
+                                </Button>
+                            ))}
+                        </div>
                     </div>
-                    <div className="grid grid-cols-4 gap-4 py-8">
-                        {subscriptionPlans.map((subscriptionPlan) => (
-                            <PlanCard
-                                key={subscriptionPlan.id}
-                                planMode={mode}
-                                subscriptionPlan={subscriptionPlan}
-                            />
-                        ))}
+
+                    {/* Pricing Cards Grid */}
+                    <div className="max-w-7xl mx-auto px-4">
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                            {subscriptionPlans.map((subscriptionPlan, _) => (
+                                <PlanCard
+                                    className={cn(
+                                        'transform transition-all duration-300 hover:scale-105 hover:shadow-2xl',
+                                        subscriptionPlan.is_recommended &&
+                                            'ring-2 ring-primary/80 shadow-lg bg-gradient-to-tr from-primary/20 to-transparent'
+                                    )}
+                                    key={subscriptionPlan.id}
+                                    planMode={mode}
+                                    subscriptionPlan={subscriptionPlan}
+                                />
+                            ))}
+                        </div>
                     </div>
+
+                    {/* Empty State */}
                     {subscriptionPlans.length === 0 && (
-                        <div className="flex items-center min-h-[60vh] w-full justify-center">
-                            <p className="text-muted-foreground/80">
-                                No available plans yet.
-                            </p>
+                        <div className="flex items-center justify-center min-h-[40vh]">
+                            <div className="text-center space-y-3">
+                                <p className="text-muted-foreground text-lg">
+                                    No subscription plans available yet.
+                                </p>
+                                <p className="text-muted-foreground/70 text-sm">
+                                    Check back soon for our pricing options.
+                                </p>
+                            </div>
                         </div>
                     )}
-                </>
-            )}
-            <div className="p-4 rounded-2xl border bg-popover items-center flex gap-x-4">
-                <div className="space-y-2">
-                    <p>Need a custom plan?</p>
-                    <p className="text-muted-foreground">
-                        Talk to us and we&apos;l happy to discuss and setup
-                        something just for you.
-                    </p>
                 </div>
-                <Button asChild className="rounded-full px-4" size="sm">
-                    <Link to="/contact">
-                        {' '}
-                        Talk to us
-                        <PaperPlaneIcon className="ml-2" />
-                    </Link>
-                </Button>
+            )}
+
+            {/* Custom Plan CTA */}
+            <div className="relative z-10 max-w-4xl mx-auto px-4 mt-16">
+                <div className="rounded-2xl border border-border/50 bg-card/50 backdrop-blur-sm p-8">
+                    <div className="flex flex-col md:flex-row items-center justify-between gap-6">
+                        <div className="space-y-2 text-center md:text-left">
+                            <h3 className="text-xl font-semibold text-foreground">
+                                Need a custom plan?
+                            </h3>
+                            <p className="text-muted-foreground">
+                                Talk to us and we&apos;ll be happy to discuss
+                                and setup something just for you.
+                            </p>
+                        </div>
+                        <Button
+                            asChild
+                            className="rounded-full px-6 py-2 bg-primary hover:bg-primary/90 text-primary-foreground font-medium"
+                            size="sm"
+                        >
+                            <Link to="/contact">
+                                Talk to us
+                                <PaperPlaneIcon className="ml-2 h-4 w-4" />
+                            </Link>
+                        </Button>
+                    </div>
+                </div>
             </div>
         </PageContainer>
     )

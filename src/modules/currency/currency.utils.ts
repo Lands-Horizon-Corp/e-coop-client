@@ -214,22 +214,24 @@ export const isFuture = (
  * sortByCurrency('entry_date', holidays, 'asc')
  * sortByCurrency('created_at', transactions, 'desc')
  */
-export const sortByCurrency = <T extends Record<string, any>>(
+export const sortByCurrency = <T extends Record<string, unknown>>(
     key: keyof T,
     data: T[],
     sort: 'asc' | 'desc' = 'asc'
 ): T[] => {
     return [...data].sort((a, b) => {
-        const dateA = a[key]
-        const dateB = b[key]
+        const dateA = a[key] as unknown
+        const dateB = b[key] as unknown
 
         // Handle null/undefined values
-        if (!dateA && !dateB) return 0
-        if (!dateA) return sort === 'asc' ? 1 : -1
-        if (!dateB) return sort === 'asc' ? -1 : 1
+        if (dateA == null && dateB == null) return 0
+        if (dateA == null) return sort === 'asc' ? 1 : -1
+        if (dateB == null) return sort === 'asc' ? -1 : 1
 
-        const parsedDateA = typeof dateA === 'string' ? parseISO(dateA) : dateA
-        const parsedDateB = typeof dateB === 'string' ? parseISO(dateB) : dateB
+        const parsedDateA =
+            typeof dateA === 'string' ? parseISO(dateA) : (dateA as Date)
+        const parsedDateB =
+            typeof dateB === 'string' ? parseISO(dateB) : (dateB as Date)
 
         const comparison =
             sort === 'asc'
@@ -238,4 +240,8 @@ export const sortByCurrency = <T extends Record<string, any>>(
 
         return comparison
     })
+}
+
+export function getCurrentTimezone(): string {
+    return Intl.DateTimeFormat().resolvedOptions().timeZone
 }

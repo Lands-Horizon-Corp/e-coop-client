@@ -2,10 +2,17 @@ import { cn } from '@/helpers/tw-utils'
 import { IJournalVoucher, TJournalVoucherMode } from '@/modules/journal-voucher'
 import { CheckCircle2Icon, PrinterIcon } from 'lucide-react'
 
-import { BadgeCheckFillIcon, DraftIcon } from '@/components/icons'
+import {
+    BadgeCheckFillIcon,
+    DraftIcon,
+    MagnifyingGlassIcon as SearchIcon,
+} from '@/components/icons'
+import { Badge } from '@/components/ui/badge'
 
 import { IClassProps } from '@/types'
 
+import { useSearchKanban } from '../hook/use-search-kanban'
+import { SearchKanbanInput } from '../search-kanban-input'
 import { JournalVoucherKanbanMain } from './journal-voucher-kanban-main'
 
 export interface IJournalVoucherStatusDates {
@@ -17,6 +24,8 @@ export interface IJournalVoucherStatusDates {
 export interface IJournalVoucherCardProps extends IClassProps {
     journalVoucher: IJournalVoucher
     refetch: () => void
+    searchTerm?: string
+    highlightMatch?: (text: string, searchTerm: string) => React.ReactNode
 }
 
 export type TJournalVoucherKanbanItem = {
@@ -24,6 +33,7 @@ export type TJournalVoucherKanbanItem = {
     value: TJournalVoucherMode
     icon: React.ReactNode
 }
+
 const JournalVoucherMenu: TJournalVoucherKanbanItem[] = [
     {
         name: 'Draft',
@@ -48,22 +58,85 @@ const JournalVoucherMenu: TJournalVoucherKanbanItem[] = [
         icon: <BadgeCheckFillIcon className="mr-2 size-4 text-purple-500" />,
     },
 ]
+
 const JournalVoucherKanban = ({ className }: { className?: string }) => {
+    const searchKanban = useSearchKanban<TJournalVoucherMode>({
+        menuItems: JournalVoucherMenu,
+        initialMode: null,
+        initialSearchTerm: '',
+        initialSearchAllModes: false,
+    })
+
+    const { selectedMode, searchTerm, searchAllModes, selectedItem } =
+        searchKanban
+
     return (
-        <div
-            className={cn(
-                'w-full flex space-x-5 p-2 ecoop-scroll overflow-auto',
-                className
-            )}
-        >
-            {JournalVoucherMenu.map((item) => (
-                <JournalVoucherKanbanMain
-                    icon={item.icon}
-                    key={item.value}
-                    mode={item.value}
-                />
-            ))}
+        <div className={cn('flex flex-col w-full border h-full', className)}>
+            {/* Top Controls Section */}
+            <SearchKanbanInput<TJournalVoucherMode>
+                kanbanType="journal-voucher"
+                menuItems={JournalVoucherMenu}
+                {...searchKanban}
+            />
+            <div className="flex-1 flex overflow-auto ecoop-scroll">
+                {selectedMode ? (
+                    //Single Mode View - When a specific mode is selected
+                    <div className="flex justify-center gap-6 w-full p-4">
+                        <JournalVoucherKanbanMain
+                            enableSearch={false}
+                            icon={selectedItem!.icon}
+                            isSelected={true}
+                            key={selectedItem!.value}
+                            mode={selectedItem!.value}
+                            searchTerm={searchTerm}
+                        />
+                    </div>
+                ) : (
+                    // All Modes View - Default view or when searching all modes
+                    <div className="flex gap-4 p-4 w-full">
+                        {JournalVoucherMenu.map((item) => (
+                            <JournalVoucherKanbanMain
+                                enableSearch={false}
+                                icon={item.icon}
+                                isSearchHighlighted={
+                                    searchAllModes && searchTerm.length > 0
+                                }
+                                isSelected={false}
+                                key={item.value}
+                                mode={item.value}
+                                searchTerm={searchAllModes ? searchTerm : ''}
+                            />
+                        ))}
+                    </div>
+                )}
+            </div>
+            <div className="flex-0 border-t bg-muted/10 p-2 px-4">
+                <div className="flex items-center justify-between text-xs text-muted-foreground">
+                    <span>
+                        {searchAllModes
+                            ? 'Viewing: All modes with search'
+                            : selectedMode
+                              ? `Viewing: ${selectedItem?.name} mode`
+                              : 'Viewing: All modes'}
+                    </span>
+                    {searchTerm && (
+                        <span className="flex items-center gap-2">
+                            <SearchIcon className="size-3" />
+                            Search active: "{searchTerm}"
+                            {searchAllModes && (
+                                <Badge
+                                    className="text-xs py-0"
+                                    variant="outline"
+                                >
+                                    All Modes
+                                </Badge>
+                            )}
+                        </span>
+                    )}
+                </div>
+            </div>
         </div>
     )
 }
+
 export default JournalVoucherKanban
