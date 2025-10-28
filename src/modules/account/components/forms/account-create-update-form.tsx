@@ -128,7 +128,7 @@ const AccountCreateUpdateForm = ({
         useFormHelper<TAccountFormValues>({
             form,
             ...formProps,
-            autoSave: accountId !== undefined, // No autosave for accounts
+            autoSave: accountId !== undefined,
         })
 
     const onSubmit = form.handleSubmit((data: TAccountFormValues) => {

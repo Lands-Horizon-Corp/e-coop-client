@@ -242,7 +242,7 @@ const OrganizationPreviewDisplay = ({
                                 TitleIcon={StarIcon}
                             />
                             {/* Categories */}
-                            <div className="flex flex-wrap gap-1">
+                            <div className="flex ecoop-scroll max-h-52 overflow-x-auto flex-wrap gap-1">
                                 <span className="text-xs font-semibold">
                                     Categories:
                                     <TagIcon className="inline-block ml-1 mb-0.5 size-4 text-muted-foreground" />

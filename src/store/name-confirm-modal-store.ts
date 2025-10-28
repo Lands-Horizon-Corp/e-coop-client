@@ -20,12 +20,6 @@ interface IConfirmModalOnOpenData extends Partial<ISharedConfirmModalProperty> {
 
     confirmString?: string | ReactNode
     cancelString?: string | ReactNode
-
-    confirmDisabled?: () => boolean
-    cancelDisabled?: boolean
-
-    confirmClassName?: string
-    cancelClassName?: string
     onClose?: () => void
     onCancel?: () => void
     onConfirm?: () => void
@@ -38,7 +32,6 @@ interface IConfirmModalStore extends ISharedConfirmModalProperty {
     showCancel: boolean
     showConfirm: boolean
     modalData?: IConfirmModalOnOpenData
-
     onOpen: (newModalData: IConfirmModalOnOpenData) => void
 }
 

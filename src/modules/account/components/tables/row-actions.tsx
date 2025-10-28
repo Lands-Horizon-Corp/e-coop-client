@@ -9,7 +9,6 @@ import {
 } from '@/modules/account'
 import { TEntryType } from '@/modules/general-ledger'
 import GeneralLedgerTable from '@/modules/general-ledger/components/tables/general-ledger-table'
-import useConfirmModalStore from '@/store/confirm-modal-store'
 import { Row } from '@tanstack/react-table'
 
 import RowActionsGroup from '@/components/data-table/data-table-row-actions'
@@ -41,6 +40,7 @@ import {
 
 import { useModalState } from '@/hooks/use-modal-state'
 
+import { NameConfirmation } from '../forms/name-confirmation'
 import { IAccountsTableActionComponentProp } from './columns'
 
 interface UseAccountActionsProps {
@@ -53,12 +53,12 @@ const useAccountActions = ({
     onDeleteSuccess,
 }: UseAccountActionsProps) => {
     const updateModal = useModalState()
+    const confirmModal = useModalState()
+    const [mode, setMode] = useState<'delete' | 'update'>('delete')
     const account = row.original
 
     const ledgerTableModal = useModalState()
     const [selectedEntryType, setSelectedEntryType] = useState<TEntryType>('')
-
-    const { onOpen } = useConfirmModalStore()
 
     const { isPending: isDeletingAccount, mutate: deleteAccount } =
         useDeleteById({
@@ -67,18 +67,18 @@ const useAccountActions = ({
                     onDeleteSuccess?.()
                     ledgerTableModal.onOpenChange(false)
                     updateModal.onOpenChange(false)
+                    toast.success(`Account deleted successfully`)
                 },
             },
         })
 
-    const handleEdit = () => updateModal.onOpenChange(true)
-
+    const handleEdit = () => {
+        setMode('update')
+        confirmModal.onOpenChange(true)
+    }
     const handleDelete = () => {
-        onOpen({
-            title: 'Delete Account',
-            description: 'Are you sure you want to delete this Account?',
-            onConfirm: () => deleteAccount(account.id),
-        })
+        confirmModal.onOpenChange(true)
+        setMode('delete')
     }
 
     const openLedgerModal = (entryType: TEntryType) => {
@@ -116,6 +116,9 @@ const useAccountActions = ({
         handleDelete,
         openLedgerModal,
         getModalTitle,
+        deleteAccount,
+        confirmModal,
+        mode,
     }
 }
 
@@ -138,11 +141,28 @@ export const AccountAction = ({
         handleDelete,
         openLedgerModal,
         getModalTitle,
+        deleteAccount,
+        confirmModal,
+        mode,
     } = useAccountActions({ row, onDeleteSuccess })
 
     return (
         <>
             <div onClick={(e) => e.stopPropagation()}>
+                <NameConfirmation
+                    description="This action cannot be undone. Please type the project name to confirm deletion."
+                    title={`Confirm ${mode === 'delete' ? 'Deletion' : 'Update'}`}
+                    {...confirmModal}
+                    mode={mode}
+                    name={row.original.name}
+                    onConfirm={() => {
+                        if (mode === 'delete') {
+                            deleteAccount(row.original.id)
+                        } else {
+                            updateModal.onOpenChange(true)
+                        }
+                    }}
+                />
                 <Modal
                     {...ledgerTableModal}
                     className="!max-w-[95vw]"
