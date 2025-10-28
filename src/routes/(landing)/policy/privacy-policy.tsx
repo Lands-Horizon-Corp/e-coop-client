@@ -71,8 +71,6 @@ function RouteComponent() {
         contactUsRef,
     ])
 
-    const contentScrollRef = useRef<HTMLDivElement>(null)
-
     const scrollToSection = useCallback(
         (sectionId: string) => {
             const ref = sectionRefs[sectionId as keyof typeof sectionRefs]
@@ -103,10 +101,7 @@ function RouteComponent() {
 
     return (
         <PageContainer className="w-full  flex flex-col-reverse lg:flex-row  flex-grow">
-            <div
-                className="flex-1 overflow-y-auto px-4 py-8 border-none lg:border-r border-gray-200 dark:border-gray-700 h-[calc(100vh-theme(spacing.16))]"
-                ref={contentScrollRef}
-            >
+            <div className="flex-1 overflow-y-auto ecoop-scroll px-4 py-8   h-[calc(100vh-theme(spacing.16))]">
                 <h1 className="text-3xl font-bold mb-4">
                     Lands Horizon Privacy Policy
                 </h1>
@@ -488,7 +483,7 @@ function RouteComponent() {
             </div>
 
             {/* Table of Contents (Right Sidebar) */}
-            <div className="w-full h-fit lg:w-80 flex-shrink-0 border-b lg:border-l border-gray-200 dark:border-gray-700 px-4 py-8 sticky top-0 lg:h-screen overflow-y-auto">
+            <div className="w-full h-fit lg:w-80 flex-shrink-0 border-b lg:border-gray-200 dark:border-gray-700 px-4 py-8 sticky top-0 lg:h-screen overflow-y-auto">
                 <h4 className="text-xl font-bold mb-3 text-gray-900 dark:text-white">
                     In this article
                 </h4>{' '}

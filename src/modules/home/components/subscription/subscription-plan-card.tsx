@@ -69,10 +69,12 @@ const PlanCard = ({
                 <div className="space-y-3">
                     <div className="flex items-baseline gap-2">
                         <span className="text-4xl font-bold text-foreground">
-                            {currencyFormat(finalPricing, {
-                                currency: subscriptionPlan.currency,
-                                showSymbol: !!subscriptionPlan.currency,
-                            })}
+                            {finalPricing === 0
+                                ? 'Free'
+                                : currencyFormat(finalPricing, {
+                                      currency: subscriptionPlan.currency,
+                                      showSymbol: !!subscriptionPlan.currency,
+                                  })}
                         </span>
                         <span className="text-muted-foreground/70 text-sm">
                             /{planMode === 'monthly' ? 'month' : 'year'}

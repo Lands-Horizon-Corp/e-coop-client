@@ -12,6 +12,7 @@ import {
 import PageContainer from '@/components/containers/page-container'
 import { PaperPlaneIcon } from '@/components/icons'
 import LoadingSpinner from '@/components/spinners/loading-spinner'
+import { Particles } from '@/components/ui/background-particles'
 import { Button } from '@/components/ui/button'
 import FormErrorMessage from '@/components/ui/form-error-message'
 import { GradientText } from '@/components/ui/gradient-text'
@@ -31,15 +32,22 @@ const SubscriptionPage = () => {
     const error = serverRequestErrExtractor({ error: responseError })
 
     return (
-        <PageContainer className="relative min-h-screen bg-background">
+        <PageContainer className="relative min-h-screen">
             {/* Dark background with subtle grid pattern */}
-            <div className="absolute inset-0 bg-gradient-to-br from-background via-background to-muted/20" />
+            <Particles
+                className="absolute inset-0"
+                color="#ffffff"
+                ease={80}
+                quantity={300}
+                size={0.01}
+            />
+            <div className="to-background/0 via-background/0 from-primary/50 top-0 absolute -mt-32 -z-10 h-screen w-[200%] bg-radial-[ellipse_at_50%_-20%] to-100% dark:block hidden" />
             {/* Header Section */}
             <div className="relative z-10 pt-24 pb-2 text-center space-y-6">
                 <div className="space-y-10">
                     <GradientText
                         animate="shimmer"
-                        className="text-6xl font-bold tracking-tight"
+                        className="text-6xl p-4 font-bold tracking-tight"
                         style={{
                             fontFamily: "'Knewave', cursive",
                         }}

@@ -106,6 +106,12 @@ export enum OtherInformationOfAnAccountEnum {
     CashOnHand = 'Cash on Hand',
 }
 
+export const enum InterestStandardComputationEnum {
+    None = 'None',
+    Yearly = 'Yearly',
+    Monthly = 'Monthly',
+}
+
 export type TInterestStandardComputation =
     (typeof ACCOUNT_INTEREST_STANDARD_COMPUTATION)[number]
 
