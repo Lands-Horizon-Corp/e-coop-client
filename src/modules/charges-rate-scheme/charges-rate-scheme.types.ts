@@ -5,6 +5,7 @@ import { IChargesRateByTerm } from '../charges-rate-by-term'
 import { IChargesRateSchemeAccount } from '../charges-rate-scheme-account'
 import { IChargesRateSchemeModeOfPayment } from '../charges-rate-scheme-mode-of-payment'
 import { ICurrency } from '../currency'
+import { TLoanModeOfPayment } from '../loan-transaction'
 import { IMemberType } from '../member-type'
 import {
     TChargesRateCreateSchemeSchema,
@@ -33,7 +34,7 @@ export interface IChargesRateScheme extends IBaseEntityMeta {
 
     member_type_id: TEntityId
     member_type?: IMemberType
-    mode_of_payment: ChargesRateMemberTypeEnum
+    mode_of_payment: TLoanModeOfPayment
 
     mode_of_payment_header_1: number
     mode_of_payment_header_2: number

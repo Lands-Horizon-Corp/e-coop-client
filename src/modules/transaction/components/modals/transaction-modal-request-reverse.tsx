@@ -110,10 +110,7 @@ const TransactionReverseRequestForm = ({
                                 mode="owner"
                                 onSelect={(value) => {
                                     field.onChange(value?.id)
-                                    form.setValue(
-                                        'user_organization',
-                                        value.user
-                                    )
+                                    form.setValue('user_organization', value)
                                 }}
                                 placeholder="Select Employee"
                                 value={form.getValues('user_organization')}

@@ -2,6 +2,8 @@ import z from 'zod'
 
 import { entityIdSchema } from '@/validation'
 
+import { UnbalanceAccountSchema } from '../unbalance-account'
+
 export const BranchSettingsSchema = z.object({
     id: entityIdSchema,
     branch_id: entityIdSchema,
@@ -71,6 +73,35 @@ export const BranchSettingsCurrencySchema = z.object({
 
     paid_up_shared_capital_account_id: entityIdSchema,
     paid_up_shared_capital_account: z.any(),
+
+    unbalanced_accounts: z
+        .array(UnbalanceAccountSchema)
+        .default([])
+        .refine(
+            (unbalancedAccounts) => {
+                const value = new Set()
+
+                for (const data of unbalancedAccounts) {
+                    if (value.has(data.currency_id)) {
+                        return false
+                    }
+                    value.add(data.currency_id)
+                }
+
+                return true
+            },
+            {
+                path: [''],
+                error: 'Currency must not repeat.',
+            }
+        ),
+    unbalanced_account_delete_ids: z.array(entityIdSchema).default([]),
+
+    // account_for_overflow_id: entityIdSchema,
+    // account_for_overflow: z.any(),
+
+    // account_for_underflow_id: entityIdSchema,
+    // account_for_underflow: z.any(),
 })
 
 export type TBranchSettingsCurrencySchema = z.infer<

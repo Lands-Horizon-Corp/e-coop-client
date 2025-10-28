@@ -216,6 +216,8 @@ export interface IAccount extends IAuditable, ITimeStamps {
 
     currency_id: TEntityId
     currency?: ICurrency
+
+    cash_and_cash_equivalence: boolean
 }
 
 // export interface IAccountRequest {

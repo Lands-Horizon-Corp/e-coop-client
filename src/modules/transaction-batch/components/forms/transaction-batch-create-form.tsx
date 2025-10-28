@@ -113,6 +113,7 @@ const TransactionBatchCreateForm = ({
                                     render={({ field }) => (
                                         <CurrencyCombobox
                                             {...field}
+                                            mode="blotter-available"
                                             onChange={(currency) => {
                                                 field.onChange(currency?.id)
                                                 form.setValue(

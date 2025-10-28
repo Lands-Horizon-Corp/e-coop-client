@@ -5,6 +5,7 @@ import { IBaseEntityMeta, IPaginatedResult, TEntityId } from '@/types'
 import { IAccount } from '../account'
 import { ICurrency } from '../currency'
 import { IMemberType } from '../member-type'
+import { IUnbalanceAccount } from '../unbalance-account'
 import {
     BranchSettingsSchema,
     TBranchSettingsCurrencySchema,
@@ -14,12 +15,6 @@ export interface IBranchSettings extends IBaseEntityMeta {
     id: TEntityId
 
     branch_id: TEntityId
-
-    cash_on_hand_account_id: TEntityId
-    cash_on_hand_account: IAccount
-
-    paid_up_shared_capital_account_id: TEntityId
-    paid_up_shared_capital_account: IAccount
 
     withdraw_allow_user_input: boolean
     /** Validation: omitempty */
@@ -80,7 +75,22 @@ export interface IBranchSettings extends IBaseEntityMeta {
     currency_id: TEntityId
     currency: ICurrency
 
+    cash_on_hand_account_id: TEntityId
+    cash_on_hand_account: IAccount
+
+    paid_up_shared_capital_account_id: TEntityId
+    paid_up_shared_capital_account: IAccount
+
     loan_applied_equal_to_balance: boolean
+
+    unbalanced_accounts: IUnbalanceAccount[]
+    unbalanced_account_delete_ids: TEntityId[]
+
+    // account_for_overflow_id: TEntityId
+    // account_for_overflow: IAccount
+
+    // account_for_underflow_id: TEntityId
+    // account_for_underflow: IAccount
 }
 
 export type IBranchSettingsRequest = z.infer<typeof BranchSettingsSchema>

@@ -24,4 +24,4 @@ export type ICurrencyRequest = z.infer<typeof CurrencySchema>
 
 export interface ICurrencyPaginated extends IPaginatedResult<ICurrency> {}
 
-export type TCurrencyHookMode = 'all' | 'available'
+export type TCurrencyHookMode = 'all' | 'available' | 'blotter-available'

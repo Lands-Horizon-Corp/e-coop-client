@@ -73,7 +73,10 @@ export const useGetAllCurrency = ({
 
             if (mode === 'available') {
                 url = `${currencyAPIRoute}/available`
+            } else if (mode === 'blotter-available') {
+                url = `${currencyAPIRoute}/blotter-available`
             }
+
             return getAllCurrency({
                 query,
                 url,
