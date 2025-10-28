@@ -15,7 +15,7 @@ export const ChargesRateByRangeOrMinimumAmountSchema = z
             .number()
             .min(0, 'Minimum amount must be 0 or greater'),
     })
-    .refine((data) => data.from >= data.to, {
+    .refine((data) => data.from <= data.to, {
         message: 'From amount cannot be greater than To amount',
         path: ['from'],
     })

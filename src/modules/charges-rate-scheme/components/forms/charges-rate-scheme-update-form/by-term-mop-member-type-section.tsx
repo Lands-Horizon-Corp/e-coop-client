@@ -4,9 +4,17 @@ import { toast } from 'sonner'
 import { cn } from '@/helpers/tw-utils'
 import { TChargesRateSchemeSchema } from '@/modules/charges-rate-scheme/charges-rate-scheme.validation'
 import { CurrencyInput } from '@/modules/currency'
+import LoanModeOfPaymentCombobox from '@/modules/loan-transaction/components/loan-mode-of-payment-combobox'
+import MemberTypeCombobox from '@/modules/member-type/components/member-type-combobox'
 import useConfirmModalStore from '@/store/confirm-modal-store'
 
-import { ArrowRightIcon, PlusIcon, TrashIcon } from '@/components/icons'
+import {
+    ArrowRightIcon,
+    InfoFillCircleIcon,
+    PlusIcon,
+    TrashIcon,
+    XIcon,
+} from '@/components/icons'
 import ActionTooltip from '@/components/tooltips/action-tooltip'
 import { Button } from '@/components/ui/button'
 import {
@@ -20,6 +28,7 @@ import {
 import FormFieldWrapper from '@/components/ui/form-field-wrapper'
 import { Input } from '@/components/ui/input'
 import { InputGroup, InputGroupInput } from '@/components/ui/input-group'
+import { Separator } from '@/components/ui/separator'
 
 import { IClassProps } from '@/types'
 
@@ -53,6 +62,8 @@ const ByTermMopMemberTypeSection = ({
     }
 
     const currency = form.watch('currency')
+    const modeOfPayment = form.watch('mode_of_payment')
+    const memberType = form.watch('member_type')
 
     const handleRemoveRow = (index: number) => {
         onOpen({
@@ -97,6 +108,74 @@ const ByTermMopMemberTypeSection = ({
                     <PlusIcon className="size-4" />
                     Add Row
                 </Button>
+            </div>
+
+            <div className="space-y-2 flex items-end gap-x-4 !mb-0">
+                <div className="flex items-start shrink-0 w-fit gap-x-2">
+                    <FormFieldWrapper
+                        control={form.control}
+                        label="Mode of Payment"
+                        name={`mode_of_payment`}
+                        render={({ field }) => (
+                            <LoanModeOfPaymentCombobox
+                                {...field}
+                                placeholder="Mode of Payment"
+                            />
+                        )}
+                    />
+                    {form.watch('mode_of_payment') && (
+                        <Button
+                            className="size-fit p-2 mt-6"
+                            onClick={() =>
+                                form.setValue('mode_of_payment', undefined)
+                            }
+                            size="icon"
+                            variant="destructive"
+                        >
+                            <XIcon />
+                        </Button>
+                    )}
+                    <Separator className="!h-6 mt-7" orientation="vertical" />
+                    <FormFieldWrapper
+                        control={form.control}
+                        label="Member Type"
+                        name={`member_type_id`}
+                        render={({ field }) => (
+                            <MemberTypeCombobox
+                                {...field}
+                                onChange={(memberType) => {
+                                    field.onChange(memberType.id)
+                                    form.setValue('member_type', memberType)
+                                }}
+                                placeholder="Member Type"
+                            />
+                        )}
+                    />
+                    {form.watch('member_type_id') && (
+                        <Button
+                            className="size-fit p-2 mt-6"
+                            onClick={() =>
+                                form.setValue('member_type_id', undefined)
+                            }
+                            size="icon"
+                            variant="destructive"
+                        >
+                            <XIcon />
+                        </Button>
+                    )}
+                </div>
+                <div className="text-foreground text-xs bg-secondary rounded-md p-2 ">
+                    <InfoFillCircleIcon className="text-primary inline mr-1" />
+                    This charges scheme only applicable to mode of payment{' '}
+                    <span className="text-primary">
+                        {modeOfPayment || 'All'}
+                    </span>{' '}
+                    and member type{' '}
+                    <span className="text-primary">
+                        {memberType?.name || 'All'}
+                    </span>{' '}
+                    otherwise computation will fallback to loan deduction.
+                </div>
             </div>
 
             <div className="w-fit max-w-full relative space-y-1 ecoop-scroll overflow-auto">

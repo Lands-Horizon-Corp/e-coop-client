@@ -16,6 +16,12 @@ import { Checkbox } from '@/components/ui/checkbox'
 import { Form } from '@/components/ui/form'
 import FormFieldWrapper from '@/components/ui/form-field-wrapper'
 import { Input } from '@/components/ui/input'
+import {
+    InputGroup,
+    InputGroupAddon,
+    InputGroupInput,
+    InputGroupText,
+} from '@/components/ui/input-group'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 
@@ -163,7 +169,11 @@ export const AutomaticLoanDeductionCreateUpdateForm = ({
                                     render={({ field }) => (
                                         <ChargesRateSchemeCombobox
                                             {...field}
+                                            currencyId={
+                                                currency?.id as TEntityId
+                                            }
                                             disabled={isDisabled(field.name)}
+                                            mode="currency"
                                             onChange={(chargesScheme) => {
                                                 field.onChange(
                                                     chargesScheme?.id
@@ -191,12 +201,14 @@ export const AutomaticLoanDeductionCreateUpdateForm = ({
                                     label="Charges % 1"
                                     name="charges_percentage_1"
                                     render={({ field }) => (
-                                        <Input
-                                            placeholder="%"
-                                            type="number"
-                                            {...field}
-                                            disabled={isDisabled(field.name)}
-                                        />
+                                        <InputGroup>
+                                            <InputGroupInput {...field} />
+                                            <InputGroupAddon align="inline-end">
+                                                <InputGroupText>
+                                                    %
+                                                </InputGroupText>
+                                            </InputGroupAddon>
+                                        </InputGroup>
                                     )}
                                 />
                                 <FormFieldWrapper
@@ -223,12 +235,14 @@ export const AutomaticLoanDeductionCreateUpdateForm = ({
                                     label="Charges % 2"
                                     name="charges_percentage_2"
                                     render={({ field }) => (
-                                        <Input
-                                            placeholder="%"
-                                            type="number"
-                                            {...field}
-                                            disabled={isDisabled(field.name)}
-                                        />
+                                        <InputGroup>
+                                            <InputGroupInput {...field} />
+                                            <InputGroupAddon align="inline-end">
+                                                <InputGroupText>
+                                                    %
+                                                </InputGroupText>
+                                            </InputGroupAddon>
+                                        </InputGroup>
                                     )}
                                 />
 

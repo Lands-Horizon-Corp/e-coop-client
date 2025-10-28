@@ -1,6 +1,7 @@
 import * as React from 'react'
 
 import { cn } from '@/helpers/tw-utils'
+import { CurrencyCountryFlag } from '@/modules/currency/components/currency-badge'
 import { Check } from 'lucide-react'
 
 import { ChevronDownIcon } from '@/components/icons'
@@ -24,7 +25,10 @@ import {
 import { TEntityId } from '@/types'
 
 import { useGetAllChargesRateScheme } from '../charges-rate-scheme.service'
-import { IChargesRateScheme } from '../charges-rate-scheme.types'
+import {
+    IChargesRateScheme,
+    TChargesRateSchemeHookMode,
+} from '../charges-rate-scheme.types'
 
 // import {
 //     ChargesRateSchemeCreateUpdateFormModal,
@@ -40,23 +44,41 @@ interface Props {
     disabled?: boolean
     className?: string
     placeholder?: string
+    mode?: TChargesRateSchemeHookMode
+    currencyId?: TEntityId
     // chargesRateSchemeComboboxCreateProps?: IChargesRateSchemeComboboxCreateProps
     onChange?: (selected: IChargesRateScheme) => void
 }
 
+type ChargesRateSchemeProps = Props &
+    (
+        | { mode: 'all' }
+        | {
+              mode: Exclude<TChargesRateSchemeHookMode, 'all'>
+              currencyId: TEntityId
+          }
+    )
+
 const ChargesRateSchemeCombobox = ({
     value,
+    mode = 'all',
+    currencyId,
     className,
     disabled = false,
     // chargesRateSchemeComboboxCreateProps,
     placeholder = 'Select Charges Rate Scheme...',
     onChange,
     ...other
-}: Props) => {
+}: ChargesRateSchemeProps & { currencyId?: TEntityId }) => {
     const [open, setOpen] = React.useState(false)
     // const [createModal, setCreateModal] = React.useState(false)
 
-    const { data, isLoading } = useGetAllChargesRateScheme()
+    const { data, isLoading } = useGetAllChargesRateScheme({
+        mode,
+        currencyId,
+    })
+
+    const selected = data?.find((option) => option.id === value)
 
     return (
         <>
@@ -81,8 +103,15 @@ const ChargesRateSchemeCombobox = ({
                         role="combobox"
                         variant="outline"
                     >
-                        {value ? (
-                            data?.find((option) => option.id === value)?.name
+                        {selected ? (
+                            <>
+                                {selected.currency && (
+                                    <CurrencyCountryFlag
+                                        currency={selected.currency}
+                                    />
+                                )}
+                                {selected.name}
+                            </>
                         ) : (
                             <span className="text-muted-foreground">
                                 {placeholder}
@@ -133,6 +162,11 @@ const ChargesRateSchemeCombobox = ({
                                             }}
                                             value={option.name}
                                         >
+                                            {option.currency && (
+                                                <CurrencyCountryFlag
+                                                    currency={option.currency}
+                                                />
+                                            )}
                                             {option.name}
                                             <Check
                                                 className={cn(
