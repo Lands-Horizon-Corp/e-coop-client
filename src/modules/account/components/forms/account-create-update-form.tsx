@@ -31,6 +31,7 @@ import {
 } from '@/modules/account'
 import { AccountCategoryComboBox } from '@/modules/account-category'
 import { AccountClassificationComboBox } from '@/modules/account-classification'
+import AccountHistorySheet from '@/modules/account-history/forms/account-history-sheet'
 import { AccountTagsManagerPopover } from '@/modules/account-tag/components/account-tag-management'
 import { useAuthUserWithOrgBranch } from '@/modules/authentication/authgentication.store'
 import ComputationSheetCombobox from '@/modules/computation-sheet/components/computation-sheet-combobox'
@@ -159,7 +160,8 @@ const AccountCreateUpdateForm = ({
                 ref={formRef}
             >
                 {accountId && (
-                    <div className="absolute top-4 right-10">
+                    <div className="absolute top-4 inline-flex space-x-2 right-10">
+                        <AccountHistorySheet accountId={accountId} />
                         <AccountTagsManagerPopover
                             accountId={accountId}
                             size="sm"
