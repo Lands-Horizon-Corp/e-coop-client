@@ -1,21 +1,23 @@
-import z from 'zod'
-
 import { IBaseEntityMeta, IPaginatedResult, TEntityId } from '@/types'
 
-import { IChargesRateByRangeOrMinimumAmount } from '../charges-by-range-or-minimum-amount'
+import { IChargesRateByRangeOrMinimumAmount } from '../charges-rate-by-range-or-minimum-amount'
 import { IChargesRateByTerm } from '../charges-rate-by-term'
-import { IChargesRateByTermHeader } from '../charges-rate-by-term-header'
 import { IChargesRateSchemeAccount } from '../charges-rate-scheme-account'
 import { IChargesRateSchemeModeOfPayment } from '../charges-rate-scheme-mode-of-payment'
 import { ICurrency } from '../currency'
 import { IMemberType } from '../member-type'
-import { ChargesRateSchemeSchema } from './charges-rate-scheme.validation'
+import {
+    TChargesRateCreateSchemeSchema,
+    TChargesRateSchemeSchema,
+} from './charges-rate-scheme.validation'
+import { CHARGES_RATE_SCHEME_TYPE } from './charges-rate.constant'
 
 export type ChargesRateMemberTypeEnum = 'all' | string
 
+export type TChargesRateSchemeType = (typeof CHARGES_RATE_SCHEME_TYPE)[number]
+
 export interface IChargesRateScheme extends IBaseEntityMeta {
     charges_rate_by_term_header_id: string
-    charges_rate_by_term_header?: IChargesRateByTermHeader
 
     name: string
     description: string
@@ -24,10 +26,10 @@ export interface IChargesRateScheme extends IBaseEntityMeta {
     currency_id: TEntityId
     currency: ICurrency
 
+    type: TChargesRateSchemeType
+
     charges_rate_scheme_accounts?: IChargesRateSchemeAccount[]
     charges_rate_by_range_or_minimum_amounts?: IChargesRateByRangeOrMinimumAmount[]
-    charges_rate_scheme_mode_of_payments?: IChargesRateSchemeModeOfPayment[]
-    charges_rate_by_terms?: IChargesRateByTerm[]
 
     member_type_id: TEntityId
     member_type?: IMemberType
@@ -55,6 +57,7 @@ export interface IChargesRateScheme extends IBaseEntityMeta {
     mode_of_payment_header_20: number
     mode_of_payment_header_21: number
     mode_of_payment_header_22: number
+    charges_rate_scheme_model_of_payments?: IChargesRateSchemeModeOfPayment[]
 
     by_term_header_1: number
     by_term_header_2: number
@@ -78,9 +81,11 @@ export interface IChargesRateScheme extends IBaseEntityMeta {
     by_term_header_20: number
     by_term_header_21: number
     by_term_header_22: number
+    charges_rate_by_terms?: IChargesRateByTerm[]
 }
+export type ICharegesRateSchemeCreateRequest = TChargesRateCreateSchemeSchema
 
-export type IChargesRateSchemeRequest = z.infer<typeof ChargesRateSchemeSchema>
+export type IChargesRateSchemeRequest = TChargesRateSchemeSchema
 
 export interface IChargesRateSchemePaginated
     extends IPaginatedResult<IChargesRateScheme> {}

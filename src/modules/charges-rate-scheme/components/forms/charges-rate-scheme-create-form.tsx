@@ -1,13 +1,15 @@
 import { useForm } from 'react-hook-form'
-import z from 'zod'
+import { toast } from 'sonner'
 
 import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
 
-import { withToastCallbacks } from '@/helpers/callback-helper'
 import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
 import { cn } from '@/helpers/tw-utils'
+import { CurrencyCombobox } from '@/modules/currency'
 
+import IconCombobox from '@/components/comboboxes/icon-combobox'
 import FormFooterResetSubmit from '@/components/form-components/form-footer-reset-submit'
+import { TIcon } from '@/components/icons'
 import Modal, { IModalProps } from '@/components/modals/modal'
 import { Form } from '@/components/ui/form'
 import FormFieldWrapper from '@/components/ui/form-field-wrapper'
@@ -16,19 +18,19 @@ import { Textarea } from '@/components/ui/textarea'
 
 import { useFormHelper } from '@/hooks/use-form-helper'
 
-import { IClassProps, IForm, TEntityId } from '@/types'
+import { IClassProps, IForm } from '@/types'
 
-import {
-    useCreateChargesRateScheme,
-    useUpdateChargesRateSchemeById,
-} from '../..'
+import { logger, useCreateChargesRateScheme } from '../..'
 import {
     IChargesRateScheme,
     IChargesRateSchemeRequest,
 } from '../../charges-rate-scheme.types'
-import { ChargesRateSchemeSchema } from '../../charges-rate-scheme.validation'
+import {
+    ChargesRateSchemeSchema,
+    TChargesRateCreateSchemeSchema,
+} from '../../charges-rate-scheme.validation'
 
-type TChargesRateSchemeFormValues = z.infer<typeof ChargesRateSchemeSchema>
+type TChargesRateSchemeFormValues = TChargesRateCreateSchemeSchema
 
 export interface IChargesRateSchemeFormProps
     extends IClassProps,
@@ -37,11 +39,9 @@ export interface IChargesRateSchemeFormProps
             IChargesRateScheme,
             Error,
             TChargesRateSchemeFormValues
-        > {
-    chargesRateSchemeId?: TEntityId
-}
+        > {}
 
-const ChargesRateSchemeCreateUpdateForm = ({
+const ChargesRateSchemeCreateForm = ({
     className,
     ...formProps
 }: IChargesRateSchemeFormProps) => {
@@ -56,24 +56,7 @@ const ChargesRateSchemeCreateUpdateForm = ({
         },
     })
 
-    const createMutation = useCreateChargesRateScheme({
-        options: {
-            ...withToastCallbacks({
-                textSuccess: 'Charges Rate Scheme Created',
-                onSuccess: formProps.onSuccess,
-                onError: formProps.onError,
-            }),
-        },
-    })
-    const updateMutation = useUpdateChargesRateSchemeById({
-        options: {
-            ...withToastCallbacks({
-                textSuccess: 'Charges Rate Scheme updated',
-                onSuccess: formProps.onSuccess,
-                onError: formProps.onError,
-            }),
-        },
-    })
+    const createMutation = useCreateChargesRateScheme()
 
     const { formRef, handleFocusError, isDisabled } =
         useFormHelper<TChargesRateSchemeFormValues>({
@@ -85,22 +68,25 @@ const ChargesRateSchemeCreateUpdateForm = ({
             defaultValues: formProps.defaultValues,
         })
 
-    const onSubmit = form.handleSubmit((formData) => {
-        if (formProps.chargesRateSchemeId) {
-            updateMutation.mutate({
-                id: formProps.chargesRateSchemeId,
-                payload: formData,
-            })
-        } else {
-            createMutation.mutate(formData)
-        }
+    const onSubmit = form.handleSubmit(async (formData) => {
+        const request = createMutation.mutateAsync(formData)
+
+        toast.promise(request, {
+            loading: 'Creating Charges Rate Scheme...',
+            success: (data) => {
+                formProps.onSuccess?.(data)
+                return 'Charges Rate Scheme Created'
+            },
+            error: (e) => {
+                const errorMessage = serverRequestErrExtractor({ error: e })
+                formProps.onError?.(e)
+                logger.error(errorMessage, e)
+                return errorMessage
+            },
+        })
     }, handleFocusError)
 
-    const {
-        error: errorResponse,
-        isPending,
-        reset,
-    } = formProps.chargesRateSchemeId ? updateMutation : createMutation
+    const { error: errorResponse, isPending, reset } = createMutation
 
     const error = serverRequestErrExtractor({ error: errorResponse })
 
@@ -132,6 +118,38 @@ const ChargesRateSchemeCreateUpdateForm = ({
                         />
                         <FormFieldWrapper
                             control={form.control}
+                            label="Icon"
+                            name="icon"
+                            render={({ field }) => (
+                                <IconCombobox
+                                    {...field}
+                                    disabled={isDisabled(field.name)}
+                                    onChange={field.onChange}
+                                    placeholder="Scheme Icon"
+                                    value={field.value as TIcon}
+                                />
+                            )}
+                        />
+
+                        <FormFieldWrapper
+                            control={form.control}
+                            label="Currency"
+                            name="currency_id"
+                            render={({ field }) => (
+                                <CurrencyCombobox
+                                    {...field}
+                                    className="w-fit"
+                                    disabled={isDisabled(field.name)}
+                                    onChange={(currency) =>
+                                        field.onChange(currency.id)
+                                    }
+                                    placeholder="Description"
+                                    value={field.value}
+                                />
+                            )}
+                        />
+                        <FormFieldWrapper
+                            control={form.control}
                             label="Description"
                             name="description"
                             render={({ field }) => (
@@ -155,16 +173,14 @@ const ChargesRateSchemeCreateUpdateForm = ({
                         reset()
                     }}
                     readOnly={formProps.readOnly}
-                    submitText={
-                        formProps.chargesRateSchemeId ? 'Update' : 'Create'
-                    }
+                    submitText="Create"
                 />
             </form>
         </Form>
     )
 }
 
-export const ChargesRateSchemeCreateUpdateFormModal = ({
+export const ChargesRateSchemeCreateFormModal = ({
     title = 'Create Charges Rate Scheme',
     description = 'Fill out the form to add a new charges rate scheme.',
     className,
@@ -175,12 +191,12 @@ export const ChargesRateSchemeCreateUpdateFormModal = ({
 }) => {
     return (
         <Modal
-            className={cn('', className)}
+            className={cn('max-w-2xl w-full', className)}
             description={description}
             title={title}
             {...props}
         >
-            <ChargesRateSchemeCreateUpdateForm
+            <ChargesRateSchemeCreateForm
                 {...formProps}
                 onSuccess={(createdData) => {
                     formProps?.onSuccess?.(createdData)
@@ -191,4 +207,4 @@ export const ChargesRateSchemeCreateUpdateFormModal = ({
     )
 }
 
-export default ChargesRateSchemeCreateUpdateForm
+export default ChargesRateSchemeCreateForm

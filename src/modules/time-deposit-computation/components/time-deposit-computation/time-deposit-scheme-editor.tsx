@@ -2,7 +2,7 @@ import { useState } from 'react'
 
 import { cn } from '@/helpers'
 import { useAuthUserWithOrgBranch } from '@/modules/authentication/authgentication.store'
-import ChargesRateSchemeCreateUpdateForm from '@/modules/charges-rate-scheme/components/forms/charges-rate-scheme-create-update-form'
+// import ChargesRateSchemeCreateUpdateForm from '@/modules/charges-rate-scheme/components/forms/charges-rate-scheme-update-form'
 import { RefreshCcwIcon } from 'lucide-react'
 import { PiIdentificationBadgeFill } from 'react-icons/pi'
 
@@ -80,7 +80,7 @@ const TimeDepositSchemeEditor = ({ className }: Props) => {
                 </div>
             ) : (
                 <>
-                    <ChargesRateSchemeCreateUpdateForm className="w-64" />
+                    {/* <ChargesRateSchemeCreateUpdateFormModal className="w-64" /> */}
                 </>
             )}
         </div>

@@ -5,10 +5,12 @@ import {
     HookQueryOptions,
     createDataLayerFactory,
 } from '@/providers/repositories/data-layer-factory'
+import { createMutationFactory } from '@/providers/repositories/mutation-factory'
 
 import { TAPIQueryOptions, TEntityId } from '@/types'
 
 import type {
+    ICharegesRateSchemeCreateRequest,
     IChargesRateScheme,
     IChargesRateSchemeRequest,
     TChargesRateSchemeHookMode,
@@ -45,7 +47,7 @@ export const {
 export { chargesRateSchemeBaseKey } // Exported in case it's needed outside
 
 export const {
-    useCreate: useCreateChargesRateScheme,
+    // useCreate: useCreateChargesRateScheme,
     useUpdateById: useUpdateChargesRateSchemeById,
 
     // useGetAll: useGetAllChargesRateScheme,
@@ -55,6 +57,26 @@ export const {
     useDeleteById: useDeleteChargesRateSchemeById,
     useDeleteMany: useDeleteManyChargesRateScheme,
 } = apiCrudHooks
+
+// custom create since not all is required in create
+
+export const useCreateChargesRateScheme = createMutationFactory<
+    IChargesRateScheme,
+    Error,
+    ICharegesRateSchemeCreateRequest
+>({
+    mutationFn: async (payload) => {
+        const response = await API.post<
+            ICharegesRateSchemeCreateRequest,
+            IChargesRateScheme
+        >(`${chargesRateSchemeAPIRoute}`, payload)
+        return response.data
+    },
+    defaultInvalidates: [
+        [chargesRateSchemeBaseKey, 'paginated'],
+        [chargesRateSchemeBaseKey, 'all'],
+    ],
+})
 
 export const useGetAllChargesRateScheme = ({
     mode = 'all',

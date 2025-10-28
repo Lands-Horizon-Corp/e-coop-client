@@ -1,8 +1,6 @@
-import { useState } from 'react';
+import { useState } from 'react'
 
-
-
-import { cn } from '@/helpers';
+import { cn } from '@/helpers'
 import { useAuthUserWithOrgBranch } from '@/modules/authentication/authgentication.store'
 
 import { GridFillIcon } from '@/components/icons'
@@ -17,7 +15,7 @@ import {
 import { IClassProps } from '@/types'
 
 import { IChargesRateScheme } from '../../charges-rate-scheme.types'
-import ChargesRateSchemeCreateUpdateForm from '../forms/charges-rate-scheme-create-update-form'
+import ChargesRateSchemeUpdateForm from '../forms/charges-rate-scheme-update-form'
 import ChargesRateSchemesSidebar from './charges-rate-schemes-sidebar'
 
 interface Props extends IClassProps {}
@@ -71,7 +69,13 @@ const ChargesRateSchemeEditor = ({ className }: Props) => {
                 </Empty>
             ) : (
                 <>
-                    <ChargesRateSchemeCreateUpdateForm className="w-64" />
+                    <ChargesRateSchemeUpdateForm
+                        chargesRateSchemeId={chargesRateScheme.id}
+                        className="flex-1 p-4 rounded-xl bg-popover/70"
+                        defaultValues={chargesRateScheme}
+                        key={chargesRateScheme.id}
+                    />
+                    <div></div>
                 </>
             )}
         </div>

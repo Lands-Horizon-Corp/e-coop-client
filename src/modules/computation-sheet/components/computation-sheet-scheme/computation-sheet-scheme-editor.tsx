@@ -1,9 +1,7 @@
 import { useState } from 'react'
 
 import { cn } from '@/helpers'
-import { useAuthUserWithOrgBranch } from '@/modules/authentication/authgentication.store';
-
-
+import { useAuthUserWithOrgBranch } from '@/modules/authentication/authgentication.store'
 
 import { LayersIcon } from '@/components/icons'
 import {
