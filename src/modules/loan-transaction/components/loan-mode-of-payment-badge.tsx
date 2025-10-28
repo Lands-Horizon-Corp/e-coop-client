@@ -10,7 +10,7 @@ import {
     PrinterIcon,
 } from '@/components/icons'
 
-import { TLoanStatusTypeOfPayment } from '../loan-transaction.types'
+import { TLoanModeOfPayment } from '../loan-transaction.types'
 
 // Map mode of payment to icon and label
 const loanModeOfPaymentIcons = {
@@ -82,7 +82,7 @@ export interface LoanModeOfPaymentBadgeProps
     extends VariantProps<typeof loanModeOfPaymentVariants> {
     className?: string
     showIcon?: boolean
-    mode: TLoanStatusTypeOfPayment
+    mode: TLoanModeOfPayment
 }
 
 const LoanModeOfPaymentBadge = ({

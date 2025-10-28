@@ -34,7 +34,7 @@ import {
     WEEKDAYS,
 } from './loan.constants'
 
-export type TLoanStatusTypeOfPayment = (typeof LOAN_MODE_OF_PAYMENT)[number]
+export type TLoanModeOfPayment = (typeof LOAN_MODE_OF_PAYMENT)[number]
 
 export type TWeekdays = (typeof WEEKDAYS)[number]
 
@@ -85,7 +85,7 @@ export interface ILoanTransaction
     fines?: number
     interest?: number
 
-    mode_of_payment: TLoanStatusTypeOfPayment
+    mode_of_payment: TLoanModeOfPayment
     mode_of_payment_weekly: TWeekdays
     mode_of_payment_fixed_days?: number
     mode_of_payment_semi_monthly_pay_1: number
