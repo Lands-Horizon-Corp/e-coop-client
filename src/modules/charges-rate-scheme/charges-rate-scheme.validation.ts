@@ -10,14 +10,14 @@ import { ChargesRateByRangeOrMinimumAmountSchema } from '../charges-rate-by-rang
 import { ChargesRateByTermSchema } from '../charges-rate-by-term'
 import { chargesRateSchemeAccountSchema } from '../charges-rate-scheme-account'
 import { ChargesRateSchemeModeOfPaymentSchema } from '../charges-rate-scheme-mode-of-payment'
+import { LOAN_MODE_OF_PAYMENT } from '../loan-transaction/loan.constants'
 import { CHARGES_RATE_SCHEME_TYPE } from './charges-rate.constant'
 
 export const ChargesRateCreateSchemeSchema = z.object({
     id: entityIdSchema.optional(),
     name: z.string().min(1, 'ChargesRateScheme name is required'),
-    description: z
+    description: z.coerce
         .string()
-        .min(10, 'Min 10 character description')
         .optional()
         .transform(descriptionTransformerSanitizer),
 
@@ -100,6 +100,10 @@ export const ChargesRateSchemeSchema = ChargesRateCreateSchemeSchema.extend({
     charges_rate_scheme_model_of_payments_deleted: z
         .array(entityIdSchema.optional())
         .optional(),
+
+    member_type_id: entityIdSchema.optional(),
+    member_type: z.any().optional(),
+    mode_of_payment: z.enum(LOAN_MODE_OF_PAYMENT).optional(),
 })
 
 export type TChargesRateSchemeSchema = z.infer<typeof ChargesRateSchemeSchema>

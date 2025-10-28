@@ -159,3 +159,29 @@ export function CurrencyBadge({
 
 export { currencyBadgeVariants, emojiSizeVariants, symbolSizeVariants }
 export type CurrencyBadgeVariants = VariantProps<typeof currencyBadgeVariants>
+
+interface CurrencyCountryFlagProps {
+    currency: ICurrency
+    className?: string
+    height?: number
+}
+
+export function CurrencyCountryFlag({
+    currency,
+    className,
+    height = 20,
+}: CurrencyCountryFlagProps) {
+    const alpha2 =
+        currency.iso_3166_alpha2 || findCountry(currency?.country)?.alpha2 || ''
+
+    return (
+        <CircleFlag
+            className={cn(
+                'inline-flex h-5 w-5 shrink-0 items-center justify-center overflow-hidden rounded-full',
+                className
+            )}
+            countryCode={alpha2.toLowerCase()}
+            height={height}
+        />
+    )
+}
