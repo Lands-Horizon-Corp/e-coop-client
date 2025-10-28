@@ -155,12 +155,14 @@ export const AccountAction = ({
                     {...confirmModal}
                     mode={mode}
                     name={row.original.name}
+
                     onConfirm={() => {
                         if (mode === 'delete') {
                             deleteAccount(row.original.id)
                         } else {
                             updateModal.onOpenChange(true)
                         }
+                        confirmModal.onOpenChange(false)
                     }}
                 />
                 <Modal
