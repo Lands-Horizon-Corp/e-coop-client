@@ -10,13 +10,11 @@ import useConfirmModalStore from '@/store/confirm-modal-store'
 import {
     DotsVerticalIcon,
     MagnifyingGlassIcon,
-    PencilFillIcon,
     PlusIcon,
     RefreshIcon,
     TrashIcon,
 } from '@/components/icons'
 import LoadingSpinner from '@/components/spinners/loading-spinner'
-import InfoTooltip from '@/components/tooltips/info-tooltip'
 import { Button } from '@/components/ui/button'
 import {
     ContextMenu,
@@ -47,7 +45,7 @@ import {
     useGetAllChargesRateScheme,
 } from '../../charges-rate-scheme.service'
 import { IChargesRateScheme } from '../../charges-rate-scheme.types'
-import { ChargesRateSchemeCreateUpdateFormModal } from '../forms/charges-rate-scheme-create-update-form'
+import { ChargesRateSchemeCreateFormModal } from '../forms/charges-rate-scheme-create-form'
 
 interface Props extends IClassProps {
     selectedId?: TEntityId
@@ -104,7 +102,7 @@ const ChargesRateSchemesSidebar = ({
                 <MagnifyingGlassIcon className="inline text-muted-foreground/70 duration-200 ease-out group-hover:text-foreground absolute top-1/2 -translate-y-1/2 right-4" />
             </div>
             <div className="flex items-center justify-between gap-x-2">
-                <ChargesRateSchemeCreateUpdateFormModal
+                <ChargesRateSchemeCreateFormModal
                     {...createModal}
                     formProps={{
                         defaultValues: {
@@ -179,7 +177,6 @@ const ChargesRateScheme = ({
     handleSelect: (scheme: IChargesRateScheme) => void
     onDeletedScheme?: (scheme: IChargesRateScheme) => void
 }) => {
-    const editModal = useModalState()
     const { onOpen } = useConfirmModalStore()
 
     const { mutate: deleteScheme, isPending: isDeleting } =
@@ -194,96 +191,69 @@ const ChargesRateScheme = ({
     return (
         <ContextMenu>
             <ContextMenuTrigger asChild>
-                <InfoTooltip
-                    content={
-                        <p className="text-pretty text-xs max-w-[400px]">
-                            {scheme.description || 'No description available'}
-                        </p>
-                    }
-                    side="right"
+                <div
+                    className={cn(
+                        'p-2 rounded-lg bg-card border flex focus:bg-primary focus:outline-none focus:ring focus:ring-ring focus:text-primary-foreground justify-between relative duration-200 ease-in-out cursor-pointer hover:border-primary/40 hover:bg-primary/20',
+                        selected &&
+                            'border-primary/60 text-primary-foreground bg-primary/80'
+                    )}
+                    key={scheme.id}
+                    onClick={() => handleSelect(scheme)}
+                    tabIndex={0}
                 >
-                    <div
-                        className={cn(
-                            'p-2 rounded-lg bg-card border flex focus:bg-primary focus:outline-none focus:ring focus:ring-ring focus:text-primary-foreground justify-between relative duration-200 ease-in-out cursor-pointer hover:border-primary/40 hover:bg-primary/20',
-                            selected &&
-                                'border-primary/60 text-primary-foreground bg-primary/80'
-                        )}
-                        key={scheme.id}
-                        onClick={() => handleSelect(scheme)}
-                        tabIndex={0}
-                    >
-                        {/* <ComputationSheetCreateUpdateFormModal
-                            {...editModal}
-                            formProps={{
-                                computationSheetId: scheme?.id,
-                                defaultValues: scheme,
-                            }}
-                            hideOnSuccess={false}
-                        /> */}
-                        <div className=" flex-1">
-                            <p className="truncate">
-                                <span>{scheme.name}</span>
-                            </p>
-                            <CurrencyBadge
-                                currency={scheme.currency}
-                                displayFormat="symbol-code"
-                                size="sm"
-                            />
-                        </div>
-                        <DropdownMenu>
-                            <DropdownMenuTrigger asChild>
-                                <Button
-                                    className="opacity-40 hover:opacity-100 size-fit shrink-0 p-1 rounded-full"
-                                    size="icon"
-                                    variant="ghost"
-                                >
-                                    <DotsVerticalIcon />
-                                </Button>
-                            </DropdownMenuTrigger>
-                            <DropdownMenuContent className="space-y-1">
-                                <DropdownMenuLabel className="text-muted-foreground/80">
-                                    Action
-                                </DropdownMenuLabel>
-                                <DropdownMenuSeparator />
-                                <DropdownMenuItem
-                                    onClick={() => editModal.onOpenChange(true)}
-                                >
-                                    <PencilFillIcon className="opacity-60 mr-1" />
-                                    Edit
-                                </DropdownMenuItem>
-                                <DropdownMenuItem
-                                    className="bg-destructive/05 text-destructive focus:bg-destructive focus:text-destructive-foreground"
-                                    disabled={isDeleting}
-                                    onClick={(e) => {
-                                        e.stopPropagation()
-                                        e.preventDefault()
-
-                                        onOpen({
-                                            title: 'Delete charges rate scheme',
-                                            description: `You are about to delete '${scheme.name}'. Are you sure to proceed?`,
-                                            confirmString: 'Delete',
-                                            onConfirm: () =>
-                                                deleteScheme(scheme.id),
-                                        })
-                                    }}
-                                >
-                                    <TrashIcon className="opacity-60 mr-1" />
-                                    Delete
-                                </DropdownMenuItem>
-                            </DropdownMenuContent>
-                        </DropdownMenu>
+                    <div className=" flex-1">
+                        <p className="truncate">
+                            <span>{scheme.name}</span>
+                        </p>
+                        <CurrencyBadge
+                            currency={scheme.currency}
+                            displayFormat="symbol-code"
+                            size="sm"
+                        />
                     </div>
-                </InfoTooltip>
+                    <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                            <Button
+                                className="opacity-40 hover:opacity-100 size-fit shrink-0 p-1 rounded-full"
+                                size="icon"
+                                variant="ghost"
+                            >
+                                <DotsVerticalIcon />
+                            </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent className="space-y-1">
+                            <DropdownMenuLabel className="text-muted-foreground/80">
+                                Action
+                            </DropdownMenuLabel>
+                            <DropdownMenuSeparator />
+                            <DropdownMenuItem
+                                className="bg-destructive/05 text-destructive focus:bg-destructive focus:text-destructive-foreground"
+                                disabled={isDeleting}
+                                onClick={(e) => {
+                                    e.stopPropagation()
+                                    e.preventDefault()
+
+                                    onOpen({
+                                        title: 'Delete charges rate scheme',
+                                        description: `You are about to delete '${scheme.name}'. Are you sure to proceed?`,
+                                        confirmString: 'Delete',
+                                        onConfirm: () =>
+                                            deleteScheme(scheme.id),
+                                    })
+                                }}
+                            >
+                                <TrashIcon className="opacity-60 mr-1" />
+                                Delete
+                            </DropdownMenuItem>
+                        </DropdownMenuContent>
+                    </DropdownMenu>
+                </div>
             </ContextMenuTrigger>
             <ContextMenuContent>
                 <ContextMenuLabel className="text-muted-foreground/80">
                     Action
                 </ContextMenuLabel>
                 <ContextMenuSeparator />
-                <ContextMenuItem onClick={() => editModal.onOpenChange(true)}>
-                    <PencilFillIcon className="opacity-60 mr-1" />
-                    Edit
-                </ContextMenuItem>
                 <ContextMenuItem
                     className="bg-destructive/05 text-destructive focus:bg-destructive focus:text-destructive-foreground"
                     disabled={isDeleting}

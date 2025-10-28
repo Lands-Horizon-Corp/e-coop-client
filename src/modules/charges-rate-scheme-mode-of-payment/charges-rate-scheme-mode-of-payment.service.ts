@@ -1,49 +1,55 @@
 import { Logger } from '@/helpers/loggers'
+import { createDataLayerFactory } from '@/providers/repositories/data-layer-factory'
+
 import type {
     IChargesRateSchemeModeOfPayment,
     IChargesRateSchemeModeOfPaymentRequest,
-} from '@/modules/charges-rate-scheme-mode-of-payment'
-import { createDataLayerFactory } from '@/providers/repositories/data-layer-factory'
+} from '.'
 
 const {
     apiCrudHooks,
     apiCrudService,
-    baseQueryKey: chargesRateMemberTypeModeOfPaymentBaseKey,
+    baseQueryKey: chargesRateSchemeModeOfPaymentBaseKey,
 } = createDataLayerFactory<
     IChargesRateSchemeModeOfPayment,
     IChargesRateSchemeModeOfPaymentRequest
 >({
-    url: '/api/v1/charges-rate-scheme-mode-of-payment',
-    baseKey: 'charges-rate-scheme-mode-of-payment',
+    url: '/api/v1/charges-rate-schema-mode-of-payment',
+    baseKey: 'charges-rate-schema-mode-of-payment',
 })
 
+// ⚙️🛠️ API SERVICE HERE
 export const {
-    API,
-    route: chargesRateMemberTypeModeOfPaymentAPIRoute,
+    API, // rarely used, for raw calls
+    route: chargesRateSchemeModeOfPaymentAPIRoute, // matches url above
 
-    create: createChargesRateMemberTypeModeOfPayment,
-    updateById: updateChargesRateMemberTypeModeOfPaymentById,
+    create: createChargesRateSchemeModeOfPayment,
+    updateById: updateChargesRateSchemeModeOfPaymentById,
 
-    deleteById: deleteChargesRateMemberTypeModeOfPaymentById,
-    deleteMany: deleteManyChargesRateMemberTypeModeOfPayment,
+    deleteById: deleteChargesRateSchemeModeOfPaymentById,
+    deleteMany: deleteManyChargesRateSchemeModeOfPayment,
 
-    getById: getChargesRateMemberTypeModeOfPaymentById,
-    getAll: getAllChargesRateMemberTypeModeOfPayment,
-    getPaginated: getPaginatedChargesRateMemberTypeModeOfPayment,
+    getById: getChargesRateSchemeModeOfPaymentById,
+    getAll: getAllChargesRateSchemeModeOfPayment,
+    getPaginated: getPaginatedChargesRateSchemeModeOfPayment,
 } = apiCrudService
 
-export { chargesRateMemberTypeModeOfPaymentBaseKey }
+// custom service functions can go here
+
+// 🪝 HOOK STARTS HERE
+export { chargesRateSchemeModeOfPaymentBaseKey } // Exported in case it's needed outside
 
 export const {
-    useCreate: useCreateChargesRateMemberTypeModeOfPayment,
-    useUpdateById: useUpdateChargesRateMemberTypeModeOfPaymentById,
+    useCreate: useCreateChargesRateSchemeModeOfPayment,
+    useUpdateById: useUpdateChargesRateSchemeModeOfPaymentById,
 
-    useGetAll: useGetAllChargesRateMemberTypeModeOfPayment,
-    useGetById: useGetChargesRateMemberTypeModeOfPaymentById,
-    useGetPaginated: useGetPaginatedChargesRateMemberTypeModeOfPayment,
+    useGetAll: useGetAllChargesRateSchemeModeOfPayment,
+    useGetById: useGetChargesRateSchemeModeOfPaymentById,
+    useGetPaginated: useGetPaginatedChargesRateSchemeModeOfPayment,
 
-    useDeleteById: useDeleteChargesRateMemberTypeModeOfPaymentById,
-    useDeleteMany: useDeleteManyChargesRateMemberTypeModeOfPayment,
+    useDeleteById: useDeleteChargesRateSchemeModeOfPaymentById,
+    useDeleteMany: useDeleteManyChargesRateSchemeModeOfPayment,
 } = apiCrudHooks
 
-export const logger = Logger.getInstance('charges-rate-scheme-mode-of-payment')
+export const logger = Logger.getInstance('charges-rate-schema-mode-of-payment')
+// custom hooks can go here

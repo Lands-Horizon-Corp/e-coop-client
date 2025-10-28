@@ -5,7 +5,7 @@ import { IBaseEntityMeta, IPaginatedResult, TEntityId } from '@/types'
 import { IAccount } from '../account'
 import { IAmortizationPayment, IAmortizationSummary } from '../amortization'
 import { ICurrency } from '../currency'
-import { TLoanStatusTypeOfPayment } from '../loan-transaction'
+import { TLoanModeOfPayment } from '../loan-transaction'
 import { ComputationSheetSchema } from './computation-sheet.validation'
 
 export interface IComputationSheet extends IBaseEntityMeta {
@@ -36,7 +36,7 @@ export interface IComputationSheetPaginated
 export interface IComputationSheetCalculatorRequest {
     terms: number
     account_id: TEntityId
-    mode_of_payment: TLoanStatusTypeOfPayment
+    mode_of_payment: TLoanModeOfPayment
     fixed_days?: number
     weekdays?: number
     pay_1?: number

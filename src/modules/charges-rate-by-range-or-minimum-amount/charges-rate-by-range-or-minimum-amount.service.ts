@@ -1,10 +1,10 @@
 import { Logger } from '@/helpers/loggers'
 import { createDataLayerFactory } from '@/providers/repositories/data-layer-factory'
 
-import {
+import type {
     IChargesRateByRangeOrMinimumAmount,
     IChargesRateByRangeOrMinimumAmountRequest,
-} from './charges-by-range-or-minimum-amount.types'
+} from '../charges-rate-by-range-or-minimum-amount'
 
 const {
     apiCrudHooks,
@@ -18,9 +18,10 @@ const {
     baseKey: 'charges-rate-by-range-or-minimum-amount',
 })
 
+// ⚙️🛠️ API SERVICE HERE
 export const {
-    API,
-    route: chargesRateByRangeOrMinimumAmountAPIRoute,
+    API, // rarely used, for raw calls
+    route: chargesRateByRangeOrMinimumAmountAPIRoute, // matches url above
 
     create: createChargesRateByRangeOrMinimumAmount,
     updateById: updateChargesRateByRangeOrMinimumAmountById,
@@ -33,7 +34,10 @@ export const {
     getPaginated: getPaginatedChargesRateByRangeOrMinimumAmount,
 } = apiCrudService
 
-export { chargesRateByRangeOrMinimumAmountBaseKey }
+// custom service functions can go here
+
+// 🪝 HOOK STARTS HERE
+export { chargesRateByRangeOrMinimumAmountBaseKey } // Exported in case it's needed outside
 
 export const {
     useCreate: useCreateChargesRateByRangeOrMinimumAmount,
@@ -50,3 +54,4 @@ export const {
 export const logger = Logger.getInstance(
     'charges-rate-by-range-or-minimum-amount'
 )
+// custom hooks can go here

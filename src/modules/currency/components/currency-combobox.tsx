@@ -81,7 +81,7 @@ const CurrencyCombobox = ({
         switch (formatMode) {
             case 'emoji-name-code':
                 return (
-                    <div className="flex items-center gap-2 min-w-0">
+                    <div className="flex flex-1 items-center max-w-full gap-2 min-w-0">
                         <CircleFlag
                             className={cn(
                                 'inline-flex size-5 shrink-0 items-center justify-center overflow-hidden rounded-full'
@@ -98,7 +98,7 @@ const CurrencyCombobox = ({
                 )
             case 'symbol-name-code':
                 return (
-                    <div className="flex items-center gap-2 min-w-0">
+                    <div className="flex flex-1 items-center max-w-full gap-2 min-w-0">
                         {currency.symbol && (
                             <span className="text-lg flex-shrink-0">
                                 {currency.symbol}
@@ -124,7 +124,7 @@ const CurrencyCombobox = ({
                 )
             case 'country':
                 return (
-                    <div className="flex items-center gap-2 min-w-0">
+                    <div className="flex flex-1 items-center max-w-full gap-2 min-w-0">
                         <CircleFlag
                             className={cn(
                                 'inline-flex size-5 shrink-0 items-center justify-center overflow-hidden rounded-full'
@@ -174,7 +174,10 @@ const CurrencyCombobox = ({
                 <PopoverTrigger asChild>
                     <Button
                         aria-expanded={open}
-                        className={cn('w-full justify-between px-3', className)}
+                        className={cn(
+                            'w-full flex items-center px-3',
+                            className
+                        )}
                         disabled={disabled || isLoading}
                         role="combobox"
                         variant="outline"
@@ -189,7 +192,7 @@ const CurrencyCombobox = ({
                                 {placeholder}
                             </span>
                         )}
-                        <ChevronDownIcon className="opacity-50 flex-shrink-0" />
+                        <ChevronDownIcon className="opacity-50 shrink-0" />
                     </Button>
                 </PopoverTrigger>
                 <PopoverContent className="max-h-[--radix-popover-content-available-height] w-[--radix-popover-trigger-width] p-0">

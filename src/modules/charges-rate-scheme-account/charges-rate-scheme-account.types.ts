@@ -1,4 +1,3 @@
-import { IChargesRateScheme } from '@/modules/charges-rate-scheme'
 import {
     IAuditable,
     IOrgBranchIdentity,
@@ -7,6 +6,7 @@ import {
 } from '@/types/common'
 
 import { IAccount } from '../account'
+import { IChargesRateScheme } from '../charges-rate-scheme'
 
 export interface IChargesRateSchemeAccountRequest {
     charges_rate_scheme_id: TEntityId
