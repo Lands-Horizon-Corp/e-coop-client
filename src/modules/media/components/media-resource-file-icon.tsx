@@ -1,14 +1,18 @@
 import { cn } from '@/helpers'
-import { getFileCategory } from '@/helpers/common-helper'
 import { IMedia } from '@/modules/media'
 import { IconType } from 'react-icons/lib'
 
 import {
+    BookOpenIcon,
+    CodeFileFillIcon,
+    CompressedFileFillIcon,
     DocumentFileFillIcon,
     FileFillIcon,
+    FontFileFillIcon,
     ImageFileFillIcon,
     MusicFileFillIcon,
     PDFFileFillIcon,
+    PresentationFileFillIcon,
     SpreadSheetFileIcon,
     TextFileFillIcon,
     VideoFileFillIcon,
@@ -16,12 +20,15 @@ import {
 
 import { IClassProps } from '@/types'
 
+import { getFileCategory, getFileInfo } from '../'
+
 interface Props {
-    media: IMedia
+    media: IMedia | File
 }
 
 export const getMediaResourceFileIcon = ({ media }: Props): IconType => {
-    const category = getFileCategory(media.file_name, media.file_type)
+    const { fullFileName, fileType } = getFileInfo(media)
+    const category = getFileCategory(fullFileName, fileType)
 
     switch (category) {
         case 'pdf':
@@ -38,19 +45,31 @@ export const getMediaResourceFileIcon = ({ media }: Props): IconType => {
             return DocumentFileFillIcon
         case 'sheet':
             return SpreadSheetFileIcon
+        case 'compressed':
+            return CompressedFileFillIcon
+        case 'code':
+            return CodeFileFillIcon
+        case 'font':
+            return FontFileFillIcon
+        case 'ebook':
+            return BookOpenIcon
+        case 'presentation':
+            return PresentationFileFillIcon
     }
 
     return FileFillIcon
 }
 
-const commonIconClass = 'size-fit rounded-sm p-1'
+const commonIconClass =
+    'flex size-full items-center justify-center rounded-sm p-2'
 
 const MediaResourceFileIcon = ({
     media,
     className,
     iconClassName,
-}: { media: IMedia; iconClassName?: string } & IClassProps) => {
-    const category = getFileCategory(media.file_name, media.file_type)
+}: { media: IMedia | File; iconClassName?: string } & IClassProps) => {
+    const { fullFileName, fileType } = getFileInfo(media)
+    const category = getFileCategory(fullFileName, fileType)
 
     switch (category) {
         case 'pdf':
@@ -123,6 +142,54 @@ const MediaResourceFileIcon = ({
                     className={cn('text-primary', commonIconClass, className)}
                 >
                     <SpreadSheetFileIcon className={iconClassName} />
+                </span>
+            )
+        case 'compressed':
+            return (
+                <span
+                    className={cn('text-amber-500', commonIconClass, className)}
+                >
+                    <CompressedFileFillIcon className={iconClassName} />
+                </span>
+            )
+        case 'code':
+            return (
+                <span
+                    className={cn('text-green-500', commonIconClass, className)}
+                >
+                    <CodeFileFillIcon className={iconClassName} />
+                </span>
+            )
+        case 'font':
+            return (
+                <span
+                    className={cn('text-slate-500', commonIconClass, className)}
+                >
+                    <FontFileFillIcon className={iconClassName} />
+                </span>
+            )
+        case 'ebook':
+            return (
+                <span
+                    className={cn(
+                        'text-indigo-500',
+                        commonIconClass,
+                        className
+                    )}
+                >
+                    <BookOpenIcon className={iconClassName} />
+                </span>
+            )
+        case 'presentation':
+            return (
+                <span
+                    className={cn(
+                        'text-orange-500',
+                        commonIconClass,
+                        className
+                    )}
+                >
+                    <PresentationFileFillIcon className={iconClassName} />
                 </span>
             )
     }
