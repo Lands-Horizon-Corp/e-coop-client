@@ -65,17 +65,7 @@ const OrganizationCategoryPicker = ({
                 }
                 title="Select Category"
             >
-                <ScrollArea className="relative flex max-h-32 gap-2 overflow-auto overflow-y-hidden rounded-2xl border py-3">
-                    {!isSelectedCategoryEmmpty && (
-                        <Button
-                            className="absolute right-1 top-1 max-h-6 cursor-pointer p-0 px-2 text-xs"
-                            onClick={() => clearCategories()}
-                            size={'sm'}
-                            variant={'ghost'}
-                        >
-                            clear all
-                        </Button>
-                    )}
+                <ScrollArea className="relative flex ecoop-scroll max-h-32 gap-2 overflow-auto overflow-y-hidden rounded-2xl border py-3">
                     {isSelectedCategoryEmmpty ? (
                         <div className="flex flex-col items-center justify-center gap-y-2 text-center text-xs text-secondary-foreground/30">
                             Select a Category
@@ -101,9 +91,19 @@ const OrganizationCategoryPicker = ({
                         })
                     )}
                 </ScrollArea>
+                {!isSelectedCategoryEmmpty && (
+                    <Button
+                        className="max-h-6 cursor-pointer p-0 px-2 text-xs"
+                        onClick={() => clearCategories()}
+                        size={'sm'}
+                        variant={'secondary'}
+                    >
+                        clear all
+                    </Button>
+                )}
                 <Command className="rounded-lg border shadow-md md:min-w-[450px]">
                     <CommandInput placeholder="Type a command or search..." />
-                    <CommandList>
+                    <CommandList className="ecoop-scroll">
                         <CommandEmpty>No results found.</CommandEmpty>
                         {data?.map((category: ICategory) => {
                             return (

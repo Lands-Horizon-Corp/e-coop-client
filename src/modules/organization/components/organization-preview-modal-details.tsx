@@ -1,5 +1,3 @@
-import React from 'react'
-
 import { cn } from '@/helpers'
 import {
     BuildingIcon,
@@ -21,10 +19,10 @@ interface OrganizationDetailsProps {
     onCreateBranch?: () => void
 }
 
-const OrganizationDetails: React.FC<OrganizationDetailsProps> = ({
+const OrganizationPreviewModalDetails = ({
     organization,
     categories = [],
-}) => {
+}: OrganizationDetailsProps) => {
     return (
         <div className="space-y-6 py-6 px-8 w-full">
             {/* Header */}
@@ -174,4 +172,4 @@ const OrganizationDetails: React.FC<OrganizationDetailsProps> = ({
     )
 }
 
-export default OrganizationDetails
+export default OrganizationPreviewModalDetails

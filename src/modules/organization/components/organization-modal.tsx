@@ -21,7 +21,7 @@ interface OrganizationModalProps extends IModalProps {
     isLoading?: boolean
 }
 
-const OrganizationModal = ({
+const OrganizationPreviewModal = ({
     organization,
     className,
     showActions = true,
@@ -82,4 +82,4 @@ const OrganizationModal = ({
     )
 }
 
-export default OrganizationModal
+export default OrganizationPreviewModal

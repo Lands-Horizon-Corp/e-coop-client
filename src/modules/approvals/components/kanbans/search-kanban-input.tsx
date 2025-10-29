@@ -179,7 +179,7 @@ export const SearchKanbanInput = <T extends string>({
                         ))}
                     </div>
 
-                    {/* ✅ Updated to use resetAll */}
+                    {/*   Updated to use resetAll */}
                     {(selectedMode || searchAllModes) && (
                         <Button
                             className="text-xs h-7"
