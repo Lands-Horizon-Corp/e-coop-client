@@ -15,7 +15,7 @@ import TruncatedText from '@/components/ui/truncated-text'
 
 import { useModalState } from '@/hooks/use-modal-state'
 
-import OrganizationModal from './organization-modal'
+import OrganizationPreviewModal from './organization-modal'
 
 interface OrganizationItemProps {
     organization: IOrganization
@@ -214,7 +214,7 @@ export const OrganizationItem = ({
     if (variant === 'netflix') {
         return (
             <>
-                <OrganizationModal
+                <OrganizationPreviewModal
                     organization={organization}
                     {...organizationModal}
                     onCreateBranch={handleCreateBranch}
@@ -273,7 +273,7 @@ export const OrganizationItem = ({
                         title=""
                     />
                 </div>
-                <OrganizationModal
+                <OrganizationPreviewModal
                     organization={organization}
                     {...organizationModal}
                     onCreateBranch={handleCreateBranch}
@@ -301,7 +301,7 @@ export const OrganizationItem = ({
                     title=""
                 />
             </div>
-            <OrganizationModal
+            <OrganizationPreviewModal
                 organization={organization}
                 {...organizationModal}
                 onCreateBranch={handleCreateBranch}

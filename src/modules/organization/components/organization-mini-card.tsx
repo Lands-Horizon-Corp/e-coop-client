@@ -2,6 +2,7 @@ import { useQueryClient } from '@tanstack/react-query'
 import { toast } from 'sonner'
 
 import { cn } from '@/helpers/tw-utils'
+import { highlightMatch } from '@/modules/approvals/components/kanbans/journal-voucher/journal-voucher-kanban-main'
 import {
     IOrganization,
     UpdateOrganizationFormModal,
@@ -37,6 +38,7 @@ interface OrganizationMiniCardProps {
     className?: string
     onCardClick?: (organization: IOrganization) => void
     showActions?: boolean
+    searchTerm?: string
 }
 
 export const OrganizationMiniCard = ({
@@ -49,6 +51,7 @@ export const OrganizationMiniCard = ({
     className,
     onCardClick,
     showActions = true,
+    searchTerm,
 }: OrganizationMiniCardProps) => {
     const updateModal = useModalState()
     const queryClient = useQueryClient()
@@ -111,9 +114,19 @@ export const OrganizationMiniCard = ({
             organization.media?.download_url ?? '/placeholder-organization.jpg'
         )
     }
+    const handleSearchTerm = ({
+        searchTerm,
+        name,
+    }: {
+        searchTerm: string
+        name: string
+    }) => {
+        return searchTerm
+            ? highlightMatch(name || '-', searchTerm)
+            : name || '-'
+    }
     const CustomHeader = () => (
         <div className="space-y-3 !h-full">
-            {/* Organization Name and Subscription */}
             <div className="flex items-start justify-between gap-2">
                 <TooltipProvider>
                     <Tooltip>
@@ -127,7 +140,10 @@ export const OrganizationMiniCard = ({
                                     'truncate cursor-pointer'
                                 )}
                             >
-                                {organizationName}
+                                {handleSearchTerm({
+                                    searchTerm: searchTerm || '',
+                                    name: organizationName,
+                                })}
                             </h3>
                         </TooltipTrigger>
                         <TooltipContent>
@@ -137,38 +153,38 @@ export const OrganizationMiniCard = ({
                 </TooltipProvider>
 
                 <div className="flex items-center gap-1 flex-shrink-0">
-                    {/* Subscription Badge */}
                     {showSubscription && getSubscriptionBadge()}
                 </div>
             </div>
-            {/* Categories */}
-            {showCategories &&
-                organization.organization_categories &&
-                organization.organization_categories.length > 0 && (
-                    <div className="flex items-center gap-1 flex-wrap">
-                        <TagIcon className="h-3 w-3 text-muted-foreground" />
-                        {organization.organization_categories
-                            .slice(0, 3)
-                            .map((orgCat, index) => (
-                                <Badge
-                                    className="text-xs"
-                                    key={index}
-                                    variant="outline"
-                                >
-                                    {orgCat.category?.name}
+            <div className="flex">
+                <TagIcon className="" size={30} />
+                {showCategories &&
+                    organization.organization_categories &&
+                    organization.organization_categories.length > 0 && (
+                        <div className="grow flex h-fit px-2 overflow-x-auto ecoop-scroll gap-1">
+                            {organization.organization_categories
+                                .slice(0, 3)
+                                .map((orgCat, index) => (
+                                    <Badge
+                                        className="text-xs min-w-fit"
+                                        key={index}
+                                        variant="outline"
+                                    >
+                                        {orgCat.category?.name}
+                                    </Badge>
+                                ))}
+                            {organization.organization_categories.length >
+                                3 && (
+                                <Badge className="text-xs" variant="outline">
+                                    +
+                                    {organization.organization_categories
+                                        .length - 3}
                                 </Badge>
-                            ))}
-                        {organization.organization_categories.length > 3 && (
-                            <Badge className="text-xs" variant="outline">
-                                +
-                                {organization.organization_categories.length -
-                                    3}
-                            </Badge>
-                        )}
-                    </div>
-                )}
+                            )}
+                        </div>
+                    )}
+            </div>
 
-            {/* Contact Information */}
             {showContact && variant !== 'compact' && (
                 <div className="space-y-1.5 text-xs text-muted-foreground">
                     {/* Email */}
@@ -182,7 +198,10 @@ export const OrganizationMiniCard = ({
                                         href={`mailto:${organization.email}`}
                                         onClick={(e) => e.stopPropagation()}
                                     >
-                                        {organization.email}
+                                        {handleSearchTerm({
+                                            searchTerm: searchTerm || '',
+                                            name: organization.email,
+                                        })}
                                     </a>
                                 </TooltipTrigger>
                                 <TooltipContent>
@@ -192,7 +211,6 @@ export const OrganizationMiniCard = ({
                         </div>
                     )}
 
-                    {/* Phone */}
                     {organization.contact_number && (
                         <div className="flex items-center gap-2">
                             <PhoneIcon className="h-3 w-3 flex-shrink-0" />
@@ -206,7 +224,6 @@ export const OrganizationMiniCard = ({
                         </div>
                     )}
 
-                    {/* Address */}
                     {organization.address && (
                         <div className="flex items-start gap-2">
                             <BuildingIcon className="h-3 w-3 flex-shrink-0 mt-0.5" />
@@ -225,7 +242,6 @@ export const OrganizationMiniCard = ({
                 </div>
             )}
 
-            {/* Subscription Period */}
             {showSubscription &&
                 organization.subscription_plan &&
                 variant !== 'compact' && (
@@ -248,11 +264,14 @@ export const OrganizationMiniCard = ({
                 <div className="flex items-start gap-2  h-full">
                     <Tooltip delayDuration={700}>
                         <TooltipTrigger asChild>
-                            <span className="line-clamp-4 cursor-pointer hover:text-foreground transition-colors">
-                                {organizationDescription}
+                            <span className="line-clamp-4 cursor-pointer  transition-colors">
+                                {handleSearchTerm({
+                                    searchTerm: searchTerm || '',
+                                    name: organizationDescription,
+                                })}
                             </span>
                         </TooltipTrigger>
-                        <TooltipContent className="max-w-xs text-sm bg-background border py-2">
+                        <TooltipContent className="max-w-xs text-sm text-primary bg-card border py-2">
                             <p>{organizationDescription}</p>
                         </TooltipContent>
                     </Tooltip>

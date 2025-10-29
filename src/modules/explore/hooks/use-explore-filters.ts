@@ -3,31 +3,31 @@ import { useMemo, useState } from 'react'
 import { IBranch } from '@/modules/branch'
 import { IOrganization } from '@/modules/organization'
 
-import useDebounce from '@/hooks/use-debounce'
-
 import { filterBranches, filterOrganizations } from '../utils/data-filters'
 import { sortBranches, sortOrganizations } from '../utils/sorting'
 
 export type ExploreView = 'organizations' | 'branches' | 'map'
 export type SortBy = 'recent' | 'popular' | 'name' | 'location'
 
+// Modified to accept the debounced term as a required argument
 const useExploreFilters = (
     organizations: IOrganization[] = [],
-    branches: IBranch[] = []
+    branches: IBranch[] = [],
+    // ACCEPT THE DEBOUNCED TERM
+    debounceSearchTerm: string
 ) => {
     const [activeView, setActiveView] = useState<ExploreView>('organizations')
-    const [searchTerm, setSearchTerm] = useState('')
+    // REMOVED: [searchTerm, setSearchTerm] and useDebounce(searchTerm, 1500)
     const [selectedCategory, setSelectedCategory] = useState('all')
     const [selectedLocation, setSelectedLocation] = useState('all')
     const [sortBy, setSortBy] = useState<SortBy>('recent')
 
-    const debounceSearchTerm = useDebounce(searchTerm, 400)
-
+    // Filtering logic now depends only on the stable debounceSearchTerm prop
     const filteredOrganizations = useMemo(() => {
         if (!organizations || organizations.length === 0) return []
         const filtered = filterOrganizations(
             organizations,
-            debounceSearchTerm,
+            debounceSearchTerm, // Use the prop
             selectedCategory
         )
         return sortOrganizations(filtered, sortBy)
@@ -37,7 +37,7 @@ const useExploreFilters = (
         if (!branches || branches.length === 0) return []
         const filtered = filterBranches(
             branches,
-            debounceSearchTerm,
+            debounceSearchTerm, // Use the prop
             selectedLocation
         )
         return sortBranches(filtered, sortBy)
@@ -46,7 +46,7 @@ const useExploreFilters = (
     const setters = useMemo(
         () => ({
             setActiveView,
-            setSearchTerm,
+            // REMOVED: setSearchTerm
             setSelectedCategory,
             setSelectedLocation,
             setSortBy,
@@ -56,14 +56,14 @@ const useExploreFilters = (
 
     return {
         activeView,
-        debounceSearchTerm,
+        // REMOVED: debounceSearchTerm (it's passed in)
         selectedCategory,
         selectedLocation,
         sortBy,
         ...setters,
         filteredOrganizations,
         filteredBranches,
-        searchTerm,
+        // REMOVED: searchTerm
     }
 }
 

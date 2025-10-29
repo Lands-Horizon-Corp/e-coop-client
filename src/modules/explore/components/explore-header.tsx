@@ -1,12 +1,23 @@
+import { useEffect, useState } from 'react'
+
 import { MagnifyingGlassIcon as SearchIcon } from '@/components/icons'
 import { Input } from '@/components/ui/input'
 
+import useDebounce from '@/hooks/use-debounce'
+
 type ExploreHeaderProps = {
-    searchTerm: string
     setSearchTerm: (term: string) => void
 }
 
-const ExploreHeader = ({ searchTerm, setSearchTerm }: ExploreHeaderProps) => {
+const ExploreHeader = ({ setSearchTerm }: ExploreHeaderProps) => {
+    const [inputValue, setInputValue] = useState('')
+
+    const debounceSearchTerm = useDebounce(inputValue, 400)
+
+    useEffect(() => {
+        setSearchTerm(debounceSearchTerm)
+    }, [debounceSearchTerm, setSearchTerm])
+
     return (
         <>
             <div className="text-start flex items-center mx-auto !mt-20">
@@ -23,9 +34,9 @@ const ExploreHeader = ({ searchTerm, setSearchTerm }: ExploreHeaderProps) => {
                     <SearchIcon className="absolute left-4 top-1/2 transform -translate-y-1/2 h-5 w-5 text-muted-foreground" />
                     <Input
                         className="pl-12 pr-4 py-3 text-lg border-2 focus:border-primary/50"
-                        onChange={(e) => setSearchTerm(e.target.value)}
+                        onChange={(e) => setInputValue(e.target.value)}
                         placeholder="Search organizations, branches, or locations..."
-                        value={searchTerm}
+                        value={inputValue}
                     />
                 </div>
             </div>

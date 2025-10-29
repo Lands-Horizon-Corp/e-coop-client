@@ -11,7 +11,7 @@ import CreateUpdateBranchFormModal from '@/modules/branch/components/forms/creat
 import { useLocationInfo } from '@/hooks/use-location-info'
 import { useModalState } from '@/hooks/use-modal-state'
 
-import OrganizationDetails from '../../components/organization-details'
+import OrganizationPreviewModalDetails from '../../components/organization-preview-modal-details'
 import { IOrganization } from '../../organization.types'
 
 type OrganizationModalDetailsProps = {
@@ -19,6 +19,7 @@ type OrganizationModalDetailsProps = {
     isPending?: boolean
     showActions?: boolean
     handleJoin?: () => void
+    showBranchesSection?: boolean
 }
 
 const OrganizationModalDetails = ({
@@ -26,6 +27,7 @@ const OrganizationModalDetails = ({
     isPending: isPendingOrganization,
     showActions = true,
     handleJoin,
+    showBranchesSection = true,
 }: OrganizationModalDetailsProps) => {
     const countryCode = useLocationInfo().countryCode
     const queryClient = useQueryClient()
@@ -66,15 +68,17 @@ const OrganizationModalDetails = ({
                 organization={organization}
                 showActions={showActions}
             />
-            <BranchesSection
-                branches={branches}
-                isPending={isPendingBranches}
-                isSeeding={false}
-                onCreateBranch={handleCreateBranch}
-                organizationId={organization.id}
-                showActions={showActions}
-            />
-            <OrganizationDetails
+            {showBranchesSection && (
+                <BranchesSection
+                    branches={branches}
+                    isPending={isPendingBranches}
+                    isSeeding={false}
+                    onCreateBranch={handleCreateBranch}
+                    organizationId={organization.id}
+                    showActions={showActions}
+                />
+            )}
+            <OrganizationPreviewModalDetails
                 onJoin={handleJoin}
                 organization={organization}
                 showActions={showActions}

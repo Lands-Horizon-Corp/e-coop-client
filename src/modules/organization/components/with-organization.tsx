@@ -44,7 +44,7 @@ import { PlainTextEditor } from '@/components/ui/text-editor'
 
 import { useUrlModal } from '@/hooks/use-url-modal'
 
-import OrganizationModal from './organization-modal'
+import OrganizationPreviewModal from './organization-modal'
 
 type UserOrganizationsDashboardProps = {
     organizationsWithBranches: IOrgUserOrganizationGroup[]
@@ -127,7 +127,7 @@ const UserOrganizationsDashboard = ({
 
     return (
         <div className="w-full">
-            <OrganizationModal
+            <OrganizationPreviewModal
                 isLoading={isLoadingOrganization}
                 onOpenChange={onOpenChange}
                 open={isModalOpen}

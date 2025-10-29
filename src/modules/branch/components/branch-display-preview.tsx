@@ -9,9 +9,9 @@ import {
     PinLocationIcon as LocationIcon,
     EmailIcon as MailIcon,
     LocationPinOutlineIcon as MapPinIcon,
-    SettingsIcon,
     StarIcon,
 } from '@/components/icons'
+import { redirectToGoogleMapsDirection } from '@/components/map/map.utils'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Skeleton } from '@/components/ui/skeleton'
@@ -185,28 +185,6 @@ const BranchPreviewDisplay = ({
                                             )}
                                         </div>
                                     </div>
-
-                                    {/* Quick Action Buttons */}
-                                    <div className="flex gap-2">
-                                        {branch?.latitude &&
-                                            branch?.longitude && (
-                                                <Button
-                                                    className="shadow-md hover:shadow-lg transition-all duration-300"
-                                                    onClick={() => {
-                                                        const url = `https://maps.google.com?q=${branch.latitude},${branch.longitude}`
-                                                        window.open(
-                                                            url,
-                                                            '_blank'
-                                                        )
-                                                    }}
-                                                    size="sm"
-                                                    variant="outline"
-                                                >
-                                                    <MapPinIcon className="h-4 w-4 mr-2" />
-                                                    Map
-                                                </Button>
-                                            )}
-                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -246,8 +224,11 @@ const BranchPreviewDisplay = ({
                                         <Button
                                             className="flex-1 sm:flex-initial shadow-sm"
                                             onClick={() => {
-                                                const url = `https://maps.google.com/dir/?api=1&destination=${branch.latitude},${branch.longitude}`
-                                                window.open(url, '_blank')
+                                                redirectToGoogleMapsDirection(
+                                                    branch.latitude as number,
+                                                    branch.longitude as number,
+                                                    true
+                                                )
                                             }}
                                             size="sm"
                                             variant="outline"
@@ -260,46 +241,13 @@ const BranchPreviewDisplay = ({
                             </>
                         )}
                         {/* Details Grid - Netflix Episode Style */}
-                        <div className="grid  grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-3">
-                            {/* Contact Information Card */}
-                            {(branch?.email || branch?.contact_number) && (
-                                <div className="group">
-                                    <div className="relative overflow-hidden">
-                                        <div className="absolute inset-0 bg-gradient-to-br from-blue-500/10 to-cyan-500/10 rounded-2xl" />
-                                        <div className="relative p-6 bg-card/80 backdrop-blur-sm rounded-2xl border border-muted hover:border-blue-300/50 transition-all duration-300 hover:shadow-lg hover:shadow-blue-500/10">
-                                            <div className="flex items-center gap-3 mb-4">
-                                                <div className="w-10 h-10 bg-blue-100 dark:bg-blue-950 rounded-xl flex items-center justify-center">
-                                                    <MailIcon className="h-5 w-5 text-blue-600 dark:text-blue-400" />
-                                                </div>
-                                                <h3 className="font-semibold text-foreground">
-                                                    Contact Info
-                                                </h3>
-                                            </div>
-
-                                            <div className="space-y-3">
-                                                {branch?.email && (
-                                                    <div className="flex items-center gap-3 p-3 rounded-xl bg-muted/30 hover:bg-muted/50 transition-colors duration-200">
-                                                        <MailIcon className="h-4 w-4 text-primary flex-shrink-0" />
-                                                        <a
-                                                            className="text-sm font-medium text-primary hover:text-primary/80 transition-colors truncate"
-                                                            href={`mailto:${branch.email}`}
-                                                        >
-                                                            {branch.email}
-                                                        </a>
-                                                    </div>
-                                                )}
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            )}
-
+                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
                             {/* Location Card */}
-                            <div className="group lg:col-span-1 xl:col-span-2">
+                            <div className="group lg:col-span-3">
                                 <div className="relative overflow-hidden">
                                     <div className="absolute inset-0 bg-gradient-to-br from-red-500/10 to-orange-500/10 rounded-2xl" />
-                                    <div className="relative p-6 bg-card/80 backdrop-blur-sm rounded-2xl border border-muted hover:border-red-300/50 transition-all duration-300 hover:shadow-lg hover:shadow-red-500/10">
-                                        <div className="flex items-center gap-3 mb-4">
+                                    <div className="relative p-3 bg-card/80 backdrop-blur-sm rounded-2xl border border-muted hover:border-primary/50 transition-all duration-300 hover:shadow-lg hover:shadow-red-500/10">
+                                        <div className="flex items-center gap-2 mb-2">
                                             <div className="w-10 h-10 bg-red-100 dark:bg-red-950 rounded-xl flex items-center justify-center">
                                                 <LocationIcon className="h-5 w-5 text-red-600 dark:text-red-400" />
                                             </div>
@@ -334,10 +282,10 @@ const BranchPreviewDisplay = ({
                                                         <Button
                                                             className="bg-background/50 backdrop-blur-sm hover:bg-background/80 transition-all duration-300 hover:scale-105"
                                                             onClick={() => {
-                                                                const url = `https://maps.google.com/dir/?api=1&destination=${branch.latitude},${branch.longitude}`
-                                                                window.open(
-                                                                    url,
-                                                                    '_blank'
+                                                                redirectToGoogleMapsDirection(
+                                                                    branch.latitude as number,
+                                                                    branch.longitude as number,
+                                                                    true
                                                                 )
                                                             }}
                                                             size="sm"
@@ -352,26 +300,32 @@ const BranchPreviewDisplay = ({
                                     </div>
                                 </div>
                             </div>
-                            {/* Branch Settings Card */}
-                            {branch?.branch_setting && (
-                                <div className="group">
+                            {(branch?.email || branch?.contact_number) && (
+                                <div className="group col-span-3">
                                     <div className="relative overflow-hidden">
-                                        <div className="absolute inset-0 bg-gradient-to-br from-purple-500/10 to-indigo-500/10 rounded-2xl" />
-                                        <div className="relative p-6 bg-card/80 backdrop-blur-sm rounded-2xl border border-muted hover:border-purple-300/50 transition-all duration-300 hover:shadow-lg hover:shadow-purple-500/10">
+                                        <div className="absolute inset-0 bg-gradient-to-br from-blue-500/10 to-cyan-500/10 rounded-2xl" />
+                                        <div className="relative p-3 bg-card/80 backdrop-blur-sm rounded-2xl border border-muted hover:border-primary/50 transition-all duration-300 hover:shadow-lg hover:shadow-blue-500/10">
                                             <div className="flex items-center gap-3 mb-4">
-                                                <div className="w-10 h-10 bg-purple-100 dark:bg-purple-950 rounded-xl flex items-center justify-center">
-                                                    <SettingsIcon className="h-5 w-5 text-purple-600 dark:text-purple-400" />
+                                                <div className="w-10 h-10 bg-blue-100 dark:bg-blue-950 rounded-xl flex items-center justify-center">
+                                                    <MailIcon className="h-5 w-5 text-blue-600 dark:text-blue-400" />
                                                 </div>
                                                 <h3 className="font-semibold text-foreground">
-                                                    Configuration
+                                                    Contact Info
                                                 </h3>
                                             </div>
 
-                                            <div className="flex items-center gap-3 p-3 rounded-xl bg-muted/30">
-                                                <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
-                                                <span className="text-sm font-medium text-foreground">
-                                                    Settings Configured
-                                                </span>
+                                            <div className="space-y-3">
+                                                {branch?.email && (
+                                                    <div className="flex items-center gap-3 p-3 rounded-xl bg-muted/30 hover:bg-muted/50 transition-colors duration-200">
+                                                        <MailIcon className="h-4 w-4 text-primary flex-shrink-0" />
+                                                        <a
+                                                            className="text-sm font-medium text-primary hover:text-primary/80 transition-colors truncate"
+                                                            href={`mailto:${branch.email}`}
+                                                        >
+                                                            {branch.email}
+                                                        </a>
+                                                    </div>
+                                                )}
                                             </div>
                                         </div>
                                     </div>
