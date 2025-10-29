@@ -2,8 +2,8 @@ import { useCallback, useState } from 'react'
 
 import { toast } from 'sonner'
 
-import { formatBytes } from '@/helpers/common-helper'
 import { cn } from '@/helpers/tw-utils'
+import { formatBytes } from '@/modules/media'
 import {
     DropzoneOptions,
     FileRejection,
@@ -11,6 +11,7 @@ import {
     useDropzone,
 } from 'react-dropzone'
 
+import FileTypeIcon from '../../modules/media/components/file-type'
 import {
     HardDriveUploadIcon,
     ReplaceIcon,
@@ -18,7 +19,6 @@ import {
     UploadIcon,
 } from '../icons'
 import { Button } from './button'
-import FileTypeIcon from './file-type'
 import { ScrollArea } from './scroll-area'
 
 interface FileUploaderProps extends DropzoneOptions {

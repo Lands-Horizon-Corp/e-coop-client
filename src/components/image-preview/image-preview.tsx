@@ -2,7 +2,8 @@
 import * as React from 'react'
 import { forwardRef, useEffect, useRef, useState } from 'react'
 
-import { cn, formatBytes, formatDate } from '@/helpers'
+import { cn, formatDate } from '@/helpers'
+import { formatBytes } from '@/modules/media'
 import useEmblaCarousel from 'embla-carousel-react'
 
 import {

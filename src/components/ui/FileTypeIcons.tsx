@@ -20,6 +20,11 @@ export const FileTypeIcons = {
             <ImageIcon className="size-5 text-primary/70" />
         </div>
     ),
+    compressed: <Image alt="attachment-compressed" src="" />,
+    code: <Image alt="attachment-code" src="" />,
+    font: <Image alt="attachment-font" src="" />,
+    ebook: <Image alt="attachment-ebook" src="" />,
+    presentation: <Image alt="attachment-presentation" src="" />,
     unknown: (
         <div className="flex size-8 items-center justify-center rounded-sm bg-slate-100">
             <FileXIcon className="size-5 text-slate-800" />

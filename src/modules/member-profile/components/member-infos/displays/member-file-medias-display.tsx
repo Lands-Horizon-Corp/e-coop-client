@@ -1,300 +1,181 @@
-import { useMemo } from 'react'
+import { useMemo, useState } from 'react'
+
+import Fuse from 'fuse.js'
+import { toast } from 'sonner'
 
 import { cn } from '@/helpers'
-import { downloadFile, formatBytes } from '@/helpers/common-helper'
-import { toReadableDate } from '@/helpers/date-utils'
 import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
-import { IMedia } from '@/modules/media'
-import MediaResourceFileIcon from '@/modules/media/components/media-resource-file-icon'
-import { useUserMedias } from '@/modules/user'
 import {
-    ColumnDef,
-    getCoreRowModel,
-    getSortedRowModel,
-    useReactTable,
-} from '@tanstack/react-table'
+    FileItem,
+    FileItemProps,
+    MediaUploaderModal,
+} from '@/modules/media/components/media-uploader'
+import {
+    useDeleteMemberProfileMediaById,
+    useGetAllMemberProfileMediaByMemberProfile,
+    useMemberProfileMediaBulk,
+} from '@/modules/member-profile-media'
 
-import CopyTextButton from '@/components/copy-text-button'
-import DataTable from '@/components/data-table'
-import DataTableColumnHeader from '@/components/data-table/data-table-column-header'
-import ColumnActions from '@/components/data-table/data-table-column-header/column-actions'
-import { useDataTableSorting } from '@/components/data-table/use-datatable-sorting'
-import useDataTableState from '@/components/data-table/use-datatable-state'
-import { DownloadIcon, FolderFillIcon, WarningIcon } from '@/components/icons'
+import {
+    FolderFillIcon,
+    MagnifyingGlassIcon,
+    PlusIcon,
+    RefreshIcon,
+} from '@/components/icons'
 import LoadingSpinner from '@/components/spinners/loading-spinner'
 import { Button } from '@/components/ui/button'
+import {
+    Empty,
+    EmptyDescription,
+    EmptyHeader,
+    EmptyMedia,
+    EmptyTitle,
+} from '@/components/ui/empty'
 import FormErrorMessage from '@/components/ui/form-error-message'
+import { Input } from '@/components/ui/input'
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from '@/components/ui/select'
 
-import { usePagination } from '@/hooks/use-pagination'
+import { useModalState } from '@/hooks/use-modal-state'
 
 import { IClassProps, TEntityId } from '@/types'
 
+import { logger } from '../../../'
 import SectionTitle from '../section-title'
 
-const FileMediaColumns = (): ColumnDef<IMedia>[] => {
-    return [
-        {
-            id: 'id',
-            accessorKey: 'id',
-            header: (props) => (
-                <DataTableColumnHeader {...props} title="ID">
-                    <ColumnActions {...props} />
-                </DataTableColumnHeader>
-            ),
-            cell: ({
-                row: {
-                    original: { id },
-                },
-            }) => {
-                return (
-                    <div className="mx-auto flex items-center gap-x-2">
-                        <p className="text-sm">{id}</p>
-                        <CopyTextButton
-                            className="shrink-0"
-                            successText="Copied media ID"
-                            textContent={id}
-                        />
-                    </div>
-                )
-            },
-            enableSorting: true,
-            enableHiding: false,
-            enableResizing: true,
-            enableMultiSort: false,
-            size: 180,
-            minSize: 120,
-            maxSize: 300,
-        },
-        {
-            id: 'file_name',
-            accessorKey: 'file_name',
-            header: (props) => (
-                <DataTableColumnHeader {...props} title="File Name">
-                    <ColumnActions {...props} />
-                </DataTableColumnHeader>
-            ),
-            cell: ({
-                row: {
-                    original: { file_name },
-                },
-            }) => (
-                <div className="mx-auto">
-                    <p>{file_name}</p>
-                </div>
-            ),
-            enableMultiSort: false,
-            enableSorting: true,
-            enableResizing: true,
-            enableHiding: false,
-            minSize: 80,
-            maxSize: 500,
-        },
-        {
-            id: 'file_type',
-            accessorKey: 'file_type',
-            header: (props) => (
-                <DataTableColumnHeader {...props} title="File Type">
-                    <ColumnActions {...props} />
-                </DataTableColumnHeader>
-            ),
-            cell: ({ row: { original } }) => {
-                return (
-                    <div className="mx-auto flex items-center">
-                        <MediaResourceFileIcon
-                            className="shrink-0"
-                            media={original}
-                        />
-                        <p className="text-sm">{original.file_type}</p>
-                    </div>
-                )
-            },
-            enableMultiSort: false,
-            enableSorting: true,
-            enableResizing: true,
-            enableHiding: false,
-            size: 150,
-            maxSize: 200,
-            minSize: 100,
-        },
-        {
-            id: 'file_size',
-            accessorKey: 'file_size',
-            header: (props) => (
-                <DataTableColumnHeader {...props} title="File Size">
-                    <ColumnActions {...props} />
-                </DataTableColumnHeader>
-            ),
-            cell: ({
-                row: {
-                    original: { file_size },
-                },
-            }) => (
-                <div className="mx-auto">
-                    <p>{formatBytes(file_size)}</p>
-                </div>
-            ),
-            enableMultiSort: false,
-            enableSorting: true,
-            enableResizing: true,
-            enableHiding: false,
-            minSize: 80,
-            maxSize: 200,
-        },
-        {
-            id: 'created_at',
-            accessorKey: 'created_at',
-            header: (props) => (
-                <DataTableColumnHeader {...props} title="Date Created">
-                    <ColumnActions {...props}></ColumnActions>
-                </DataTableColumnHeader>
-            ),
-            cell: ({
-                row: {
-                    original: { created_at },
-                },
-            }) => <div>{toReadableDate(created_at)}</div>,
-            enableMultiSort: false,
-            enableResizing: true,
-            minSize: 100,
-        },
-        {
-            id: 'download',
-            accessorKey: 'download_url',
-            header: (props) => (
-                <DataTableColumnHeader {...props} title="">
-                    {/* <ColumnActions {...props}></ColumnActions> */}
-                </DataTableColumnHeader>
-            ),
-            cell: ({
-                row: {
-                    original: { download_url, file_name },
-                },
-            }) => {
-                const handleDownload = () =>
-                    downloadFile(download_url, file_name)
-
-                return (
-                    <div>
-                        <Button
-                            className="gap-x-2"
-                            onClick={() => handleDownload()}
-                            size="sm"
-                            variant="ghost"
-                        >
-                            Download <DownloadIcon />
-                        </Button>
-                    </div>
-                )
-            },
-            enableResizing: false,
-            enableMultiSort: false,
-            maxSize: 120,
-        },
-    ]
-}
-
 interface Props extends IClassProps {
-    userId?: TEntityId
+    memberProfileId?: TEntityId
 }
 
-const FilesTableView = ({
-    files,
-    className,
-}: { files: IMedia[] } & IClassProps) => {
-    const { pagination, setPagination } = usePagination()
-    const { tableSorting, setTableSorting } = useDataTableSorting()
+const MemberFileMediaDisplay = ({ memberProfileId, className }: Props) => {
+    const [searchQuery, setSearchQuery] = useState('')
+    const [sortBy, setSortBy] = useState<'upload_date' | 'name'>('upload_date')
+    const uploaderModalState = useModalState()
 
-    const columns = useMemo(() => FileMediaColumns(), [])
-
-    const {
-        getRowIdFn,
-        columnOrder,
-        setColumnOrder,
-        isScrollable,
-        columnVisibility,
-        setColumnVisibility,
-        rowSelectionState,
-    } = useDataTableState<IMedia>({
-        defaultColumnVisibility: {
-            isEmailVerified: false,
-            isContactVerified: false,
-        },
-        defaultColumnOrder: columns.map((c) => c.id!),
-        // onSelectData,
-    })
-
-    // const handleRowSelectionChange = createHandleRowSelectionChange(data)
-
-    const table = useReactTable({
-        columns,
-        data: files,
-        initialState: {
-            columnPinning: { left: ['mediaId'] },
-        },
-        state: {
-            sorting: tableSorting,
-            pagination,
-            columnOrder,
-            rowSelection: rowSelectionState.rowSelection,
-            columnVisibility,
-        },
-        getRowId: getRowIdFn,
-        enableMultiSort: true,
-        columnResizeMode: 'onChange',
-        onSortingChange: setTableSorting,
-        onPaginationChange: setPagination,
-        getCoreRowModel: getCoreRowModel(),
-        onColumnOrderChange: setColumnOrder,
-        getSortedRowModel: getSortedRowModel(),
-        onColumnVisibilityChange: setColumnVisibility,
-        // onRowSelectionChange: handleRowSelectionChange,
-    })
-
-    return (
-        <div
-            className={cn(
-                'relative flex h-full flex-col gap-y-2 py-4',
-                className,
-                !isScrollable && 'h-fit !max-h-none'
-            )}
-        >
-            <DataTable
-                className={cn('mb-2', isScrollable && 'flex-1')}
-                isScrollable={isScrollable}
-                isStickyFooter
-                isStickyHeader
-                setColumnOrder={setColumnOrder}
-                table={table}
-            />
-        </div>
-    )
-}
-
-const MemberFileMediaDisplay = ({ userId, className }: Props) => {
     const {
         data,
         isPending,
         error: rawError,
-    } = useUserMedias({
-        userId: userId as unknown as TEntityId,
+        refetch,
+        isRefetching,
+    } = useGetAllMemberProfileMediaByMemberProfile({
+        mode: 'member-profile',
+        memberProfileId,
         options: {
-            enabled: !!userId,
+            enabled: !!memberProfileId,
         },
     })
 
     const error = serverRequestErrExtractor({ error: rawError })
 
+    const fuse = useMemo(() => {
+        if (!data) return null
+        return new Fuse(data, {
+            keys: ['name', 'media.file_name', 'media.file_type', 'description'],
+            threshold: 0.3,
+            includeScore: true,
+        })
+    }, [data])
+
+    const filteredAndSortedData = useMemo(() => {
+        if (!data) return []
+
+        let result = data
+
+        if (searchQuery && fuse) {
+            const searchResults = fuse.search(searchQuery)
+            result = searchResults.map((r) => r.item)
+        }
+
+        return [...result].sort((a, b) => {
+            if (sortBy === 'name') {
+                return a.name.localeCompare(b.name)
+            }
+            return (
+                new Date(b.created_at || 0).getTime() -
+                new Date(a.created_at || 0).getTime()
+            )
+        })
+    }, [data, searchQuery, sortBy, fuse])
+
+    const {
+        mutateAsync: bulkUploadMediaForMemberProfile,
+        isPending: isBulkUploading,
+    } = useMemberProfileMediaBulk({
+        options: {
+            onSuccess: () => {
+                toast.success('Upload finished successfully.')
+                uploaderModalState.onOpenChange(false)
+            },
+            onError: (e) => {
+                const errorMessage = serverRequestErrExtractor({ error: e })
+                toast.error(`Failed to finish upload, try again.`)
+                logger.error(errorMessage)
+            },
+        },
+    })
+
     return (
         <div className={cn('min-h-[50vh] space-y-4', className)}>
+            <MediaUploaderModal
+                {...uploaderModalState}
+                uploaderProps={{
+                    mode: 'multiple',
+                    onMultipleUploadComplete: (uploadedMedias) => {
+                        bulkUploadMediaForMemberProfile({
+                            media_ids: uploadedMedias.map((m) => m.id),
+                            memberProfileId: memberProfileId as TEntityId,
+                        })
+                    },
+                }}
+            />
             <div className="flex justify-between">
                 <SectionTitle
                     Icon={FolderFillIcon}
                     subTitle="View all medias/files this user has"
                     title="Member Medias"
                 />
-                <p className="text-sm text-muted-foreground/80">
-                    {(data ?? []).length} Files
-                </p>
+                {isBulkUploading ? (
+                    <div className="flex items-center gap-2">
+                        <LoadingSpinner className="size-4" />
+                        <p className="text-sm text-muted-foreground/80">
+                            Finishing upload...
+                        </p>
+                    </div>
+                ) : (
+                    <div className="flex items-center gap-2">
+                        <p className="text-sm text-muted-foreground/80">
+                            {(data ?? []).length} Files
+                        </p>
+                        <Button
+                            disabled={isRefetching}
+                            onClick={() => refetch()}
+                            size="sm"
+                            variant="outline"
+                        >
+                            {isRefetching ? (
+                                <LoadingSpinner className="size-4" />
+                            ) : (
+                                <RefreshIcon className="size-4" />
+                            )}
+                        </Button>
+                        <Button
+                            onClick={() =>
+                                uploaderModalState.onOpenChange(true)
+                            }
+                            size="sm"
+                            variant="outline"
+                        >
+                            <PlusIcon className="size-4" />
+                            Upload File
+                        </Button>
+                    </div>
+                )}
             </div>
             {!data && error && (
                 <FormErrorMessage
@@ -302,19 +183,108 @@ const MemberFileMediaDisplay = ({ userId, className }: Props) => {
                     errorMessage={error}
                 />
             )}
-            {isPending && userId && <LoadingSpinner className="mx-auto" />}
-            {data && <FilesTableView className="!p-0" files={data ?? []} />}
-            {!userId && (
-                <div className="mx-auto max-w-md items-center gap-3 space-y-4 rounded-lg text-sm text-muted-foreground">
-                    <WarningIcon className="mx-auto size-4" />
-                    <p className="text-center">
-                        We are unable to locate files since this member profile
-                        has no User Account.
-                    </p>
+            {isPending && memberProfileId && (
+                <LoadingSpinner className="mx-auto" />
+            )}
+            {data && (
+                <div className="space-y-4">
+                    {/* Search and Sort Controls */}
+                    <div className="flex items-center gap-4">
+                        <div className="flex-1 relative">
+                            <MagnifyingGlassIcon className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
+                            <Input
+                                className="pl-10"
+                                onChange={(e) => setSearchQuery(e.target.value)}
+                                placeholder="Search (with fuse.js) ( file name, file type, filename + filetype )"
+                                value={searchQuery}
+                            />
+                        </div>
+                        <Select
+                            onValueChange={(value: 'upload_date' | 'name') =>
+                                setSortBy(value)
+                            }
+                            value={sortBy}
+                        >
+                            <SelectTrigger className="w-[180px]">
+                                <SelectValue placeholder="Sort by" />
+                            </SelectTrigger>
+                            <SelectContent>
+                                <SelectItem value="upload_date">
+                                    Upload date
+                                </SelectItem>
+                                <SelectItem value="name">Name</SelectItem>
+                            </SelectContent>
+                        </Select>
+                    </div>
+
+                    {filteredAndSortedData.length === 0 ? (
+                        <Empty className="border border-dashed">
+                            <EmptyHeader>
+                                <EmptyMedia variant="icon">
+                                    <FolderFillIcon />
+                                </EmptyMedia>
+                                <EmptyTitle>No Files Found</EmptyTitle>
+                                <EmptyDescription>
+                                    {searchQuery
+                                        ? 'No files match your search criteria.'
+                                        : 'This member has not uploaded any files yet.'}
+                                </EmptyDescription>
+                            </EmptyHeader>
+                        </Empty>
+                    ) : (
+                        <div className="space-y-2">
+                            {filteredAndSortedData.map((item) => (
+                                <MemberMediaFileItem
+                                    id={item.id}
+                                    key={item.id}
+                                    media={item.media}
+                                    uploadedBy={
+                                        item.created_by?.full_name ||
+                                        'unknown user'
+                                    }
+                                />
+                            ))}
+                        </div>
+                    )}
                 </div>
+            )}
+            {!memberProfileId && (
+                <Empty className="border border-dashed">
+                    <EmptyHeader>
+                        <EmptyMedia variant="icon">
+                            <FolderFillIcon />
+                        </EmptyMedia>
+                        <EmptyTitle>No User Account</EmptyTitle>
+                        <EmptyDescription>
+                            We are unable to locate files since this member
+                            profile has no User Account.
+                        </EmptyDescription>
+                    </EmptyHeader>
+                </Empty>
             )}
         </div>
     )
+}
+
+type MemberMediaFileItemProps = FileItemProps & {
+    id: TEntityId
+}
+
+const MemberMediaFileItem = ({ id, ...props }: MemberMediaFileItemProps) => {
+    const deleteMutation = useDeleteMemberProfileMediaById()
+
+    const handleDelete = () => {
+        toast.promise(deleteMutation.mutateAsync(id), {
+            loading: 'Deleting file...',
+            success: 'File deleted successfully',
+            error: (err) => {
+                const errorMessage = serverRequestErrExtractor({ error: err })
+                return errorMessage || 'Failed to delete file'
+            },
+        })
+    }
+
+    return <FileItem {...props} onRemoveFile={handleDelete} />
 }
 
 export default MemberFileMediaDisplay

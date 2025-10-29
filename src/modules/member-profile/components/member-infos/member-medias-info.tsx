@@ -27,7 +27,7 @@ const MemberMediasInfo = forwardRef<HTMLDivElement, Props>(
                 )}
                 ref={ref}
             >
-                <MemberFileMediaDisplay userId={data?.user_id} />
+                <MemberFileMediaDisplay memberProfileId={data?.id} />
             </div>
         )
     }

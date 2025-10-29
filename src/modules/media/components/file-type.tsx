@@ -1,8 +1,7 @@
 import React from 'react'
 
-import { getFileType } from '@/helpers/common-helper'
-
-import { FileTypeIcons } from './FileTypeIcons'
+import { FileTypeIcons } from '../../../components/ui/FileTypeIcons'
+import { getFileType } from '../media.utils'
 
 interface FileTypeIconProps {
     file: File
