@@ -52,7 +52,7 @@ const UserNav = ({
                     }
                     variant="secondary"
                 >
-                    <BadgeCheckFillIcon className="ease-out duration-500 text-primary group-hover:text-primary-foreground" />
+                    <BadgeCheckFillIcon className="ease-out duration-500 text-primary" />
                     Approvals
                 </Button>
             ) : null,

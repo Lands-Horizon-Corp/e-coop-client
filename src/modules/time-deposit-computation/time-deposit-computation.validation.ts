@@ -1,23 +1,34 @@
 import z from 'zod'
 
-export const timeDepositComputationSchema = z.object({
-    name: z.string(),
+import { PercentageSchema, entityIdSchema } from '@/validation'
 
-    minimum_amount: z.number().optional(),
-    maximum_amount: z.number().optional(),
-    header1: z.number().optional(),
-    header2: z.number().optional(),
-    header3: z.number().optional(),
-    header4: z.number().optional(),
-    header5: z.number().optional(),
-    header6: z.number().optional(),
-    header7: z.number().optional(),
-    header8: z.number().optional(),
-    header9: z.number().optional(),
-    header10: z.number().optional(),
-    header11: z.number().optional(),
-})
+export const timeDepositComputationSchema = z
+    .object({
+        id: entityIdSchema.optional(), // dont worry this is set by server
+        time_deposit_type_id: entityIdSchema.optional(), // set by server
 
-export type TTimeDepositComputationFormValues = z.infer<
+        minimum_amount: z.coerce.number(),
+        maximum_amount: z.coerce.number(),
+        header_1: PercentageSchema,
+        header_2: PercentageSchema,
+        header_3: PercentageSchema,
+        header_4: PercentageSchema,
+        header_5: PercentageSchema,
+        header_6: PercentageSchema,
+        header_7: PercentageSchema,
+        header_8: PercentageSchema,
+        header_9: PercentageSchema,
+        header_10: PercentageSchema,
+        header_11: PercentageSchema,
+    })
+    .refine(
+        ({ minimum_amount, maximum_amount }) => minimum_amount < maximum_amount,
+        {
+            path: ['minimum_amount'],
+            error: 'Minimum amount must be less than Maximum amount',
+        }
+    )
+
+export type TTimeDepositComputationSchema = z.infer<
     typeof timeDepositComputationSchema
 >

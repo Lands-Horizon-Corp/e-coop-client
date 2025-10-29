@@ -1,8 +1,8 @@
 import PageContainer from '@/components/containers/page-container'
 
-import TimeDepositSchemeEditor from '../time-deposit-computation/time-deposit-scheme-editor'
+import TimeDepositSchemeEditor from '../time-deposit-type/time-deposit-type-editor'
 
-const TimeDepositComputationPage = () => {
+const TimeDepositTypePage = () => {
     return (
         <PageContainer className="!p-0">
             <TimeDepositSchemeEditor />
@@ -10,4 +10,4 @@ const TimeDepositComputationPage = () => {
     )
 }
 
-export default TimeDepositComputationPage
+export default TimeDepositTypePage

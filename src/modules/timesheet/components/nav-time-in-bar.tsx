@@ -27,14 +27,14 @@ const NavTimeInBar = () => {
                     >
                         {!!timesheet && (
                             <div className="absolute -right-1 -top-1">
-                                <DotBigIcon className="absolute mr-2 text-primary blur-sm" />
-                                <DotBigIcon className="mr-2 text-primary" />
+                                <DotBigIcon className="absolute mr-2 blur-sm" />
+                                <DotBigIcon className="mr-2 text-primary text-primar" />
                             </div>
                         )}
                         {isLoading && !timesheet ? (
                             <LoadingSpinner className="size-4" />
                         ) : (
-                            <BriefCaseClockIcon className="text-primary" />
+                            <BriefCaseClockIcon />
                         )}
                         Work Time
                     </Button>

@@ -70,12 +70,14 @@ const ByTermSection = ({ form, disabled, className }: IByTermProps) => {
     }
 
     const handleRemoveTerm = (index: number) => {
+        const field = form.getValues(`charges_rate_by_terms.${index}`)
+
+        if (field.id === undefined || field.id === null) return remove(index)
+
         onOpen({
             title: 'Remove Term',
             description: 'Are you sure you want to remove this term?',
             onConfirm: () => {
-                const field = form.getValues(`charges_rate_by_terms.${index}`)
-
                 if (field.id) addDeletedId(field.id)
 
                 remove(index)
@@ -115,348 +117,324 @@ const ByTermSection = ({ form, disabled, className }: IByTermProps) => {
                 )}
             </div>
 
-            <div className="w-fit max-w-full relative space-y-1 ecoop-scroll overflow-auto">
-                <div className="space-y-2 p-1 sticky top-0">
-                    <div className="grid items-end grid-cols-[250px_repeat(22,6rem)] w-fit gap-2">
-                        <span className="p-1.5 sticky left-0 bg-accent text-accent-foreground z-50 h-fit rounded-md text-center">
-                            Mode of Payment
-                        </span>
-                        <FormFieldWrapper
-                            control={form.control}
-                            label="#1"
-                            name="by_term_header_1"
-                            render={({ field }) => (
-                                <InputGroup>
-                                    <InputGroupInput
-                                        {...field}
-                                        disabled={disabled}
-                                        placeholder="#1"
-                                    />
-                                </InputGroup>
-                            )}
-                        />
-                        <FormFieldWrapper
-                            control={form.control}
-                            label="#2"
-                            name="by_term_header_2"
-                            render={({ field }) => (
-                                <InputGroup>
-                                    <InputGroupInput
-                                        {...field}
-                                        disabled={disabled}
-                                        placeholder="#2"
-                                    />
-                                </InputGroup>
-                            )}
-                        />
-                        <FormFieldWrapper
-                            control={form.control}
-                            label="#3"
-                            name="by_term_header_3"
-                            render={({ field }) => (
-                                <InputGroup>
-                                    <InputGroupInput
-                                        {...field}
-                                        disabled={disabled}
-                                        placeholder="#3"
-                                    />
-                                </InputGroup>
-                            )}
-                        />
-                        <FormFieldWrapper
-                            control={form.control}
-                            label="#4"
-                            name="by_term_header_4"
-                            render={({ field }) => (
-                                <InputGroup>
-                                    <InputGroupInput
-                                        {...field}
-                                        disabled={disabled}
-                                        placeholder="#4"
-                                    />
-                                </InputGroup>
-                            )}
-                        />
-                        <FormFieldWrapper
-                            control={form.control}
-                            label="#5"
-                            name="by_term_header_5"
-                            render={({ field }) => (
-                                <InputGroup>
-                                    <InputGroupInput
-                                        {...field}
-                                        disabled={disabled}
-                                        placeholder="#5"
-                                    />
-                                </InputGroup>
-                            )}
-                        />
-                        <FormFieldWrapper
-                            control={form.control}
-                            label="#6"
-                            name="by_term_header_6"
-                            render={({ field }) => (
-                                <InputGroup>
-                                    <InputGroupInput
-                                        {...field}
-                                        disabled={disabled}
-                                        placeholder="#6"
-                                    />
-                                </InputGroup>
-                            )}
-                        />
-                        <FormFieldWrapper
-                            control={form.control}
-                            label="#7"
-                            name="by_term_header_7"
-                            render={({ field }) => (
-                                <InputGroup>
-                                    <InputGroupInput
-                                        {...field}
-                                        disabled={disabled}
-                                        placeholder="#7"
-                                    />
-                                </InputGroup>
-                            )}
-                        />
-                        <FormFieldWrapper
-                            control={form.control}
-                            label="#8"
-                            name="by_term_header_8"
-                            render={({ field }) => (
-                                <InputGroup>
-                                    <InputGroupInput
-                                        {...field}
-                                        disabled={disabled}
-                                        placeholder="#8"
-                                    />
-                                </InputGroup>
-                            )}
-                        />
-                        <FormFieldWrapper
-                            control={form.control}
-                            label="#9"
-                            name="by_term_header_9"
-                            render={({ field }) => (
-                                <InputGroup>
-                                    <InputGroupInput
-                                        {...field}
-                                        disabled={disabled}
-                                        placeholder="#9"
-                                    />
-                                </InputGroup>
-                            )}
-                        />
-                        <FormFieldWrapper
-                            control={form.control}
-                            label="#10"
-                            name="by_term_header_10"
-                            render={({ field }) => (
-                                <InputGroup>
-                                    <InputGroupInput
-                                        {...field}
-                                        disabled={disabled}
-                                        placeholder="#10"
-                                    />
-                                </InputGroup>
-                            )}
-                        />
-                        <FormFieldWrapper
-                            control={form.control}
-                            label="#11"
-                            name="by_term_header_11"
-                            render={({ field }) => (
-                                <InputGroup>
-                                    <InputGroupInput
-                                        {...field}
-                                        disabled={disabled}
-                                        placeholder="#11"
-                                    />
-                                </InputGroup>
-                            )}
-                        />
-                        <FormFieldWrapper
-                            control={form.control}
-                            label="#12"
-                            name="by_term_header_12"
-                            render={({ field }) => (
-                                <InputGroup>
-                                    <InputGroupInput
-                                        {...field}
-                                        disabled={disabled}
-                                        placeholder="#12"
-                                    />
-                                </InputGroup>
-                            )}
-                        />
-                        <FormFieldWrapper
-                            control={form.control}
-                            label="#13"
-                            name="by_term_header_13"
-                            render={({ field }) => (
-                                <InputGroup>
-                                    <InputGroupInput
-                                        {...field}
-                                        disabled={disabled}
-                                        placeholder="#13"
-                                    />
-                                </InputGroup>
-                            )}
-                        />
-                        <FormFieldWrapper
-                            control={form.control}
-                            label="#14"
-                            name="by_term_header_14"
-                            render={({ field }) => (
-                                <InputGroup>
-                                    <InputGroupInput
-                                        {...field}
-                                        disabled={disabled}
-                                        placeholder="#14"
-                                    />
-                                </InputGroup>
-                            )}
-                        />
-                        <FormFieldWrapper
-                            control={form.control}
-                            label="#15"
-                            name="by_term_header_15"
-                            render={({ field }) => (
-                                <InputGroup>
-                                    <InputGroupInput
-                                        {...field}
-                                        disabled={disabled}
-                                        placeholder="#15"
-                                    />
-                                </InputGroup>
-                            )}
-                        />
-                        <FormFieldWrapper
-                            control={form.control}
-                            label="#16"
-                            name="by_term_header_16"
-                            render={({ field }) => (
-                                <InputGroup>
-                                    <InputGroupInput
-                                        {...field}
-                                        disabled={disabled}
-                                        placeholder="#16"
-                                    />
-                                </InputGroup>
-                            )}
-                        />
-                        <FormFieldWrapper
-                            control={form.control}
-                            label="#17"
-                            name="by_term_header_17"
-                            render={({ field }) => (
-                                <InputGroup>
-                                    <InputGroupInput
-                                        {...field}
-                                        disabled={disabled}
-                                        placeholder="#17"
-                                    />
-                                </InputGroup>
-                            )}
-                        />
-                        <FormFieldWrapper
-                            control={form.control}
-                            label="#18"
-                            name="by_term_header_18"
-                            render={({ field }) => (
-                                <InputGroup>
-                                    <InputGroupInput
-                                        {...field}
-                                        disabled={disabled}
-                                        placeholder="#18"
-                                    />
-                                </InputGroup>
-                            )}
-                        />
-                        <FormFieldWrapper
-                            control={form.control}
-                            label="#19"
-                            name="by_term_header_19"
-                            render={({ field }) => (
-                                <InputGroup>
-                                    <InputGroupInput
-                                        {...field}
-                                        disabled={disabled}
-                                        placeholder="#19"
-                                    />
-                                </InputGroup>
-                            )}
-                        />
-                        <FormFieldWrapper
-                            control={form.control}
-                            label="#20"
-                            name="by_term_header_20"
-                            render={({ field }) => (
-                                <InputGroup>
-                                    <InputGroupInput
-                                        {...field}
-                                        disabled={disabled}
-                                        placeholder="#20"
-                                    />
-                                </InputGroup>
-                            )}
-                        />
-                        <FormFieldWrapper
-                            control={form.control}
-                            label="#21"
-                            name="by_term_header_21"
-                            render={({ field }) => (
-                                <InputGroup>
-                                    <InputGroupInput
-                                        {...field}
-                                        disabled={disabled}
-                                        placeholder="#21"
-                                    />
-                                </InputGroup>
-                            )}
-                        />
-                        <FormFieldWrapper
-                            control={form.control}
-                            label="#22"
-                            name="by_term_header_22"
-                            render={({ field }) => (
-                                <InputGroup>
-                                    <InputGroupInput
-                                        {...field}
-                                        disabled={disabled}
-                                        placeholder="#22"
-                                    />
-                                </InputGroup>
-                            )}
-                        />
+            {fields.length > 0 && (
+                <div className="w-fit max-w-full relative space-y-1 ecoop-scroll overflow-auto">
+                    <div className="space-y-2 p-1 sticky top-0">
+                        <div className="grid items-end grid-cols-[250px_repeat(22,6rem)] w-fit gap-2">
+                            <span className="p-1.5 sticky left-0 bg-accent text-accent-foreground z-50 h-fit rounded-md text-center">
+                                Mode of Payment
+                            </span>
+                            <FormFieldWrapper
+                                control={form.control}
+                                label="#1"
+                                name="by_term_header_1"
+                                render={({ field }) => (
+                                    <InputGroup>
+                                        <InputGroupInput
+                                            {...field}
+                                            disabled={disabled}
+                                            placeholder="#1"
+                                        />
+                                    </InputGroup>
+                                )}
+                            />
+                            <FormFieldWrapper
+                                control={form.control}
+                                label="#2"
+                                name="by_term_header_2"
+                                render={({ field }) => (
+                                    <InputGroup>
+                                        <InputGroupInput
+                                            {...field}
+                                            disabled={disabled}
+                                            placeholder="#2"
+                                        />
+                                    </InputGroup>
+                                )}
+                            />
+                            <FormFieldWrapper
+                                control={form.control}
+                                label="#3"
+                                name="by_term_header_3"
+                                render={({ field }) => (
+                                    <InputGroup>
+                                        <InputGroupInput
+                                            {...field}
+                                            disabled={disabled}
+                                            placeholder="#3"
+                                        />
+                                    </InputGroup>
+                                )}
+                            />
+                            <FormFieldWrapper
+                                control={form.control}
+                                label="#4"
+                                name="by_term_header_4"
+                                render={({ field }) => (
+                                    <InputGroup>
+                                        <InputGroupInput
+                                            {...field}
+                                            disabled={disabled}
+                                            placeholder="#4"
+                                        />
+                                    </InputGroup>
+                                )}
+                            />
+                            <FormFieldWrapper
+                                control={form.control}
+                                label="#5"
+                                name="by_term_header_5"
+                                render={({ field }) => (
+                                    <InputGroup>
+                                        <InputGroupInput
+                                            {...field}
+                                            disabled={disabled}
+                                            placeholder="#5"
+                                        />
+                                    </InputGroup>
+                                )}
+                            />
+                            <FormFieldWrapper
+                                control={form.control}
+                                label="#6"
+                                name="by_term_header_6"
+                                render={({ field }) => (
+                                    <InputGroup>
+                                        <InputGroupInput
+                                            {...field}
+                                            disabled={disabled}
+                                            placeholder="#6"
+                                        />
+                                    </InputGroup>
+                                )}
+                            />
+                            <FormFieldWrapper
+                                control={form.control}
+                                label="#7"
+                                name="by_term_header_7"
+                                render={({ field }) => (
+                                    <InputGroup>
+                                        <InputGroupInput
+                                            {...field}
+                                            disabled={disabled}
+                                            placeholder="#7"
+                                        />
+                                    </InputGroup>
+                                )}
+                            />
+                            <FormFieldWrapper
+                                control={form.control}
+                                label="#8"
+                                name="by_term_header_8"
+                                render={({ field }) => (
+                                    <InputGroup>
+                                        <InputGroupInput
+                                            {...field}
+                                            disabled={disabled}
+                                            placeholder="#8"
+                                        />
+                                    </InputGroup>
+                                )}
+                            />
+                            <FormFieldWrapper
+                                control={form.control}
+                                label="#9"
+                                name="by_term_header_9"
+                                render={({ field }) => (
+                                    <InputGroup>
+                                        <InputGroupInput
+                                            {...field}
+                                            disabled={disabled}
+                                            placeholder="#9"
+                                        />
+                                    </InputGroup>
+                                )}
+                            />
+                            <FormFieldWrapper
+                                control={form.control}
+                                label="#10"
+                                name="by_term_header_10"
+                                render={({ field }) => (
+                                    <InputGroup>
+                                        <InputGroupInput
+                                            {...field}
+                                            disabled={disabled}
+                                            placeholder="#10"
+                                        />
+                                    </InputGroup>
+                                )}
+                            />
+                            <FormFieldWrapper
+                                control={form.control}
+                                label="#11"
+                                name="by_term_header_11"
+                                render={({ field }) => (
+                                    <InputGroup>
+                                        <InputGroupInput
+                                            {...field}
+                                            disabled={disabled}
+                                            placeholder="#11"
+                                        />
+                                    </InputGroup>
+                                )}
+                            />
+                            <FormFieldWrapper
+                                control={form.control}
+                                label="#12"
+                                name="by_term_header_12"
+                                render={({ field }) => (
+                                    <InputGroup>
+                                        <InputGroupInput
+                                            {...field}
+                                            disabled={disabled}
+                                            placeholder="#12"
+                                        />
+                                    </InputGroup>
+                                )}
+                            />
+                            <FormFieldWrapper
+                                control={form.control}
+                                label="#13"
+                                name="by_term_header_13"
+                                render={({ field }) => (
+                                    <InputGroup>
+                                        <InputGroupInput
+                                            {...field}
+                                            disabled={disabled}
+                                            placeholder="#13"
+                                        />
+                                    </InputGroup>
+                                )}
+                            />
+                            <FormFieldWrapper
+                                control={form.control}
+                                label="#14"
+                                name="by_term_header_14"
+                                render={({ field }) => (
+                                    <InputGroup>
+                                        <InputGroupInput
+                                            {...field}
+                                            disabled={disabled}
+                                            placeholder="#14"
+                                        />
+                                    </InputGroup>
+                                )}
+                            />
+                            <FormFieldWrapper
+                                control={form.control}
+                                label="#15"
+                                name="by_term_header_15"
+                                render={({ field }) => (
+                                    <InputGroup>
+                                        <InputGroupInput
+                                            {...field}
+                                            disabled={disabled}
+                                            placeholder="#15"
+                                        />
+                                    </InputGroup>
+                                )}
+                            />
+                            <FormFieldWrapper
+                                control={form.control}
+                                label="#16"
+                                name="by_term_header_16"
+                                render={({ field }) => (
+                                    <InputGroup>
+                                        <InputGroupInput
+                                            {...field}
+                                            disabled={disabled}
+                                            placeholder="#16"
+                                        />
+                                    </InputGroup>
+                                )}
+                            />
+                            <FormFieldWrapper
+                                control={form.control}
+                                label="#17"
+                                name="by_term_header_17"
+                                render={({ field }) => (
+                                    <InputGroup>
+                                        <InputGroupInput
+                                            {...field}
+                                            disabled={disabled}
+                                            placeholder="#17"
+                                        />
+                                    </InputGroup>
+                                )}
+                            />
+                            <FormFieldWrapper
+                                control={form.control}
+                                label="#18"
+                                name="by_term_header_18"
+                                render={({ field }) => (
+                                    <InputGroup>
+                                        <InputGroupInput
+                                            {...field}
+                                            disabled={disabled}
+                                            placeholder="#18"
+                                        />
+                                    </InputGroup>
+                                )}
+                            />
+                            <FormFieldWrapper
+                                control={form.control}
+                                label="#19"
+                                name="by_term_header_19"
+                                render={({ field }) => (
+                                    <InputGroup>
+                                        <InputGroupInput
+                                            {...field}
+                                            disabled={disabled}
+                                            placeholder="#19"
+                                        />
+                                    </InputGroup>
+                                )}
+                            />
+                            <FormFieldWrapper
+                                control={form.control}
+                                label="#20"
+                                name="by_term_header_20"
+                                render={({ field }) => (
+                                    <InputGroup>
+                                        <InputGroupInput
+                                            {...field}
+                                            disabled={disabled}
+                                            placeholder="#20"
+                                        />
+                                    </InputGroup>
+                                )}
+                            />
+                            <FormFieldWrapper
+                                control={form.control}
+                                label="#21"
+                                name="by_term_header_21"
+                                render={({ field }) => (
+                                    <InputGroup>
+                                        <InputGroupInput
+                                            {...field}
+                                            disabled={disabled}
+                                            placeholder="#21"
+                                        />
+                                    </InputGroup>
+                                )}
+                            />
+                            <FormFieldWrapper
+                                control={form.control}
+                                label="#22"
+                                name="by_term_header_22"
+                                render={({ field }) => (
+                                    <InputGroup>
+                                        <InputGroupInput
+                                            {...field}
+                                            disabled={disabled}
+                                            placeholder="#22"
+                                        />
+                                    </InputGroup>
+                                )}
+                            />
+                        </div>
                     </div>
-                </div>
 
-                {fields.length === 0 ? (
-                    <Empty className="from-muted/50 w-full to-background bg-gradient-to-b from-30% rounded-2xl border p-8">
-                        <EmptyHeader>
-                            <EmptyMedia variant="icon">
-                                <PlusIcon />
-                            </EmptyMedia>
-                            <EmptyTitle>No Charge Terms</EmptyTitle>
-                            <EmptyDescription>
-                                Add charge terms to define how charges are
-                                calculated based on payment terms.
-                            </EmptyDescription>
-                        </EmptyHeader>
-                        <EmptyContent>
-                            <Button
-                                onClick={handleAddTerm}
-                                size="sm"
-                                type="button"
-                                variant="outline"
-                            >
-                                <PlusIcon className="size-4" />
-                                Add First Term
-                            </Button>
-                        </EmptyContent>
-                    </Empty>
-                ) : (
                     <div className="space-y-2 pb-4 w-full rounded-2xl">
                         {fields.map((field, index) => {
                             return (
@@ -886,8 +864,34 @@ const ByTermSection = ({ form, disabled, className }: IByTermProps) => {
                             )
                         })}
                     </div>
-                )}
-            </div>
+                </div>
+            )}
+
+            {fields.length === 0 && (
+                <Empty className="from-muted/50 w-full to-background bg-gradient-to-b from-30% rounded-2xl border p-8">
+                    <EmptyHeader>
+                        <EmptyMedia variant="icon">
+                            <PlusIcon />
+                        </EmptyMedia>
+                        <EmptyTitle>No Charge Terms</EmptyTitle>
+                        <EmptyDescription>
+                            Add charge terms to define how charges are
+                            calculated based on payment terms.
+                        </EmptyDescription>
+                    </EmptyHeader>
+                    <EmptyContent>
+                        <Button
+                            onClick={handleAddTerm}
+                            size="sm"
+                            type="button"
+                            variant="outline"
+                        >
+                            <PlusIcon className="size-4" />
+                            Add First Term
+                        </Button>
+                    </EmptyContent>
+                </Empty>
+            )}
         </div>
     )
 }
