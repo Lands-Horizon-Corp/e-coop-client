@@ -136,3 +136,5 @@ export const PercentageSchema = z.coerce
     .number()
     .min(0, 'Minimum 0 %')
     .max(100, 'Max is 100 %')
+
+export const DaySchema = z.coerce.number().int().nonnegative()

@@ -2,7 +2,7 @@ import { createFileRoute, useNavigate, useSearch } from '@tanstack/react-router'
 
 import ChargesRateSchemePage from '@/modules/charges-rate-scheme/components/pages/charges-rate-page'
 import ComputationSheetPage from '@/modules/computation-sheet/components/pages/computation-sheet'
-import TimeDepositComputationPage from '@/modules/time-deposit-computation/components/pages/time-deposit-computation'
+import TimeDepositTypePage from '@/modules/time-deposit-type/components/pages/time-deposit-type'
 
 import PageContainer from '@/components/containers/page-container'
 import { BookStackIcon, CashClockIcon, GridFillIcon } from '@/components/icons'
@@ -89,7 +89,7 @@ function RouteComponent() {
                     <ChargesRateSchemePage />
                 </TabsContent>
                 <TabsContent value="time-deposit-scheme">
-                    <TimeDepositComputationPage />
+                    <TimeDepositTypePage />
                 </TabsContent>
             </Tabs>
         </PageContainer>

@@ -1,9 +1,11 @@
 import { Logger } from '@/helpers/loggers'
 import type {
     ITimeDepositType,
+    ITimeDepositTypeCreateRequest,
     ITimeDepositTypeRequest,
 } from '@/modules/time-deposit-type'
 import { createDataLayerFactory } from '@/providers/repositories/data-layer-factory'
+import { createMutationFactory } from '@/providers/repositories/mutation-factory'
 
 const {
     apiCrudHooks,
@@ -32,7 +34,7 @@ export const {
 export { timeDepositTypeBaseKey }
 
 export const {
-    useCreate: useCreateTimeDepositType,
+    // useCreate: useCreateTimeDepositType,
     useUpdateById: useUpdateTimeDepositTypeById,
 
     useGetAll: useGetAllTimeDepositType,
@@ -42,5 +44,18 @@ export const {
     useDeleteById: useDeleteTimeDepositTypeById,
     useDeleteMany: useDeleteManyTimeDepositType,
 } = apiCrudHooks
+
+export const useCreateTimeDepositType = createMutationFactory<
+    ITimeDepositType,
+    Error,
+    ITimeDepositTypeCreateRequest
+>({
+    mutationFn: (payload) =>
+        createTimeDepositType<ITimeDepositTypeCreateRequest>({ payload }),
+    defaultInvalidates: [
+        [timeDepositTypeBaseKey, 'paginated'],
+        [timeDepositTypeBaseKey, 'all'],
+    ],
+})
 
 export const logger = Logger.getInstance('time-deposit-type')

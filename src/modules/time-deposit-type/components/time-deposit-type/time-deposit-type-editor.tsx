@@ -18,21 +18,22 @@ import {
 
 import { IClassProps } from '@/types'
 
-import { ITimeDepositComputation } from '../../time-deposit-computation.types'
-import ChargesRateSchemesSidebar from './time-deposit-scheme-sidebar'
+import { ITimeDepositType } from '../../time-deposit-type.types'
+import TimeDepositTypeUpdateForm from '../forms/time-deposit-type-update-form/time-deposit-type-update-form'
+import TimeDepositTypesSidebar from './time-deposit-type-sidebar'
 
 interface Props extends IClassProps {}
 
 const TimeDepositSchemeEditor = ({ className }: Props) => {
-    const [chargesRateScheme, setChargesRateScheme] = useState<
-        ITimeDepositComputation | undefined
+    const [timeDepositType, setTimeDepositType] = useState<
+        ITimeDepositType | undefined
     >()
 
     const {
         currentAuth: {
             user_organization: {
                 branch: {
-                    branch_setting: { currency_id },
+                    branch_setting: { currency },
                 },
             },
         },
@@ -45,29 +46,29 @@ const TimeDepositSchemeEditor = ({ className }: Props) => {
                 className
             )}
         >
-            <ChargesRateSchemesSidebar
+            <TimeDepositTypesSidebar
                 className="sticky top-0"
-                defaultCurrencyId={currency_id}
-                onDeletedComputation={(scheme) => {
-                    if (chargesRateScheme?.id === scheme.id)
-                        setChargesRateScheme(undefined)
+                defaultCurrency={currency}
+                onDeletedType={(selectedTimeDepositType) => {
+                    if (timeDepositType?.id === selectedTimeDepositType.id)
+                        setTimeDepositType(undefined)
                 }}
-                onSelect={(selectedScheme) =>
-                    setChargesRateScheme(selectedScheme)
+                onSelect={(selectedTimeDepositType) =>
+                    setTimeDepositType(selectedTimeDepositType)
                 }
-                selectedId={chargesRateScheme?.id}
+                selectedId={timeDepositType?.id}
             />
-            {chargesRateScheme === undefined ? (
+            {timeDepositType === undefined ? (
                 <div className="flex-1 min-h-full flex items-center justify-center">
                     <Empty className="from-muted/50 to-background h-full bg-gradient-to-b from-30%">
                         <EmptyHeader>
                             <EmptyMedia variant="icon">
                                 <PiIdentificationBadgeFill />
                             </EmptyMedia>
-                            <EmptyTitle>No Notifications</EmptyTitle>
+                            <EmptyTitle>No Time Deposit Type</EmptyTitle>
                             <EmptyDescription>
-                                You&apos;re all caught up. New notifications
-                                will appear here.
+                                No time deposit type yet, please select or
+                                create.
                             </EmptyDescription>
                         </EmptyHeader>
                         <EmptyContent>
@@ -79,9 +80,10 @@ const TimeDepositSchemeEditor = ({ className }: Props) => {
                     </Empty>
                 </div>
             ) : (
-                <>
-                    {/* <ChargesRateSchemeCreateUpdateFormModal className="w-64" /> */}
-                </>
+                <TimeDepositTypeUpdateForm
+                    defaultValues={timeDepositType}
+                    timeDepositTypeId={timeDepositType.id}
+                />
             )}
         </div>
     )

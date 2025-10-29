@@ -5,27 +5,8 @@ import {
     TEntityId,
 } from '@/types/common'
 
-import { ICurrency } from '../currency'
 import { ITimeDepositType } from '../time-deposit-type'
-
-export interface ITimeDepositComputationRequest {
-    currency_id?: TEntityId
-    name: string
-
-    minimum_amount?: number
-    maximum_amount?: number
-    header1?: number
-    header2?: number
-    header3?: number
-    header4?: number
-    header5?: number
-    header6?: number
-    header7?: number
-    header8?: number
-    header9?: number
-    header10?: number
-    header11?: number
-}
+import { TTimeDepositComputationSchema } from './time-deposit-computation.validation'
 
 export interface ITimeDepositComputation
     extends ITimeStamps,
@@ -33,14 +14,12 @@ export interface ITimeDepositComputation
         IOrgBranchIdentity {
     id: TEntityId
 
-    currency_id?: TEntityId
-    currency: ICurrency
-    name: string
-
     time_deposit_type_id: TEntityId
     time_deposit_type?: ITimeDepositType
+
     minimum_amount: number
     maximum_amount: number
+
     header_1: number
     header_2: number
     header_3: number
@@ -53,3 +32,5 @@ export interface ITimeDepositComputation
     header_10: number
     header_11: number
 }
+
+export type ITimeDepositComputationRequest = TTimeDepositComputationSchema

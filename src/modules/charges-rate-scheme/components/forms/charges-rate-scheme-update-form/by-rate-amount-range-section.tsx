@@ -65,14 +65,16 @@ const ByRateOrAmountRange = ({
     }
 
     const handleRemoveRange = (index: number) => {
+        const field = form.getValues(
+            `charges_rate_by_range_or_minimum_amounts.${index}`
+        )
+
+        if (field.id === undefined || field.id === null) return remove(index)
+
         onOpen({
             title: 'Remove Range',
             description: 'Are you sure you want to remove this charge range?',
             onConfirm: () => {
-                const field = form.getValues(
-                    `charges_rate_by_range_or_minimum_amounts.${index}`
-                )
-
                 if (field.id) addDeletedId(field.id)
 
                 remove(index)

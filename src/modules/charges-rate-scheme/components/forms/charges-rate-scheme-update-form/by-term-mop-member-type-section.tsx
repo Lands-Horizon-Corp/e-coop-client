@@ -66,14 +66,16 @@ const ByTermMopMemberTypeSection = ({
     const memberType = form.watch('member_type')
 
     const handleRemoveRow = (index: number) => {
+        const field = form.getValues(
+            `charges_rate_scheme_model_of_payments.${index}`
+        )
+
+        if (field.id === undefined || field.id === null) return remove(index)
+
         onOpen({
             title: 'Remove Row',
             description: 'Are you sure you want to remove this row?',
             onConfirm: () => {
-                const field = form.getValues(
-                    `charges_rate_scheme_model_of_payments.${index}`
-                )
-
                 if (field.id) addDeletedId(field.id)
 
                 remove(index)
@@ -178,361 +180,338 @@ const ByTermMopMemberTypeSection = ({
                 </div>
             </div>
 
-            <div className="w-fit max-w-full relative space-y-1 ecoop-scroll overflow-auto">
-                <div className="space-y-2 p-1 top-0">
-                    <div className="grid items-end grid-cols-[390px_repeat(22,6rem)] w-fit gap-2">
-                        <div className="grid grid-cols-2 font-medium text-lg sticky left-0 z-50 gap-x-2 items-center">
-                            <p className="p-1.5 bg-accent flex items-center justify-center text-accent-foreground h-full rounded-md text-center">
-                                FROM
-                            </p>
-                            <p className="p-1.5 bg-accent flex items-center justify-center text-accent-foreground h-full rounded-md text-center">
-                                TO
-                            </p>
+            {fields.length > 0 && (
+                <div className="w-fit max-w-full relative space-y-1 ecoop-scroll overflow-auto">
+                    <div className="space-y-2 p-1 top-0">
+                        <div className="grid items-end grid-cols-[390px_repeat(22,6rem)] w-fit gap-2">
+                            <div className="grid grid-cols-2 font-medium text-lg sticky left-0 z-50 gap-x-2 items-center">
+                                <p className="p-1.5 bg-accent flex items-center justify-center text-accent-foreground h-full rounded-md text-center">
+                                    FROM
+                                </p>
+                                <p className="p-1.5 bg-accent flex items-center justify-center text-accent-foreground h-full rounded-md text-center">
+                                    TO
+                                </p>
+                            </div>
+                            <FormFieldWrapper
+                                control={form.control}
+                                label="01"
+                                name="mode_of_payment_header_1"
+                                render={({ field }) => (
+                                    <InputGroup>
+                                        <InputGroupInput
+                                            {...field}
+                                            disabled={disabled}
+                                            placeholder="01"
+                                        />
+                                    </InputGroup>
+                                )}
+                            />
+                            <FormFieldWrapper
+                                control={form.control}
+                                label="02"
+                                name="mode_of_payment_header_2"
+                                render={({ field }) => (
+                                    <InputGroup>
+                                        <InputGroupInput
+                                            {...field}
+                                            disabled={disabled}
+                                            placeholder="02"
+                                        />
+                                    </InputGroup>
+                                )}
+                            />
+                            <FormFieldWrapper
+                                control={form.control}
+                                label="03"
+                                name="mode_of_payment_header_3"
+                                render={({ field }) => (
+                                    <InputGroup>
+                                        <InputGroupInput
+                                            {...field}
+                                            disabled={disabled}
+                                            placeholder="03"
+                                        />
+                                    </InputGroup>
+                                )}
+                            />
+                            <FormFieldWrapper
+                                control={form.control}
+                                label="04"
+                                name="mode_of_payment_header_4"
+                                render={({ field }) => (
+                                    <InputGroup>
+                                        <InputGroupInput
+                                            {...field}
+                                            disabled={disabled}
+                                            placeholder="04"
+                                        />
+                                    </InputGroup>
+                                )}
+                            />
+                            <FormFieldWrapper
+                                control={form.control}
+                                label="05"
+                                name="mode_of_payment_header_5"
+                                render={({ field }) => (
+                                    <InputGroup>
+                                        <InputGroupInput
+                                            {...field}
+                                            disabled={disabled}
+                                            placeholder="05"
+                                        />
+                                    </InputGroup>
+                                )}
+                            />
+                            <FormFieldWrapper
+                                control={form.control}
+                                label="06"
+                                name="mode_of_payment_header_6"
+                                render={({ field }) => (
+                                    <InputGroup>
+                                        <InputGroupInput
+                                            {...field}
+                                            disabled={disabled}
+                                            placeholder="06"
+                                        />
+                                    </InputGroup>
+                                )}
+                            />
+                            <FormFieldWrapper
+                                control={form.control}
+                                label="07"
+                                name="mode_of_payment_header_7"
+                                render={({ field }) => (
+                                    <InputGroup>
+                                        <InputGroupInput
+                                            {...field}
+                                            disabled={disabled}
+                                            placeholder="07"
+                                        />
+                                    </InputGroup>
+                                )}
+                            />
+                            <FormFieldWrapper
+                                control={form.control}
+                                label="08"
+                                name="mode_of_payment_header_8"
+                                render={({ field }) => (
+                                    <InputGroup>
+                                        <InputGroupInput
+                                            {...field}
+                                            disabled={disabled}
+                                            placeholder="08"
+                                        />
+                                    </InputGroup>
+                                )}
+                            />
+                            <FormFieldWrapper
+                                control={form.control}
+                                label="09"
+                                name="mode_of_payment_header_9"
+                                render={({ field }) => (
+                                    <InputGroup>
+                                        <InputGroupInput
+                                            {...field}
+                                            disabled={disabled}
+                                            placeholder="09"
+                                        />
+                                    </InputGroup>
+                                )}
+                            />
+                            <FormFieldWrapper
+                                control={form.control}
+                                label="10"
+                                name="mode_of_payment_header_10"
+                                render={({ field }) => (
+                                    <InputGroup>
+                                        <InputGroupInput
+                                            {...field}
+                                            disabled={disabled}
+                                            placeholder="10"
+                                        />
+                                    </InputGroup>
+                                )}
+                            />
+                            <FormFieldWrapper
+                                control={form.control}
+                                label="11"
+                                name="mode_of_payment_header_11"
+                                render={({ field }) => (
+                                    <InputGroup>
+                                        <InputGroupInput
+                                            {...field}
+                                            disabled={disabled}
+                                            placeholder="11"
+                                        />
+                                    </InputGroup>
+                                )}
+                            />
+                            <FormFieldWrapper
+                                control={form.control}
+                                label="12"
+                                name="mode_of_payment_header_12"
+                                render={({ field }) => (
+                                    <InputGroup>
+                                        <InputGroupInput
+                                            {...field}
+                                            disabled={disabled}
+                                            placeholder="12"
+                                        />
+                                    </InputGroup>
+                                )}
+                            />
+                            <FormFieldWrapper
+                                control={form.control}
+                                label="13"
+                                name="mode_of_payment_header_13"
+                                render={({ field }) => (
+                                    <InputGroup>
+                                        <InputGroupInput
+                                            {...field}
+                                            disabled={disabled}
+                                            placeholder="13"
+                                        />
+                                    </InputGroup>
+                                )}
+                            />
+
+                            <FormFieldWrapper
+                                control={form.control}
+                                label="14"
+                                name="mode_of_payment_header_14"
+                                render={({ field }) => (
+                                    <InputGroup>
+                                        <InputGroupInput
+                                            {...field}
+                                            disabled={disabled}
+                                            placeholder="14"
+                                        />
+                                    </InputGroup>
+                                )}
+                            />
+
+                            <FormFieldWrapper
+                                control={form.control}
+                                label="15"
+                                name="mode_of_payment_header_15"
+                                render={({ field }) => (
+                                    <InputGroup>
+                                        <InputGroupInput
+                                            {...field}
+                                            disabled={disabled}
+                                            placeholder="15"
+                                        />
+                                    </InputGroup>
+                                )}
+                            />
+
+                            <FormFieldWrapper
+                                control={form.control}
+                                label="16"
+                                name="mode_of_payment_header_16"
+                                render={({ field }) => (
+                                    <InputGroup>
+                                        <InputGroupInput
+                                            {...field}
+                                            disabled={disabled}
+                                            placeholder="16"
+                                        />
+                                    </InputGroup>
+                                )}
+                            />
+
+                            <FormFieldWrapper
+                                control={form.control}
+                                label="17"
+                                name="mode_of_payment_header_17"
+                                render={({ field }) => (
+                                    <InputGroup>
+                                        <InputGroupInput
+                                            {...field}
+                                            disabled={disabled}
+                                            placeholder="17"
+                                        />
+                                    </InputGroup>
+                                )}
+                            />
+
+                            <FormFieldWrapper
+                                control={form.control}
+                                label="18"
+                                name="mode_of_payment_header_18"
+                                render={({ field }) => (
+                                    <InputGroup>
+                                        <InputGroupInput
+                                            {...field}
+                                            disabled={disabled}
+                                            placeholder="18"
+                                        />
+                                    </InputGroup>
+                                )}
+                            />
+
+                            <FormFieldWrapper
+                                control={form.control}
+                                label="19"
+                                name="mode_of_payment_header_19"
+                                render={({ field }) => (
+                                    <InputGroup>
+                                        <InputGroupInput
+                                            {...field}
+                                            disabled={disabled}
+                                            placeholder="19"
+                                        />
+                                    </InputGroup>
+                                )}
+                            />
+
+                            <FormFieldWrapper
+                                control={form.control}
+                                label="20"
+                                name="mode_of_payment_header_20"
+                                render={({ field }) => (
+                                    <InputGroup>
+                                        <InputGroupInput
+                                            {...field}
+                                            disabled={disabled}
+                                            placeholder="20"
+                                        />
+                                    </InputGroup>
+                                )}
+                            />
+
+                            <FormFieldWrapper
+                                control={form.control}
+                                label="21"
+                                name="mode_of_payment_header_21"
+                                render={({ field }) => (
+                                    <InputGroup>
+                                        <InputGroupInput
+                                            {...field}
+                                            disabled={disabled}
+                                            placeholder="21"
+                                        />
+                                    </InputGroup>
+                                )}
+                            />
+
+                            <FormFieldWrapper
+                                control={form.control}
+                                label="22"
+                                name="mode_of_payment_header_22"
+                                render={({ field }) => (
+                                    <InputGroup>
+                                        <InputGroupInput
+                                            {...field}
+                                            disabled={disabled}
+                                            placeholder="22"
+                                        />
+                                    </InputGroup>
+                                )}
+                            />
                         </div>
-                        <FormFieldWrapper
-                            control={form.control}
-                            label="01"
-                            name="mode_of_payment_header_1"
-                            render={({ field }) => (
-                                <InputGroup>
-                                    <InputGroupInput
-                                        {...field}
-                                        disabled={disabled}
-                                        placeholder="01"
-                                    />
-                                </InputGroup>
-                            )}
-                        />
-                        <FormFieldWrapper
-                            control={form.control}
-                            label="02"
-                            name="mode_of_payment_header_2"
-                            render={({ field }) => (
-                                <InputGroup>
-                                    <InputGroupInput
-                                        {...field}
-                                        disabled={disabled}
-                                        placeholder="02"
-                                    />
-                                </InputGroup>
-                            )}
-                        />
-                        <FormFieldWrapper
-                            control={form.control}
-                            label="03"
-                            name="mode_of_payment_header_3"
-                            render={({ field }) => (
-                                <InputGroup>
-                                    <InputGroupInput
-                                        {...field}
-                                        disabled={disabled}
-                                        placeholder="03"
-                                    />
-                                </InputGroup>
-                            )}
-                        />
-                        <FormFieldWrapper
-                            control={form.control}
-                            label="04"
-                            name="mode_of_payment_header_4"
-                            render={({ field }) => (
-                                <InputGroup>
-                                    <InputGroupInput
-                                        {...field}
-                                        disabled={disabled}
-                                        placeholder="04"
-                                    />
-                                </InputGroup>
-                            )}
-                        />
-                        <FormFieldWrapper
-                            control={form.control}
-                            label="05"
-                            name="mode_of_payment_header_5"
-                            render={({ field }) => (
-                                <InputGroup>
-                                    <InputGroupInput
-                                        {...field}
-                                        disabled={disabled}
-                                        placeholder="05"
-                                    />
-                                </InputGroup>
-                            )}
-                        />
-                        <FormFieldWrapper
-                            control={form.control}
-                            label="06"
-                            name="mode_of_payment_header_6"
-                            render={({ field }) => (
-                                <InputGroup>
-                                    <InputGroupInput
-                                        {...field}
-                                        disabled={disabled}
-                                        placeholder="06"
-                                    />
-                                </InputGroup>
-                            )}
-                        />
-                        <FormFieldWrapper
-                            control={form.control}
-                            label="07"
-                            name="mode_of_payment_header_7"
-                            render={({ field }) => (
-                                <InputGroup>
-                                    <InputGroupInput
-                                        {...field}
-                                        disabled={disabled}
-                                        placeholder="07"
-                                    />
-                                </InputGroup>
-                            )}
-                        />
-                        <FormFieldWrapper
-                            control={form.control}
-                            label="08"
-                            name="mode_of_payment_header_8"
-                            render={({ field }) => (
-                                <InputGroup>
-                                    <InputGroupInput
-                                        {...field}
-                                        disabled={disabled}
-                                        placeholder="08"
-                                    />
-                                </InputGroup>
-                            )}
-                        />
-                        <FormFieldWrapper
-                            control={form.control}
-                            label="09"
-                            name="mode_of_payment_header_9"
-                            render={({ field }) => (
-                                <InputGroup>
-                                    <InputGroupInput
-                                        {...field}
-                                        disabled={disabled}
-                                        placeholder="09"
-                                    />
-                                </InputGroup>
-                            )}
-                        />
-                        <FormFieldWrapper
-                            control={form.control}
-                            label="10"
-                            name="mode_of_payment_header_10"
-                            render={({ field }) => (
-                                <InputGroup>
-                                    <InputGroupInput
-                                        {...field}
-                                        disabled={disabled}
-                                        placeholder="10"
-                                    />
-                                </InputGroup>
-                            )}
-                        />
-                        <FormFieldWrapper
-                            control={form.control}
-                            label="11"
-                            name="mode_of_payment_header_11"
-                            render={({ field }) => (
-                                <InputGroup>
-                                    <InputGroupInput
-                                        {...field}
-                                        disabled={disabled}
-                                        placeholder="11"
-                                    />
-                                </InputGroup>
-                            )}
-                        />
-                        <FormFieldWrapper
-                            control={form.control}
-                            label="12"
-                            name="mode_of_payment_header_12"
-                            render={({ field }) => (
-                                <InputGroup>
-                                    <InputGroupInput
-                                        {...field}
-                                        disabled={disabled}
-                                        placeholder="12"
-                                    />
-                                </InputGroup>
-                            )}
-                        />
-                        <FormFieldWrapper
-                            control={form.control}
-                            label="13"
-                            name="mode_of_payment_header_13"
-                            render={({ field }) => (
-                                <InputGroup>
-                                    <InputGroupInput
-                                        {...field}
-                                        disabled={disabled}
-                                        placeholder="13"
-                                    />
-                                </InputGroup>
-                            )}
-                        />
-
-                        <FormFieldWrapper
-                            control={form.control}
-                            label="14"
-                            name="mode_of_payment_header_14"
-                            render={({ field }) => (
-                                <InputGroup>
-                                    <InputGroupInput
-                                        {...field}
-                                        disabled={disabled}
-                                        placeholder="14"
-                                    />
-                                </InputGroup>
-                            )}
-                        />
-
-                        <FormFieldWrapper
-                            control={form.control}
-                            label="15"
-                            name="mode_of_payment_header_15"
-                            render={({ field }) => (
-                                <InputGroup>
-                                    <InputGroupInput
-                                        {...field}
-                                        disabled={disabled}
-                                        placeholder="15"
-                                    />
-                                </InputGroup>
-                            )}
-                        />
-
-                        <FormFieldWrapper
-                            control={form.control}
-                            label="16"
-                            name="mode_of_payment_header_16"
-                            render={({ field }) => (
-                                <InputGroup>
-                                    <InputGroupInput
-                                        {...field}
-                                        disabled={disabled}
-                                        placeholder="16"
-                                    />
-                                </InputGroup>
-                            )}
-                        />
-
-                        <FormFieldWrapper
-                            control={form.control}
-                            label="17"
-                            name="mode_of_payment_header_17"
-                            render={({ field }) => (
-                                <InputGroup>
-                                    <InputGroupInput
-                                        {...field}
-                                        disabled={disabled}
-                                        placeholder="17"
-                                    />
-                                </InputGroup>
-                            )}
-                        />
-
-                        <FormFieldWrapper
-                            control={form.control}
-                            label="18"
-                            name="mode_of_payment_header_18"
-                            render={({ field }) => (
-                                <InputGroup>
-                                    <InputGroupInput
-                                        {...field}
-                                        disabled={disabled}
-                                        placeholder="18"
-                                    />
-                                </InputGroup>
-                            )}
-                        />
-
-                        <FormFieldWrapper
-                            control={form.control}
-                            label="19"
-                            name="mode_of_payment_header_19"
-                            render={({ field }) => (
-                                <InputGroup>
-                                    <InputGroupInput
-                                        {...field}
-                                        disabled={disabled}
-                                        placeholder="19"
-                                    />
-                                </InputGroup>
-                            )}
-                        />
-
-                        <FormFieldWrapper
-                            control={form.control}
-                            label="20"
-                            name="mode_of_payment_header_20"
-                            render={({ field }) => (
-                                <InputGroup>
-                                    <InputGroupInput
-                                        {...field}
-                                        disabled={disabled}
-                                        placeholder="20"
-                                    />
-                                </InputGroup>
-                            )}
-                        />
-
-                        <FormFieldWrapper
-                            control={form.control}
-                            label="21"
-                            name="mode_of_payment_header_21"
-                            render={({ field }) => (
-                                <InputGroup>
-                                    <InputGroupInput
-                                        {...field}
-                                        disabled={disabled}
-                                        placeholder="21"
-                                    />
-                                </InputGroup>
-                            )}
-                        />
-
-                        <FormFieldWrapper
-                            control={form.control}
-                            label="22"
-                            name="mode_of_payment_header_22"
-                            render={({ field }) => (
-                                <InputGroup>
-                                    <InputGroupInput
-                                        {...field}
-                                        disabled={disabled}
-                                        placeholder="22"
-                                    />
-                                </InputGroup>
-                            )}
-                        />
                     </div>
-                </div>
 
-                {fields.length === 0 ? (
-                    <Empty className="from-muted/50 !w-full to-background bg-gradient-to-b from-30% rounded-2xl border p-8">
-                        <EmptyHeader>
-                            <EmptyMedia variant="icon">
-                                <PlusIcon />
-                            </EmptyMedia>
-                            <EmptyTitle>No Rows Added</EmptyTitle>
-                            <EmptyDescription>
-                                Add rows to define rates based on amount ranges.
-                            </EmptyDescription>
-                        </EmptyHeader>
-                        <EmptyContent>
-                            <Button
-                                onClick={handleAddRow}
-                                size="sm"
-                                type="button"
-                                variant="outline"
-                            >
-                                <PlusIcon className="size-4" />
-                                Add First Row
-                            </Button>
-                        </EmptyContent>
-                    </Empty>
-                ) : (
                     <div className="space-y-2 pb-4 w-full rounded-2xl">
                         {fields.map((field, index) => {
                             return (
@@ -849,8 +828,32 @@ const ByTermMopMemberTypeSection = ({
                             )
                         })}
                     </div>
-                )}
-            </div>
+                </div>
+            )}
+            {fields.length === 0 && (
+                <Empty className="from-muted/50 mt-4 !w-full to-background bg-gradient-to-b from-30% rounded-2xl border p-8">
+                    <EmptyHeader>
+                        <EmptyMedia variant="icon">
+                            <PlusIcon />
+                        </EmptyMedia>
+                        <EmptyTitle>No Rows Added</EmptyTitle>
+                        <EmptyDescription>
+                            Add rows to define rates based on amount ranges.
+                        </EmptyDescription>
+                    </EmptyHeader>
+                    <EmptyContent>
+                        <Button
+                            onClick={handleAddRow}
+                            size="sm"
+                            type="button"
+                            variant="outline"
+                        >
+                            <PlusIcon className="size-4" />
+                            Add First Row
+                        </Button>
+                    </EmptyContent>
+                </Empty>
+            )}
         </div>
     )
 }
