@@ -169,6 +169,7 @@ import {
     GiPayMoney as HandDropCoinsIcon,
     GiTakeMyMoney as MoneyIcon,
     GiMoneyStack as MoneyStackIcon,
+    GiReceiveMoney as ReceiveMoneyIcon,
     GiVillage as VillageIcon,
     GiWallet as WalletIcon,
     GiWoodenSign as WoodSignsIcon,
@@ -709,6 +710,7 @@ export {
     JudgeHammerIcon,
     PoliceBadgeIcon,
     ClockCancelIcon,
+    ReceiveMoneyIcon,
     TrendingDownIcon,
     HandsHelpingIcon,
     DoorExitFillIcon,
@@ -1188,6 +1190,7 @@ export const IconMap = {
     'Globe Asia': GlobeAsiaIcon,
     'Shop Icon': ShopIcon,
     'Grid Icon': GridIcon,
+    'Receive Money': ReceiveMoneyIcon,
 }
 
 export type TIcon = (typeof ICONS)[number]

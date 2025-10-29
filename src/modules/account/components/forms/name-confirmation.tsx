@@ -53,7 +53,10 @@ export function NameConfirmation({
                     <Button
                         className="flex-1"
                         disabled={!isMatching}
-                        onClick={onConfirm}
+                        onClick={() => {
+                            onConfirm?.()
+                            setInputValue('')
+                        }}
                         variant={confirmButtonVariant}
                     >
                         {isLoading ? 'Processing...' : confirmButtonText}

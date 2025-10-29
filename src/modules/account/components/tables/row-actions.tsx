@@ -183,10 +183,6 @@ export const AccountAction = ({
                     formProps={{
                         accountId: account.id,
                         defaultValues: account,
-                        onSuccess: () => {
-                            toast.success('1 account updated')
-                            updateModal.onOpenChange(false)
-                        },
                     }}
                     title="Update Account"
                 />
@@ -375,10 +371,28 @@ export const AccountRowContext = ({
         handleDelete,
         openLedgerModal,
         getModalTitle,
+        confirmModal,
+        mode,
+        deleteAccount,
     } = useAccountActions({ row, onDeleteSuccess })
 
     return (
         <>
+            <NameConfirmation
+                description="This action cannot be undone. Please type the project name to confirm deletion."
+                title={`Confirm ${mode === 'delete' ? 'Deletion' : 'Update'}`}
+                {...confirmModal}
+                mode={mode}
+                name={row.original.name}
+                onConfirm={() => {
+                    if (mode === 'delete') {
+                        deleteAccount(row.original.id)
+                    } else {
+                        updateModal.onOpenChange(true)
+                    }
+                    confirmModal.onOpenChange(false)
+                }}
+            />
             <Modal
                 {...ledgerTableModal}
                 className="!max-w-[95vw]"
@@ -398,10 +412,6 @@ export const AccountRowContext = ({
                 formProps={{
                     accountId: account.id,
                     defaultValues: account,
-                    onSuccess: () => {
-                        toast.success('1 account Added')
-                        updateModal.onOpenChange(false)
-                    },
                 }}
                 title="Update Account"
             />
