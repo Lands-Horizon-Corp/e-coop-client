@@ -115,6 +115,8 @@ import {
     FaFaceAngry as AngryIcon,
     FaArrowTrendUp as ArrowTrendUpIcon,
     FaArrowUpLong as ArrowUpLong,
+    // FaShield as ShieldFillIcon
+    FaBell as BellIcon,
     FaBoxesStacked as BoxesStackedIcon,
     FaBusinessTime as BriefCaseClockIcon,
     FaChartBar as ChartBarIcon,
@@ -151,7 +153,6 @@ import {
     FaUserShield as UserShieldIcon,
     FaUsersLine as Users3LineIcon,
     FaWandMagicSparkles as WandSparkleIcon,
-    // FaShield as ShieldFillIcon
 } from 'react-icons/fa6'
 import {
     FiCamera as CameraIcon,
@@ -463,6 +464,7 @@ export {
     F3Icon,
     MapIcon,
     CsvIcon,
+    BellIcon,
     SunIcon,
     KeyIcon,
     DevIcon,
@@ -1077,6 +1079,7 @@ export const IconMap = {
     'Shield Check': ShieldCheckIcon,
     'Address Card': AddressCardIcon,
     'Chevron Left': ChevronLeftIcon,
+    Bell: BellIcon,
     'Sidebar Left': SidebarLeftIcon,
     'Building Cog': BuildingCogIcon,
     'List Ordered': ListOrderedIcon,

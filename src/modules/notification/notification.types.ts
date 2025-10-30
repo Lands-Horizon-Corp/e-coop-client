@@ -1,27 +1,26 @@
-import { IPaginatedResult, ITimeStamps, TEntityId } from '@/types/common'
+import z from 'zod'
 
-import { IUserBase } from '../user/user.types'
+import { IBaseEntityMeta, IPaginatedResult, TEntityId } from '@/types'
 
-export type INotificationType =
-    | 'success'
-    | 'warning'
-    | 'info'
-    | 'error'
-    | 'general'
-    | 'report'
+import { IUser } from '../user'
+import { NOTIFICATION_TYPE } from './notification.constant'
+import { NotificationSchema } from './notification.validation'
 
-export interface INotification extends ITimeStamps {
-    id: TEntityId
+export type TNotificationType = (typeof NOTIFICATION_TYPE)[number]
 
+export interface INotification extends IBaseEntityMeta {
+    [x: string]: any
     user_id: TEntityId
-    user: IUserBase
-
+    user: IUser
     title: string
     description: string
     is_viewed: boolean
-
-    notification_type: INotificationType
+    notification_type: TNotificationType
 }
+
+export type INotificationRequest = z.infer<typeof NotificationSchema>
 
 export interface INotificationPaginated
     extends IPaginatedResult<INotification> {}
+
+export type INotificationViewRequest = { ids: TEntityId[] }

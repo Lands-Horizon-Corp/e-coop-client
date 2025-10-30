@@ -87,7 +87,7 @@ const AccountCreateUpdateForm = ({
         options: { onSuccess: formProps.onSuccess },
     })
 
-    const { formRef, handleFocusError, isDisabled } =
+    const { formRef, handleFocusError, isDisabled, firstError } =
         useFormHelper<TAccountFormValues>({
             form,
             ...formProps,
@@ -111,7 +111,9 @@ const AccountCreateUpdateForm = ({
         ? updateMutation
         : createMutation
 
-    const error = serverRequestErrExtractor({ error: errorResponse })
+    const error =
+        serverRequestErrExtractor({ error: errorResponse }) || firstError
+
     return (
         <Form {...form}>
             <form

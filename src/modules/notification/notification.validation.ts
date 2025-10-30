@@ -1,28 +1,15 @@
 import z from 'zod'
 
-import {
-    descriptionSchema,
-    descriptionTransformerSanitizer,
-    entityIdSchema,
-} from '@/validation'
-
-const notificationTypeSchema = z.enum([
-    'success',
-    'warning',
-    'info',
-    'error',
-    'general',
-    'report',
-])
+import { descriptionTransformerSanitizer, entityIdSchema } from '@/validation'
 
 export const NotificationSchema = z.object({
-    user_id: entityIdSchema,
-    title: z.string().min(1, 'Title is required'),
-    description: descriptionSchema
+    id: entityIdSchema.optional(),
+    name: z.string().min(1, 'Notification name is required'),
+    description: z
+        .string()
         .min(10, 'Min 10 character description')
+        .optional()
         .transform(descriptionTransformerSanitizer),
-    is_viewed: z.boolean().default(false),
-    notification_type: notificationTypeSchema.default('general'),
 })
 
 export type TNotificationSchema = z.infer<typeof NotificationSchema>
