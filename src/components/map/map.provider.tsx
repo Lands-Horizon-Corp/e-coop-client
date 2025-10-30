@@ -61,9 +61,8 @@ export const MapProvider = ({
                     setLoadError(true)
                 }}
                 onLoad={() => setIsLoaded(true)}
-            >
-                {children}
-            </LoadScript>
+            />
+            {children}
         </MapProviderContext.Provider>
     )
 }
