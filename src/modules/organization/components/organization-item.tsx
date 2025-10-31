@@ -46,7 +46,7 @@ export const OrganizationItem = ({
 
     const getImageSrc = () => {
         return (
-            organization?.cover_media?.url ||
+            organization?.cover_media?.download_url ||
             organization?.media?.download_url ||
             '/placeholder-org-cover.jpg'
         )

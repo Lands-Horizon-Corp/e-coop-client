@@ -116,7 +116,9 @@ const TransactionModalJointMember = ({
                     <p className="items-center flex">
                         <ImageDisplay
                             className="size-5 shrink-0"
-                            src={selectedJointMember?.picture_media.url}
+                            src={
+                                selectedJointMember?.picture_media.download_url
+                            }
                         />
                         {triggerContentMode === 'full' && (
                             <span className="ml-2 inline-block truncate">

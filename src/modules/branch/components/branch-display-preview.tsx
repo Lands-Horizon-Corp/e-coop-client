@@ -58,7 +58,7 @@ const BranchPreviewDisplay = ({
         return null
     }
 
-    const mediaUrl = branch?.media?.url || branch?.media?.download_url
+    const mediaUrl = branch?.media?.download_url
     const branchId = branch?.id || ''
     const description =
         branch?.description || 'Branch description not available.'

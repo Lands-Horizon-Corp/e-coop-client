@@ -60,7 +60,7 @@ const OrganizationPreviewDisplay = ({
     if (!organization) {
         return null
     }
-    const mediaUrl = organization?.cover_media?.url
+    const mediaUrl = organization?.cover_media?.download_url
     const categories = organization?.organization_categories ?? []
     const organizationId = organization?.id || ''
     const description =

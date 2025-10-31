@@ -50,13 +50,13 @@ export const LoanTransactionCardCreatorInfo = ({
               : ''
 
     const mediaUrl = isReleased
-        ? loan.released_by?.media?.url
+        ? loan.released_by?.media?.download_url
         : isApproved
-          ? loan.approved_by?.media?.url
+          ? loan.approved_by?.media?.download_url
           : isPrinted
-            ? loan.printed_by?.media?.url
+            ? loan.printed_by?.media?.download_url
             : loan.created_by
-              ? loan.created_by?.media?.url
+              ? loan.created_by?.media?.download_url
               : ''
     return (
         <div className="flex items-center justify-end gap-x-2 pt-2 border-t border-dashed">

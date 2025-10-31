@@ -57,11 +57,11 @@ const UpdateOrganizationForm = ({
 }: IEditOrganizationFormProps) => {
     const { countryCode } = useLocationInfo()
     const [selectedLogoMedia, setSelectedLogoMedia] = useState<string>(
-        media?.url || ''
+        media?.download_url || ''
     )
 
     const [selectedCoverMedia, setSelectedCoverMedia] = useState<string>(
-        coverMedia?.url || ''
+        coverMedia?.download_url || ''
     )
 
     const form = useForm<TEditOrganizationFormValues>({

@@ -70,13 +70,13 @@ export const JournalVoucherCardCreatorInfo = ({
               : ''
 
     const mediaUrl = isReleased
-        ? journalVoucher.released_by?.media?.url
+        ? journalVoucher.released_by?.media?.download_url
         : isApproved
-          ? journalVoucher.approved_by?.media?.url
+          ? journalVoucher.approved_by?.media?.download_url
           : isPrinted
-            ? journalVoucher.printed_by?.media?.url
+            ? journalVoucher.printed_by?.media?.download_url
             : journalVoucher.created_by
-              ? journalVoucher.created_by?.media?.url
+              ? journalVoucher.created_by?.media?.download_url
               : ''
     return (
         <div className="flex items-center justify-end gap-x-2">

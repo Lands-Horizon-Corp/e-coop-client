@@ -74,7 +74,7 @@ const OrganizationHeader = ({
     }
 
     const fallBackImage = orgBannerList[0]
-    const mediaUrl = organization?.media?.url ?? fallBackImage
+    const mediaUrl = organization?.media?.download_url ?? fallBackImage
 
     return (
         <GradientBackground className="w-full" mediaUrl={mediaUrl}>

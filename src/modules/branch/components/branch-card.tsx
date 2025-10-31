@@ -295,7 +295,7 @@ export const BranchCard = ({
         }
     }
     const getImageSrc = () => {
-        return branch.media?.url ?? '/placeholder-branch.jpg'
+        return branch.media?.download_url ?? '/placeholder-branch.jpg'
     }
     const CustomFooter = (): ReactNode => (
         <div className="flex items-center px-1 !pt-0 pb-2 w-full justify-between gap-2">
