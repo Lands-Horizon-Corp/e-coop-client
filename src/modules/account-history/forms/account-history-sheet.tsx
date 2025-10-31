@@ -89,7 +89,7 @@ const AccountHistoryCard = ({
     return (
         <Card className="group relative hover:shadow-md transition-all p-0 duration-200">
             {!isLast && (
-                <div className="absolute left-8 top-20 w-px h-6 bg-gradient-to-b from-border to-transparent z-10" />
+                <div className="absolute left-7 bottom-0 w-px h-6 bg-gradient-to-b from-border to-transparent z-10" />
             )}
 
             <CardHeader className="p-2.5 pb-5">
@@ -100,7 +100,7 @@ const AccountHistoryCard = ({
                     <div className="inline-flex pt-2 space-x-2 ">
                         <div
                             className={cn(
-                                'relative hid flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center border-2 shadow-sm',
+                                'relative flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center border-2 shadow-sm',
                                 config.color
                             )}
                         >
@@ -144,7 +144,7 @@ const AccountHistoryCard = ({
                             </div>
                             <ImageDisplay
                                 className=""
-                                src={history.created_by?.media?.url}
+                                src={history.created_by?.media?.download_url}
                             />
                         </div>
                     </div>
@@ -166,7 +166,7 @@ const AccountHistorySheet = ({ accountId }: { accountId: TEntityId }) => {
         <Sheet>
             <SheetTrigger asChild>
                 <Button
-                    className="!p-0.9 py-1 h-fit"
+                    className="!p-0.9  py-1 h-fit"
                     size={'sm'}
                     variant={'secondary'}
                 >
