@@ -109,12 +109,31 @@ const BranchSettingsCurrencyForm = ({
                             <div className="size-fit rounded-full bg-yellow-100 p-2 dark:bg-yellow-900/20">
                                 <BankIcon className="size-5 " />
                             </div>
-                            <div>
+                            <div className="flex-1">
                                 <h3 className="font-semibold">
                                     Currency & Default Accounts
                                 </h3>
                                 <p className="text-xs text-muted-foreground">
                                     Configure currency and default accounts
+                                </p>
+                            </div>
+                        </div>
+
+                        {/* Important Notice */}
+                        <div className="flex gap-3 p-3 bg-accent/50 border border-border rounded-lg">
+                            <InfoIcon className="size-5 shrink-0 text-primary mt-0.5" />
+                            <div className="space-y-1">
+                                <p className="text-sm font-medium text-foreground">
+                                    Currency Configuration Requirements
+                                </p>
+                                <p className="text-xs text-muted-foreground">
+                                    To enable multi-currency support, the Paid
+                                    Up Share Capital and Cash on Hand accounts
+                                    must use the same currency as your default
+                                    currency. If you change the default currency
+                                    and no corresponding accounts exist for that
+                                    currency, please create these accounts first
+                                    before saving your changes.
                                 </p>
                             </div>
                         </div>
