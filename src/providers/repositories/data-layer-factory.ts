@@ -55,7 +55,7 @@ export const createDataLayerFactory = <
     } = {}) => {
         return useQuery<TData[], TError>({
             ...options,
-            queryKey: [baseKey, 'all', query],
+            queryKey: [baseKey, 'all', query].filter(Boolean),
             queryFn: async () =>
                 baseAPI.getAll({
                     query,
@@ -72,7 +72,7 @@ export const createDataLayerFactory = <
     }) => {
         return useQuery<IPaginatedResult<TData>, TError>({
             ...options,
-            queryKey: [baseKey, 'paginated', query],
+            queryKey: [baseKey, 'paginated', query].filter(Boolean),
             queryFn: async () => baseAPI.getPaginated({ query }),
         })
     }

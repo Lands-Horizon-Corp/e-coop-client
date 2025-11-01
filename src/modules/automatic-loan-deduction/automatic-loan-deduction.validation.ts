@@ -1,6 +1,10 @@
 import z from 'zod'
 
-import { descriptionTransformerSanitizer, entityIdSchema } from '@/validation'
+import {
+    PercentageSchema,
+    descriptionTransformerSanitizer,
+    entityIdSchema,
+} from '@/validation'
 
 export const AutomaticLoanDeductionSchema = z.object({
     id: entityIdSchema.optional(),
@@ -14,8 +18,8 @@ export const AutomaticLoanDeductionSchema = z.object({
         .optional()
         .transform(descriptionTransformerSanitizer),
 
-    charges_percentage_1: z.coerce.number().nonnegative(),
-    charges_percentage_2: z.coerce.number().nonnegative(),
+    charges_percentage_1: PercentageSchema,
+    charges_percentage_2: PercentageSchema,
     charges_amount: z.coerce.number().nonnegative(),
     charges_divisor: z.coerce.number(),
 
@@ -24,8 +28,7 @@ export const AutomaticLoanDeductionSchema = z.object({
 
     anum: z.coerce.number().int(),
 
-    link_account_id: entityIdSchema.optional(),
-    link_account: z.any().optional(),
+    charges_rate_scheme_id: entityIdSchema.optional(),
 
     add_on: z.boolean().default(false),
     ao_rest: z.boolean().default(false),

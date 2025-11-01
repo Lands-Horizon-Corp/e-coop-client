@@ -2,7 +2,8 @@
 import * as React from 'react'
 import { forwardRef, useEffect, useRef, useState } from 'react'
 
-import { cn, formatBytes, formatDate } from '@/helpers'
+import { cn, formatDate } from '@/helpers'
+import { formatBytes } from '@/modules/media'
 import useEmblaCarousel from 'embla-carousel-react'
 
 import {
@@ -286,7 +287,7 @@ export const ImageContainer = ({
                 >
                     <a
                         className="py-1 text-xs "
-                        href={media.url}
+                        href={media.download_url}
                         target="_blank"
                     >
                         Open in Browser
@@ -449,7 +450,7 @@ export const ImagePreviewPanel = forwardRef<
                     <img
                         alt={`Image ${index}`}
                         className="h-full w-full cursor-pointer overflow-hidden rounded-lg object-cover"
-                        src={data.url}
+                        src={data.download_url}
                     />
                 </div>
             ))}

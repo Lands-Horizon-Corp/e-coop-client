@@ -45,7 +45,7 @@ const ImagePreviewModal = () => {
 
     const [downloadImage, setDownloadImage] = useState<DownloadProps>({
         fileName: Images?.[0]?.file_name ?? '',
-        fileUrl: Images?.[0]?.url ?? '',
+        fileUrl: Images?.[0]?.download_url ?? '',
         fileType: Images?.[0]?.file_type ?? '',
     })
 
@@ -130,11 +130,11 @@ const ImagePreviewModal = () => {
                 if (!ImageToDownload) return
                 setDownloadImage({
                     fileName: ImageToDownload.file_name || '',
-                    fileUrl: ImageToDownload.url || '',
+                    fileUrl: ImageToDownload.download_url || '',
                     fileType: ImageToDownload.file_type || '',
                 })
                 if (imageRef.current) {
-                    imageRef.current.src = ImageToDownload.url
+                    imageRef.current.src = ImageToDownload.download_url
                 }
             }
         }

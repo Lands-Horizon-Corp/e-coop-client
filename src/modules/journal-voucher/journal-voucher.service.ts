@@ -19,6 +19,7 @@ import type {
     IJournalVoucherPrintRequest,
     IJournalVoucherRequest,
     TJournalActionMode,
+    TJournalVoucherMode,
     TPrintMode,
 } from '../journal-voucher'
 
@@ -62,15 +63,13 @@ export const {
     useDeleteMany: useDeleteManyJournalVoucher,
 } = apiCrudHooks
 
-type TloanTransactionMode = 'draft' | 'printed' | 'approved' | 'released'
-
 export const useGetAllJournalVoucher = ({
     mode,
 
     query,
     options,
 }: {
-    mode?: TloanTransactionMode
+    mode?: TJournalVoucherMode
 
     query?: TAPIQueryOptions
     options?: HookQueryOptions<IJournalVoucher[], Error>
@@ -83,6 +82,9 @@ export const useGetAllJournalVoucher = ({
 
             if (mode) {
                 url = `${journalVoucherAPIRoute}/${mode}`
+            }
+            if (mode === 'release-today') {
+                url = `${journalVoucherAPIRoute}/released/today`
             }
 
             return getAllJournalVoucher({ url, query })

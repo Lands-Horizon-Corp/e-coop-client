@@ -177,102 +177,107 @@ const Toolbar = ({
     ]
 
     return (
-        <div
-            className={cn(
-                `flex w-full min-w-fit flex-wrap space-x-2`,
-                className
-            )}
-        >
-            {toolbarItems.map((item) => {
-                const IconComponent = item.icon
-                const isActive = item.isActiveCheck
-                    ? editor.isActive(item.isActiveCheck)
-                    : false
+        <div>
+            <div
+                className={cn(
+                    `flex w-fit min-w-fit overflow-y-auto space-x-2`,
+                    className
+                )}
+            >
+                {toolbarItems.map((item) => {
+                    const IconComponent = item.icon
+                    const isActive = item.isActiveCheck
+                        ? editor.isActive(item.isActiveCheck)
+                        : false
 
-                if (item.id === 'horizontalRule' && !isAllowedHorizontalRule) {
-                    return null
-                }
+                    if (
+                        item.id === 'horizontalRule' &&
+                        !isAllowedHorizontalRule
+                    ) {
+                        return null
+                    }
 
-                if (item.type === 'toggle') {
-                    return (
-                        <ActionTooltip
-                            align="center"
-                            key={item.id}
-                            side="top"
-                            tooltipContent={item.tooltipContent}
-                        >
-                            <Toggle
-                                aria-label={item.ariaLabel}
-                                onClick={item.command(editor)}
-                                onPressedChange={
-                                    item.onPressedChange
-                                        ? item.onPressedChange(editor)
-                                        : undefined
-                                }
-                                pressed={isActive}
-                                size="sm"
-                            >
-                                {IconComponent ? (
-                                    <IconComponent className="size-4" />
-                                ) : (
-                                    item.label
-                                )}
-                            </Toggle>
-                        </ActionTooltip>
-                    )
-                } else {
-                    return (
-                        <ActionTooltip
-                            align="center"
-                            key={item.id}
-                            side="top"
-                            tooltipContent={item.tooltipContent}
-                        >
-                            <Button
-                                aria-label={item.ariaLabel}
-                                className={cn(isActive && 'is-active')}
-                                onClick={item.command(editor)}
-                                type="button"
-                                variant={'ghost'}
-                            >
-                                {IconComponent ? (
-                                    <IconComponent className="size-4" />
-                                ) : (
-                                    item.label
-                                )}
-                            </Button>
-                        </ActionTooltip>
-                    )
-                }
-            })}
-
-            {!isHeadingDisabled && (
-                <>
-                    {Array.from({ length: 4 }, (_, i) => {
-                        const level = (i + 1) as THeadingLevel
+                    if (item.type === 'toggle') {
                         return (
                             <ActionTooltip
                                 align="center"
-                                key={`h-${level}`}
+                                key={item.id}
                                 side="top"
-                                tooltipContent={`Heading ${level}`}
+                                tooltipContent={item.tooltipContent}
                             >
                                 <Toggle
-                                    aria-label={`Toggle Heading ${level}`}
-                                    onClick={() => toggleHeading(level)}
-                                    pressed={
-                                        activeHeading === level &&
-                                        editor.isFocused
+                                    aria-label={item.ariaLabel}
+                                    onClick={item.command(editor)}
+                                    onPressedChange={
+                                        item.onPressedChange
+                                            ? item.onPressedChange(editor)
+                                            : undefined
                                     }
+                                    pressed={isActive}
                                     size="sm"
                                 >
-                                    {`H${level}`}
+                                    {IconComponent ? (
+                                        <IconComponent className="size-4" />
+                                    ) : (
+                                        item.label
+                                    )}
                                 </Toggle>
                             </ActionTooltip>
                         )
-                    })}
-                </>
-            )}
+                    } else {
+                        return (
+                            <ActionTooltip
+                                align="center"
+                                key={item.id}
+                                side="top"
+                                tooltipContent={item.tooltipContent}
+                            >
+                                <Button
+                                    aria-label={item.ariaLabel}
+                                    className={cn(isActive && 'is-active')}
+                                    onClick={item.command(editor)}
+                                    type="button"
+                                    variant={'ghost'}
+                                >
+                                    {IconComponent ? (
+                                        <IconComponent className="size-4" />
+                                    ) : (
+                                        item.label
+                                    )}
+                                </Button>
+                            </ActionTooltip>
+                        )
+                    }
+                })}
+
+                {!isHeadingDisabled && (
+                    <>
+                        {Array.from({ length: 4 }, (_, i) => {
+                            const level = (i + 1) as THeadingLevel
+                            return (
+                                <ActionTooltip
+                                    align="center"
+                                    key={`h-${level}`}
+                                    side="top"
+                                    tooltipContent={`Heading ${level}`}
+                                >
+                                    <Toggle
+                                        aria-label={`Toggle Heading ${level}`}
+                                        onClick={() => toggleHeading(level)}
+                                        pressed={
+                                            activeHeading === level &&
+                                            editor.isFocused
+                                        }
+                                        size="sm"
+                                    >
+                                        {`H${level}`}
+                                    </Toggle>
+                                </ActionTooltip>
+                            )
+                        })}
+                    </>
+                )}
+            </div>
         </div>
     )
 }

@@ -1,15 +1,45 @@
 import z from 'zod'
 
-import { descriptionSchema, entityIdSchema } from '@/validation'
+import { PercentageSchema, entityIdSchema } from '@/validation'
 
-const modeOfPaymentSchema = z.string().optional()
+export const ChargesRateSchemeModeOfPaymentSchema = z
+    .object({
+        id: entityIdSchema.optional(),
+        from: z.coerce.number(),
+        to: z.coerce.number(),
+        column1: PercentageSchema.optional(),
+        column2: PercentageSchema.optional(),
+        column3: PercentageSchema.optional(),
+        column4: PercentageSchema.optional(),
+        column5: PercentageSchema.optional(),
+        column6: PercentageSchema.optional(),
+        column7: PercentageSchema.optional(),
+        column8: PercentageSchema.optional(),
+        column9: PercentageSchema.optional(),
+        column10: PercentageSchema.optional(),
+        column11: PercentageSchema.optional(),
+        column12: PercentageSchema.optional(),
+        column13: PercentageSchema.optional(),
+        column14: PercentageSchema.optional(),
+        column15: PercentageSchema.optional(),
+        column16: PercentageSchema.optional(),
+        column17: PercentageSchema.optional(),
+        column18: PercentageSchema.optional(),
+        column19: PercentageSchema.optional(),
+        column20: PercentageSchema.optional(),
+        column21: PercentageSchema.optional(),
+        column22: PercentageSchema.optional(),
+    })
+    .refine(
+        (data) => {
+            return data.from < data.to
+        },
+        {
+            path: ['from'],
+            error: 'From should not be greater than or equal to To',
+        }
+    )
 
-export const chargesRateMemberTypeModeOfPaymentsSchema = z.object({
-    member_type_id: entityIdSchema.min(1, 'Member Type ID is required'),
-    mode_of_payment: modeOfPaymentSchema,
-    name: z.string().optional(),
-    description: descriptionSchema.optional(),
-})
-export type TChargesRateMemberTypeModeOfPaymenFormValues = z.infer<
-    typeof chargesRateMemberTypeModeOfPaymentsSchema
+export type TChargesRateSchemeModeOfPaymentSchema = z.infer<
+    typeof ChargesRateSchemeModeOfPaymentSchema
 >

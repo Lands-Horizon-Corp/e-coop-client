@@ -30,6 +30,7 @@ export enum ECashCheckVoucherStatus {
     Approved = 'approved',
     Released = 'released',
 }
+
 export const CheckVoucherStatusValues: ECashCheckVoucherStatus[] =
     Object.values(ECashCheckVoucherStatus)
 
@@ -196,11 +197,13 @@ export interface ICashCheckVoucherRequest {
     cash_check_voucher_entries?: ICashCheckVoucherEntryRequest[]
     cash_check_voucher_entries_deleted?: TEntityId[]
 }
-export type TCashCheckVoucherStatus =
+export type TCashCheckVoucherMode =
     | 'draft'
     | 'printed'
     | 'approved'
     | 'released'
+    | 'release-today'
+
 export enum ECashCheckVoucherStatus {
     Draft = 'draft',
     Posted = 'posted',

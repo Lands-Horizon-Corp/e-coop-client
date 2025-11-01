@@ -88,13 +88,13 @@ const ComputationSheetCombobox = ({
                         variant="outline"
                     >
                         {selectedComputationSheet ? (
-                            <div className="flex items-center gap-2 min-w-0">
+                            <div className="flex items-center gap-2 w-[50%] min-w-0">
                                 <span className="truncate">
                                     {selectedComputationSheet.name}
                                 </span>
                             </div>
                         ) : (
-                            <span className="text-muted-foreground">
+                            <span className="truncate text-muted-foreground">
                                 {placeholder}
                             </span>
                         )}

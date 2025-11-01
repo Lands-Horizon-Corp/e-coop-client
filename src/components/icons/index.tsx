@@ -9,6 +9,7 @@ import {
     AiOutlineMessage as MessageOutlineIcon,
     AiOutlineRotateLeft as RotateBoxLeftIcon,
     AiOutlineRotateRight as RotateBoxRightIcon,
+    AiFillShop as ShopIcon,
     AiOutlineClear as SmallBrushIcon,
 } from 'react-icons/ai'
 import { BiErrorCircle as WarningIcon } from 'react-icons/bi'
@@ -31,12 +32,17 @@ import {
     BsBuildingGear as BuildingGearIcon,
     BsCameraFill as CameraFillIcon,
     BsUiChecksGrid as ChecksGridIcon,
+    BsFileEarmarkCodeFill as CodeFileFillIcon,
     BsCompassFill as CompassIcon,
+    BsFileEarmarkZipFill as CompressedFileFillIcon,
     BsDashSquareDotted as DashSquareDottedIcon,
     BsDatabaseFillLock as DatabaseLockIcon,
     BsFileEarmarkWordFill as DocumentFileFillIcon,
     BsFileEarmarkExcelFill as ExcelFileFillIcon,
     BsFileEarmarkFill as FileFillIcon,
+    BsFileEarmarkFontFill as FontFileFillIcon,
+    BsFillGridFill as GridFillIcon,
+    BsGrid1X2Fill as GridIcon,
     BsImage as Image2Icon,
     BsFileEarmarkImageFill as ImageFileFillIcon,
     BsFillInfoCircleFill as InfoFillCircleIcon,
@@ -44,6 +50,7 @@ import {
     BsInstagram as InstagramIcon,
     BsFileEarmarkMusicFill as MusicFileFillIcon,
     BsFileEarmarkPdfFill as PDFFileFillIcon,
+    BsFileEarmarkPptFill as PresentationFileFillIcon,
     BsFillPrinterFill as PrinterFillIcon,
     BsFillQuestionCircleFill as QuestionCircleFillIcon,
     BsShieldFillCheck as ShieldCheckIcon,
@@ -88,6 +95,7 @@ import {
     FaCalendarCheck as FaCalendarCheckIcon,
     FaTimesCircle as FaTimesIcon,
     FaFingerprint as FingerPrintIcon,
+    FaGlobeAsia as GlobeAsiaIcon,
     FaGripHorizontal as GripHorizontalIcon,
     FaGripVertical as GripVerticalIcon,
     FaHandsHelping as HandsHelpingIcon,
@@ -107,6 +115,8 @@ import {
     FaFaceAngry as AngryIcon,
     FaArrowTrendUp as ArrowTrendUpIcon,
     FaArrowUpLong as ArrowUpLong,
+    // FaShield as ShieldFillIcon
+    FaBell as BellIcon,
     FaBoxesStacked as BoxesStackedIcon,
     FaBusinessTime as BriefCaseClockIcon,
     FaChartBar as ChartBarIcon,
@@ -143,7 +153,6 @@ import {
     FaUserShield as UserShieldIcon,
     FaUsersLine as Users3LineIcon,
     FaWandMagicSparkles as WandSparkleIcon,
-    // FaShield as ShieldFillIcon
 } from 'react-icons/fa6'
 import {
     FiCamera as CameraIcon,
@@ -157,6 +166,7 @@ import {
 } from 'react-icons/fi'
 import {
     GiBorderedShield as BorderedShieldIcon,
+    GiBrain as BrainIcon,
     GiTreeBranch as BranchIcon,
     GiGasMask as GasMaskIcon,
     GiClockwork as GiClockIcon,
@@ -164,6 +174,7 @@ import {
     GiPayMoney as HandDropCoinsIcon,
     GiTakeMyMoney as MoneyIcon,
     GiMoneyStack as MoneyStackIcon,
+    GiReceiveMoney as ReceiveMoneyIcon,
     GiVillage as VillageIcon,
     GiWallet as WalletIcon,
     GiWoodenSign as WoodSignsIcon,
@@ -392,6 +403,7 @@ import {
 import { SlOptions as OptionsIcon } from 'react-icons/sl'
 import {
     TbBlockquote as BlockQuoteIcon,
+    TbClockDollar as CashClockIcon,
     TbClockCancel as ClockCancelIcon,
     TbCreditCard as CreditCardIcon2,
     TbCurrencyDollar as DollarIcon,
@@ -424,6 +436,7 @@ import {
 } from 'react-icons/vsc'
 
 export {
+    BrainIcon,
     FingerprintOffIcon,
     FingerprintScanIcon,
     FingerPrintIcon,
@@ -451,6 +464,7 @@ export {
     F3Icon,
     MapIcon,
     CsvIcon,
+    BellIcon,
     SunIcon,
     KeyIcon,
     DevIcon,
@@ -480,6 +494,7 @@ export {
     BackIcon,
     NextIcon,
     InfoIcon,
+    ShopIcon,
     DraftIcon,
     GlobeIcon,
     GhostIcon,
@@ -526,6 +541,7 @@ export {
     AdjustIcon,
     UploadIcon,
     WalletIcon,
+    GridFillIcon,
     SchoolIcon,
     Image2Icon,
     IdCardIcon,
@@ -535,6 +551,7 @@ export {
     CommandIcon,
     SadFaceIcon,
     TwitterIcon,
+    CashClockIcon,
     EyeViewIcon,
     CodeSandBox,
     ExcludeIcon,
@@ -625,6 +642,7 @@ export {
     TelephoneIcon,
     UserGroupIcon,
     SwapArrowIcon,
+    GlobeAsiaIcon,
     ThumbsDownIcon,
     CookieBiteIcon,
     Users3LineIcon,
@@ -698,6 +716,7 @@ export {
     JudgeHammerIcon,
     PoliceBadgeIcon,
     ClockCancelIcon,
+    ReceiveMoneyIcon,
     TrendingDownIcon,
     HandsHelpingIcon,
     DoorExitFillIcon,
@@ -729,6 +748,10 @@ export {
     VideoFileFillIcon,
     MusicFileFillIcon,
     ImageFileFillIcon,
+    CompressedFileFillIcon,
+    CodeFileFillIcon,
+    FontFileFillIcon,
+    PresentationFileFillIcon,
     ArrowDownLeftIcon,
     ExcelFileFillIcon,
     GraduationCapIcon,
@@ -800,9 +823,11 @@ export {
     PaintIcon,
     GripHorizontalIcon,
     GripVerticalIcon,
+    GridIcon,
 }
 
 export const IconMap = {
+    Brain: BrainIcon,
     'Fingerprint Off': FingerprintOffIcon,
     'Fingerprint Scan': FingerprintScanIcon,
     Fingerprint: FingerPrintIcon,
@@ -932,6 +957,8 @@ export const IconMap = {
     Running: RunningIcon,
     'Arrow Up': ArrowUpIcon,
     'User Cog': UserCogIcon,
+    Grid: GridFillIcon,
+    'Cash Clock': CashClockIcon,
     'Eye View': EyeViewIcon,
     'Push Pin': PushPinIcon,
     'Sun Moon': SunMoonIcon,
@@ -1052,6 +1079,7 @@ export const IconMap = {
     'Shield Check': ShieldCheckIcon,
     'Address Card': AddressCardIcon,
     'Chevron Left': ChevronLeftIcon,
+    Bell: BellIcon,
     'Sidebar Left': SidebarLeftIcon,
     'Building Cog': BuildingCogIcon,
     'List Ordered': ListOrderedIcon,
@@ -1170,6 +1198,10 @@ export const IconMap = {
     'Chart Bar': ChartBarIcon,
     Cloud: CloudIcon,
     Database: DatabaseIcon,
+    'Globe Asia': GlobeAsiaIcon,
+    'Shop Icon': ShopIcon,
+    'Grid Icon': GridIcon,
+    'Receive Money': ReceiveMoneyIcon,
 }
 
 export type TIcon = (typeof ICONS)[number]

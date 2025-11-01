@@ -8,6 +8,7 @@ import {
 
 import { TEntityId } from '@/types'
 
+import { ICategory } from '../category'
 import {
     IOrganization,
     IOrganizationRequest,
@@ -22,7 +23,7 @@ const { apiCrudHooks, apiCrudService } = createDataLayerFactory<
 const {
     useCreate: useCreateOrganization,
     useUpdateById: useUpdateOrganization,
-    useGetById,
+    useGetById: useGetOrganizationById,
     useGetAll,
 } = apiCrudHooks
 
@@ -31,10 +32,10 @@ const { getById: getOrganizationById, route, API } = apiCrudService
 export {
     useCreateOrganization,
     useUpdateOrganization,
-    useGetById,
     useGetAll,
     apiCrudHooks,
     apiCrudService,
+    useGetOrganizationById,
 }
 
 interface Options<TData = IOrganization[]> {
@@ -53,13 +54,57 @@ export const useGetAllOrganizations = ({
     })
 }
 
-export const useGetOrganizationById = ({
+export const useGetOrganizationWithPoliciesById = ({
     options,
     organizationId,
 }: Options<IOrganizationWithPolicies> & { organizationId: TEntityId }) => {
     return useQuery<IOrganizationWithPolicies, Error>({
         queryKey: ['organization', 'current', organizationId],
         queryFn: () => getOrganizationById({ id: organizationId }),
+        ...options,
+    })
+}
+
+export const useGetAllOrganizationsExplore = ({
+    mode,
+    options,
+}: {
+    mode: 'featured' | 'recently'
+    options?: HookQueryOptions<IOrganization[]>
+}) => {
+    return useQuery<IOrganization[]>({
+        queryKey: ['organization', 'resource', mode],
+        queryFn: async () => {
+            return API.get<IOrganization[]>(`${route}/${mode}`).then(
+                (res) => res.data
+            )
+        },
+        ...options,
+    })
+}
+
+export type TGetAllByCategory = {
+    category: ICategory
+    organizations: IOrganization[]
+    _searchStats?: {
+        originalCount: number
+        filteredCount: number
+        hasResults: boolean
+    }
+}
+
+export const useGetAllOrganizationsByCategories = ({
+    options,
+}: {
+    options?: HookQueryOptions<TGetAllByCategory[]>
+} = {}) => {
+    return useQuery<TGetAllByCategory[]>({
+        queryKey: ['organization', 'resource', 'category'],
+        queryFn: async () => {
+            return API.get<TGetAllByCategory[]>(`${route}/category`).then(
+                (res) => res.data
+            )
+        },
         ...options,
     })
 }

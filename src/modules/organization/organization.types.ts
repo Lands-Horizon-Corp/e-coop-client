@@ -55,6 +55,7 @@ export interface IOrganization extends ITimeStamps, IAuditable {
 
     organization_categories?: IOrganizationCategory[]
     currency_id: TEntityId
+    is_private?: boolean
 }
 
 // Organization Request
@@ -81,7 +82,7 @@ export interface IOrganizationRequest {
     refund_policy?: string
     user_agreement?: string
     is_private?: boolean
-    currency_id: TEntityId
+    currency_id?: TEntityId
 }
 
 export interface IOrganizationPaginated

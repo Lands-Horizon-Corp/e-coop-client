@@ -174,18 +174,20 @@ export const CashCheckJournalEntryTable = ({
     const isUpdateMode = mode === 'update'
     const isReadOnlyMode = mode === 'readOnly'
 
-    const watchCashCheckVoucherEntries =
-        form.watch('cash_check_voucher_entries') || []
+    const watchCashCheckVoucherEntries = form.watch(
+        'cash_check_voucher_entries'
+    )
 
-    const watchDeleteCashCheckVoucherEntries =
-        form.watch('cash_check_voucher_entries_deleted') || []
+    const watchDeleteCashCheckVoucherEntries = form.watch(
+        'cash_check_voucher_entries_deleted'
+    )
 
     const cashCheckVoucherEntries = useMemo(
-        () => watchCashCheckVoucherEntries,
+        () => watchCashCheckVoucherEntries || [],
         [watchCashCheckVoucherEntries]
     )
     const deletedCashCheckVoucherEntries = useMemo(
-        () => watchDeleteCashCheckVoucherEntries,
+        () => watchDeleteCashCheckVoucherEntries || [],
         [watchDeleteCashCheckVoucherEntries]
     )
 
@@ -228,29 +230,38 @@ export const CashCheckJournalEntryTable = ({
         },
         [cashCheckVoucherEntries, form]
     )
-    const handleDeleteRow = (row: Row<ICashCheckVoucherEntryRequest>) => {
-        const id = row.original.id
-        if (isUpdateMode) {
-            const validation = entityIdSchema.safeParse(id)
-            if (validation.success) {
-                form.setValue('cash_check_voucher_entries_deleted', [
-                    ...deletedCashCheckVoucherEntries,
-                    id as TEntityId,
-                ])
-                const updatedData = cashCheckVoucherEntries.filter(
-                    (data) => data.id !== id
-                )
-                form.setValue('cash_check_voucher_entries', updatedData)
-                form.trigger('cash_check_voucher_entries')
-            } else {
-                const updatedData = cashCheckVoucherEntries.filter(
-                    (_, index) => index !== row.index
-                )
-                form.setValue('cash_check_voucher_entries', updatedData)
-                form.trigger('cash_check_voucher_entries')
+    const handleDeleteRow = useCallback(
+        (row: Row<ICashCheckVoucherEntryRequest>) => {
+            const id = row.original.id
+            if (isUpdateMode) {
+                const validation = entityIdSchema.safeParse(id)
+                if (validation.success) {
+                    form.setValue('cash_check_voucher_entries_deleted', [
+                        ...deletedCashCheckVoucherEntries,
+                        id as TEntityId,
+                    ])
+                    const updatedData = cashCheckVoucherEntries.filter(
+                        (data) => data.id !== id
+                    )
+                    form.setValue('cash_check_voucher_entries', updatedData)
+                    form.trigger('cash_check_voucher_entries')
+                } else {
+                    const updatedData = cashCheckVoucherEntries.filter(
+                        (_, index) => index !== row.index
+                    )
+                    form.setValue('cash_check_voucher_entries', updatedData)
+                    form.trigger('cash_check_voucher_entries')
+                }
             }
-        }
-    }
+        },
+        [
+            isUpdateMode,
+            isReadOnlyMode,
+            deletedCashCheckVoucherEntries,
+            cashCheckVoucherEntries,
+            form,
+        ]
+    )
 
     const table = useReactTable({
         data: cashCheckVoucherEntries,
@@ -292,7 +303,9 @@ export const CashCheckJournalEntryTable = ({
                 e as unknown as React.MouseEvent<HTMLButtonElement, MouseEvent>
             )
         },
-        [cashCheckVoucherEntries, isReadOnlyMode, handleAddRow]
+        {
+            enabled: !isReadOnlyMode,
+        }
     )
 
     return (

@@ -4,9 +4,13 @@ import { useQueryClient } from '@tanstack/react-query'
 import { useNavigate } from '@tanstack/react-router'
 import { toast } from 'sonner'
 
+import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
 import { cn } from '@/helpers/tw-utils'
 import { useAuthUser } from '@/modules/authentication/authgentication.store'
-import { IOrganizationWithPolicies } from '@/modules/organization'
+import {
+    IOrganizationWithPolicies,
+    useGetOrganizationById,
+} from '@/modules/organization'
 import {
     IOrgUserOrganizationGroup,
     IUserOrganization,
@@ -18,6 +22,7 @@ import { GradientBackground } from '@/components/gradient-background/gradient-ba
 import {
     BuildingIcon,
     DotBigIcon,
+    EyeIcon,
     GearIcon,
     LoadingCircleIcon,
     PinLocationIcon,
@@ -33,8 +38,13 @@ import {
 } from '@/components/ui/accordion'
 import { Avatar, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
+import FormErrorMessage from '@/components/ui/form-error-message'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { PlainTextEditor } from '@/components/ui/text-editor'
+
+import { useUrlModal } from '@/hooks/use-url-modal'
+
+import OrganizationPreviewModal from './organization-modal'
 
 type UserOrganizationsDashboardProps = {
     organizationsWithBranches: IOrgUserOrganizationGroup[]
@@ -45,50 +55,86 @@ const UserOrganizationsDashboard = ({
 }: UserOrganizationsDashboardProps) => {
     const queryClient = useQueryClient()
     const navigate = useNavigate()
+
     const {
         updateCurrentAuth,
         currentAuth: { user, user_organization: currentUserOrg },
     } = useAuthUser()
+
+    const {
+        isOpen: isModalOpen,
+        paramValue: organizationId,
+        openWithParam: openOrganizationModal,
+        onOpenChange,
+    } = useUrlModal({ paramName: 'organization_id', defaultOpen: false })
+
+    const {
+        data: organization,
+        isLoading: isLoadingOrganization,
+        error: organizationError,
+    } = useGetOrganizationById({
+        id: organizationId || '',
+        options: {
+            enabled: !!organizationId,
+        },
+    })
+
     const { mutateAsync: switchOrganization } = useSwitchOrganization()
     const { handleProceedToSetupOrg } = useCategoryStore()
     const [switchingOrgId, setSwitchingOrgId] = useState<string | null>(null)
 
+    const error = serverRequestErrExtractor({ error: organizationError })
+
     const handleVisit = async (userOrganization: IUserOrganization) => {
         setSwitchingOrgId(userOrganization.id)
 
-        const response = await switchOrganization(userOrganization.id)
+        try {
+            const response = await switchOrganization(userOrganization.id)
 
-        if (response) {
-            await queryClient.invalidateQueries({
-                queryKey: ['auth', 'context'],
-            })
+            if (response) {
+                await queryClient.invalidateQueries({
+                    queryKey: ['auth', 'context'],
+                })
 
-            updateCurrentAuth({
-                user_organization: userOrganization,
-                user: userOrganization.user,
-            })
+                updateCurrentAuth({
+                    user_organization: userOrganization,
+                    user: userOrganization.user,
+                })
 
-            const orgName = userOrganization.organization.name
-                .toLowerCase()
-                .replace(/[^a-z0-9]+/g, '-')
-                .replace(/^-+|-+$/g, '')
+                const orgName = userOrganization.organization.name
+                    .toLowerCase()
+                    .replace(/[^a-z0-9]+/g, '-')
+                    .replace(/^-+|-+$/g, '')
 
-            const branchName = userOrganization.branch.name
-                .toLowerCase()
-                .replace(/[^a-z0-9]+/g, '-')
-                .replace(/^-+|-+$/g, '')
+                const branchName = userOrganization.branch.name
+                    .toLowerCase()
+                    .replace(/[^a-z0-9]+/g, '-')
+                    .replace(/^-+|-+$/g, '')
 
-            navigate({
-                to: `/org/${orgName}/branch/${branchName}`,
-            })
-        } else {
-            throw new Error('Server failed to switch organization')
+                navigate({
+                    to: `/org/${orgName}/branch/${branchName}`,
+                })
+            } else {
+                throw new Error('Server failed to switch organization')
+            }
+        } catch (error) {
+            console.error('Failed to switch organization:', error)
+            toast.error('Failed to switch organization')
+        } finally {
+            setSwitchingOrgId(null)
         }
     }
 
     return (
         <div className="w-full">
-            <div className="my-3 flex w-full justify-center space-x-2">
+            <OrganizationPreviewModal
+                isLoading={isLoadingOrganization}
+                onOpenChange={onOpenChange}
+                open={isModalOpen}
+                organization={organization}
+                showActions={false}
+            />
+            <div className="mb-5 flex w-full justify-center space-x-2">
                 <Button
                     className={cn('w-[300px] gap-x-2 rounded-xl')}
                     onClick={() => handleProceedToSetupOrg(navigate)}
@@ -98,14 +144,18 @@ const UserOrganizationsDashboard = ({
                 </Button>
                 <Button
                     className={cn('w-[300px] gap-x-2 rounded-xl')}
-                    onClick={() => navigate({ to: '/onboarding/organization' })}
-                    variant={'secondary'}
+                    disabled
+                    onClick={() =>
+                        navigate({ to: '/onboarding/organization' as string })
+                    }
+                    variant="secondary"
                 >
                     <BuildingIcon />
                     Join an Organization
                 </Button>
             </div>
-            <ScrollArea className="w-full overflow-auto p-10">
+            <FormErrorMessage errorMessage={error} />
+            <ScrollArea className="w-full overflow-auto">
                 <Accordion
                     className={cn('w-full space-y-4')}
                     collapsible
@@ -125,7 +175,7 @@ const UserOrganizationsDashboard = ({
                             >
                                 <GradientBackground
                                     className="border-secondary/50 border"
-                                    imageBackgroundClassName=" size-74 "
+                                    imageBackgroundClassName="size-74"
                                     mediaUrl={mediaUrl}
                                 >
                                     <AccordionTrigger className="relative flex min-h-32 w-full cursor-pointer items-center justify-between rounded-2xl border-0 p-4 hover:bg-secondary/50 hover:no-underline">
@@ -138,26 +188,45 @@ const UserOrganizationsDashboard = ({
                                                     content={org.description}
                                                 />
                                             </span>
-                                            {(isUserOwner || isOrgCreator) && (
-                                                <span
-                                                    className="mt-2 flex w-fit items-center gap-x-2 rounded-lg border border-border bg-secondary/40 p-2 px-4 text-sm text-foreground duration-300 ease-in-out hover:scale-105 hover:bg-primary/90 hover:text-primary-foreground"
+                                            <div className="mt-4 flex gap-x-2">
+                                                {(isUserOwner ||
+                                                    isOrgCreator) && (
+                                                    <div className="flex justify-start gap-x-2">
+                                                        <Button
+                                                            className="mt-2 w-fit"
+                                                            onClick={(e) => {
+                                                                e.stopPropagation()
+                                                                navigate({
+                                                                    to: `/onboarding/create-branch/${org.id}` as string,
+                                                                })
+                                                            }}
+                                                            size="sm"
+                                                            variant="secondary"
+                                                        >
+                                                            <GearIcon className="mr-2 h-4 w-4" />
+                                                            Manage Organization
+                                                        </Button>
+                                                    </div>
+                                                )}
+                                                <Button
+                                                    className="mt-2 w-fit"
                                                     onClick={(e) => {
                                                         e.stopPropagation()
-                                                        navigate({
-                                                            to: '/onboarding/create-branch/$organization_id',
-                                                            params: {
-                                                                organization_id:
-                                                                    org.id,
-                                                            },
-                                                        })
+                                                        openOrganizationModal(
+                                                            org.id
+                                                        )
                                                     }}
+                                                    size="sm"
+                                                    variant="secondary"
                                                 >
-                                                    <GearIcon /> Manage Branches
-                                                </span>
-                                            )}
+                                                    <EyeIcon className="h-4 w-4" />
+                                                    View Details
+                                                </Button>
+                                            </div>
                                         </div>
                                     </AccordionTrigger>
                                 </GradientBackground>
+
                                 <AccordionContent className="p-4">
                                     {org.user_organizations.length === 0 ? (
                                         <GradientBackground opacity={0.1}>
@@ -195,11 +264,6 @@ const UserOrganizationsDashboard = ({
                                                                         loading: `Switching to ${userOrg.branch?.name}...`,
                                                                         success: `Switched to ${userOrg.branch?.name}`,
                                                                         error: `Failed to switch to ${userOrg.branch?.name}`,
-                                                                        finally:
-                                                                            () =>
-                                                                                setSwitchingOrgId(
-                                                                                    null
-                                                                                ),
                                                                     }
                                                                 )
                                                             }

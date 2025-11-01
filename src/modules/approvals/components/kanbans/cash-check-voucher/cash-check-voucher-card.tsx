@@ -14,6 +14,8 @@ import { JournalKanbanInfoItem } from '../journal-voucher/journal-voucher-card'
 interface ICashCheckVoucherCardProps extends IClassProps {
     cashCheckVoucher: ICashCheckVoucher
     refetch: () => void
+    searchTerm?: string
+    highlightMatch: (text: string, searchTerm: string) => React.ReactNode
 }
 
 export const CashCheckVoucherCardCreatorInfo = ({
@@ -44,13 +46,13 @@ export const CashCheckVoucherCardCreatorInfo = ({
               : ''
 
     const mediaUrl = isReleased
-        ? cashCheckVoucher.released_by?.media?.url
+        ? cashCheckVoucher.released_by?.media?.download_url
         : isApproved
-          ? cashCheckVoucher.approved_by?.media?.url
+          ? cashCheckVoucher.approved_by?.media?.download_url
           : isPrinted
-            ? cashCheckVoucher.printed_by?.media?.url
+            ? cashCheckVoucher.printed_by?.media?.download_url
             : cashCheckVoucher.created_by
-              ? cashCheckVoucher.created_by?.media?.url
+              ? cashCheckVoucher.created_by?.media?.download_url
               : ''
 
     return (

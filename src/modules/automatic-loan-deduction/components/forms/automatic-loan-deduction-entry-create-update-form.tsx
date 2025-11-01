@@ -6,6 +6,7 @@ import { cn } from '@/helpers'
 import { withToastCallbacks } from '@/helpers/callback-helper'
 import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
 import { AccountPicker } from '@/modules/account'
+import ChargesRateSchemeCombobox from '@/modules/charges-rate-scheme/components/charges-rate-combobox'
 import { CurrencyInput, ICurrency } from '@/modules/currency'
 
 import FormFooterResetSubmit from '@/components/form-components/form-footer-reset-submit'
@@ -15,6 +16,12 @@ import { Checkbox } from '@/components/ui/checkbox'
 import { Form } from '@/components/ui/form'
 import FormFieldWrapper from '@/components/ui/form-field-wrapper'
 import { Input } from '@/components/ui/input'
+import {
+    InputGroup,
+    InputGroupAddon,
+    InputGroupInput,
+    InputGroupText,
+} from '@/components/ui/input-group'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 
@@ -157,28 +164,22 @@ export const AutomaticLoanDeductionCreateUpdateForm = ({
                                 />
                                 <FormFieldWrapper
                                     control={form.control}
-                                    label="Linked Account"
-                                    name="link_account_id"
+                                    label="Charges Rate Scheme"
+                                    name="charges_rate_scheme_id"
                                     render={({ field }) => (
-                                        <AccountPicker
+                                        <ChargesRateSchemeCombobox
                                             {...field}
                                             currencyId={
                                                 currency?.id as TEntityId
                                             }
                                             disabled={isDisabled(field.name)}
-                                            hideDescription
                                             mode="currency"
-                                            onSelect={(account) => {
-                                                field.onChange(account.id)
-                                                form.setValue(
-                                                    'link_account',
-                                                    account,
-                                                    { shouldDirty: true }
+                                            onChange={(chargesScheme) => {
+                                                field.onChange(
+                                                    chargesScheme?.id
                                                 )
                                             }}
-                                            value={form.getValues(
-                                                'link_account'
-                                            )}
+                                            value={field.value}
                                         />
                                     )}
                                 />
@@ -200,12 +201,14 @@ export const AutomaticLoanDeductionCreateUpdateForm = ({
                                     label="Charges % 1"
                                     name="charges_percentage_1"
                                     render={({ field }) => (
-                                        <Input
-                                            placeholder="%"
-                                            type="number"
-                                            {...field}
-                                            disabled={isDisabled(field.name)}
-                                        />
+                                        <InputGroup>
+                                            <InputGroupInput {...field} />
+                                            <InputGroupAddon align="inline-end">
+                                                <InputGroupText>
+                                                    %
+                                                </InputGroupText>
+                                            </InputGroupAddon>
+                                        </InputGroup>
                                     )}
                                 />
                                 <FormFieldWrapper
@@ -232,12 +235,14 @@ export const AutomaticLoanDeductionCreateUpdateForm = ({
                                     label="Charges % 2"
                                     name="charges_percentage_2"
                                     render={({ field }) => (
-                                        <Input
-                                            placeholder="%"
-                                            type="number"
-                                            {...field}
-                                            disabled={isDisabled(field.name)}
-                                        />
+                                        <InputGroup>
+                                            <InputGroupInput {...field} />
+                                            <InputGroupAddon align="inline-end">
+                                                <InputGroupText>
+                                                    %
+                                                </InputGroupText>
+                                            </InputGroupAddon>
+                                        </InputGroup>
                                     )}
                                 />
 

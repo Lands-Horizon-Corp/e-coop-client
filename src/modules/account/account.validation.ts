@@ -9,7 +9,6 @@ import {
     AccountTypeEnum,
     ComputationTypeEnum,
     EarnedUnearnedInterestEnum,
-    FinancialStatementTypeEnum,
     GeneralLedgerTypeEnum,
     InterestDeductionEnum,
     InterestFinesComputationDiminishingEnum,
@@ -57,10 +56,7 @@ export const IAccountRequestSchema = z.object({
         .enum(ACCOUNT_INTEREST_STANDARD_COMPUTATION)
         .default('None'),
 
-    computation_type: z.preprocess(
-        (val) => (val === '' || val === null ? undefined : val),
-        z.enum(ComputationTypeEnum).optional()
-    ),
+    computation_type: z.enum(ComputationTypeEnum).optional(),
     fines_amort: z
         .number()
         .min(0, 'Fines amort must be non-negative')
@@ -138,7 +134,7 @@ export const IAccountRequestSchema = z.object({
         .min(0)
         .optional(),
 
-    financial_statement_type: z.enum(FinancialStatementTypeEnum),
+    // financial_statement_type: z.enum(FinancialStatementTypeEnum).optional(),
     general_ledger_type: z.enum(GeneralLedgerTypeEnum),
 
     alternative_code: z.string().optional().default(''),
@@ -185,13 +181,17 @@ export const IAccountRequestSchema = z.object({
     show_in_general_ledger_source_journal_voucher: z.boolean().default(true),
     show_in_general_ledger_source_check_voucher: z.boolean().default(true),
 
-    compassion_fund: z.boolean().default(false), // this is damayan in OLD coop
+    compassion_fund: z.boolean().default(false),
     compassion_fund_amount: z.coerce
         .number()
         .min(0, 'Negative amount is not allowed')
-        .default(0), // this is damayan in OLD coop
+        .default(0),
 
     currency_id: entityIdSchema.optional(),
     currency: z.any(),
+
+    is_internal: z.boolean().optional(),
+    cash_on_hand: z.boolean().optional(),
+    paid_up_share_capital: z.boolean().optional(),
 })
 export type TAccountFormValues = z.infer<typeof IAccountRequestSchema>

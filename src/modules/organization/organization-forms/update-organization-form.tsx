@@ -2,7 +2,6 @@ import { useState } from 'react'
 
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
-import z from 'zod'
 
 import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
 
@@ -14,6 +13,7 @@ import { IMedia } from '@/modules/media/media.types'
 import {
     EditOrganizationSchema,
     IOrganizationRequest,
+    TEditOrganizationFormValues,
     useUpdateOrganization,
 } from '@/modules/organization'
 
@@ -34,8 +34,6 @@ import { useFormHelper } from '@/hooks/use-form-helper'
 import { useLocationInfo } from '@/hooks/use-location-info'
 
 import { IClassProps, IForm, TEntityId } from '@/types'
-
-type TEditOrganizationFormValues = z.infer<typeof EditOrganizationSchema>
 
 export interface IEditOrganizationFormProps
     extends IClassProps,
@@ -58,13 +56,12 @@ const UpdateOrganizationForm = ({
     ...formProps
 }: IEditOrganizationFormProps) => {
     const { countryCode } = useLocationInfo()
-
     const [selectedLogoMedia, setSelectedLogoMedia] = useState<string>(
-        media?.url || ''
+        media?.download_url || ''
     )
 
     const [selectedCoverMedia, setSelectedCoverMedia] = useState<string>(
-        coverMedia?.url || ''
+        coverMedia?.download_url || ''
     )
 
     const form = useForm<TEditOrganizationFormValues>({
@@ -77,7 +74,6 @@ const UpdateOrganizationForm = ({
             media_id: media?.id,
         },
     })
-
     const {
         mutate: updateMutation,
         error,
@@ -112,8 +108,8 @@ const UpdateOrganizationForm = ({
     }
 
     const onSubmit = form.handleSubmit(async (data) => {
-        let logoMedia = ''
-        let CoverMedia = ''
+        let logoMedia = null
+        let CoverMedia = null
         if (
             selectedLogoMedia &&
             selectedLogoMedia.startsWith('data:') &&
@@ -122,7 +118,7 @@ const UpdateOrganizationForm = ({
             const uploadedPhoto = await handleUploadPhoto(selectedLogoMedia)
             logoMedia = uploadedPhoto
         } else {
-            logoMedia = data.media_id || ''
+            logoMedia = data.media_id || null
         }
         if (
             selectedCoverMedia &&
@@ -133,7 +129,7 @@ const UpdateOrganizationForm = ({
                 await handleUploadPhoto(selectedCoverMedia)
             CoverMedia = uploadedCoverPhoto
         } else {
-            CoverMedia = data.cover_media_id || ''
+            CoverMedia = data.cover_media_id || null
         }
 
         const requestData = {
@@ -147,7 +143,6 @@ const UpdateOrganizationForm = ({
     }, handleFocusError)
 
     const errorMessage = serverRequestErrExtractor({ error })
-
     return (
         <Form {...form}>
             <form
@@ -281,7 +276,7 @@ const UpdateOrganizationForm = ({
                         )}
                     />
                     <FormFieldWrapper
-                        className="col-span-full h-52"
+                        className="col-span-full "
                         control={form.control}
                         label="Organization Description"
                         name="description"
@@ -291,7 +286,7 @@ const UpdateOrganizationForm = ({
                                 <FormControl>
                                     <TextEditor
                                         {...rest}
-                                        className="h-full w-full"
+                                        className="w-full"
                                         content={field.value || ''}
                                         placeholder="Write some description about your Organization..."
                                         textEditorClassName="!max-w-none !h-full"

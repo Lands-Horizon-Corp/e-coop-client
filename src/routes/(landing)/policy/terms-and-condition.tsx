@@ -77,7 +77,7 @@ function RouteComponent() {
 
     return (
         <PageContainer className=" w-full flex-row flex-grow">
-            <div className="justify-start h-[100vh] overflow-auto px-4 py-8  border-gray-200 dark:border-gray-700">
+            <div className="flex-1 overflow-y-auto ecoop-scroll px-4 py-8   h-[calc(100vh-theme(spacing.16))]">
                 <h1 className="text-3xl font-bold min-h-16 flex items-center justify-start w-full mb-4">
                     Lands Horizon Terms and Conditions
                 </h1>

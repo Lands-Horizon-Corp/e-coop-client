@@ -6,10 +6,7 @@ export const Route = createFileRoute('/onboarding/organization')({
 
 function RouteComponent() {
     return (
-        <div className="w-full pt-10">
-            <h1 className="w-full text-center text-3xl font-semibold">
-                Join Organization
-            </h1>
+        <div className="w-full">
             <Outlet />
         </div>
     )

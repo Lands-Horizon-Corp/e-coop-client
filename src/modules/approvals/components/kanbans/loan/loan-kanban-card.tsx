@@ -18,6 +18,8 @@ import { JournalKanbanInfoItem } from '../journal-voucher/journal-voucher-card'
 interface ILoanTransactionCardProps extends IClassProps {
     loan: ILoanTransaction
     refetch: () => void
+    searchTerm?: string
+    highlightMatch: (text: string, search: string) => React.ReactNode
 }
 
 export const LoanTransactionCardCreatorInfo = ({
@@ -33,7 +35,7 @@ export const LoanTransactionCardCreatorInfo = ({
           ? `Approved by`
           : isPrinted
             ? `Printed by `
-            : loan.employee_user
+            : loan.created_by
               ? `Created by`
               : 'No Creator Info'
 
@@ -43,18 +45,18 @@ export const LoanTransactionCardCreatorInfo = ({
           ? ` ${loan.approved_by?.full_name}`
           : isPrinted
             ? ` ${loan.printed_by?.full_name}`
-            : loan.employee_user
-              ? ` ${loan.employee_user?.full_name}`
+            : loan.created_by
+              ? ` ${loan.created_by?.full_name}`
               : ''
 
     const mediaUrl = isReleased
-        ? loan.released_by?.media?.url
+        ? loan.released_by?.media?.download_url
         : isApproved
-          ? loan.approved_by?.media?.url
+          ? loan.approved_by?.media?.download_url
           : isPrinted
-            ? loan.printed_by?.media?.url
-            : loan.employee_user
-              ? loan.employee_user?.media?.url
+            ? loan.printed_by?.media?.download_url
+            : loan.created_by
+              ? loan.created_by?.media?.download_url
               : ''
     return (
         <div className="flex items-center justify-end gap-x-2 pt-2 border-t border-dashed">

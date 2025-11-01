@@ -51,6 +51,13 @@ export type TComputationType = (typeof COMPUTATION_TYPE)[number]
 // NOT SERVER/ONLY CLIENT GENERATED
 export type TLoanStatusType = 'draft' | 'printed' | 'approved' | 'released'
 
+export type TLoanMode =
+    | 'draft'
+    | 'printed'
+    | 'approved'
+    | 'released'
+    | 'release-today'
+
 export interface ILoanTransaction
     extends IBaseEntityMeta,
         ILoanTransactionSignatures,

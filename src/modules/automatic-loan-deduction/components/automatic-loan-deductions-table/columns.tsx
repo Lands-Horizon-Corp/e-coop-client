@@ -195,19 +195,19 @@ const AutomaticLoanDeductionColumns = (
         size: 150,
     },
     {
-        id: 'link_account.name',
-        accessorKey: 'link_account.name',
+        id: 'charges_rate_scheme_id.name',
+        accessorKey: 'charges_rate_scheme_id.name',
         header: (props) => (
-            <DataTableColumnHeader {...props} title="Link Account">
+            <DataTableColumnHeader {...props} title="Charges Rate Scheme">
                 <ColumnActions {...props}>
                     <TextFilter<IAutomaticLoanDeduction>
-                        displayText="link_account.name"
-                        field="link_account.name"
+                        displayText="Charges Rate Scheme"
+                        field="charges_rate_scheme_id.name"
                     />
                 </ColumnActions>
             </DataTableColumnHeader>
         ),
-        cell: ({ row }) => <div>{row.original.link_account?.name}</div>,
+        cell: ({ row }) => <div>{row.original.charges_rate_scheme?.name}</div>,
         size: 200,
     },
 

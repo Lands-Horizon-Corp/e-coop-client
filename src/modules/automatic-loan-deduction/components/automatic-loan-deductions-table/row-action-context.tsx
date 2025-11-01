@@ -86,6 +86,7 @@ export const AutomaticLoanDeductionAction = ({
                     formProps={{
                         automaticLoanDeductionId: automaticLoanDeduction.id,
                         defaultValues: automaticLoanDeduction,
+                        currency: automaticLoanDeduction.account?.currency,
                         onSuccess: () => editModal.onOpenChange(false),
                     }}
                 />
@@ -135,6 +136,7 @@ export const AutomaticLoanDeductionRowContext = ({
                 formProps={{
                     automaticLoanDeductionId: automaticLoanDeduction.id,
                     defaultValues: automaticLoanDeduction,
+                    currency: automaticLoanDeduction.account?.currency,
                     onSuccess: () => editModal.onOpenChange(false),
                 }}
             />

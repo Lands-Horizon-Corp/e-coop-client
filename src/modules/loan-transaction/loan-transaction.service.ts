@@ -21,6 +21,7 @@ import type {
     ILoanTransactionRequest,
     ILoanTransactionSignatureRequest,
     ILoanTransactionSuggestedRequest,
+    TLoanMode,
 } from '../loan-transaction'
 
 const {
@@ -95,13 +96,12 @@ export const {
     useDeleteMany: useDeleteManyLoanTransaction,
 } = apiCrudHooks
 
-type TloanTransactionMode = 'draft' | 'printed' | 'approved' | 'released'
 // get all loan transaction
 export type TLoanTransactionHookModeGetAll =
     | 'branch'
     | 'member-profile'
     | 'member-profile-loan-account'
-    | TloanTransactionMode
+    | TLoanMode
 
 export const useGetAllLoanTransaction = ({
     mode = 'branch',
@@ -142,6 +142,9 @@ export const useGetAllLoanTransaction = ({
 
             if (mode) {
                 url = `${loanTransactionAPIRoute}/${mode}`
+            }
+            if (mode === 'release-today') {
+                url = `${loanTransactionAPIRoute}/released/today`
             }
 
             return getAllLoanTransaction({ url, query })

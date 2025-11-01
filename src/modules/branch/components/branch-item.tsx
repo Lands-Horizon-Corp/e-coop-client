@@ -37,7 +37,7 @@ export const BranchItem = ({
     showDescription = true,
     className,
 }: BranchItemProps) => {
-    const mediaUrl = branch?.media?.url ?? orgBannerList[0]
+    const mediaUrl = branch?.media?.download_url ?? orgBannerList[0]
 
     if (!branch || !branch.id) {
         return (

@@ -200,7 +200,15 @@ export const FlickeringGrid: React.FC<FlickeringGridProps> = ({
     }, [setupCanvas, updateSquares, drawGrid, width, height, isInView])
 
     return (
-        <div className={cn(` ${className}`)} ref={containerRef} {...props}>
+        <div
+            className={cn(` inset-0 fixed -bottom-1/2 -z-10 h-screen w-full opacity-20 dark:opacity-10
+    [mask-image:linear-gradient(to_bottom,transparent_0%,white_0%,white_0%,transparent_100%)]
+    [-webkit-mask-image:linear-gradient(to_bottom,transparent_0%,white_0%,white_0%,transparent_100%)]
+    [mask-repeat:no-repeat] [-webkit-mask-repeat:no-repeat]
+    [mask-size:100%_100%] [-webkit-mask-size:100%_100%] ${className}`)}
+            ref={containerRef}
+            {...props}
+        >
             <canvas
                 className="pointer-events-none"
                 ref={canvasRef}

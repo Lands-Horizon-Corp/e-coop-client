@@ -13,7 +13,7 @@ const SitePolicyItem = forwardRef<HTMLDivElement, SitePolicyItemProps>(
     ({ title, id, children, onClick }, ref) => {
         return (
             <div
-                className="mb-4 border border-gray-200 dark:border-gray-700 rounded-lg p-4 w-full"
+                className="mb-4 border   rounded-lg p-4 w-full"
                 id={id}
                 ref={ref}
             >

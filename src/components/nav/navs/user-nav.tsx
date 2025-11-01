@@ -6,6 +6,7 @@ import { useRouter } from '@tanstack/react-router'
 
 import { cn } from '@/helpers/tw-utils'
 import { useAuthStore } from '@/modules/authentication/authgentication.store'
+import { NotificationNav } from '@/modules/notification/components/notification'
 import TransactionBatchNavButton from '@/modules/transaction-batch/components/batch-nav-button'
 import NavProfileMenu from '@/modules/user-profile/components/nav/nav-profile-menu'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
@@ -52,7 +53,7 @@ const UserNav = ({
                     }
                     variant="secondary"
                 >
-                    <BadgeCheckFillIcon className="ease-out duration-500 text-primary group-hover:text-primary-foreground" />
+                    <BadgeCheckFillIcon className="ease-out duration-500 text-primary" />
                     Approvals
                 </Button>
             ) : null,
@@ -84,6 +85,10 @@ const UserNav = ({
 
     // Important nav items (always visible)
     const IMPORTANT_NAV_ITEMS = [
+        {
+            important: true,
+            component: user ? <NotificationNav /> : null,
+        },
         {
             important: true,
             component: user ? <NavProfileMenu /> : null,

@@ -28,7 +28,7 @@ import { IClassProps } from '@/types'
 
 import { IJournalVoucher } from '../journal-voucher.types'
 import JournalVoucherStatusBadge, {
-    TJournalVoucherStatusType,
+    TJournalVoucherModeType,
 } from './journal-voucher-status-badge'
 
 export interface IJournalVoucherStatusDates {
@@ -39,7 +39,7 @@ export interface IJournalVoucherStatusDates {
 
 export const resolveJVStatusDatesToStatus = (
     dates: IJournalVoucherStatusDates
-): TJournalVoucherStatusType => {
+): TJournalVoucherModeType => {
     if (dates.released_date) {
         return 'released'
     }
@@ -97,7 +97,7 @@ export const JournalVoucherStatusIndicatorDetails = ({
         },
     ]
 
-    const statusToStepMap: Record<TJournalVoucherStatusType, number> = {
+    const statusToStepMap: Record<TJournalVoucherModeType, number> = {
         draft: 1,
         printed: 2,
         approved: 3,

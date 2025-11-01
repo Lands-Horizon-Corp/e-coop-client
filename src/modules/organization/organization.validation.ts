@@ -1,7 +1,6 @@
 import z from 'zod'
 
 import {
-    descriptionSchema,
     descriptionTransformerSanitizer,
     emailSchema,
     entityIdSchema,
@@ -22,7 +21,10 @@ export const OrganizationSchema = z.object({
     address: z.string().optional(),
     email: emailSchema.min(1, 'Organization email is required'),
     contact_number: z.string().optional(),
-    description: descriptionSchema.transform(descriptionTransformerSanitizer),
+    description: z.preprocess((val) => {
+        if (val === '') return ''
+        return val
+    }, z.string().transform(descriptionTransformerSanitizer)),
 
     media_id: z.string().min(1, 'Organization Logo is required'),
     cover_media_id: z.string().min(1, 'Cover media is required'),
@@ -31,6 +33,7 @@ export const OrganizationSchema = z.object({
     media: z.any().optional(),
     cover_media: z.any().optional(),
     subscription_plan: z.any().optional(),
+    is_private: z.boolean().optional(),
 })
 
 export const EditOrganizationSchema = OrganizationSchema.extend({
@@ -43,7 +46,6 @@ export const EditOrganizationSchema = OrganizationSchema.extend({
     user_agreement: z.string().optional(),
     media_id: z.string().optional(),
     cover_media_id: z.string().optional(),
-    currency_id: entityIdSchema,
-})
-
+}).omit({ currency_id: true })
+export type TEditOrganizationFormValues = z.infer<typeof EditOrganizationSchema>
 export type TOrganizationFormValues = z.infer<typeof OrganizationSchema>

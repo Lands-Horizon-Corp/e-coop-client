@@ -131,3 +131,10 @@ export const amount = z.preprocess(
         })
         .max(500000000, 'Amount cannot exceed Five Million (500,000,000)')
 )
+
+export const PercentageSchema = z.coerce
+    .number()
+    .min(0, 'Minimum 0 %')
+    .max(100, 'Max is 100 %')
+
+export const DaySchema = z.coerce.number().int().nonnegative()

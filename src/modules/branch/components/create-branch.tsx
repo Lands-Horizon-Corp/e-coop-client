@@ -4,7 +4,8 @@ import { toast } from 'sonner'
 
 import { useGetBranchesByOrganizationId } from '@/modules/branch'
 import CreateUpdateBranchFormModal from '@/modules/branch/components/forms/create-branch-form'
-import { useGetById } from '@/modules/organization'
+import { useGetOrganizationById } from '@/modules/organization'
+import OrganizationModalDetails from '@/modules/organization/pages/organization/organization-modal-details'
 import { useSeedOrganization } from '@/modules/user-organization/user-organization.service'
 
 import { Alert, AlertDescription } from '@/components/ui/alert'
@@ -12,9 +13,7 @@ import { Alert, AlertDescription } from '@/components/ui/alert'
 import { useLocationInfo } from '@/hooks/use-location-info'
 import { useModalState } from '@/hooks/use-modal-state'
 
-import { BranchesSection } from './branches-section'
 import { CompletionSection } from './completion-section'
-import OrganizationCard from './organization-card'
 
 const CreateBranch = () => {
     const { organization_id: organizationId } = useParams({
@@ -30,13 +29,10 @@ const CreateBranch = () => {
         data: organization,
         isPending: isPendingOrganization,
         error: organizationError,
-    } = useGetById({ id: organizationId })
+    } = useGetOrganizationById({ id: organizationId })
 
-    const {
-        data: branches,
-        isPending: isPendingBranches,
-        error: branchesError,
-    } = useGetBranchesByOrganizationId({ organizationId })
+    const { data: branches, error: branchesError } =
+        useGetBranchesByOrganizationId({ organizationId })
 
     const isNoBranches = branches?.length === 0
     const hasError = organizationError || branchesError
@@ -50,16 +46,12 @@ const CreateBranch = () => {
                 toast.success(
                     'Successfully seeded the Organization with Branch!'
                 )
-                navigate({ to: '/onboarding' })
+                navigate({ to: '/onboarding' as string })
             }
         } catch (error) {
             toast.error('Failed to seed organization. Please try again.')
             console.error('Seed error:', error)
         }
-    }
-
-    const handleCreateBranch = () => {
-        createModal.onOpenChange(true)
     }
 
     if (hasError) {
@@ -76,7 +68,7 @@ const CreateBranch = () => {
     }
 
     return (
-        <div className="w-full h-full flex flex-col space-y-6">
+        <div className="w-full h-full bg-background/20 backdrop-blur-2xl flex flex-col space-y-6">
             <CreateUpdateBranchFormModal
                 {...createModal}
                 className="w-full min-w-[80rem] max-w-[80rem]"
@@ -97,22 +89,12 @@ const CreateBranch = () => {
                 }}
                 title="Create Branch"
             />
-
-            {/* Organization Header */}
-            <OrganizationCard
-                isLoading={isPendingOrganization}
-                onCreateBranch={handleCreateBranch}
-                organization={organization}
-            />
-            {/* <Separator /> */}
-            {/* Branches Section */}
-            <BranchesSection
-                branches={branches}
-                isPending={isPendingBranches}
-                isSeeding={isSeeding}
-                onCreateBranch={handleCreateBranch}
-                organizationId={organizationId}
-            />
+            {organization && (
+                <OrganizationModalDetails
+                    isPending={isPendingOrganization}
+                    organization={organization}
+                />
+            )}
             {/* Completion Section */}
             <CompletionSection
                 isNoBranches={isNoBranches}

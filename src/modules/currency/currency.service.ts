@@ -7,10 +7,11 @@ import {
 
 import { TAPIQueryOptions } from '@/types'
 
-import type {
-    ICurrency,
-    ICurrencyRequest,
-    TCurrencyHookMode,
+import {
+    type ICurrency,
+    type ICurrencyRequest,
+    type TCurrencyHookMode,
+    getCurrentTimezone,
 } from '../currency'
 
 const {
@@ -72,6 +73,8 @@ export const useGetAllCurrency = ({
 
             if (mode === 'available') {
                 url = `${currencyAPIRoute}/available`
+            } else if (mode === 'blotter-available') {
+                url = `${currencyAPIRoute}/blotter-available`
             }
 
             return getAllCurrency({
@@ -88,6 +91,13 @@ export const getCurrencyByTimezone = async (
 ): Promise<ICurrency> => {
     const response = await API.get<ICurrency>(
         `${currencyAPIRoute}/timezone/${timezone}`
+    )
+    return response.data
+}
+
+export const getCurrentCurrencyByTimezone = async (): Promise<ICurrency> => {
+    const response = await API.get<ICurrency>(
+        `${currencyAPIRoute}/timezone/${getCurrentTimezone()}`
     )
     return response.data
 }
@@ -111,7 +121,5 @@ export const useGetCurrentCurrency = ({
 }: {
     options?: HookQueryOptions<ICurrency, Error>
 } = {}) => {
-    const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone
-
-    return useGetCurrency({ timezone, options })
+    return useGetCurrency({ timezone: getCurrentTimezone(), options })
 }
