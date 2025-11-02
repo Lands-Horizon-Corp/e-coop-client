@@ -7,4 +7,4 @@ export const ACTIVITY_DEBOUNCE_TIME = 500 // 500ms
 export const POLLING_INTERVAL = 1 * 1000 // 1 second
 
 export const INACTIVITY_SETTINGS_KEY = 'account-inactivity-settings'
-export const ACTIVITY_STORAGE_KEY = 'last-user-activity'
+export const ACTIVITY_STORAGE_KEY = 'ecoop-last-user-activity'
