@@ -2,7 +2,7 @@ import { useState } from 'react'
 
 import { toast } from 'sonner'
 
-import { AccountTypeEnum, IAccount } from '@/modules/account'
+import { IAccount } from '@/modules/account'
 import {
     ILoanTransaction,
     useGetLoanTransactionPayableAccounts,
@@ -842,7 +842,7 @@ function LoanPaymentPage() {
     })
 
     const handleAccountClick = (account: IAccount) => {
-        if (account.type !== AccountTypeEnum.Loan)
+        if (account.type !== 'Loan')
             return toast.warning(
                 'Not a loan account, please select a valid loan account'
             )

@@ -1,47 +1,32 @@
 import { cn } from '@/helpers/tw-utils'
-import { ComputationTypeEnum } from '@/modules/account'
+import { TComputationType } from '@/modules/account'
 
 import { Badge } from '@/components/ui/badge'
 
 interface ComputationTypeBadgeProps {
-    type: ComputationTypeEnum
+    type: TComputationType
     className?: string
     description?: string
 }
 
 const computationTypeStyles: Record<
-    ComputationTypeEnum,
+    TComputationType,
     { label: string; bgColor: string; textColor: string }
 > = {
-    [ComputationTypeEnum.Straight]: {
+    Straight: {
         label: 'Straight',
         bgColor: 'bg-blue-800',
         textColor: 'text-blue-50',
     },
-    [ComputationTypeEnum.Diminishing]: {
+    Diminishing: {
         label: 'Diminishing',
         bgColor: 'bg-destructive',
         textColor: 'text-red-50',
     },
-    [ComputationTypeEnum.DiminishingAddOn]: {
-        label: 'Diminishing Add-On',
-        bgColor: 'bg-primary/60',
-        textColor: 'text-green-50',
-    },
-    [ComputationTypeEnum.DiminishingYearly]: {
-        label: 'Diminishing Yearly',
-        bgColor: 'bg-yellow-600',
-        textColor: 'text-yellow-50',
-    },
-    [ComputationTypeEnum.DiminishingStraight]: {
+    DiminishingStraight: {
         label: 'Diminishing Straight',
         bgColor: 'bg-indigo-600',
         textColor: 'text-indigo-50',
-    },
-    [ComputationTypeEnum.DiminishingQuarterly]: {
-        label: 'Diminishing Quarterly',
-        bgColor: 'bg-fuchsia-800',
-        textColor: 'text-fuchsia-50',
     },
 }
 

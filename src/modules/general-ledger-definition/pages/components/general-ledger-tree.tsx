@@ -5,7 +5,6 @@ import { toast } from 'sonner'
 import {
     AccountCreateUpdateFormModal,
     AccountPicker,
-    GeneralLedgerTypeEnum,
     IAccount,
     useDeleteAccountFromGLFS,
     useUpdateAccountIndex,
@@ -315,8 +314,7 @@ const GeneralLedgerDefinitionTreeViewer = ({
 
     const formDefaultValues = onCreate
         ? {
-              general_ledger_type:
-                  selectedGeneralLedgerTypes || GeneralLedgerTypeEnum.Assets,
+              general_ledger_type: selectedGeneralLedgerTypes || 'Assets',
           }
         : {
               ...node,

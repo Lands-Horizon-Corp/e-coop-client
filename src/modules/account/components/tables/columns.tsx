@@ -8,7 +8,6 @@ import { CurrencyBadge } from '@/modules/currency/components/currency-badge'
 import { GeneralLedgerTypeBadge } from '@/modules/general-ledger/components/general-ledger-type-badge'
 import { ColumnDef, Row } from '@tanstack/react-table'
 
-import CopyTextButton from '@/components/copy-text-button'
 import DataTableColumnHeader from '@/components/data-table/data-table-column-header'
 import ColumnActions from '@/components/data-table/data-table-column-header/column-actions'
 import { IGlobalSearchTargets } from '@/components/data-table/data-table-filters/data-table-global-search'
@@ -28,7 +27,7 @@ import { Badge } from '@/components/ui/badge'
 import { Checkbox } from '@/components/ui/checkbox'
 import { PlainTextEditor } from '@/components/ui/text-editor'
 
-import { IAccount, InterestDeductionEnum } from '../../account.types'
+import { IAccount } from '../../account.types'
 
 export const accountsGlobalSearchTargets: IGlobalSearchTargets<IAccount>[] = [
     { field: 'accountCode', displayText: 'Account Code' },
@@ -229,39 +228,39 @@ const AccountsTableColumns = (
             enableMultiSort: true,
             size: 130,
         },
-        {
-            id: 'accountCode',
-            accessorKey: 'alternative_code',
-            header: (props) => (
-                <DataTableColumnHeader {...props} title="Code">
-                    <ColumnActions {...props}>
-                        <TextFilter
-                            defaultMode="contains"
-                            displayText="Account Code"
-                            field="alternative_code"
-                        />
-                    </ColumnActions>
-                </DataTableColumnHeader>
-            ),
-            cell: ({
-                row: {
-                    original: { alternative_code },
-                },
-            }) => (
-                <div className="flex items-center justify-between gap-x-2 text-sm">
-                    <p className="w-full rounded-lg bg-background p-1 px-2 text-xs">
-                        {' '}
-                        {alternative_code}
-                    </p>
-                    <CopyTextButton
-                        className="size-5"
-                        textContent={alternative_code ?? ''}
-                    />
-                </div>
-            ),
-            enableMultiSort: true,
-            size: 120,
-        },
+        // {
+        //     id: 'accountCode',
+        //     accessorKey: 'alternative_code',
+        //     header: (props) => (
+        //         <DataTableColumnHeader {...props} title="Code">
+        //             <ColumnActions {...props}>
+        //                 <TextFilter
+        //                     defaultMode="contains"
+        //                     displayText="Account Code"
+        //                     field="alternative_code"
+        //                 />
+        //             </ColumnActions>
+        //         </DataTableColumnHeader>
+        //     ),
+        //     cell: ({
+        //         row: {
+        //             original: { alternative_code },
+        //         },
+        //     }) => (
+        //         <div className="flex items-center justify-between gap-x-2 text-sm">
+        //             <p className="w-full rounded-lg bg-background p-1 px-2 text-xs">
+        //                 {' '}
+        //                 {alternative_code}
+        //             </p>
+        //             <CopyTextButton
+        //                 className="size-5"
+        //                 textContent={alternative_code ?? ''}
+        //             />
+        //         </div>
+        //     ),
+        //     enableMultiSort: true,
+        //     size: 120,
+        // },
         {
             id: 'type',
             accessorKey: 'type',
@@ -387,33 +386,33 @@ const AccountsTableColumns = (
             enableSorting: true,
             size: 100,
         },
-        {
-            id: 'interestSecured',
-            accessorKey: 'interest_secured',
-            header: (props) => (
-                <DataTableColumnHeader {...props} title="Secured Interest">
-                    <ColumnActions {...props}>
-                        <NumberFilter
-                            displayText="Interest Secured"
-                            field="interest_secured"
-                        />
-                    </ColumnActions>
-                </DataTableColumnHeader>
-            ),
-            cell: ({
-                row: {
-                    original: { interest_secured },
-                },
-            }) => (
-                <div className="text-right">
-                    {interest_secured !== undefined
-                        ? `${(interest_secured * 100).toFixed(2)}%`
-                        : 'N/A'}
-                </div>
-            ), // Format as percentage
-            enableSorting: true,
-            size: 120,
-        },
+        // {
+        //     id: 'interestSecured',
+        //     accessorKey: 'interest_secured',
+        //     header: (props) => (
+        //         <DataTableColumnHeader {...props} title="Secured Interest">
+        //             <ColumnActions {...props}>
+        //                 <NumberFilter
+        //                     displayText="Interest Secured"
+        //                     field="interest_secured"
+        //                 />
+        //             </ColumnActions>
+        //         </DataTableColumnHeader>
+        //     ),
+        //     cell: ({
+        //         row: {
+        //             original: { interest_secured },
+        //         },
+        //     }) => (
+        //         <div className="text-right">
+        //             {interest_secured !== undefined
+        //                 ? `${(interest_secured * 100).toFixed(2)}%`
+        //                 : 'N/A'}
+        //         </div>
+        //     ), // Format as percentage
+        //     enableSorting: true,
+        //     size: 120,
+        // },
         {
             id: 'isInternal',
             accessorKey: 'is_internal',
@@ -733,9 +732,9 @@ const AccountsTableColumns = (
             ),
             cell: ({
                 row: {
-                    original: { number_grace_period_daily },
+                    original: { no_grace_period_daily },
                 },
-            }) => <EnabledDisabled isEnabled={number_grace_period_daily} />,
+            }) => <EnabledDisabled isEnabled={no_grace_period_daily} />,
             enableSorting: true,
             enableHiding: true,
             size: 150,
@@ -793,10 +792,10 @@ const AccountsTableColumns = (
             size: 100,
         },
         {
-            id: 'loanCutOffDays',
-            accessorKey: 'loan_cut_off_days',
+            id: 'cutOffDays',
+            accessorKey: 'cut_off_days',
             header: (props) => (
-                <DataTableColumnHeader {...props} title="Loan Cut-Off Days">
+                <DataTableColumnHeader {...props} title="cut-Off Days">
                     <ColumnActions {...props}>
                         <NumberFilter
                             displayText="Loan Cut-Off Days"
@@ -807,11 +806,11 @@ const AccountsTableColumns = (
             ),
             cell: ({
                 row: {
-                    original: { loan_cut_off_days },
+                    original: { cut_off_days },
                 },
             }) => (
                 <div className="text-right text-xs">
-                    {loan_cut_off_days || 'N/A'}
+                    {cut_off_days || 'N/A'}
                 </div>
             ),
             enableSorting: true,
@@ -896,14 +895,14 @@ const AccountsTableColumns = (
                 <div className="flex items-center justify-start gap-x-1 text-xs">
                     <p
                         className={cn(
-                            interest_deduction === InterestDeductionEnum.Above
+                            interest_deduction === 'Above'
                                 ? 'text-blue-500'
                                 : 'text-destructive'
                         )}
                     >
                         {interest_deduction}
                     </p>
-                    {interest_deduction === InterestDeductionEnum.Above ? (
+                    {interest_deduction === 'Above' ? (
                         <ArrowUpLong className="text-blue-400" />
                     ) : (
                         <ArrowUpLong className="rotate-180 text-destructive" />

@@ -5,11 +5,11 @@ import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
 
 import { cn } from '@/helpers'
 import {
+    FINANCIAL_STATEMENT_TYPE,
     FinancialStatementDefinitionSchema,
-    FinancialStatementTypeEnum,
     IFinancialStatementDefinition,
-    IFinancialStatementDefinitionFormValues,
     IFinancialStatementDefinitionRequest,
+    IFinancialStatementDefinitionSchema,
     useCreate,
     useUpdateById,
 } from '@/modules/financial-statement-definition'
@@ -44,7 +44,7 @@ interface IFinancialStatementCreateUpdateFormProps
             Partial<IFinancialStatementDefinitionRequest>,
             IFinancialStatementDefinition,
             string,
-            IFinancialStatementDefinitionFormValues
+            IFinancialStatementDefinitionSchema
         > {
     financialStatementDefinitionEntriesId?: TEntityId
     financialStatementId?: TEntityId
@@ -61,7 +61,7 @@ const FinancialStatementCreateUpdateForm = ({
     onSuccess,
     ...formProps
 }: IFinancialStatementCreateUpdateFormProps) => {
-    const form = useForm<IFinancialStatementDefinitionFormValues>({
+    const form = useForm<IFinancialStatementDefinitionSchema>({
         resolver: standardSchemaResolver(FinancialStatementDefinitionSchema),
         reValidateMode: 'onChange',
         mode: 'onSubmit',
@@ -90,7 +90,7 @@ const FinancialStatementCreateUpdateForm = ({
     })
 
     const { formRef, handleFocusError, isDisabled } =
-        useFormHelper<IFinancialStatementDefinitionFormValues>({
+        useFormHelper<IFinancialStatementDefinitionSchema>({
             form,
             ...formProps,
             readOnly,
@@ -173,7 +173,7 @@ const FinancialStatementCreateUpdateForm = ({
                                 </SelectTrigger>
                                 <SelectContent>
                                     {Object.values(
-                                        FinancialStatementTypeEnum
+                                        FINANCIAL_STATEMENT_TYPE
                                     ).map((type) => (
                                         <SelectItem key={type} value={type}>
                                             {type}

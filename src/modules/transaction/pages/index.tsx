@@ -5,7 +5,6 @@ import { useNavigate } from '@tanstack/react-router'
 import { toast } from 'sonner'
 
 import { SHORTCUT_SCOPES } from '@/constants'
-import { AccountTypeEnum } from '@/modules/account'
 import { IGeneralLedger } from '@/modules/general-ledger'
 import {
     ITransaction,
@@ -233,10 +232,7 @@ const Transaction = ({ transactionId, fullPath }: TTransactionProps) => {
                                     )
                                 }
 
-                                if (
-                                    data.original.account?.type ===
-                                    AccountTypeEnum.Loan
-                                ) {
+                                if (data.original.account?.type === 'Loan') {
                                     return loanPickerState.onOpenChange(true)
                                 }
 

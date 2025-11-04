@@ -20,28 +20,25 @@ import { Skeleton } from '@/components/ui/skeleton'
 import { TEntityId } from '@/types'
 
 import { useGetAccountHistoryByAccountId } from '../account-history.service'
-import {
-    HistoryChangeTypeEnum,
-    IAccountHistory,
-} from '../account-history.types'
+import { IAccountHistory, THistoryChangeType } from '../account-history.types'
 
-const getChangeTypeConfig = (changeType: HistoryChangeTypeEnum) => {
+const getChangeTypeConfig = (changeType: THistoryChangeType) => {
     switch (changeType) {
-        case HistoryChangeTypeEnum.Created:
+        case 'created':
             return {
                 color: 'bg-emerald-100 dark:bg-emerald-950 border-emerald-300 text-emerald-700 dark:text-emerald-300',
                 badgeColor:
                     'bg-emerald-50 text-emerald-700 border-emerald-200 dark:bg-emerald-950 dark:text-emerald-300 dark:border-emerald-800',
                 label: 'Created',
             }
-        case HistoryChangeTypeEnum.Updated:
+        case 'updated':
             return {
                 color: 'bg-blue-100 dark:bg-blue-950 border-blue-300 text-blue-700 dark:text-blue-300',
                 badgeColor:
                     'bg-blue-50 text-blue-700 border-blue-200 dark:bg-blue-950 dark:text-blue-300 dark:border-blue-800',
                 label: 'Updated',
             }
-        case HistoryChangeTypeEnum.Deleted:
+        case 'deleted':
             return {
                 color: 'bg-red-100 dark:bg-red-950 border-red-300 text-red-700 dark:text-red-300',
                 badgeColor:
@@ -72,10 +69,10 @@ const AccountHistoryCard = ({
     const config = getChangeTypeConfig(history.change_type)
 
     const getChangeDescription = () => {
-        if (history.change_type === HistoryChangeTypeEnum.Created) {
+        if (history.change_type === 'created') {
             return 'Account configuration created'
         }
-        if (history.change_type === HistoryChangeTypeEnum.Deleted) {
+        if (history.change_type === 'deleted') {
             return 'Account configuration removed'
         }
         if (history.changed_fields) {

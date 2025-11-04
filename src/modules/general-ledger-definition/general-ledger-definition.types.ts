@@ -1,13 +1,7 @@
 import { IAuditable, ITimeStamps, TEntityId } from '@/types/common'
 
 import { IAccount } from '../account/account.types'
-
-export enum GeneralLedgerTypeEnum {
-    Assets = 'Assets',
-    LiabilitiesEquityAndReserves = 'Liabilities, Equity & Reserves',
-    Income = 'Income',
-    Expenses = 'Expenses',
-}
+import { TGeneralLedgerType } from '../general-ledger/general-ledger.types'
 
 export interface IGeneralLedgerDefinition extends IAuditable, ITimeStamps {
     id: TEntityId
@@ -29,7 +23,7 @@ export interface IGeneralLedgerDefinition extends IAuditable, ITimeStamps {
 
     name_in_total?: string
     is_posting?: boolean
-    general_ledger_type: GeneralLedgerTypeEnum
+    general_ledger_type: TGeneralLedgerType
 
     beginning_balance_of_the_year_credit?: number
     beginning_balance_of_the_year_debit?: number
@@ -37,7 +31,7 @@ export interface IGeneralLedgerDefinition extends IAuditable, ITimeStamps {
 
 export interface IGeneralLedgerDefinitionRequest {
     name: string
-    general_ledger_type: GeneralLedgerTypeEnum
+    general_ledger_type: TGeneralLedgerType
 
     description?: string
     index?: number

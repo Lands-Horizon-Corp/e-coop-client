@@ -1,9 +1,7 @@
 import { toast } from 'sonner'
 
-import {
-    GeneralLedgerTypeEnum,
-    IGeneralLedgerDefinition,
-} from '@/modules/general-ledger-definition'
+import { TGeneralLedgerType } from '@/modules/general-ledger'
+import { IGeneralLedgerDefinition } from '@/modules/general-ledger-definition'
 import { arrayMove } from '@dnd-kit/sortable'
 import { create } from 'zustand'
 
@@ -20,7 +18,7 @@ export interface GeneralLedgerAccountsGroupingStore {
     changedGeneralLedgerItems: UpdateIndexRequest[]
     setChangedGeneralLedgerItems: (data: UpdateIndexRequest[]) => void
 
-    selectedGeneralLedgerTypes: GeneralLedgerTypeEnum | null
+    selectedGeneralLedgerTypes: TGeneralLedgerType | null
     generalLedgerDefinitionEntriesId?: TEntityId
     changedAccounts: UpdateIndexRequest[]
 
@@ -44,7 +42,7 @@ export interface GeneralLedgerAccountsGroupingStore {
         generalLedgerDefinitions: IGeneralLedgerDefinition | null
     ) => void
     setGeneralLedgerType?: (
-        generalLedgerType: GeneralLedgerTypeEnum | null
+        generalLedgerType: TGeneralLedgerType | null
     ) => void
 }
 

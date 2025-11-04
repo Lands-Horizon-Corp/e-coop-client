@@ -1,8 +1,8 @@
 import { toast } from 'sonner'
 
 import {
-    FinancialStatementTypeEnum,
     IFinancialStatementDefinition,
+    TFinancialStatementType,
 } from '@/modules/financial-statement-definition'
 import { arrayMove } from '@dnd-kit/sortable'
 import { create } from 'zustand'
@@ -20,7 +20,7 @@ interface FinancialStatementAccountsGroupingStore {
     selectedFinancialStatementDefinition: IFinancialStatementDefinition | null
     financialStatementDefinitionEntriesId?: TEntityId
     changedFinancialStatementItems: UpdateIndexRequest[]
-    selectedFinancialStatementTypes?: FinancialStatementTypeEnum | null
+    selectedFinancialStatementTypes?: TFinancialStatementType | null
 
     setFinancialStatmentAccountsGroupingId: (paymentType: string) => void
     setSelectedFinancialStatementDefinitionId: (id: string | null) => void
@@ -44,7 +44,7 @@ interface FinancialStatementAccountsGroupingStore {
     ) => void
     setChangedFinancialStatementItems: (data: UpdateIndexRequest[]) => void
     setFinancialStatementType?: (
-        financialStatementType: FinancialStatementTypeEnum | null
+        financialStatementType: TFinancialStatementType | null
     ) => void
 }
 

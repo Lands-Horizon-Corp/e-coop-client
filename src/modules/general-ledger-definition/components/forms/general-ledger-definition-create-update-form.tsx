@@ -8,13 +8,13 @@ import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
 import { CurrencyInput } from '@/modules/currency'
 import {
     GeneralLedgerDefinitionSchema,
-    GeneralLedgerTypeEnum,
     IGeneralLedgerDefinition,
     IGeneralLedgerDefinitionFormValues,
     IGeneralLedgerDefinitionRequest,
     useCreate,
     useUpdateById,
 } from '@/modules/general-ledger-definition'
+import { GENERAL_LEDGER_TYPE } from '@/modules/general-ledger/constants'
 
 import { GradientBackground } from '@/components/gradient-background/gradient-background'
 import { MoneyBagIcon } from '@/components/icons'
@@ -174,13 +174,11 @@ const GeneralLedgerDefinitionCreateUpdateForm = ({
                                     {field.value || 'Select GL Type'}
                                 </SelectTrigger>
                                 <SelectContent>
-                                    {Object.values(GeneralLedgerTypeEnum).map(
-                                        (type) => (
-                                            <SelectItem key={type} value={type}>
-                                                {type}
-                                            </SelectItem>
-                                        )
-                                    )}
+                                    {GENERAL_LEDGER_TYPE.map((type) => (
+                                        <SelectItem key={type} value={type}>
+                                            {type}
+                                        </SelectItem>
+                                    ))}
                                 </SelectContent>
                             </Select>
                         </FormControl>

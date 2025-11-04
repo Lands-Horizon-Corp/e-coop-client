@@ -411,7 +411,7 @@ export const AccountRowContext = ({
                 description="Modify/Update account..."
                 formProps={{
                     accountId: account.id,
-                    defaultValues: account,
+                    defaultValues: account, // FOCUS HERE
                 }}
                 title="Update Account"
             />

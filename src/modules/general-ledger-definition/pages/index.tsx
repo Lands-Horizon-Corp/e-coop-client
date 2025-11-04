@@ -5,11 +5,11 @@ import { toast } from 'sonner'
 import { AccordionContent, AccordionItem } from '@radix-ui/react-accordion'
 
 import { payment_bg } from '@/assets/transactions'
-import { GeneralLedgerTypeEnum } from '@/modules/account'
 import FinancialStatementSkeleton from '@/modules/financial-statement-definition/pages/components/financial-statement-skeleton'
 import { useGetAll } from '@/modules/general-ledger-account-grouping'
 import { IGeneralLedgerAccountGrouping } from '@/modules/general-ledger-account-grouping'
 import { GLAccountsGroupingUpdateFormModal } from '@/modules/general-ledger-account-grouping'
+import { GENERAL_LEDGER_TYPE } from '@/modules/general-ledger/constants'
 import { useGeneralLedgerAccountsGroupingStore } from '@/store/general-ledger-accounts-groupings-store'
 
 import PageContainer from '@/components/containers/page-container'
@@ -58,7 +58,7 @@ const GeneralLedgerDefinition = () => {
     const handleAccountTrigger = (grouping: IGeneralLedgerAccountGrouping) => {
         setGeneralLedgerAccountsGroupingId(grouping.id)
 
-        const GeneralLedgerTypeArray = Object.values(GeneralLedgerTypeEnum)
+        const GeneralLedgerTypeArray = GENERAL_LEDGER_TYPE
         const matchedType = GeneralLedgerTypeArray.find(
             (type) => type === grouping.name
         )

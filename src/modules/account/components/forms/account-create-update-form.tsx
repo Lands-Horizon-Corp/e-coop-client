@@ -1,5 +1,3 @@
-import { useState } from 'react'
-
 import { useForm } from 'react-hook-form'
 
 import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
@@ -7,8 +5,6 @@ import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
 import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
 import { cn } from '@/helpers/tw-utils'
 import {
-    AccountTypeEnum,
-    ComputationTypeEnum,
     IAccount,
     IAccountRequest,
     IAccountRequestSchema,
@@ -34,6 +30,7 @@ import AccountContentForm from './account-content-form'
 import AccountHeaderForm, {
     AccountGlSourceVisibility,
 } from './account-header-form'
+import LoanConnectAccountSection from './sections/loan-connect-account-section'
 
 export interface IAccountCreateUpdateFormProps
     extends IClassProps,
@@ -50,11 +47,6 @@ const AccountCreateUpdateForm = ({
     const organizationId = currentAuth.user_organization.organization_id
     const branchId = currentAuth.user_organization.branch_id
 
-    const [selectedAccountType, setSelectedAccountType] =
-        useState<AccountTypeEnum>(
-            formProps.defaultValues?.type || AccountTypeEnum.Other
-        )
-
     const form = useForm<TAccountFormValues>({
         resolver: standardSchemaResolver(IAccountRequestSchema),
         reValidateMode: 'onChange',
@@ -70,7 +62,8 @@ const AccountCreateUpdateForm = ({
             compassion_fund: false,
             compassion_fund_amount: 0,
             icon: 'Money Bag',
-            computation_type: ComputationTypeEnum.Straight,
+            computation_type: 'Straight',
+            type: 'Other',
             currency_id:
                 currentAuth.user_organization.branch.branch_setting.currency_id,
             ...formProps.defaultValues,
@@ -145,12 +138,13 @@ const AccountCreateUpdateForm = ({
                     isDisabled={isDisabled}
                     isReadOnly={formProps.readOnly}
                 />
-                <AccountContentForm
-                    form={form}
-                    isDisabled={isDisabled}
-                    selectedAccountType={selectedAccountType}
-                    setSelectedAccountType={setSelectedAccountType}
-                />
+                <div className="flex gap-x-2">
+                    <AccountContentForm form={form} isDisabled={isDisabled} />
+                    <LoanConnectAccountSection
+                        className="my-2 w-[240px]"
+                        form={form}
+                    />
+                </div>
                 {!formProps.readOnly && (
                     <div className="space-y-2 sticky bottom-0">
                         <div className="flex items-center justify-end gap-x-2">
@@ -202,7 +196,7 @@ export const AccountCreateUpdateFormModal = ({
 }) => {
     return (
         <Modal
-            className={cn('!max-w-[95vw]', className)}
+            className={cn('!max-w-[99vw]', className)}
             description={description}
             title={title}
             {...props}

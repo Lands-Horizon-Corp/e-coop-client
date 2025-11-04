@@ -135,7 +135,7 @@ const GeneralLedgerTableColumns = (
                 <div className="space-y-1">
                     <p className="font-medium">{account?.name || '-'}</p>
                     <p className="text-xs text-muted-foreground/70 font-mono">
-                        {account?.alternative_code || ''}
+                        {account?.loan_account_id || ''}
                     </p>
                 </div>
             ),

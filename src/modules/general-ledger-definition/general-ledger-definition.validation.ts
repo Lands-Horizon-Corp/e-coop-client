@@ -5,14 +5,9 @@ import {
     descriptionTransformerSanitizer,
 } from '@/validation'
 
-import { GeneralLedgerTypeEnum } from '../account'
+import { GENERAL_LEDGER_TYPE } from '../general-ledger/constants'
 
-export const GeneralLedgerTypeEnumSchema = z.enum([
-    GeneralLedgerTypeEnum.Assets,
-    GeneralLedgerTypeEnum.LiabilitiesEquityAndReserves,
-    GeneralLedgerTypeEnum.Income,
-    GeneralLedgerTypeEnum.Expenses,
-])
+export const GeneralLedgerTypeEnumSchema = z.enum(GENERAL_LEDGER_TYPE)
 
 export const GeneralLedgerDefinitionSchema = z.object({
     name: z.string().min(1, 'The name is Required!'),

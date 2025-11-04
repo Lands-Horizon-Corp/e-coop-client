@@ -3,7 +3,6 @@ import qs from 'query-string'
 
 import { downloadFile } from '@/helpers/common-helper'
 import { Logger } from '@/helpers/loggers'
-import { createAPIRepository } from '@/providers/repositories/api-crud-factory'
 import {
     HookQueryOptions,
     createDataLayerFactory,
@@ -13,55 +12,60 @@ import {
     updateMutationInvalidationFn,
 } from '@/providers/repositories/mutation-factory'
 
-import { TEntityId, UpdateIndexRequest } from '@/types'
+import { TAPIQueryOptions, TEntityId, UpdateIndexRequest } from '@/types'
 
 import {
     IAccount,
     IAccountPaginated,
     IAccountRequest,
     TAccountComputationsheetConnect,
+    TAccountLoanConnect,
     TDeleteAccountFromGLFSType,
+    TGetAllAccountMode,
     TPaginatedAccountHookMode,
 } from './account.types'
 
-const { apiCrudHooks, apiCrudService } = createDataLayerFactory<
-    IAccount,
-    IAccountRequest
->({
+const {
+    baseQueryKey: accountBaseQueryKey,
+    apiCrudHooks,
+    apiCrudService,
+} = createDataLayerFactory<IAccount, IAccountRequest>({
     url: '/api/v1/account',
     baseKey: 'account',
 })
 
+export const { getAll: getAllAccounts } = apiCrudService
+
+export const { API, route: accountAPIRoute } = apiCrudService
+
 export const {
     useCreate,
-    useGetAll,
+    // useGetAll,
     useGetById,
     useDeleteById,
     useUpdateById,
     useGetPaginated,
 } = apiCrudHooks
-const { API, route } = createAPIRepository<IAccount, IAccountRequest>(
-    '/api/v1/account'
-)
+
 export const deleteMany = async (ids: TEntityId[]) => {
-    const endpoint = `${route}/bulk-delete`
+    const endpoint = `${accountAPIRoute}/bulk-delete`
     await API.delete<void>(endpoint, { ids })
 }
 
 export const exportAll = async () => {
-    const url = `${route}/export`
+    const url = `${accountAPIRoute}/export`
     await downloadFile(url, 'all_banks_export.xlsx')
 }
 
 export const exportAllFiltered = async (filters?: string) => {
-    const url = `${route}/export-search?filter=${filters || ''}`
+    const url = `${accountAPIRoute}/export-search?filter=${filters || ''}`
     await downloadFile(url, 'filtered_account_export.xlsx')
 }
 
 export const exportSelected = async (ids: TEntityId[]) => {
     const url = qs.stringifyUrl(
         {
-            url: `${route}/export-selected`,
+            url: `${accountAPIRoute}/export-selected`,
             query: { ids },
         },
         { skipNull: true }
@@ -76,7 +80,7 @@ export const AccountUpdateIndex = async (
     const response = await Promise.all(
         changedItems.map((item) =>
             API.put<{ accountId: TEntityId; index: number }, IAccount>(
-                `${route}/${item.id}/index/${item.index}`
+                `${accountAPIRoute}/${item.id}/index/${item.index}`
             )
         )
     )
@@ -88,8 +92,11 @@ export const deleteAccountFromGLFS = async ({
     mode,
 }: TDeleteAccountFromGLFSType) => {
     const type = `${mode}-definition`
-    return (await API.put<IAccount, IAccount>(`${route}/${id}/${type}/remove`))
-        .data
+    return (
+        await API.put<IAccount, IAccount>(
+            `${accountAPIRoute}/${id}/${type}/remove`
+        )
+    ).data
 }
 
 export const useUpdateAccountIndex = createMutationFactory<
@@ -124,9 +131,13 @@ export const useFilteredPaginatedAccount = ({
     currencyId?: TEntityId
 }) => {
     return useQuery<IAccountPaginated, Error>({
-        queryKey: ['account', 'paginated', mode, currencyId, query].filter(
-            Boolean
-        ),
+        queryKey: [
+            accountBaseQueryKey,
+            'paginated',
+            mode,
+            currencyId,
+            query,
+        ].filter(Boolean),
         queryFn: async () => {
             let targetUrl = ''
             if (mode === 'all') targetUrl = 'search'
@@ -150,6 +161,8 @@ export const useFilteredPaginatedAccount = ({
                 targetUrl = currencyId
                     ? `currency/${currencyId}/loan/search`
                     : 'search'
+            } else if (mode === 'loan-suggested') {
+                targetUrl = 'loan-suggestion/search'
             } else {
                 targetUrl = mode ? `${mode}/search` : 'search'
             }
@@ -173,7 +186,12 @@ export const useAccountsComputation = ({
     options?: HookQueryOptions<IAccount[], Error>
 }) => {
     return useQuery<IAccount[], Error>({
-        queryKey: ['account', 'computation-sheet', computationSheetId, query],
+        queryKey: [
+            accountBaseQueryKey,
+            'computation-sheet',
+            computationSheetId,
+            query,
+        ],
         queryFn: async () => {
             return apiCrudService.getAll<IAccount>({
                 url: `${apiCrudService.route}/computation-sheet/${computationSheetId}`,
@@ -206,7 +224,7 @@ export const useAccountComputationConnect = createMutationFactory<
         })
         args.queryClient.invalidateQueries({
             queryKey: [
-                'account',
+                accountBaseQueryKey,
                 'computation-sheet',
                 args.variables.computation_sheet_id,
             ],
@@ -236,9 +254,113 @@ export const useAccountComputationDisconnect = createMutationFactory<
         })
         args.queryClient.invalidateQueries({
             queryKey: [
-                'account',
+                accountBaseQueryKey,
                 'computation-sheet',
                 args.variables.computation_sheet_id,
+            ],
+        })
+    },
+})
+
+export const useAccountLoanConnect = createMutationFactory<
+    IAccount,
+    Error,
+    TAccountLoanConnect
+>({
+    mutationFn: async ({ loan_account_id, account_id }) => {
+        return (
+            await API.post<TAccountLoanConnect, IAccount>(
+                `${apiCrudService.route}/${account_id}/connect-to-loan/${loan_account_id}`,
+                { loan_account_id, account_id }
+            )
+        ).data
+    },
+    invalidationFn: (args) => {
+        args.queryClient.invalidateQueries({
+            queryKey: ['account', args.variables.account_id],
+        })
+        args.queryClient.invalidateQueries({
+            queryKey: ['account', args.variables.loan_account_id],
+        })
+        args.queryClient.invalidateQueries({
+            queryKey: ['account'],
+        })
+    },
+})
+
+// GET ALL ACCOUNT with diff mode
+export const useGetAllAccount = ({
+    mode = 'all',
+    query,
+    options,
+    accountId,
+}: {
+    mode?: TGetAllAccountMode
+    query?: TAPIQueryOptions
+    options?: HookQueryOptions<IAccount[], Error>
+    accountId?: TEntityId
+} = {}) => {
+    return useQuery<IAccount[], Error>({
+        ...options,
+        queryKey: [accountBaseQueryKey, 'all', mode, accountId, query].filter(
+            Boolean
+        ),
+        queryFn: async () => {
+            let targetUrl = accountAPIRoute
+
+            if (mode === 'loan-account-connections') {
+                targetUrl = `${accountAPIRoute}/${accountId}/loan-accounts`
+            }
+
+            return apiCrudService.getAll<IAccount>({
+                url: targetUrl,
+                query,
+            })
+        },
+    })
+}
+
+export const useConnectAccount = createMutationFactory<
+    IAccount[],
+    Error,
+    { mainAccountId: TEntityId; accountId: TEntityId }
+>({
+    mutationFn: async ({ accountId, mainAccountId }) => {
+        const response = await API.post<void, IAccount[]>(
+            `${accountAPIRoute}/${mainAccountId}/connect-to-loan/${accountId}`
+        )
+        return response.data
+    },
+    invalidationFn: ({ queryClient, variables }) => {
+        queryClient.invalidateQueries({
+            queryKey: [
+                accountBaseQueryKey,
+                'all',
+                'loan-account-connections',
+                variables.mainAccountId,
+            ],
+        })
+    },
+})
+
+export const useDisconnectAccount = createMutationFactory<
+    IAccount[],
+    Error,
+    { mainAccountId: TEntityId; accountId: TEntityId }
+>({
+    mutationFn: async ({ accountId, mainAccountId }) => {
+        const response = await API.post<void, IAccount[]>(
+            `${accountAPIRoute}/${mainAccountId}/disconnect-account/${accountId}`
+        )
+        return response.data
+    },
+    invalidationFn: ({ queryClient, variables }) => {
+        queryClient.invalidateQueries({
+            queryKey: [
+                accountBaseQueryKey,
+                'all',
+                'loan-account-connections',
+                variables.mainAccountId,
             ],
         })
     },

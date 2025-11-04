@@ -1,38 +1,39 @@
 import { cn } from '@/helpers/tw-utils'
-import { GeneralLedgerTypeEnum } from '@/modules/account'
 
 import { Badge } from '@/components/ui/badge'
 
+import { TGeneralLedgerType } from '../general-ledger.types'
+
 interface GeneralLedgerTypeBadgeProps {
-    type: GeneralLedgerTypeEnum
+    type: TGeneralLedgerType
     className?: string
     description?: string
 }
 
 const generalLedgerTypeStyles: Record<
-    GeneralLedgerTypeEnum,
+    TGeneralLedgerType,
     {
         label: string
         bgColor: string
         textColor: string
     }
 > = {
-    [GeneralLedgerTypeEnum.Assets]: {
+    Assets: {
         label: 'Assets',
         bgColor: 'bg-emerald-700',
         textColor: 'text-emerald-50',
     },
-    [GeneralLedgerTypeEnum.LiabilitiesEquityAndReserves]: {
+    'Liabilities, Equity & Reserves': {
         label: 'Liabilities, Equity & Reserves',
         bgColor: 'bg-purple-700',
         textColor: 'text-purple-50',
     },
-    [GeneralLedgerTypeEnum.Income]: {
+    Income: {
         label: 'Income',
         bgColor: 'bg-primary',
         textColor: 'text-primary',
     },
-    [GeneralLedgerTypeEnum.Expenses]: {
+    Expenses: {
         label: 'Expenses',
         bgColor: 'bg-stone-500',
         textColor: 'text-stone-50',

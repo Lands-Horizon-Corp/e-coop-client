@@ -61,10 +61,10 @@ const AccountMiniCard = ({ accountId, defaultAccount, className }: Props) => {
                                 />
                             )}
                         </div>
-                        {data?.alternative_code && (
+                        {data?.loan_account && (
                             <div className="flex items-center gap-1 mt-1 text-sm text-muted-foreground">
                                 <HashIcon className="h-3 w-3" />
-                                <span>{data?.alternative_code ?? '-'}</span>
+                                <span>{data?.loan_account.name ?? '-'}</span>
                             </div>
                         )}
                     </div>

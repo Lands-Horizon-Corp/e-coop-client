@@ -3,19 +3,15 @@ import { z } from 'zod'
 import {
     descriptionSchema,
     descriptionTransformerSanitizer,
+    entityIdSchema,
 } from '@/validation'
 
-import { FinancialStatementTypeEnum } from '../account'
+import { FINANCIAL_STATEMENT_TYPE } from './financial-statement-definition.constants'
 
-export const FinancialStatementTypeSchema = z.enum([
-    FinancialStatementTypeEnum.Assets,
-    FinancialStatementTypeEnum.Liabilities,
-    FinancialStatementTypeEnum.Equity,
-    FinancialStatementTypeEnum.Expenses,
-    FinancialStatementTypeEnum.Revenue,
-])
+export const FinancialStatementTypeSchema = z.enum(FINANCIAL_STATEMENT_TYPE)
 
 export const FinancialStatementDefinitionSchema = z.object({
+    id: entityIdSchema.optional(),
     name: z.string().min(1, 'The name is Required!'),
     description: descriptionSchema
         .optional()
@@ -27,8 +23,10 @@ export const FinancialStatementDefinitionSchema = z.object({
 
     beginning_balance_of_the_year_credit: z.number().optional(),
     beginning_balance_of_the_year_debit: z.number().optional(),
+
+    financial_statement_definition_entries_id: entityIdSchema.optional(),
 })
 
-export type IFinancialStatementDefinitionFormValues = z.infer<
+export type IFinancialStatementDefinitionSchema = z.infer<
     typeof FinancialStatementDefinitionSchema
 >

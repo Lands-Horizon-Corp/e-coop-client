@@ -8,146 +8,93 @@ import {
 import { TIcon } from '@/components/icons'
 
 import { ICurrency } from '../currency'
-import { ACCOUNT_INTEREST_STANDARD_COMPUTATION } from './account.constants'
+import { TFinancialStatementType } from '../financial-statement-definition'
+import { TGeneralLedgerType } from '../general-ledger'
+import {
+    ACCOUNT_EXCLUSIVE_SETTING_TYPE,
+    ACCOUNT_INTEREST_STANDARD_COMPUTATION,
+    ACCOUNT_TYPE,
+    COMPUTATION_TYPE,
+    EARNED_UNEARNED_INTEREST,
+    INTEREST_DEDUCTION,
+    INTEREST_FINES_COMPUTATION_DIMINISHING,
+    INTEREST_FINES_COMPUTATION_DIMINISHING_STRAIGHT_DIMINISHING_YEARLY,
+    INTEREST_SAVING_TYPE_DIMINISHING_STRAIGHT,
+    LOAN_SAVING_TYPE,
+    LUMPSUM_COMPUTATION_TYPE,
+    OTHER_DEDUCTION_ENTRY,
+    OTHER_INFORMATION_OF_AN_ACCOUNT,
+} from './account.constants'
 import { TAccountFormValues } from './account.validation'
 
-export enum AccountTypeEnum {
-    Other = 'Other',
-    Deposit = 'Deposit',
-    Loan = 'Loan',
-    ARLedger = 'A/R-Ledger',
-    ARAging = 'A/R-Aging',
-    Fines = 'Fines',
-    Interest = 'Interest',
-    SVFLedger = 'SVF-Ledger',
-    WOff = 'W-Off',
-    APLedger = 'A/P-Ledger',
-}
+export type TAccountType = (typeof ACCOUNT_TYPE)[number]
 
-export enum ComputationTypeEnum {
-    Straight = 'Straight',
-    Diminishing = 'Diminishing',
-    DiminishingAddOn = 'DiminishingAddOn',
-    DiminishingYearly = 'DiminishingYearly',
-    DiminishingStraight = 'DiminishingStraight',
-    DiminishingQuarterly = 'DiminishingQuarterly',
-}
+export type TComputationType = (typeof COMPUTATION_TYPE)[number]
 
-export enum FinancialStatementTypeEnum {
-    Assets = 'Assets',
-    Liabilities = 'Liabilities',
-    Equity = 'Equity',
-    Revenue = 'Revenue',
-    Expenses = 'Expenses',
-}
+export type TLumpsumComputationType = (typeof LUMPSUM_COMPUTATION_TYPE)[number]
 
-export enum GeneralLedgerTypeEnum {
-    Assets = 'Assets',
-    LiabilitiesEquityAndReserves = 'Liabilities, Equity & Reserves',
-    Income = 'Income',
-    Expenses = 'Expenses',
-}
+export type TInterestFinesComputationDiminishing =
+    (typeof INTEREST_FINES_COMPUTATION_DIMINISHING)[number]
 
-export enum LumpsumComputationTypeEnum {
-    None = 'None',
-    ComputeFinesMaturity = 'Compute Fines Maturity',
-    ComputeInterestMaturityTerms = 'Compute Interest Maturity / Terms',
-    ComputeAdvanceInterest = 'Compute Advance Interest',
-}
+export type TInterestFinesComputationDiminishingStraightDiminishingYearly =
+    (typeof INTEREST_FINES_COMPUTATION_DIMINISHING_STRAIGHT_DIMINISHING_YEARLY)[number]
 
-export enum InterestFinesComputationDiminishingEnum {
-    None = 'None',
-    ByAmortization = 'By Amortization',
-    ByAmortizationDailyOnInterestPrincipalInterestFinesArr = 'By Amortization Daly on Interest Principal + Interest = Fines(Arr)',
-}
+export type TEarnedUnearnedInterest = (typeof EARNED_UNEARNED_INTEREST)[number]
 
-export enum InterestFinesComputationDiminishingStraightDiminishingYearlyEnum {
-    None = 'None',
-    ByDailyOnInterestBasedOnLoanBalanceByYearPrincipalInterestAmortizationFinesFinesGracePeriodMonthEndAmortization = 'By Daily on Interest based on loan balance by year Principal + Interest Amortization = Fines Fines Grace Period Month end Amortization',
-}
+export type TLoanSavingType = (typeof LOAN_SAVING_TYPE)[number]
 
-export enum EarnedUnearnedInterestEnum {
-    None = 'None',
-    ByFormula = 'By Formula',
-    ByFormulaActualPay = 'By Formula + Actual Pay',
-    ByAdvanceInterestActualPay = 'By Advance Interest + Actual Pay',
-}
+export type TInterestDeduction = (typeof INTEREST_DEDUCTION)[number]
 
-export enum LoanSavingTypeEnum {
-    Separate = 'Separate',
-    SingleLedger = 'Single Ledger',
-    SingleLedgerIfNotZero = 'Single Ledger if Not Zero',
-    SingleLedgerSemi1530 = 'Single Ledger Semi (15/30)',
-    SingleLedgerSemiWithinMaturity = 'Single Ledger Semi Within Maturity',
-}
+export type TOtherDeductionEntry = (typeof OTHER_DEDUCTION_ENTRY)[number]
 
-export enum InterestDeductionEnum {
-    Above = 'Above',
-    Below = 'Below',
-}
+export type TInterestSavingTypeDiminishingStraight =
+    (typeof INTEREST_SAVING_TYPE_DIMINISHING_STRAIGHT)[number]
 
-export enum OtherDeductionEntryEnum {
-    None = 'None',
-    HealthCare = 'Health Care',
-}
-
-export enum InterestSavingTypeDiminishingStraightEnum {
-    Spread = 'Spread',
-    FirstPayment = '1st Payment',
-}
-
-export enum OtherInformationOfAnAccountEnum {
-    None = 'None',
-    Jewelry = 'Jewelry',
-    Grocery = 'Grocery',
-    TrackLoanDeduction = 'Track Loan Deduction',
-    Restructured = 'Restructured',
-    CashInBankCashInCheckAccount = 'Cash in Bank / Cash in Check Account',
-    CashOnHand = 'Cash on Hand',
-}
-
-export const enum InterestStandardComputationEnum {
-    None = 'None',
-    Yearly = 'Yearly',
-    Monthly = 'Monthly',
-}
+export type TOtherInformationOfAnAccount =
+    (typeof OTHER_INFORMATION_OF_AN_ACCOUNT)[number]
 
 export type TInterestStandardComputation =
     (typeof ACCOUNT_INTEREST_STANDARD_COMPUTATION)[number]
 
+export type TAccountExclusiveSettingType =
+    (typeof ACCOUNT_EXCLUSIVE_SETTING_TYPE)[number]
+
 export interface IAccount extends IAuditable, ITimeStamps {
     id: TEntityId
 
-    organization_id?: TEntityId
-    branch_id?: TEntityId
+    // organization_id?: TEntityId
+    // branch_id?: TEntityId
 
-    general_ledger_definition_id?: TEntityId
-    financial_statement_definition_entries_id?: TEntityId
-    account_classification_id?: TEntityId
-    account_category_id?: TEntityId
-    member_type_id: TEntityId
+    // GENERAL CONFIG
+    index?: number
+    is_internal?: boolean
+    cash_on_hand?: boolean
+    paid_up_share_capital?: boolean
 
+    header_row?: number
+    center_row?: number
+    total_row?: number
+
+    icon: TIcon
     name: string
     description?: string
 
     minAmount?: number
     maxAmount?: number
-    index?: number
-    type: AccountTypeEnum
+    type: TAccountType
+    member_type_id: TEntityId
 
-    is_internal?: boolean
-    cash_on_hand?: boolean
-    paid_up_share_capital?: boolean
+    cash_and_cash_equivalence: boolean
 
-    computation_type?: ComputationTypeEnum
+    compassion_fund: boolean // this is damayan in OLD coop
+    compassion_fund_amount: number // this is damayan in OLD coop
 
-    fines_amort?: number
-    fines_maturity?: number
+    general_ledger_grouping_exclude_account?: boolean
 
-    interest_standard?: number
-    interest_secured?: number
+    financial_statement_type?: TFinancialStatementType
+    general_ledger_type: TGeneralLedgerType
 
-    computation_sheet_id?: TEntityId
+    account_category_id?: TEntityId
 
     coh_cib_fines_grace_period_entry_daily_amortization?: number
     coh_cib_fines_grace_period_entry_daily_maturity?: number
@@ -170,39 +117,15 @@ export interface IAccount extends IAuditable, ITimeStamps {
     coh_cib_fines_grace_period_entry_lumpsum_amortization?: number
     coh_cib_fines_grace_period_entry_lumpsum_maturity?: number
 
-    financial_statement_type?: FinancialStatementTypeEnum
-    general_ledger_type?: GeneralLedgerTypeEnum
+    general_ledger_definition_id?: TEntityId
+    financial_statement_definition_entries_id?: TEntityId
 
-    alternative_code?: string
+    account_classification_id?: TEntityId
 
-    fines_grace_period_amortization?: number
-    additional_grace_period?: number
-    // cut_off_days
-    // cut_off_months
+    // COMMON
 
-    number_grace_period_daily?: boolean
-
-    fines_grace_period_maturity?: number
     yearly_subscription_fee?: number
-    loan_cut_off_days?: number
 
-    lumpsum_computation_type?: LumpsumComputationTypeEnum
-    interest_fines_computation_diminishing?: InterestFinesComputationDiminishingEnum
-    interest_fines_computation_diminishing_straight_diminishing_yearly?: InterestFinesComputationDiminishingStraightDiminishingYearlyEnum
-    earned_unearned_interest?: EarnedUnearnedInterestEnum
-    loan_saving_type?: LoanSavingTypeEnum
-    interest_deduction?: InterestDeductionEnum
-    other_deduction_entry?: OtherDeductionEntryEnum
-    interest_saving_type_diminishing_straight?: InterestSavingTypeDiminishingStraightEnum
-    other_information_of_an_account?: OtherInformationOfAnAccountEnum
-
-    header_row?: number
-    center_row?: number
-    total_row?: number
-
-    general_ledger_grouping_exclude_account?: boolean
-
-    icon: TIcon
     show_in_general_ledger_source_withdraw: boolean
     show_in_general_ledger_source_deposit: boolean
     show_in_general_ledger_source_journal: boolean
@@ -211,25 +134,68 @@ export interface IAccount extends IAuditable, ITimeStamps {
     show_in_general_ledger_source_journal_voucher: boolean
     show_in_general_ledger_source_check_voucher: boolean
 
-    compassion_fund: boolean // this is damayan in OLD coop
-    compassion_fund_amount: number // this is damayan in OLD coop
+    // FOR LOAN
+    // loan_cut_off_days?: number
+    computation_sheet_id?: TEntityId
+    loan_saving_type?: TLoanSavingType
+    lumpsum_computation_type?: TLumpsumComputationType
 
+    other_deduction_entry?: TOtherDeductionEntry
+
+    //  ALTCODE REPLACEMENT - Shows in (Interest, Fines, SVF (Service Fee))
+    loan_account_id?: TEntityId
+    loan_account?: IAccount
+
+    // FOR CURRENCY
     currency_id: TEntityId
     currency?: ICurrency
 
-    cash_and_cash_equivalence: boolean
+    // FOR LOAN / INTEREST / FINES / SVF
+    computation_type?: TComputationType
+
+    // FOR FINES
+    fines_amort?: number
+    fines_maturity?: number
+
+    fines_grace_period_amortization?: number
+    additional_grace_period?: number
+
+    fines_grace_period_maturity?: number
+
+    no_grace_period_daily?: boolean
+
+    interest_computation_month_end?: boolean
+    fines_computation_by_next_amortization?: boolean
+    computation_fines_lumpsum?: boolean
+    fines_computation_daily_by_amortization?: boolean
+    fines_computation_rest_by_rate?: boolean
+    compute_fines_after_maturity?: boolean
+
+    // FOR INTEREST
+    interest_standard?: number
+    interest_standard_computation?: TInterestStandardComputation
+
+    cut_off_days?: number
+    cut_off_months?: number
+
+    earned_unearned_interest?: TEarnedUnearnedInterest
+    interest_deduction?: TInterestDeduction
+
+    interest_fines_computation_diminishing?: TInterestFinesComputationDiminishing
+    interest_fines_computation_diminishing_straight_diminishing_yearly?: TInterestFinesComputationDiminishingStraightDiminishingYearly
+
+    interest_saving_type_diminishing_straight?: TInterestSavingTypeDiminishingStraight
+    other_information_of_an_account?: TOtherInformationOfAnAccount
+
+    interest_diminishing_by_year?: boolean
 }
+
+// FOR US TO REMEMBER
+// interest_secured?: number - WALA NATO DI NADAW GAGMITIN
 
 export type IAccountRequest = TAccountFormValues
 
 export interface IAccountPaginated extends IPaginatedResult<IAccount> {}
-
-export enum AccountExclusiveSettingTypeEnum {
-    None = 'None',
-    IsInternal = 'Is Internal',
-    CashOnHand = 'Cash on Hand',
-    PaidUpShareCapital = 'Paid up share capital',
-}
 
 export type TPaginatedAccountHookMode =
     | 'withdraw'
@@ -240,6 +206,7 @@ export type TPaginatedAccountHookMode =
     | 'journal-voucher'
     | 'check-voucher'
     | 'loan'
+    | 'loan-suggested'
     | 'cash-and-cash-equivalence'
     | 'currency'
     | 'currency-payment'
@@ -257,3 +224,10 @@ export type TAccountComputationsheetConnect = {
     computation_sheet_id: TEntityId
     account_id: TEntityId
 }
+
+export type TAccountLoanConnect = {
+    loan_account_id: TEntityId
+    account_id: TEntityId
+}
+
+export type TGetAllAccountMode = 'all' | 'loan-account-connections'

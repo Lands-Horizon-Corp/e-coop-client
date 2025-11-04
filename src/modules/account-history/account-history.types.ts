@@ -5,29 +5,27 @@ import { TIcon } from '@/components/icons'
 import { IBaseEntityMeta, IPaginatedResult, TEntityId } from '@/types'
 
 import {
-    AccountTypeEnum,
-    ComputationTypeEnum,
-    EarnedUnearnedInterestEnum,
     IAccount,
-    InterestDeductionEnum,
-    InterestFinesComputationDiminishingEnum,
-    InterestFinesComputationDiminishingStraightDiminishingYearlyEnum,
-    InterestSavingTypeDiminishingStraightEnum,
-    InterestStandardComputationEnum,
-    LoanSavingTypeEnum,
-    LumpsumComputationTypeEnum,
-    OtherDeductionEntryEnum,
-    OtherInformationOfAnAccountEnum,
+    TAccountType,
+    TComputationType,
+    TEarnedUnearnedInterest,
+    TInterestDeduction,
+    TInterestFinesComputationDiminishing,
+    TInterestFinesComputationDiminishingStraightDiminishingYearly,
+    TInterestSavingTypeDiminishingStraight,
+    TInterestStandardComputation,
+    TLoanSavingType,
+    TLumpsumComputationType,
+    TOtherDeductionEntry,
+    TOtherInformationOfAnAccount,
 } from '../account/account.types'
-import { FinancialStatementTypeEnum } from '../financial-statement-definition'
-import { GeneralLedgerTypeEnum } from '../general-ledger-definition'
+import { TFinancialStatementType } from '../financial-statement-definition'
+import { TGeneralLedgerType } from '../general-ledger'
 import { AccountHistorySchema } from './account-history.validation'
 
-export enum HistoryChangeTypeEnum {
-    Created = 'created',
-    Updated = 'updated',
-    Deleted = 'deleted',
-}
+export const HISTORY_CHANGE_TYPE = ['created', 'updated', 'deleted'] as const
+
+export type THistoryChangeType = (typeof HISTORY_CHANGE_TYPE)[number]
 
 export interface IAccountHistory extends IBaseEntityMeta {
     id: TEntityId
@@ -35,7 +33,7 @@ export interface IAccountHistory extends IBaseEntityMeta {
     account_id: TEntityId
     account?: IAccount
 
-    change_type: HistoryChangeTypeEnum
+    change_type: THistoryChangeType
     valid_from: string
     valid_to?: string
     change_reason?: string
@@ -43,7 +41,7 @@ export interface IAccountHistory extends IBaseEntityMeta {
 
     name: string
     description: string
-    type: AccountTypeEnum
+    typa?: TAccountType
     min_amount: number
     max_amount: number
     index: number
@@ -52,7 +50,7 @@ export interface IAccountHistory extends IBaseEntityMeta {
     cash_on_hand: boolean
     paid_up_share_capital: boolean
 
-    computation_type: ComputationTypeEnum
+    computation_type: TComputationType
 
     fines_amort: number
     fines_maturity: number
@@ -66,18 +64,18 @@ export interface IAccountHistory extends IBaseEntityMeta {
     yearly_subscription_fee: number
     loan_cut_off_days: number
 
-    lumpsum_computation_type: LumpsumComputationTypeEnum
-    interest_fines_computation_diminishing: InterestFinesComputationDiminishingEnum
-    interest_fines_computation_diminishing_straight_yearly: InterestFinesComputationDiminishingStraightDiminishingYearlyEnum
-    earned_unearned_interest: EarnedUnearnedInterestEnum
-    loan_saving_type: LoanSavingTypeEnum
-    interest_deduction: InterestDeductionEnum
-    other_deduction_entry: OtherDeductionEntryEnum
-    interest_saving_type_diminishing_straight: InterestSavingTypeDiminishingStraightEnum
-    other_information_of_an_account: OtherInformationOfAnAccountEnum
+    lumpsum_computation_type: TLumpsumComputationType
+    interest_fines_computation_diminishing: TInterestFinesComputationDiminishing
+    interest_fines_computation_diminishing_straight_yearly: TInterestFinesComputationDiminishingStraightDiminishingYearly
+    earned_unearned_interest: TEarnedUnearnedInterest
+    loan_saving_type: TLoanSavingType
+    interest_deduction: TInterestDeduction
+    other_deduction_entry: TOtherDeductionEntry
+    interest_saving_type_diminishing_straight: TInterestSavingTypeDiminishingStraight
+    other_information_of_an_account: TOtherInformationOfAnAccount
 
-    financial_statement_type: FinancialStatementTypeEnum
-    general_ledger_type: GeneralLedgerTypeEnum
+    financial_statement_type: TFinancialStatementType
+    general_ledger_type: TGeneralLedgerType
 
     header_row: number
     center_row: number
@@ -98,7 +96,7 @@ export interface IAccountHistory extends IBaseEntityMeta {
     compassion_fund_amount: number
     cash_and_cash_equivalence: boolean
 
-    interest_standard_computation: InterestStandardComputationEnum
+    interest_standard_computation: TInterestStandardComputation
 
     general_ledger_definition_id?: TEntityId
     financial_statement_definition_id?: TEntityId

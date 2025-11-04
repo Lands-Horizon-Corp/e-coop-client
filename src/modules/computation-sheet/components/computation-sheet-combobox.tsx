@@ -101,11 +101,11 @@ const ComputationSheetCombobox = ({
                         <ChevronDownIcon className="opacity-50 flex-shrink-0" />
                     </Button>
                 </PopoverTrigger>
-                <PopoverContent className="max-h-[--radix-popover-content-available-height] w-[--radix-popover-trigger-width] p-0">
+                <PopoverContent className="max-h-[--radix-popover-content-available-height] w-[var(--radix-popover-trigger-width)] p-0">
                     <Command>
                         <CommandInput
                             className="h-9"
-                            placeholder="Search Bank..."
+                            placeholder="Search Computation Sheet..."
                         />
                         {isLoading ? (
                             <CommandEmpty>
@@ -114,7 +114,9 @@ const ComputationSheetCombobox = ({
                             </CommandEmpty>
                         ) : (
                             <CommandList className="ecoop-scroll">
-                                <CommandEmpty>No Bank found.</CommandEmpty>
+                                <CommandEmpty>
+                                    No Computation Sheet found.
+                                </CommandEmpty>
                                 {/* TODO: Once role is set */}
                                 {/* {bankComboboxCreateProps && (
                                     <>

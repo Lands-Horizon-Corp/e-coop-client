@@ -3,6 +3,7 @@ import { Path, UseFormReturn } from 'react-hook-form'
 import { AccountCategoryComboBox } from '@/modules/account-category'
 import { AccountClassificationComboBox } from '@/modules/account-classification'
 import { CurrencyCombobox } from '@/modules/currency'
+import { GENERAL_LEDGER_TYPE } from '@/modules/general-ledger'
 import MemberTypeCombobox from '@/modules/member-type/components/member-type-combobox'
 import { EyeIcon } from 'lucide-react'
 
@@ -38,8 +39,10 @@ import {
 
 import { useModalState } from '@/hooks/use-modal-state'
 
-import { GeneralLedgerTypeEnum } from '../../account.types'
+import { TEntityId } from '@/types'
+
 import { TAccountFormValues } from '../../account.validation'
+import AccountPicker from '../picker/account-picker'
 
 type AccountHeaderProps = {
     form: UseFormReturn<TAccountFormValues>
@@ -122,18 +125,16 @@ const AccountHeaderForm = ({
                                         'select General Ledger Type'}
                                 </SelectTrigger>
                                 <SelectContent>
-                                    {Object.values(GeneralLedgerTypeEnum).map(
-                                        (account) => {
-                                            return (
-                                                <SelectItem
-                                                    key={account}
-                                                    value={account}
-                                                >
-                                                    {account}
-                                                </SelectItem>
-                                            )
-                                        }
-                                    )}
+                                    {GENERAL_LEDGER_TYPE.map((account) => {
+                                        return (
+                                            <SelectItem
+                                                key={account}
+                                                value={account}
+                                            >
+                                                {account}
+                                            </SelectItem>
+                                        )
+                                    })}
                                 </SelectContent>
                             </Select>
                         </FormControl>
@@ -143,15 +144,21 @@ const AccountHeaderForm = ({
             <div className="grid flex-2 w-full gap-x-2 grid-cols-4">
                 <FormFieldWrapper
                     control={form.control}
-                    label="Alternative Code"
-                    name="alternative_code"
+                    label="Loan Account"
+                    name="loan_account_id"
                     render={({ field }) => (
-                        <Input
-                            {...field}
-                            autoComplete="off"
+                        <AccountPicker
+                            currencyId={form.watch('currency_id') as TEntityId}
                             disabled={isDisabled(field.name)}
-                            id={field.name}
-                            placeholder="Account Name"
+                            mode="currency"
+                            onSelect={(account) => {
+                                field.onChange(account.id)
+                                form.setValue('loan_account', account, {
+                                    shouldDirty: true,
+                                })
+                            }}
+                            placeholder="Select an account"
+                            value={form.getValues('loan_account')}
                         />
                     )}
                 />
