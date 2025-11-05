@@ -82,7 +82,6 @@ export const AdjustmentEntryAction = ({
                     isAllowed: !isDeletingEntry,
                     onClick: handleDelete,
                 }}
-                otherActions={<>{/* Additional actions can be added here */}</>}
                 row={row}
             />
         </>
@@ -100,8 +99,10 @@ export const AdjustmentEntryRowContext = ({
     children,
     onDeleteSuccess,
 }: IAdjustmentEntryRowContextProps) => {
-    const { isDeletingEntry, handleEdit, handleDelete } =
-        useAdjustmentEntryActions({ row, onDeleteSuccess })
+    const { isDeletingEntry, handleDelete } = useAdjustmentEntryActions({
+        row,
+        onDeleteSuccess,
+    })
 
     return (
         <>
@@ -110,11 +111,6 @@ export const AdjustmentEntryRowContext = ({
                     text: 'Delete',
                     isAllowed: !isDeletingEntry,
                     onClick: handleDelete,
-                }}
-                onEdit={{
-                    text: 'Edit',
-                    isAllowed: true,
-                    onClick: handleEdit,
                 }}
                 row={row}
             >

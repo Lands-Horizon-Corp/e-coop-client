@@ -40,7 +40,6 @@ export interface IAdjustmentEntryRequest {
     account_id: TEntityId
 
     member_profile_id?: TEntityId
-    employee_user_id?: TEntityId
     payment_type_id?: TEntityId
 
     type_of_payment_type?: string

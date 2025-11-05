@@ -53,7 +53,7 @@ export const Onboarding = () => {
                     <div className="ecoop-scroll  max-h-screen relative flex w-full flex-col overflow-y-auto">
                         <div className="relative mx-auto h-full mt-20 flex max-w-6xl flex-1 flex-col">
                             {isCreateBranchRoute && (
-                                <OnboardingBack className="absolute z-50 right-0 top-0 max-w-full" />
+                                <OnboardingBack className="absolute z-50 right-3 top-2 max-w-full" />
                             )}
                             <Outlet />
                         </div>

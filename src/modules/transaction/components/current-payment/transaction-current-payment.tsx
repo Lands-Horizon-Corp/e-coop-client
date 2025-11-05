@@ -95,7 +95,7 @@ const TransactionCurrentPaymentEntry = ({
 
     const hasPayments =
         generalLedgerBasedTransaction &&
-        generalLedgerBasedTransaction.data.length > 0
+        generalLedgerBasedTransaction?.data?.length > 0
 
     return (
         <div className="flex min-h-[100%] h-fit flex-col gap-y-2 p-4 overflow-hidden  rounded-2xl bg-card">

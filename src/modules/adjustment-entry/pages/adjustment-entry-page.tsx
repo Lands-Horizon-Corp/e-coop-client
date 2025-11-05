@@ -1,10 +1,12 @@
 import { useState } from 'react'
 
 import { useQueryClient } from '@tanstack/react-query'
+import { toast } from 'sonner'
 
 import { useAuthUserWithOrgBranch } from '@/modules/authentication/authgentication.store'
 import { CurrencyCombobox, ICurrency } from '@/modules/currency'
 import EmployeePicker from '@/modules/employee/components/employee-picker'
+import { useTransactionBatchStore } from '@/modules/transaction-batch/store/transaction-batch-store'
 import { IEmployee } from '@/modules/user'
 import { IUserOrganization } from '@/modules/user-organization'
 
@@ -27,6 +29,8 @@ const AdjustmentEntryPage = () => {
     } = useAuthUserWithOrgBranch()
     const queryClient = useQueryClient()
     const createModal = useModalState(false)
+
+    const { data } = useTransactionBatchStore()
     const [userOrganization, setUserOrganization] = useState<
         IUserOrganization<IEmployee> | undefined
     >(user_organization as IUserOrganization<IEmployee>)
@@ -95,7 +99,13 @@ const AdjustmentEntryPage = () => {
                 mode={userOrganization ? 'currency-employee' : 'currency'}
                 toolbarProps={{
                     createActionProps: {
-                        onClick: () => createModal.onOpenChange(true),
+                        onClick: () => {
+                            if (!data)
+                                return toast.warning(
+                                    'Please create transaction batch first before making any Adjustment.'
+                                )
+                            createModal.onOpenChange(true)
+                        },
                     },
                 }}
                 userOrganizationId={userOrganization?.id as TEntityId}

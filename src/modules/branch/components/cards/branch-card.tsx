@@ -253,11 +253,12 @@ export const BranchCard = ({
     showActions = true,
     showJoinBranch = false,
 }: BranchCardProps) => {
-    const updateModal = useModalState()
-    const { open, onOpenChange } = useModalState()
-    const { onOpen } = useConfirmModalStore()
-    const queryClient = useQueryClient()
     const navigate = useNavigate()
+    const updateModal = useModalState()
+    const queryClient = useQueryClient()
+    const { onOpen } = useConfirmModalStore()
+    const { open, onOpenChange } = useModalState()
+
     const [selectedBranch, setSelectedBranch] = useState<IBranch | null>(null)
 
     const { data: organizationWithPolicies, isPending: isPendingOrganization } =
@@ -387,7 +388,6 @@ export const BranchCard = ({
                     organization={organizationWithPolicies}
                 />
             )}
-
             <CardTopImage
                 cardFooter={
                     <BranchCardFooter

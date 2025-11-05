@@ -211,6 +211,7 @@ const Organization = () => {
                                     handleOpenOrgPreview={
                                         handleOpenModalPreview
                                     }
+                                    key={org.id}
                                     onCardClick={handleOpenModalPreview}
                                     organization={org}
                                     searchTerm={searchTerm}
