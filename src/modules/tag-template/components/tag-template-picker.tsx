@@ -103,12 +103,12 @@ const TagTemplatePicker = forwardRef<HTMLButtonElement, Props>(
                             bulkSetFilter(
                                 [
                                     {
-                                        displayText: 'full name',
-                                        field: 'fullName',
+                                        displayText: 'Tag Name',
+                                        field: 'name',
                                     },
                                     {
-                                        displayText: 'PB',
-                                        field: 'memberProfile.passbookNumber',
+                                        displayText: 'Tag Description',
+                                        field: 'description',
                                     },
                                 ],
                                 {

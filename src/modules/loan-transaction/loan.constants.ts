@@ -41,8 +41,14 @@ export const LOAN_AMORTIZATION_TYPE = ['suggested', 'none'] as const
 export const COMPUTATION_TYPE = [
     'Straight',
     'Diminishing',
-    'Diminishing Add-On',
-    'Diminishing Yearly',
     'Diminishing Straight',
-    'Diminishing Quarterly',
 ] as const
+
+export const COMPUTATION_TYPE_DESCRIPTIONS = {
+    Straight:
+        'Interest is calculated on the full principal amount throughout the entire loan term.',
+    Diminishing:
+        'Interest is calculated on the remaining principal balance, which decreases with each payment.',
+    'Diminishing Straight':
+        'A hybrid approach combining elements of both diminishing and straight methods.',
+} as const

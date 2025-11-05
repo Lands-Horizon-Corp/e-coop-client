@@ -20,8 +20,17 @@ export const ACCOUNT_TYPE = [
 export const COMPUTATION_TYPE = [
     'Straight',
     'Diminishing',
-    'DiminishingStraight',
+    'Diminishing Straight',
 ] as const
+
+export const COMPUTATION_TYPE_DESCRIPTIONS = {
+    Straight:
+        'Interest is calculated on the full principal amount throughout the entire loan term.',
+    Diminishing:
+        'Interest is calculated on the remaining principal balance, which decreases with each payment.',
+    'Diminishing Straight':
+        'A hybrid approach combining elements of both diminishing and straight methods.',
+} as const
 
 export const LUMPSUM_COMPUTATION_TYPE = [
     'None',
@@ -29,6 +38,14 @@ export const LUMPSUM_COMPUTATION_TYPE = [
     'Compute Interest Maturity / Terms',
     'Compute Advance Interest',
 ] as const
+
+export const LUMPSUM_COMPUTATION_TYPE_DESCRIPTIONS = {
+    None: 'No specific lumpsum computation will be applied.',
+    'Compute Fines Maturity': 'Calculates lumpsum based on fines maturity.',
+    'Compute Interest Maturity / Terms':
+        'Calculates lumpsum based on interest maturity or terms.',
+    'Compute Advance Interest': 'Calculates lumpsum based on advance interest.',
+} as const
 
 export const INTEREST_FINES_COMPUTATION_DIMINISHING = [
     'None',

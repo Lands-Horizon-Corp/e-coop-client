@@ -149,7 +149,16 @@ const AccountHeaderForm = ({
                     render={({ field }) => (
                         <AccountPicker
                             currencyId={form.watch('currency_id') as TEntityId}
-                            disabled={isDisabled(field.name)}
+                            disabled={
+                                isDisabled(field.name) ||
+                                [
+                                    'Deposit',
+                                    'A/R-Ledger',
+                                    'A/R-Aging',
+                                    'W-Off',
+                                    'A/P-Ledger',
+                                ].includes(form.watch('type'))
+                            }
                             mode="currency"
                             onSelect={(account) => {
                                 field.onChange(account.id)

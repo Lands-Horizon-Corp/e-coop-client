@@ -15,7 +15,7 @@ import { Card, CardContent, CardHeader } from '@/components/ui/card'
 
 import { IClassProps, TEntityId } from '@/types'
 
-import { useGetById } from '../account.service'
+import { useGetAccountById } from '../account.service'
 import { IAccount } from '../account.types'
 
 interface Props extends IClassProps {
@@ -24,7 +24,7 @@ interface Props extends IClassProps {
 }
 
 const AccountMiniCard = ({ accountId, defaultAccount, className }: Props) => {
-    const { data, isPending, refetch } = useGetById({
+    const { data, isPending, refetch } = useGetAccountById({
         id: accountId,
         options: {
             initialData: defaultAccount,

@@ -7,9 +7,13 @@ import {
 
 import { TIcon } from '@/components/icons'
 
+import { IAccountCategory } from '../account-category'
+import { IAccountClassification } from '../account-classification'
+import { IComputationSheet } from '../computation-sheet'
 import { ICurrency } from '../currency'
 import { TFinancialStatementType } from '../financial-statement-definition'
 import { TGeneralLedgerType } from '../general-ledger'
+import { IMemberType } from '../member-type'
 import {
     ACCOUNT_EXCLUSIVE_SETTING_TYPE,
     ACCOUNT_INTEREST_STANDARD_COMPUTATION,
@@ -62,9 +66,6 @@ export type TAccountExclusiveSettingType =
 export interface IAccount extends IAuditable, ITimeStamps {
     id: TEntityId
 
-    // organization_id?: TEntityId
-    // branch_id?: TEntityId
-
     // GENERAL CONFIG
     index?: number
     is_internal?: boolean
@@ -82,7 +83,9 @@ export interface IAccount extends IAuditable, ITimeStamps {
     minAmount?: number
     maxAmount?: number
     type: TAccountType
+
     member_type_id: TEntityId
+    member_type: IMemberType
 
     cash_and_cash_equivalence: boolean
 
@@ -95,6 +98,7 @@ export interface IAccount extends IAuditable, ITimeStamps {
     general_ledger_type: TGeneralLedgerType
 
     account_category_id?: TEntityId
+    account_category?: IAccountCategory
 
     coh_cib_fines_grace_period_entry_daily_amortization?: number
     coh_cib_fines_grace_period_entry_daily_maturity?: number
@@ -121,6 +125,7 @@ export interface IAccount extends IAuditable, ITimeStamps {
     financial_statement_definition_entries_id?: TEntityId
 
     account_classification_id?: TEntityId
+    account_classification?: IAccountClassification
 
     // COMMON
 
@@ -137,6 +142,7 @@ export interface IAccount extends IAuditable, ITimeStamps {
     // FOR LOAN
     // loan_cut_off_days?: number
     computation_sheet_id?: TEntityId
+    computation_sheet?: IComputationSheet
     loan_saving_type?: TLoanSavingType
     lumpsum_computation_type?: TLumpsumComputationType
 

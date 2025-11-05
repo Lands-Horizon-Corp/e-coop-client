@@ -2,11 +2,8 @@ import { UseFormReturn, useFieldArray } from 'react-hook-form'
 import { toast } from 'sonner'
 
 import { cn } from '@/helpers'
-import {
-    AccountCreateUpdateFormModal,
-    AccountPicker,
-    IAccount,
-} from '@/modules/account'
+import { AccountPicker, IAccount } from '@/modules/account'
+import { AccountViewerModal } from '@/modules/account/components/account-viewer/account-viewer'
 import { TChargesRateSchemeSchema } from '@/modules/charges-rate-scheme/charges-rate-scheme.validation'
 import useConfirmModalStore from '@/store/confirm-modal-store'
 
@@ -175,15 +172,10 @@ const AccountItem = ({ account, onRemove }: IAccountItemProps) => {
 
     return (
         <li className="p-3 rounded-md border hover:border-primary cursor-pointer duration-200 text-xs bg-card space-y-1">
-            <AccountCreateUpdateFormModal
+            <AccountViewerModal
                 {...openAccountState}
-                description="View account details"
-                formProps={{
-                    readOnly: true,
-                    accountId: account.id,
-                    defaultValues: account,
-                }}
-                title="View Account"
+                accountId={account.id}
+                defaultValue={account}
             />
             <div className="flex items-center gap-x-2">
                 <RenderIcon className="shrink-0" icon={account?.icon} />

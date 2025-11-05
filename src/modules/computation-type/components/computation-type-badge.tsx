@@ -23,7 +23,7 @@ const computationTypeStyles: Record<
         bgColor: 'bg-destructive',
         textColor: 'text-red-50',
     },
-    DiminishingStraight: {
+    'Diminishing Straight': {
         label: 'Diminishing Straight',
         bgColor: 'bg-indigo-600',
         textColor: 'text-indigo-50',

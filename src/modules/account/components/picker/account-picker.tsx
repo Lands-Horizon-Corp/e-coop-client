@@ -144,7 +144,7 @@ const AccountPicker = ({
                 listHeading={`Matched Results (${totalSize})`}
                 onOpenChange={setState}
                 onSearchChange={(searchValue) => {
-                    bulkSetFilter([{ displayText: 'name', field: 'Name' }], {
+                    bulkSetFilter([{ displayText: 'Name', field: 'name' }], {
                         displayText: '',
                         mode: 'contains',
                         dataType: 'text',

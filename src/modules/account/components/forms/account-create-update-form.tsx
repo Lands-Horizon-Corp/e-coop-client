@@ -77,7 +77,12 @@ const AccountCreateUpdateForm = ({
     })
 
     const updateMutation = useUpdateById({
-        options: { onSuccess: formProps.onSuccess },
+        options: {
+            onSuccess: (newData) => {
+                formProps.onSuccess?.(newData)
+                form.reset(newData as unknown as IAccountRequest)
+            },
+        },
     })
 
     const { formRef, handleFocusError, isDisabled, firstError } =

@@ -6,7 +6,6 @@ import { toast } from 'sonner'
 import { cn } from '@/helpers'
 import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
 import {
-    AccountCreateUpdateFormModal,
     AccountPicker,
     IAccount,
     TAccountType,
@@ -42,6 +41,8 @@ import {
 import { useModalState } from '@/hooks/use-modal-state'
 
 import { IClassProps } from '@/types'
+
+import { AccountViewerModal } from '../../account-viewer/account-viewer'
 
 interface ILoanConnectAccountSectionProps extends IClassProps {
     form: UseFormReturn<TAccountFormValues>
@@ -299,14 +300,10 @@ const AccountItem = ({ account }: IAccountItemProps) => {
 
     return (
         <li className="p-3 rounded-lg border hover:border-primary duration-200 text-xs bg-card space-y-1">
-            <AccountCreateUpdateFormModal
+            <AccountViewerModal
                 {...openAccountState}
+                accountId={account.id}
                 description="View account details"
-                formProps={{
-                    readOnly: true,
-                    accountId: account.id,
-                    defaultValues: account,
-                }}
                 title="View Account"
             />
             <div className="flex items-center gap-x-2">

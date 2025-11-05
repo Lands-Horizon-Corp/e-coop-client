@@ -41,7 +41,7 @@ export const { API, route: accountAPIRoute } = apiCrudService
 export const {
     useCreate,
     // useGetAll,
-    useGetById,
+    useGetById: useGetAccountById,
     useDeleteById,
     useUpdateById,
     useGetPaginated,
