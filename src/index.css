@@ -449,16 +449,7 @@ body[data-scroll-locked] {
 .text-destructive {
     color: oklch(var(--destructive));
 }
-/* text-editor.css */
-/* .text-editor-content {
-    flex: 1;
-    min-height: 0;
-    height: 100%;
-}
 
-.text-editor-content .ProseMirror {
-    height: 100%;
-    overflow-y: auto;
-    outline: none;
-    padding: 12px;
-} */
+.b1 {
+    @apply border-1 border-red-500;
+}

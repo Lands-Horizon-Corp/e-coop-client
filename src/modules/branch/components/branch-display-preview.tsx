@@ -4,6 +4,7 @@ import { toast } from 'sonner'
 import { cn } from '@/helpers/tw-utils'
 
 import {
+    BadgeCheckFillIcon,
     CalendarIcon,
     EditPencilIcon,
     PinLocationIcon as LocationIcon,
@@ -11,6 +12,7 @@ import {
     LocationPinOutlineIcon as MapPinIcon,
     StarIcon,
 } from '@/components/icons'
+import MapView from '@/components/map'
 import { redirectToGoogleMapsDirection } from '@/components/map/map.utils'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
@@ -21,7 +23,6 @@ import {
     TooltipProvider,
     TooltipTrigger,
 } from '@/components/ui/tooltip'
-import TruncatedText from '@/components/ui/truncated-text'
 
 import { useModalState } from '@/hooks/use-modal-state'
 
@@ -59,9 +60,7 @@ const BranchPreviewDisplay = ({
     }
 
     const mediaUrl = branch?.media?.download_url
-    const branchId = branch?.id || ''
-    const description =
-        branch?.description || 'Branch description not available.'
+    const branchId = branch?.id
 
     const addressComponents = [
         branch?.address,
@@ -74,35 +73,12 @@ const BranchPreviewDisplay = ({
 
     const fullAddress = addressComponents.join(', ')
 
-    const getContainerHeight = () => {
-        switch (variant) {
-            case 'compact':
-                return 'h-[60vh]'
-            case 'detailed':
-                return 'h-[90vh]'
-            default:
-                return 'h-[80vh]'
-        }
-    }
-
-    const getTextSize = () => {
-        switch (variant) {
-            case 'compact':
-                return 'text-[min(28px,5vw)]'
-            case 'detailed':
-                return 'text-[min(50px,9vw)]'
-            default:
-                return 'text-[min(40px,7vw)]'
-        }
-    }
-
     return (
         <TooltipProvider>
             <div>
                 <div
                     className={cn(
-                        'flex relative w-full bg-cover !h-[50vh] bg-center flex-col gap-y-2 ecoop-scroll',
-                        getContainerHeight(),
+                        'flex relative w-full bg-cover bg-center flex-col gap-y-2 ecoop-scroll h-[50vh]',
                         'max-h-screen',
                         className
                     )}
@@ -112,7 +88,6 @@ const BranchPreviewDisplay = ({
                 >
                     <div className="absolute w-full min-h-52 bottom-0 px-4 sm:px-8 bg-gradient-to-t from-background via-[80%] via-background/10 to-transparent" />
                 </div>
-
                 <CreateUpdateBranchFormModal
                     {...updateModal}
                     className="w-full min-w-[70rem] max-w-[80rem]"
@@ -129,11 +104,9 @@ const BranchPreviewDisplay = ({
                         },
                     }}
                 />
-
                 <div className="w-full inset-0 z-30 px-4 sm:px-8">
                     <div className="flex flex-col space-y-5 mb-8">
                         <div className="space-y-6">
-                            {/* Branch Title & Type */}
                             <div className="space-y-3">
                                 <div className="flex items-start justify-between">
                                     <div className="space-y-2">
@@ -141,9 +114,7 @@ const BranchPreviewDisplay = ({
                                             <TooltipTrigger asChild>
                                                 <h1
                                                     className={cn(
-                                                        'font-sans font-black !leading-[0.9] cursor-pointer max-w-4xl',
-                                                        getTextSize(),
-                                                        'hover:text-primary/80 transition-colors duration-300'
+                                                        'font-sans font-black !leading-[0.9] cursor-pointer max-w-4xl text-[min(40px,7vw)] hover:text-primary/80 transition-colors duration-300'
                                                     )}
                                                 >
                                                     {branch?.name}
@@ -156,7 +127,7 @@ const BranchPreviewDisplay = ({
                                         {/* Branch Type & Main Badge */}
                                         <div className="flex items-center gap-3">
                                             {branch?.is_main_branch && (
-                                                <Badge className="bg-gradient-to-r from-amber-500 to-yellow-500 text-white border-0 shadow-lg text-sm font-semibold px-3 py-1">
+                                                <Badge className="bg-gradient-to-r from-background to-background/80 border-0 shadow-lg text-sm font-semibold px-3 py-1">
                                                     <StarIcon className="h-4 w-4 mr-1" />
                                                     Headquarters
                                                 </Badge>
@@ -173,7 +144,11 @@ const BranchPreviewDisplay = ({
                                                 </div>
                                             )}
                                             {branch?.type && (
-                                                <Badge className={cn('text-')}>
+                                                <Badge
+                                                    className={cn('text-')}
+                                                    variant={'outline'}
+                                                >
+                                                    <BadgeCheckFillIcon className="text-primary mr-1" />
                                                     {branch.type
                                                         .charAt(0)
                                                         .toUpperCase() +
@@ -188,24 +163,7 @@ const BranchPreviewDisplay = ({
                                 </div>
                             </div>
                         </div>
-                        {/* Description */}
-                        {variant !== 'compact' && description && (
-                            <>
-                                <div className="">
-                                    <TruncatedText
-                                        className="text-muted-foreground !bg-inherit max-h-52 overflow-auto ecoop-scroll text-sm sm:text-base leading-relaxed"
-                                        maxLength={
-                                            variant === 'detailed' ? 400 : 250
-                                        }
-                                        showLessText="Read less"
-                                        showMoreText="Read more"
-                                        text={
-                                            'facilis corporis optio voluptas quia doloremque laudantium voluptatem deleniti sed magnam deserunt ab reprehenderit repellat neque iure ipsam accusantium tempore rerum quae voluptatem sed consequatur tempora quae deserunt aperiam recusandae possimus deleniti ex sed delectus laborum quisquam rerum soluta excepturi omnis adipisci minus atque nulla est velit soluta quasi sunt ea iusto et a quia explicabo quis odit. error itaque et qui molestiae et veniam voluptatibus aut nulla molestiae perferendis aut ut accusantium est blanditiis natus tempore eaque quae et sit sed et dignissimos sunt consequatur dicta molestiae qui. aspernatur dolor dolores iusto neque voluptatem sed est ut optio et eaque error consequuntur est sequi in fugit voluptatem non ut voluptas ut porro dolores dolores adipisci saepe voluptas voluptate a vitae aut eos dolorum non est modi velit aut numquam eum natus non itaque qui distinctio.'
-                                        }
-                                    />
-                                </div>
-                            </>
-                        )}
+
                         {showActions && (
                             <>
                                 <div className="flex flex-col sm:flex-row gap-3">
@@ -240,16 +198,15 @@ const BranchPreviewDisplay = ({
                                 </div>
                             </>
                         )}
-                        {/* Details Grid - Netflix Episode Style */}
+                        {/* Details Grid */}
                         <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
-                            {/* Location Card */}
                             <div className="group lg:col-span-3">
                                 <div className="relative overflow-hidden">
-                                    <div className="absolute inset-0 bg-gradient-to-br from-red-500/10 to-orange-500/10 rounded-2xl" />
-                                    <div className="relative p-3 bg-card/80 backdrop-blur-sm rounded-2xl border border-muted hover:border-primary/50 transition-all duration-300 hover:shadow-lg hover:shadow-red-500/10">
+                                    <div className="absolute inset-0 bg-gradient-to-br from-primary to-background/0 rounded-2xl" />
+                                    <div className="relative p-3 bg-card/80 backdrop-blur-sm rounded-2xl transition-all duration-300 hover:shadow-lg hover:shadow-red-500/10">
                                         <div className="flex items-center gap-2 mb-2">
-                                            <div className="w-10 h-10 bg-red-100 dark:bg-red-950 rounded-xl flex items-center justify-center">
-                                                <LocationIcon className="h-5 w-5 text-red-600 dark:text-red-400" />
+                                            <div className="w-10 h-10 dark:bg-primary/20 bg-primary/20 rounded-xl flex items-center justify-center">
+                                                <LocationIcon className="h-5 w-5 text-primary dark:text-primary/50" />
                                             </div>
                                             <h3 className="font-semibold text-foreground">
                                                 Location
@@ -294,6 +251,26 @@ const BranchPreviewDisplay = ({
                                                             <LocationIcon className="h-4 w-4 mr-2" />
                                                             Get Directions
                                                         </Button>
+                                                    </div>
+                                                )}
+                                            {branch.latitude &&
+                                                branch.longitude && (
+                                                    <div className="absolute top-0 right-0 -z-10 inset-0">
+                                                        <div className="relative size-full overflow-clip shrink-0">
+                                                            <MapView
+                                                                locations={[
+                                                                    {
+                                                                        title:
+                                                                            branch?.name ||
+                                                                            '',
+                                                                        lat: branch?.latitude,
+                                                                        lng: branch?.longitude,
+                                                                    },
+                                                                ]}
+                                                                viewOnly
+                                                            />
+                                                            <div className="absolute pointer-events-none inset-0 bg-gradient-to-l from-transparent to-background" />
+                                                        </div>
                                                     </div>
                                                 )}
                                         </div>

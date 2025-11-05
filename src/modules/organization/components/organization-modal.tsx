@@ -10,7 +10,7 @@ import Modal, { IModalProps } from '@/components/modals/modal'
 import { useLocationInfo } from '@/hooks/use-location-info'
 import { useModalState } from '@/hooks/use-modal-state'
 
-import OrganizationModalDetails from '../pages/organization/organization-modal-details'
+import OrganizationModalDetails from '../organization-forms/organization-modal-details'
 import { OrganizationPreviewDisplaySkeleton } from '../pages/organization/organization-preview-display'
 
 interface OrganizationModalProps extends IModalProps {
@@ -19,6 +19,7 @@ interface OrganizationModalProps extends IModalProps {
     className?: string
     showActions?: boolean
     isLoading?: boolean
+    showJoinBranch?: boolean
 }
 
 const OrganizationPreviewModal = ({
@@ -26,6 +27,7 @@ const OrganizationPreviewModal = ({
     className,
     showActions = true,
     isLoading,
+    showJoinBranch,
     ...modalProps
 }: OrganizationModalProps) => {
     const createModal = useModalState()
@@ -67,14 +69,12 @@ const OrganizationPreviewModal = ({
             />
             <div className="relative">
                 {isLoading ? (
-                    <OrganizationPreviewDisplaySkeleton
-                        className="rounded-none min-h-screen overflow-y-hidden"
-                        variant="default"
-                    />
+                    <OrganizationPreviewDisplaySkeleton className="rounded-none min-h-screen overflow-y-hidden" />
                 ) : (
                     <OrganizationModalDetails
                         organization={organization}
                         showActions={showActions}
+                        showJoinBranch={showJoinBranch}
                     />
                 )}
             </div>

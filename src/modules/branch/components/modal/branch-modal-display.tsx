@@ -35,10 +35,7 @@ const BranchModalDisplay = ({
         >
             <div className="relative">
                 {isLoading ? (
-                    <OrganizationPreviewDisplaySkeleton
-                        className="rounded-none min-h-screen overflow-y-hidden"
-                        variant="default"
-                    />
+                    <OrganizationPreviewDisplaySkeleton className="rounded-none min-h-screen overflow-y-hidden" />
                 ) : (
                     <BranchPreviewDisplay
                         branch={branch}

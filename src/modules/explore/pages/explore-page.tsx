@@ -10,6 +10,7 @@ import { useModalState } from '@/hooks/use-modal-state'
 
 import ExploreHeader from '../components/explore-header'
 import useExploreData from '../hooks/use-explore-data'
+import { getCategories } from '../utils/data-grouping'
 import { ExploreCategoriesMain } from './explore-by-categories'
 import ExploreFeatured from './explore-featured'
 
@@ -20,7 +21,7 @@ const ExplorePage = () => {
     const [selectedOrganization, setSelectedOrganization] =
         useState<IOrganization | null>(null)
 
-    const { hasError } = useExploreData()
+    const { hasError, organizations } = useExploreData()
 
     if (hasError) {
         return (
@@ -34,10 +35,12 @@ const ExplorePage = () => {
         )
     }
 
+    const categories = getCategories(organizations)
     const handleOpenOrgPreview = (organization: IOrganization) => {
         orgModal.onOpenChange(true)
         setSelectedOrganization(organization)
     }
+
     return (
         <AuthGuard>
             <OrganizationPreviewModal
@@ -45,13 +48,7 @@ const ExplorePage = () => {
                 organization={selectedOrganization}
                 showActions={false}
             />
-            {/* <BranchModalDisplay
-                {...branchModal}
-                branch={selectedBranch}
-                isLoading={false}
-                showActions={false}
-            /> */}
-            <div className="min-h-screen px-12 max-auto max-w-full">
+            <div className="min-h-screen max-w-full">
                 <FlickeringGrid
                     className="fixed"
                     flickerChance={0.05}
@@ -59,9 +56,11 @@ const ExplorePage = () => {
                     maxOpacity={0.9}
                     squareSize={64}
                 />
-                <div className="to-background/0 via-background/0 from-primary/50 absolute right-0 -z-10 -mt-16 h-screen w-full bg-radial-[ellipse_at_20%_0%] to-100% dark:block hidden" />
-                <ExploreHeader setSearchTerm={setSearchTerm} />
-                <div className="sticky w-full top-0 border-b">
+                <ExploreHeader
+                    categories={categories}
+                    setSearchTerm={setSearchTerm}
+                />
+                <div className="w-full pl-10">
                     <div className="space-y-8">
                         {['featured', 'recently'].map((mode) => (
                             <ExploreFeatured

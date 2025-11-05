@@ -4,24 +4,14 @@ import { IBranch } from '@/modules/branch'
 
 import { useModalState } from '@/hooks/use-modal-state'
 
-import { TEntityId } from '@/types'
-
-import { BranchCard } from './branch-card'
+import { useBranchesContext } from '../context/branches-context'
+import { BranchCard } from './cards/branch-card'
 import BranchModalDisplay from './modal/branch-modal-display'
 
-interface BranchesGridProps {
-    branches: IBranch[]
-    organizationId: TEntityId
-    isSeeding: boolean
-    showActions?: boolean
-}
+export const BranchesGrid = () => {
+    const { branches, isSeeding, showActions, showJoinBranch, organizationId } =
+        useBranchesContext()
 
-export const BranchesGrid = ({
-    branches,
-    organizationId,
-    isSeeding,
-    showActions = true,
-}: BranchesGridProps) => {
     const branchModal = useModalState()
     const [selectedBranch, setSelectedBranch] = useState<IBranch | null>(null)
 
@@ -33,7 +23,7 @@ export const BranchesGrid = ({
                 isLoading={false}
                 showActions={false}
             />
-            {branches.map((branch) => (
+            {branches?.map((branch) => (
                 <BranchCard
                     branch={branch}
                     className=""
@@ -45,6 +35,7 @@ export const BranchesGrid = ({
                     }}
                     organizationId={organizationId}
                     showActions={showActions}
+                    showJoinBranch={showJoinBranch}
                 />
             ))}
         </div>

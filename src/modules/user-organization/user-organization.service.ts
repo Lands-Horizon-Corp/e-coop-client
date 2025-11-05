@@ -405,4 +405,24 @@ export const useUpdateUserOrganizationSettings = createMutationFactory<
     },
 })
 
+export const useCanUserCanJoinBranch = ({
+    options,
+    organizationId,
+    branchId,
+}: {
+    options?: HookQueryOptions<boolean, Error>
+    organizationId?: TEntityId
+    branchId?: TEntityId
+} = {}) => {
+    return useQuery<boolean, Error>({
+        ...options,
+        queryKey: ['can-user-join', organizationId, branchId],
+        queryFn: async () => {
+            if (!organizationId || !branchId) return false
+            return canJoinOrganizationMember(organizationId, branchId)
+        },
+        enabled: !!organizationId && !!branchId && (options?.enabled ?? true),
+    })
+}
+
 export const logger = Logger.getInstance('user-organization')

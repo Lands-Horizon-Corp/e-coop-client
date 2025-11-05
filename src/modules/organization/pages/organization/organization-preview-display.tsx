@@ -35,7 +35,6 @@ type OrganizationPreviewDisplayProps = {
     organization?: IOrganization
     onCreateBranch?: () => void
     isLoading?: boolean
-    variant?: 'default' | 'compact' | 'detailed'
     showActions?: boolean
     className?: string
     onClick?: () => void
@@ -46,7 +45,6 @@ const OrganizationPreviewDisplay = ({
     organization,
     onCreateBranch,
     isLoading,
-    variant = 'default',
     showActions = true,
     className,
 }: OrganizationPreviewDisplayProps) => {
@@ -54,7 +52,7 @@ const OrganizationPreviewDisplay = ({
     const queryClient = useQueryClient()
 
     if (isLoading) {
-        return <OrganizationPreviewDisplaySkeleton variant={variant} />
+        return <OrganizationPreviewDisplaySkeleton />
     }
 
     if (!organization) {
@@ -66,50 +64,12 @@ const OrganizationPreviewDisplay = ({
     const description =
         organization?.description || 'Organization description not available.'
 
-    // const branchCount = organization?.branches_count || 0
-    // const memberCount = organization?.members_count || 0
-
-    const getContainerHeight = () => {
-        switch (variant) {
-            case 'compact':
-                return 'h-[60vh]'
-            case 'detailed':
-                return 'h-[90vh]'
-            default:
-                return 'h-[80vh]'
-        }
-    }
-
-    const getImageSize = () => {
-        switch (variant) {
-            case 'compact':
-                return 'size-20'
-            case 'detailed':
-                return 'size-40'
-            default:
-                return 'size-30'
-        }
-    }
-
-    const getTextSize = () => {
-        switch (variant) {
-            case 'compact':
-                return 'text-[min(32px,6vw)]'
-            case 'detailed':
-                return 'text-[min(60px,10vw)]'
-            default:
-                return 'text-[min(50px,8vw)]'
-        }
-    }
-
     return (
         <TooltipProvider>
             <div>
                 <div
                     className={cn(
-                        'flex relative w-full bg-cover !h-[50vh] bg-center flex-col gap-y-2 ecoop-scroll',
-                        getContainerHeight(),
-                        'max-h-screen',
+                        'flex relative w-full bg-cover !h-[50vh] bg-center flex-col gap-y-2 ecoop-scroll max-h-screen',
                         className
                     )}
                     style={{
@@ -138,13 +98,12 @@ const OrganizationPreviewDisplay = ({
                 {/* Gradient Overlay */}
                 <div className=" w-full -mt-20 inset-0 z-30 px-4 sm:px-8">
                     {/* Organization Logo */}
-                    <div className="mb-4">
+                    <div className="mb-4 ">
                         <PreviewMediaWrapper media={organization?.media}>
                             <div className="relative">
                                 <ImageDisplay
                                     className={cn(
-                                        'object-cover hover:border-2 hover:border-primary/50 transition-all duration-200 rounded-2xl',
-                                        getImageSize()
+                                        'object-cover hover:border-2 hover:border-primary/50 transition-all duration-200 rounded-2xl size-30'
                                     )}
                                     src={
                                         organization?.media?.download_url ||
@@ -163,9 +122,7 @@ const OrganizationPreviewDisplay = ({
                                     <TooltipTrigger asChild>
                                         <h1
                                             className={cn(
-                                                'font-sans font-black  !leading-[52px] cursor-pointer',
-                                                getTextSize(),
-                                                'hover:text-primary/80 transition-colors'
+                                                'font-sans font-black  !leading-[52px] cursor-pointer hover:text-primary/80 transition-colors text-[min(50px,8vw)]'
                                             )}
                                         >
                                             {organization?.name}
@@ -175,21 +132,7 @@ const OrganizationPreviewDisplay = ({
                                         <p>{organization?.name}</p>
                                     </TooltipContent>
                                 </Tooltip>
-
-                                {/* Organization Stats */}
                                 <div className="flex flex-wrap items-center gap-4 text-sm text-muted-foreground">
-                                    {/* {branchCount > 0 && (
-                                        <div className="flex items-center gap-1">
-                                            <BuildingIcon className="h-4 w-4" />
-                                            <span>{branchCount} {branchCount === 1 ? 'branch' : 'branches'}</span>
-                                        </div>
-                                    )}
-                                    {memberCount > 0 && (
-                                        <div className="flex items-center gap-1">
-                                            <UsersIcon className="h-4 w-4" />
-                                            <span>{memberCount} {memberCount === 1 ? 'member' : 'members'}</span>
-                                        </div>
-                                    )} */}
                                     {organization?.created_at && (
                                         <div className="flex items-center gap-1">
                                             <CalendarIcon className="h-4 w-4" />
@@ -203,46 +146,73 @@ const OrganizationPreviewDisplay = ({
                                     )}
                                 </div>
                             </div>
-                            {variant !== 'compact' && (
-                                <>
-                                    <div className="text-muted-foreground mt-3">
-                                        <TruncatedText
-                                            className="text-muted-foreground !bg-inherit max-h-52 overflow-auto ecoop-scroll text-sm sm:text-base"
-                                            maxLength={
-                                                variant === 'detailed'
-                                                    ? 400
-                                                    : 250
-                                            }
-                                            showLessText="Read less"
-                                            showMoreText="Read more"
-                                            text={description}
-                                        />
-                                    </div>
-                                </>
-                            )}
+                            <>
+                                <div className="text-muted-foreground mt-3">
+                                    <TruncatedText
+                                        className="text-muted-foreground !bg-inherit max-h-24 overflow-auto ecoop-scroll text-sm sm:text-base"
+                                        maxLength={250}
+                                        showLessText="Read less"
+                                        showMoreText="Read more"
+                                        text={description}
+                                    />
+                                </div>
+                            </>
                         </div>
-
-                        {/* Organization Details */}
-                        <div className="flex-1 flex-col !h-full space-y-1">
-                            {/* Subscription Plan */}
-                            <BranchInfoItem
-                                className="w-full"
-                                content={
-                                    <div className="flex gap-2 ">
-                                        <Badge variant="secondary">
-                                            {organization?.subscription_plan
-                                                ?.name || 'No plan selected'}
-                                        </Badge>
-                                    </div>
-                                }
-                                contentClassName="translate-y-1 "
-                                iconClassName="size-4 text-muted-foreground"
-                                textAlign="left"
-                                title="Plan:"
-                                TitleIcon={StarIcon}
-                            />
-                            {/* Categories */}
-                            <div className="flex ecoop-scroll max-h-52 overflow-x-auto flex-wrap gap-1">
+                        <div className="flex-1 relative flex-col !h-full space-y-1">
+                            <div className="flex ecoop-scroll max-h-54 overflow-x-auto flex-wrap gap-1">
+                                <div className="pointer-events-none absolute top-42 left-0 right-0 h-16 bg-gradient-to-b from-transparent to-background" />
+                                <BranchInfoItem
+                                    className="w-full"
+                                    content={
+                                        <div className="flex gap-2 ">
+                                            <Badge variant="secondary">
+                                                {organization?.subscription_plan
+                                                    ?.name ||
+                                                    'No plan selected'}
+                                            </Badge>
+                                        </div>
+                                    }
+                                    contentClassName="translate-y-1 "
+                                    iconClassName="size-4 text-muted-foreground"
+                                    textAlign="left"
+                                    title="Plan:"
+                                    TitleIcon={StarIcon}
+                                />
+                                <span className="text-xs font-semibold">
+                                    Categories:
+                                    <TagIcon className="inline-block ml-1 mb-0.5 size-4 text-muted-foreground" />
+                                </span>
+                                {categories.map((catItem) => (
+                                    <Badge
+                                        className="mr-1 mb-1"
+                                        key={catItem.id}
+                                        variant="secondary"
+                                    >
+                                        {catItem.category?.name}
+                                    </Badge>
+                                ))}
+                            </div>
+                        </div>
+                        <div className="flex-1 hidden flex-col !h-full space-y-1">
+                            <div className="flex ecoop-scroll max-h-42 overflow-x-auto flex-wrap gap-1">
+                                <div className="sticky top-28 bg-gradient-to-b from-transparent to-background bg-red-500 h-16  w-full" />
+                                <BranchInfoItem
+                                    className="w-full"
+                                    content={
+                                        <div className="flex gap-2 ">
+                                            <Badge variant="secondary">
+                                                {organization?.subscription_plan
+                                                    ?.name ||
+                                                    'No plan selected'}
+                                            </Badge>
+                                        </div>
+                                    }
+                                    contentClassName="translate-y-1 "
+                                    iconClassName="size-4 text-muted-foreground"
+                                    textAlign="left"
+                                    title="Plan:"
+                                    TitleIcon={StarIcon}
+                                />
                                 <span className="text-xs font-semibold">
                                     Categories:
                                     <TagIcon className="inline-block ml-1 mb-0.5 size-4 text-muted-foreground" />
@@ -259,8 +229,6 @@ const OrganizationPreviewDisplay = ({
                             </div>
                         </div>
                     </div>
-
-                    {/* Description */}
 
                     {/* Actions */}
                     {showActions && (
@@ -299,56 +267,25 @@ const OrganizationPreviewDisplay = ({
 }
 
 export const OrganizationPreviewDisplaySkeleton = ({
-    variant = 'default',
     className,
 }: {
-    variant?: 'default' | 'compact' | 'detailed'
     className?: string
 }) => {
-    const getContainerHeight = () => {
-        switch (variant) {
-            case 'compact':
-                return 'h-[60vh]'
-            case 'detailed':
-                return 'h-[90vh]'
-            default:
-                return 'h-[80vh]'
-        }
-    }
-
-    const getImageSize = () => {
-        switch (variant) {
-            case 'compact':
-                return 'size-20'
-            case 'detailed':
-                return 'size-40'
-            default:
-                return 'size-30'
-        }
-    }
-
     return (
         <div
             className={cn(
-                'flex relative w-full min-w-5xl bg-secondary rounded-t-4xl animate-pulse',
-                getContainerHeight(),
+                'flex relative w-full min-w-3xl bg-secondary rounded-t-4xl animate-pulse',
                 className
             )}
         >
             <div className="absolute w-full bottom-0 pb-10 px-4 sm:px-8 pt-20 sm:pt-50 bg-gradient-to-t from-background via-background/95 via-30% to-transparent">
-                {/* Logo Skeleton */}
-                <Skeleton className={cn('mb-4 rounded-2xl', getImageSize())} />
-
-                {/* Title Skeleton */}
                 <div className="mb-4">
-                    <Skeleton className="h-8 sm:h-12 w-3/4 mb-2" />
+                    <Skeleton className="size-24 rounded-xl mb-2 " />
                     <div className="flex gap-4 mb-4">
                         <Skeleton className="h-4 w-20" />
                         <Skeleton className="h-4 w-24" />
                     </div>
                 </div>
-
-                {/* Content Area */}
                 <div className="flex flex-col lg:flex-row gap-4 mb-6">
                     <div className="flex-2">
                         <div className="space-y-2">
@@ -359,26 +296,8 @@ export const OrganizationPreviewDisplaySkeleton = ({
                     <div className="flex-1 space-y-3">
                         <Skeleton className="h-8 w-full" />
                         <Skeleton className="h-8 w-3/4" />
-                        {variant === 'detailed' && (
-                            <>
-                                <Skeleton className="h-6 w-full" />
-                                <Skeleton className="h-6 w-5/6" />
-                                <Skeleton className="h-6 w-4/5" />
-                            </>
-                        )}
                     </div>
                 </div>
-
-                {/* Description Skeleton */}
-                {variant !== 'compact' && (
-                    <div className="space-y-2 mb-6">
-                        <Skeleton className="h-4 w-full" />
-                        <Skeleton className="h-4 w-5/6" />
-                        <Skeleton className="h-4 w-3/4" />
-                    </div>
-                )}
-
-                {/* Actions Skeleton */}
                 <div className="flex flex-col sm:flex-row gap-2">
                     <Skeleton className="h-9 w-32" />
                     <Skeleton className="h-9 w-40" />

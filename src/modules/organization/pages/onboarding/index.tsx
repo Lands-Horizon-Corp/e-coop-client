@@ -3,7 +3,6 @@ import { useEffect, useState } from 'react'
 import { useRouter } from '@tanstack/react-router'
 import { Outlet } from '@tanstack/react-router'
 
-import { useAuthStore } from '@/modules/authentication/authgentication.store'
 import { useGetAll } from '@/modules/category/category.service'
 import { OnboardingBack } from '@/modules/organization'
 import OrganizationCategoryPicker from '@/modules/organization/components/organization-category-picker'
@@ -16,9 +15,6 @@ import AuthGuard from '@/components/wrappers/auth-guard'
 
 export const Onboarding = () => {
     const router = useRouter()
-    const {
-        currentAuth: { user_organization },
-    } = useAuthStore()
     const { onOpenCategoryPicker, setOnOpenCategoryPicker } = useCategoryStore()
 
     const { data: Category } = useGetAll()
@@ -56,8 +52,8 @@ export const Onboarding = () => {
                     <div className="to-background/0 via-background/0 from-primary/50 absolute right-50 -z-10 -mt-16 h-screen w-full blur-2xl bg-radial-[ellipse_at_20%_0%] to-100% dark:block hidden" />
                     <div className="ecoop-scroll  max-h-screen relative flex w-full flex-col overflow-y-auto">
                         <div className="relative mx-auto h-full mt-20 flex max-w-6xl flex-1 flex-col">
-                            {!isCreateBranchRoute && user_organization && (
-                                <OnboardingBack className="absolute right-0 top-0 max-w-full" />
+                            {isCreateBranchRoute && (
+                                <OnboardingBack className="absolute z-50 right-0 top-0 max-w-full" />
                             )}
                             <Outlet />
                         </div>

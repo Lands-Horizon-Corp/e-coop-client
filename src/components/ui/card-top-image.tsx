@@ -5,16 +5,7 @@ import { IMedia } from '@/modules/media'
 
 import ImageDisplay from '../image-display'
 import PreviewMediaWrapper from '../wrappers/preview-media-wrapper'
-import { Button } from './button'
-import {
-    Card,
-    CardContent,
-    CardDescription,
-    CardFooter,
-    CardHeader,
-    CardTitle,
-} from './card'
-import TruncatedText from './truncated-text'
+import { Card, CardContent, CardFooter, CardHeader } from './card'
 
 interface ActionProps {
     label?: string | ReactNode
@@ -36,21 +27,30 @@ export interface CardTopImageProps {
     imageSrc?: string
     imageAlt?: string
     imageClassName?: string
-    title?: string
-    description?: string
     className?: string
-    cardContentClassName?: string
-    cardHeaderClassName?: string
-    cardFooterClassName?: string
+
     cardLabelClassName?: string
+    cardHeaderClassName?: string
+    cardContentClassName?: string
+    cardFooterClassName?: string
+
+    cardLabel?: ReactNode
+    cardHeader?: ReactNode
+    cardContent?: ReactNode
+    cardFooter?: ReactNode
+
+    customLabel?: ReactNode
+    customHeader?: ReactNode
+    customContent?: ReactNode
+    customFooter?: ReactNode
+
     primaryAction?: ActionProps
     secondaryAction?: ActionProps
-    customFooter?: ReactNode
-    customHeader?: ReactNode
-    label?: ReactNode
     footerDirection?: 'row' | 'column'
+
     hideFooter?: boolean
     hideHeader?: boolean
+
     onCardClick?: () => void
     onImageClick?: () => void
 }
@@ -59,138 +59,63 @@ const CardTopImage = ({
     mediaSrc,
     imageSrc,
     imageClassName,
-    title,
-    description,
-    className,
     cardContentClassName,
     cardHeaderClassName,
     cardFooterClassName,
     cardLabelClassName,
-    primaryAction,
-    secondaryAction,
-    customFooter,
     customHeader,
-    footerDirection = 'row',
-    hideFooter = false,
     hideHeader = false,
     onCardClick,
     onImageClick,
-    label,
+    cardLabel,
+    className,
+    customLabel,
+    cardHeader,
+    cardContent,
+    customContent,
+    cardFooter,
+    customFooter,
 }: CardTopImageProps) => {
-    const renderFooter = () => {
-        if (hideFooter) return null
-        if (customFooter) {
-            return (
-                <CardFooter
-                    className={cn(
-                        'gap-3 h-full px-2 py-1 rounded-b-2xl',
-                        cardFooterClassName
-                    )}
-                >
-                    {customFooter}
-                </CardFooter>
-            )
-        }
-        if (!primaryAction && !secondaryAction) return null
-        return (
-            <CardFooter
-                className={cn(
-                    'gap-3 ',
-                    footerDirection === 'column'
-                        ? 'flex-col items-stretch'
-                        : 'max-sm:flex-col max-sm:items-stretch',
-                    cardFooterClassName
-                )}
-            >
-                {primaryAction && (
-                    <Button
-                        disabled={
-                            primaryAction.disabled || primaryAction.loading
-                        }
-                        onClick={primaryAction.onClick}
-                        size={primaryAction.size || 'default'}
-                        variant={primaryAction.variant || 'default'}
-                    >
-                        {primaryAction.loading
-                            ? 'Loading...'
-                            : primaryAction.label}
-                    </Button>
-                )}
-                {secondaryAction && (
-                    <Button
-                        disabled={
-                            secondaryAction.disabled || secondaryAction.loading
-                        }
-                        onClick={secondaryAction.onClick}
-                        size={secondaryAction.size || 'default'}
-                        variant={secondaryAction.variant || 'outline'}
-                    >
-                        {secondaryAction.loading
-                            ? 'Loading...'
-                            : secondaryAction.label}
-                    </Button>
-                )}
-            </CardFooter>
-        )
-    }
-
     return (
         <Card
             className={cn(
-                'max-w-sm pt-0 border-0 !h-fit relative',
+                'max-w-sm pt-0 bg-sidebar border-0 !h-fit relative',
                 onCardClick && 'cursor-pointer ',
                 className
             )}
             onClick={onCardClick}
         >
-            {label && (
-                <div
-                    className={cn(
-                        'absolute top-3 right-3 z-10',
-                        cardLabelClassName
-                    )}
-                >
-                    {label}
-                </div>
-            )}
-            <CardContent
+            <div
                 className={cn(
-                    'p-0 border-0 rounded-t-xl',
-                    cardContentClassName
+                    'absolute top-3 right-3 z-10',
+                    cardLabelClassName
                 )}
             >
-                <PreviewMediaWrapper media={mediaSrc}>
-                    <ImageDisplay
-                        className={cn(
-                            'aspect-video size-full rounded-t-2xl rounded-b-xs object-cover',
-                            onImageClick && 'cursor-pointer',
-                            imageClassName
-                        )}
-                        onClick={onImageClick}
-                        src={imageSrc}
-                    />
-                </PreviewMediaWrapper>
-            </CardContent>
-            {!hideHeader && (
-                <CardHeader className={cardHeaderClassName}>
-                    {customHeader ? (
-                        customHeader
-                    ) : (
-                        <>
-                            <CardTitle>{title}</CardTitle>
-                            {description && (
-                                <CardDescription className="max-h-20 overflow-auto ecoop-scroll">
-                                    <TruncatedText
-                                        maxLength={120}
-                                        text={description}
-                                    />
-                                </CardDescription>
-                            )}
-                        </>
+                {cardLabel ? cardLabel : customLabel}
+            </div>
+
+            <PreviewMediaWrapper media={mediaSrc}>
+                <ImageDisplay
+                    className={cn(
+                        'aspect-video size-full rounded-t-2xl rounded-b-xs object-cover',
+                        onImageClick && 'cursor-pointer',
+                        imageClassName
                     )}
+                    onClick={onImageClick}
+                    src={imageSrc}
+                />
+            </PreviewMediaWrapper>
+            {!hideHeader && (
+                <CardHeader className={cn('p-2', cardHeaderClassName)}>
+                    {cardHeader ? cardHeader : customHeader}
                 </CardHeader>
             )}
-            {renderFooter()}
+            <CardContent className={cn('p-0 border-0', cardContentClassName)}>
+                {cardContent ? cardContent : customContent}
+            </CardContent>
+            <CardFooter className={cn('p-0', cardFooterClassName)}>
+                {cardFooter ? cardFooter : customFooter}
+            </CardFooter>
         </Card>
     )
 }

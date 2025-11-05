@@ -7,7 +7,7 @@ import {
     TGetAllByCategory,
     useGetAllOrganizationsByCategories,
 } from '@/modules/organization'
-import { OrganizationMiniCard } from '@/modules/organization/components/organization-mini-card'
+import { OrganizationMiniCard } from '@/modules/organization/components/cards/organization-mini-card'
 
 import RefreshButton from '@/components/buttons/refresh-button'
 import { CompassIcon } from '@/components/icons'
@@ -16,13 +16,12 @@ import {
     Carousel,
     CarouselContent,
     CarouselItem,
-    CarouselNext,
-    CarouselPrevious,
 } from '@/components/ui/carousel'
 
 import EmptyState from '../components/empty-state'
 import LoadingSkeleton from '../components/loading-skeleton'
 import { organizationFuseOptions } from '../utils/data-grouping'
+import { ExplorePageCardPreviewController } from './explore-featured'
 
 export const useSearchOrganizationsByCategories = (
     data: TGetAllByCategory[] | undefined,
@@ -115,10 +114,7 @@ const ExploreByCategories = ({
     refetch,
     item: { category, organizations },
 }: ExploreByCategoriesProps) => {
-    const workingOrganizations = useMemo(
-        () => organizations ?? [],
-        [organizations]
-    )
+    const workingOrganizations = useMemo(() => organizations ?? [], [])
 
     return (
         <div>
@@ -163,22 +159,15 @@ const ExploreByCategories = ({
                                 }
                             >
                                 <OrganizationMiniCard
-                                    className="max-h-96 min-h-96"
-                                    onCardClick={() => {
-                                        // setSelectedOrganization(item)
-                                        // orgModal.onOpenChange(true)
-                                    }}
                                     organization={item}
                                     searchTerm={searchTerm}
                                     showActions={false}
-                                    showContact={false}
                                 />
                             </CarouselItem>
                         ))
                     )}
                 </CarouselContent>
-                <CarouselPrevious />
-                <CarouselNext />
+                <ExplorePageCardPreviewController />
             </Carousel>
         </div>
     )

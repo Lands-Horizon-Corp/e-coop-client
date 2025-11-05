@@ -1,31 +1,23 @@
-import { IBranch } from '@/modules/branch'
+import OrganizationSkeleton from '@/modules/organization/components/organization-item-skeleton'
 
 import { BranchIcon } from '@/components/icons'
 
-import { TEntityId } from '@/types'
-
+import { useBranchesContext } from '../context/branches-context'
 import { BranchesGrid } from './branches-grid'
 import { EmptyBranchesState } from './empty-branches-state'
 
 interface BranchesSectionProps {
-    branches: IBranch[] | undefined
-    isPending: boolean
-    isSeeding: boolean
-    organizationId: TEntityId
     onCreateBranch: () => void
-    showActions?: boolean
+    isPending: boolean
 }
 
 export const BranchesSection = ({
-    branches,
-    isPending,
-    isSeeding,
-    organizationId,
     onCreateBranch,
-    showActions = true,
+    isPending,
 }: BranchesSectionProps) => {
+    const { branches, isSeeding } = useBranchesContext()
     if (isPending) {
-        return <div>Loading branches...</div>
+        return <OrganizationSkeleton className="p-10" count={5} />
     }
 
     if (!branches || branches.length === 0) {
@@ -47,12 +39,7 @@ export const BranchesSection = ({
                     </h2>
                 </div>
             </div>
-            <BranchesGrid
-                branches={branches}
-                isSeeding={isSeeding}
-                organizationId={organizationId}
-                showActions={showActions}
-            />
+            <BranchesGrid />
         </div>
     )
 }

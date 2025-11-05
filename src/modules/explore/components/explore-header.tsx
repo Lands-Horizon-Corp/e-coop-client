@@ -5,11 +5,14 @@ import { Input } from '@/components/ui/input'
 
 import useDebounce from '@/hooks/use-debounce'
 
+import FiltersToolbar from './filters-toolbar'
+
 type ExploreHeaderProps = {
     setSearchTerm: (term: string) => void
+    categories: string[]
 }
 
-const ExploreHeader = ({ setSearchTerm }: ExploreHeaderProps) => {
+const ExploreHeader = ({ setSearchTerm, categories }: ExploreHeaderProps) => {
     const [inputValue, setInputValue] = useState('')
 
     const debounceSearchTerm = useDebounce(inputValue, 400)
@@ -19,8 +22,8 @@ const ExploreHeader = ({ setSearchTerm }: ExploreHeaderProps) => {
     }, [debounceSearchTerm, setSearchTerm])
 
     return (
-        <>
-            <div className="text-start flex items-center mx-auto !mt-20">
+        <div className="sticky top-16 z-10 -translate-y-[1.5px] ease-in-out duration-900 pb-2 backdrop-blur-2xl pl-10 px-2">
+            <div className="text-start pt-1 flex items-center mx-auto !mt-20">
                 <div className="flex flex-col flex-2 justify-start mb-1">
                     <h1 className="text-2xl font-bold bg-gradient-to-r from-primary to-primary bg-clip-text text-transparent">
                         Explore
@@ -40,7 +43,11 @@ const ExploreHeader = ({ setSearchTerm }: ExploreHeaderProps) => {
                     />
                 </div>
             </div>
-        </>
+            <FiltersToolbar
+                categories={categories}
+                setSearchTerm={setSearchTerm}
+            />
+        </div>
     )
 }
 

@@ -3,8 +3,9 @@ import { useNavigate } from '@tanstack/react-router'
 import { cn } from '@/helpers/tw-utils'
 import { useCategoryStore } from '@/store/onboarding/category-store'
 
+import RandomDots from '@/components/backgrounds/random-dots'
 import { BuildingIcon, PlusIcon } from '@/components/icons'
-import { HikingLandscape } from '@/components/svg/svg'
+import ImageMatch from '@/components/image-match'
 import { Button } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
 
@@ -13,10 +14,15 @@ const NoOrganizationView = () => {
     const navigate = useNavigate()
 
     return (
-        <div className="flex w-full flex-col items-center gap-y-5">
-            <HikingLandscape />
+        <div className="flex w-full flex-col justify-center items-center gap-y-5">
+            <RandomDots count={80} enableFloat enableGlow />
+            <ImageMatch
+                alt="Cooperative community working together"
+                containerClassName="overflow-hidden rounded-3xl max-w-[300px] transform group-hover:scale-105 transition-transform duration-300"
+                src="/pictures/go-up.png"
+            />
             <Button
-                className={cn('w-[300px] gap-x-2 rounded-xl')}
+                className={cn('w-[300px] z-10 gap-x-2 rounded-xl')}
                 onClick={() => {
                     handleProceedToSetupOrg(navigate)
                 }}
@@ -24,10 +30,10 @@ const NoOrganizationView = () => {
                 <PlusIcon />
                 Create your own Organization
             </Button>
-            <div className="flex items-center justify-evenly gap-x-2">
-                <Separator className="w-5" />
+            <div className="grid grid-cols-3 items-center gap-5 ">
+                <Separator className="w-10" />
                 <p>or</p>
-                <Separator className="w-5" />
+                <Separator className="w-10" />
             </div>
             <Button
                 className={cn('w-[300px] gap-x-2 rounded-xl')}

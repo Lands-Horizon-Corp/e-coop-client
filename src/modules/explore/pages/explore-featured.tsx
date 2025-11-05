@@ -6,17 +6,19 @@ import {
     IOrganization,
     useGetAllOrganizationsExplore,
 } from '@/modules/organization'
-import { OrganizationMiniCard } from '@/modules/organization/components/organization-mini-card'
+import { OrganizationMiniCard } from '@/modules/organization/components/cards/organization-mini-card'
 
 import RefreshButton from '@/components/buttons/refresh-button'
 import { CompassIcon, StarIcon, TrendingDownIcon } from '@/components/icons'
+import {
+    ImagePreviewNext,
+    ImagePreviewPrevious,
+} from '@/components/image-preview/image-preview'
 import { Badge } from '@/components/ui/badge'
 import {
     Carousel,
     CarouselContent,
     CarouselItem,
-    CarouselNext,
-    CarouselPrevious,
 } from '@/components/ui/carousel'
 
 import EmptyState from '../components/empty-state'
@@ -109,30 +111,38 @@ const ExploreFeatured = ({
                             <CarouselItem
                                 className="md:basis-1/2 lg:basis-1/5"
                                 key={index}
-                                onClick={() =>
-                                    handleSelectedOrganization?.(item)
-                                }
                             >
                                 <OrganizationMiniCard
-                                    className="max-h-96 min-h-96"
-                                    onCardClick={() => {
-                                        // setSelectedOrganization(item)
-                                        // orgModal.onOpenChange(true)
+                                    handleOpenOrgPreview={(org) => {
+                                        handleSelectedOrganization?.(org)
                                     }}
+                                    onCardClick={() =>
+                                        handleSelectedOrganization?.(item)
+                                    }
                                     organization={item}
                                     searchTerm={searchTerm}
-                                    showActions={false}
-                                    showContact={false}
                                 />
                             </CarouselItem>
                         ))
                     )}
                 </CarouselContent>
-                <CarouselPrevious />
-                <CarouselNext />
+                <ExplorePageCardPreviewController />
             </Carousel>
         </div>
     )
 }
 
 export default ExploreFeatured
+
+export const ExplorePageCardPreviewController = () => {
+    return (
+        <div>
+            <ImagePreviewPrevious
+                className={`-left-10 border-0  rounded-none rounded-tl-xs rounded-bl-xs h-full bg-background/80 dark:!bg-black/20`}
+            />
+            <ImagePreviewNext
+                className={`right-0 h-full rounded-none rounded-tr-xs rounded-br-xs border-0 !bg-background/50`}
+            />
+        </div>
+    )
+}
