@@ -141,7 +141,7 @@ export const CashCheckVoucherKanbanMain = ({
     return (
         <KanbanContainer
             className={cn(
-                'w-[420px] h-full shrink-0 relative',
+                '2xl:w-[24%] lg:w-[350px] w-[300px] h-full shrink-0 relative',
                 isSelected && 'ring-2 ring-primary/20 bg-primary/5'
             )}
         >
@@ -242,7 +242,7 @@ export const CashCheckVoucherKanbanMain = ({
                                             content={cashCheckVoucher.name}
                                         >
                                             <AccordionTrigger className="truncate h-10">
-                                                <p className="truncate text-lg font-bold text-foreground/95">
+                                                <p className="truncate text-sm font-bold text-foreground/95">
                                                     {searchTerm
                                                         ? highlightMatch(
                                                               cashCheckVoucher.name ||
