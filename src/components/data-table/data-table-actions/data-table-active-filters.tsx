@@ -57,7 +57,7 @@ const DataTableActiveFilters = ({ className }: IClassProps) => {
                         className="inline-flex cursor-pointer items-center duration-200 ease-in-out text-muted-foreground/70 hover:text-foreground"
                         variant="secondary"
                     >
-                        <FunnelFilledIcon className="mr-2" />
+                        <FunnelFilledIcon />
                         Filter{mappedFilters.length > 1 ? 's' : ''} (
                         {mappedFilters.length})
                     </Button>
@@ -65,22 +65,21 @@ const DataTableActiveFilters = ({ className }: IClassProps) => {
                 <DropdownMenuContent>
                     <DropdownMenuLabel className="flex flex-col">
                         <div className="flex">
-                            Filters{' '}
                             <FunnelIcon
                                 aria-hidden="true"
-                                className="opacity-60 inline ml-auto"
-                                size={16}
+                                className="opacity-60 mr-1 inline"
                             />
+                            Filters
                         </div>
                         <p className="text-xs text-muted-foreground/60 font-light">
                             Click to remove a filter
                         </p>
                     </DropdownMenuLabel>
                     <DropdownMenuSeparator />
-                    <DropdownMenuGroup>
+                    <DropdownMenuGroup className="space-y-1">
                         {mappedFilters.map((filter) => (
                             <DropdownMenuItem
-                                className="focus:bg-background"
+                                className="focus:bg-accent/50 focus:border-accent focus:border border-accent border focus:text-accent-foreground"
                                 key={filter.field}
                                 onClick={(e) => {
                                     e.preventDefault()
@@ -89,13 +88,14 @@ const DataTableActiveFilters = ({ className }: IClassProps) => {
                                 }}
                             >
                                 {filter.displayText ?? filter.field}
-                                <XIcon className="" />
+                                <XIcon className="ml-auto" />
                             </DropdownMenuItem>
                         ))}
                     </DropdownMenuGroup>
                     <DropdownMenuSeparator />
                     <ActionTooltip tooltipContent="Remove All Filters">
                         <DropdownMenuItem
+                            className="text-xs"
                             onClick={(e) => {
                                 resetFilter()
                                 e.stopPropagation()

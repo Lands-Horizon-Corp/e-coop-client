@@ -1,5 +1,6 @@
 import { useQuery } from '@tanstack/react-query'
 
+import { getCurrentTimezone } from '@/helpers/date-utils'
 import {
     HookQueryOptions,
     createDataLayerFactory,
@@ -11,7 +12,6 @@ import {
     type ICurrency,
     type ICurrencyRequest,
     type TCurrencyHookMode,
-    getCurrentTimezone,
 } from '../currency'
 
 const {

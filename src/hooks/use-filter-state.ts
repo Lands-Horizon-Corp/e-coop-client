@@ -8,6 +8,7 @@ import type {
     TFinalFilter,
     TSearchFilter,
 } from '@/contexts/filter-context'
+import { toReadableDate } from '@/helpers/date-utils'
 import { toBase64 } from '@/helpers/encoding-utils'
 
 import useDebounce from '@/hooks/use-debounce'
@@ -101,15 +102,24 @@ const useFilterState = ({
                 return
             }
 
+            let finalValue =
+                value.mode === 'range' && !Array.isArray(value.value)
+                    ? { from: value.from, to: value.to }
+                    : value.value
+
+            if (
+                value.mode !== 'range' &&
+                value.dataType === 'date' &&
+                toReadableDate(value.value as Date, 'hh:mm:ss') === '00:00:00'
+            )
+                finalValue = toReadableDate(value.value as Date, 'yyyy-MM-dd')
+
             filteredFilter.push({
                 field: key,
                 mode: value.mode,
                 dataType: value.dataType,
                 isStaticFilter: value.isStaticFilter,
-                value:
-                    value.mode === 'range' && !Array.isArray(value.value)
-                        ? { from: value.from, to: value.to }
-                        : value.value,
+                value: finalValue,
             })
         })
 

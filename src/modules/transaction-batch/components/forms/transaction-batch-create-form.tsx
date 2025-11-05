@@ -155,11 +155,11 @@ const TransactionBatchCreateForm = ({
                                                 field.onChange(value?.user_id)
                                                 form.setValue(
                                                     'provided_by_user',
-                                                    value.user
+                                                    value
                                                 )
                                             }}
                                             placeholder="Select Employee"
-                                            value={form.getValues(
+                                            value={form.watch(
                                                 'provided_by_user'
                                             )}
                                         />
@@ -252,7 +252,7 @@ export const TransactionBatchCreateFormModal = ({
 }) => {
     return (
         <Modal
-            className={cn('', className)}
+            className={cn('!max-w-xl', className)}
             description={description}
             title={title}
             {...props}

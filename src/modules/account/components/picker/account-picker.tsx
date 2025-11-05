@@ -89,8 +89,9 @@ const AccountPicker = ({
         pageSize: PICKERS_SELECT_PAGE_SIZE,
     })
 
-    const { finalFilterPayload, bulkSetFilter } = useFilterState({
+    const { finalFilterPayloadBase64, bulkSetFilter } = useFilterState({
         defaultFilterMode: 'OR',
+        debounceFinalFilterMs: 0,
         onFilterChange: () =>
             setPagination((prev) => ({
                 ...prev,
@@ -107,9 +108,9 @@ const AccountPicker = ({
         mode,
         currencyId,
         query: {
-            pagination,
+            ...pagination,
             showMessage: false,
-            filterPayload: finalFilterPayload,
+            filter: finalFilterPayloadBase64,
         },
         options: {
             enabled: !disabled,
@@ -143,21 +144,12 @@ const AccountPicker = ({
                 listHeading={`Matched Results (${totalSize})`}
                 onOpenChange={setState}
                 onSearchChange={(searchValue) => {
-                    bulkSetFilter(
-                        [
-                            { displayText: 'name', field: 'Name' },
-                            {
-                                displayText: 'alternative-code',
-                                field: 'Alternative Code',
-                            },
-                        ],
-                        {
-                            displayText: '',
-                            mode: 'equal',
-                            dataType: 'text',
-                            value: searchValue,
-                        }
-                    )
+                    bulkSetFilter([{ displayText: 'name', field: 'Name' }], {
+                        displayText: '',
+                        mode: 'contains',
+                        dataType: 'text',
+                        value: searchValue,
+                    })
                 }}
                 onSelect={(account) => {
                     queryClient.setQueryData(['account', value], account)
