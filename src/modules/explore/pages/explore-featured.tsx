@@ -119,6 +119,7 @@ const ExploreFeatured = ({
                                     onCardClick={() =>
                                         handleSelectedOrganization?.(item)
                                     }
+                                    showActions={false}
                                     organization={item}
                                     searchTerm={searchTerm}
                                 />
