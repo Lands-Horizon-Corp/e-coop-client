@@ -80,6 +80,7 @@ const OrganizationModalDetails = ({
                 <OrganizationPreviewDisplay
                     isLoading={isPendingOrganization}
                     onCreateBranch={handleCreateBranch}
+                    organization={organization}
                     showActions={showActions}
                 />
                 {showBranchesSection && (

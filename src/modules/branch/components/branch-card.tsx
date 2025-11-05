@@ -398,7 +398,6 @@ export const BranchCard = ({
                 imageSrc={getImageSrc()}
                 onCardClick={onClick ? handleCardClick : undefined}
                 onImageClick={onClick ? () => onClick(branch) : undefined}
-                title=""
             />
         </TooltipProvider>
     )

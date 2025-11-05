@@ -149,7 +149,6 @@ const UserOrganizationsDashboard = ({
                 open={isModalOpen}
                 organization={organization}
                 showActions={false}
-                showJoinBranch={true}
             />
             <div className="mb-7  flex w-full justify-center space-x-2">
                 <Button
