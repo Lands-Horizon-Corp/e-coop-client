@@ -66,3 +66,4 @@ pnpm-lock.yaml
 **/temp.md
 **/developer-temporary-dir
 **/dev-pseudo.md
+.env.prod

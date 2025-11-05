@@ -42,3 +42,12 @@ export interface IGeneratedReport extends ITimeStamps, IAuditable {
 
 export interface IGeneratedReportPaginated
     extends IPaginatedResult<IGeneratedReport> {}
+
+// 📄 Interface for Paper or Screen Size
+export interface PaperSize {
+    name: string
+    width: number
+    height: number
+    unit: 'mm' | 'in' | 'pt'
+    orientation?: 'portrait' | 'landscape'
+}
