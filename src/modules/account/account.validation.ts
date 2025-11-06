@@ -78,8 +78,12 @@ const AccountTypeDiscriminator = z.discriminatedUnion('type', [
     z.object({
         type: z.literal('Loan'),
         computation_type: AccountComputationTypeSchema,
-        loan_saving_type: z.enum(LOAN_SAVING_TYPE).optional(),
-        other_deduction_entry: z.enum(OTHER_DEDUCTION_ENTRY).optional(),
+        loan_saving_type: z
+            .enum(LOAN_SAVING_TYPE, { error: 'Invalid loan saving type' })
+            .optional(),
+        other_deduction_entry: z
+            .enum(OTHER_DEDUCTION_ENTRY, { error: 'Invalid other deduction' })
+            .optional(),
         computation_sheet_id: entityIdSchema.optional(),
     }),
 
@@ -145,21 +149,32 @@ const AccountTypeDiscriminator = z.discriminatedUnion('type', [
         cut_off_months: z.coerce.number().int().min(0).max(31).optional(),
 
         interest_fines_computation_diminishing: z
-            .enum(INTEREST_FINES_COMPUTATION_DIMINISHING)
+            .enum(INTEREST_FINES_COMPUTATION_DIMINISHING, {
+                error: 'Invalid option',
+            })
             .optional(),
 
-        interest_deduction: z.enum(INTEREST_DEDUCTION).optional(),
+        interest_deduction: z
+            .enum(INTEREST_DEDUCTION, { error: 'Invalid interest deduction' })
+            .optional(),
 
         interest_fines_computation_diminishing_straight_diminishing_yearly: z
             .enum(
-                INTEREST_FINES_COMPUTATION_DIMINISHING_STRAIGHT_DIMINISHING_YEARLY
+                INTEREST_FINES_COMPUTATION_DIMINISHING_STRAIGHT_DIMINISHING_YEARLY,
+                {
+                    error: 'Invalid option',
+                }
             )
             .optional(),
 
-        earned_unearned_interest: z.enum(EARNED_UNEARNED_INTEREST).optional(),
+        earned_unearned_interest: z
+            .enum(EARNED_UNEARNED_INTEREST, { error: 'Invalid option' })
+            .optional(),
 
         interest_saving_type_diminishing_straight: z
-            .enum(INTEREST_SAVING_TYPE_DIMINISHING_STRAIGHT)
+            .enum(INTEREST_SAVING_TYPE_DIMINISHING_STRAIGHT, {
+                error: 'Invalid option',
+            })
             .optional(),
     }),
 ])
@@ -202,8 +217,14 @@ export const IAccountRequestSchema = z
         icon: z.enum(ICONS, { error: 'Invalid icon' }).default('Money'),
         member_type_id: entityIdSchema.optional(),
 
-        financial_statement_type: z.enum(FINANCIAL_STATEMENT_TYPE).optional(),
-        general_ledger_type: z.enum(GENERAL_LEDGER_TYPE),
+        financial_statement_type: z
+            .enum(FINANCIAL_STATEMENT_TYPE, {
+                error: 'Invalid financial statement type',
+            })
+            .optional(),
+        general_ledger_type: z.enum(GENERAL_LEDGER_TYPE, {
+            error: 'Invalid option',
+        }),
 
         account_category_id: entityIdSchema.optional(),
 
@@ -269,7 +290,7 @@ export const IAccountRequestSchema = z
 
         account_classification_id: entityIdSchema.optional(),
         other_information_of_an_account: z
-            .enum(OTHER_INFORMATION_OF_AN_ACCOUNT)
+            .enum(OTHER_INFORMATION_OF_AN_ACCOUNT, { error: 'Invalid option' })
             .optional(),
 
         // COMMON
@@ -297,7 +318,9 @@ export const IAccountRequestSchema = z
 
         // FOR COMMON INTEREST
         interest_standard_computation: z
-            .enum(ACCOUNT_INTEREST_STANDARD_COMPUTATION)
+            .enum(ACCOUNT_INTEREST_STANDARD_COMPUTATION, {
+                error: 'Invalid computation option',
+            })
             .default('None'),
 
         // COMMON FINES
@@ -305,12 +328,18 @@ export const IAccountRequestSchema = z
 
         // FOR COMMON LOAN
         yearly_subscription_fee: z.coerce.number().min(0).optional(),
-        loan_cut_off_days: z.number().int().min(0).optional(),
+        loan_cut_off_days: z.coerce.number().int().min(-1).optional(),
 
-        lumpsum_computation_type: z.enum(LUMPSUM_COMPUTATION_TYPE).optional(),
+        lumpsum_computation_type: z
+            .enum(LUMPSUM_COMPUTATION_TYPE, {
+                error: 'Invalid lumpsum computation type',
+            })
+            .optional(),
 
         account_exclusive_setting_type: z
-            .enum(ACCOUNT_EXCLUSIVE_SETTING_TYPE)
+            .enum(ACCOUNT_EXCLUSIVE_SETTING_TYPE, {
+                error: 'Invalid account exclusive setting type',
+            })
             .default('None'),
 
         interest_diminishing_by_year: z.boolean().optional().default(false),

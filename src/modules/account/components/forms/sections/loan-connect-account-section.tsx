@@ -21,9 +21,11 @@ import {
     BankDuoToneIcon,
     LinkIcon,
     PlusIcon,
+    RefreshIcon,
     RenderIcon,
     TrashIcon,
 } from '@/components/icons'
+import LoadingSpinner from '@/components/spinners/loading-spinner'
 import { Button } from '@/components/ui/button'
 import {
     Empty,
@@ -40,7 +42,7 @@ import {
 
 import { useModalState } from '@/hooks/use-modal-state'
 
-import { IClassProps } from '@/types'
+import { IClassProps, TEntityId } from '@/types'
 
 import { AccountViewerModal } from '../../account-viewer/account-viewer'
 
@@ -64,7 +66,12 @@ const LoanConnectAccountSection = ({
     const { mutateAsync: connectAccount, isPending: isConnecting } =
         useConnectAccount()
 
-    const { data: connectedAccounts = [], isPending } = useGetAllAccount({
+    const {
+        data: connectedAccounts = [],
+        isPending,
+        isRefetching,
+        refetch,
+    } = useGetAllAccount({
         mode: 'loan-account-connections',
         accountId: accountId!,
         options: {
@@ -104,20 +111,11 @@ const LoanConnectAccountSection = ({
 
     return (
         <div className={cn('space-y-3 max-h-full flex flex-col', className)}>
-            <div className="flex items-center justify-between">
-                <div className="space-y-1">
-                    <h3 className="text-sm font-medium">Connected Accounts</h3>
-                    <p className="text-xs text-muted-foreground">
-                        Linked loan accounts for this account
-                    </p>
-                </div>
-            </div>
-
-            <div className="flex gap-2">
+            <div className="flex items-center gap-2">
                 <Popover onOpenChange={setIsPopoverOpen} open={isPopoverOpen}>
                     <PopoverTrigger asChild>
                         <Button
-                            className="w-full"
+                            className="flex-1"
                             size="sm"
                             type="button"
                             variant="outline"
@@ -128,7 +126,7 @@ const LoanConnectAccountSection = ({
                     </PopoverTrigger>
                     <PopoverContent
                         align="end"
-                        className="w-96 p-0 rounded-xl"
+                        className="w-96 max-h-[80vh] p-0 rounded-xl"
                         side="bottom"
                     >
                         <div className="flex flex-col">
@@ -162,12 +160,26 @@ const LoanConnectAccountSection = ({
                             <div className="p-4 space-y-3">
                                 <div>
                                     <AccountPicker
-                                        // mode="loan-suggested"
-                                        mode="all"
-                                        nameOnly
-                                        onSelect={(account) =>
-                                            setSelectedAccount(account)
+                                        currencyId={
+                                            form.getValues(
+                                                'currency_id'
+                                            ) as TEntityId
                                         }
+                                        mode="loan-connectable-account-currency"
+                                        nameOnly
+                                        onSelect={(account) => {
+                                            if (
+                                                connectedAccounts.find(
+                                                    (acc) =>
+                                                        acc.id ===
+                                                        selectedAccount?.id
+                                                )
+                                            )
+                                                return toast.warning(
+                                                    'This account is already connected.'
+                                                )
+                                            setSelectedAccount(account)
+                                        }}
                                         placeholder="Select account to connect..."
                                         triggerClassName="w-full"
                                         value={selectedAccount}
@@ -217,6 +229,27 @@ const LoanConnectAccountSection = ({
                         </div>
                     </PopoverContent>
                 </Popover>
+                <Button
+                    className="shrink-0 size-fit p-2"
+                    onClick={() => refetch()}
+                    size="icon"
+                    type="button"
+                    variant="outline"
+                >
+                    {isRefetching ? (
+                        <LoadingSpinner />
+                    ) : (
+                        <RefreshIcon className="size-4" />
+                    )}
+                </Button>
+            </div>
+            <div className="flex items-center justify-between">
+                <div className="space-y-1">
+                    {/* <h3 className="text-sm font-medium">Connected Accounts</h3> */}
+                    <p className="text-xs text-muted-foreground">
+                        Linked loan accounts for this account
+                    </p>
+                </div>
             </div>
 
             <div className="space-y-3 p-3 bg-popover max-h-full flex-1 rounded-xl">
@@ -226,12 +259,14 @@ const LoanConnectAccountSection = ({
                     </p>
                 )}
                 {!isPending && connectedAccounts.length === 0 && (
-                    <Empty className="from-muted/50 sticky top-0 to-background bg-gradient-to-b from-30% rounded-lg border">
+                    <Empty className="sticky top-0">
                         <EmptyHeader>
                             <EmptyMedia variant="icon">
                                 <LinkIcon />
                             </EmptyMedia>
-                            <EmptyTitle>No Accounts Connected</EmptyTitle>
+                            <EmptyTitle className="text-sm">
+                                No Accounts Connected
+                            </EmptyTitle>
                             <EmptyDescription>
                                 No loan accounts connected to this account yet.
                             </EmptyDescription>
@@ -277,7 +312,6 @@ const AccountItem = ({ account }: IAccountItemProps) => {
             onConfirm: () => {
                 toast.promise(
                     disconnectAccount({
-                        mainAccountId: accountId,
                         accountId: disconnectAccountId,
                     }),
                     {
@@ -302,7 +336,9 @@ const AccountItem = ({ account }: IAccountItemProps) => {
         <li className="p-3 rounded-lg border hover:border-primary duration-200 text-xs bg-card space-y-1">
             <AccountViewerModal
                 {...openAccountState}
-                accountId={account.id}
+                accountViewerProps={{
+                    accountId: account.id,
+                }}
                 description="View account details"
                 title="View Account"
             />

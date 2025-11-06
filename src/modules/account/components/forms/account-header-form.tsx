@@ -156,10 +156,12 @@ const AccountHeaderForm = ({
                                     'A/R-Ledger',
                                     'A/R-Aging',
                                     'W-Off',
+                                    'Loan',
                                     'A/P-Ledger',
                                 ].includes(form.watch('type'))
                             }
-                            mode="currency"
+                            mode="currency-loan"
+                            nameOnly
                             onSelect={(account) => {
                                 field.onChange(account.id)
                                 form.setValue('loan_account', account, {

@@ -25,14 +25,15 @@ import {
     TPaginatedAccountHookMode,
 } from './account.types'
 
-const {
-    baseQueryKey: accountBaseQueryKey,
-    apiCrudHooks,
-    apiCrudService,
-} = createDataLayerFactory<IAccount, IAccountRequest>({
+const { baseQueryKey, apiCrudHooks, apiCrudService } = createDataLayerFactory<
+    IAccount,
+    IAccountRequest
+>({
     url: '/api/v1/account',
     baseKey: 'account',
 })
+
+export const accountBaseQueryKey = baseQueryKey
 
 export const { getAll: getAllAccounts } = apiCrudService
 
@@ -161,8 +162,8 @@ export const useFilteredPaginatedAccount = ({
                 targetUrl = currencyId
                     ? `currency/${currencyId}/loan/search`
                     : 'search'
-            } else if (mode === 'loan-suggested') {
-                targetUrl = 'loan-suggestion/search'
+            } else if (mode === 'loan-connectable-account-currency') {
+                targetUrl = `loan-connectable-account-currency/${currencyId}/search`
             } else {
                 targetUrl = mode ? `${mode}/search` : 'search'
             }
@@ -346,24 +347,17 @@ export const useConnectAccount = createMutationFactory<
 export const useDisconnectAccount = createMutationFactory<
     IAccount[],
     Error,
-    { mainAccountId: TEntityId; accountId: TEntityId }
+    { accountId: TEntityId }
 >({
-    mutationFn: async ({ accountId, mainAccountId }) => {
+    mutationFn: async ({ accountId }) => {
         const response = await API.post<void, IAccount[]>(
-            `${accountAPIRoute}/${mainAccountId}/disconnect-account/${accountId}`
+            `${accountAPIRoute}/${accountId}/disconnect-account`
         )
         return response.data
     },
-    invalidationFn: ({ queryClient, variables }) => {
-        queryClient.invalidateQueries({
-            queryKey: [
-                accountBaseQueryKey,
-                'all',
-                'loan-account-connections',
-                variables.mainAccountId,
-            ],
-        })
-    },
+    defaultInvalidates: [
+        [accountBaseQueryKey, 'all', 'loan-account-connections'],
+    ],
 })
 
 export const logger = Logger.getInstance('account')

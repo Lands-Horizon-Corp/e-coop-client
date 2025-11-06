@@ -46,6 +46,7 @@ type FinalProp = PickerProp &
                   | 'currency'
                   | 'currency-loan'
                   | 'currency-payment'
+                  | 'loan-accounts-currency'
                   | 'currency-cash-and-cash-equivalence'
                   | 'currency-paid-up-shared-capital'
               >
@@ -55,6 +56,7 @@ type FinalProp = PickerProp &
                   | 'currency'
                   | 'currency-payment'
                   | 'currency-loan'
+                  | 'loan-accounts-currency'
                   | 'currency-cash-and-cash-equivalence'
                   | 'currency-paid-up-shared-capital'
               currencyId: TEntityId

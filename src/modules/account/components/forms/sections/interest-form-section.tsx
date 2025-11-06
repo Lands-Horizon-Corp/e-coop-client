@@ -1,5 +1,7 @@
 import { Path, UseFormReturn } from 'react-hook-form'
 
+import { CurrencyInput } from '@/modules/currency'
+
 import { GradientBackground } from '@/components/gradient-background/gradient-background'
 import { ReceiveMoneyIcon } from '@/components/icons'
 import { FormControl } from '@/components/ui/form'
@@ -55,20 +57,16 @@ export const InterestFormSection = ({
                         control={form.control}
                         label="Max Amount"
                         name="max_amount"
-                        render={({ field }) => (
+                        render={({ field: { onChange, ...field } }) => (
                             <div className="flex grow flex-col gap-y-2">
-                                <Input
+                                <CurrencyInput
                                     {...field}
+                                    currency={form.watch('currency')}
                                     disabled={isDisabled(field.name)}
-                                    onChange={(e) =>
-                                        field.onChange(
-                                            e.target.value === ''
-                                                ? undefined
-                                                : parseFloat(e.target.value)
-                                        )
-                                    }
-                                    placeholder="Max Amount"
-                                    value={field.value ?? ''}
+                                    onValueChange={(newValue = '') => {
+                                        onChange(newValue)
+                                    }}
+                                    placeholder="0.0"
                                 />
                             </div>
                         )}
@@ -77,20 +75,16 @@ export const InterestFormSection = ({
                         control={form.control}
                         label="Min Amount"
                         name="min_amount"
-                        render={({ field }) => (
+                        render={({ field: { onChange, ...field } }) => (
                             <div className="flex grow flex-col gap-y-2">
-                                <Input
+                                <CurrencyInput
                                     {...field}
+                                    currency={form.watch('currency')}
                                     disabled={isDisabled(field.name)}
-                                    onChange={(e) =>
-                                        field.onChange(
-                                            e.target.value === ''
-                                                ? undefined
-                                                : parseFloat(e.target.value)
-                                        )
-                                    }
-                                    placeholder="Min Amount"
-                                    value={field.value ?? ''}
+                                    onValueChange={(newValue = '') => {
+                                        onChange(newValue)
+                                    }}
+                                    placeholder="0.00"
                                 />
                             </div>
                         )}
@@ -290,7 +284,7 @@ export const InterestFormSection = ({
                 />
             </div>
 
-            <div className="grid grid-cols-4 gap-x-3">
+            <div className="grid grid-cols-4 gap-x-2">
                 {/* Earned/Unearned Interest */}
                 <FormFieldWrapper
                     className="bg-card/50 p-3 pb-3 col-span-2 rounded-xl"

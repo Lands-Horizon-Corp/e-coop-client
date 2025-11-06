@@ -212,13 +212,13 @@ export type TPaginatedAccountHookMode =
     | 'journal-voucher'
     | 'check-voucher'
     | 'loan'
-    | 'loan-suggested'
+    | 'loan-connectable-account-currency' // - This returns SVF, Interest, Fines accounts that can be connected to a loan account based on currency
     | 'cash-and-cash-equivalence'
     | 'currency'
     | 'currency-payment'
     | 'currency-cash-and-cash-equivalence'
     | 'currency-paid-up-shared-capital'
-    | 'currency-loan'
+    | 'currency-loan' // - All loan accounts based on currency
     | 'all'
 
 export type TDeleteAccountFromGLFSType = {

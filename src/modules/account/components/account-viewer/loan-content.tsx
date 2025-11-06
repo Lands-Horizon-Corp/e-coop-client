@@ -240,7 +240,7 @@ const ConnectedAccountItem = ({ account }: { account: IAccount }) => {
             <div className="flex gap-2 items-center">
                 <AccountViewerModal
                     {...viewModalState}
-                    accountId={account.id}
+                    accountViewerProps={{ accountId: account.id }}
                 />
                 {account.currency && (
                     <CurrencyBadge

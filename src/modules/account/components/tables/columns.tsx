@@ -4,6 +4,7 @@ import { toReadableDate } from '@/helpers/date-utils'
 import { cn } from '@/helpers/tw-utils'
 import { AccountTypeBadge } from '@/modules/account'
 import { ComputationTypeBadge } from '@/modules/computation-type/components/computation-type-badge'
+import { currencyFormat } from '@/modules/currency'
 import { CurrencyBadge } from '@/modules/currency/components/currency-badge'
 import { GeneralLedgerTypeBadge } from '@/modules/general-ledger/components/general-ledger-type-badge'
 import { ColumnDef, Row } from '@tanstack/react-table'
@@ -327,12 +328,15 @@ const AccountsTableColumns = (
             ),
             cell: ({
                 row: {
-                    original: { min_amount },
+                    original: { min_amount, currency },
                 },
             }) => (
                 <div className="text-right font-mono">
                     {min_amount !== undefined
-                        ? min_amount.toLocaleString()
+                        ? currencyFormat(min_amount, {
+                              currency,
+                              showSymbol: !!currency,
+                          })
                         : 'N/A'}
                 </div>
             ), // Format as currency
@@ -354,12 +358,15 @@ const AccountsTableColumns = (
             ),
             cell: ({
                 row: {
-                    original: { max_amount },
+                    original: { max_amount, currency },
                 },
             }) => (
                 <div className="text-right font-mono">
                     {max_amount !== undefined
-                        ? max_amount.toLocaleString()
+                        ? currencyFormat(max_amount, {
+                              currency: currency,
+                              showSymbol: !!currency,
+                          })
                         : 'N/A'}
                 </div>
             ), // Format as currency

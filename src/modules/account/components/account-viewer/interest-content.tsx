@@ -10,6 +10,7 @@ import {
     PercentIcon,
     TrendingDownIcon,
 } from '@/components/icons'
+import { Separator } from '@/components/ui/separator'
 
 import { IAccount } from '../../account.types'
 import {
@@ -39,9 +40,14 @@ export const InterestAccountContent = ({
             />
 
             {/* Min Amount, Max Amount, Interest Standard, Cutoff */}
-            <div className="grid grid-cols-3 gap-y-2 p-4 rounded-xl border bg-secondary/50 text-secondary-foreground text-sm">
-                <div className="flex gap-x-4 items-center">
-                    <span>Min Amount :</span>
+            <div className="space-y-2 p-4 rounded-xl border bg-secondary/50 text-secondary-foreground text-sm">
+                {/* Min Amount */}
+                <div className="flex gap-x-4 justify-between items-center">
+                    <span className="flex items-center gap-x-2">
+                        <TrendingDownIcon className="size-4" />
+                        Min Amount
+                    </span>
+                    <Separator className="flex-1" />
                     {account.min_amount !== undefined &&
                     account.min_amount !== null ? (
                         <span className="bg-accent/80 px-3 rounded-md py-1 border-accent border">
@@ -53,8 +59,14 @@ export const InterestAccountContent = ({
                         </span>
                     )}
                 </div>
-                <div className="flex gap-x-4 items-center">
-                    <span>Max Amount :</span>
+
+                {/* Max Amount */}
+                <div className="flex gap-x-4 justify-between items-center">
+                    <span className="flex items-center gap-x-2">
+                        <ChartBarIcon className="size-4" />
+                        Max Amount
+                    </span>
+                    <Separator className="flex-1" />
                     {account.max_amount !== undefined &&
                     account.max_amount !== null ? (
                         <span className="bg-accent/80 px-3 rounded-md py-1 border-accent border">
@@ -66,22 +78,33 @@ export const InterestAccountContent = ({
                         </span>
                     )}
                 </div>
-                <div className="flex gap-x-4 items-center">
-                    <span>Interest Standard :</span>
+
+                {/* Interest Standard */}
+                <div className="flex gap-x-4 justify-between items-center">
+                    <span className="flex items-center gap-x-2">
+                        <PercentIcon className="size-4" />
+                        Interest Standard
+                    </span>
+                    <Separator className="flex-1" />
                     {account.interest_standard !== undefined &&
                     account.interest_standard !== null ? (
                         <span className="bg-accent/80 px-3 rounded-md py-1 border-accent border">
-                            {account.interest_standard.toFixed(2)}
-                            {' %'}
+                            {account.interest_standard.toFixed(2)} %
                         </span>
                     ) : (
-                        <span className="text-muted-foreground px-3 py-1">
-                            0.0 <PercentIcon className="inline" />
+                        <span className="text-muted-foreground px-3 py-1 flex items-center gap-x-1">
+                            0.0 <PercentIcon className="inline size-3" />
                         </span>
                     )}
                 </div>
-                <div className="flex gap-x-4 items-center">
-                    <span>Cutoff Months :</span>
+
+                {/* Cutoff Months */}
+                <div className="flex gap-x-4 justify-between items-center">
+                    <span className="flex items-center gap-x-2">
+                        <CalendarNumberIcon className="size-4" />
+                        Cutoff Months
+                    </span>
+                    <Separator className="flex-1" />
                     {account.cut_off_months ? (
                         <span className="bg-accent/80 px-3 rounded-md py-1 border-accent border">
                             {account.cut_off_months}
@@ -92,8 +115,14 @@ export const InterestAccountContent = ({
                         </span>
                     )}
                 </div>
-                <div className="flex gap-x-4 items-center">
-                    <span>Cutoff Days :</span>
+
+                {/* Cutoff Days */}
+                <div className="flex gap-x-4 justify-between items-center">
+                    <span className="flex items-center gap-x-2">
+                        <CalendarNumberIcon className="size-4" />
+                        Cutoff Days
+                    </span>
+                    <Separator className="flex-1" />
                     {account.cut_off_days ? (
                         <span className="bg-accent/80 px-3 rounded-md py-1 border-accent border">
                             {account.cut_off_days}

@@ -174,8 +174,10 @@ const AccountItem = ({ account, onRemove }: IAccountItemProps) => {
         <li className="p-3 rounded-md border hover:border-primary cursor-pointer duration-200 text-xs bg-card space-y-1">
             <AccountViewerModal
                 {...openAccountState}
-                accountId={account.id}
-                defaultValue={account}
+                accountViewerProps={{
+                    accountId: account.id,
+                    defaultValue: account,
+                }}
             />
             <div className="flex items-center gap-x-2">
                 <RenderIcon className="shrink-0" icon={account?.icon} />

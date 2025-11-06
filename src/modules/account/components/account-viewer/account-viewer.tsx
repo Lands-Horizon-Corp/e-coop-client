@@ -1,9 +1,19 @@
 import { cn } from '@/helpers'
+import {
+    IAccountHistory,
+    useGetAccountHistoryById,
+} from '@/modules/account-history'
+import AccountHistorySheet from '@/modules/account-history/forms/account-history-sheet'
 import { useGetAllAccountTag } from '@/modules/account-tag'
 import { AccountTagChip } from '@/modules/account-tag/components/account-tag-management'
 import { CurrencyBadge } from '@/modules/currency/components/currency-badge'
 
-import { ErrorIcon, RefreshIcon, RenderIcon } from '@/components/icons'
+import {
+    ErrorIcon,
+    HistoryIcon,
+    RefreshIcon,
+    RenderIcon,
+} from '@/components/icons'
 import Modal, { IModalProps } from '@/components/modals/modal'
 import LoadingSpinner from '@/components/spinners/loading-spinner'
 import TextRenderer from '@/components/text-renderer'
@@ -22,11 +32,32 @@ import { InterestAccountContent } from './interest-content'
 import { LoanAccountContent } from './loan-content'
 
 type Props = {
+    isHistoryAccount?: boolean
     accountId: TEntityId
-    defaultValue?: IAccount
+    defaultValue?: IAccount | IAccountHistory
 } & IClassProps
 
-const AccountViewer = ({ className, accountId, defaultValue }: Props) => {
+const AccountViewer = ({
+    isHistoryAccount = false,
+    className,
+    accountId,
+    defaultValue,
+}: Props) => {
+    const fetchAccount = useGetAccountById({
+        id: accountId,
+        options: {
+            initialData: defaultValue,
+            enabled: !isHistoryAccount,
+        },
+    })
+
+    const fetchHistoryAccount = useGetAccountHistoryById({
+        id: accountId,
+        options: {
+            enabled: isHistoryAccount,
+        },
+    })
+
     const {
         data: account,
         isPending,
@@ -34,12 +65,7 @@ const AccountViewer = ({ className, accountId, defaultValue }: Props) => {
         refetch,
         isError,
         error,
-    } = useGetAccountById({
-        id: accountId,
-        options: {
-            initialData: defaultValue,
-        },
-    })
+    } = isHistoryAccount ? fetchHistoryAccount : fetchAccount
 
     if (isPending) {
         return <AccountViewerSkeleton className={className} />
@@ -79,8 +105,19 @@ const AccountViewer = ({ className, accountId, defaultValue }: Props) => {
     }
 
     return (
-        <div className={cn('p-4 space-y-2 bg-popover rounded-xl', className)}>
+        <div
+            className={cn(
+                'p-4 space-y-2 bg-popover rounded-xl',
+                className,
+                isHistoryAccount && 'saturate-50'
+            )}
+        >
             {/*  HEADER */}
+            {isHistoryAccount && (
+                <p className="text-center px-3 py-1 sticky top-0 bg-accent/40 text-accent-foreground border-accent border shadow w-fit rounded-md backdrop-blur-sm z-10 mx-auto text-sm ">
+                    This account is a history preview only
+                </p>
+            )}
             <div className="space-y-4 min-w-0 max-w-full">
                 <div className="flex items-center justify-between">
                     <div className="flex items-center max-w-full min-w-0 gap-x-2">
@@ -107,6 +144,17 @@ const AccountViewer = ({ className, accountId, defaultValue }: Props) => {
                             />
                         )}
                         <AccountTypeBadge type={account.type} />
+                        {!isHistoryAccount && (
+                            <AccountHistorySheet accountId={account.id}>
+                                <Button
+                                    className="size-fit p-1 h-fit"
+                                    size="icon"
+                                    variant="secondary"
+                                >
+                                    <HistoryIcon />
+                                </Button>
+                            </AccountHistorySheet>
+                        )}
                         <Button
                             className="size-fit p-1"
                             onClick={() => refetch()}
@@ -245,16 +293,18 @@ export const AccountViewerModal = ({
     title = 'Account Details',
     description,
     className,
-    accountId,
-    defaultValue,
+    accountViewerProps,
     ...props
 }: IModalProps & {
-    accountId: TEntityId
-    defaultValue?: IAccount
+    accountViewerProps: Omit<Props, 'className'>
 }) => {
     return (
         <Modal
-            className={cn('w-fit p-4 !rounded-3xl !max-w-none', className)}
+            className={cn(
+                'w-fit p-4 !rounded-3xl !max-w-none',
+                className,
+                accountViewerProps.isHistoryAccount && 'saturate-50'
+            )}
             closeButtonClassName="hidden"
             description={description}
             descriptionClassName="hidden"
@@ -263,9 +313,8 @@ export const AccountViewerModal = ({
             {...props}
         >
             <AccountViewer
-                accountId={accountId}
+                {...accountViewerProps}
                 className="bg-transparent min-w-2xl p-0"
-                defaultValue={defaultValue}
             />
         </Modal>
     )

@@ -41,6 +41,7 @@ export interface IAccountCreateUpdateFormProps
 const AccountCreateUpdateForm = ({
     className,
     accountId,
+    autoSave = false,
     ...formProps
 }: IAccountCreateUpdateFormProps) => {
     const { currentAuth } = useAuthUserWithOrgBranch()
@@ -88,7 +89,7 @@ const AccountCreateUpdateForm = ({
         useFormHelper<TAccountFormValues>({
             form,
             ...formProps,
-            autoSave: accountId !== undefined,
+            autoSave,
         })
 
     const onSubmit = form.handleSubmit((data: TAccountFormValues) => {
@@ -121,7 +122,14 @@ const AccountCreateUpdateForm = ({
                 <div className="absolute top-4 inline-flex space-x-2 right-10">
                     {accountId && (
                         <>
-                            <AccountHistorySheet accountId={accountId} />
+                            <AccountHistorySheet
+                                accountId={accountId}
+                                onRestore={(restoredAccount) =>
+                                    form.reset(
+                                        restoredAccount as unknown as IAccountRequest
+                                    )
+                                }
+                            />
                             <AccountTagsManagerPopover
                                 accountId={accountId}
                                 size="sm"
@@ -144,7 +152,7 @@ const AccountCreateUpdateForm = ({
                 <div className="flex gap-x-2">
                     <AccountContentForm form={form} isDisabled={isDisabled} />
                     <LoanConnectAccountSection
-                        className="my-2 w-[240px]"
+                        className="my-2 w-[320px] shrink-0 max-w-[320px]"
                         form={form}
                     />
                 </div>

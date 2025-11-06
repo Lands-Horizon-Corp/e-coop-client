@@ -7,10 +7,11 @@ import {
 } from '@/providers/repositories/data-layer-factory'
 import {
     createMutationFactory,
+    deleteMutationInvalidationFn,
     updateMutationInvalidationFn,
 } from '@/providers/repositories/mutation-factory'
 
-import { TAPIQueryOptions } from '@/types'
+import { TAPIQueryOptions, TEntityId } from '@/types'
 
 import type {
     INotification,
@@ -56,9 +57,24 @@ export const {
     useGetById: useGetNotificationById,
     useGetPaginated: useGetPaginatedNotification,
 
-    useDeleteById: useDeleteNotificationById,
+    // useDeleteById: useDeleteNotificationById,
     useDeleteMany: useDeleteManyNotification,
 } = apiCrudHooks
+
+export const useDeleteNotificationById = createMutationFactory<
+    void,
+    Error,
+    TEntityId
+>({
+    mutationFn: (id) => deleteNotificationById({ id }),
+    invalidationFn: (args) => {
+        deleteMutationInvalidationFn(notificationBaseKey, args)
+    },
+    defaultInvalidates: [
+        [notificationBaseKey, 'all'],
+        [notificationBaseKey, 'all', 'me'],
+    ],
+})
 
 export const useGetAllNotification = ({
     query,
