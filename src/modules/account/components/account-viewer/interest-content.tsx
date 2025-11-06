@@ -42,10 +42,10 @@ export const InterestAccountContent = ({
             <div className="grid grid-cols-3 gap-y-2 p-4 rounded-xl border bg-secondary/50 text-secondary-foreground text-sm">
                 <div className="flex gap-x-4 items-center">
                     <span>Min Amount :</span>
-                    {account.minAmount !== undefined &&
-                    account.minAmount !== null ? (
+                    {account.min_amount !== undefined &&
+                    account.min_amount !== null ? (
                         <span className="bg-accent/80 px-3 rounded-md py-1 border-accent border">
-                            {account.minAmount.toFixed(2)}
+                            {account.min_amount.toFixed(2)}
                         </span>
                     ) : (
                         <span className="text-muted-foreground px-3 py-1">
@@ -55,10 +55,10 @@ export const InterestAccountContent = ({
                 </div>
                 <div className="flex gap-x-4 items-center">
                     <span>Max Amount :</span>
-                    {account.maxAmount !== undefined &&
-                    account.maxAmount !== null ? (
+                    {account.max_amount !== undefined &&
+                    account.max_amount !== null ? (
                         <span className="bg-accent/80 px-3 rounded-md py-1 border-accent border">
-                            {account.maxAmount.toFixed(2)}
+                            {account.max_amount.toFixed(2)}
                         </span>
                     ) : (
                         <span className="text-muted-foreground px-3 py-1">

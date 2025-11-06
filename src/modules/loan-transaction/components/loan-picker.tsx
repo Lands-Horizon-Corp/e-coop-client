@@ -78,6 +78,7 @@ const LoanPicker = forwardRef<
 
         const { finalFilterPayloadBase64, bulkSetFilter } = useFilterState({
             defaultFilterMode: 'OR',
+            debounceFinalFilterMs: 0,
             onFilterChange: () =>
                 setPagination((prev) => ({
                     ...prev,

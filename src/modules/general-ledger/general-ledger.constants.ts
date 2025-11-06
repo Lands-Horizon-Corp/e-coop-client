@@ -1,6 +1,7 @@
 export const GENERAL_LEDGER_TYPE = [
     'Assets',
-    'Liabilities, Equity & Reserves',
-    'Income',
+    'Liabilities',
+    'Equity',
+    'Revenue',
     'Expenses',
 ] as const

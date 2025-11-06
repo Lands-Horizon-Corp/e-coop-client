@@ -62,7 +62,6 @@ const AccountCreateUpdateForm = ({
             compassion_fund: false,
             compassion_fund_amount: 0,
             icon: 'Money Bag',
-            computation_type: 'Straight',
             type: 'Other',
             currency_id:
                 currentAuth.user_organization.branch.branch_setting.currency_id,

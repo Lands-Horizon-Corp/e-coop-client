@@ -34,8 +34,8 @@ export const accountsGlobalSearchTargets: IGlobalSearchTargets<IAccount>[] = [
     { field: 'description', displayText: 'Description' },
     { field: 'altDescription', displayText: 'Alternative Description' },
     { field: 'type', displayText: 'Account Type' },
-    { field: 'maxAmount', displayText: 'Max Amount' },
-    { field: 'minAmount', displayText: 'Min Amount' },
+    { field: 'max_amount', displayText: 'Max Amount' },
+    { field: 'min_amount', displayText: 'Min Amount' },
     { field: 'computationType', displayText: 'Computation Type' },
     {
         field: 'earnedUnearnedInterest',
@@ -306,26 +306,26 @@ const AccountsTableColumns = (
             size: 250,
         },
         {
-            id: 'minAmount',
-            accessorKey: 'minAmount',
+            id: 'min_amount',
+            accessorKey: 'min_amount',
             header: (props) => (
                 <DataTableColumnHeader {...props} title="Min Amount">
                     <ColumnActions {...props}>
                         <NumberFilter
                             displayText="Min Amount"
-                            field="minAmount"
+                            field="min_amount"
                         />
                     </ColumnActions>
                 </DataTableColumnHeader>
             ),
             cell: ({
                 row: {
-                    original: { minAmount },
+                    original: { min_amount },
                 },
             }) => (
                 <div className="text-right font-mono">
-                    {minAmount !== undefined
-                        ? minAmount.toLocaleString()
+                    {min_amount !== undefined
+                        ? min_amount.toLocaleString()
                         : 'N/A'}
                 </div>
             ), // Format as currency
@@ -333,26 +333,26 @@ const AccountsTableColumns = (
             size: 120,
         },
         {
-            id: 'maxAmount',
-            accessorKey: 'maxAmount',
+            id: 'max_amount',
+            accessorKey: 'max_amount',
             header: (props) => (
                 <DataTableColumnHeader {...props} title="Max Amount">
                     <ColumnActions {...props}>
                         <NumberFilter
                             displayText="Max Amount"
-                            field="maxAmount"
+                            field="max_amount"
                         />
                     </ColumnActions>
                 </DataTableColumnHeader>
             ),
             cell: ({
                 row: {
-                    original: { maxAmount },
+                    original: { max_amount },
                 },
             }) => (
                 <div className="text-right font-mono">
-                    {maxAmount !== undefined
-                        ? maxAmount.toLocaleString()
+                    {max_amount !== undefined
+                        ? max_amount.toLocaleString()
                         : 'N/A'}
                 </div>
             ), // Format as currency

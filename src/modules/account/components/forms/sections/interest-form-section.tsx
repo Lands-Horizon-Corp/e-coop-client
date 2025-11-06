@@ -54,7 +54,7 @@ export const InterestFormSection = ({
                     <FormFieldWrapper
                         control={form.control}
                         label="Max Amount"
-                        name="maxAmount"
+                        name="max_amount"
                         render={({ field }) => (
                             <div className="flex grow flex-col gap-y-2">
                                 <Input
@@ -76,7 +76,7 @@ export const InterestFormSection = ({
                     <FormFieldWrapper
                         control={form.control}
                         label="Min Amount"
-                        name="minAmount"
+                        name="min_amount"
                         render={({ field }) => (
                             <div className="flex grow flex-col gap-y-2">
                                 <Input

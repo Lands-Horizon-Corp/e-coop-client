@@ -12,8 +12,7 @@ import {
     ThemeProvider,
     useTheme,
 } from '@/modules/settings/provider/theme-provider';
-
-// import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 
 import SpySvg from '../src/assets/spy.svg';
 import PageContainer from './components/containers/page-container';
@@ -109,7 +108,7 @@ const App = () => {
                     <AppContent />
                 </MapProvider>
             </ThemeProvider>
-            {/* <ReactQueryDevtools initialIsOpen={false} /> */}
+            <ReactQueryDevtools initialIsOpen={false} />
         </QueryClientProvider>
     );
 };

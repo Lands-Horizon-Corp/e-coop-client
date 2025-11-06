@@ -28,6 +28,7 @@ import {
     ACCOUNT_TYPE,
     OTHER_INFORMATION_OF_AN_ACCOUNT,
 } from '../../account.constants'
+import { TAccountType } from '../../account.types'
 import { TAccountFormValues } from '../../account.validation'
 import { DepositFormSection } from './sections/deposit-form-section'
 import { FinesFormSection } from './sections/fines-form-section'
@@ -59,8 +60,39 @@ const AccountContentForm = ({
                     <RadioGroup
                         className="flex ecoop-scroll overflow-x-auto gap-x-2"
                         disabled={isDisabled(field.name)}
-                        onValueChange={(value) => {
+                        onValueChange={(value: TAccountType) => {
                             field.onChange(value)
+
+                            if (form.getValues('general_ledger_type')) return
+
+                            if (value === 'Loan')
+                                form.setValue(
+                                    'general_ledger_type',
+                                    'Liabilities'
+                                )
+                            else if (value === 'Deposit')
+                                form.setValue('general_ledger_type', 'Assets')
+                            else if (value === 'A/R-Ledger')
+                                form.setValue('general_ledger_type', 'Assets')
+                            else if (value === 'A/R-Aging')
+                                form.setValue('general_ledger_type', 'Assets')
+                            else if (value === 'Fines')
+                                form.setValue('general_ledger_type', 'Revenue')
+                            else if (value === 'Interest')
+                                form.setValue('general_ledger_type', 'Revenue')
+                            else if (value === 'SVF-Ledger')
+                                form.setValue('general_ledger_type', 'Equity')
+                            else if (value === 'W-Off')
+                                form.setValue('general_ledger_type', 'Expenses')
+                            else if (value === 'A/P-Ledger')
+                                form.setValue(
+                                    'general_ledger_type',
+                                    'Liabilities'
+                                )
+                            else if (value === 'Other')
+                                form.setValue('general_ledger_type', 'Equity')
+                            else if (value === 'Time Deposit')
+                                form.setValue('general_ledger_type', 'Assets')
                         }}
                         value={field.value}
                     >

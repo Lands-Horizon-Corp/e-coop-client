@@ -8,14 +8,29 @@ import { useAuthUser } from '@/modules/authentication/authgentication.store'
 
 import {
     BellIcon,
+    BugIcon,
+    CheckFillIcon,
+    DiamondWarningIcon,
     DotBigIcon,
+    DotsHorizontalIcon,
+    EmailIcon,
     ErrorIcon,
+    InfoFillCircleIcon,
+    LoadingCircleIcon,
+    MonitorCogIcon,
     RefreshIcon,
+    TrashIcon,
     WarningIcon,
 } from '@/components/icons'
-import LoadingSpinner from '@/components/spinners/loading-spinner'
+import ImageDisplay from '@/components/image-display'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu'
 import {
     Empty,
     EmptyContent,
@@ -31,25 +46,38 @@ import {
 } from '@/components/ui/popover'
 import { Skeleton } from '@/components/ui/skeleton'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import PreviewMediaWrapper from '@/components/wrappers/preview-media-wrapper'
 
+import { useModalState } from '@/hooks/use-modal-state'
 import { useSubscribe } from '@/hooks/use-pubsub'
 
 import { TEntityId } from '@/types'
 
 import {
+    useDeleteNotificationById,
     useGetAllNotification,
     useViewAllNotification,
     useViewNotification,
 } from '../notification.service'
 import { INotification, TNotificationType } from '../notification.types'
+import { NotificationInfoViewModal } from './notification-view'
 
-const getNotificationIcon = (type: TNotificationType) => {
+export const getNotificationIcon = (type: TNotificationType) => {
     switch (type) {
-        case 'Error':
+        case 'error':
             return ErrorIcon
-        case 'Warning':
+        case 'warning':
             return WarningIcon
-        case 'Info':
+        case 'alert':
+            return DiamondWarningIcon
+        case 'debug':
+            return BugIcon
+        case 'message':
+            return EmailIcon
+        case 'system':
+            return MonitorCogIcon
+        case 'info':
+            return InfoFillCircleIcon
         default:
             return BellIcon
     }
@@ -141,7 +169,7 @@ export const NotificationNav = () => {
             </PopoverTrigger>
             <PopoverContent
                 align="start"
-                className="w-[400px] rounded-xl p-1"
+                className="w-[400px] max-h-[80vh] rounded-xl p-1 flex flex-col"
                 side="left"
             >
                 <NotificationContainer
@@ -205,7 +233,7 @@ const NotificationContainer = ({
     const renderSkeletons = () => (
         <>
             {[1, 2, 3].map((i) => (
-                <div className="p-4 bg-popover w-full space-y-2" key={i}>
+                <div className="p-2 bg-popover w-full space-y-2" key={i}>
                     <div className="w-full flex items-center gap-x-2">
                         <Skeleton className="h-5 w-[80%]" />
                         <Skeleton className="h-5 w-[10%]" />
@@ -246,26 +274,39 @@ const NotificationContainer = ({
     )
 
     return (
-        <div className={cn('min-h-[300px]', className)}>
-            <div className="flex items-baseline justify-between gap-4 px-3 py-2">
-                <div className="text-xl">
-                    Notifications
-                    {!isPending && isLoading && (
-                        <LoadingSpinner className="inline size-3 ml-2" />
+        <div className={cn('flex flex-col min-h-0 flex-1', className)}>
+            <div className="flex items-baseline justify-between gap-4 px-3 py-2 flex-shrink-0">
+                <div className="text-xl">Notifications</div>
+                <div className="flex items-center gap-2">
+                    <Button
+                        className="size-fit p-1 "
+                        disabled={isLoading || isPending}
+                        onClick={handleReload}
+                        size="icon"
+                        variant="ghost"
+                    >
+                        {isLoading || isPending ? (
+                            <LoadingCircleIcon className="size-3 animate-spin" />
+                        ) : (
+                            <RefreshIcon className="size-3" />
+                        )}
+                    </Button>
+                    {unreadCount > 0 && (
+                        <button
+                            className="text-xs cursor-pointer font-medium hover:underline"
+                            disabled={isTagingViewAll}
+                            onClick={handleMarkAllAsRead}
+                        >
+                            Mark all as read
+                        </button>
                     )}
                 </div>
-                {unreadCount > 0 && (
-                    <button
-                        className="text-xs cursor-pointer font-medium hover:underline"
-                        disabled={isTagingViewAll}
-                        onClick={handleMarkAllAsRead}
-                    >
-                        Mark all as read
-                    </button>
-                )}
             </div>
-            <Tabs className="w-full" defaultValue="all">
-                <TabsList className="w-full mb-5 justify-start">
+            <Tabs
+                className="w-full flex flex-col min-h-0 flex-1"
+                defaultValue="all"
+            >
+                <TabsList className="w-full relative mb-2 justify-start flex-shrink-0">
                     <TabsTrigger
                         className="text-xs relative after:absolute after:inset-x-0 after:bottom-0 after:-mb-1 after:h-0.5 data-[state=active]:bg-transparent data-[state=active]:shadow-none data-[state=active]:after:bg-primary"
                         value="all"
@@ -298,7 +339,7 @@ const NotificationContainer = ({
                         className="text-xs relative after:absolute after:inset-x-0 after:bottom-0 after:-mb-1 after:h-0.5 data-[state=active]:bg-transparent data-[state=active]:shadow-none data-[state=active]:after:bg-primary"
                         value="read"
                     >
-                        Red{' '}
+                        Veiwed{' '}
                         {readNotifications.length > 0 && (
                             <Badge
                                 className="ml-2 rounded-sm px-1.5"
@@ -309,14 +350,23 @@ const NotificationContainer = ({
                         )}
                     </TabsTrigger>
                 </TabsList>
-                <TabsContent className="mt-2" value="all">
+                <TabsContent
+                    className="mt-4 overflow-y-auto ecoop-scroll flex-1 min-h-0"
+                    value="all"
+                >
                     {isPending && renderSkeletons()}
                     {!isPending && notifications.length === 0 && renderEmpty()}
                     {!isPending &&
                         notifications.length > 0 &&
                         renderNotificationList(notifications)}
+                    {notifications.length > 5 && (
+                        <div className="sticky bottom-0 w-full bg-gradient-to-t from-popover to-transparent h-8" />
+                    )}
                 </TabsContent>
-                <TabsContent className="mt-2" value="unread">
+                <TabsContent
+                    className="mt-4 overflow-y-auto ecoop-scroll flex-1 min-h-0"
+                    value="unread"
+                >
                     {isPending && renderSkeletons()}
                     {!isPending &&
                         unreadNotifications.length === 0 &&
@@ -324,8 +374,14 @@ const NotificationContainer = ({
                     {!isPending &&
                         unreadNotifications.length > 0 &&
                         renderNotificationList(unreadNotifications)}
+                    {unreadNotifications.length > 5 && (
+                        <div className="sticky bottom-0 w-full bg-gradient-to-t from-popover to-transparent h-8" />
+                    )}
                 </TabsContent>
-                <TabsContent className="mt-2" value="read">
+                <TabsContent
+                    className="mt-4 overflow-y-auto ecoop-scroll flex-1 min-h-0"
+                    value="read"
+                >
                     {isPending && renderSkeletons()}
                     {!isPending &&
                         readNotifications.length === 0 &&
@@ -333,6 +389,9 @@ const NotificationContainer = ({
                     {!isPending &&
                         readNotifications.length > 0 &&
                         renderNotificationList(readNotifications)}
+                    {readNotifications.length > 5 && (
+                        <div className="sticky bottom-0 w-full bg-gradient-to-t from-popover to-transparent h-8" />
+                    )}
                 </TabsContent>
             </Tabs>
         </div>
@@ -346,13 +405,39 @@ const NotificationItem = ({
     notification: INotification
     className?: string
 }) => {
-    const { mutateAsync } = useViewNotification()
+    const viewModalState = useModalState()
+    const { mutateAsync } = useViewNotification({
+        options: {
+            onSuccess: () => {
+                viewModalState.onOpenChange(false)
+                // HAHAHAHAHA
+                // new Audio('/audio/respect-++.mp3').play()
+            },
+        },
+    })
+    const { mutateAsync: deleteNotification } = useDeleteNotificationById({
+        options: {
+            onSuccess: () => {
+                viewModalState.onOpenChange(false)
+                // HAHAHAHAHA
+                // new Audio('/audio/respect-++.mp3').play()
+            },
+        },
+    })
 
     const handleNotificationClick = (notificationId: TEntityId) => {
         toast.promise(mutateAsync({ ids: [notificationId] }), {
             loading: 'Marking notification as read...',
             success: 'Notification marked as read',
             error: 'Failed to mark notification as read',
+        })
+    }
+
+    const handleDeleteNotificationClick = (notificationId: TEntityId) => {
+        toast.promise(deleteNotification(notificationId), {
+            loading: 'Deleting...',
+            success: 'Notification deleted',
+            error: 'Failed delete notification',
         })
     }
 
@@ -369,31 +454,102 @@ const NotificationItem = ({
             )}
             key={notification.id}
         >
-            <div className="relative flex items-start gap-3 pe-3">
-                <NotificationIconComponent className="size-4 rounded-md" />
-                <div className="flex-1 space-y-1">
+            <NotificationInfoViewModal
+                {...viewModalState}
+                notification={notification}
+                onDelete={() => handleDeleteNotificationClick(notification.id)}
+                onView={() => handleNotificationClick(notification.id)}
+            />
+            <div className="relative group flex items-start gap-3 pe-3">
+                <div className="size-10 relative flex-shrink-0">
+                    {notification.recipient ? (
+                        <>
+                            <PreviewMediaWrapper
+                                media={notification.recipient?.media}
+                            >
+                                <ImageDisplay
+                                    className="size-full rounded-full object-cover"
+                                    src={
+                                        notification.recipient?.media
+                                            ?.download_url
+                                    }
+                                />
+                            </PreviewMediaWrapper>
+                            <span className="absolute -bottom-1 -right-1 p-0.5 bg-background rounded-full">
+                                <NotificationIconComponent className="size-3" />
+                            </span>
+                        </>
+                    ) : (
+                        <div className="size-full rounded-full bg-muted flex items-center justify-center">
+                            <NotificationIconComponent className="size-5" />
+                        </div>
+                    )}
+                </div>
+                <div className="flex-1 space-y-1 mr-8 min-w-0">
                     <div
-                        className="text-left space-y-1 disabled:cursor-auto cursor-pointer text-foreground/80 after:absolute after:inset-0"
+                        className="text-left space-y-1.5 disabled:cursor-auto cursor-pointer after:absolute after:inset-0"
                         onClick={() => {
-                            if (notification.is_viewed) return
-                            handleNotificationClick(notification.id)
+                            viewModalState.onOpenChange(true)
                         }}
                     >
-                        <p className="font-medium text-foreground hover:underline">
+                        <div className="flex items-center gap-2 flex-wrap">
+                            <p className="font-medium text-foreground hover:underline">
+                                {notification.recipient
+                                    ? notification.recipient.full_name
+                                    : 'System'}
+                            </p>
+                            {notification.user_type && (
+                                <Badge
+                                    className="text-xs capitalize"
+                                    variant="secondary"
+                                >
+                                    {notification.user_type}
+                                </Badge>
+                            )}
+                        </div>
+                        <p className="text-sm font-medium text-foreground line-clamp-1">
                             {notification.title}
-                        </p>{' '}
-                        <p className="text-sm">{notification.description}</p>
-                    </div>
-                    <div className="text-xs text-muted-foreground">
-                        {toReadableDate(notification.created_at)}{' '}
-                        {dateAgo(notification.created_at)}
+                        </p>
+                        <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                            <span>
+                                {toReadableDate(notification.created_at)}
+                            </span>
+                            <span>•</span>
+                            <span>{dateAgo(notification.created_at)}</span>
+                        </div>
                     </div>
                 </div>
-                {!notification.is_viewed && (
-                    <div className="absolute end-0 self-center">
-                        <DotBigIcon className="text-primary animate-pulse " />
-                    </div>
-                )}
+
+                <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                        <Button
+                            className="size-fit absolute top-1/2 -translate-y-1/2 right-0 pointer-events-auto shrink-0 p-1 z-10"
+                            size="icon"
+                            variant="ghost"
+                        >
+                            <DotsHorizontalIcon className=" opacity-0 group-hover:opacity-100" />
+                            {!notification.is_viewed && (
+                                <DotBigIcon className="text-primary animate-pulse" />
+                            )}
+                        </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end" className="min-w-16">
+                        <DropdownMenuItem
+                            onClick={() =>
+                                handleNotificationClick(notification.id)
+                            }
+                        >
+                            <CheckFillIcon className="mr-1" /> Mark as Read
+                        </DropdownMenuItem>
+                        <DropdownMenuItem
+                            onClick={() =>
+                                handleDeleteNotificationClick(notification.id)
+                            }
+                        >
+                            <TrashIcon className="mr-1" /> Delete Notification
+                        </DropdownMenuItem>
+                    </DropdownMenuContent>
+                </DropdownMenu>
             </div>
         </div>
     )

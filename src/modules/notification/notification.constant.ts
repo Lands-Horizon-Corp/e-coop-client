@@ -1,1 +1,9 @@
-export const NOTIFICATION_TYPE = ['Error', 'Info', 'Warning'] as const
+export const NOTIFICATION_TYPE = [
+    'error',
+    'warning',
+    'info',
+    'debug',
+    'alert',
+    'message',
+    'system',
+] as const

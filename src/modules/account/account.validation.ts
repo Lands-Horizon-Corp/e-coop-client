@@ -34,32 +34,28 @@ const AccountTypeDiscriminator = z.discriminatedUnion('type', [
     // Other account types - computation_type is optional
     z.object({
         type: z.literal('Other'),
-        computation_type: AccountComputationTypeSchema.optional(),
     }),
 
     z.object({
         type: z.literal('Deposit'),
-        computation_type: AccountComputationTypeSchema.optional(),
     }),
 
     z.object({
         type: z.literal('A/R-Ledger'),
-        computation_type: AccountComputationTypeSchema.optional(),
     }),
 
     z.object({
         type: z.literal('A/R-Aging'),
-        computation_type: AccountComputationTypeSchema.optional(),
     }),
 
     z.object({
         type: z.literal('SVF-Ledger'),
 
-        minAmount: z.coerce
+        min_amount: z.coerce
             .number()
             .min(0, 'Min amount must be non-negative')
             .optional(),
-        maxAmount: z.coerce
+        max_amount: z.coerce
             .number()
             .min(0, 'Max amount must be non-negative')
             .optional(),
@@ -73,12 +69,10 @@ const AccountTypeDiscriminator = z.discriminatedUnion('type', [
 
     z.object({
         type: z.literal('W-Off'),
-        computation_type: AccountComputationTypeSchema.optional(),
     }),
 
     z.object({
         type: z.literal('A/P-Ledger'),
-        computation_type: AccountComputationTypeSchema.optional(),
     }),
 
     z.object({
@@ -132,11 +126,11 @@ const AccountTypeDiscriminator = z.discriminatedUnion('type', [
     z.object({
         type: z.literal('Interest'),
 
-        minAmount: z.coerce
+        min_amount: z.coerce
             .number()
             .min(0, 'Min amount must be non-negative')
             .optional(),
-        maxAmount: z.coerce
+        max_amount: z.coerce
             .number()
             .min(0, 'Max amount must be non-negative')
             .optional(),

@@ -23,13 +23,18 @@ const generalLedgerTypeStyles: Record<
         bgColor: 'bg-emerald-700',
         textColor: 'text-emerald-50',
     },
-    'Liabilities, Equity & Reserves': {
+    Liabilities: {
+        label: 'Liabilities',
+        bgColor: 'bg-rose-700',
+        textColor: 'text-rose-50',
+    },
+    Equity: {
         label: 'Liabilities, Equity & Reserves',
         bgColor: 'bg-purple-700',
         textColor: 'text-purple-50',
     },
-    Income: {
-        label: 'Income',
+    Revenue: {
+        label: 'Revenue',
         bgColor: 'bg-primary',
         textColor: 'text-primary',
     },

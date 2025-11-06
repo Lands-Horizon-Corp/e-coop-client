@@ -80,8 +80,8 @@ export interface IAccount extends IAuditable, ITimeStamps {
     name: string
     description?: string
 
-    minAmount?: number
-    maxAmount?: number
+    min_amount?: number
+    max_amount?: number
     type: TAccountType
 
     member_type_id: TEntityId

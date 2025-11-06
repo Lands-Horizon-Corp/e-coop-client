@@ -56,6 +56,7 @@ const TransactionCurrentPaymentEntry = ({
 
     const { finalFilterPayloadBase64 } = useFilterState({
         defaultFilterMode: 'OR',
+        debounceFinalFilterMs: 0,
         onFilterChange: () =>
             setPagination((prev) => ({
                 ...prev,

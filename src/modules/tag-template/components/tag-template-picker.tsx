@@ -48,6 +48,7 @@ const TagTemplatePicker = forwardRef<HTMLButtonElement, Props>(
 
         const { finalFilterPayloadBase64, bulkSetFilter } = useFilterState({
             defaultFilterMode: 'OR',
+            debounceFinalFilterMs: 0,
         })
 
         const {

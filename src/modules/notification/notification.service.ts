@@ -69,7 +69,7 @@ export const useGetAllNotification = ({
 } = {}) => {
     return useQuery<INotification[], Error>({
         ...options,
-        queryKey: [notificationBaseKey, 'all', query].filter(Boolean),
+        queryKey: [notificationBaseKey, 'all', 'me', query].filter(Boolean),
         queryFn: async () => {
             const url = `${notificationAPIRoute}/me`
             return getAllNotification({
@@ -95,6 +95,10 @@ export const useViewNotification = createMutationFactory<
     },
     invalidationFn: (args) =>
         updateMutationInvalidationFn(notificationBaseKey, args),
+    defaultInvalidates: [
+        [notificationBaseKey, 'all'],
+        [notificationBaseKey, 'all', 'me'],
+    ],
 })
 
 export const useViewAllNotification = createMutationFactory<
