@@ -242,15 +242,13 @@ export const AccountGlSourceVisibility = ({
     const modalState = useModalState()
     return (
         <Popover modal {...modalState}>
-            <PopoverTrigger
-                className="flex items-center"
-                onClick={(e) => {
-                    modalState.onOpenChange(true)
-                    e.preventDefault()
-                }}
-            >
+            <PopoverTrigger asChild>
                 <Button
                     className="mb-0 rounded-full size-fit !p-0 border-accent !py-0.5 !px-2 "
+                    onClick={(e) => {
+                        modalState.onOpenChange(true)
+                        e.preventDefault()
+                    }}
                     size="sm"
                     variant="outline"
                 >

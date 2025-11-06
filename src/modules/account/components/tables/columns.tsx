@@ -30,71 +30,78 @@ import { PlainTextEditor } from '@/components/ui/text-editor'
 import { IAccount } from '../../account.types'
 
 export const accountsGlobalSearchTargets: IGlobalSearchTargets<IAccount>[] = [
-    { field: 'accountCode', displayText: 'Account Code' },
+    { field: 'name', displayText: 'Name' },
     { field: 'description', displayText: 'Description' },
-    { field: 'altDescription', displayText: 'Alternative Description' },
     { field: 'type', displayText: 'Account Type' },
-    { field: 'max_amount', displayText: 'Max Amount' },
     { field: 'min_amount', displayText: 'Min Amount' },
-    { field: 'computationType', displayText: 'Computation Type' },
+    { field: 'max_amount', displayText: 'Max Amount' },
+    { field: 'is_internal', displayText: 'Internal Account' },
+    { field: 'cash_on_hand', displayText: 'Cash On Hand' },
+    { field: 'paid_up_share_capital', displayText: 'Paid Up Share Capital' },
+    { field: 'fines_amort', displayText: 'Fines Amortization' },
+    { field: 'fines_maturity', displayText: 'Fines Maturity' },
+    { field: 'interest_standard', displayText: 'Interest Standard' },
+    { field: 'computation_type', displayText: 'Computation Type' },
     {
-        field: 'earnedUnearnedInterest',
+        field: 'earned_unearned_interest',
         displayText: 'Earned/Unearned Interest',
     },
     {
-        field: 'otherInformationOfAnAccount',
+        field: 'other_information_of_an_account',
         displayText: 'Other Information',
     },
-    { field: 'name', displayText: 'Name' },
-    { field: 'isInternal', displayText: 'Internal Account' },
-    { field: 'cashOnHand', displayText: 'Cash On Hand' },
-    { field: 'paidUpShareCapital', displayText: 'Paid Up Share Capital' },
-    { field: 'finesAmort', displayText: 'Fines Amortization' },
-    { field: 'finesMaturity', displayText: 'Fines Maturity' },
-    { field: 'interestStandard', displayText: 'Interest Standard' },
-    { field: 'interestSecured', displayText: 'Interest Secured' },
     {
-        field: 'financialStatementType',
+        field: 'financial_statement_type',
         displayText: 'Financial Statement Type',
     },
-    { field: 'generalLedgerType', displayText: 'General Ledger Type' },
+    { field: 'general_ledger_type', displayText: 'General Ledger Type' },
     {
-        field: 'finesGracePeriodAmortization',
+        field: 'fines_grace_period_amortization',
         displayText: 'Fines Grace Period (Amort.)',
     },
     {
-        field: 'additionalGracePeriod',
+        field: 'additional_grace_period',
         displayText: 'Additional Grace Period',
     },
-    { field: 'numberGracePeriodDaily', displayText: 'Daily Grace Period' },
+    { field: 'no_grace_period_daily', displayText: 'Daily Grace Period' },
     {
-        field: 'finesGracePeriodMaturity',
+        field: 'fines_grace_period_maturity',
         displayText: 'Fines Grace Period (Maturity)',
     },
     {
-        field: 'yearlySubscriptionFee',
+        field: 'yearly_subscription_fee',
         displayText: 'Yearly Subscription Fee',
     },
-    { field: 'loanCutOffDays', displayText: 'Loan Cut-Off Days' },
+    { field: 'cut_off_days', displayText: 'Cut-Off Days' },
     {
-        field: 'lumpsumComputationType',
+        field: 'lumpsum_computation_type',
         displayText: 'Lumpsum Computation Type',
     },
     {
-        field: 'interestFinesComputationDiminishing',
+        field: 'interest_fines_computation_diminishing',
         displayText: 'Interest Fines Computation (Dim.)',
     },
-    { field: 'loanSavingType', displayText: 'Loan Saving Type' },
-    { field: 'interestDeduction', displayText: 'Interest Deduction' },
-    { field: 'otherDeductionEntry', displayText: 'Other Deduction Entry' },
+    { field: 'loan_saving_type', displayText: 'Loan Saving Type' },
+    { field: 'interest_deduction', displayText: 'Interest Deduction' },
+    { field: 'other_deduction_entry', displayText: 'Other Deduction Entry' },
     {
-        field: 'interestSavingTypeDiminishingStraight',
+        field: 'interest_saving_type_diminishing_straight',
         displayText: 'Interest Saving Type (Dim. Straight)',
     },
     {
-        field: 'generalLedgerGroupingExcludeAccount',
+        field: 'general_ledger_grouping_exclude_account',
         displayText: 'Exclude from GL Grouping',
     },
+    { field: 'currency.name', displayText: 'Currency Name' },
+    { field: 'currency.code', displayText: 'Currency Code' },
+    { field: 'member_type.name', displayText: 'Member Type' },
+    { field: 'account_category.name', displayText: 'Account Category' },
+    {
+        field: 'account_classification.name',
+        displayText: 'Account Classification',
+    },
+    { field: 'computation_sheet.name', displayText: 'Computation Sheet' },
+    { field: 'loan_account.name', displayText: 'Loan Account' },
 ]
 
 export interface IAccountsTableActionComponentProp {
@@ -207,7 +214,7 @@ const AccountsTableColumns = (
                         <TextFilter
                             defaultMode="contains"
                             displayText="Currency"
-                            field="currency"
+                            field="currency.currency_code"
                         />
                     </ColumnActions>
                 </DataTableColumnHeader>
@@ -724,7 +731,7 @@ const AccountsTableColumns = (
         },
         {
             id: 'numberGracePeriodDaily',
-            accessorKey: 'number_grace_period_daily',
+            accessorKey: 'no_grace_period_daily',
             header: (props) => (
                 <DataTableColumnHeader {...props} title="Daily Grace Period">
                     <ColumnActions {...props} />
@@ -798,8 +805,8 @@ const AccountsTableColumns = (
                 <DataTableColumnHeader {...props} title="cut-Off Days">
                     <ColumnActions {...props}>
                         <NumberFilter
-                            displayText="Loan Cut-Off Days"
-                            field="loan_cut_off_days"
+                            displayText="Cut-Off Days"
+                            field="cut_off_days"
                         />
                     </ColumnActions>
                 </DataTableColumnHeader>

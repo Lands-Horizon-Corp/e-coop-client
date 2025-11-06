@@ -121,7 +121,6 @@ const AccountCreateUpdateForm = ({
                 <div className="absolute top-4 inline-flex space-x-2 right-10">
                     {accountId && (
                         <>
-                            {' '}
                             <AccountHistorySheet accountId={accountId} />
                             <AccountTagsManagerPopover
                                 accountId={accountId}

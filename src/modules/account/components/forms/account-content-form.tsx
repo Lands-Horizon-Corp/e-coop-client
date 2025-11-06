@@ -100,6 +100,7 @@ const AccountContentForm = ({
                             <GradientBackground
                                 className="rounded-lg shrink-0 hover:cursor-pointer"
                                 gradientOnly
+                                key={type}
                             >
                                 <div
                                     className="shadow-xs  relative min-w-fit flex w-full h-10 items-center  gap-2 rounded-lg border  px-2 outline-none duration-200 ease-out has-[:checked]:border-primary/30 has-[:checked]:bg-primary/40"
