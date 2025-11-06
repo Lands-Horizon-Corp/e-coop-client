@@ -7,15 +7,26 @@ import {
     BadgeCheckFillIcon,
     CalendarIcon,
     EditPencilIcon,
+    EmailIcon,
+    EyeIcon,
+    InfoIcon,
     PinLocationIcon as LocationIcon,
-    EmailIcon as MailIcon,
     LocationPinOutlineIcon as MapPinIcon,
+    PhoneIcon,
+    PhoneOutlineIcon,
     StarIcon,
 } from '@/components/icons'
 import MapView from '@/components/map'
 import { redirectToGoogleMapsDirection } from '@/components/map/map.utils'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import {
+    Empty,
+    EmptyDescription,
+    EmptyHeader,
+    EmptyMedia,
+} from '@/components/ui/empty'
 import { Skeleton } from '@/components/ui/skeleton'
 import {
     Tooltip,
@@ -23,6 +34,7 @@ import {
     TooltipProvider,
     TooltipTrigger,
 } from '@/components/ui/tooltip'
+import TruncatedText from '@/components/ui/truncated-text'
 
 import { useModalState } from '@/hooks/use-modal-state'
 
@@ -39,6 +51,7 @@ type BranchPreviewDisplayProps = {
     className?: string
     onClick?: () => void
     isEditMode?: boolean
+    onSelectBranch: (branch: IBranch) => void
 }
 
 const BranchPreviewDisplay = ({
@@ -47,6 +60,7 @@ const BranchPreviewDisplay = ({
     variant = 'default',
     showActions = true,
     className,
+    onSelectBranch,
 }: BranchPreviewDisplayProps) => {
     const updateModal = useModalState(false)
     const queryClient = useQueryClient()
@@ -85,9 +99,7 @@ const BranchPreviewDisplay = ({
                     style={{
                         backgroundImage: `url(${mediaUrl || '/placeholder-branch-bg.jpg'})`,
                     }}
-                >
-                    <div className="absolute w-full min-h-52 bottom-0 px-4 sm:px-8 bg-gradient-to-t from-background via-[80%] via-background/10 to-transparent" />
-                </div>
+                ></div>
                 <CreateUpdateBranchFormModal
                     {...updateModal}
                     className="w-full min-w-[70rem] max-w-[80rem]"
@@ -132,7 +144,7 @@ const BranchPreviewDisplay = ({
                                                     Headquarters
                                                 </Badge>
                                             )}
-                                            {branch?.created_at && (
+                                            {/* {branch?.created_at && (
                                                 <div className="flex items-center gap-1">
                                                     <CalendarIcon className="h-4 w-4" />
                                                     <span>
@@ -142,7 +154,7 @@ const BranchPreviewDisplay = ({
                                                         ).getFullYear()}
                                                     </span>
                                                 </div>
-                                            )}
+                                            )} */}
                                             {branch?.type && (
                                                 <Badge
                                                     className={cn('text-')}
@@ -199,7 +211,7 @@ const BranchPreviewDisplay = ({
                             </>
                         )}
                         {/* Details Grid */}
-                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
+                        <div className="flex flex-col gap-3">
                             <div className="group lg:col-span-3">
                                 <div className="relative overflow-hidden">
                                     <div className="absolute inset-0 bg-gradient-to-br from-primary to-background/0 rounded-2xl" />
@@ -221,6 +233,16 @@ const BranchPreviewDisplay = ({
                                             {branch?.latitude &&
                                                 branch?.longitude && (
                                                     <div className="flex flex-wrap gap-3">
+                                                        <Button
+                                                            onClick={() => {
+                                                                onSelectBranch(
+                                                                    branch
+                                                                )
+                                                            }}
+                                                            size={'sm'}
+                                                        >
+                                                            <EyeIcon />
+                                                        </Button>
                                                         <Button
                                                             className="bg-background/50 backdrop-blur-sm hover:bg-background/80 transition-all duration-300 hover:scale-105"
                                                             onClick={() => {
@@ -277,37 +299,115 @@ const BranchPreviewDisplay = ({
                                     </div>
                                 </div>
                             </div>
-                            {(branch?.email || branch?.contact_number) && (
-                                <div className="group col-span-3">
-                                    <div className="relative overflow-hidden">
-                                        <div className="absolute inset-0 bg-gradient-to-br from-blue-500/10 to-cyan-500/10 rounded-2xl" />
-                                        <div className="relative p-3 bg-card/80 backdrop-blur-sm rounded-2xl border border-muted hover:border-primary/50 transition-all duration-300 hover:shadow-lg hover:shadow-blue-500/10">
-                                            <div className="flex items-center gap-3 mb-4">
-                                                <div className="w-10 h-10 bg-blue-100 dark:bg-blue-950 rounded-xl flex items-center justify-center">
-                                                    <MailIcon className="h-5 w-5 text-blue-600 dark:text-blue-400" />
+                            <div className="col-span-2 flex gap-x-3">
+                                <Card className="bg-card flex-1">
+                                    <CardHeader className="">
+                                        <CardTitle className="flex items-center gap-x-2">
+                                            <Button
+                                                className=" size-fit bg-primary/40 border border-primary"
+                                                size="icon"
+                                            >
+                                                <InfoIcon className=" size-5 text-primary " />
+                                            </Button>
+                                            <h3 className="font-semibold text-[min(16px,2.5vw)] text-foreground">
+                                                Description
+                                            </h3>
+                                        </CardTitle>
+                                    </CardHeader>
+                                    <CardContent>
+                                        {branch.description ? (
+                                            <div className="space-y-2">
+                                                <TruncatedText
+                                                    className="text-sm h-fit overflow-y-auto max-h-16 ecoop-scroll"
+                                                    text={branch.description}
+                                                />
+                                            </div>
+                                        ) : (
+                                            <Empty className="h-[10vh] border ">
+                                                <EmptyHeader>
+                                                    <EmptyMedia variant="icon">
+                                                        <InfoIcon />
+                                                    </EmptyMedia>
+                                                    <EmptyDescription>
+                                                        No description
+                                                        available.
+                                                    </EmptyDescription>
+                                                </EmptyHeader>
+                                            </Empty>
+                                        )}
+                                    </CardContent>
+                                </Card>
+                                <Card className="bg-card flex-1 min-w-0">
+                                    <CardHeader className="">
+                                        <CardTitle className="flex items-center gap-x-2">
+                                            <Button
+                                                className=" size-fit p-1 bg-primary/40 border border-primary"
+                                                size="icon"
+                                            >
+                                                <PhoneOutlineIcon className=" size-3 text-primary " />
+                                            </Button>
+                                            <h3 className="font-semibold text-[min(16px,2.5vw)] text-foreground">
+                                                Contact Information
+                                            </h3>
+                                        </CardTitle>
+                                    </CardHeader>
+                                    <CardContent>
+                                        <div className="space-y-2">
+                                            {branch.email && (
+                                                <div className="flex items-center gap-2">
+                                                    <EmailIcon className="h-4 w-4 text-muted-foreground" />
+                                                    <a
+                                                        className="text-sm text-primary hover:underline"
+                                                        href={`mailto:${branch.email}`}
+                                                    >
+                                                        {branch.email}
+                                                    </a>
                                                 </div>
-                                                <h3 className="font-semibold text-foreground">
-                                                    Contact Info
-                                                </h3>
-                                            </div>
+                                            )}
 
-                                            <div className="space-y-3">
-                                                {branch?.email && (
-                                                    <div className="flex items-center gap-3 p-3 rounded-xl bg-muted/30 hover:bg-muted/50 transition-colors duration-200">
-                                                        <MailIcon className="h-4 w-4 text-primary flex-shrink-0" />
-                                                        <a
-                                                            className="text-sm font-medium text-primary hover:text-primary/80 transition-colors truncate"
-                                                            href={`mailto:${branch.email}`}
-                                                        >
-                                                            {branch.email}
-                                                        </a>
-                                                    </div>
-                                                )}
-                                            </div>
+                                            {branch.contact_number && (
+                                                <div className="flex items-center gap-2">
+                                                    <PhoneIcon className="h-4 w-4 text-muted-foreground" />
+                                                    <a
+                                                        className="text-sm text-primary hover:underline"
+                                                        href={`tel:${branch.contact_number}`}
+                                                    >
+                                                        {branch.contact_number}
+                                                    </a>
+                                                </div>
+                                            )}
+                                            {branch.address && (
+                                                <div className="flex items-start gap-2 min-w-0 max-w-full">
+                                                    <LocationIcon className="h-4 w-4 text-muted-foreground mt-0.5 flex-shrink-0" />
+                                                    <Tooltip
+                                                        delayDuration={800}
+                                                    >
+                                                        <TooltipTrigger className="truncate text-sm">
+                                                            {branch.address}
+                                                        </TooltipTrigger>
+                                                        <TooltipContent>
+                                                            {branch.address}
+                                                        </TooltipContent>
+                                                    </Tooltip>
+                                                </div>
+                                            )}
                                         </div>
+                                    </CardContent>
+                                </Card>
+                            </div>
+                            <div className="flex-center">
+                                {branch.created_at && (
+                                    <div className="flex items-center gap-2">
+                                        <CalendarIcon className="h-4 w-4 text-primary" />
+                                        <span>
+                                            Established{' '}
+                                            {new Date(
+                                                branch?.created_at
+                                            ).toLocaleDateString()}
+                                        </span>
                                     </div>
-                                </div>
-                            )}
+                                )}
+                            </div>
                         </div>
                     </div>
                 </div>

@@ -28,7 +28,7 @@ export const BranchCardFooter = ({
 }: CustomFooterProps) => {
     if (!showActions) return null
     return (
-        <div className="flex items-center px-1 !pt-0 pb-2 w-full justify-between gap-2">
+        <div className="flex  items-center px-3 py-2 w-full justify-between gap-2">
             <div className="flex items-center gap-2 text-xs text-muted-foreground">
                 {branch.created_at && (
                     <div className="flex items-center gap-1">

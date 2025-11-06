@@ -16,7 +16,7 @@ export const BranchesGrid = () => {
     const [selectedBranch, setSelectedBranch] = useState<IBranch | null>(null)
 
     return (
-        <div className="grid w-fit grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-4 p-1">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-2 p-1">
             <BranchModalDisplay
                 {...branchModal}
                 branch={selectedBranch}
@@ -26,7 +26,6 @@ export const BranchesGrid = () => {
             {branches?.map((branch) => (
                 <BranchCard
                     branch={branch}
-                    className=""
                     isSeeding={isSeeding}
                     key={branch.id}
                     onClick={(branch) => {

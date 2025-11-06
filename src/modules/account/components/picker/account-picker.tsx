@@ -34,7 +34,6 @@ interface PickerProp extends IPickerBaseProps<IAccount> {
     nameOnly?: boolean
     hideDescription?: boolean
     allowClear?: boolean
-
     mode: TPaginatedAccountHookMode
 }
 

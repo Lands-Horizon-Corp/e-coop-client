@@ -7,7 +7,7 @@ import {
     TGetAllByCategory,
     useGetAllOrganizationsByCategories,
 } from '@/modules/organization'
-import { OrganizationMiniCard } from '@/modules/organization/components/cards/organization-mini-card'
+import { OrganizationCardWithToolTip } from '@/modules/organization/pages/organization'
 
 import RefreshButton from '@/components/buttons/refresh-button'
 import { CompassIcon } from '@/components/icons'
@@ -114,7 +114,10 @@ const ExploreByCategories = ({
     refetch,
     item: { category, organizations },
 }: ExploreByCategoriesProps) => {
-    const workingOrganizations = useMemo(() => organizations ?? [], [])
+    const workingOrganizations = useMemo(
+        () => organizations ?? [],
+        [organizations]
+    )
 
     return (
         <div>
@@ -158,10 +161,12 @@ const ExploreByCategories = ({
                                     handleSelectedOrganization?.(item)
                                 }
                             >
-                                <OrganizationMiniCard
+                                <OrganizationCardWithToolTip
+                                    handleOpenModalPreview={(org) => {
+                                        handleSelectedOrganization?.(org)
+                                    }}
                                     organization={item}
                                     searchTerm={searchTerm}
-                                    showActions={false}
                                 />
                             </CarouselItem>
                         ))

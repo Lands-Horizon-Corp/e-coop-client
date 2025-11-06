@@ -450,6 +450,17 @@ body[data-scroll-locked] {
     color: oklch(var(--destructive));
 }
 
-.b1 {
+.r1 {
     @apply border-1 border-red-500;
+}
+.g1 {
+    @apply border-1 border-green-500;
+}
+
+.v1 {
+    @apply border-1 border-violet-500;
+}
+
+.flex-center {
+    @apply flex w-full items-center justify-center;
 }

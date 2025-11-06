@@ -19,18 +19,8 @@ import {
 } from '@/modules/user-organization'
 import useConfirmModalStore from '@/store/confirm-modal-store'
 
-import {
-    BankIcon,
-    BuildingIcon,
-    EmailIcon,
-    PinLocationIcon as LocationIcon,
-    PhoneIcon,
-    ShopIcon,
-    StarIcon,
-} from '@/components/icons'
-import { Badge } from '@/components/ui/badge'
+import { BankIcon, BuildingIcon, ShopIcon } from '@/components/icons'
 import { Button } from '@/components/ui/button'
-import { CardHeader } from '@/components/ui/card'
 import CardTopImage, { CardTopImageProps } from '@/components/ui/card-top-image'
 import {
     Tooltip,
@@ -38,6 +28,7 @@ import {
     TooltipProvider,
     TooltipTrigger,
 } from '@/components/ui/tooltip'
+import TruncatedText from '@/components/ui/truncated-text'
 
 import { useModalState } from '@/hooks/use-modal-state'
 
@@ -65,18 +56,6 @@ interface BranchCardHeaderContentProps {
     showContact: boolean
 }
 
-const formatAddress = (branch: IBranch): string => {
-    return [
-        branch.address,
-        branch.barangay,
-        branch.city,
-        branch.province,
-        branch.postal_code,
-    ]
-        .filter(Boolean)
-        .join(', ')
-}
-
 const getBranchTypeIcon = (type: branchTypeEnum) => {
     switch (type) {
         case branchTypeEnum.CooperativeBranch:
@@ -93,142 +72,61 @@ const getBranchTypeIcon = (type: branchTypeEnum) => {
 const getBranchTypeColor = (type: branchTypeEnum) => {
     switch (type) {
         case branchTypeEnum.CooperativeBranch:
-            return 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200'
+            return 'bg-primary text-primary-foreground shadow-xs hover:bg-primary/90'
         case branchTypeEnum.BankingBranch:
-            return 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200'
+            return 'border bg-background shadow-xs hover:bg-accent hover: dark:bg-input/30 dark:border-input dark:hover:bg-input/50'
         case branchTypeEnum.BusinessBranch:
-            return 'bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200'
+            return 'bg-secondary text-secondary-foreground shadow-xs hover:bg-secondary/80'
         default:
-            return 'bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-200'
+            return 'bg-primary/20 text-primary shadow-xs hover:border-[1px] border-primary border-[.6px]'
     }
 }
 
 export const BranchCardHeaderContent = ({
     branch,
-    variant,
-    showLocation,
-    showContact,
 }: BranchCardHeaderContentProps) => {
     const branchName = branch?.name || 'Unnamed Branch'
     const branchDescription = branch?.description || ''
-    const fullAddress = formatAddress(branch)
 
     return (
-        <div className="space-y-2">
-            {/* Branch Name and Status */}
-            <div className="flex items-start justify-between gap-2">
+        <div className="space-y-2 w-full">
+            <div className="inline-flex items-start min-w-0 max-w-full w-full justify-between gap-2">
                 <TooltipProvider>
                     <Tooltip delayDuration={500}>
                         <TooltipTrigger asChild>
-                            <h3
+                            <p
                                 className={cn(
-                                    'font-semibold text-foreground leading-tight',
-                                    variant === 'compact'
-                                        ? 'text-sm'
-                                        : 'text-base',
-                                    'truncate cursor-pointer'
+                                    'font-semibold truncate min-w-0 text-foreground leading-tight'
                                 )}
                             >
-                                {branchName}
-                            </h3>
+                                {branchName} asfasfasdfasdf asdfas dfsaf sad
+                            </p>
                         </TooltipTrigger>
                         <TooltipContent>
                             <p>{branchName}</p>
                         </TooltipContent>
                     </Tooltip>
                 </TooltipProvider>
-
-                <div className="flex items-center gap-1 flex-shrink-0">
-                    {/* Main Branch Badge */}
-                    {branch.is_main_branch && (
-                        <Badge className="text-xs" variant="default">
-                            <StarIcon className="h-3 w-3 mr-1" />
-                            Main
-                        </Badge>
-                    )}
-                </div>
-            </div>
-
-            {/* Branch Type Badge */}
-            <div className="flex items-center gap-2 flex-wrap">
-                <div
-                    className={cn(
-                        'inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium',
-                        getBranchTypeColor(branch.type)
-                    )}
-                >
-                    {getBranchTypeIcon(branch.type)}
-                    <span className="capitalize">
-                        {branch.type.replace(/([A-Z])/g, ' $1').trim()}
-                    </span>
-                </div>
-            </div>
-
-            {/* Contact Information */}
-            {showContact && variant !== 'compact' && (
-                <div className="space-y-1.5 text-xs text-muted-foreground">
-                    {/* Email */}
-                    {branch.email && (
-                        <div className="flex items-center gap-2">
-                            <EmailIcon className="h-3 w-3 flex-shrink-0" />
-                            <Tooltip delayDuration={500}>
-                                <TooltipTrigger asChild>
-                                    <a
-                                        className="truncate hover:text-primary transition-colors"
-                                        href={`mailto:${branch.email}`}
-                                        onClick={(e) => e.stopPropagation()}
-                                    >
-                                        {branch.email}
-                                    </a>
-                                </TooltipTrigger>
-                                <TooltipContent>
-                                    <p>{branch.email}</p>
-                                </TooltipContent>
-                            </Tooltip>
-                        </div>
-                    )}
-
-                    {/* Phone */}
-                    {branch.contact_number && (
-                        <div className="flex items-center gap-2">
-                            <PhoneIcon className="h-3 w-3 flex-shrink-0" />
-                            <a
-                                className="hover:text-primary transition-colors"
-                                href={`tel:${branch.contact_number}`}
-                                onClick={(e) => e.stopPropagation()}
-                            >
-                                {branch.contact_number}
-                            </a>
-                        </div>
-                    )}
-                </div>
-            )}
-
-            {/* Location Information */}
-            {showLocation && (
-                <div className="space-y-1.5 text-xs text-muted-foreground">
-                    {/* Full Address */}
-                    <div className="flex items-start gap-2">
-                        <LocationIcon className="h-3 w-3 flex-shrink-0 mt-0.5" />
-                        <Tooltip delayDuration={500}>
-                            <TooltipTrigger asChild>
-                                <span className="line-clamp-2 cursor-pointer hover:text-foreground transition-colors">
-                                    {fullAddress}
-                                </span>
-                            </TooltipTrigger>
-                            <TooltipContent className="max-w-xs">
-                                <p>{fullAddress}</p>
-                            </TooltipContent>
-                        </Tooltip>
+                <div className=" gap-2 min-w-fit">
+                    <div
+                        className={cn(
+                            'inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium',
+                            getBranchTypeColor(branch.type)
+                        )}
+                    >
+                        {getBranchTypeIcon(branch.type)}
+                        <span className="capitalize">
+                            {branch.type.replace(/([A-Z])/g, ' $1').trim()}
+                        </span>
                     </div>
                 </div>
-            )}
+            </div>
             <div className="space-y-1.5 text-xs text-muted-foreground">
                 <div className="flex items-start gap-2">
                     <Tooltip delayDuration={700}>
                         <TooltipTrigger asChild>
                             <span className="line-clamp-2 cursor-pointer hover:text-foreground transition-colors">
-                                {branchDescription}
+                                <TruncatedText text={branchDescription} />
                             </span>
                         </TooltipTrigger>
                         <TooltipContent className="max-w-xs text-sm text-pirmary bg-background border py-2">
@@ -401,7 +299,7 @@ export const BranchCard = ({
                 }
                 className={cn('cursor-pointer', className)}
                 customHeader={
-                    <CardHeader className="p-2 pt-3">
+                    <>
                         <BranchCardHeaderContent
                             branch={branch}
                             showContact={showContact}
@@ -423,7 +321,7 @@ export const BranchCard = ({
                                     : 'Join Branch'}
                             </Button>
                         )}
-                    </CardHeader>
+                    </>
                 }
                 imageAlt={`${branchName} branch`}
                 imageSrc={branch.media?.download_url}

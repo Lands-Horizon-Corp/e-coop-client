@@ -3,25 +3,31 @@ import { useEffect, useMemo, useState } from 'react'
 import { useSearch } from '@tanstack/react-router'
 import Fuse from 'fuse.js'
 
+import { highlightMatch } from '@/modules/approvals/components/kanbans/journal-voucher/journal-voucher-kanban-main'
 import { useAuthUser } from '@/modules/authentication/authgentication.store'
 import { organizationFuseOptions } from '@/modules/explore/utils/data-grouping'
 import { IOrganization, useGetAllOrganizations } from '@/modules/organization'
 import { OrganizationItemSkeleton } from '@/modules/organization'
+import ErrorPage from '@/routes/-common-pages/error-page'
+import { useHotkeys } from 'react-hotkeys-hook'
 
 import RefreshButton from '@/components/buttons/refresh-button'
 import {
+    OrganizationIcon,
     QrCodeIcon,
     MagnifyingGlassIcon as SearchIcon,
 } from '@/components/icons'
+import ImageDisplay from '@/components/image-display'
 import { Button } from '@/components/ui/button'
-import FormErrorMessage from '@/components/ui/form-error-message'
 import { Input } from '@/components/ui/input'
+import { Skeleton } from '@/components/ui/skeleton'
 
 import useDebounce from '@/hooks/use-debounce'
 import { useModalState } from '@/hooks/use-modal-state'
 import { useSubscribe } from '@/hooks/use-pubsub'
 
-import { OrganizationMiniCard } from '../../components/cards/organization-mini-card'
+import { CustomOrganizationToolTipContent } from '../../components/cards/organization-mini-card'
+import { OrganizationMiniCardToolTip } from '../../components/cards/organization-mini-card-tooltip'
 import OrganizationPreviewModal from '../../components/organization-modal'
 import JoinBranchWithCodeFormModal from '../../organization-forms/join-organization-form'
 
@@ -45,8 +51,17 @@ const JoinOrgSearch = ({
     }, [debouseSearchTerm, setSearchTerm])
 
     return (
-        <div className="flex mt-10 w-full justify-between items-center mx-auto pb-2">
-            <div className="inline-flex space-x-2">
+        <div className="flex mt-0 w-full justify-between items-center mx-auto pb-2">
+            <div className="font-semibold text-xl flex items-center ">
+                <span className="relative mr-5 before:absolute before:left-1/2 before:top-[50%] before:-z-10 before:size-[30px] before:-translate-x-1/2 before:-translate-y-1/2 before:rounded-full before:bg-primary before:opacity-50 before:blur-lg before:content-['']">
+                    <OrganizationIcon className="z-50" size={24} />
+                </span>
+                All Organization List
+            </div>
+            <div className="flex items-center space-x-2">
+                <div className="w-full flex justify-start">
+                    <RefreshButton onClick={refetch} />
+                </div>
                 <div className="relative max-w-md min-w-[16rem]">
                     <SearchIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                     <Input
@@ -56,11 +71,6 @@ const JoinOrgSearch = ({
                         value={inputSearch}
                     />
                 </div>
-                <div className="w-full flex justify-start">
-                    <RefreshButton onClick={refetch} />
-                </div>
-            </div>
-            <div className="flex items-center gap-3">
                 <Button
                     onClick={() => setOpenJoinWithCodeModal(true)}
                     size="sm"
@@ -120,6 +130,7 @@ const Organization = () => {
         isFetching,
         isLoading,
         refetch,
+        error,
     } = useGetAllOrganizations()
 
     const [searchTerm, setSearchTerm] = useState('')
@@ -140,19 +151,34 @@ const Organization = () => {
         organizations: Organizations,
         searchTerm,
     })
+    const handleOpenModalPreview = (org: IOrganization) => {
+        setSelectedOrganization(org)
+        orgModalState.onOpenChange(true)
+    }
+
+    useHotkeys(
+        'enter',
+        (e) => {
+            e.preventDefault()
+            const searchInput = document.querySelector(
+                'input[placeholder*="Search"]'
+            ) as HTMLInputElement
+            if (searchInput) {
+                searchInput.focus()
+            }
+        },
+        {
+            keydown: true,
+            keyup: true,
+        }
+    )
 
     if (isError) {
         return (
             <div className="w-full py-2">
-                <FormErrorMessage
-                    errorMessage={'Something went wrong! Failed to load data.'}
-                />
+                <ErrorPage error={error as Error} reset={() => {}} />
             </div>
         )
-    }
-    const handleOpenModalPreview = (org: IOrganization) => {
-        setSelectedOrganization(org)
-        orgModalState.onOpenChange(true)
     }
 
     return (
@@ -177,49 +203,59 @@ const Organization = () => {
                 setSearchTerm={setSearchTerm}
             />
             {/* Content */}
-            <div className="container mx-auto py-3">
-                {isLoading && (
-                    <OrganizationItemSkeleton
-                        count={8}
-                        itemClassName="min-w-[17rem]"
-                        mainClassName="grid !grid-cols-4 "
-                    />
-                )}
-                {isNoOrganization || !Organizations ? (
-                    <div className="flex flex-col items-center justify-center py-20">
-                        <div className="text-center">
-                            <h2 className="text-2xl font-semibold mb-2">
-                                No Organizations Found
-                            </h2>
-                            <p className="text-muted-foreground mb-6">
-                                Be the first to create an organization or join
-                                with a code
-                            </p>
-                            <Button
-                                onClick={() => setOpenJoinWithCodeModal(true)}
-                            >
-                                <QrCodeIcon className="mr-2 h-4 w-4" />
-                                Join with Code
-                            </Button>
-                        </div>
-                    </div>
+            <div className="container mx-auto py-3 min-w-fit">
+                {isLoading || isFetching ? (
+                    <>
+                        <OrganizationItemSkeleton
+                            count={16}
+                            customSkeleton={
+                                <div className="flex flex-col gap-y-2 h-[200px] w-[250px]">
+                                    <Skeleton className="flex-5" />
+                                    <Skeleton className="flex-1" />
+                                </div>
+                            }
+                            itemClassName="min-w-[17rem]"
+                            mainClassName="grid !grid-cols-4"
+                        />
+                    </>
                 ) : (
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                        {organizations?.map((org) => {
-                            return (
-                                <OrganizationMiniCard
-                                    handleOpenOrgPreview={
-                                        handleOpenModalPreview
-                                    }
-                                    key={org.id}
-                                    onCardClick={handleOpenModalPreview}
-                                    organization={org}
-                                    searchTerm={searchTerm}
-                                    showActions={false}
-                                />
-                            )
-                        })}
-                    </div>
+                    <>
+                        {isNoOrganization || !Organizations ? (
+                            <div className="flex flex-col items-center justify-center py-20">
+                                <div className="text-center">
+                                    <h2 className="text-2xl font-semibold mb-2">
+                                        No Organizations Found
+                                    </h2>
+                                    <p className="text-muted-foreground mb-6">
+                                        Be the first to create an organization
+                                        or join with a code
+                                    </p>
+                                    <Button
+                                        onClick={() =>
+                                            setOpenJoinWithCodeModal(true)
+                                        }
+                                    >
+                                        <QrCodeIcon className="mr-2 h-4 w-4" />
+                                        Join with Code
+                                    </Button>
+                                </div>
+                            </div>
+                        ) : (
+                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                                {organizations?.map((org) => {
+                                    return (
+                                        <OrganizationCardWithToolTip
+                                            handleOpenModalPreview={
+                                                handleOpenModalPreview
+                                            }
+                                            organization={org}
+                                            searchTerm={searchTerm}
+                                        />
+                                    )
+                                })}
+                            </div>
+                        )}
+                    </>
                 )}
                 <div className="flex w-full animate-pulse justify-center text-xs opacity-30 mt-8">
                     {isFetching ? 'Loading data...' : null}
@@ -230,3 +266,41 @@ const Organization = () => {
 }
 
 export default Organization
+
+type TOrganizationCardWithTooltipProps = {
+    organization: IOrganization
+    handleOpenModalPreview: (org: IOrganization) => void
+    searchTerm?: string
+}
+export const OrganizationCardWithToolTip = ({
+    organization: org,
+    handleOpenModalPreview,
+    searchTerm,
+}: TOrganizationCardWithTooltipProps) => {
+    return (
+        <OrganizationMiniCardToolTip
+            content={
+                <div className="flex flex-col gap-y-2  h-[200px] w-[250px]">
+                    <ImageDisplay
+                        className="flex-5 size-full rounded-lg hover:scale-105 duration-500 ease-in-out transition"
+                        src={org.cover_media?.download_url}
+                    />
+                    <div className="flex-1 inline-flex items-center px-2 border-[0.5px] border-primary/30 bg-sidebar/80 rounded-lg">
+                        <OrganizationIcon className="text-primary" />
+                        <h1 className="p-1 px-2 font-semibold text-primary-foreground text-sm">
+                            {highlightMatch(org.name, searchTerm ?? '')}
+                        </h1>
+                    </div>
+                </div>
+            }
+            customToolTipContent={
+                <CustomOrganizationToolTipContent
+                    handleOpenOrgPreview={(org) => {
+                        handleOpenModalPreview(org)
+                    }}
+                    organization={org}
+                />
+            }
+        />
+    )
+}

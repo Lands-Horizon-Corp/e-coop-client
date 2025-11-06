@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react'
 
+import { useHotkeys } from 'react-hotkeys-hook'
+
 import { MagnifyingGlassIcon as SearchIcon } from '@/components/icons'
 import { Input } from '@/components/ui/input'
 
@@ -21,8 +23,25 @@ const ExploreHeader = ({ setSearchTerm, categories }: ExploreHeaderProps) => {
         setSearchTerm(debounceSearchTerm)
     }, [debounceSearchTerm, setSearchTerm])
 
+    useHotkeys(
+        'enter',
+        (e) => {
+            e.preventDefault()
+            const searchInput = document.querySelector(
+                'input[placeholder*="Search"]'
+            ) as HTMLInputElement
+            if (searchInput) {
+                searchInput.focus()
+            }
+        },
+        {
+            keydown: true,
+            keyup: true,
+        }
+    )
+
     return (
-        <div className="sticky top-16 z-10 -translate-y-[1.5px] ease-in-out duration-900 pb-2 backdrop-blur-2xl pl-10 px-2">
+        <div className="top-16 z-10 -translate-y-[1.5px] ease-in-out duration-900 pb-2  pl-10 px-2">
             <div className="text-start pt-1 flex items-center mx-auto !mt-20">
                 <div className="flex flex-col flex-2 justify-start mb-1">
                     <h1 className="text-2xl font-bold bg-gradient-to-r from-primary to-primary bg-clip-text text-transparent">

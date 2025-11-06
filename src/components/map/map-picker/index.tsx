@@ -36,6 +36,8 @@ import {
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 
+import { useInternalState } from '@/hooks/use-internal-state'
+
 import MapView, { MapLocation } from '..'
 import { useMap } from '../map.provider'
 import { constructGoogleMapsViewUrl } from '../map.utils'
@@ -77,7 +79,7 @@ export interface MapPickerProps {
     /** Current selected location */
     value?: MapLocation | null
     /** Callback when location changes */
-    onChange: (location: MapLocation | null) => void
+    onChange?: (location: MapLocation | null) => void
     /** Google Maps Map ID for custom styling */
     mapId?: string
     /** Default map center */
@@ -110,6 +112,12 @@ export interface MapPickerProps {
     /** Custom button class name */
     className?: string
     hideButtonCoordinates?: boolean
+    modalState?:
+        | {
+              open: boolean
+              onOpenChange: React.Dispatch<React.SetStateAction<boolean>>
+          }
+        | undefined
 }
 
 const defaultCenter: MapLocation = { lat: 37.7749, lng: -122.4194 }
@@ -130,9 +138,17 @@ export const MapPicker: React.FC<MapPickerProps> = ({
     className,
     viewOnly = false,
     hideButtonCoordinates = true,
+    modalState,
 }) => {
     const { isLoaded, loadError } = useMap() // Internal modal state
-    const [isOpen, setIsOpen] = useState(false)
+    // const [state, setState] = useState(false)
+
+    const [state, setState] = useInternalState(
+        false,
+        modalState?.open,
+        modalState?.onOpenChange
+    )
+
     const [selectedLocation, setSelectedLocation] =
         useState<MapLocation | null>(value || null)
     const [mapCenter, setMapCenter] = useState<MapLocation>(
@@ -156,7 +172,6 @@ export const MapPicker: React.FC<MapPickerProps> = ({
     const theme = useRef<google.maps.ColorScheme | null>(null)
     const searchInputRef = useRef<HTMLInputElement | null>(null)
     const searchTimeoutRef = useRef<NodeJS.Timeout | null>(null)
-    const justOpenedRef = useRef(false)
 
     const formatLocation = (location: MapLocation): string => {
         return `${location.lat.toFixed(4)}, ${location.lng.toFixed(4)}`
@@ -440,24 +455,24 @@ export const MapPicker: React.FC<MapPickerProps> = ({
         [createOrMoveMarker, reverseGeocode, viewOnly]
     )
 
-    // Sync internal state with external value
-    useEffect(() => {
-        if (isOpen) {
-            justOpenedRef.current = true
-        }
-    }, [isOpen])
+    // // Sync internal state with external value
+    // useEffect(() => {
+    //     if (state) {
+    //         justOpenedRef.current = true
+    //     }
+    // }, [state])
+
+    // useEffect(() => {
+    //     if (state && justOpenedRef.current) {
+    //         // Ignore the first value change after opening
+    //         justOpenedRef.current = false
+    //         return
+    //     }
+    //     setSelectedLocation(value || null)
+    // }, [value, state])
 
     useEffect(() => {
-        if (isOpen && justOpenedRef.current) {
-            // Ignore the first value change after opening
-            justOpenedRef.current = false
-            return
-        }
-        setSelectedLocation(value || null)
-    }, [value, isOpen])
-
-    useEffect(() => {
-        if (isOpen) {
+        if (state) {
             setSelectedLocation(value || null)
             setMapCenter(value || propDefaultCenter)
             setMapZoom(value ? 15 : defaultZoom)
@@ -479,7 +494,7 @@ export const MapPicker: React.FC<MapPickerProps> = ({
             }
         }
     }, [
-        isOpen,
+        state,
         value,
         propDefaultCenter,
         defaultZoom,
@@ -516,13 +531,13 @@ export const MapPicker: React.FC<MapPickerProps> = ({
 
     // Auto-close modal and call onChange when location is selected
     const handleConfirm = () => {
-        onChange(selectedLocation)
-        setIsOpen(false)
+        onChange?.(selectedLocation)
+        setState(false)
     }
 
     const handleCancel = () => {
         setSelectedLocation(value || null) // Reset to original value
-        setIsOpen(false)
+        setState(false)
     }
 
     const handleClear = () => {
@@ -587,9 +602,9 @@ export const MapPicker: React.FC<MapPickerProps> = ({
         <>
             {/* Trigger Button */}
             <Button
-                className={className}
+                className={cn('', modalState ? 'hidden' : '', className)}
                 disabled={disabled}
-                onClick={() => setIsOpen(true)}
+                onClick={() => setState(true)}
                 size={size}
                 type="button"
                 variant={variant}
@@ -607,7 +622,7 @@ export const MapPicker: React.FC<MapPickerProps> = ({
             </Button>
 
             {/* Modal */}
-            <Dialog onOpenChange={setIsOpen} open={isOpen}>
+            <Dialog onOpenChange={setState} open={state}>
                 <DialogContent className="max-h-[100vh] min-w-7xl overflow-hidden p-0">
                     <DialogHeader className="p-6 pb-4">
                         <DialogTitle className="flex items-center gap-2">

@@ -3,7 +3,7 @@ import { useState } from 'react'
 import { IOrganization } from '@/modules/organization'
 import OrganizationPreviewModal from '@/modules/organization/components/organization-modal'
 
-import { FlickeringGrid } from '@/components/backgrounds/flickering-grid'
+import { Particles } from '@/components/ui/background-particles'
 import AuthGuard from '@/components/wrappers/auth-guard'
 
 import { useModalState } from '@/hooks/use-modal-state'
@@ -48,13 +48,14 @@ const ExplorePage = () => {
                 organization={selectedOrganization}
                 showActions={false}
             />
+            <div className="to-background/0 via-background/0 from-primary/50 top-0 absolute overflow-y-hidden -mt-36 -z-10 h-screen w-[100%] bg-radial-[ellipse_100%_80%_at_10%_10%] to-100% dark:block hidden" />
             <div className="min-h-screen max-w-full">
-                <FlickeringGrid
-                    className="fixed"
-                    flickerChance={0.05}
-                    gridGap={1}
-                    maxOpacity={0.9}
-                    squareSize={64}
+                <Particles
+                    className="absolute inset-0"
+                    color="#ffffff"
+                    ease={80}
+                    quantity={300}
+                    size={0.01}
                 />
                 <ExploreHeader
                     categories={categories}

@@ -65,7 +65,7 @@ function RouteComponent() {
         )
     }
     return (
-        <div className="mt-10 flex min-h-full w-full min-w-5xl flex-col items-center gap-y-2">
+        <div className=" flex min-h-full w-full min-w-5xl flex-col items-center gap-y-2">
             <h1 className="relative mr-2 flex w-full items-center justify-center space-x-2 font-inter text-3xl font-semibold">
                 <span className="relative mr-5 before:absolute before:left-1/2 before:top-[50%] before:-z-10 before:size-[30px] before:-translate-x-1/2 before:-translate-y-1/2 before:rounded-full before:bg-primary before:opacity-50 before:blur-lg before:content-['']">
                     <LandmarkIcon className="z-50" size={24} />

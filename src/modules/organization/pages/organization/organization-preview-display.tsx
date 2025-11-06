@@ -69,7 +69,7 @@ const OrganizationPreviewDisplay = ({
             <div>
                 <div
                     className={cn(
-                        'flex relative w-full bg-cover !h-[50vh] bg-center flex-col gap-y-2 ecoop-scroll max-h-screen',
+                        'flex relative w-full rounded-lg bg-cover !h-[50vh] bg-center ecoop-scroll max-h-screen',
                         className
                     )}
                     style={{

@@ -79,7 +79,7 @@ const CardTopImage = ({
     return (
         <Card
             className={cn(
-                'max-w-sm pt-0 bg-sidebar border-0 !h-fit relative',
+                ' pt-0 bg-sidebar b1 grid grid-rows-3 relative',
                 onCardClick && 'cursor-pointer ',
                 className
             )}
@@ -93,11 +93,10 @@ const CardTopImage = ({
             >
                 {cardLabel ? cardLabel : customLabel}
             </div>
-
             <PreviewMediaWrapper media={mediaSrc}>
                 <ImageDisplay
                     className={cn(
-                        'aspect-video size-full rounded-t-2xl rounded-b-xs object-cover',
+                        'aspect-video inset-0 !size-full row-span-2 rounded-t-2xl rounded-b-xs object-cover',
                         onImageClick && 'cursor-pointer',
                         imageClassName
                     )}
@@ -105,17 +104,24 @@ const CardTopImage = ({
                     src={imageSrc}
                 />
             </PreviewMediaWrapper>
-            {!hideHeader && (
-                <CardHeader className={cn('p-2', cardHeaderClassName)}>
-                    {cardHeader ? cardHeader : customHeader}
-                </CardHeader>
-            )}
-            <CardContent className={cn('p-0 border-0', cardContentClassName)}>
-                {cardContent ? cardContent : customContent}
+            <CardContent
+                className={cn(
+                    '!p-4 flex flex-col row-span-1 max-w-full min-w-0 justify-between ',
+                    cardContentClassName
+                )}
+            >
+                {!hideHeader && (
+                    <CardHeader className={cn('p-0', cardHeaderClassName)}>
+                        {cardHeader ? cardHeader : customHeader}
+                    </CardHeader>
+                )}
+                <div className="">
+                    {cardContent ? cardContent : customContent}
+                </div>
+                <CardFooter className={cn('p-0', cardFooterClassName)}>
+                    {cardFooter ? cardFooter : customFooter}
+                </CardFooter>
             </CardContent>
-            <CardFooter className={cn('p-0', cardFooterClassName)}>
-                {cardFooter ? cardFooter : customFooter}
-            </CardFooter>
         </Card>
     )
 }

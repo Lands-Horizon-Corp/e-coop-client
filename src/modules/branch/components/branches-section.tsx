@@ -28,7 +28,6 @@ export const BranchesSection = ({
             />
         )
     }
-
     return (
         <div className="space-y-4 px-6">
             <div className="flex items-center justify-between">

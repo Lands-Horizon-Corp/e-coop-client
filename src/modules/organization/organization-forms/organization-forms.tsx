@@ -484,7 +484,7 @@ const OrganizationForm = () => {
                             )}
                             {activeStep === 3 && (
                                 <div className="space-y-4">
-                                    <div className="text-center sm:text-left">
+                                    <div className="text-center sm:text-center">
                                         <h1 className="inline-flex items-center justify-center sm:justify-start text-xl sm:text-2xl font-semibold mb-2">
                                             Almost done!
                                             <RocketIcon className="text-primary ml-1" />

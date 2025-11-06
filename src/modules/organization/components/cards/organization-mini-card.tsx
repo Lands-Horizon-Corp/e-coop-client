@@ -42,8 +42,6 @@ export const OrganizationMiniCard = ({
 }: OrganizationMiniCardProps) => {
     const updateModal = useModalState()
     const queryClient = useQueryClient()
-    const { data: branches, isPending: isPendingBranches } =
-        useGetBranchesByOrganizationId({ organizationId: organization.id })
 
     if (!organization || !organization.id) {
         return (
@@ -150,78 +148,92 @@ export const OrganizationMiniCard = ({
                 </>
             }
             customToolTipContent={
-                <div className="h-[300px] rounded-xl overflow-hidden bg-background shadow-2xl shadow-black/10">
-                    <div
-                        className="h-1/2 w-full rounded-t-xl"
-                        style={{
-                            background: `url(${organization?.media?.download_url}) center center / cover no-repeat`,
-                        }}
-                    />
-                    <div className="h-1/2 p-2 px-5 space-y-1">
-                        <div className="flex items-center justify-between gap-2">
-                            <h1 className=" truncate min-w-0 text-lg text-foreground">
-                                {organizationName}
-                            </h1>
-                            <Button
-                                className="rounded-full"
-                                onClick={() => {
-                                    handleOpenOrgPreview?.(organization)
-                                }}
-                                size={'icon'}
-                                variant={'outline'}
-                            >
-                                <ArrowChevronUpIcon
-                                    className="text-primary"
-                                    size={25}
-                                />
-                            </Button>
-                        </div>
-                        <div>
-                            <Badge
-                                className="mb-2 text-[10px]"
-                                variant={'outline'}
-                            >
-                                <BadgeCheckFillIcon className="text-primary mr-1" />
-                                {isPendingBranches
-                                    ? 'Loading...'
-                                    : (branches?.length ?? 0)}{' '}
-                                Branches
-                            </Badge>
-                        </div>
-                        <div className="flex ecoop-scroll overflow-x-auto flex-wrap gap-1">
-                            {organization.organization_categories?.map(
-                                (catItem, index) => {
-                                    if (index > 3) return null
-                                    return (
-                                        <Badge
-                                            className="mb-1 border-0 p-0 text-[10px]"
-                                            key={catItem.id}
-                                            variant="outline"
-                                        >
-                                            • {catItem.category?.name}
-                                        </Badge>
-                                    )
-                                }
-                            )}
-                            {organization?.organization_categories && (
-                                <>
-                                    {organization?.organization_categories
-                                        ?.length -
-                                        3 >
-                                        0 && (
-                                        <Badge className="mb-1 border-0 px-1 py-0.2 text-[10px]">
-                                            {organization
-                                                ?.organization_categories
-                                                ?.length - 3}{' '}
-                                            more
-                                        </Badge>
-                                    )}
-                                </>
-                            )}
-                        </div>
-                    </div>
-                </div>
+                <CustomOrganizationToolTipContent
+                    handleOpenOrgPreview={handleOpenOrgPreview}
+                    organization={organization}
+                />
             }
         />
+    )
+}
+
+type CustomOrganizationToolTipConentProps = {
+    organization: IOrganization
+    handleOpenOrgPreview?: (org: IOrganization) => void
+}
+
+export const CustomOrganizationToolTipContent = ({
+    organization,
+    handleOpenOrgPreview,
+}: CustomOrganizationToolTipConentProps) => {
+    const { data: branches, isPending: isPendingBranches } =
+        useGetBranchesByOrganizationId({ organizationId: organization.id })
+    const organizationName = organization.name ?? ''
+    return (
+        <div className="h-[300px] rounded-xl overflow-hidden bg-background shadow-2xl shadow-black/10">
+            <div
+                className="h-1/2 w-full rounded-t-xl"
+                style={{
+                    background: `url(${organization?.media?.download_url}) center center / cover no-repeat`,
+                }}
+            />
+            <div className="h-1/2 p-2 px-5 space-y-1">
+                <div className="flex items-center justify-between gap-2">
+                    <h1 className=" truncate min-w-0 text-lg text-foreground">
+                        {organizationName}
+                    </h1>
+                    <Button
+                        className="rounded-full"
+                        onClick={() => {
+                            handleOpenOrgPreview?.(organization)
+                        }}
+                        size={'icon'}
+                        variant={'outline'}
+                    >
+                        <ArrowChevronUpIcon
+                            className="text-primary"
+                            size={25}
+                        />
+                    </Button>
+                </div>
+                <div>
+                    <Badge className="mb-2 text-[10px]" variant={'outline'}>
+                        <BadgeCheckFillIcon className="text-primary mr-1" />
+                        {isPendingBranches
+                            ? 'Loading...'
+                            : (branches?.length ?? 0)}{' '}
+                        Branches
+                    </Badge>
+                </div>
+                <div className="flex ecoop-scroll overflow-x-auto flex-wrap gap-1">
+                    {organization.organization_categories?.map(
+                        (catItem, index) => {
+                            if (index > 3) return null
+                            return (
+                                <Badge
+                                    className="mb-1 border-0 p-0 text-[10px]"
+                                    key={catItem.id}
+                                    variant="outline"
+                                >
+                                    • {catItem.category?.name}
+                                </Badge>
+                            )
+                        }
+                    )}
+                    {organization?.organization_categories && (
+                        <>
+                            {organization?.organization_categories?.length - 3 >
+                                0 && (
+                                <Badge className="mb-1 border-0 px-1 py-0.2 text-[10px]">
+                                    {organization?.organization_categories
+                                        ?.length - 3}{' '}
+                                    more
+                                </Badge>
+                            )}
+                        </>
+                    )}
+                </div>
+            </div>
+        </div>
     )
 }

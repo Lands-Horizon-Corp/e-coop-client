@@ -10,9 +10,9 @@ export const OrganizationItemSkeleton = ({
     className,
 }: OrganizationItemSkeletonProps) => {
     return (
-        <div
+        <Skeleton
             className={cn(
-                'flex gap-4 p-4 flex-col border min-w-[15rem] max-w-[15rem] rounded-lg',
+                'flex gap-4 p-4 flex-col border min-w-[15rem] max-w-[15rem] bg-background/80 rounded-lg',
                 className
             )}
         >
@@ -22,7 +22,7 @@ export const OrganizationItemSkeleton = ({
                 <Skeleton className="h-4 w-full" />
                 <Skeleton className="h-4 w-2/3" />
             </div>
-        </div>
+        </Skeleton>
     )
 }
 
@@ -30,23 +30,28 @@ interface OrganizationItemSkeletonProps {
     mainClassName?: string
     count?: number
     itemClassName?: string
+    customSkeleton?: React.ReactNode
 }
 
 export const OrganizationSkeleton = ({
     mainClassName,
     count = 3,
     itemClassName,
+    customSkeleton,
 }: OrganizationItemSkeletonProps) => {
     return (
         <div className={cn('gap-3 flex flex-wrap', mainClassName)}>
-            {Array.from({ length: count }).map((_, sectionIndex) => (
-                <OrganizationItemSkeleton
-                    className={itemClassName}
-                    key={sectionIndex}
-                />
-            ))}
+            {Array.from({ length: count }).map((_, index) => {
+                return customSkeleton ? (
+                    <div key={index}>{customSkeleton}</div>
+                ) : (
+                    <OrganizationItemSkeleton
+                        className={itemClassName}
+                        key={index}
+                    />
+                )
+            })}
         </div>
     )
 }
-
 export default OrganizationSkeleton

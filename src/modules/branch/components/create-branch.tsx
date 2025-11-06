@@ -68,7 +68,7 @@ const CreateBranch = () => {
     }
 
     return (
-        <div className="w-full h-full bg-background/20 backdrop-blur-2xl flex flex-col space-y-6">
+        <div className="w-full h-full rounded-lg -mt-3 flex flex-col space-y-6">
             <CreateUpdateBranchFormModal
                 {...createModal}
                 className="w-full min-w-[80rem] max-w-[80rem]"

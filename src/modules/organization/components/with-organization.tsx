@@ -8,10 +8,7 @@ import { toReadableDateShort } from '@/helpers/date-utils'
 import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
 import { cn } from '@/helpers/tw-utils'
 import { useAuthUser } from '@/modules/authentication/authgentication.store'
-import {
-    IOrganizationWithPolicies,
-    useGetOrganizationById,
-} from '@/modules/organization'
+import { useGetOrganizationById } from '@/modules/organization'
 import {
     IOrgUserOrganizationGroup,
     IUserOrganization,
@@ -19,26 +16,17 @@ import {
 import { useSwitchOrganization } from '@/modules/user-organization/user-organization.service'
 import { useCategoryStore } from '@/store/onboarding/category-store'
 
-import { GradientBackground } from '@/components/gradient-background/gradient-background'
 import {
     ArrowRightIcon,
     BuildingIcon,
     DotBigIcon,
     EyeIcon,
-    GearIcon,
     LoadingCircleIcon,
     PencilFillIcon,
     PinLocationIcon,
     PlusIcon,
 } from '@/components/icons'
 import ImageDisplay from '@/components/image-display'
-import OrganizationPolicies from '@/components/policies'
-import {
-    Accordion,
-    AccordionContent,
-    AccordionItem,
-    AccordionTrigger,
-} from '@/components/ui/accordion'
 import { Avatar, AvatarImage } from '@/components/ui/avatar'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
@@ -50,16 +38,14 @@ import {
     CardTitle,
 } from '@/components/ui/card'
 import FormErrorMessage from '@/components/ui/form-error-message'
-import {
-    Popover,
-    PopoverContent,
-    PopoverTrigger,
-} from '@/components/ui/popover'
-import { PlainTextEditor } from '@/components/ui/text-editor'
 import TruncatedText from '@/components/ui/truncated-text'
 
+import { useModalState } from '@/hooks/use-modal-state'
 import { useUrlModal } from '@/hooks/use-url-modal'
 
+import { TEntityId } from '@/types'
+
+import OrganizationBranchesModal from './modal/org-branches-modal'
 import OrganizationPreviewModal from './organization-modal'
 
 type UserOrganizationsDashboardProps = {
@@ -71,10 +57,10 @@ const UserOrganizationsDashboard = ({
 }: UserOrganizationsDashboardProps) => {
     const queryClient = useQueryClient()
     const navigate = useNavigate()
-
+    const openOrgBranch = useModalState(false)
     const {
         updateCurrentAuth,
-        currentAuth: { user, user_organization: currentUserOrg },
+        currentAuth: { user },
     } = useAuthUser()
 
     const {
@@ -97,7 +83,9 @@ const UserOrganizationsDashboard = ({
 
     const { mutateAsync: switchOrganization } = useSwitchOrganization()
     const { handleProceedToSetupOrg } = useCategoryStore()
-    const [switchingOrgId, setSwitchingOrgId] = useState<string | null>(null)
+    const [switchingOrgId, setSwitchingOrgId] = useState<TEntityId | null>(null)
+    const [selectedOrg, setSelectedOrg] =
+        useState<IOrgUserOrganizationGroup | null>(null)
 
     const error = serverRequestErrExtractor({ error: organizationError })
 
@@ -142,7 +130,18 @@ const UserOrganizationsDashboard = ({
     }
 
     return (
-        <div className="w-full">
+        <div className="w-full mt-2">
+            {selectedOrg && (
+                <OrganizationBranchesModal
+                    {...openOrgBranch}
+                    className="min-w-fit"
+                    handleVisit={handleVisit}
+                    organization={selectedOrg}
+                    overlayClassName="!bg-transparent"
+                    switchingOrgId={switchingOrgId}
+                    title="List of Branches"
+                />
+            )}
             <OrganizationPreviewModal
                 isLoading={isLoadingOrganization}
                 onOpenChange={onOpenChange}
@@ -150,7 +149,7 @@ const UserOrganizationsDashboard = ({
                 organization={organization}
                 showActions={false}
             />
-            <div className="mb-7  flex w-full justify-center space-x-2">
+            <div className="mb-7 flex w-full justify-center space-x-2">
                 <Button
                     className={cn('w-[300px] gap-x-2 rounded-xl')}
                     onClick={() => handleProceedToSetupOrg(navigate)}
@@ -172,7 +171,7 @@ const UserOrganizationsDashboard = ({
                 </Button>
             </div>
             <FormErrorMessage errorMessage={error} />
-            <div className="w-full grid grid-cols-3 gap-3 ">
+            <div className="w-full grid grid-cols-1 lg:grid-cols-3 gap-y-5 mt-10">
                 {organizationsWithBranches.map((org) => {
                     const mediaUrl = org.media?.download_url
                     const coverUrl = org.cover_media?.download_url
@@ -242,52 +241,20 @@ const UserOrganizationsDashboard = ({
                                 >
                                     <EyeIcon className="h-4 w-4" />
                                 </Button>
-                                <Popover modal>
-                                    <PopoverTrigger asChild>
-                                        <Button className="rounded-full cursor-pointer">
-                                            visit
-                                        </Button>
-                                    </PopoverTrigger>
-                                    <PopoverContent className="w-fit max-w-lg border-0 shadow-2xl bg-background">
-                                        <div className="flex flex-col gap-y-2">
-                                            {org.user_organizations.map(
-                                                (userOrg) => {
-                                                    const isCurrentOrg =
-                                                        userOrg.id ===
-                                                        currentUserOrg?.id
-                                                    return (
-                                                        <ListOfBranches
-                                                            isCurrent={
-                                                                isCurrentOrg
-                                                            }
-                                                            isLoading={
-                                                                switchingOrgId ===
-                                                                userOrg.id
-                                                            }
-                                                            key={userOrg.id}
-                                                            onClick={() =>
-                                                                toast.promise(
-                                                                    handleVisit(
-                                                                        userOrg
-                                                                    ),
-                                                                    {
-                                                                        loading: `Switching to ${userOrg.branch?.name}...`,
-                                                                        success: `Switched to ${userOrg.branch?.name}`,
-                                                                        error: `Failed to switch to ${userOrg.branch?.name}`,
-                                                                    }
-                                                                )
-                                                            }
-                                                            userOrg={userOrg}
-                                                        />
-                                                    )
-                                                }
-                                            )}
-                                        </div>
-                                    </PopoverContent>
-                                </Popover>
+
+                                <Button
+                                    className=" cursor-pointer"
+                                    onClick={() => {
+                                        openOrgBranch.onOpenChange(true)
+                                        setSelectedOrg(org)
+                                    }}
+                                    size={'sm'}
+                                >
+                                    visit
+                                </Button>
                             </CardFooter>
                             {/* for reference */}
-                            <Accordion
+                            {/* <Accordion
                                 className={cn('hidden space-y-4')}
                                 collapsible
                                 type="single"
@@ -416,7 +383,7 @@ const UserOrganizationsDashboard = ({
                                         )}
                                     </AccordionContent>
                                 </AccordionItem>
-                            </Accordion>
+                            </Accordion> */}
                         </Card>
                     )
                 })}
@@ -430,24 +397,37 @@ type ListOfBranchesProps = {
     onClick: () => void
     isCurrent: boolean
     isLoading: boolean
+    onSelect: (org: IUserOrganization) => void
 }
 
-const ListOfBranches = ({
+export const ListOfBranches = ({
     userOrg,
     onClick,
     isCurrent,
     isLoading,
+    onSelect,
 }: ListOfBranchesProps) => {
     const mediaUrl = userOrg.branch?.media?.download_url
     const isPending = userOrg.application_status === 'pending'
     return (
         <div key={userOrg.branch?.id ?? ''}>
-            <div className="relative inline-flex min-h-16 w-full justify-between rounded-xl bg-sidebar cursor-pointer items-center gap-x-2 border-0 p-2 hover:bg-sidebar/70 ">
+            <div className="relative inline-flex min-h-16 w-full justify-between rounded-xl bg-card cursor-pointer items-center gap-x-2 border-0 p-2 hover:bg-card/70 ">
                 <div className="flex max-w-full min-w-0">
                     <div className="inline-flex space-x-2 truncate">
-                        <Avatar className="size-12">
-                            <AvatarImage src={mediaUrl} />
-                        </Avatar>
+                        <div className="relative">
+                            <Avatar className="relative size-12">
+                                <AvatarImage src={mediaUrl} />
+                            </Avatar>
+                            <Button
+                                className="absolute size-6 cursor-pointer bottom-0 right-0 "
+                                onClick={() => {
+                                    onSelect?.(userOrg)
+                                }}
+                                size={'icon'}
+                            >
+                                <PinLocationIcon className="size-fit" />
+                            </Button>{' '}
+                        </div>
                         <div className="w-full items-center truncate min-w-0 max-w-full ">
                             <div className="flex items-center text-xs text-muted-foreground">
                                 {userOrg.application_status}
@@ -462,10 +442,8 @@ const ListOfBranches = ({
                                 />
                             </div>
                             <h1 className="truncate">{userOrg.branch?.name}</h1>
-
                             <div className="w-full">
                                 <div className="flex items-center max-w-full gap-y-2 text-xs">
-                                    <PinLocationIcon className="mr-2 text-destructive/60" />
                                     <p className="truncate min-w-0 text-xs text-muted-foreground/80">
                                         {userOrg.branch?.address}
                                     </p>
@@ -473,26 +451,6 @@ const ListOfBranches = ({
                             </div>
                         </div>
                     </div>
-                    {/* {userOrg.branch.latitude &&
-                            userOrg.branch.longitude && (
-                                <div className="mt-2">
-                                    <MapPicker
-                                        className="text-xs"
-                                        disabled={false}
-                                        hideButtonCoordinates={true}
-                                        onChange={() => {}} // Read-only, no changes allowed
-                                        placeholder="View Branch Location"
-                                        size="sm"
-                                        title={`${userOrg.branch.name} Location`}
-                                        value={{
-                                            lat: userOrg.branch.latitude,
-                                            lng: userOrg.branch.longitude,
-                                        }}
-                                        variant="outline"
-                                        viewOnly={true}
-                                    />
-                                </div>
-                            )} */}
                 </div>
 
                 {!isPending && (

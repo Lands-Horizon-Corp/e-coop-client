@@ -1,19 +1,31 @@
-import { cn } from '@/helpers'
-import {
-    BuildingIcon,
-    CalendarIcon,
-    PhoneIcon,
-    StarIcon,
-    TagIcon,
-} from 'lucide-react'
+import { BuildingIcon, CalendarIcon, PhoneIcon, StarIcon } from 'lucide-react'
 
-import { EmailIcon, PinLocationIcon as LocationIcon } from '@/components/icons'
+import {
+    EmailIcon,
+    InfoIcon,
+    PinLocationIcon as LocationIcon,
+    PhoneOutlineIcon,
+} from '@/components/icons'
 import { Badge } from '@/components/ui/badge'
-import { Separator } from '@/components/ui/separator'
+import { Button } from '@/components/ui/button'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import {
+    Empty,
+    EmptyDescription,
+    EmptyHeader,
+    EmptyMedia,
+} from '@/components/ui/empty'
+import {
+    Tooltip,
+    TooltipContent,
+    TooltipTrigger,
+} from '@/components/ui/tooltip'
+import TruncatedText from '@/components/ui/truncated-text'
+
+import { IOrganization } from '../organization.types'
 
 interface OrganizationDetailsProps {
-    organization: any
-    categories?: any[]
+    organization: IOrganization
     showActions?: boolean
     onJoin?: () => void
     onCreateBranch?: () => void
@@ -21,22 +33,23 @@ interface OrganizationDetailsProps {
 
 const OrganizationPreviewModalDetails = ({
     organization,
-    categories = [],
 }: OrganizationDetailsProps) => {
     return (
-        <div className="space-y-6 py-6 px-8 w-full">
+        <div className="space-y-6 py-6 px-8 w-full bg-card/50 rounded-lg">
             {/* Header */}
             <div className="space-y-2">
                 <h2 className="text-2xl font-bold text-foreground">
                     {organization.name}
                 </h2>
-
                 <div className="flex items-center gap-2">
-                    <Badge className="text-xs px-2 py-1" variant="secondary">
-                        <BuildingIcon className="h-3 w-3 mr-1" />
+                    <Button
+                        className="text-xs size-fit p-1.5"
+                        size="icon"
+                        variant="secondary"
+                    >
+                        <BuildingIcon className="size-4" />
                         {organization.organization_key}
-                    </Badge>
-
+                    </Button>
                     {organization.subscription_plan && (
                         <Badge className="text-xs px-2 py-1" variant="default">
                             <StarIcon className="h-3 w-3 mr-1" />
@@ -45,128 +58,112 @@ const OrganizationPreviewModalDetails = ({
                     )}
                 </div>
             </div>
-            <Separator />
-            {/* Organization Details */}
-            <div className="space-y-4">
-                <h3 className="text-lg font-semibold">Organization Details</h3>
-
-                {/* Description */}
-                {organization.description && (
-                    <div className="space-y-2">
-                        <h4 className="text-sm font-medium text-muted-foreground">
-                            About
-                        </h4>
-                        <p className="text-sm leading-relaxed">
-                            {organization.description}
-                        </p>
-                    </div>
-                )}
-
-                {/* Categories */}
-                {categories.length > 0 && (
-                    <div className="space-y-2">
-                        <h4 className="text-sm font-medium text-muted-foreground flex items-center gap-1">
-                            <TagIcon className="h-3 w-3" />
-                            Categories
-                        </h4>
-                        <div className="flex flex-wrap gap-1">
-                            {categories.map((catItem) => (
-                                <Badge
-                                    className="text-xs"
-                                    key={catItem.id}
-                                    variant="outline"
-                                >
-                                    {catItem.category?.name}
-                                </Badge>
-                            ))}
-                        </div>
-                    </div>
-                )}
-
-                {/* Contact Information */}
-                <div className="space-y-3">
-                    <h4 className="text-sm font-medium text-muted-foreground">
-                        Contact Information
-                    </h4>
-
-                    <div className="space-y-2">
-                        {organization.email && (
-                            <div className="flex items-center gap-2">
-                                <EmailIcon className="h-4 w-4 text-muted-foreground" />
-                                <a
-                                    className="text-sm text-primary hover:underline"
-                                    href={`mailto:${organization.email}`}
-                                >
-                                    {organization.email}
-                                </a>
-                            </div>
-                        )}
-
-                        {organization.contact_number && (
-                            <div className="flex items-center gap-2">
-                                <PhoneIcon className="h-4 w-4 text-muted-foreground" />
-                                <a
-                                    className="text-sm text-primary hover:underline"
-                                    href={`tel:${organization.contact_number}`}
-                                >
-                                    {organization.contact_number}
-                                </a>
-                            </div>
-                        )}
-
-                        {organization.address && (
-                            <div className="flex items-start gap-2">
-                                <LocationIcon className="h-4 w-4 text-muted-foreground mt-0.5 flex-shrink-0" />
-                                <span className="text-sm">
-                                    {organization.address}
-                                </span>
-                            </div>
-                        )}
-                    </div>
-                </div>
-
-                {/* Organization Stats */}
-                <div className="space-y-2">
-                    <h4 className="text-sm font-medium text-muted-foreground">
-                        Information
-                    </h4>
-
-                    <div className="grid grid-cols-1 gap-2 text-sm">
-                        {organization.created_at && (
-                            <div className="flex items-center gap-2">
-                                <CalendarIcon className="h-4 w-4 text-muted-foreground" />
-                                <span>
-                                    Established{' '}
-                                    {new Date(
-                                        organization.created_at
-                                    ).toLocaleDateString()}
-                                </span>
-                            </div>
-                        )}
-
-                        {organization.database_migration_status && (
-                            <div className="flex items-center gap-2">
-                                <div
-                                    className={cn(
-                                        'h-2 w-2 rounded-full',
-                                        organization.database_migration_status ===
-                                            'completed' && 'bg-green-500',
-                                        organization.database_migration_status ===
-                                            'pending' && 'bg-yellow-500',
-                                        organization.database_migration_status ===
-                                            'migrating' && 'bg-blue-500',
-                                        organization.database_migration_status ===
-                                            'error' && 'bg-red-500'
-                                    )}
+            {/* Contact Information */}
+            <div className="flex w-full gap-x-3">
+                <Card className="bg-card flex-1">
+                    <CardHeader className="">
+                        <CardTitle className="flex items-center gap-x-2">
+                            <Button
+                                className=" size-fit bg-primary/40 border border-primary"
+                                size="icon"
+                            >
+                                <InfoIcon className=" size-5 text-primary " />
+                            </Button>
+                            <h3 className="font-semibold text-[min(16px,2.5vw)] text-foreground">
+                                Details
+                            </h3>
+                        </CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                        {organization.description ? (
+                            <div className="space-y-2">
+                                <TruncatedText
+                                    className="text-sm h-fit overflow-y-auto max-h-16 ecoop-scroll"
+                                    text={organization.description}
                                 />
-                                <span className="capitalize">
-                                    {organization.database_migration_status}{' '}
-                                    Status
-                                </span>
                             </div>
+                        ) : (
+                            <Empty className="h-[10vh] border ">
+                                <EmptyHeader>
+                                    <EmptyMedia variant="icon">
+                                        <InfoIcon />
+                                    </EmptyMedia>
+                                    <EmptyDescription>
+                                        No description available.
+                                    </EmptyDescription>
+                                </EmptyHeader>
+                            </Empty>
                         )}
+                    </CardContent>
+                </Card>
+                <Card className="bg-card flex-1 min-w-0">
+                    <CardHeader className="">
+                        <CardTitle className="flex items-center gap-x-2">
+                            <Button
+                                className=" size-fit p-1 bg-primary/40 border border-primary"
+                                size="icon"
+                            >
+                                <PhoneOutlineIcon className=" size-3 text-primary " />
+                            </Button>
+                            <h3 className="font-semibold text-[min(16px,2.5vw)] text-foreground">
+                                Contact Information
+                            </h3>
+                        </CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                        <div className="space-y-2">
+                            {organization.email && (
+                                <div className="flex items-center gap-2">
+                                    <EmailIcon className="h-4 w-4 text-muted-foreground" />
+                                    <a
+                                        className="text-sm text-primary hover:underline"
+                                        href={`mailto:${organization.email}`}
+                                    >
+                                        {organization.email}
+                                    </a>
+                                </div>
+                            )}
+
+                            {organization.contact_number && (
+                                <div className="flex items-center gap-2">
+                                    <PhoneIcon className="h-4 w-4 text-muted-foreground" />
+                                    <a
+                                        className="text-sm text-primary hover:underline"
+                                        href={`tel:${organization.contact_number}`}
+                                    >
+                                        {organization.contact_number}
+                                    </a>
+                                </div>
+                            )}
+                            {organization.address && (
+                                <div className="flex items-start gap-2 min-w-0 max-w-full">
+                                    <LocationIcon className="h-4 w-4 text-muted-foreground mt-0.5 flex-shrink-0" />
+                                    <Tooltip delayDuration={800}>
+                                        <TooltipTrigger className="truncate text-sm">
+                                            {organization.address}
+                                        </TooltipTrigger>
+                                        <TooltipContent>
+                                            {organization.address}
+                                        </TooltipContent>
+                                    </Tooltip>
+                                </div>
+                            )}
+                        </div>
+                    </CardContent>
+                </Card>
+            </div>
+            <div className="flex-center">
+                {organization.created_at && (
+                    <div className="flex items-center gap-2">
+                        <CalendarIcon className="h-4 w-4 text-primary" />
+                        <span>
+                            Established{' '}
+                            {new Date(
+                                organization.created_at
+                            ).toLocaleDateString()}
+                        </span>
                     </div>
-                </div>
+                )}
             </div>
         </div>
     )

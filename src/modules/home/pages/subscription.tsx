@@ -41,7 +41,7 @@ const SubscriptionPage = () => {
                 quantity={300}
                 size={0.01}
             />
-            <div className="to-background/0 via-background/0 from-primary/50 top-0 absolute -mt-32 -z-10 h-screen w-[200%] bg-radial-[ellipse_at_50%_-20%] to-100% dark:block hidden" />
+            <div className="to-background/0 via-background/0 from-primary/50 top-0 absolute overflow-y-hidden -mt-36 -z-10 h-screen w-[100%] bg-radial-[ellipse_105%_100%_at_50%_10%] to-100% dark:block hidden" />
             {/* Header Section */}
             <div className="relative z-10 pt-24 pb-2 text-center space-y-6">
                 <div className="space-y-10">

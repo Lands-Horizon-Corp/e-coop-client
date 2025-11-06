@@ -6,7 +6,7 @@ import {
     IOrganization,
     useGetAllOrganizationsExplore,
 } from '@/modules/organization'
-import { OrganizationMiniCard } from '@/modules/organization/components/cards/organization-mini-card'
+import { OrganizationCardWithToolTip } from '@/modules/organization/pages/organization'
 
 import RefreshButton from '@/components/buttons/refresh-button'
 import { CompassIcon, StarIcon, TrendingDownIcon } from '@/components/icons'
@@ -112,16 +112,12 @@ const ExploreFeatured = ({
                                 className="md:basis-1/2 lg:basis-1/5"
                                 key={index}
                             >
-                                <OrganizationMiniCard
-                                    handleOpenOrgPreview={(org) => {
+                                <OrganizationCardWithToolTip
+                                    handleOpenModalPreview={(org) => {
                                         handleSelectedOrganization?.(org)
                                     }}
-                                    onCardClick={() =>
-                                        handleSelectedOrganization?.(item)
-                                    }
                                     organization={item}
                                     searchTerm={searchTerm}
-                                    showActions={false}
                                 />
                             </CarouselItem>
                         ))
