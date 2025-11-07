@@ -181,7 +181,7 @@ const UserOrganizationsDashboard = ({
 
                     return (
                         <Card
-                            className="relative bg-sidebar/90 duration-300 max-w-xs min-h-60 rounded-3xl hover:bg-background/50"
+                            className="relative bg-sidebar/90 duration-300 max-w-xs min-h-60 rounded-3xl hover:bg-background dark:hover:bg-background/50"
                             key={org.id}
                         >
                             <ImageDisplay
@@ -253,137 +253,6 @@ const UserOrganizationsDashboard = ({
                                     visit
                                 </Button>
                             </CardFooter>
-                            {/* for reference */}
-                            {/* <Accordion
-                                className={cn('hidden space-y-4')}
-                                collapsible
-                                type="single"
-                            >
-                                <AccordionItem
-                                    className={cn('rounded-3xl border-0')}
-                                    key={org.id}
-                                    value={org.name ?? ''}
-                                >
-                                    <GradientBackground
-                                        className="border-secondary/50 border"
-                                        imageBackgroundClassName="size-74"
-                                        mediaUrl={mediaUrl}
-                                    >
-                                        <AccordionTrigger className="relative flex min-h-32 w-full cursor-pointer items-center justify-between rounded-2xl border-0 p-4 hover:bg-secondary/50 hover:no-underline">
-                                            <div className="flex flex-col w-full">
-                                                <p className="text-start text-2xl font-bold">
-                                                    {org.name}
-                                                </p>
-                                                <span className="truncate text-sm line-clamp-2 text-wrap text-start w-fit">
-                                                    <PlainTextEditor
-                                                        content={
-                                                            org.description
-                                                        }
-                                                    />
-                                                </span>
-                                                <div className="mt-4 flex gap-x-2">
-                                                    {(isUserOwner ||
-                                                        isOrgCreator) && (
-                                                        <div className="flex justify-start gap-x-2">
-                                                            <Button
-                                                                className="mt-2 w-fit"
-                                                                onClick={(
-                                                                    e
-                                                                ) => {
-                                                                    e.stopPropagation()
-                                                                    navigate({
-                                                                        to: `/onboarding/create-branch/${org.id}` as string,
-                                                                    })
-                                                                }}
-                                                                size="sm"
-                                                                variant="secondary"
-                                                            >
-                                                                <GearIcon className="mr-2 h-4 w-4" />
-                                                                Manage
-                                                                Organization
-                                                            </Button>
-                                                        </div>
-                                                    )}
-                                                    <Button
-                                                        className="mt-2 w-fit"
-                                                        onClick={(e) => {
-                                                            e.stopPropagation()
-                                                            openOrganizationModal(
-                                                                org.id
-                                                            )
-                                                        }}
-                                                        size="sm"
-                                                        variant="secondary"
-                                                    >
-                                                        <EyeIcon className="h-4 w-4" />
-                                                        View Details
-                                                    </Button>
-                                                </div>
-                                            </div>
-                                        </AccordionTrigger>
-                                    </GradientBackground>
-
-                                    <AccordionContent className="p-4">
-                                        {org.user_organizations.length === 0 ? (
-                                            <GradientBackground opacity={0.1}>
-                                                <div className="flex min-h-16 flex-col items-center justify-center gap-y-2">
-                                                    <p className="text-secondary-foreground/50">
-                                                        This organization has no
-                                                        branches yet.
-                                                    </p>
-                                                    🍃
-                                                </div>
-                                            </GradientBackground>
-                                        ) : (
-                                            <div className="flex flex-col gap-y-2">
-                                                {org.user_organizations.map(
-                                                    (userOrg) => {
-                                                        const isCurrentOrg =
-                                                            userOrg.id ===
-                                                            currentUserOrg?.id
-                                                        return (
-                                                            <ListOfBranches
-                                                                isCurrent={
-                                                                    isCurrentOrg
-                                                                }
-                                                                isLoading={
-                                                                    switchingOrgId ===
-                                                                    userOrg.id
-                                                                }
-                                                                key={userOrg.id}
-                                                                onClick={() =>
-                                                                    toast.promise(
-                                                                        handleVisit(
-                                                                            userOrg
-                                                                        ),
-                                                                        {
-                                                                            loading: `Switching to ${userOrg.branch?.name}...`,
-                                                                            success: `Switched to ${userOrg.branch?.name}`,
-                                                                            error: `Failed to switch to ${userOrg.branch?.name}`,
-                                                                        }
-                                                                    )
-                                                                }
-                                                                userOrg={
-                                                                    userOrg
-                                                                }
-                                                            />
-                                                        )
-                                                    }
-                                                )}
-                                            </div>
-                                        )}
-
-                                        {org && (
-                                            <OrganizationPolicies
-                                                organization={
-                                                    org.user_organizations[0]
-                                                        ?.organization as IOrganizationWithPolicies
-                                                }
-                                            />
-                                        )}
-                                    </AccordionContent>
-                                </AccordionItem>
-                            </Accordion> */}
                         </Card>
                     )
                 })}
@@ -419,7 +288,7 @@ export const ListOfBranches = ({
                                 <AvatarImage src={mediaUrl} />
                             </Avatar>
                             <Button
-                                className="absolute size-6 cursor-pointer bottom-0 right-0 "
+                                className="absolute rounded-full size-6 cursor-pointer bottom-0 right-0 "
                                 onClick={() => {
                                     onSelect?.(userOrg)
                                 }}

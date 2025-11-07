@@ -57,7 +57,7 @@ const OrganizationBranchesModal = ({
                     viewOnly={true}
                 />
             )}
-            <div className="w-fit max-w-lg flex flex-col gap-y-2 overflow-y-auto ecoop-scroll border-0 shadow-2xl bg-background">
+            <div className="w-fit max-w-lg flex flex-col gap-y-2 overflow-y-auto ecoop-scroll border-0  bg-background">
                 {org.user_organizations.map((userOrg) => {
                     const isCurrentOrg = userOrg.id === currentUserOrg?.id
                     return (

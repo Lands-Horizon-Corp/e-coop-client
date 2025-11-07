@@ -4,6 +4,7 @@ import { Link } from '@tanstack/react-router'
 
 import { cn } from '@/helpers'
 import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
+import OrganizationSkeleton from '@/modules/organization/components/organization-item-skeleton'
 import {
     TPricingPlanMode,
     useGetAllSubscriptionPlans,
@@ -11,11 +12,11 @@ import {
 
 import PageContainer from '@/components/containers/page-container'
 import { PaperPlaneIcon } from '@/components/icons'
-import LoadingSpinner from '@/components/spinners/loading-spinner'
 import { Particles } from '@/components/ui/background-particles'
 import { Button } from '@/components/ui/button'
 import FormErrorMessage from '@/components/ui/form-error-message'
 import { GradientText } from '@/components/ui/gradient-text'
+import { Skeleton } from '@/components/ui/skeleton'
 
 import PlanCard from '../components/subscription/subscription-plan-card'
 
@@ -23,7 +24,7 @@ const SubscriptionPage = () => {
     const [mode, setMode] = useState<TPricingPlanMode>('monthly')
     const {
         data: subscriptionPlans,
-        isPending,
+        isLoading,
         error: responseError,
     } = useGetAllSubscriptionPlans({
         mode: 'timezone',
@@ -68,7 +69,6 @@ const SubscriptionPage = () => {
                     className="text-center mb-8"
                     errorMessage={error}
                 />
-                {isPending && <LoadingSpinner className="mx-auto mb-8" />}
             </div>
 
             {subscriptionPlans && (
@@ -101,19 +101,29 @@ const SubscriptionPage = () => {
 
                     {/* Pricing Cards Grid */}
                     <div className="max-w-7xl mx-auto px-4">
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                            {subscriptionPlans.map((subscriptionPlan, _) => (
-                                <PlanCard
-                                    className={cn(
-                                        'transform transition-all duration-300 hover:scale-105 hover:shadow-2xl',
-                                        subscriptionPlan.is_recommended &&
-                                            'ring-2 ring-primary/80 shadow-lg bg-gradient-to-tr from-primary/20 to-transparent'
+                        <div className="grid grid-cols-1 w-full md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                            {isLoading ? (
+                                <SubscriptionSkeleton />
+                            ) : (
+                                <>
+                                    {subscriptionPlans.map(
+                                        (subscriptionPlan, _) => (
+                                            <PlanCard
+                                                className={cn(
+                                                    'transform transition-all duration-300 hover:scale-105 hover:shadow-2xl',
+                                                    subscriptionPlan.is_recommended &&
+                                                        'ring-2 ring-primary/80 shadow-lg bg-gradient-to-tr from-primary/20 to-transparent'
+                                                )}
+                                                key={subscriptionPlan.id}
+                                                planMode={mode}
+                                                subscriptionPlan={
+                                                    subscriptionPlan
+                                                }
+                                            />
+                                        )
                                     )}
-                                    key={subscriptionPlan.id}
-                                    planMode={mode}
-                                    subscriptionPlan={subscriptionPlan}
-                                />
-                            ))}
+                                </>
+                            )}
                         </div>
                     </div>
 
@@ -162,4 +172,46 @@ const SubscriptionPage = () => {
         </PageContainer>
     )
 }
+
+export const SubscriptionSkeleton = () => {
+    return (
+        <OrganizationSkeleton
+            count={4}
+            customSkeleton={
+                <Skeleton className="h-[551px] rounded-3xl space-y-2 bg-sidebar p-8 min-w-[10vw] w-[20vw]">
+                    <Skeleton className="h-4 w-full" />
+                    <Skeleton className="h-3 w-1/4" />
+                    <Skeleton className="h-5 w-3/4" />
+                    <br />
+                    <br />
+                    <div className="flex flex-col space-y-2">
+                        <div className="flex items-center space-x-2">
+                            <Skeleton className="flex 1 size-10" />
+                            <Skeleton className="flex-2 w-full h-5" />
+                        </div>{' '}
+                        <div className="flex items-center space-x-2">
+                            <Skeleton className="flex 1 size-10" />
+                            <Skeleton className="flex-2 w-full h-5" />
+                        </div>
+                        <div className="flex items-center space-x-2">
+                            <Skeleton className="flex 1 size-10" />
+                            <Skeleton className="flex-2 w-full h-5" />
+                        </div>
+                        <div className="flex items-center space-x-2">
+                            <Skeleton className="flex 1 size-10" />
+                            <Skeleton className="flex-2 w-full h-5" />
+                        </div>
+                    </div>
+                    <br />
+                    <br />
+                    <Skeleton className="w-1/2 h-4" />
+                    <Skeleton className="w-1/4 h-4" />
+                    <Skeleton className="w-full h-4" />
+                </Skeleton>
+            }
+            mainClassName="col-span-4 flex flex-wrap"
+        />
+    )
+}
+
 export default SubscriptionPage
