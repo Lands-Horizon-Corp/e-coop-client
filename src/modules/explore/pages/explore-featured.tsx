@@ -65,16 +65,20 @@ const ExploreFeatured = ({
     }, [searchTerm, fuse, workingOrganizations])
 
     return (
-        <div>
+        <div className="">
             <div className={`flex items-center gap-2 my-2 justify-between`}>
                 <div className="flex items-center gap-2">
-                    {mode === 'featured' ? <StarIcon /> : <TrendingDownIcon />}
+                    {mode === 'featured' ? (
+                        <StarIcon className="text-primary" />
+                    ) : (
+                        <TrendingDownIcon className="text-pr" />
+                    )}
                     <h2 className="text-xl font-semibold">
                         {mode === 'featured'
                             ? 'Featured Organizations'
                             : 'Recently Viewed Organizations'}
                     </h2>
-                    <Badge className="ml-2" variant="secondary">
+                    <Badge className="ml-2">
                         {filteredOrganizations.length}
                     </Badge>
                 </div>
@@ -109,7 +113,7 @@ const ExploreFeatured = ({
                     ) : (
                         filteredOrganizations.map((item, index) => (
                             <CarouselItem
-                                className="md:basis-1/2 lg:basis-1/5"
+                                className="md:basis-1/2 pl-2 lg:basis-1/6"
                                 key={index}
                             >
                                 <OrganizationCardWithToolTip
@@ -135,10 +139,10 @@ export const ExplorePageCardPreviewController = () => {
     return (
         <div>
             <ImagePreviewPrevious
-                className={`-left-10 border-0  rounded-none rounded-tl-xs rounded-bl-xs h-full bg-background/80 dark:!bg-black/20`}
+                className={`-left-10 border-0 rounded-none rounded-tl-xs rounded-bl-xs h-full bg-background/80 dark:!bg-black`}
             />
             <ImagePreviewNext
-                className={`right-0 h-full rounded-none rounded-tr-xs rounded-br-xs border-0 !bg-background/50`}
+                className={`-right-5 ease-in-out duration-300 h-full px-2 w-[3.5rem] -translate-x-5 rounded-none rounded-tr-xs rounded-br-xs border-0 !bg-background/50 dark:from-black dark:to-transparent dark:bg-gradient-to-l`}
             />
         </div>
     )

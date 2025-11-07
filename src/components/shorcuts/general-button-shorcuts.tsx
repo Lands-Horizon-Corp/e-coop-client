@@ -76,7 +76,6 @@ const ShortcutItem = ({
 const GeneralButtonShortcuts = ({ className }: { className?: string }) => {
     const { open, onOpenChange } = useModalState()
     const [searchTerm, setSearchTerm] = useState('')
-    const [data, _] = useState<TGroupShorcuts[]>(ShortcutsData ?? [])
 
     useHotkeys(
         'control+J',
@@ -91,7 +90,7 @@ const GeneralButtonShortcuts = ({ className }: { className?: string }) => {
 
     const fuse = useMemo(
         () =>
-            new Fuse<TGroupShorcuts>(data, {
+            new Fuse<TGroupShorcuts>(ShortcutsData, {
                 keys: [
                     'title',
                     'items.title',
@@ -104,10 +103,10 @@ const GeneralButtonShortcuts = ({ className }: { className?: string }) => {
                 includeMatches: true,
                 findAllMatches: true,
             }),
-        [data]
+        [ShortcutsData]
     )
     const filteredGroupShorcuts = useMemo(() => {
-        let filtered = data
+        let filtered = ShortcutsData
         if (searchTerm.trim()) {
             filtered = fuse.search(searchTerm).map((r) => r.item)
         }
@@ -118,7 +117,7 @@ const GeneralButtonShortcuts = ({ className }: { className?: string }) => {
             const bLength = b.items?.length || 0
             return bLength - aLength // descending order
         })
-    }, [searchTerm, fuse, data])
+    }, [searchTerm, fuse, ShortcutsData])
 
     return (
         <div className={cn('w-fit ', className)}>

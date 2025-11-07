@@ -100,7 +100,7 @@ export const ExploreCategoriesMain = ({
             handleSelectedOrganization={handleSelectedOrganization}
             isLoading={isLoading}
             item={item}
-            key={index}
+            key={item?.category?.id ?? index}
             refetch={handleRefetch}
             searchTerm={searchTerm}
         />
@@ -114,9 +114,11 @@ const ExploreByCategories = ({
     refetch,
     item: { category, organizations },
 }: ExploreByCategoriesProps) => {
-    const workingOrganizations = useMemo(
-        () => organizations ?? [],
-        [organizations]
+    const onOpenModalPreview = useCallback(
+        (org: IOrganization) => {
+            handleSelectedOrganization?.(org)
+        },
+        [handleSelectedOrganization]
     )
 
     return (
@@ -125,7 +127,7 @@ const ExploreByCategories = ({
                 <div className="flex items-center gap-2">
                     <h2 className="text-xl font-semibold">{category.name}</h2>
                     <Badge className="ml-2" variant="secondary">
-                        {workingOrganizations.length}
+                        {organizations.length}
                     </Badge>
                 </div>
                 <RefreshButton
@@ -143,7 +145,7 @@ const ExploreByCategories = ({
                 <CarouselContent>
                     {isLoading ? (
                         <LoadingSkeleton />
-                    ) : workingOrganizations.length === 0 ? (
+                    ) : organizations.length === 0 ? (
                         <div className="w-full">
                             <EmptyState
                                 icon={
@@ -152,20 +154,16 @@ const ExploreByCategories = ({
                                 type={'Organizations'}
                             />
                         </div>
-                    ) : (
-                        workingOrganizations.map((item, index) => (
+                        ) : (
+                        organizations.map((org, index) => (
                             <CarouselItem
-                                className="md:basis-1/2 lg:basis-1/5"
-                                key={index}
-                                onClick={() =>
-                                    handleSelectedOrganization?.(item)
-                                }
+                                className="md:basis-1/2 pl-2 lg:basis-1/6"
+                                key={org?.id ?? index}
+                                onClick={() => handleSelectedOrganization?.(org)}
                             >
                                 <OrganizationCardWithToolTip
-                                    handleOpenModalPreview={(org) => {
-                                        handleSelectedOrganization?.(org)
-                                    }}
-                                    organization={item}
+                                    handleOpenModalPreview={onOpenModalPreview}
+                                    organization={org}
                                     searchTerm={searchTerm}
                                 />
                             </CarouselItem>

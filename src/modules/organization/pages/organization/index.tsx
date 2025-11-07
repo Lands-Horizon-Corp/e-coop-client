@@ -280,14 +280,14 @@ export const OrganizationCardWithToolTip = ({
     return (
         <OrganizationMiniCardToolTip
             content={
-                <div className="flex flex-col gap-y-2  h-[200px] w-[250px]">
+                <div className="flex flex-col gap-y-2 h-[200px] ">
                     <ImageDisplay
-                        className="flex-5 size-full rounded-lg hover:scale-105 duration-500 ease-in-out transition"
+                        className="flex-5 size-full rounded-lg hover:scale-102 duration-800 ease-in-out transition"
                         src={org.cover_media?.download_url}
                     />
                     <div className="flex-1 inline-flex items-center px-2 border-[0.5px] border-primary/30 bg-sidebar/80 rounded-lg">
                         <OrganizationIcon className="text-primary" />
-                        <h1 className="p-1 px-2 font-semibold text-primary-foreground text-sm">
+                        <h1 className="p-1 px-2 font-semibold truncate text-foreground text-sm">
                             {highlightMatch(org.name, searchTerm ?? '')}
                         </h1>
                     </div>
