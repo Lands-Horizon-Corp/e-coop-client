@@ -1,31 +1,41 @@
-import { ReactNode } from 'react'
+import { ReactNode, useMemo } from 'react'
+import { useEffect, useState } from 'react'
+
+import Fuse from 'fuse.js'
 
 import { cn } from '@/helpers'
 import { useHotkeys } from 'react-hotkeys-hook'
 
 import {
-    ArrowIcon,
-    CommandIcon,
-    EyeIcon,
-    FocusIcon,
-    HistoryIcon,
-    ReloadIcon,
-    ResetIcon,
-    ScanQrIcon,
-    UserIcon,
-    ViewIcon,
+    MagnifyingGlassIcon,
+    MagnifyingGlassIcon as SearchIcon,
 } from '@/components/icons'
+import { CommandIcon } from '@/components/icons'
 import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
 
+import useDebounce from '@/hooks/use-debounce'
 import { useModalState } from '@/hooks/use-modal-state'
 
+import { highlightMatch } from '../../modules/approvals/components/kanbans/journal-voucher/journal-voucher-kanban-main'
 import Modal from '../modals/modal'
+import {
+    Empty,
+    EmptyDescription,
+    EmptyHeader,
+    EmptyMedia,
+    EmptyTitle,
+} from '../ui/empty'
+import { Kbd } from '../ui/kbd'
+import { ShortcutsData } from './general-shorcuts-data'
+import { TGroupShorcuts } from './general-shorcuts.type'
 
 interface ShortcutItemProps {
-    icon: ReactNode
-    text: string
-    shortcut: string
+    icon?: ReactNode
+    text?: string
+    shortcut?: string
     description?: string
+    search: string
 }
 
 const ShortcutItem = ({
@@ -33,6 +43,7 @@ const ShortcutItem = ({
     text,
     shortcut,
     description,
+    search,
 }: ShortcutItemProps) => {
     return (
         <div
@@ -44,108 +55,28 @@ const ShortcutItem = ({
         >
             <div className="flex-none w-5 h-5 mr-2">{icon}</div>
             <div className="flex-1 overflow-hidden whitespace-nowrap text-ellipsis">
-                <span className="font-medium text-wrap">{text}</span>
+                {text && (
+                    <span className="font-medium text-wrap">
+                        {highlightMatch(text, search)}
+                    </span>
+                )}
                 {description && (
                     <span className="text-xs italic text-wrap text-muted-foreground ml-2">
-                        {description}
+                        {highlightMatch(description, search)}
                     </span>
                 )}
             </div>
             <div className="flex-none ml-auto text-xs text-muted-foreground">
-                {shortcut}
+                {shortcut && <Kbd>{highlightMatch(shortcut, search)}</Kbd>}
             </div>
         </div>
     )
 }
 
-const shortcutsData = {
-    general: {
-        title: 'General',
-        items: [
-            {
-                icon: <EyeIcon />,
-                text: 'Open / Close Command Shortcuts',
-                shortcut: 'Ctrl + J',
-            },
-            {
-                icon: <EyeIcon />,
-                text: 'Open Create Form',
-                description: '(from any table)',
-                shortcut: 'Enter',
-            },
-            {
-                text: 'Quick Navigate',
-                description: 'search pages',
-                icon: <CommandIcon />,
-                shortcut: 'Alt + Q, Ctrl + Q, Meta + Q',
-            },
-        ],
-    },
-    quicktTransfer: {
-        title: 'Quick Transfer / Payment',
-        items: [
-            { icon: <UserIcon />, text: 'Select a Member', shortcut: 'Enter' },
-            {
-                icon: <ArrowIcon />,
-                text: 'Submit Payment',
-                description: '(requires a member and valid form)',
-                shortcut: 'Ctrl + Enter',
-            },
-            {
-                icon: <ViewIcon />,
-                text: 'View Member Profile',
-                description: '(requires a member to be selected)',
-                shortcut: 'Alt + V',
-            },
-            { icon: <HistoryIcon />, text: 'History', shortcut: 'H' },
-            {
-                icon: <ResetIcon />,
-                text: 'Reset Transaction / Clear Member',
-                shortcut: 'Escape',
-            },
-            {
-                icon: <ReloadIcon />,
-                text: 'Refresh Accounts Table',
-                description: 'this will work on history page panel too',
-                shortcut: 'Alt + R',
-            },
-        ],
-    },
-    transaction: {
-        title: 'Payment',
-        items: [
-            {
-                icon: <ScanQrIcon />,
-                text: 'Start / Stop Scanner',
-                shortcut: 'S',
-            },
-            {
-                icon: <FocusIcon />,
-                text: 'Focus on Amount',
-                description: '(requires a member to be selected)',
-                shortcut: 'A',
-            },
-        ],
-    },
-    loanActions: {
-        title: 'Loan',
-        items: [
-            {
-                icon: <ScanQrIcon />,
-                text: 'Start Code Scanner',
-                shortcut: 'Shift + S',
-            },
-            {
-                icon: <UserIcon />,
-                text: 'Select a Member',
-                shortcut: 'Ctrl + Enter',
-            },
-        ],
-    },
-}
-
 const GeneralButtonShortcuts = ({ className }: { className?: string }) => {
     const { open, onOpenChange } = useModalState()
+    const [searchTerm, setSearchTerm] = useState('')
+    const [data, _] = useState<TGroupShorcuts[]>(ShortcutsData ?? [])
 
     useHotkeys(
         'control+J',
@@ -158,6 +89,37 @@ const GeneralButtonShortcuts = ({ className }: { className?: string }) => {
         }
     )
 
+    const fuse = useMemo(
+        () =>
+            new Fuse<TGroupShorcuts>(data, {
+                keys: [
+                    'title',
+                    'items.title',
+                    'items.description',
+                    'items.text',
+                    'items.shorcut',
+                ],
+                includeScore: true,
+                threshold: 0.2,
+                includeMatches: true,
+                findAllMatches: true,
+            }),
+        [data]
+    )
+    const filteredGroupShorcuts = useMemo(() => {
+        let filtered = data
+        if (searchTerm.trim()) {
+            filtered = fuse.search(searchTerm).map((r) => r.item)
+        }
+
+        // Sort by items length in descending order (groups with more items first)
+        return [...filtered].sort((a, b) => {
+            const aLength = a.items?.length || 0
+            const bLength = b.items?.length || 0
+            return bLength - aLength // descending order
+        })
+    }, [searchTerm, fuse, data])
+
     return (
         <div className={cn('w-fit ', className)}>
             <Button
@@ -169,7 +131,7 @@ const GeneralButtonShortcuts = ({ className }: { className?: string }) => {
                 <CommandIcon />
             </Button>
             <Modal
-                className="min-w-fit lg:min-w-[1200px] h-fit bg-background border-border text-foreground p-6 flex flex-col"
+                className="min-w-fit lg:min-w-[1200px] h-fit bg-background border-border text-foreground p-6 -space-y-3 flex flex-col"
                 description="Here are some useful keyboard shortcuts to help you navigate and perform actions quickly."
                 descriptionClassName="text-sm text-center text-muted-foreground"
                 onOpenChange={onOpenChange}
@@ -177,18 +139,40 @@ const GeneralButtonShortcuts = ({ className }: { className?: string }) => {
                 title="All Keyboard Shortcuts"
                 titleClassName="text-lg font-semibold text-center"
             >
-                <div className="">
+                <div className="-translate-y-5">
+                    <GeneralShorcutsSearch setSearchTerm={setSearchTerm} />
                     {/* Main Content Area - Columns */}
-                    <div className="flex-1 grid grid-cols-1 lg:grid-cols-3 gap-6 ecoop-scroll overflow-y-auto">
-                        {Object.values(shortcutsData).map((category, index) => (
+                    <div className="flex-1 bg-sidebar/50 mt-3 p-2 rounded-xl grid grid-cols-1 lg:grid-cols-3 gap-6 ecoop-scroll overflow-y-auto">
+                        {!filteredGroupShorcuts.length && (
+                            <Empty className="sticky top-0 col-span-3">
+                                <EmptyHeader>
+                                    <EmptyMedia variant="icon">
+                                        <MagnifyingGlassIcon />
+                                    </EmptyMedia>
+                                    <EmptyTitle className="text-sm">
+                                        No Shortcuts Found
+                                    </EmptyTitle>
+                                    <EmptyDescription>
+                                        No shortcut commands match "{' '}
+                                        <Kbd>{searchTerm}</Kbd> "
+                                    </EmptyDescription>
+                                </EmptyHeader>
+                            </Empty>
+                        )}
+                        {filteredGroupShorcuts.map((category, index) => (
                             <div className="p-2" key={index}>
                                 <h2 className="text-sm text-muted-foreground font-medium mb-2">
-                                    {category.title}
+                                    {category.title &&
+                                        highlightMatch(
+                                            category.title,
+                                            searchTerm
+                                        )}
                                 </h2>
                                 <div className="space-y-1">
                                     {category.items.map((item, itemIndex) => (
                                         <ShortcutItem
                                             key={itemIndex}
+                                            search={searchTerm}
                                             {...item}
                                         />
                                     ))}
@@ -213,3 +197,48 @@ const GeneralButtonShortcuts = ({ className }: { className?: string }) => {
 }
 
 export default GeneralButtonShortcuts
+
+type GeneralLedgerShorcutsProps = {
+    setSearchTerm: (term: string) => void
+}
+
+const GeneralShorcutsSearch = ({
+    setSearchTerm,
+}: GeneralLedgerShorcutsProps) => {
+    const [inputValue, setInputValue] = useState('')
+
+    const debounceSearchTerm = useDebounce(inputValue, 200)
+
+    useEffect(() => {
+        setSearchTerm(debounceSearchTerm)
+    }, [debounceSearchTerm, setSearchTerm])
+
+    useHotkeys(
+        'enter',
+        (e) => {
+            e.preventDefault()
+            const searchInput = document.querySelector(
+                'input[placeholder*="Search"]'
+            ) as HTMLInputElement
+            if (searchInput) {
+                searchInput.focus()
+            }
+        },
+        {
+            keydown: true,
+            keyup: true,
+        }
+    )
+
+    return (
+        <div className="relative flex-1 max-w-2xl mx-auto">
+            <SearchIcon className="absolute left-4 top-1/2 transform -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+            <Input
+                className="pl-12 pr-4 py-3 text-lg border-2 focus:border-primary/50"
+                onChange={(e) => setInputValue(e.target.value)}
+                placeholder="Search organizations, branches, or locations..."
+                value={inputValue}
+            />
+        </div>
+    )
+}

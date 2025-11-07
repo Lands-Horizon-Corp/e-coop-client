@@ -10,6 +10,7 @@ import {
 } from '@/modules/transaction-batch'
 import { useTransactionBatchStore } from '@/modules/transaction-batch/store/transaction-batch-store'
 import { IEmployee } from '@/modules/user'
+import { useHotkeys } from 'react-hotkeys-hook'
 
 import { LayersIcon, LayersSharpDotIcon } from '@/components/icons'
 import { Button } from '@/components/ui/button'
@@ -96,6 +97,11 @@ const TransactionBatchNavButton = (_props: Props) => {
             toast.info('Your current transaction batch has been deleted.')
         }
     )
+
+    useHotkeys('alt+s', (e) => {
+        modalState.onOpenChange(true)
+        e.preventDefault()
+    })
 
     if (!transactionBatch)
         return (

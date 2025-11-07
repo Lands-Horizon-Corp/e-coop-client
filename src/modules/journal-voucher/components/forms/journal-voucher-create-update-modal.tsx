@@ -478,7 +478,7 @@ export const JournalVoucherCreateUpdateFormModal = ({
 
     return (
         <Modal
-            className={cn('!min-w-2xl !max-w-7xl', className)}
+            className={cn('!min-w-2xl !max-w-5xl', className)}
             title={
                 <div>
                     <p className="font-medium">

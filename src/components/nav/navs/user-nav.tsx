@@ -10,6 +10,7 @@ import { NotificationNav } from '@/modules/notification/components/notification'
 import TransactionBatchNavButton from '@/modules/transaction-batch/components/batch-nav-button'
 import NavProfileMenu from '@/modules/user-profile/components/nav/nav-profile-menu'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
+import { useHotkeys } from 'react-hotkeys-hook'
 
 import { BadgeCheckFillIcon } from '@/components/icons'
 import LiveToggle from '@/components/live-toggle'
@@ -36,6 +37,18 @@ const UserNav = ({
     const router = useRouter()
     const [isOpen, setIsOpen] = useState(true)
 
+    useHotkeys(
+        'alt+a',
+        (e) => {
+            router.navigate({
+                to: '/org/$orgname/branch/$branchname/approvals' as string,
+            })
+            e.preventDefault()
+        },
+        {
+            keydown: true,
+        }
+    )
     // Secondary nav items (collapsible)
     const SECONDARY_NAV_ITEMS = [
         {
