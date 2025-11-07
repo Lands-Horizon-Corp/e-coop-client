@@ -123,7 +123,7 @@ const AccountHistoryCard = ({
                     }}
                 >
                     <div className="inline-flex pt-2 space-x-2 ">
-                        <div className="flex items-center flex-col">
+                        <div className="flex pt-4 items-center flex-col">
                             <div
                                 className={cn(
                                     'relative flex-shrink-0 size-10 rounded-full flex items-center justify-center border-2 shadow-sm',

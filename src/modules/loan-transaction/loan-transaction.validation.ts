@@ -21,7 +21,7 @@ import {
     WEEKDAYS,
 } from './loan.constants'
 
-export const WithModeOfPayment = z.discriminatedUnion(
+export const WithModeOfPaymentSchema = z.discriminatedUnion(
     'mode_of_payment',
     [
         z.object({
@@ -333,7 +333,7 @@ export const LoanTransactionSchema = z
 
         amortization: z.coerce.number().optional(), //For UI only
     })
-    .and(WithModeOfPayment)
+    .and(WithModeOfPaymentSchema)
     .and(WithComaker)
     .and(withLoanType)
 

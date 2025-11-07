@@ -283,7 +283,6 @@ export const AccountTypeContent = ({
                 <LoanAccountContent account={account} className={className} />
             )
         case 'SVF-Ledger':
-            return <div>SVF Ledger Account Content</div>
         default:
             return null
     }

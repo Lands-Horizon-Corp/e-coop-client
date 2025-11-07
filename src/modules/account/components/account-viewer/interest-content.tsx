@@ -31,7 +31,7 @@ export const InterestAccountContent = ({
     return (
         <div className={cn('space-y-4 p-4 bg-popover rounded-2xl', className)}>
             <p className="text-sm text-popover-foreground/40 font-semibold">
-                Interest
+                Interest Configuration
             </p>
 
             {/* Computation Type */}
@@ -259,7 +259,7 @@ export const InterestAccountContent = ({
                 <BooleanFieldDisplay
                     description="Enable interest diminishing calculation by year instead of by payment period."
                     icon={<CalendarNumberIcon className="size-4" />}
-                    title="Interest Diminishing by Year ???????"
+                    title="Interest Diminishing by Year"
                     value={account.interest_diminishing_by_year}
                 />
             </div>

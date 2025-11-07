@@ -25,7 +25,7 @@ const LiveToggle = ({ className, size = 'sm' }: LiveToggleProps) => {
                 <TooltipTrigger asChild>
                     <Button
                         className={cn(
-                            'rounded-full shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105',
+                            'rounded-full transition-all duration-300 hover:scale-105',
                             isLiveEnabled
                                 ? 'bg-primary text-primary-foreground hover:bg-primary/90'
                                 : 'bg-secondary text-secondary-foreground hover:bg-secondary/80',

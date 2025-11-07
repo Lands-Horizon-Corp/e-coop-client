@@ -77,7 +77,7 @@ const AccountTypeDiscriminator = z.discriminatedUnion('type', [
 
     z.object({
         type: z.literal('Loan'),
-        computation_type: AccountComputationTypeSchema,
+        // computation_type: AccountComputationTypeSchema,
         loan_saving_type: z
             .enum(LOAN_SAVING_TYPE, { error: 'Invalid loan saving type' })
             .optional(),
@@ -90,7 +90,7 @@ const AccountTypeDiscriminator = z.discriminatedUnion('type', [
     // Fines account - has specific fields
     z.object({
         type: z.literal('Fines'),
-        computation_type: AccountComputationTypeSchema.optional(),
+        // computation_type: AccountComputationTypeSchema.optional(),
 
         //  ALTCODE REPLACEMENT
         loan_account_id: entityIdSchema.optional(),

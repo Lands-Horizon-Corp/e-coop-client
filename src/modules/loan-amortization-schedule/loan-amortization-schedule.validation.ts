@@ -2,9 +2,9 @@ import z from 'zod'
 
 import { descriptionTransformerSanitizer, entityIdSchema } from '@/validation'
 
-export const AmortizationSchema = z.object({
+export const LoanAmortizationScheduleSchema = z.object({
     id: entityIdSchema.optional(),
-    name: z.string().min(1, 'Amortization name is required'),
+    name: z.string().min(1, 'LoanAmortizationSchedule name is required'),
     description: z
         .string()
         .min(10, 'Min 10 character description')
@@ -12,4 +12,6 @@ export const AmortizationSchema = z.object({
         .transform(descriptionTransformerSanitizer),
 })
 
-export type TAmortizationSchema = z.infer<typeof AmortizationSchema>
+export type TLoanAmortizationScheduleSchema = z.infer<
+    typeof LoanAmortizationScheduleSchema
+>

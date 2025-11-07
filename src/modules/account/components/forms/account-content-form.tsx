@@ -58,7 +58,7 @@ const AccountContentForm = ({
                 name="type"
                 render={({ field }) => (
                     <RadioGroup
-                        className="flex ecoop-scroll overflow-x-auto gap-x-2"
+                        className="flex flex-wrap gap-x-2"
                         disabled={isDisabled(field.name)}
                         onValueChange={(value: TAccountType) => {
                             field.onChange(value)

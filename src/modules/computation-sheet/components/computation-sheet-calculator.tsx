@@ -2,7 +2,6 @@ import { toast } from 'sonner'
 
 import { formatNumber } from '@/helpers'
 import { cn } from '@/helpers'
-import AmortizationTable from '@/modules/amortization/components/amortization-table'
 import MockLoanInputForm from '@/modules/calculator/components/forms/mock-loan-input-form'
 
 import { RenderIcon, TIcon } from '@/components/icons'
@@ -19,18 +18,18 @@ import {
 import { IClassProps, TEntityId } from '@/types'
 
 import {
-    IComputationSheetCalculator,
-    IComputationSheetCalculatorDeduction,
+    IComputationSheetAmortizationResponse,
+    IComputationSheetAmortizationResponseDeduction,
     useCalculateSchemeAmortization,
 } from '..'
 import { TMockCloanInputSchema } from '../../calculator'
 
 interface ComputationSheetCalculatorProps extends IClassProps {
     computationSheetId?: TEntityId
-    defaultResult?: IComputationSheetCalculator
+    defaultResult?: IComputationSheetAmortizationResponse
     defaultInput?: Partial<TMockCloanInputSchema>
     onSubmitData?: (data: TMockCloanInputSchema) => void
-    onCalculatorResult?: (data: IComputationSheetCalculator) => void
+    onCalculatorResult?: (data: IComputationSheetAmortizationResponse) => void
 }
 
 const ComputationSheetCalculator = ({
@@ -70,8 +69,8 @@ const ComputationSheetCalculator = ({
                 className
             )}
         >
-            <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-2 bg-secondary dark:bg-transparent p-4 dark:p-0 rounded">
+            <div className="grid grid-cols-12 gap-4">
+                <div className="space-y-2 col-span-7 bg-secondary dark:bg-transparent p-4 dark:p-0 rounded">
                     <p>Mock Loan Input</p>
                     <MockLoanInputForm
                         className="max-h-[60vh] overflow-y-auto ecoop-scroll"
@@ -80,7 +79,7 @@ const ComputationSheetCalculator = ({
                         onSubmit={handleCompute}
                     />
                 </div>
-                <div className="space-y-2 rounded">
+                <div className="space-y-2 col-span-5 rounded">
                     <p>Deductions</p>
                     <DeductionTable
                         deductionEntries={
@@ -95,16 +94,11 @@ const ComputationSheetCalculator = ({
             </div>
             <div className="bg-popover p-4 space-y-2 rounded-xl">
                 <p>Amortization</p>
-                <AmortizationTable
-                    amortizationPayments={
-                        schemeCalculatorResponse?.amortization.amortizations ||
-                        []
+                {/* <AmortizationTable
+                    sce={
+                        schemeCalculatorResponse?.schedule || []
                     }
-                    amortizationSummary={
-                        schemeCalculatorResponse?.amortization
-                            .amortization_summary
-                    }
-                />
+                /> */}
             </div>
         </div>
     )
@@ -115,7 +109,7 @@ const DeductionTable = ({
     totalCredit = 0,
     totalDebit = 0,
 }: {
-    deductionEntries: IComputationSheetCalculatorDeduction[]
+    deductionEntries: IComputationSheetAmortizationResponseDeduction[]
     totalCredit: number
     totalDebit: number
 }) => {

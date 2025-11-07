@@ -9,8 +9,6 @@ import { Label } from '@/components/ui/label'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 
 import {
-    COMPUTATION_TYPE,
-    COMPUTATION_TYPE_DESCRIPTIONS,
     LOAN_SAVING_TYPE,
     OTHER_DEDUCTION_ENTRY,
 } from '../../../account.constants'
@@ -36,53 +34,6 @@ export const LoanFormSection = ({
             </h1>
 
             <div className="grid grid-cols-1 gap-x-2">
-                {/* Computation Type */}
-                <FormFieldWrapper
-                    className="bg-card/50 p-3 pb-3 rounded-xl"
-                    control={form.control}
-                    label="Computation Type"
-                    name="computation_type"
-                    render={({ field }) => (
-                        <RadioGroup
-                            className="grid grid-cols-3 gap-2"
-                            disabled={isDisabled(field.name) || isLoading}
-                            onValueChange={field.onChange}
-                            value={field.value}
-                        >
-                            {COMPUTATION_TYPE.map((type) => (
-                                <GradientBackground gradientOnly key={type}>
-                                    <div className="shadow-xs relative flex w-full items-center gap-2 rounded-2xl border border-input p-3 outline-none duration-200 ease-out has-[:checked]:border-primary/30 has-[:checked]:bg-primary/40">
-                                        <RadioGroupItem
-                                            className="order-1 after:absolute after:inset-0"
-                                            id={`computation-type-${type}`}
-                                            value={type}
-                                        />
-                                        <div className="flex grow items-center gap-3">
-                                            <div className="grid gap-2">
-                                                <Label
-                                                    htmlFor={`computation-type-${type}`}
-                                                >
-                                                    {type}
-                                                </Label>
-                                                <p
-                                                    className="text-xs text-muted-foreground"
-                                                    id={`computation-type-${type}-description`}
-                                                >
-                                                    {
-                                                        COMPUTATION_TYPE_DESCRIPTIONS[
-                                                            type
-                                                        ]
-                                                    }
-                                                </p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </GradientBackground>
-                            ))}
-                        </RadioGroup>
-                    )}
-                />
-
                 {/* Computation Sheet */}
                 <FormFieldWrapper
                     control={form.control}

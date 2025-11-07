@@ -21,7 +21,7 @@ export const FinesAccountContent = ({
     return (
         <div className={cn('space-y-4 p-4 bg-popover rounded-2xl', className)}>
             <p className="text-sm text-popover-foreground/40 font-semibold">
-                Fines
+                Fines Configuration
             </p>
 
             {/* Computation Type */}

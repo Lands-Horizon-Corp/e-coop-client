@@ -1,4 +1,5 @@
 import { useForm } from 'react-hook-form'
+import { toast } from 'sonner'
 
 import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
 
@@ -99,9 +100,20 @@ const AccountCreateUpdateForm = ({
             ...data,
         }
         if (accountId) {
-            updateMutation.mutate({ id: accountId, payload: request })
+            toast.promise(
+                updateMutation.mutateAsync({ id: accountId, payload: request }),
+                {
+                    loading: 'Updating account...',
+                    success: 'Account updated successfully!',
+                    error: 'Failed to update account.',
+                }
+            )
         } else {
-            createMutation.mutate(request)
+            toast.promise(createMutation.mutateAsync(request), {
+                loading: 'Creating account...',
+                success: 'Account created successfully!',
+                error: 'Failed to create account.',
+            })
         }
     }, handleFocusError)
 

@@ -113,7 +113,7 @@ const UserNav = ({
             <NavContainer className="pointer-events-auto">
                 <div className="flex items-center gap-2">
                     {/* Collapsible secondary navigation */}
-                    <div className="relative overflow-hidden">
+                    <div className="relative p-2 overflow-hidden">
                         <div
                             className={`flex items-center gap-2 transition-all duration-300 ease-out ${
                                 isOpen

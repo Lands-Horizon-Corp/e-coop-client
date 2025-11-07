@@ -2,7 +2,6 @@ import { Path, UseFormReturn } from 'react-hook-form'
 
 import { GradientBackground } from '@/components/gradient-background/gradient-background'
 import { FaCalendarCheckIcon, MoneyBagIcon } from '@/components/icons'
-import { FormControl } from '@/components/ui/form'
 import FormFieldWrapper from '@/components/ui/form-field-wrapper'
 import { Input } from '@/components/ui/input'
 import {
@@ -13,16 +12,9 @@ import {
 } from '@/components/ui/input-group'
 import { Label } from '@/components/ui/label'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
-import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-} from '@/components/ui/select'
 import { Switch } from '@/components/ui/switch'
 
 import {
-    COMPUTATION_TYPE,
     INTEREST_FINES_COMPUTATION_DIMINISHING,
     INTEREST_FINES_COMPUTATION_DIMINISHING_STRAIGHT_DIMINISHING_YEARLY,
     LUMPSUM_COMPUTATION_TYPE,
@@ -48,36 +40,6 @@ export const FinesFormSection = ({
             </h1>
             <div className="flex gap-x-3">
                 <div>
-                    {/* Computation Type */}
-                    <FormFieldWrapper
-                        control={form.control}
-                        label="Computation Type"
-                        name="computation_type"
-                        render={({ field }) => (
-                            <FormControl>
-                                <Select
-                                    defaultValue={field.value || undefined}
-                                    disabled={isDisabled(field.name)}
-                                    onValueChange={(selectedValue) => {
-                                        field.onChange(selectedValue)
-                                    }}
-                                >
-                                    <SelectTrigger className="w-full">
-                                        {field.value ||
-                                            'Select Computation Type'}
-                                    </SelectTrigger>
-                                    <SelectContent>
-                                        {COMPUTATION_TYPE.map((type) => (
-                                            <SelectItem key={type} value={type}>
-                                                {type}
-                                            </SelectItem>
-                                        ))}
-                                    </SelectContent>
-                                </Select>
-                            </FormControl>
-                        )}
-                    />
-
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                         <FormFieldWrapper
                             control={form.control}

@@ -1,6 +1,6 @@
-import { cn, formatNumber } from '@/helpers'
-import { toReadableDate } from '@/helpers/date-utils'
-import AmortizationTable from '@/modules/amortization/components/amortization-table'
+import { cn } from '@/helpers'
+
+// import AmortizationTable from '@/modules/amortization/components/amortization-table'
 
 import {
     BookOpenIcon,
@@ -8,27 +8,24 @@ import {
     CalendarDotsIcon,
     CalendarNumberIcon,
     MoneyTrendIcon,
-    RefreshIcon,
-    TicketIcon,
     TrendingUpIcon,
 } from '@/components/icons'
 import Modal, { IModalProps } from '@/components/modals/modal'
-import LoadingSpinner from '@/components/spinners/loading-spinner'
 import { Button } from '@/components/ui/button'
 
 import { IClassProps, TEntityId } from '@/types'
 
-import { useGetLoanAmortization } from '..'
+// import { useGetLoanAmortization } from '..'
 
 interface Props extends IClassProps {
     loanTransactionId: TEntityId
 }
 
-const LoanAmortization = ({ className, loanTransactionId }: Props) => {
-    const { data, refetch, isRefetching } = useGetLoanAmortization({
-        loanTransactionId,
-        options: { enabled: loanTransactionId !== undefined },
-    })
+const LoanAmortization = ({ className }: Props) => {
+    // const { data, refetch, isRefetching } = useGetLoanAmortization({
+    //     loanTransactionId,
+    //     options: { enabled: loanTransactionId !== undefined },
+    // })
 
     return (
         <div
@@ -45,17 +42,17 @@ const LoanAmortization = ({ className, loanTransactionId }: Props) => {
                     </p>
                     <Button
                         className="size-fit p-1 cursor-pointer"
-                        disabled={isRefetching || !loanTransactionId}
-                        onClick={() => refetch()}
+                        // disabled={isRefetching || !loanTransactionId}
+                        // onClick={() => refetch()}
                         size="icon"
                         type="button"
                         variant="ghost"
                     >
-                        {isRefetching ? (
+                        {/* {isRefetching ? (
                             <LoadingSpinner className="size-3" />
                         ) : (
                             <RefreshIcon className="size-3" />
-                        )}
+                        )} */}
                     </Button>
                 </div>
                 <div className="bg-background rounded-xl p-4 text-sm">
@@ -69,32 +66,32 @@ const LoanAmortization = ({ className, loanTransactionId }: Props) => {
                                 Amount Applied
                             </p>
                             <p>
-                                {formatNumber(
+                                {/* {formatNumber(
                                     data?.loan_details.account_applied || 0,
                                     2
-                                )}
+                                )} */}
                             </p>
                         </div>
                         <div className="col-span-1">
                             <p className="text-xs text-muted-foreground">
-                                <TicketIcon className="inline" /> Voucher
+                                {/* <TicketIcon className="inline" /> Voucher */}
                             </p>
                             <p>
-                                {data?.loan_details?.voucher || (
+                                {/* {data?.loan_details?.voucher || (
                                     <span className="text-muted-foreground/50 text-xs">
                                         none
                                     </span>
-                                )}
+                                )} */}
                             </p>
                         </div>
                         <div>
                             <p className="text-xs text-muted-foreground">
                                 Due Date
                             </p>
-                            <p>
-                                {data?.loan_details.due_date &&
+                            {/* <p> */}
+                            {/* {data?.loan_details.due_date &&
                                     toReadableDate(data?.loan_details.due_date)}
-                            </p>
+                            </p> */}
                         </div>
                     </div>
                 </div>
@@ -108,7 +105,7 @@ const LoanAmortization = ({ className, loanTransactionId }: Props) => {
                                 Monthly Payment
                             </p>
                             <p className="font-medium text-green-600">
-                                {data?.summary?.monthly_payment ? (
+                                {/* {data?.summary?.monthly_payment ? (
                                     formatNumber(
                                         data?.summary?.monthly_payment,
                                         2
@@ -117,7 +114,7 @@ const LoanAmortization = ({ className, loanTransactionId }: Props) => {
                                     <span className="text-xs text-muted-foreground">
                                         none
                                     </span>
-                                )}
+                                )} */}
                             </p>
                         </div>
                         <div>
@@ -126,13 +123,13 @@ const LoanAmortization = ({ className, loanTransactionId }: Props) => {
                                 Rate
                             </p>
                             <p className="font-medium text-orange-500">
-                                {data?.summary?.interest_rate ? (
+                                {/* {data?.summary?.interest_rate ? (
                                     `${data.summary.interest_rate}%`
                                 ) : (
                                     <span className="text-xs text-muted-foreground">
                                         none
                                     </span>
-                                )}
+                                )} */}
                             </p>
                         </div>
                         <div>
@@ -141,11 +138,11 @@ const LoanAmortization = ({ className, loanTransactionId }: Props) => {
                                 Computation Type
                             </p>
                             <p className="font-medium text-blue-600">
-                                {data?.summary?.computation_type || (
+                                {/* {data?.summary?.computation_type || (
                                     <span className="text-xs text-muted-foreground">
                                         none
                                     </span>
-                                )}
+                                )} */}
                             </p>
                         </div>
                         <div>
@@ -154,11 +151,11 @@ const LoanAmortization = ({ className, loanTransactionId }: Props) => {
                                 Payment
                             </p>
                             <p className="font-medium capitalize text-purple-600">
-                                {data?.summary?.mode_of_payment || (
+                                {/* {data?.summary?.mode_of_payment || (
                                     <span className="text-xs text-muted-foreground">
                                         none
                                     </span>
-                                )}
+                                )} */}
                             </p>
                         </div>
 
@@ -169,13 +166,13 @@ const LoanAmortization = ({ className, loanTransactionId }: Props) => {
                                 Terms
                             </p>
                             <p className="font-medium text-slate-700">
-                                {data?.summary?.total_terms ? (
+                                {/* {data?.summary?.total_terms ? (
                                     `${data.summary.total_terms} Term(s)`
                                 ) : (
                                     <span className="text-xs text-muted-foreground">
                                         none
                                     </span>
-                                )}
+                                )} */}
                             </p>
                         </div>
                         <div>
@@ -184,13 +181,13 @@ const LoanAmortization = ({ className, loanTransactionId }: Props) => {
                                 Interest
                             </p>
                             <p className="font-medium text-orange-600">
-                                {data?.summary?.total_interest ? (
+                                {/* {data?.summary?.total_interest ? (
                                     formatNumber(data.summary.total_interest, 2)
                                 ) : (
                                     <span className="text-xs text-muted-foreground">
                                         none
                                     </span>
-                                )}
+                                )} */}
                             </p>
                         </div>
                         <div>
@@ -199,7 +196,7 @@ const LoanAmortization = ({ className, loanTransactionId }: Props) => {
                                 Service Fee
                             </p>
                             <p className="font-medium text-amber-600">
-                                {data?.summary?.total_service_fee ? (
+                                {/* {data?.summary?.total_service_fee ? (
                                     formatNumber(
                                         data.summary.total_service_fee,
                                         2
@@ -208,7 +205,7 @@ const LoanAmortization = ({ className, loanTransactionId }: Props) => {
                                     <span className="text-xs text-muted-foreground">
                                         none
                                     </span>
-                                )}
+                                )} */}
                             </p>
                         </div>
                         <div>
@@ -217,22 +214,22 @@ const LoanAmortization = ({ className, loanTransactionId }: Props) => {
                                 Payment
                             </p>
                             <p className="font-bold text-emerald-600 text-base">
-                                {data?.summary?.total_amount ? (
+                                {/* {data?.summary?.total_amount ? (
                                     formatNumber(data.summary.total_amount, 2)
                                 ) : (
                                     <span className="text-xs text-muted-foreground">
                                         none
                                     </span>
-                                )}
+                                )} */}
                             </p>
                         </div>
                     </div>
                 </div>
 
                 <p className="text-xs text-center text-muted-foreground/60">
-                    {data?.generated_at
+                    {/* {data?.generated_at
                         ? `Generated at ${toReadableDate(data.generated_at)}`
-                        : ''}
+                        : ''} */}
                 </p>
             </div>
             <div className="flex-1 bg-popover/80 rounded-lg p-1 min-w-0 text-sm">
@@ -241,10 +238,10 @@ const LoanAmortization = ({ className, loanTransactionId }: Props) => {
                     Amortization Schedule
                 </p>
 
-                <AmortizationTable
+                {/* <AmortizationTable
                     amortizationPayments={data?.amortization_schedule || []}
                     amortizationSummary={data?.summary}
-                />
+                /> */}
             </div>
         </div>
     )

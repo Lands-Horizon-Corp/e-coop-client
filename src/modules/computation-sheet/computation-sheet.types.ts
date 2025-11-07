@@ -3,9 +3,9 @@ import z from 'zod'
 import { IBaseEntityMeta, IPaginatedResult, TEntityId } from '@/types'
 
 import { IAccount } from '../account'
-import { IAmortizationPayment, IAmortizationSummary } from '../amortization'
+import { TMockCloanInputSchema } from '../calculator'
 import { ICurrency } from '../currency'
-import { TLoanModeOfPayment } from '../loan-transaction'
+import { ILoanAmortizationSchedule } from '../loan-amortization-schedule'
 import { ComputationSheetSchema } from './computation-sheet.validation'
 
 export interface IComputationSheet extends IBaseEntityMeta {
@@ -33,23 +33,9 @@ export interface IComputationSheetPaginated
 
 // FOR CALCULATOR USE ONLY
 // Payload for computing amortization of a specific computation sheet
-export interface IComputationSheetCalculatorRequest {
-    terms: number
-    account_id: TEntityId
-    mode_of_payment: TLoanModeOfPayment
-    fixed_days?: number
-    weekdays?: number
-    pay_1?: number
-    pay_2?: number
-    applied_1: number
-    is_add_on: boolean
+export type IComputationSheetAmortizationResponseRequest = TMockCloanInputSchema
 
-    exclude_holidays?: boolean
-    exclude_saturdays?: boolean
-    exclude_sundays?: boolean
-}
-
-export interface IComputationSheetCalculatorDeduction {
+export interface IComputationSheetAmortizationResponseDeduction {
     account: IAccount
     name?: string
     description?: string
@@ -59,12 +45,10 @@ export interface IComputationSheetCalculatorDeduction {
     debit: number
 }
 
-export interface IComputationSheetCalculator {
-    entries: IComputationSheetCalculatorDeduction[]
+export interface IComputationSheetAmortizationResponse {
+    entries: IComputationSheetAmortizationResponseDeduction[]
     total_debit: number
     total_credit: number
-    amortization: {
-        amortizations: IAmortizationPayment[]
-        amortization_summary: IAmortizationSummary
-    }
+
+    schedule: ILoanAmortizationSchedule[]
 }

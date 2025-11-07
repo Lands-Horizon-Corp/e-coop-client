@@ -38,7 +38,6 @@ export const SVFLedgerFormSection = ({
                 <MoneyBagIcon className="inline-block mr-2 mb-1" />
                 SVF (Service Fee) Configuration
             </h1>
-
             {/* Max Amount, Min Amount, Computation Type */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <FormFieldWrapper
