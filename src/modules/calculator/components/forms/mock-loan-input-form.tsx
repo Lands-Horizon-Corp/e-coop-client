@@ -440,7 +440,7 @@ const ConnectedAccountsSection = ({
             {connectedAccounts.map((account, i) => (
                 <ConnectedAccountItem
                     account={account}
-                    key={`account-${i}`}
+                    key={account.id}
                     onRemove={() => handleRemove(i)}
                 />
             ))}

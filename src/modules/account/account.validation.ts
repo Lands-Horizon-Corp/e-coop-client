@@ -1,7 +1,12 @@
 import z from 'zod'
 
 import { ICONS } from '@/constants'
-import { descriptionTransformerSanitizer, entityIdSchema } from '@/validation'
+import {
+    DaySchema,
+    PercentageSchema,
+    descriptionTransformerSanitizer,
+    entityIdSchema,
+} from '@/validation'
 
 import { FINANCIAL_STATEMENT_TYPE } from '../financial-statement-definition'
 import { GENERAL_LEDGER_TYPE } from '../general-ledger'
@@ -96,27 +101,11 @@ const AccountTypeDiscriminator = z.discriminatedUnion('type', [
         loan_account_id: entityIdSchema.optional(),
         loan_account: z.any().optional(),
 
-        fines_amort: z
-            .number()
-            .min(0, 'Fines amort must be non-negative')
-            .optional(),
-        fines_maturity: z
-            .number()
-            .min(0, 'Fines maturity must be non-negative')
-            .optional(),
-        fines_grace_period_amortization: z
-            .number()
-            .min(0, 'Fines grace period amortization must be non-negative')
-            .optional(),
-        additional_grace_period: z
-            .number()
-            .int()
-            .min(0, 'Additional grace period must be non-negative')
-            .optional(),
-        fines_grace_period_maturity: z
-            .number()
-            .min(0, 'Fines grace period maturity must be non-negative')
-            .optional(),
+        fines_amort: PercentageSchema.optional(),
+        fines_maturity: PercentageSchema.optional(),
+        fines_grace_period_amortization: DaySchema.optional(),
+        additional_grace_period: PercentageSchema.optional(),
+        fines_grace_period_maturity: DaySchema.optional(),
 
         interest_computation_month_end: z.boolean().optional(),
         fines_computation_by_next_amortization: z.boolean().optional(),
@@ -124,6 +113,39 @@ const AccountTypeDiscriminator = z.discriminatedUnion('type', [
         fines_computation_daily_by_amortization: z.boolean().optional(),
         fines_computation_rest_by_rate: z.boolean().optional(),
         compute_fines_after_maturity: z.boolean().optional(),
+
+        coh_cib_fines_grace_period_entry_daily_amortization:
+            PercentageSchema.optional().default(0),
+        coh_cib_fines_grace_period_entry_daily_maturity:
+            PercentageSchema.optional().default(0),
+        coh_cib_fines_grace_period_entry_weekly_amortization:
+            PercentageSchema.optional().default(0),
+        coh_cib_fines_grace_period_entry_weekly_maturity:
+            PercentageSchema.optional().default(0),
+        coh_cib_fines_grace_period_entry_monthly_amortization:
+            PercentageSchema.optional().default(0),
+        coh_cib_fines_grace_period_entry_monthly_maturity:
+            PercentageSchema.optional().default(0),
+        coh_cib_fines_grace_period_entry_semi_monthly_amortization:
+            PercentageSchema.optional().default(0),
+        coh_cib_fines_grace_period_entry_semi_monthly_maturity:
+            PercentageSchema.optional().default(0),
+        coh_cib_fines_grace_period_entry_quarterly_amortization:
+            PercentageSchema.optional().default(0),
+        coh_cib_fines_grace_period_entry_quarterly_maturity:
+            PercentageSchema.optional().default(0),
+        coh_cib_fines_grace_period_entry_semi_annual_amortization:
+            PercentageSchema.optional().default(0),
+        coh_cib_fines_grace_period_entry_semi_annual_maturity:
+            PercentageSchema.optional().default(0),
+        coh_cib_fines_grace_period_entry_annual_amortization:
+            PercentageSchema.optional().default(0),
+        coh_cib_fines_grace_period_entry_annual_maturity:
+            PercentageSchema.optional().default(0),
+        coh_cib_fines_grace_period_entry_lumpsum_amortization:
+            PercentageSchema.optional().default(0),
+        coh_cib_fines_grace_period_entry_lumpsum_maturity:
+            PercentageSchema.optional().default(0),
     }),
 
     // Interest account - has specific fields
@@ -227,63 +249,6 @@ export const IAccountRequestSchema = z
         }),
 
         account_category_id: entityIdSchema.optional(),
-
-        coh_cib_fines_grace_period_entry_daily_amortization: z
-            .number()
-            .min(0)
-            .optional(),
-        coh_cib_fines_grace_period_entry_daily_maturity: z
-            .number()
-            .min(0)
-            .optional(),
-        coh_cib_fines_grace_period_entry_weekly_amortization: z
-            .number()
-            .min(0)
-            .optional(),
-        coh_cib_fines_grace_period_entry_weekly_maturity: z
-            .number()
-            .min(0)
-            .optional(),
-        coh_cib_fines_grace_period_entry_monthly_amortization: z
-            .number()
-            .min(0)
-            .optional(),
-        coh_cib_fines_grace_period_entry_monthly_maturity: z
-            .number()
-            .min(0)
-            .optional(),
-        coh_cib_fines_grace_period_entry_semi_monthly_amortization: z
-            .number()
-            .min(0)
-            .optional(),
-        coh_cib_fines_grace_period_entry_semi_monthly_maturity: z
-            .number()
-            .min(0)
-            .optional(),
-        coh_cib_fines_grace_period_entry_quarterly_amortization: z
-            .number()
-            .min(0)
-            .optional(),
-        coh_cib_fines_grace_period_entry_quarterly_maturity: z
-            .number()
-            .min(0)
-            .optional(),
-        coh_cib_fines_grace_period_entry_semi_anual_amortization: z
-            .number()
-            .min(0)
-            .optional(),
-        coh_cib_fines_grace_period_entry_semi_anual_maturity: z
-            .number()
-            .min(0)
-            .optional(),
-        coh_cib_fines_grace_period_entry_lumpsum_amortization: z
-            .number()
-            .min(0)
-            .optional(),
-        coh_cib_fines_grace_period_entry_lumpsum_maturity: z
-            .number()
-            .min(0)
-            .optional(),
 
         general_ledger_definition_id: entityIdSchema.optional(),
         financial_statement_definition_entries_id: entityIdSchema.optional(),

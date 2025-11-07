@@ -100,27 +100,6 @@ export interface IAccount extends IAuditable, ITimeStamps {
     account_category_id?: TEntityId
     account_category?: IAccountCategory
 
-    coh_cib_fines_grace_period_entry_daily_amortization?: number
-    coh_cib_fines_grace_period_entry_daily_maturity?: number
-
-    coh_cib_fines_grace_period_entry_weekly_amortization?: number
-    coh_cib_fines_grace_period_entry_weekly_maturity?: number
-
-    coh_cib_fines_grace_period_entry_monthly_amortization?: number
-    coh_cib_fines_grace_period_entry_monthly_maturity?: number
-
-    coh_cib_fines_grace_period_entry_semi_monthly_amortization?: number
-    coh_cib_fines_grace_period_entry_semi_monthly_maturity?: number
-
-    coh_cib_fines_grace_period_entry_quarterly_amortization?: number
-    coh_cib_fines_grace_period_entry_quarterly_maturity?: number
-
-    coh_cib_fines_grace_period_entry_semi_anual_amortization?: number
-    coh_cib_fines_grace_period_entry_semi_anual_maturity?: number
-
-    coh_cib_fines_grace_period_entry_lumpsum_amortization?: number
-    coh_cib_fines_grace_period_entry_lumpsum_maturity?: number
-
     general_ledger_definition_id?: TEntityId
     financial_statement_definition_entries_id?: TEntityId
 
@@ -176,6 +155,30 @@ export interface IAccount extends IAuditable, ITimeStamps {
     fines_computation_daily_by_amortization?: boolean
     fines_computation_rest_by_rate?: boolean
     compute_fines_after_maturity?: boolean
+
+    coh_cib_fines_grace_period_entry_daily_amortization?: number
+    coh_cib_fines_grace_period_entry_daily_maturity?: number
+
+    coh_cib_fines_grace_period_entry_weekly_amortization?: number
+    coh_cib_fines_grace_period_entry_weekly_maturity?: number
+
+    coh_cib_fines_grace_period_entry_monthly_amortization?: number
+    coh_cib_fines_grace_period_entry_monthly_maturity?: number
+
+    coh_cib_fines_grace_period_entry_semi_monthly_amortization?: number
+    coh_cib_fines_grace_period_entry_semi_monthly_maturity?: number
+
+    coh_cib_fines_grace_period_entry_quarterly_amortization?: number
+    coh_cib_fines_grace_period_entry_quarterly_maturity?: number
+
+    coh_cib_fines_grace_period_entry_semi_annual_amortization?: number
+    coh_cib_fines_grace_period_entry_semi_annual_maturity?: number
+
+    coh_cib_fines_grace_period_entry_annual_amortization?: number
+    coh_cib_fines_grace_period_entry_annual_maturity?: number
+
+    coh_cib_fines_grace_period_entry_lumpsum_amortization?: number
+    coh_cib_fines_grace_period_entry_lumpsum_maturity?: number
 
     // FOR INTEREST
     interest_standard?: number
