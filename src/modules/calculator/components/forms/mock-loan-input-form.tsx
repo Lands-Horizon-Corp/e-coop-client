@@ -389,6 +389,88 @@ const MockLoanInputForm = ({
                                         </div>
                                     )}
                                 />
+                                <div className="flex gap-x-2 w-fit items-center">
+                                    <FormFieldWrapper
+                                        className="mb-1"
+                                        control={form.control}
+                                        name="exclude_holiday"
+                                        render={({ field }) => (
+                                            <div className="inline-flex items-center gap-2">
+                                                <Switch
+                                                    aria-label="Toggle exclude holiday"
+                                                    checked={
+                                                        field.value || false
+                                                    }
+                                                    className="peer inline-flex shrink-0 cursor-pointer items-center rounded-full border-2 border-transparent transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:cursor-not-allowed disabled:opacity-50 data-[state=checked]:bg-primary data-[state=unchecked]:bg-input h-4 w-6 [&_span]:size-3 data-[state=checked]:[&_span]:translate-x-2 data-[state=checked]:[&_span]:rtl:-translate-x-2"
+                                                    id={field.name}
+                                                    onCheckedChange={
+                                                        field.onChange
+                                                    }
+                                                />
+                                                <Label
+                                                    className="shrink-0 text-xs font-medium"
+                                                    htmlFor={field.name}
+                                                >
+                                                    Exclude Holiday
+                                                </Label>
+                                            </div>
+                                        )}
+                                    />
+
+                                    <FormFieldWrapper
+                                        className="mb-1"
+                                        control={form.control}
+                                        name="exclude_saturday"
+                                        render={({ field }) => (
+                                            <div className="inline-flex items-center gap-2">
+                                                <Switch
+                                                    aria-label="Toggle exclude saturday"
+                                                    checked={
+                                                        field.value || false
+                                                    }
+                                                    className="peer inline-flex shrink-0 cursor-pointer items-center rounded-full border-2 border-transparent transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:cursor-not-allowed disabled:opacity-50 data-[state=checked]:bg-primary data-[state=unchecked]:bg-input h-4 w-6 [&_span]:size-3 data-[state=checked]:[&_span]:translate-x-2 data-[state=checked]:[&_span]:rtl:-translate-x-2"
+                                                    id={field.name}
+                                                    onCheckedChange={
+                                                        field.onChange
+                                                    }
+                                                />
+                                                <Label
+                                                    className="shrink-0 text-xs font-medium"
+                                                    htmlFor={field.name}
+                                                >
+                                                    Exclude Saturday
+                                                </Label>
+                                            </div>
+                                        )}
+                                    />
+
+                                    <FormFieldWrapper
+                                        className="mb-1"
+                                        control={form.control}
+                                        name="exclude_sunday"
+                                        render={({ field }) => (
+                                            <div className="inline-flex items-center gap-2">
+                                                <Switch
+                                                    aria-label="Toggle exclude sunday"
+                                                    checked={
+                                                        field.value || false
+                                                    }
+                                                    className="peer inline-flex shrink-0 cursor-pointer items-center rounded-full border-2 border-transparent transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:cursor-not-allowed disabled:opacity-50 data-[state=checked]:bg-primary data-[state=unchecked]:bg-input h-4 w-6 [&_span]:size-3 data-[state=checked]:[&_span]:translate-x-2 data-[state=checked]:[&_span]:rtl:-translate-x-2"
+                                                    id={field.name}
+                                                    onCheckedChange={
+                                                        field.onChange
+                                                    }
+                                                />
+                                                <Label
+                                                    className="font-medium text-xs"
+                                                    htmlFor={field.name}
+                                                >
+                                                    Exclude Sunday
+                                                </Label>
+                                            </div>
+                                        )}
+                                    />
+                                </div>
                             </div>
                         </div>
                         <FormErrorMessage errorMessage={firstError} />

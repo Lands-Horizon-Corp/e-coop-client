@@ -1,6 +1,6 @@
-import { formatCurrency } from '@/helpers/common-helper'
 import { toReadableDateTime } from '@/helpers/date-utils'
 import { dateAgo } from '@/helpers/date-utils'
+import { currencyFormat } from '@/modules/currency/currency.utils'
 import { ITransaction } from '@/modules/transaction'
 
 import ImageDisplay from '@/components/image-display'
@@ -55,7 +55,10 @@ export const TransactionDetails = ({
             </div>
             <div className="actions text-xs text-end">
                 <p className="font-bold text-primary dark:text-primary">
-                    {formatCurrency(item.amount)}
+                    {currencyFormat(item.amount, {
+                        currency: item.currency,
+                        showSymbol: !!item.currency,
+                    })}
                 </p>
                 <p className="text-xs text-muted-foreground">
                     {dateAgo(item.created_at)}

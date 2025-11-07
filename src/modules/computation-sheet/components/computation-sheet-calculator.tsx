@@ -3,6 +3,7 @@ import { toast } from 'sonner'
 import { formatNumber } from '@/helpers'
 import { cn } from '@/helpers'
 import MockLoanInputForm from '@/modules/calculator/components/forms/mock-loan-input-form'
+import AmortizationScheduleTable from '@/modules/loan-amortization-schedule/components/amortization-schedule-table'
 
 import { RenderIcon, TIcon } from '@/components/icons'
 import {
@@ -62,10 +63,16 @@ const ComputationSheetCalculator = ({
         )
     }
 
+    // console.log(schemeCalculatorResponse)
+    // console.log(
+    //     'schemeCalculatorResponse',
+    //     scheduleToTableRow(schemeCalculatorResponse?.schedule || [])
+    // )
+
     return (
         <div
             className={cn(
-                'grid max-h-full overflow-y-auto ecoop-scroll pb-4 gap-4 px-4 max-w-7xl',
+                'grid max-h-full min-w-0 overflow-y-auto ecoop-scroll pb-4 gap-4 px-4 max-w-7xl',
                 className
             )}
         >
@@ -92,13 +99,21 @@ const ComputationSheetCalculator = ({
                     />
                 </div>
             </div>
-            <div className="bg-popover p-4 space-y-2 rounded-xl">
+            <div className="bg-popover max-w-full min-w-0 p-4 space-y-2 rounded-xl">
                 <p>Amortization</p>
-                {/* <AmortizationTable
-                    sce={
-                        schemeCalculatorResponse?.schedule || []
-                    }
-                /> */}
+
+                {schemeCalculatorResponse !== undefined ? (
+                    <AmortizationScheduleTable
+                        className="max-h-[80vh]"
+                        currency={schemeCalculatorResponse?.currency}
+                        schedules={schemeCalculatorResponse?.schedule || []}
+                        total={schemeCalculatorResponse?.total || 0}
+                    />
+                ) : (
+                    <p className="text-center text-muted-foreground">
+                        No amortization result yet
+                    </p>
+                )}
             </div>
         </div>
     )

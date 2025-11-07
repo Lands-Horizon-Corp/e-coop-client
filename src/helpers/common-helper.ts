@@ -129,10 +129,3 @@ export function sortBy<T>(
         return 0
     }
 }
-
-export const formatCurrency = (amount: number): string => {
-    return new Intl.NumberFormat('en-PH', {
-        style: 'currency',
-        currency: 'PHP',
-    }).format(amount)
-}

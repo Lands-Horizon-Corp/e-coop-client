@@ -1,4 +1,4 @@
-import { cn, formatCurrency } from '@/helpers'
+import { cn } from '@/helpers'
 import { dateAgo, toReadableDate } from '@/helpers/date-utils'
 import { currencyFormat } from '@/modules/currency'
 import TransactionUserInfoGrid from '@/modules/transaction/components/transaction-user-info-grid'
@@ -169,7 +169,7 @@ export const CashCheckVoucherCard = ({
                         },
                         {
                             label: 'Check Amount',
-                            value: formatCurrency(
+                            value: currencyFormat(
                                 cashCheckVoucher.check_entry_amount ?? 0
                             ),
                         },

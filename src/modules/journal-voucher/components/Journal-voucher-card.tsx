@@ -1,5 +1,6 @@
-import { cn, formatCurrency } from '@/helpers'
+import { cn } from '@/helpers'
 import { dateAgo, toReadableDate } from '@/helpers/date-utils'
+import { currencyFormat } from '@/modules/currency'
 import { JournalVoucherTagChip } from '@/modules/journal-voucher-tag/components/journal-voucher-tag-management'
 import TransactionUserInfoGrid from '@/modules/transaction/components/transaction-user-info-grid'
 
@@ -65,11 +66,17 @@ export const JournalVoucherCard = ({
                 data={[
                     {
                         label: 'Total Debit',
-                        value: formatCurrency(journalVoucher.total_debit),
+                        value: currencyFormat(journalVoucher.total_debit, {
+                            currency: journalVoucher.currency,
+                            showSymbol: !!journalVoucher.currency,
+                        }),
                     },
                     {
                         label: 'Total Credit',
-                        value: formatCurrency(journalVoucher.total_credit),
+                        value: currencyFormat(journalVoucher.total_credit, {
+                            currency: journalVoucher.currency,
+                            showSymbol: !!journalVoucher.currency,
+                        }),
                     },
                     {
                         label: 'Description',

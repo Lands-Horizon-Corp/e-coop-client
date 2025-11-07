@@ -1,5 +1,6 @@
-import { formatCurrency, formatDate } from '@/helpers/common-helper'
+import { formatDate } from '@/helpers/common-helper'
 import { toReadableDateTime } from '@/helpers/date-utils'
+import { currencyFormat } from '@/modules/currency'
 import { ITransaction } from '@/modules/transaction'
 
 import ImageDisplay from '@/components/image-display'
@@ -23,6 +24,7 @@ export const TransactionCardItem = ({
         loan_balance,
         loan_due,
         fines_due,
+        currency,
         total_loan,
     } = transaction
 
@@ -59,7 +61,10 @@ export const TransactionCardItem = ({
                             </p>
                         </div>
                         <p className="font-semibold dark:text-primary flex-shrink-0">
-                            {formatCurrency(amount)}
+                            {currencyFormat(amount, {
+                                currency,
+                                showSymbol: !!currency,
+                            })}
                         </p>
                     </div>
                 </div>
@@ -82,16 +87,31 @@ export const TransactionCardItem = ({
                     data={[
                         {
                             label: 'Total Loan',
-                            value: formatCurrency(total_loan),
+                            value: currencyFormat(total_loan, {
+                                currency,
+                                showSymbol: !!currency,
+                            }),
                         },
                         {
                             label: 'Loan Balance',
-                            value: formatCurrency(loan_balance),
+                            value: currencyFormat(loan_balance, {
+                                currency,
+                                showSymbol: !!currency,
+                            }),
                         },
-                        { label: 'Loan Due', value: formatCurrency(loan_due) },
+                        {
+                            label: 'Loan Due',
+                            value: currencyFormat(loan_due, {
+                                currency,
+                                showSymbol: !!currency,
+                            }),
+                        },
                         {
                             label: 'Fines Due',
-                            value: formatCurrency(fines_due),
+                            value: currencyFormat(fines_due, {
+                                currency,
+                                showSymbol: !!currency,
+                            }),
                         },
                     ]}
                     title="Account and Loan Information"

@@ -46,9 +46,13 @@ export interface IComputationSheetAmortizationResponseDeduction {
 }
 
 export interface IComputationSheetAmortizationResponse {
+    currency: ICurrency
+
     entries: IComputationSheetAmortizationResponseDeduction[]
     total_debit: number
     total_credit: number
+
+    total: number
 
     schedule: ILoanAmortizationSchedule[]
 }

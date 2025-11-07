@@ -1,8 +1,9 @@
 import { useState } from 'react'
 
 import { PAGINATION_INITIAL_INDEX } from '@/constants'
-import { formatCurrency, formatDate } from '@/helpers/common-helper'
+import { formatDate } from '@/helpers/common-helper'
 import { dateAgo, toReadableDateTime } from '@/helpers/date-utils'
+import { currencyFormat } from '@/modules/currency'
 import {
     IGeneralLedger,
     useFilteredPaginatedGeneralLedger,
@@ -44,6 +45,7 @@ export const TransactionDetailsCard = ({
         balance,
         member_profile,
         source,
+        currency,
         transaction_reference_number,
     } = transaction
 
@@ -91,7 +93,10 @@ export const TransactionDetailsCard = ({
                             </p>
                         </div>
                         <p className="font-semibold text-primary flex-shrink-0">
-                            {formatCurrency(balance)}
+                            {currencyFormat(balance, {
+                                currency,
+                                showSymbol: !!currency,
+                            })}
                         </p>
                     </div>
                 </div>
@@ -220,7 +225,10 @@ const TransactionDepositWithdrawCardListItem = ({
             </div>
             <div className="actions text-xs text-end">
                 <p className="font-bold text-primary dark:text-primary">
-                    {formatCurrency(item.balance)}
+                    {currencyFormat(item.balance, {
+                        currency: item.currency,
+                        showSymbol: !!item.currency,
+                    })}
                 </p>
                 <p className="text-xs text-muted-foreground">
                     {dateAgo(item.created_at)}

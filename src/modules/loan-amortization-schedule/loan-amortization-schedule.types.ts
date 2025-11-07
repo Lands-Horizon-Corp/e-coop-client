@@ -7,14 +7,16 @@ import { IAccount } from '../account'
 
 export interface IAccountValue {
     account: IAccount
+    total: number
     value: number
 }
 
 export interface ILoanAmortizationSchedule extends IBaseEntityMeta {
-    scheduledDate: string
-    actualDate: string
-    daysSkipped: number
+    scheduled_date: string
+    actual_date: string
+    days_skipped: number
     total: number
+    balance: number
     accounts: IAccountValue[]
 }
 
