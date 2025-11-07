@@ -101,7 +101,7 @@ const TransactionBatchNavButton = (_props: Props) => {
         return (
             <>
                 <Button
-                    className="group rounded-full text-foreground/70"
+                    className="group rounded-full"
                     hoverVariant="primary"
                     onClick={() => modalState.onOpenChange((prev) => !prev)}
                     variant="secondary"
