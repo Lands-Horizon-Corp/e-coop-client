@@ -289,6 +289,27 @@ export const useAccountLoanConnect = createMutationFactory<
     },
 })
 
+export const getAllAccount = async ({
+    mode,
+    accountId,
+    query,
+}: {
+    mode?: TGetAllAccountMode
+    query?: TAPIQueryOptions
+    accountId?: TEntityId
+}) => {
+    let targetUrl = accountAPIRoute
+
+    if (mode === 'loan-account-connections') {
+        targetUrl = `${accountAPIRoute}/${accountId}/loan-accounts`
+    }
+
+    return apiCrudService.getAll<IAccount>({
+        url: targetUrl,
+        query,
+    })
+}
+
 // GET ALL ACCOUNT with diff mode
 export const useGetAllAccount = ({
     mode = 'all',
@@ -306,18 +327,12 @@ export const useGetAllAccount = ({
         queryKey: [accountBaseQueryKey, 'all', mode, accountId, query].filter(
             Boolean
         ),
-        queryFn: async () => {
-            let targetUrl = accountAPIRoute
-
-            if (mode === 'loan-account-connections') {
-                targetUrl = `${accountAPIRoute}/${accountId}/loan-accounts`
-            }
-
-            return apiCrudService.getAll<IAccount>({
-                url: targetUrl,
+        queryFn: async () =>
+            getAllAccount({
+                accountId,
+                mode,
                 query,
-            })
-        },
+            }),
     })
 }
 

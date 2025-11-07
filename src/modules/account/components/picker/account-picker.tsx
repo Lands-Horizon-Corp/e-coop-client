@@ -48,6 +48,7 @@ type FinalProp = PickerProp &
                   | 'loan-accounts-currency'
                   | 'currency-cash-and-cash-equivalence'
                   | 'currency-paid-up-shared-capital'
+                  | 'loan-connectable-account-currency' // - This returns SVF, Interest, Fines accounts that can be connected to a loan account based on currency
               >
           }
         | {
@@ -58,6 +59,7 @@ type FinalProp = PickerProp &
                   | 'loan-accounts-currency'
                   | 'currency-cash-and-cash-equivalence'
                   | 'currency-paid-up-shared-capital'
+                  | 'loan-connectable-account-currency' // - This returns SVF, Interest, Fines accounts that can be connected to a loan account based on currency
               currencyId: TEntityId
           }
     )

@@ -1,6 +1,7 @@
 import { useEffect } from 'react'
 
 import { UseFormReturn, useFieldArray, useForm } from 'react-hook-form'
+import { toast } from 'sonner'
 
 import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
 
@@ -22,6 +23,7 @@ import {
     CheckIcon,
     EyeIcon,
     LinkIcon,
+    PlusIcon,
     RenderIcon,
     ShapesIcon,
 } from '@/components/icons'
@@ -165,6 +167,7 @@ const MockLoanInputForm = ({
                                                     'account',
                                                     account
                                                 )
+                                                form.setValue('accounts', [])
                                             }}
                                             placeholder="Select Loan Account"
                                             value={form.getValues('account')}
@@ -405,8 +408,8 @@ const ConnectedAccountsSection = ({
     form: UseFormReturn<TMockCloanInputSchema>
 }) => {
     const connectedAccounts: IAccount[] = form.watch('accounts')
-
     const accountId = form.watch('account_id')
+    const accountPickerModal = useModalState()
 
     const { data } = useGetAllAccount({
         accountId,
@@ -416,26 +419,55 @@ const ConnectedAccountsSection = ({
         },
     })
 
-    const { remove: handleRemove } = useFieldArray({
+    const { append, remove: handleRemove } = useFieldArray({
         name: 'accounts',
         control: form.control,
     })
 
+    const selectedAccount = form.watch('account')
+
     useEffect(() => {
-        if (data) {
+        if (connectedAccounts.length === 0 && data?.length) {
             form.setValue(
                 'accounts',
                 data.map((data) => ({ ...data, static: true }))
             )
         }
-    }, [accountId, data, form])
+    }, [accountId, connectedAccounts.length, data, form])
 
     return (
         <div className="space-y-2 p-2 min-w-[200px] rounded-xl bg-popover overflow-y-auto sticky top-0">
-            <div>
+            <AccountPicker
+                currencyId={selectedAccount?.currency_id}
+                modalState={accountPickerModal}
+                mode="loan-connectable-account-currency"
+                onSelect={(selectedAccount) => {
+                    if (
+                        connectedAccounts
+                            .map(({ id }) => id)
+                            .includes(selectedAccount.id)
+                    )
+                        return toast.warning('Account already connected')
+
+                    append(selectedAccount)
+                }}
+                triggerClassName="hidden"
+            />
+            <div className="flex items-center justify-between">
                 <p className="text-sm font-medium text-popover-foreground/70">
                     Accounts
                 </p>
+
+                <Button
+                    className="size-fit p-1"
+                    hoverVariant="secondary"
+                    onClick={() => accountPickerModal.onOpenChange(true)}
+                    size="icon"
+                    type="button"
+                    variant="ghost"
+                >
+                    <PlusIcon className="size-3" />
+                </Button>
             </div>
             {connectedAccounts.map((account, i) => (
                 <ConnectedAccountItem
