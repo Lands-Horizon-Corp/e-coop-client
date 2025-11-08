@@ -141,6 +141,7 @@ import {
     FaMoneyBillTrendUp as MoneyTrendIcon,
     FaPeopleGroup as PeopleGroupIcon,
     FaPercent as PercentIcon,
+    FaPesoSign as PesoIcon,
     FaChartPie as PieChartIcon,
     FaPlay as PlayIcon,
     FaQuestion as QuestionIcon,
@@ -448,6 +449,7 @@ import {
 } from 'react-icons/vsc'
 
 export {
+    PesoIcon,
     VoteIcon,
     WifiIcon,
     DiamondFillIcon,
@@ -885,6 +887,7 @@ export const IconMap = {
     Book: BookIcon,
     View: ViewIcon,
     Stop: StopIcon,
+    Peso: PesoIcon,
     Play: PlayIcon,
     Note: NoteIcon,
     Copy: CopyIcon,

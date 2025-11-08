@@ -5,9 +5,6 @@ interface ElectricLineProps {
     length?: number
     thickness?: number
     flowSpeed?: number
-    flowColor?: string
-    lineColor?: string
-    glowIntensity?: 'low' | 'medium' | 'high'
 }
 
 export const ElectricLine = ({

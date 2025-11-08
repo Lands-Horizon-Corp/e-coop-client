@@ -33,8 +33,8 @@ export default function FeatureSection() {
                         members, finances, and integrations.
                     </p>
 
-                    <div className="space-y-4 md:grid md:grid-cols-3 md:gap-8 md:space-y-0">
-                        <div className="rounded-3xl overflow-hidden backdrop-blur-2xl bg-background/40">
+                    <div className="grid grid-cols-[repeat(auto-fit,_320px)] gap-8 justify-center">
+                        <div className="w-[320px] rounded-3xl overflow-hidden backdrop-blur-2xl bg-background/40">
                             <CreditCard />
                             <div className="py-5 px-3 space-y-6">
                                 {/* Header */}
@@ -102,7 +102,7 @@ export default function FeatureSection() {
                                 </div>
                             </div>
                         </div>
-                        <div className="rounded-3xl overflow-hidden backdrop-blur-2xl bg-background/40">
+                        <div className="w-[320px] rounded-3xl overflow-hidden backdrop-blur-2xl bg-background/40">
                             <Banking />
                             <div className="p-4">
                                 <h3 className="text-foreground mb-2 min-h-[28px] font-bold md:mb-4">
@@ -180,7 +180,7 @@ export default function FeatureSection() {
                                 </div>
                             </div>
                         </div>
-                        <div className="rounded-3xl overflow-hidden backdrop-blur-2xl bg-background/40">
+                        <div className="w-[320px] rounded-3xl overflow-hidden backdrop-blur-2xl bg-background/40">
                             <MemberPortal />
                             <div className="py-5 px-3 space-y-6">
                                 {/* Header */}
