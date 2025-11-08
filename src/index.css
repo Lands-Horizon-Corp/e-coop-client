@@ -565,3 +565,46 @@ body[data-scroll-locked] {
     animation: code-slide-up 3s ease-in-out infinite;
     animation-delay: 1.5s;
 }
+
+@keyframes scroll-up {
+    0% {
+        transform: translateY(0);
+    }
+    100% {
+        transform: translateY(-50%);
+    }
+}
+
+@keyframes scroll-down {
+    0% {
+        transform: translateY(0);
+    }
+    100% {
+        transform: translateY(50%);
+    }
+}
+
+.animate-scroll-up {
+    animation: scroll-up 15s linear infinite;
+}
+
+.animate-scroll-down {
+    animation: scroll-down 15s linear infinite;
+}
+
+/* Vertical scroll on hover only */
+.animate-scroll-up-hover {
+    animation-play-state: paused;
+}
+
+.group:hover .animate-scroll-up-hover {
+    animation: scroll-up 15s linear infinite;
+}
+
+.animate-scroll-down-hover {
+    animation-play-state: paused;
+}
+
+.group:hover .animate-scroll-down-hover {
+    animation: scroll-down 15s linear infinite;
+}

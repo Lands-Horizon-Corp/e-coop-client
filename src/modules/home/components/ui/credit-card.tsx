@@ -4,7 +4,7 @@ import { RandomCode } from '@/components/ui/random-code'
 
 export const CreditCard = () => {
     return (
-        <div className="h-64 w-full backdrop-blur-2xl bg-background">
+        <div className="h-64 w-full rounded-t-2xl bg-background">
             <div
                 className="
                     w-full h-full border-foreground/40 inset-shadow-xs/20
