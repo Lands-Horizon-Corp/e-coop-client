@@ -21,6 +21,15 @@ import { MemberPortal } from '../ui/member-portal'
 export default function FeatureSection() {
     return (
         <section className="flex items-center bg-none px-5 my-16">
+            <div
+                className="
+            to-background/0 
+            via-background/0 
+            from-primary/20
+            absolute right-0 
+            -z-10 h-screen w-full bg-radial-[ellipse_at_50%_50%] to-50% dark:block hidden"
+            />
+
             <div className="absolute inset-0 -z-10 h-full w-full bg-radial-[ellipse_at_-20%_50%] from-primary/20 via-background/0 to-background/0 to-10%" />
 
             <div className="container mx-auto px-4">
@@ -34,7 +43,7 @@ export default function FeatureSection() {
                     </p>
 
                     <div className="grid grid-cols-[repeat(auto-fit,_320px)] gap-8 justify-center">
-                        <div className="w-[320px] rounded-3xl overflow-hidden backdrop-blur-2xl bg-background/40">
+                        <div className="w-[320px] rounded-3xl overflow-hidden backdrop-blur-2xl bg-background/70">
                             <CreditCard />
                             <div className="py-5 px-3 space-y-6">
                                 {/* Header */}
@@ -102,7 +111,7 @@ export default function FeatureSection() {
                                 </div>
                             </div>
                         </div>
-                        <div className="w-[320px] rounded-3xl overflow-hidden backdrop-blur-2xl bg-background/40">
+                        <div className="w-[320px] rounded-3xl overflow-hidden backdrop-blur-2xl bg-background/70">
                             <Banking />
                             <div className="p-4">
                                 <h3 className="text-foreground mb-2 min-h-[28px] font-bold md:mb-4">
@@ -116,7 +125,7 @@ export default function FeatureSection() {
                                     balance and transaction history.
                                 </p>
                             </div>
-                            <div className="space-y-4">
+                            <div className="space-y-4 py-5 px-3">
                                 <div className="space-y-3">
                                     <div className="flex items-center gap-3">
                                         <div className="flex-shrink-0 w-8 h-8 bg-primary/10 rounded-lg flex items-center justify-center">
@@ -180,7 +189,7 @@ export default function FeatureSection() {
                                 </div>
                             </div>
                         </div>
-                        <div className="w-[320px] rounded-3xl overflow-hidden backdrop-blur-2xl bg-background/40">
+                        <div className="w-[320px] rounded-3xl overflow-hidden backdrop-blur-2xl bg-background/70">
                             <MemberPortal />
                             <div className="py-5 px-3 space-y-6">
                                 {/* Header */}

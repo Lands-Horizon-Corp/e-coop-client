@@ -64,12 +64,13 @@ export const Banking = () => {
                         group-hover:scale-150 group-hover:border-primary
                         transition-all duration-1000 ease-out
                         group-hover:from-primary/10
+                        opacity-40
                     "
                 ></div>
                 <div
                     className="
                         w-40 h-40 
-                        
+                         opacity-40
                         absolute inset-0 m-auto 
                         rounded-full
                         border-t-2 border-foreground/50
@@ -82,7 +83,7 @@ export const Banking = () => {
                 <div
                     className="
                         w-55 h-55 
-                        
+                         opacity-40
                         absolute inset-0 m-auto 
                         rounded-full
                         border-t-2 border-foreground/50
@@ -91,7 +92,7 @@ export const Banking = () => {
                         group-hover:from-primary/30
                     "
                 ></div>
-                <div className="absolute inset-0 flex items-center justify-center">
+                <div className="absolute inset-0 flex items-center justify-center opacity-40">
                     <div className="group-hover:from-primary group-hover:scale-150 group-hover:border-primary transition-all duration-1000 ease-out h-full w-1 bg-radial-[at_50%_50%] from-foreground to-background/0 to-65%"></div>
                 </div>
                 <ElectricLine
@@ -143,6 +144,7 @@ export const Banking = () => {
 
                 <ElectricLine
                     className="
+                    group-hover:opacity-100 opacity-0
                     absolute top-32 left-73 m-auto rotate-180 origin-left text-current group-hover:text-primary"
                     flowSpeed={1.5}
                     length={15}
@@ -157,6 +159,7 @@ export const Banking = () => {
                 />
                 <ElectricLine
                     className="
+                    group-hover:opacity-100 opacity-0
                     absolute top-28 left-73 m-auto rotate-180 origin-left text-current group-hover:text-primary"
                     flowSpeed={1.5}
                     length={15}
