@@ -154,12 +154,14 @@ const ExploreByCategories = ({
                                 type={'Organizations'}
                             />
                         </div>
-                        ) : (
+                    ) : (
                         organizations.map((org, index) => (
                             <CarouselItem
                                 className="md:basis-1/2 pl-2 lg:basis-1/6"
                                 key={org?.id ?? index}
-                                onClick={() => handleSelectedOrganization?.(org)}
+                                onClick={() =>
+                                    handleSelectedOrganization?.(org)
+                                }
                             >
                                 <OrganizationCardWithToolTip
                                     handleOpenModalPreview={onOpenModalPreview}

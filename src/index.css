@@ -464,3 +464,104 @@ body[data-scroll-locked] {
 .flex-center {
     @apply flex w-full items-center justify-center;
 }
+@keyframes scroll-left {
+    0% {
+        transform: translateX(0);
+    }
+    100% {
+        transform: translateX(-50%);
+    }
+}
+
+@keyframes scroll-right {
+    0% {
+        transform: translateX(0);
+    }
+    100% {
+        transform: translateX(50%);
+    }
+}
+
+.animate-scroll-left {
+    animation: scroll-left 15s linear infinite;
+}
+
+.animate-scroll-right {
+    animation: scroll-right 15s linear infinite;
+}
+
+@keyframes scroll {
+    0% {
+        transform: translateX(0);
+    }
+    100% {
+        transform: translateX(-50%);
+    }
+}
+
+.animate-scroll {
+    animation: scroll 10s linear infinite;
+}
+
+@keyframes electric-flow {
+    0% {
+        stroke-dashoffset: 20;
+    }
+    100% {
+        stroke-dashoffset: 0;
+    }
+}
+
+@keyframes electric-particle {
+    0% {
+        opacity: 0;
+        transform: scale(0.5);
+    }
+    10% {
+        opacity: 1;
+        transform: scale(1);
+    }
+    90% {
+        opacity: 1;
+        transform: scale(1);
+    }
+    100% {
+        opacity: 0;
+        transform: scale(0.5);
+    }
+}
+
+.animate-electric-flow {
+    animation: electric-flow linear infinite;
+}
+
+.animate-electric-particle {
+    animation: electric-particle linear infinite;
+}
+@keyframes code-slide-up {
+    0% {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    20% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+    80% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+    100% {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+}
+
+.animate-code-slide {
+    animation: code-slide-up 3s ease-in-out infinite;
+}
+
+.animate-code-slide-delay {
+    animation: code-slide-up 3s ease-in-out infinite;
+    animation-delay: 1.5s;
+}

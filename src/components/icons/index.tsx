@@ -110,6 +110,7 @@ import {
     FaTabletAlt as TabletIcon,
     FaTwitter as TwitterIcon,
     FaUserClock as UserClockFillIcon,
+    FaWifi as WifiIcon,
     FaYoutube as YoutubeIcon,
 } from 'react-icons/fa'
 import {
@@ -179,6 +180,7 @@ import {
     GiMoneyStack as MoneyStackIcon,
     GiReceiveMoney as ReceiveMoneyIcon,
     GiVillage as VillageIcon,
+    GiVote as VoteIcon,
     GiWallet as WalletIcon,
     GiWoodenSign as WoodSignsIcon,
 } from 'react-icons/gi'
@@ -252,6 +254,7 @@ import {
     IoChatbubblesSharp as ChatBubbleIcon,
     IoCheckmarkOutline as CheckIcon,
     IoCloseOutline as CloseIcon,
+    IoDiamond as DiamondIcon,
     IoLogOut as DoorExitFillIcon,
     IoLogOutOutline as DoorExitIcon,
     IoPencilOutline as EditPencilIcon,
@@ -384,6 +387,7 @@ import {
 } from 'react-icons/pi'
 import {
     RiCommandLine as CommandIcon,
+    RiVipDiamondFill as DiamondFillIcon,
     RiFlipHorizontalFill as FlipHorizontalIcon,
     RiFlipHorizontalLine as FlipHorizontalLineIcon,
     RiFlipVerticalFill as FlipVerticalIcon,
@@ -444,6 +448,10 @@ import {
 } from 'react-icons/vsc'
 
 export {
+    VoteIcon,
+    WifiIcon,
+    DiamondFillIcon,
+    DiamondIcon,
     BrainIcon,
     FingerprintOffIcon,
     FingerprintScanIcon,
@@ -844,6 +852,7 @@ export {
 
 export const IconMap = {
     Brain: BrainIcon,
+    Vote: VoteIcon,
     'Fingerprint Off': FingerprintOffIcon,
     'Fingerprint Scan': FingerprintScanIcon,
     Fingerprint: FingerPrintIcon,
@@ -972,6 +981,7 @@ export const IconMap = {
     Feedback: FeedbackIcon,
     Building: BuildingIcon,
     Download: DownloadIcon,
+    'Diamond fill': DiamondFillIcon,
     Calendar: CalendarIcon,
     Heading: HeadingIcon,
     Running: RunningIcon,
@@ -1009,6 +1019,7 @@ export const IconMap = {
     'Upload Icon': UploadIcon,
     'User List': UserListIcon,
     Bug: BugIcon,
+    Diamond: DiamondIcon,
     'Plant Growth': PlantGrowthIcon,
     'Users Add': UsersAddIcon,
     'Tree City': TreeCityIcon,
@@ -1039,6 +1050,7 @@ export const IconMap = {
     Fullscreen: FullscreenIcon,
     Instagram: InstagramIcon,
     'Book Stack': BookStackIcon,
+    Wifi: WifiIcon,
     'Code SandBox': CodeSandBox,
     'House Lock': HouseLockIcon,
     'Check Fill': CheckFillIcon,
