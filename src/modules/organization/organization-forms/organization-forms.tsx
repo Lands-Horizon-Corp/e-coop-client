@@ -38,7 +38,7 @@ import ImageDisplay from '@/components/image-display'
 import TextEditor from '@/components/text-editor'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card'
+import { Card, CardContent, CardFooter } from '@/components/ui/card'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Form, FormControl } from '@/components/ui/form'
 import FormErrorMessage from '@/components/ui/form-error-message'
@@ -51,6 +51,7 @@ import { PlainTextEditor } from '@/components/ui/text-editor'
 import PreviewMediaWrapper from '@/components/wrappers/preview-media-wrapper'
 
 import { useAlertBeforeClosing } from '@/hooks/use-alert-before-closing'
+import { useFormHelper } from '@/hooks/use-form-helper'
 import { useLocationInfo } from '@/hooks/use-location-info'
 
 import { TEntityId } from '@/types'
@@ -92,6 +93,9 @@ const OrganizationForm = () => {
         },
     })
 
+    const { firstError } = useFormHelper<TOrganizationFormValues>({
+        form,
+    })
     const { data: currencyData } = useGetCurrencyById({
         id: form.watch('currency_id'),
     })
@@ -160,10 +164,12 @@ const OrganizationForm = () => {
             >
                 <Card
                     className={cn(
-                        'flex-1 w-full max-w-full min-w-6xl shadow-none rounded-none sm:rounded-lg border-none sm:border bg-transparent sm:bg-card/50  flex flex-col'
+                        'flex-1 w-full pt-5 max-w-full min-w-6xl shadow-none rounded-none sm:rounded-lg border-none sm:border bg-transparent sm:bg-card/50  flex flex-col'
                     )}
                 >
-                    <CardHeader className="text-lg px-4 sm:px-6"></CardHeader>
+                    {activeStep > 0 && (
+                        <FormErrorMessage errorMessage={firstError} />
+                    )}
                     <OrganizationFormStepper
                         activeStep={activeStep}
                         className="px-2 sm:px-0 block md:hidden xl:block"

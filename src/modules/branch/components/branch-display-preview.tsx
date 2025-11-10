@@ -99,10 +99,11 @@ const BranchPreviewDisplay = ({
                     style={{
                         backgroundImage: `url(${mediaUrl || '/placeholder-branch-bg.jpg'})`,
                     }}
-                ></div>
+                >
+                    <div className="w-full h-1/2 absolute bottom-0 bg-gradient-to-b from-transparent via-background via-90% to-background" />
+                </div>
                 <CreateUpdateBranchFormModal
                     {...updateModal}
-                    className="w-full min-w-[70rem] max-w-[80rem]"
                     formProps={{
                         branchId,
                         organizationId: branch?.organization_id || '',

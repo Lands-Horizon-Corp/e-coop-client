@@ -17,7 +17,7 @@ export const OrganizationMigrationStatus = z.enum([
 
 export const OrganizationSchema = z.object({
     name: z.string().min(1, 'Organization name is required'),
-    subscription_plan_id: entityIdSchema,
+    subscription_plan_id: z.string().min(1, 'Subscription plan is required'),
     address: z.string().optional(),
     email: emailSchema.min(1, 'Organization email is required'),
     contact_number: z.string().optional(),
@@ -28,7 +28,7 @@ export const OrganizationSchema = z.object({
 
     media_id: z.string().min(1, 'Organization Logo is required'),
     cover_media_id: z.string().min(1, 'Cover media is required'),
-    currency_id: entityIdSchema,
+    currency_id: entityIdSchema.min(1, 'currency is required'),
 
     media: z.any().optional(),
     cover_media: z.any().optional(),

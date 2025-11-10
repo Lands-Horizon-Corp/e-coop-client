@@ -71,7 +71,6 @@ const CreateBranch = () => {
         <div className="w-full h-full rounded-lg -mt-3 flex flex-col space-y-6">
             <CreateUpdateBranchFormModal
                 {...createModal}
-                className="w-full min-w-[80rem] max-w-[80rem]"
                 description="Fill out the form to add new branch"
                 formProps={{
                     organizationId,

@@ -111,13 +111,12 @@ const GeneralButtonShortcuts = ({ className }: { className?: string }) => {
             filtered = fuse.search(searchTerm).map((r) => r.item)
         }
 
-        // Sort by items length in descending order (groups with more items first)
         return [...filtered].sort((a, b) => {
             const aLength = a.items?.length || 0
             const bLength = b.items?.length || 0
-            return bLength - aLength // descending order
+            return bLength - aLength
         })
-    }, [searchTerm, fuse, ShortcutsData])
+    }, [searchTerm, fuse])
 
     return (
         <div className={cn('w-fit ', className)}>
