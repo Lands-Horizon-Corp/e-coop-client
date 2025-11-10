@@ -173,7 +173,6 @@ export const LoanTransactionCardActions = ({
                     <div key={mode}>
                         <LoanApproveReleaseDisplayModal
                             {...modalState}
-                            className="w-[55vw] min-w-[55vw] !max-w-[80vw]"
                             loanTransaction={loanTransaction}
                             mode={
                                 mode as TLoanTransactionApproveReleaseDisplayMode

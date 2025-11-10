@@ -179,7 +179,7 @@ const LoanApproveReleaseDisplayModal = ({
 
     return (
         <Modal
-            className={cn('!max-w-2xl', className)}
+            className={cn('w-fit min-w-4xl', className)}
             description={description}
             descriptionClassName="sr-only"
             title={title}
@@ -196,7 +196,7 @@ const LoanApproveReleaseDisplayModal = ({
                 />
                 {memberProfile && (
                     <MemberProfileInfoViewLoanCard
-                        className="bg-gradient-to-r from-primary/20 to-card/10 p-4 ring-2 ring-card dark:ring-primary/40"
+                        className="bg-gradient-to-r w-full from-primary/20 to-card/10 p-4 ring-2 ring-card dark:ring-primary/40"
                         memberProfile={memberProfile}
                     />
                 )}

@@ -139,10 +139,10 @@ export const ExplorePageCardPreviewController = () => {
     return (
         <div>
             <ImagePreviewPrevious
-                className={`-left-10 border-0 rounded-none rounded-tl-xs rounded-bl-xs h-full bg-background/80 dark:!bg-black`}
+                className={`-left-10 border-0 rounded-none rounded-tl-xs rounded-bl-xs h-full  from-background/20 !opacity-80 to-background bg-gradient-to-r`}
             />
             <ImagePreviewNext
-                className={`-right-5 ease-in-out duration-300 h-full px-2 w-[3.5rem] -translate-x-5 rounded-none rounded-tr-xs rounded-br-xs border-0 !bg-background/50 dark:from-black dark:to-transparent dark:bg-gradient-to-l`}
+                className={`-right-5 ease-in-out duration-300 h-full px-2 w-[3.5rem] -translate-x-5 rounded-none rounded-tr-xs !opacity-80 rounded-br-xs border-0 !bg-background/50 dark:from-background dark:to-background/0 dark:via-background via-10% dark:bg-gradient-to-l`}
             />
         </div>
     )

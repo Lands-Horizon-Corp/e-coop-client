@@ -140,7 +140,7 @@ const GeneralButtonShortcuts = ({ className }: { className?: string }) => {
                 <div className="-translate-y-5">
                     <GeneralShorcutsSearch setSearchTerm={setSearchTerm} />
                     {/* Main Content Area - Columns */}
-                    <div className="flex-1 bg-sidebar/50 mt-3 p-2 rounded-xl grid grid-cols-1 lg:grid-cols-3 gap-6 ecoop-scroll overflow-y-auto">
+                    <div className="flex-1 bg-sidebar/50 mt-3 p-5 rounded-xl grid grid-cols-1 lg:grid-cols-3 gap-3 ecoop-scroll overflow-y-auto">
                         {!filteredGroupShorcuts.length && (
                             <Empty className="sticky top-0 col-span-3">
                                 <EmptyHeader>
@@ -158,8 +158,11 @@ const GeneralButtonShortcuts = ({ className }: { className?: string }) => {
                             </Empty>
                         )}
                         {filteredGroupShorcuts.map((category, index) => (
-                            <div className="p-2" key={index}>
-                                <h2 className="text-sm text-muted-foreground font-medium mb-2">
+                            <div
+                                className="p-2 bg-card rounded-2xl"
+                                key={index}
+                            >
+                                <h2 className="text-sm text-center text-muted-foreground font-medium mb-2">
                                     {category.title &&
                                         highlightMatch(
                                             category.title,
