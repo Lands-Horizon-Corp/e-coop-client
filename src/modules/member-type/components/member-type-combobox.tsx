@@ -39,8 +39,9 @@ interface Props
     disabled?: boolean
     className?: string
     placeholder?: string
+    undefinable?: boolean
     memberTypeComboboxCreateProps?: IMemberTypeComboboxCreateProps
-    onChange?: (selected: IMemberType) => void
+    onChange?: (selected: IMemberType | undefined) => void
 }
 
 const MemberTypeCombobox = React.forwardRef<HTMLButtonElement, Props>(
@@ -49,6 +50,7 @@ const MemberTypeCombobox = React.forwardRef<HTMLButtonElement, Props>(
             value,
             className,
             disabled = false,
+            undefinable = true,
             memberTypeComboboxCreateProps,
             placeholder = 'Select Member Type...',
             onChange,
@@ -103,7 +105,7 @@ const MemberTypeCombobox = React.forwardRef<HTMLButtonElement, Props>(
                         <Command>
                             <CommandInput
                                 className="h-9"
-                                placeholder="Search Member Type..."
+                                placeholder="Search ember Type..."
                             />
                             {isLoading ? (
                                 <CommandEmpty>
@@ -131,6 +133,18 @@ const MemberTypeCombobox = React.forwardRef<HTMLButtonElement, Props>(
                                         </>
                                     )}
                                     <CommandGroup>
+                                        {undefinable && (
+                                            <CommandItem
+                                                className="justify-center text-muted-foreground"
+                                                onSelect={() => {
+                                                    setOpen(false)
+                                                    onChange?.(undefined)
+                                                }}
+                                                value={undefined}
+                                            >
+                                                Select None
+                                            </CommandItem>
+                                        )}
                                         {data?.map((option) => (
                                             <CommandItem
                                                 key={option.id}

@@ -9,7 +9,7 @@ interface InputDateProps extends React.InputHTMLAttributes<HTMLInputElement> {
 }
 
 const InputDate = forwardRef<HTMLInputElement, InputDateProps>(
-    ({ className, hideNativeCalendar, ...props }, ref) => {
+    ({ className, hideNativeCalendar, type = 'date', ...props }, ref) => {
         // USE THIS IF YOU WANNA HIDE THE NATIVE CALENDAR ICON/PICKER
         // [&::-webkit-calendar-picker-indicator]:hidden
         return (
@@ -22,7 +22,7 @@ const InputDate = forwardRef<HTMLInputElement, InputDateProps>(
                         '[&::-webkit-calendar-picker-indicator]:hidden',
                     className
                 )}
-                type="date"
+                type={type}
             />
         )
     }

@@ -37,7 +37,6 @@ const AmortizationScheduleTable = ({
             : []
 
     const lastAccount = schedules.at(-1)
-    // const accountNameColumns = accounts.map((account) => account.name)
 
     return (
         <div className={cn('min-h-0 h-full', className)}>
@@ -123,17 +122,20 @@ const AmortizationScheduleTable = ({
                         </TableRow>
                     ))}
                 </TableBody>
-                <TableFooter className="sticky bottom-0 bg-background/90 backdrop-blur-xs">
+                <TableFooter className="sticky bottom-0 bg-secondary/90 backdrop-blur-xs">
                     <TableRow>
                         <TableCell className="sticky left-0 backdrop-blur-sm bg-background/60">
-                            <strong className="text-muted-foreground capitalize text-sm mr-2">
+                            <strong className="text-muted-foreground capitalize text-lg mr-2">
                                 Total
                             </strong>
                         </TableCell>
                         <TableCell />
 
                         {accounts.map((acc, i) => (
-                            <TableCell className="text-right" key={acc.id}>
+                            <TableCell
+                                className="text-right text-lg"
+                                key={acc.id}
+                            >
                                 <strong>
                                     {currencyFormat(
                                         lastAccount?.accounts[i]?.total || 0,
@@ -143,7 +145,7 @@ const AmortizationScheduleTable = ({
                             </TableCell>
                         ))}
                         <TableCell className="text-right" colSpan={1}>
-                            <strong className="text-primary text-right w-full">
+                            <strong className="text-primary text-lg text-right w-full">
                                 <span className="font-mono">
                                     {currencyFormat(total || 0, {
                                         currency,

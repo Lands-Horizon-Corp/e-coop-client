@@ -5,6 +5,7 @@ import { AccountClassificationComboBox } from '@/modules/account-classification'
 import { CurrencyCombobox } from '@/modules/currency'
 import { GENERAL_LEDGER_TYPE } from '@/modules/general-ledger'
 import MemberTypeCombobox from '@/modules/member-type/components/member-type-combobox'
+import { PaymentTypeCombobox } from '@/modules/transaction'
 import { EyeIcon } from 'lucide-react'
 
 import IconCombobox from '@/components/comboboxes/icon-combobox'
@@ -152,6 +153,7 @@ const AccountHeaderForm = ({
                             disabled={
                                 isDisabled(field.name) ||
                                 [
+                                    'Other',
                                     'Deposit',
                                     'A/R-Ledger',
                                     'A/R-Aging',
@@ -182,7 +184,9 @@ const AccountHeaderForm = ({
                         <MemberTypeCombobox
                             {...field}
                             disabled={isDisabled(field.name)}
-                            onChange={(selected) => field.onChange(selected.id)}
+                            onChange={(selected) =>
+                                field.onChange(selected?.id)
+                            }
                             placeholder="Select Member Type"
                         />
                     )}
@@ -194,7 +198,9 @@ const AccountHeaderForm = ({
                     render={({ field }) => (
                         <AccountClassificationComboBox
                             disabled={isDisabled(field.name)}
-                            onChange={(selected) => field.onChange(selected.id)}
+                            onChange={(selected) =>
+                                field.onChange(selected?.id)
+                            }
                             placeholder="Select Account Classification"
                             value={field.value}
                         />
@@ -207,31 +213,57 @@ const AccountHeaderForm = ({
                     render={({ field }) => (
                         <AccountCategoryComboBox
                             disabled={isDisabled(field.name)}
-                            onChange={(selected) => field.onChange(selected.id)}
+                            onChange={(selected) =>
+                                field.onChange(selected?.id)
+                            }
                             placeholder="Select Account Category"
                             value={field.value}
                         />
                     )}
                 />
             </div>
-            <FormFieldWrapper
-                className="col-span-4"
-                control={form.control}
-                label="Account Description"
-                name="description"
-                render={({ field }) => {
-                    const { ref: _ref, ...rest } = field
-                    return (
-                        <TextEditor
-                            {...rest}
-                            content={field.value ?? ''}
-                            disabled={isDisabled(field.name)}
-                            placeholder="Write some description about the account..."
-                            textEditorClassName="!max-w-none !h-12"
-                        />
-                    )
-                }}
-            />
+            <div className="grid grid-cols-4 gap-x-3">
+                <FormFieldWrapper
+                    className="col-span-3 "
+                    control={form.control}
+                    label="Account Description"
+                    name="description"
+                    render={({ field }) => {
+                        const { ref: _ref, ...rest } = field
+                        return (
+                            <TextEditor
+                                {...rest}
+                                content={field.value ?? ''}
+                                disabled={isDisabled(field.name)}
+                                placeholder="Write some description about the account..."
+                                textEditorClassName="!max-w-none !h-12"
+                            />
+                        )
+                    }}
+                />
+                <FormFieldWrapper
+                    className="col-span-1 self-end"
+                    control={form.control}
+                    label="Default Payment Type"
+                    name="default_payment_type_id"
+                    render={({ field }) => {
+                        return (
+                            <PaymentTypeCombobox
+                                {...field}
+                                disabled={isDisabled(field.name)}
+                                onChange={(selectedPaymentType) => {
+                                    field.onChange(selectedPaymentType?.id)
+                                    form.setValue(
+                                        'default_payment_type',
+                                        selectedPaymentType
+                                    )
+                                }}
+                                placeholder="Write some description about the account..."
+                            />
+                        )
+                    }}
+                />
+            </div>
         </div>
     )
 }

@@ -22,6 +22,7 @@ import { TEntityId } from '@/types'
 
 import { useGetAllAccount } from '../../account.service'
 import { IAccount } from '../../account.types'
+import AccountTypeBadge from '../badges/account-type-badge'
 import { AccountViewerModal } from './account-viewer'
 import { ComputationTypeDisplay } from './common'
 
@@ -184,30 +185,47 @@ export const LoanAccountContent = ({
                     </p>
                 </div>
 
-                <LoanConnectedAccounts accountId={account.id} />
+                <LoanConnectedAccountsConnected accountId={account.id} />
             </div>
         </div>
     )
 }
 
-const LoanConnectedAccounts = ({ accountId }: { accountId: TEntityId }) => {
+export const LoanConnectedAccountsConnected = ({
+    accountId,
+    className,
+}: {
+    accountId: TEntityId
+    className?: string
+}) => {
     const { data: connectedAccounts, isPending } = useGetAllAccount({
         mode: 'loan-account-connections',
         accountId,
     })
 
     return (
-        <div className="rounded-xl grid grid-cols-1 md:grid-cols-2 gap-3">
+        <div
+            className={cn(
+                'rounded-xl grid grid-cols-1 md:grid-cols-2 gap-3',
+                className
+            )}
+        >
             {isPending ? (
                 <>
                     {/* Show 2 skeleton loaders when loading */}
                     <ConnectedAccountSkeleton />
                     <ConnectedAccountSkeleton />
                 </>
-            ) : (
-                connectedAccounts?.map((account) => (
+            ) : connectedAccounts && connectedAccounts.length > 0 ? (
+                connectedAccounts.map((account) => (
                     <ConnectedAccountItem account={account} key={account.id} />
                 ))
+            ) : (
+                <div className="col-span-full text-center py-8">
+                    <p className="text-sm text-muted-foreground">
+                        No connected accounts found
+                    </p>
+                </div>
             )}
         </div>
     )
@@ -231,10 +249,7 @@ const ConnectedAccountItem = ({ account }: { account: IAccount }) => {
     return (
         <div
             className={cn(
-                'relative w-full space-y-1 rounded-xl bg-accent text-accent-foreground border px-3 py-3',
-                account.loan_account_id
-                    ? 'border-primary bg-primary/20'
-                    : 'border-input bg-muted/30'
+                'relative w-full space-y-1 rounded-xl bg-gradient-to-r from-accent/20 to-primary/20 text-accent-foreground border px-3 py-3 border-primary'
             )}
         >
             <div className="flex gap-2 items-center">
@@ -263,6 +278,7 @@ const ConnectedAccountItem = ({ account }: { account: IAccount }) => {
                         {account.name}
                     </p>
                 </div>
+                <AccountTypeBadge size="xs" type={account.type} />
             </div>
             <p className="text-xs text-muted-foreground truncate">
                 {account.description}

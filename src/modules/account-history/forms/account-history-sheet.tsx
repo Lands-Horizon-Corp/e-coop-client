@@ -36,40 +36,7 @@ import {
     useAccountHistoryRestore,
     useGetAccountHistoryByAccountId,
 } from '../account-history.service'
-import { IAccountHistory, THistoryChangeType } from '../account-history.types'
-
-const getChangeTypeConfig = (changeType: THistoryChangeType) => {
-    switch (changeType) {
-        case 'created':
-            return {
-                color: 'bg-emerald-100 dark:bg-emerald-950 border-emerald-300 text-emerald-700 dark:text-emerald-300',
-                badgeColor:
-                    'bg-emerald-50 text-emerald-700 border-emerald-200 dark:bg-emerald-950 dark:text-emerald-300 dark:border-emerald-800',
-                label: 'Created',
-            }
-        case 'updated':
-            return {
-                color: 'bg-blue-100 dark:bg-blue-950 border-blue-300 text-blue-700 dark:text-blue-300',
-                badgeColor:
-                    'bg-blue-50 text-blue-700 border-blue-200 dark:bg-blue-950 dark:text-blue-300 dark:border-blue-800',
-                label: 'Updated',
-            }
-        case 'deleted':
-            return {
-                color: 'bg-red-100 dark:bg-red-950 border-red-300 text-red-700 dark:text-red-300',
-                badgeColor:
-                    'bg-red-50 text-red-700 border-red-200 dark:bg-red-950 dark:text-red-300 dark:border-red-800',
-                label: 'Deleted',
-            }
-        default:
-            return {
-                color: 'bg-gray-100 dark:bg-gray-950 border-gray-300 text-gray-700 dark:text-gray-300',
-                badgeColor:
-                    'bg-gray-50 text-gray-700 border-gray-200 dark:bg-gray-950 dark:text-gray-300 dark:border-gray-800',
-                label: 'Unknown',
-            }
-    }
-}
+import { IAccountHistory } from '../account-history.types'
 
 type AccountHistoryCardProps = {
     history: IAccountHistory
@@ -84,19 +51,19 @@ const AccountHistoryCard = ({
     isLast,
     onRestore,
 }: AccountHistoryCardProps) => {
-    const config = getChangeTypeConfig(history.change_type)
+    // const config = getChangeTypeConfig(history.change_type)
     const viewModalState = useModalState()
     const { onOpen } = useConfirmModalStore()
 
-    const getChangeDescription = () => {
-        if (history.change_type === 'created') {
-            return 'Account configuration created'
-        }
-        if (history.change_type === 'deleted') {
-            return 'Account configuration removed'
-        }
-        return 'Configuration updated'
-    }
+    // const getChangeDescription = () => {
+    //     if (history.change_type === 'created') {
+    //         return 'Account configuration created'
+    //     }
+    //     if (history.change_type === 'deleted') {
+    //         return 'Account configuration removed'
+    //     }
+    //     return 'Configuration updated'
+    // }
 
     const restoreMutation = useAccountHistoryRestore({
         options: {
@@ -126,8 +93,8 @@ const AccountHistoryCard = ({
                         <div className="flex pt-4 items-center flex-col">
                             <div
                                 className={cn(
-                                    'relative flex-shrink-0 size-10 rounded-full flex items-center justify-center border-2 shadow-sm',
-                                    config.color
+                                    'relative flex-shrink-0 size-10 rounded-full flex items-center justify-center border-2 shadow-sm'
+                                    // config.color
                                 )}
                             >
                                 {historyIcon && historyIcon !== undefined ? (
@@ -138,8 +105,8 @@ const AccountHistoryCard = ({
                                 {index === 0 && (
                                     <div
                                         className={cn(
-                                            'absolute inset-0 rounded-full animate-ping opacity-20',
-                                            config.color
+                                            'absolute inset-0 rounded-full animate-ping opacity-20'
+                                            // config.color
                                         )}
                                     />
                                 )}
@@ -150,7 +117,7 @@ const AccountHistoryCard = ({
                         </div>
                         <div className="flex flex-col py-4 font-sm max-w-62">
                             <p className="truncate w-full">
-                                {getChangeDescription()}
+                                {/* {getChangeDescription()} */}
                             </p>
                             <p className="text-xs text-muted-foreground">
                                 {toReadableDate(history.created_at)} -{' '}
@@ -159,14 +126,7 @@ const AccountHistoryCard = ({
                             <div className="flex-1 min-w-0">
                                 <div className="flex items-center gap-2 text-xs text-muted-foreground mt-1">
                                     <div className="flex-2 flex gap-1">
-                                        <span>
-                                            {
-                                                getChangeTypeConfig(
-                                                    history.change_type
-                                                ).label
-                                            }{' '}
-                                            by
-                                        </span>
+                                        <span>updated by</span>
                                         <span>
                                             {history.created_by?.full_name ||
                                                 ' Unknown User'}

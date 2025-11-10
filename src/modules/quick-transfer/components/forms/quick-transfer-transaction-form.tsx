@@ -414,7 +414,7 @@ export const QuickTransferTransactionForm = ({
                                 disabled={isDisabled('payment_type_id')}
                                 onChange={(selectedPaymentType) => {
                                     if (isDisabled('payment_type_id')) return
-                                    field.onChange(selectedPaymentType.id)
+                                    field.onChange(selectedPaymentType?.id)
                                 }}
                                 placeholder="Select a payment type"
                                 value={field.value ?? undefined}

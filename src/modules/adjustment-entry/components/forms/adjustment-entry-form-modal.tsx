@@ -205,7 +205,7 @@ const AdjustmentEntryCreateUpdateForm = ({
                                 {...field}
                                 disabled={isDisabled('payment_type_id')}
                                 onChange={(selectedPaymentType) => {
-                                    field.onChange(selectedPaymentType.id)
+                                    field.onChange(selectedPaymentType?.id)
                                 }}
                                 placeholder="Select a payment type"
                                 value={field.value ?? undefined}

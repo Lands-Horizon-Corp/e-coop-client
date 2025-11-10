@@ -67,6 +67,15 @@ export const UserOrganizationSettingsSchema = z.object({
         .optional()
         .nullable(),
     settings_accounting_withdraw_default_value: z.any().optional(),
+
+    time_machine_time: z.coerce.string().transform((val) => {
+        if (!val || val === '') return undefined
+
+        const date = new Date(val)
+        if (isNaN(date.getTime())) return undefined
+
+        return date.toISOString()
+    }),
 })
 
 export type TUserOrganizationSettingsSchema = z.infer<

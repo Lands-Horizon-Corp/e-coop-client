@@ -1,17 +1,15 @@
 import { Path, UseFormReturn } from 'react-hook-form'
 
-import { CurrencyInput } from '@/modules/currency'
 import { GENERAL_LEDGER_TYPE } from '@/modules/general-ledger'
 
 import { GradientBackground } from '@/components/gradient-background/gradient-background'
-import { MoneyBagIcon, SettingsIcon } from '@/components/icons'
+import { SettingsIcon } from '@/components/icons'
 import {
     Accordion,
     AccordionContent,
     AccordionItem,
     AccordionTrigger,
 } from '@/components/ui/accordion'
-import { Checkbox } from '@/components/ui/checkbox'
 import { FormControl } from '@/components/ui/form'
 import FormFieldWrapper from '@/components/ui/form-field-wrapper'
 import { Input } from '@/components/ui/input'
@@ -34,6 +32,7 @@ import { DepositFormSection } from './sections/deposit-form-section'
 import { FinesFormSection } from './sections/fines-form-section'
 import { InterestFormSection } from './sections/interest-form-section'
 import { LoanFormSection } from './sections/loan-form-section'
+import { OtherFormSection } from './sections/other-form-section'
 import { SVFLedgerFormSection } from './sections/svf-ledger-form-section'
 
 type AccountContentFormProps = {
@@ -47,7 +46,7 @@ const AccountContentForm = ({
     isDisabled,
     isLoading,
 }: AccountContentFormProps) => {
-    const isCompassionFundEnabled = form.watch('compassion_fund')
+    // const isCompassionFundEnabled = form.watch('compassion_fund')
 
     return (
         <div className="py-2 w-full space-y-2">
@@ -129,6 +128,7 @@ const AccountContentForm = ({
                 )}
             />
             <div className="w-full bg-card/50 rounded-3xl ">
+                <OtherFormSection form={form} isDisabled={isDisabled} />
                 <DepositFormSection form={form} isDisabled={isDisabled} />
                 <LoanFormSection form={form} isDisabled={isDisabled} />
                 <FinesFormSection form={form} isDisabled={isDisabled} />
@@ -168,7 +168,10 @@ const AccountContentForm = ({
                                                         selectedValue
                                                     ) => {
                                                         field.onChange(
-                                                            selectedValue
+                                                            selectedValue ===
+                                                                'None'
+                                                                ? undefined
+                                                                : selectedValue
                                                         )
                                                     }}
                                                 >
@@ -177,6 +180,9 @@ const AccountContentForm = ({
                                                             'select General Ledger Type'}
                                                     </SelectTrigger>
                                                     <SelectContent>
+                                                        <SelectItem value="None">
+                                                            None
+                                                        </SelectItem>
                                                         {GENERAL_LEDGER_TYPE.map(
                                                             (GLType) => {
                                                                 return (
@@ -266,95 +272,6 @@ const AccountContentForm = ({
                                             </RadioGroup>
                                         )}
                                     />
-                                    <div className="flex flex-col col-span-2">
-                                        <div>
-                                            <h4 className="text-sm font-medium text-muted-foreground">
-                                                Compassion Fund (Damayan)
-                                            </h4>
-                                            <FormFieldWrapper
-                                                control={form.control}
-                                                name="compassion_fund"
-                                                render={({ field }) => (
-                                                    <GradientBackground
-                                                        gradientOnly
-                                                    >
-                                                        <div className="shadow-xs relative flex w-full items-start gap-2 rounded-2xl border border-input p-4 outline-none duration-200 ease-out has-[:checked]:border-primary/30 has-[:checked]:bg-primary/40">
-                                                            <Checkbox
-                                                                checked={
-                                                                    field.value
-                                                                }
-                                                                className="order-1 after:absolute after:inset-0"
-                                                                disabled={
-                                                                    isDisabled(
-                                                                        field.name
-                                                                    ) ||
-                                                                    isLoading
-                                                                }
-                                                                id={field.name}
-                                                                onCheckedChange={
-                                                                    field.onChange
-                                                                }
-                                                            />
-                                                            <div className="flex grow items-center gap-3">
-                                                                <div className="size-fit rounded-full bg-secondary p-2">
-                                                                    <MoneyBagIcon className="size-4" />
-                                                                </div>
-                                                                <div className="grid gap-2">
-                                                                    <Label
-                                                                        htmlFor={
-                                                                            field.name
-                                                                        }
-                                                                    >
-                                                                        Enable
-                                                                        Compassion
-                                                                        Fund
-                                                                    </Label>
-                                                                    <p className="text-xs text-muted-foreground">
-                                                                        Enable
-                                                                        compassion
-                                                                        fund
-                                                                        (damayan)
-                                                                        for this
-                                                                        account
-                                                                    </p>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </GradientBackground>
-                                                )}
-                                            />
-                                        </div>
-                                        <div>
-                                            <FormFieldWrapper
-                                                control={form.control}
-                                                label="Compassion Fund Amount"
-                                                name="compassion_fund_amount"
-                                                render={({
-                                                    field: {
-                                                        onChange,
-                                                        ...field
-                                                    },
-                                                }) => (
-                                                    <CurrencyInput
-                                                        {...field}
-                                                        disabled={
-                                                            isDisabled(
-                                                                field.name
-                                                            ) ||
-                                                            isLoading ||
-                                                            !isCompassionFundEnabled
-                                                        }
-                                                        onValueChange={(
-                                                            newValue = ''
-                                                        ) => {
-                                                            onChange(newValue)
-                                                        }}
-                                                        placeholder="Enter compassion fund amount"
-                                                    />
-                                                )}
-                                            />
-                                        </div>
-                                    </div>
                                 </div>
                                 <legend>
                                     Reporting & Display Configuration

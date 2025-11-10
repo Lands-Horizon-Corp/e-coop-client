@@ -481,7 +481,7 @@ const PaymentWithTransactionForm = ({
                                             )}
                                             onChange={(selectedPaymentType) => {
                                                 field.onChange(
-                                                    selectedPaymentType.id
+                                                    selectedPaymentType?.id
                                                 )
                                                 if (isOnlinePayment) {
                                                     form.setValue(

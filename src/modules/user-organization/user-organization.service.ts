@@ -388,6 +388,31 @@ export const useUpdateUserOrganizationPermission = createMutationFactory<
     },
 })
 
+export const useCancelTimeMachineTime = createMutationFactory<
+    IUserOrganization,
+    Error,
+    void
+>({
+    mutationFn: async () => {
+        const response = await API.put<void, IUserOrganization>(
+            `${userOrganizationAPIRoute}/time-machine/cancel`
+        )
+        return response.data
+    },
+    invalidationFn: (args) => {
+        args.queryClient.invalidateQueries({
+            queryKey: ['auth', 'context'],
+        })
+        args.queryClient.invalidateQueries({
+            queryKey: ['employee', 'paginated'],
+        })
+        args.queryClient.invalidateQueries({
+            queryKey: ['user-organization', args.resultData.id],
+        })
+        updateMutationInvalidationFn('user-organization', args)
+    },
+})
+
 export const useUpdateUserOrganizationSettings = createMutationFactory<
     IUserOrganization,
     Error,

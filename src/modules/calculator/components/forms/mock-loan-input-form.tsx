@@ -198,7 +198,7 @@ const MockLoanInputForm = ({
                                                 {...field}
                                                 onChange={(memberType) => {
                                                     field.onChange(
-                                                        memberType.id
+                                                        memberType?.id
                                                     )
                                                     form.setValue(
                                                         'member_type',

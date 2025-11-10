@@ -5,6 +5,8 @@ import { IBaseEntityMeta, IPaginatedResult, TEntityId } from '@/types'
 import { IAccount } from '../account'
 import { IComakerCollateral } from '../comaker-collateral'
 import { IComakerMemberProfile } from '../comaker-member-profile'
+import { ICurrency } from '../currency'
+import { ILoanAmortizationSchedule } from '../loan-amortization-schedule'
 import { ILoanClearanceAnalysis } from '../loan-clearance-analysis'
 import { ILoanClearanceAnalysisInstitution } from '../loan-clearance-analysis-institution'
 import { ILoanPurpose } from '../loan-purpose'
@@ -296,4 +298,17 @@ export interface ILoanPayableAccount {
 
 export interface ILoanTransactionPayableAccounts {
     payable_accounts: ILoanPayableAccount[]
+}
+
+// for loan transaction amort schedules
+export interface ILoanAmortizationSchedules {
+    currency: ICurrency
+
+    // entries: IComputationSheetAmortizationResponseDeduction[]
+    total_debit: number
+    total_credit: number
+
+    total: number
+
+    schedule: ILoanAmortizationSchedule[]
 }

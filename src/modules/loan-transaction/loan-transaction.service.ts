@@ -14,6 +14,7 @@ import { TAPIQueryOptions, TEntityId } from '@/types'
 
 // import { IAmortizationSchedule } from '../amortization'
 import type {
+    ILoanAmortizationSchedules,
     ILoanTransaction,
     ILoanTransactionPaginated,
     ILoanTransactionPayableAccounts,
@@ -197,26 +198,26 @@ export const useGetPaginatedLoanTransaction = ({
     })
 }
 
-// GET LOAN AMORT
-// export const useGetLoanAmortization = ({
-//     loanTransactionId,
-//     options,
-// }: {
-//     loanTransactionId: TEntityId
-//     options?: HookQueryOptions<IAmortizationSchedule, Error>
-// }) => {
-//     return useQuery<IAmortizationSchedule, Error>({
-//         ...options,
-//         queryKey: [loanTransactionBaseKey, loanTransactionId, 'amortization'],
-//         queryFn: async () => {
-//             const response = await API.get<IAmortizationSchedule>(
-//                 `${loanTransactionAPIRoute}/${loanTransactionId}/amortization-schedule`
-//             )
+// GET LOAN AMORTIZATION SCHEDULES
+export const useGetLoanAmortization = ({
+    loanTransactionId,
+    options,
+}: {
+    loanTransactionId: TEntityId
+    options?: HookQueryOptions<ILoanAmortizationSchedules, Error>
+}) => {
+    return useQuery<ILoanAmortizationSchedules, Error>({
+        ...options,
+        queryKey: [loanTransactionBaseKey, loanTransactionId, 'amortization'],
+        queryFn: async () => {
+            const response = await API.get<ILoanAmortizationSchedules>(
+                `${loanTransactionAPIRoute}/${loanTransactionId}/schedule`
+            )
 
-//             return response.data
-//         },
-//     })
-// }
+            return response.data
+        },
+    })
+}
 
 // GET Loan Transaction Payable Accounts
 export const useGetLoanTransactionPayableAccounts = ({

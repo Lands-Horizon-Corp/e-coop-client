@@ -96,6 +96,8 @@ export interface IUserOrganizationSettings {
 
     settings_payment_type_default_value_id?: TEntityId | null
     settings_payment_type_default_value?: IPaymentType
+
+    time_machine_time?: string
 }
 
 export interface IUserOrganizationSettingsRequest

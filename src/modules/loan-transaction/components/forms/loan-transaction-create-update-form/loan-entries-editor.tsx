@@ -36,7 +36,6 @@ import {
     TIcon,
     TrashIcon,
 } from '@/components/icons'
-import Modal from '@/components/modals/modal'
 import ActionTooltip from '@/components/tooltips/action-tooltip'
 import InfoTooltip from '@/components/tooltips/info-tooltip'
 import { Button } from '@/components/ui/button'
@@ -60,7 +59,7 @@ import { useModalState } from '@/hooks/use-modal-state'
 import { TEntityId } from '@/types'
 
 import { TLoanTransactionSchema } from '../../../loan-transaction.validation'
-import LoanAmortization from '../../loan-amortization'
+import { LoanAmortizationModal } from '../../loan-amortization'
 
 // Loan Entires Tab Content
 const LoanEntriesEditor = forwardRef<
@@ -763,20 +762,11 @@ const AmortizationView = ({
     return (
         <>
             {loanTransactionId && (
-                <Modal
+                <LoanAmortizationModal
                     {...amortViewer}
-                    className="!max-w-[90vw] p-0 shadow-none border-none bg-transparent gap-y-0"
-                    closeButtonClassName="top-2 right-2"
-                    description=""
-                    descriptionClassName="sr-only"
-                    title=""
-                    titleClassName="sr-only"
-                >
-                    <LoanAmortization
-                        className="col-span-5 p-0 bg-transparent"
-                        loanTransactionId={loanTransactionId}
-                    />
-                </Modal>
+                    className="col-span-5 p-4"
+                    loanTransactionId={loanTransactionId}
+                />
             )}
             <Button
                 aria-label="See amortization"

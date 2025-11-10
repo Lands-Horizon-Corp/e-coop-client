@@ -11,17 +11,21 @@ import { PaymentTypeCombobox } from '@/modules/transaction'
 import FormFooterResetSubmit from '@/components/form-components/form-footer-reset-submit'
 import {
     BillIcon,
+    ClockFillIcon,
     CreditCardIcon,
     InfoIcon,
     ReceiptIcon,
     ShieldCheckIcon,
     WeightScaleIcon,
+    XIcon,
 } from '@/components/icons'
 import Modal, { IModalProps } from '@/components/modals/modal'
 import InfoTooltip from '@/components/tooltips/info-tooltip'
+import { Button } from '@/components/ui/button'
 import { Form } from '@/components/ui/form'
 import FormFieldWrapper from '@/components/ui/form-field-wrapper'
 import { Input } from '@/components/ui/input'
+import InputDate from '@/components/ui/input-date'
 import { Label } from '@/components/ui/label'
 import { Separator } from '@/components/ui/separator'
 import { Switch } from '@/components/ui/switch'
@@ -173,6 +177,77 @@ const UserOrgSettingsForm = ({
                                 />
                             )}
                         />
+                    </div>
+
+                    <Separator />
+
+                    {/* Time Machine Section */}
+                    <div className="space-y-4 p-4 bg-secondary/60 dark:bg-popover rounded-xl">
+                        <div className="flex items-center gap-3">
+                            <div className="size-fit rounded-full bg-accent p-2 dark:bg-accent/20">
+                                <ClockFillIcon className="h-5 w-5 text-accent-foreground" />
+                            </div>
+                            <div>
+                                <h3 className="font-semibold">Time Machine</h3>
+                                <p className="text-xs text-muted-foreground">
+                                    Set a specific date and time to simulate
+                                    transactions and operations at that point in
+                                    time.
+                                </p>
+                            </div>
+                        </div>
+
+                        <div className="flex items-end gap-x-3">
+                            <FormFieldWrapper
+                                control={form.control}
+                                label={
+                                    <>
+                                        Date Time Machine{' '}
+                                        <span className="text-muted-foreground">
+                                            MM / dd / yyyy, hh:mm
+                                        </span>
+                                    </>
+                                }
+                                labelClassName="flex justify-between items-end"
+                                name="time_machine_time"
+                                render={({ field }) => {
+                                    const localValue = field.value
+                                        ? new Date(field.value)
+                                              .toISOString()
+                                              .slice(0, 16)
+                                        : ''
+
+                                    return (
+                                        <InputDate
+                                            {...field}
+                                            autoComplete="off"
+                                            disabled={isDisabled(field.name)}
+                                            id={field.name}
+                                            placeholder="Date"
+                                            type="datetime-local"
+                                            value={localValue}
+                                            // value={field.value}
+                                        />
+                                    )
+                                }}
+                            />
+                            {form.watch('time_machine_time') !== undefined && (
+                                <Button
+                                    hoverVariant="destructive"
+                                    onClick={() =>
+                                        form.setValue(
+                                            'time_machine_time',
+                                            undefined,
+                                            { shouldDirty: true }
+                                        )
+                                    }
+                                    size="icon"
+                                    variant="ghost"
+                                >
+                                    <XIcon className="size-4" />
+                                </Button>
+                            )}
+                        </div>
                     </div>
 
                     <Separator />

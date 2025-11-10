@@ -348,7 +348,7 @@ const LoanPayablesForm = ({
                                                     selectedPaymentType
                                                 ) => {
                                                     field.onChange(
-                                                        selectedPaymentType.id
+                                                        selectedPaymentType?.id
                                                     )
                                                     form.setValue(
                                                         `payables.${idx}.payment_type`,

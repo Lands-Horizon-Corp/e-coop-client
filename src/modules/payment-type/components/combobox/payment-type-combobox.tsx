@@ -28,13 +28,15 @@ interface Props {
     disabled?: boolean
     className?: string
     placeholder?: string
-    onChange?: (selected: IPaymentType) => void
+    undefinable?: boolean
+    onChange?: (selected: IPaymentType | undefined) => void
 }
 
 const PaymentTypeCombobox = ({
     value,
     className,
     disabled = false,
+    undefinable = true,
     placeholder = 'Select Payment Type...',
     onChange,
 }: Props) => {
@@ -83,6 +85,18 @@ const PaymentTypeCombobox = ({
                                     No Payment Type found
                                 </CommandEmpty>
                                 <CommandGroup>
+                                    {undefinable && (
+                                        <CommandItem
+                                            className="justify-center text-muted-foreground"
+                                            onSelect={() => {
+                                                setOpen(false)
+                                                onChange?.(undefined)
+                                            }}
+                                            value={undefined}
+                                        >
+                                            Select None
+                                        </CommandItem>
+                                    )}
                                     {paymentTypes?.map((option) => (
                                         <CommandItem
                                             key={option.id}

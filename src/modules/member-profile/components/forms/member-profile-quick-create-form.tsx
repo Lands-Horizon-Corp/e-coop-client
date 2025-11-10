@@ -132,7 +132,7 @@ const MemberProfileQuickCreateForm = ({
                                         {...field}
                                         disabled={isDisabled(field.name)}
                                         onChange={(selected) =>
-                                            field.onChange(selected.id)
+                                            field.onChange(selected?.id)
                                         }
                                         placeholder="Select Member Type"
                                     />

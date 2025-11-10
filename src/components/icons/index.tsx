@@ -241,6 +241,7 @@ import {
 } from 'react-icons/hi2'
 import { ImHammer2 as JudgeHammerIcon } from 'react-icons/im'
 import {
+    IoMdClock as ClockFillIcon,
     IoIosFunnel as FunnelFilledIcon,
     IoIosCog as GearIcon,
     IoIosCode as IoIosCodeIcon,
@@ -559,6 +560,7 @@ export {
     AdjustIcon,
     UploadIcon,
     WalletIcon,
+    ClockFillIcon,
     GridFillIcon,
     FastForwardIcon,
     SchoolIcon,
@@ -997,6 +999,7 @@ export const IconMap = {
     'Push Pin': PushPinIcon,
     'Sun Moon': SunMoonIcon,
     'Zoom Out': ZoomOutIcon,
+    'Clock Fill': ClockFillIcon,
     'Printer Fill': PrinterFillIcon,
     'Swap Arrow': SwapArrowIcon,
     'Eye None': EyeNoneIcon,

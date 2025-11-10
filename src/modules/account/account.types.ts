@@ -14,6 +14,7 @@ import { ICurrency } from '../currency'
 import { TFinancialStatementType } from '../financial-statement-definition'
 import { TGeneralLedgerType } from '../general-ledger'
 import { IMemberType } from '../member-type'
+import { IPaymentType } from '../payment-type'
 import {
     ACCOUNT_EXCLUSIVE_SETTING_TYPE,
     ACCOUNT_INTEREST_STANDARD_COMPUTATION,
@@ -134,6 +135,9 @@ export interface IAccount extends IAuditable, ITimeStamps {
     // FOR CURRENCY
     currency_id: TEntityId
     currency?: ICurrency
+
+    default_payment_type_id?: TEntityId
+    default_payment_type?: IPaymentType
 
     // FOR LOAN / INTEREST / FINES / SVF
     computation_type?: TComputationType

@@ -1,3 +1,5 @@
+import { Path } from 'react-hook-form'
+
 import { cn } from '@/helpers'
 import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
 import { useAuthUserWithOrg } from '@/modules/authentication/authgentication.store'
@@ -20,7 +22,7 @@ interface Props extends IClassProps {}
 const UserOrganizationSettings = ({ className }: Props) => {
     const {
         currentAuth: {
-            user_organization: { id },
+            user_organization: { id, user_type },
         },
         updateCurrentAuth,
     } = useAuthUserWithOrg()
@@ -51,6 +53,11 @@ const UserOrganizationSettings = ({ className }: Props) => {
                     defaultValues={
                         userOrganization as TUserOrgSettingsFormValues
                     }
+                    disabledFields={[
+                        ...((user_type !== 'owner'
+                            ? ['time_machine_time']
+                            : []) as Path<TUserOrgSettingsFormValues>[]),
+                    ]}
                     mode="current"
                     onSuccess={(data) =>
                         updateCurrentAuth({ user_organization: data })
