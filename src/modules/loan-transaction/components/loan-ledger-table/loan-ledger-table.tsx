@@ -166,7 +166,7 @@ export const LoanLedgerTable = ({ data = [], className, view }: Props) => {
                     </TableRow>
                 </TableHeader>
                 <TableBody>
-                    {normalizedLedgerData.map((ledgerEntry) => {
+                    {normalizedLedgerData.map((ledgerEntry: IGeneralLedger) => {
                         return (
                             <TableRow
                                 className="border-none odd:bg-muted/50 hover:bg-transparent odd:hover:bg-muted/50"
@@ -195,37 +195,46 @@ export const LoanLedgerTable = ({ data = [], className, view }: Props) => {
                                 </TableCell>
                                 {uniqueAccounts.map((account) => {
                                     const debit =
-                                        (ledgerEntry as any)[
-                                            `${account.id}_debit`
+                                        ledgerEntry[
+                                            `${account.id}_debit` as keyof IGeneralLedger
                                         ] || 0
                                     const credit =
-                                        (ledgerEntry as any)[
-                                            `${account.id}_credit`
+                                        ledgerEntry[
+                                            `${account.id}_credit` as keyof IGeneralLedger
                                         ] || 0
                                     const balance =
-                                        (ledgerEntry as any)[
-                                            `${account.id}_balance`
+                                        ledgerEntry[
+                                            `${account.id}_balance` as keyof IGeneralLedger
                                         ] || 0
 
                                     return (
                                         <Fragment key={account.id}>
                                             <TableCell className="text-right font-mono">
-                                                {currencyFormat(debit, {
-                                                    currency,
-                                                    showSymbol: !!currency,
-                                                })}
+                                                {currencyFormat(
+                                                    debit as number,
+                                                    {
+                                                        currency,
+                                                        showSymbol: !!currency,
+                                                    }
+                                                )}
                                             </TableCell>
                                             <TableCell className="text-right font-mono">
-                                                {currencyFormat(credit, {
-                                                    currency,
-                                                    showSymbol: !!currency,
-                                                })}
+                                                {currencyFormat(
+                                                    credit as number,
+                                                    {
+                                                        currency,
+                                                        showSymbol: !!currency,
+                                                    }
+                                                )}
                                             </TableCell>
                                             <TableCell className="text-right font-mono">
-                                                {currencyFormat(balance, {
-                                                    currency,
-                                                    showSymbol: !!currency,
-                                                })}
+                                                {currencyFormat(
+                                                    balance as number,
+                                                    {
+                                                        currency,
+                                                        showSymbol: !!currency,
+                                                    }
+                                                )}
                                             </TableCell>
                                         </Fragment>
                                     )
@@ -285,6 +294,9 @@ const LoanLedgerTableView = ({
     const { data = [], isPending } = useGetAllGeneralLedger({
         mode: 'loan-transaction',
         loanTransactionId,
+        options: {
+            enabled: !!loanTransactionId,
+        },
     })
 
     return (
