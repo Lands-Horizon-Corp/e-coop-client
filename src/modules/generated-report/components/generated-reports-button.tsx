@@ -151,8 +151,8 @@ export const GeneratedReportCard = ({
                     toast.success('Report generation started.')
                 }
             },
-            onError: () => {
-                toast.error('Failed to start download process.')
+            onError: (error) => {
+                toast.error(`${error?.message}`)
             },
         },
     })
@@ -198,11 +198,13 @@ export const GeneratedReportCard = ({
                 {...openUpdateReport}
             />
             <div className="flex items-center gap-2 min-w-0">
-                <MediaResourceFileIcon
-                    className="flex-1"
-                    iconClassName="size-5 "
-                    media={report.media}
-                />
+                {report.media?.file_name && (
+                    <MediaResourceFileIcon
+                        className="flex-1"
+                        iconClassName="size-5 "
+                        media={report.media}
+                    />
+                )}
                 <div className="min-w-0">
                     <div className="font-medium text-sm truncate">
                         {report.name}
@@ -288,7 +290,7 @@ export const GeneratedReportCard = ({
                     </DropdownMenu>
                 </div>
             </div>
-            {report.media.progress && (
+            {report.media?.progress && report.media.progress !== 100 && (
                 <Progress
                     className="h-0.5 -translate-x-3 px-.5 bottom-0 absolute"
                     value={mediaProgess || report.media.progress}
