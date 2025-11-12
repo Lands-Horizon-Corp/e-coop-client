@@ -134,7 +134,7 @@ export interface IAccount extends IAuditable, ITimeStamps {
 
     // FOR CURRENCY
     currency_id: TEntityId
-    currency?: ICurrency
+    currency: ICurrency
 
     default_payment_type_id?: TEntityId
     default_payment_type?: IPaymentType

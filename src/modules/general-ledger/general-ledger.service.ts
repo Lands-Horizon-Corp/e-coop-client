@@ -2,8 +2,10 @@ import { useQuery } from '@tanstack/react-query'
 import qs from 'query-string'
 
 import { Logger } from '@/helpers/loggers'
-import { createAPIRepository } from '@/providers/repositories/api-crud-factory'
-import { HookQueryOptions } from '@/providers/repositories/data-layer-factory'
+import {
+    HookQueryOptions,
+    createDataLayerFactory,
+} from '@/providers/repositories/data-layer-factory'
 
 import { TAPIQueryOptions, TEntityId } from '@/types'
 
@@ -16,15 +18,31 @@ import {
 
 // ⚙️🛠️ API SERVICE HERE
 
-export const { getPaginated, API, route } = createAPIRepository(
-    '/api/v1/general-ledger'
-)
+export const {
+    apiCrudHooks,
+    apiCrudService,
+    baseQueryKey: generalLedgerBaseKey,
+} = createDataLayerFactory<IGeneralLedger, void>({
+    baseKey: 'general-ledger',
+    url: '/api/v1/general-ledger',
+})
+
+export const { useGetById: getGeneralLedgerId } = apiCrudHooks
+
+export const {
+    API,
+    route: generalLedgerAPIRoute,
+    getAll,
+    getPaginated: getPaginatedGeneralLedger,
+} = apiCrudService
 
 // API function to get a general ledger by ID
 export const getGeneralLedgerByID = async (
     id: TEntityId
 ): Promise<IGeneralLedger> => {
-    const response = await API.get<IGeneralLedger>(`${route}/${id}`)
+    const response = await API.get<IGeneralLedger>(
+        `${generalLedgerAPIRoute}/${id}`
+    )
     return response.data
 }
 
@@ -37,12 +55,59 @@ export const getMemberAccountGeneralLedgerTotal = async ({
     accountId: TEntityId
 }): Promise<IMemberGeneralLedgerTotal> => {
     const response = await API.get<IMemberGeneralLedgerTotal>(
-        `${route}/member-profile/${memberProfileId}/account/${accountId}/total`
+        `${generalLedgerAPIRoute}/member-profile/${memberProfileId}/account/${accountId}/total`
     )
     return response.data
 }
 
+type TGetAllGeneralLedgerMode = 'all' | 'loan-transaction'
+
+export const getAllGeneralLedger = async ({
+    mode,
+    loanTransactionId,
+}: {
+    mode?: TGetAllGeneralLedgerMode
+    loanTransactionId?: TEntityId
+}) => {
+    let url = `${generalLedgerAPIRoute}`
+
+    if (mode === 'loan-transaction' && loanTransactionId) {
+        url = `${generalLedgerAPIRoute}/loan-transaction/${loanTransactionId}`
+    }
+
+    const response = await API.get<IGeneralLedger[]>(url)
+    return response.data
+}
+
 // 🪝 HOOK START HERE
+
+export const useGetAllGeneralLedger = ({
+    mode = 'all',
+    query,
+    options,
+    loanTransactionId,
+}: {
+    mode?: TGetAllGeneralLedgerMode
+    loanTransactionId?: TEntityId
+    query?: TAPIQueryOptions
+    options?: HookQueryOptions<IGeneralLedger[], Error>
+}) => {
+    return useQuery<IGeneralLedger[], Error>({
+        ...options,
+        queryKey: [
+            generalLedgerBaseKey,
+            'all',
+            mode,
+            loanTransactionId,
+            query,
+        ].filter(Boolean),
+        queryFn: async () =>
+            getAllGeneralLedger({
+                mode,
+                loanTransactionId,
+            }),
+    })
+}
 
 // Exported mode for reuse
 export type TGeneralLedgerMode =
@@ -79,7 +144,7 @@ export const useFilteredPaginatedGeneralLedger = ({
     return useQuery<IGeneralLedgerPaginated, Error>({
         ...options,
         queryKey: [
-            'general-ledger',
+            generalLedgerBaseKey,
             'filtered-paginated',
             mode,
             userOrganizationId,
@@ -91,19 +156,19 @@ export const useFilteredPaginatedGeneralLedger = ({
             query,
         ].filter(Boolean),
         queryFn: async () => {
-            let url: string = `${route}/branch/search`
+            let url: string = `${generalLedgerAPIRoute}/branch/search`
 
             switch (mode) {
                 case 'branch':
                     url = TEntryType
-                        ? `${route}/branch/${TEntryType}/search`
-                        : `${route}/branch/search`
+                        ? `${generalLedgerAPIRoute}/branch/${TEntryType}/search`
+                        : `${generalLedgerAPIRoute}/branch/search`
                     break
 
                 case 'current':
                     url = TEntryType
-                        ? `${route}/current/${TEntryType}/search`
-                        : `${route}/current/search`
+                        ? `${generalLedgerAPIRoute}/current/${TEntryType}/search`
+                        : `${generalLedgerAPIRoute}/current/search`
                     break
 
                 case 'employee':
@@ -113,8 +178,8 @@ export const useFilteredPaginatedGeneralLedger = ({
                         )
                     }
                     url = TEntryType
-                        ? `${route}/employee/${userOrganizationId}/${TEntryType}/search`
-                        : `${route}/employee/${userOrganizationId}/search`
+                        ? `${generalLedgerAPIRoute}/employee/${userOrganizationId}/${TEntryType}/search`
+                        : `${generalLedgerAPIRoute}/employee/${userOrganizationId}/search`
                     break
 
                 case 'member':
@@ -124,8 +189,8 @@ export const useFilteredPaginatedGeneralLedger = ({
                         )
                     }
                     url = TEntryType
-                        ? `${route}/member-profile/${memberProfileId}/${TEntryType}/search`
-                        : `${route}/member-profile/${memberProfileId}/search`
+                        ? `${generalLedgerAPIRoute}/member-profile/${memberProfileId}/${TEntryType}/search`
+                        : `${generalLedgerAPIRoute}/member-profile/${memberProfileId}/search`
                     break
 
                 case 'member-account':
@@ -140,8 +205,8 @@ export const useFilteredPaginatedGeneralLedger = ({
                         )
                     }
                     url = TEntryType
-                        ? `${route}/member-profile/${memberProfileId}/account/${accountId}/${TEntryType}/search`
-                        : `${route}/member-profile/${memberProfileId}/account/${accountId}/search`
+                        ? `${generalLedgerAPIRoute}/member-profile/${memberProfileId}/account/${accountId}/${TEntryType}/search`
+                        : `${generalLedgerAPIRoute}/member-profile/${memberProfileId}/account/${accountId}/search`
                     break
 
                 case 'transaction-batch':
@@ -151,8 +216,8 @@ export const useFilteredPaginatedGeneralLedger = ({
                         )
                     }
                     url = TEntryType
-                        ? `${route}/transaction-batch/${transactionBatchId}/${TEntryType}/search`
-                        : `${route}/transaction-batch/${transactionBatchId}/search`
+                        ? `${generalLedgerAPIRoute}/transaction-batch/${transactionBatchId}/${TEntryType}/search`
+                        : `${generalLedgerAPIRoute}/transaction-batch/${transactionBatchId}/search`
                     break
 
                 case 'transaction':
@@ -162,8 +227,8 @@ export const useFilteredPaginatedGeneralLedger = ({
                         )
                     }
                     url = TEntryType
-                        ? `${route}/transaction/${transactionId}/${TEntryType}/search`
-                        : `${route}/transaction/${transactionId}/search`
+                        ? `${generalLedgerAPIRoute}/transaction/${transactionId}/${TEntryType}/search`
+                        : `${generalLedgerAPIRoute}/transaction/${transactionId}/search`
                     break
 
                 case 'account':
@@ -173,8 +238,8 @@ export const useFilteredPaginatedGeneralLedger = ({
                         )
                     }
                     url = TEntryType
-                        ? `${route}/account/${accountId}/${TEntryType}/search`
-                        : `${route}/account/${accountId}/search`
+                        ? `${generalLedgerAPIRoute}/account/${accountId}/${TEntryType}/search`
+                        : `${generalLedgerAPIRoute}/account/${accountId}/search`
                     break
 
                 default:
@@ -189,7 +254,10 @@ export const useFilteredPaginatedGeneralLedger = ({
                 { skipNull: true }
             )
 
-            return await getPaginated<IGeneralLedger>({ url: finalUrl, query })
+            return await getPaginatedGeneralLedger<IGeneralLedger>({
+                url: finalUrl,
+                query,
+            })
         },
     })
 }

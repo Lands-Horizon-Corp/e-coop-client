@@ -9,7 +9,6 @@ import { BranchesSection } from '@/modules/branch/components/branches-section'
 import CreateUpdateBranchFormModal from '@/modules/branch/components/forms/create-branch-form'
 import { BranchesProvider } from '@/modules/branch/context/branches-context'
 
-import { useLocationInfo } from '@/hooks/use-location-info'
 import { useModalState } from '@/hooks/use-modal-state'
 
 import OrganizationPreviewModalDetails from '../components/organization-preview-modal-details'
@@ -34,7 +33,6 @@ const OrganizationModalDetails = ({
     organization,
     isSeeding,
 }: OrganizationModalDetailsProps) => {
-    const countryCode = useLocationInfo().countryCode
     const queryClient = useQueryClient()
     const createModal = useModalState()
 
@@ -62,9 +60,7 @@ const OrganizationModalDetails = ({
                     description="Fill out the form to add new branch"
                     formProps={{
                         organizationId: organization.id,
-                        defaultValues: {
-                            country_code: countryCode || 'PH',
-                        },
+                        defaultValues: {},
                         hiddenFields: ['is_main_branch'],
                         onSuccess: () => {
                             createModal.onOpenChange(false)

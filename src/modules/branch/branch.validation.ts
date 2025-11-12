@@ -14,7 +14,8 @@ export const branchSchema = z.object({
     description: descriptionSchema
         .transform(descriptionTransformerSanitizer)
         .optional(),
-    country_code: z.string({ error: 'Country code is required' }).min(2),
+    currency_id: z.string({ error: 'Country code is required' }).min(2),
+    currency: z.any(),
     contact_number: z
         .string({ error: 'Contact Number is at least 11 Characters' })
         .min(11)

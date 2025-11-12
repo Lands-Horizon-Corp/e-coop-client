@@ -10,7 +10,6 @@ import { useSeedOrganization } from '@/modules/user-organization/user-organizati
 
 import { Alert, AlertDescription } from '@/components/ui/alert'
 
-import { useLocationInfo } from '@/hooks/use-location-info'
 import { useModalState } from '@/hooks/use-modal-state'
 
 import { CompletionSection } from './completion-section'
@@ -19,7 +18,6 @@ const CreateBranch = () => {
     const { organization_id: organizationId } = useParams({
         from: '/onboarding/create-branch/$organization_id',
     })
-    const countryCode = useLocationInfo().countryCode
     const navigate = useNavigate()
     const { mutateAsync: seed, isPending: isSeeding } = useSeedOrganization()
     const queryClient = useQueryClient()
@@ -74,9 +72,7 @@ const CreateBranch = () => {
                 description="Fill out the form to add new branch"
                 formProps={{
                     organizationId,
-                    defaultValues: {
-                        country_code: countryCode || 'PH',
-                    },
+                    defaultValues: {},
                     hiddenFields: ['is_main_branch'],
                     onSuccess: () => {
                         createModal.onOpenChange(false)

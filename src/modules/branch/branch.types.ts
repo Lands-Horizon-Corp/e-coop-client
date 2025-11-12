@@ -1,6 +1,7 @@
 import { IAuditable, IPaginatedResult, ITimeStamps, TEntityId } from '@/types'
 
 import { IBranchSettings } from '../branch-settings'
+import { ICurrency } from '../currency'
 import { IMedia } from '../media'
 import { IOrganization } from '../organization'
 
@@ -25,7 +26,8 @@ export interface IBranch extends ITimeStamps, IAuditable {
     email: string
 
     description?: string
-    country_code?: string
+    currency_id: TEntityId
+    currency: ICurrency
     contact_number?: string
 
     address: string
@@ -53,8 +55,10 @@ export interface IBranchRequest {
     email: string
 
     description?: string
-    country_code?: string
     contact_number?: string
+
+    currency_id: TEntityId
+    currency: ICurrency
 
     address: string
     province: string

@@ -7,7 +7,6 @@ import { IOrganization } from '@/modules/organization'
 
 import Modal, { IModalProps } from '@/components/modals/modal'
 
-import { useLocationInfo } from '@/hooks/use-location-info'
 import { useModalState } from '@/hooks/use-modal-state'
 
 import OrganizationModalDetails from '../organization-forms/organization-modal-details'
@@ -32,7 +31,6 @@ const OrganizationPreviewModal = ({
 }: OrganizationModalProps) => {
     const createModal = useModalState()
     const queryClient = useQueryClient()
-    const countryCode = useLocationInfo().countryCode
 
     if (!organization) return null
 
@@ -52,9 +50,7 @@ const OrganizationPreviewModal = ({
                 description="Fill out the form to add new branch"
                 formProps={{
                     organizationId: organization.id,
-                    defaultValues: {
-                        country_code: countryCode || 'PH',
-                    },
+                    defaultValues: {},
                     hiddenFields: ['is_main_branch'],
                     onSuccess: () => {
                         createModal.onOpenChange(false)

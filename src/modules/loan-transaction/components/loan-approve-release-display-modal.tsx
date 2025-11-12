@@ -201,13 +201,13 @@ const LoanApproveReleaseDisplayModal = ({
                     />
                 )}
                 <LoanMiniInfoCard loanTransaction={loanTransaction} />
-                <div className="p-2 max-w-full mx-auto min-w-0 flex items-center gap-x-4 rounded bg-secondary/40 ring-2 ring-secondary/60">
-                    <span className="text-muted-foreground/70 shrink-0">
+                <div className="p-2 max-w-full mx-auto min-w-0 flex items-center text-accent-foreground gap-x-4 rounded bg-accent/80 ring-2 ring-primary/60">
+                    <span className="text-accent-foreground/70 shrink-0">
                         <TicketIcon className="inline mr-2 size-5" />
                         Voucher
                     </span>
                     <Separator className="min-h-8" orientation="vertical" />
-                    <p className="font-mono text-xl text-nowrap overflow-x-scroll ecoop-scroll tracking-wider max-w-full">
+                    <p className="font-mono text-xl text-nowrap overflow-x-auto ecoop-scroll tracking-wider max-w-full">
                         {loanTransaction.voucher}
                     </p>
                 </div>

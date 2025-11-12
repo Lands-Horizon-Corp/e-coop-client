@@ -63,7 +63,7 @@ const MemberAccountingLedgerTableColumns = (
             </DataTableColumnHeader>
         ),
         cell: ({ row: { original } }) => (
-            <p>
+            <div>
                 <span className="mr-1">{original.account?.name || '-'}</span>
                 {original.account?.currency && (
                     <CurrencyBadge
@@ -72,7 +72,7 @@ const MemberAccountingLedgerTableColumns = (
                         size="sm"
                     />
                 )}
-            </p>
+            </div>
         ),
         enableMultiSort: true,
         enableSorting: true,

@@ -72,17 +72,22 @@ const AmortizationScheduleTable = ({
                     </TableRow>
                 </TableHeader>
                 <TableBody>
-                    {schedules.map((schedule) => (
+                    {schedules.map((schedule, index) => (
                         <TableRow
                             className="border-none odd:bg-muted/50 hover:bg-transparent odd:hover:bg-muted/50 "
                             key={schedule.id}
                         >
-                            <TableCell className="text-sm sticky left-0 backdrop-blur-sm bg-background/60">
-                                {schedule.days_skipped > 0 ? (
-                                    <div>
-                                        {toReadableDate(
-                                            schedule.scheduled_date
-                                        )}
+                            <TableCell className="text-sm sticky flex left-0 backdrop-blur-sm bg-background/60">
+                                <span className="text-primary font-bold text-base mr-2">
+                                    {index}
+                                </span>
+                                <div>
+                                    {toReadableDate(
+                                        schedule.days_skipped > 0
+                                            ? schedule.scheduled_date
+                                            : schedule.actual_date
+                                    )}
+                                    {schedule.days_skipped > 0 && (
                                         <p className="text-muted-foreground text-nowrap text-xs">
                                             <FastForwardIcon className="inline" />{' '}
                                             {schedule.days_skipped} Day
@@ -91,10 +96,8 @@ const AmortizationScheduleTable = ({
                                                 : ''}{' '}
                                             skipped
                                         </p>
-                                    </div>
-                                ) : (
-                                    `${toReadableDate(schedule.actual_date)}`
-                                )}
+                                    )}
+                                </div>
                             </TableCell>
                             <TableCell className="font-mono">
                                 {currencyFormat(schedule.balance, {

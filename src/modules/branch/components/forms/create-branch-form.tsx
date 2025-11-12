@@ -6,9 +6,9 @@ import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
 
 import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
 import { cn } from '@/helpers/tw-utils'
+import { CurrencyCombobox } from '@/modules/currency'
 import { IMedia } from '@/modules/media'
 
-import { CountryCombobox } from '@/components/comboboxes/country-combobox'
 import { LoadingSpinnerIcon } from '@/components/icons'
 import MapPicker from '@/components/map/map-picker'
 import Modal, { IModalProps } from '@/components/modals/modal'
@@ -61,7 +61,6 @@ export const CreateUpdateBranchByOrgForm = ({
         reValidateMode: 'onChange',
         mode: 'onSubmit',
         defaultValues: {
-            country_code: countryCode,
             media: formProps.defaultValues?.media,
             description: formProps.defaultValues?.description ?? '',
             type:
@@ -250,16 +249,15 @@ export const CreateUpdateBranchByOrgForm = ({
                             />
                             <FormFieldWrapper
                                 control={form.control}
-                                label="Country Code"
-                                name="country_code"
+                                label="Currency"
+                                name="currency_id"
                                 render={({ field }) => (
-                                    <CountryCombobox
-                                        {...field}
-                                        defaultValue={field.value}
-                                        disabled={isLoading}
-                                        onChange={(country) =>
-                                            field.onChange(country.alpha2)
+                                    <CurrencyCombobox
+                                        onChange={(selected) =>
+                                            field.onChange(selected.id)
                                         }
+                                        placeholder="Select Currency"
+                                        value={field.value}
                                     />
                                 )}
                             />

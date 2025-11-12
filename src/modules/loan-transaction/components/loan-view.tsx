@@ -4,7 +4,6 @@ import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
 import AccountBadge from '@/modules/account/components/badges/account-badge'
 import GeneralStatusBadge from '@/modules/authentication/components/general-status-badge'
 import { currencyFormat } from '@/modules/currency'
-import LoanLedgerTable from '@/modules/loan-ledger/components/loan-ledger-table'
 import {
     ILoanTransaction,
     TLoanModeOfPayment,
@@ -50,6 +49,7 @@ import { IClassProps, TEntityId } from '@/types'
 import { LoanAddInterestFormModal } from './forms/loan-add-interest-form'
 import { LoanInquireAdvanceInterestFinesModal } from './forms/loan-inquire-advance-interest-fines-form'
 import { LoanAmortizationModal } from './loan-amortization'
+import LoanLedgerTableView from './loan-ledger-table/loan-ledger-table'
 import { LoanViewSkeleton } from './skeletons/loan-view-skeleton'
 
 interface LoanLedgerViewProps extends IClassProps {
@@ -80,7 +80,7 @@ const LoanView = ({
         : serverRequestErrExtractor({ error })
 
     return (
-        <div className={cn('space-y-4 p-4 w-full ', className)}>
+        <div className={cn('space-y-4 p-4 w-full', className)}>
             {errorMessage && (
                 <FormErrorMessage
                     className="mx-auto"
@@ -92,7 +92,10 @@ const LoanView = ({
                 <>
                     <LoanLedgerHeader loanTransaction={data} />
                     <LoanDetails loanTransaction={data} />
-                    <LoanLedgerTable className="h-[50vh] w-full rounded-lg" />
+                    <LoanLedgerTableView
+                        className="h-[50vh] w-full rounded-lg"
+                        loanTransactionId={loanTransactionId}
+                    />
                     <LoanQuickSummary loanTransaction={data} />
                 </>
             )}
@@ -307,18 +310,18 @@ const LoanDetails = ({
     return (
         <div
             className={cn(
-                'w-full flex gap-1 bg-popover text-sm justify-between p-4 rounded-lg',
+                'w-full flex gap-1 bg-popover justify-between overflow-x-auto ecoop-scroll text-sm p-4 rounded-lg',
                 className
             )}
         >
             {/* Account Info & Dates */}
             <div className="space-y-2 min-w-[180px] px-4 border-l first:border-l-0">
-                <p className="text-xs font-bold text-muted-foreground">
+                <p className="text-xs font-bold text-nowrap text-muted-foreground">
                     Account Info & Dates
                 </p>
                 <div className="space-y-2">
                     <div className="flex text-muted-foreground text-xs items-center gap-1">
-                        Account :{' '}
+                        <span className="text-nowrap">Account :</span>{' '}
                         {account?.icon && account?.name ? (
                             <AccountBadge
                                 icon={account.icon as TIcon}
@@ -333,8 +336,8 @@ const LoanDetails = ({
                         )}
                     </div>
                     <div className="flex text-muted-foreground text-xs items-center gap-1">
-                        Entry Date:{' '}
-                        <span className="px-2 py-1 rounded-md bg-secondary border border-border">
+                        <span className="text-nowrap">Entry Date: </span>{' '}
+                        <span className="px-2 py-1 text-wrap rounded-md bg-secondary border border-border">
                             {created_at ? (
                                 toReadableDate(created_at)
                             ) : (
@@ -345,7 +348,7 @@ const LoanDetails = ({
                         </span>
                     </div>
                     <div className="flex text-muted-foreground text-xs items-center gap-1">
-                        Due Date:
+                        <span className="text-nowrap">Due Date:</span>
                         <span className="px-2 py-1 rounded-md bg-secondary border border-border">
                             {due_date ? (
                                 toReadableDate(due_date)
@@ -357,7 +360,7 @@ const LoanDetails = ({
                         </span>
                     </div>
                     <div className="flex text-muted-foreground text-xs items-center gap-1">
-                        Terms:
+                        <span className="text-nowrap">Terms:</span>
                         <span className="px-2 py-1 bg-accent rounded-md border border-border">
                             <span className="text-accent-foreground">
                                 {typeof terms === 'number' ? (
@@ -375,18 +378,18 @@ const LoanDetails = ({
             </div>
 
             {/* Loan Summary */}
-            <div className="space-y-2 min-w-[180px] px-4 border-l first:border-l-0">
-                <p className="text-xs font-bold text-muted-foreground">
+            <div className="space-y-2 min-w-[180px] w-fit px-4 border-l first:border-l-0">
+                <p className="text-xs font-bold text-nowrap text-muted-foreground">
                     Loan Summary
                 </p>
                 <LoanAmortizationModal
                     {...loanAmortizationModalState}
                     loanTransactionId={loanTransaction.id}
                 />
-                <div className="space-y-2">
-                    <div className="flex text-muted-foreground text-xs items-center gap-1">
-                        Amount Applied:
-                        <span className="px-2 py-1 rounded-md bg-primary/40 border border-primary text-primary-foreground font-mono text-xs">
+                <div className="space-y-2 w-fit">
+                    <div className="flex text-muted-foreground w-fit text-xs items-center gap-1">
+                        <span className="">Amount Applied:</span>
+                        <div className="px-2 py-1 flex-1 rounded-md bg-primary/40 border border-primary text-primary-foreground font-mono text-xs">
                             {typeof applied_1 === 'number' ? (
                                 currencyFormat(applied_1, {
                                     currency: loanTransaction.account?.currency,
@@ -398,7 +401,7 @@ const LoanDetails = ({
                                     ...
                                 </span>
                             )}
-                        </span>
+                        </div>
                     </div>
                     <div className="flex text-muted-foreground text-xs items-center gap-1">
                         Amount Granted:
@@ -465,7 +468,7 @@ const LoanDetails = ({
 
             {/* Payment Status */}
             <div className="space-y-2 min-w-[260px] px-4 border-l first:border-l-0">
-                <p className="text-xs font-bold text-muted-foreground">
+                <p className="text-xs font-bold text-nowrap text-muted-foreground">
                     Payment Status
                 </p>
                 <div className="grid grid-cols-3 gap-2 items-center">
@@ -559,7 +562,7 @@ const LoanDetails = ({
 
             {/* Deductions & Adjustments */}
             <div className="space-y-2 min-w-[180px] px-4 border-l first:border-l-0">
-                <p className="text-xs font-bold text-muted-foreground">
+                <p className="text-xs font-bold text-nowrap text-muted-foreground">
                     Deductions & Adjustments
                 </p>
                 <div className="space-y-2">
@@ -624,7 +627,7 @@ const LoanDetails = ({
 
             {/* Penalties & Mode */}
             <div className="space-y-2 min-w-[180px] px-4 border-l first:border-l-0">
-                <p className="text-xs font-bold text-muted-foreground">
+                <p className="text-xs font-bold text-nowrap text-muted-foreground">
                     Penalties & Mode
                 </p>
                 <div className="space-y-2">
@@ -1115,7 +1118,7 @@ export const LoanViewModal = ({
             {...props}
         >
             <LoanView
-                className="p-0"
+                className="p-0 max-w-full min-w-0"
                 defaultLoanTransaction={defaultLoanTransaction}
                 loanTransactionId={loanTransactionId}
             />

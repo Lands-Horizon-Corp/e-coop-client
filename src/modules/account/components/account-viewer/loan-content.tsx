@@ -30,7 +30,7 @@ export const LoanAccountContent = ({
     account,
     className,
 }: {
-    account: IAccount
+    account: IAccount & { account?: IAccount }
     className?: string
 }) => {
     return (
@@ -185,7 +185,11 @@ export const LoanAccountContent = ({
                     </p>
                 </div>
 
-                <LoanConnectedAccountsConnected accountId={account.id} />
+                <LoanConnectedAccountsConnected
+                    accountId={
+                        (account?.account?.id as TEntityId) || account.id
+                    }
+                />
             </div>
         </div>
     )
