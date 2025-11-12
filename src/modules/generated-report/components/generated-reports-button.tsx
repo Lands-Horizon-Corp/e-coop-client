@@ -223,10 +223,10 @@ export const GeneratedReportCard = ({
                 <span className="text-xs font-mono tracking-wider">
                     {report.generated_reports_type?.toUpperCase()}
                 </span>
-                <div className="flex items-center ">
-                    <div>
+                <div className="flex items-center flex-1 ">
+                    <div className="flex-1">
                         <Button
-                            className="relative overflow-hidden cursor-pointer w-24 justify-center"
+                            className="relative overflow-hidden cursor-pointer justify-center"
                             disabled={isDownloading || isPending}
                             onClick={handleDownloadClick}
                             size="sm"
@@ -248,11 +248,6 @@ export const GeneratedReportCard = ({
                                     {isDownloading
                                         ? `${mediaProgess}%`
                                         : 'Download'}
-                                </span>
-                            )}
-                            {!isDownloading && (
-                                <span className="ml-1 text-xs font-medium">
-                                    download
                                 </span>
                             )}
                         </Button>
@@ -617,7 +612,7 @@ const GeneratedReportsButton = ({ className }: { className?: string }) => {
                     </Button>
                 </SheetTrigger>
                 <SheetContent
-                    className="bg-transparent shadow-none min-w-xl border-0 flex flex-row p-4 gap-4"
+                    className="bg-transparent shadow-none min-w-lg border-0 flex flex-row p-4 gap-4"
                     closeClassName="top-7 right-7"
                 >
                     <Card className="h-full  w-full bg-card rounded-xl shadow-xl flex-shrink-0">
