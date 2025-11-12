@@ -30,6 +30,7 @@ import { DepositAccountContent } from './deposit-content'
 import { FinesAccountContent } from './fines-content'
 import { InterestAccountContent } from './interest-content'
 import { LoanAccountContent } from './loan-content'
+import { ServiceFeeAccountContent } from './svf-content'
 
 type Props = {
     isHistoryAccount?: boolean
@@ -283,6 +284,12 @@ export const AccountTypeContent = ({
                 <LoanAccountContent account={account} className={className} />
             )
         case 'SVF-Ledger':
+            return (
+                <ServiceFeeAccountContent
+                    account={account}
+                    className={className}
+                />
+            )
         default:
             return null
     }

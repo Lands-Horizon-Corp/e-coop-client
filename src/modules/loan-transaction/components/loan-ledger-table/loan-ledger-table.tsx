@@ -131,9 +131,6 @@ export const LoanLedgerTable = ({ data = [], className, view }: Props) => {
                         >
                             Reference #
                         </TableHead>
-                        <TableHead className="align-middle" rowSpan={2}>
-                            Teller
-                        </TableHead>
                         {uniqueAccounts.map((account) => (
                             <TableHead
                                 className="text-center h-fit py-2"
@@ -148,6 +145,9 @@ export const LoanLedgerTable = ({ data = [], className, view }: Props) => {
                                 />
                             </TableHead>
                         ))}
+                        <TableHead className="align-middle" rowSpan={2}>
+                            Teller
+                        </TableHead>
                     </TableRow>
                     <TableRow className="!hover:bg-muted">
                         {uniqueAccounts.map((account) => (
@@ -177,20 +177,6 @@ export const LoanLedgerTable = ({ data = [], className, view }: Props) => {
                                         <span className="text-sm text-muted-foreground">
                                             No reference
                                         </span>
-                                    )}
-                                </TableCell>
-                                <TableCell className="text-sm">
-                                    {ledgerEntry.employee_user && (
-                                        <ImageNameDisplay
-                                            name={
-                                                ledgerEntry.employee_user
-                                                    .full_name
-                                            }
-                                            src={
-                                                ledgerEntry.employee_user.media
-                                                    ?.download_url
-                                            }
-                                        />
                                     )}
                                 </TableCell>
                                 {uniqueAccounts.map((account) => {
@@ -239,6 +225,20 @@ export const LoanLedgerTable = ({ data = [], className, view }: Props) => {
                                         </Fragment>
                                     )
                                 })}
+                                <TableCell className="text-sm">
+                                    {ledgerEntry.employee_user && (
+                                        <ImageNameDisplay
+                                            name={
+                                                ledgerEntry.employee_user
+                                                    .full_name
+                                            }
+                                            src={
+                                                ledgerEntry.employee_user.media
+                                                    ?.download_url
+                                            }
+                                        />
+                                    )}
+                                </TableCell>
                             </TableRow>
                         )
                     })}

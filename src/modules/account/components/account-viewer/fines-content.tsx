@@ -11,7 +11,6 @@ import { Separator } from '@/components/ui/separator'
 import { IAccount } from '../../account.types'
 import {
     BooleanFieldDisplay,
-    ComputationTypeDisplay,
     InterestFinesComputationDim,
     InterestFinesComputationDimStraightYearly,
     LumpsumComputationTypeDisplay,
@@ -29,12 +28,6 @@ export const FinesAccountContent = ({
             <p className="text-sm text-popover-foreground/40 font-semibold">
                 Fines Configuration
             </p>
-
-            {/* Computation Type */}
-            <ComputationTypeDisplay
-                computationType={account.computation_type}
-                label="Computation Type"
-            />
 
             <div className="grid grid-cols-2 gap-x-3">
                 {/* Fines Amort / Fines GP Amort */}
