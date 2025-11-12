@@ -74,7 +74,7 @@ const AccountHistoryCard = ({
     const historyIcon = history?.icon
 
     return (
-        <Card className="group relative hover:shadow-md transition-all p-0 duration-200">
+        <Card className="group relative bg-card hover:shadow-md transition-all p-0 duration-200">
             <AccountViewerModal
                 {...viewModalState}
                 accountViewerProps={{

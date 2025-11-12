@@ -1,6 +1,7 @@
 import { useMemo } from 'react'
 
 import { useQueryClient } from '@tanstack/react-query'
+import qs from 'query-string'
 
 import FilterContext from '@/contexts/filter-context/filter-context'
 import { cn } from '@/helpers'
@@ -131,7 +132,14 @@ const LoanStatusTable = ({
         onColumnVisibilityChange: setColumnVisibility,
         onRowSelectionChange: handleRowSelectionChange,
     })
-
+    const exportfilter = qs.stringify(
+        {
+            ...pagination,
+            sort: sortingStateBase64,
+            filter: filterState.finalFilterPayloadBase64,
+        },
+        { skipNull: true }
+    )
     return (
         <FilterContext.Provider value={filterState}>
             <div
@@ -153,15 +161,10 @@ const LoanStatusTable = ({
                             }),
                     }}
                     exportActionProps={{
-                        pagination,
                         isLoading: isPending,
-                        filters: filterState.finalFilterPayload,
-                        disabled: isPending || isRefetching,
-                        // exportAll: exportAll,
-                        // exportCurrentPage: (ids) =>
-                        //     exportSelected(ids.map((data) => data.id)),
-                        // exportSelected: (ids) =>
-                        //     exportSelected(ids.map((data) => data.id)),
+                        filters: exportfilter,
+                        model: 'LoanStatus',
+                        url: 'api/v1/loan-status/search',
                     }}
                     filterLogicProps={{
                         filterLogic: filterState.filterLogic,

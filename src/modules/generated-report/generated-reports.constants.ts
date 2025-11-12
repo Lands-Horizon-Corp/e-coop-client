@@ -1,4 +1,4 @@
-import { PaperSize } from './generated-reports.types'
+import { PaperSize } from './generated-report.types'
 
 // 📏 Common Paper & Screen Sizes
 export const PAPER_SIZES: Record<string, PaperSize> = {

@@ -25,7 +25,7 @@ export const ShortcutsData: TGroupShorcuts[] = [
             {
                 icon: <EyeIcon />,
                 text: 'Toggle Command Shortcuts',
-                shortcut: 'Ctrl + J',
+                shortcut: 'Ctrl + H',
             },
             {
                 icon: <EyeIcon />,

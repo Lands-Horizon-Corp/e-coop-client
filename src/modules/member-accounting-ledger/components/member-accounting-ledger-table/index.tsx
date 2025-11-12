@@ -1,5 +1,7 @@
 import { useMemo } from 'react'
 
+import qs from 'query-string'
+
 import FilterContext from '@/contexts/filter-context/filter-context'
 import { cn } from '@/helpers'
 import { IMemberAccountingLedger } from '@/modules/member-account-ledger'
@@ -150,7 +152,14 @@ const MemberAccountingLedgerTable = ({
     useHotkeys('Alt + R', () => {
         refetch()
     })
-
+    const exportfilter = qs.stringify(
+        {
+            ...pagination,
+            sort: sortingStateBase64,
+            filter: filterState.finalFilterPayloadBase64,
+        },
+        { skipNull: true }
+    )
     return (
         <FilterContext.Provider value={filterState}>
             <div
@@ -162,10 +171,10 @@ const MemberAccountingLedgerTable = ({
             >
                 <DataTableToolbar
                     exportActionProps={{
-                        pagination,
                         isLoading: isPending,
-                        filters: filterState.finalFilterPayload,
-                        disabled: isPending || isRefetching,
+                        filters: exportfilter,
+                        model: 'MemberAccountingLedger',
+                        url: 'api/v1/member-accounting-ledger/search',
                     }}
                     filterLogicProps={{
                         filterLogic: filterState.filterLogic,

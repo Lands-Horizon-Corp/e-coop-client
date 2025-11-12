@@ -1,24 +1,20 @@
 import { ReactNode, useMemo } from 'react'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 
 import Fuse from 'fuse.js'
 
 import { cn } from '@/helpers'
 import { useHotkeys } from 'react-hotkeys-hook'
 
-import {
-    MagnifyingGlassIcon,
-    MagnifyingGlassIcon as SearchIcon,
-} from '@/components/icons'
+import { MagnifyingGlassIcon } from '@/components/icons'
 import { CommandIcon } from '@/components/icons'
 import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
 
-import useDebounce from '@/hooks/use-debounce'
 import { useModalState } from '@/hooks/use-modal-state'
 
 import { highlightMatch } from '../../modules/approvals/components/kanbans/journal-voucher/journal-voucher-kanban-main'
 import Modal from '../modals/modal'
+import GenericSearchInput from '../search/generic-search-input'
 import {
     Empty,
     EmptyDescription,
@@ -78,7 +74,7 @@ const GeneralButtonShortcuts = ({ className }: { className?: string }) => {
     const [searchTerm, setSearchTerm] = useState('')
 
     useHotkeys(
-        'control+J',
+        'control+H',
         (e) => {
             onOpenChange(!open)
             e.preventDefault()
@@ -138,7 +134,10 @@ const GeneralButtonShortcuts = ({ className }: { className?: string }) => {
                 titleClassName="text-lg font-semibold text-center"
             >
                 <div className="-translate-y-5">
-                    <GeneralShorcutsSearch setSearchTerm={setSearchTerm} />
+                    <GenericSearchInput
+                        placeholder="search command key"
+                        setSearchTerm={setSearchTerm}
+                    />
                     {/* Main Content Area - Columns */}
                     <div className="flex-1 bg-sidebar/50 mt-3 p-5 rounded-xl grid grid-cols-1 lg:grid-cols-3 gap-3 ecoop-scroll overflow-y-auto">
                         {!filteredGroupShorcuts.length && (
@@ -198,48 +197,3 @@ const GeneralButtonShortcuts = ({ className }: { className?: string }) => {
 }
 
 export default GeneralButtonShortcuts
-
-type GeneralLedgerShorcutsProps = {
-    setSearchTerm: (term: string) => void
-}
-
-const GeneralShorcutsSearch = ({
-    setSearchTerm,
-}: GeneralLedgerShorcutsProps) => {
-    const [inputValue, setInputValue] = useState('')
-
-    const debounceSearchTerm = useDebounce(inputValue, 200)
-
-    useEffect(() => {
-        setSearchTerm(debounceSearchTerm)
-    }, [debounceSearchTerm, setSearchTerm])
-
-    useHotkeys(
-        'enter',
-        (e) => {
-            e.preventDefault()
-            const searchInput = document.querySelector(
-                'input[placeholder*="Search"]'
-            ) as HTMLInputElement
-            if (searchInput) {
-                searchInput.focus()
-            }
-        },
-        {
-            keydown: true,
-            keyup: true,
-        }
-    )
-
-    return (
-        <div className="relative flex-1 max-w-2xl mx-auto">
-            <SearchIcon className="absolute left-4 top-1/2 transform -translate-y-1/2 h-5 w-5 text-muted-foreground" />
-            <Input
-                className="pl-12 pr-4 py-3 text-lg border-2 focus:border-primary/50"
-                onChange={(e) => setInputValue(e.target.value)}
-                placeholder="Search organizations, branches, or locations..."
-                value={inputValue}
-            />
-        </div>
-    )
-}

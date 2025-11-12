@@ -32,8 +32,10 @@ export const useSubscribe = <T = unknown>(
             subject === undefined ||
             subject === null
         ) {
+            // console.log(subject, connection, isLiveEnabled)
             return
         }
+
         let sub: Subscription
         const subHandler = async () => {
             sub = connection.subscribe(`${NATS_CLIENT}${subject}`)

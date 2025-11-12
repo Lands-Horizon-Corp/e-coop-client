@@ -163,12 +163,12 @@ const MemberLoanTableSummary = ({
                                 ids: selectedData.map((data) => data.id),
                             }),
                     }}
-                    exportActionProps={{
-                        pagination,
-                        isLoading: isPending,
-                        filters: filterState.finalFilterPayload,
-                        disabled: isPending || isRefetching,
-                    }}
+                    // exportActionProps={{
+                    //     isLoading: isPending,
+                    //     filters: exportfilter,
+                    //     model: 'MemberLoan',
+                    //     url: 'api/v1/member-loan/search',
+                    // }}
                     filterLogicProps={{
                         filterLogic: filterState.filterLogic,
                         setFilterLogic: filterState.setFilterLogic,

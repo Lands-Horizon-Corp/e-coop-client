@@ -6,6 +6,7 @@ import { useRouter } from '@tanstack/react-router'
 
 import { cn } from '@/helpers/tw-utils'
 import { useAuthStore } from '@/modules/authentication/authgentication.store'
+import GeneratedReportsButton from '@/modules/generated-report/components/generated-reports-button'
 import { NotificationNav } from '@/modules/notification/components/notification'
 import TransactionBatchNavButton from '@/modules/transaction-batch/components/batch-nav-button'
 import NavProfileMenu from '@/modules/user-profile/components/nav/nav-profile-menu'
@@ -89,6 +90,10 @@ const UserNav = ({
         {
             important: false,
             component: <GeneralButtonShortcuts />,
+        },
+        {
+            important: false,
+            component: <GeneratedReportsButton />,
         },
         {
             important: false,

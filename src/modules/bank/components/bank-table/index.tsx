@@ -1,6 +1,7 @@
 import { useMemo } from 'react'
 
 import { useQueryClient } from '@tanstack/react-query'
+import qs from 'query-string'
 
 import FilterContext from '@/contexts/filter-context/filter-context'
 import { cn } from '@/helpers/tw-utils'
@@ -134,6 +135,15 @@ const BankTable = ({
         onRowSelectionChange: handleRowSelectionChange,
     })
 
+    const filter = qs.stringify(
+        {
+            ...pagination,
+            sort: sortingStateBase64,
+            filter: filterState.finalFilterPayloadBase64,
+        },
+        { skipNull: true }
+    )
+
     return (
         <FilterContext.Provider value={filterState}>
             <div
@@ -155,17 +165,11 @@ const BankTable = ({
                             }),
                     }}
                     exportActionProps={{
-                        pagination,
                         isLoading: isPending,
-                        filters: filterState.finalFilterPayload,
+                        filters: filter,
                         disabled: isPending || isRefetching,
-                        // exportAll: exportAll,
-                        // exportCurrentPage: (ids) =>
-                        //     exportSelected(ids.map((data) => data.id)),
-                        // exportSelected: (ids) =>
-                        //     exportSelected(ids.map((data) => data.id)),
-                        // exportAllFiltered: (filters) =>
-                        //     exportAllFiltered(filters),
+                        model: 'Bank',
+                        url: 'api/v1/bank/search',
                     }}
                     filterLogicProps={{
                         filterLogic: filterState.filterLogic,

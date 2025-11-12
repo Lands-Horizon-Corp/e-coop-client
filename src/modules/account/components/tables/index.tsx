@@ -1,17 +1,11 @@
 import { useMemo } from 'react'
 
 import { useQueryClient } from '@tanstack/react-query'
+import qs from 'query-string'
 
 import FilterContext from '@/contexts/filter-context/filter-context'
 import { cn } from '@/helpers/tw-utils'
-import {
-    IAccount,
-    deleteMany,
-    exportAll,
-    exportAllFiltered,
-    exportSelected,
-    useGetPaginated,
-} from '@/modules/account'
+import { IAccount, deleteMany, useGetPaginated } from '@/modules/account'
 import { useAuthUserWithOrgBranch } from '@/modules/authentication/authgentication.store'
 import {
     getCoreRowModel,
@@ -162,6 +156,15 @@ const AccountsTable = ({
     useSubscribe(`account.update.branch.${branch_id}`, refetch)
     useSubscribe(`account.delete.branch.${branch_id}`, refetch)
 
+    const exportfilter = qs.stringify(
+        {
+            ...pagination,
+            sort: sortingStateBase64,
+            filter: filterState.finalFilterPayloadBase64,
+        },
+        { skipNull: true }
+    )
+
     return (
         <FilterContext.Provider value={filterState}>
             <div
@@ -183,16 +186,10 @@ const AccountsTable = ({
                             deleteMany(selectedData.map((data) => data.id)),
                     }}
                     exportActionProps={{
-                        pagination,
                         isLoading: isPending,
-                        filters: filterState.finalFilterPayload,
-                        disabled: isPending || isRefetching,
-                        exportAll: exportAll,
-                        exportAllFiltered: exportAllFiltered,
-                        exportCurrentPage: (ids) =>
-                            exportSelected(ids.map((data) => data.id)),
-                        exportSelected: (ids) =>
-                            exportSelected(ids.map((data) => data.id)),
+                        filters: exportfilter,
+                        model: 'Account',
+                        url: 'api/v1/account/search',
                     }}
                     filterLogicProps={{
                         filterLogic: filterState.filterLogic,

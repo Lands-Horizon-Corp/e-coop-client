@@ -7,7 +7,7 @@ type LogMethod = (...args: unknown[]) => void
 class Logger {
     private static instances: Map<string, Logger> = new Map()
     private isDevelopment: boolean
-    private module: string
+    private module?: string
     private static hasLoggedAsciiArt: boolean = false
 
     public log: LogMethod
@@ -16,7 +16,7 @@ class Logger {
     public info: LogMethod
     public debug: LogMethod
 
-    private constructor(module: string = 'default') {
+    private constructor(module?: string) {
         this.module = module
         if (!Logger.hasLoggedAsciiArt) {
             console.log(
@@ -98,14 +98,16 @@ class Logger {
         description: string,
         activity: string
     ) {
-        await createFootstep({
-            payload: {
-                level,
-                description,
-                activity,
-                module: this.module,
-            },
-        })
+        if (this.module) {
+            await createFootstep({
+                payload: {
+                    level,
+                    description,
+                    activity,
+                    module: this.module,
+                },
+            })
+        }
     }
 
     public static getInstance(module: string = 'default'): Logger {

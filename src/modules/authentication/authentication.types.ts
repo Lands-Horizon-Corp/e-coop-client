@@ -1,4 +1,4 @@
-import { IGeneratedReport } from '../generated-reports'
+import { IGeneratedReport } from '../generated-report'
 import { IUserBase } from '../user'
 import { IUserOrganization } from '../user-organization'
 
