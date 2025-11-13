@@ -7,6 +7,7 @@ import { withToastCallbacks } from '@/helpers/callback-helper'
 import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
 import { AccountPicker } from '@/modules/account'
 import { PaymentTypeCombobox } from '@/modules/transaction'
+import TransactionReverseRequestFormModal from '@/modules/transaction/components/modals/transaction-modal-request-reverse'
 
 import FormFooterResetSubmit from '@/components/form-components/form-footer-reset-submit'
 import {
@@ -32,6 +33,7 @@ import { Switch } from '@/components/ui/switch'
 import { Textarea } from '@/components/ui/textarea'
 
 import { useFormHelper } from '@/hooks/use-form-helper'
+import { useModalState } from '@/hooks/use-modal-state'
 
 import { IClassProps, IForm, TEntityId } from '@/types'
 
@@ -65,6 +67,8 @@ const UserOrgSettingsForm = ({
         | { mode: 'specific'; userOrganizationId: TEntityId }
         | { mode: 'current' }
     )) => {
+    const modalState = useModalState()
+
     const form = useForm<TUserOrgSettingsFormValues>({
         resolver: standardSchemaResolver(UserOrganizationSettingsSchema),
         reValidateMode: 'onChange',
@@ -109,11 +113,25 @@ const UserOrgSettingsForm = ({
             autoSave: true,
         })
 
-    const onSubmit = form.handleSubmit(async (formData) => {
+    const handleSubmitWithData = async (
+        formData: TUserOrgSettingsFormValues
+    ) => {
         await updateMutation.mutateAsync({
             id: userOrganizationId,
             data: formData,
         })
+    }
+
+    const onSubmit = form.handleSubmit(async (formData) => {
+        const hasTimeMachineValue =
+            formData.time_machine_time &&
+            formData.time_machine_time.trim() !== ''
+
+        if (hasTimeMachineValue) {
+            modalState.onOpenChange(true)
+        } else {
+            await handleSubmitWithData(formData)
+        }
     }, handleFocusError)
 
     const { error: rawError, isPending, reset } = updateMutation
@@ -122,17 +140,37 @@ const UserOrgSettingsForm = ({
 
     return (
         <Form {...form}>
+            <TransactionReverseRequestFormModal
+                {...modalState}
+                description="There's a change that involves advance settings that might affect transactions."
+                formProps={{
+                    submitText: 'Proceed with Protected Action',
+                    onSuccess: async () => {
+                        modalState.onOpenChange(false)
+                        const isErrorFree = await form.trigger()
+
+                        if (isErrorFree) {
+                            handleSubmitWithData(
+                                UserOrganizationSettingsSchema.parse(
+                                    form.getValues()
+                                )
+                            )
+                        }
+                    },
+                }}
+                title="Protected Action"
+            />
             <form
                 className={cn('flex w-full flex-col gap-y-4', className)}
                 onSubmit={onSubmit}
                 ref={formRef}
             >
                 <fieldset
-                    className="space-y-6"
+                    className="space-y-4"
                     disabled={isPending || readOnly}
                 >
                     {/* Description Section */}
-                    <div className="space-y-4 p-4 bg-secondary/60 dark:bg-popover rounded-xl">
+                    <div className="space-y-4 p-4 bg-popover rounded-xl">
                         <div className="flex items-center gap-3">
                             <div className="size-fit rounded-full bg-blue-100 p-2 dark:bg-blue-900/20">
                                 <InfoIcon className="h-5 w-5 text-blue-600 dark:text-blue-400" />
@@ -182,7 +220,7 @@ const UserOrgSettingsForm = ({
                     <Separator />
 
                     {/* Time Machine Section */}
-                    <div className="space-y-4 p-4 bg-secondary/60 dark:bg-popover rounded-xl">
+                    <div className="space-y-4 p-4 bg-popover rounded-xl">
                         <div className="flex items-center gap-3">
                             <div className="size-fit rounded-full bg-accent p-2 dark:bg-accent/20">
                                 <ClockFillIcon className="h-5 w-5 text-accent-foreground" />
@@ -242,7 +280,7 @@ const UserOrgSettingsForm = ({
                                         )
                                     }
                                     size="icon"
-                                    variant="ghost"
+                                    variant="secondary"
                                 >
                                     <XIcon className="size-4" />
                                 </Button>
@@ -253,7 +291,7 @@ const UserOrgSettingsForm = ({
                     <Separator />
 
                     {/* Transaction Automation Section */}
-                    <div className="space-y-4 p-4 bg-secondary/60 dark:bg-popover rounded-xl">
+                    <div className="space-y-4 p-4 bg-popover rounded-xl">
                         <div className="flex items-center gap-3">
                             <div className="size-fit rounded-full bg-primary/10 p-2 dark:bg-primary/10/20">
                                 <ReceiptIcon className="h-5 w-5 text-primary dark:text-primary" />
@@ -376,7 +414,7 @@ const UserOrgSettingsForm = ({
                     <Separator />
 
                     {/* Withdrawal and Balance Settings */}
-                    <div className="space-y-4 p-4 bg-secondary/60 dark:bg-popover rounded-xl">
+                    <div className="space-y-4 p-4 bg-popover rounded-xl">
                         <div className="flex items-center gap-3">
                             <div className="size-fit rounded-full bg-destructive/40 p-2 dark:bg-destructive/40/20">
                                 <BillIcon className="h-5 w-5 text-destructive dark:text-destructive" />
@@ -502,7 +540,7 @@ const UserOrgSettingsForm = ({
                     <Separator />
 
                     {/* Accounting Default Values */}
-                    <div className="space-y-4 p-4 bg-secondary/60 dark:bg-popover rounded-xl">
+                    <div className="space-y-4 p-4 bg-popover rounded-xl">
                         <div className="flex items-center gap-3">
                             <div className="size-fit rounded-full bg-purple-100 p-2 dark:bg-purple-900/20">
                                 <CreditCardIcon className="h-5 w-5 text-purple-600 dark:text-purple-400" />
@@ -629,7 +667,6 @@ const UserOrgSettingsForm = ({
                         />
                     </div>
                 </fieldset>
-
                 <FormFooterResetSubmit
                     className="sticky bottom-0 bg-popover rounded-xl p-4"
                     disableSubmit={!form.formState.isDirty}

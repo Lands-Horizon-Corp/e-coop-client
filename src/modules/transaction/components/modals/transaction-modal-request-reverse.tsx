@@ -39,10 +39,13 @@ export interface ITransactionBatchEndFormProps
             IVerification,
             Error,
             TTransactionReverseRequestValues
-        > {}
+        > {
+    submitText?: string
+}
 
 const TransactionReverseRequestForm = ({
     className,
+    submitText = 'Request Reverse',
     ...formProps
 }: ITransactionBatchEndFormProps) => {
     const form = useForm<TTransactionReverseRequestValues>({
@@ -139,7 +142,7 @@ const TransactionReverseRequestForm = ({
                         size="sm"
                         type="submit"
                     >
-                        {isPending ? <LoadingSpinner /> : 'Request Reverse'}
+                        {isPending ? <LoadingSpinner /> : submitText}
                     </Button>
                 </div>
             </form>

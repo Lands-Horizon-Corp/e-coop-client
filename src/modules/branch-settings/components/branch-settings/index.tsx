@@ -5,6 +5,7 @@ import { IAuthContext, useAuthContext } from '@/modules/authentication'
 import { useAuthUserWithOrg } from '@/modules/authentication/authgentication.store'
 
 import FormErrorMessage from '@/components/ui/form-error-message'
+import { Separator } from '@/components/ui/separator'
 
 import { useSubscribe } from '@/hooks/use-pubsub'
 import { useQeueryHookCallback } from '@/hooks/use-query-hook-cb'
@@ -13,6 +14,7 @@ import { IClassProps } from '@/types'
 
 import BranchSettingsCurrencyForm from '../forms/branch-settings-currency-form'
 import BranchSettingsForm from '../forms/branch-settings-form'
+import LoanProcessing from './loan-processing'
 
 interface Props extends IClassProps {}
 
@@ -72,22 +74,29 @@ const BranchSettings = ({ className }: Props) => {
                 </div>
             )}
 
+            <Separator />
+
+            <LoanProcessing />
+
             {user_organization.branch && (
-                <BranchSettingsForm
-                    defaultValues={user_organization.branch.branch_setting}
-                    onSuccess={(data) =>
-                        updateCurrentAuth({
-                            user_organization: {
-                                ...user_organization,
-                                branch: {
-                                    ...user_organization.branch,
-                                    branch_setting: data,
+                <>
+                    <Separator />
+                    <BranchSettingsForm
+                        defaultValues={user_organization.branch.branch_setting}
+                        onSuccess={(data) =>
+                            updateCurrentAuth({
+                                user_organization: {
+                                    ...user_organization,
+                                    branch: {
+                                        ...user_organization.branch,
+                                        branch_setting: data,
+                                    },
                                 },
-                            },
-                        })
-                    }
-                    resetOnDefaultChange
-                />
+                            })
+                        }
+                        resetOnDefaultChange
+                    />
+                </>
             )}
             {!user_organization.branch && (
                 <>
