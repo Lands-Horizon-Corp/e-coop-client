@@ -24,7 +24,7 @@
         "fmt": "eslint . --fix && prettier . -w",
         "build": "tsc -b && vite build",
         "vc": "eslint . && prettier . -c && vitest run && tsc -b --verbose && vite build",
-        "dp": "bun run fmt && bun run vc",
+        "dick": "bun run fmt && bun run vc",
         "gen-mod": "bunx plop module-gen",
         "unused": "knip"
     },
