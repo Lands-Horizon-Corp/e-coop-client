@@ -212,6 +212,10 @@ export interface ILoanTransaction
 
     released_by_user_id?: string
     released_by?: IUser
+
+    // ADDED FROM ZALZAL Dev Branch
+    loan_count?: number
+    processing?: boolean
 }
 
 export interface ILoanTransactionStatusDates {
@@ -311,4 +315,14 @@ export interface ILoanAmortizationSchedules {
     total: number
 
     schedule: ILoanAmortizationSchedule[]
+}
+
+// for processing all progress
+export type LoanProcessingEventResponse = {
+    total: number
+    processed: number
+    start_time: string
+    current_time: string
+    account_name: string
+    member_name: string
 }

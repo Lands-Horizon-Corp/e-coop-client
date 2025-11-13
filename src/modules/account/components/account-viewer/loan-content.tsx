@@ -24,7 +24,6 @@ import { useGetAllAccount } from '../../account.service'
 import { IAccount } from '../../account.types'
 import AccountTypeBadge from '../badges/account-type-badge'
 import { AccountViewerModal } from './account-viewer'
-import { ComputationTypeDisplay } from './common'
 
 export const LoanAccountContent = ({
     account,
@@ -40,9 +39,9 @@ export const LoanAccountContent = ({
             </p>
 
             {/* Computation Type */}
-            <ComputationTypeDisplay
+            {/* <ComputationTypeDisplay
                 computationType={account.computation_type}
-            />
+            /> */}
 
             {/* Computation Scheme & Loan Saving Type */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">

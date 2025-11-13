@@ -1,7 +1,22 @@
-import { IAccount } from '@/modules/account'
+import { IAccount, TAccountType } from '@/modules/account'
 import { IGeneralLedger } from '@/modules/general-ledger'
 
 import { TEntityId } from '@/types'
+
+export const getAccountTypePriority = (accountType: TAccountType) => {
+    switch (accountType) {
+        case 'Loan':
+            return 1
+        case 'Interest':
+            return 2
+        case 'SVF-Ledger':
+            return 3
+        case 'Fines':
+            return 4
+        default:
+            return 5
+    }
+}
 
 export const getLedgerUniqueAccounts = ({
     ledgerEntries = [],
@@ -281,7 +296,6 @@ export const loanNormalizeLedgerEntries = ({
             .map((payments) => payments.length)
             .reduce((a, b) => Math.max(a, b), 0)
 
-        // Fill all accounts with multiple ghost payments
         Object.keys(generalLedgerPaymentPerAccount).forEach((accountId) => {
             if (generalLedgerPaymentPerAccount[accountId].length < maxPayment) {
                 const missingPaymentsCount =
@@ -363,4 +377,87 @@ export const loanNormalizeLedgerEntries = ({
     }
 
     return result
+}
+
+export const loanNormalizeLedgerEntries2 = ({
+    ledgerEntries: entries,
+}: {
+    ledgerEntries: IGeneralLedger[]
+}) => {
+    const groupedByDate = new Map<string, IGeneralLedger[]>()
+
+    // Use your unique accounts helper
+    const { uniqueAccountsMap } = getLedgerUniqueAccounts({
+        ledgerEntries: entries,
+    })
+
+    // 1️⃣ Group by date (ignore time)
+    for (const entry of entries) {
+        const dateOnly = entry.entry_date.split('T')[0]
+        if (!groupedByDate.has(dateOnly)) groupedByDate.set(dateOnly, [])
+        groupedByDate.get(dateOnly)!.push(entry)
+    }
+
+    const result: Record<string, any>[] = []
+
+    // 2️⃣ Process each date group
+    for (const [_, dayEntries] of groupedByDate) {
+        // Group entries by account id for that day
+        const accountGroups = new Map<string, IGeneralLedger[]>()
+        for (const e of dayEntries) {
+            if (!accountGroups.has(e.account.id))
+                accountGroups.set(e.account.id, [])
+            accountGroups.get(e.account.id)!.push(e)
+        }
+
+        // 3️⃣ Build rows (split if debit+credit exist)
+        const dayRows: Record<string, any>[] = []
+
+        for (const [_, accEntries] of accountGroups) {
+            const hasDebit = accEntries.some((e) => e.debit > 0)
+            const hasCredit = accEntries.some((e) => e.credit > 0)
+
+            if (hasDebit && hasCredit) {
+                const debitRow = accEntries.filter((e) => e.debit > 0)
+                const creditRow = accEntries.filter((e) => e.credit > 0)
+                dayRows.push(...[debitRow, creditRow].map(buildRow))
+            } else {
+                dayRows.push(buildRow(accEntries))
+            }
+        }
+
+        // 4️⃣ Each built row still must include ghost accounts
+        for (const row of dayRows) {
+            for (const accId of Object.keys(uniqueAccountsMap)) {
+                const prefix = accId.replace(/\s+/g, '_').toLowerCase()
+                if (!(`${prefix}_debit` in row)) {
+                    row[`${prefix}_debit`] = 0
+                    row[`${prefix}_credit`] = 0
+                    row[`${prefix}_balance`] = 0
+                }
+            }
+
+            result.push(row)
+        }
+    }
+
+    // 5️⃣ Sort by entry date (chronologically)
+    result.sort((a, b) => a.entry_date.localeCompare(b.entry_date))
+
+    return result
+
+    // 🧩 Helper to build one legal row
+    function buildRow(entries: IGeneralLedger[]): Record<string, any> {
+        const { entry_date, id, ...other } = entries[0]
+        const row: Record<string, any> = { entry_date, id, ...other }
+
+        for (const e of entries) {
+            const prefix = e.account.id.replace(/\s+/g, '_').toLowerCase()
+            row[`${prefix}_debit`] = e.debit
+            row[`${prefix}_credit`] = e.credit
+            row[`${prefix}_balance`] = e.balance
+        }
+
+        return row
+    }
 }

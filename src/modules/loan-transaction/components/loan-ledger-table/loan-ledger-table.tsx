@@ -1,4 +1,5 @@
 import { cn } from '@/helpers'
+import { dateAgo, toReadableDate } from '@/helpers/date-utils'
 import { AccountTypeBadge, IAccount } from '@/modules/account'
 import { AccountViewerModal } from '@/modules/account/components/account-viewer/account-viewer'
 import { currencyFormat } from '@/modules/currency'
@@ -25,6 +26,7 @@ import { useModalState } from '@/hooks/use-modal-state'
 import { IClassProps, TEntityId } from '@/types'
 
 import {
+    getAccountTypePriority,
     getLedgerUniqueAccounts,
     loanNormalizeLedgerEntries,
 } from './loan-ledger-table.utils'
@@ -35,17 +37,46 @@ type Props = {
     data: IGeneralLedger[]
 }
 
+const getColorClass = (i: number) => {
+    const colors = [
+        'bg-primary/20',
+        'bg-blue-400/30 text-blue-800 dark:text-blue-300',
+        'bg-orange-400/40 text-orange-900 dark:text-orange-300',
+        'bg-accent/70 text-accent-foreground',
+        'bg-card-400 text-card-700',
+        'bg-warning text-warning-foreground',
+    ]
+
+    return colors[i % colors.length]
+}
+
+const mappAccountColor = (accounts: IAccount[]) => {
+    const colorMap: Record<TEntityId, string> = {}
+
+    accounts.forEach((account, index) => {
+        colorMap[account.id] = getColorClass(index)
+    })
+
+    return colorMap
+}
+
 export const LoanLedgerTable = ({ data = [], className, view }: Props) => {
     const uniqueAccounts = getLedgerUniqueAccounts({
         ledgerEntries: data,
-    }).uniqueAccountsArray
+    }).uniqueAccountsArray.sort(
+        (a, b) =>
+            getAccountTypePriority(a.type) - getAccountTypePriority(b.type)
+    )
+
+    const accountColorMap = mappAccountColor(uniqueAccounts)
+
     const normalizedLedgerData = loanNormalizeLedgerEntries({
         ledgerEntries: data,
     })
 
     if (view === 'skeleton') {
         return (
-            <div className="w-full flex-1 grid gap-x-4 grid-cols-4 p-4 rounded-2xl bg-accent/40">
+            <div className="w-full flex-1  grid gap-x-4 grid-cols-4 p-4 rounded-2xl bg-accent/40">
                 <div className="space-y-4">
                     <div className="flex items-center gap-x-3">
                         <Skeleton className="w-full size-8 shrink-0 rounded-full" />
@@ -125,15 +156,13 @@ export const LoanLedgerTable = ({ data = [], className, view }: Props) => {
             >
                 <TableHeader className="sticky top-0 rounded-t-2xl overflow-clip z-10 bg-muted/90 backdrop-blur-xs">
                     <TableRow className="!hover:bg-muted">
-                        <TableHead
-                            className="sticky text-nowrap left-0 backdrop-blur-sm bg-background/60 align-middle"
-                            rowSpan={2}
-                        >
-                            Reference #
-                        </TableHead>
+                        <TableHead colSpan={2} />
                         {uniqueAccounts.map((account) => (
                             <TableHead
-                                className="text-center h-fit py-2"
+                                className={cn(
+                                    'text-center h-fit py-1',
+                                    accountColorMap[account.id]
+                                )}
                                 colSpan={3}
                                 key={account.id}
                             >
@@ -145,24 +174,44 @@ export const LoanLedgerTable = ({ data = [], className, view }: Props) => {
                                 />
                             </TableHead>
                         ))}
-                        <TableHead className="align-middle" rowSpan={2}>
-                            Teller
-                        </TableHead>
+                        <TableHead />
                     </TableRow>
                     <TableRow className="!hover:bg-muted">
+                        <TableHead className="sticky text-nowrap left-0 backdrop-blur-sm bg-background/60 align-middle">
+                            Reference #
+                        </TableHead>
+                        <TableHead className="align-middle text-nowrap">
+                            Entry Date
+                        </TableHead>
                         {uniqueAccounts.map((account) => (
                             <Fragment key={account.id}>
-                                <TableHead className="text-right w-[150px]">
+                                <TableHead
+                                    className={cn(
+                                        'text-right opacity-70 w-[150px]',
+                                        accountColorMap[account.id]
+                                    )}
+                                >
                                     Debit
                                 </TableHead>
-                                <TableHead className="text-right w-[150px]">
+                                <TableHead
+                                    className={cn(
+                                        'text-right  opacity-80 w-[150px]',
+                                        accountColorMap[account.id]
+                                    )}
+                                >
                                     Credit
                                 </TableHead>
-                                <TableHead className="text-right w-[150px]">
+                                <TableHead
+                                    className={cn(
+                                        'text-right w-[150px]',
+                                        accountColorMap[account.id]
+                                    )}
+                                >
                                     Balance
                                 </TableHead>
                             </Fragment>
                         ))}
+                        <TableHead className="align-middle">Teller</TableHead>
                     </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -177,6 +226,18 @@ export const LoanLedgerTable = ({ data = [], className, view }: Props) => {
                                         <span className="text-sm text-muted-foreground">
                                             No reference
                                         </span>
+                                    )}
+                                </TableCell>
+                                <TableCell className="text-sm text-nowrap">
+                                    {ledgerEntry.entry_date && (
+                                        <>
+                                            {`${toReadableDate(ledgerEntry.entry_date)}`}
+                                            <span className="text-xs text-muted-foreground block">
+                                                {dateAgo(
+                                                    ledgerEntry.entry_date
+                                                )}
+                                            </span>
+                                        </>
                                     )}
                                 </TableCell>
                                 {uniqueAccounts.map((account) => {
@@ -195,7 +256,12 @@ export const LoanLedgerTable = ({ data = [], className, view }: Props) => {
 
                                     return (
                                         <Fragment key={account.id}>
-                                            <TableCell className="text-right font-mono">
+                                            <TableCell
+                                                className={cn(
+                                                    'text-right  opacity-70 font-mono',
+                                                    accountColorMap[account.id]
+                                                )}
+                                            >
                                                 {currencyFormat(
                                                     debit as number,
                                                     {
@@ -204,7 +270,12 @@ export const LoanLedgerTable = ({ data = [], className, view }: Props) => {
                                                     }
                                                 )}
                                             </TableCell>
-                                            <TableCell className="text-right font-mono">
+                                            <TableCell
+                                                className={cn(
+                                                    'text-right opacity-80 font-mono',
+                                                    accountColorMap[account.id]
+                                                )}
+                                            >
                                                 {currencyFormat(
                                                     credit as number,
                                                     {
@@ -213,7 +284,12 @@ export const LoanLedgerTable = ({ data = [], className, view }: Props) => {
                                                     }
                                                 )}
                                             </TableCell>
-                                            <TableCell className="text-right font-mono">
+                                            <TableCell
+                                                className={cn(
+                                                    'text-right font-mono',
+                                                    accountColorMap[account.id]
+                                                )}
+                                            >
                                                 {currencyFormat(
                                                     balance as number,
                                                     {

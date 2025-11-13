@@ -67,3 +67,5 @@ pnpm-lock.yaml
 **/developer-temporary-dir
 **/dev-pseudo.md
 .env.prod
+*playground.txt
+

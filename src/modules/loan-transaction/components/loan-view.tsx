@@ -1,5 +1,13 @@
+import { ReactNode } from 'react'
+
+import { toast } from 'sonner'
+
 import { cn, formatNumber } from '@/helpers'
-import { toReadableDate } from '@/helpers/date-utils'
+import {
+    dateAgo,
+    toReadableDate,
+    toReadableDateTime,
+} from '@/helpers/date-utils'
 import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
 import AccountBadge from '@/modules/account/components/badges/account-badge'
 import GeneralStatusBadge from '@/modules/authentication/components/general-status-badge'
@@ -8,14 +16,15 @@ import {
     ILoanTransaction,
     TLoanModeOfPayment,
     useGetLoanTransactionById,
+    useProcessLoanTransactionById,
 } from '@/modules/loan-transaction'
-import LoanModeOfPaymentBadge from '@/modules/loan-transaction/components/loan-mode-of-payment-badge'
 import { IMemberProfile } from '@/modules/member-profile'
 
 import {
     CakeIcon,
     CalculatorIcon,
     CalendarNumberIcon,
+    FileFillIcon,
     IdCardIcon,
     PhoneIcon,
     PlusIcon,
@@ -27,6 +36,7 @@ import {
 } from '@/components/icons'
 import ImageDisplay from '@/components/image-display'
 import Modal, { IModalProps } from '@/components/modals/modal'
+import LoadingSpinner from '@/components/spinners/loading-spinner'
 import TextDisplay from '@/components/text-display'
 import { Button } from '@/components/ui/button'
 import FormErrorMessage from '@/components/ui/form-error-message'
@@ -50,6 +60,7 @@ import { LoanAddInterestFormModal } from './forms/loan-add-interest-form'
 import { LoanInquireAdvanceInterestFinesModal } from './forms/loan-inquire-advance-interest-fines-form'
 import { LoanAmortizationModal } from './loan-amortization'
 import LoanLedgerTableView from './loan-ledger-table/loan-ledger-table'
+import LoanModeOfPaymentBadge from './loan-mode-of-payment-badge'
 import { LoanViewSkeleton } from './skeletons/loan-view-skeleton'
 
 interface LoanLedgerViewProps extends IClassProps {
@@ -79,6 +90,9 @@ const LoanView = ({
         ? 'No valid loan transaction selected'
         : serverRequestErrExtractor({ error })
 
+    const { isPending: isProcessing, mutateAsync: processLoanTransaction } =
+        useProcessLoanTransactionById()
+
     return (
         <div className={cn('space-y-4 p-4 w-full', className)}>
             {errorMessage && (
@@ -91,6 +105,27 @@ const LoanView = ({
             {data && (
                 <>
                     <LoanLedgerHeader loanTransaction={data} />
+                    <div className="flex justify-end items-center">
+                        <Button
+                            className=""
+                            disabled={isProcessing}
+                            onClick={() =>
+                                toast.promise(processLoanTransaction(data.id), {
+                                    loading: 'Processing loan...',
+                                    error: 'Failed to process loan.',
+                                    success: 'Loan has been processed.',
+                                })
+                            }
+                            size="sm"
+                        >
+                            {isProcessing ? (
+                                <LoadingSpinner />
+                            ) : (
+                                <FileFillIcon />
+                            )}{' '}
+                            Process Loan
+                        </Button>
+                    </div>
                     <LoanDetails loanTransaction={data} />
                     <LoanLedgerTableView
                         className="h-[50vh] w-full rounded-lg"
@@ -114,24 +149,30 @@ const LoanLedgerHeader = ({
                 <div className="space-y-2 shrink-0">
                     <div className="bg-secondary px-4 py-2 rounded-lg">
                         <p className="text-xs text-muted-foreground">
-                            CV. <TicketIcon className="inline" />
+                            <TicketIcon className="inline mr-1" />
+                            Check Voucher
                         </p>
                         <TextDisplay
                             noValueText="no voucher number set"
                             withCopy
                         >
-                            {loanTransaction.voucher}
+                            {loanTransaction.check_number}
                         </TextDisplay>
                     </div>
-                    <div className="bg-secondary px-4 py-2 rounded-lg">
+                    <div className="bg-secondary  px-4 py-2 rounded-lg">
                         <p className="text-xs text-muted-foreground">
                             Released <CalendarNumberIcon className="inline" />
                         </p>
                         <TextDisplay noValueText="no voucher number set">
                             {loanTransaction.released_date
-                                ? toReadableDate(loanTransaction.released_date)
+                                ? `${toReadableDateTime(loanTransaction.released_date)}`
                                 : undefined}
                         </TextDisplay>
+                        <span className="text-xs text-muted-foreground block">
+                            {loanTransaction.released_date
+                                ? `${dateAgo(loanTransaction.released_date)}`
+                                : undefined}
+                        </span>
                     </div>
                 </div>
                 <div className="flex grow justify-between gap-4 bg-gradient-to-r from-primary/20 to-card/10 ring-2 ring-card dark:ring-primary/40 rounded-xl p-4">
@@ -310,169 +351,162 @@ const LoanDetails = ({
     return (
         <div
             className={cn(
-                'w-full flex gap-1 bg-popover justify-between overflow-x-auto ecoop-scroll text-sm p-4 rounded-lg',
+                'w-full flex gap-1 bg-popover border border-border overflow-x-auto ecoop-scroll justify-between text-sm p-4 rounded-lg',
                 className
             )}
         >
             {/* Account Info & Dates */}
-            <div className="space-y-2 min-w-[180px] px-4 border-l first:border-l-0">
-                <p className="text-xs font-bold text-nowrap text-muted-foreground">
-                    Account Info & Dates
-                </p>
-                <div className="space-y-2">
-                    <div className="flex text-muted-foreground text-xs items-center gap-1">
-                        <span className="text-nowrap">Account :</span>{' '}
-                        {account?.icon && account?.name ? (
-                            <AccountBadge
-                                icon={account.icon as TIcon}
-                                name={account.name}
-                                size="sm"
-                                variant="primary"
-                            />
+            <LoanInfoSection
+                className="min-w-[250px]"
+                title="Account Info & Dates"
+            >
+                <LoanInfoItem>
+                    <InfoLabel>Account:</InfoLabel>
+                    {account?.icon && account?.name ? (
+                        <AccountBadge
+                            icon={account.icon as TIcon}
+                            name={account.name}
+                            size="sm"
+                            variant="primary"
+                        />
+                    ) : (
+                        <span className="text-xs text-muted-foreground">
+                            ...
+                        </span>
+                    )}
+                </LoanInfoItem>
+
+                <LoanInfoItem className="text-nowrap">
+                    <InfoLabel>Entry Date:</InfoLabel>
+                    <InfoValue>
+                        {created_at ? (
+                            toReadableDate(created_at)
                         ) : (
                             <span className="text-xs text-muted-foreground">
                                 ...
                             </span>
                         )}
-                    </div>
-                    <div className="flex text-muted-foreground text-xs items-center gap-1">
-                        <span className="text-nowrap">Entry Date: </span>{' '}
-                        <span className="px-2 py-1 text-wrap rounded-md bg-secondary border border-border">
-                            {created_at ? (
-                                toReadableDate(created_at)
+                    </InfoValue>
+                </LoanInfoItem>
+
+                <LoanInfoItem>
+                    <InfoLabel>Due Date:</InfoLabel>
+                    <InfoValue>
+                        {due_date ? (
+                            toReadableDate(due_date)
+                        ) : (
+                            <span className="text-xs text-muted-foreground">
+                                ...
+                            </span>
+                        )}
+                    </InfoValue>
+                </LoanInfoItem>
+
+                <LoanInfoItem>
+                    <InfoLabel>Terms:</InfoLabel>
+                    <InfoValue className="bg-accent">
+                        <span className="text-accent-foreground">
+                            {typeof terms === 'number' ? (
+                                terms
                             ) : (
                                 <span className="text-xs text-muted-foreground">
                                     ...
                                 </span>
                             )}
-                        </span>
-                    </div>
-                    <div className="flex text-muted-foreground text-xs items-center gap-1">
-                        <span className="text-nowrap">Due Date:</span>
-                        <span className="px-2 py-1 rounded-md bg-secondary border border-border">
-                            {due_date ? (
-                                toReadableDate(due_date)
-                            ) : (
-                                <span className="text-xs text-muted-foreground">
-                                    ...
-                                </span>
-                            )}
-                        </span>
-                    </div>
-                    <div className="flex text-muted-foreground text-xs items-center gap-1">
-                        <span className="text-nowrap">Terms:</span>
-                        <span className="px-2 py-1 bg-accent rounded-md border border-border">
-                            <span className="text-accent-foreground">
-                                {typeof terms === 'number' ? (
-                                    terms
-                                ) : (
-                                    <span className="text-xs text-muted-foreground">
-                                        ...
-                                    </span>
-                                )}
-                            </span>{' '}
-                            Mos
-                        </span>
-                    </div>
-                </div>
-            </div>
+                        </span>{' '}
+                        Mos
+                    </InfoValue>
+                </LoanInfoItem>
+            </LoanInfoSection>
 
             {/* Loan Summary */}
-            <div className="space-y-2 min-w-[180px] w-fit px-4 border-l first:border-l-0">
-                <p className="text-xs font-bold text-nowrap text-muted-foreground">
-                    Loan Summary
-                </p>
+            <LoanInfoSection title="Loan Summary">
                 <LoanAmortizationModal
                     {...loanAmortizationModalState}
                     loanTransactionId={loanTransaction.id}
                 />
-                <div className="space-y-2 w-fit">
-                    <div className="flex text-muted-foreground w-fit text-xs items-center gap-1">
-                        <span className="">Amount Applied:</span>
-                        <div className="px-2 py-1 flex-1 rounded-md bg-primary/40 border border-primary text-primary-foreground font-mono text-xs">
-                            {typeof applied_1 === 'number' ? (
-                                currencyFormat(applied_1, {
-                                    currency: loanTransaction.account?.currency,
-                                    showSymbol:
-                                        !!loanTransaction.account?.currency,
-                                })
-                            ) : (
-                                <span className="text-xs text-muted-foreground">
-                                    ...
-                                </span>
-                            )}
-                        </div>
-                    </div>
-                    <div className="flex text-muted-foreground text-xs items-center gap-1">
-                        Amount Granted:
-                        <span className="px-2 py-1 rounded-md border border-green-400/40 bg-green-300/20 text-green-400 font-mono text-xs">
-                            {typeof amount_granted === 'number' ? (
-                                currencyFormat(amount_granted, {
-                                    currency: loanTransaction.account?.currency,
-                                    showSymbol:
-                                        !!loanTransaction.account?.currency,
-                                })
-                            ) : (
-                                <span className="text-xs text-muted-foreground">
-                                    ...
-                                </span>
-                            )}
-                        </span>
-                    </div>
-                    <div className="flex text-muted-foreground text-xs items-center gap-1">
-                        Amortization:
-                        <span className="px-2 py-1 rounded-md border border-border bg-secondary font-mono text-xs">
-                            {typeof amortization === 'number' ? (
-                                currencyFormat(amortization, {
-                                    currency: loanTransaction.account?.currency,
-                                    showSymbol:
-                                        !!loanTransaction.account?.currency,
-                                })
-                            ) : (
-                                <span className="text-xs text-muted-foreground">
-                                    ...
-                                </span>
-                            )}
-                        </span>
-                    </div>
-                    <div className="flex text-muted-foreground text-xs items-center gap-1">
-                        Add-On Amount:
-                        <span className="px-2 py-1 rounded-md border border-border bg-secondary font-mono text-xs">
-                            {typeof add_on_amount === 'number' ? (
-                                currencyFormat(add_on_amount, {
-                                    currency: loanTransaction.account?.currency,
-                                    showSymbol:
-                                        !!loanTransaction.account?.currency,
-                                })
-                            ) : (
-                                <span className="text-xs text-muted-foreground">
-                                    ...
-                                </span>
-                            )}
-                        </span>
-                    </div>
-                    <Button
-                        className="text-xs h-fit px-2 py-1 items-center"
-                        hoverVariant="primary"
-                        onClick={() =>
-                            loanAmortizationModalState.onOpenChange(true)
-                        }
-                        size="sm"
-                        variant="outline"
-                    >
-                        <CalendarNumberIcon className="inline size-3" /> View
-                        Amort. Schedule
-                    </Button>
-                </div>
-            </div>
+
+                <LoanInfoItem>
+                    <InfoLabel>Amount Applied:</InfoLabel>
+                    <InfoValue className="bg-primary/80 border-primary text-primary-foreground font-mono">
+                        {typeof applied_1 === 'number' ? (
+                            currencyFormat(applied_1, {
+                                currency: loanTransaction.account?.currency,
+                                showSymbol: !!loanTransaction.account?.currency,
+                            })
+                        ) : (
+                            <span className="text-xs text-muted-foreground">
+                                ...
+                            </span>
+                        )}
+                    </InfoValue>
+                </LoanInfoItem>
+
+                <LoanInfoItem>
+                    <InfoLabel>Amount Granted:</InfoLabel>
+                    <InfoValue className="border-green-400/40 bg-green-300/20 text-green-400 font-mono">
+                        {typeof amount_granted === 'number' ? (
+                            currencyFormat(amount_granted, {
+                                currency: loanTransaction.account?.currency,
+                                showSymbol: !!loanTransaction.account?.currency,
+                            })
+                        ) : (
+                            <span className="text-xs text-muted-foreground">
+                                ...
+                            </span>
+                        )}
+                    </InfoValue>
+                </LoanInfoItem>
+
+                <LoanInfoItem>
+                    <InfoLabel>Amortization:</InfoLabel>
+                    <InfoValue className="font-mono">
+                        {typeof amortization === 'number' ? (
+                            currencyFormat(amortization, {
+                                currency: loanTransaction.account?.currency,
+                                showSymbol: !!loanTransaction.account?.currency,
+                            })
+                        ) : (
+                            <span className="text-xs text-muted-foreground">
+                                ...
+                            </span>
+                        )}
+                    </InfoValue>
+                </LoanInfoItem>
+
+                <LoanInfoItem>
+                    <InfoLabel>Add-On Amount:</InfoLabel>
+                    <InfoValue className="font-mono">
+                        {typeof add_on_amount === 'number' ? (
+                            currencyFormat(add_on_amount, {
+                                currency: loanTransaction.account?.currency,
+                                showSymbol: !!loanTransaction.account?.currency,
+                            })
+                        ) : (
+                            <span className="text-xs text-muted-foreground">
+                                ...
+                            </span>
+                        )}
+                    </InfoValue>
+                </LoanInfoItem>
+
+                <Button
+                    className="text-xs h-fit px-2 py-1 items-center"
+                    hoverVariant="primary"
+                    onClick={() =>
+                        loanAmortizationModalState.onOpenChange(true)
+                    }
+                    size="sm"
+                    variant="outline"
+                >
+                    <CalendarNumberIcon className="inline size-3" /> View Amort.
+                    Schedule
+                </Button>
+            </LoanInfoSection>
 
             {/* Payment Status */}
-            <div className="space-y-2 min-w-[260px] px-4 border-l first:border-l-0">
-                <p className="text-xs font-bold text-nowrap text-muted-foreground">
-                    Payment Status
-                </p>
+            <LoanInfoSection className="min-w-[260px]" title="Payment Status">
                 <div className="grid grid-cols-3 gap-2 items-center">
-                    {/* Header Row */}
                     <span className="font-medium text-xs text-muted-foreground col-span-1">
                         Un-Paid
                     </span>
@@ -483,11 +517,8 @@ const LoanDetails = ({
                         Interest
                     </span>
 
-                    {/* Un-Paid Count */}
-                    <span className="text-xs text-muted-foreground">
-                        Count:
-                    </span>
-                    <span className="px-2 py-1 rounded-md border border-border bg-secondary font-mono text-xs text-center">
+                    <InfoLabel>Count:</InfoLabel>
+                    <InfoValue className="font-mono text-center">
                         {typeof unpaid_principal_count === 'number' ? (
                             formatNumber(unpaid_principal_count, 0)
                         ) : (
@@ -495,8 +526,8 @@ const LoanDetails = ({
                                 ...
                             </span>
                         )}
-                    </span>
-                    <span className="px-2 py-1 rounded-md border border-border bg-secondary font-mono text-xs text-center">
+                    </InfoValue>
+                    <InfoValue className="font-mono text-center">
                         {typeof unpaid_interest_count === 'number' ? (
                             formatNumber(unpaid_interest_count, 0)
                         ) : (
@@ -504,13 +535,10 @@ const LoanDetails = ({
                                 ...
                             </span>
                         )}
-                    </span>
+                    </InfoValue>
 
-                    {/* Un-Paid Amount */}
-                    <span className="text-xs text-muted-foreground">
-                        Amount:
-                    </span>
-                    <span className="px-2 py-1 rounded-md border border-border bg-secondary font-mono text-xs text-center">
+                    <InfoLabel>Amount:</InfoLabel>
+                    <InfoValue className="font-mono text-center">
                         {typeof unpaid_principal_amount === 'number' ? (
                             currencyFormat(unpaid_principal_amount, {
                                 currency: loanTransaction.account?.currency,
@@ -521,8 +549,8 @@ const LoanDetails = ({
                                 ...
                             </span>
                         )}
-                    </span>
-                    <span className="px-2 py-1 rounded-md border border-border bg-secondary font-mono text-xs text-center">
+                    </InfoValue>
+                    <InfoValue className="font-mono text-center">
                         {typeof unpaid_interest_amount === 'number' ? (
                             currencyFormat(unpaid_interest_amount, {
                                 currency: loanTransaction.account?.currency,
@@ -533,13 +561,12 @@ const LoanDetails = ({
                                 ...
                             </span>
                         )}
-                    </span>
+                    </InfoValue>
 
-                    {/* Paid Count Row */}
                     <span className="font-medium text-xs text-muted-foreground col-span-1">
                         Paid Count:
                     </span>
-                    <span className="px-2 py-1 rounded-md border border-border bg-secondary font-mono text-xs text-center col-span-1">
+                    <InfoValue className="font-mono text-center col-span-1">
                         {typeof principal_paid_count === 'number' ? (
                             formatNumber(principal_paid_count, 0)
                         ) : (
@@ -547,8 +574,8 @@ const LoanDetails = ({
                                 ...
                             </span>
                         )}
-                    </span>
-                    <span className="px-2 py-1 rounded-md border border-border bg-secondary font-mono text-xs text-center col-span-1">
+                    </InfoValue>
+                    <InfoValue className="font-mono text-center col-span-1">
                         {typeof interest_paid_count === 'number' ? (
                             formatNumber(interest_paid_count, 0)
                         ) : (
@@ -556,222 +583,219 @@ const LoanDetails = ({
                                 ...
                             </span>
                         )}
-                    </span>
+                    </InfoValue>
                 </div>
-            </div>
+            </LoanInfoSection>
 
             {/* Deductions & Adjustments */}
-            <div className="space-y-2 min-w-[180px] px-4 border-l first:border-l-0">
-                <p className="text-xs font-bold text-nowrap text-muted-foreground">
-                    Deductions & Adjustments
-                </p>
-                <div className="space-y-2">
-                    <div className="flex text-muted-foreground text-xs items-center gap-1">
-                        Deducted Interest:
-                        <span className="px-2 py-1 rounded-md border border-border bg-secondary font-mono text-xs">
-                            {typeof deducted_interest === 'number' ? (
-                                currencyFormat(deducted_interest, {
-                                    currency: loanTransaction.account?.currency,
-                                    showSymbol:
-                                        !!loanTransaction.account?.currency,
-                                })
-                            ) : (
-                                <span className="text-xs text-muted-foreground">
-                                    ...
-                                </span>
-                            )}
-                        </span>
-                    </div>
-                    <div className="flex text-muted-foreground text-xs items-center gap-1">
-                        Advance Payment:
-                        <span className="px-2 py-1 rounded-md border border-border bg-secondary font-mono text-xs">
-                            {typeof advance_payment === 'number' ? (
-                                currencyFormat(advance_payment, {
-                                    currency: loanTransaction.account?.currency,
-                                    showSymbol:
-                                        !!loanTransaction.account?.currency,
-                                })
-                            ) : (
-                                <span className="text-xs text-muted-foreground">
-                                    ...
-                                </span>
-                            )}
-                        </span>
-                    </div>
-                    <div className="flex text-muted-foreground text-xs items-center gap-1">
-                        Used Days:
-                        <span className="px-2 py-1 rounded-md border border-border bg-secondary text-xs font-mono">
-                            {typeof used_days === 'number' ? (
-                                formatNumber(used_days, 0)
-                            ) : (
-                                <span className="text-xs text-muted-foreground">
-                                    ...
-                                </span>
-                            )}
-                        </span>
-                    </div>
-                    <div className="flex text-muted-foreground text-xs items-center gap-1">
-                        Unused Days:
-                        <span className="px-2 py-1 rounded-md border border-border bg-secondary font-mono text-xs">
-                            {typeof unused_days === 'number' ? (
-                                formatNumber(unused_days, 0)
-                            ) : (
-                                <span className="text-xs text-muted-foreground">
-                                    ...
-                                </span>
-                            )}
-                        </span>
-                    </div>
-                </div>
-            </div>
-
-            {/* Penalties & Mode */}
-            <div className="space-y-2 min-w-[180px] px-4 border-l first:border-l-0">
-                <p className="text-xs font-bold text-nowrap text-muted-foreground">
-                    Penalties & Mode
-                </p>
-                <div className="space-y-2">
-                    <div className="flex text-muted-foreground text-xs items-center gap-1">
-                        Arrears:
-                        <span className="px-2 py-1 rounded-md border border-border bg-secondary font-mono text-xs">
-                            {typeof arrears === 'number' ? (
-                                currencyFormat(arrears, {
-                                    currency: loanTransaction.account?.currency,
-                                    showSymbol:
-                                        !!loanTransaction.account?.currency,
-                                })
-                            ) : (
-                                <span className="text-xs text-muted-foreground">
-                                    ...
-                                </span>
-                            )}
-                        </span>
-                    </div>
-                    <div className="flex text-muted-foreground text-xs items-center gap-1">
-                        Interest:
-                        <span className="px-2 py-1 rounded-md border border-border bg-secondary font-mono text-xs">
-                            {typeof interest === 'number' ? (
-                                currencyFormat(interest, {
-                                    currency: loanTransaction.account?.currency,
-                                    showSymbol:
-                                        !!loanTransaction.account?.currency,
-                                })
-                            ) : (
-                                <span className="text-xs text-muted-foreground">
-                                    ...
-                                </span>
-                            )}
-                        </span>
-                    </div>
-                    <div className="flex text-muted-foreground text-xs items-center gap-1">
-                        Fines:
-                        <span className="px-2 py-1 rounded-md border border-border bg-secondary font-mono text-xs">
-                            {typeof fines === 'number' ? (
-                                currencyFormat(fines, {
-                                    currency: loanTransaction.account?.currency,
-                                    showSymbol:
-                                        !!loanTransaction.account?.currency,
-                                })
-                            ) : (
-                                <span className="text-xs text-muted-foreground">
-                                    ...
-                                </span>
-                            )}
-                        </span>
-                    </div>
-                    <div className="flex text-muted-foreground text-xs items-center gap-1">
-                        Mode:
-                        {mode_of_payment ? (
-                            <LoanModeOfPaymentBadge
-                                mode={mode_of_payment as TLoanModeOfPayment}
-                                size="sm"
-                            />
+            <LoanInfoSection
+                className="min-w-[200px]"
+                title="Deductions & Adjustments"
+            >
+                <LoanInfoItem>
+                    <InfoLabel>Deducted Interest:</InfoLabel>
+                    <InfoValue className="font-mono">
+                        {typeof deducted_interest === 'number' ? (
+                            currencyFormat(deducted_interest, {
+                                currency: loanTransaction.account?.currency,
+                                showSymbol: !!loanTransaction.account?.currency,
+                            })
                         ) : (
                             <span className="text-xs text-muted-foreground">
                                 ...
                             </span>
                         )}
-                    </div>
-                    {mode_of_payment === 'day' && (
-                        <div className="flex items-center text-muted-foreground text-xs gap-1">
-                            Fixed Days :
-                            <span className="px-2 py-1 rounded-md border border-border bg-secondary font-mono text-xs">
-                                {typeof mode_of_payment_fixed_days ===
-                                'number' ? (
-                                    mode_of_payment_fixed_days
-                                ) : (
-                                    <span className="text-xs text-muted-foreground">
-                                        ...
-                                    </span>
-                                )}
+                    </InfoValue>
+                </LoanInfoItem>
+
+                <LoanInfoItem>
+                    <InfoLabel>Advance Payment:</InfoLabel>
+                    <InfoValue className="font-mono">
+                        {typeof advance_payment === 'number' ? (
+                            currencyFormat(advance_payment, {
+                                currency: loanTransaction.account?.currency,
+                                showSymbol: !!loanTransaction.account?.currency,
+                            })
+                        ) : (
+                            <span className="text-xs text-muted-foreground">
+                                ...
                             </span>
-                        </div>
-                    )}
-                    {mode_of_payment === 'monthly' && (
-                        <div className="flex items-center text-muted-foreground text-xs gap-1">
-                            Payment :
-                            <span className="px-2 py-1 rounded-md border border-border bg-secondary font-mono text-xs">
-                                {typeof mode_of_payment_monthly_exact_day ===
-                                'boolean' ? (
-                                    mode_of_payment_monthly_exact_day ? (
-                                        'Exact Day'
-                                    ) : (
-                                        'Every 30 Days'
-                                    )
-                                ) : (
-                                    <span className="text-xs text-muted-foreground">
-                                        ...
-                                    </span>
-                                )}
+                        )}
+                    </InfoValue>
+                </LoanInfoItem>
+
+                <LoanInfoItem>
+                    <InfoLabel>Used Days:</InfoLabel>
+                    <InfoValue className="font-mono">
+                        {typeof used_days === 'number' ? (
+                            formatNumber(used_days, 0)
+                        ) : (
+                            <span className="text-xs text-muted-foreground">
+                                ...
                             </span>
-                        </div>
-                    )}
-                    {mode_of_payment === 'weekly' && (
-                        <div className="flex items-center text-muted-foreground text-xs gap-1">
-                            Payment :
-                            <span className="px-2 py-1 rounded-md border border-border bg-secondary font-mono text-xs">
-                                {typeof mode_of_payment_weekly === 'string' ? (
-                                    mode_of_payment_weekly
-                                ) : (
-                                    <span className="text-xs text-muted-foreground">
-                                        ...
-                                    </span>
-                                )}
+                        )}
+                    </InfoValue>
+                </LoanInfoItem>
+
+                <LoanInfoItem>
+                    <InfoLabel>Unused Days:</InfoLabel>
+                    <InfoValue className="font-mono">
+                        {typeof unused_days === 'number' ? (
+                            formatNumber(unused_days, 0)
+                        ) : (
+                            <span className="text-xs text-muted-foreground">
+                                ...
                             </span>
-                        </div>
+                        )}
+                    </InfoValue>
+                </LoanInfoItem>
+            </LoanInfoSection>
+
+            {/* Penalties & Mode */}
+            <LoanInfoSection className="min-w-[200px]" title="Penalties & Mode">
+                <LoanInfoItem>
+                    <InfoLabel>Arrears:</InfoLabel>
+                    <InfoValue className="font-mono">
+                        {typeof arrears === 'number' ? (
+                            currencyFormat(arrears, {
+                                currency: loanTransaction.account?.currency,
+                                showSymbol: !!loanTransaction.account?.currency,
+                            })
+                        ) : (
+                            <span className="text-xs text-muted-foreground">
+                                ...
+                            </span>
+                        )}
+                    </InfoValue>
+                </LoanInfoItem>
+
+                <LoanInfoItem>
+                    <InfoLabel>Interest:</InfoLabel>
+                    <InfoValue className="font-mono">
+                        {typeof interest === 'number' ? (
+                            currencyFormat(interest, {
+                                currency: loanTransaction.account?.currency,
+                                showSymbol: !!loanTransaction.account?.currency,
+                            })
+                        ) : (
+                            <span className="text-xs text-muted-foreground">
+                                ...
+                            </span>
+                        )}
+                    </InfoValue>
+                </LoanInfoItem>
+
+                <LoanInfoItem>
+                    <InfoLabel>Fines:</InfoLabel>
+                    <InfoValue className="font-mono">
+                        {typeof fines === 'number' ? (
+                            currencyFormat(fines, {
+                                currency: loanTransaction.account?.currency,
+                                showSymbol: !!loanTransaction.account?.currency,
+                            })
+                        ) : (
+                            <span className="text-xs text-muted-foreground">
+                                ...
+                            </span>
+                        )}
+                    </InfoValue>
+                </LoanInfoItem>
+
+                <LoanInfoItem>
+                    <InfoLabel>Mode:</InfoLabel>
+                    {mode_of_payment ? (
+                        <LoanModeOfPaymentBadge
+                            mode={mode_of_payment as TLoanModeOfPayment}
+                            size="sm"
+                        />
+                    ) : (
+                        <span className="text-xs text-muted-foreground">
+                            ...
+                        </span>
                     )}
-                    {mode_of_payment === 'semi-monthly' && (
-                        <>
-                            <div className="flex items-center text-muted-foreground text-xs gap-1">
-                                Payment 1:
-                                <span className="px-2 py-1 rounded-md border border-border bg-secondary font-mono text-xs">
-                                    {typeof mode_of_payment_semi_monthly_pay_1 ===
-                                    'string' ? (
-                                        `Day ${mode_of_payment_semi_monthly_pay_1}`
-                                    ) : (
-                                        <span className="text-xs text-muted-foreground">
-                                            ...
-                                        </span>
-                                    )}
+                </LoanInfoItem>
+
+                {mode_of_payment === 'day' && (
+                    <LoanInfoItem>
+                        <InfoLabel>Fixed Days:</InfoLabel>
+                        <InfoValue className="font-mono">
+                            {typeof mode_of_payment_fixed_days === 'number' ? (
+                                mode_of_payment_fixed_days
+                            ) : (
+                                <span className="text-xs text-muted-foreground">
+                                    ...
                                 </span>
-                            </div>
-                            <div className="flex items-center text-muted-foreground text-xs gap-1">
-                                Payment 2:
-                                <span className="px-2 py-1 rounded-md border border-border bg-secondary font-mono text-xs">
-                                    {typeof mode_of_payment_semi_monthly_pay_2 ===
-                                    'string' ? (
-                                        `Day ${mode_of_payment_semi_monthly_pay_2}`
-                                    ) : (
-                                        <span className="text-xs text-muted-foreground">
-                                            ...
-                                        </span>
-                                    )}
+                            )}
+                        </InfoValue>
+                    </LoanInfoItem>
+                )}
+
+                {mode_of_payment === 'monthly' && (
+                    <LoanInfoItem>
+                        <InfoLabel>Payment:</InfoLabel>
+                        <InfoValue className="font-mono">
+                            {typeof mode_of_payment_monthly_exact_day ===
+                            'boolean' ? (
+                                mode_of_payment_monthly_exact_day ? (
+                                    'Exact Day'
+                                ) : (
+                                    'Every 30 Days'
+                                )
+                            ) : (
+                                <span className="text-xs text-muted-foreground">
+                                    ...
                                 </span>
-                            </div>
-                        </>
-                    )}
-                </div>
-            </div>
+                            )}
+                        </InfoValue>
+                    </LoanInfoItem>
+                )}
+
+                {mode_of_payment === 'weekly' && (
+                    <LoanInfoItem>
+                        <InfoLabel>Payment:</InfoLabel>
+                        <InfoValue className="font-mono">
+                            {typeof mode_of_payment_weekly === 'string' ? (
+                                mode_of_payment_weekly
+                            ) : (
+                                <span className="text-xs text-muted-foreground">
+                                    ...
+                                </span>
+                            )}
+                        </InfoValue>
+                    </LoanInfoItem>
+                )}
+
+                {mode_of_payment === 'semi-monthly' && (
+                    <>
+                        <LoanInfoItem>
+                            <InfoLabel>Payment 1:</InfoLabel>
+                            <InfoValue className="font-mono">
+                                {typeof mode_of_payment_semi_monthly_pay_1 ===
+                                'string' ? (
+                                    `Day ${mode_of_payment_semi_monthly_pay_1}`
+                                ) : (
+                                    <span className="text-xs text-muted-foreground">
+                                        ...
+                                    </span>
+                                )}
+                            </InfoValue>
+                        </LoanInfoItem>
+                        <LoanInfoItem>
+                            <InfoLabel>Payment 2:</InfoLabel>
+                            <InfoValue className="font-mono">
+                                {typeof mode_of_payment_semi_monthly_pay_2 ===
+                                'string' ? (
+                                    `Day ${mode_of_payment_semi_monthly_pay_2}`
+                                ) : (
+                                    <span className="text-xs text-muted-foreground">
+                                        ...
+                                    </span>
+                                )}
+                            </InfoValue>
+                        </LoanInfoItem>
+                    </>
+                )}
+            </LoanInfoSection>
         </div>
     )
 }
@@ -803,7 +827,7 @@ const LoanQuickSummary = ({
     return (
         <div
             className={cn(
-                'w-full flex gap-4 bg-popover text-sm justify-between p-4 rounded-lg',
+                'w-full flex gap-4 border border-border bg-popover text-sm justify-between p-4 rounded-lg',
                 className
             )}
         >
@@ -1113,8 +1137,11 @@ export const LoanViewModal = ({
     return (
         <Modal
             className={cn('!max-w-[95vw]', className)}
+            closeButtonClassName="top-1 right-1"
             description={description}
+            descriptionClassName="hidden"
             title={title}
+            titleClassName="hidden"
             {...props}
         >
             <LoanView
@@ -1127,3 +1154,80 @@ export const LoanViewModal = ({
 }
 
 export default LoanView
+
+const LoanInfoItem = ({
+    className,
+    children,
+}: IClassProps & {
+    children: ReactNode
+}) => {
+    return (
+        <div
+            className={cn(
+                'flex text-muted-foreground text-xs items-center gap-1',
+                className
+            )}
+        >
+            {children}
+        </div>
+    )
+}
+
+const InfoLabel = ({
+    className,
+    children,
+}: IClassProps & {
+    children: ReactNode
+}) => {
+    return <span className={cn('text-nowrap', className)}>{children}</span>
+}
+
+const InfoValue = ({
+    className,
+    children,
+}: IClassProps & {
+    children: ReactNode
+}) => {
+    return (
+        <span
+            className={cn(
+                'px-2 py-1 rounded-md bg-secondary border border-border',
+                className
+            )}
+        >
+            {children}
+        </span>
+    )
+}
+
+const LoanInfoSection = ({
+    title,
+    titleClassName,
+    className,
+    children,
+}: IClassProps & {
+    title?: string
+    titleClassName?: string
+    children: ReactNode
+}) => {
+    return (
+        <div
+            className={cn(
+                'space-y-2 px-4 border-l first:border-l-0',
+                className
+            )}
+        >
+            {title && (
+                <p
+                    className={cn(
+                        'text-xs font-bold text-nowrap text-muted-foreground',
+                        titleClassName
+                    )}
+                >
+                    {title}
+                </p>
+            )}
+            <div className="space-y-2">{children}</div>
+        </div>
+    )
+}

@@ -377,4 +377,42 @@ export const useLoanTransactionSuggestedAmortization = createMutationFactory<
     },
 })
 
+// PROCESSING
+
+// loan processing all
+export const useProcessAllLoanTransaction = createMutationFactory<
+    void,
+    Error,
+    void
+>({
+    mutationFn: async () => {
+        const response = await API.post<void, void>(
+            `${loanTransactionAPIRoute}/process`
+        )
+        return response.data
+    },
+})
+
+// loan processing specific loan transaction
+export const useProcessLoanTransactionById = createMutationFactory<
+    void,
+    Error,
+    TEntityId
+>({
+    mutationFn: async (loanTransactionId) => {
+        const response = await API.post<void, void>(
+            `${loanTransactionAPIRoute}/${loanTransactionId}/process`
+        )
+        return response.data
+    },
+    invalidationFn: ({ queryClient, variables }) => {
+        queryClient.invalidateQueries({
+            queryKey: [loanTransactionBaseKey, variables],
+        })
+        queryClient.invalidateQueries({
+            queryKey: [loanTransactionBaseKey, 'paginated'],
+        })
+    },
+})
+
 export const logger = Logger.getInstance('loan-transaction')
