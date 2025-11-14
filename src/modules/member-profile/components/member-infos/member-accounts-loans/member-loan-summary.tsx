@@ -1,7 +1,7 @@
 import { useState } from 'react'
 
 import { ILoanTransaction } from '@/modules/loan-transaction'
-import { LoanViewModal } from '@/modules/loan-transaction/components/loan-view'
+import { LoanViewModal } from '@/modules/loan-transaction/components/loan-view/loan-view'
 import MemberLoanTableSummary from '@/modules/loan-transaction/components/member-loan-table-summary'
 
 import { TEntityId } from '@/types'

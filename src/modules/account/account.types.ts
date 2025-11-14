@@ -203,6 +203,11 @@ export interface IAccount extends IAuditable, ITimeStamps {
     interest_diminishing_by_year?: boolean
 }
 
+export interface IAccountHistory extends IAccount {
+    account_id: TEntityId
+    account: IAccount
+}
+
 // FOR US TO REMEMBER
 // interest_secured?: number - WALA NATO DI NADAW GAGMITIN
 

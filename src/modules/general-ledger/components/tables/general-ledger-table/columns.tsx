@@ -13,7 +13,7 @@ import DataTableColumnHeader from '@/components/data-table/data-table-column-hea
 import ColumnActions from '@/components/data-table/data-table-column-header/column-actions'
 import { createUpdateColumns } from '@/components/data-table/data-table-common-columns'
 import { IGlobalSearchTargets } from '@/components/data-table/data-table-filters/data-table-global-search'
-import DataTableMultiSelectFilter from '@/components/data-table/data-table-filters/multi-select-filter'
+import DataTableMultiSelectFilter from '@/components/data-table/data-table-filters/data-table-multi-select-filter'
 import NumberFilter from '@/components/data-table/data-table-filters/number-filter'
 import TextFilter from '@/components/data-table/data-table-filters/text-filter'
 import HeaderToggleSelect from '@/components/data-table/data-table-row-actions/header-toggle-select'

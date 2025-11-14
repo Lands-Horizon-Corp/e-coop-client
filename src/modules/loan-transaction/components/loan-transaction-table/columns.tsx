@@ -8,6 +8,8 @@ import DataTableColumnHeader from '@/components/data-table/data-table-column-hea
 import ColumnActions from '@/components/data-table/data-table-column-header/column-actions'
 import { createUpdateColumns } from '@/components/data-table/data-table-common-columns'
 import { IGlobalSearchTargets } from '@/components/data-table/data-table-filters/data-table-global-search'
+import DataTableMultiSelectFilter from '@/components/data-table/data-table-filters/data-table-multi-select-filter'
+import NumberFilter from '@/components/data-table/data-table-filters/number-filter'
 import TextFilter from '@/components/data-table/data-table-filters/text-filter'
 import HeaderToggleSelect from '@/components/data-table/data-table-row-actions/header-toggle-select'
 import {
@@ -435,6 +437,79 @@ const LoanTransactionTableColumns = (
                             src={employee_user.media_id}
                         />
                     )}
+                </div>
+            ),
+            enableMultiSort: true,
+            enableSorting: true,
+            enableResizing: true,
+            enableHiding: true,
+            size: 300,
+            minSize: 300,
+            maxSize: 800,
+        },
+        {
+            id: 'count',
+            accessorKey: 'count',
+            header: (props) => (
+                <DataTableColumnHeader {...props} title="Loan Count">
+                    <ColumnActions {...props}>
+                        <NumberFilter<ILoanTransaction>
+                            displayText="Loan Count"
+                            field="count"
+                        />
+                    </ColumnActions>
+                </DataTableColumnHeader>
+            ),
+            cell: ({
+                row: {
+                    original: { count },
+                },
+            }) => (
+                <div className="!text-wrap text-muted-foreground">
+                    {count && count}
+                </div>
+            ),
+            enableMultiSort: true,
+            enableSorting: true,
+            enableResizing: true,
+            enableHiding: true,
+            size: 300,
+            minSize: 300,
+            maxSize: 800,
+        },
+        {
+            id: 'processing',
+            accessorKey: 'processing',
+            header: (props) => (
+                <DataTableColumnHeader {...props} title="Processing">
+                    <ColumnActions {...props}>
+                        <DataTableMultiSelectFilter<ILoanTransaction, boolean>
+                            dataType="boolean"
+                            defaultMode="contains"
+                            displayText="Processing Status"
+                            field="processing"
+                            mode="contains"
+                            multiSelectOptions={[
+                                {
+                                    label: 'Processing',
+                                    value: true,
+                                },
+                                {
+                                    label: 'Not Processing',
+                                    value: false,
+                                },
+                            ]}
+                        />
+                    </ColumnActions>
+                </DataTableColumnHeader>
+            ),
+            cell: ({
+                row: {
+                    original: { count },
+                },
+            }) => (
+                <div className="!text-wrap text-muted-foreground">
+                    {count && count}
                 </div>
             ),
             enableMultiSort: true,

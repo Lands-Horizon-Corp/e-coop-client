@@ -13,6 +13,7 @@ import { LoanClearanceAnalysisInstitutionSchema } from '../loan-clearance-analys
 import { LoanTermsAndConditionAmountReceiptSchema } from '../loan-terms-and-condition-amount-receipt'
 import { LoanTermsAndConditionSuggestedPaymentSchema } from '../loan-terms-and-condition-suggested-payment'
 import {
+    LOAN_ADJUSTMENT_TYPE,
     LOAN_COLLECTOR_PLACE,
     LOAN_COMAKER_TYPE,
     // LOAN_COMAKER_TYPE,
@@ -436,4 +437,18 @@ export const LoanTransactionSuggestedSchema = z.object({
 
 export type TLoanTransactionSuggestedSchema = z.infer<
     typeof LoanTransactionSuggestedSchema
+>
+
+export const LoanTransactionAdjustmentSchema = z.object({
+    voucher: z.coerce.string().optional(),
+    account_id: EntityIdSchema('Account is required'),
+    account: z.any(),
+    adjustment_type: z.enum(LOAN_ADJUSTMENT_TYPE),
+    amount: z.coerce
+        .number('Invalid amount')
+        .min(0.0000001, 'Amount must not less than 0'),
+})
+
+export type TLoanTransactionAdjustmentSchema = z.infer<
+    typeof LoanTransactionAdjustmentSchema
 >

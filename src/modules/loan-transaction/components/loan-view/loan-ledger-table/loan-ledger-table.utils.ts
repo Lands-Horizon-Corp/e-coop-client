@@ -1,22 +1,7 @@
-import { IAccount, TAccountType } from '@/modules/account'
+import { IAccount } from '@/modules/account'
 import { IGeneralLedger } from '@/modules/general-ledger'
 
 import { TEntityId } from '@/types'
-
-export const getAccountTypePriority = (accountType: TAccountType) => {
-    switch (accountType) {
-        case 'Loan':
-            return 1
-        case 'Interest':
-            return 2
-        case 'SVF-Ledger':
-            return 3
-        case 'Fines':
-            return 4
-        default:
-            return 5
-    }
-}
 
 export const getLedgerUniqueAccounts = ({
     ledgerEntries = [],

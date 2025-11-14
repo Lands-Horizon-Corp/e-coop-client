@@ -3,9 +3,11 @@ import z from 'zod'
 import { IBaseEntityMeta, IPaginatedResult, TEntityId } from '@/types'
 
 import { IAccount } from '../account'
+import { IAccountHistory } from '../account-history'
 import { IComakerCollateral } from '../comaker-collateral'
 import { IComakerMemberProfile } from '../comaker-member-profile'
 import { ICurrency } from '../currency'
+import { IGeneralLedger } from '../general-ledger'
 import { ILoanAmortizationSchedule } from '../loan-amortization-schedule'
 import { ILoanClearanceAnalysis } from '../loan-clearance-analysis'
 import { ILoanClearanceAnalysisInstitution } from '../loan-clearance-analysis-institution'
@@ -23,11 +25,13 @@ import { IUser } from '../user'
 import {
     LoanTransactionPrintSchema,
     LoanTransactionSchema,
+    TLoanTransactionAdjustmentSchema,
     TLoanTransactionSignatureSchema,
     TLoanTransactionSuggestedSchema,
 } from './loan-transaction.validation'
 import {
     COMPUTATION_TYPE,
+    LOAN_ADJUSTMENT_TYPE,
     LOAN_AMORTIZATION_TYPE,
     LOAN_COLLECTOR_PLACE,
     LOAN_COMAKER_TYPE,
@@ -82,10 +86,7 @@ export interface ILoanTransaction
     loan_status?: ILoanStatus
 
     count?: number
-    last_pay?: string
     balance?: number
-    fines?: number
-    interest?: number
 
     mode_of_payment: TLoanModeOfPayment
     mode_of_payment_weekly: TWeekdays
@@ -171,39 +172,6 @@ export interface ILoanTransaction
     total_add_on: number
     total_deduction: number
 
-    // Tel zalven to add these
-    due_date?: string
-    amount_granted?: number
-    add_on_amount?: number
-
-    deducted_interest?: number
-    advance_payment?: number
-
-    used_days?: number
-    unused_days?: number
-
-    arrears?: number
-
-    unpaid_principal_count?: number
-    unpaid_interest_count?: number
-
-    unpaid_principal_amount?: number
-    unpaid_interest_amount?: number
-
-    principal_paid_count?: number
-    interest_paid_count?: number
-
-    // for quick summary
-    principal_paid?: number
-    previous_interest_paid?: number
-    previous_fines_paid?: number
-    interest_paid?: number
-    fines_paid?: number
-    collection_progress?: number // percentage
-    interest_amortization?: number
-    first_irr?: number
-    first_dq?: number
-
     printed_by_user_id?: string
     printed_by?: IUser
 
@@ -214,7 +182,6 @@ export interface ILoanTransaction
     released_by?: IUser
 
     // ADDED FROM ZALZAL Dev Branch
-    loan_count?: number
     processing?: boolean
 }
 
@@ -325,4 +292,51 @@ export type LoanProcessingEventResponse = {
     current_time: string
     account_name: string
     member_name: string
+}
+
+// for loan transaction adjustments
+export type TLoanAdjustmentType = (typeof LOAN_ADJUSTMENT_TYPE)[number]
+export type ILoanTransactionAdjustmentRequest = TLoanTransactionAdjustmentSchema
+
+// for loan transaction account summary
+export interface ILoanTransactionAccountSummary {
+    account_history_id: TEntityId
+    account_history: IAccountHistory
+
+    due_date?: string
+    last_payment?: string
+
+    // COUNTS
+    total_number_of_payments: number
+    total_number_of_deductions: number
+    total_number_of_additions: number
+
+    // AMOUNTS
+    total_account_principal: number
+    total_account_advanced_payment: number
+    total_account_principal_paid: number
+    total_remaining_principal: number
+
+    total_debit: number
+    total_credit: number
+    balance: number
+}
+
+// for loan transaction summary
+export interface ILoanTransactionSummary {
+    arrears: number
+    amount_granted: number
+    add_on_amount: number
+
+    account_summary: ILoanTransactionAccountSummary[]
+    general_ledger: IGeneralLedger[]
+
+    last_payment?: string
+    first_deliquency_date?: string
+    first_irregularity_date?: string
+
+    total_principal: number
+    total_advanced_payment: number
+    total_principal_paid: number
+    total_remaining_principal: number // old coop progress
 }

@@ -2,7 +2,7 @@ import { ReactNode } from 'react'
 
 import { toast } from 'sonner'
 
-import { cn, formatNumber } from '@/helpers'
+import { cn } from '@/helpers'
 import {
     dateAgo,
     toReadableDate,
@@ -14,8 +14,10 @@ import GeneralStatusBadge from '@/modules/authentication/components/general-stat
 import { currencyFormat } from '@/modules/currency'
 import {
     ILoanTransaction,
+    ILoanTransactionSummary,
     TLoanModeOfPayment,
     useGetLoanTransactionById,
+    useGetLoanTransactionSummary,
     useProcessLoanTransactionById,
 } from '@/modules/loan-transaction'
 import { IMemberProfile } from '@/modules/member-profile'
@@ -29,6 +31,7 @@ import {
     PhoneIcon,
     PlusIcon,
     PrinterFillIcon,
+    RefreshIcon,
     TIcon,
     TicketIcon,
     UndoIcon,
@@ -56,12 +59,13 @@ import { useModalState } from '@/hooks/use-modal-state'
 
 import { IClassProps, TEntityId } from '@/types'
 
-import { LoanAddInterestFormModal } from './forms/loan-add-interest-form'
-import { LoanInquireAdvanceInterestFinesModal } from './forms/loan-inquire-advance-interest-fines-form'
-import { LoanAmortizationModal } from './loan-amortization'
-import LoanLedgerTableView from './loan-ledger-table/loan-ledger-table'
-import LoanModeOfPaymentBadge from './loan-mode-of-payment-badge'
-import { LoanViewSkeleton } from './skeletons/loan-view-skeleton'
+import { LoanAddInterestFormModal } from '../forms/loan-add-interest-form'
+import { LoanInquireAdvanceInterestFinesModal } from '../forms/loan-inquire-advance-interest-fines-form'
+import { LoanAmortizationModal } from '../loan-amortization'
+import LoanModeOfPaymentBadge from '../loan-mode-of-payment-badge'
+import { LoanViewSkeleton } from '../skeletons/loan-view-skeleton'
+import { LoanAccountsSummary } from './loan-account-summary'
+import LoanLedgerTable from './loan-ledger-table/loan-ledger-table'
 
 interface LoanLedgerViewProps extends IClassProps {
     loanTransactionId: TEntityId
@@ -76,8 +80,10 @@ const LoanView = ({
     const {
         data = defaultLoanTransaction,
         isPending,
+        isRefetching,
         isEnabled,
         error,
+        refetch: refetchLoanTransaction,
     } = useGetLoanTransactionById({
         id: loanTransactionId,
         options: {
@@ -86,12 +92,33 @@ const LoanView = ({
         },
     })
 
+    const {
+        data: loanSummary,
+        isRefetching: isRefetchingSummary,
+        isPending: isPendingSummary,
+        refetch: refetchSummary,
+    } = useGetLoanTransactionSummary({
+        id: loanTransactionId,
+        options: {
+            enabled: !!loanTransactionId,
+        },
+    })
+
+    const handleRefresh = () => {
+        refetchSummary()
+        refetchLoanTransaction()
+    }
+
     const errorMessage = !isEnabled
         ? 'No valid loan transaction selected'
         : serverRequestErrExtractor({ error })
 
     const { isPending: isProcessing, mutateAsync: processLoanTransaction } =
-        useProcessLoanTransactionById()
+        useProcessLoanTransactionById({
+            options: {
+                onSuccess: () => handleRefresh(),
+            },
+        })
 
     return (
         <div className={cn('space-y-4 p-4 w-full', className)}>
@@ -104,34 +131,30 @@ const LoanView = ({
             {(isPending || !data) && isEnabled && <LoanViewSkeleton />}
             {data && (
                 <>
-                    <LoanLedgerHeader loanTransaction={data} />
-                    <div className="flex justify-end items-center">
-                        <Button
-                            className=""
-                            disabled={isProcessing}
-                            onClick={() =>
-                                toast.promise(processLoanTransaction(data.id), {
-                                    loading: 'Processing loan...',
-                                    error: 'Failed to process loan.',
-                                    success: 'Loan has been processed.',
-                                })
-                            }
-                            size="sm"
-                        >
-                            {isProcessing ? (
-                                <LoadingSpinner />
-                            ) : (
-                                <FileFillIcon />
-                            )}{' '}
-                            Process Loan
-                        </Button>
-                    </div>
-                    <LoanDetails loanTransaction={data} />
-                    <LoanLedgerTableView
-                        className="h-[50vh] w-full rounded-lg"
-                        loanTransactionId={loanTransactionId}
+                    <LoanLedgerHeader
+                        canProcess={!isProcessing || !data.processing}
+                        canRefresh={!isRefetching && !isRefetchingSummary}
+                        handleProcess={() => {
+                            toast.promise(processLoanTransaction(data.id), {
+                                loading: 'Processing loan...',
+                                error: 'Failed to process loan.',
+                                success: 'Loan has been processed.',
+                            })
+                        }}
+                        handleRefresh={handleRefresh}
+                        loanTransaction={data}
+                        loanTransactionSummary={loanSummary}
                     />
-                    <LoanQuickSummary loanTransaction={data} />
+                    <LoanLedgerTable
+                        className="h-[50vh] w-full rounded-lg"
+                        data={loanSummary?.general_ledger || []}
+                        view={isPendingSummary ? 'skeleton' : 'data'}
+                    />
+                    <LoanAccountsSummary
+                        loanTransactionAccountSummaries={
+                            loanSummary?.account_summary || []
+                        }
+                    />
                 </>
             )}
         </div>
@@ -142,163 +165,223 @@ const LoanView = ({
 const LoanLedgerHeader = ({
     className,
     loanTransaction,
-}: IClassProps & { loanTransaction: ILoanTransaction }) => {
+    loanTransactionSummary,
+
+    isProcessing,
+    isRefetching,
+    canRefresh,
+    canProcess,
+    handleProcess,
+    handleRefresh,
+}: IClassProps & {
+    loanTransaction: ILoanTransaction
+    loanTransactionSummary?: ILoanTransactionSummary
+
+    isProcessing?: boolean
+    isRefetching?: boolean
+    canRefresh?: boolean
+    canProcess?: boolean
+    handleProcess?: () => void
+    handleRefresh?: () => void
+}) => {
     return (
         <div className={cn('', className)}>
             <div className="flex gap-2 w-full">
-                <div className="space-y-2 shrink-0">
-                    <div className="bg-secondary px-4 py-2 rounded-lg">
-                        <p className="text-xs text-muted-foreground">
-                            <TicketIcon className="inline mr-1" />
-                            Check Voucher
-                        </p>
-                        <TextDisplay
-                            noValueText="no voucher number set"
-                            withCopy
-                        >
-                            {loanTransaction.check_number}
-                        </TextDisplay>
+                <div className="flex-1 flex flex-col space-y-2">
+                    <div className="flex flex-1 grow justify-between gap-4 bg-gradient-to-r from-primary/20 to-card/10 ring-2 ring-card dark:ring-primary/40 rounded-xl p-4">
+                        <div className="flex-shrink-0">
+                            <PreviewMediaWrapper
+                                media={loanTransaction.member_profile?.media}
+                            >
+                                <ImageDisplay
+                                    className="size-14 rounded-lg"
+                                    // fallback={memberProfile.first_name.charAt(0) ?? '-'}
+                                    fallback="S"
+                                    src={
+                                        loanTransaction.member_profile?.media
+                                            ?.download_url
+                                    }
+                                />
+                            </PreviewMediaWrapper>
+                        </div>
+                        <div className="space-y-2 grow">
+                            <div className="flex gap-x-2">
+                                <p className="text-lg">
+                                    {loanTransaction.member_profile
+                                        ?.full_name || '...'}
+                                </p>
+                                <GeneralStatusBadge generalStatus="verified" />
+                            </div>
+                            <Separator />
+                            <div className="flex justify-between flex-wrap space-x-5 text-xs">
+                                <div className="shrink-0">
+                                    <h3 className="font-medium text-muted-foreground">
+                                        Contact Number
+                                    </h3>
+                                    <div className="flex items-center gap-2">
+                                        <PhoneIcon className="400 size-3" />
+                                        <span>
+                                            {loanTransaction.member_profile
+                                                ?.contact_number ? (
+                                                <CopyWrapper>
+                                                    {
+                                                        loanTransaction
+                                                            .member_profile
+                                                            .contact_number
+                                                    }
+                                                </CopyWrapper>
+                                            ) : (
+                                                <span className="text-xs text-muted-foreground">
+                                                    ...
+                                                </span>
+                                            )}
+                                        </span>
+                                    </div>
+                                </div>
+                                <div className="shrink-0">
+                                    <h3 className="font-medium text-muted-foreground">
+                                        Passbook Number
+                                    </h3>
+                                    <div className="flex items-center gap-2">
+                                        <IdCardIcon className="size-3" />
+                                        <span className="font-mono text-xs">
+                                            {loanTransaction.member_profile
+                                                ?.passbook ? (
+                                                <CopyWrapper>
+                                                    {
+                                                        loanTransaction
+                                                            .member_profile
+                                                            .passbook
+                                                    }
+                                                </CopyWrapper>
+                                            ) : (
+                                                <span className="text-xs text-muted-foreground">
+                                                    ...
+                                                </span>
+                                            )}
+                                        </span>
+                                    </div>
+                                </div>
+                                <div className="shrink-0">
+                                    <h3 className="font-medium text-muted-foreground">
+                                        Member Type
+                                    </h3>
+                                    <div className="flex items-center gap-2">
+                                        <UserIcon className="size-3" />
+                                        <span>
+                                            {loanTransaction.member_profile
+                                                ?.member_type?.name ? (
+                                                <CopyWrapper>
+                                                    {
+                                                        loanTransaction
+                                                            .member_profile
+                                                            .member_type.name
+                                                    }
+                                                </CopyWrapper>
+                                            ) : (
+                                                <span className="text-xs text-muted-foreground">
+                                                    ...
+                                                </span>
+                                            )}
+                                        </span>
+                                    </div>
+                                </div>
+                                <div className="shrink-0">
+                                    <h3 className="font-medium text-muted-foreground">
+                                        Birthday
+                                    </h3>
+                                    <div className="flex items-center gap-2">
+                                        <CakeIcon className="size-3" />
+                                        <span>
+                                            {loanTransaction.member_profile
+                                                ?.birthdate ? (
+                                                <CopyWrapper>
+                                                    {toReadableDate(
+                                                        loanTransaction
+                                                            .member_profile
+                                                            .birthdate
+                                                    )}
+                                                </CopyWrapper>
+                                            ) : (
+                                                <span className="text-xs text-muted-foreground">
+                                                    ...
+                                                </span>
+                                            )}
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <div className="bg-secondary  px-4 py-2 rounded-lg">
-                        <p className="text-xs text-muted-foreground">
-                            Released <CalendarNumberIcon className="inline" />
-                        </p>
-                        <TextDisplay noValueText="no voucher number set">
-                            {loanTransaction.released_date
-                                ? `${toReadableDateTime(loanTransaction.released_date)}`
-                                : undefined}
-                        </TextDisplay>
-                        <span className="text-xs text-muted-foreground block">
-                            {loanTransaction.released_date
-                                ? `${dateAgo(loanTransaction.released_date)}`
-                                : undefined}
-                        </span>
-                    </div>
-                </div>
-                <div className="flex grow justify-between gap-4 bg-gradient-to-r from-primary/20 to-card/10 ring-2 ring-card dark:ring-primary/40 rounded-xl p-4">
-                    <div className="flex-shrink-0">
-                        <PreviewMediaWrapper
-                            media={loanTransaction.member_profile?.media}
-                        >
-                            <ImageDisplay
-                                className="size-14 rounded-lg"
-                                // fallback={memberProfile.first_name.charAt(0) ?? '-'}
-                                fallback="S"
-                                src={
-                                    loanTransaction.member_profile?.media
-                                        ?.download_url
-                                }
-                            />
-                        </PreviewMediaWrapper>
-                    </div>
-                    <div className="space-y-2 grow">
-                        <div className="flex gap-x-2">
-                            <p className="text-lg">
-                                {loanTransaction.member_profile?.full_name ||
-                                    '...'}
+                    <div className="flex gap-3 ">
+                        <div className="bg-secondary flex-1 px-4 py-2 rounded-lg">
+                            <p className="text-xs text-muted-foreground">
+                                <TicketIcon className="inline mr-1" />
+                                Check Voucher
                             </p>
-                            <GeneralStatusBadge generalStatus="verified" />
+                            <TextDisplay
+                                noValueText="no voucher number set"
+                                withCopy
+                            >
+                                {loanTransaction.check_number}
+                            </TextDisplay>
                         </div>
-                        <Separator />
-                        <div className="flex justify-between flex-wrap space-x-5 text-xs">
-                            <div className="shrink-0">
-                                <h3 className="font-medium text-muted-foreground">
-                                    Contact Number
-                                </h3>
-                                <div className="flex items-center gap-2">
-                                    <PhoneIcon className="400 size-3" />
-                                    <span>
-                                        {loanTransaction.member_profile
-                                            ?.contact_number ? (
-                                            <CopyWrapper>
-                                                {
-                                                    loanTransaction
-                                                        .member_profile
-                                                        .contact_number
-                                                }
-                                            </CopyWrapper>
-                                        ) : (
-                                            <span className="text-xs text-muted-foreground">
-                                                ...
-                                            </span>
-                                        )}
-                                    </span>
-                                </div>
+                        <div className="bg-secondary flex-1 px-4 py-2 rounded-lg">
+                            <div className="flex items-center justify-between">
+                                <p className="text-xs text-muted-foreground">
+                                    Released{' '}
+                                    <CalendarNumberIcon className="inline" />
+                                </p>
+                                <span className="text-xs text-muted-foreground block">
+                                    {loanTransaction.released_date
+                                        ? `${dateAgo(loanTransaction.released_date)}`
+                                        : undefined}
+                                </span>
                             </div>
-                            <div className="shrink-0">
-                                <h3 className="font-medium text-muted-foreground">
-                                    Passbook Number
-                                </h3>
-                                <div className="flex items-center gap-2">
-                                    <IdCardIcon className="size-3" />
-                                    <span className="font-mono text-xs">
-                                        {loanTransaction.member_profile
-                                            ?.passbook ? (
-                                            <CopyWrapper>
-                                                {
-                                                    loanTransaction
-                                                        .member_profile.passbook
-                                                }
-                                            </CopyWrapper>
-                                        ) : (
-                                            <span className="text-xs text-muted-foreground">
-                                                ...
-                                            </span>
-                                        )}
-                                    </span>
-                                </div>
-                            </div>
-                            <div className="shrink-0">
-                                <h3 className="font-medium text-muted-foreground">
-                                    Member Type
-                                </h3>
-                                <div className="flex items-center gap-2">
-                                    <UserIcon className="size-3" />
-                                    <span>
-                                        {loanTransaction.member_profile
-                                            ?.member_type?.name ? (
-                                            <CopyWrapper>
-                                                {
-                                                    loanTransaction
-                                                        .member_profile
-                                                        .member_type.name
-                                                }
-                                            </CopyWrapper>
-                                        ) : (
-                                            <span className="text-xs text-muted-foreground">
-                                                ...
-                                            </span>
-                                        )}
-                                    </span>
-                                </div>
-                            </div>
-                            <div className="shrink-0">
-                                <h3 className="font-medium text-muted-foreground">
-                                    Birthday
-                                </h3>
-                                <div className="flex items-center gap-2">
-                                    <CakeIcon className="size-3" />
-                                    <span>
-                                        {loanTransaction.member_profile
-                                            ?.birthdate ? (
-                                            <CopyWrapper>
-                                                {toReadableDate(
-                                                    loanTransaction
-                                                        .member_profile
-                                                        .birthdate
-                                                )}
-                                            </CopyWrapper>
-                                        ) : (
-                                            <span className="text-xs text-muted-foreground">
-                                                ...
-                                            </span>
-                                        )}
-                                    </span>
-                                </div>
+                            <TextDisplay noValueText="no voucher number set">
+                                {loanTransaction.released_date
+                                    ? `${toReadableDateTime(loanTransaction.released_date)}`
+                                    : undefined}
+                            </TextDisplay>
+                        </div>
+                        <div className="bg-popover rounded-md p-2">
+                            <p className="text-sm text-muted-foreground">
+                                Actions
+                            </p>
+                            <div className="flex justify-end gap-x-2 items-center">
+                                <Button
+                                    disabled={isProcessing || !canProcess}
+                                    onClick={handleProcess}
+                                    size="sm"
+                                >
+                                    {isProcessing ? (
+                                        <LoadingSpinner />
+                                    ) : (
+                                        <FileFillIcon />
+                                    )}{' '}
+                                    Process Loan
+                                </Button>
+                                <Button
+                                    disabled={!canRefresh}
+                                    onClick={handleRefresh}
+                                    size="sm"
+                                >
+                                    {isRefetching ? (
+                                        <LoadingSpinner />
+                                    ) : (
+                                        <RefreshIcon />
+                                    )}{' '}
+                                    Refresh
+                                </Button>
                             </div>
                         </div>
                     </div>
                 </div>
+                <LoanDetails
+                    className="shrink-0"
+                    loanTransaction={loanTransaction}
+                    loanTransactionSummary={loanTransactionSummary}
+                />
             </div>
         </div>
     )
@@ -308,35 +391,17 @@ const LoanLedgerHeader = ({
 const LoanDetails = ({
     className,
     loanTransaction,
-}: IClassProps & { loanTransaction: ILoanTransaction }) => {
+    loanTransactionSummary,
+}: IClassProps & {
+    loanTransaction: ILoanTransaction
+    loanTransactionSummary?: ILoanTransactionSummary
+}) => {
     const {
         account,
         created_at,
         terms,
         applied_1,
-        due_date,
-        amount_granted,
         amortization,
-        add_on_amount,
-
-        deducted_interest,
-
-        unpaid_interest_amount,
-        unpaid_principal_amount,
-        unpaid_interest_count,
-        unpaid_principal_count,
-
-        principal_paid_count,
-        interest_paid_count,
-
-        advance_payment,
-        used_days,
-        unused_days,
-
-        interest,
-        arrears,
-        fines,
-
         mode_of_payment,
         mode_of_payment_fixed_days,
         mode_of_payment_monthly_exact_day,
@@ -346,20 +411,26 @@ const LoanDetails = ({
         mode_of_payment_semi_monthly_pay_2,
     } = loanTransaction
 
+    const {
+        amount_granted,
+        add_on_amount,
+        arrears,
+        first_deliquency_date,
+        first_irregularity_date,
+        last_payment,
+    } = loanTransactionSummary || {}
+
     const loanAmortizationModalState = useModalState()
 
     return (
         <div
             className={cn(
-                'w-full flex gap-1 bg-popover border border-border overflow-x-auto ecoop-scroll justify-between text-sm p-4 rounded-lg',
+                'flex gap-1 bg-popover border border-border overflow-x-auto ecoop-scroll justify-between text-sm p-4 rounded-lg',
                 className
             )}
         >
             {/* Account Info & Dates */}
-            <LoanInfoSection
-                className="min-w-[250px]"
-                title="Account Info & Dates"
-            >
+            <LoanInfoSection title="Account Info & Dates">
                 <LoanInfoItem>
                     <InfoLabel>Account:</InfoLabel>
                     {account?.icon && account?.name ? (
@@ -390,19 +461,6 @@ const LoanDetails = ({
                 </LoanInfoItem>
 
                 <LoanInfoItem>
-                    <InfoLabel>Due Date:</InfoLabel>
-                    <InfoValue>
-                        {due_date ? (
-                            toReadableDate(due_date)
-                        ) : (
-                            <span className="text-xs text-muted-foreground">
-                                ...
-                            </span>
-                        )}
-                    </InfoValue>
-                </LoanInfoItem>
-
-                <LoanInfoItem>
                     <InfoLabel>Terms:</InfoLabel>
                     <InfoValue className="bg-accent">
                         <span className="text-accent-foreground">
@@ -417,6 +475,32 @@ const LoanDetails = ({
                         Mos
                     </InfoValue>
                 </LoanInfoItem>
+
+                <LoanInfoItem>
+                    <InfoLabel>Last Payment:</InfoLabel>
+                    <InfoValue className="font-mono">
+                        {last_payment ? (
+                            <>{toReadableDate(last_payment)}</>
+                        ) : (
+                            <span className="text-xs text-muted-foreground">
+                                ...
+                            </span>
+                        )}
+                    </InfoValue>
+                </LoanInfoItem>
+
+                <Button
+                    className="text-xs h-fit px-2 py-1 items-center"
+                    hoverVariant="primary"
+                    onClick={() =>
+                        loanAmortizationModalState.onOpenChange(true)
+                    }
+                    size="sm"
+                    variant="outline"
+                >
+                    <CalendarNumberIcon className="inline size-3" /> View Amort.
+                    Schedule
+                </Button>
             </LoanInfoSection>
 
             {/* Loan Summary */}
@@ -444,7 +528,7 @@ const LoanDetails = ({
 
                 <LoanInfoItem>
                     <InfoLabel>Amount Granted:</InfoLabel>
-                    <InfoValue className="border-green-400/40 bg-green-300/20 text-green-400 font-mono">
+                    <InfoValue className="bg-primary/80 border-primary text-primary-foreground font-mono">
                         {typeof amount_granted === 'number' ? (
                             currencyFormat(amount_granted, {
                                 currency: loanTransaction.account?.currency,
@@ -489,218 +573,10 @@ const LoanDetails = ({
                         )}
                     </InfoValue>
                 </LoanInfoItem>
-
-                <Button
-                    className="text-xs h-fit px-2 py-1 items-center"
-                    hoverVariant="primary"
-                    onClick={() =>
-                        loanAmortizationModalState.onOpenChange(true)
-                    }
-                    size="sm"
-                    variant="outline"
-                >
-                    <CalendarNumberIcon className="inline size-3" /> View Amort.
-                    Schedule
-                </Button>
-            </LoanInfoSection>
-
-            {/* Payment Status */}
-            <LoanInfoSection className="min-w-[260px]" title="Payment Status">
-                <div className="grid grid-cols-3 gap-2 items-center">
-                    <span className="font-medium text-xs text-muted-foreground col-span-1">
-                        Un-Paid
-                    </span>
-                    <span className="font-medium text-xs text-muted-foreground text-center">
-                        Principal
-                    </span>
-                    <span className="font-medium text-xs text-muted-foreground text-center">
-                        Interest
-                    </span>
-
-                    <InfoLabel>Count:</InfoLabel>
-                    <InfoValue className="font-mono text-center">
-                        {typeof unpaid_principal_count === 'number' ? (
-                            formatNumber(unpaid_principal_count, 0)
-                        ) : (
-                            <span className="text-xs text-muted-foreground">
-                                ...
-                            </span>
-                        )}
-                    </InfoValue>
-                    <InfoValue className="font-mono text-center">
-                        {typeof unpaid_interest_count === 'number' ? (
-                            formatNumber(unpaid_interest_count, 0)
-                        ) : (
-                            <span className="text-xs text-muted-foreground">
-                                ...
-                            </span>
-                        )}
-                    </InfoValue>
-
-                    <InfoLabel>Amount:</InfoLabel>
-                    <InfoValue className="font-mono text-center">
-                        {typeof unpaid_principal_amount === 'number' ? (
-                            currencyFormat(unpaid_principal_amount, {
-                                currency: loanTransaction.account?.currency,
-                                showSymbol: !!loanTransaction.account?.currency,
-                            })
-                        ) : (
-                            <span className="text-xs text-muted-foreground">
-                                ...
-                            </span>
-                        )}
-                    </InfoValue>
-                    <InfoValue className="font-mono text-center">
-                        {typeof unpaid_interest_amount === 'number' ? (
-                            currencyFormat(unpaid_interest_amount, {
-                                currency: loanTransaction.account?.currency,
-                                showSymbol: !!loanTransaction.account?.currency,
-                            })
-                        ) : (
-                            <span className="text-xs text-muted-foreground">
-                                ...
-                            </span>
-                        )}
-                    </InfoValue>
-
-                    <span className="font-medium text-xs text-muted-foreground col-span-1">
-                        Paid Count:
-                    </span>
-                    <InfoValue className="font-mono text-center col-span-1">
-                        {typeof principal_paid_count === 'number' ? (
-                            formatNumber(principal_paid_count, 0)
-                        ) : (
-                            <span className="text-xs text-muted-foreground">
-                                ...
-                            </span>
-                        )}
-                    </InfoValue>
-                    <InfoValue className="font-mono text-center col-span-1">
-                        {typeof interest_paid_count === 'number' ? (
-                            formatNumber(interest_paid_count, 0)
-                        ) : (
-                            <span className="text-xs text-muted-foreground">
-                                ...
-                            </span>
-                        )}
-                    </InfoValue>
-                </div>
-            </LoanInfoSection>
-
-            {/* Deductions & Adjustments */}
-            <LoanInfoSection
-                className="min-w-[200px]"
-                title="Deductions & Adjustments"
-            >
-                <LoanInfoItem>
-                    <InfoLabel>Deducted Interest:</InfoLabel>
-                    <InfoValue className="font-mono">
-                        {typeof deducted_interest === 'number' ? (
-                            currencyFormat(deducted_interest, {
-                                currency: loanTransaction.account?.currency,
-                                showSymbol: !!loanTransaction.account?.currency,
-                            })
-                        ) : (
-                            <span className="text-xs text-muted-foreground">
-                                ...
-                            </span>
-                        )}
-                    </InfoValue>
-                </LoanInfoItem>
-
-                <LoanInfoItem>
-                    <InfoLabel>Advance Payment:</InfoLabel>
-                    <InfoValue className="font-mono">
-                        {typeof advance_payment === 'number' ? (
-                            currencyFormat(advance_payment, {
-                                currency: loanTransaction.account?.currency,
-                                showSymbol: !!loanTransaction.account?.currency,
-                            })
-                        ) : (
-                            <span className="text-xs text-muted-foreground">
-                                ...
-                            </span>
-                        )}
-                    </InfoValue>
-                </LoanInfoItem>
-
-                <LoanInfoItem>
-                    <InfoLabel>Used Days:</InfoLabel>
-                    <InfoValue className="font-mono">
-                        {typeof used_days === 'number' ? (
-                            formatNumber(used_days, 0)
-                        ) : (
-                            <span className="text-xs text-muted-foreground">
-                                ...
-                            </span>
-                        )}
-                    </InfoValue>
-                </LoanInfoItem>
-
-                <LoanInfoItem>
-                    <InfoLabel>Unused Days:</InfoLabel>
-                    <InfoValue className="font-mono">
-                        {typeof unused_days === 'number' ? (
-                            formatNumber(unused_days, 0)
-                        ) : (
-                            <span className="text-xs text-muted-foreground">
-                                ...
-                            </span>
-                        )}
-                    </InfoValue>
-                </LoanInfoItem>
             </LoanInfoSection>
 
             {/* Penalties & Mode */}
-            <LoanInfoSection className="min-w-[200px]" title="Penalties & Mode">
-                <LoanInfoItem>
-                    <InfoLabel>Arrears:</InfoLabel>
-                    <InfoValue className="font-mono">
-                        {typeof arrears === 'number' ? (
-                            currencyFormat(arrears, {
-                                currency: loanTransaction.account?.currency,
-                                showSymbol: !!loanTransaction.account?.currency,
-                            })
-                        ) : (
-                            <span className="text-xs text-muted-foreground">
-                                ...
-                            </span>
-                        )}
-                    </InfoValue>
-                </LoanInfoItem>
-
-                <LoanInfoItem>
-                    <InfoLabel>Interest:</InfoLabel>
-                    <InfoValue className="font-mono">
-                        {typeof interest === 'number' ? (
-                            currencyFormat(interest, {
-                                currency: loanTransaction.account?.currency,
-                                showSymbol: !!loanTransaction.account?.currency,
-                            })
-                        ) : (
-                            <span className="text-xs text-muted-foreground">
-                                ...
-                            </span>
-                        )}
-                    </InfoValue>
-                </LoanInfoItem>
-
-                <LoanInfoItem>
-                    <InfoLabel>Fines:</InfoLabel>
-                    <InfoValue className="font-mono">
-                        {typeof fines === 'number' ? (
-                            currencyFormat(fines, {
-                                currency: loanTransaction.account?.currency,
-                                showSymbol: !!loanTransaction.account?.currency,
-                            })
-                        ) : (
-                            <span className="text-xs text-muted-foreground">
-                                ...
-                            </span>
-                        )}
-                    </InfoValue>
-                </LoanInfoItem>
-
+            <LoanInfoSection title="Penalties & Mode">
                 <LoanInfoItem>
                     <InfoLabel>Mode:</InfoLabel>
                     {mode_of_payment ? (
@@ -795,31 +671,60 @@ const LoanDetails = ({
                         </LoanInfoItem>
                     </>
                 )}
+
+                <LoanInfoItem>
+                    <InfoLabel>Arrears:</InfoLabel>
+                    <InfoValue className="font-mono">
+                        {typeof arrears === 'number' ? (
+                            currencyFormat(arrears, {
+                                currency: loanTransaction.account?.currency,
+                                showSymbol: !!loanTransaction.account?.currency,
+                            })
+                        ) : (
+                            <span className="text-xs text-muted-foreground">
+                                ...
+                            </span>
+                        )}
+                    </InfoValue>
+                </LoanInfoItem>
+
+                <LoanInfoItem>
+                    <InfoLabel>First DQ Date:</InfoLabel>
+                    <InfoValue className="font-mono">
+                        {first_deliquency_date ? (
+                            <>{toReadableDate(first_deliquency_date)}</>
+                        ) : (
+                            <span className="text-xs text-muted-foreground">
+                                ...
+                            </span>
+                        )}
+                    </InfoValue>
+                </LoanInfoItem>
+
+                <LoanInfoItem>
+                    <InfoLabel>First Irregular Date:</InfoLabel>
+                    <InfoValue className="font-mono">
+                        {first_irregularity_date ? (
+                            <>{toReadableDate(first_irregularity_date)}</>
+                        ) : (
+                            <span className="text-xs text-muted-foreground">
+                                ...
+                            </span>
+                        )}
+                    </InfoValue>
+                </LoanInfoItem>
             </LoanInfoSection>
         </div>
     )
 }
 
 // Quick Summary & Actions
-const LoanQuickSummary = ({
+export const LoanQuickSummary = ({
     className,
     loanTransaction,
 }: IClassProps & { loanTransaction: ILoanTransaction }) => {
     const calculatorModalState = useModalState()
     const addInterestModalState = useModalState()
-
-    const {
-        principal_paid,
-        interest_paid,
-        previous_interest_paid,
-        previous_fines_paid,
-        fines_paid,
-        collection_progress,
-        interest_amortization,
-        amortization,
-        first_irr,
-        first_dq,
-    } = loanTransaction
 
     const members_amount: { member_profile: IMemberProfile; amount: number }[] =
         []
@@ -914,7 +819,7 @@ const LoanQuickSummary = ({
             {/* Grouped Summary */}
             <div className="flex w-fit gap-8 overflow-clip">
                 {/* Paid Group */}
-                <div className="flex flex-col gap-2">
+                {/* <div className="flex flex-col gap-2">
                     <div className="flex items-center gap-2">
                         <span className="text-xs text-muted-foreground font-semibold">
                             Principal Paid:
@@ -1019,10 +924,10 @@ const LoanQuickSummary = ({
                             )}
                         </span>
                     </div>
-                </div>
+                </div> */}
 
                 {/* Amortization Group */}
-                <div className="flex flex-col gap-2">
+                {/* <div className="flex flex-col gap-2">
                     <div className="flex items-center gap-2">
                         <span className="text-xs text-muted-foreground font-semibold">
                             Int. Amort:
@@ -1079,7 +984,7 @@ const LoanQuickSummary = ({
                             )}
                         </span>
                     </div>
-                </div>
+                </div> */}
             </div>
 
             {/* Actions */}

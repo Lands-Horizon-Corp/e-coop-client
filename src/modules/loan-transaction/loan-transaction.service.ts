@@ -16,12 +16,14 @@ import { TAPIQueryOptions, TEntityId } from '@/types'
 import type {
     ILoanAmortizationSchedules,
     ILoanTransaction,
+    ILoanTransactionAdjustmentRequest,
     ILoanTransactionPaginated,
     ILoanTransactionPayableAccounts,
     ILoanTransactionPrintRequest,
     ILoanTransactionRequest,
     ILoanTransactionSignatureRequest,
     ILoanTransactionSuggestedRequest,
+    ILoanTransactionSummary,
     TLoanMode,
 } from '../loan-transaction'
 
@@ -369,10 +371,10 @@ export const useLoanTransactionSuggestedAmortization = createMutationFactory<
     ILoanTransactionSuggestedRequest
 >({
     mutationFn: async (payload) => {
-        const response = await API.post<
-            ILoanTransactionSuggestedRequest,
-            { terms: number }
-        >(`${loanTransactionAPIRoute}/suggested`, payload)
+        const response = await API.post<typeof payload, { terms: number }>(
+            `${loanTransactionAPIRoute}/suggested`,
+            payload
+        )
         return response.data
     },
 })
@@ -414,5 +416,48 @@ export const useProcessLoanTransactionById = createMutationFactory<
         })
     },
 })
+
+// loan transaction adjustment
+export const useAdjustmentLoanTransaction = createMutationFactory<
+    void,
+    Error,
+    { loanTransactionId: TEntityId; payload: ILoanTransactionAdjustmentRequest }
+>({
+    mutationFn: async ({ loanTransactionId, payload }) => {
+        const response = await API.post<typeof payload, void>(
+            `${loanTransactionAPIRoute}/${loanTransactionId}/adjustment`,
+            payload
+        )
+        return response.data
+    },
+    invalidationFn: ({ queryClient, variables }) => {
+        queryClient.invalidateQueries({
+            queryKey: [loanTransactionBaseKey, variables.loanTransactionId],
+        })
+        queryClient.invalidateQueries({
+            queryKey: [loanTransactionBaseKey, 'paginated'],
+        })
+    },
+})
+
+// loan transaction summary
+export const useGetLoanTransactionSummary = ({
+    id,
+    options,
+}: {
+    id: TEntityId
+    options?: HookQueryOptions<ILoanTransactionSummary, Error>
+}) => {
+    return useQuery<ILoanTransactionSummary, Error>({
+        ...options,
+        queryKey: [loanTransactionBaseKey, id, 'summary'],
+        queryFn: async () => {
+            const response = await API.get<ILoanTransactionSummary>(
+                `${loanTransactionAPIRoute}/${id}/summary`
+            )
+            return response.data
+        },
+    })
+}
 
 export const logger = Logger.getInstance('loan-transaction')

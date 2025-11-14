@@ -52,3 +52,5 @@ export const COMPUTATION_TYPE_DESCRIPTIONS = {
     'Diminishing Straight':
         'A hybrid approach combining elements of both diminishing and straight methods.',
 } as const
+
+export const LOAN_ADJUSTMENT_TYPE = ['add', 'deduct'] as const

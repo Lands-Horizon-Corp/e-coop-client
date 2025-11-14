@@ -6,7 +6,9 @@ import { WalletIcon } from '@/components/icons'
 import { IBaseProps, TEntityId } from '@/types'
 
 import SectionTitle from '../section-title'
-import MemberAccountingLedger from './member-accounting-ledger'
+import MemberAccountingLedger, {
+    MemberAccountingLedgerTotal,
+} from './member-accounting-ledger'
 import MemberLoanSummary from './member-loan-summary'
 
 interface Props extends IBaseProps {
@@ -22,10 +24,14 @@ const MemberAccountsLoans = ({ className, memberProfileId }: Props) => {
                 className
             )}
         >
-            <div className="space-y-4">
+            <div className="space-y-4 flex flex-col">
                 <SectionTitle Icon={WalletIcon} title="Accounts Summary" />
                 <MemberAccountingLedger
                     className="h-[500px]"
+                    memberProfileId={memberProfileId}
+                />
+                <MemberAccountingLedgerTotal
+                    className="w-fit shrink-0 self-end"
                     memberProfileId={memberProfileId}
                 />
             </div>

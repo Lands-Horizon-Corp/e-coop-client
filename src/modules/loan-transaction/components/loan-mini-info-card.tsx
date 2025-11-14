@@ -14,7 +14,7 @@ import { LoanAmortizationModal } from './loan-amortization'
 import LoanModeOfPaymentBadge from './loan-mode-of-payment-badge'
 import LoanStatusIndicator from './loan-status-indicator'
 import { LoanTypeBadge } from './loan-type-badge'
-import { LoanViewModal } from './loan-view'
+import { LoanViewModal } from './loan-view/loan-view'
 
 interface Props extends IClassProps {
     loanTransaction: ILoanTransaction

@@ -301,7 +301,7 @@ const MemberAccountingLedger = ({ memberProfileId, className }: Props) => {
                 </Modal>
             )}
             <MemberAccountingLedgerTable
-                className="w-full"
+                className="w-full flex-1"
                 memberProfileId={memberProfileId}
                 mode="member"
                 onRowClick={(data) =>
@@ -311,10 +311,6 @@ const MemberAccountingLedger = ({ memberProfileId, className }: Props) => {
                         account: data.original.account,
                     })
                 }
-            />
-            <MemberAccountingLedgerTotal
-                className="w-fit self-end"
-                memberProfileId={memberProfileId}
             />
         </div>
     )
