@@ -28,3 +28,6 @@ export function getPaperSize(
         ? { ...size, width: size.height, height: size.width, orientation }
         : { ...size, orientation }
 }
+
+export const DELAY_DOWNLOAD_TIME_DURATION = 10
+export const DELAY_DOWNLOAD_TIME_INTERVAL = 1000

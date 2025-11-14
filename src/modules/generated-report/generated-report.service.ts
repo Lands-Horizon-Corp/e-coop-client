@@ -148,7 +148,7 @@ export const useGetFilteredPaginatedGeneratedReport = ({
     query?: Record<string, unknown>
 }) => {
     return useQuery<IGeneratedReportPaginated>({
-        queryKey: ['generated-report-paginated', mode, model],
+        queryKey: ['generated-report-paginated', mode, model, query],
         queryFn: async () => {
             const pathSegments: string[] = []
             let typeFilter = ''

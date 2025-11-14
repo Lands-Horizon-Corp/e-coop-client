@@ -1,4 +1,7 @@
 import * as React from 'react'
+import { useMemo } from 'react'
+
+import Fuse from 'fuse.js'
 
 import { cn } from '@/helpers/tw-utils'
 
@@ -18,7 +21,11 @@ import {
     PopoverTrigger,
 } from '@/components/ui/popover'
 
-import { ACCOUNT_MODEL_NAMES, TModelName } from '../generated-report.types'
+import { useGetGeneratedReportAvailableModels } from '../../generated-report.service'
+import {
+    IGeneratedReportAvailableModalResponse,
+    TModelName,
+} from '../../generated-report.types'
 
 interface Props {
     value?: TModelName
@@ -36,13 +43,34 @@ const ModelCombobox = ({
     onChange,
 }: Props) => {
     const [open, setOpen] = React.useState(false)
+    const [searchInput, setSearchInput] = React.useState('')
+    const [selectedModel, setSelectedModel] = React.useState<
+        TModelName | undefined
+    >(value)
 
-    const data = ACCOUNT_MODEL_NAMES
-
-    const selectedModel = React.useMemo(
-        () => data.find((model) => model === value),
-        [data, value]
+    const { data: AccountModels } = useGetGeneratedReportAvailableModels({
+        options: {},
+    })
+    const fuse = useMemo(
+        () =>
+            new Fuse<IGeneratedReportAvailableModalResponse>(
+                AccountModels ?? [],
+                {
+                    keys: [{ name: 'model', weight: 0.2 }],
+                    threshold: 0.2,
+                }
+            ),
+        [AccountModels]
     )
+
+    const filteredAccountModalName = useMemo(() => {
+        if (!searchInput.trim()) {
+            // No search input: show all models
+            return AccountModels ?? []
+        }
+        // Search by input text
+        return fuse.search(searchInput).map((r) => r.item)
+    }, [searchInput, fuse, AccountModels])
 
     return (
         <Popover modal onOpenChange={setOpen} open={open}>
@@ -68,27 +96,51 @@ const ModelCombobox = ({
                 <Command>
                     <CommandInput
                         className="h-9"
+                        onValueChange={setSearchInput}
                         placeholder="Search Model..."
+                        value={searchInput}
                     />
                     <CommandList className="ecoop-scroll">
                         <CommandEmpty>No Model found.</CommandEmpty>
                         <CommandGroup>
-                            {data.map((option) => (
+                            {/* Always show 'none' first */}
+                            <CommandItem
+                                key="none"
+                                onSelect={() => {
+                                    setOpen(false)
+                                    onChange?.('none')
+                                    setSelectedModel('none')
+                                }}
+                                value="none"
+                            >
+                                <span className="truncate flex-1">none</span>
+                                <CheckIcon
+                                    className={cn(
+                                        'ml-auto flex-shrink-0',
+                                        value === 'none'
+                                            ? 'opacity-100'
+                                            : 'opacity-0'
+                                    )}
+                                />
+                            </CommandItem>
+                            {/* Then API models */}
+                            {(filteredAccountModalName ?? []).map((model) => (
                                 <CommandItem
-                                    key={option}
+                                    key={model.model}
                                     onSelect={() => {
                                         setOpen(false)
-                                        onChange?.(option)
+                                        onChange?.(model.model)
+                                        setSelectedModel(model.model)
                                     }}
-                                    value={option}
+                                    value={model.model}
                                 >
                                     <span className="truncate flex-1">
-                                        {option}
+                                        {model.model}
                                     </span>
                                     <CheckIcon
                                         className={cn(
                                             'ml-auto flex-shrink-0',
-                                            value === option
+                                            value === model.model
                                                 ? 'opacity-100'
                                                 : 'opacity-0'
                                         )}

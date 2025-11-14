@@ -58,7 +58,9 @@ const BankTable = ({
     RowContextComponent = BankRowContext,
 }: BankTableProps) => {
     const queryClient = useQueryClient()
-    const { pagination, setPagination } = usePagination()
+    const { pagination, setPagination } = usePagination({
+        pageSize: 3,
+    })
     const { sortingStateBase64, tableSorting, setTableSorting } =
         useDataTableSorting()
 
@@ -143,6 +145,7 @@ const BankTable = ({
         },
         { skipNull: true }
     )
+    console.log(filterState)
 
     return (
         <FilterContext.Provider value={filterState}>

@@ -432,6 +432,7 @@ import {
     TbMoneybag as MoneyBagIcon,
     TbGrowth as PlantGrowthIcon,
     TbRecycle as RecycleIcon,
+    TbReportSearch as ReportsSearchIcon,
     TbSunMoon as SunMoonIcon,
     TbTargetArrow as TargetArrowIcon,
     TbTransactionDollar as TransactionDollarIcon,
@@ -800,6 +801,7 @@ export {
     HandDropCoinsIcon,
     ColumnOutlineIcon,
     PiHandDepositIcon,
+    ReportsSearchIcon,
     OutlinePaymentIcon,
     DotsHorizontalIcon,
     FinanceReportsIcon,
@@ -1247,6 +1249,7 @@ export const IconMap = {
     'Shop Icon': ShopIcon,
     'Grid Icon': GridIcon,
     'Receive Money': ReceiveMoneyIcon,
+    'Report Search Icon': ReportsSearchIcon,
 }
 
 export type TIcon = (typeof ICONS)[number]

@@ -182,10 +182,10 @@ export interface IGeneratedReport extends IBaseEntityMeta {
     system_message: string
 
     filter_search: string
-    is_favorites: boolean
+    is_favorite: boolean
     model: TModelName
     url: string
-    generated_reports_type: TGeneratedReportType
+    generated_report_type: TGeneratedReportType
 
     download_users: IGeneratedReportsDownloadUsers[]
 }

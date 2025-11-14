@@ -280,7 +280,7 @@ export const ListOfBranches = ({
     const isPending = userOrg.application_status === 'pending'
     return (
         <div key={userOrg.branch?.id ?? ''}>
-            <div className="relative inline-flex min-h-16 w-full justify-between rounded-xl bg-card cursor-pointer items-center gap-x-2 border-0 p-2 hover:bg-card/70 ">
+            <div className="relative inline-flex min-h-16 w-full justify-between rounded-xl bg-sidebar cursor-pointer items-center gap-x-2 border-0 p-2 hover:bg-card/70 ">
                 <div className="flex max-w-full min-w-0">
                     <div className="inline-flex space-x-2 truncate">
                         <div className="relative">

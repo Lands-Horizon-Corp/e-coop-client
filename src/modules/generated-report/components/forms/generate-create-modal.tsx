@@ -152,7 +152,7 @@ const GenerateReportCreateForm = ({
                         reset()
                     }}
                     readOnly={formProps.readOnly}
-                    submitText="Generate"
+                    submitText={reportId ? 'Update Report' : 'Create Report'}
                 />
             </form>
         </Form>

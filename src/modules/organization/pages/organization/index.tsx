@@ -182,7 +182,7 @@ const Organization = () => {
     }
 
     return (
-        <div className="w-full min-w-xl">
+        <div className="w-full min-w-6xl py-5 ">
             <OrganizationPreviewModal
                 organization={selectedOrganization}
                 showActions={false}

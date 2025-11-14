@@ -68,7 +68,7 @@ const UserOrganizationPicker = forwardRef<HTMLButtonElement, Props>(
         const {
             data = {
                 data: [],
-                pageIndex: 1,
+                pageIndex: 0,
                 pageSize: 10,
                 totalPage: 1,
                 totalSize: 0,
