@@ -345,8 +345,8 @@ const LoanTransactionCreateUpdateForm = ({
             form,
             ...formProps,
             readOnly: isReadOnly,
-            autoSave: !!loanTransactionId,
-            autoSaveDelay: 2000,
+            autoSave: false,
+            // autoSaveDelay: 2000,
         })
 
     const onSubmit = form.handleSubmit(
@@ -387,6 +387,7 @@ const LoanTransactionCreateUpdateForm = ({
                         }),
                 })
             }
+
             if (promise)
                 toast.promise(promise, {
                     loading: 'Saving...',

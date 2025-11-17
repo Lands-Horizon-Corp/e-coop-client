@@ -729,7 +729,7 @@ export const generateSidebarGroups = (
                         {
                             type: 'item',
                             icon: MoneyCheckIcon,
-                            title: 'Check Entry',
+                            title: 'My Check Entry',
                             url: `/check-entry`,
                             userType: ['employee', 'owner'],
                             shortDescription: 'View check entry transactions',
@@ -778,7 +778,7 @@ export const generateSidebarGroups = (
                         {
                             type: 'item',
                             icon: BookStackIcon,
-                            title: 'Journal Entry',
+                            title: 'My Journal Entry',
                             url: `/journal-entry`,
                             userType: ['employee', 'owner'],
                             shortDescription: 'View journal entry transactions',
@@ -786,7 +786,7 @@ export const generateSidebarGroups = (
                         {
                             type: 'item',
                             icon: SettingsIcon,
-                            title: 'Adjustment Entry',
+                            title: 'My Adjustment Entry',
                             url: `/adjustment-entry`,
                             userType: ['employee', 'owner'],
                             shortDescription:
@@ -795,7 +795,7 @@ export const generateSidebarGroups = (
                         {
                             type: 'item',
                             icon: BillIcon,
-                            title: 'Journal Voucher',
+                            title: 'My Journal Voucher',
                             url: `/journal-voucher`,
                             userType: ['employee', 'owner'],
                             shortDescription:
@@ -804,7 +804,7 @@ export const generateSidebarGroups = (
                         {
                             type: 'item',
                             icon: MoneyCheckIcon,
-                            title: 'Check Voucher',
+                            title: 'My Check Voucher',
                             url: `/check-voucher`,
                             userType: ['employee', 'owner'],
                             shortDescription: 'View check voucher transactions',

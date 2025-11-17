@@ -49,7 +49,7 @@ export const LoanAccountsSummary = ({
                                 key={loanTransactionAccount.account_history_id}
                                 loanTransactionAccount={{
                                     ...loanTransactionAccount,
-                                    colorClass: getAccountColorClass(i),
+                                    colorClass: getAccountColorClass(i + 1),
                                 }}
                             />
                         )
@@ -100,6 +100,8 @@ const LoanTransactionAccountSummaryItem = ({
         total_credit,
         total_debit,
 
+        loan_transaction_id,
+
         colorClass,
     } = loanTransactionAccount || {}
 
@@ -135,6 +137,7 @@ const LoanTransactionAccountSummaryItem = ({
             <LoanTransactionAdjustmentFormModal
                 {...adjustmentModalState}
                 formProps={{
+                    loanTransactionId: loan_transaction_id,
                     defaultValues: {
                         account_id: account_history.account_id,
                         account: account_history.account,

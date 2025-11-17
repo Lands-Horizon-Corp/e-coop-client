@@ -303,6 +303,8 @@ export interface ILoanTransactionAccountSummary {
     account_history_id: TEntityId
     account_history: IAccountHistory
 
+    loan_transaction_id: TEntityId
+
     due_date?: string
     last_payment?: string
 
@@ -340,3 +342,16 @@ export interface ILoanTransactionSummary {
     total_principal_paid: number
     total_remaining_principal: number // old coop progress
 }
+
+// FOR VIEWING ONLY (NORMALIZED VIEW TYPE)
+
+export type TLoanLedgerNormalized = {
+    entry_date: string
+    uid: string
+} & Partial<
+    Record<
+        `${TEntityId}_debit` | `${TEntityId}_credit` | `${TEntityId}_balance`,
+        unknown
+    > &
+        Record<`${TEntityId}_ledger`, IGeneralLedger>
+>

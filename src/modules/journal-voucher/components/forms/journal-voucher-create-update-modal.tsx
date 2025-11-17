@@ -8,6 +8,7 @@ import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
 
 import { cn } from '@/helpers'
 import { withToastCallbacks } from '@/helpers/callback-helper'
+import { toInputDateString } from '@/helpers/date-utils'
 import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
 import CompanyCombobox from '@/modules/company/components/combobox'
 import { CurrencyCombobox, currencyFormat } from '@/modules/currency'
@@ -23,6 +24,7 @@ import { JournalVoucherTagsManagerPopover } from '@/modules/journal-voucher-tag/
 import { IMemberProfile } from '@/modules/member-profile'
 import MemberPicker from '@/modules/member-profile/components/member-picker'
 import { useTransactionBatchStore } from '@/modules/transaction-batch/store/transaction-batch-store'
+import { getTimeMachineValue } from '@/modules/user-organization/user-organization-utils'
 import { useMemberPickerStore } from '@/store/member-picker-store'
 import { useHotkeys } from 'react-hotkeys-hook'
 
@@ -88,6 +90,9 @@ const JournalVoucherCreateUpdateForm = ({
         mode: 'onSubmit',
         defaultValues: {
             ...defaultValues,
+            date: toInputDateString(
+                defaultValues?.date || getTimeMachineValue()
+            ),
         },
     })
 

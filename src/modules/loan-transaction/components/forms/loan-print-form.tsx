@@ -49,11 +49,9 @@ const LoanTransactionPrintForm = ({
             voucher: '',
             check_number: '',
             ...formProps.defaultValues,
-            check_date: formProps?.defaultValues?.check_date
-                ? toInputDateString(
-                      formProps.defaultValues?.check_date || new Date()
-                  )
-                : '',
+            check_date: toInputDateString(
+                formProps.defaultValues?.check_date || new Date()
+            ),
         },
     })
 

@@ -1,5 +1,6 @@
 import { IAccount } from '@/modules/account'
 import { IGeneralLedger } from '@/modules/general-ledger'
+import { TLoanLedgerNormalized } from '@/modules/loan-transaction/loan-transaction.types'
 
 import { TEntityId } from '@/types'
 
@@ -227,6 +228,7 @@ export const loanNormalizeLedgerEntries = ({
     const records: Record<string, IGeneralLedger[]> = {}
     for (const record of ledgerEntries) {
         const parsedDate = new Date(record.entry_date).toDateString()
+
         if (!records[parsedDate]) {
             records[parsedDate] = [record]
         } else {
@@ -236,33 +238,34 @@ export const loanNormalizeLedgerEntries = ({
 
     // step 2 - convert to array and sort by date
     const ledgerByDate: Array<{
-        entry_date: string
+        uniqueKey: string
         ledger: IGeneralLedger[]
     }> = []
 
-    for (const [entry_date, ledger] of Object.entries(records)) {
+    for (const [uniqueKey, ledger] of Object.entries(records)) {
         ledgerByDate.push({
-            entry_date,
+            uniqueKey,
             ledger: ledger.sort(
                 (a, b) =>
-                    new Date(a.entry_date).getTime() -
-                    new Date(b.entry_date).getTime()
+                    new Date(b.entry_date).getTime() -
+                    new Date(a.entry_date).getTime()
             ),
         })
     }
 
     ledgerByDate.sort(
         (a, b) =>
-            new Date(a.entry_date).getTime() - new Date(b.entry_date).getTime()
+            new Date(a.uniqueKey).getTime() - new Date(b.uniqueKey).getTime()
     )
 
     // step 3 - unique accounts
-    const { uniqueAccountsMap: uniqueAccounts } = getLedgerUniqueAccounts({
-        ledgerEntries,
-    })
+    const { uniqueAccountsMap: uniqueAccounts, uniqueAccountsArray } =
+        getLedgerUniqueAccounts({
+            ledgerEntries,
+        })
 
     // step 4 - ledger by date
-    const result: IGeneralLedger[] = []
+    const result: TLoanLedgerNormalized[] = []
     for (const entry of ledgerByDate) {
         const generalLedgerPaymentPerAccount: Record<
             TEntityId,
@@ -290,7 +293,6 @@ export const loanNormalizeLedgerEntries = ({
                 for (let i = 0; i < missingPaymentsCount; i++) {
                     generalLedgerPaymentPerAccount[accountId].push({
                         id: `ghost-${Math.random().toString(36).substring(2, 15)}`,
-                        entry_date: new Date(entry.entry_date).toISOString(),
                         account_id: accountId,
                         account: uniqueAccounts[accountId],
                         account_history_id:
@@ -315,7 +317,9 @@ export const loanNormalizeLedgerEntries = ({
             for (let i = 0; i < maxPayment; i++) {
                 generalLedgerPaymentPerAccount[missingAcc.id].push({
                     id: `ghost-${Math.random().toString(36).substring(2, 15)}`,
-                    entry_date: new Date(entry.entry_date).toISOString(),
+                    entry_date: new Date(
+                        entry.uniqueKey.split('-')[0]
+                    ).toISOString(),
                     account_id: missingAcc.id,
                     account: missingAcc,
                     account_history_id:
@@ -341,10 +345,9 @@ export const loanNormalizeLedgerEntries = ({
 
             generalLedgerPaymentPerAccount[entryValues].forEach((genLeg) => {
                 head.push({
-                    [`${entryValues}_credit`]: genLeg.credit,
-                    [`${entryValues}_debit`]: genLeg.debit,
-                    [`${entryValues}_balance`]: genLeg.balance,
-                    ...(genLeg.entry_date ? genLeg : {}),
+                    [`${entryValues}_ledger`]: genLeg.entry_date
+                        ? genLeg
+                        : { balance: 0, debit: 0, credit: 0 },
                 } as unknown as IGeneralLedger)
             })
 
@@ -357,92 +360,27 @@ export const loanNormalizeLedgerEntries = ({
                 ledger = { ...ledger, ...header[i] }
             }
             generalLedgerPayments.push(ledger)
-            result.push({ ...ledger, entry_date: entry.entry_date })
+            result.push({
+                ...ledger,
+                uid: Math.random().toString(36).substring(2, 15), // just for uniqueness
+                entry_date: entry.uniqueKey.split('-')[0],
+            })
         }
     }
 
-    return result
-}
-
-export const loanNormalizeLedgerEntries2 = ({
-    ledgerEntries: entries,
-}: {
-    ledgerEntries: IGeneralLedger[]
-}) => {
-    const groupedByDate = new Map<string, IGeneralLedger[]>()
-
-    // Use your unique accounts helper
-    const { uniqueAccountsMap } = getLedgerUniqueAccounts({
-        ledgerEntries: entries,
-    })
-
-    // 1️⃣ Group by date (ignore time)
-    for (const entry of entries) {
-        const dateOnly = entry.entry_date.split('T')[0]
-        if (!groupedByDate.has(dateOnly)) groupedByDate.set(dateOnly, [])
-        groupedByDate.get(dateOnly)!.push(entry)
-    }
-
-    const result: Record<string, any>[] = []
-
-    // 2️⃣ Process each date group
-    for (const [_, dayEntries] of groupedByDate) {
-        // Group entries by account id for that day
-        const accountGroups = new Map<string, IGeneralLedger[]>()
-        for (const e of dayEntries) {
-            if (!accountGroups.has(e.account.id))
-                accountGroups.set(e.account.id, [])
-            accountGroups.get(e.account.id)!.push(e)
-        }
-
-        // 3️⃣ Build rows (split if debit+credit exist)
-        const dayRows: Record<string, any>[] = []
-
-        for (const [_, accEntries] of accountGroups) {
-            const hasDebit = accEntries.some((e) => e.debit > 0)
-            const hasCredit = accEntries.some((e) => e.credit > 0)
-
-            if (hasDebit && hasCredit) {
-                const debitRow = accEntries.filter((e) => e.debit > 0)
-                const creditRow = accEntries.filter((e) => e.credit > 0)
-                dayRows.push(...[debitRow, creditRow].map(buildRow))
-            } else {
-                dayRows.push(buildRow(accEntries))
+    for (let i = 0; i < result.length - 1; i++) {
+        for (const account of uniqueAccountsArray) {
+            if (
+                result[i + 1][`${account.id}_ledger`]?.debit == 0 &&
+                result[i + 1][`${account.id}_ledger`]?.credit == 0
+            ) {
+                result[i + 1][`${account.id}_ledger`] = {
+                    credit: 0,
+                    debit: 0,
+                    balance: result[i][`${account.id}_ledger`]?.balance || 0,
+                } as IGeneralLedger
             }
         }
-
-        // 4️⃣ Each built row still must include ghost accounts
-        for (const row of dayRows) {
-            for (const accId of Object.keys(uniqueAccountsMap)) {
-                const prefix = accId.replace(/\s+/g, '_').toLowerCase()
-                if (!(`${prefix}_debit` in row)) {
-                    row[`${prefix}_debit`] = 0
-                    row[`${prefix}_credit`] = 0
-                    row[`${prefix}_balance`] = 0
-                }
-            }
-
-            result.push(row)
-        }
     }
-
-    // 5️⃣ Sort by entry date (chronologically)
-    result.sort((a, b) => a.entry_date.localeCompare(b.entry_date))
-
     return result
-
-    // 🧩 Helper to build one legal row
-    function buildRow(entries: IGeneralLedger[]): Record<string, any> {
-        const { entry_date, id, ...other } = entries[0]
-        const row: Record<string, any> = { entry_date, id, ...other }
-
-        for (const e of entries) {
-            const prefix = e.account.id.replace(/\s+/g, '_').toLowerCase()
-            row[`${prefix}_debit`] = e.debit
-            row[`${prefix}_credit`] = e.credit
-            row[`${prefix}_balance`] = e.balance
-        }
-
-        return row
-    }
 }

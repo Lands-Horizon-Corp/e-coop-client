@@ -1,7 +1,7 @@
 import { ReactNode } from 'react'
 
-import { formatNumber } from '@/helpers'
 import { toReadableDateTime } from '@/helpers/date-utils'
+import { currencyFormat } from '@/modules/currency'
 import { ColumnDef, Row } from '@tanstack/react-table'
 
 import DataTableColumnHeader from '@/components/data-table/data-table-column-header'
@@ -248,11 +248,14 @@ const LoanTransactionTableColumns = (
             ),
             cell: ({
                 row: {
-                    original: { applied_1 },
+                    original: { applied_1, account },
                 },
             }) => (
                 <p className="!text-wrap font-mono text-lg text-right text-muted-foreground">
-                    {formatNumber(applied_1, 0, 1)}
+                    {currencyFormat(applied_1, {
+                        currency: account?.currency,
+                        showSymbol: !!account?.currency,
+                    })}
                 </p>
             ),
             enableMultiSort: true,

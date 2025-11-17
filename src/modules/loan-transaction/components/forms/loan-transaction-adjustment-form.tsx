@@ -1,4 +1,5 @@
 import { useForm } from 'react-hook-form'
+import { toast } from 'sonner'
 import z from 'zod'
 
 import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
@@ -42,7 +43,7 @@ export interface ILoanTransactionAdjustmentFormProps
 
 const LoanTransactionAdjustmentForm = ({
     className,
-    loanTransactionId: _loanTransactionId,
+    loanTransactionId: loanTransactionId,
     ...formProps
 }: ILoanTransactionAdjustmentFormProps) => {
     const form = useForm<TLoanTransactionAdjustmentFormValues>({
@@ -58,13 +59,13 @@ const LoanTransactionAdjustmentForm = ({
     })
 
     const {
-        mutate: adjustLoanTransaction,
+        mutateAsync: adjustLoanTransaction,
         isPending,
         error: errorResponse,
         reset,
     } = useAdjustmentLoanTransaction()
 
-    const { formRef, handleFocusError, isDisabled } =
+    const { formRef, firstError, handleFocusError, isDisabled } =
         useFormHelper<TLoanTransactionAdjustmentFormValues>({
             form,
             autoSave: formProps.autoSave,
@@ -75,23 +76,32 @@ const LoanTransactionAdjustmentForm = ({
         })
 
     const onSubmit = form.handleSubmit((formData) => {
-        if (!_loanTransactionId) return
+        if (!loanTransactionId)
+            return toast.warning('Loan Transaction ID is missing')
 
-        adjustLoanTransaction(
-            {
-                loanTransactionId: _loanTransactionId,
-                payload: formData,
-            },
-            {
-                onSuccess: () => {
-                    formProps.onSuccess?.(undefined as void)
+        toast.promise(
+            adjustLoanTransaction(
+                {
+                    loanTransactionId,
+                    payload: formData,
                 },
-                onError: formProps.onError,
+                {
+                    onSuccess: () => {
+                        formProps.onSuccess?.(undefined as void)
+                    },
+                    onError: formProps.onError,
+                }
+            ),
+            {
+                loading: 'Applying adjustment...',
+                success: 'Adjustment applied successfully',
+                error: 'Failed to apply adjustment',
             }
         )
     }, handleFocusError)
 
-    const error = serverRequestErrExtractor({ error: errorResponse })
+    const error =
+        serverRequestErrExtractor({ error: errorResponse }) || firstError
 
     const account: IAccount | undefined = form.watch('account')
 
@@ -118,8 +128,6 @@ const LoanTransactionAdjustmentForm = ({
                                 />
                                 <p className="flex-1 truncate min-w-0">
                                     {account?.name}
-                                    iopahsgo iajspgaspgpasojgpoasgpasjg
-                                    pasjgpaojgpoaj gapsojgposa
                                 </p>
                             </div>
                             {account && (
@@ -258,7 +266,7 @@ const LoanTransactionAdjustmentForm = ({
                         reset()
                     }}
                     readOnly={formProps.readOnly}
-                    submitText="Submit the amount"
+                    submitText="Apply Adjustment"
                 />
             </form>
         </Form>

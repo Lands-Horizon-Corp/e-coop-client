@@ -133,11 +133,11 @@ const CashCheckVoucherTableColumns = (
         header: (props) => <DataTableColumnHeader {...props} title="Date" />,
         cell: ({
             row: {
-                original: { date },
+                original: { entry_date },
             },
         }) => (
             <div className="!text-wrap">
-                {date ? new Date(date).toLocaleDateString() : '-'}
+                {entry_date ? new Date(entry_date).toLocaleDateString() : '-'}
             </div>
         ),
         enableMultiSort: true,

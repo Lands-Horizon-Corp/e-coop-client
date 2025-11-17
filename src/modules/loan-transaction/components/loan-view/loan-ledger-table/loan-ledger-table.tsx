@@ -1,3 +1,5 @@
+import { useEffect, useMemo, useState } from 'react'
+
 import { cn } from '@/helpers'
 import { dateAgo, toReadableDate } from '@/helpers/date-utils'
 import { AccountTypeBadge, IAccount } from '@/modules/account'
@@ -8,6 +10,7 @@ import {
 import { AccountViewerModal } from '@/modules/account/components/account-viewer/account-viewer'
 import { currencyFormat } from '@/modules/currency'
 import { IGeneralLedger } from '@/modules/general-ledger'
+import { TLoanLedgerNormalized } from '@/modules/loan-transaction/loan-transaction.types'
 import { Fragment } from 'react/jsx-runtime'
 
 import ImageNameDisplay from '@/components/image-name-display'
@@ -42,18 +45,33 @@ export const LoanLedgerTable = ({
     className,
     view = 'skeleton',
 }: Props) => {
-    const uniqueAccounts = getLedgerUniqueAccounts({
-        ledgerEntries: data,
-    }).uniqueAccountsArray.sort(
-        (a, b) =>
-            getAccountTypePriority(a.type) - getAccountTypePriority(b.type)
-    )
+    const [selectedAccountId, setSelectedAccountId] = useState<
+        TEntityId | undefined
+    >()
 
-    const accountColorMap = mapAccountColor(uniqueAccounts)
+    const { accountColorMap, uniqueAccounts, normalizedLedgerData } =
+        useMemo(() => {
+            const uniqueAccounts = getLedgerUniqueAccounts({
+                ledgerEntries: data,
+            }).uniqueAccountsArray.sort(
+                (a, b) =>
+                    getAccountTypePriority(a.type) -
+                    getAccountTypePriority(b.type)
+            )
+            const accountColorMap = mapAccountColor(uniqueAccounts)
 
-    const normalizedLedgerData = loanNormalizeLedgerEntries({
-        ledgerEntries: data,
-    })
+            const normalizedLedgerData = loanNormalizeLedgerEntries({
+                ledgerEntries: data,
+            })
+
+            return { uniqueAccounts, accountColorMap, normalizedLedgerData }
+        }, [data])
+
+    useEffect(() => {
+        if (selectedAccountId) return
+
+        setSelectedAccountId(uniqueAccounts[0]?.id)
+    }, [selectedAccountId, uniqueAccounts])
 
     if (view === 'skeleton') {
         return (
@@ -126,9 +144,6 @@ export const LoanLedgerTable = ({
         )
     }
 
-    // Get currency from first entry if available
-    const currency = normalizedLedgerData[0]?.currency
-
     return (
         <div className={cn('min-h-0 h-full', className)}>
             <Table
@@ -137,15 +152,17 @@ export const LoanLedgerTable = ({
             >
                 <TableHeader className="sticky top-0 rounded-t-2xl overflow-clip z-10 bg-muted/90 backdrop-blur-xs">
                     <TableRow className="!hover:bg-muted">
-                        <TableHead colSpan={3} />
                         {uniqueAccounts.map((account) => (
                             <TableHead
                                 className={cn(
-                                    'text-center h-fit py-1',
+                                    'text-center',
                                     accountColorMap[account.id]
                                 )}
-                                colSpan={3}
+                                colSpan={
+                                    selectedAccountId === account.id ? 6 : 3
+                                }
                                 key={account.id}
+                                onClick={() => setSelectedAccountId(account.id)}
                             >
                                 <AccountColumnHeader
                                     account={account}
@@ -155,18 +172,23 @@ export const LoanLedgerTable = ({
                                 />
                             </TableHead>
                         ))}
-                        <TableHead />
                     </TableRow>
                     <TableRow className="!hover:bg-muted">
-                        <TableHead />
-                        <TableHead className="sticky text-nowrap left-0 backdrop-blur-sm bg-background/60 align-middle">
-                            Reference #
-                        </TableHead>
-                        <TableHead className="align-middle text-nowrap">
-                            Entry Date
-                        </TableHead>
                         {uniqueAccounts.map((account) => (
                             <Fragment key={account.id}>
+                                {selectedAccountId === account.id && (
+                                    <>
+                                        <TableHead className="text-nowrap bg-background/60 align-middle">
+                                            Reference #
+                                        </TableHead>
+                                        <TableHead className="align-middle text-nowrap">
+                                            Entry Date
+                                        </TableHead>
+                                        <TableHead className="align-middle">
+                                            Teller
+                                        </TableHead>
+                                    </>
+                                )}
                                 <TableHead
                                     className={cn(
                                         'text-right opacity-70 w-[150px]',
@@ -177,7 +199,7 @@ export const LoanLedgerTable = ({
                                 </TableHead>
                                 <TableHead
                                     className={cn(
-                                        'text-right  opacity-80 w-[150px]',
+                                        'text-right opacity-80 w-[150px]',
                                         accountColorMap[account.id]
                                     )}
                                 >
@@ -193,55 +215,66 @@ export const LoanLedgerTable = ({
                                 </TableHead>
                             </Fragment>
                         ))}
-                        <TableHead className="align-middle">Teller</TableHead>
                     </TableRow>
                 </TableHeader>
                 <TableBody>
                     {normalizedLedgerData.map(
-                        (ledgerEntry: IGeneralLedger, i) => {
+                        (ledgerEntry: TLoanLedgerNormalized) => {
                             return (
                                 <TableRow
-                                    className="border-none odd:bg-muted/50 hover:bg-transparent odd:hover:bg-muted/50"
-                                    key={ledgerEntry.id}
+                                    className="border-none bg-secondary hover:bg-transparent"
+                                    key={ledgerEntry.uid}
                                 >
-                                    <TableCell className="text-sm text-nowrap">
-                                        {i}
-                                    </TableCell>
-                                    <TableCell className="text-sm sticky text-nowrap left-0 backdrop-blur-sm bg-background/60">
-                                        {ledgerEntry.reference_number || (
-                                            <span className="text-sm text-muted-foreground">
-                                                No reference
-                                            </span>
-                                        )}
-                                    </TableCell>
-                                    <TableCell className="text-sm text-nowrap">
-                                        {ledgerEntry.entry_date && (
-                                            <>
-                                                {`${toReadableDate(ledgerEntry.entry_date)}`}
-                                                <span className="text-xs text-muted-foreground block">
-                                                    {dateAgo(
-                                                        ledgerEntry.entry_date
-                                                    )}
-                                                </span>
-                                            </>
-                                        )}
-                                    </TableCell>
                                     {uniqueAccounts.map((account) => {
-                                        const debit =
-                                            ledgerEntry[
-                                                `${account.id}_debit` as keyof IGeneralLedger
-                                            ] || 0
-                                        const credit =
-                                            ledgerEntry[
-                                                `${account.id}_credit` as keyof IGeneralLedger
-                                            ] || 0
-                                        const balance =
-                                            ledgerEntry[
-                                                `${account.id}_balance` as keyof IGeneralLedger
-                                            ] || 0
+                                        const ledger =
+                                            ledgerEntry[`${account.id}_ledger`]
+                                        const credit = ledger?.credit || 0
+                                        const debit = ledger?.debit || 0
+                                        const balance = ledger?.balance || 0
+                                        const currency =
+                                            ledger?.account?.currency
+                                        const entry_date = ledger?.entry_date
+
+                                        const reference_number =
+                                            ledger?.reference_number
+                                        const teller = ledger?.employee_user
 
                                         return (
                                             <Fragment key={account.id}>
+                                                {selectedAccountId ===
+                                                    account.id && (
+                                                    <>
+                                                        <TableCell className="text-sm bg-background/60 text-nowrap">
+                                                            {reference_number}
+                                                        </TableCell>
+                                                        <TableCell className="text-sm text-nowrap">
+                                                            {entry_date && (
+                                                                <>
+                                                                    {`${toReadableDate(entry_date)}`}
+                                                                    <span className="text-xs text-muted-foreground block">
+                                                                        {dateAgo(
+                                                                            entry_date
+                                                                        )}
+                                                                    </span>
+                                                                </>
+                                                            )}
+                                                        </TableCell>
+                                                        <TableCell className="text-sm">
+                                                            {ledgerEntry && (
+                                                                <ImageNameDisplay
+                                                                    name={
+                                                                        teller?.full_name
+                                                                    }
+                                                                    src={
+                                                                        teller
+                                                                            ?.media
+                                                                            ?.download_url
+                                                                    }
+                                                                />
+                                                            )}
+                                                        </TableCell>
+                                                    </>
+                                                )}
                                                 <TableCell
                                                     className={cn(
                                                         'text-right  opacity-70 font-mono',
@@ -250,14 +283,23 @@ export const LoanLedgerTable = ({
                                                         ]
                                                     )}
                                                 >
-                                                    {currencyFormat(
-                                                        debit as number,
-                                                        {
-                                                            currency,
-                                                            showSymbol:
-                                                                !!currency,
-                                                        }
-                                                    )}
+                                                    <p
+                                                        className={cn(
+                                                            'opacity-100',
+                                                            (debit as number) ===
+                                                                0 &&
+                                                                'opacity-25'
+                                                        )}
+                                                    >
+                                                        {currencyFormat(
+                                                            debit as number,
+                                                            {
+                                                                currency,
+                                                                showSymbol:
+                                                                    !!currency,
+                                                            }
+                                                        )}
+                                                    </p>
                                                 </TableCell>
                                                 <TableCell
                                                     className={cn(
@@ -267,14 +309,23 @@ export const LoanLedgerTable = ({
                                                         ]
                                                     )}
                                                 >
-                                                    {currencyFormat(
-                                                        credit as number,
-                                                        {
-                                                            currency,
-                                                            showSymbol:
-                                                                !!currency,
-                                                        }
-                                                    )}
+                                                    <p
+                                                        className={cn(
+                                                            'opacity-100',
+                                                            (credit as number) ===
+                                                                0 &&
+                                                                'opacity-25'
+                                                        )}
+                                                    >
+                                                        {currencyFormat(
+                                                            credit as number,
+                                                            {
+                                                                currency,
+                                                                showSymbol:
+                                                                    !!currency,
+                                                            }
+                                                        )}
+                                                    </p>
                                                 </TableCell>
                                                 <TableCell
                                                     className={cn(
@@ -296,20 +347,6 @@ export const LoanLedgerTable = ({
                                             </Fragment>
                                         )
                                     })}
-                                    <TableCell className="text-sm">
-                                        {ledgerEntry.employee_user && (
-                                            <ImageNameDisplay
-                                                name={
-                                                    ledgerEntry.employee_user
-                                                        .full_name
-                                                }
-                                                src={
-                                                    ledgerEntry.employee_user
-                                                        .media?.download_url
-                                                }
-                                            />
-                                        )}
-                                    </TableCell>
                                 </TableRow>
                             )
                         }

@@ -104,9 +104,9 @@ export const CashCheckVoucherCard = ({
                         },
                         {
                             label: 'Date',
-                            value: cashCheckVoucher.date
+                            value: cashCheckVoucher.entry_date
                                 ? new Date(
-                                      cashCheckVoucher.date
+                                      cashCheckVoucher.entry_date
                                   ).toLocaleDateString(undefined, {
                                       year: 'numeric',
                                       month: 'short',
@@ -254,7 +254,7 @@ export const CashCheckVoucherCard = ({
                 />
             )}
             <p className="text-xs text-end text-muted-foreground/70 truncate">
-                {dateAgo(cashCheckVoucher.date)}
+                {dateAgo(cashCheckVoucher.entry_date)}
             </p>
         </div>
     )
