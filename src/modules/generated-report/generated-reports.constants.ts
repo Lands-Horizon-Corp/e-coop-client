@@ -1,7 +1,18 @@
 import { PaperSize } from './generated-report.types'
 
+type PaperName =
+    | 'RECEIPT_58MM'
+    | 'RECEIPT_80MM'
+    | 'A6'
+    | 'A5'
+    | 'A4'
+    | 'A3'
+    | 'LETTER'
+    | 'LEGAL'
+    | 'FOLIO'
+    | 'B5'
 // 📏 Common Paper & Screen Sizes
-export const PAPER_SIZES: Record<string, PaperSize> = {
+export const PAPER_SIZES: Record<PaperName, PaperSize> = {
     RECEIPT_58MM: { name: '58mm Receipt', width: 58, height: 200, unit: 'mm' },
     RECEIPT_80MM: { name: '80mm Receipt', width: 80, height: 200, unit: 'mm' },
 
@@ -28,6 +39,7 @@ export function getPaperSize(
         ? { ...size, width: size.height, height: size.width, orientation }
         : { ...size, orientation }
 }
+const paperSize = getPaperSize('LEGAL', 'portrait')
 
 export const DELAY_DOWNLOAD_TIME_DURATION = 10
 export const DELAY_DOWNLOAD_TIME_INTERVAL = 1000

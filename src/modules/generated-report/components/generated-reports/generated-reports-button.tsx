@@ -128,6 +128,7 @@ const GeneratedReportActions = () => {
     const isFavorite = activeTab === 'me-favorites' || activeTab === 'favorites'
     const AllVariant = isAll ? 'default' : 'outline'
     const MEvariant = !isAll ? 'default' : 'outline'
+    
     return (
         <div className="flex flex-col p-1 h-full">
             <h2 className="text-xl flex items-center font-bold text-foreground mb-2">
@@ -156,7 +157,7 @@ const GeneratedReportActions = () => {
                             size={'sm'}
                             variant={AllVariant}
                         >
-                            <ReportsSearchIcon className="size-4" />
+                            I<ReportsSearchIcon className="size-4" />
                             All
                         </Button>
                     </ButtonGroup>

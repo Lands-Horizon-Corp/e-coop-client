@@ -186,6 +186,8 @@ export interface IGeneratedReport extends IBaseEntityMeta {
     model: TModelName
     url: string
     generated_report_type: TGeneratedReportType
+    paper_size?: string
+    template?: string
 
     download_users: IGeneratedReportsDownloadUsers[]
 }
@@ -196,8 +198,12 @@ export interface IGeneratedReportRequest {
     filter_search: string
     url: string
     model: TModelName
+    paper_size?: string
     generated_report_type: TGeneratedReportType
 }
+
+export interface IPFGeneratedReport extends IGeneratedReport {}
+export interface IExcelGeneratedReport extends IGeneratedReport {}
 
 export interface IGeneratedReportPaginated
     extends IPaginatedResult<IGeneratedReport> {}

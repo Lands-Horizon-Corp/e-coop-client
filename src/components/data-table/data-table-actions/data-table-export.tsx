@@ -1,9 +1,9 @@
 import { toReadableDate } from '@/helpers/date-utils'
 import { TModelName } from '@/modules/generated-report'
-import GeneratedReportCreateFormModal from '@/modules/generated-report/components/forms/generate-create-modal'
+import GeneratedReportCreateFormModal from '@/modules/generated-report/components/forms/generate-report-create-update-modal'
 import { Table } from '@tanstack/react-table'
 
-import { ExportIcon } from '@/components/icons'
+import { ReportsIcon } from '@/components/icons'
 import LoadingSpinner from '@/components/spinners/loading-spinner'
 import { Button } from '@/components/ui/button'
 
@@ -55,8 +55,8 @@ const DataTableExport = <TData,>({
                 size="sm"
                 variant={'secondary'}
             >
-                <ExportIcon className="mr-1 size-4" />
-                {isLoading ? <LoadingSpinner /> : 'Export'}
+                <ReportsIcon className="mr-1 size-4" />
+                {isLoading ? <LoadingSpinner /> : 'Generate'}
             </Button>
         </>
     )

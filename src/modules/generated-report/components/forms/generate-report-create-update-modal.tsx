@@ -40,38 +40,57 @@ export interface IGeneratedReportFormProps
             TBankFormValues
         > {
     reportId?: TEntityId
+    type?: 'generate' | 'generate-report'
+}
+
+type TGenerateReportCreateUpdateModalServiceProps<TData> = {
+    onSuccess?: (report: TData) => void
+    onError?: (err: Error) => void
+}
+
+export const useGenerateReportCreateUpdateModalService = ({
+    onSuccess,
+    onError,
+}: TGenerateReportCreateUpdateModalServiceProps<IGeneratedReport>) => {
+    const createMutation = useCreateGeneratedReport({
+        options: {
+            ...withToastCallbacks({
+                textSuccess: 'Report Created',
+                onSuccess: onSuccess,
+                onError: onError,
+            }),
+        },
+    })
+
+    const updateMutation = useUpdateGeneratedReportById({
+        options: {
+            ...withToastCallbacks({
+                textSuccess: 'Report updated',
+                onSuccess: onSuccess,
+                onError: onError,
+            }),
+        },
+    })
+
+    return {
+        createMutation,
+        updateMutation,
+    }
 }
 
 const GenerateReportCreateForm = ({
     className,
     reportId,
+    type = 'generate',
     ...formProps
 }: IGeneratedReportFormProps) => {
+
     const form = useForm<TBankFormValues>({
         resolver: standardSchemaResolver(GeneratedReportSchema),
         reValidateMode: 'onChange',
         mode: 'onSubmit',
         defaultValues: {
             ...formProps.defaultValues,
-        },
-    })
-
-    const createMutation = useCreateGeneratedReport({
-        options: {
-            ...withToastCallbacks({
-                textSuccess: 'Report Created',
-                onSuccess: formProps.onSuccess,
-                onError: formProps.onError,
-            }),
-        },
-    })
-    const updateMutation = useUpdateGeneratedReportById({
-        options: {
-            ...withToastCallbacks({
-                textSuccess: 'Report updated',
-                onSuccess: formProps.onSuccess,
-                onError: formProps.onError,
-            }),
         },
     })
 
@@ -85,11 +104,17 @@ const GenerateReportCreateForm = ({
             defaultValues: formProps.defaultValues,
         })
 
+    const { updateMutation, createMutation } =
+        useGenerateReportCreateUpdateModalService({
+            onSuccess: formProps.onSuccess,
+            onError: formProps.onError,
+        })
+
     const onSubmit = form.handleSubmit((formData) => {
         if (reportId) {
-            updateMutation.mutate({ id: reportId, payload: formData })
+            updateMutation.mutate({ id: reportId, payload: {...formData} })
         } else {
-            createMutation.mutate(formData)
+            createMutation.mutate({...formData, paper_size:"A4"})
         }
     }, handleFocusError)
 

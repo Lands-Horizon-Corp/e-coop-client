@@ -14,6 +14,8 @@ export const GeneratedReportSchema = z.object({
     model: z.enum(ACCOUNT_MODEL_NAMES, { error: 'model is required' }),
     filter_search: z.string().optional().default(''),
     generated_report_type: z.enum(['pdf', 'excel']).default('excel'),
+
+    // template: z.string().optional().transform(descriptionTransformerSanitizer), // HBS
 })
 
 export type TGeneratedReportFormValues = z.infer<typeof GeneratedReportSchema>

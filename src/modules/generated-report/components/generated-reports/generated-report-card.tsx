@@ -50,7 +50,7 @@ import {
     DELAY_DOWNLOAD_TIME_DURATION,
     DELAY_DOWNLOAD_TIME_INTERVAL,
 } from '../../generated-reports.constants'
-import GeneratedReportCreateFormModal from '../forms/generate-create-modal'
+import GeneratedReportCreateFormModal from '../forms/generate-report-create-update-modal'
 
 type TGeneratedReportCardProps = {
     report: IGeneratedReport
