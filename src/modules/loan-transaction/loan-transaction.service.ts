@@ -15,6 +15,7 @@ import { TAPIQueryOptions, TEntityId } from '@/types'
 // import { IAmortizationSchedule } from '../amortization'
 import type {
     ILoanAmortizationSchedules,
+    ILoanPaymentResponse,
     ILoanTransaction,
     ILoanTransactionAdjustmentRequest,
     ILoanTransactionPaginated,
@@ -137,20 +138,37 @@ export const useGetAllLoanTransaction = ({
 
             if (mode === 'member-profile') {
                 url = `${loanTransactionAPIRoute}/member-profile/${memberProfileId}`
-            }
-
-            if (mode === 'member-profile-loan-account') {
+            } else if (mode === 'member-profile-loan-account') {
                 url = `${loanTransactionAPIRoute}/member-profile/${memberProfileId}/account/${loanAccountId}`
-            }
-
-            if (mode) {
+            } else if (mode) {
                 url = `${loanTransactionAPIRoute}/${mode}`
-            }
-            if (mode === 'release-today') {
+            } else if (mode === 'release-today') {
                 url = `${loanTransactionAPIRoute}/released/today`
             }
 
             return getAllLoanTransaction({ url, query })
+        },
+    })
+}
+
+//
+
+export const useLoanPaymentSchedule = ({
+    loanTransactionId,
+    options,
+}: {
+    options?: HookQueryOptions<ILoanPaymentResponse, Error>
+    loanTransactionId: TEntityId
+}) => {
+    return useQuery<ILoanPaymentResponse, Error>({
+        ...options,
+        queryKey: [loanTransactionBaseKey, loanTransactionId, 'payment'],
+        queryFn: async () => {
+            const response = await API.get<ILoanPaymentResponse>(
+                `${loanTransactionAPIRoute}/${loanTransactionId}/payment`
+            )
+
+            return response.data
         },
     })
 }
@@ -410,6 +428,9 @@ export const useProcessLoanTransactionById = createMutationFactory<
     invalidationFn: ({ queryClient, variables }) => {
         queryClient.invalidateQueries({
             queryKey: [loanTransactionBaseKey, variables],
+        })
+        queryClient.invalidateQueries({
+            queryKey: [loanTransactionBaseKey, variables, 'payment'],
         })
         queryClient.invalidateQueries({
             queryKey: [loanTransactionBaseKey, 'paginated'],

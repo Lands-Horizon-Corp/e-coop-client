@@ -54,3 +54,17 @@ export const COMPUTATION_TYPE_DESCRIPTIONS = {
 } as const
 
 export const LOAN_ADJUSTMENT_TYPE = ['add', 'deduct'] as const
+
+export const LOAN_PAYMENT_STATUS = [
+    'paid',
+    'overdue',
+    'upcoming',
+    'advance',
+] as const
+
+export const LOAN_OVERALL_PAYMENT_STATUS = [
+    'current',
+    'overdue',
+    'advance',
+    'mixed',
+] as const

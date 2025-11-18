@@ -39,3 +39,10 @@ export const mapAccountColor = (accounts: IAccount[]) => {
 
     return colorMap
 }
+
+export const sortAccountsByTypePriority = (a: IAccount, b: IAccount) => {
+    const priorityA = getAccountTypePriority(a.type)
+    const priorityB = getAccountTypePriority(b.type)
+
+    return priorityA - priorityB
+}

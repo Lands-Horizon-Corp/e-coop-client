@@ -43,7 +43,7 @@ const TimeMachineTimeStatBar = () => {
 
     return (
         <div className="sticky bottom-0 left-0 w-full">
-            <div className="absolute w-full top-0.5 z-5 h-16 from-40% -translate-y-full bg-gradient-to-t from-primary/10 to-transparent" />
+            <div className="absolute pointer-events-none w-full top-0.5 z-5 h-16 from-40% -translate-y-full bg-gradient-to-t from-primary/10 to-transparent" />
             <TimeMachineTimeStatusBar
                 className="z-10"
                 timeMachineTime={time_machine_time}

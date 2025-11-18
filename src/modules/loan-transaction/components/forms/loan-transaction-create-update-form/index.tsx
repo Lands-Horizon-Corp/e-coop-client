@@ -576,7 +576,7 @@ const LoanTransactionCreateUpdateForm = ({
                                 )
                             }}
                         />
-                        <AccountPickerField form={form} />
+                        <AccountPickerField disabled={readOnly} form={form} />
                     </div>
                     <Tabs
                         className="max-w-full min-w-0"
@@ -1449,8 +1449,10 @@ const SuggestedAmortizationSection = ({
 }
 
 const AccountPickerField = ({
+    disabled,
     form,
 }: {
+    disabled?: boolean
     form: UseFormReturn<TLoanTransactionSchema>
 }) => {
     const accountViewerModal = useModalState()
@@ -1492,7 +1494,7 @@ const AccountPickerField = ({
                 name="account_id"
                 render={({ field }) => (
                     <AccountPicker
-                        // disabled={isDisabled(field.name)}
+                        disabled={disabled}
                         mode="loan"
                         onSelect={(account) => {
                             field.onChange(account?.id)

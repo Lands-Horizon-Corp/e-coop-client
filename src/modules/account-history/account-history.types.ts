@@ -12,6 +12,7 @@ import { AccountHistorySchema } from './account-history.validation'
 export interface IAccountHistory extends IAccount {
     account_id: TEntityId
     account: IAccount
+    account_history_id: TEntityId
     // change_type: THistoryChangeType
 }
 

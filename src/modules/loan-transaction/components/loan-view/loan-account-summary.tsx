@@ -49,7 +49,7 @@ export const LoanAccountsSummary = ({
                                 key={loanTransactionAccount.account_history_id}
                                 loanTransactionAccount={{
                                     ...loanTransactionAccount,
-                                    colorClass: getAccountColorClass(i + 1),
+                                    colorClass: getAccountColorClass(i),
                                 }}
                             />
                         )

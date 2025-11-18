@@ -36,6 +36,8 @@ import {
     LOAN_COLLECTOR_PLACE,
     LOAN_COMAKER_TYPE,
     LOAN_MODE_OF_PAYMENT,
+    LOAN_OVERALL_PAYMENT_STATUS,
+    LOAN_PAYMENT_STATUS,
     LOAN_TYPE,
     WEEKDAYS,
 } from './loan.constants'
@@ -355,3 +357,75 @@ export type TLoanLedgerNormalized = {
     > &
         Record<`${TEntityId}_ledger`, IGeneralLedger>
 >
+
+// FOR LOAN TRANSACTION PAYMENT SCHEDULE
+
+export type TLoanPaymentStatus = (typeof LOAN_PAYMENT_STATUS)[number]
+export type TLoanOverallPaymentStatus =
+    (typeof LOAN_OVERALL_PAYMENT_STATUS)[number]
+
+// LoanPaymentSchedule represents a single payment schedule entry
+export interface ILoanPaymentSchedule {
+    currency: ICurrency
+    date: string
+    amount: number
+    paid: boolean
+    due: boolean
+    is_advance: boolean // Payment made before due date
+    is_future: boolean // Future scheduled payment
+    days_early: number // Days paid before schedule (if advance)
+    days_overdue: number // Days overdue (if unpaid and past due)
+    payment_status: TLoanPaymentStatus // "paid", "overdue", "upcoming", "advance"
+}
+
+// LoanPaymentPerAccount represents payment details for a single loan account
+export interface ILoanPaymentPerAccount {
+    currency: ICurrency
+    account: IAccountHistory
+    account_history_id: TEntityId
+    loan_payment_schedule: ILoanPaymentSchedule[]
+    total_principal: number // Total principal amount (sum of all scheduled payments for this account)
+    total_paid_amount: number
+    total_remaining_balance: number // Remaining balance to be paid (total_principal - total_paid_amount)
+    total_due_amount: number
+    total_advance_payment: number // Total amount paid in advance
+    suggested_payment_amount: number // Recommended payment (includes overdue + next upcoming)
+    next_payment_date: string
+    last_payment_date?: string // Date of the last payment made (day only)
+    last_payment_amount?: number // Sum of all payments made on the last payment date
+    advance_payment_count: number // Number of advance payments made
+    overdue_payment_count: number // Number of overdue payments
+    is_loan_fully_paid: boolean // True if all scheduled payments for this account are completed
+}
+
+// LoanPaymentSummary represents aggregated summary across all accounts
+export interface ILoanPaymentSummary {
+    currency: ICurrency
+    total_accounts: number // Total number of loan accounts
+    total_principal: number // Total principal amount across all accounts (sum of all scheduled payments)
+    total_paid_amount: number // Sum of all paid amounts
+    total_remaining_balance: number // Total remaining balance across all accounts (total_principal - total_paid_amount)
+    total_due_amount: number // Sum of all due amounts
+    total_advance_payment: number // Sum of all advance payments
+    total_suggested_payment: number // Sum of all suggested payments across accounts
+    total_scheduled_payments: number // Total number of scheduled payments
+    total_paid_payments: number // Total number of paid payments
+    total_overdue_payments: number // Total number of overdue payments
+    total_advance_payments: number // Total number of advance payments
+    total_upcoming_payments: number // Total number of upcoming payments
+    earliest_next_payment_date: string // Earliest next payment date across all accounts
+    last_payment_date: string // Most recent payment date across all accounts (day only)
+    last_payment_amount: number // Sum of all payments made on the last payment date across all accounts
+    accounts_with_overdue: number // Number of accounts with overdue payments
+    accounts_fully_paid: number // Number of accounts fully paid
+    accounts_with_advance: number // Number of accounts with advance payments
+    overall_payment_status: TLoanOverallPaymentStatus // "current", "overdue", "advance", "mixed"
+    is_loan_fully_paid: boolean // True if all scheduled payments across all accounts are completed
+}
+
+// LoanPaymentResponse is the main response structure containing both details and summary
+export interface ILoanPaymentResponse {
+    currency: ICurrency
+    account_payments: ILoanPaymentPerAccount[] // Payment details per account
+    summary: ILoanPaymentSummary // Aggregated summary across all accounts
+}

@@ -9,6 +9,7 @@ import {
     toReadableDateTime,
 } from '@/helpers/date-utils'
 import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
+import { sortAccountsByTypePriority } from '@/modules/account/account.utils'
 import AccountBadge from '@/modules/account/components/badges/account-badge'
 import GeneralStatusBadge from '@/modules/authentication/components/general-status-badge'
 import { currencyFormat } from '@/modules/currency'
@@ -152,7 +153,12 @@ const LoanView = ({
                     />
                     <LoanAccountsSummary
                         loanTransactionAccountSummaries={
-                            loanSummary?.account_summary || []
+                            loanSummary?.account_summary.sort(
+                                (
+                                    { account_history: a },
+                                    { account_history: b }
+                                ) => sortAccountsByTypePriority(a, b)
+                            ) || []
                         }
                     />
                 </>

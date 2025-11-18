@@ -4,8 +4,8 @@ import { cn } from '@/helpers'
 import { dateAgo, toReadableDate } from '@/helpers/date-utils'
 import { AccountTypeBadge, IAccount } from '@/modules/account'
 import {
-    getAccountTypePriority,
     mapAccountColor,
+    sortAccountsByTypePriority,
 } from '@/modules/account/account.utils'
 import { AccountViewerModal } from '@/modules/account/components/account-viewer/account-viewer'
 import { currencyFormat } from '@/modules/currency'
@@ -55,11 +55,7 @@ export const LoanLedgerTable = ({
         useMemo(() => {
             const uniqueAccounts = getLedgerUniqueAccounts({
                 ledgerEntries: data,
-            }).uniqueAccountsArray.sort(
-                (a, b) =>
-                    getAccountTypePriority(a.type) -
-                    getAccountTypePriority(b.type)
-            )
+            }).uniqueAccountsArray.sort(sortAccountsByTypePriority)
             const accountColorMap = mapAccountColor(uniqueAccounts)
 
             const normalizedLedgerData = loanNormalizeLedgerEntries({

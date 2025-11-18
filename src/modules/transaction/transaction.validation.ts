@@ -19,6 +19,10 @@ export const PaymentWithTransactionSchema = z.object({
         .string({ error: 'Entry date mus be a valid date' })
         .optional(),
     account_id: EntityIdSchema('Account').min(1),
+
+    loan_transaction_id: EntityIdSchema('Loan transaction').optional(),
+    loan_transaction: z.any().optional(),
+
     payment_type_id: EntityIdSchema('Payment type').min(1),
     description: z.coerce
         .string<string>({ error: 'Description is must be a string' })

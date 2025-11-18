@@ -23,7 +23,7 @@ import { ResetIcon } from '@/components/icons'
 // import { useShortcutContext } from '@/components/shorcuts/general-shortcuts-wrapper'
 import { Button } from '@/components/ui/button'
 
-import { useModalState } from '@/hooks/use-modal-state'
+// import { useModalState } from '@/hooks/use-modal-state'
 import { useSubscribe } from '@/hooks/use-pubsub'
 import { useQeueryHookCallback } from '@/hooks/use-query-hook-cb'
 
@@ -43,7 +43,7 @@ const Transaction = ({ transactionId, fullPath }: TTransactionProps) => {
     const { hasNoTransactionBatch, data: currentTransactionBatch } =
         useTransactionBatchStore()
     const { modalData, isOpen, onClose } = useTransactionReverseSecurityStore()
-    const loanPickerState = useModalState()
+    // const loanPickerState = useModalState()
     // const { setActiveScope } = useShortcutContext()
 
     const {
@@ -232,9 +232,9 @@ const Transaction = ({ transactionId, fullPath }: TTransactionProps) => {
                                     )
                                 }
 
-                                if (data.original.account?.type === 'Loan') {
-                                    return loanPickerState.onOpenChange(true)
-                                }
+                                // if (data.original.account?.type === 'Loan') {
+                                //     return loanPickerState.onOpenChange(true)
+                                // }
 
                                 if (
                                     data.original.account.currency_id !==
