@@ -13,8 +13,10 @@ import { IGeneralLedger } from '@/modules/general-ledger'
 import { TLoanLedgerNormalized } from '@/modules/loan-transaction/loan-transaction.types'
 import { Fragment } from 'react/jsx-runtime'
 
+import { EyeIcon } from '@/components/icons'
 import ImageNameDisplay from '@/components/image-name-display'
 import ActionTooltip from '@/components/tooltips/action-tooltip'
+import { Button } from '@/components/ui/button'
 import { Skeleton } from '@/components/ui/skeleton'
 import {
     Table,
@@ -375,10 +377,7 @@ const AccountColumnHeader = ({
                     accountId: accountHistoryId,
                 }}
             />
-            <div
-                className="items-center justify-center flex gap-x-2"
-                onClick={() => accountViewModal.onOpenChange(true)}
-            >
+            <div className="items-center justify-center flex gap-x-2">
                 <AccountTypeBadge
                     className="inline"
                     size={'xs'}
@@ -389,6 +388,14 @@ const AccountColumnHeader = ({
                         {account.name}
                     </p>
                 </ActionTooltip>
+                <Button
+                    className="size-fit p-1"
+                    onClick={() => accountViewModal.onOpenChange(true)}
+                    size="icon"
+                    variant="ghost"
+                >
+                    <EyeIcon className="size-3" />
+                </Button>
             </div>
         </>
     )

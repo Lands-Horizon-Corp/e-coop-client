@@ -217,14 +217,7 @@ const GeneralLedgerTableColumns = (
             id: 'balance',
             accessorKey: 'balance',
             header: (props) => (
-                <DataTableColumnHeader {...props} title="Balance">
-                    <ColumnActions {...props}>
-                        <NumberFilter<IGeneralLedger>
-                            displayText="Balance"
-                            field="balance"
-                        />
-                    </ColumnActions>
-                </DataTableColumnHeader>
+                <DataTableColumnHeader {...props} title="Balance" />
             ),
             cell: ({
                 row: {
