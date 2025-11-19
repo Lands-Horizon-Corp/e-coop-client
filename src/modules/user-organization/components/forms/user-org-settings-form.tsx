@@ -110,7 +110,7 @@ const UserOrgSettingsForm = ({
             form,
             defaultValues,
             resetOnDefaultChange: resetOnDefaultChange,
-            autoSave: true,
+            autoSave: false,
         })
 
     const handleSubmitWithData = async (

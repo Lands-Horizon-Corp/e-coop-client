@@ -256,23 +256,6 @@ export type ILoanTransactionPrintRequest = LoanTransactionPrintSchema
 export type ILoanTransactionSuggested = { terms: number }
 export type ILoanTransactionSuggestedRequest = TLoanTransactionSuggestedSchema
 
-// A loan transaction payable account with suggested payment amount
-export interface ILoanPayableAccount {
-    account: IAccount
-    account_id: TEntityId
-
-    is_past_due?: boolean
-
-    last_payment_date?: string
-    supposed_payment_date?: string
-
-    suggested_payment_amount: number
-}
-
-export interface ILoanTransactionPayableAccounts {
-    payable_accounts: ILoanPayableAccount[]
-}
-
 // for loan transaction amort schedules
 export interface ILoanAmortizationSchedules {
     currency: ICurrency
@@ -390,7 +373,7 @@ export interface ILoanPaymentPerAccount {
     total_due_amount: number
     total_advance_payment: number // Total amount paid in advance
     suggested_payment_amount: number // Recommended payment (includes overdue + next upcoming)
-    next_payment_date: string
+    next_payment_date?: string
     last_payment_date?: string // Date of the last payment made (day only)
     last_payment_amount?: number // Sum of all payments made on the last payment date
     advance_payment_count: number // Number of advance payments made

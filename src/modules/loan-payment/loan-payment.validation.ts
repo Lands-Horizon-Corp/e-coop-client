@@ -29,13 +29,20 @@ export const LoanPayableAccountSchema = z.object({
     entry_date: stringDateSchema.transform(dateToISOTransformer).optional(),
 
     description: z.string().optional(),
+
+    // FOR SUGGESTION ONLY
+    suggested_payment_amount: z.coerce.number().min(0).optional(), //
+    is_past_due: z.boolean().optional(),
+    last_payment_date: z.coerce.string().optional(),
+    supposed_payment_date: z.coerce.string().optional(),
+    payment_schedule: z.any().optional(),
 })
 
 export const LoanPayablePaymentSchema = z.object({
     is_reference_number_checked: z.boolean().optional(),
     total_amount: z.coerce.number().min(0, 'Total amount must be at least 0'),
     payables: z.array(LoanPayableAccountSchema),
-    reference_number: z.string().optional(),
+    reference_number: z.string(),
 })
 
 export type TLoanPayablePaymentSchema = z.infer<typeof LoanPayablePaymentSchema>

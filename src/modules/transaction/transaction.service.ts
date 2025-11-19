@@ -25,13 +25,15 @@ import {
     ITransaction,
     ITransactionRequest,
     TCreateTransactionPaymentProps,
+    TTransactionRequest,
     TUpdateReferenceNumberProps,
 } from './transaction.types'
 
-export const { apiCrudHooks, apiCrudService } = createDataLayerFactory<
-    ITransaction,
-    ITransactionRequest
->({ url: '/api/v1/transaction', baseKey: 'transaction' })
+export const { apiCrudHooks, apiCrudService, baseQueryKey } =
+    createDataLayerFactory<ITransaction, ITransactionRequest>({
+        url: '/api/v1/transaction',
+        baseKey: 'transaction',
+    })
 
 export const {
     useGetById,
@@ -39,7 +41,12 @@ export const {
     useCreate: useCreateTransaction,
 } = apiCrudHooks
 
-export const { route, API, create, getPaginated } = apiCrudService
+export const {
+    route: transactionAPIRoute,
+    API,
+    create,
+    getPaginated,
+} = apiCrudService
 
 export const useGetCurrentPaymentTransaction = ({
     options,
@@ -50,9 +57,28 @@ export const useGetCurrentPaymentTransaction = ({
         ...options,
         queryKey: ['current-payment-transaction'],
         queryFn: async () =>
-            (await API.get<ITransaction>(`${route}/current`)).data,
+            (await API.get<ITransaction>(`${transactionAPIRoute}/current`))
+                .data,
     })
 }
+
+export const useCreateTransactionStandalone = createMutationFactory<
+    ITransaction,
+    Error,
+    TTransactionRequest
+>({
+    mutationFn: async (payload) => {
+        const response = await API.post<typeof payload, ITransaction>(
+            `${transactionAPIRoute}`,
+            payload
+        )
+        return response.data
+    },
+    defaultInvalidates: [
+        [baseQueryKey, 'paginated'],
+        [baseQueryKey, 'all'],
+    ],
+})
 
 type TPaymentTransactionProps = {
     data: IPaymentRequest
@@ -68,7 +94,7 @@ export const createPaymentTransaction = async ({
 }: TPaymentTransactionProps) => {
     return (
         await API.post<IPaymentRequest, IGeneralLedger>(
-            `${route}/${transactionId}/${mode}`,
+            `${transactionAPIRoute}/${transactionId}/${mode}`,
             data
         )
     ).data
@@ -110,7 +136,7 @@ export const useCreateQuickTransactionPayment = createMutationFactory<
     mutationFn: async ({ data, mode }) =>
         (
             await API.post<IPaymentQuickRequest, IGeneralLedger>(
-                `${route}/${mode}`,
+                `${transactionAPIRoute}/${mode}`,
                 data
             )
         ).data,
@@ -126,7 +152,7 @@ export const usePrintGeneralLedgerTransaction = createMutationFactory<
     mutationFn: async ({ id }) =>
         (
             await API.post<void, IGeneralLedger>(
-                `${route}/general-ledger/${id}/print`
+                `${transactionAPIRoute}/general-ledger/${id}/print`
             )
         ).data,
 })
@@ -139,7 +165,7 @@ export const useCreateTransactionPayment = createMutationFactory<
     mutationFn: async ({ data, transactionId }) =>
         (
             await API.post<IPaymentRequest, IGeneralLedger>(
-                `${route}/${transactionId}/payment`,
+                `${transactionAPIRoute}/${transactionId}/payment`,
                 data
             )
         ).data,
@@ -157,7 +183,7 @@ export const useUpdateReferenceNumber = createMutationFactory<
             await API.put<
                 { reference_number: string; description: string },
                 ITransaction
-            >(`${route}/${transactionId}`, {
+            >(`${transactionAPIRoute}/${transactionId}`, {
                 reference_number,
                 description,
             })
@@ -177,7 +203,7 @@ export const useSingleReverseTransaction = createMutationFactory<
     mutationFn: async ({ general_ledger_id }) =>
         (
             await API.post<void, IGeneralLedger>(
-                `${route}/general-ledger/${general_ledger_id}/reverse`
+                `${transactionAPIRoute}/general-ledger/${general_ledger_id}/reverse`
             )
         ).data,
     invalidationFn: (args) =>
@@ -192,7 +218,7 @@ export const useAllReverseTransaction = createMutationFactory<
     mutationFn: async ({ transaction_id }) =>
         (
             await API.post<void, IGeneralLedger>(
-                `${route}/${transaction_id}/reverse`
+                `${transactionAPIRoute}/${transaction_id}/reverse`
             )
         ).data,
     invalidationFn: (args) =>
@@ -203,18 +229,37 @@ export const logger = Logger.getInstance('transaction')
 
 // For Jervx Loan Payment Multiple Payable Account since loan may have multiple accounts
 // to be paid
-export const useCreateMultiTransactionPayment = createMutationFactory<
+// export const useCreateMultiTransactionPayment = createMutationFactory<
+//     IGeneralLedger,
+//     Error,
+//     { transactionId: TEntityId; payments: IPaymentRequest[] }
+// >({
+//     mutationFn: async ({ payments, transactionId }) =>
+//         (
+//             await API.post<IPaymentRequest[], IGeneralLedger>(
+//                 `${transactionAPIRoute}/${transactionId}/multipayment`,
+//                 payments
+//             )
+//         ).data,
+//     invalidationFn: (args) => {
+//         createMutationInvalidateFn('transaction', args)
+//         createMutationInvalidateFn('general-ledger', args)
+//     },
+// })
+
+export const useCreateSingleTransactionPayment = createMutationFactory<
     IGeneralLedger,
     Error,
-    { transactionId: TEntityId; payments: IPaymentRequest[] }
+    { transactionId: TEntityId; data: IPaymentRequest }
 >({
-    mutationFn: async ({ payments, transactionId }) =>
-        (
-            await API.post<IPaymentRequest[], IGeneralLedger>(
-                `${route}/${transactionId}/multi-payment`,
-                payments
-            )
-        ).data,
+    mutationFn: async ({ data, transactionId }) => {
+        const response = await createPaymentTransaction({
+            mode: 'payment',
+            transactionId,
+            data: data,
+        })
+        return response
+    },
     invalidationFn: (args) => {
         createMutationInvalidateFn('transaction', args)
         createMutationInvalidateFn('general-ledger', args)

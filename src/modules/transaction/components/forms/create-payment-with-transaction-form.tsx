@@ -167,6 +167,8 @@ const PaymentWithTransactionForm = ({
             : undefined
         const transactionpayPayload: ITransactionRequest = {
             ...data,
+            currency_id: (transaction?.currency_id ||
+                currentTransactionBatch?.currency_id) as TEntityId,
             member_profile_id: memberProfileId,
             member_joint_account_id: memberJointId,
             source: 'payment',
@@ -174,6 +176,9 @@ const PaymentWithTransactionForm = ({
         creatTransactionDeposit({
             data: {
                 ...data,
+                currency_id:
+                    transaction?.currency_id ||
+                    currentTransactionBatch?.currency_id,
                 entry_date: entryDate,
             },
             mode: 'payment',

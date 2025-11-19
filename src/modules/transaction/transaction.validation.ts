@@ -36,6 +36,22 @@ export const PaymentWithTransactionSchema = z.object({
     member: z.any().optional(),
     account: z.any().optional(),
 })
+
+export const TransactionSchema = z.object({
+    signature_media_id: entityIdSchema.optional(),
+    member_profile_id: EntityIdSchema('Member Profile').min(1),
+    member_joint_account_id: EntityIdSchema('Member Joint Account').optional(),
+    reference_number: z.string().min(1, 'Reference number is required'),
+    is_reference_number_checked: z.boolean().optional(),
+    description: z.coerce
+        .string()
+        .optional()
+        .transform(descriptionTransformerSanitizer),
+    currency_id: EntityIdSchema('Currency').min(1),
+})
+
+export type TTransactionSchema = z.infer<typeof TransactionSchema>
+
 export type TPaymentWithTransactionFormValues = z.infer<
     typeof PaymentWithTransactionSchema
 >

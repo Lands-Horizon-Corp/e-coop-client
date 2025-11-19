@@ -17,7 +17,6 @@ import { useAuthUserWithOrgBranch } from '@/modules/authentication/authgenticati
 import BankCombobox from '@/modules/bank/components/bank-combobox'
 import { ICurrency, currencyFormat } from '@/modules/currency'
 import CurrencyInput from '@/modules/currency/components/currency-input'
-import { IGeneralLedger } from '@/modules/general-ledger'
 import { LoanPaymentStatusBadge } from '@/modules/loan-transaction/components/loan-payment-status-type-badges'
 import { IMedia } from '@/modules/media'
 import { IPaymentType } from '@/modules/payment-type'
@@ -25,10 +24,9 @@ import {
     ITransaction,
     PaymentTypeCombobox,
     TTransactionRequest,
-    useCreateSingleTransactionPayment,
+    useCreateMultiTransactionPayment,
     useCreateTransactionStandalone,
 } from '@/modules/transaction'
-import TransactionModalSuccessPayment from '@/modules/transaction/components/modals/transaction-modal-success-payment'
 
 import FormFooterResetSubmit from '@/components/form-components/form-footer-reset-submit'
 import {
@@ -54,7 +52,6 @@ import SignatureField from '@/components/ui/signature-field'
 import { Textarea } from '@/components/ui/textarea'
 
 import { useFormHelper } from '@/hooks/use-form-helper'
-import { useModalState } from '@/hooks/use-modal-state'
 
 import { IForm, TEntityId } from '@/types'
 
@@ -84,15 +81,6 @@ const LoanPayablesForm = ({
     ...formProps
 }: LoanPayablesFormProps) => {
     const [transaction, setTransaction] = useState<ITransaction>()
-    const [lastGeneralLedger, setLastGeneralLedger] =
-        useState<IGeneralLedger | null>(null)
-    const [processedPayments, setProcessedPayments] = useState<Set<string>>(
-        new Set()
-    )
-    const [failedPayments, setFailedPayments] = useState<Map<string, string>>(
-        new Map()
-    )
-    const [isProcessing, setIsProcessing] = useState(false)
 
     const {
         currentAuth: {
@@ -166,12 +154,10 @@ const LoanPayablesForm = ({
     }
 
     const createTransaction = useCreateTransactionStandalone()
-    const singlePaymentMutation = useCreateSingleTransactionPayment()
+    const multiPaymentMutation = useCreateMultiTransactionPayment()
 
     const onSubmit = form.handleSubmit(async (data) => {
         const toastId = 'loan-payment-process'
-        setIsProcessing(true)
-
         try {
             toast.loading('Creating transaction...', { id: toastId })
 
@@ -180,6 +166,7 @@ const LoanPayablesForm = ({
             if (!focusedTransaction) {
                 const payload: TTransactionRequest = {
                     member_profile_id: formProps.memberProfileId,
+                    // source: 'payment' as TGeneralLedgerSource,
                     currency_id: currency?.id,
                     reference_number: data.reference_number,
                     is_reference_number_checked:
@@ -193,143 +180,21 @@ const LoanPayablesForm = ({
                 setTransaction(createdTransaction)
             }
 
-            // Process payments sequentially
-            const paymentResults: {
-                success: string[]
-                failed: Array<{ accountId: string; error: string }>
-                skipped: string[]
-            } = {
-                success: [],
-                failed: [],
-                skipped: [],
-            }
+            toast.loading('Saving payments...', { id: toastId })
 
-            let latestGeneralLedger: IGeneralLedger | null = null
-
-            // Filter out payables with no amount or amount <= 0
-            const validPayables = data.payables.filter((p) => {
-                if (!p.amount || p.amount <= 0) {
-                    paymentResults.skipped.push(p.account_id)
-                    return false
-                }
-                return true
-            })
-
-            if (validPayables.length === 0) {
-                setIsProcessing(false)
-                toast.error(
-                    'No payments to process. Please enter amounts greater than 0.',
-                    {
-                        id: toastId,
-                    }
-                )
-                return
-            }
-
-            for (let i = 0; i < validPayables.length; i++) {
-                const payable = validPayables[i]
-                const accountId = payable.account_id
-
-                // Skip if already processed successfully
-                if (processedPayments.has(accountId)) {
-                    paymentResults.success.push(accountId)
-                    continue
-                }
-
-                try {
-                    toast.loading(
-                        `Processing payment ${i + 1} of ${validPayables.length}...`,
-                        { id: toastId }
-                    )
-                    const dataPayload = {
-                        amount: payable.amount,
-                        account: payable.account,
-                        account_id: payable.account_id,
-                        currency_id:
-                            currency.id || payable.account?.currency_id,
-                        payment_type_id: payable.payment_type_id,
-                        signature_media_id: payable.signature_media_id,
-                        proof_of_payment_media_id:
-                            payable.proof_of_payment_media_id,
-                        bank_id: payable.bank_id,
-                        bank_reference_number: payable.bank_reference_number,
-                        entry_date: payable.entry_date,
-                        description: payable.description,
-                    }
-
-                    const generalLedger =
-                        await singlePaymentMutation.mutateAsync({
-                            transactionId: focusedTransaction.id,
-                            data: dataPayload,
-                        })
-
-                    // Store the latest general ledger
-                    latestGeneralLedger = generalLedger
-
-                    // Mark as successfully processed
-                    setProcessedPayments((prev) => new Set(prev).add(accountId))
-                    setFailedPayments((prev) => {
-                        const newMap = new Map(prev)
-                        newMap.delete(accountId)
-                        return newMap
-                    })
-                    paymentResults.success.push(accountId)
-                } catch (error) {
-                    const errorMessage =
-                        serverRequestErrExtractor({ error }) ||
-                        'Unknown error occurred'
-
-                    // Track failed payment
-                    setFailedPayments((prev) =>
-                        new Map(prev).set(accountId, errorMessage)
-                    )
-                    paymentResults.failed.push({
-                        accountId,
-                        error: errorMessage,
-                    })
-                }
-            }
-
-            setIsProcessing(false)
-
-            // Display results
-            if (
-                paymentResults.failed.length === 0 &&
-                validPayables.length > 0
-            ) {
-                const successMessage =
-                    paymentResults.skipped.length > 0
-                        ? `${paymentResults.success.length} payment(s) completed successfully! (${paymentResults.skipped.length} skipped due to zero amount)`
-                        : 'All payments completed successfully!'
-
-                toast.success(successMessage, {
-                    id: toastId,
+            if (focusedTransaction) {
+                await multiPaymentMutation.mutateAsync({
+                    transactionId: focusedTransaction.id,
+                    payments: data.payables.map((entry) => ({
+                        ...entry,
+                        currency_id: currency.id || entry.account?.currency_id,
+                        transaction_id: focusedTransaction.id,
+                    })),
                 })
-
-                // Set the general ledger and show the print modal
-                if (latestGeneralLedger) {
-                    setLastGeneralLedger(latestGeneralLedger)
-                    printModalState.onOpenChange(true)
-                }
-            } else if (paymentResults.success.length === 0) {
-                toast.error('All payments failed. Please try again.', {
-                    id: toastId,
-                    description: paymentResults.failed
-                        .map((f) => `${f.error}`)
-                        .join(', '),
-                })
-            } else {
-                const totalAttempted = validPayables.length
-                toast.warning(
-                    `${paymentResults.success.length} of ${totalAttempted} payments succeeded.`,
-                    {
-                        id: toastId,
-                        description: `${paymentResults.failed.length} payment(s) failed. You can retry failed payments.${paymentResults.skipped.length > 0 ? ` (${paymentResults.skipped.length} skipped)` : ''}`,
-                    }
-                )
+                toast.success('Payment complete!', { id: toastId })
+                formProps.onSuccess?.(focusedTransaction)
             }
         } catch (error) {
-            setIsProcessing(false)
             toast.error(
                 `An error occurred. Please try again. ${serverRequestErrExtractor({ error })}`,
                 { id: toastId }
@@ -345,8 +210,6 @@ const LoanPayablesForm = ({
                 amount || 0
         form.setValue('total_amount', payableTotals)
     }
-
-    const printModalState = useModalState()
 
     return (
         <Form {...form}>
@@ -442,26 +305,6 @@ const LoanPayablesForm = ({
                     </Button>
                 </div>
                 <Separator />
-                {(processedPayments.size > 0 || failedPayments.size > 0) && (
-                    <div className="space-y-2">
-                        {processedPayments.size > 0 && (
-                            <div className="bg-green-50 dark:bg-green-950/30 border border-green-300 dark:border-green-800 rounded-lg p-3">
-                                <p className="text-sm font-medium text-green-800 dark:text-green-300">
-                                    ✓ {processedPayments.size} payment(s)
-                                    completed successfully
-                                </p>
-                            </div>
-                        )}
-                        {failedPayments.size > 0 && (
-                            <div className="bg-rose-50 dark:bg-rose-950/30 border border-rose-300 dark:border-rose-800 rounded-lg p-3">
-                                <p className="text-sm font-medium text-rose-800 dark:text-rose-300">
-                                    ✗ {failedPayments.size} payment(s) failed -
-                                    scroll down to see errors and retry
-                                </p>
-                            </div>
-                        )}
-                    </div>
-                )}
                 <div className="space-y-4">
                     {payables.map((p, idx) => {
                         const paymentType = form.getValues(
@@ -472,37 +315,11 @@ const LoanPayablesForm = ({
                             paymentType?.type || ''
                         )
 
-                        const isProcessedSuccessfully = processedPayments.has(
-                            p.account_id
-                        )
-                        const failureMessage = failedPayments.get(p.account_id)
-
                         return (
                             <div
-                                className={cn(
-                                    'rounded-xl p-3 space-y-2 bg-popover relative',
-                                    isProcessedSuccessfully &&
-                                        'border-2 border-green-500 dark:border-green-600',
-                                    failureMessage &&
-                                        'border-2 border-rose-500 dark:border-rose-600'
-                                )}
+                                className="rounded-xl p-3 space-y-2 bg-popover"
                                 key={p.account_id}
                             >
-                                {isProcessedSuccessfully && (
-                                    <div className="absolute top-2 right-2 bg-green-500 dark:bg-green-600 text-white text-xs px-2 py-1 rounded-md">
-                                        ✓ Paid
-                                    </div>
-                                )}
-                                {failureMessage && (
-                                    <div className="absolute top-2 right-2 bg-rose-500 dark:bg-rose-600 text-white text-xs px-2 py-1 rounded-md">
-                                        ✗ Failed
-                                    </div>
-                                )}
-                                {failureMessage && (
-                                    <div className="bg-rose-100 dark:bg-rose-950/30 border border-rose-300 dark:border-rose-800 rounded-md p-2 text-xs text-rose-800 dark:text-rose-300">
-                                        <strong>Error:</strong> {failureMessage}
-                                    </div>
-                                )}
                                 <div className="flex items-center justify-between">
                                     <div>
                                         <div className="flex items-center gap-x-1">
@@ -853,46 +670,13 @@ const LoanPayablesForm = ({
                 </div>
                 <FormFooterResetSubmit
                     className="sticky bottom-0"
-                    disableSubmit={!form.formState.isDirty || isProcessing}
-                    isLoading={isProcessing}
-                    onReset={() => {
-                        form.reset()
-                        setProcessedPayments(new Set())
-                        setFailedPayments(new Map())
-                        setLastGeneralLedger(null)
-                        setTransaction(undefined)
-                    }}
+                    disableSubmit={!form.formState.isDirty}
+                    isLoading={false}
+                    onReset={() => form.reset()}
                     readOnly={formProps.readOnly}
-                    submitText={
-                        failedPayments.size > 0
-                            ? 'Retry Failed Payments'
-                            : 'Pay'
-                    }
+                    submitText="Pay"
                 />
             </form>
-
-            <TransactionModalSuccessPayment
-                isOpen={printModalState.open}
-                onClose={() => {
-                    // Close the modal
-                    printModalState.onOpenChange(false)
-
-                    // Reset the form
-                    form.reset()
-
-                    // Clear tracking states
-                    setProcessedPayments(new Set())
-                    setFailedPayments(new Map())
-                    setLastGeneralLedger(null)
-                    setTransaction(undefined)
-
-                    // Call parent success callback
-                    formProps.onSuccess?.(transaction!)
-                }}
-                onOpenChange={printModalState.onOpenChange}
-                open={printModalState.open}
-                transaction={lastGeneralLedger}
-            />
         </Form>
     )
 }

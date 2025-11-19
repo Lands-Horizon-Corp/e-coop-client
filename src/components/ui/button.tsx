@@ -49,7 +49,7 @@ const buttonVariants = cva(
                 lg: 'h-10 rounded-md px-6 has-[>svg]:px-4',
                 icon: 'size-9',
                 'icon-sm': 'size-8',
-                xs: 'text-sm px-2 py-1',
+                xs: 'text-xs px-2 py-1',
             },
         },
         defaultVariants: {

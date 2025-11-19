@@ -19,7 +19,6 @@ import type {
     ILoanTransaction,
     ILoanTransactionAdjustmentRequest,
     ILoanTransactionPaginated,
-    ILoanTransactionPayableAccounts,
     ILoanTransactionPrintRequest,
     ILoanTransactionRequest,
     ILoanTransactionSignatureRequest,
@@ -234,30 +233,6 @@ export const useGetLoanAmortization = ({
                 `${loanTransactionAPIRoute}/${loanTransactionId}/schedule`
             )
 
-            return response.data
-        },
-    })
-}
-
-// GET Loan Transaction Payable Accounts
-export const useGetLoanTransactionPayableAccounts = ({
-    loanTransactionId,
-    options,
-}: {
-    loanTransactionId: TEntityId
-    options?: HookQueryOptions<ILoanTransactionPayableAccounts, Error>
-}) => {
-    return useQuery<ILoanTransactionPayableAccounts, Error>({
-        ...options,
-        queryKey: [
-            loanTransactionBaseKey,
-            loanTransactionId,
-            'payable-accounts',
-        ],
-        queryFn: async () => {
-            const response = await API.get<ILoanTransactionPayableAccounts>(
-                `${loanTransactionAPIRoute}/${loanTransactionId}/payable-accounts`
-            )
             return response.data
         },
     })

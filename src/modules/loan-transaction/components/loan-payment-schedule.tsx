@@ -818,9 +818,11 @@ export const LoanPaymentAccountScheduleSummary = ({
                         <div className="bg-primary/10 px-3 py-1 rounded-md">
                             <p className="text-xs">
                                 <ClockIcon className="inline mr-1" />
-                                {toReadableDate(
-                                    accountPaymentSummary.next_payment_date
-                                )}
+                                {accountPaymentSummary?.next_payment_date
+                                    ? toReadableDate(
+                                          accountPaymentSummary?.next_payment_date
+                                      )
+                                    : 'Paid in full'}
                             </p>
                             <p className="text-muted-foreground text-xs">
                                 <ChevronsRightIcon className="inline animate-pulse mr-0.5" />
