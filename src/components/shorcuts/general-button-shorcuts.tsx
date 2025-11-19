@@ -117,10 +117,11 @@ const GeneralButtonShortcuts = ({ className }: { className?: string }) => {
     return (
         <div className={cn('w-fit ', className)}>
             <Button
-                className="hover:!bg-transparent text-muted-foreground/70 h-9 rounded-full"
+                className="rounded-lg"
+                hoverVariant="primary"
                 onClick={() => onOpenChange(!open)}
-                size="sm"
-                variant="outline"
+                size="icon-sm"
+                variant="outline-ghost"
             >
                 <CommandIcon />
             </Button>

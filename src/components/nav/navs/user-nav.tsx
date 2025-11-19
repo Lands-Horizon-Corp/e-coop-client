@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import React, { useState } from 'react'
 
 import { useRouter } from '@tanstack/react-router'
 
@@ -54,27 +54,11 @@ const UserNav = ({
     const SECONDARY_NAV_ITEMS = [
         {
             important: false,
-            component: ['employee', 'owner'].includes(
-                user_organization?.user_type ?? ''
-            ) ? (
-                <Button
-                    className="rounded-full group"
-                    hoverVariant="primary"
-                    onClick={() =>
-                        router.navigate({
-                            to: '/org/$orgname/branch/$branchname/approvals' as string,
-                        })
-                    }
-                    variant="secondary"
-                >
-                    <BadgeCheckFillIcon className="ease-out duration-500 text-primary" />
-                    Approvals
-                </Button>
-            ) : null,
+            component: user ? <TransactionBatchNavButton /> : null,
         },
         {
             important: false,
-            component: user ? <TransactionBatchNavButton /> : null,
+            component: user ? <LiveToggle size="xs" /> : null,
         },
         {
             important: false,
@@ -85,7 +69,24 @@ const UserNav = ({
         },
         {
             important: false,
-            component: user ? <LiveToggle size="default" /> : null,
+            component: ['employee', 'owner'].includes(
+                user_organization?.user_type ?? ''
+            ) ? (
+                <Button
+                    className="rounded-lg group border"
+                    hoverVariant="primary"
+                    onClick={() =>
+                        router.navigate({
+                            to: '/org/$orgname/branch/$branchname/approvals' as string,
+                        })
+                    }
+                    shadow="none"
+                    size="icon-sm"
+                    variant="outline-ghost"
+                >
+                    <BadgeCheckFillIcon className="ease-out duration-500" />
+                </Button>
+            ) : null,
         },
         {
             important: false,
@@ -129,11 +130,11 @@ const UserNav = ({
             </NavContainer>
 
             <NavContainer className="pointer-events-auto">
-                <div className="flex items-center gap-2">
+                <div className="flex items-center">
                     {/* Collapsible secondary navigation */}
                     <div className="relative p-2 overflow-hidden">
                         <div
-                            className={`flex items-center gap-2 transition-all duration-300 ease-out ${
+                            className={`flex items-center gap-1 transition-all duration-300 ease-out ${
                                 isOpen
                                     ? 'translate-x-0 opacity-100'
                                     : '-translate-x-8 opacity-0 pointer-events-none'
@@ -143,9 +144,9 @@ const UserNav = ({
                             }}
                         >
                             {SECONDARY_NAV_ITEMS.map((navItem, index) => (
-                                <div className="whitespace-nowrap" key={index}>
+                                <React.Fragment key={index}>
                                     {navItem.component}
-                                </div>
+                                </React.Fragment>
                             ))}
                         </div>
                     </div>
@@ -157,23 +158,27 @@ const UserNav = ({
                         }
                         className="shrink-0"
                         onClick={() => setIsOpen(!isOpen)}
-                        size="icon"
+                        size="icon-sm"
                         variant="ghost"
                     >
                         {isOpen ? (
-                            <ChevronLeft className="h-4 w-4" />
+                            <ChevronLeft className="size-4" />
                         ) : (
-                            <ChevronRight className="h-4 w-4" />
+                            <ChevronRight className="size-4" />
                         )}
                     </Button>
 
                     {/* Divider */}
-                    <div className="mx-2 h-6 w-px bg-border" />
+                    <div className="mx-2 h-4 w-px bg-border" />
 
                     {/* Important items - always visible */}
-                    {IMPORTANT_NAV_ITEMS.map((navItem, index) => (
-                        <div key={index}>{navItem.component}</div>
-                    ))}
+                    <div className="flex items-center gap-x-2">
+                        {IMPORTANT_NAV_ITEMS.map((navItem, index) => (
+                            <React.Fragment key={index}>
+                                {navItem.component}
+                            </React.Fragment>
+                        ))}
+                    </div>
                 </div>
             </NavContainer>
         </RootNav>

@@ -1,5 +1,6 @@
 import type { ICONS } from '@/constants'
 import {
+    AiOutlineDownload as DownloadIcon,
     AiOutlineFullscreenExit as FullscreenExitIcon,
     AiOutlineFullscreen as FullscreenIcon,
     AiFillHome as HomeFillIcon,
@@ -144,7 +145,6 @@ import {
     FaPercent as PercentIcon,
     FaPesoSign as PesoIcon,
     FaChartPie as PieChartIcon,
-    FaPlay as PlayIcon,
     FaQuestion as QuestionIcon,
     FaReact as ReactIcon,
     FaSchool as SchoolIcon,
@@ -162,7 +162,6 @@ import {
 import {
     FiCamera as CameraIcon,
     FiCodesandbox as CodeSandBox,
-    FiDownload as DownloadIcon,
     FiEye as EyeIcon,
     FiEyeOff as EyeOffIcon,
     FiHash as HashIcon,
@@ -376,6 +375,7 @@ import {
     PiHandDeposit as PiHandDepositIcon,
     PiHandWithdraw as PiHandWithdrawIcon,
     PiPiggyBankFill as PiggyBankIcon,
+    PiPlayLight as PlayIcon,
     PiPlugsConnectedFill as PlugConnectFillIcon,
     PiPlus as PlusIcon,
     PiPushPin as PushPinIcon,

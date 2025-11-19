@@ -2,7 +2,7 @@ import { cn } from '@/helpers/tw-utils'
 import { useCurrentTimesheet } from '@/modules/timesheet'
 import WorkTimer from '@/modules/timesheet/components/worktimer'
 
-import { BriefCaseClockIcon, DotBigIcon } from '@/components/icons'
+import { ClockIcon, DotBigIcon } from '@/components/icons'
 import LoadingSpinner from '@/components/spinners/loading-spinner'
 import { Button } from '@/components/ui/button'
 import {
@@ -19,24 +19,26 @@ const NavTimeInBar = () => {
             <Popover modal>
                 <PopoverTrigger asChild>
                     <Button
-                        className={cn('group relative gap-x-2 rounded-full')}
+                        className={cn(
+                            'group relative border gap-x-2 rounded-lg'
+                        )}
                         disabled={isLoading && !timesheet}
                         hoverVariant="primary"
-                        size="sm"
-                        variant="secondary"
+                        size="icon-sm"
+                        variant="outline-ghost"
                     >
                         {!!timesheet && (
-                            <div className="absolute -right-1 -top-1">
-                                <DotBigIcon className="absolute mr-2 blur-sm" />
-                                <DotBigIcon className="mr-2 text-primary text-primar" />
+                            <div className="absolute -right-1.5 -top-1.5">
+                                <DotBigIcon className="absolute blur-sm" />
+                                <DotBigIcon className="text-primary text-primar" />
                             </div>
                         )}
                         {isLoading && !timesheet ? (
                             <LoadingSpinner className="size-4" />
                         ) : (
-                            <BriefCaseClockIcon />
+                            <ClockIcon />
                         )}
-                        Work Time
+                        {/* Work Time */}
                     </Button>
                 </PopoverTrigger>
                 <PopoverContent

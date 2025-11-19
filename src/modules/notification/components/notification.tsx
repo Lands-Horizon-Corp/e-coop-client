@@ -156,8 +156,9 @@ export const NotificationNav = () => {
                 <Button
                     aria-label="Open notifications"
                     className="relative size-fit p-1.5"
-                    size="icon"
-                    variant="ghost"
+                    hoverVariant="primary"
+                    size="icon-sm"
+                    variant="outline-ghost"
                 >
                     <BellIcon aria-hidden="true" size={16} />
                     {unreadCount > 0 && (
@@ -169,7 +170,7 @@ export const NotificationNav = () => {
             </PopoverTrigger>
             <PopoverContent
                 align="start"
-                className="w-[400px] max-h-[80vh] rounded-xl p-1 flex flex-col"
+                className="w-[400px] max-h-[90vh] rounded-xl p-1 flex flex-col"
                 side="left"
             >
                 <NotificationContainer

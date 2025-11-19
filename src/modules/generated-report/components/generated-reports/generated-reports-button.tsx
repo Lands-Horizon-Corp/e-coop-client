@@ -1,7 +1,5 @@
 import { useCallback, useMemo, useState } from 'react'
 
-import Fuse from 'fuse.js'
-
 import { PAGINATION_INITIAL_INDEX } from '@/constants'
 import { cn } from '@/helpers'
 import { PaginationState } from '@tanstack/react-table'
@@ -70,39 +68,6 @@ const GeneratedReportTabOptions: {
 ]
 
 export const DEFAULT_MODEL: TModelName = 'none'
-
-type useFilterGeneratedReportProps = {
-    report: IGeneratedReport[]
-    selectedModel: string
-}
-
-export const useFilterGeneratedReports = ({
-    report,
-    selectedModel,
-}: useFilterGeneratedReportProps) => {
-    const fuse = useMemo(
-        () =>
-            new Fuse<IGeneratedReport>(report ?? [], {
-                keys: [{ name: 'model', weight: 0.2 }],
-                includeScore: true,
-                threshold: 0.2,
-                includeMatches: true,
-                findAllMatches: true,
-            }),
-        [report]
-    )
-
-    const filteredReports = useMemo(() => {
-        let filtered: IGeneratedReport[] = Array.from(report ?? [])
-        filtered = fuse.search(selectedModel).map((r) => r.item)
-
-        return filtered
-    }, [selectedModel, fuse])
-
-    return {
-        filteredReports,
-    }
-}
 
 const GeneratedReportActions = () => {
     const [activeTab, setActiveTab] = useState<TModeGeneratedReport>('search')
@@ -356,10 +321,10 @@ const GeneratedReportsButton = ({ className }: { className?: string }) => {
                 </SheetDescription>
                 <SheetTrigger asChild>
                     <Button
-                        className="hover:!bg-transparent text-muted-foreground/70 h-9 rounded-full bg-card p-1"
+                        hoverVariant="primary"
                         onClick={() => onOpenChange(!open)}
-                        size="sm"
-                        variant="outline"
+                        size="icon-sm"
+                        variant="outline-ghost"
                     >
                         <DownloadIcon className="size-5 text-foreground" />
                     </Button>

@@ -5,7 +5,7 @@ import { descriptionTransformerSanitizer, entityIdSchema } from '@/validation'
 // use by transaction batch create form
 export const TransactionBatchCreateSchema = z.object({
     name: z.string().min(1, 'Name is required'),
-    amount: z.coerce.number().min(0, 'Amount is required'),
+    amount: z.coerce.number().min(-1, 'Amount is required'),
     description: z.coerce
         .string()
         .optional()

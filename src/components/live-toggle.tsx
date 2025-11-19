@@ -1,7 +1,7 @@
 import { cn } from '@/helpers/tw-utils'
 import { useLiveMonitoringStore } from '@/store/live-monitoring-store'
 
-import { PlayIcon, StopIcon } from '@/components/icons'
+import { DotBigIcon, PlayIcon, StopIcon } from '@/components/icons'
 import { Button } from '@/components/ui/button'
 import {
     Tooltip,
@@ -13,7 +13,7 @@ import {
 import { IClassProps } from '@/types'
 
 interface LiveToggleProps extends IClassProps {
-    size?: 'sm' | 'default' | 'lg'
+    size?: 'sm' | 'default' | 'lg' | 'xs'
 }
 
 const LiveToggle = ({ className, size = 'sm' }: LiveToggleProps) => {
@@ -25,20 +25,24 @@ const LiveToggle = ({ className, size = 'sm' }: LiveToggleProps) => {
                 <TooltipTrigger asChild>
                     <Button
                         className={cn(
-                            'rounded-full transition-all duration-300 hover:scale-105',
-                            isLiveEnabled
-                                ? 'bg-primary text-primary-foreground hover:bg-primary/90'
-                                : 'bg-secondary text-secondary-foreground hover:bg-secondary/80',
+                            'rounded-lg transition-all relative border duration-300 hover:scale-105',
                             className
                         )}
+                        hoverVariant="primary"
                         onClick={toggleLive}
                         size={size}
-                        variant={isLiveEnabled ? 'default' : 'secondary'}
+                        variant="outline-ghost"
                     >
+                        {isLiveEnabled && (
+                            <div className="absolute -right-1.5 -top-1.5">
+                                <DotBigIcon className="absolute blur-sm" />
+                                <DotBigIcon className="text-primary text-primar" />
+                            </div>
+                        )}
                         {isLiveEnabled ? (
-                            <StopIcon className="h-4 w-4 mr-1 transition-all duration-200" />
+                            <StopIcon className="size-4 transition-all duration-200" />
                         ) : (
-                            <PlayIcon className="h-4 w-4 mr-1 transition-all duration-200" />
+                            <PlayIcon className="size-4 transition-all duration-200" />
                         )}
                         {isLiveEnabled ? 'Stop Live' : 'Live'}
                     </Button>
