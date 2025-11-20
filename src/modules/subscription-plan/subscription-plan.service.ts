@@ -57,7 +57,7 @@ export const useGetAllSubscriptionPlans = ({
     query?: TAPIQueryOptions
     mode?: TSubscriptionPlanMode
     options?: HookQueryOptions<ISubscriptionPlan[], Error>
-}) => {
+} = {}) => {
     return useQuery<ISubscriptionPlan[], Error>({
         ...options,
         queryKey: ['subscription-plan', mode, query].filter(Boolean),

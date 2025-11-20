@@ -83,7 +83,8 @@ const LoanPaymentSchedule = ({
         },
     })
 
-    const resolvedAccountDefaultId = accountDefaultId || data?.account_payments[0]?.account.id
+    const resolvedAccountDefaultId =
+        accountDefaultId || data?.account_payments[0]?.account.id
 
     return (
         <div className={cn('space-y-6 min-w-0 max-w-full', className)}>

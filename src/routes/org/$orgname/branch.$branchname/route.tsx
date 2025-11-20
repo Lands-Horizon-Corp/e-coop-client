@@ -1,9 +1,9 @@
 // import { useEffect, useState } from 'react'
-
 import { Outlet, createFileRoute } from '@tanstack/react-router'
 
 import { useAuthUserWithOrgBranch } from '@/modules/authentication/authgentication.store'
 import TimeMachineTimeStatusBar from '@/modules/user-organization/components/time-machine-time-status-bar'
+
 // import { motion } from 'framer-motion'
 
 // import { CursorFillIcon } from '@/components/icons'

@@ -17,8 +17,8 @@ import { CurrencyBadge } from '@/modules/currency/components/currency-badge'
 import { IMedia } from '@/modules/media'
 import {
     ICreateOrganizationResponse,
+    IOrganizationRequest,
     OrganizationSchema,
-    TOrganizationFormValues,
 } from '@/modules/organization'
 import { useCreateOrganization } from '@/modules/organization'
 import { IOrganizationCategoryRequest } from '@/modules/organization-category'
@@ -76,7 +76,7 @@ const OrganizationForm = () => {
 
     const navigate = useNavigate()
 
-    const form = useForm<TOrganizationFormValues>({
+    const form = useForm<IOrganizationRequest>({
         resolver: standardSchemaResolver(OrganizationSchema),
         reValidateMode: 'onChange',
         mode: 'onSubmit',
@@ -93,7 +93,7 @@ const OrganizationForm = () => {
         },
     })
 
-    const { firstError } = useFormHelper<TOrganizationFormValues>({
+    const { firstError } = useFormHelper<IOrganizationRequest>({
         form,
     })
     const { data: currencyData } = useGetCurrencyById({
@@ -121,7 +121,7 @@ const OrganizationForm = () => {
         },
     })
 
-    const handleSubmit = async (data: TOrganizationFormValues) => {
+    const handleSubmit = async (data: IOrganizationRequest) => {
         if (!form.formState.isValid) return
         const requestData = {
             ...data,

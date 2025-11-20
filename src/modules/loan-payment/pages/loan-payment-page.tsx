@@ -11,9 +11,9 @@ import {
     ILoanTransaction,
     useLoanPaymentSchedule,
 } from '@/modules/loan-transaction'
-import LoanAllMemberSummary from '@/modules/loan-transaction/components/statistics/loan-all-member-summary'
 import { LoanMicroInfoCard } from '@/modules/loan-transaction/components/loan-mini-info-card'
 import LoanPickerAll from '@/modules/loan-transaction/components/loan-picker-all'
+import LoanAllMemberSummary from '@/modules/loan-transaction/components/statistics/loan-all-member-summary'
 import {
     MemberAccountGeneralLedgerAction,
     MemberAccountingLedgerTable,
@@ -174,8 +174,10 @@ function LoanPaymentPage() {
                                         : 'Click on a loan account from the right panel to begin processing payment'}
                                 </p>
                             </div>
-                            
-                            {!selectedLoan && <LoanAllMemberSummary className="w-full" />}
+
+                            {!selectedLoan && (
+                                <LoanAllMemberSummary className="w-full" />
+                            )}
                         </div>
                     ) : (
                         <>

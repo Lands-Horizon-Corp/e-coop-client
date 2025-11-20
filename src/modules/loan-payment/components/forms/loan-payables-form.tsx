@@ -243,7 +243,7 @@ const LoanPayablesForm = ({
                     {...loanPaymentScheduleModal}
                     loanPaymentProps={{
                         loanTransactionId,
-                        accountDefaultId : payables[0]?.account_id,
+                        accountDefaultId: payables[0]?.account_id,
                     }}
                 />
                 <div className="flex items-center justify-between">

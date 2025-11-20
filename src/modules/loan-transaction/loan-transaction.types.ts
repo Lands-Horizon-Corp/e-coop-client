@@ -456,7 +456,6 @@ export interface ILoanTransactionSummaryResponse {
     total_remaining_principal: number
 }
 
-
 // MEMBER LOAN SUMMARY
 
 // MemberLoanSummary represents loan summary for a single member
@@ -476,7 +475,7 @@ export interface IMemberLoanSummary {
 
 // AllMembersLoanSummaryResponse represents loan summaries for all members
 export interface IAllMembersLoanSummaryResponse {
-    member_summaries: IMemberLoanSummary[] 
+    member_summaries: IMemberLoanSummary[]
     total_members: number
     total_loans: number
     total_arrears: number

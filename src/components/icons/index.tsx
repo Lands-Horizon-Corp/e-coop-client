@@ -159,6 +159,7 @@ import {
     FaUserShield as UserShieldIcon,
     FaUsersLine as Users3LineIcon,
     FaWandMagicSparkles as WandSparkleIcon,
+    FaXTwitter as XTwitterIcon,
 } from 'react-icons/fa6'
 import {
     FiCamera as CameraIcon,
@@ -622,6 +623,7 @@ export {
     SignPostIcon,
     InternalIcon,
     UserLockIcon,
+    XTwitterIcon,
     LanguageIcon,
     BookOpenIcon,
     PriceTagIcon,
@@ -1009,6 +1011,7 @@ export const IconMap = {
     'Sun Moon': SunMoonIcon,
     'Zoom Out': ZoomOutIcon,
     'Clock Fill': ClockFillIcon,
+    XTwitter: XTwitterIcon,
     'Printer Fill': PrinterFillIcon,
     'Swap Arrow': SwapArrowIcon,
     'Eye None': EyeNoneIcon,

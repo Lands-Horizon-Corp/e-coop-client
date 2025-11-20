@@ -5,7 +5,7 @@ import { UseFormReturn } from 'react-hook-form'
 import { cn } from '@/helpers'
 
 import { FormStepper } from '../../../components/form-stepper/form-stepper'
-import { TOrganizationFormValues } from '../organization.validation'
+import { TOrganizationSchema } from '../organization.validation'
 import {
     organizationStepValidations,
     organizationSteps,
@@ -28,7 +28,7 @@ const useMediaQuery = (query: string) => {
 }
 
 type OrganizationFormStepperProps = {
-    form: UseFormReturn<TOrganizationFormValues>
+    form: UseFormReturn<TOrganizationSchema>
     activeStep: number
     onStepChange?: (step: number) => void
     disabled?: boolean

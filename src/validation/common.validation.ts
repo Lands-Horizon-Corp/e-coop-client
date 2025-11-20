@@ -37,10 +37,7 @@ export const mediaSchema = z.object({
     deleted_at: z.string().optional(),
 })
 
-export const emailSchema = z
-    .string()
-    .min(1, 'Email is required')
-    .email('Invalid email')
+export const emailSchema = z.email('Invalid email address')
 
 export const userNameSchema = z.string().min(1, 'Username is required')
 
