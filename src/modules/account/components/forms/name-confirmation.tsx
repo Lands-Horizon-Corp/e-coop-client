@@ -1,5 +1,8 @@
 import { useState } from 'react'
 
+import {
+    compareIgnoreCase,
+} from '@/modules/timesheet/components/worktimer/utils'
 import { AlertCircle, CheckCircle2 } from 'lucide-react'
 
 import Modal, { IModalProps } from '@/components/modals/modal'
@@ -29,7 +32,8 @@ export function NameConfirmation({
     ...props
 }: NameConfirmationProps) {
     const [inputValue, setInputValue] = useState('')
-    const isMatching = inputValue === name
+
+    const isMatching = compareIgnoreCase(inputValue, name)
 
     if (mode === 'delete' && !confirmButtonVariant) {
         confirmButtonVariant = 'destructive'
