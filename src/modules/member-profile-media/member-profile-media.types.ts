@@ -24,5 +24,5 @@ export interface IMemberProfileMediaPaginated
     extends IPaginatedResult<IMemberProfileMedia> {}
 
 export type IMemberProfileMediaBulkRequest = {
-    media_ids: TEntityId[]
+    ids: TEntityId[]
 }

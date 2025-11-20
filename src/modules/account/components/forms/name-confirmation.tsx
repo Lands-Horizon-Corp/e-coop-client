@@ -1,8 +1,6 @@
 import { useState } from 'react'
 
-import {
-    compareIgnoreCase,
-} from '@/modules/timesheet/components/worktimer/utils'
+import { compareIgnoreCase } from '@/modules/timesheet/components/worktimer/utils'
 import { AlertCircle, CheckCircle2 } from 'lucide-react'
 
 import Modal, { IModalProps } from '@/components/modals/modal'
@@ -15,7 +13,6 @@ interface NameConfirmationProps extends IModalProps {
     confirmButtonText?: string
     confirmButtonVariant?: ButtonVariantType['variant']
     isLoading?: boolean
-    isMatch?: (isMatch: boolean) => void
     onConfirm?: () => void | Promise<void>
     onCancel?: () => void
 }
@@ -23,7 +20,6 @@ interface NameConfirmationProps extends IModalProps {
 export function NameConfirmation({
     name,
     isLoading = false,
-    isMatch,
     onCancel,
     onConfirm,
     confirmButtonVariant,
@@ -41,6 +37,13 @@ export function NameConfirmation({
         confirmButtonVariant = 'default'
     }
 
+    const handleConfirm = () => {
+        if (isMatching) {
+            onConfirm?.()
+            setInputValue('')
+        }
+    }
+
     return (
         <Modal
             {...props}
@@ -50,6 +53,7 @@ export function NameConfirmation({
                         className="flex-1 bg-transparent"
                         disabled={isLoading}
                         onClick={onCancel}
+                        type="button"
                         variant="outline"
                     >
                         Cancel
@@ -57,10 +61,8 @@ export function NameConfirmation({
                     <Button
                         className="flex-1"
                         disabled={!isMatching}
-                        onClick={() => {
-                            onConfirm?.()
-                            setInputValue('')
-                        }}
+                        onClick={handleConfirm}
+                        type="button"
                         variant={confirmButtonVariant}
                     >
                         {isLoading ? 'Processing...' : confirmButtonText}
@@ -93,7 +95,12 @@ export function NameConfirmation({
                         id="name-input"
                         onChange={(e) => {
                             setInputValue(e.target.value)
-                            isMatch?.(e.target.value === name)
+                        }}
+                        onKeyDown={(e) => {
+                            if (e.key === 'Enter') {
+                                e.preventDefault()
+                                handleConfirm()
+                            }
                         }}
                         placeholder={`Type "${name}" to confirm`}
                         type="text"

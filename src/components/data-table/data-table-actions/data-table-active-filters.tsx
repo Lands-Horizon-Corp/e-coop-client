@@ -63,7 +63,7 @@ const DataTableActiveFilters = ({ className }: IClassProps) => {
                     </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent>
-                    <DropdownMenuLabel className="flex flex-col">
+                    <DropdownMenuLabel className="flex sticky top-0 z-40 !bg-popover flex-col">
                         <div className="flex">
                             <FunnelIcon
                                 aria-hidden="true"
@@ -76,7 +76,7 @@ const DataTableActiveFilters = ({ className }: IClassProps) => {
                         </p>
                     </DropdownMenuLabel>
                     <DropdownMenuSeparator />
-                    <DropdownMenuGroup className="space-y-1">
+                    <DropdownMenuGroup className="space-y-1 px-2 max-h-[400px] overflow-y-auto ecoop-scroll">
                         {mappedFilters.map((filter) => (
                             <DropdownMenuItem
                                 className="focus:bg-accent/50 focus:border-accent focus:border border-accent border focus:text-accent-foreground"
@@ -95,7 +95,7 @@ const DataTableActiveFilters = ({ className }: IClassProps) => {
                     <DropdownMenuSeparator />
                     <ActionTooltip tooltipContent="Remove All Filters">
                         <DropdownMenuItem
-                            className="text-xs"
+                            className="text-xs bg-secondary"
                             onClick={(e) => {
                                 resetFilter()
                                 e.stopPropagation()

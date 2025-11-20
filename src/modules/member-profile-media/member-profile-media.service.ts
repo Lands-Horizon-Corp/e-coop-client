@@ -99,9 +99,9 @@ export const useMemberProfileMediaBulk = createMutationFactory<
     Error,
     { memberProfileId: TEntityId } & IMemberProfileMediaBulkRequest
 >({
-    mutationFn: async (payload) => {
-        const url = `${memberProfileMediaAPIRoute}/bulk/member-profile/${payload.memberProfileId}`
-        return createMemberProfileMedia({ url, payload })
+    mutationFn: async ({ ids, memberProfileId }) => {
+        const url = `${memberProfileMediaAPIRoute}/bulk/member-profile/${memberProfileId}`
+        return createMemberProfileMedia({ url, payload : { ids } })
     },
     defaultInvalidates: [
         [memberProfileMediaBaseKey, 'paginated'],

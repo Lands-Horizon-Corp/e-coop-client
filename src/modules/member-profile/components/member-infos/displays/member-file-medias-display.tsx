@@ -128,7 +128,7 @@ const MemberFileMediaDisplay = ({ memberProfileId, className }: Props) => {
                     mode: 'multiple',
                     onMultipleUploadComplete: (uploadedMedias) => {
                         bulkUploadMediaForMemberProfile({
-                            media_ids: uploadedMedias.map((m) => m.id),
+                            ids: uploadedMedias.map((m) => m.id),
                             memberProfileId: memberProfileId as TEntityId,
                         })
                     },
