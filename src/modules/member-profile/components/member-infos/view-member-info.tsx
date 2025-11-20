@@ -7,6 +7,7 @@ import { IconType } from 'react-icons/lib'
 
 import {
     BankIcon,
+    CompressedFileFillIcon,
     CreditCardIcon,
     FolderFillIcon,
     UserCogIcon,
@@ -25,6 +26,7 @@ import { IClassProps, TEntityId } from '@/types'
 import { IMemberProfile, useGetMemberProfileById } from '../..'
 import MemberCloseAccountBanner from './banners/member-closed-account-banner'
 import MemberInfoBanner from './banners/member-info-banner'
+import MemberFileArchiveDisplay from './displays/member-file-archives-display'
 import MemberAccountsLoans from './member-accounts-loans'
 import MemberFinancialInfo from './member-financial-info'
 import MemberMembershipInfo from './member-general-membership-info'
@@ -78,9 +80,15 @@ const memberInfoTabs: {
     },
     {
         value: 'medias',
-        title: "Member Media's",
+        title: 'Files',
         Icon: FolderFillIcon,
         Component: (props) => <MemberMediasInfo {...props} />,
+    },
+    {
+        value: 'archives',
+        title: 'Archives',
+        Icon: CompressedFileFillIcon,
+        Component: (props) => <MemberFileArchiveDisplay {...props} />,
     },
     {
         value: 'financial',

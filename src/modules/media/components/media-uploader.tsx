@@ -34,6 +34,7 @@ interface BaseMediaUploaderProps {
     maxFiles?: number
     disabled?: boolean
     className?: string
+    onUploadStateChange?: (isUploading: boolean) => void
 }
 
 interface SingleModeProps extends BaseMediaUploaderProps {
@@ -48,7 +49,7 @@ interface MultipleModeProps extends BaseMediaUploaderProps {
     onSingleUploadComplete?: never
 }
 
-type MediaUploaderProps = SingleModeProps | MultipleModeProps
+export type MediaUploaderProps = SingleModeProps | MultipleModeProps
 
 interface FileUploadState {
     file: File
@@ -71,6 +72,7 @@ interface FileItemProps {
     displayMode?: boolean
     uploadedBy?: string
     otherAction?: React.ReactNode
+    onUploadStateChange?: (isUploading: boolean) => void
 }
 
 const FileItem = ({
@@ -225,6 +227,7 @@ const MediaUploader = (props: MediaUploaderProps) => {
         maxFiles = mode === 'single' ? 1 : 10,
         disabled = false,
         className = '',
+        onUploadStateChange,
     } = props
 
     const [fileStates, setFileStates] = useState<Map<string, FileUploadState>>(
@@ -235,6 +238,7 @@ const MediaUploader = (props: MediaUploaderProps) => {
         null
     )
     const completionCalledRef = useRef(false)
+    const uploadStartCalledRef = useRef(false)
 
     // Generate unique key for file
     const getFileKey = (file: File): string => {
@@ -304,13 +308,18 @@ const MediaUploader = (props: MediaUploaderProps) => {
                         ) {
                             props.onMultipleUploadComplete(uploadedMedias)
                         }
+
+                        // Call onUploadStateChange when all uploads finish
+                        if (onUploadStateChange) {
+                            onUploadStateChange(false)
+                        }
                     }, 0)
                 }
 
                 return prev
             })
         },
-        [mode, props]
+        [mode, props, onUploadStateChange]
     )
 
     // Process upload queue
@@ -323,6 +332,12 @@ const MediaUploader = (props: MediaUploaderProps) => {
         if (!fileState || fileState.isUploading || fileState.media) {
             setUploadQueue((prev) => prev.slice(1))
             return
+        }
+
+        // Call onUploadStateChange when upload starts (only once)
+        if (!uploadStartCalledRef.current && onUploadStateChange) {
+            uploadStartCalledRef.current = true
+            onUploadStateChange(true)
         }
 
         setCurrentlyUploading(nextFileKey)
@@ -403,6 +418,7 @@ const MediaUploader = (props: MediaUploaderProps) => {
         fileStates,
         uploadFile,
         checkAllUploadsComplete,
+        onUploadStateChange,
     ])
 
     // Handle files dropped (just add to state, don't upload yet)
@@ -447,8 +463,9 @@ const MediaUploader = (props: MediaUploaderProps) => {
             }
         })
 
-        // Reset completion flag when starting uploads
+        // Reset completion and upload start flags when starting uploads
         completionCalledRef.current = false
+        uploadStartCalledRef.current = false
         setUploadQueue((prev) => [...prev, ...newQueue])
     }, [fileStates])
 
