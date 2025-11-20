@@ -103,9 +103,18 @@ export const findCountry = (query: string): Country | undefined => {
     return results[0]?.item
 }
 
+type TCountryChangeMode =
+    | {
+          undefinable?: true
+          onChange?: (country: Country | undefined) => void
+      }
+    | {
+          undefinable?: false
+          onChange?: (country: Country) => void
+      }
+
 interface CountryDropdownProps {
     options?: Country[]
-    onChange?: (country: Country) => void
     defaultValue?: string
     disabled?: boolean
     placeholder?: string
@@ -116,12 +125,13 @@ const CountryComboboxComponent = (
     {
         options = availableCountries,
         onChange,
+        undefinable,
         defaultValue,
         disabled = false,
         placeholder = 'Select a country',
         slim = false,
         ...props
-    }: CountryDropdownProps,
+    }: CountryDropdownProps & TCountryChangeMode,
     ref: React.ForwardedRef<HTMLButtonElement>
 ) => {
     const [open, setOpen] = useState(false)
@@ -222,6 +232,18 @@ const CountryComboboxComponent = (
                         </div>
                         <CommandEmpty>No country found.</CommandEmpty>
                         <CommandGroup>
+                            {undefinable && (
+                                <CommandItem
+                                    className="justify-center text-muted-foreground"
+                                    onSelect={() => {
+                                        setOpen(false)
+                                        onChange?.(undefined)
+                                    }}
+                                    value={undefined}
+                                >
+                                    Select None
+                                </CommandItem>
+                            )}
                             {filteredCountries
                                 .filter((x) => x.name)
                                 .map((option, key: number) => (

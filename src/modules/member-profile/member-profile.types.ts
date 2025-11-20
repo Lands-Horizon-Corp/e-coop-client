@@ -83,6 +83,8 @@ export interface IMemberProfileRequest {
     businessAddress?: string
     businessContact?: string
 
+    birth_place?: string // ISO ALPHA-3
+
     status: TGeneralStatus
     isClosed: boolean
 
@@ -242,6 +244,8 @@ export interface IMemberProfilePersonalInfoRequest {
     birthdate?: string
     contact_number?: string
     business_contact_number?: string
+
+    birth_place?: string // ISO ALPHA-3
 
     civil_status: TCivilStatus
 

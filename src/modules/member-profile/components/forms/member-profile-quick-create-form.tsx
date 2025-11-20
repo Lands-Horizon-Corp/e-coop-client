@@ -15,6 +15,7 @@ import MemberTypeCombobox from '@/modules/member-type/components/member-type-com
 import { HandCoinsIcon, PieChartIcon } from 'lucide-react'
 
 import CivilStatusCombobox from '@/components/comboboxes/civil-status-combobox'
+import { CountryCombobox } from '@/components/comboboxes/country-combobox'
 import GeneralStatusCombobox from '@/components/comboboxes/general-status-combobox'
 import FormFooterResetSubmit from '@/components/form-components/form-footer-reset-submit'
 import { VerifiedPatchIcon } from '@/components/icons'
@@ -318,6 +319,21 @@ const MemberProfileQuickCreateForm = ({
                                             defaultCountry="PH"
                                         />
                                     </div>
+                                )}
+                            />
+                            <FormFieldWrapper
+                                control={form.control}
+                                label="Birth Place"
+                                name="birth_place"
+                                render={({ field }) => (
+                                    <CountryCombobox
+                                        {...field}
+                                        defaultValue={field.value}
+                                        onChange={(country) => {
+                                            field.onChange(country?.alpha3)
+                                        }}
+                                        undefinable={true}
+                                    />
                                 )}
                             />
                         </div>

@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback } from 'react'
 
 import { Outlet, createRootRoute } from '@tanstack/react-router'
 import { AxiosError } from 'axios'
@@ -11,12 +11,10 @@ import { useAuthStore } from '@/modules/authentication/authgentication.store'
 import UserProfileInactivityPrompter from '@/modules/user-profile/components/user-profile-inactivity-prompter'
 import { ActionSecurityProvider } from '@/providers/action-security-provider'
 import ConnectionProvider from '@/providers/connection-provider'
-import { motion } from 'framer-motion'
 
 import CookieConsent from '@/components/cookie-consent'
 import {
     CheckFillIcon,
-    CursorFillIcon,
     InfoFillCircleIcon,
     NotAllowedIcon,
     WarningFillIcon,
@@ -86,7 +84,6 @@ function RootLayout() {
 
     return (
         <div className="relative">
-            <CursorFollow />
             <DndProvider backend={HTML5Backend}>
                 <Toaster
                     className="z-[9999] toaster group"
@@ -144,39 +141,5 @@ function RootLayout() {
                 {/* <TanStackRouterDevtools /> */}
             </DndProvider>
         </div>
-    )
-}
-
-export const CursorFollow = () => {
-    const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 })
-
-    useEffect(() => {
-        const updateMousePosition = (e: MouseEvent) => {
-            setMousePosition({ x: e.clientX, y: e.clientY })
-        }
-
-        window.addEventListener('mousemove', updateMousePosition)
-
-        return () => {
-            window.removeEventListener('mousemove', updateMousePosition)
-        }
-    }, [])
-
-    return (
-        <motion.div
-            animate={{
-                x: mousePosition.x - 12,
-                y: mousePosition.y - 12,
-            }}
-            className="fixed pointer-events-none z-[9999] size-2 translate-y-full translate-x-full mix-blend-difference"
-            transition={{
-                type: 'spring',
-                stiffness: 500,
-                damping: 28,
-                mass: 0.5,
-            }}
-        >
-            <CursorFillIcon className=" -rotate-[80deg]" />
-        </motion.div>
     )
 }

@@ -1,3 +1,5 @@
+import { useEffect } from 'react'
+
 import { useForm } from 'react-hook-form'
 import z from 'zod'
 
@@ -23,10 +25,15 @@ import { IClassProps, IForm, TEntityId } from '@/types'
 
 import {
     useCreateMemberGovernmentBenefit,
+    useGetAllGovernmentIds,
     useUpdateMemberGovernmentBenefit,
 } from '../../member-government-benefit.service'
-import { IMemberGovernmentBenefit } from '../../member-government-benefit.types'
+import {
+    IGovernmentId,
+    IMemberGovernmentBenefit,
+} from '../../member-government-benefit.types'
 import { MemberGovernmentBenefitSchema } from '../../member-government-benefit.validation'
+import GovernmentIdCombobox from '../government-id-combobox'
 
 type TMemberGovernmentBenefitFormValues = z.infer<
     typeof MemberGovernmentBenefitSchema
@@ -104,34 +111,46 @@ const MemberGovernmentBenefitCreateUpdateForm = ({
         reset,
     } = benefitId ? updateMutation : createMutation
 
+    const name = form.watch('name')
+    const isoAlpha3 = form.watch('country_code')
+    const government: IGovernmentId | undefined = form.watch('government')
+
+    const { data } = useGetAllGovernmentIds({
+        isoAlpha3,
+        options: {
+            enabled: !!isoAlpha3,
+        },
+    })
+
+    useEffect(() => {
+        if (government || !name || name.length === 0 || data?.length === 0)
+            return
+
+        const matchedGovernment = data?.find((gov) => gov.name === name)
+
+        if (matchedGovernment) {
+            form.setValue('government', matchedGovernment)
+        }
+    }, [data, form, government, name])
+
     const error = serverRequestErrExtractor({ error: rawError })
 
     return (
         <Form {...form}>
             <form
-                className={cn('flex flex-col gap-y-4', className)}
+                className={cn(
+                    'flex min-w-0 max-w-full flex-col gap-y-4',
+                    className
+                )}
                 onSubmit={onSubmit}
                 ref={formRef}
             >
                 <fieldset
-                    className="grid gap-x-6 gap-y-4 sm:gap-y-3"
+                    className="grid gap-x-6 min-w-0 max-w-full gap-y-4 sm:gap-y-3"
                     disabled={isPending || formProps.readOnly}
                 >
-                    <fieldset className="space-y-3">
-                        <FormFieldWrapper
-                            control={form.control}
-                            label="Name *"
-                            name="name"
-                            render={({ field }) => (
-                                <Input
-                                    {...field}
-                                    disabled={isDisabled(field.name)}
-                                    id={field.name}
-                                    placeholder="Government Benefit Name"
-                                />
-                            )}
-                        />
-                        <div className="grid w-full gap-4 sm:grid-cols-8">
+                    <fieldset className="space-y-3 max-w-full min-w-0">
+                        <div className="grid w-full min-w-0 max-w-full gap-4 sm:grid-cols-8">
                             <FormFieldWrapper
                                 className="col-span-full"
                                 control={form.control}
@@ -142,17 +161,46 @@ const MemberGovernmentBenefitCreateUpdateForm = ({
                                         {...field}
                                         defaultValue={field.value}
                                         disabled={isDisabled(field.name)}
-                                        onChange={(country) =>
-                                            field.onChange(country.alpha2)
-                                        }
+                                        onChange={(country) => {
+                                            field.onChange(country.alpha3)
+                                        }}
                                         placeholder="Country"
+                                        undefinable={false}
+                                    />
+                                )}
+                            />
+                            <FormFieldWrapper
+                                className="col-span-full"
+                                control={form.control}
+                                label="Name *"
+                                name="name"
+                                render={({ field }) => (
+                                    <GovernmentIdCombobox
+                                        className="col-span-full"
+                                        disabled={!isoAlpha3}
+                                        isoAlpha3={isoAlpha3}
+                                        {...field}
+                                        onChange={(governmentId) => {
+                                            form.setValue(
+                                                'name',
+                                                governmentId?.name ?? ''
+                                            )
+                                            form.setValue(
+                                                'government',
+                                                governmentId
+                                            )
+                                        }}
                                     />
                                 )}
                             />
                             <FormFieldWrapper
                                 className="col-span-4"
                                 control={form.control}
-                                label="Value *"
+                                label={
+                                    government?.field_name
+                                        ? government.field_name
+                                        : 'Value *'
+                                }
                                 name="value"
                                 render={({ field }) => (
                                     <Input

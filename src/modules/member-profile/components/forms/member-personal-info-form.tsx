@@ -14,6 +14,7 @@ import MemberGenderCombobox from '@/modules/member-gender/components/member-gend
 import MemberOccupationCombobox from '@/modules/member-occupation/components/member-occupation-combobox'
 
 import CivilStatusCombobox from '@/components/comboboxes/civil-status-combobox'
+import { CountryCombobox } from '@/components/comboboxes/country-combobox'
 import FormFooterResetSubmit from '@/components/form-components/form-footer-reset-submit'
 import { VerifiedPatchIcon } from '@/components/icons'
 import TextEditor from '@/components/text-editor'
@@ -409,6 +410,21 @@ const MemberPersonalInfoForm = ({
                                         disabled={isDisabled(field.name)}
                                         id={field.name}
                                         placeholder="Business Contact"
+                                    />
+                                )}
+                            />
+                            <FormFieldWrapper
+                                control={form.control}
+                                label="Birth Place"
+                                name="birth_place"
+                                render={({ field }) => (
+                                    <CountryCombobox
+                                        {...field}
+                                        defaultValue={field.value}
+                                        onChange={(country) => {
+                                            field.onChange(country?.alpha3)
+                                        }}
+                                        undefinable={false}
                                     />
                                 )}
                             />

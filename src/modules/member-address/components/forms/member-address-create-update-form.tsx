@@ -153,6 +153,7 @@ const MemberAddressCreateUpdateForm = ({
                                     onChange={(country) =>
                                         field.onChange(country.alpha2)
                                     }
+                                    undefinable={false}
                                 />
                             )}
                         />
