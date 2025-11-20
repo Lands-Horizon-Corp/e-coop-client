@@ -14,6 +14,7 @@ import { TAPIQueryOptions, TEntityId } from '@/types'
 
 // import { IAmortizationSchedule } from '../amortization'
 import type {
+    IAllMembersLoanSummaryResponse,
     ILoanAmortizationSchedules,
     ILoanPaymentResponse,
     ILoanTransaction,
@@ -455,5 +456,63 @@ export const useGetLoanTransactionSummary = ({
         },
     })
 }
+
+// GET LOAN SUMMARIES
+// export const useLoanAllMemberSummary = ({
+//     loanTransactionId,
+//     options,
+// }: {
+//     loanTransactionId: TEntityId
+//     options?: HookQueryOptions<ILoanTransactionSummaryResponse, Error>
+// }) => {
+//     return useQuery<ILoanTransactionSummaryResponse, Error>({
+//         ...options,
+//         queryKey: [loanTransactionBaseKey, 'summary'],
+//         queryFn: async () => {
+//             const response = await API.get<ILoanAmortizationSchedules>(
+//                 `${loanTransactionAPIRoute}/${loanTransactionId}/schedule`
+//             )
+
+//             return response.data
+//         },
+//     })
+// }
+
+// GET ALL MEMBER LOAN SUMMARIES
+export const useLoanAllMemberLoanSummary = ({
+    options,
+}: {
+    options?: HookQueryOptions<IAllMembersLoanSummaryResponse, Error>
+}) => {
+    return useQuery<IAllMembersLoanSummaryResponse, Error>({
+        ...options,
+        queryKey: [loanTransactionBaseKey, 'all-members-summary'],
+        queryFn: async () => {
+            const response = await API.get<IAllMembersLoanSummaryResponse>(
+                `${loanTransactionAPIRoute}/all-members-summary`
+            )
+            return response.data
+        },
+    })
+}
+
+// loan all summary clear cache
+export const useLoanSummaryClearCache = createMutationFactory<
+    void,
+    Error,
+    void
+>({
+    mutationFn: async () => {
+        await API.delete(`${loanTransactionAPIRoute}/all-members-summary/cache`)
+    },
+    invalidationFn: ({ queryClient }) => {
+        queryClient.invalidateQueries({
+            queryKey: [loanTransactionBaseKey, 'all-members-summary'],
+        })
+        queryClient.invalidateQueries({
+            queryKey: [loanTransactionBaseKey, 'paginated'],
+        })
+    },
+})
 
 export const logger = Logger.getInstance('loan-transaction')

@@ -1,12 +1,12 @@
-import { useEffect, useState } from 'react'
+// import { useEffect, useState } from 'react'
 
 import { Outlet, createFileRoute } from '@tanstack/react-router'
 
 import { useAuthUserWithOrgBranch } from '@/modules/authentication/authgentication.store'
 import TimeMachineTimeStatusBar from '@/modules/user-organization/components/time-machine-time-status-bar'
-import { motion } from 'framer-motion'
+// import { motion } from 'framer-motion'
 
-import { CursorFillIcon } from '@/components/icons'
+// import { CursorFillIcon } from '@/components/icons'
 import UserNav from '@/components/nav/navs/user-nav'
 import OrgBranchSidebar from '@/components/sidebar/org-branch-sidebar'
 import { SidebarInset, SidebarProvider } from '@/components/ui/sidebar'
@@ -20,7 +20,6 @@ export const Route = createFileRoute('/org/$orgname/branch/$branchname')({
 function RouteComponent() {
     return (
         <AuthGuard>
-            <CursorFollow />
             <OrgBranchUrlGuard>
                 <SidebarProvider>
                     <OrgBranchSidebar />
@@ -34,40 +33,6 @@ function RouteComponent() {
                 </SidebarProvider>
             </OrgBranchUrlGuard>
         </AuthGuard>
-    )
-}
-
-const CursorFollow = () => {
-    const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 })
-
-    useEffect(() => {
-        const updateMousePosition = (e: MouseEvent) => {
-            setMousePosition({ x: e.clientX, y: e.clientY })
-        }
-
-        window.addEventListener('mousemove', updateMousePosition)
-
-        return () => {
-            window.removeEventListener('mousemove', updateMousePosition)
-        }
-    }, [])
-
-    return (
-        <motion.div
-            animate={{
-                x: mousePosition.x - 12,
-                y: mousePosition.y - 12,
-            }}
-            className="fixed pointer-events-none z-[9999] size-2 translate-y-full translate-x-full mix-blend-difference"
-            transition={{
-                type: 'spring',
-                stiffness: 500,
-                damping: 28,
-                mass: 0.5,
-            }}
-        >
-            <CursorFillIcon className=" -rotate-90" />
-        </motion.div>
     )
 }
 

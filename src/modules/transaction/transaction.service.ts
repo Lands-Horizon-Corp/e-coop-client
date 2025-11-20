@@ -229,39 +229,39 @@ export const logger = Logger.getInstance('transaction')
 
 // For Jervx Loan Payment Multiple Payable Account since loan may have multiple accounts
 // to be paid
-// export const useCreateMultiTransactionPayment = createMutationFactory<
-//     IGeneralLedger,
-//     Error,
-//     { transactionId: TEntityId; payments: IPaymentRequest[] }
-// >({
-//     mutationFn: async ({ payments, transactionId }) =>
-//         (
-//             await API.post<IPaymentRequest[], IGeneralLedger>(
-//                 `${transactionAPIRoute}/${transactionId}/multipayment`,
-//                 payments
-//             )
-//         ).data,
-//     invalidationFn: (args) => {
-//         createMutationInvalidateFn('transaction', args)
-//         createMutationInvalidateFn('general-ledger', args)
-//     },
-// })
-
-export const useCreateSingleTransactionPayment = createMutationFactory<
+export const useCreateMultiTransactionPayment = createMutationFactory<
     IGeneralLedger,
     Error,
-    { transactionId: TEntityId; data: IPaymentRequest }
+    { transactionId: TEntityId; payments: IPaymentRequest[] }
 >({
-    mutationFn: async ({ data, transactionId }) => {
-        const response = await createPaymentTransaction({
-            mode: 'payment',
-            transactionId,
-            data: data,
-        })
-        return response
-    },
+    mutationFn: async ({ payments, transactionId }) =>
+        (
+            await API.post<IPaymentRequest[], IGeneralLedger>(
+                `${transactionAPIRoute}/${transactionId}/multipayment`,
+                payments
+            )
+        ).data,
     invalidationFn: (args) => {
         createMutationInvalidateFn('transaction', args)
         createMutationInvalidateFn('general-ledger', args)
     },
 })
+
+// export const useCreateSingleTransactionPayment = createMutationFactory<
+//     IGeneralLedger,
+//     Error,
+//     { transactionId: TEntityId; data: IPaymentRequest }
+// >({
+//     mutationFn: async ({ data, transactionId }) => {
+//         const response = await createPaymentTransaction({
+//             mode: 'payment',
+//             transactionId,
+//             data: data,
+//         })
+//         return response
+//     },
+//     invalidationFn: (args) => {
+//         createMutationInvalidateFn('transaction', args)
+//         createMutationInvalidateFn('general-ledger', args)
+//     },
+// })

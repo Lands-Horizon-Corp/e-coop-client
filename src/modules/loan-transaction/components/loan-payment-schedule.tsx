@@ -83,6 +83,8 @@ const LoanPaymentSchedule = ({
         },
     })
 
+    const resolvedAccountDefaultId = accountDefaultId || data?.account_payments[0]?.account.id
+
     return (
         <div className={cn('space-y-6 min-w-0 max-w-full', className)}>
             {/* Summary Section */}
@@ -369,7 +371,7 @@ const LoanPaymentSchedule = ({
                         <CardContent className="flex-1 min-h-0 max-h-full overflow-auto">
                             <Tabs
                                 className="w-full relative overflow-clip max-h-full min-h-0 flex-row min-w-0"
-                                defaultValue={`account-${accountDefaultId || 0}`}
+                                defaultValue={`account-${resolvedAccountDefaultId || 0}`}
                                 orientation="vertical"
                             >
                                 <TabsList className="flex-col h-fit gap-1 sticky top-0 rounded-none bg-transparent px-1 py-0 text-foreground">
@@ -1052,7 +1054,7 @@ export const LoanPaymentScheduleModal = ({
     return (
         <Modal
             {...props}
-            className="!max-w-[95vw] flex flex-col !max-h-[80vh] bg-transparent p-0 shadow-none border-none gap-y-0"
+            className="!max-w-[95vw] flex flex-col !max-h-[95vh] bg-transparent p-0 shadow-none border-none gap-y-0"
             closeButtonClassName="top-2 right-2"
             descriptionClassName="sr-only"
             titleClassName="sr-only"

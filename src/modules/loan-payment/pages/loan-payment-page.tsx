@@ -2,13 +2,16 @@ import { useState } from 'react'
 
 import { toast } from 'sonner'
 
+import ARTWORK_LOAN_SELECT_EMPTY from '@/assets/artworks/artwork-loan-select-empty.svg'
 import { IAccount } from '@/modules/account'
+import { sortAccountsByTypePriority } from '@/modules/account/account.utils'
 import { ICurrency } from '@/modules/currency'
 import {
     ILoanPaymentPerAccount,
     ILoanTransaction,
     useLoanPaymentSchedule,
 } from '@/modules/loan-transaction'
+import LoanAllMemberSummary from '@/modules/loan-transaction/components/statistics/loan-all-member-summary'
 import { LoanMicroInfoCard } from '@/modules/loan-transaction/components/loan-mini-info-card'
 import LoanPickerAll from '@/modules/loan-transaction/components/loan-picker-all'
 import {
@@ -21,6 +24,7 @@ import { useTransactionBatchStore } from '@/modules/transaction-batch/store/tran
 
 import PageContainer from '@/components/containers/page-container'
 import { HandCoinsIcon, XIcon } from '@/components/icons'
+import ImageDisplay from '@/components/image-display'
 import { Button } from '@/components/ui/button'
 import {
     ResizableHandle,
@@ -74,9 +78,11 @@ function LoanPaymentPage() {
     })
 
     const payables =
-        paymentSchedule?.account_payments.map((smry) =>
-            getCurrentPayable(smry)
-        ) || []
+        paymentSchedule?.account_payments
+            .sort(({ account: a }, { account: b }) =>
+                sortAccountsByTypePriority(a, b)
+            )
+            .map((smry) => getCurrentPayable(smry)) || []
 
     const handleAccountClick = (account: IAccount) => {
         if (account.type !== 'Loan')
@@ -149,25 +155,52 @@ function LoanPaymentPage() {
                             </Button>
                         )}
                     </div>
-                    <div>
-                        <p>Paying for Loan</p>
-                        {selectedLoan && (
-                            <LoanMicroInfoCard
-                                className="rounded-xl p-3 bg-accent/50"
-                                loanTransaction={selectedLoan}
-                            />
-                        )}
-                    </div>
-                    {member && (
-                        <LoanPayablesForm
-                            currency={
-                                (currentTransactionBatch?.currency ||
-                                    selectedLoan?.account
-                                        ?.currency) as ICurrency
-                            }
-                            memberProfileId={member.id}
-                            payables={payables}
-                        />
+
+                    {!member || !selectedLoan ? (
+                        <div className="flex flex-col items-center gap-y-6 py-8">
+                            <div className="flex flex-col items-center justify-center gap-y-4">
+                                <ImageDisplay
+                                    className="size-48 rounded-xl"
+                                    src={ARTWORK_LOAN_SELECT_EMPTY}
+                                />
+                                <p className="!-mb-4 text-lg">
+                                    {!member
+                                        ? 'Select a Member to Get Started'
+                                        : 'Select a Loan to Pay'}
+                                </p>
+                                <p className="text-sm text-muted-foreground text-center max-w-md">
+                                    {!member
+                                        ? 'Choose a member from the list to view their loan accounts and make payments'
+                                        : 'Click on a loan account from the right panel to begin processing payment'}
+                                </p>
+                            </div>
+                            
+                            {!selectedLoan && <LoanAllMemberSummary className="w-full" />}
+                        </div>
+                    ) : (
+                        <>
+                            <div>
+                                <p>Paying for Loan</p>
+                                {selectedLoan && (
+                                    <LoanMicroInfoCard
+                                        className="rounded-xl p-3 bg-accent/50"
+                                        loanTransaction={selectedLoan}
+                                    />
+                                )}
+                            </div>
+                            {member && (
+                                <LoanPayablesForm
+                                    currency={
+                                        (currentTransactionBatch?.currency ||
+                                            selectedLoan?.account
+                                                ?.currency) as ICurrency
+                                    }
+                                    loanTransactionId={selectedLoan.id}
+                                    memberProfileId={member.id}
+                                    payables={payables}
+                                />
+                            )}
+                        </>
                     )}
                 </ResizablePanel>
                 <ResizableHandle withHandle />

@@ -195,7 +195,7 @@ const MemberFileMediaDisplay = ({ memberProfileId, className }: Props) => {
                             <Input
                                 className="pl-10"
                                 onChange={(e) => setSearchQuery(e.target.value)}
-                                placeholder="Search (with fuse.js) ( file name, file type, filename + filetype )"
+                                placeholder="Search ( file name, file type, filename + filetype )"
                                 value={searchQuery}
                             />
                         </div>

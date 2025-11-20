@@ -412,3 +412,84 @@ export interface ILoanPaymentResponse {
     account_payments: ILoanPaymentPerAccount[] // Payment details per account
     summary: ILoanPaymentSummary // Aggregated summary across all accounts
 }
+
+// LOAN SUMMARY ALL MEMBER
+
+export interface ILoanAccountSummaryResponse {
+    account_history_id: TEntityId
+    account_history: IAccountHistory
+
+    total_debit: number
+    total_credit: number
+    balance: number
+
+    due_date?: string
+    last_payment?: string
+
+    total_number_of_payments: number
+
+    total_number_of_deductions: number
+    total_deductions: number
+    total_number_of_additions: number
+    total_additions: number
+
+    total_account_principal: number
+    total_account_advanced_payment: number
+    total_account_principal_paid: number
+    total_remaining_principal: number
+    loan_transaction_id: TEntityId
+}
+
+export interface ILoanTransactionSummaryResponse {
+    loan_transaction_id: TEntityId
+    amount_granted: number
+    add_on_amount: number
+
+    arrears: number
+
+    last_payment?: string
+    first_deliquency_date?: string
+    first_irregularity_date?: string
+    total_principal: number
+    total_advanced_payment: number
+    total_principal_paid: number
+    total_remaining_principal: number
+}
+
+
+// MEMBER LOAN SUMMARY
+
+// MemberLoanSummary represents loan summary for a single member
+export interface IMemberLoanSummary {
+    member_profile_id: TEntityId
+    total_loans: number
+    total_arrears: number
+    total_principal: number
+    total_paid: number
+    total_remaining: number
+    active_loans: number
+    fully_paid_loans: number
+    overdue_loans: number
+    last_payment_date?: string
+    last_payment_amount: number
+}
+
+// AllMembersLoanSummaryResponse represents loan summaries for all members
+export interface IAllMembersLoanSummaryResponse {
+    member_summaries: IMemberLoanSummary[] 
+    total_members: number
+    total_loans: number
+    total_arrears: number
+    total_principal: number
+    total_paid: number
+    total_remaining: number
+    total_active_loans: number
+    total_fully_paid_loans: number
+    total_overdue_loans: number
+    members_with_loans: number
+    members_with_overdue: number
+    members_fully_paid: number
+    organization_id: TEntityId
+    branch_id: TEntityId
+    generated_at: string
+}
