@@ -6,23 +6,27 @@ import { toast } from 'sonner'
 import { cn } from '@/helpers'
 import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
 import {
-    FileItem,
     FileItemProps,
     MediaUploaderModal,
 } from '@/modules/media/components/media-uploader'
 import {
+    IMemberProfileMedia,
     useDeleteMemberProfileMediaById,
     useGetAllMemberProfileMediaByMemberProfile,
     useMemberProfileMediaBulk,
 } from '@/modules/member-profile-media'
+import { UpdateMemberProfileMediaFormModal } from '@/modules/member-profile-media/components/form/update-member-profile-media-form'
+import MemberMediaItem from '@/modules/member-profile-media/components/member-media-item'
 
 import {
     FolderFillIcon,
     MagnifyingGlassIcon,
+    PencilFillIcon,
     PlusIcon,
     RefreshIcon,
 } from '@/components/icons'
 import LoadingSpinner from '@/components/spinners/loading-spinner'
+import ActionTooltip from '@/components/tooltips/action-tooltip'
 import { Button } from '@/components/ui/button'
 import {
     Empty,
@@ -238,6 +242,7 @@ const MemberFileMediaDisplay = ({ memberProfileId, className }: Props) => {
                                     id={item.id}
                                     key={item.id}
                                     media={item.media}
+                                    memberMedia={item}
                                     uploadedBy={
                                         item.created_by?.full_name ||
                                         'unknown user'
@@ -268,10 +273,16 @@ const MemberFileMediaDisplay = ({ memberProfileId, className }: Props) => {
 
 type MemberMediaFileItemProps = FileItemProps & {
     id: TEntityId
+    memberMedia: IMemberProfileMedia
 }
 
-const MemberMediaFileItem = ({ id, ...props }: MemberMediaFileItemProps) => {
+const MemberMediaFileItem = ({
+    id,
+    memberMedia,
+    ...props
+}: MemberMediaFileItemProps) => {
     const deleteMutation = useDeleteMemberProfileMediaById()
+    const editMemberMedia = useModalState()
 
     const handleDelete = () => {
         toast.promise(deleteMutation.mutateAsync(id), {
@@ -284,7 +295,34 @@ const MemberMediaFileItem = ({ id, ...props }: MemberMediaFileItemProps) => {
         })
     }
 
-    return <FileItem {...props} onRemoveFile={handleDelete} />
+    return (
+        <>
+            <UpdateMemberProfileMediaFormModal
+                {...editMemberMedia}
+                formProps={{
+                    defaultValues: memberMedia,
+                }}
+            />
+            <MemberMediaItem
+                {...props}
+                memberMedia={memberMedia}
+                onRemove={handleDelete}
+                otherAction={
+                    <ActionTooltip side="left" tooltipContent="Delete file">
+                        <Button
+                            className="size-fit rounded-md p-1 hover:text-destructive-foreground"
+                            hoverVariant="destructive"
+                            onClick={() => editMemberMedia.onOpenChange(true)}
+                            size="icon"
+                            variant="secondary"
+                        >
+                            <PencilFillIcon className="size-4 cursor-pointer" />
+                        </Button>
+                    </ActionTooltip>
+                }
+            />
+        </>
+    )
 }
 
 export default MemberFileMediaDisplay

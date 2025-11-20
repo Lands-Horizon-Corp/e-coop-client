@@ -70,6 +70,7 @@ interface FileItemProps {
     onRemoveFile?: () => void
     displayMode?: boolean
     uploadedBy?: string
+    otherAction?: React.ReactNode
 }
 
 const FileItem = ({
@@ -77,6 +78,7 @@ const FileItem = ({
     uploadDetails,
     media,
     uploadedBy,
+    otherAction,
     onRemoveFile,
 }: FileItemProps) => {
     // Determine what to display based on media or file
@@ -199,6 +201,7 @@ const FileItem = ({
                             </Button>
                         </ActionTooltip>
                     )}
+                    {otherAction}
                 </div>
             </div>
             {uploadDetails?.isUploading && (

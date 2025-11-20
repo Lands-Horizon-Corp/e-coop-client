@@ -8,6 +8,7 @@ import {
 import {
     createMutationFactory,
     deleteMutationInvalidationFn,
+    updateMutationInvalidationFn,
 } from '@/providers/repositories/mutation-factory'
 
 import { TAPIQueryOptions, TEntityId } from '@/types'
@@ -50,7 +51,7 @@ export { memberProfileMediaBaseKey } // Exported in case it's needed outside
 
 export const {
     useCreate: useCreateMemberProfileMedia,
-    useUpdateById: useUpdateMemberProfileMediaById,
+    // useUpdateById: useUpdateMemberProfileMediaById,
 
     // useGetAll: useGetAllMemberProfileMedia,
     useGetById: useGetMemberProfileMediaById,
@@ -59,6 +60,26 @@ export const {
     // useDeleteById: useDeleteMemberProfileMediaById,
     useDeleteMany: useDeleteManyMemberProfileMedia,
 } = apiCrudHooks
+
+export const useUpdateMemberProfileMediaById = createMutationFactory<
+    IMemberProfileMedia,
+    Error,
+    { id: TEntityId; payload: IMemberProfileMediaRequest }
+>({
+    mutationFn: async ({ id, payload }) => {
+        const response = await API.put<typeof payload, IMemberProfileMedia>(
+            `${memberProfileMediaAPIRoute}/${id}`,
+            payload
+        )
+        return response.data
+    },
+    invalidationFn: (args) => {
+        args.queryClient.invalidateQueries({
+            queryKey: [memberProfileMediaBaseKey, 'all', 'member-profile'],
+        })
+        updateMutationInvalidationFn(memberProfileMediaBaseKey, args)
+    },
+})
 
 type TMemberProfileMediaHookMode = 'all' | 'member-profile'
 
@@ -75,9 +96,13 @@ export const useGetAllMemberProfileMediaByMemberProfile = ({
 } = {}) => {
     return useQuery<IMemberProfileMedia[], Error>({
         ...options,
-        queryKey: [memberProfileMediaBaseKey, 'all', mode, query].filter(
-            Boolean
-        ),
+        queryKey: [
+            memberProfileMediaBaseKey,
+            'all',
+            mode,
+            memberProfileId,
+            query,
+        ].filter(Boolean),
         queryFn: async () => {
             let url = `${memberProfileMediaAPIRoute}`
 
