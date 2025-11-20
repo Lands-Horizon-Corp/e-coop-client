@@ -101,7 +101,7 @@ export const useMemberProfileMediaBulk = createMutationFactory<
 >({
     mutationFn: async ({ ids, memberProfileId }) => {
         const url = `${memberProfileMediaAPIRoute}/bulk/member-profile/${memberProfileId}`
-        return createMemberProfileMedia({ url, payload : { ids } })
+        return createMemberProfileMedia({ url, payload: { ids } })
     },
     defaultInvalidates: [
         [memberProfileMediaBaseKey, 'paginated'],
