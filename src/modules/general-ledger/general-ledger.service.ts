@@ -32,7 +32,7 @@ export const { useGetById: getGeneralLedgerId } = apiCrudHooks
 export const {
     API,
     route: generalLedgerAPIRoute,
-    getAll,
+    getAll: getAllGeneralLedgers,
     getPaginated: getPaginatedGeneralLedger,
 } = apiCrudService
 
@@ -60,23 +60,27 @@ export const getMemberAccountGeneralLedgerTotal = async ({
     return response.data
 }
 
-type TGetAllGeneralLedgerMode = 'all' | 'loan-transaction'
+type TGetAllGeneralLedgerMode = 'all' | 'loan-transaction' | 'transaction'
 
 export const getAllGeneralLedger = async ({
     mode,
+    transactionId,
     loanTransactionId,
 }: {
     mode?: TGetAllGeneralLedgerMode
     loanTransactionId?: TEntityId
+    transactionId?: TEntityId
 }) => {
     let url = `${generalLedgerAPIRoute}`
 
     if (mode === 'loan-transaction' && loanTransactionId) {
         url = `${generalLedgerAPIRoute}/loan-transaction/${loanTransactionId}`
+    } else if (mode === 'transaction' && transactionId) {
+        url = `${generalLedgerAPIRoute}/transaction/${transactionId}`
     }
 
-    const response = await API.get<IGeneralLedger[]>(url)
-    return response.data
+    const response = await getAllGeneralLedgers({ url })
+    return response
 }
 
 // 🪝 HOOK START HERE
@@ -85,10 +89,12 @@ export const useGetAllGeneralLedger = ({
     mode = 'all',
     query,
     options,
+    transactionId,
     loanTransactionId,
 }: {
     mode?: TGetAllGeneralLedgerMode
     loanTransactionId?: TEntityId
+    transactionId?: TEntityId
     query?: TAPIQueryOptions
     options?: HookQueryOptions<IGeneralLedger[], Error>
 }) => {
@@ -98,12 +104,14 @@ export const useGetAllGeneralLedger = ({
             generalLedgerBaseKey,
             'all',
             mode,
+            transactionId,
             loanTransactionId,
             query,
         ].filter(Boolean),
         queryFn: async () =>
             getAllGeneralLedger({
                 mode,
+                transactionId,
                 loanTransactionId,
             }),
     })

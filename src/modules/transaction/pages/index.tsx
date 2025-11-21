@@ -10,7 +10,7 @@ import {
     ITransaction,
     TransactionCurrentPaymentEntry,
     TransactionModalSuccessPayment,
-    useGetById,
+    useGetTransactionById,
 } from '@/modules/transaction'
 import { useTransactionBatchStore } from '@/modules/transaction-batch/store/transaction-batch-store'
 import TransactionMemberScanner from '@/modules/transaction/components/transaction-member-scanner'
@@ -82,7 +82,7 @@ const Transaction = ({ transactionId, fullPath }: TTransactionProps) => {
         isError,
         isSuccess,
         error,
-    } = useGetById({
+    } = useGetTransactionById({
         id: transactionId,
         options: {
             enabled: !!transactionId,
@@ -151,6 +151,10 @@ const Transaction = ({ transactionId, fullPath }: TTransactionProps) => {
         }
     })
 
+    const isTransactionMismatchCurrentBatch = !transaction
+        ? false
+        : currentTransactionBatch?.id !== transaction?.transaction_batch_id
+
     return (
         <div
         // onClick={() => {
@@ -187,7 +191,7 @@ const Transaction = ({ transactionId, fullPath }: TTransactionProps) => {
 
                 <div className="flex h-full flex-col lg:flex-row  w-full gap-2 overflow-hidden">
                     {/* Left Section (Payment) */}
-                    <div className="w-full lg:w-[40%] ecoop-scroll flex flex-col py-2 overflow-y-auto">
+                    <div className="w-full lg:w-[40%] ecoop-scroll flex flex-col overflow-y-auto">
                         <TransactionCurrentPaymentEntry
                             fullPath={fullPath}
                             totalAmount={transaction?.amount}
@@ -201,6 +205,9 @@ const Transaction = ({ transactionId, fullPath }: TTransactionProps) => {
                                     e.preventDefault()
                                     handleResetAll()
                                     handleSetTransactionId({ fullPath })
+                                    queryClient.resetQueries({
+                                        queryKey: ['transaction'],
+                                    })
                                 }}
                                 size="sm"
                                 variant="outline"
@@ -253,7 +260,7 @@ const Transaction = ({ transactionId, fullPath }: TTransactionProps) => {
                 </div>
                 {/* bottom Section (transaction  Payment) */}
             </PageContainer>
-            {selectedMember && (
+            {selectedMember && !isTransactionMismatchCurrentBatch && (
                 <PaymentWithTransactionForm
                     currentTransactionBatch={currentTransactionBatch}
                     memberJointId={selectedJointMember?.id}

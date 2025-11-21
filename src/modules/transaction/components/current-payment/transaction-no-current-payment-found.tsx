@@ -1,6 +1,7 @@
 import { RefreshCcwIcon } from 'lucide-react'
 
 import { EmptyIcon } from '@/components/icons'
+import LoadingSpinner from '@/components/spinners/loading-spinner'
 import { Button } from '@/components/ui/button'
 import {
     Empty,
@@ -11,7 +12,13 @@ import {
     EmptyTitle,
 } from '@/components/ui/empty'
 
-const TransactionNoCurrentPaymentFound = () => {
+const TransactionNoCurrentPaymentFound = ({
+    isRefreshing,
+    handleRefresh,
+}: {
+    isRefreshing?: boolean
+    handleRefresh?: () => void
+}) => {
     return (
         <Empty className="flex-1 h-full">
             <EmptyHeader>
@@ -27,12 +34,19 @@ const TransactionNoCurrentPaymentFound = () => {
                     page.
                 </EmptyDescription>
             </EmptyHeader>
-            <EmptyContent>
-                <Button size="sm" variant="outline">
-                    <RefreshCcwIcon />
-                    Refresh
-                </Button>
-            </EmptyContent>
+            {handleRefresh && (
+                <EmptyContent>
+                    <Button
+                        disabled={isRefreshing}
+                        onClick={handleRefresh}
+                        size="sm"
+                        variant="outline"
+                    >
+                        {isRefreshing ? <LoadingSpinner /> : <RefreshCcwIcon />}
+                        Refresh
+                    </Button>
+                </EmptyContent>
+            )}
         </Empty>
     )
 }

@@ -15,7 +15,7 @@ import {
 
 import { TEntityId } from '@/types'
 
-import { IGeneralLedger } from '../general-ledger'
+import { IGeneralLedger, generalLedgerBaseKey } from '../general-ledger'
 import {
     IPaymentQuickRequest,
     IPaymentRequest,
@@ -36,7 +36,7 @@ export const { apiCrudHooks, apiCrudService, baseQueryKey } =
     })
 
 export const {
-    useGetById,
+    useGetById : useGetTransactionById,
     useGetAll,
     useCreate: useCreateTransaction,
 } = apiCrudHooks
@@ -124,8 +124,12 @@ export const useCreateTransactionPaymentByMode = createMutationFactory<
             })
         }
     },
-    invalidationFn: (args) =>
-        createMutationInvalidateFn('general-ledger', args),
+    invalidationFn: (args) => {
+        createMutationInvalidateFn('general-ledger', args)
+        args.queryClient.invalidateQueries({
+            queryKey: [generalLedgerBaseKey, 'all'],
+        })
+    },
 })
 
 export const useCreateQuickTransactionPayment = createMutationFactory<

@@ -8,6 +8,7 @@ import { CurrencyBadge } from '@/modules/currency/components/currency-badge'
 
 import { EyeIcon, LayersSharpDotIcon } from '@/components/icons'
 import { Button } from '@/components/ui/button'
+import CopyWrapper from '@/components/wrappers/copy-wrapper'
 
 import { useModalState } from '@/hooks/use-modal-state'
 
@@ -91,12 +92,16 @@ const TransactionBatch = ({
                                 size="sm"
                             />
                         </div>
-                        <p className="text-xs text-muted-foreground dark:text-muted-foreground/40">
+                        <p className="text-xs text-muted-foreground">
                             {toReadableDate(
                                 transactionBatch?.created_at,
                                 "MMM, dd yyyy 'at' h:mm a "
                             )}
                         </p>
+
+                        <div className="text-xs text-muted-foreground/70 font-semibold">
+                            Batch ID <CopyWrapper className='text-muted-foreground/50'>{transactionBatch?.id}</CopyWrapper>
+                        </div>
                     </div>
                 </div>
                 <Button
