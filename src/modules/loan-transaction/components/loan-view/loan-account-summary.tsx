@@ -107,27 +107,6 @@ const LoanTransactionAccountSummaryItem = ({
 
     const currency = account_history?.currency
 
-    const formatValue = (value: number | string | undefined) => {
-        if (value === undefined || value === null) {
-            return <span className="text-muted-foreground">...</span>
-        }
-        return value
-    }
-
-    const formatCurrency = (value: number | undefined) => {
-        if (value === undefined || value === null) {
-            return <span className="text-muted-foreground">...</span>
-        }
-        return `${currency?.symbol || ''}${value.toLocaleString()}`
-    }
-
-    const formatDate = (date: string | undefined) => {
-        if (!date) {
-            return <span className="text-muted-foreground">...</span>
-        }
-        return toReadableDate(date)
-    }
-
     return (
         <div
             className={cn(
@@ -178,7 +157,11 @@ const LoanTransactionAccountSummaryItem = ({
                         Last Payment
                     </p>
                     <p className="text-sm font-medium">
-                        {formatDate(last_payment)}
+                        {!last_payment ? (
+                            <span className="text-muted-foreground">...</span>
+                        ) : (
+                            toReadableDate(last_payment)
+                        )}
                     </p>
                 </div>
 
@@ -187,7 +170,11 @@ const LoanTransactionAccountSummaryItem = ({
                         Due Date
                     </p>
                     <p className="text-sm font-medium">
-                        {formatDate(due_date)}
+                        {!due_date ? (
+                            <span className="text-muted-foreground">...</span>
+                        ) : (
+                            toReadableDate(due_date)
+                        )}
                     </p>
                 </div>
 
@@ -198,7 +185,16 @@ const LoanTransactionAccountSummaryItem = ({
                     </p>
                     <p className="text-sm font-medium flex items-center gap-1">
                         <span className="font-mono">
-                            {formatCurrency(total_account_principal)}
+                            {!total_account_principal ? (
+                                <span className="text-muted-foreground">
+                                    ...
+                                </span>
+                            ) : (
+                                currencyFormat(total_account_principal, {
+                                    currency,
+                                    showSymbol: !!currency,
+                                })
+                            )}
                         </span>
                     </p>
                 </div>
@@ -209,7 +205,18 @@ const LoanTransactionAccountSummaryItem = ({
                         Total Payments
                     </p>
                     <p className="text-sm font-medium">
-                        {formatValue(total_number_of_payments)}
+                        <span className="font-mono">
+                            {!total_number_of_payments ? (
+                                <span className="text-muted-foreground">
+                                    ...
+                                </span>
+                            ) : (
+                                currencyFormat(total_number_of_payments, {
+                                    currency,
+                                    showSymbol: !!currency,
+                                })
+                            )}
+                        </span>
                     </p>
                 </div>
                 <div className="p-1">
@@ -217,7 +224,18 @@ const LoanTransactionAccountSummaryItem = ({
                         Total Deductions
                     </p>
                     <p className="text-sm font-medium">
-                        {formatValue(total_number_of_deductions)}
+                        <span className="font-mono">
+                            {!total_number_of_deductions ? (
+                                <span className="text-muted-foreground">
+                                    ...
+                                </span>
+                            ) : (
+                                currencyFormat(total_number_of_deductions, {
+                                    currency,
+                                    showSymbol: !!currency,
+                                })
+                            )}
+                        </span>
                     </p>
                 </div>
 
@@ -227,7 +245,18 @@ const LoanTransactionAccountSummaryItem = ({
                         Total Additions
                     </p>
                     <p className="text-sm font-medium">
-                        {formatValue(total_number_of_additions)}
+                        <span className="font-mono">
+                            {!total_number_of_additions ? (
+                                <span className="text-muted-foreground">
+                                    ...
+                                </span>
+                            ) : (
+                                currencyFormat(total_number_of_additions, {
+                                    currency,
+                                    showSymbol: !!currency,
+                                })
+                            )}
+                        </span>
                     </p>
                 </div>
                 <div className="p-1">
@@ -235,7 +264,18 @@ const LoanTransactionAccountSummaryItem = ({
                         Principal Paid
                     </p>
                     <p className="text-sm font-medium">
-                        {formatCurrency(total_account_principal_paid)}
+                        <span className="font-mono">
+                            {total_account_principal_paid == null ? (
+                                <span className="text-muted-foreground">
+                                    ...
+                                </span>
+                            ) : (
+                                currencyFormat(total_account_principal_paid, {
+                                    currency,
+                                    showSymbol: !!currency,
+                                })
+                            )}
+                        </span>
                     </p>
                 </div>
 
@@ -244,7 +284,18 @@ const LoanTransactionAccountSummaryItem = ({
                         Advanced Payment
                     </p>
                     <p className="text-sm font-medium">
-                        {formatCurrency(total_account_advanced_payment)}
+                        <span className="font-mono">
+                            {total_account_advanced_payment == null ? (
+                                <span className="text-muted-foreground">
+                                    ...
+                                </span>
+                            ) : (
+                                currencyFormat(total_account_advanced_payment, {
+                                    currency,
+                                    showSymbol: !!currency,
+                                })
+                            )}
+                        </span>
                     </p>
                 </div>
                 <div className="p-2">
@@ -252,7 +303,18 @@ const LoanTransactionAccountSummaryItem = ({
                         Remaining Principal
                     </p>
                     <p className="text-sm font-medium">
-                        {formatCurrency(total_remaining_principal)}
+                        <span className="font-mono">
+                            {total_remaining_principal == null ? (
+                                <span className="text-muted-foreground">
+                                    ...
+                                </span>
+                            ) : (
+                                currencyFormat(total_remaining_principal, {
+                                    currency,
+                                    showSymbol: !!currency,
+                                })
+                            )}
+                        </span>
                     </p>
                 </div>
 
@@ -262,7 +324,18 @@ const LoanTransactionAccountSummaryItem = ({
                         Total Debit
                     </p>
                     <p className="text-sm font-medium">
-                        {formatCurrency(total_debit)}
+                        <span className="font-mono">
+                            {total_debit == null ? (
+                                <span className="text-muted-foreground">
+                                    ...
+                                </span>
+                            ) : (
+                                currencyFormat(total_debit, {
+                                    currency,
+                                    showSymbol: !!currency,
+                                })
+                            )}
+                        </span>
                     </p>
                 </div>
                 <div className="p-1">
@@ -270,7 +343,18 @@ const LoanTransactionAccountSummaryItem = ({
                         Total Credit
                     </p>
                     <p className="text-sm font-medium">
-                        {formatCurrency(total_credit)}
+                        <span className="font-mono">
+                            {total_credit == null ? (
+                                <span className="text-muted-foreground">
+                                    ...
+                                </span>
+                            ) : (
+                                currencyFormat(total_credit, {
+                                    currency,
+                                    showSymbol: !!currency,
+                                })
+                            )}
+                        </span>
                     </p>
                 </div>
 
@@ -279,10 +363,14 @@ const LoanTransactionAccountSummaryItem = ({
                         Balance
                     </p>
                     <p className="text-lg font-mono text-accent-foreground text-right">
-                        {currencyFormat(balance, {
-                            currency,
-                            showSymbol: !!currency,
-                        })}
+                        {balance == null ? (
+                            <span className="text-muted-foreground">...</span>
+                        ) : (
+                            currencyFormat(balance, {
+                                currency,
+                                showSymbol: !!currency,
+                            })
+                        )}
                     </p>
                 </div>
             </div>

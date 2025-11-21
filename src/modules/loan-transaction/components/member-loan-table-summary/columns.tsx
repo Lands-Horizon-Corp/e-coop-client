@@ -1,7 +1,7 @@
 import { ReactNode } from 'react'
 
-import { formatNumber } from '@/helpers'
 import { dateAgo, toReadableDate } from '@/helpers/date-utils'
+import { currencyFormat } from '@/modules/currency'
 import { ColumnDef, Row } from '@tanstack/react-table'
 
 import DataTableColumnHeader from '@/components/data-table/data-table-column-header'
@@ -215,9 +215,9 @@ const MemberLoanTableSummaryColumns = (
             enableSorting: true,
             enableResizing: true,
             enableHiding: true,
-            size: 300,
-            minSize: 300,
-            maxSize: 800,
+            size: 150,
+            minSize: 150,
+            maxSize: 200,
         },
         {
             id: 'balance',
@@ -264,11 +264,14 @@ const MemberLoanTableSummaryColumns = (
             ),
             cell: ({
                 row: {
-                    original: { applied_1 },
+                    original: { applied_1, account },
                 },
             }) => (
-                <p className="!text-wrap font-mono text-lg text-right text-muted-foreground">
-                    {formatNumber(applied_1, 0, 1)}
+                <p className="!text-wrap font-mono text-right text-muted-foreground">
+                    {currencyFormat(applied_1, {
+                        currency: account?.currency,
+                        showSymbol: !!account?.currency,
+                    })}
                 </p>
             ),
             enableMultiSort: true,
