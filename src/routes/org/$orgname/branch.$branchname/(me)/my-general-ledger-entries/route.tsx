@@ -1,10 +1,18 @@
 import { useState } from 'react'
 
+import { createFileRoute } from '@tanstack/react-router'
+
+import { TEntryType } from '@/modules/general-ledger'
+import GeneralLedgerTable from '@/modules/general-ledger/components/tables/general-ledger-table'
+
 import PageContainer from '@/components/containers/page-container'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 
-import { TEntryType } from '../..'
-import GeneralLedgerTable from '../tables/general-ledger-table'
+export const Route = createFileRoute(
+    '/org/$orgname/branch/$branchname/(me)/my-general-ledger-entries'
+)({
+    component: RouteComponent,
+})
 
 const tabs = [
     { name: 'General Ledger', value: '' },
@@ -20,12 +28,15 @@ const tabs = [
     { name: 'Check Voucher Entry', value: 'check-voucher' },
 ]
 
-const GeneralLedgerPage = () => {
+function RouteComponent() {
     const [selectedTabs, setSelectedTabs] =
         useState<(typeof tabs)[number]['value']>('')
 
     return (
         <PageContainer>
+            <p className="py-4 text-muted-foreground">
+                My General Ledger Entries
+            </p>
             <Tabs
                 className="flex-row min-w-0 max-w-full"
                 defaultValue="explore"
@@ -55,7 +66,7 @@ const GeneralLedgerPage = () => {
                         <GeneralLedgerTable
                             className="max-h-[90vh] min-h-[90vh] min-w-0 max-w-full "
                             excludeColumnIds={['balance']}
-                            mode="branch"
+                            mode="current"
                             TEntryType={
                                 (tab.value === ''
                                     ? undefined
@@ -68,4 +79,3 @@ const GeneralLedgerPage = () => {
         </PageContainer>
     )
 }
-export default GeneralLedgerPage
