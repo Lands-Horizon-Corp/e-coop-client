@@ -24,6 +24,8 @@ import { useModalState } from '@/hooks/use-modal-state'
 
 import { IClassProps } from '@/types'
 
+import { useLoanKanbanContext } from './loan-kanban-context'
+
 export interface ILoanTransactionStatusDates {
     printed_date?: string | null
     approved_date?: string | null
@@ -124,6 +126,8 @@ export const LoanTransactionCardActions = ({
 }: Pick<ILoanTransactionCardProps, 'loanTransaction' | 'refetch'> & {
     loanDates: ILoanTransactionStatusDates
 }) => {
+    const { openPrintModalForLoan } = useLoanKanbanContext()
+
     const {
         printModal,
         handleOpenViewModal,
@@ -149,6 +153,7 @@ export const LoanTransactionCardActions = ({
                     readOnly: true,
                 }}
             />
+
             <LoanTransactionPrintFormModal
                 {...printModal}
                 className=""
@@ -156,6 +161,7 @@ export const LoanTransactionCardActions = ({
                     defaultValues: { ...loanTransaction },
                     loanTransactionId: loanTransaction.id,
                     onSuccess: () => {
+                        openPrintModalForLoan(loanTransaction.id)
                         refetch?.()
                     },
                 }}

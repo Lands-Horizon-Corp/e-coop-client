@@ -65,6 +65,8 @@ const BankTable = ({
     const { sortingStateBase64, tableSorting, setTableSorting } =
         useDataTableSorting()
 
+    console.log(tableSorting)
+
     const columns = useMemo(
         () =>
             BankTableColumns({
@@ -104,6 +106,7 @@ const BankTable = ({
     const {
         isPending,
         isRefetching,
+        isLoading,
         data: { data = [], totalPage = 1, pageSize = 10, totalSize = 0 } = {},
         refetch,
     } = useGetPaginatedBanks({
@@ -116,8 +119,19 @@ const BankTable = ({
 
     const handleRowSelectionChange = createHandleRowSelectionChange(data)
 
+    const columnsMemo = useMemo(
+        () =>
+            isLoading || isRefetching || isPending
+                ? columns.map((column) => ({
+                      ...column,
+                      cell: () => <Skeleton className="h-5 w-full" />,
+                  }))
+                : columns,
+        [isLoading, isRefetching, isPending, columns]
+    )
+
     const table = useReactTable({
-        columns,
+        columns: columnsMemo,
         data: data,
         initialState: {
             columnPinning: { left: ['select'] },
@@ -181,6 +195,7 @@ const BankTable = ({
                         disabled: isPending || isRefetching,
                         model: 'Bank',
                         url: 'api/v1/bank/search',
+                        hbsDataPath: '/reports/bank/default-bank.hbs',
                     }}
                     filterLogicProps={{
                         filterLogic: filterState.filterLogic,

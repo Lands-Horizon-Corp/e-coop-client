@@ -158,7 +158,7 @@ const ImagePreviewModal = () => {
                     className={cn(
                         '!h-max-[100vh] h-full !w-full !max-w-full  border-[0px] border-primary bg-transparent'
                     )}
-                    overlayClassName="bg-transparent"
+                    overlayClassName="bg-transparent pointer-events-none"
                 >
                     <div
                         className={cn(

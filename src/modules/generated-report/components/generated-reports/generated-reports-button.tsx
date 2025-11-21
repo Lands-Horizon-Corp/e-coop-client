@@ -75,7 +75,7 @@ const GeneratedReportActions = () => {
         useState<TModelName>(DEFAULT_MODEL)
     const [pagination, setPagination] = useState<PaginationState>({
         pageIndex: PAGINATION_INITIAL_INDEX,
-        pageSize: 5,
+        pageSize: 50,
     })
     const [isAll, setIsAll] = useState(false)
 
@@ -128,7 +128,7 @@ const GeneratedReportActions = () => {
     const isFavorite = activeTab === 'me-favorites' || activeTab === 'favorites'
     const AllVariant = isAll ? 'default' : 'outline'
     const MEvariant = !isAll ? 'default' : 'outline'
-    
+
     return (
         <div className="flex flex-col p-1 h-full">
             <h2 className="text-xl flex items-center font-bold text-foreground mb-2">

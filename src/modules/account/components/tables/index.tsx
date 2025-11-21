@@ -190,6 +190,7 @@ const AccountsTable = ({
                         filters: exportfilter,
                         model: 'Account',
                         url: 'api/v1/account/search',
+                        hbsDataPath: '/reports/multi-page.hbs',
                     }}
                     filterLogicProps={{
                         filterLogic: filterState.filterLogic,

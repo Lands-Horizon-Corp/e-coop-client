@@ -1,0 +1,263 @@
+<style>
+   .report-content {
+   width: 100%;
+   height: 100%;
+   padding: 5%;
+   background: white;
+   font-size: clamp(0.5rem, 1.5vw, 0.875rem);
+   margin: 0;
+   padding: 0;
+   font-family: Arial, Helvetica, sans-serif;
+   box-sizing: border-box;
+   }
+   /* Header */
+   header {
+   text-align: center;
+   margin-bottom: 2rem;
+   padding-bottom: 1rem;
+   border-bottom: 1px solid #e5e7eb;
+   }
+   header h1 {
+   font-size: clamp(1rem, 3vw, 1.875rem);
+   font-weight: 800;
+   color: #1f2937;
+   letter-spacing: -0.5px;
+   margin-bottom: 0.25rem;
+   }
+   header p {
+   margin-top: 0.25rem;
+   color: #6b7280;
+   font-size: clamp(0.625rem, 1.2vw, 0.875rem);
+   }
+   header .tin {
+   color: #6b7280;
+   font-size: clamp(0.5rem, 1vw, 0.75rem);
+   }
+   header h2 {
+   margin-top: 1rem;
+   font-size: clamp(0.875rem, 2vw, 1.25rem);
+   font-weight: 700;
+   text-transform: uppercase;
+   color: #1f2937;
+   }
+   /* Grid layout */
+   .loan-grid {
+   display: grid;
+   grid-template-columns: 1fr;
+   gap: 1rem;
+   margin-bottom: 1.5rem;
+   font-size: clamp(0.625rem, 1.3vw, 0.875rem);
+   }
+   @media (min-width: 600px) {
+   .loan-grid {
+   grid-template-columns: repeat(2, 1fr);
+   }
+   }
+   @media (min-width: 900px) {
+   .loan-grid {
+   grid-template-columns: repeat(3, 1fr);
+   gap: 1rem 2rem;
+   }
+   }
+   .loan-grid p {
+   margin-bottom: 0.25rem;
+   color: #374151;
+   }
+   .loan-grid .title {
+   font-weight: 600;
+   color: #1f2937;
+   }
+   .loan-grid .value {
+   padding-left: 0.5rem;
+   color: #374151;
+   font-weight: 600;
+   font-size: clamp(0.75rem, 1.8vw, 1.125rem);
+   }
+   .subtext {
+   font-size: clamp(0.5rem, 1vw, 0.75rem);
+   color: #6b7280;
+   }
+   /* Table */
+   table {
+   width: 100%;
+   border-collapse: collapse;
+   background: white;
+   font-size: clamp(0.5rem, 1.2vw, 0.875rem);
+   color: #6b7280;
+   text-align: left;
+   }
+   table th {
+   text-transform: uppercase;
+   background: #f9fafb;
+   font-size: clamp(0.5rem, 1vw, 0.75rem);
+   color: #374151;
+   padding: clamp(0.375rem, 1vw, 0.75rem) clamp(0.5rem, 1.5vw, 1rem);
+   font-weight: 700;
+   }
+   table td {
+   padding: clamp(0.375rem, 1vw, 0.75rem) clamp(0.5rem, 1.5vw, 1rem);
+   }
+   table tbody tr {
+   border-bottom: 1px solid #e5e7eb;
+   }
+   .highlight {
+   background: #e0f2fe;
+   color: #111827;
+   font-weight: 700;
+   border-top: 2px solid black;
+   border-bottom: 2px solid black;
+   }
+   .totals {
+   background: #f3f4f6;
+   font-size: clamp(0.625rem, 1.5vw, 1rem);
+   color: #1f2937;
+   font-weight: 700;
+   }
+   .text-right {
+   text-align: right;
+   font-family: monospace;
+   }
+   /* Amount in Words */
+   .amount-words {
+   margin-top: 1rem;
+   padding: clamp(0.5rem, 1.5vw, 1rem);
+   background: #fffbeb;
+   border: 1px solid #fde68a;
+   color: #92400e;
+   font-size: clamp(0.625rem, 1.3vw, 0.875rem);
+   font-weight: 600;
+   border-radius: 0.5rem;
+   text-align: center;
+   }
+   /* Signatures */
+   .signature-grid {
+   margin-top: 2rem;
+   display: grid;
+   grid-template-columns: repeat(2, 1fr);
+   gap: 1rem;
+   font-size: clamp(0.625rem, 1.3vw, 0.875rem);
+   }
+   @media (min-width: 600px) {
+   .signature-grid {
+   grid-template-columns: repeat(4, 1fr);
+   gap: 1.5rem;
+   }
+   }
+   .signature-grid .label {
+   color: #6b7280;
+   }
+   .signature-line {
+   margin-top: 0.5rem;
+   padding-top: 0.25rem;
+   border-bottom: 1px solid #9ca3af;
+   font-weight: 500;
+   color: #1f2937;
+   text-align: center;
+   min-height: 1.5rem;
+   }
+   /* Approval */
+   .approval-section {
+   margin-top: 2rem;
+   text-align: center;
+   }
+   .approval-section p {
+   font-size: clamp(0.75rem, 1.8vw, 1.125rem);
+   font-weight: 700;
+   color: #1f2937;
+   text-transform: uppercase;
+   }
+   .approval-line {
+   width: 100%;
+   max-width: 20rem;
+   margin: 0.5rem auto 0;
+   border-bottom: 1px solid #9ca3af;
+   padding-top: 0.25rem;
+   font-weight: 500;
+   color: #1f2937;
+   min-height: 1.5rem;
+   }
+   /* Responsive table wrapper */
+   .overflow-x-auto {
+   overflow-x: auto;
+   -webkit-overflow-scrolling: touch;
+   }
+   @media print {
+   .report-content {
+   padding: 3%;
+   }
+   }
+</style>
+<div class="report-content">
+   <header>
+      <h1>{{header_title}}</h1>
+      <p class="">{{header_address}}</p>
+      <p class="tin">TIN: {{tax_number}}</p>
+      <h2>{{report_title}}</h2>
+   </header>
+   <div class="loan-grid">
+      <div>
+         <p class="title">Pay To:{{pay_to}}</p>
+         <p class="subtext">Account No: {{account_number}}</p>
+         <p class="subtext">Contact: {{contact}}</p>
+      </div>
+      <div>
+         <p><span class="title">Voucher No:</span> {{voucher_no}}</p>
+         <p><span class="title">Release Date:</span> {{date_release}}</p>
+         <p><span class="title">Terms:</span> {{terms}} months ({{mode_of_payment}})</p>
+      </div>
+      <div>
+         <p><span class="title">Processor:</span> {{processor}}</p>
+         <p><span class="title">Due Date:</span> <span style="color:#dc2626; font-weight:600">{{due_date}}</span></p>
+      </div>
+   </div>
+   <div class="overflow-x-auto shadow-md rounded-lg">
+      <table>
+         <thead>
+            <tr>
+               <th>ACCOUNT TITLE</th>
+               <th class="text-right">DEBIT (PHP)</th>
+               <th class="text-right">CREDIT (PHP)</th>
+            </tr>
+         </thead>
+         <tbody>
+            {{#each loan_transaction_entries}}
+            <tr class="{{#if is_highlighted}}highlight{{/if}}">
+               <td>{{account_title}}</td>
+               <td class="text-right">{{debit}}</td>
+               <td class="text-right">{{credit}}</td>
+            </tr>
+            {{/each}}
+            <tr class="totals">
+               <td colspan="1">TOTAL:</td>
+               <td class="text-right">{{cash_on_hand_total_debit}}</td>
+               <td class="text-right">{{cash_on_hand_total_credit}}</td>
+            </tr>
+         </tbody>
+      </table>
+   </div>
+   <div class="amount-words">
+      *** {{total_amount_in_words}} ONLY ***
+   </div>
+   <div class="signature-grid">
+      <div>
+         <p class="label">Prepared by:</p>
+         <p class="signature-line">{{prepared_by}}</p>
+      </div>
+      <div>
+         <p class="label">Payee:</p>
+         <p class="signature-line">{{payeee}}</p>
+      </div>
+      <div>
+         <p class="label">Certified Correct:</p>
+         <p class="signature-line">{{cetified_correct}}</p>
+      </div>
+      <div>
+         <p class="label">Paid by:</p>
+         <p class="signature-line">{{paid_by}}</p>
+      </div>
+   </div>
+   <div class="approval-section">
+      <p>Approved for Payment:</p>
+      <div class="approval-line">{{approved_for_payment}}</div>
+   </div>
+</div>

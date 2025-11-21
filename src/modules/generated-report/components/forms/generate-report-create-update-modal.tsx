@@ -1,11 +1,15 @@
+import { useEffect } from 'react'
+
 import { useForm } from 'react-hook-form'
 import z from 'zod'
 
 import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
 
+import { IFilterState } from '@/contexts/filter-context'
 import { withToastCallbacks } from '@/helpers/callback-helper'
 import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
 import { cn } from '@/helpers/tw-utils'
+import { ColumnDef, Table } from '@tanstack/react-table'
 
 import FormFooterResetSubmit from '@/components/form-components/form-footer-reset-submit'
 import Modal, { IModalProps } from '@/components/modals/modal'
@@ -19,6 +23,7 @@ import { useFormHelper } from '@/hooks/use-form-helper'
 
 import { IClassProps, IForm, TEntityId } from '@/types'
 
+import { extractColumnMetadata } from '../../../../helpers/table-column-meta-utils'
 import {
     useCreateGeneratedReport,
     useUpdateGeneratedReportById,
@@ -28,10 +33,12 @@ import {
     IGeneratedReportRequest,
 } from '../../generated-report.types'
 import { GeneratedReportSchema } from '../../generated-report.validation'
+import { useGeneratedReportFilter } from '../filters/context/use-generate-report-filter-context'
+import { GeneratedReportFilter } from '../filters/report-filter'
 
 type TBankFormValues = z.infer<typeof GeneratedReportSchema>
 
-export interface IGeneratedReportFormProps
+export interface IGeneratedReportFormProps<TData>
     extends IClassProps,
         IForm<
             Partial<IGeneratedReportRequest>,
@@ -41,6 +48,10 @@ export interface IGeneratedReportFormProps
         > {
     reportId?: TEntityId
     type?: 'generate' | 'generate-report'
+    reportPath?: string
+    filterState?: IFilterState
+    table?: Table<TData>
+    columns?: ColumnDef<TData>[]
 }
 
 type TGenerateReportCreateUpdateModalServiceProps<TData> = {
@@ -78,12 +89,14 @@ export const useGenerateReportCreateUpdateModalService = ({
     }
 }
 
-const GenerateReportCreateForm = ({
+const GenerateReportCreateForm = <TData,>({
     className,
     reportId,
-    type = 'generate',
+    table,
+    columns,
     ...formProps
-}: IGeneratedReportFormProps) => {
+}: IGeneratedReportFormProps<TData>) => {
+    const isEditMode = !!reportId
 
     const form = useForm<TBankFormValues>({
         resolver: standardSchemaResolver(GeneratedReportSchema),
@@ -110,11 +123,20 @@ const GenerateReportCreateForm = ({
             onError: formProps.onError,
         })
 
+    const { finalFilterPayloadBase64 } = useGeneratedReportFilter()
+
     const onSubmit = form.handleSubmit((formData) => {
         if (reportId) {
-            updateMutation.mutate({ id: reportId, payload: {...formData} })
+            updateMutation.mutate({
+                id: reportId,
+                payload: {
+                    ...formData,
+                },
+            })
         } else {
-            createMutation.mutate({...formData, paper_size:"A4"})
+            createMutation.mutate({
+                ...formData,
+            })
         }
     }, handleFocusError)
 
@@ -126,6 +148,12 @@ const GenerateReportCreateForm = ({
 
     const error = serverRequestErrExtractor({ error: errorResponse })
 
+    const filterColumns = extractColumnMetadata(columns ?? [], table)
+
+    useEffect(() => {
+        form.setValue('filter_search', finalFilterPayloadBase64)
+    }, [finalFilterPayloadBase64, form])
+
     return (
         <Form {...form}>
             <form
@@ -133,42 +161,47 @@ const GenerateReportCreateForm = ({
                 onSubmit={onSubmit}
                 ref={formRef}
             >
-                <fieldset
-                    className="grid gap-x-6 gap-y-4 sm:gap-y-3"
-                    disabled={isPending || formProps.readOnly}
-                >
-                    <fieldset className="space-y-3">
-                        <FormErrorMessage errorMessage={firstError} />
-                        <FormFieldWrapper
-                            control={form.control}
-                            label="Model Name"
-                            name="name"
-                            render={({ field }) => (
-                                <Input
-                                    {...field}
-                                    autoComplete="off"
-                                    disabled={isDisabled(field.name)}
-                                    id={field.name}
-                                    placeholder="Model Name"
-                                />
-                            )}
-                        />
-                        <FormFieldWrapper
-                            control={form.control}
-                            label="Description"
-                            name="description"
-                            render={({ field }) => (
-                                <Textarea
-                                    {...field}
-                                    autoComplete="off"
-                                    disabled={isDisabled(field.name)}
-                                    id={field.name}
-                                    placeholder="Description"
-                                />
-                            )}
-                        />
+                <div className="flex gap-x-5">
+                    <fieldset
+                        className="flex-1 grid gap-x-6 gap-y-4 sm:gap-y-3"
+                        disabled={isPending || formProps.readOnly}
+                    >
+                        <fieldset className="space-y-3">
+                            <FormErrorMessage errorMessage={firstError} />
+                            <FormFieldWrapper
+                                control={form.control}
+                                label="Model Name"
+                                name="name"
+                                render={({ field }) => (
+                                    <Input
+                                        {...field}
+                                        autoComplete="off"
+                                        disabled={isDisabled(field.name)}
+                                        id={field.name}
+                                        placeholder="Model Name"
+                                    />
+                                )}
+                            />
+                            <FormFieldWrapper
+                                control={form.control}
+                                label="Description"
+                                name="description"
+                                render={({ field }) => (
+                                    <Textarea
+                                        {...field}
+                                        autoComplete="off"
+                                        disabled={isDisabled(field.name)}
+                                        id={field.name}
+                                        placeholder="Description"
+                                    />
+                                )}
+                            />
+                        </fieldset>
+                        {!isEditMode && (
+                            <GeneratedReportFilter columns={filterColumns} />
+                        )}
                     </fieldset>
-                </fieldset>
+                </div>
                 <FormFooterResetSubmit
                     error={error}
                     isLoading={isPending}
@@ -184,18 +217,18 @@ const GenerateReportCreateForm = ({
     )
 }
 
-export const GeneratedReportCreateFormModal = ({
+export const GeneratedReportCreateFormModal = <TData,>({
     title = 'Generate Report',
     description = 'Fill out the form to generate report.',
     className,
     formProps,
     ...props
 }: IModalProps & {
-    formProps?: Omit<IGeneratedReportFormProps, 'className'>
+    formProps?: Omit<IGeneratedReportFormProps<TData>, 'className'>
 }) => {
     return (
         <Modal
-            className={cn('', className)}
+            className={cn('!w-fit min-w-fit', className)}
             description={description}
             title={title}
             {...props}

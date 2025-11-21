@@ -108,6 +108,7 @@ import {
     FaPaintBrush as PaintBrushIcon,
     FaPhoneAlt as PhoneIcon,
     FaRunning as RunningIcon,
+    FaSort as SortIcon,
     FaStar as StarIcon,
     FaTabletAlt as TabletIcon,
     FaTwitter as TwitterIcon,
@@ -337,6 +338,7 @@ import {
     MdOutlineExpandLess as ExpandLessIcon,
     MdExpandMore as ExpandMoreIcon,
     MdFamilyRestroom as FamilyIcon,
+    MdOutlineFilterVintage as FilterVintageIcon,
     MdOutlineQueryStats as FinanceReportsIcon,
     MdOutlineCenterFocusWeak as FocusIcon,
     MdOutlineScreenshotMonitor as MonitorIcon,
@@ -443,7 +445,11 @@ import {
     TbUnlink as UnlinkIcon,
 } from 'react-icons/tb'
 import { TfiFaceSad as SadFaceIcon } from 'react-icons/tfi'
-import { TiBook as BookIcon, TiPipette as PipetteIcon } from 'react-icons/ti'
+import {
+    TiBook as BookIcon,
+    TiPipette as PipetteIcon,
+    // TiArrowUp as ArrowUpIcon,
+} from 'react-icons/ti'
 import {
     VscBracketError as BracketErrorIcon,
     VscCollapseAll as CollapseIcon,
@@ -864,10 +870,17 @@ export {
     GripHorizontalIcon,
     GripVerticalIcon,
     GridIcon,
+    FilterVintageIcon,
+    SortIcon,
 }
 
 export const IconMap = {
     Brain: BrainIcon,
+    FilterVintage: FilterVintageIcon,
+    DiamondWarning: DiamondWarningIcon,
+    HandDropCoins: HandDropCoinsIcon,
+    MoneyStack: MoneyStackIcon,
+    HandDepositCoins: HandDepositIcon,
     Vote: VoteIcon,
     'Fingerprint Off': FingerprintOffIcon,
     'Fingerprint Scan': FingerprintScanIcon,
@@ -1261,6 +1274,7 @@ export const IconMap = {
     'Grid Icon': GridIcon,
     'Receive Money': ReceiveMoneyIcon,
     'Report Search Icon': ReportsSearchIcon,
+    'Sort Icon': SortIcon,
 }
 
 export type TIcon = (typeof ICONS)[number]

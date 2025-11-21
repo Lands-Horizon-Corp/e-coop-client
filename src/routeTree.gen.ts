@@ -11,6 +11,7 @@
 import { createFileRoute } from '@tanstack/react-router'
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as PlaygroundRouteImport } from './routes/playground'
 import { Route as OnboardingRouteRouteImport } from './routes/onboarding/route'
 import { Route as AuthRouteRouteImport } from './routes/auth/route'
 import { Route as AccountProfileRouteRouteImport } from './routes/account-profile/route'
@@ -113,6 +114,11 @@ import { Route as OrgOrgnameBranchBranchnamemaintenancemembersMemberProfileMembe
 
 const AuthSignUpLazyRouteImport = createFileRoute('/auth/sign-up')()
 
+const PlaygroundRoute = PlaygroundRouteImport.update({
+  id: '/playground',
+  path: '/playground',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const OnboardingRouteRoute = OnboardingRouteRouteImport.update({
   id: '/onboarding',
   path: '/onboarding',
@@ -746,6 +752,7 @@ export interface FileRoutesByFullPath {
   '/account-profile': typeof AccountProfileRouteRouteWithChildren
   '/auth': typeof AuthRouteRouteWithChildren
   '/onboarding': typeof OnboardingRouteRouteWithChildren
+  '/playground': typeof PlaygroundRoute
   '/policy': typeof landingPolicyRouteRouteWithChildren
   '/onboarding/organization': typeof OnboardingOrganizationRouteRouteWithChildren
   '/about': typeof landingAboutRoute
@@ -844,6 +851,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/auth': typeof AuthRouteRouteWithChildren
+  '/playground': typeof PlaygroundRoute
   '/policy': typeof landingPolicyRouteRouteWithChildren
   '/about': typeof landingAboutRoute
   '/contact': typeof landingContactRoute
@@ -945,6 +953,7 @@ export interface FileRoutesById {
   '/account-profile': typeof AccountProfileRouteRouteWithChildren
   '/auth': typeof AuthRouteRouteWithChildren
   '/onboarding': typeof OnboardingRouteRouteWithChildren
+  '/playground': typeof PlaygroundRoute
   '/(landing)/policy': typeof landingPolicyRouteRouteWithChildren
   '/onboarding/organization': typeof OnboardingOrganizationRouteRouteWithChildren
   '/(landing)/about': typeof landingAboutRoute
@@ -1049,6 +1058,7 @@ export interface FileRouteTypes {
     | '/account-profile'
     | '/auth'
     | '/onboarding'
+    | '/playground'
     | '/policy'
     | '/onboarding/organization'
     | '/about'
@@ -1147,6 +1157,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/auth'
+    | '/playground'
     | '/policy'
     | '/about'
     | '/contact'
@@ -1247,6 +1258,7 @@ export interface FileRouteTypes {
     | '/account-profile'
     | '/auth'
     | '/onboarding'
+    | '/playground'
     | '/(landing)/policy'
     | '/onboarding/organization'
     | '/(landing)/about'
@@ -1350,11 +1362,19 @@ export interface RootRouteChildren {
   AccountProfileRouteRoute: typeof AccountProfileRouteRouteWithChildren
   AuthRouteRoute: typeof AuthRouteRouteWithChildren
   OnboardingRouteRoute: typeof OnboardingRouteRouteWithChildren
+  PlaygroundRoute: typeof PlaygroundRoute
   OrgOrgnameRoute: typeof OrgOrgnameRouteWithChildren
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/playground': {
+      id: '/playground'
+      path: '/playground'
+      fullPath: '/playground'
+      preLoaderRoute: typeof PlaygroundRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/onboarding': {
       id: '/onboarding'
       path: '/onboarding'
@@ -2398,6 +2418,7 @@ const rootRouteChildren: RootRouteChildren = {
   AccountProfileRouteRoute: AccountProfileRouteRouteWithChildren,
   AuthRouteRoute: AuthRouteRouteWithChildren,
   OnboardingRouteRoute: OnboardingRouteRouteWithChildren,
+  PlaygroundRoute: PlaygroundRoute,
   OrgOrgnameRoute: OrgOrgnameRouteWithChildren,
 }
 export const routeTree = rootRouteImport

@@ -1,0 +1,49 @@
+<div style="font-family: Arial, sans-serif; color: #333; line-height: 1.6;">
+  <div style="text-align: center; margin-bottom: 30px; border-bottom: 2px solid #333; padding-bottom: 15px;">
+    <h1 style="margin: 0; font-size: 24px; font-weight: bold;">{{title}}</h1>
+    {{#if description}}
+    <p style="margin: 8px 0 0 0; font-size: 13px; color: #666;">{{description}}</p>
+    {{/if}}
+    <p style="margin: 8px 0 0 0; font-size: 11px; color: #999;">
+      Generated on {{currentDate}}
+    </p>
+  </div>
+
+  <table style="width: 100%; border-collapse: collapse; margin-bottom: 30px; font-size: 13px;">
+    <thead>
+      <tr style="background-color: #f0f0f0; border-bottom: 2px solid #333;">
+        <th style="border: 1px solid #ddd; padding: 12px; text-align: left; font-weight: bold;">Name</th>
+        <th style="border: 1px solid #ddd; padding: 12px; text-align: left; font-weight: bold;">Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      {{#each items}}
+      <tr style="border-bottom: 1px solid #ddd;">
+        <td style="border: 1px solid #ddd; padding: 12px; vertical-align: top;">
+          {{name}}
+        </td>
+        <td style="border: 1px solid #ddd; padding: 12px; vertical-align: top;">
+          {{#if description}}
+            {{description}}
+          {{else}}
+            <span style="color: #999;">—</span>
+          {{/if}}
+        </td>
+      </tr>
+      {{/each}}
+    </tbody>
+  </table>
+
+  <div style="margin-top: 60px;">
+    <div style="display: inline-block; width: 50%; text-align: center;">
+      <div style="border-top: 1px solid #000; padding-top: 8px; min-height: 60px; margin-bottom: 4px;"></div>
+      <p style="margin: 0; font-size: 12px; font-weight: bold;">{{authorizedBy}}</p>
+      <p style="margin: 4px 0 0 0; font-size: 11px; color: #666;">Authorized By</p>
+    </div>
+  </div>
+
+  <div style="margin-top: 40px; padding-top: 12px; border-top: 1px solid #eee; text-align: center; font-size: 10px; color: #999;">
+    <p style="margin: 0;">Page 1 | Paper Size: {{paperSize}} | Report Type: Bank</p>
+  </div>
+</div>
+

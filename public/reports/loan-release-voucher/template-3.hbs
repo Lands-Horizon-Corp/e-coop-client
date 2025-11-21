@@ -1,0 +1,163 @@
+<style>
+    /* --------------------------------------------------------------------- */
+    /* Base Styles (Receipt Optimization - Forces Stacking and Small Fonts)  */
+    /* --------------------------------------------------------------------- */
+    .report-content {
+        width: 100%;
+        min-height: 100%;
+        padding: 5mm; /* Very small padding */
+        background: white;
+        font-size: 9pt; /* Small default font */
+        margin: 0;
+        font-family: sans-serif;
+        box-sizing: border-box;
+    }
+
+    /* Header */
+    header {
+        text-align: center;
+        margin-bottom: 0.5rem;
+        padding-bottom: 0.2rem;
+        border-bottom: 1px dashed #333; /* Dashed line for receipt feel */
+    }
+
+    header h1 {
+        font-size: 11pt; /* Smaller H1 */
+        font-weight: 800;
+        margin-bottom: 0.1rem;
+    }
+
+    header p, header .tin {
+        font-size: 7pt; /* Tiny contact info */
+        margin: 0;
+    }
+
+    header h2 {
+        margin-top: 0.5rem;
+        font-size: 10pt;
+        font-weight: 700;
+    }
+
+    /* Grid layout - FORCED STACKING */
+    .loan-grid {
+        display: block; /* Force elements to stack instead of grid */
+        margin-bottom: 0.5rem;
+        font-size: 8pt;
+    }
+
+    .loan-grid p {
+        margin-bottom: 0.1rem;
+    }
+
+    /* Table - Simplified and No Padding */
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 8pt;
+        text-align: left;
+    }
+
+    table th {
+        text-transform: uppercase;
+        background: none;
+        font-size: 7pt;
+        padding: 2pt 0; /* Minimal padding */
+        font-weight: 700;
+        border-bottom: 1px dashed #999;
+    }
+
+    table td {
+        padding: 2pt 0;
+    }
+
+    table tbody tr {
+        border-bottom: none;
+    }
+
+    .totals {
+        font-size: 9pt;
+        font-weight: 700;
+        border-top: 1px dashed #333; /* Separator for total */
+    }
+
+    /* Amount in Words */
+    .amount-words {
+        margin-top: 0.5rem;
+        padding: 0.5rem 0;
+        border-top: 1px dashed #333;
+        border-bottom: 1px dashed #333;
+        font-size: 8pt;
+        font-weight: 600;
+    }
+
+    /* Signatures - FORCED STACKING */
+    .signature-grid {
+        margin-top: 1rem;
+        display: block; /* Force signatures to stack */
+        font-size: 8pt;
+    }
+    
+    .signature-grid > div {
+        margin-bottom: 0.5rem;
+    }
+
+    .signature-line {
+        border-bottom: 1px dashed #999; /* Dashed line for signature */
+        text-align: left; /* Aligns signature line to the left for narrow space */
+        min-height: 0.8rem;
+    }
+
+    /* Approval */
+    .approval-section {
+        margin-top: 0.5rem;
+        text-align: center;
+    }
+
+    .approval-section p {
+        font-size: 9pt;
+    }
+
+    .approval-line {
+        width: 80%;
+        margin: 0.25rem auto 0;
+        border-bottom: 1px dashed #999;
+        min-height: 0.8rem;
+    }
+
+    /* Print Media Query for Receipts (Ensures no page margins) */
+    @page {
+        size: auto;
+        margin: 0;
+    }
+
+    @media print {
+        body { margin: 0; padding: 0; }
+        .report-content { padding: 0; margin: 0; }
+    }
+
+    /* The HTML structure remains identical for all samples below */
+</style>
+
+<div class="report-content">
+    <header>
+        <h1>{{header_title}}</h1>
+        <p class="">{{header_address}}</p>
+        <p class="tin">TIN: {{tax_number}}</p>
+        <h2>{{report_title}}</h2>
+    </header>
+    <div class="loan-grid">
+        </div>
+    <div class="overflow-x-auto">
+        <table>
+            </table>
+    </div>
+    <div class="amount-words">
+        *** {{total_amount_in_words}} ONLY ***
+    </div>
+    <div class="signature-grid">
+        </div>
+    <div class="approval-section">
+        <p>Approved for Payment:</p>
+        <div class="approval-line">{{approved_for_payment}}</div>
+    </div>
+</div>

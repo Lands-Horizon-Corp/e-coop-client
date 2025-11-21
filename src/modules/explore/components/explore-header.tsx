@@ -17,7 +17,7 @@ type ExploreHeaderProps = {
 const ExploreHeader = ({ setSearchTerm, categories }: ExploreHeaderProps) => {
     const [inputValue, setInputValue] = useState('')
 
-    const debounceSearchTerm = useDebounce(inputValue, 400)
+    const debounceSearchTerm = useDebounce(inputValue, 700)
 
     useEffect(() => {
         setSearchTerm(debounceSearchTerm)

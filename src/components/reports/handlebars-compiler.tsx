@@ -9,32 +9,26 @@ let helpersRegistered = false
 const registerHandlebarsHelpers = () => {
     if (helpersRegistered) return
 
-    // Increment helper for page numbering (converts 0-based to 1-based)
     Handlebars.registerHelper('inc', (num) =>
         typeof num === 'number' ? num + 1 : 1
     )
 
-    // Equality helper for conditionals
     Handlebars.registerHelper('eq', (a, b) => a === b)
 
-    // Add helper to perform numeric addition (useful for page offsets)
     Handlebars.registerHelper('add', (a, b) => {
         const na = Number(a) || 0
         const nb = Number(b) || 0
         return na + nb
     })
 
-    // Object keys helper for iterating object keys
     Handlebars.registerHelper('object-keys', (obj) => {
         return Object.keys(obj || {})
     })
 
-    // Lookup helper for dynamic property access
     Handlebars.registerHelper('lookup', (obj, field) => {
         return obj?.[field]
     })
 
-    // First helper to get first item of array
     Handlebars.registerHelper('first', (arr) => {
         return arr?.[0]
     })
@@ -44,13 +38,16 @@ const registerHandlebarsHelpers = () => {
 
 registerHandlebarsHelpers()
 
-export default function HbsRenderer({
+export default function HbsCompiler<TData>({
     templatePath,
+    data,
     onHtmlReady,
 }: {
     templatePath?: string
-    onHtmlReady?: (template: string) => void
+    data?: TData
+    onHtmlReady?: (html: string) => void
 }) {
+    const [html, setHtml] = useState('')
     const [error, setError] = useState<string | null>(null)
 
     useEffect(() => {
@@ -65,17 +62,31 @@ export default function HbsRenderer({
                 return res.text()
             })
             .then((raw) => {
+                const compiled = Handlebars.compile(raw)
+                const result = compiled(data ?? {})
+                setHtml(result)
                 setError(null)
-                onHtmlReady?.(raw)
+                onHtmlReady?.(result)
             })
             .catch((err) => {
-                toast.error('❌ HbsRenderer error:', err)
+                toast.error('❌ HbsCompiler error:', err)
                 setError(String(err?.message ?? err))
             })
-    }, [templatePath, onHtmlReady])
+    }, [templatePath, data, onHtmlReady])
 
     if (error) {
-        toast.error('❌ HbsRenderer error:')
-        return null
+        return (
+            <div className="p-4 bg-destructive/10 text-destructive rounded border border-destructive">
+                <strong>Template Error:</strong> {error}
+            </div>
+        )
     }
+
+    return (
+        <div
+            dangerouslySetInnerHTML={{
+                __html: html,
+            }}
+        />
+    )
 }

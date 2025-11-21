@@ -57,7 +57,9 @@ const LoanTransactionPrintForm = ({
 
     const printMutation = usePrintLoanTransaction({
         options: {
-            onSuccess: formProps.onSuccess,
+            onSuccess: (loan) => {
+                formProps.onSuccess?.(loan)
+            },
             onError: formProps.onError,
         },
     })
@@ -85,75 +87,75 @@ const LoanTransactionPrintForm = ({
     const error = serverRequestErrExtractor({ error: rawError })
 
     return (
-        <Form {...form}>
-            <form
-                className={cn('flex w-full flex-col gap-y-4', className)}
-                onSubmit={onSubmit}
-                ref={formRef}
-            >
-                <fieldset
-                    className="grid gap-x-6 gap-y-4 sm:gap-y-3"
-                    disabled={isPending || formProps.readOnly}
+        <>
+            <Form {...form}>
+                <form
+                    className={cn('flex w-full flex-col gap-y-4', className)}
+                    onSubmit={onSubmit}
+                    ref={formRef}
                 >
-                    <FormFieldWrapper
-                        control={form.control}
-                        label="Voucher *"
-                        name="voucher"
-                        render={({ field }) => (
-                            <Input
-                                {...field}
-                                autoComplete="off"
-                                disabled={isDisabled(field.name)}
-                                id={field.name}
-                                placeholder="Voucher Number"
-                            />
-                        )}
+                    <fieldset
+                        className="grid gap-x-6 gap-y-4 sm:gap-y-3"
+                        disabled={isPending || formProps.readOnly}
+                    >
+                        <FormFieldWrapper
+                            control={form.control}
+                            label="Voucher *"
+                            name="voucher"
+                            render={({ field }) => (
+                                <Input
+                                    {...field}
+                                    autoComplete="off"
+                                    disabled={isDisabled(field.name)}
+                                    id={field.name}
+                                    placeholder="Voucher Number"
+                                />
+                            )}
+                        />
+                        <FormFieldWrapper
+                            control={form.control}
+                            label="Check Number"
+                            name="check_number"
+                            render={({ field }) => (
+                                <Input
+                                    {...field}
+                                    autoComplete="off"
+                                    disabled={isDisabled(field.name)}
+                                    id={field.name}
+                                    placeholder="Check Number (optional)"
+                                />
+                            )}
+                        />
+                        <FormFieldWrapper
+                            control={form.control}
+                            label="Check Date"
+                            name="check_date"
+                            render={({ field }) => (
+                                <InputDate
+                                    {...field}
+                                    autoComplete="off"
+                                    disabled={isDisabled(field.name)}
+                                    id={field.name}
+                                    placeholder="Check Date"
+                                    type="date"
+                                />
+                            )}
+                        />
+                    </fieldset>
+                    <FormFooterResetSubmit
+                        disableSubmit={!form.formState.isDirty}
+                        error={error}
+                        isLoading={isPending}
+                        onReset={() => {
+                            form.reset()
+                            reset?.()
+                        }}
+                        readOnly={formProps.readOnly}
+                        submitText="Print"
                     />
-
-                    <FormFieldWrapper
-                        control={form.control}
-                        label="Check Number"
-                        name="check_number"
-                        render={({ field }) => (
-                            <Input
-                                {...field}
-                                autoComplete="off"
-                                disabled={isDisabled(field.name)}
-                                id={field.name}
-                                placeholder="Check Number (optional)"
-                            />
-                        )}
-                    />
-                    <FormFieldWrapper
-                        control={form.control}
-                        label="Check Date"
-                        name="check_date"
-                        render={({ field }) => (
-                            <InputDate
-                                {...field}
-                                autoComplete="off"
-                                disabled={isDisabled(field.name)}
-                                id={field.name}
-                                placeholder="Check Date"
-                                type="date"
-                            />
-                        )}
-                    />
-                </fieldset>
-
-                <FormFooterResetSubmit
-                    disableSubmit={!form.formState.isDirty}
-                    error={error}
-                    isLoading={isPending}
-                    onReset={() => {
-                        form.reset()
-                        reset?.()
-                    }}
-                    readOnly={formProps.readOnly}
-                    submitText="Print"
-                />
-            </form>
-        </Form>
+                </form>
+            </Form>
+        </>
     )
 }
 

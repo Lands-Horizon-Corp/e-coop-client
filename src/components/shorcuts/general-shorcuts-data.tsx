@@ -10,6 +10,7 @@ import {
     MagnifyingGlassIcon,
     MoneyStackIcon,
     ReloadIcon,
+    ReportsIcon,
     ResetIcon,
     ScanQrIcon,
     UserIcon,
@@ -159,6 +160,18 @@ export const ShortcutsData: TGroupShorcuts[] = [
                 description:
                     'Available after creating Journal/Cash Check Voucher',
                 shortcut: 'Shift + I',
+            },
+        ],
+    },
+    {
+        title: 'Generate Reports',
+        key: 'generate-report',
+        items: [
+            {
+                text: 'Toggle Generate Report',
+                icon: <ReportsIcon />,
+                description: 'Open the generate report',
+                shortcut: 'ctrl + G',
             },
         ],
     },

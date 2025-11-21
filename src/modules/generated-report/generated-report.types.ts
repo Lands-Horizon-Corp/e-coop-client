@@ -3,6 +3,7 @@ import { IBaseEntityMeta, IPaginatedResult, TEntityId } from '@/types'
 import { IGeneratedReportsDownloadUsers } from '../generated-reports-download-users/generated-reports-download-users.types'
 import { IMedia } from '../media'
 import { IUser } from '../user'
+import { TPaperSizeUnit } from './generated-reports.constants'
 
 export const ACCOUNT_MODEL_NAMES = [
     'AccountHistory',
@@ -162,7 +163,9 @@ export type TModeGeneratedReport =
     | 'search'
     | 'me'
 
-type TGeneratedReportType = 'pdf' | 'excel'
+export const GENERATE_REPORT_TYPE = ['pdf', 'excel'] as const
+
+export type TGeneratedReportType = (typeof GENERATE_REPORT_TYPE)[number]
 
 export type TGeneratedReportStatus =
     | 'pending'
@@ -193,13 +196,20 @@ export interface IGeneratedReport extends IBaseEntityMeta {
 }
 
 export interface IGeneratedReportRequest {
-    name: string
+    name?: string
     description?: string
-    filter_search: string
-    url: string
+    filter_search?: string
+    url?: string
     model: TModelName
-    paper_size?: string
     generated_report_type: TGeneratedReportType
+
+    //optional settings
+    paper_size?: string
+    template?: string
+    width?: number
+    height?: number
+    unit?: TPaperSizeUnit
+    landscape?: boolean
 }
 
 export interface IPFGeneratedReport extends IGeneratedReport {}
@@ -216,12 +226,4 @@ export interface IGeneratedReportUpdateRequest {
 export interface IGeneratedReportAvailableModalResponse {
     model: TModelName
     count: number
-}
-
-export interface PaperSize {
-    name: string
-    width: number
-    height: number
-    unit: 'mm' | 'in' | 'pt'
-    orientation?: 'portrait' | 'landscape'
 }

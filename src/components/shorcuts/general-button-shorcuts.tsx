@@ -99,7 +99,7 @@ const GeneralButtonShortcuts = ({ className }: { className?: string }) => {
                 includeMatches: true,
                 findAllMatches: true,
             }),
-        [ShortcutsData]
+        []
     )
     const filteredGroupShorcuts = useMemo(() => {
         let filtered = ShortcutsData
