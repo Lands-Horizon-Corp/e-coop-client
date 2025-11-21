@@ -16,6 +16,7 @@ import {
     ThumbsUpIcon,
     UndoIcon,
 } from '@/components/icons'
+import { ActionNameConfirmModal } from '@/components/modals/ action-name-confirm-modal'
 import LoadingSpinner from '@/components/spinners/loading-spinner'
 import { ContextMenuItem } from '@/components/ui/context-menu'
 import { DropdownMenuItem } from '@/components/ui/dropdown-menu'
@@ -49,6 +50,7 @@ const useLoanTransactionActions = ({
     const updateModal = useModalState()
     const updateSignatureModal = useModalState()
     const loanCreatePrintModal = useModalState()
+    const actionNameConfirmModal = useModalState()
 
     const [approvalReleaseMode, setApprovalReleaseMode] =
         useState<TLoanApproveReleaseDisplayMode>('approve')
@@ -73,7 +75,10 @@ const useLoanTransactionActions = ({
     const reprintMutation = useReprintLoanTransaction()
     const unprintMutation = useUndoPrintLoanTransaction()
 
-    const handleEdit = () => updateModal.onOpenChange(true)
+    const handleOpenEdit = () => updateModal.onOpenChange(true)
+    const handleEdit = () => {
+        actionNameConfirmModal.onOpenChange(true)
+    }
 
     const handleDelete = () => {
         onOpen({
@@ -110,6 +115,9 @@ const useLoanTransactionActions = ({
         isDeletingLoanTransaction,
         handleEdit,
         handleDelete,
+
+        actionNameConfirmModal,
+        handleOpenEdit,
     }
 }
 
@@ -140,6 +148,9 @@ export const LoanTransactionAction = ({
         unprintMutation,
         isPrintingProcess,
 
+        actionNameConfirmModal,
+        handleOpenEdit,
+
         isDeletingLoanTransaction,
         handleEdit,
         handleDelete,
@@ -148,6 +159,17 @@ export const LoanTransactionAction = ({
     return (
         <>
             <div onClick={(e) => e.stopPropagation()}>
+                <ActionNameConfirmModal
+                    {...actionNameConfirmModal}
+                    name={loanTransaction.account?.name || 'confirm'}
+                    onCancel={() => {
+                        actionNameConfirmModal.onOpenChange(false)
+                    }}
+                    onConfirm={() => {
+                        actionNameConfirmModal.onOpenChange(false)
+                        handleOpenEdit()
+                    }}
+                />
                 <LoanTransactionCreateUpdateFormModal
                     {...updateModal}
                     formProps={{
@@ -359,6 +381,9 @@ export const LoanTransactionRowContext = ({
         isDeletingLoanTransaction,
         handleEdit,
         handleDelete,
+
+        actionNameConfirmModal,
+        handleOpenEdit,
     } = useLoanTransactionActions({ row, onDeleteSuccess })
 
     return (
@@ -388,6 +413,17 @@ export const LoanTransactionRowContext = ({
                 {...loanApproveReleaseDisplayModal}
                 loanTransaction={loanTransaction}
                 mode={approvalReleaseMode}
+            />
+            <ActionNameConfirmModal
+                {...actionNameConfirmModal}
+                name={loanTransaction.account?.name || 'confirm'}
+                onCancel={() => {
+                    actionNameConfirmModal.onOpenChange(false)
+                }}
+                onConfirm={() => {
+                    actionNameConfirmModal.onOpenChange(false)
+                    handleOpenEdit()
+                }}
             />
             <DataTableRowContext
                 onDelete={{

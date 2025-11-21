@@ -143,6 +143,36 @@ const MemberLoanTableSummaryColumns = (
             maxSize: 800,
         },
         {
+            id: 'balance',
+            accessorKey: 'balance',
+            header: (props) => (
+                <DataTableColumnHeader {...props} title="Balance">
+                    <ColumnActions {...props}>
+                        <NumberFilter<ILoanTransaction>
+                            displayText="Balance"
+                            field="balance"
+                        />
+                    </ColumnActions>
+                </DataTableColumnHeader>
+            ),
+            cell: ({
+                row: {
+                    original: { balance },
+                },
+            }) => (
+                <div className="!text-wrap text-muted-foreground">
+                    {balance}
+                </div>
+            ),
+            enableMultiSort: true,
+            enableSorting: true,
+            enableResizing: true,
+            enableHiding: true,
+            size: 200,
+            minSize: 200,
+            maxSize: 800,
+        },
+        {
             id: 'count',
             header: (props) => (
                 <DataTableColumnHeader {...props} title="Count" />
@@ -218,36 +248,6 @@ const MemberLoanTableSummaryColumns = (
             size: 150,
             minSize: 150,
             maxSize: 200,
-        },
-        {
-            id: 'balance',
-            accessorKey: 'balance',
-            header: (props) => (
-                <DataTableColumnHeader {...props} title="Balance">
-                    <ColumnActions {...props}>
-                        <NumberFilter<ILoanTransaction>
-                            displayText="Balance"
-                            field="balance"
-                        />
-                    </ColumnActions>
-                </DataTableColumnHeader>
-            ),
-            cell: ({
-                row: {
-                    original: { balance },
-                },
-            }) => (
-                <div className="!text-wrap text-muted-foreground">
-                    {balance}
-                </div>
-            ),
-            enableMultiSort: true,
-            enableSorting: true,
-            enableResizing: true,
-            enableHiding: true,
-            size: 200,
-            minSize: 200,
-            maxSize: 800,
         },
         {
             id: 'applied_1',

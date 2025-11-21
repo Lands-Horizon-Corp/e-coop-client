@@ -40,7 +40,7 @@ import {
 
 import { useModalState } from '@/hooks/use-modal-state'
 
-import { NameConfirmation } from '../forms/name-confirmation'
+import { ActionNameConfirmModal } from '../../../../components/modals/ action-name-confirm-modal'
 import { IAccountsTableActionComponentProp } from './columns'
 
 interface UseAccountActionsProps {
@@ -149,7 +149,7 @@ export const AccountAction = ({
     return (
         <>
             <div onClick={(e) => e.stopPropagation()}>
-                <NameConfirmation
+                <ActionNameConfirmModal
                     description="This action cannot be undone. Please type the project name to confirm deletion."
                     title={`Confirm ${mode === 'delete' ? 'Deletion' : 'Update'}`}
                     {...confirmModal}
@@ -378,7 +378,7 @@ export const AccountRowContext = ({
 
     return (
         <>
-            <NameConfirmation
+            <ActionNameConfirmModal
                 description="This action cannot be undone. Please type the project name to confirm deletion."
                 title={`Confirm ${mode === 'delete' ? 'Deletion' : 'Update'}`}
                 {...confirmModal}

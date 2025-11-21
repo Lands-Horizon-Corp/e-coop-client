@@ -17,7 +17,7 @@ interface NameConfirmationProps extends IModalProps {
     onCancel?: () => void
 }
 
-export function NameConfirmation({
+export function ActionNameConfirmModal({
     name,
     isLoading = false,
     onCancel,
