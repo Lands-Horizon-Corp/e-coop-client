@@ -36,7 +36,7 @@ export const { apiCrudHooks, apiCrudService, baseQueryKey } =
     })
 
 export const {
-    useGetById : useGetTransactionById,
+    useGetById: useGetTransactionById,
     useGetAll,
     useCreate: useCreateTransaction,
 } = apiCrudHooks

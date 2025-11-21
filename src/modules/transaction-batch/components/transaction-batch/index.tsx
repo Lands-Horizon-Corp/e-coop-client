@@ -100,7 +100,10 @@ const TransactionBatch = ({
                         </p>
 
                         <div className="text-xs text-muted-foreground/70 font-semibold">
-                            Batch ID <CopyWrapper className='text-muted-foreground/50'>{transactionBatch?.id}</CopyWrapper>
+                            Batch ID{' '}
+                            <CopyWrapper className="text-muted-foreground/50">
+                                {transactionBatch?.id}
+                            </CopyWrapper>
                         </div>
                     </div>
                 </div>
