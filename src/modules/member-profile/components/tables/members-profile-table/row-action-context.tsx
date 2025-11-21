@@ -219,10 +219,10 @@ export const MemberProfileAction = ({
                         >
                             <GeneralLedgerTable
                                 className="min-h-[75vh] min-w-0 max-h-[75vh]"
+                                entryType={selectedEntryType}
                                 excludeColumnIds={['balance']}
                                 memberProfileId={member.id}
                                 mode="member"
-                                TEntryType={selectedEntryType}
                             />
                         </Modal>
 
@@ -580,10 +580,10 @@ export const MemberProfileRowContext = ({
                     >
                         <GeneralLedgerTable
                             className="min-h-[75vh] min-w-0 max-h-[75vh]"
+                            entryType={selectedEntryType}
                             excludeColumnIds={['balance']}
                             memberProfileId={member.id}
                             mode="member"
-                            TEntryType={selectedEntryType}
                         />
                     </Modal>
 

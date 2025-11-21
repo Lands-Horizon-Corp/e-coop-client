@@ -23,7 +23,9 @@ import DataTableToolbar, {
 } from '@/components/data-table/data-table-toolbar'
 import { TableProps } from '@/components/data-table/table.type'
 import { useDataTableSorting } from '@/components/data-table/use-datatable-sorting'
-import useDataTableState from '@/components/data-table/use-datatable-state'
+import useDataTableState, {
+    useResolvedColumnOrder,
+} from '@/components/data-table/use-datatable-state'
 
 import useDatableFilterState from '@/hooks/use-filter-state'
 import { usePagination } from '@/hooks/use-pagination'
@@ -49,7 +51,7 @@ export interface GeneralLedgerTableProps
         | 'deleteActionProps'
     >
     mode: TGeneralLedgerMode
-    TEntryType?: TEntryType
+    entryType?: TEntryType
 }
 
 export type TGeneralLedgerTableProps = GeneralLedgerTableProps &
@@ -84,13 +86,13 @@ export type TGeneralLedgerTableProps = GeneralLedgerTableProps &
     )
 
 const GeneralLedgerTable = ({
+    persistKey = ['general-ledger'],
     mode,
     className,
-    TEntryType,
+    entryType,
     toolbarProps,
     defaultFilter,
     excludeColumnIds,
-    defaultColumnSort,
     onRowClick = () => {},
     onDoubleClick = (row) => {
         row.toggleSelected()
@@ -124,8 +126,16 @@ const GeneralLedgerTable = ({
         return allColumns
     }, [actionComponent, excludeColumnIds])
 
+    const { resolvedColumnOrder, resolvedColumnVisibility, finalKeys } =
+        useResolvedColumnOrder({
+            columns,
+            persistKey: [...persistKey, mode, entryType],
+        })
+
     const tableState = useDataTableState<IGeneralLedger>({
-        defaultColumnOrder: defaultColumnSort || columns.map((c) => c.id!),
+        key: finalKeys,
+        defaultColumnVisibility: resolvedColumnVisibility,
+        defaultColumnOrder: resolvedColumnOrder,
         onSelectData,
     })
 
@@ -141,7 +151,7 @@ const GeneralLedgerTable = ({
         refetch,
     } = useFilteredPaginatedGeneralLedger({
         mode,
-        TEntryType,
+        entryType,
         query: {
             ...pagination,
             sort: sortingStateBase64,

@@ -110,8 +110,8 @@ export const TransactionAction = ({
                 >
                     <GeneralLedgerTable
                         className="min-h-[90vh] min-w-0 max-h-[90vh]"
+                        entryType={selectedEntryType}
                         mode="transaction"
-                        TEntryType={selectedEntryType}
                         transactionId={transaction.id}
                     />
                 </Modal>
@@ -300,8 +300,8 @@ export const TransactionRowContext = ({
             >
                 <GeneralLedgerTable
                     className="min-h-[90vh] min-w-0 max-h-[90vh]"
+                    entryType={selectedEntryType}
                     mode="transaction"
-                    TEntryType={selectedEntryType}
                     transactionId={transaction.id}
                 />
             </Modal>

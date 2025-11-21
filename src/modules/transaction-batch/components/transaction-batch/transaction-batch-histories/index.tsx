@@ -71,8 +71,8 @@ const HistoryTabs: {
             >
                 <GeneralLedgerTable
                     className="grow"
+                    entryType=""
                     mode="transaction-batch"
-                    TEntryType=""
                     transactionBatchId={transactionBatchId}
                 />
             </div>
@@ -91,8 +91,8 @@ const HistoryTabs: {
             >
                 <GeneralLedgerTable
                     className="grow"
+                    entryType="check-entry"
                     mode="transaction-batch"
-                    TEntryType="check-entry"
                     transactionBatchId={transactionBatchId}
                 />
             </div>
@@ -111,8 +111,8 @@ const HistoryTabs: {
             >
                 <GeneralLedgerTable
                     className="grow"
+                    entryType="online-entry"
                     mode="transaction-batch"
-                    TEntryType="online-entry"
                     transactionBatchId={transactionBatchId}
                 />
             </div>
@@ -131,8 +131,8 @@ const HistoryTabs: {
             >
                 <GeneralLedgerTable
                     className="grow"
+                    entryType="cash-entry"
                     mode="transaction-batch"
-                    TEntryType="cash-entry"
                     transactionBatchId={transactionBatchId}
                 />
             </div>
@@ -151,8 +151,8 @@ const HistoryTabs: {
             >
                 <GeneralLedgerTable
                     className="grow"
+                    entryType="payment-entry"
                     mode="transaction-batch"
-                    TEntryType="payment-entry"
                     transactionBatchId={transactionBatchId}
                 />
             </div>
@@ -171,8 +171,8 @@ const HistoryTabs: {
             >
                 <GeneralLedgerTable
                     className="grow"
+                    entryType="withdraw-entry"
                     mode="transaction-batch"
-                    TEntryType="withdraw-entry"
                     transactionBatchId={transactionBatchId}
                 />
             </div>
@@ -191,8 +191,8 @@ const HistoryTabs: {
             >
                 <GeneralLedgerTable
                     className="grow"
+                    entryType="deposit-entry"
                     mode="transaction-batch"
-                    TEntryType="deposit-entry"
                     transactionBatchId={transactionBatchId}
                 />
             </div>

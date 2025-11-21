@@ -269,7 +269,7 @@ const CurrentTransactionWithdrawHistoryData = ({
         isFetching: isFetchingCurrentTransaction,
     } = useFilteredPaginatedGeneralLedger({
         mode: modeState,
-        TEntryType: `${mode}-entry`,
+        entryType: `${mode}-entry`,
         query: {
             filter: finalFilterPayloadBase64,
             ...pagination,

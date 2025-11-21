@@ -65,13 +65,13 @@ function RouteComponent() {
                     >
                         <GeneralLedgerTable
                             className="max-h-[90vh] min-h-[90vh] min-w-0 max-w-full "
-                            excludeColumnIds={['balance']}
-                            mode="current"
-                            TEntryType={
+                            entryType={
                                 (tab.value === ''
                                     ? undefined
                                     : tab.value) as TEntryType
                             }
+                            excludeColumnIds={['balance']}
+                            mode="current"
                         />
                     </TabsContent>
                 ))}

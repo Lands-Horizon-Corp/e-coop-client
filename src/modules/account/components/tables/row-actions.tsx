@@ -173,8 +173,8 @@ export const AccountAction = ({
                     <GeneralLedgerTable
                         accountId={account.id}
                         className="min-h-[90vh] !max-w-[90vw] min-w-0 max-h-[90vh]"
+                        entryType={selectedEntryType}
                         mode="account"
-                        TEntryType={selectedEntryType}
                     />
                 </Modal>
                 <AccountCreateUpdateFormModal
@@ -402,8 +402,8 @@ export const AccountRowContext = ({
                 <GeneralLedgerTable
                     accountId={account.id}
                     className="min-h-[90vh] min-w-0 max-h-[90vh]"
+                    entryType={selectedEntryType}
                     mode="account"
-                    TEntryType={selectedEntryType}
                 />
             </Modal>
             <AccountCreateUpdateFormModal

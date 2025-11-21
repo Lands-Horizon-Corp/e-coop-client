@@ -121,8 +121,8 @@ export const LoanMicroInfoCard = ({ className, loanTransaction }: Props) => {
                     <p>Loan Summary</p>
                     <div className="text-xs">
                         <CopyWrapper textToCopy={loanTransaction.id}>
-                            <span className="text-muted-foreground/70">
-                                Copy ID
+                            <span className="text-muted-foreground/50 hover:text-muted-foreground">
+                                {loanTransaction.id}
                             </span>
                         </CopyWrapper>
                     </div>

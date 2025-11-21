@@ -130,7 +130,7 @@ export type TGeneralLedgerMode =
 
 export const useFilteredPaginatedGeneralLedger = ({
     mode = 'branch', // Default mode is 'branch'
-    TEntryType = '',
+    entryType = '',
     userOrganizationId,
     memberProfileId,
     accountId,
@@ -140,7 +140,7 @@ export const useFilteredPaginatedGeneralLedger = ({
     options,
 }: {
     mode?: TGeneralLedgerMode
-    TEntryType?: TEntryType
+    entryType?: TEntryType
     userOrganizationId?: TEntityId
     memberProfileId?: TEntityId
     accountId?: TEntityId
@@ -160,7 +160,7 @@ export const useFilteredPaginatedGeneralLedger = ({
             accountId,
             transactionBatchId,
             transactionId,
-            TEntryType,
+            entryType,
             query,
         ].filter(Boolean),
         queryFn: async () => {
@@ -168,14 +168,14 @@ export const useFilteredPaginatedGeneralLedger = ({
 
             switch (mode) {
                 case 'branch':
-                    url = TEntryType
-                        ? `${generalLedgerAPIRoute}/branch/${TEntryType}/search`
+                    url = entryType
+                        ? `${generalLedgerAPIRoute}/branch/${entryType}/search`
                         : `${generalLedgerAPIRoute}/branch/search`
                     break
 
                 case 'current':
-                    url = TEntryType
-                        ? `${generalLedgerAPIRoute}/current/${TEntryType}/search`
+                    url = entryType
+                        ? `${generalLedgerAPIRoute}/current/${entryType}/search`
                         : `${generalLedgerAPIRoute}/current/search`
                     break
 
@@ -185,8 +185,8 @@ export const useFilteredPaginatedGeneralLedger = ({
                             'userOrganizationId is required for employee mode'
                         )
                     }
-                    url = TEntryType
-                        ? `${generalLedgerAPIRoute}/employee/${userOrganizationId}/${TEntryType}/search`
+                    url = entryType
+                        ? `${generalLedgerAPIRoute}/employee/${userOrganizationId}/${entryType}/search`
                         : `${generalLedgerAPIRoute}/employee/${userOrganizationId}/search`
                     break
 
@@ -196,8 +196,8 @@ export const useFilteredPaginatedGeneralLedger = ({
                             'memberProfileId is required for member mode'
                         )
                     }
-                    url = TEntryType
-                        ? `${generalLedgerAPIRoute}/member-profile/${memberProfileId}/${TEntryType}/search`
+                    url = entryType
+                        ? `${generalLedgerAPIRoute}/member-profile/${memberProfileId}/${entryType}/search`
                         : `${generalLedgerAPIRoute}/member-profile/${memberProfileId}/search`
                     break
 
@@ -212,8 +212,8 @@ export const useFilteredPaginatedGeneralLedger = ({
                             'accountId is required for member-account mode'
                         )
                     }
-                    url = TEntryType
-                        ? `${generalLedgerAPIRoute}/member-profile/${memberProfileId}/account/${accountId}/${TEntryType}/search`
+                    url = entryType
+                        ? `${generalLedgerAPIRoute}/member-profile/${memberProfileId}/account/${accountId}/${entryType}/search`
                         : `${generalLedgerAPIRoute}/member-profile/${memberProfileId}/account/${accountId}/search`
                     break
 
@@ -223,8 +223,8 @@ export const useFilteredPaginatedGeneralLedger = ({
                             'transactionBatchId is required for transaction-batch mode'
                         )
                     }
-                    url = TEntryType
-                        ? `${generalLedgerAPIRoute}/transaction-batch/${transactionBatchId}/${TEntryType}/search`
+                    url = entryType
+                        ? `${generalLedgerAPIRoute}/transaction-batch/${transactionBatchId}/${entryType}/search`
                         : `${generalLedgerAPIRoute}/transaction-batch/${transactionBatchId}/search`
                     break
 
@@ -234,8 +234,8 @@ export const useFilteredPaginatedGeneralLedger = ({
                             'transactionId is required for transaction mode'
                         )
                     }
-                    url = TEntryType
-                        ? `${generalLedgerAPIRoute}/transaction/${transactionId}/${TEntryType}/search`
+                    url = entryType
+                        ? `${generalLedgerAPIRoute}/transaction/${transactionId}/${entryType}/search`
                         : `${generalLedgerAPIRoute}/transaction/${transactionId}/search`
                     break
 
@@ -245,8 +245,8 @@ export const useFilteredPaginatedGeneralLedger = ({
                             'accountId is required for account mode'
                         )
                     }
-                    url = TEntryType
-                        ? `${generalLedgerAPIRoute}/account/${accountId}/${TEntryType}/search`
+                    url = entryType
+                        ? `${generalLedgerAPIRoute}/account/${accountId}/${entryType}/search`
                         : `${generalLedgerAPIRoute}/account/${accountId}/search`
                     break
 

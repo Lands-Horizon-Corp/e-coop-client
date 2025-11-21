@@ -54,13 +54,13 @@ const GeneralLedgerPage = () => {
                     >
                         <GeneralLedgerTable
                             className="max-h-[90vh] min-h-[90vh] min-w-0 max-w-full "
-                            excludeColumnIds={['balance']}
-                            mode="branch"
-                            TEntryType={
+                            entryType={
                                 (tab.value === ''
                                     ? undefined
                                     : tab.value) as TEntryType
                             }
+                            excludeColumnIds={['balance']}
+                            mode="branch"
                         />
                     </TabsContent>
                 ))}

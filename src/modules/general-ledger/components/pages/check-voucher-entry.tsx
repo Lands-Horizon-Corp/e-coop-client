@@ -7,9 +7,9 @@ const CheckVoucherEntryPage = () => {
         <PageContainer>
             <GeneralLedgerTable
                 className="max-h-[90vh] min-h-[90vh] w-full"
+                entryType="check-voucher"
                 excludeColumnIds={['balance']}
                 mode="branch"
-                TEntryType="check-voucher"
             />
         </PageContainer>
     )

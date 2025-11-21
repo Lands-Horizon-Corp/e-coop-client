@@ -197,8 +197,8 @@ export const TransactionBatchAction = ({
                 >
                     <GeneralLedgerTable
                         className="min-h-[90vh] min-w-0 max-h-[90vh]"
+                        entryType={selectedEntryType}
                         mode="transaction-batch"
-                        TEntryType={selectedEntryType}
                         transactionBatchId={batch.id}
                     />
                 </Modal>
@@ -463,8 +463,8 @@ export const TransactionBatchRowContext = ({
             >
                 <GeneralLedgerTable
                     className="min-h-[90vh] min-w-0 max-h-[90vh]"
+                    entryType={selectedEntryType}
                     mode="transaction-batch"
-                    TEntryType={selectedEntryType}
                     transactionBatchId={batch.id}
                 />
             </Modal>

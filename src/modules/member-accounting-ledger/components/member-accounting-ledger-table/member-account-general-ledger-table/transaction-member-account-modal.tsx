@@ -140,9 +140,9 @@ const TransactionMemberAccountLedger = ({
                         <GeneralLedgerTable
                             accountId={focusedLedger.accountId}
                             className="min-h-[70vh] max-h-[70vh] w-full"
+                            entryType="check-entry"
                             memberProfileId={focusedLedger.memberProfileId}
                             mode="member-account"
-                            TEntryType="check-entry"
                         />
                     </TabsContent>
 
@@ -150,9 +150,9 @@ const TransactionMemberAccountLedger = ({
                         <GeneralLedgerTable
                             accountId={focusedLedger.accountId}
                             className="min-h-[70vh] max-h-[70vh] w-full"
+                            entryType="online-entry"
                             memberProfileId={focusedLedger.memberProfileId}
                             mode="member-account"
-                            TEntryType="online-entry"
                         />
                     </TabsContent>
 
@@ -160,9 +160,9 @@ const TransactionMemberAccountLedger = ({
                         <GeneralLedgerTable
                             accountId={focusedLedger.accountId}
                             className="min-h-[70vh] max-h-[70vh] w-full"
+                            entryType="cash-entry"
                             memberProfileId={focusedLedger.memberProfileId}
                             mode="member-account"
-                            TEntryType="cash-entry"
                         />
                     </TabsContent>
 
@@ -170,9 +170,9 @@ const TransactionMemberAccountLedger = ({
                         <GeneralLedgerTable
                             accountId={focusedLedger.accountId}
                             className="min-h-[70vh] max-h-[70vh] w-full"
+                            entryType="payment-entry"
                             memberProfileId={focusedLedger.memberProfileId}
                             mode="member-account"
-                            TEntryType="payment-entry"
                         />
                     </TabsContent>
 
@@ -180,9 +180,9 @@ const TransactionMemberAccountLedger = ({
                         <GeneralLedgerTable
                             accountId={focusedLedger.accountId}
                             className="min-h-[70vh] max-h-[70vh] w-full"
+                            entryType="withdraw-entry"
                             memberProfileId={focusedLedger.memberProfileId}
                             mode="member-account"
-                            TEntryType="withdraw-entry"
                         />
                     </TabsContent>
 
@@ -190,9 +190,9 @@ const TransactionMemberAccountLedger = ({
                         <GeneralLedgerTable
                             accountId={focusedLedger.accountId}
                             className="min-h-[70vh] max-h-[70vh] w-full"
+                            entryType="deposit-entry"
                             memberProfileId={focusedLedger.memberProfileId}
                             mode="member-account"
-                            TEntryType="deposit-entry"
                         />
                     </TabsContent>
                 </Tabs>

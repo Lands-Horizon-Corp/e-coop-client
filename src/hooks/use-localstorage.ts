@@ -1,8 +1,13 @@
 import { useCallback, useEffect, useState } from 'react'
 
 export function getLocalStorage<T>(key: string, fallback?: T): T | null {
-    const item = window.localStorage.getItem(key)
-    return item ? JSON.parse(item) : (fallback ?? null)
+    try {
+        const item = window.localStorage.getItem(key)
+        return item ? JSON.parse(item) : (fallback ?? null)
+    } catch (error) {
+        console.error(`Error parsing localStorage key "${key}":`, error)
+        return fallback ?? null
+    }
 }
 
 export function setLocalStorage<T>(key: string, value: T) {

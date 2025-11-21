@@ -169,9 +169,9 @@ export const EmployeesAction = ({
                 >
                     <GeneralLedgerTable
                         className="min-h-[75vh] min-w-0 max-h-[75vh]"
+                        entryType={selectedEntryType}
                         excludeColumnIds={['balance']}
                         mode="employee"
-                        TEntryType={selectedEntryType}
                         userOrganizationId={employee.id}
                     />
                 </Modal>
@@ -528,9 +528,9 @@ export const EmployeesRowContext = ({
             >
                 <GeneralLedgerTable
                     className="min-h-[75vh] min-w-0 max-h-[75vh]"
+                    entryType={selectedEntryType}
                     excludeColumnIds={['balance']}
                     mode="employee"
-                    TEntryType={selectedEntryType}
                     userOrganizationId={employee.id}
                 />
             </Modal>

@@ -9,6 +9,7 @@ import { ICurrency } from '@/modules/currency'
 import {
     ILoanPaymentPerAccount,
     ILoanTransaction,
+    useGetLoanTransactionById,
     useLoanPaymentSchedule,
 } from '@/modules/loan-transaction'
 import { LoanMicroInfoCard } from '@/modules/loan-transaction/components/loan-mini-info-card'
@@ -23,8 +24,9 @@ import MemberPicker from '@/modules/member-profile/components/member-picker'
 import { useTransactionBatchStore } from '@/modules/transaction-batch/store/transaction-batch-store'
 
 import PageContainer from '@/components/containers/page-container'
-import { HandCoinsIcon, XIcon } from '@/components/icons'
+import { HandCoinsIcon, RefreshIcon, XIcon } from '@/components/icons'
 import ImageDisplay from '@/components/image-display'
+import LoadingSpinner from '@/components/spinners/loading-spinner'
 import { Button } from '@/components/ui/button'
 import {
     ResizableHandle,
@@ -181,15 +183,12 @@ function LoanPaymentPage() {
                         </div>
                     ) : (
                         <>
-                            <div>
-                                <p>Paying for Loan</p>
-                                {selectedLoan && (
-                                    <LoanMicroInfoCard
-                                        className="rounded-xl p-3 bg-accent/50"
-                                        loanTransaction={selectedLoan}
-                                    />
-                                )}
-                            </div>
+                            {selectedLoan && (
+                                <SelectedLoanView
+                                    defaultLoanTransaction={selectedLoan}
+                                    loanTransactionId={selectedLoan.id}
+                                />
+                            )}
                             {member && (
                                 <LoanPayablesForm
                                     currency={
@@ -242,6 +241,93 @@ function LoanPaymentPage() {
                 </ResizablePanel>
             </ResizablePanelGroup>
         </PageContainer>
+    )
+}
+
+const SelectedLoanView = ({
+    defaultLoanTransaction,
+    loanTransactionId,
+}: {
+    loanTransactionId: TEntityId
+    defaultLoanTransaction?: ILoanTransaction
+}) => {
+    const {
+        data: loanTransaction = defaultLoanTransaction,
+        isPending,
+        isRefetching,
+        refetch,
+    } = useGetLoanTransactionById({
+        id: loanTransactionId,
+        options: { enabled: !!loanTransactionId },
+    })
+
+    if (isPending) {
+        return (
+            <div className="rounded-xl p-3 bg-accent/50 space-y-4">
+                {/* Header */}
+                <div className="space-y-2">
+                    <div className="h-6 bg-accent/40 rounded-md w-1/3 animate-pulse" />
+                    <div className="h-4 bg-accent/40 rounded-md w-1/4 animate-pulse" />
+                </div>
+
+                {/* Info Grid */}
+                <div className="grid grid-cols-4 gap-4">
+                    {/* MOP */}
+                    <div className="space-y-2">
+                        <div className="h-3 bg-accent/40 rounded-md w-12 animate-pulse" />
+                        <div className="h-9 bg-accent/40 rounded-full w-24 animate-pulse" />
+                    </div>
+
+                    {/* Loan Type */}
+                    <div className="space-y-2">
+                        <div className="h-3 bg-accent/40 rounded-md w-16 animate-pulse" />
+                        <div className="h-9 bg-accent/40 rounded-full w-28 animate-pulse" />
+                    </div>
+
+                    {/* Applied */}
+                    <div className="space-y-2">
+                        <div className="h-3 bg-accent/40 rounded-md w-14 animate-pulse" />
+                        <div className="h-9 bg-accent/40 rounded-md w-32 animate-pulse" />
+                    </div>
+
+                    {/* Balance */}
+                    <div className="space-y-2 text-right">
+                        <div className="h-3 bg-accent/40 rounded-md w-14 ml-auto animate-pulse" />
+                        <div className="h-9 bg-accent/40 rounded-md w-32 ml-auto animate-pulse" />
+                    </div>
+                </div>
+            </div>
+        )
+    }
+
+    return (
+        <div className="space-y-2">
+            <div className="flex items-center justify-between">
+                <p>Paying for Loan</p>
+                <Button
+                    disabled={isPending || isRefetching}
+                    onClick={() => refetch()}
+                    size="icon-sm"
+                    variant="outline"
+                >
+                    {isRefetching ? (
+                        <LoadingSpinner className="size-3" />
+                    ) : (
+                        <RefreshIcon className="size-3" />
+                    )}
+                </Button>
+            </div>
+            {loanTransaction ? (
+                <LoanMicroInfoCard
+                    className="rounded-xl p-3 bg-accent/50"
+                    loanTransaction={loanTransaction || defaultLoanTransaction}
+                />
+            ) : (
+                <p className="text-sm text-red-500">
+                    Failed to load loan transaction.
+                </p>
+            )}
+        </div>
     )
 }
 

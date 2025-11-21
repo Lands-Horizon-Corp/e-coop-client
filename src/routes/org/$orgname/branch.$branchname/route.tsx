@@ -21,7 +21,7 @@ export const Route = createFileRoute('/org/$orgname/branch/$branchname')({
 function RouteComponent() {
     return (
         <AuthGuard>
-            <CursorFollow />
+            {/* <CursorFollow /> */}
             <OrgBranchUrlGuard>
                 <SidebarProvider>
                     <OrgBranchSidebar />
