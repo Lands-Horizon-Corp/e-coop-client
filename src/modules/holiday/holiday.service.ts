@@ -5,7 +5,10 @@ import {
     HookQueryOptions,
     createDataLayerFactory,
 } from '@/providers/repositories/data-layer-factory'
-import { createMutationFactory } from '@/providers/repositories/mutation-factory'
+import {
+    createMutationFactory,
+    updateMutationInvalidationFn,
+} from '@/providers/repositories/mutation-factory'
 
 import { TAPIQueryOptions, TEntityId } from '@/types'
 
@@ -48,7 +51,7 @@ export { holidayBaseKey } // Exported in case it's needed outside
 
 export const {
     useCreate: useCreateHoliday,
-    useUpdateById: useUpdateHolidayById,
+    // useUpdateById: useUpdateHolidayById,
 
     // useGetAll: useGetAllHoliday,
     useGetById: useGetHolidayById,
@@ -92,6 +95,20 @@ export const useGetHolidayAvailableYears = ({
         },
     })
 }
+
+export const useUpdateHolidayById = createMutationFactory<
+    IHoliday,
+    Error,
+    { id: TEntityId; payload: IHolidayRequest }
+>({
+    mutationFn: (variables) => updateHolidayById(variables),
+    invalidationFn: (args) => {
+        updateMutationInvalidationFn(holidayBaseKey, args)
+        args.queryClient.invalidateQueries({
+            queryKey: [holidayBaseKey, 'all'],
+        })
+    },
+})
 
 // Holidays
 export const useGetAllHolidays = ({
