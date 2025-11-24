@@ -24,15 +24,28 @@ import { TEntityId } from '@/types'
 
 import InputDate from './input-date'
 
-declare module '@tanstack/react-table' {
-    interface TableMeta<TData> {
-        updateData: <TValue>(
-            rowIndex: number,
-            columnId: keyof TData,
-            value: TValue
-        ) => void
-        handleDeleteRow: (row: Row<TData>) => void
+export interface CustomColumnMeta<TData extends object> {
+    inputType?:
+        | 'text'
+        | 'checkbox'
+        | 'select'
+        | 'number'
+        | 'date'
+        | 'account-picker'
+        | 'member-picker'
+    options?: { label: string; value: string }[]
+    inputProps?: InputProps & {
+        currency?: ICurrency
+        defaultCurrency?: ICurrency
     }
+    selectTriggerProps?: React.ComponentProps<typeof SelectPrimitive.Trigger>
+    checkboxProps?: React.ComponentProps<typeof Checkbox>
+    updateData?: <TValue>(
+        rowIndex: number,
+        columnId: keyof TData,
+        value: TValue
+    ) => void
+    handleDeleteRow?: (row: Row<TData>) => void
 }
 
 interface CustomCellContext<TData extends object>
@@ -57,29 +70,29 @@ interface CustomCellContext<TData extends object>
 export const EditableCell = <T extends object>({
     getValue,
     row: { index },
-    column: { id },
+    column: { id, columnDef },
     inputType = 'text',
     options = [],
     inputProps,
     selectTriggerProps,
     checkboxProps,
-    table,
 }: CustomCellContext<T>) => {
     const initialValue = getValue()
     const [value, setValue] = useState(initialValue)
     const [open, setOpen] = useState(false)
+    const meta = columnDef.meta as CustomColumnMeta<T> | undefined
 
     useEffect(() => {
         setValue(initialValue)
     }, [initialValue])
 
     const handleBlur = () => {
-        table.options.meta?.updateData(index, id as keyof T, value)
+        meta?.updateData?.(index, id as keyof T, value)
     }
 
     const handleChange = (newValue: unknown) => {
         setValue(newValue)
-        table.options.meta?.updateData(index, id as keyof T, newValue)
+        meta?.updateData?.(index, id as keyof T, newValue)
     }
 
     switch (inputType) {

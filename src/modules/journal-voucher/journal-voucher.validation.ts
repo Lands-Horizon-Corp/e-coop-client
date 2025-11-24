@@ -55,11 +55,11 @@ export const JournalVoucherSchema = z.object({
             (entries) => {
                 if (entries.length === 0) return true
                 const totalDebit = entries.reduce(
-                    (acc, entry) => acc + entry.debit,
+                    (acc, entry) => acc + (entry.debit || 0),
                     0
                 )
                 const totalCredit = entries.reduce(
-                    (acc, entry) => acc + entry.credit,
+                    (acc, entry) => acc + (entry.credit || 0),
                     0
                 )
                 return totalDebit === totalCredit

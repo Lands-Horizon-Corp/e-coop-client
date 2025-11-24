@@ -162,9 +162,6 @@ const PaymentWithTransactionForm = ({
     const { onOpenReverseRequestAction } = useTransactionReverseSecurityStore()
 
     const handleSubmitForm = (data: TPaymentWithTransactionFormValues) => {
-        const entryDate = data.entry_date
-            ? new Date(data.entry_date).toISOString()
-            : undefined
         const transactionpayPayload: ITransactionRequest = {
             ...data,
             currency_id: (transaction?.currency_id ||
@@ -179,7 +176,6 @@ const PaymentWithTransactionForm = ({
                 currency_id:
                     transaction?.currency_id ||
                     currentTransactionBatch?.currency_id,
-                entry_date: entryDate,
             },
             mode: 'payment',
             transactionId,

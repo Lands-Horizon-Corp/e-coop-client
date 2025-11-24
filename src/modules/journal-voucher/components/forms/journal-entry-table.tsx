@@ -1,16 +1,17 @@
-import { useCallback, useMemo } from 'react'
+import { useCallback } from 'react'
 
-import { UseFormReturn } from 'react-hook-form'
+import { UseFormReturn, useFieldArray } from 'react-hook-form'
 
 import { cn } from '@/helpers'
 import { IAccount } from '@/modules/account'
-import { ICurrency } from '@/modules/currency'
+import { AccountPicker } from '@/modules/account/components'
+import { CurrencyInput, ICurrency } from '@/modules/currency'
 import { IJournalVoucherEntryRequest } from '@/modules/journal-voucher-entry'
+import LoanPicker from '@/modules/loan-transaction/components/loan-picker'
 import { IMemberProfile } from '@/modules/member-profile'
-import { entityIdSchema } from '@/validation'
+import MemberPicker from '@/modules/member-profile/components/member-picker'
 import {
     ColumnDef,
-    Row,
     flexRender,
     getCoreRowModel,
     useReactTable,
@@ -20,7 +21,6 @@ import { useHotkeys } from 'react-hotkeys-hook'
 import { PlusIcon, TrashIcon } from '@/components/icons'
 import { Button } from '@/components/ui/button'
 import { CommandShortcut } from '@/components/ui/command'
-import { EditableCell } from '@/components/ui/editable-columns'
 import {
     Table,
     TableBody,
@@ -41,14 +41,29 @@ const columns: ColumnDef<IJournalVoucherEntryRequest>[] = [
         minSize: 200,
         size: 350,
         cell: (props) => {
+            const meta = props.table.options.meta as JournalEntryTableMeta
+            const form = meta.form
+            const rowIndex = props.row.index
+
             return (
-                <EditableCell
-                    inputProps={{
-                        currency: props.table.options.meta?.defaultCurrency,
-                        className: '!w-full !min-w-0 flex-1',
+                <AccountPicker
+                    allowClear
+                    currencyId={meta.defaultCurrency?.id as TEntityId}
+                    mode={meta.defaultCurrency ? 'currency' : 'all'}
+                    nameOnly
+                    onSelect={(selectedAccount) => {
+                        form.setValue(
+                            `journal_voucher_entries.${rowIndex}.account`,
+                            selectedAccount
+                        )
+                        form.setValue(
+                            `journal_voucher_entries.${rowIndex}.account_id`,
+                            selectedAccount?.id as TEntityId
+                        )
                     }}
-                    inputType="account-picker"
-                    {...props}
+                    placeholder="Select an Account"
+                    triggerClassName="!w-full !min-w-0 flex-1"
+                    value={props.row.original.account as IAccount}
                 />
             )
         },
@@ -59,85 +74,160 @@ const columns: ColumnDef<IJournalVoucherEntryRequest>[] = [
         minSize: 200,
         size: 350,
         cell: (props) => {
+            const meta = props.table.options.meta as JournalEntryTableMeta
+            const form = meta.form
+            const rowIndex = props.row.index
+
             return (
-                <EditableCell
-                    inputProps={{
-                        className: '!w-full !min-w-0 flex-1',
+                <MemberPicker
+                    allowClear
+                    onSelect={(selectedMember) => {
+                        form.setValue(
+                            `journal_voucher_entries.${rowIndex}.member_profile`,
+                            selectedMember
+                        )
+                        form.setValue(
+                            `journal_voucher_entries.${rowIndex}.member_profile_id`,
+                            selectedMember?.id as TEntityId
+                        )
                     }}
-                    inputType="member-picker"
-                    {...props}
+                    placeholder="Select Member"
+                    showPBNo={false}
+                    triggerClassName="!w-full !min-w-0 flex-1"
+                    triggerVariant="outline"
+                    value={props.row.original.member_profile as IMemberProfile}
                 />
             )
         },
     },
     {
-        accessorKey: 'cash_check_voucher_number',
-        header: 'CV Number',
+        accessorKey: 'loan_transaction_id',
+        header: 'Loan',
         minSize: 120,
         size: 150,
-        cell: (props) => (
-            <EditableCell
-                inputProps={{
-                    className: '!w-full !min-w-0',
-                }}
-                inputType="text"
-                {...props}
-            />
-        ),
+        cell: (props) => {
+            const meta = props.table.options.meta as JournalEntryTableMeta
+            const form = meta.form
+            const rowIndex = props.row.index
+
+            const original = props.row.original
+            const account: IAccount | undefined = original.account
+
+            return (
+                <LoanPicker
+                    disabled={
+                        !account ||
+                        account?.type !== 'Loan' ||
+                        !original.member_profile_id
+                    }
+                    memberProfileId={original.member_profile_id as TEntityId}
+                    mode={'member-profile'}
+                    onSelect={(loanTransaction) => {
+                        form.setValue(
+                            `journal_voucher_entries.${rowIndex}.loan_transaction`,
+                            loanTransaction
+                        )
+                        form.setValue(
+                            `journal_voucher_entries.${rowIndex}.loan_transaction_id`,
+                            loanTransaction.id
+                        )
+                    }}
+                    value={original.loan_transaction}
+                />
+            )
+        },
     },
     {
         accessorKey: 'debit',
         header: 'Debit',
         minSize: 200,
         size: 200,
-        cell: (props) => (
-            <EditableCell
-                inputProps={{
-                    currency: props.row.original.account?.currency,
-                    className: '!w-full !min-w-0',
-                }}
-                inputType="number"
-                {...props}
-            />
-        ),
+        cell: (props) => {
+            const meta = props.table.options.meta as JournalEntryTableMeta
+            const form = meta.form
+            const rowIndex = props.row.index
+
+            return (
+                <CurrencyInput
+                    className="text-left !w-full !min-w-0"
+                    currency={props.row.original.account?.currency}
+                    onValueChange={(newValue) => {
+                        const numValue =
+                            typeof newValue === 'string'
+                                ? parseFloat(newValue) || 0
+                                : (newValue ?? 0)
+                        form.setValue(
+                            `journal_voucher_entries.${rowIndex}.debit`,
+                            numValue
+                        )
+                        form.setValue(
+                            `journal_voucher_entries.${rowIndex}.credit`,
+                            0
+                        )
+                    }}
+                    value={props.row.original.debit}
+                />
+            )
+        },
     },
     {
         accessorKey: 'credit',
         header: 'Credit',
         minSize: 200,
         size: 200,
-        cell: (props) => (
-            <EditableCell
-                inputProps={{
-                    currency: props.row.original.account?.currency,
-                    className: '!w-full !min-w-0',
-                }}
-                inputType="number"
-                {...props}
-            />
-        ),
+        cell: (props) => {
+            const meta = props.table.options.meta as JournalEntryTableMeta
+            const form = meta.form
+            const rowIndex = props.row.index
+
+            return (
+                <CurrencyInput
+                    className="text-left !w-full !min-w-0"
+                    currency={props.row.original.account?.currency}
+                    onValueChange={(newValue) => {
+                        const numValue =
+                            typeof newValue === 'string'
+                                ? parseFloat(newValue) || 0
+                                : (newValue ?? 0)
+                        form.setValue(
+                            `journal_voucher_entries.${rowIndex}.credit`,
+                            numValue
+                        )
+                        form.setValue(
+                            `journal_voucher_entries.${rowIndex}.debit`,
+                            0
+                        )
+                    }}
+                    value={props.row.original.credit}
+                />
+            )
+        },
     },
     {
         accessorKey: 'action',
         header: 'Action',
-        cell: (row) => (
-            <Button
-                className="w-full hover:bg-primary/10 !p-0 text-destructive"
-                onClick={(e) => {
-                    e.preventDefault()
-                    row.table.options.meta?.handleDeleteRow(row.row)
-                }}
-                size="icon"
-                variant="ghost"
-            >
-                <TrashIcon />
-            </Button>
-        ),
+        cell: (row) => {
+            const meta = row.table.options.meta as JournalEntryTableMeta
+            return (
+                <Button
+                    className="w-full hover:bg-primary/10 !p-0 text-destructive"
+                    onClick={(e) => {
+                        e.preventDefault()
+                        meta.handleDeleteRow(row.row.index)
+                    }}
+                    size="icon"
+                    variant="ghost"
+                >
+                    <TrashIcon />
+                </Button>
+            )
+        },
         enableSorting: false,
         enableColumnFilter: false,
         size: 50,
     },
 ]
+
 type JournalEntryTableProps = {
     defaultMemberProfile?: IMemberProfile
     journalVoucherId: TEntityId
@@ -151,16 +241,10 @@ type JournalEntryTableProps = {
     form: UseFormReturn<TJournalVoucherSchema>
 }
 
-declare module '@tanstack/react-table' {
-    interface TableMeta<TData> {
-        updateData: <TValue>(
-            rowIndex: number,
-            columnId: keyof TData,
-            value: TValue
-        ) => void
-        handleDeleteRow: (row: Row<TData>) => void
-        defaultCurrency?: ICurrency
-    }
+type JournalEntryTableMeta = {
+    handleDeleteRow: (index: number) => void
+    defaultCurrency?: ICurrency
+    form: UseFormReturn<TJournalVoucherSchema>
 }
 
 export const JournalEntryTable = ({
@@ -176,50 +260,34 @@ export const JournalEntryTable = ({
     const isReadOnlyMode = mode === 'readOnly'
 
     const watchedJournalEntries = form.watch('journal_voucher_entries')
-    const watchedDeletedEntries = form.watch('journal_voucher_entries_deleted')
 
-    const journalVoucherEntry = useMemo(
-        () => watchedJournalEntries || [],
-        [watchedJournalEntries]
-    )
+    const { append: addEntry, remove: removeEntry } = useFieldArray({
+        name: 'journal_voucher_entries',
+        control: form.control,
+    })
 
-    const deletedJournalVoucherEntries = useMemo(
-        () => watchedDeletedEntries || [],
-        [watchedDeletedEntries]
-    )
+    const { append: addRemoveId } = useFieldArray({
+        name: 'removed_journal_voucher_entry_ids',
+        control: form.control,
+    })
 
     const handleDeleteRow = useCallback(
-        (row: Row<IJournalVoucherEntryRequest>) => {
+        (index: number) => {
             if (isReadOnlyMode) return
-            const id = row.original.id
-            if (isUpdateMode && id) {
-                const validation = entityIdSchema.safeParse(id)
-                if (validation.success) {
-                    form.setValue('journal_voucher_entries_deleted', [
-                        ...deletedJournalVoucherEntries,
-                        id as TEntityId,
-                    ])
-                    const updatedData = journalVoucherEntry.filter(
-                        (data) => data.id !== id
-                    )
-                    form.setValue('journal_voucher_entries', updatedData)
-                    form.trigger('journal_voucher_entries')
-                }
-            } else {
-                const updatedData = journalVoucherEntry.filter(
-                    (_, index) => index !== row.index
-                )
-                form.setValue('journal_voucher_entries', updatedData)
-                form.trigger('journal_voucher_entries')
+
+            const entryId = form.getValues(
+                `journal_voucher_entries.${index}.id`
+            )
+
+            if (entryId && isUpdateMode) {
+                removeEntry(index)
+                addRemoveId(entryId)
+                return
             }
+
+            removeEntry(index)
         },
-        [
-            isUpdateMode,
-            isReadOnlyMode,
-            form,
-            journalVoucherEntry,
-            deletedJournalVoucherEntries,
-        ]
+        [isReadOnlyMode, form, isUpdateMode, removeEntry, addRemoveId]
     )
 
     const handleAddRow = useCallback(
@@ -229,76 +297,28 @@ export const JournalEntryTable = ({
             if (isReadOnlyMode) return
 
             const newRow: IJournalVoucherEntryRequest = {
-                debit: 0,
-                credit: 0,
-                rowId: crypto.randomUUID(),
-                cash_check_voucher_number: '',
+                debit: '' as unknown as number,
+                credit: '' as unknown as number,
                 member_profile_id: defaultMemberProfile?.id,
                 member_profile: defaultMemberProfile,
                 account_id: '' as TEntityId,
                 transaction_batch_id: transactionBatchId ?? undefined,
             }
 
-            const updatedEntries = [...journalVoucherEntry, newRow]
-            form.setValue('journal_voucher_entries', updatedEntries)
-            form.trigger('journal_voucher_entries')
+            addEntry(newRow)
         },
-        [
-            isReadOnlyMode,
-            defaultMemberProfile,
-            transactionBatchId,
-            journalVoucherEntry,
-            form,
-        ]
-    )
-
-    const updateData = useCallback(
-        <TValue,>(
-            rowIndex: number,
-            columnId: keyof IJournalVoucherEntryRequest,
-            value: TValue
-        ) => {
-            const updatedEntries = journalVoucherEntry.map((entry, index) => {
-                if (index === rowIndex) {
-                    const updatedEntry = { ...entry }
-
-                    if (columnId === 'debit') {
-                        updatedEntry.debit = value as number
-                        updatedEntry.credit = 0 // Clear credit when debit is set
-                    } else if (columnId === 'credit') {
-                        updatedEntry.credit = value as number
-                        updatedEntry.debit = 0 // Clear debit when credit is set
-                    } else if (columnId === 'account') {
-                        updatedEntry.account = value
-                        updatedEntry.account_id = (value as IAccount)
-                            ?.id as TEntityId
-                    } else if (columnId === 'member_profile') {
-                        updatedEntry.member_profile = value
-                        updatedEntry.member_profile_id = (
-                            value as IMemberProfile
-                        )?.id as TEntityId
-                    }
-
-                    return updatedEntry
-                }
-                return entry
-            })
-
-            form.setValue('journal_voucher_entries', updatedEntries)
-            form.trigger('journal_voucher_entries')
-        },
-        [journalVoucherEntry, form]
+        [addEntry, defaultMemberProfile, isReadOnlyMode, transactionBatchId]
     )
 
     const table = useReactTable<IJournalVoucherEntryRequest>({
-        data: journalVoucherEntry,
+        data: watchedJournalEntries || [],
         columns: columns,
         getCoreRowModel: getCoreRowModel(),
         meta: {
             defaultCurrency: currency,
-            updateData,
             handleDeleteRow,
-        },
+            form,
+        } as JournalEntryTableMeta,
     })
 
     useHotkeys(
