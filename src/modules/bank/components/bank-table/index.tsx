@@ -22,6 +22,7 @@ import { useDataTableSorting } from '@/components/data-table/use-datatable-sorti
 import useDataTableState, {
     useResolvedColumnOrder,
 } from '@/components/data-table/use-datatable-state'
+import { Skeleton } from '@/components/ui/skeleton'
 
 import useDatableFilterState from '@/hooks/use-filter-state'
 import { usePagination } from '@/hooks/use-pagination'
@@ -64,8 +65,6 @@ const BankTable = ({
     const { pagination, setPagination } = usePagination()
     const { sortingStateBase64, tableSorting, setTableSorting } =
         useDataTableSorting()
-
-    console.log(tableSorting)
 
     const columns = useMemo(
         () =>

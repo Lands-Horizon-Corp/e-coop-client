@@ -4,6 +4,9 @@ import { createFileRoute } from '@tanstack/react-router'
 
 import { TEntryType } from '@/modules/general-ledger'
 import GeneralLedgerTable from '@/modules/general-ledger/components/tables/general-ledger-table'
+import GeneralLedgerAction, {
+    GeneralLedgerRowContext,
+} from '@/modules/general-ledger/components/tables/general-ledger-table/row-action-context'
 
 import PageContainer from '@/components/containers/page-container'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
@@ -64,6 +67,7 @@ function RouteComponent() {
                         value={tab.value}
                     >
                         <GeneralLedgerTable
+                            actionComponent={GeneralLedgerAction}
                             className="max-h-[90vh] min-h-[90vh] min-w-0 max-w-full "
                             entryType={
                                 (tab.value === ''
@@ -72,6 +76,7 @@ function RouteComponent() {
                             }
                             excludeColumnIds={['balance']}
                             mode="current"
+                            RowContextComponent={GeneralLedgerRowContext}
                         />
                     </TabsContent>
                 ))}

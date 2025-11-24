@@ -5,6 +5,9 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 
 import { TEntryType } from '../..'
 import GeneralLedgerTable from '../tables/general-ledger-table'
+import GeneralLedgerAction, {
+    GeneralLedgerRowContext,
+} from '../tables/general-ledger-table/row-action-context'
 
 const tabs = [
     { name: 'General Ledger', value: '' },
@@ -53,6 +56,7 @@ const GeneralLedgerPage = () => {
                         value={tab.value}
                     >
                         <GeneralLedgerTable
+                            actionComponent={GeneralLedgerAction}
                             className="max-h-[90vh] min-h-[90vh] min-w-0 max-w-full "
                             entryType={
                                 (tab.value === ''
@@ -61,6 +65,7 @@ const GeneralLedgerPage = () => {
                             }
                             excludeColumnIds={['balance']}
                             mode="branch"
+                            RowContextComponent={GeneralLedgerRowContext}
                         />
                     </TabsContent>
                 ))}

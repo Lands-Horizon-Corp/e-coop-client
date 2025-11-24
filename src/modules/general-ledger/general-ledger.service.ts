@@ -85,6 +85,8 @@ export const getAllGeneralLedger = async ({
 
 // 🪝 HOOK START HERE
 
+export const { useGetById: useGetGeneralLedgerById } = apiCrudHooks
+
 export const useGetAllGeneralLedger = ({
     mode = 'all',
     query,

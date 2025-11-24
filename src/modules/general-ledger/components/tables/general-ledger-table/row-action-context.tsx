@@ -11,6 +11,7 @@ import { DropdownMenuItem } from '@/components/ui/dropdown-menu'
 
 import { useModalState } from '@/hooks/use-modal-state'
 
+import { GeneralLedgerViewSheet } from '../../ledger-detail'
 import { IGeneralLedgerTableActionComponentProp } from './columns'
 
 interface UseGeneralLedgerActionsProps {
@@ -40,14 +41,19 @@ export const GeneralLedgerAction = ({
     row,
     onDeleteSuccess,
 }: IGeneralLedgerTableActionProps) => {
-    const { handleViewDetails } = useGeneralLedgerActions({
-        row,
-        onDeleteSuccess,
-    })
+    const { ledgerEntry, detailsModal, handleViewDetails } =
+        useGeneralLedgerActions({
+            row,
+            onDeleteSuccess,
+        })
 
     return (
         <>
-            <div onClick={(e) => e.stopPropagation()}></div>
+            <GeneralLedgerViewSheet
+                {...detailsModal}
+                defaultLedgerValue={ledgerEntry}
+                ledgerId={ledgerEntry.id}
+            />
             <RowActionsGroup
                 canSelect
                 otherActions={
@@ -75,13 +81,19 @@ export const GeneralLedgerRowContext = ({
     children,
     onDeleteSuccess,
 }: IGeneralLedgerRowContextProps) => {
-    const { handleViewDetails } = useGeneralLedgerActions({
-        row,
-        onDeleteSuccess,
-    })
+    const { detailsModal, ledgerEntry, handleViewDetails } =
+        useGeneralLedgerActions({
+            row,
+            onDeleteSuccess,
+        })
 
     return (
         <>
+            <GeneralLedgerViewSheet
+                {...detailsModal}
+                // defaultLedgerValue={ledgerEntry}
+                ledgerId={ledgerEntry.id}
+            />
             <DataTableRowContext
                 otherActions={
                     <>
