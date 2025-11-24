@@ -44,6 +44,9 @@ const AdjustmentEntryPage = () => {
                 {...createModal}
                 description="Enter the details for the new adjustment entry."
                 formProps={{
+                    defaultValues: {
+                        entry_date: userOrganization?.time_machine_time,
+                    },
                     baseCurrency: currency,
                     onSuccess: () => {
                         queryClient.invalidateQueries({

@@ -5,6 +5,7 @@ import z from 'zod'
 import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
 
 import { withToastCallbacks } from '@/helpers/callback-helper'
+import { toInputDateString } from '@/helpers/date-utils'
 import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
 import { cn } from '@/helpers/tw-utils'
 import { AccountPicker } from '@/modules/account'
@@ -61,11 +62,13 @@ const AdjustmentEntryCreateUpdateForm = ({
         reValidateMode: 'onChange',
         mode: 'onSubmit',
         defaultValues: {
+            ...formProps.defaultValues,
             account_id: '',
-            entry_date: new Date(),
+            entry_date: formProps.defaultValues?.entry_date
+                ? toInputDateString(formProps.defaultValues.entry_date)
+                : '',
             debit: 0,
             credit: 0,
-            ...formProps.defaultValues,
         } as TAdjustmentEntryFormValues,
     })
 
