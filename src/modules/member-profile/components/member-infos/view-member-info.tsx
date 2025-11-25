@@ -14,6 +14,7 @@ import {
     UserIcon,
     UserPlusIcon,
     UserTagIcon,
+    Users3FillIcon,
 } from '@/components/icons'
 import Modal, { IModalProps } from '@/components/modals/modal'
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area'
@@ -26,6 +27,7 @@ import { IClassProps, TEntityId } from '@/types'
 import { IMemberProfile, useGetMemberProfileById } from '../..'
 import MemberCloseAccountBanner from './banners/member-closed-account-banner'
 import MemberInfoBanner from './banners/member-info-banner'
+import MemberComakerDisplay from './displays/member-comaker-display'
 import MemberFileArchiveDisplay from './displays/member-file-archives-display'
 import MemberAccountsLoans from './member-accounts-loans'
 import MemberFinancialInfo from './member-financial-info'
@@ -65,6 +67,12 @@ const memberInfoTabs: {
         title: 'General/Membership',
         Icon: UserTagIcon,
         Component: (props) => <MemberMembershipInfo {...props} />,
+    },
+    {
+        value: 'comakers',
+        title: 'Comakers',
+        Icon: Users3FillIcon,
+        Component: (props) => <MemberComakerDisplay {...props} />,
     },
     {
         value: 'personal-infos',

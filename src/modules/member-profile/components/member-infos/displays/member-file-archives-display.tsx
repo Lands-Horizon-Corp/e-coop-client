@@ -104,8 +104,6 @@ const MemberFileArchiveDisplay = ({ profileId, className }: Props) => {
         })
     }, [data])
 
-    console.log('data', selectedCategories, data)
-
     const filteredAndSortedData = useMemo(() => {
         if (!data) return []
 
@@ -126,8 +124,6 @@ const MemberFileArchiveDisplay = ({ profileId, className }: Props) => {
             )
         })
     }, [data, searchQuery, sortBy, fuse])
-
-    console.log('filteredAndSortedData', filteredAndSortedData)
 
     const handleCategoryToggle = (categoryName: string) => {
         setSelectedCategories((prev) =>

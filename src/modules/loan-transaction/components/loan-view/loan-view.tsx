@@ -14,14 +14,17 @@ import { IMemberProfile } from '@/modules/member-profile'
 
 import {
     CalculatorIcon,
+    LinkIcon,
     PlusIcon,
     PrinterFillIcon,
     UndoIcon,
+    Users3Icon,
 } from '@/components/icons'
 import ImageDisplay from '@/components/image-display'
 import Modal, { IModalProps } from '@/components/modals/modal'
 import { Button } from '@/components/ui/button'
 import FormErrorMessage from '@/components/ui/form-error-message'
+import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area'
 import {
     Table,
     TableBody,
@@ -30,6 +33,7 @@ import {
     TableHeader,
     TableRow,
 } from '@/components/ui/table'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 
 import { useModalState } from '@/hooks/use-modal-state'
 
@@ -39,6 +43,7 @@ import { LoanAddInterestFormModal } from '../forms/loan-add-interest-form'
 import { LoanInquireAdvanceInterestFinesModal } from '../forms/loan-inquire-advance-interest-fines-form'
 import { LoanViewSkeleton } from '../skeletons/loan-view-skeleton'
 import { LoanAccountsSummary } from './loan-account-summary'
+import { LoanComakersList } from './loan-comakers'
 import LoanLedgerHeader from './loan-ledger-header'
 import LoanLedgerTable from './loan-ledger-table/loan-ledger-table'
 
@@ -125,16 +130,45 @@ const LoanView = ({
                         data={loanSummary?.general_ledger || []}
                         view={isPendingSummary ? 'skeleton' : 'data'}
                     />
-                    <LoanAccountsSummary
-                        loanTransactionAccountSummaries={
-                            loanSummary?.account_summary.sort(
-                                (
-                                    { account_history: a },
-                                    { account_history: b }
-                                ) => sortAccountsByTypePriority(a, b)
-                            ) || []
-                        }
-                    />
+
+                    <Tabs className="w-full" defaultValue="account-summary">
+                        <ScrollArea>
+                            <TabsList className="mb-3 h-auto gap-2 rounded-none border-b bg-transparent px-0 py-1 text-foreground">
+                                <TabsTrigger
+                                    className="relative after:absolute after:inset-x-0 after:bottom-0 after:-mb-1 after:h-0.5 after:duration-300 after:ease-in-out hover:bg-accent hover:text-foreground data-[state=active]:bg-transparent data-[state=active]:shadow-none data-[state=active]:after:bg-primary data-[state=active]:hover:bg-accent"
+                                    value="account-summary"
+                                >
+                                    <LinkIcon className="me-1.5 size-4 opacity-60" />
+                                    Account Summary
+                                </TabsTrigger>
+                                <TabsTrigger
+                                    className="relative after:absolute after:inset-x-0 after:bottom-0 after:-mb-1 after:h-0.5 after:duration-300 after:ease-in-out hover:bg-accent hover:text-foreground data-[state=active]:bg-transparent data-[state=active]:shadow-none data-[state=active]:after:bg-primary data-[state=active]:hover:bg-accent"
+                                    value="comakers"
+                                >
+                                    <Users3Icon className="me-1.5 size-4 opacity-60" />
+                                    Comakers
+                                </TabsTrigger>
+                            </TabsList>
+                            <ScrollBar orientation="horizontal" />
+                        </ScrollArea>
+
+                        <TabsContent value="account-summary">
+                            <LoanAccountsSummary
+                                loanTransactionAccountSummaries={
+                                    loanSummary?.account_summary.sort(
+                                        (
+                                            { account_history: a },
+                                            { account_history: b }
+                                        ) => sortAccountsByTypePriority(a, b)
+                                    ) || []
+                                }
+                            />
+                        </TabsContent>
+
+                        <TabsContent value="comakers">
+                            <LoanComakersList loanTransactionId={data.id} />
+                        </TabsContent>
+                    </Tabs>
                 </>
             )}
         </div>
@@ -465,7 +499,7 @@ export const LoanViewModal = ({
     return (
         <Modal
             className={cn('!max-w-[95vw]', className)}
-            closeButtonClassName="sticky top-1 right-1"
+            closeButtonClassName="hidden"
             description={description}
             descriptionClassName="hidden"
             title={title}

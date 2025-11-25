@@ -12,6 +12,7 @@ import {
 
 import { TAPIQueryOptions, TEntityId } from '@/types'
 
+import { IComakerMemberProfile } from '../comaker-member-profile'
 // import { IAmortizationSchedule } from '../amortization'
 import type {
     IAllMembersLoanSummaryResponse,
@@ -477,6 +478,27 @@ export const useGetLoanTransactionSummary = ({
 //         },
 //     })
 // }
+
+// loan comakers
+// /api/v1/loan-transaction/
+export const useLoanComakers = ({
+    loanTransactiionId,
+    options,
+}: {
+    loanTransactiionId: TEntityId
+    options?: HookQueryOptions<IComakerMemberProfile[], Error>
+}) => {
+    return useQuery<IComakerMemberProfile[], Error>({
+        ...options,
+        queryKey: [loanTransactionBaseKey, loanTransactiionId, 'comakers'],
+        queryFn: async () => {
+            const response = await API.get<IComakerMemberProfile[]>(
+                `${loanTransactionAPIRoute}/member-profile/${loanTransactiionId}/comaker`
+            )
+            return response.data
+        },
+    })
+}
 
 // GET ALL MEMBER LOAN SUMMARIES
 export const useLoanAllMemberLoanSummary = ({

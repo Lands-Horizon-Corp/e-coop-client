@@ -30,13 +30,13 @@ export const LoanAccountsSummary = ({
     return (
         <div
             className={cn(
-                'bg-popover space-y-2 border p-4 justify-center items-center rounded-3xl',
+                'bg-popover space-y-2 border p-4 justify-center items-center rounded-xl',
                 className
             )}
         >
             <p>
                 Loan Accounts Summary
-                <span className="block text-muted-foreground">
+                <span className="block text-xs text-muted-foreground">
                     See all accounts summary that are linked to this loan
                     transaction .
                 </span>
