@@ -58,7 +58,7 @@ export const saveUserProfileInactivitySettings = (
 
 const getLastActivityFromLocalStorage = (): number | null => {
     try {
-        const stored = localStorage.getItem(ACTIVITY_STORAGE_KEY)
+        const stored = getLocalStorage<string>(ACTIVITY_STORAGE_KEY)
         return stored ? Number(stored) : null
     } catch (error) {
         logger.error(
@@ -151,7 +151,7 @@ export const useUserProfileInactivity = ({
                 if (
                     lastActivity &&
                     calculateLastActivityFromNow(now, lastActivity) >=
-                        activityGracePeriod
+                    activityGracePeriod
                 ) {
                     // console.log('INACTIVE', {
                     //     lastActivity,
@@ -259,7 +259,7 @@ export const useUserProfileInactivity = ({
                 if (
                     !lastSavedActivityRef.current ||
                     timestamp - lastSavedActivityRef.current >=
-                        ACTIVITY_DEBOUNCE_TIME
+                    ACTIVITY_DEBOUNCE_TIME
                 ) {
                     lastSavedActivityRef.current = timestamp
                     saveActivityToLocalStorage(timestamp)
