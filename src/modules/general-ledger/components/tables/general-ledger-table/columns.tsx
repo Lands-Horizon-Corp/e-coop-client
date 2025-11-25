@@ -1,5 +1,6 @@
 import { ReactNode } from 'react'
 
+import { dateAgo, toReadableDate } from '@/helpers/date-utils'
 import { currencyFormat } from '@/modules/currency'
 import { LedgerSourceBadge } from '@/modules/general-ledger/components/ledger-source-badge'
 import { GENERAL_LEDGER_SOURCES } from '@/modules/general-ledger/constants'
@@ -14,6 +15,7 @@ import ColumnActions from '@/components/data-table/data-table-column-header/colu
 import { createUpdateColumns } from '@/components/data-table/data-table-common-columns'
 import { IGlobalSearchTargets } from '@/components/data-table/data-table-filters/data-table-global-search'
 import DataTableMultiSelectFilter from '@/components/data-table/data-table-filters/data-table-multi-select-filter'
+import DateFilter from '@/components/data-table/data-table-filters/date-filter'
 import NumberFilter from '@/components/data-table/data-table-filters/number-filter'
 import TextFilter from '@/components/data-table/data-table-filters/text-filter'
 import HeaderToggleSelect from '@/components/data-table/data-table-row-actions/header-toggle-select'
@@ -390,6 +392,41 @@ const GeneralLedgerTableColumns = (
             enableHiding: true,
             size: 160,
             minSize: 120,
+        },
+        {
+            id: 'entry_date',
+            accessorKey: 'entry_date',
+            header: (props) => (
+                <DataTableColumnHeader {...props} title="Entry Date">
+                    <ColumnActions {...props}>
+                        <DateFilter
+                            displayText="Entry Date"
+                            field="entry_date"
+                        />
+                    </ColumnActions>
+                </DataTableColumnHeader>
+            ),
+            cell: ({
+                row: {
+                    original: { entry_date },
+                },
+            }) => (
+                <div>
+                    <p>{entry_date ? toReadableDate(entry_date) : ''} </p>
+                    {entry_date ? (
+                        <p className="text-xs text-muted-foreground/60">
+                            {toReadableDate(entry_date, 'h:mm a -')}{' '}
+                            {dateAgo(entry_date)}
+                        </p>
+                    ) : (
+                        ''
+                    )}
+                </div>
+            ),
+            enableMultiSort: true,
+            enableSorting: true,
+            enableResizing: true,
+            minSize: 200,
         },
         ...createUpdateColumns<IGeneralLedger>().filter(
             (col) => col.id === 'updated_at'
