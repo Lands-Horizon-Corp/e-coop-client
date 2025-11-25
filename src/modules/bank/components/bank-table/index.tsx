@@ -17,6 +17,7 @@ import DataTablePagination from '@/components/data-table/data-table-pagination'
 import DataTableToolbar, {
     IDataTableToolbarProps,
 } from '@/components/data-table/data-table-toolbar'
+import { TableRowActionStoreProvider } from '@/components/data-table/store/data-table-action-store'
 import { TableProps } from '@/components/data-table/table.type'
 import { useDataTableSorting } from '@/components/data-table/use-datatable-sorting'
 import useDataTableState, {
@@ -31,7 +32,10 @@ import BankTableColumns, {
     IBankTableColumnProps,
     bankGlobalSearchTargets,
 } from './columns'
-import BankAction, { BankRowContext } from './row-action-context'
+import BankAction, {
+    BankRowContext,
+    BankTableActionManager,
+} from './row-action-context'
 
 export interface BankTableProps
     extends TableProps<IBank>,
@@ -49,7 +53,7 @@ export interface BankTableProps
 }
 
 const BankTable = ({
-    persistKey = ['bank-table'],
+    persistKey = ['bank'],
     className,
     toolbarProps,
     defaultFilter,
@@ -80,17 +84,7 @@ const BankTable = ({
             persistKey,
         })
 
-    const {
-        getRowIdFn,
-        columnOrder,
-        setColumnOrder,
-        isScrollable,
-        setIsScrollable,
-        columnVisibility,
-        setColumnVisibility,
-        rowSelectionState,
-        createHandleRowSelectionChange,
-    } = useDataTableState<IBank>({
+    const tableState = useDataTableState<IBank>({
         key: finalKeys,
         defaultColumnOrder: resolvedColumnOrder,
         defaultColumnVisibility: resolvedColumnVisibility,
@@ -105,7 +99,6 @@ const BankTable = ({
     const {
         isPending,
         isRefetching,
-        isLoading,
         data: { data = [], totalPage = 1, pageSize = 10, totalSize = 0 } = {},
         refetch,
     } = useGetPaginatedBanks({
@@ -116,17 +109,18 @@ const BankTable = ({
         },
     })
 
-    const handleRowSelectionChange = createHandleRowSelectionChange(data)
+    const handleRowSelectionChange =
+        tableState.createHandleRowSelectionChange(data)
 
     const columnsMemo = useMemo(
         () =>
-            isLoading || isRefetching || isPending
+            isPending
                 ? columns.map((column) => ({
                       ...column,
                       cell: () => <Skeleton className="h-5 w-full" />,
                   }))
                 : columns,
-        [isLoading, isRefetching, isPending, columns]
+        [isPending, columns]
     )
 
     const table = useReactTable({
@@ -138,9 +132,9 @@ const BankTable = ({
         state: {
             sorting: tableSorting,
             pagination,
-            columnOrder,
-            rowSelection: rowSelectionState.rowSelection,
-            columnVisibility,
+            columnOrder: tableState.columnOrder,
+            rowSelection: tableState.rowSelectionState.rowSelection,
+            columnVisibility: tableState.columnVisibility,
         },
         rowCount: pageSize,
         manualSorting: true,
@@ -149,14 +143,15 @@ const BankTable = ({
         manualFiltering: true,
         manualPagination: true,
         columnResizeMode: 'onChange',
-        getRowId: getRowIdFn,
+        getRowId: tableState.getRowIdFn,
         onSortingChange: setTableSorting,
         onPaginationChange: setPagination,
         getCoreRowModel: getCoreRowModel(),
-        onColumnOrderChange: setColumnOrder,
+        onColumnOrderChange: tableState.setColumnOrder,
         getSortedRowModel: getSortedRowModel(),
-        onColumnVisibilityChange: setColumnVisibility,
+        onColumnVisibilityChange: tableState.setColumnVisibility,
         onRowSelectionChange: handleRowSelectionChange,
+        defaultColumn: { minSize: 100, size: 150, maxSize: 800 },
     })
 
     const filter = qs.stringify(
@@ -169,63 +164,69 @@ const BankTable = ({
     )
 
     return (
-        <FilterContext.Provider value={filterState}>
-            <div
-                className={cn(
-                    'flex h-full flex-col gap-y-2',
-                    className,
-                    !isScrollable && 'h-fit !max-h-none'
-                )}
-            >
-                <DataTableToolbar
-                    deleteActionProps={{
-                        onDeleteSuccess: () =>
-                            queryClient.invalidateQueries({
-                                queryKey: ['bank', 'paginated'],
-                            }),
-                        onDelete: (selectedData) =>
-                            deleteManyBanks({
-                                ids: selectedData.map((data) => data.id),
-                            }),
-                    }}
-                    exportActionProps={{
-                        isLoading: isPending,
-                        filters: filter,
-                        disabled: isPending || isRefetching,
-                        model: 'Bank',
-                        url: 'api/v1/bank/search',
-                        hbsDataPath: '/reports/bank/default-bank.hbs',
-                    }}
-                    filterLogicProps={{
-                        filterLogic: filterState.filterLogic,
-                        setFilterLogic: filterState.setFilterLogic,
-                    }}
-                    globalSearchProps={{
-                        defaultMode: 'equal',
-                        targets: bankGlobalSearchTargets,
-                    }}
-                    refreshActionProps={{
-                        onClick: () => refetch(),
-                        isLoading: isPending || isRefetching,
-                    }}
-                    scrollableProps={{ isScrollable, setIsScrollable }}
-                    table={table}
-                    {...toolbarProps}
-                />
-                <DataTable
-                    className="mb-2"
-                    isScrollable={isScrollable}
-                    isStickyFooter
-                    isStickyHeader
-                    onDoubleClick={onDoubleClick}
-                    onRowClick={onRowClick}
-                    RowContextComponent={RowContextComponent}
-                    setColumnOrder={setColumnOrder}
-                    table={table}
-                />
-                <DataTablePagination table={table} totalSize={totalSize} />
-            </div>
-        </FilterContext.Provider>
+        <TableRowActionStoreProvider>
+            <FilterContext.Provider value={filterState}>
+                <div
+                    className={cn(
+                        'flex h-full flex-col gap-y-2',
+                        className,
+                        !tableState.isScrollable && 'h-fit !max-h-none'
+                    )}
+                >
+                    <DataTableToolbar
+                        deleteActionProps={{
+                            onDeleteSuccess: () =>
+                                queryClient.invalidateQueries({
+                                    queryKey: ['bank', 'paginated'],
+                                }),
+                            onDelete: (selectedData) =>
+                                deleteManyBanks({
+                                    ids: selectedData.map((data) => data.id),
+                                }),
+                        }}
+                        exportActionProps={{
+                            isLoading: isPending,
+                            filters: filter,
+                            disabled: isPending || isRefetching,
+                            model: 'Bank',
+                            url: 'api/v1/bank/search',
+                            hbsDataPath: '/reports/bank/default-bank.hbs',
+                        }}
+                        filterLogicProps={{
+                            filterLogic: filterState.filterLogic,
+                            setFilterLogic: filterState.setFilterLogic,
+                        }}
+                        globalSearchProps={{
+                            defaultMode: 'equal',
+                            targets: bankGlobalSearchTargets,
+                        }}
+                        refreshActionProps={{
+                            onClick: () => refetch(),
+                            isLoading: isPending || isRefetching,
+                        }}
+                        scrollableProps={{
+                            isScrollable: tableState.isScrollable,
+                            setIsScrollable: tableState.setIsScrollable,
+                        }}
+                        table={table}
+                        {...toolbarProps}
+                    />
+                    <DataTable
+                        className="mb-2"
+                        isScrollable={tableState.isScrollable}
+                        isStickyFooter
+                        isStickyHeader
+                        onDoubleClick={onDoubleClick}
+                        onRowClick={onRowClick}
+                        RowContextComponent={RowContextComponent}
+                        setColumnOrder={tableState.setColumnOrder}
+                        table={table}
+                    />
+                    <DataTablePagination table={table} totalSize={totalSize} />
+                </div>
+                <BankTableActionManager />
+            </FilterContext.Provider>
+        </TableRowActionStoreProvider>
     )
 }
 

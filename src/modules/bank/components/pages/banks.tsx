@@ -1,13 +1,14 @@
 import { useQueryClient } from '@tanstack/react-query'
 
 import { useAuthUserWithOrgBranch } from '@/modules/authentication/authgentication.store'
-import BankTable from '@/modules/bank/components/bank-table'
 import { BankCreateUpdateFormModal } from '@/modules/bank/components/forms/bank-create-update-form'
 
 import PageContainer from '@/components/containers/page-container'
 
 import { useModalState } from '@/hooks/use-modal-state'
 import { useSubscribe } from '@/hooks/use-pubsub'
+
+import BankTable from '../bank-table'
 
 const BankPage = () => {
     const queryClient = useQueryClient()
