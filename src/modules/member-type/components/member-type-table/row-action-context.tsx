@@ -7,17 +7,24 @@ import { Row } from '@tanstack/react-table'
 
 import RowActionsGroup from '@/components/data-table/data-table-row-actions'
 import DataTableRowContext from '@/components/data-table/data-table-row-context'
+import { useTableRowActionStore } from '@/components/data-table/store/data-table-action-store'
 import { ArrowTrendUpIcon } from '@/components/icons'
 import Modal from '@/components/modals/modal'
 import { ContextMenuItem } from '@/components/ui/context-menu'
 import { DropdownMenuItem } from '@/components/ui/dropdown-menu'
 
-import { useModalState } from '@/hooks/use-modal-state'
-
 import { useDeleteById } from '../../member-type.service'
 import { IMemberType } from '../../member-type.types'
 import { MemberTypeCreateUpdateFormModal } from '../forms/member-type-create-update-form'
 import { IMemberTypeTableActionComponentProp } from './columns'
+
+export type MemberTypeActionType =
+    | 'edit'
+    | 'delete'
+    | 'reference-create'
+    | 'browse-references'
+
+export type MemberTypeActionExtra = Record<string, never>
 
 interface UseMemberTypeActionsProps {
     row: Row<IMemberType>
@@ -28,10 +35,12 @@ const useMemberTypeActions = ({
     row,
     onDeleteSuccess,
 }: UseMemberTypeActionsProps) => {
-    const createUpdateModal = useModalState()
-    const referenceCreateUpdateModal = useModalState()
-    const referenceTableModal = useModalState()
     const memberType = row.original
+    const { open } = useTableRowActionStore<
+        IMemberType,
+        MemberTypeActionType,
+        MemberTypeActionExtra
+    >()
 
     const { onOpen } = useConfirmModalStore()
 
@@ -42,7 +51,12 @@ const useMemberTypeActions = ({
             },
         })
 
-    const handleEdit = () => createUpdateModal.onOpenChange(true)
+    const handleEdit = () => {
+        open('edit', {
+            id: memberType.id,
+            defaultValues: memberType,
+        })
+    }
 
     const handleDelete = () => {
         onOpen({
@@ -52,13 +66,15 @@ const useMemberTypeActions = ({
         })
     }
 
-    const handleBrowseReferences = () => referenceTableModal.onOpenChange(true)
+    const handleBrowseReferences = () => {
+        open('browse-references', {
+            id: memberType.id,
+            defaultValues: memberType,
+        })
+    }
 
     return {
         memberType,
-        createUpdateModal,
-        referenceCreateUpdateModal,
-        referenceTableModal,
         isDeletingMemberType,
         handleEdit,
         handleDelete,
@@ -77,10 +93,6 @@ export const MemberTypeAction = ({
     onDeleteSuccess,
 }: IMemberTypeTableActionProps) => {
     const {
-        memberType,
-        createUpdateModal,
-        referenceCreateUpdateModal,
-        referenceTableModal,
         isDeletingMemberType,
         handleEdit,
         handleDelete,
@@ -89,46 +101,7 @@ export const MemberTypeAction = ({
 
     return (
         <>
-            <div onClick={(e) => e.stopPropagation()}>
-                <MemberTypeCreateUpdateFormModal
-                    {...createUpdateModal}
-                    description="Modify/Update members type..."
-                    formProps={{
-                        memberTypeId: memberType.id,
-                        defaultValues: memberType,
-                        onSuccess: () => createUpdateModal.onOpenChange(false),
-                    }}
-                    title="Update Member Type"
-                />
-                <MemberTypeReferenceCreateUpdateFormModal
-                    {...referenceCreateUpdateModal}
-                    formProps={{
-                        defaultValues: memberType,
-                        disabledFields: ['member_type_id'],
-                        onSuccess: () =>
-                            referenceCreateUpdateModal.onOpenChange(false),
-                    }}
-                />
-                <Modal
-                    {...referenceTableModal}
-                    className="!max-w-[95vw]"
-                    title={`Member type reference for member type ${memberType.name}`}
-                >
-                    <MemberTypeReferenceTable
-                        className="flex min-h-[80vh] max-w-full min-w-0 flex-1 flex-col gap-y-4 rounded-xl bg-background"
-                        memberTypeId={memberType.id}
-                        mode="specific"
-                        toolbarProps={{
-                            createActionProps: {
-                                onClick: () =>
-                                    referenceCreateUpdateModal.onOpenChange(
-                                        true
-                                    ),
-                            },
-                        }}
-                    />
-                </Modal>
-            </div>
+            <div onClick={(e) => e.stopPropagation()}></div>
             <RowActionsGroup
                 canSelect
                 onDelete={{
@@ -167,10 +140,6 @@ export const MemberTypeRowContext = ({
     onDeleteSuccess,
 }: IMemberTypeRowContextProps) => {
     const {
-        memberType,
-        createUpdateModal,
-        referenceCreateUpdateModal,
-        referenceTableModal,
         isDeletingMemberType,
         handleEdit,
         handleDelete,
@@ -179,42 +148,6 @@ export const MemberTypeRowContext = ({
 
     return (
         <>
-            <MemberTypeCreateUpdateFormModal
-                {...createUpdateModal}
-                description="Modify/Update members type..."
-                formProps={{
-                    memberTypeId: memberType.id,
-                    defaultValues: memberType,
-                    onSuccess: () => createUpdateModal.onOpenChange(false),
-                }}
-                title="Update Member Type"
-            />
-            <MemberTypeReferenceCreateUpdateFormModal
-                {...referenceCreateUpdateModal}
-                formProps={{
-                    defaultValues: memberType,
-                    disabledFields: ['member_type_id'],
-                    onSuccess: () =>
-                        referenceCreateUpdateModal.onOpenChange(false),
-                }}
-            />
-            <Modal
-                {...referenceTableModal}
-                className="!max-w-[95vw]"
-                title={`Member type reference for member type ${memberType.name}`}
-            >
-                <MemberTypeReferenceTable
-                    className="flex min-h-[80vh] max-w-full min-w-0 flex-1 flex-col gap-y-4 rounded-xl bg-background"
-                    memberTypeId={memberType.id}
-                    mode="specific"
-                    toolbarProps={{
-                        createActionProps: {
-                            onClick: () =>
-                                referenceCreateUpdateModal.onOpenChange(true),
-                        },
-                    }}
-                />
-            </Modal>
             <DataTableRowContext
                 onDelete={{
                     text: 'Delete',
@@ -238,6 +171,78 @@ export const MemberTypeRowContext = ({
             >
                 {children}
             </DataTableRowContext>
+        </>
+    )
+}
+
+export const MemberTypeTableActionManager = () => {
+    const { state, close } = useTableRowActionStore<
+        IMemberType,
+        MemberTypeActionType,
+        MemberTypeActionExtra
+    >()
+    const { open } = useTableRowActionStore<
+        IMemberType,
+        MemberTypeActionType,
+        MemberTypeActionExtra
+    >()
+
+    if (!state || !state.defaultValues) return null
+
+    const memberType = state.defaultValues
+
+    const handleOpenReferenceCreate = () => {
+        open('reference-create', {
+            id: memberType.id,
+            defaultValues: memberType,
+        })
+    }
+
+    return (
+        <>
+            {state.action === 'edit' && (
+                <MemberTypeCreateUpdateFormModal
+                    description="Modify/Update members type..."
+                    formProps={{
+                        memberTypeId: memberType.id,
+                        defaultValues: memberType,
+                        onSuccess: close,
+                    }}
+                    onOpenChange={close}
+                    open={true}
+                    title="Update Member Type"
+                />
+            )}
+            {state.action === 'reference-create' && (
+                <MemberTypeReferenceCreateUpdateFormModal
+                    formProps={{
+                        defaultValues: memberType,
+                        disabledFields: ['member_type_id'],
+                        onSuccess: close,
+                    }}
+                    onOpenChange={close}
+                    open={true}
+                />
+            )}
+            {state.action === 'browse-references' && (
+                <Modal
+                    className="!max-w-[95vw]"
+                    onOpenChange={close}
+                    open={true}
+                    title={`Member type reference for member type ${memberType.name}`}
+                >
+                    <MemberTypeReferenceTable
+                        className="flex min-h-[80vh] max-w-full min-w-0 flex-1 flex-col gap-y-4 rounded-xl bg-background"
+                        memberTypeId={memberType.id}
+                        mode="specific"
+                        toolbarProps={{
+                            createActionProps: {
+                                onClick: handleOpenReferenceCreate,
+                            },
+                        }}
+                    />
+                </Modal>
+            )}
         </>
     )
 }

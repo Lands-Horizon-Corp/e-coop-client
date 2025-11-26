@@ -6,12 +6,15 @@ import { Row } from '@tanstack/react-table'
 
 import RowActionsGroup from '@/components/data-table/data-table-row-actions'
 import DataTableRowContext from '@/components/data-table/data-table-row-context'
-
-import { useModalState } from '@/hooks/use-modal-state'
+import { useTableRowActionStore } from '@/components/data-table/store/data-table-action-store'
 
 import { IPermissionTemplate, useDeletePermissionTemplateById } from '../..'
 import { PermissionTemplateCreateUpdateFormModal } from '../permission-template-create-update-form'
 import { IPermissionTemplateTableActionComponentProp } from './columns'
+
+export type PermissionTemplateActionType = 'edit' | 'delete'
+
+export type PermissionTemplateActionExtra = Record<string, never>
 
 interface UsePermissionTemplateActionsProps {
     row: Row<IPermissionTemplate>
@@ -22,8 +25,12 @@ const usePermissionTemplateActions = ({
     row,
     onDeleteSuccess,
 }: UsePermissionTemplateActionsProps) => {
-    const updateModal = useModalState()
     const permissionTemplate = row.original
+    const { open } = useTableRowActionStore<
+        IPermissionTemplate,
+        PermissionTemplateActionType,
+        PermissionTemplateActionExtra
+    >()
 
     const { onOpen } = useConfirmModalStore()
 
@@ -37,7 +44,12 @@ const usePermissionTemplateActions = ({
             },
         })
 
-    const handleEdit = () => updateModal.onOpenChange(true)
+    const handleEdit = () => {
+        open('edit', {
+            id: permissionTemplate.id,
+            defaultValues: permissionTemplate,
+        })
+    }
 
     const handleDelete = () => {
         onOpen({
@@ -49,8 +61,6 @@ const usePermissionTemplateActions = ({
     }
 
     return {
-        permissionTemplate,
-        updateModal,
         isDeleting,
         handleEdit,
         handleDelete,
@@ -67,26 +77,12 @@ export const PermissionTemplateAction = ({
     row,
     onDeleteSuccess,
 }: IPermissionTemplateTableActionProps) => {
-    const {
-        permissionTemplate,
-        updateModal,
-        isDeleting,
-        handleEdit,
-        handleDelete,
-    } = usePermissionTemplateActions({ row, onDeleteSuccess })
+    const { isDeleting, handleEdit, handleDelete } =
+        usePermissionTemplateActions({ row, onDeleteSuccess })
 
     return (
         <>
-            <div onClick={(e) => e.stopPropagation()}>
-                <PermissionTemplateCreateUpdateFormModal
-                    {...updateModal}
-                    formProps={{
-                        permissionTemplateId: permissionTemplate.id,
-                        defaultValues: { ...permissionTemplate },
-                        onSuccess: () => updateModal.onOpenChange(false),
-                    }}
-                />
-            </div>
+            <div onClick={(e) => e.stopPropagation()}></div>
             <RowActionsGroup
                 canSelect
                 onDelete={{
@@ -117,24 +113,11 @@ export const PermissionTemplateRowContext = ({
     children,
     onDeleteSuccess,
 }: IPermissionTemplateRowContextProps) => {
-    const {
-        permissionTemplate,
-        updateModal,
-        isDeleting,
-        handleEdit,
-        handleDelete,
-    } = usePermissionTemplateActions({ row, onDeleteSuccess })
+    const { isDeleting, handleEdit, handleDelete } =
+        usePermissionTemplateActions({ row, onDeleteSuccess })
 
     return (
         <>
-            <PermissionTemplateCreateUpdateFormModal
-                {...updateModal}
-                formProps={{
-                    permissionTemplateId: permissionTemplate.id,
-                    defaultValues: { ...permissionTemplate },
-                    onSuccess: () => updateModal.onOpenChange(false),
-                }}
-            />
             <DataTableRowContext
                 onDelete={{
                     text: 'Delete',
@@ -150,6 +133,34 @@ export const PermissionTemplateRowContext = ({
             >
                 {children}
             </DataTableRowContext>
+        </>
+    )
+}
+
+export const PermissionTemplateTableActionManager = () => {
+    const { state, close } = useTableRowActionStore<
+        IPermissionTemplate,
+        PermissionTemplateActionType,
+        PermissionTemplateActionExtra
+    >()
+
+    if (!state || !state.defaultValues) return null
+
+    const permissionTemplate = state.defaultValues
+
+    return (
+        <>
+            {state.action === 'edit' && (
+                <PermissionTemplateCreateUpdateFormModal
+                    formProps={{
+                        permissionTemplateId: permissionTemplate.id,
+                        defaultValues: { ...permissionTemplate },
+                        onSuccess: close,
+                    }}
+                    onOpenChange={close}
+                    open={true}
+                />
+            )}
         </>
     )
 }

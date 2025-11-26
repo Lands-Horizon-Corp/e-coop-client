@@ -6,13 +6,16 @@ import { Row } from '@tanstack/react-table'
 
 import RowActionsGroup from '@/components/data-table/data-table-row-actions'
 import DataTableRowContext from '@/components/data-table/data-table-row-context'
-
-import { useModalState } from '@/hooks/use-modal-state'
+import { useTableRowActionStore } from '@/components/data-table/store/data-table-action-store'
 
 import { useDeleteById } from '../../member-type-reference.service'
 import { IMemberTypeReference } from '../../member-type-reference.types'
 import { MemberTypeReferenceCreateUpdateFormModal } from '../member-type-reference-create-update-form'
 import { IMemberTypeReferenceTableActionComponentProp } from './columns'
+
+export type MemberTypeReferenceActionType = 'edit' | 'delete'
+
+export type MemberTypeReferenceActionExtra = Record<string, never>
 
 interface UseMemberTypeReferenceActionsProps {
     row: Row<IMemberTypeReference>
@@ -23,8 +26,12 @@ const useMemberTypeReferenceActions = ({
     row,
     onDeleteSuccess,
 }: UseMemberTypeReferenceActionsProps) => {
-    const updateModal = useModalState()
     const memberTypeReference = row.original
+    const { open } = useTableRowActionStore<
+        IMemberTypeReference,
+        MemberTypeReferenceActionType,
+        MemberTypeReferenceActionExtra
+    >()
 
     const { onOpen } = useConfirmModalStore()
 
@@ -35,7 +42,12 @@ const useMemberTypeReferenceActions = ({
             },
         })
 
-    const handleEdit = () => updateModal.onOpenChange(true)
+    const handleEdit = () => {
+        open('edit', {
+            id: memberTypeReference.id,
+            defaultValues: memberTypeReference,
+        })
+    }
 
     const handleDelete = () => {
         onOpen({
@@ -47,7 +59,6 @@ const useMemberTypeReferenceActions = ({
 
     return {
         memberTypeReference,
-        updateModal,
         isDeleting,
         handleEdit,
         handleDelete,
@@ -64,26 +75,12 @@ export const MemberTypeReferenceAction = ({
     row,
     onDeleteSuccess,
 }: IMemberTypeReferenceActionProps) => {
-    const {
-        memberTypeReference,
-        updateModal,
-        isDeleting,
-        handleEdit,
-        handleDelete,
-    } = useMemberTypeReferenceActions({ row, onDeleteSuccess })
+    const { isDeleting, handleEdit, handleDelete } =
+        useMemberTypeReferenceActions({ row, onDeleteSuccess })
 
     return (
         <>
-            <div onClick={(e) => e.stopPropagation()}>
-                <MemberTypeReferenceCreateUpdateFormModal
-                    {...updateModal}
-                    formProps={{
-                        defaultValues: memberTypeReference,
-                        memberTypeReferenceId: memberTypeReference.id,
-                        onSuccess: () => updateModal.onOpenChange(false),
-                    }}
-                />
-            </div>
+            <div onClick={(e) => e.stopPropagation()}></div>
             <RowActionsGroup
                 canSelect
                 onDelete={{
@@ -114,24 +111,11 @@ export const MemberTypeReferenceRowContext = ({
     children,
     onDeleteSuccess,
 }: IMemberTypeReferenceRowContextProps) => {
-    const {
-        memberTypeReference,
-        updateModal,
-        isDeleting,
-        handleEdit,
-        handleDelete,
-    } = useMemberTypeReferenceActions({ row, onDeleteSuccess })
+    const { isDeleting, handleEdit, handleDelete } =
+        useMemberTypeReferenceActions({ row, onDeleteSuccess })
 
     return (
         <>
-            <MemberTypeReferenceCreateUpdateFormModal
-                {...updateModal}
-                formProps={{
-                    defaultValues: memberTypeReference,
-                    memberTypeReferenceId: memberTypeReference.id,
-                    onSuccess: () => updateModal.onOpenChange(false),
-                }}
-            />
             <DataTableRowContext
                 onDelete={{
                     text: 'Delete',
@@ -147,6 +131,34 @@ export const MemberTypeReferenceRowContext = ({
             >
                 {children}
             </DataTableRowContext>
+        </>
+    )
+}
+
+export const MemberTypeReferenceTableActionManager = () => {
+    const { state, close } = useTableRowActionStore<
+        IMemberTypeReference,
+        MemberTypeReferenceActionType,
+        MemberTypeReferenceActionExtra
+    >()
+
+    if (!state || !state.defaultValues) return null
+
+    const memberTypeReference = state.defaultValues
+
+    return (
+        <>
+            {state.action === 'edit' && (
+                <MemberTypeReferenceCreateUpdateFormModal
+                    formProps={{
+                        defaultValues: memberTypeReference,
+                        memberTypeReferenceId: memberTypeReference.id,
+                        onSuccess: close,
+                    }}
+                    onOpenChange={close}
+                    open={true}
+                />
+            )}
         </>
     )
 }

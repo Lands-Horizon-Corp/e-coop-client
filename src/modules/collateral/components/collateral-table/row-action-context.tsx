@@ -6,12 +6,15 @@ import { Row } from '@tanstack/react-table'
 
 import RowActionsGroup from '@/components/data-table/data-table-row-actions'
 import DataTableRowContext from '@/components/data-table/data-table-row-context'
-
-import { useModalState } from '@/hooks/use-modal-state'
+import { useTableRowActionStore } from '@/components/data-table/store/data-table-action-store'
 
 import { ICollateral, useDeleteCollateralById } from '../..'
 import { CollateralCreateUpdateFormModal } from '../forms/collateral-create-update-form'
 import { ICollateralTableActionComponentProp } from './columns'
+
+export type CollateralActionType = 'edit' | 'delete'
+
+export type CollateralActionExtra = Record<string, never>
 
 interface UseCollateralActionsProps {
     row: Row<ICollateral>
@@ -22,8 +25,12 @@ const useCollateralActions = ({
     row,
     onDeleteSuccess,
 }: UseCollateralActionsProps) => {
-    const updateModal = useModalState()
     const collateral = row.original
+    const { open } = useTableRowActionStore<
+        ICollateral,
+        CollateralActionType,
+        CollateralActionExtra
+    >()
 
     const { onOpen } = useConfirmModalStore()
 
@@ -37,7 +44,12 @@ const useCollateralActions = ({
             },
         })
 
-    const handleEdit = () => updateModal.onOpenChange(true)
+    const handleEdit = () => {
+        open('edit', {
+            id: collateral.id,
+            defaultValues: collateral,
+        })
+    }
 
     const handleDelete = () => {
         onOpen({
@@ -49,7 +61,6 @@ const useCollateralActions = ({
 
     return {
         collateral,
-        updateModal,
         isDeletingCollateral,
         handleEdit,
         handleDelete,
@@ -66,26 +77,12 @@ export const CollateralAction = ({
     row,
     onDeleteSuccess,
 }: ICollateralTableActionProps) => {
-    const {
-        collateral,
-        updateModal,
-        isDeletingCollateral,
-        handleEdit,
-        handleDelete,
-    } = useCollateralActions({ row, onDeleteSuccess })
+    const { isDeletingCollateral, handleEdit, handleDelete } =
+        useCollateralActions({ row, onDeleteSuccess })
 
     return (
         <>
-            <div onClick={(e) => e.stopPropagation()}>
-                <CollateralCreateUpdateFormModal
-                    {...updateModal}
-                    formProps={{
-                        collateralId: collateral.id,
-                        defaultValues: collateral,
-                        onSuccess: () => updateModal.onOpenChange(false),
-                    }}
-                />
-            </div>
+            <div onClick={(e) => e.stopPropagation()}></div>
             <RowActionsGroup
                 canSelect
                 onDelete={{
@@ -116,24 +113,11 @@ export const CollateralRowContext = ({
     children,
     onDeleteSuccess,
 }: ICollateralRowContextProps) => {
-    const {
-        collateral,
-        updateModal,
-        isDeletingCollateral,
-        handleEdit,
-        handleDelete,
-    } = useCollateralActions({ row, onDeleteSuccess })
+    const { isDeletingCollateral, handleEdit, handleDelete } =
+        useCollateralActions({ row, onDeleteSuccess })
 
     return (
         <>
-            <CollateralCreateUpdateFormModal
-                {...updateModal}
-                formProps={{
-                    collateralId: collateral.id,
-                    defaultValues: collateral,
-                    onSuccess: () => updateModal.onOpenChange(false),
-                }}
-            />
             <DataTableRowContext
                 onDelete={{
                     text: 'Delete',
@@ -149,6 +133,32 @@ export const CollateralRowContext = ({
             >
                 {children}
             </DataTableRowContext>
+        </>
+    )
+}
+
+export const CollateralTableActionManager = () => {
+    const { state, close } = useTableRowActionStore<
+        ICollateral,
+        CollateralActionType,
+        CollateralActionExtra
+    >()
+
+    if (!state || !state.defaultValues) return null
+
+    return (
+        <>
+            {state.action === 'edit' && (
+                <CollateralCreateUpdateFormModal
+                    formProps={{
+                        collateralId: state.defaultValues.id,
+                        defaultValues: state.defaultValues,
+                        onSuccess: close,
+                    }}
+                    onOpenChange={close}
+                    open={true}
+                />
+            )}
         </>
     )
 }

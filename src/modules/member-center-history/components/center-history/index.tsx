@@ -19,7 +19,9 @@ import DataTableToolbar, {
 } from '@/components/data-table/data-table-toolbar'
 import { TableProps } from '@/components/data-table/table.type'
 import { useDataTableSorting } from '@/components/data-table/use-datatable-sorting'
-import useDataTableState from '@/components/data-table/use-datatable-state'
+import useDataTableState, {
+    useResolvedColumnOrder,
+} from '@/components/data-table/use-datatable-state'
 
 import useDatableFilterState from '@/hooks/use-filter-state'
 import { usePagination } from '@/hooks/use-pagination'
@@ -51,6 +53,7 @@ export interface MemberCenterHistoryTableProps
 
 const MemberCenterHistoryTable = ({
     profileId,
+    persistKey = ['member-center-history', profileId],
     className,
     toolbarProps,
 }: MemberCenterHistoryTableProps) => {
@@ -61,6 +64,12 @@ const MemberCenterHistoryTable = ({
         useDataTableSorting()
 
     const columns = useMemo(() => memberCenterHistoryColumns(), [])
+
+    const { resolvedColumnOrder, resolvedColumnVisibility, finalKeys } =
+        useResolvedColumnOrder({
+            columns,
+            persistKey,
+        })
 
     const {
         getRowIdFn,
@@ -73,7 +82,9 @@ const MemberCenterHistoryTable = ({
         rowSelectionState,
         createHandleRowSelectionChange,
     } = useDataTableState<IMemberCenterHistory>({
-        defaultColumnOrder: columns.map((c) => c.id!),
+        key: finalKeys,
+        defaultColumnOrder: resolvedColumnOrder,
+        defaultColumnVisibility: resolvedColumnVisibility,
     })
 
     const filterState = useDatableFilterState({

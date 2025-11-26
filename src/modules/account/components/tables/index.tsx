@@ -18,9 +18,12 @@ import DataTablePagination from '@/components/data-table/data-table-pagination'
 import DataTableToolbar, {
     IDataTableToolbarProps,
 } from '@/components/data-table/data-table-toolbar'
+import { TableRowActionStoreProvider } from '@/components/data-table/store/data-table-action-store'
 import { TableProps } from '@/components/data-table/table.type'
 import { useDataTableSorting } from '@/components/data-table/use-datatable-sorting'
-import useDataTableState from '@/components/data-table/use-datatable-state'
+import useDataTableState, {
+    useResolvedColumnOrder,
+} from '@/components/data-table/use-datatable-state'
 
 import useDatableFilterState from '@/hooks/use-filter-state'
 import { usePagination } from '@/hooks/use-pagination'
@@ -30,7 +33,11 @@ import accountTableColumns, {
     IAccountsTableColumnProps,
     accountsGlobalSearchTargets,
 } from './columns'
-import { AccountAction, AccountRowContext } from './row-actions'
+import {
+    AccountAction,
+    AccountRowContext,
+    AccountTableActionManager,
+} from './row-actions'
 
 export interface AccountsTableProps
     extends TableProps<IAccount>,
@@ -48,6 +55,7 @@ export interface AccountsTableProps
 }
 
 const AccountsTable = ({
+    persistKey = ['account'],
     className,
     toolbarProps,
     defaultFilter,
@@ -79,6 +87,12 @@ const AccountsTable = ({
         [actionComponent]
     )
 
+    const { resolvedColumnOrder, resolvedColumnVisibility, finalKeys } =
+        useResolvedColumnOrder({
+            columns,
+            persistKey,
+        })
+
     const {
         getRowIdFn,
         columnOrder,
@@ -90,7 +104,9 @@ const AccountsTable = ({
         rowSelectionState,
         createHandleRowSelectionChange,
     } = useDataTableState<IAccount>({
-        defaultColumnOrder: columns.map((c) => c.id!),
+        key: finalKeys,
+        defaultColumnOrder: resolvedColumnOrder,
+        defaultColumnVisibility: resolvedColumnVisibility,
         onSelectData,
     })
 
@@ -166,62 +182,65 @@ const AccountsTable = ({
     )
 
     return (
-        <FilterContext.Provider value={filterState}>
-            <div
-                className={cn(
-                    'flex h-full flex-col gap-y-2',
-                    className,
-                    !isScrollable && 'h-fit !max-h-none'
-                )}
-            >
-                <DataTableToolbar
-                    className=""
-                    deleteActionProps={{
-                        onDeleteSuccess: () => {
-                            queryClient.invalidateQueries({
-                                queryKey: ['account', 'paginated'],
-                            })
-                        },
-                        onDelete: (selectedData) =>
-                            deleteMany(selectedData.map((data) => data.id)),
-                    }}
-                    exportActionProps={{
-                        isLoading: isPending,
-                        filters: exportfilter,
-                        model: 'Account',
-                        url: 'api/v1/account/search',
-                        hbsDataPath: '/reports/multi-page.hbs',
-                    }}
-                    filterLogicProps={{
-                        filterLogic: filterState.filterLogic,
-                        setFilterLogic: filterState.setFilterLogic,
-                    }}
-                    globalSearchProps={{
-                        defaultMode: 'equal',
-                        targets: accountsGlobalSearchTargets,
-                    }}
-                    refreshActionProps={{
-                        onClick: () => refetch(),
-                        isLoading: isPending || isRefetching,
-                    }}
-                    scrollableProps={{ isScrollable, setIsScrollable }}
-                    table={table}
-                    {...toolbarProps}
-                />
-                <DataTable
-                    className="mb-2"
-                    isScrollable={isScrollable}
-                    isStickyFooter
-                    isStickyHeader
-                    onDoubleClick={onDoubleClick}
-                    onRowClick={onRowClick}
-                    RowContextComponent={RowContextComponent}
-                    setColumnOrder={setColumnOrder}
-                    table={table}
-                />
-                <DataTablePagination table={table} totalSize={totalSize} />
-            </div>
-        </FilterContext.Provider>
+        <TableRowActionStoreProvider>
+            <FilterContext.Provider value={filterState}>
+                <div
+                    className={cn(
+                        'flex h-full flex-col gap-y-2',
+                        className,
+                        !isScrollable && 'h-fit !max-h-none'
+                    )}
+                >
+                    <DataTableToolbar
+                        className=""
+                        deleteActionProps={{
+                            onDeleteSuccess: () => {
+                                queryClient.invalidateQueries({
+                                    queryKey: ['account', 'paginated'],
+                                })
+                            },
+                            onDelete: (selectedData) =>
+                                deleteMany(selectedData.map((data) => data.id)),
+                        }}
+                        exportActionProps={{
+                            isLoading: isPending,
+                            filters: exportfilter,
+                            model: 'Account',
+                            url: 'api/v1/account/search',
+                            hbsDataPath: '/reports/multi-page.hbs',
+                        }}
+                        filterLogicProps={{
+                            filterLogic: filterState.filterLogic,
+                            setFilterLogic: filterState.setFilterLogic,
+                        }}
+                        globalSearchProps={{
+                            defaultMode: 'equal',
+                            targets: accountsGlobalSearchTargets,
+                        }}
+                        refreshActionProps={{
+                            onClick: () => refetch(),
+                            isLoading: isPending || isRefetching,
+                        }}
+                        scrollableProps={{ isScrollable, setIsScrollable }}
+                        table={table}
+                        {...toolbarProps}
+                    />
+                    <DataTable
+                        className="mb-2"
+                        isScrollable={isScrollable}
+                        isStickyFooter
+                        isStickyHeader
+                        onDoubleClick={onDoubleClick}
+                        onRowClick={onRowClick}
+                        RowContextComponent={RowContextComponent}
+                        setColumnOrder={setColumnOrder}
+                        table={table}
+                    />
+                    <DataTablePagination table={table} totalSize={totalSize} />
+                </div>
+            </FilterContext.Provider>
+            <AccountTableActionManager />
+        </TableRowActionStoreProvider>
     )
 }
 

@@ -1,4 +1,4 @@
-import { ReactNode, useState } from 'react'
+import { ReactNode } from 'react'
 
 import { toast } from 'sonner'
 
@@ -9,6 +9,7 @@ import { Row } from '@tanstack/react-table'
 
 import RowActionsGroup from '@/components/data-table/data-table-row-actions'
 import DataTableRowContext from '@/components/data-table/data-table-row-context'
+import { useTableRowActionStore } from '@/components/data-table/store/data-table-action-store'
 import {
     CheckFillIcon,
     PrinterFillIcon,
@@ -20,8 +21,6 @@ import { ActionNameConfirmModal } from '@/components/modals/ action-name-confirm
 import LoadingSpinner from '@/components/spinners/loading-spinner'
 import { ContextMenuItem } from '@/components/ui/context-menu'
 import { DropdownMenuItem } from '@/components/ui/dropdown-menu'
-
-import { useModalState } from '@/hooks/use-modal-state'
 
 import {
     useDeleteLoanTransactionById,
@@ -38,6 +37,20 @@ import LoanApproveReleaseDisplayModal, {
 } from '../loan-approve-release-display-modal'
 import { ILoanTransactionTableActionComponentProp } from './columns'
 
+// ===== TYPE DEFINITIONS =====
+export type LoanTransactionActionType =
+    | 'edit'
+    | 'edit-confirm'
+    | 'signature'
+    | 'print'
+    | 'approve-release'
+    | 'delete'
+
+export interface LoanTransactionActionExtra {
+    onDeleteSuccess?: () => void
+    approveReleaseMode?: TLoanApproveReleaseDisplayMode
+}
+
 interface UseLoanTransactionActionsProps {
     row: Row<ILoanTransaction>
     onDeleteSuccess?: () => void
@@ -47,18 +60,13 @@ const useLoanTransactionActions = ({
     row,
     onDeleteSuccess,
 }: UseLoanTransactionActionsProps) => {
-    const updateModal = useModalState()
-    const updateSignatureModal = useModalState()
-    const loanCreatePrintModal = useModalState()
-    const actionNameConfirmModal = useModalState()
-
-    const [approvalReleaseMode, setApprovalReleaseMode] =
-        useState<TLoanApproveReleaseDisplayMode>('approve')
-    const loanApproveReleaseDisplayModal = useModalState()
-
     const loanTransaction = row.original
-
     const { onOpen } = useConfirmModalStore()
+    const { open } = useTableRowActionStore<
+        ILoanTransaction,
+        LoanTransactionActionType,
+        LoanTransactionActionExtra
+    >()
 
     const {
         isPending: isDeletingLoanTransaction,
@@ -75,9 +83,38 @@ const useLoanTransactionActions = ({
     const reprintMutation = useReprintLoanTransaction()
     const unprintMutation = useUndoPrintLoanTransaction()
 
-    const handleOpenEdit = () => updateModal.onOpenChange(true)
+    const loanApplicationStatus = resolveLoanDatesToStatus(loanTransaction)
+
     const handleEdit = () => {
-        actionNameConfirmModal.onOpenChange(true)
+        open('edit-confirm', {
+            id: loanTransaction.id,
+            defaultValues: loanTransaction,
+            extra: { onDeleteSuccess },
+        })
+    }
+
+    const handleOpenEdit = () => {
+        open('edit', {
+            id: loanTransaction.id,
+            defaultValues: loanTransaction,
+            extra: { onDeleteSuccess },
+        })
+    }
+
+    const handleSignature = () => {
+        open('signature', {
+            id: loanTransaction.id,
+            defaultValues: loanTransaction,
+            extra: { onDeleteSuccess },
+        })
+    }
+
+    const handlePrint = () => {
+        open('print', {
+            id: loanTransaction.id,
+            defaultValues: loanTransaction,
+            extra: { onDeleteSuccess },
+        })
     }
 
     const handleDelete = () => {
@@ -88,24 +125,17 @@ const useLoanTransactionActions = ({
         })
     }
 
-    const loanApplicationStatus = resolveLoanDatesToStatus(loanTransaction)
-
     const openApprovalModal = (mode: TLoanApproveReleaseDisplayMode) => {
-        setApprovalReleaseMode(mode)
-        loanApproveReleaseDisplayModal.onOpenChange(true)
+        open('approve-release', {
+            id: loanTransaction.id,
+            defaultValues: loanTransaction,
+            extra: { onDeleteSuccess, approveReleaseMode: mode },
+        })
     }
 
     return {
         loanTransaction,
         loanApplicationStatus,
-
-        updateModal,
-        updateSignatureModal,
-        loanCreatePrintModal,
-
-        approvalReleaseMode,
-        openApprovalModal,
-        loanApproveReleaseDisplayModal,
 
         reprintMutation,
         unprintMutation,
@@ -114,10 +144,11 @@ const useLoanTransactionActions = ({
 
         isDeletingLoanTransaction,
         handleEdit,
-        handleDelete,
-
-        actionNameConfirmModal,
         handleOpenEdit,
+        handleSignature,
+        handlePrint,
+        handleDelete,
+        openApprovalModal,
     }
 }
 
@@ -136,217 +167,156 @@ export const LoanTransactionAction = ({
         loanTransaction,
         loanApplicationStatus,
 
-        updateModal,
-        updateSignatureModal,
-        loanCreatePrintModal,
-
-        approvalReleaseMode,
-        loanApproveReleaseDisplayModal,
-        openApprovalModal,
-
         reprintMutation,
         unprintMutation,
         isPrintingProcess,
 
-        actionNameConfirmModal,
-        handleOpenEdit,
-
         isDeletingLoanTransaction,
         handleEdit,
+        handleSignature,
+        handlePrint,
         handleDelete,
+        openApprovalModal,
     } = useLoanTransactionActions({ row, onDeleteSuccess })
 
     return (
-        <>
-            <div onClick={(e) => e.stopPropagation()}>
-                <ActionNameConfirmModal
-                    {...actionNameConfirmModal}
-                    name={loanTransaction.account?.name || 'confirm'}
-                    onCancel={() => {
-                        actionNameConfirmModal.onOpenChange(false)
-                    }}
-                    onConfirm={() => {
-                        actionNameConfirmModal.onOpenChange(false)
-                        handleOpenEdit()
-                    }}
-                />
-                <LoanTransactionCreateUpdateFormModal
-                    {...updateModal}
-                    formProps={{
-                        loanTransactionId: loanTransaction.id,
-                        defaultValues: loanTransaction,
-                    }}
-                />
-                <LoanTransactionSignatureUpdateFormModal
-                    {...updateSignatureModal}
-                    formProps={{
-                        loanTransactionId: loanTransaction.id,
-                        defaultValues: loanTransaction,
-                    }}
-                />
-                <LoanTransactionPrintFormModal
-                    {...loanCreatePrintModal}
-                    formProps={{
-                        defaultValues: loanTransaction,
-                        loanTransactionId: loanTransaction.id,
-                    }}
-                />
-                <LoanApproveReleaseDisplayModal
-                    {...loanApproveReleaseDisplayModal}
-                    loanTransaction={loanTransaction}
-                    mode={approvalReleaseMode}
-                />
-            </div>
-            <RowActionsGroup
-                canSelect
-                onDelete={{
-                    text: 'Delete',
-                    isAllowed: !isDeletingLoanTransaction,
-                    onClick: handleDelete,
-                }}
-                onEdit={{
-                    text: 'Edit',
-                    isAllowed: true,
-                    onClick: handleEdit,
-                }}
-                otherActions={
-                    <>
-                        <DropdownMenuItem
-                            onClick={() =>
-                                updateSignatureModal.onOpenChange(true)
-                            }
-                        >
-                            <SignatureLightIcon
-                                className="mr-2"
-                                strokeWidth={1.5}
-                            />
-                            Signature
-                        </DropdownMenuItem>
-                        <DropdownMenuItem
-                            disabled={
-                                loanTransaction.printed_date !== undefined
-                            }
-                            onClick={() =>
-                                loanCreatePrintModal.onOpenChange(true)
-                            }
-                        >
+        <RowActionsGroup
+            canSelect
+            onDelete={{
+                text: 'Delete',
+                isAllowed: !isDeletingLoanTransaction,
+                onClick: handleDelete,
+            }}
+            onEdit={{
+                text: 'Edit',
+                isAllowed: true,
+                onClick: handleEdit,
+            }}
+            otherActions={
+                <>
+                    <DropdownMenuItem onClick={handleSignature}>
+                        <SignatureLightIcon
+                            className="mr-2"
+                            strokeWidth={1.5}
+                        />
+                        Signature
+                    </DropdownMenuItem>
+                    <DropdownMenuItem
+                        disabled={loanTransaction.printed_date !== undefined}
+                        onClick={handlePrint}
+                    >
+                        <PrinterFillIcon className="mr-2" strokeWidth={1.5} />
+                        Print
+                    </DropdownMenuItem>
+                    <DropdownMenuItem
+                        disabled={
+                            loanTransaction.printed_date === undefined ||
+                            loanApplicationStatus === 'released' ||
+                            isPrintingProcess
+                        }
+                        onClick={() => {
+                            toast.promise(
+                                reprintMutation.mutateAsync({
+                                    loanTransactionId: loanTransaction.id,
+                                }),
+                                {
+                                    loading: (
+                                        <span>
+                                            <PrinterFillIcon className="inline mr-1" />{' '}
+                                            Printing... Please wait...
+                                        </span>
+                                    ),
+                                    success: 'Reprinted',
+                                    error: (error) =>
+                                        serverRequestErrExtractor({
+                                            error,
+                                        }),
+                                }
+                            )
+                        }}
+                    >
+                        {reprintMutation.isPending ? (
+                            <LoadingSpinner className="mr-1 size-3" />
+                        ) : (
                             <PrinterFillIcon
                                 className="mr-2"
                                 strokeWidth={1.5}
                             />
-                            Print
-                        </DropdownMenuItem>
-                        <DropdownMenuItem
-                            disabled={
-                                loanTransaction.printed_date === undefined ||
-                                loanApplicationStatus === 'released' ||
-                                isPrintingProcess
-                            }
-                            onClick={() => {
-                                toast.promise(
-                                    reprintMutation.mutateAsync({
-                                        loanTransactionId: loanTransaction.id,
-                                    }),
-                                    {
-                                        loading: (
-                                            <span>
-                                                <PrinterFillIcon className="inline mr-1" />{' '}
-                                                Printing... Please wait...
-                                            </span>
-                                        ),
-                                        success: 'Reprinted',
-                                        error: (error) =>
-                                            serverRequestErrExtractor({
-                                                error,
-                                            }),
-                                    }
-                                )
-                            }}
-                        >
-                            {reprintMutation.isPending ? (
-                                <LoadingSpinner className="mr-1 size-3" />
-                            ) : (
-                                <PrinterFillIcon
-                                    className="mr-2"
-                                    strokeWidth={1.5}
-                                />
-                            )}
-                            Re-print
-                        </DropdownMenuItem>
-                        <DropdownMenuItem
-                            disabled={
-                                loanTransaction.printed_date === undefined ||
-                                loanApplicationStatus === 'released' ||
-                                loanApplicationStatus === 'approved' ||
-                                isPrintingProcess
-                            }
-                            onClick={() =>
-                                onOpen({
-                                    title: 'Unprint Loan',
-                                    description:
-                                        'Unprinting loan will remove the set voucher number. Are you sure to unprint?',
-                                    confirmString: 'Unprint Loan',
-                                    onConfirm: () =>
-                                        toast.promise(
-                                            unprintMutation.mutateAsync({
-                                                loanTransactionId:
-                                                    loanTransaction.id,
-                                            }),
-                                            {
-                                                loading: (
-                                                    <span>
-                                                        Unprinting... Please
-                                                        wait...
-                                                    </span>
-                                                ),
-                                                success: 'Unprinted',
-                                                error: (error) =>
-                                                    serverRequestErrExtractor({
-                                                        error,
-                                                    }),
-                                            }
-                                        ),
-                                })
-                            }
-                        >
-                            {unprintMutation.isPending ? (
-                                <LoadingSpinner className="mr-1 size-3" />
-                            ) : (
-                                <UndoIcon className="mr-2" strokeWidth={1.5} />
-                            )}
-                            Unprint
-                        </DropdownMenuItem>
-
-                        <DropdownMenuItem
-                            disabled={
-                                loanTransaction.printed_date === undefined ||
-                                loanApplicationStatus === 'approved' ||
-                                loanApplicationStatus === 'released'
-                            }
-                            onClick={() => openApprovalModal('approve')}
-                        >
-                            <ThumbsUpIcon className="mr-2" strokeWidth={1.5} />
-                            Approve
-                        </DropdownMenuItem>
-                        <DropdownMenuItem
-                            disabled={loanApplicationStatus !== 'approved'}
-                            onClick={() => openApprovalModal('undo-approve')}
-                        >
+                        )}
+                        Re-print
+                    </DropdownMenuItem>
+                    <DropdownMenuItem
+                        disabled={
+                            loanTransaction.printed_date === undefined ||
+                            loanApplicationStatus === 'released' ||
+                            loanApplicationStatus === 'approved' ||
+                            isPrintingProcess
+                        }
+                        onClick={() =>
+                            onOpen({
+                                title: 'Unprint Loan',
+                                description:
+                                    'Unprinting loan will remove the set voucher number. Are you sure to unprint?',
+                                confirmString: 'Unprint Loan',
+                                onConfirm: () =>
+                                    toast.promise(
+                                        unprintMutation.mutateAsync({
+                                            loanTransactionId:
+                                                loanTransaction.id,
+                                        }),
+                                        {
+                                            loading: (
+                                                <span>
+                                                    Unprinting... Please wait...
+                                                </span>
+                                            ),
+                                            success: 'Unprinted',
+                                            error: (error) =>
+                                                serverRequestErrExtractor({
+                                                    error,
+                                                }),
+                                        }
+                                    ),
+                            })
+                        }
+                    >
+                        {unprintMutation.isPending ? (
+                            <LoadingSpinner className="mr-1 size-3" />
+                        ) : (
                             <UndoIcon className="mr-2" strokeWidth={1.5} />
-                            Undo Approval
-                        </DropdownMenuItem>
-                        <DropdownMenuItem
-                            disabled={loanApplicationStatus !== 'approved'}
-                            onClick={() => openApprovalModal('release')}
-                        >
-                            <CheckFillIcon className="mr-2" strokeWidth={1.5} />
-                            Release
-                        </DropdownMenuItem>
-                    </>
-                }
-                row={row}
-            />
-        </>
+                        )}
+                        Unprint
+                    </DropdownMenuItem>
+
+                    <DropdownMenuItem
+                        disabled={
+                            loanTransaction.printed_date === undefined ||
+                            loanApplicationStatus === 'approved' ||
+                            loanApplicationStatus === 'released'
+                        }
+                        onClick={() => openApprovalModal('approve')}
+                    >
+                        <ThumbsUpIcon className="mr-2" strokeWidth={1.5} />
+                        Approve
+                    </DropdownMenuItem>
+                    <DropdownMenuItem
+                        disabled={loanApplicationStatus !== 'approved'}
+                        onClick={() => openApprovalModal('undo-approve')}
+                    >
+                        <UndoIcon className="mr-2" strokeWidth={1.5} />
+                        Undo Approval
+                    </DropdownMenuItem>
+                    <DropdownMenuItem
+                        disabled={loanApplicationStatus !== 'approved'}
+                        onClick={() => openApprovalModal('release')}
+                    >
+                        <CheckFillIcon className="mr-2" strokeWidth={1.5} />
+                        Release
+                    </DropdownMenuItem>
+                </>
+            }
+            row={row}
+        />
     )
 }
 
@@ -366,216 +336,237 @@ export const LoanTransactionRowContext = ({
         loanTransaction,
         loanApplicationStatus,
 
-        updateModal,
-        updateSignatureModal,
-        loanCreatePrintModal,
-
-        approvalReleaseMode,
-        loanApproveReleaseDisplayModal,
-        openApprovalModal,
-
         reprintMutation,
         unprintMutation,
         isPrintingProcess,
 
         isDeletingLoanTransaction,
         handleEdit,
+        handleSignature,
+        handlePrint,
         handleDelete,
-
-        actionNameConfirmModal,
-        handleOpenEdit,
+        openApprovalModal,
     } = useLoanTransactionActions({ row, onDeleteSuccess })
 
     return (
-        <>
-            <LoanTransactionCreateUpdateFormModal
-                {...updateModal}
-                formProps={{
-                    loanTransactionId: loanTransaction.id,
-                    defaultValues: loanTransaction,
-                }}
-            />
-            <LoanTransactionSignatureUpdateFormModal
-                {...updateSignatureModal}
-                formProps={{
-                    loanTransactionId: loanTransaction.id,
-                    defaultValues: loanTransaction,
-                }}
-            />
-            <LoanTransactionPrintFormModal
-                {...loanCreatePrintModal}
-                formProps={{
-                    defaultValues: loanTransaction,
-                    loanTransactionId: loanTransaction.id,
-                }}
-            />
-            <LoanApproveReleaseDisplayModal
-                {...loanApproveReleaseDisplayModal}
-                loanTransaction={loanTransaction}
-                mode={approvalReleaseMode}
-            />
-            <ActionNameConfirmModal
-                {...actionNameConfirmModal}
-                name={loanTransaction.account?.name || 'confirm'}
-                onCancel={() => {
-                    actionNameConfirmModal.onOpenChange(false)
-                }}
-                onConfirm={() => {
-                    actionNameConfirmModal.onOpenChange(false)
-                    handleOpenEdit()
-                }}
-            />
-            <DataTableRowContext
-                onDelete={{
-                    text: 'Delete',
-                    isAllowed: !isDeletingLoanTransaction,
-                    onClick: handleDelete,
-                }}
-                onEdit={{
-                    text: 'Edit',
-                    isAllowed: true,
-                    onClick: handleEdit,
-                }}
-                otherActions={
-                    <>
-                        <ContextMenuItem
-                            onClick={() =>
-                                updateSignatureModal.onOpenChange(true)
-                            }
-                        >
-                            <SignatureLightIcon
-                                className="mr-2"
-                                strokeWidth={1.5}
-                            />
-                            Signature
-                        </ContextMenuItem>
-                        <ContextMenuItem
-                            disabled={
-                                loanTransaction.printed_date !== undefined
-                            }
-                            onClick={() =>
-                                loanCreatePrintModal.onOpenChange(true)
-                            }
-                        >
+        <DataTableRowContext
+            onDelete={{
+                text: 'Delete',
+                isAllowed: !isDeletingLoanTransaction,
+                onClick: handleDelete,
+            }}
+            onEdit={{
+                text: 'Edit',
+                isAllowed: true,
+                onClick: handleEdit,
+            }}
+            otherActions={
+                <>
+                    <ContextMenuItem onClick={handleSignature}>
+                        <SignatureLightIcon
+                            className="mr-2"
+                            strokeWidth={1.5}
+                        />
+                        Signature
+                    </ContextMenuItem>
+                    <ContextMenuItem
+                        disabled={loanTransaction.printed_date !== undefined}
+                        onClick={handlePrint}
+                    >
+                        <PrinterFillIcon className="mr-2" strokeWidth={1.5} />
+                        Print
+                    </ContextMenuItem>
+                    <ContextMenuItem
+                        disabled={
+                            loanTransaction.printed_date === undefined ||
+                            loanApplicationStatus === 'released' ||
+                            isPrintingProcess
+                        }
+                        onClick={() => {
+                            toast.promise(
+                                reprintMutation.mutateAsync({
+                                    loanTransactionId: loanTransaction.id,
+                                }),
+                                {
+                                    loading: (
+                                        <span>
+                                            <PrinterFillIcon className="inline mr-1" />{' '}
+                                            Printing... Please wait...
+                                        </span>
+                                    ),
+                                    success: 'Reprinted',
+                                    error: (error) =>
+                                        serverRequestErrExtractor({
+                                            error,
+                                        }),
+                                }
+                            )
+                        }}
+                    >
+                        {reprintMutation.isPending ? (
+                            <LoadingSpinner className="mr-1 size-3" />
+                        ) : (
                             <PrinterFillIcon
                                 className="mr-2"
                                 strokeWidth={1.5}
                             />
-                            Print
-                        </ContextMenuItem>
-                        <ContextMenuItem
-                            disabled={
-                                loanTransaction.printed_date === undefined ||
-                                loanApplicationStatus === 'released' ||
-                                isPrintingProcess
-                            }
-                            onClick={() => {
-                                toast.promise(
-                                    reprintMutation.mutateAsync({
-                                        loanTransactionId: loanTransaction.id,
-                                    }),
-                                    {
-                                        loading: (
-                                            <span>
-                                                <PrinterFillIcon className="inline mr-1" />{' '}
-                                                Printing... Please wait...
-                                            </span>
-                                        ),
-                                        success: 'Reprinted',
-                                        error: (error) =>
-                                            serverRequestErrExtractor({
-                                                error,
-                                            }),
-                                    }
-                                )
-                            }}
-                        >
-                            {reprintMutation.isPending ? (
-                                <LoadingSpinner className="mr-1 size-3" />
-                            ) : (
-                                <PrinterFillIcon
-                                    className="mr-2"
-                                    strokeWidth={1.5}
-                                />
-                            )}
-                            Re-print
-                        </ContextMenuItem>
-                        <ContextMenuItem
-                            disabled={
-                                loanTransaction.printed_date === undefined ||
-                                loanApplicationStatus === 'released' ||
-                                loanApplicationStatus === 'approved' ||
-                                isPrintingProcess
-                            }
-                            onClick={() =>
-                                onOpen({
-                                    title: 'Unprint Loan',
-                                    description:
-                                        'Unprinting loan will remove the set voucher number. Are you sure to unprint?',
-                                    confirmString: 'Unprint Loan',
-                                    onConfirm: () =>
-                                        toast.promise(
-                                            unprintMutation.mutateAsync({
-                                                loanTransactionId:
-                                                    loanTransaction.id,
-                                            }),
-                                            {
-                                                loading: (
-                                                    <span>
-                                                        Unprinting... Please
-                                                        wait...
-                                                    </span>
-                                                ),
-                                                success: 'Unprinted',
-                                                error: (error) =>
-                                                    serverRequestErrExtractor({
-                                                        error,
-                                                    }),
-                                            }
-                                        ),
-                                })
-                            }
-                        >
-                            {unprintMutation.isPending ? (
-                                <LoadingSpinner className="mr-1 size-3" />
-                            ) : (
-                                <UndoIcon className="mr-2" strokeWidth={1.5} />
-                            )}
-                            Unprint
-                        </ContextMenuItem>
-                        <ContextMenuItem
-                            disabled={
-                                loanTransaction.printed_date === undefined ||
-                                loanApplicationStatus === 'approved' ||
-                                loanApplicationStatus === 'released'
-                            }
-                            onClick={() => openApprovalModal('approve')}
-                        >
-                            <ThumbsUpIcon className="mr-2" strokeWidth={1.5} />
-                            Approve
-                        </ContextMenuItem>
-                        <ContextMenuItem
-                            disabled={loanApplicationStatus !== 'approved'}
-                            onClick={() => openApprovalModal('undo-approve')}
-                        >
+                        )}
+                        Re-print
+                    </ContextMenuItem>
+                    <ContextMenuItem
+                        disabled={
+                            loanTransaction.printed_date === undefined ||
+                            loanApplicationStatus === 'released' ||
+                            loanApplicationStatus === 'approved' ||
+                            isPrintingProcess
+                        }
+                        onClick={() =>
+                            onOpen({
+                                title: 'Unprint Loan',
+                                description:
+                                    'Unprinting loan will remove the set voucher number. Are you sure to unprint?',
+                                confirmString: 'Unprint Loan',
+                                onConfirm: () =>
+                                    toast.promise(
+                                        unprintMutation.mutateAsync({
+                                            loanTransactionId:
+                                                loanTransaction.id,
+                                        }),
+                                        {
+                                            loading: (
+                                                <span>
+                                                    Unprinting... Please wait...
+                                                </span>
+                                            ),
+                                            success: 'Unprinted',
+                                            error: (error) =>
+                                                serverRequestErrExtractor({
+                                                    error,
+                                                }),
+                                        }
+                                    ),
+                            })
+                        }
+                    >
+                        {unprintMutation.isPending ? (
+                            <LoadingSpinner className="mr-1 size-3" />
+                        ) : (
                             <UndoIcon className="mr-2" strokeWidth={1.5} />
-                            Undo Approval
-                        </ContextMenuItem>
-                        <ContextMenuItem
-                            disabled={loanApplicationStatus !== 'approved'}
-                            onClick={() => openApprovalModal('release')}
-                        >
-                            <CheckFillIcon className="mr-2" strokeWidth={1.5} />
-                            Release
-                        </ContextMenuItem>
-                    </>
-                }
-                row={row}
-            >
-                {children}
-            </DataTableRowContext>
+                        )}
+                        Unprint
+                    </ContextMenuItem>
+                    <ContextMenuItem
+                        disabled={
+                            loanTransaction.printed_date === undefined ||
+                            loanApplicationStatus === 'approved' ||
+                            loanApplicationStatus === 'released'
+                        }
+                        onClick={() => openApprovalModal('approve')}
+                    >
+                        <ThumbsUpIcon className="mr-2" strokeWidth={1.5} />
+                        Approve
+                    </ContextMenuItem>
+                    <ContextMenuItem
+                        disabled={loanApplicationStatus !== 'approved'}
+                        onClick={() => openApprovalModal('undo-approve')}
+                    >
+                        <UndoIcon className="mr-2" strokeWidth={1.5} />
+                        Undo Approval
+                    </ContextMenuItem>
+                    <ContextMenuItem
+                        disabled={loanApplicationStatus !== 'approved'}
+                        onClick={() => openApprovalModal('release')}
+                    >
+                        <CheckFillIcon className="mr-2" strokeWidth={1.5} />
+                        Release
+                    </ContextMenuItem>
+                </>
+            }
+            row={row}
+        >
+            {children}
+        </DataTableRowContext>
+    )
+}
+
+export const LoanTransactionTableActionManager = () => {
+    const { state, close, open } = useTableRowActionStore<
+        ILoanTransaction,
+        LoanTransactionActionType,
+        LoanTransactionActionExtra
+    >()
+
+    const loanTransaction = state.defaultValues
+    const approveReleaseMode = state.extra?.approveReleaseMode ?? 'approve'
+
+    const handleConfirmEdit = () => {
+        close()
+        // Open the actual edit modal after confirmation
+        if (loanTransaction) {
+            open('edit', {
+                id: loanTransaction.id,
+                defaultValues: loanTransaction,
+                extra: state.extra,
+            })
+        }
+    }
+
+    return (
+        <>
+            {state.action === 'edit-confirm' && loanTransaction && (
+                <ActionNameConfirmModal
+                    name={loanTransaction.account?.name || 'confirm'}
+                    onCancel={close}
+                    onConfirm={handleConfirmEdit}
+                    onOpenChange={close}
+                    open={state.isOpen}
+                />
+            )}
+
+            {state.action === 'edit' && loanTransaction && (
+                <LoanTransactionCreateUpdateFormModal
+                    formProps={{
+                        loanTransactionId: loanTransaction.id,
+                        defaultValues: loanTransaction,
+                    }}
+                    onOpenChange={close}
+                    open={state.isOpen}
+                />
+            )}
+
+            {state.action === 'signature' && loanTransaction && (
+                <LoanTransactionSignatureUpdateFormModal
+                    formProps={{
+                        loanTransactionId: loanTransaction.id,
+                        defaultValues: loanTransaction,
+                    }}
+                    onOpenChange={close}
+                    open={state.isOpen}
+                />
+            )}
+
+            {state.action === 'print' && loanTransaction && (
+                <LoanTransactionPrintFormModal
+                    formProps={{
+                        defaultValues: loanTransaction,
+                        loanTransactionId: loanTransaction.id,
+                    }}
+                    onOpenChange={close}
+                    open={state.isOpen}
+                />
+            )}
+
+            {state.action === 'approve-release' && loanTransaction && (
+                <LoanApproveReleaseDisplayModal
+                    loanTransaction={loanTransaction}
+                    mode={approveReleaseMode}
+                    onOpenChange={close}
+                    open={state.isOpen}
+                />
+            )}
         </>
     )
 }
 
+// Default export for backward compatibility
 export default LoanTransactionAction

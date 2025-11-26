@@ -224,8 +224,8 @@ const BankTable = ({
                     />
                     <DataTablePagination table={table} totalSize={totalSize} />
                 </div>
-                <BankTableActionManager />
             </FilterContext.Provider>
+            <BankTableActionManager />
         </TableRowActionStoreProvider>
     )
 }

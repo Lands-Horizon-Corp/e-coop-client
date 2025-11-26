@@ -20,28 +20,24 @@ const MemberAccountsLoans = ({ className, memberProfileId }: Props) => {
     return (
         <div
             className={cn(
-                'flex flex-1 flex-col gap-y-4 rounded-xl bg-background p-4',
+                'flex flex-1 flex-col gap-y-4 rounded-xl bg-background px-2',
                 className
             )}
         >
-            <div className="space-y-4 flex flex-col">
+            <div className="space-y-4 flex flex-col p-4 bg-popover/40 rounded-lg border border-border">
                 <SectionTitle Icon={WalletIcon} title="Accounts Summary" />
                 <MemberAccountingLedger
                     className="h-[500px]"
                     memberProfileId={memberProfileId}
                 />
-                <MemberAccountingLedgerTotal
-                    className="w-fit shrink-0 self-end"
-                    memberProfileId={memberProfileId}
-                />
             </div>
-            <div className="space-y-4">
+            <MemberAccountingLedgerTotal
+                className="w-fit shrink-0 self-end"
+                memberProfileId={memberProfileId}
+            />
+            <div className="space-y-4  p-4 bg-popover/40 rounded-lg border border-border">
                 <SectionTitle Icon={WalletIcon} title="Loan Summary" />
                 <MemberLoanSummary memberProfileId={memberProfileId} />
-                {/* <MemberAccountingLedger
-                    memberProfileId={memberProfileId}
-                    className="h-[500px]"
-                /> */}
             </div>
         </div>
     )

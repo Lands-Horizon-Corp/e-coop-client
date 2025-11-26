@@ -2,13 +2,13 @@ import { useMemo, useState } from 'react'
 
 import Fuse from 'fuse.js'
 
-import { cn } from '@/helpers'
 import { toReadableDate } from '@/helpers/date-utils'
 import { useMemberProfileComakers } from '@/modules/comaker-member-profile'
 import { currencyFormat } from '@/modules/currency'
 
 import { RefreshIcon, UserIcon } from '@/components/icons'
 import ImageDisplay from '@/components/image-display'
+import LoadingSpinner from '@/components/spinners/loading-spinner'
 import { Button } from '@/components/ui/button'
 import EmptyState from '@/components/ui/empty-state'
 import { Input } from '@/components/ui/input'
@@ -35,7 +35,6 @@ const DebouncedSearchInput = ({
     const [localValue, setLocalValue] = useState(value)
     const debouncedValue = useDebounce(localValue, 300)
 
-    // Update parent when debounced value changes
     useMemo(() => {
         onChange(debouncedValue)
     }, [debouncedValue, onChange])
@@ -106,26 +105,19 @@ const MemberComakerDisplay = ({ profileId }: MemberComakerDisplayProps) => {
                     <Button
                         disabled={isRefetching}
                         onClick={() => refetch()}
-                        size="sm"
+                        size="icon"
                         variant="outline"
                     >
-                        <RefreshIcon
-                            className={cn(
-                                'size-4',
-                                isRefetching && 'animate-spin'
-                            )}
-                        />
+                        {isRefetching ? <LoadingSpinner /> : <RefreshIcon />}
                     </Button>
                 </div>
             </div>
 
-            {/* Search Input */}
             <DebouncedSearchInput
                 onChange={setSearchQuery}
                 value={searchQuery}
             />
 
-            {/* Loading State */}
             {status === 'pending' && (
                 <div className="space-y-3">
                     {[...Array(3)].map((_, i) => (
@@ -158,7 +150,6 @@ const MemberComakerDisplay = ({ profileId }: MemberComakerDisplayProps) => {
                 </div>
             )}
 
-            {/* Empty State */}
             {status === 'success' && filteredComakers.length === 0 && (
                 <EmptyState
                     description={
@@ -171,7 +162,6 @@ const MemberComakerDisplay = ({ profileId }: MemberComakerDisplayProps) => {
                 />
             )}
 
-            {/* Comakers List */}
             {status === 'success' && filteredComakers.length > 0 && (
                 <div className="space-y-3">
                     {filteredComakers.map((comaker) => (
@@ -193,7 +183,6 @@ const MemberComakerDisplay = ({ profileId }: MemberComakerDisplayProps) => {
                                     />
                                 </PreviewMediaWrapper>
 
-                                {/* Comaker Details */}
                                 <div className="min-w-0 flex-1 space-y-3">
                                     <div className="grid gap-3 md:grid-cols-3">
                                         {/* Full Name */}
@@ -206,7 +195,6 @@ const MemberComakerDisplay = ({ profileId }: MemberComakerDisplayProps) => {
                                             </p>
                                         </div>
 
-                                        {/* Passbook */}
                                         <div className="space-y-1">
                                             <p className="font-medium">
                                                 {comaker.member_profile
@@ -217,7 +205,6 @@ const MemberComakerDisplay = ({ profileId }: MemberComakerDisplayProps) => {
                                             </p>
                                         </div>
 
-                                        {/* Amount */}
                                         <div className="space-y-1">
                                             <p className="font-medium">
                                                 {currencyFormat(
@@ -264,7 +251,6 @@ const MemberComakerDisplay = ({ profileId }: MemberComakerDisplayProps) => {
                                             </p>
                                         </div>
 
-                                        {/* Created Date */}
                                         <div className="space-y-1">
                                             <p className="text-sm">
                                                 {toReadableDate(
@@ -277,7 +263,6 @@ const MemberComakerDisplay = ({ profileId }: MemberComakerDisplayProps) => {
                                         </div>
                                     </div>
 
-                                    {/* Description */}
                                     {comaker.description && (
                                         <div className="space-y-1">
                                             <p className="text-sm text-muted-foreground">
@@ -295,7 +280,6 @@ const MemberComakerDisplay = ({ profileId }: MemberComakerDisplayProps) => {
                 </div>
             )}
 
-            {/* Error State (optional, handled by status !== 'pending' && !== 'success') */}
             {status === 'error' && (
                 <EmptyState
                     description="Failed to load comakers. Please try again."

@@ -18,7 +18,9 @@ import DataTableToolbar, {
 } from '@/components/data-table/data-table-toolbar'
 import { TableProps } from '@/components/data-table/table.type'
 import { useDataTableSorting } from '@/components/data-table/use-datatable-sorting'
-import useDataTableState from '@/components/data-table/use-datatable-state'
+import useDataTableState, {
+    useResolvedColumnOrder,
+} from '@/components/data-table/use-datatable-state'
 
 import useDatableFilterState from '@/hooks/use-filter-state'
 import { usePagination } from '@/hooks/use-pagination'
@@ -49,6 +51,7 @@ export interface EmployeesTableProps
 }
 
 const EmployeesTable = ({
+    persistKey = ['employee'],
     className,
     toolbarProps,
     defaultFilter,
@@ -73,18 +76,16 @@ const EmployeesTable = ({
         [actionComponent]
     )
 
-    const {
-        getRowIdFn,
-        columnOrder,
-        setColumnOrder,
-        isScrollable,
-        setIsScrollable,
-        columnVisibility,
-        setColumnVisibility,
-        rowSelectionState,
-        createHandleRowSelectionChange,
-    } = useDataTableState<IUserOrganization>({
-        defaultColumnOrder: columns.map((c) => c.id!),
+    const { resolvedColumnOrder, resolvedColumnVisibility, finalKeys } =
+        useResolvedColumnOrder({
+            columns,
+            persistKey,
+        })
+
+    const tableState = useDataTableState<IUserOrganization>({
+        key: finalKeys,
+        defaultColumnVisibility: resolvedColumnVisibility,
+        defaultColumnOrder: resolvedColumnOrder,
         onSelectData,
     })
 
@@ -106,7 +107,8 @@ const EmployeesTable = ({
         },
     })
 
-    const handleRowSelectionChange = createHandleRowSelectionChange(data)
+    const handleRowSelectionChange =
+        tableState.createHandleRowSelectionChange(data)
 
     const table = useReactTable({
         columns,
@@ -117,9 +119,9 @@ const EmployeesTable = ({
         state: {
             sorting: tableSorting,
             pagination,
-            columnOrder,
-            rowSelection: rowSelectionState.rowSelection,
-            columnVisibility,
+            columnOrder: tableState.columnOrder,
+            rowSelection: tableState.rowSelectionState.rowSelection,
+            columnVisibility: tableState.columnVisibility,
         },
         rowCount: pageSize,
         manualSorting: true,
@@ -128,14 +130,15 @@ const EmployeesTable = ({
         manualFiltering: true,
         manualPagination: true,
         columnResizeMode: 'onChange',
-        getRowId: getRowIdFn,
+        getRowId: tableState.getRowIdFn,
         onSortingChange: setTableSorting,
         onPaginationChange: setPagination,
         getCoreRowModel: getCoreRowModel(),
-        onColumnOrderChange: setColumnOrder,
+        onColumnOrderChange: tableState.setColumnOrder,
         getSortedRowModel: getSortedRowModel(),
-        onColumnVisibilityChange: setColumnVisibility,
+        onColumnVisibilityChange: tableState.setColumnVisibility,
         onRowSelectionChange: handleRowSelectionChange,
+        defaultColumn: { minSize: 100, size: 150, maxSize: 800 },
     })
 
     return (
@@ -144,7 +147,7 @@ const EmployeesTable = ({
                 className={cn(
                     'flex h-full flex-col gap-y-2',
                     className,
-                    !isScrollable && 'h-fit !max-h-none'
+                    !tableState.isScrollable && 'h-fit !max-h-none'
                 )}
             >
                 <DataTableToolbar
@@ -170,19 +173,22 @@ const EmployeesTable = ({
                         onClick: () => refetch(),
                         isLoading: isPending || isRefetching,
                     }}
-                    scrollableProps={{ isScrollable, setIsScrollable }}
+                    scrollableProps={{
+                        isScrollable: tableState.isScrollable,
+                        setIsScrollable: tableState.setIsScrollable,
+                    }}
                     table={table}
                     {...toolbarProps}
                 />
                 <DataTable
                     className="mb-2"
-                    isScrollable={isScrollable}
+                    isScrollable={tableState.isScrollable}
                     isStickyFooter
                     isStickyHeader
                     onDoubleClick={onDoubleClick}
                     onRowClick={onRowClick}
                     RowContextComponent={RowContextComponent}
-                    setColumnOrder={setColumnOrder}
+                    setColumnOrder={tableState.setColumnOrder}
                     table={table}
                 />
                 <DataTablePagination table={table} totalSize={totalSize} />

@@ -1,7 +1,5 @@
 import { ReactNode } from 'react'
 
-import { toast } from 'sonner'
-
 import {
     AccountClassificationFormModal,
     IAccountClassification,
@@ -12,10 +10,15 @@ import { Row } from '@tanstack/react-table'
 
 import RowActionsGroup from '@/components/data-table/data-table-row-actions'
 import DataTableRowContext from '@/components/data-table/data-table-row-context'
-
-import { useModalState } from '@/hooks/use-modal-state'
+import { useTableRowActionStore } from '@/components/data-table/store/data-table-action-store'
 
 import { IAccountClassificationTableActionComponentProp } from './column'
+
+export type AccountClassificationActionType = 'edit' | 'delete'
+
+export interface AccountClassificationActionExtra {
+    onDeleteSuccess?: () => void
+}
 
 interface UseAccountClassificationActionsProps {
     row: Row<IAccountClassification>
@@ -26,9 +29,12 @@ const useAccountClassificationActions = ({
     row,
     onDeleteSuccess,
 }: UseAccountClassificationActionsProps) => {
-    const updateModal = useModalState()
     const accountClassification = row.original
-
+    const { open } = useTableRowActionStore<
+        IAccountClassification,
+        AccountClassificationActionType,
+        AccountClassificationActionExtra
+    >()
     const { onOpen } = useConfirmModalStore()
 
     const {
@@ -36,7 +42,13 @@ const useAccountClassificationActions = ({
         isPending: isDeletingAccountClassification,
     } = useDeleteById({ options: { onSuccess: onDeleteSuccess } })
 
-    const handleEdit = () => updateModal.onOpenChange(true)
+    const handleEdit = () => {
+        open('edit', {
+            id: accountClassification.id,
+            defaultValues: accountClassification,
+            extra: { onDeleteSuccess },
+        })
+    }
 
     const handleDelete = () => {
         onOpen({
@@ -50,7 +62,6 @@ const useAccountClassificationActions = ({
 
     return {
         accountClassification,
-        updateModal,
         isDeletingAccountClassification,
         handleEdit,
         handleDelete,
@@ -67,35 +78,11 @@ export const AccountClassificationAction = ({
     row,
     onDeleteSuccess,
 }: IAccountClassificationActionProps) => {
-    const {
-        accountClassification,
-        updateModal,
-        isDeletingAccountClassification,
-        handleEdit,
-        handleDelete,
-    } = useAccountClassificationActions({ row, onDeleteSuccess })
+    const { isDeletingAccountClassification, handleEdit, handleDelete } =
+        useAccountClassificationActions({ row, onDeleteSuccess })
 
     return (
         <>
-            <div onClick={(e) => e.stopPropagation()}>
-                <AccountClassificationFormModal
-                    {...updateModal}
-                    className="!max-w-2xl"
-                    description="Update details for this account classification."
-                    formProps={{
-                        accountClassificationId: accountClassification.id,
-                        defaultValues: { ...accountClassification },
-                        onSuccess: () => {
-                            toast.success(
-                                'Account classification updated successfully'
-                            )
-                            updateModal.onOpenChange(false)
-                        },
-                    }}
-                    title="Edit Account Classification"
-                    titleClassName="font-bold"
-                />
-            </div>
             <RowActionsGroup
                 canSelect
                 onDelete={{
@@ -108,7 +95,7 @@ export const AccountClassificationAction = ({
                     isAllowed: true,
                     onClick: handleEdit,
                 }}
-                otherActions={<>{/* Additional actions can be added here */}</>}
+                otherActions={<></>}
                 row={row}
             />
         </>
@@ -126,33 +113,11 @@ export const AccountClassificationRowContext = ({
     children,
     onDeleteSuccess,
 }: IAccountClassificationRowContextProps) => {
-    const {
-        accountClassification,
-        updateModal,
-        isDeletingAccountClassification,
-        handleEdit,
-        handleDelete,
-    } = useAccountClassificationActions({ row, onDeleteSuccess })
+    const { isDeletingAccountClassification, handleEdit, handleDelete } =
+        useAccountClassificationActions({ row, onDeleteSuccess })
 
     return (
         <>
-            <AccountClassificationFormModal
-                {...updateModal}
-                className="!max-w-2xl"
-                description="Update details for this account classification."
-                formProps={{
-                    accountClassificationId: accountClassification.id,
-                    defaultValues: { ...accountClassification },
-                    onSuccess: () => {
-                        toast.success(
-                            'Account classification updated successfully'
-                        )
-                        updateModal.onOpenChange(false)
-                    },
-                }}
-                title="Edit Account Classification"
-                titleClassName="font-bold"
-            />
             <DataTableRowContext
                 onDelete={{
                     text: 'Delete',
@@ -168,6 +133,34 @@ export const AccountClassificationRowContext = ({
             >
                 {children}
             </DataTableRowContext>
+        </>
+    )
+}
+
+export const AccountClassificationTableActionManager = () => {
+    const { state, close } = useTableRowActionStore<
+        IAccountClassification,
+        AccountClassificationActionType,
+        AccountClassificationActionExtra
+    >()
+
+    return (
+        <>
+            {state.action === 'edit' && state.defaultValues && (
+                <AccountClassificationFormModal
+                    className="!max-w-2xl"
+                    description="Update details for this account classification."
+                    formProps={{
+                        accountClassificationId: state.id,
+                        defaultValues: state.defaultValues,
+                        onSuccess: () => close(),
+                    }}
+                    onOpenChange={close}
+                    open={state.isOpen}
+                    title="Edit Account Classification"
+                    titleClassName="font-bold"
+                />
+            )}
         </>
     )
 }

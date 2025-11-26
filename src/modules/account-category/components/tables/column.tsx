@@ -1,8 +1,8 @@
-import { toReadableDate } from '@/helpers/date-utils'
 import { ColumnDef, Row } from '@tanstack/react-table'
 
 import DataTableColumnHeader from '@/components/data-table/data-table-column-header'
 import ColumnActions from '@/components/data-table/data-table-column-header/column-actions'
+import { createUpdateColumns } from '@/components/data-table/data-table-common-columns'
 import { IGlobalSearchTargets } from '@/components/data-table/data-table-filters/data-table-global-search'
 import TextFilter from '@/components/data-table/data-table-filters/text-filter'
 import HeaderToggleSelect from '@/components/data-table/data-table-row-actions/header-toggle-select'
@@ -11,7 +11,6 @@ import { Checkbox } from '@/components/ui/checkbox'
 import { PlainTextEditor } from '@/components/ui/text-editor'
 
 import { IAccountCategory } from '../../account-category.types'
-import AccountCategoryAction from './row-action-context'
 
 export const AccountCategoryGlobalSearchTargets: IGlobalSearchTargets<IAccountCategory>[] =
     [
@@ -121,40 +120,7 @@ const AccountCategoryTableColumns = (
         size: 180,
         minSize: 180,
     },
-    {
-        id: 'created_at',
-        accessorKey: 'created_at',
-        header: (props) => (
-            <DataTableColumnHeader {...props} title="Date Created">
-                <ColumnActions {...props} />
-            </DataTableColumnHeader>
-        ),
-        cell: ({
-            row: {
-                original: { created_at },
-            },
-        }) => (
-            <span className="text-sm font-semibold">
-                {created_at ? toReadableDate(created_at) : '-'}
-            </span>
-        ),
-        enableMultiSort: true,
-        enableSorting: true,
-        enableResizing: true,
-        enableHiding: false,
-        size: 180,
-        minSize: 150,
-    },
-    {
-        id: 'actions',
-        header: () => null,
-        cell: ({ row }) => <AccountCategoryAction row={row} />,
-        enableSorting: false,
-        enableResizing: false,
-        enableHiding: false,
-        size: 80,
-        minSize: 80,
-    },
+    ...createUpdateColumns<IAccountCategory>(),
 ]
 
 export default AccountCategoryTableColumns

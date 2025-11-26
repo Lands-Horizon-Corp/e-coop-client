@@ -1,7 +1,5 @@
 import { ReactNode } from 'react'
 
-import { toast } from 'sonner'
-
 import {
     AccountCategoryFormModal,
     IAccountCategory,
@@ -12,10 +10,15 @@ import { Row } from '@tanstack/react-table'
 
 import RowActionsGroup from '@/components/data-table/data-table-row-actions'
 import DataTableRowContext from '@/components/data-table/data-table-row-context'
-
-import { useModalState } from '@/hooks/use-modal-state'
+import { useTableRowActionStore } from '@/components/data-table/store/data-table-action-store'
 
 import { IAccountCategoryTableActionComponentProp } from './column'
+
+export type AccountCategoryActionType = 'edit' | 'delete'
+
+export interface AccountCategoryActionExtra {
+    onDeleteSuccess?: () => void
+}
 
 interface UseAccountCategoryActionsProps {
     row: Row<IAccountCategory>
@@ -26,9 +29,12 @@ const useAccountCategoryActions = ({
     row,
     onDeleteSuccess,
 }: UseAccountCategoryActionsProps) => {
-    const updateModal = useModalState()
     const accountCategory = row.original
-
+    const { open } = useTableRowActionStore<
+        IAccountCategory,
+        AccountCategoryActionType,
+        AccountCategoryActionExtra
+    >()
     const { onOpen } = useConfirmModalStore()
 
     const {
@@ -36,7 +42,13 @@ const useAccountCategoryActions = ({
         isPending: isDeletingAccountCategory,
     } = useDeleteById({ options: { onSuccess: onDeleteSuccess } })
 
-    const handleEdit = () => updateModal.onOpenChange(true)
+    const handleEdit = () => {
+        open('edit', {
+            id: accountCategory.id,
+            defaultValues: accountCategory,
+            extra: { onDeleteSuccess },
+        })
+    }
 
     const handleDelete = () => {
         onOpen({
@@ -49,7 +61,6 @@ const useAccountCategoryActions = ({
 
     return {
         accountCategory,
-        updateModal,
         isDeletingAccountCategory,
         handleEdit,
         handleDelete,
@@ -66,37 +77,11 @@ export const AccountCategoryAction = ({
     row,
     onDeleteSuccess,
 }: IAccountCategoryActionProps) => {
-    const {
-        accountCategory,
-        updateModal,
-        isDeletingAccountCategory,
-        handleEdit,
-        handleDelete,
-    } = useAccountCategoryActions({ row, onDeleteSuccess })
+    const { isDeletingAccountCategory, handleEdit, handleDelete } =
+        useAccountCategoryActions({ row, onDeleteSuccess })
 
     return (
         <>
-            <div onClick={(e) => e.stopPropagation()}>
-                <AccountCategoryFormModal
-                    {...updateModal}
-                    branchId={accountCategory.branch_id}
-                    className="!max-w-2xl"
-                    description="Update details for this account category."
-                    formProps={{
-                        accountCategoryId: accountCategory.id,
-                        defaultValues: { ...accountCategory },
-                        onSuccess: () => {
-                            toast.success(
-                                'Account category updated successfully'
-                            )
-                            updateModal.onOpenChange(false)
-                        },
-                    }}
-                    organizationId={accountCategory.organization_id}
-                    title="Edit Account Category"
-                    titleClassName="font-bold"
-                />
-            </div>
             <RowActionsGroup
                 canSelect
                 onDelete={{
@@ -109,7 +94,7 @@ export const AccountCategoryAction = ({
                     isAllowed: true,
                     onClick: handleEdit,
                 }}
-                otherActions={<>{/* Additional actions can be added here */}</>}
+                otherActions={<></>}
                 row={row}
             />
         </>
@@ -127,33 +112,11 @@ export const AccountCategoryRowContext = ({
     children,
     onDeleteSuccess,
 }: IAccountCategoryRowContextProps) => {
-    const {
-        accountCategory,
-        updateModal,
-        isDeletingAccountCategory,
-        handleEdit,
-        handleDelete,
-    } = useAccountCategoryActions({ row, onDeleteSuccess })
+    const { isDeletingAccountCategory, handleEdit, handleDelete } =
+        useAccountCategoryActions({ row, onDeleteSuccess })
 
     return (
         <>
-            <AccountCategoryFormModal
-                {...updateModal}
-                branchId={accountCategory.branch_id}
-                className="!max-w-2xl"
-                description="Update details for this account category."
-                formProps={{
-                    accountCategoryId: accountCategory.id,
-                    defaultValues: { ...accountCategory },
-                    onSuccess: () => {
-                        toast.success('Account category updated successfully')
-                        updateModal.onOpenChange(false)
-                    },
-                }}
-                organizationId={accountCategory.organization_id}
-                title="Edit Account Category"
-                titleClassName="font-bold"
-            />
             <DataTableRowContext
                 onDelete={{
                     text: 'Delete',
@@ -169,6 +132,36 @@ export const AccountCategoryRowContext = ({
             >
                 {children}
             </DataTableRowContext>
+        </>
+    )
+}
+
+export const AccountCategoryTableActionManager = () => {
+    const { state, close } = useTableRowActionStore<
+        IAccountCategory,
+        AccountCategoryActionType,
+        AccountCategoryActionExtra
+    >()
+
+    return (
+        <>
+            {state.action === 'edit' && state.defaultValues && (
+                <AccountCategoryFormModal
+                    branchId={state.defaultValues.branch_id}
+                    className="!max-w-2xl"
+                    description="Update details for this account category."
+                    formProps={{
+                        accountCategoryId: state.id,
+                        defaultValues: state.defaultValues,
+                        onSuccess: () => close(),
+                    }}
+                    onOpenChange={close}
+                    open={state.isOpen}
+                    organizationId={state.defaultValues.organization_id}
+                    title="Edit Account Category"
+                    titleClassName="font-bold"
+                />
+            )}
         </>
     )
 }

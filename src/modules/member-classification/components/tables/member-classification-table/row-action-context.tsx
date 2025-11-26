@@ -9,11 +9,14 @@ import { Row } from '@tanstack/react-table'
 
 import RowActionsGroup from '@/components/data-table/data-table-row-actions'
 import DataTableRowContext from '@/components/data-table/data-table-row-context'
-
-import { useModalState } from '@/hooks/use-modal-state'
+import { useTableRowActionStore } from '@/components/data-table/store/data-table-action-store'
 
 import { MemberClassificationCreateUpdateFormModal } from '../../member-classification-create-update-form'
 import { IMemberClassificationTableActionComponentProp } from './columns'
+
+export type MemberClassificationActionType = 'edit' | 'delete'
+
+export type MemberClassificationActionExtra = Record<string, never>
 
 interface UseMemberClassificationActionsProps {
     row: Row<IMemberClassification>
@@ -24,8 +27,12 @@ const useMemberClassificationActions = ({
     row,
     onDeleteSuccess,
 }: UseMemberClassificationActionsProps) => {
-    const updateModal = useModalState()
     const memberClassification = row.original
+    const { open } = useTableRowActionStore<
+        IMemberClassification,
+        MemberClassificationActionType,
+        MemberClassificationActionExtra
+    >()
 
     const { onOpen } = useConfirmModalStore()
 
@@ -38,7 +45,12 @@ const useMemberClassificationActions = ({
         },
     })
 
-    const handleEdit = () => updateModal.onOpenChange(true)
+    const handleEdit = () => {
+        open('edit', {
+            id: memberClassification.id,
+            defaultValues: memberClassification,
+        })
+    }
 
     const handleDelete = () => {
         onOpen({
@@ -52,7 +64,6 @@ const useMemberClassificationActions = ({
 
     return {
         memberClassification,
-        updateModal,
         isDeletingMemberClassification,
         handleEdit,
         handleDelete,
@@ -69,28 +80,12 @@ export const MemberClassificationAction = ({
     row,
     onDeleteSuccess,
 }: IMemberClassificationTableActionProps) => {
-    const {
-        memberClassification,
-        updateModal,
-        isDeletingMemberClassification,
-        handleEdit,
-        handleDelete,
-    } = useMemberClassificationActions({ row, onDeleteSuccess })
+    const { isDeletingMemberClassification, handleEdit, handleDelete } =
+        useMemberClassificationActions({ row, onDeleteSuccess })
 
     return (
         <>
-            <div onClick={(e) => e.stopPropagation()}>
-                <MemberClassificationCreateUpdateFormModal
-                    {...updateModal}
-                    description="Modify/Update the member classification..."
-                    formProps={{
-                        memberClassificationId: memberClassification.id,
-                        defaultValues: { ...memberClassification },
-                        onSuccess: () => updateModal.onOpenChange(false),
-                    }}
-                    title="Update Member Classification"
-                />
-            </div>
+            <div onClick={(e) => e.stopPropagation()}></div>
             <RowActionsGroup
                 canSelect
                 onDelete={{
@@ -121,26 +116,11 @@ export const MemberClassificationRowContext = ({
     children,
     onDeleteSuccess,
 }: IMemberClassificationRowContextProps) => {
-    const {
-        memberClassification,
-        updateModal,
-        isDeletingMemberClassification,
-        handleEdit,
-        handleDelete,
-    } = useMemberClassificationActions({ row, onDeleteSuccess })
+    const { isDeletingMemberClassification, handleEdit, handleDelete } =
+        useMemberClassificationActions({ row, onDeleteSuccess })
 
     return (
         <>
-            <MemberClassificationCreateUpdateFormModal
-                {...updateModal}
-                description="Modify/Update the member classification..."
-                formProps={{
-                    memberClassificationId: memberClassification.id,
-                    defaultValues: { ...memberClassification },
-                    onSuccess: () => updateModal.onOpenChange(false),
-                }}
-                title="Update Member Classification"
-            />
             <DataTableRowContext
                 onDelete={{
                     text: 'Delete',
@@ -156,6 +136,36 @@ export const MemberClassificationRowContext = ({
             >
                 {children}
             </DataTableRowContext>
+        </>
+    )
+}
+
+export const MemberClassificationTableActionManager = () => {
+    const { state, close } = useTableRowActionStore<
+        IMemberClassification,
+        MemberClassificationActionType,
+        MemberClassificationActionExtra
+    >()
+
+    if (!state || !state.defaultValues) return null
+
+    const memberClassification = state.defaultValues
+
+    return (
+        <>
+            {state.action === 'edit' && (
+                <MemberClassificationCreateUpdateFormModal
+                    description="Modify/Update the member classification..."
+                    formProps={{
+                        memberClassificationId: memberClassification.id,
+                        defaultValues: memberClassification,
+                        onSuccess: close,
+                    }}
+                    onOpenChange={close}
+                    open={true}
+                    title="Update Member Classification"
+                />
+            )}
         </>
     )
 }

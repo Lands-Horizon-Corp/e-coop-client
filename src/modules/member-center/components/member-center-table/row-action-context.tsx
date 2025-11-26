@@ -5,13 +5,16 @@ import { Row } from '@tanstack/react-table'
 
 import RowActionsGroup from '@/components/data-table/data-table-row-actions'
 import DataTableRowContext from '@/components/data-table/data-table-row-context'
-
-import { useModalState } from '@/hooks/use-modal-state'
+import { useTableRowActionStore } from '@/components/data-table/store/data-table-action-store'
 
 import { useDeleteById } from '../../member-center.service'
 import { IMemberCenter } from '../../member-center.types'
 import { MemberCenterCreateUpdateFormModal } from '../member-center-create-update-form'
 import { IMemberCenterTableActionComponentProp } from './columns'
+
+export type MemberCenterActionType = 'edit' | 'delete'
+
+export type MemberCenterActionExtra = Record<string, never>
 
 interface UseMemberCenterActionsProps {
     row: Row<IMemberCenter>
@@ -22,8 +25,12 @@ const useMemberCenterActions = ({
     row,
     onDeleteSuccess,
 }: UseMemberCenterActionsProps) => {
-    const updateModal = useModalState()
     const memberCenter = row.original
+    const { open } = useTableRowActionStore<
+        IMemberCenter,
+        MemberCenterActionType,
+        MemberCenterActionExtra
+    >()
 
     const { onOpen } = useConfirmModalStore()
 
@@ -34,7 +41,12 @@ const useMemberCenterActions = ({
             },
         })
 
-    const handleEdit = () => updateModal.onOpenChange(true)
+    const handleEdit = () => {
+        open('edit', {
+            id: memberCenter.id,
+            defaultValues: memberCenter,
+        })
+    }
 
     const handleDelete = () => {
         onOpen({
@@ -46,7 +58,6 @@ const useMemberCenterActions = ({
 
     return {
         memberCenter,
-        updateModal,
         isDeletingMemberCenter,
         handleEdit,
         handleDelete,
@@ -63,28 +74,12 @@ export const MemberCenterAction = ({
     row,
     onDeleteSuccess,
 }: IMemberCenterTableActionProps) => {
-    const {
-        memberCenter,
-        updateModal,
-        isDeletingMemberCenter,
-        handleEdit,
-        handleDelete,
-    } = useMemberCenterActions({ row, onDeleteSuccess })
+    const { isDeletingMemberCenter, handleEdit, handleDelete } =
+        useMemberCenterActions({ row, onDeleteSuccess })
 
     return (
         <>
-            <div onClick={(e) => e.stopPropagation()}>
-                <MemberCenterCreateUpdateFormModal
-                    {...updateModal}
-                    description="Modify/Update member center..."
-                    formProps={{
-                        memberCenterId: memberCenter.id,
-                        defaultValues: { ...memberCenter },
-                        onSuccess: () => updateModal.onOpenChange(false),
-                    }}
-                    title="Update Member Center"
-                />
-            </div>
+            <div onClick={(e) => e.stopPropagation()}></div>
             <RowActionsGroup
                 canSelect
                 onDelete={{
@@ -115,26 +110,11 @@ export const MemberCenterRowContext = ({
     children,
     onDeleteSuccess,
 }: IMemberCenterRowContextProps) => {
-    const {
-        memberCenter,
-        updateModal,
-        isDeletingMemberCenter,
-        handleEdit,
-        handleDelete,
-    } = useMemberCenterActions({ row, onDeleteSuccess })
+    const { isDeletingMemberCenter, handleEdit, handleDelete } =
+        useMemberCenterActions({ row, onDeleteSuccess })
 
     return (
         <>
-            <MemberCenterCreateUpdateFormModal
-                {...updateModal}
-                description="Modify/Update member center..."
-                formProps={{
-                    memberCenterId: memberCenter.id,
-                    defaultValues: { ...memberCenter },
-                    onSuccess: () => updateModal.onOpenChange(false),
-                }}
-                title="Update Member Center"
-            />
             <DataTableRowContext
                 onDelete={{
                     text: 'Delete',
@@ -150,6 +130,36 @@ export const MemberCenterRowContext = ({
             >
                 {children}
             </DataTableRowContext>
+        </>
+    )
+}
+
+export const MemberCenterTableActionManager = () => {
+    const { state, close } = useTableRowActionStore<
+        IMemberCenter,
+        MemberCenterActionType,
+        MemberCenterActionExtra
+    >()
+
+    if (!state || !state.defaultValues) return null
+
+    const memberCenter = state.defaultValues
+
+    return (
+        <>
+            {state.action === 'edit' && (
+                <MemberCenterCreateUpdateFormModal
+                    description="Modify/Update member center..."
+                    formProps={{
+                        memberCenterId: memberCenter.id,
+                        defaultValues: memberCenter,
+                        onSuccess: close,
+                    }}
+                    onOpenChange={close}
+                    open={true}
+                    title="Update Member Center"
+                />
+            )}
         </>
     )
 }

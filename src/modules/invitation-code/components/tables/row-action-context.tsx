@@ -14,14 +14,17 @@ import { Row } from '@tanstack/react-table'
 import CopyURL from '@/components/copy-url'
 import RowActionsGroup from '@/components/data-table/data-table-row-actions'
 import DataTableRowContext from '@/components/data-table/data-table-row-context'
+import { useTableRowActionStore } from '@/components/data-table/store/data-table-action-store'
 import { KeySharpIcon, LinkIcon, QrCodeIcon } from '@/components/icons'
 import { QrCodeDownloadable } from '@/components/qr-code'
 import { ContextMenuItem } from '@/components/ui/context-menu'
 import { DropdownMenuItem } from '@/components/ui/dropdown-menu'
 
-import { useModalState } from '@/hooks/use-modal-state'
-
 import { IInvitationTableActionComponentProp } from './columns'
+
+export type InvitationCodeActionType = 'edit'
+
+export type InvitationCodeActionExtra = Record<string, never>
 
 interface UseInvitationCodeActionsProps {
     row: Row<IInvitationCode>
@@ -32,8 +35,12 @@ const useInvitationCodeActions = ({
     row,
     onDeleteSuccess,
 }: UseInvitationCodeActionsProps) => {
-    const updateModal = useModalState()
     const invitationCode = row.original
+    const { open } = useTableRowActionStore<
+        IInvitationCode,
+        InvitationCodeActionType,
+        InvitationCodeActionExtra
+    >()
 
     const { onOpen } = useConfirmModalStore()
     const { onOpen: openInfoModal } = useInfoModalStore()
@@ -53,7 +60,12 @@ const useInvitationCodeActions = ({
     const selfUrl = window.location.origin
     const invitationUrl = `${selfUrl}/onboarding/organization?invitation_code=${invitationCode.code}`
 
-    const handleEdit = () => updateModal.onOpenChange(true)
+    const handleEdit = () => {
+        open('edit', {
+            id: invitationCode.id,
+            defaultValues: invitationCode,
+        })
+    }
 
     const handleDelete = () => {
         onOpen({
@@ -109,7 +121,6 @@ const useInvitationCodeActions = ({
 
     return {
         invitationCode,
-        updateModal,
         isDeletingInvitationCode,
         invitationUrl,
         handleEdit,
@@ -131,8 +142,6 @@ export const InvitationCodeAction = ({
     onDeleteSuccess,
 }: IInvitationCodeTableActionProps) => {
     const {
-        invitationCode,
-        updateModal,
         isDeletingInvitationCode,
         handleEdit,
         handleDelete,
@@ -143,22 +152,7 @@ export const InvitationCodeAction = ({
 
     return (
         <>
-            <div onClick={(e) => e.stopPropagation()}>
-                <InvitationCodeCreateUpdateFormModal
-                    {...updateModal}
-                    description="Update details for this invitation code."
-                    formProps={{
-                        invitationCodeId: invitationCode.id,
-                        defaultValues: invitationCode,
-                        onSuccess: () => {
-                            onDeleteSuccess?.()
-                            updateModal.onOpenChange(false)
-                        },
-                    }}
-                    title="Edit Invitation Code"
-                    titleClassName="font-bold"
-                />
-            </div>
+            <div onClick={(e) => e.stopPropagation()}></div>
             <RowActionsGroup
                 canSelect
                 onDelete={{
@@ -205,8 +199,6 @@ export const InvitationCodeRowContext = ({
     onDeleteSuccess,
 }: IInvitationCodeRowContextProps) => {
     const {
-        invitationCode,
-        updateModal,
         isDeletingInvitationCode,
         handleEdit,
         handleDelete,
@@ -217,20 +209,6 @@ export const InvitationCodeRowContext = ({
 
     return (
         <>
-            <InvitationCodeCreateUpdateFormModal
-                {...updateModal}
-                description="Update details for this invitation code."
-                formProps={{
-                    invitationCodeId: invitationCode.id,
-                    defaultValues: invitationCode,
-                    onSuccess: () => {
-                        onDeleteSuccess?.()
-                        updateModal.onOpenChange(false)
-                    },
-                }}
-                title="Edit Invitation Code"
-                titleClassName="font-bold"
-            />
             <DataTableRowContext
                 onDelete={{
                     text: 'Delete Invitation Code',
@@ -262,6 +240,37 @@ export const InvitationCodeRowContext = ({
             >
                 {children}
             </DataTableRowContext>
+        </>
+    )
+}
+
+export const InvitationCodeTableActionManager = () => {
+    const { state, close } = useTableRowActionStore<
+        IInvitationCode,
+        InvitationCodeActionType,
+        InvitationCodeActionExtra
+    >()
+
+    if (!state || !state.defaultValues) return null
+
+    const invitationCode = state.defaultValues
+
+    return (
+        <>
+            {state.action === 'edit' && (
+                <InvitationCodeCreateUpdateFormModal
+                    description="Update details for this invitation code."
+                    formProps={{
+                        invitationCodeId: invitationCode.id,
+                        defaultValues: invitationCode,
+                        onSuccess: close,
+                    }}
+                    onOpenChange={close}
+                    open={true}
+                    title="Edit Invitation Code"
+                    titleClassName="font-bold"
+                />
+            )}
         </>
     )
 }

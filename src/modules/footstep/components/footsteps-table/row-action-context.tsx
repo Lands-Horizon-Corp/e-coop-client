@@ -4,16 +4,19 @@ import { Row } from '@tanstack/react-table'
 
 import RowActionsGroup from '@/components/data-table/data-table-row-actions'
 import DataTableRowContext from '@/components/data-table/data-table-row-context'
+import { useTableRowActionStore } from '@/components/data-table/store/data-table-action-store'
 import { EyeIcon } from '@/components/icons'
 import { ContextMenuItem } from '@/components/ui/context-menu'
 import { DropdownMenuItem } from '@/components/ui/dropdown-menu'
 import { Sheet, SheetContent } from '@/components/ui/sheet'
 
-import { useModalState } from '@/hooks/use-modal-state'
-
 import { IFootstep } from '../../footstep.types'
 import FootstepDetail from '../footstep-detail'
 import { IFootstepTableActionComponentProp } from './columns'
+
+export type FootstepActionType = 'view-footstep'
+
+export type FootstepActionExtra = Record<string, never>
 
 interface UseFootstepActionsProps {
     row: Row<IFootstep>
@@ -22,13 +25,21 @@ interface UseFootstepActionsProps {
 
 const useFootstepActions = ({ row }: UseFootstepActionsProps) => {
     const footstep = row.original
-    const footstepModal = useModalState()
+    const { open } = useTableRowActionStore<
+        IFootstep,
+        FootstepActionType,
+        FootstepActionExtra
+    >()
 
-    const handleViewFootstep = () => footstepModal.onOpenChange(true)
+    const handleViewFootstep = () => {
+        open('view-footstep', {
+            id: footstep.id,
+            defaultValues: footstep,
+        })
+    }
 
     return {
         footstep,
-        footstepModal,
         handleViewFootstep,
     }
 }
@@ -41,25 +52,14 @@ export const FootstepAction = ({
     row,
     onDeleteSuccess,
 }: IFootstepTableActionProps) => {
-    const { footstep, footstepModal, handleViewFootstep } = useFootstepActions({
+    const { handleViewFootstep } = useFootstepActions({
         row,
         onDeleteSuccess,
     })
 
     return (
         <>
-            <div onClick={(e) => e.stopPropagation()}>
-                <Sheet {...footstepModal}>
-                    <SheetContent
-                        className="!max-w-lg bg-transparent p-2 focus:outline-none border-none"
-                        side="right"
-                    >
-                        <div className="rounded-xl bg-popover p-6 ecoop-scroll relative h-full overflow-y-auto">
-                            <FootstepDetail footstep={footstep} />
-                        </div>
-                    </SheetContent>
-                </Sheet>
-            </div>
+            <div onClick={(e) => e.stopPropagation()}></div>
             <RowActionsGroup
                 canSelect
                 otherActions={
@@ -86,23 +86,13 @@ export const FootstepRowContext = ({
     children,
     onDeleteSuccess,
 }: IFootstepRowContextProps) => {
-    const { footstep, footstepModal, handleViewFootstep } = useFootstepActions({
+    const { handleViewFootstep } = useFootstepActions({
         row,
         onDeleteSuccess,
     })
 
     return (
         <>
-            <Sheet {...footstepModal}>
-                <SheetContent
-                    className="!max-w-lg bg-transparent p-2 focus:outline-none border-none"
-                    side="right"
-                >
-                    <div className="rounded-xl bg-popover p-6 ecoop-scroll relative h-full overflow-y-auto">
-                        <FootstepDetail footstep={footstep} />
-                    </div>
-                </SheetContent>
-            </Sheet>
             <DataTableRowContext
                 otherActions={
                     <>
@@ -116,6 +106,35 @@ export const FootstepRowContext = ({
             >
                 {children}
             </DataTableRowContext>
+        </>
+    )
+}
+
+export const FootstepTableActionManager = () => {
+    const { state, close } = useTableRowActionStore<
+        IFootstep,
+        FootstepActionType,
+        FootstepActionExtra
+    >()
+
+    if (!state || !state.defaultValues) return null
+
+    const footstep = state.defaultValues
+
+    return (
+        <>
+            {state.action === 'view-footstep' && (
+                <Sheet onOpenChange={close} open={true}>
+                    <SheetContent
+                        className="!max-w-lg bg-transparent p-2 focus:outline-none border-none"
+                        side="right"
+                    >
+                        <div className="rounded-xl bg-popover p-6 ecoop-scroll relative h-full overflow-y-auto">
+                            <FootstepDetail footstep={footstep} />
+                        </div>
+                    </SheetContent>
+                </Sheet>
+            )}
         </>
     )
 }

@@ -1,4 +1,3 @@
-// src/modules/adjustment-entry/components/AdjustmentEntryActions.tsx
 import { ReactNode } from 'react'
 
 import { withToastCallbacks } from '@/helpers/callback-helper'
@@ -7,12 +6,17 @@ import { Row } from '@tanstack/react-table'
 
 import RowActionsGroup from '@/components/data-table/data-table-row-actions'
 import DataTableRowContext from '@/components/data-table/data-table-row-context'
-
-import { useModalState } from '@/hooks/use-modal-state'
+import { useTableRowActionStore } from '@/components/data-table/store/data-table-action-store'
 
 import { useDeleteAdjustmentEntryById } from '../..'
 import { IAdjustmentEntry } from '../../adjustment-entry.types'
 import { IAdjustmentEntryTableActionComponentProp } from './columns'
+
+export type AdjustmentEntryActionType = 'edit' | 'delete'
+
+export interface AdjustmentEntryActionExtra {
+    onDeleteSuccess?: () => void
+}
 
 interface UseAdjustmentEntryActionsProps {
     row: Row<IAdjustmentEntry>
@@ -23,9 +27,12 @@ const useAdjustmentEntryActions = ({
     row,
     onDeleteSuccess,
 }: UseAdjustmentEntryActionsProps) => {
-    const updateModal = useModalState()
     const adjustmentEntry = row.original
-
+    const { open } = useTableRowActionStore<
+        IAdjustmentEntry,
+        AdjustmentEntryActionType,
+        AdjustmentEntryActionExtra
+    >()
     const { onOpen } = useConfirmModalStore()
 
     const { isPending: isDeletingEntry, mutate: deleteEntry } =
@@ -38,7 +45,13 @@ const useAdjustmentEntryActions = ({
             },
         })
 
-    const handleEdit = () => updateModal.onOpenChange(true)
+    const handleEdit = () => {
+        open('edit', {
+            id: adjustmentEntry.id,
+            defaultValues: adjustmentEntry,
+            extra: { onDeleteSuccess },
+        })
+    }
 
     const handleDelete = () => {
         onOpen({
@@ -51,7 +64,6 @@ const useAdjustmentEntryActions = ({
 
     return {
         adjustmentEntry,
-        updateModal,
         isDeletingEntry,
         handleEdit,
         handleDelete,
@@ -118,4 +130,14 @@ export const AdjustmentEntryRowContext = ({
             </DataTableRowContext>
         </>
     )
+}
+
+export const AdjustmentEntryTableActionManager = () => {
+    const { state } = useTableRowActionStore<
+        IAdjustmentEntry,
+        AdjustmentEntryActionType,
+        AdjustmentEntryActionExtra
+    >()
+
+    return <>{state.action === 'edit' && state.defaultValues && <></>}</>
 }

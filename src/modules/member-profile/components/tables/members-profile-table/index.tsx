@@ -16,9 +16,12 @@ import DataTablePagination from '@/components/data-table/data-table-pagination'
 import DataTableToolbar, {
     IDataTableToolbarProps,
 } from '@/components/data-table/data-table-toolbar'
+import { TableRowActionStoreProvider } from '@/components/data-table/store/data-table-action-store'
 import { TableProps } from '@/components/data-table/table.type'
 import { useDataTableSorting } from '@/components/data-table/use-datatable-sorting'
-import useDataTableState from '@/components/data-table/use-datatable-state'
+import useDataTableState, {
+    useResolvedColumnOrder,
+} from '@/components/data-table/use-datatable-state'
 
 import useDatableFilterState from '@/hooks/use-filter-state'
 import { usePagination } from '@/hooks/use-pagination'
@@ -34,6 +37,7 @@ import membersColumns, {
 } from './columns'
 import MemberProfileAction, {
     MemberProfileRowContext,
+    MemberProfileTableActionManager,
 } from './row-action-context'
 
 // import { MemberProfileRowContext } from './row-action-context'
@@ -54,6 +58,7 @@ export interface MemberProfileTableProps
 }
 
 const MemberProfileTable = ({
+    persistKey = ['member-profile'],
     className,
     toolbarProps,
     defaultFilter,
@@ -78,6 +83,12 @@ const MemberProfileTable = ({
         [actionComponent]
     )
 
+    const { resolvedColumnOrder, resolvedColumnVisibility, finalKeys } =
+        useResolvedColumnOrder({
+            columns,
+            persistKey,
+        })
+
     const {
         getRowIdFn,
         columnOrder,
@@ -89,11 +100,13 @@ const MemberProfileTable = ({
         rowSelectionState,
         createHandleRowSelectionChange,
     } = useDataTableState<IMemberProfile>({
+        key: finalKeys,
         defaultColumnVisibility: {
             isEmailVerified: false,
             isContactVerified: false,
+            ...resolvedColumnVisibility,
         },
-        defaultColumnOrder: columns.map((c) => c.id!),
+        defaultColumnOrder: resolvedColumnOrder,
         onSelectData,
     })
 
@@ -159,61 +172,64 @@ const MemberProfileTable = ({
         { skipNull: true }
     )
     return (
-        <FilterContext.Provider value={filterState}>
-            <div
-                className={cn(
-                    'flex h-full flex-col gap-y-2',
-                    className,
-                    !isScrollable && 'h-fit !max-h-none'
-                )}
-            >
-                <DataTableToolbar
-                    deleteActionProps={{
-                        onDeleteSuccess: () =>
-                            queryClient.invalidateQueries({
-                                queryKey: ['member-profile', 'paginated'],
-                            }),
-                        onDelete: (selectedData) =>
-                            deleteManyMemberProfiles({
-                                ids: selectedData.map((data) => data.id),
-                            }),
-                    }}
-                    exportActionProps={{
-                        isLoading: isPending,
-                        filters: exportfilter,
-                        model: 'MemberProfile',
-                        url: 'api/v1/member-profile/search',
-                    }}
-                    filterLogicProps={{
-                        filterLogic: filterState.filterLogic,
-                        setFilterLogic: filterState.setFilterLogic,
-                    }}
-                    globalSearchProps={{
-                        defaultMode: 'equal',
-                        targets: memberGlobalSearchTargets,
-                    }}
-                    refreshActionProps={{
-                        onClick: () => refetch(),
-                        isLoading: isPending || isRefetching,
-                    }}
-                    scrollableProps={{ isScrollable, setIsScrollable }}
-                    table={table}
-                    {...toolbarProps}
-                />
-                <DataTable
-                    className={cn('mb-2', isScrollable && 'flex-1')}
-                    isScrollable={isScrollable}
-                    isStickyFooter
-                    isStickyHeader
-                    onDoubleClick={onDoubleClick}
-                    onRowClick={onRowClick}
-                    RowContextComponent={RowContextComponent}
-                    setColumnOrder={setColumnOrder}
-                    table={table}
-                />
-                <DataTablePagination table={table} totalSize={totalSize} />
-            </div>
-        </FilterContext.Provider>
+        <TableRowActionStoreProvider<IMemberProfile>>
+            <FilterContext.Provider value={filterState}>
+                <div
+                    className={cn(
+                        'flex h-full flex-col gap-y-2',
+                        className,
+                        !isScrollable && 'h-fit !max-h-none'
+                    )}
+                >
+                    <DataTableToolbar
+                        deleteActionProps={{
+                            onDeleteSuccess: () =>
+                                queryClient.invalidateQueries({
+                                    queryKey: ['member-profile', 'paginated'],
+                                }),
+                            onDelete: (selectedData) =>
+                                deleteManyMemberProfiles({
+                                    ids: selectedData.map((data) => data.id),
+                                }),
+                        }}
+                        exportActionProps={{
+                            isLoading: isPending,
+                            filters: exportfilter,
+                            model: 'MemberProfile',
+                            url: 'api/v1/member-profile/search',
+                        }}
+                        filterLogicProps={{
+                            filterLogic: filterState.filterLogic,
+                            setFilterLogic: filterState.setFilterLogic,
+                        }}
+                        globalSearchProps={{
+                            defaultMode: 'equal',
+                            targets: memberGlobalSearchTargets,
+                        }}
+                        refreshActionProps={{
+                            onClick: () => refetch(),
+                            isLoading: isPending || isRefetching,
+                        }}
+                        scrollableProps={{ isScrollable, setIsScrollable }}
+                        table={table}
+                        {...toolbarProps}
+                    />
+                    <DataTable
+                        className={cn('mb-2', isScrollable && 'flex-1')}
+                        isScrollable={isScrollable}
+                        isStickyFooter
+                        isStickyHeader
+                        onDoubleClick={onDoubleClick}
+                        onRowClick={onRowClick}
+                        RowContextComponent={RowContextComponent}
+                        setColumnOrder={setColumnOrder}
+                        table={table}
+                    />
+                    <DataTablePagination table={table} totalSize={totalSize} />
+                </div>
+                <MemberProfileTableActionManager />
+            </FilterContext.Provider>
+        </TableRowActionStoreProvider>
     )
 }
 

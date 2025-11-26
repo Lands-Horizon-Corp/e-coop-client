@@ -151,7 +151,7 @@ export const useUserProfileInactivity = ({
                 if (
                     lastActivity &&
                     calculateLastActivityFromNow(now, lastActivity) >=
-                    activityGracePeriod
+                        activityGracePeriod
                 ) {
                     // console.log('INACTIVE', {
                     //     lastActivity,
@@ -259,7 +259,7 @@ export const useUserProfileInactivity = ({
                 if (
                     !lastSavedActivityRef.current ||
                     timestamp - lastSavedActivityRef.current >=
-                    ACTIVITY_DEBOUNCE_TIME
+                        ACTIVITY_DEBOUNCE_TIME
                 ) {
                     lastSavedActivityRef.current = timestamp
                     saveActivityToLocalStorage(timestamp)

@@ -1,4 +1,4 @@
-import { ReactNode, useState } from 'react'
+import { ReactNode } from 'react'
 
 import { useAuthUser } from '@/modules/authentication/authgentication.store'
 import DisbursementTransactionTable from '@/modules/disbursement-transaction/components/disbursement-transaction-table'
@@ -9,6 +9,7 @@ import { Row } from '@tanstack/react-table'
 
 import RowActionsGroup from '@/components/data-table/data-table-row-actions'
 import DataTableRowContext from '@/components/data-table/data-table-row-context'
+import { useTableRowActionStore } from '@/components/data-table/store/data-table-action-store'
 import {
     BillIcon,
     BookOpenIcon,
@@ -42,8 +43,6 @@ import {
     DropdownMenuSubTrigger,
 } from '@/components/ui/dropdown-menu'
 
-import { useModalState } from '@/hooks/use-modal-state'
-
 import {
     useDeleteTransactionBatchById,
     useTransactionBatchAcceptBlotterView,
@@ -51,9 +50,18 @@ import {
 import { ITransactionBatch } from '../../transaction-batch.types'
 import { TransactionBatchHistoriesModal } from '../transaction-batch/transaction-batch-histories'
 import { BatchBlotterQuickViewModal } from '../transaction-batch/transaction-batch-quick-view'
-// import DisbursementTransactionTable from '../disbursement-transaction-table'
-// import GeneralLedgerTable from '../ledgers-tables/general-ledger-table'
 import { ITransactionBatchTableActionComponentProp } from './columns'
+
+export type TransactionBatchActionType =
+    | 'delete'
+    | 'view-disbursements'
+    | 'view-ledger'
+    | 'view-history'
+    | 'quick-view'
+
+export interface TransactionBatchActionExtra {
+    entryType?: TEntryType
+}
 
 interface UseTransactionBatchActionsProps {
     row: Row<ITransactionBatch>
@@ -65,14 +73,12 @@ const useTransactionBatchActions = ({
     onDeleteSuccess,
 }: UseTransactionBatchActionsProps) => {
     const batch = row.original
+    const { open } = useTableRowActionStore<
+        ITransactionBatch,
+        TransactionBatchActionType,
+        TransactionBatchActionExtra
+    >()
     const { onOpen } = useConfirmModalStore()
-
-    const quickViewModal = useModalState()
-    const viewHistoryModal = useModalState()
-    const disbursementTransactionsModal = useModalState()
-    const ledgerTableModal = useModalState()
-
-    const [selectedEntryType, setSelectedEntryType] = useState<TEntryType>('')
 
     const {
         currentAuth: { user },
@@ -108,12 +114,36 @@ const useTransactionBatchActions = ({
     }
 
     const openLedgerModal = (entryType: TEntryType) => {
-        setSelectedEntryType(entryType)
-        ledgerTableModal.onOpenChange(true)
+        open('view-ledger', {
+            id: batch.id,
+            defaultValues: batch,
+            extra: { entryType },
+        })
     }
 
-    const getModalTitle = () => {
-        if (!selectedEntryType) return 'General Ledger'
+    const handleQuickView = () => {
+        open('quick-view', {
+            id: batch.id,
+            defaultValues: batch,
+        })
+    }
+
+    const handleViewHistory = () => {
+        open('view-history', {
+            id: batch.id,
+            defaultValues: batch,
+        })
+    }
+
+    const handleViewDisbursements = () => {
+        open('view-disbursements', {
+            id: batch.id,
+            defaultValues: batch,
+        })
+    }
+
+    const getModalTitle = (entryType?: TEntryType) => {
+        if (!entryType) return 'General Ledger'
 
         const entryTypeNames: Record<TEntryType, string> = {
             '': 'General Ledger',
@@ -129,22 +159,20 @@ const useTransactionBatchActions = ({
             'check-voucher': 'Check Voucher',
         }
 
-        return entryTypeNames[selectedEntryType] || 'General Ledger'
+        return entryTypeNames[entryType] || 'General Ledger'
     }
 
     return {
         batch,
         user,
-        quickViewModal,
-        viewHistoryModal,
-        disbursementTransactionsModal,
-        ledgerTableModal,
-        selectedEntryType,
         isDeletingBatch,
         isAproving,
         handleDelete,
         handleApproveView,
         openLedgerModal,
+        handleQuickView,
+        handleViewHistory,
+        handleViewDisbursements,
         getModalTitle,
     }
 }
@@ -162,60 +190,19 @@ export const TransactionBatchAction = ({
     const {
         batch,
         user,
-        quickViewModal,
-        viewHistoryModal,
-        disbursementTransactionsModal,
-        ledgerTableModal,
-        selectedEntryType,
         isDeletingBatch,
         isAproving,
         handleDelete,
         handleApproveView,
         openLedgerModal,
-        getModalTitle,
+        handleQuickView,
+        handleViewHistory,
+        handleViewDisbursements,
     } = useTransactionBatchActions({ row, onDeleteSuccess })
 
     return (
         <>
-            <div onClick={(e) => e.stopPropagation()}>
-                <Modal
-                    className="!max-w-[95vw]"
-                    title="Disbursement Transactions"
-                    {...disbursementTransactionsModal}
-                    description={`You are viewing ${batch.batch_name || 'unknown'}'s disbursement transactions`}
-                >
-                    <DisbursementTransactionTable
-                        className="min-h-[90vh] min-w-0 max-h-[90vh]"
-                        mode="transaction-batch"
-                        transactionBatchId={batch.id}
-                    />
-                </Modal>
-                <Modal
-                    {...ledgerTableModal}
-                    className="!max-w-[95vw]"
-                    title={getModalTitle()}
-                >
-                    <GeneralLedgerTable
-                        className="min-h-[90vh] min-w-0 max-h-[90vh]"
-                        entryType={selectedEntryType}
-                        mode="transaction-batch"
-                        transactionBatchId={batch.id}
-                    />
-                </Modal>
-
-                <TransactionBatchHistoriesModal
-                    {...viewHistoryModal}
-                    transactionBatchHistoryProps={{
-                        transactionBatchId: batch.id,
-                    }}
-                />
-                <BatchBlotterQuickViewModal
-                    {...quickViewModal}
-                    batchBlotterProps={{
-                        transBatch: batch,
-                    }}
-                />
-            </div>
+            <div onClick={(e) => e.stopPropagation()}></div>
             <RowActionsGroup
                 canSelect
                 onDelete={{
@@ -230,28 +217,22 @@ export const TransactionBatchAction = ({
                                 user?.id === batch.employee_user_id &&
                                 batch.can_view === false
                             }
-                            onClick={() => quickViewModal.onOpenChange(true)}
+                            onClick={handleQuickView}
                         >
                             <EyeIcon className="mr-2" strokeWidth={1.5} />
                             View Quick Summary
                         </DropdownMenuItem>
-                        <DropdownMenuItem
-                            onClick={() => viewHistoryModal.onOpenChange(true)}
-                        >
+                        <DropdownMenuItem onClick={handleViewHistory}>
                             <ClockIcon className="mr-2" strokeWidth={1.5} />
                             View Histories
                         </DropdownMenuItem>
 
-                        <DropdownMenuItem
-                            onClick={() =>
-                                disbursementTransactionsModal.onOpenChange(true)
-                            }
-                        >
+                        <DropdownMenuItem onClick={handleViewDisbursements}>
                             <HandDropCoinsIcon
                                 className="mr-2"
                                 strokeWidth={1.5}
                             />
-                            Disbursement Transactions
+                            View Disbursements
                         </DropdownMenuItem>
 
                         <DropdownMenuSub>
@@ -429,58 +410,18 @@ export const TransactionBatchRowContext = ({
     const {
         batch,
         user,
-        quickViewModal,
-        viewHistoryModal,
-        disbursementTransactionsModal,
-        ledgerTableModal,
-        selectedEntryType,
         isDeletingBatch,
         isAproving,
         handleDelete,
         handleApproveView,
         openLedgerModal,
-        getModalTitle,
+        handleQuickView,
+        handleViewHistory,
+        handleViewDisbursements,
     } = useTransactionBatchActions({ row, onDeleteSuccess })
 
     return (
         <>
-            <Modal
-                className="!max-w-[95vw]"
-                title="Disbursement Transactions"
-                {...disbursementTransactionsModal}
-                description={`You are viewing ${batch.batch_name || 'unknown'}'s disbursement transactions`}
-            >
-                <DisbursementTransactionTable
-                    className="min-h-[90vh] min-w-0 max-h-[90vh]"
-                    mode="transaction-batch"
-                    transactionBatchId={batch.id}
-                />
-            </Modal>
-            <Modal
-                {...ledgerTableModal}
-                className="!max-w-[95vw]"
-                title={getModalTitle()}
-            >
-                <GeneralLedgerTable
-                    className="min-h-[90vh] min-w-0 max-h-[90vh]"
-                    entryType={selectedEntryType}
-                    mode="transaction-batch"
-                    transactionBatchId={batch.id}
-                />
-            </Modal>
-
-            <TransactionBatchHistoriesModal
-                {...viewHistoryModal}
-                transactionBatchHistoryProps={{
-                    transactionBatchId: batch.id,
-                }}
-            />
-            <BatchBlotterQuickViewModal
-                {...quickViewModal}
-                batchBlotterProps={{
-                    transBatch: batch,
-                }}
-            />
             <DataTableRowContext
                 onDelete={{
                     text: 'Delete',
@@ -494,23 +435,17 @@ export const TransactionBatchRowContext = ({
                                 user?.id === batch.employee_user_id &&
                                 batch.can_view === false
                             }
-                            onClick={() => quickViewModal.onOpenChange(true)}
+                            onClick={handleQuickView}
                         >
                             <EyeIcon className="mr-2" strokeWidth={1.5} />
                             View Quick Summary
                         </ContextMenuItem>
-                        <ContextMenuItem
-                            onClick={() => viewHistoryModal.onOpenChange(true)}
-                        >
+                        <ContextMenuItem onClick={handleViewHistory}>
                             <ClockIcon className="mr-2" strokeWidth={1.5} />
                             View Histories
                         </ContextMenuItem>
 
-                        <ContextMenuItem
-                            onClick={() =>
-                                disbursementTransactionsModal.onOpenChange(true)
-                            }
-                        >
+                        <ContextMenuItem onClick={handleViewDisbursements}>
                             <HandDropCoinsIcon
                                 className="mr-2"
                                 strokeWidth={1.5}
@@ -677,6 +612,92 @@ export const TransactionBatchRowContext = ({
             >
                 {children}
             </DataTableRowContext>
+        </>
+    )
+}
+
+export const TransactionBatchTableActionManager = () => {
+    const { state, close } = useTableRowActionStore<
+        ITransactionBatch,
+        TransactionBatchActionType,
+        TransactionBatchActionExtra
+    >()
+
+    if (!state || !state.defaultValues) return null
+
+    const batch = state.defaultValues
+    const entryType = state.extra?.entryType || ''
+
+    const getModalTitle = (entryType?: TEntryType) => {
+        if (!entryType) return 'General Ledger'
+
+        const entryTypeNames: Record<TEntryType, string> = {
+            '': 'General Ledger',
+            'check-entry': 'Check Entry',
+            'online-entry': 'Online Entry',
+            'cash-entry': 'Cash Entry',
+            'payment-entry': 'Payment Entry',
+            'withdraw-entry': 'Withdraw Entry',
+            'deposit-entry': 'Deposit Entry',
+            'journal-entry': 'Journal Entry',
+            'adjustment-entry': 'Adjustment Entry',
+            'journal-voucher': 'Journal Voucher',
+            'check-voucher': 'Check Voucher',
+        }
+
+        return entryTypeNames[entryType] || 'General Ledger'
+    }
+
+    return (
+        <>
+            {state.action === 'view-disbursements' && (
+                <Modal
+                    className="!max-w-[95vw]"
+                    description={`You are viewing ${batch.batch_name || 'unknown'}'s disbursement transactions`}
+                    onOpenChange={close}
+                    open={true}
+                    title="Disbursement Transactions"
+                >
+                    <DisbursementTransactionTable
+                        className="min-h-[90vh] min-w-0 max-h-[90vh]"
+                        mode="transaction-batch"
+                        transactionBatchId={batch.id}
+                    />
+                </Modal>
+            )}
+            {state.action === 'view-ledger' && (
+                <Modal
+                    className="!max-w-[95vw]"
+                    onOpenChange={close}
+                    open={true}
+                    title={getModalTitle(entryType)}
+                >
+                    <GeneralLedgerTable
+                        className="min-h-[90vh] min-w-0 max-h-[90vh]"
+                        entryType={entryType}
+                        mode="transaction-batch"
+                        transactionBatchId={batch.id}
+                    />
+                </Modal>
+            )}
+            {state.action === 'view-history' && (
+                <TransactionBatchHistoriesModal
+                    onOpenChange={close}
+                    open={true}
+                    transactionBatchHistoryProps={{
+                        transactionBatchId: batch.id,
+                    }}
+                />
+            )}
+            {state.action === 'quick-view' && (
+                <BatchBlotterQuickViewModal
+                    batchBlotterProps={{
+                        transBatch: batch,
+                    }}
+                    onOpenChange={close}
+                    open={true}
+                />
+            )}
         </>
     )
 }

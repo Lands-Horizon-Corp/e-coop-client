@@ -1,4 +1,4 @@
-import { ReactNode, useState } from 'react'
+import { ReactNode } from 'react'
 
 import { toast } from 'sonner'
 
@@ -9,10 +9,12 @@ import {
 } from '@/modules/account'
 import { TEntryType } from '@/modules/general-ledger'
 import GeneralLedgerTable from '@/modules/general-ledger/components/tables/general-ledger-table'
+import useConfirmModalStore from '@/store/confirm-modal-store'
 import { Row } from '@tanstack/react-table'
 
 import RowActionsGroup from '@/components/data-table/data-table-row-actions'
 import DataTableRowContext from '@/components/data-table/data-table-row-context'
+import { useTableRowActionStore } from '@/components/data-table/store/data-table-action-store'
 import {
     BillIcon,
     BookOpenIcon,
@@ -38,10 +40,14 @@ import {
     DropdownMenuSubTrigger,
 } from '@/components/ui/dropdown-menu'
 
-import { useModalState } from '@/hooks/use-modal-state'
-
-import { ActionNameConfirmModal } from '../../../../components/modals/ action-name-confirm-modal'
 import { IAccountsTableActionComponentProp } from './columns'
+
+export type AccountActionType = 'edit' | 'delete' | 'view-ledger'
+
+export interface AccountActionExtra {
+    onDeleteSuccess?: () => void
+    entryType?: TEntryType
+}
 
 interface UseAccountActionsProps {
     row: Row<IAccount>
@@ -52,73 +58,54 @@ const useAccountActions = ({
     row,
     onDeleteSuccess,
 }: UseAccountActionsProps) => {
-    const updateModal = useModalState()
-    const confirmModal = useModalState()
-    const [mode, setMode] = useState<'delete' | 'update'>('delete')
     const account = row.original
-
-    const ledgerTableModal = useModalState()
-    const [selectedEntryType, setSelectedEntryType] = useState<TEntryType>('')
+    const { open } = useTableRowActionStore<
+        IAccount,
+        AccountActionType,
+        AccountActionExtra
+    >()
+    const { onOpen } = useConfirmModalStore()
 
     const { isPending: isDeletingAccount, mutate: deleteAccount } =
         useDeleteById({
             options: {
                 onSuccess: () => {
                     onDeleteSuccess?.()
-                    ledgerTableModal.onOpenChange(false)
-                    updateModal.onOpenChange(false)
                     toast.success(`Account deleted successfully`)
                 },
             },
         })
 
     const handleEdit = () => {
-        setMode('update')
-        confirmModal.onOpenChange(true)
+        open('edit', {
+            id: account.id,
+            defaultValues: account,
+            extra: { onDeleteSuccess },
+        })
     }
+
     const handleDelete = () => {
-        confirmModal.onOpenChange(true)
-        setMode('delete')
+        onOpen({
+            title: 'Delete Account',
+            description: `Are you sure you want to delete account "${account.name}"?`,
+            onConfirm: () => deleteAccount(account.id),
+        })
     }
 
     const openLedgerModal = (entryType: TEntryType) => {
-        setSelectedEntryType(entryType)
-        ledgerTableModal.onOpenChange(true)
-    }
-
-    const getModalTitle = () => {
-        if (!selectedEntryType) return 'General Ledger'
-
-        const entryTypeNames: Record<TEntryType, string> = {
-            '': 'General Ledger',
-            'check-entry': 'Check Entry',
-            'online-entry': 'Online Entry',
-            'cash-entry': 'Cash Entry',
-            'payment-entry': 'Payment Entry',
-            'withdraw-entry': 'Withdraw Entry',
-            'deposit-entry': 'Deposit Entry',
-            'journal-entry': 'Journal Entry',
-            'adjustment-entry': 'Adjustment Entry',
-            'journal-voucher': 'Journal Voucher',
-            'check-voucher': 'Check Voucher',
-        }
-
-        return entryTypeNames[selectedEntryType] || 'General Ledger'
+        open('view-ledger', {
+            id: account.id,
+            defaultValues: account,
+            extra: { entryType, onDeleteSuccess },
+        })
     }
 
     return {
         account,
-        updateModal,
-        ledgerTableModal,
-        selectedEntryType,
         isDeletingAccount,
         handleEdit,
         handleDelete,
         openLedgerModal,
-        getModalTitle,
-        deleteAccount,
-        confirmModal,
-        mode,
     }
 }
 
@@ -131,62 +118,11 @@ export const AccountAction = ({
     row,
     onDeleteSuccess,
 }: IAccountTableActionProps) => {
-    const {
-        account,
-        updateModal,
-        ledgerTableModal,
-        selectedEntryType,
-        isDeletingAccount,
-        handleEdit,
-        handleDelete,
-        openLedgerModal,
-        getModalTitle,
-        deleteAccount,
-        confirmModal,
-        mode,
-    } = useAccountActions({ row, onDeleteSuccess })
+    const { isDeletingAccount, handleEdit, handleDelete, openLedgerModal } =
+        useAccountActions({ row, onDeleteSuccess })
 
     return (
         <>
-            <div onClick={(e) => e.stopPropagation()}>
-                <ActionNameConfirmModal
-                    description="This action cannot be undone. Please type the project name to confirm deletion."
-                    title={`Confirm ${mode === 'delete' ? 'Deletion' : 'Update'}`}
-                    {...confirmModal}
-                    mode={mode}
-                    name={row.original.name}
-                    onConfirm={() => {
-                        if (mode === 'delete') {
-                            deleteAccount(row.original.id)
-                        } else {
-                            updateModal.onOpenChange(true)
-                        }
-                        confirmModal.onOpenChange(false)
-                    }}
-                />
-                <Modal
-                    {...ledgerTableModal}
-                    className="!max-w-[95vw]"
-                    description={`You are viewing account (${account.name}) ${getModalTitle().toLowerCase()}`}
-                    title={getModalTitle()}
-                >
-                    <GeneralLedgerTable
-                        accountId={account.id}
-                        className="min-h-[90vh] !max-w-[90vw] min-w-0 max-h-[90vh]"
-                        entryType={selectedEntryType}
-                        mode="account"
-                    />
-                </Modal>
-                <AccountCreateUpdateFormModal
-                    {...updateModal}
-                    description="Modify/Update account..."
-                    formProps={{
-                        accountId: account.id,
-                        defaultValues: account,
-                    }}
-                    title="Update Account"
-                />
-            </div>
             <RowActionsGroup
                 canSelect
                 onDelete={{
@@ -361,60 +297,11 @@ export const AccountRowContext = ({
     children,
     onDeleteSuccess,
 }: IAccountRowContextProps) => {
-    const {
-        account,
-        updateModal,
-        ledgerTableModal,
-        selectedEntryType,
-        isDeletingAccount,
-        handleEdit,
-        handleDelete,
-        openLedgerModal,
-        getModalTitle,
-        confirmModal,
-        mode,
-        deleteAccount,
-    } = useAccountActions({ row, onDeleteSuccess })
+    const { isDeletingAccount, handleEdit, handleDelete, openLedgerModal } =
+        useAccountActions({ row, onDeleteSuccess })
 
     return (
         <>
-            <ActionNameConfirmModal
-                description="This action cannot be undone. Please type the project name to confirm deletion."
-                title={`Confirm ${mode === 'delete' ? 'Deletion' : 'Update'}`}
-                {...confirmModal}
-                mode={mode}
-                name={row.original.name}
-                onConfirm={() => {
-                    if (mode === 'delete') {
-                        deleteAccount(row.original.id)
-                    } else {
-                        updateModal.onOpenChange(true)
-                    }
-                    confirmModal.onOpenChange(false)
-                }}
-            />
-            <Modal
-                {...ledgerTableModal}
-                className="!max-w-[95vw]"
-                description={`You are viewing account (${account.name}) ${getModalTitle().toLowerCase()}`}
-                title={getModalTitle()}
-            >
-                <GeneralLedgerTable
-                    accountId={account.id}
-                    className="min-h-[90vh] min-w-0 max-h-[90vh]"
-                    entryType={selectedEntryType}
-                    mode="account"
-                />
-            </Modal>
-            <AccountCreateUpdateFormModal
-                {...updateModal}
-                description="Modify/Update account..."
-                formProps={{
-                    accountId: account.id,
-                    defaultValues: account, // FOCUS HERE
-                }}
-                title="Update Account"
-            />
             <DataTableRowContext
                 onDelete={{
                     text: 'Delete',
@@ -576,6 +463,68 @@ export const AccountRowContext = ({
             >
                 {children}
             </DataTableRowContext>
+        </>
+    )
+}
+
+const getModalTitle = (entryType?: TEntryType) => {
+    if (!entryType) return 'General Ledger'
+
+    const entryTypeNames: Record<TEntryType, string> = {
+        '': 'General Ledger',
+        'check-entry': 'Check Entry',
+        'online-entry': 'Online Entry',
+        'cash-entry': 'Cash Entry',
+        'payment-entry': 'Payment Entry',
+        'withdraw-entry': 'Withdraw Entry',
+        'deposit-entry': 'Deposit Entry',
+        'journal-entry': 'Journal Entry',
+        'adjustment-entry': 'Adjustment Entry',
+        'journal-voucher': 'Journal Voucher',
+        'check-voucher': 'Check Voucher',
+    }
+
+    return entryTypeNames[entryType] || 'General Ledger'
+}
+
+export const AccountTableActionManager = () => {
+    const { state, close } = useTableRowActionStore<
+        IAccount,
+        AccountActionType,
+        AccountActionExtra
+    >()
+
+    return (
+        <>
+            {state.action === 'edit' && state.defaultValues && (
+                <AccountCreateUpdateFormModal
+                    description="Modify/Update account..."
+                    formProps={{
+                        accountId: state.id,
+                        defaultValues: state.defaultValues,
+                        onSuccess: () => close(),
+                    }}
+                    onOpenChange={close}
+                    open={state.isOpen}
+                    title="Update Account"
+                />
+            )}
+            {state.action === 'view-ledger' && state.defaultValues && (
+                <Modal
+                    className="!max-w-[95vw]"
+                    description={`You are viewing account (${state.defaultValues.name}) ${getModalTitle(state.extra?.entryType).toLowerCase()}`}
+                    onOpenChange={close}
+                    open={state.isOpen}
+                    title={getModalTitle(state.extra?.entryType)}
+                >
+                    <GeneralLedgerTable
+                        accountId={state.defaultValues.id}
+                        className="min-h-[90vh] !max-w-[90vw] min-w-0 max-h-[90vh]"
+                        entryType={state.extra?.entryType || ''}
+                        mode="account"
+                    />
+                </Modal>
+            )}
         </>
     )
 }
