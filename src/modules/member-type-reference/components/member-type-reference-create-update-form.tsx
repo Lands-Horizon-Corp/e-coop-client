@@ -53,8 +53,6 @@ const MemberTypeReferenceCreateUpdateForm = ({
             charges: 0,
             minimum_balance: 0,
             maintaining_balance: 0,
-            active_member_ratio: 0,
-            active_member_minimum_balance: 0,
             other_interest_on_saving_computation_minimum_balance: 0,
             other_interest_on_saving_computation_interest_rate: 0,
             ...formProps.defaultValues,
@@ -192,34 +190,6 @@ const MemberTypeReferenceCreateUpdateForm = ({
                         />
                     </fieldset>
                     <p>Active Member Criteria</p>
-                    <fieldset className="space-y-4">
-                        <FormFieldWrapper
-                            control={form.control}
-                            label="Active Member Ration *"
-                            name="active_member_ratio"
-                            render={({ field }) => (
-                                <Input
-                                    {...field}
-                                    disabled={isDisabled(field.name)}
-                                    placeholder="Active Member Ratio"
-                                    type="number"
-                                />
-                            )}
-                        />
-                        <FormFieldWrapper
-                            control={form.control}
-                            label="Active Member Minimum Balance *"
-                            name="active_member_minimum_balance"
-                            render={({ field }) => (
-                                <Input
-                                    {...field}
-                                    disabled={isDisabled(field.name)}
-                                    placeholder="Maintaining Balance"
-                                    type="number"
-                                />
-                            )}
-                        />
-                    </fieldset>
                     <p>Other</p>
 
                     <fieldset className="space-y-4">

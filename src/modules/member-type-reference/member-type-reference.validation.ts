@@ -22,9 +22,6 @@ export const MemberTypeReferenceSchema = z.object({
         .number()
         .min(0, 'Maintaining balance is required'),
 
-    active_member_ratio: z.coerce.number().min(0),
-    active_member_minimum_balance: z.coerce.number().min(0),
-
     other_interest_on_saving_computation_minimum_balance: z.coerce
         .number()
         .min(0),

@@ -26,8 +26,6 @@ export interface IMemberTypeReference extends IBaseEntityMeta {
     interest_rate: number
     minimum_balance: number
     charges: number
-    active_member_minimum_balance: number
-    active_member_ratio: number
 
     other_interest_on_saving_computation_minimum_balance: number
     other_interest_on_saving_computation_interest_rate: number
