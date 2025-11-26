@@ -1,6 +1,7 @@
 import { toast } from 'sonner'
 
 import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
+import PrintReportFormModal from '@/modules/generated-report/components/forms/print-modal-config'
 import {
     ILoanTransaction,
     useUndoPrintLoanTransaction,
@@ -13,6 +14,7 @@ import { LoanTagsManagerPopover } from '@/modules/loan-transaction/components/lo
 import useConfirmModalStore from '@/store/confirm-modal-store'
 
 import { EyeIcon, PencilFillIcon } from '@/components/icons'
+import { LoanVoucherReleaseTemplates } from '@/components/templates/loan-voucher-release'
 import { Button } from '@/components/ui/button'
 import {
     DropdownMenu,
@@ -23,8 +25,6 @@ import {
 import { useModalState } from '@/hooks/use-modal-state'
 
 import { IClassProps } from '@/types'
-
-import { useLoanKanbanContext } from './loan-kanban-context'
 
 export interface ILoanTransactionStatusDates {
     printed_date?: string | null
@@ -56,7 +56,9 @@ const useCardKanbanActions = ({
     const releaseModal = useModalState()
     const openViewModal = useModalState()
     const undoApproveModal = useModalState()
+    const generateReport = useModalState()
     const { onOpen } = useConfirmModalStore()
+
     const unprintMutation = useUndoPrintLoanTransaction({
         options: {
             onSuccess: () => {
@@ -103,6 +105,10 @@ const useCardKanbanActions = ({
         undoApproveModal.onOpenChange(true)
     }
 
+    const handleGenerateReport = () => {
+        generateReport.onOpenChange(true)
+    }
+
     return {
         handleOpenViewModal,
         openViewModal,
@@ -117,6 +123,8 @@ const useCardKanbanActions = ({
         undoApproveModal,
         handleUndoApprove,
         handleUnprint,
+        generateReport,
+        handleGenerateReport,
     }
 }
 
@@ -126,13 +134,10 @@ export const LoanTransactionCardActions = ({
 }: Pick<ILoanTransactionCardProps, 'loanTransaction' | 'refetch'> & {
     loanDates: ILoanTransactionStatusDates
 }) => {
-    const { openPrintModalForLoan } = useLoanKanbanContext()
-
     const {
         printModal,
         handleOpenViewModal,
         openViewModal,
-        handleOpenPrintModal,
         approveModal,
         handleApproveModal,
         releaseModal,
@@ -140,6 +145,9 @@ export const LoanTransactionCardActions = ({
         undoApproveModal,
         handleUndoApprove,
         handleUnprint,
+        handleOpenPrintModal,
+        handleGenerateReport,
+        generateReport,
     } = useCardKanbanActions({ loanTransaction, refetch })
 
     const isReleased = !!loanTransaction.released_date
@@ -153,15 +161,37 @@ export const LoanTransactionCardActions = ({
                     readOnly: true,
                 }}
             />
-
+            <PrintReportFormModal
+                {...generateReport}
+                formProps={{
+                    defaultValues: {
+                        name: 'Loan Release Voucher',
+                        description: 'Generated Loan Release Voucher',
+                        model: 'LoanTransaction',
+                        generated_report_type: 'pdf',
+                        url: `/api/v1/loan-transaction/${loanTransaction.id}`,
+                    },
+                    onSuccess: () => {
+                        generateReport.onOpenChange(false)
+                    },
+                    onSubmit: (data) => {
+                        handleOpenPrintModal()
+                        console.log('Generate to Print Submitted', data)
+                    },
+                    templateOptions: LoanVoucherReleaseTemplates,
+                }}
+                title="Generate to Print"
+            />
             <LoanTransactionPrintFormModal
                 {...printModal}
                 className=""
                 formProps={{
                     defaultValues: { ...loanTransaction },
                     loanTransactionId: loanTransaction.id,
-                    onSuccess: () => {
-                        openPrintModalForLoan(loanTransaction.id)
+                    onSuccess: (data) => {
+                        console.log('Print Success Data', data)
+                        printModal.onOpenChange(false)
+                        handleGenerateReport()
                         refetch?.()
                     },
                 }}
@@ -214,7 +244,9 @@ export const LoanTransactionCardActions = ({
                             <LoanTransactionOtherAction
                                 loanTransaction={loanTransaction}
                                 onApprove={handleApproveModal}
-                                onPrint={handleOpenPrintModal}
+                                onPrint={() => {
+                                    generateReport.onOpenChange(true)
+                                }}
                                 onPrintUndo={handleUnprint}
                                 onRelease={handleReleaseModal}
                                 onUndoApprove={handleUndoApprove}

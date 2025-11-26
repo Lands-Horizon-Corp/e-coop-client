@@ -1,7 +1,4 @@
-import { toast } from 'sonner'
-
 import { cn } from '@/helpers/tw-utils'
-import PrintReportFormModal from '@/modules/generated-report/components/forms/print-modal'
 import { ILoanTransaction, TLoanMode } from '@/modules/loan-transaction'
 import { CheckCircle2Icon, PrinterIcon } from 'lucide-react'
 
@@ -16,7 +13,6 @@ import { IClassProps } from '@/types'
 
 import { useSearchKanban } from '../hook/use-search-kanban'
 import { SearchKanbanInput } from '../search-kanban-input'
-import { LoanKanbanProvider, useLoanKanbanContext } from './loan-kanban-context'
 import { LoanKanbanMain } from './loan-kanban-main'
 
 export interface ILoanStatusDates {
@@ -63,15 +59,13 @@ const LoanKanbanMenu: TLoanKanbanItem[] = [
     },
 ]
 
-const LoanKanbanContent = ({ className }: { className?: string }) => {
+const LoanKanban = ({ className }: { className?: string }) => {
     const searchKanban = useSearchKanban<TLoanMode>({
         menuItems: LoanKanbanMenu,
         initialMode: null,
         initialSearchTerm: '',
         initialSearchAllModes: false,
     })
-
-    const { showPrintModal, loanTransactionUrl } = useLoanKanbanContext()
 
     const { selectedMode, searchTerm, searchAllModes, selectedItem } =
         searchKanban
@@ -84,23 +78,7 @@ const LoanKanbanContent = ({ className }: { className?: string }) => {
                 menuItems={LoanKanbanMenu}
                 {...searchKanban}
             />
-            <PrintReportFormModal
-                {...showPrintModal}
-                formProps={{
-                    defaultValues: {
-                        name: 'Loan Release Voucher',
-                        description: 'Generated Loan Release Voucher',
-                        model: 'LoanTransaction',
-                        generated_report_type: 'pdf',
-                        url: loanTransactionUrl || undefined,
-                    },
-                    onSuccess: () => {
-                        toast.success('Generated Report Created')
-                        showPrintModal.onOpenChange(false)
-                    },
-                }}
-                title="Print Configuration"
-            />
+
             <div className="flex-1 flex overflow-auto ecoop-scroll">
                 {selectedMode ? (
                     // Single Mode View - When a specific mode is selected
@@ -163,13 +141,4 @@ const LoanKanbanContent = ({ className }: { className?: string }) => {
         </div>
     )
 }
-
-const LoanKanban = ({ className }: { className?: string }) => {
-    return (
-        <LoanKanbanProvider>
-            <LoanKanbanContent className={className} />
-        </LoanKanbanProvider>
-    )
-}
-
 export default LoanKanban

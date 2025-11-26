@@ -109,22 +109,10 @@ const BankTable = ({
         },
     })
 
-    const handleRowSelectionChange =
-        tableState.createHandleRowSelectionChange(data)
-
-    const columnsMemo = useMemo(
-        () =>
-            isPending
-                ? columns.map((column) => ({
-                      ...column,
-                      cell: () => <Skeleton className="h-5 w-full" />,
-                  }))
-                : columns,
-        [isPending, columns]
-    )
+    const handleRowSelectionChange = createHandleRowSelectionChange(data)
 
     const table = useReactTable({
-        columns: columnsMemo,
+        columns: columns,
         data: data,
         initialState: {
             columnPinning: { left: ['select'] },

@@ -32,6 +32,8 @@ export interface ILoanReleaseVoucher extends IReportBase {
     cash_on_hand_total_debit: number
     cash_on_hand_total_credit: number
 
+    total_debit: number
+    total_credit: number
     total_amount_in_words: string
 
     prepared_by: string

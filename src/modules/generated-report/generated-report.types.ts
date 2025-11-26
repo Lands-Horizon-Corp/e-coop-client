@@ -3,6 +3,7 @@ import { IBaseEntityMeta, IPaginatedResult, TEntityId } from '@/types'
 import { IGeneratedReportsDownloadUsers } from '../generated-reports-download-users/generated-reports-download-users.types'
 import { IMedia } from '../media'
 import { IUser } from '../user'
+import { TPaperSizeName } from './components/forms/paper-size-selector'
 import { TPaperSizeUnit } from './generated-reports.constants'
 
 export const ACCOUNT_MODEL_NAMES = [
@@ -226,4 +227,12 @@ export interface IGeneratedReportUpdateRequest {
 export interface IGeneratedReportAvailableModalResponse {
     model: TModelName
     count: number
+}
+
+export type TemplateOptions = {
+    value?: string
+    label?: string
+    description?: string
+
+    defaultSize: TPaperSizeName
 }

@@ -25,40 +25,31 @@ type GENERAL_PAPER_SIZE =
     | 'BANKBOOK'
 
 type B_SERIES_SIZES =
-    | 'B0'
-    | 'B1'
-    | 'B2'
-    | 'B3'
-    | 'B4'
-    | 'B5'
-    | 'B6'
-    | 'B7'
-    | 'B8'
-    | 'B9'
-    | 'B10'
-type A_SERIES_SIZES =
-    | 'A0'
-    | 'A1'
-    | 'A2'
-    | 'A3'
-    | 'A4'
-    | 'A5'
-    | 'A6'
-    | 'A7'
-    | 'A8'
-    | 'A9'
-    | 'A10'
+    // | 'B0'
+    // | 'B1'
+    // | 'B2'
+    // | 'B3'
+    // | 'B4'
+    'B5' | 'B6' | 'B7' | 'B8' | 'B9' | 'B10'
+type A_SERIES_SIZES = 'A0' | 'A1' | 'A2' | 'A3' | 'A4' | 'A5' | 'A6'
+// | 'A7'
+// | 'A8'
+// | 'A9'
+// | 'A10'
 
-type PaperSizeName = GENERAL_PAPER_SIZE | A_SERIES_SIZES | B_SERIES_SIZES
+export type TPaperSizeName =
+    | GENERAL_PAPER_SIZE
+    | A_SERIES_SIZES
+    | B_SERIES_SIZES
 
-export const PAPER_SIZES: Record<PaperSizeName, PaperSize> = {
+export const PAPER_SIZES: Record<TPaperSizeName, PaperSize> = {
     // Receipt Sizes
     RECEIPT_58MM: { name: '58mm Receipt', width: 58, height: 200, unit: 'mm' },
     RECEIPT_80MM: { name: '80mm Receipt', width: 80, height: 200, unit: 'mm' },
 
     // Banking & Transaction Sizes
-    CHECK: { name: 'Check', width: 6, height: 2.75, unit: 'in' }, // Standard US check
-    PASSBOOK: { name: 'Passbook', width: 148, height: 105, unit: 'mm' }, // A6 landscape
+    CHECK: { name: 'Check', width: 6, height: 2.75, unit: 'in' },
+    PASSBOOK: { name: 'Passbook', width: 148, height: 105, unit: 'mm' },
     DEPOSIT_SLIP: { name: 'Deposit Slip', width: 3.5, height: 8.5, unit: 'in' },
     WITHDRAWAL_SLIP: {
         name: 'Withdrawal Slip',
@@ -66,9 +57,9 @@ export const PAPER_SIZES: Record<PaperSizeName, PaperSize> = {
         height: 8.5,
         unit: 'in',
     },
-    STATEMENT: { name: 'Bank Statement', width: 8.5, height: 11, unit: 'in' }, // Letter size
+    STATEMENT: { name: 'Bank Statement', width: 8.5, height: 11, unit: 'in' },
     CHECKBOOK: { name: 'Checkbook Register', width: 3, height: 6, unit: 'in' },
-    BANKBOOK: { name: 'Bank Book', width: 125, height: 176, unit: 'mm' }, // B6
+    BANKBOOK: { name: 'Bank Book', width: 125, height: 176, unit: 'mm' },
 
     // A Series (ISO 216 Standard)
     A0: { name: 'A0', width: 841, height: 1189, unit: 'mm' },
@@ -78,17 +69,18 @@ export const PAPER_SIZES: Record<PaperSizeName, PaperSize> = {
     A4: { name: 'A4', width: 210, height: 297, unit: 'mm' },
     A5: { name: 'A5', width: 148, height: 210, unit: 'mm' },
     A6: { name: 'A6', width: 105, height: 148, unit: 'mm' },
-    A7: { name: 'A7', width: 74, height: 105, unit: 'mm' },
-    A8: { name: 'A8', width: 52, height: 74, unit: 'mm' },
-    A9: { name: 'A9', width: 37, height: 52, unit: 'mm' },
-    A10: { name: 'A10', width: 26, height: 37, unit: 'mm' },
+    //this sizes are rarely used
+    // A7: { name: 'A7', width: 74, height: 105, unit: 'mm' },
+    // A8: { name: 'A8', width: 52, height: 74, unit: 'mm' },
+    // A9: { name: 'A9', width: 37, height: 52, unit: 'mm' },
+    // A10: { name: 'A10', width: 26, height: 37, unit: 'mm' },
 
     // B Series (ISO 216 Standard)
-    B0: { name: 'B0', width: 1000, height: 1414, unit: 'mm' },
-    B1: { name: 'B1', width: 707, height: 1000, unit: 'mm' },
-    B2: { name: 'B2', width: 500, height: 707, unit: 'mm' },
-    B3: { name: 'B3', width: 353, height: 500, unit: 'mm' },
-    B4: { name: 'B4', width: 250, height: 353, unit: 'mm' },
+    // B0: { name: 'B0', width: 1000, height: 1414, unit: 'mm' },
+    // B1: { name: 'B1', width: 707, height: 1000, unit: 'mm' },
+    // B2: { name: 'B2', width: 500, height: 707, unit: 'mm' },
+    // B3: { name: 'B3', width: 353, height: 500, unit: 'mm' },
+    // B4: { name: 'B4', width: 250, height: 353, unit: 'mm' },
     B5: { name: 'B5', width: 176, height: 250, unit: 'mm' },
     B6: { name: 'B6', width: 125, height: 176, unit: 'mm' },
     B7: { name: 'B7', width: 88, height: 125, unit: 'mm' },
@@ -191,7 +183,6 @@ export const Style = {
 
         trackingNormal: '0em',
     },
-
     dark: {
         background: 'oklch(0.2077 0.0398 265.7549)',
         foreground: 'oklch(0.8717 0.0093 258.3382)',

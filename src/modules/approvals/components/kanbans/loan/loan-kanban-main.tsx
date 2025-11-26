@@ -32,6 +32,7 @@ import {
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
+import { Skeleton } from '@/components/ui/skeleton'
 
 import { highlightMatch } from '../journal-voucher/journal-voucher-kanban-main'
 import {
@@ -107,8 +108,6 @@ export const LoanKanbanMain = ({
         return fuse.search(searchTerm).map((result) => result.item)
     }, [searchTerm, fuse, loanData])
 
-    if (!rawLoans) return null
-
     const allIds = filteredLoans.map((loan) => loan.id)
     const hasItem = filteredLoans.length > 0
     const isExpanded = openLoans.length > 0
@@ -129,7 +128,17 @@ export const LoanKanbanMain = ({
         }
     }
 
-    if (isLoading) return <JournalVoucherSkeletonCard className="w-[420px]" />
+    if (isLoading)
+        return (
+            <div className="w-full px-4">
+                <Skeleton className="h-6 w-3/4 mb-4" />
+                <Skeleton className="h-1 w-full mb-2" />
+                <div className="w-full py-2 pt-5 h-40 space-y-3">
+                    <JournalVoucherSkeletonCard />
+                    <JournalVoucherSkeletonCard />
+                </div>
+            </div>
+        )
 
     const handleInvalidate = () => {
         invalidate.invalidateQueries({
