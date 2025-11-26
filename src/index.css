@@ -445,11 +445,6 @@ body[data-scroll-locked] {
     }
 }
 
-/* Custom text-destructive utility class */
-.text-destructive {
-    color: oklch(var(--destructive));
-}
-
 .r1 {
     @apply border-1 border-red-500;
 }

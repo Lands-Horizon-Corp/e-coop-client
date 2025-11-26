@@ -86,8 +86,6 @@ const MemberProfileCloseForm = ({
         keyName: 'fieldKey',
     })
 
-    form.watch('remarks')
-
     const handleSubmit = form.handleSubmit(({ remarks }: TMemberCloseForm) => {
         closeAccount({ profileId, data: remarks })
     }, handleFocusError)
