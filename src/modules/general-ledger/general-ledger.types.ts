@@ -10,7 +10,10 @@ import { IPaymentType } from '../payment-type/payment-type.types'
 import { ITransactionBatch } from '../transaction-batch/transaction-batch.types'
 import { ITransaction } from '../transaction/transaction.types'
 import { IUserBase } from '../user/user.types'
-import { GENERAL_LEDGER_SOURCES, GENERAL_LEDGER_TYPE } from './constants'
+import {
+    GENERAL_LEDGER_SOURCES,
+    GENERAL_LEDGER_TYPE,
+} from './general-ledger.constants'
 
 export type TEntryType =
     | ''

@@ -156,7 +156,7 @@ export const MemberTypeReferenceTableActionManager = () => {
                         onSuccess: close,
                     }}
                     onOpenChange={close}
-                    open={true}
+                    open={state.isOpen}
                 />
             )}
         </>

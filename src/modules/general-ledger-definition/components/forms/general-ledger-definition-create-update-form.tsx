@@ -14,7 +14,7 @@ import {
     useCreate,
     useUpdateById,
 } from '@/modules/general-ledger-definition'
-import { GENERAL_LEDGER_TYPE } from '@/modules/general-ledger/constants'
+import { GENERAL_LEDGER_TYPE } from '@/modules/general-ledger/general-ledger.constants'
 
 import { GradientBackground } from '@/components/gradient-background/gradient-background'
 import { MoneyBagIcon } from '@/components/icons'

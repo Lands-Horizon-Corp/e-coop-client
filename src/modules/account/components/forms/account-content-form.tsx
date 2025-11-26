@@ -1,6 +1,6 @@
 import { Path, UseFormReturn } from 'react-hook-form'
 
-import { GENERAL_LEDGER_TYPE } from '@/modules/general-ledger'
+import { GENERAL_LEDGER_TYPE } from '@/modules/general-ledger/general-ledger.constants'
 
 import { GradientBackground } from '@/components/gradient-background/gradient-background'
 import { SettingsIcon } from '@/components/icons'

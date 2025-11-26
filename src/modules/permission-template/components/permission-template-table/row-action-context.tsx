@@ -158,7 +158,7 @@ export const PermissionTemplateTableActionManager = () => {
                         onSuccess: close,
                     }}
                     onOpenChange={close}
-                    open={true}
+                    open={state.isOpen}
                 />
             )}
         </>

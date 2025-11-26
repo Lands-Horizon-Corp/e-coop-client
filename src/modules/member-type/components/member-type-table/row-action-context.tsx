@@ -209,7 +209,7 @@ export const MemberTypeTableActionManager = () => {
                         onSuccess: close,
                     }}
                     onOpenChange={close}
-                    open={true}
+                    open={state.isOpen}
                     title="Update Member Type"
                 />
             )}
@@ -221,14 +221,14 @@ export const MemberTypeTableActionManager = () => {
                         onSuccess: close,
                     }}
                     onOpenChange={close}
-                    open={true}
+                    open={state.isOpen}
                 />
             )}
             {state.action === 'browse-references' && (
                 <Modal
                     className="!max-w-[95vw]"
                     onOpenChange={close}
-                    open={true}
+                    open={state.isOpen}
                     title={`Member type reference for member type ${memberType.name}`}
                 >
                     <MemberTypeReferenceTable

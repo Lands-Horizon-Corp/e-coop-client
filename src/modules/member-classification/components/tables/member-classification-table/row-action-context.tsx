@@ -162,7 +162,7 @@ export const MemberClassificationTableActionManager = () => {
                         onSuccess: close,
                     }}
                     onOpenChange={close}
-                    open={true}
+                    open={state.isOpen}
                     title="Update Member Classification"
                 />
             )}

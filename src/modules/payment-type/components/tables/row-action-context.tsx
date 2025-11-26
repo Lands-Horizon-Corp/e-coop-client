@@ -164,7 +164,7 @@ export const PaymentTypeTableActionManager = () => {
                         },
                     }}
                     onOpenChange={close}
-                    open={true}
+                    open={state.isOpen}
                     title="Edit Payment Type"
                     titleClassName="font-bold"
                 />

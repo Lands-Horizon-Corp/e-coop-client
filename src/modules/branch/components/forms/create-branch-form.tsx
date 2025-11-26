@@ -19,6 +19,12 @@ import FormErrorMessage from '@/components/ui/form-error-message'
 import FormFieldWrapper from '@/components/ui/form-field-wrapper'
 import ImageField from '@/components/ui/image-field'
 import { Input } from '@/components/ui/input'
+import {
+    InputGroup,
+    InputGroupAddon,
+    InputGroupInput,
+    InputGroupText,
+} from '@/components/ui/input-group'
 import { PhoneInput } from '@/components/ui/phone-input'
 import {
     Select,
@@ -362,6 +368,7 @@ export const CreateUpdateBranchByOrgForm = ({
                                 )
                             }}
                         />
+
                         <div className="flex flex-col row-span-2 space-y-4">
                             <div className="flex gap-x-2 items-center ">
                                 <FormFieldWrapper
@@ -419,7 +426,26 @@ export const CreateUpdateBranchByOrgForm = ({
                                 variant="outline"
                             />
                         </div>
+                        <FormFieldWrapper
+                            className="col-span-2"
+                            control={form.control}
+                            label="Tax Identification Number"
+                            name="tax_identification_number"
+                            render={({ field }) => (
+                                <InputGroup>
+                                    <InputGroupInput
+                                        {...field}
+                                        placeholder="360"
+                                        type="text"
+                                    />
+                                    <InputGroupAddon align="inline-end">
+                                        <InputGroupText>TAX</InputGroupText>
+                                    </InputGroupAddon>
+                                </InputGroup>
+                            )}
+                        />
                     </div>
+
                     <FormErrorMessage
                         className="my-5 w-full"
                         errorMessage={combinedError}

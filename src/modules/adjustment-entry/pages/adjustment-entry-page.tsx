@@ -13,7 +13,6 @@ import { IUserOrganization } from '@/modules/user-organization'
 import PageContainer from '@/components/containers/page-container'
 import { XIcon } from '@/components/icons'
 import { Button, buttonVariants } from '@/components/ui/button'
-import FormErrorMessage from '@/components/ui/form-error-message'
 import { Separator } from '@/components/ui/separator'
 
 import { useModalState } from '@/hooks/use-modal-state'

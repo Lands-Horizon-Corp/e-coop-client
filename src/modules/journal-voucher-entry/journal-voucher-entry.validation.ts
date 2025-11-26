@@ -2,7 +2,7 @@ import z from 'zod'
 
 import { EntityIdSchema, entityIdSchema } from '@/validation'
 
-import { IAccount } from '../account'
+import { IAccount, TAccountType } from '../account'
 
 export const JournalVoucherEntrySchema = z
     .object({
@@ -26,20 +26,28 @@ export const JournalVoucherEntrySchema = z
         (data) => {
             const account: IAccount | undefined = data.account
 
-            if (account && account.type === 'Loan') {
-                if (
-                    data.loan_transaction_id === undefined ||
-                    data.loan_transaction_id === ''
-                ) {
-                    return false
-                }
+            if (
+                account &&
+                account?.type &&
+                (
+                    [
+                        'Loan',
+                        'SVF-Ledger',
+                        'Fines',
+                        'Interest',
+                    ] as TAccountType[]
+                ).includes(account?.type) &&
+                !data.loan_transaction_id
+            ) {
+                return false
             }
 
             return true
         },
         {
             path: [''],
-            message: 'loan_transaction_id is required for Loan accounts',
+            message:
+                'Loan is required for account type (loan, svf, fines, interest)',
         }
     )
 

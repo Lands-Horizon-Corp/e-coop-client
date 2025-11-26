@@ -654,7 +654,8 @@ export const generateSidebarGroups = (
                     icon: SettingsIcon,
                     url: `${baseUrl}/settings`,
                     userType: ['employee', 'member', 'owner'],
-                    shortDescription: 'Application settings and preferences',
+                    shortDescription:
+                        'Application settings and preferences for your settings or branch settings',
                 },
             ],
         },

@@ -3,7 +3,7 @@ import { ReactNode } from 'react'
 import { dateAgo, toReadableDate } from '@/helpers/date-utils'
 import { currencyFormat } from '@/modules/currency'
 import { LedgerSourceBadge } from '@/modules/general-ledger/components/ledger-source-badge'
-import { GENERAL_LEDGER_SOURCES } from '@/modules/general-ledger/constants'
+import { GENERAL_LEDGER_SOURCES } from '@/modules/general-ledger/general-ledger.constants'
 import {
     IGeneralLedger,
     TGeneralLedgerSource,

@@ -9,7 +9,7 @@ import {
 } from '@/validation'
 
 import { FINANCIAL_STATEMENT_TYPE } from '../financial-statement-definition'
-import { GENERAL_LEDGER_TYPE } from '../general-ledger'
+import { GENERAL_LEDGER_TYPE } from '../general-ledger/general-ledger.constants'
 import {
     ACCOUNT_EXCLUSIVE_SETTING_TYPE,
     ACCOUNT_INTEREST_STANDARD_COMPUTATION,
@@ -43,6 +43,7 @@ const AccountTypeDiscriminator = z.discriminatedUnion('type', [
 
     z.object({
         type: z.literal('Deposit'),
+        is_taxable: z.boolean().optional(),
     }),
 
     z.object({
@@ -152,6 +153,10 @@ const AccountTypeDiscriminator = z.discriminatedUnion('type', [
     z.object({
         type: z.literal('Interest'),
 
+        interest_amortization: PercentageSchema.optional(),
+
+        interest_maturity: PercentageSchema.optional(),
+
         min_amount: z.coerce
             .number()
             .min(0, 'Min amount must be non-negative')
@@ -167,7 +172,7 @@ const AccountTypeDiscriminator = z.discriminatedUnion('type', [
             .min(0, 'Interest standard must be non-negative')
             .optional(),
 
-        cut_off_days: z.coerce.number().int().min(1).max(31).optional(),
+        cut_off_days: z.coerce.number().int().min(0).max(31).optional(),
         cut_off_months: z.coerce.number().int().min(0).max(31).optional(),
 
         interest_fines_computation_diminishing: z

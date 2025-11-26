@@ -266,7 +266,7 @@ export const InvitationCodeTableActionManager = () => {
                         onSuccess: close,
                     }}
                     onOpenChange={close}
-                    open={true}
+                    open={state.isOpen}
                     title="Edit Invitation Code"
                     titleClassName="font-bold"
                 />

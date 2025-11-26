@@ -219,7 +219,7 @@ export const AccountCreateUpdateFormModal = ({
 }) => {
     return (
         <Modal
-            className={cn('!max-w-[99vw]', className)}
+            className={cn('!max-w-[99vw] bg-popover', className)}
             description={description}
             title={title}
             {...props}

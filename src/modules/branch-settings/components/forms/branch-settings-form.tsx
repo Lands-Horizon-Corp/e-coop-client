@@ -6,6 +6,7 @@ import { cn } from '@/helpers'
 import { withToastCallbacks } from '@/helpers/callback-helper'
 import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
 import MemberTypeCombobox from '@/modules/member-type/components/member-type-combobox'
+import { DivideIcon } from 'lucide-react'
 
 import FormFooterResetSubmit from '@/components/form-components/form-footer-reset-submit'
 import {
@@ -24,6 +25,12 @@ import { Checkbox } from '@/components/ui/checkbox'
 import { Form } from '@/components/ui/form'
 import FormFieldWrapper from '@/components/ui/form-field-wrapper'
 import { Input } from '@/components/ui/input'
+import {
+    InputGroup,
+    InputGroupAddon,
+    InputGroupInput,
+    InputGroupText,
+} from '@/components/ui/input-group'
 import { Label } from '@/components/ui/label'
 import { Separator } from '@/components/ui/separator'
 import { Switch } from '@/components/ui/switch'
@@ -198,6 +205,46 @@ const BranchSettingsForm = ({
                                     placeholder="Select default member type"
                                     value={field.value}
                                 />
+                            )}
+                        />
+                    </div>
+                    <Separator />
+
+                    {/* Anual Divisor */}
+                    <div className="space-y-4 p-4 bg-secondary/60 dark:bg-popover rounded-xl">
+                        <div className="flex items-center gap-3">
+                            <div className="size-fit rounded-full bg-yellow-100 p-2 dark:bg-yellow-900/20">
+                                <DivideIcon className="size-5 " />
+                            </div>
+                            <div>
+                                <h3 className="font-semibold">
+                                    Annual Divisor
+                                </h3>
+                                <p className="text-xs text-muted-foreground">
+                                    An annual divisor is a number used to
+                                    convert a yearly amount into a smaller
+                                    time-based amount—such as monthly, weekly,
+                                    or daily—by dividing it across the desired
+                                    period.
+                                </p>
+                            </div>
+                        </div>
+
+                        <FormFieldWrapper
+                            control={form.control}
+                            name="annual_divisor"
+                            render={({ field }) => (
+                                <InputGroup>
+                                    <InputGroupInput
+                                        {...field}
+                                        disabled={isDisabled(field.name)}
+                                        placeholder="360"
+                                        type="text"
+                                    />
+                                    <InputGroupAddon align="inline-end">
+                                        <InputGroupText>Days</InputGroupText>
+                                    </InputGroupAddon>
+                                </InputGroup>
                             )}
                         />
                     </div>

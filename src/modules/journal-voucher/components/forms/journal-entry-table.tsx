@@ -3,7 +3,7 @@ import { useCallback } from 'react'
 import { UseFormReturn, useFieldArray } from 'react-hook-form'
 
 import { cn } from '@/helpers'
-import { IAccount } from '@/modules/account'
+import { IAccount, TAccountType } from '@/modules/account'
 import { AccountPicker } from '@/modules/account/components'
 import { CurrencyInput, ICurrency } from '@/modules/currency'
 import { IJournalVoucherEntryRequest } from '@/modules/journal-voucher-entry'
@@ -117,7 +117,14 @@ const columns: ColumnDef<IJournalVoucherEntryRequest>[] = [
                 <LoanPicker
                     disabled={
                         !account ||
-                        account?.type !== 'Loan' ||
+                        !(
+                            [
+                                'Loan',
+                                'SVF-Ledger',
+                                'Fines',
+                                'Interest',
+                            ] as TAccountType[]
+                        ).includes(account?.type) ||
                         !original.member_profile_id
                     }
                     memberProfileId={original.member_profile_id as TEntityId}

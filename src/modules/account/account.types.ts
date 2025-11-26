@@ -70,6 +70,7 @@ export interface IAccount extends IAuditable, ITimeStamps {
     // GENERAL CONFIG
     index?: number
     is_internal?: boolean
+    is_taxable?: boolean
     cash_on_hand?: boolean
     paid_up_share_capital?: boolean
 
@@ -185,6 +186,9 @@ export interface IAccount extends IAuditable, ITimeStamps {
     coh_cib_fines_grace_period_entry_lumpsum_maturity?: number
 
     // FOR INTEREST
+    interest_amortization?: number
+    interest_maturity?: number
+
     interest_standard?: number
     interest_standard_computation?: TInterestStandardComputation
 

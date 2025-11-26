@@ -1,5 +1,7 @@
 import { ReactNode } from 'react'
 
+import { useRouter } from '@tanstack/react-router'
+
 import { withToastCallbacks } from '@/helpers/callback-helper'
 import FootstepTable from '@/modules/footstep/components/footsteps-table'
 import { TEntryType } from '@/modules/general-ledger'
@@ -82,6 +84,7 @@ const useMemberProfileActions = ({
     row,
     onDeleteSuccess,
 }: UseMemberProfileActionsProps) => {
+    const router = useRouter()
     const member = row.original
     const { onOpen } = useInfoModalStore()
     const { onOpen: onOpenConfirm } = useConfirmModalStore()
@@ -170,9 +173,16 @@ const useMemberProfileActions = ({
         })
     }
 
+    const handleEdit = () => {
+        router.navigate({
+            to: `../member-profile/${member.id}/personal-info`,
+        })
+    }
+
     return {
         member,
         isDeleting,
+        handleEdit,
         handleDelete,
         handleInfo,
         handleHistory,
@@ -199,6 +209,7 @@ export const MemberProfileAction = ({
     const {
         member,
         isDeleting,
+        handleEdit,
         handleDelete,
         handleInfo,
         handleHistory,
@@ -223,8 +234,7 @@ export const MemberProfileAction = ({
                 text: 'Edit',
                 isAllowed: true,
                 onClick: () => {
-                    // Navigate to edit page - not using store for navigation
-                    window.location.href = `#/member-profile/${member.id}/personal-info`
+                    handleEdit()
                 },
             }}
             otherActions={
@@ -429,6 +439,7 @@ export const MemberProfileRowContext = ({
     const {
         member,
         isDeleting,
+        handleEdit,
         handleDelete,
         handleInfo,
         handleHistory,
@@ -452,8 +463,7 @@ export const MemberProfileRowContext = ({
                 text: 'Edit',
                 isAllowed: true,
                 onClick: () => {
-                    // Navigate to edit page - not using store for navigation
-                    window.location.href = `#/member-profile/${member.id}/personal-info`
+                    handleEdit()
                 },
             }}
             otherActions={

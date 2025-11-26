@@ -655,7 +655,7 @@ export const TransactionBatchTableActionManager = () => {
                     className="!max-w-[95vw]"
                     description={`You are viewing ${batch.batch_name || 'unknown'}'s disbursement transactions`}
                     onOpenChange={close}
-                    open={true}
+                    open={state.isOpen}
                     title="Disbursement Transactions"
                 >
                     <DisbursementTransactionTable
@@ -669,7 +669,7 @@ export const TransactionBatchTableActionManager = () => {
                 <Modal
                     className="!max-w-[95vw]"
                     onOpenChange={close}
-                    open={true}
+                    open={state.isOpen}
                     title={getModalTitle(entryType)}
                 >
                     <GeneralLedgerTable
@@ -683,7 +683,7 @@ export const TransactionBatchTableActionManager = () => {
             {state.action === 'view-history' && (
                 <TransactionBatchHistoriesModal
                     onOpenChange={close}
-                    open={true}
+                    open={state.isOpen}
                     transactionBatchHistoryProps={{
                         transactionBatchId: batch.id,
                     }}
@@ -695,7 +695,7 @@ export const TransactionBatchTableActionManager = () => {
                         transBatch: batch,
                     }}
                     onOpenChange={close}
-                    open={true}
+                    open={state.isOpen}
                 />
             )}
         </>

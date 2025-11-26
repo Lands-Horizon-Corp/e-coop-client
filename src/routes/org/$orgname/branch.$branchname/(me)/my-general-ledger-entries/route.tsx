@@ -7,6 +7,7 @@ import GeneralLedgerTable from '@/modules/general-ledger/components/tables/gener
 import GeneralLedgerAction, {
     GeneralLedgerRowContext,
 } from '@/modules/general-ledger/components/tables/general-ledger-table/row-action-context'
+import { BookOpenIcon } from 'lucide-react'
 
 import PageContainer from '@/components/containers/page-container'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
@@ -37,8 +38,9 @@ function RouteComponent() {
 
     return (
         <PageContainer>
-            <p className="py-4 text-muted-foreground">
-                My General Ledger Entries
+            <p className="py-4 w-full text-muted-foreground">
+                <BookOpenIcon className="inline mr-1" /> My General Ledger
+                Entries
             </p>
             <Tabs
                 className="flex-row min-w-0 max-w-full"

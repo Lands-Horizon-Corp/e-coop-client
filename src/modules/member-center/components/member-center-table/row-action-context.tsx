@@ -156,7 +156,7 @@ export const MemberCenterTableActionManager = () => {
                         onSuccess: close,
                     }}
                     onOpenChange={close}
-                    open={true}
+                    open={state.isOpen}
                     title="Update Member Center"
                 />
             )}

@@ -9,7 +9,7 @@ import FinancialStatementSkeleton from '@/modules/financial-statement-definition
 import { useGetAll } from '@/modules/general-ledger-account-grouping'
 import { IGeneralLedgerAccountGrouping } from '@/modules/general-ledger-account-grouping'
 import { GLAccountsGroupingUpdateFormModal } from '@/modules/general-ledger-account-grouping'
-import { GENERAL_LEDGER_TYPE } from '@/modules/general-ledger/constants'
+import { GENERAL_LEDGER_TYPE } from '@/modules/general-ledger/general-ledger.constants'
 import { useGeneralLedgerAccountsGroupingStore } from '@/store/general-ledger-accounts-groupings-store'
 
 import PageContainer from '@/components/containers/page-container'

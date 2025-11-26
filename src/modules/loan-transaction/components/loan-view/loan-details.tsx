@@ -31,6 +31,7 @@ export const LoanDetails = ({
         terms,
         applied_1,
         amortization,
+        total_add_on,
         mode_of_payment,
         mode_of_payment_fixed_days,
         mode_of_payment_monthly_exact_day,
@@ -42,7 +43,6 @@ export const LoanDetails = ({
 
     const {
         amount_granted,
-        add_on_amount,
         arrears,
         first_deliquency_date,
         first_irregularity_date,
@@ -172,10 +172,10 @@ export const LoanDetails = ({
                 </LoanInfoItem>
 
                 <LoanInfoItem>
-                    <InfoLabel>Add-On Amount:</InfoLabel>
-                    {typeof add_on_amount === 'number' ? (
+                    <InfoLabel>Total Add-On:</InfoLabel>
+                    {typeof total_add_on === 'number' ? (
                         <InfoValue className="font-mono">
-                            {currencyFormat(add_on_amount, {
+                            {currencyFormat(total_add_on, {
                                 currency: loanTransaction.account?.currency,
                                 showSymbol: !!loanTransaction.account?.currency,
                             })}

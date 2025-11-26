@@ -6,33 +6,36 @@ import { StoreApi, createStore } from 'zustand/vanilla'
 export type RowActionType = string
 
 export interface TableRowActionState<
-    T = Record<string, unknown>,
-    A extends RowActionType = string,
-    E = Record<string, unknown>,
+    TData = Record<string, unknown>,
+    TAction extends RowActionType = string,
+    TExtra = Record<string, unknown>,
 > {
-    action?: A | null
+    action?: TAction | null
     isOpen: boolean
     id?: string
-    defaultValues?: T
-    extra?: E
+    defaultValues?: TData
+    extra?: TExtra
 }
 
 export interface TableRowActionStore<
-    T = Record<string, unknown>,
-    A extends RowActionType = string,
-    E = Record<string, unknown>,
+    TData = Record<string, unknown>,
+    TAction extends RowActionType = string,
+    TExtra = Record<string, unknown>,
 > {
-    state: TableRowActionState<T, A, E>
-    open: (action: A, payload?: Partial<TableRowActionState<T, A, E>>) => void
+    state: TableRowActionState<TData, TAction, TExtra>
+    open: (
+        action: TAction,
+        payload?: Partial<TableRowActionState<TData, TAction, TExtra>>
+    ) => void
     close: () => void
 }
 
 export function createTableRowActionStore<
-    T = Record<string, unknown>,
-    A extends RowActionType = string,
-    E = Record<string, unknown>,
+    TData = Record<string, unknown>,
+    TAction extends RowActionType = string,
+    TExtra = Record<string, unknown>,
 >() {
-    return createStore<TableRowActionStore<T, A, E>>((set) => ({
+    return createStore<TableRowActionStore<TData, TAction, TExtra>>((set) => ({
         state: { action: null, isOpen: false },
 
         open: (action, payload = {}) =>
@@ -48,11 +51,14 @@ const TableRowActionStoreContext = createContext<StoreApi<
 > | null>(null)
 
 export function TableRowActionStoreProvider<
-    T = Record<string, unknown>,
-    A extends RowActionType = string,
-    E = Record<string, unknown>,
+    TData = Record<string, unknown>,
+    TAction extends RowActionType = string,
+    TExtra = Record<string, unknown>,
 >({ children }: { children: ReactNode }) {
-    const store = useMemo(() => createTableRowActionStore<T, A, E>(), [])
+    const store = useMemo(
+        () => createTableRowActionStore<TData, TAction, TExtra>(),
+        []
+    )
     return (
         <TableRowActionStoreContext.Provider
             value={
@@ -67,12 +73,12 @@ export function TableRowActionStoreProvider<
 }
 
 export function useTableRowActionStore<
-    T = Record<string, unknown>,
-    A extends RowActionType = string,
-    E = Record<string, unknown>,
+    TData = Record<string, unknown>,
+    TAction extends RowActionType = string,
+    TExtra = Record<string, unknown>,
 >() {
     const store = useContext(TableRowActionStoreContext) as StoreApi<
-        TableRowActionStore<T, A, E>
+        TableRowActionStore<TData, TAction, TExtra>
     > | null
     if (!store)
         throw new Error(

@@ -443,7 +443,6 @@ export interface ILoanAccountSummaryResponse {
 export interface ILoanTransactionSummaryResponse {
     loan_transaction_id: TEntityId
     amount_granted: number
-    add_on_amount: number
 
     arrears: number
 

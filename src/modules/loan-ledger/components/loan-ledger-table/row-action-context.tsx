@@ -137,7 +137,7 @@ export const LoanLedgerTableActionManager = () => {
                         onSuccess: close,
                     }}
                     onOpenChange={close}
-                    open={true}
+                    open={state.isOpen}
                 />
             )}
             {state.action === 'print' && (
@@ -147,7 +147,7 @@ export const LoanLedgerTableActionManager = () => {
                         defaultValues: { line_number: ledger.line_number },
                     }}
                     onOpenChange={close}
-                    open={true}
+                    open={state.isOpen}
                 />
             )}
         </>

@@ -468,7 +468,7 @@ export const TransactionTableActionManager = () => {
                     className="max-w-[95vw]"
                     description={`You are viewing transaction ${transaction.reference_number}'s ${getModalTitle(entryType).toLowerCase()}`}
                     onOpenChange={close}
-                    open={true}
+                    open={state.isOpen}
                     title={getModalTitle(entryType)}
                 >
                     <GeneralLedgerTable

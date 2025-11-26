@@ -5,7 +5,7 @@ import {
     descriptionTransformerSanitizer,
 } from '@/validation'
 
-import { GENERAL_LEDGER_TYPE } from '../general-ledger/constants'
+import { GENERAL_LEDGER_TYPE } from '../general-ledger/general-ledger.constants'
 
 export const GeneralLedgerTypeEnumSchema = z.enum(GENERAL_LEDGER_TYPE)
 

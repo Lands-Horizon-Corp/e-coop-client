@@ -502,7 +502,6 @@ export const AccountTableActionManager = () => {
                     formProps={{
                         accountId: state.id,
                         defaultValues: state.defaultValues,
-                        onSuccess: () => close(),
                     }}
                     onOpenChange={close}
                     open={state.isOpen}

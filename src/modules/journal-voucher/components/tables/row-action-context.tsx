@@ -231,7 +231,7 @@ export const JournalVoucherTableActionManager = () => {
                         mode: isPrinted ? 'readOnly' : 'update',
                     }}
                     onOpenChange={close}
-                    open={true}
+                    open={state.isOpen}
                 />
             )}
             {state.action === 'print' && (
@@ -241,7 +241,7 @@ export const JournalVoucherTableActionManager = () => {
                         journalVoucherId: journalVoucher.id,
                     }}
                     onOpenChange={close}
-                    open={true}
+                    open={state.isOpen}
                 />
             )}
             {state.action === 'approve-release' && (
@@ -249,7 +249,7 @@ export const JournalVoucherTableActionManager = () => {
                     journalVoucher={journalVoucher}
                     mode={approveReleaseMode}
                     onOpenChange={close}
-                    open={true}
+                    open={state.isOpen}
                 />
             )}
         </>

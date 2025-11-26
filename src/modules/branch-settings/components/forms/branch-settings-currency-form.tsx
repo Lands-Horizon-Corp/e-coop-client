@@ -269,106 +269,7 @@ const BranchSettingsCurrencyForm = ({
                                 />
                             )}
                         />
-
                         <UnbalanceAccountSection form={form} />
-
-                        {/* <FormFieldWrapper
-                            control={form.control}
-                            label={
-                                <span>
-                                    Account for Overflow
-                                    <InfoTooltip
-                                        content={
-                                            <div className="flex gap-2 text-muted-foreground max-w-[400px]">
-                                                <InfoIcon
-                                                    aria-hidden="true"
-                                                    className="size-6 shrink-0 opacity-60"
-                                                    size={16}
-                                                />
-                                                <div className="space-y-1">
-                                                    <p className="text-[13px] font-medium">
-                                                        Account for Overflow
-                                                    </p>
-                                                    <p className="text-muted-foreground text-xs">
-                                                        Account to handle
-                                                        overflow transactions
-                                                    </p>
-                                                </div>
-                                            </div>
-                                        }
-                                    />
-                                </span>
-                            }
-                            name="account_for_overflow_id"
-                            render={({ field }) => (
-                                <AccountPicker
-                                    currencyId={form.getValues('currency_id')}
-                                    mode="currency"
-                                    nameOnly
-                                    onSelect={(selectedAccount) => {
-                                        field.onChange(selectedAccount?.id)
-                                        form.setValue(
-                                            'account_for_overflow',
-                                            selectedAccount,
-                                            { shouldDirty: true }
-                                        )
-                                    }}
-                                    placeholder="Select overflow account"
-                                    value={form.getValues(
-                                        'account_for_overflow'
-                                    )}
-                                />
-                            )}
-                        />
-
-                        <FormFieldWrapper
-                            control={form.control}
-                            label={
-                                <span>
-                                    Account for Underflow
-                                    <InfoTooltip
-                                        content={
-                                            <div className="flex gap-2 text-muted-foreground max-w-[400px]">
-                                                <InfoIcon
-                                                    aria-hidden="true"
-                                                    className="size-6 shrink-0 opacity-60"
-                                                    size={16}
-                                                />
-                                                <div className="space-y-1">
-                                                    <p className="text-[13px] font-medium">
-                                                        Account for Underflow
-                                                    </p>
-                                                    <p className="text-muted-foreground text-xs">
-                                                        Account to handle
-                                                        underflow transactions
-                                                    </p>
-                                                </div>
-                                            </div>
-                                        }
-                                    />
-                                </span>
-                            }
-                            name="account_for_underflow_id"
-                            render={({ field }) => (
-                                <AccountPicker
-                                    currencyId={form.getValues('currency_id')}
-                                    mode="currency"
-                                    nameOnly
-                                    onSelect={(selectedAccount) => {
-                                        field.onChange(selectedAccount?.id)
-                                        form.setValue(
-                                            'account_for_underflow',
-                                            selectedAccount,
-                                            { shouldDirty: true }
-                                        )
-                                    }}
-                                    placeholder="Select underflow account"
-                                    value={form.getValues(
-                                        'account_for_underflow'
-                                    )}
-                                />
-                            )}
-                        /> */}
                     </div>
                 </fieldset>
                 <FormFooterResetSubmit
@@ -402,7 +303,7 @@ const UnbalanceAccountSection = ({
     const currencyId = form.watch('currency_id')
 
     return (
-        <div className="space-y-4 p-4 bg-secondary/60 dark:bg-popover rounded-xl">
+        <div className="space-y-4 p-0 bg-secondary/60 dark:bg-popover rounded-xl">
             <div className="flex items-center justify-between">
                 <div className="flex flex-1 items-center gap-3">
                     <div>

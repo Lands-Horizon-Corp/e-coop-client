@@ -608,3 +608,32 @@ body[data-scroll-locked] {
 .group:hover .animate-scroll-down-hover {
     animation: scroll-down 15s linear infinite;
 }
+
+/* adding alert button animation with pulsing glow effect */
+/* Updated pulse-alert animation to include expanding ring ripple effect */
+@keyframes pulse-alert {
+    0% {
+        opacity: 1;
+        box-shadow:
+            0 0 0 0 rgba(239, 68, 68, 0.7),
+            0 0 20px 4px rgba(239, 68, 68, 0.5);
+    }
+    50% {
+        opacity: 0.9;
+        box-shadow:
+            0 0 0 10px rgba(239, 68, 68, 0),
+            0 0 30px 8px rgba(239, 68, 68, 0.3);
+    }
+    100% {
+        opacity: 1;
+        box-shadow:
+            0 0 0 0 rgba(239, 68, 68, 0),
+            0 0 20px 4px rgba(239, 68, 68, 0.5);
+    }
+}
+
+@layer utilities {
+    .animate-pulse-alert {
+        animation: pulse-alert 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+    }
+}

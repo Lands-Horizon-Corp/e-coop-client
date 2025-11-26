@@ -200,6 +200,63 @@ export const InterestFormSection = ({
                 </div>
             </div>
 
+            <div className="grid grid-cols-2 gap-x-3 rounded-xl bg-popover">
+                <p className="col-span-2 text-sm text-muted-foreground">
+                    Amortization & Maturity
+                </p>
+                <FormFieldWrapper
+                    control={form.control}
+                    label="Interest Amortization (%)"
+                    name="interest_amortization"
+                    render={({ field }) => (
+                        <InputGroup>
+                            <InputGroupInput
+                                {...field}
+                                disabled={isDisabled(field.name)}
+                                onChange={(e) =>
+                                    field.onChange(
+                                        e.target.value === ''
+                                            ? undefined
+                                            : parseFloat(e.target.value)
+                                    )
+                                }
+                                placeholder="Interest Standard"
+                                value={field.value ?? ''}
+                            />
+                            <InputGroupAddon align="inline-end">
+                                <InputGroupText>%</InputGroupText>
+                            </InputGroupAddon>
+                        </InputGroup>
+                    )}
+                />
+
+                <FormFieldWrapper
+                    control={form.control}
+                    label="Interest Maturity (%)"
+                    name="interest_maturity"
+                    render={({ field }) => (
+                        <InputGroup>
+                            <InputGroupInput
+                                {...field}
+                                disabled={isDisabled(field.name)}
+                                onChange={(e) =>
+                                    field.onChange(
+                                        e.target.value === ''
+                                            ? undefined
+                                            : parseFloat(e.target.value)
+                                    )
+                                }
+                                placeholder="Interest Standard"
+                                value={field.value ?? ''}
+                            />
+                            <InputGroupAddon align="inline-end">
+                                <InputGroupText>%</InputGroupText>
+                            </InputGroupAddon>
+                        </InputGroup>
+                    )}
+                />
+            </div>
+
             <div className="flex gap-x-3">
                 {/* Int/Fines Computation (Dim.) */}
                 <FormFieldWrapper
