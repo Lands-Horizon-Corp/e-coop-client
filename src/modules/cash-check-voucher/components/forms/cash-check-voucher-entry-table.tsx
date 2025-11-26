@@ -3,10 +3,11 @@ import { useCallback } from 'react'
 import { UseFormReturn, useFieldArray } from 'react-hook-form'
 
 import { cn } from '@/helpers'
-import { IAccount } from '@/modules/account'
+import { IAccount, TAccountType } from '@/modules/account'
 import { AccountPicker } from '@/modules/account/components'
 import { ICashCheckVoucherEntryRequest } from '@/modules/cash-check-voucher-entry'
 import { CurrencyInput, ICurrency } from '@/modules/currency'
+import LoanPicker from '@/modules/loan-transaction/components/loan-picker'
 import { IMemberProfile } from '@/modules/member-profile'
 import MemberPicker from '@/modules/member-profile/components/member-picker'
 import {
@@ -20,7 +21,6 @@ import { useHotkeys } from 'react-hotkeys-hook'
 import { PlusIcon, TrashIcon } from '@/components/icons'
 import { Button } from '@/components/ui/button'
 import { CommandShortcut } from '@/components/ui/command'
-import { Input } from '@/components/ui/input'
 import {
     Table,
     TableBody,
@@ -108,8 +108,8 @@ const columns: ColumnDef<ICashCheckVoucherEntryRequest>[] = [
         },
     },
     {
-        accessorKey: 'cash_check_voucher_number',
-        header: 'CV Number',
+        accessorKey: 'loan_transaction_id',
+        header: 'Loan',
         minSize: 120,
         size: 150,
         cell: (props) => {
@@ -117,16 +117,36 @@ const columns: ColumnDef<ICashCheckVoucherEntryRequest>[] = [
             const form = meta.form
             const rowIndex = props.row.index
 
+            const original = props.row.original
+            const account: IAccount | undefined = original.account
+
             return (
-                <Input
-                    className="!w-full !min-w-0"
-                    onChange={(e) => {
+                <LoanPicker
+                    disabled={
+                        !account ||
+                        !(
+                            [
+                                'Loan',
+                                'SVF-Ledger',
+                                'Fines',
+                                'Interest',
+                            ] as TAccountType[]
+                        ).includes(account?.type) ||
+                        !original.member_profile_id
+                    }
+                    memberProfileId={original.member_profile_id as TEntityId}
+                    mode={'member-profile'}
+                    onSelect={(loanTransaction) => {
                         form.setValue(
-                            `cash_check_voucher_entries.${rowIndex}.cash_check_voucher_number`,
-                            e.target.value
+                            `cash_check_voucher_entries.${rowIndex}.loan_transaction`,
+                            loanTransaction
+                        )
+                        form.setValue(
+                            `cash_check_voucher_entries.${rowIndex}.loan_transaction_id`,
+                            loanTransaction.id
                         )
                     }}
-                    value={props.row.original.cash_check_voucher_number}
+                    value={original.loan_transaction}
                 />
             )
         },
@@ -282,10 +302,8 @@ export const CashCheckJournalEntryTable = ({
             if (isReadOnlyMode) return
 
             const newRow: ICashCheckVoucherEntryRequest = {
-                description: '',
                 debit: 0,
                 credit: 0,
-                rowId: crypto.randomUUID(),
                 account_id: '' as TEntityId,
                 member_profile_id: defaultMemberProfile?.id,
                 member_profile: defaultMemberProfile,

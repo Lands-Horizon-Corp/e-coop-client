@@ -12,13 +12,14 @@ import { IUserOrganization } from '@/modules/user-organization'
 
 import PageContainer from '@/components/containers/page-container'
 import { XIcon } from '@/components/icons'
-import { Button } from '@/components/ui/button'
+import { Button, buttonVariants } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
 
 import { useModalState } from '@/hooks/use-modal-state'
 
 import { TEntityId } from '@/types'
 
+import { IAdjustmentEntryTotal } from '../adjustment-entry.types'
 import { AdjustmentEntryTotal } from '../components/adjustment-entry-total'
 import { AdjustmentEntryCreateUpdateFormModal } from '../components/forms/adjustment-entry-form-modal'
 import AdjustmentEntryTable from '../components/tables'
@@ -29,6 +30,9 @@ const AdjustmentEntryPage = () => {
     } = useAuthUserWithOrgBranch()
     const queryClient = useQueryClient()
     const createModal = useModalState(false)
+    const [focusedTotal, setFocusedTotal] = useState<
+        IAdjustmentEntryTotal | undefined
+    >()
 
     const { data } = useTransactionBatchStore()
     const [userOrganization, setUserOrganization] = useState<
@@ -60,6 +64,7 @@ const AdjustmentEntryPage = () => {
                 className="selft-start w-full"
                 currencyId={currency?.id as TEntityId}
                 mode={userOrganization ? 'currency-employee' : 'currency'}
+                onLoad={(data) => setFocusedTotal(data)}
                 userOrganizationId={userOrganization?.id as TEntityId}
             >
                 <div className="flex flex-1 items-center gap-x-2">
@@ -95,13 +100,17 @@ const AdjustmentEntryPage = () => {
                     </div>
                 </div>
             </AdjustmentEntryTotal>
-
             <AdjustmentEntryTable
                 className="max-h-[90vh] min-h-[80vh] w-full py-2"
                 currencyId={currency?.id as TEntityId}
                 mode={userOrganization ? 'currency-employee' : 'currency'}
                 toolbarProps={{
                     createActionProps: {
+                        className: buttonVariants({
+                            variant: !focusedTotal?.is_balanced
+                                ? 'alert'
+                                : 'default',
+                        }),
                         onClick: () => {
                             if (!data)
                                 return toast.warning(

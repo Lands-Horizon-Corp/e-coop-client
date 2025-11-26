@@ -52,6 +52,13 @@ export interface IAdjustmentEntryRequest {
     credit: number
 }
 
+export interface IAdjustmentEntryTotal {
+    balance: number
+    total_debit: number
+    total_credit: number
+    is_balanced: boolean
+}
+
 export interface IAdjustmentEntryPaginated
     extends IPaginatedResult<IAdjustmentEntry> {}
 

@@ -64,9 +64,11 @@ const AdjustmentEntryCreateUpdateForm = ({
         defaultValues: {
             ...formProps.defaultValues,
             account_id: '',
-            entry_date: formProps.defaultValues?.entry_date
-                ? toInputDateString(formProps.defaultValues.entry_date)
-                : '',
+            entry_date: toInputDateString(
+                formProps.defaultValues?.entry_date
+                    ? formProps.defaultValues.entry_date
+                    : new Date()
+            ),
             debit: 0,
             credit: 0,
         } as TAdjustmentEntryFormValues,
