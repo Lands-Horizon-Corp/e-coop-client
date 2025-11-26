@@ -13,6 +13,7 @@ import { IUserOrganization } from '@/modules/user-organization'
 import PageContainer from '@/components/containers/page-container'
 import { XIcon } from '@/components/icons'
 import { Button, buttonVariants } from '@/components/ui/button'
+import FormErrorMessage from '@/components/ui/form-error-message'
 import { Separator } from '@/components/ui/separator'
 
 import { useModalState } from '@/hooks/use-modal-state'
@@ -44,6 +45,12 @@ const AdjustmentEntryPage = () => {
 
     return (
         <PageContainer>
+            {focusedTotal?.is_balanced === false && (
+                <div className="px-2 py-1 mb-3 rounded-md bg-destructive text-xs w-full text-center border-destructive">
+                    In this adjustment entry, the total debits and total credits
+                    must be balanced.
+                </div>
+            )}
             <AdjustmentEntryCreateUpdateFormModal
                 {...createModal}
                 description="Enter the details for the new adjustment entry."
