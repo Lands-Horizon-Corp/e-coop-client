@@ -23,7 +23,7 @@ import {
 
 import { TEntityId } from '@/types'
 
-import { useGetAll } from '../member-type.service'
+import { useGetAllMemberTypes } from '../member-type.service'
 import { IMemberType } from '../member-type.types'
 import {
     MemberTypeCreateUpdateFormModal,
@@ -61,7 +61,7 @@ const MemberTypeCombobox = React.forwardRef<HTMLButtonElement, Props>(
         const [open, setOpen] = React.useState(false)
         const [createModal, setCreateModal] = React.useState(false)
 
-        const { data, isLoading } = useGetAll()
+        const { data, isLoading } = useGetAllMemberTypes()
 
         return (
             <>

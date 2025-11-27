@@ -1,6 +1,6 @@
 import { ReactNode } from 'react'
 
-import { MemberTypeReferenceCreateUpdateFormModal } from '@/modules/member-type-reference/components/member-type-reference-create-update-form'
+import { MemberTypeReferenceCreateUpdateFormModal } from '@/modules/member-type-reference/components/forms/member-type-reference-create-update-form'
 import MemberTypeReferenceTable from '@/modules/member-type-reference/components/member-type-references-table'
 import useConfirmModalStore from '@/store/confirm-modal-store'
 import { Row } from '@tanstack/react-table'

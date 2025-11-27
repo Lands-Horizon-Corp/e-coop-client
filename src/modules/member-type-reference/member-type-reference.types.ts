@@ -1,19 +1,17 @@
-import z from 'zod'
-
 import { IBaseEntityMeta, IPaginatedResult, TEntityId } from '@/types/common'
 
 import { IAccount } from '../account'
 import { IMemberType } from '../member-type/member-type.types'
-import { MemberTypeReferenceSchema } from './member-type-reference.validation'
+import { TMemberTypeReferenceSchema } from './member-type-reference.validation'
 
 // LATEST FROM ERD
-export type IMemberTypeReferenceRequest = z.infer<
-    typeof MemberTypeReferenceSchema
->
+export type IMemberTypeReferenceRequest = TMemberTypeReferenceSchema
 
 // LATEST FROM ERD
 export interface IMemberTypeReference extends IBaseEntityMeta {
     id: TEntityId
+
+    name: string
 
     account_id: TEntityId
     account: IAccount
@@ -23,12 +21,16 @@ export interface IMemberTypeReference extends IBaseEntityMeta {
 
     maintaining_balance: number
     description: string
-    interest_rate: number
     minimum_balance: number
+    interest_rate: number
     charges: number
 
-    other_interest_on_saving_computation_minimum_balance: number
-    other_interest_on_saving_computation_interest_rate: number
+    other_interest_on_saving_computation_minimum_balance?: number
+    other_interest_on_saving_computation_interest_rate?: number
+
+    interest_rates_by_year: any[]
+    interest_rates_by_date: any[]
+    interest_rates_by_amount: any[]
 }
 
 export interface IMemberTypeReferencePaginated

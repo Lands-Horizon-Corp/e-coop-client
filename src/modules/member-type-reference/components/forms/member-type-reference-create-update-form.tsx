@@ -8,7 +8,14 @@ import { cn } from '@/helpers/tw-utils'
 import { AccountPicker } from '@/modules/account'
 
 import FormFooterResetSubmit from '@/components/form-components/form-footer-reset-submit'
+import { SettingsIcon } from '@/components/icons'
 import Modal, { IModalProps } from '@/components/modals/modal'
+import {
+    Accordion,
+    AccordionContent,
+    AccordionItem,
+    AccordionTrigger,
+} from '@/components/ui/accordion'
 import { Form } from '@/components/ui/form'
 import FormFieldWrapper from '@/components/ui/form-field-wrapper'
 import { Input } from '@/components/ui/input'
@@ -18,9 +25,12 @@ import { useFormHelper } from '@/hooks/use-form-helper'
 
 import { IClassProps, IForm, TEntityId } from '@/types'
 
-import { useCreate, useUpdateById } from '../member-type-reference.service'
-import { IMemberTypeReference } from '../member-type-reference.types'
-import { MemberTypeReferenceSchema } from '../member-type-reference.validation'
+import {
+    useCreateMemberTypeReference,
+    useUpdateMemberTypeReferenceById,
+} from '../../member-type-reference.service'
+import { IMemberTypeReference } from '../../member-type-reference.types'
+import { MemberTypeReferenceSchema } from '../../member-type-reference.validation'
 
 type TMemberTypeReferenceFormValues = z.infer<typeof MemberTypeReferenceSchema>
 
@@ -47,8 +57,6 @@ const MemberTypeReferenceCreateUpdateForm = ({
         defaultValues: {
             description: '',
             account_id: '',
-            member_type_id: '',
-
             interest_rate: 0,
             charges: 0,
             minimum_balance: 0,
@@ -59,14 +67,14 @@ const MemberTypeReferenceCreateUpdateForm = ({
         },
     })
 
-    const createMutation = useCreate({
+    const createMutation = useCreateMemberTypeReference({
         options: { onSuccess: formProps.onSuccess, onError: formProps.onError },
     })
-    const updateMutation = useUpdateById({
+    const updateMutation = useUpdateMemberTypeReferenceById({
         options: { onSuccess: formProps.onSuccess, onError: formProps.onError },
     })
 
-    const { formRef, handleFocusError, isDisabled } =
+    const { formRef, firstError, handleFocusError, isDisabled } =
         useFormHelper<TMemberTypeReferenceFormValues>({
             form,
             ...formProps,
@@ -89,19 +97,32 @@ const MemberTypeReferenceCreateUpdateForm = ({
         reset,
     } = memberTypeReferenceId ? updateMutation : createMutation
 
-    const error = serverRequestErrExtractor({ error: rawError })
+    const error = serverRequestErrExtractor({ error: rawError }) || firstError
 
     return (
         <Form {...form}>
             <form
-                className={cn('flex w-full flex-col gap-y-4', className)}
+                className={cn('min-w-0 max-w-full flex-col gap-y-4', className)}
                 onSubmit={onSubmit}
                 ref={formRef}
             >
                 <fieldset
-                    className="grid gap-x-6 gap-y-4 sm:gap-y-3"
+                    className="min-w-0 max-w-full space-y-3"
                     disabled={isPending || formProps.readOnly}
                 >
+                    <FormFieldWrapper
+                        control={form.control}
+                        label="Name *"
+                        name="name"
+                        render={({ field }) => (
+                            <Input
+                                {...field}
+                                disabled={isDisabled(field.name)}
+                                placeholder="Name"
+                                type="text"
+                            />
+                        )}
+                    />
                     <FormFieldWrapper
                         control={form.control}
                         label="Account *"
@@ -120,36 +141,10 @@ const MemberTypeReferenceCreateUpdateForm = ({
                             />
                         )}
                     />
-                    <FormFieldWrapper
-                        control={form.control}
-                        label="Description *"
-                        name="description"
-                        render={({ field }) => (
-                            <Textarea
-                                {...field}
-                                autoComplete="off"
-                                disabled={isDisabled(field.name)}
-                                placeholder="Description"
-                            />
-                        )}
-                    />
-                    <p>Financial Details</p>
-                    <fieldset className="space-y-4">
-                        <FormFieldWrapper
-                            control={form.control}
-                            label="Interest *"
-                            name="interest_rate"
-                            render={({ field }) => (
-                                <Input
-                                    {...field}
-                                    disabled={isDisabled(field.name)}
-                                    placeholder="Interest Rate (%)"
-                                    type="number"
-                                />
-                            )}
-                        />
 
+                    <fieldset className="space-y-0 grid min-w-0 gap-2 grid-cols-2">
                         <FormFieldWrapper
+                            className="col-span-2 "
                             control={form.control}
                             label="Minimum Balance *"
                             name="minimum_balance"
@@ -158,7 +153,22 @@ const MemberTypeReferenceCreateUpdateForm = ({
                                     {...field}
                                     disabled={isDisabled(field.name)}
                                     placeholder="Minimum Balance"
-                                    type="number"
+                                />
+                            )}
+                        />
+                        <FormFieldWrapper
+                            control={form.control}
+                            label="Interest *"
+                            name="interest_rate"
+                            render={({ field }) => (
+                                <Input
+                                    {...field}
+                                    disabled={isDisabled(field.name)}
+                                    onChange={(e) => {
+                                        field.onChange(e)
+                                        form.setValue('charges', undefined)
+                                    }}
+                                    placeholder="Interest Rate (%)"
                                 />
                             )}
                         />
@@ -170,12 +180,19 @@ const MemberTypeReferenceCreateUpdateForm = ({
                                 <Input
                                     {...field}
                                     disabled={isDisabled(field.name)}
+                                    onChange={(e) => {
+                                        field.onChange(e)
+                                        form.setValue(
+                                            'interest_rate',
+                                            undefined
+                                        )
+                                    }}
                                     placeholder="Charges"
-                                    type="number"
                                 />
                             )}
                         />
-                        <FormFieldWrapper
+
+                        {/* <FormFieldWrapper
                             control={form.control}
                             label="Maintaining Balance *"
                             name="maintaining_balance"
@@ -184,42 +201,69 @@ const MemberTypeReferenceCreateUpdateForm = ({
                                     {...field}
                                     disabled={isDisabled(field.name)}
                                     placeholder="Maintaining Balance"
-                                    type="number"
                                 />
                             )}
-                        />
+                        /> */}
                     </fieldset>
-                    <p>Active Member Criteria</p>
-                    <p>Other</p>
 
-                    <fieldset className="space-y-4">
-                        <FormFieldWrapper
-                            control={form.control}
-                            label="Other interest on saving computation minimum balance *"
-                            name="other_interest_on_saving_computation_minimum_balance"
-                            render={({ field }) => (
-                                <Input
-                                    {...field}
-                                    disabled={isDisabled(field.name)}
-                                    placeholder="Maintaining Balance"
-                                    type="number"
+                    <Accordion collapsible type="single">
+                        <AccordionItem
+                            className="!p-0"
+                            value="member-type-reference-other-config"
+                        >
+                            <AccordionTrigger className="px-0 hover:no-underline">
+                                <div className="flex items-center text-primary gap-2">
+                                    <SettingsIcon className="size-4" />
+                                    <span>Other</span>
+                                </div>
+                            </AccordionTrigger>
+                            <AccordionContent className="px-0 space-y-4">
+                                <FormFieldWrapper
+                                    control={form.control}
+                                    label="Description *"
+                                    name="description"
+                                    render={({ field }) => (
+                                        <Textarea
+                                            {...field}
+                                            autoComplete="off"
+                                            disabled={isDisabled(field.name)}
+                                            placeholder="Description"
+                                        />
+                                    )}
                                 />
-                            )}
-                        />
-                        <FormFieldWrapper
-                            control={form.control}
-                            label="Other interest on saving computation interest rate *"
-                            name="other_interest_on_saving_computation_interest_rate"
-                            render={({ field }) => (
-                                <Input
-                                    {...field}
-                                    disabled={isDisabled(field.name)}
-                                    placeholder="Maintaining Balance"
-                                    type="number"
-                                />
-                            )}
-                        />
-                    </fieldset>
+                                <fieldset className="space-y-4 grid grid-cols-2 gap-2">
+                                    <FormFieldWrapper
+                                        control={form.control}
+                                        label="Other interest on saving computation minimum balance *"
+                                        name="other_interest_on_saving_computation_minimum_balance"
+                                        render={({ field }) => (
+                                            <Input
+                                                {...field}
+                                                disabled={isDisabled(
+                                                    field.name
+                                                )}
+                                                placeholder="Minimum Balance"
+                                            />
+                                        )}
+                                    />
+                                    <FormFieldWrapper
+                                        control={form.control}
+                                        label="Other interest on saving computation interest rate *"
+                                        name="other_interest_on_saving_computation_interest_rate"
+                                        render={({ field }) => (
+                                            <Input
+                                                {...field}
+                                                disabled={isDisabled(
+                                                    field.name
+                                                )}
+                                                placeholder="Interest Rate"
+                                            />
+                                        )}
+                                    />
+                                </fieldset>
+                            </AccordionContent>
+                        </AccordionItem>
+                    </Accordion>
                 </fieldset>
                 <FormFooterResetSubmit
                     disableSubmit={!form.formState.isDirty}
@@ -248,7 +292,7 @@ export const MemberTypeReferenceCreateUpdateFormModal = ({
 }) => {
     return (
         <Modal
-            className={cn('max-w-2xl', className)}
+            className={cn('!max-w-xl', className)}
             description={description}
             title={title}
             {...props}

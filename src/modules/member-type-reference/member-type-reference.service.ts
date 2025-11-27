@@ -29,12 +29,12 @@ export const MemberTypeReferenceAPI = apiCrudService
 // 🪝 HOOK STARTS HERE
 // Expose CRUD hooks
 export const {
-    useCreate,
-    useDeleteById,
-    useDeleteMany,
-    useGetAll,
-    useGetById,
-    useUpdateById,
+    useCreate: useCreateMemberTypeReference,
+    useDeleteById: useDeleteMemberTypeReferenceById,
+    useDeleteMany: useDeleteManyMemberTypeReferences,
+    useGetAll: useGetAllMemberTypeReferences,
+    useGetById: useGetMemberTypeReferenceById,
+    useUpdateById: useUpdateMemberTypeReferenceById,
 } = apiCrudHooks
 
 // Custom hook for filtered and paginated member type references

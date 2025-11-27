@@ -14,9 +14,8 @@ export const entityIdSchema = z.uuidv4()
 export const EntityIdSchema = (fieldName?: string) =>
     z.uuidv4({ error: `${fieldName ? fieldName : 'Field'} is required` })
 
-export const descriptionSchema = z
+export const descriptionSchema = z.coerce
     .string({ error: 'Description is required' })
-    .min(1)
 
 export const organizationBranchIdsSchema = z.object({
     organization_id: entityIdSchema.optional(),
