@@ -2,6 +2,7 @@ import { toast } from 'sonner'
 
 import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
 import PrintReportFormModal from '@/modules/generated-report/components/forms/print-modal-config'
+import { useGenerateReport } from '@/modules/generated-report/components/generate-report-hooks/use-report-generate'
 import {
     ILoanTransaction,
     useUndoPrintLoanTransaction,
@@ -12,6 +13,7 @@ import LoanApproveReleaseDisplayModal from '@/modules/loan-transaction/component
 import LoanTransactionOtherAction from '@/modules/loan-transaction/components/loan-other-actions'
 import { LoanTagsManagerPopover } from '@/modules/loan-transaction/components/loan-tag-manager'
 import useConfirmModalStore from '@/store/confirm-modal-store'
+import useGeneratedReportConfigStore from '@/store/generated-report-config-store'
 
 import { EyeIcon, PencilFillIcon } from '@/components/icons'
 import { LoanVoucherReleaseTemplates } from '@/components/templates/loan-voucher-release'
@@ -105,10 +107,6 @@ const useCardKanbanActions = ({
         undoApproveModal.onOpenChange(true)
     }
 
-    const handleGenerateReport = () => {
-        generateReport.onOpenChange(true)
-    }
-
     return {
         handleOpenViewModal,
         openViewModal,
@@ -124,7 +122,6 @@ const useCardKanbanActions = ({
         handleUndoApprove,
         handleUnprint,
         generateReport,
-        handleGenerateReport,
     }
 }
 
@@ -146,11 +143,17 @@ export const LoanTransactionCardActions = ({
         handleUndoApprove,
         handleUnprint,
         handleOpenPrintModal,
-        handleGenerateReport,
         generateReport,
     } = useCardKanbanActions({ loanTransaction, refetch })
 
     const isReleased = !!loanTransaction.released_date
+
+    const { clear } = useGeneratedReportConfigStore()
+    const createGeneratedReport = useGenerateReport({
+        onSuccess: () => {
+            clear()
+        },
+    })
 
     return (
         <>
@@ -188,10 +191,9 @@ export const LoanTransactionCardActions = ({
                 formProps={{
                     defaultValues: { ...loanTransaction },
                     loanTransactionId: loanTransaction.id,
-                    onSuccess: (data) => {
-                        console.log('Print Success Data', data)
+                    onSuccess: () => {
                         printModal.onOpenChange(false)
-                        handleGenerateReport()
+                        createGeneratedReport?.handleGenerateReport()
                         refetch?.()
                     },
                 }}

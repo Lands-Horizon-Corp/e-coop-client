@@ -203,9 +203,9 @@ const PrintReportForm = ({
                                               )
                                     }
                                 >
-                                    {templates?.map((template) => {
+                                    {templates?.map((template, idx) => {
                                         return (
-                                            <div key={template.value}>
+                                            <div key={idx}>
                                                 <div className="shadow-xs h-full relative flex w-full items-center gap-3 rounded-2xl border border-input p-4 outline-none duration-200 ease-out has-[:checked]:border-primary/30 has-[:checked]:bg-primary/40">
                                                     <RadioGroupItem
                                                         className="order-1 after:absolute after:inset-0"
