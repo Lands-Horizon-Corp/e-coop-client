@@ -26,56 +26,56 @@ import { useFormHelper } from '@/hooks/use-form-helper'
 import { IClassProps, IForm, TEntityId } from '@/types'
 
 import {
-    useCreateMemberTypeReference,
-    useUpdateMemberTypeReferenceById,
-} from '../../member-type-reference.service'
-import { IMemberTypeReference } from '../../member-type-reference.types'
-import { MemberTypeReferenceSchema } from '../../member-type-reference.validation'
+    useCreateBrowseReference,
+    useUpdateBrowseReferenceById,
+} from '../../browse-reference.service'
+import { IBrowseReference } from '../../browse-reference.types'
+import { BrowseReferenceSchema } from '../../browse-reference.validation'
 
-type TMemberTypeReferenceFormValues = z.infer<typeof MemberTypeReferenceSchema>
+type TBrowseReferenceFormValues = z.infer<typeof BrowseReferenceSchema>
 
-export interface IMemberTypeReferenceFormProps
+export interface IBrowseReferenceFormProps
     extends IClassProps,
         IForm<
-            Partial<TMemberTypeReferenceFormValues>,
-            IMemberTypeReference,
+            Partial<TBrowseReferenceFormValues>,
+            IBrowseReference,
             Error,
-            TMemberTypeReferenceFormValues
+            TBrowseReferenceFormValues
         > {
     memberTypeReferenceId?: TEntityId
 }
 
-const MemberTypeReferenceCreateUpdateForm = ({
+const BrowseReferenceCreateUpdateForm = ({
     className,
     memberTypeReferenceId,
     ...formProps
-}: IMemberTypeReferenceFormProps) => {
-    const form = useForm<TMemberTypeReferenceFormValues>({
-        resolver: standardSchemaResolver(MemberTypeReferenceSchema),
+}: IBrowseReferenceFormProps) => {
+    const form = useForm<TBrowseReferenceFormValues>({
+        resolver: standardSchemaResolver(BrowseReferenceSchema),
         mode: 'onSubmit',
         reValidateMode: 'onChange',
         defaultValues: {
             description: '',
             account_id: '',
             interest_rate: 0,
+            interest_type: 'none',
             charges: 0,
             minimum_balance: 0,
-            maintaining_balance: 0,
             other_interest_on_saving_computation_minimum_balance: 0,
             other_interest_on_saving_computation_interest_rate: 0,
             ...formProps.defaultValues,
         },
     })
 
-    const createMutation = useCreateMemberTypeReference({
+    const createMutation = useCreateBrowseReference({
         options: { onSuccess: formProps.onSuccess, onError: formProps.onError },
     })
-    const updateMutation = useUpdateMemberTypeReferenceById({
+    const updateMutation = useUpdateBrowseReferenceById({
         options: { onSuccess: formProps.onSuccess, onError: formProps.onError },
     })
 
     const { formRef, firstError, handleFocusError, isDisabled } =
-        useFormHelper<TMemberTypeReferenceFormValues>({
+        useFormHelper<TBrowseReferenceFormValues>({
             form,
             ...formProps,
         })
@@ -133,6 +133,7 @@ const MemberTypeReferenceCreateUpdateForm = ({
                                 mode="all"
                                 onSelect={(account) => {
                                     field.onChange(account.id)
+                                    form.setValue('name', account?.name)
                                     form.setValue('account', account, {
                                         shouldDirty: true,
                                     })
@@ -281,14 +282,14 @@ const MemberTypeReferenceCreateUpdateForm = ({
     )
 }
 
-export const MemberTypeReferenceCreateUpdateFormModal = ({
+export const BrowseReferenceCreateUpdateFormModal = ({
     title = 'Create Member Type Reference',
     description = 'Fill out the form to add or update a reference.',
     className,
     formProps,
     ...props
 }: IModalProps & {
-    formProps?: Omit<IMemberTypeReferenceFormProps, 'className'>
+    formProps?: Omit<IBrowseReferenceFormProps, 'className'>
 }) => {
     return (
         <Modal
@@ -297,7 +298,7 @@ export const MemberTypeReferenceCreateUpdateFormModal = ({
             title={title}
             {...props}
         >
-            <MemberTypeReferenceCreateUpdateForm
+            <BrowseReferenceCreateUpdateForm
                 {...formProps}
                 onSuccess={(data) => {
                     formProps?.onSuccess?.(data)
@@ -308,4 +309,4 @@ export const MemberTypeReferenceCreateUpdateFormModal = ({
     )
 }
 
-export default MemberTypeReferenceCreateUpdateForm
+export default BrowseReferenceCreateUpdateForm

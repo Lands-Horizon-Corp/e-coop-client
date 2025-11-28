@@ -1,8 +1,8 @@
 import { createFileRoute, useNavigate, useSearch } from '@tanstack/react-router'
 
+import BrowseReferencePage from '@/modules/browse-reference/components/pages/browse-reference-page'
 import ChargesRateSchemePage from '@/modules/charges-rate-scheme/components/pages/charges-rate-page'
 import ComputationSheetPage from '@/modules/computation-sheet/components/pages/computation-sheet'
-import MemberTypeBrowseReferencePage from '@/modules/member-type-reference/components/pages/member-type-reference-page'
 import TimeDepositTypePage from '@/modules/time-deposit-type/components/pages/time-deposit-type'
 
 import PageContainer from '@/components/containers/page-container'
@@ -14,22 +14,22 @@ import {
 } from '@/components/icons'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 
+type Tabs =
+    | 'computation-sheet-scheme'
+    | 'loan-charges-scheme'
+    | 'time-deposit-scheme'
+    | 'browse-reference'
+
 export const Route = createFileRoute(
     '/org/$orgname/branch/$branchname/(employee)/schemes/'
 )({
     component: RouteComponent,
     validateSearch: (search: Record<string, unknown>) => {
         return {
-            tab: (search.tab as string) || 'loan-scheme',
+            tab: (search.tab as Tabs) || 'loan-scheme',
         }
     },
 })
-
-type Tabs =
-    | 'computation-sheet-scheme'
-    | 'loan-charges-scheme'
-    | 'time-deposit-scheme'
-    | 'browse-reference'
 
 function RouteComponent() {
     const navigate = useNavigate()
@@ -97,7 +97,7 @@ function RouteComponent() {
                             className="mb-1.5 opacity-60"
                             size={16}
                         />
-                        Browse Reference
+                        Member Type
                     </TabsTrigger>
                 </TabsList>
                 <TabsContent
@@ -122,7 +122,7 @@ function RouteComponent() {
                     className="min-w-0 w-full"
                     value="browse-reference"
                 >
-                    <MemberTypeBrowseReferencePage />
+                    <BrowseReferencePage />
                 </TabsContent>
             </Tabs>
         </PageContainer>

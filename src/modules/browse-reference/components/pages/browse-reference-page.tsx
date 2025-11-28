@@ -2,7 +2,7 @@ import PageContainer from '@/components/containers/page-container'
 
 import BrowseReferenceSchemeEditor from '../browse-reference/browse-reference-editor'
 
-const MemberTypeBrowseReferencePage = () => {
+const BrowseReferencePage = () => {
     return (
         <PageContainer className="!p-0">
             <BrowseReferenceSchemeEditor />
@@ -10,4 +10,4 @@ const MemberTypeBrowseReferencePage = () => {
     )
 }
 
-export default MemberTypeBrowseReferencePage
+export default BrowseReferencePage

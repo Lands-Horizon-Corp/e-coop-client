@@ -8,7 +8,7 @@ import {
 } from '@/types/common'
 
 import { IBranch } from '../branch'
-import { IMemberTypeReference } from '../member-type-reference'
+import { IBrowseReference } from '../browse-reference'
 import { MemberTypeSchema } from './member-type.validation'
 
 export interface IMemberType extends ITimeStamps, IAuditable {
@@ -21,7 +21,7 @@ export interface IMemberType extends ITimeStamps, IAuditable {
     prefix: string
     description: string
 
-    browse_references: IMemberTypeReference[]
+    browse_references: IBrowseReference[]
 }
 
 export type IMemberTypeRequest = z.infer<typeof MemberTypeSchema>

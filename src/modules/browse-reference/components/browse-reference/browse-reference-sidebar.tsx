@@ -38,8 +38,8 @@ import { useModalState } from '@/hooks/use-modal-state'
 
 import { IClassProps, TEntityId } from '@/types'
 
-import { IMemberTypeReference } from '../../member-type-reference.types'
-import { MemberTypeReferenceCreateUpdateFormModal } from '../forms/member-type-reference-create-update-form'
+import { IBrowseReference } from '../../browse-reference.types'
+import { BrowseReferenceCreateUpdateFormModal } from '../forms/browse-reference-create-update-form'
 
 interface Props extends IClassProps {
     selectedReferenceId?: TEntityId
@@ -164,10 +164,7 @@ const BrowseReferenceSidebar = ({
                         )}
                     </p>
                 )}
-                <Accordion
-                    className="w-full min-w-0 space-y-2"
-                    type="single"
-                >
+                <Accordion className="w-full min-w-0 space-y-2" type="single">
                     {filteredData.map((memberType) => (
                         <MemberTypeAccordionItem
                             key={memberType.id}
@@ -183,7 +180,6 @@ const BrowseReferenceSidebar = ({
     )
 }
 
-// Component for each accordion item representing a member type
 const MemberTypeAccordionItem = ({
     memberType,
     selectedReferenceId,
@@ -198,7 +194,6 @@ const MemberTypeAccordionItem = ({
     const createReferenceModal = useModalState()
     const memberTypeModal = useModalState()
 
-    // Use preloaded browse_references from memberType
     const references = memberType.browse_references || []
 
     return (
@@ -211,7 +206,7 @@ const MemberTypeAccordionItem = ({
                 }}
                 title="Edit Member Type"
             />
-            <MemberTypeReferenceCreateUpdateFormModal
+            <BrowseReferenceCreateUpdateFormModal
                 {...createReferenceModal}
                 formProps={{
                     defaultValues: {
@@ -223,31 +218,25 @@ const MemberTypeAccordionItem = ({
                 className="min-w-0 border-b-0 space-y-2 bg-card"
                 value={`member-type-${memberType.id}`}
             >
-                <AccordionTrigger
-                    className="px-3 py-2 min-w-0 bg-background/50 border border-border/40 hover:no-underline hover:bg-primary/5 rounded-lg"
-                >
+                <AccordionTrigger className="px-3 py-2 min-w-0 bg-background/50 border border-border/40 hover:no-underline hover:bg-primary/5 rounded-lg">
                     <div className="flex items-center justify-between flex-1 mr-2 min-w-0 gap-x-2">
                         <div className="text-left min-w-0 flex-1">
                             <p className="font-medium truncate text-sm">
                                 {memberType.name}
                             </p>
                         </div>
-                        <Button
-                            className="h-6 w-6 p-0 opacity-60 hover:opacity-100 shrink-0"
+                        <span
+                            className="size-6 p-0 opacity-60 rounded-md hover:bg-popover flex items-center justify-center duration-300 hover:opacity-100 shrink-0"
                             onClick={(e) => {
                                 e.stopPropagation()
                                 memberTypeModal.onOpenChange(true)
                             }}
-                            size="icon-sm"
-                            type="button"
-                            variant="ghost"
                         >
                             <PencilFillIcon className="size-3" />
-                        </Button>
+                        </span>
                     </div>
                 </AccordionTrigger>
                 <AccordionContent className="px-0 mx-0 bg-background rounded-md py-2">
-                    {/* Add Reference button - only visible when expanded */}
                     <div className="mb-2 px-1">
                         <Button
                             className="h-7 text-xs w-full"
@@ -268,9 +257,9 @@ const MemberTypeAccordionItem = ({
                             No references found
                         </p>
                     )}
-                    <div className="space-y-1">
+                    <div className="space-y-1 px-1">
                         {references.map((reference) => (
-                            <MemberTypeReferenceItem
+                            <BrowseReferenceItem
                                 key={reference.id}
                                 onDelete={onDeleteReference}
                                 onSelect={onSelectReference}
@@ -286,13 +275,13 @@ const MemberTypeAccordionItem = ({
 }
 
 // Component for individual member type reference items
-const MemberTypeReferenceItem = ({
+const BrowseReferenceItem = ({
     reference,
     selected,
     onSelect,
     onDelete,
 }: {
-    reference: IMemberTypeReference
+    reference: IBrowseReference
     selected: boolean
     onSelect: (referenceId: TEntityId) => void
     onDelete?: (referenceId: TEntityId) => void
@@ -307,7 +296,7 @@ const MemberTypeReferenceItem = ({
         >
             <div className="flex-1 min-w-0">
                 <p className="text-sm font-medium truncate">
-                    {reference.account?.name || 'Unnamed Account'}
+                    {reference.name || 'Unnamed Account'}
                 </p>
                 <p className="text-xs text-muted-foreground truncate">
                     {reference.description || 'No description'}

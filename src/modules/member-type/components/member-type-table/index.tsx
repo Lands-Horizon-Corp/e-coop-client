@@ -6,8 +6,8 @@ import FilterContext from '@/contexts/filter-context/filter-context'
 import { cn } from '@/helpers/tw-utils'
 import {
     IMemberType,
-    MemberTypeAPI,
-    useGetPaginated,
+    deleteManyMemberTypes,
+    useGetPaginatedMemberTypes,
 } from '@/modules/member-type'
 import {
     getCoreRowModel,
@@ -113,7 +113,7 @@ const MemberTypeTable = ({
         isRefetching,
         data: { data = [], totalPage = 1, pageSize = 10, totalSize = 0 } = {},
         refetch,
-    } = useGetPaginated({
+    } = useGetPaginatedMemberTypes({
         query: {
             ...pagination,
             sort: sortingStateBase64,
@@ -170,7 +170,7 @@ const MemberTypeTable = ({
                                     queryKey: ['member-type', 'paginated'],
                                 }),
                             onDelete: (selectedData) =>
-                                MemberTypeAPI.deleteMany({
+                                deleteManyMemberTypes({
                                     ids: selectedData.map((data) => data.id),
                                 }),
                         }}

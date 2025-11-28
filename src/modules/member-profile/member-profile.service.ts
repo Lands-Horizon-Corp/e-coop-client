@@ -17,6 +17,7 @@ import { TAPIQueryOptions, TEntityId } from '@/types'
 import type {
     IMemberProfile,
     IMemberProfileMembershipInfoRequest,
+    IMemberProfilePaginated,
     IMemberProfilePersonalInfoRequest,
     IMemberProfileQuickCreateRequest,
     IMemberProfileRequest,
@@ -41,6 +42,7 @@ export const {
     updateById: updateMemberProfileById,
     deleteMany: deleteManyMemberProfiles,
     getAll: getAllMemberProfile,
+    getPaginated: getPaginatedMemberProfile,
 } = apiCrudService
 
 // Update Member Profile Membership Info API
@@ -194,5 +196,74 @@ export const useAllPendingMemberProfiles = ({
             }),
     })
 }
+
+export const useGetPaginatedMemberProfileByMemberType = ({
+    memberTypeId,
+    query,
+    options,
+}: {
+    memberTypeId: TEntityId
+    query?: TAPIQueryOptions
+    options?: HookQueryOptions<IMemberProfilePaginated, Error>
+}) => {
+    return useQuery<IMemberProfilePaginated, Error>({
+        ...options,
+        queryKey: [
+            memberProfileBaseKey,
+            'paginated',
+            'member-type',
+            memberTypeId,
+            query,
+        ].filter(Boolean),
+        queryFn: async () =>
+            getPaginatedMemberProfile({
+                url: `${memberProfileAPIRoute}/member-type/${memberTypeId}/search`,
+                query,
+            }),
+    })
+}
+
+export const useLinkMemberProfileMemberType = createMutationFactory<
+    IMemberProfile,
+    Error,
+    { memberId: TEntityId; memberTypeId: TEntityId }
+>({
+    mutationFn: async ({ memberId, memberTypeId }) => {
+        const response = await API.put<void, IMemberProfile>(
+            `${memberProfileAPIRoute}/${memberId}/member-type/${memberTypeId}/link`
+        )
+        return response.data
+    },
+    invalidationFn: (args) => {
+        args.queryClient.invalidateQueries({
+            queryKey: [
+                memberProfileBaseKey,
+                'paginated',
+                'member-type',
+                args.variables.memberTypeId,
+            ],
+        })
+        updateMutationInvalidationFn(memberProfileBaseKey, args)
+    },
+})
+
+export const useUnlinkMemberProfileMemberType = createMutationFactory<
+    IMemberProfile,
+    Error,
+    { memberId: TEntityId }
+>({
+    mutationFn: async ({ memberId }) => {
+        const response = await API.put<void, IMemberProfile>(
+            `${memberProfileAPIRoute}/${memberId}/unlink`
+        )
+        return response.data
+    },
+    invalidationFn: (args) => {
+        args.queryClient.invalidateQueries({
+            queryKey: [memberProfileBaseKey, 'paginated', 'member-type'],
+        })
+        updateMutationInvalidationFn(memberProfileBaseKey, args)
+    },
+})
 
 export const logger = Logger.getInstance('member-profile')

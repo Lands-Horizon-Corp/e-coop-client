@@ -3,10 +3,10 @@ import { createDataLayerFactory } from '@/providers/repositories/data-layer-fact
 
 import type { IMemberType, IMemberTypeRequest } from './member-type.types'
 
-const {
+export const {
     apiCrudHooks,
     apiCrudService,
-    // baseQueryKey: memberTypeBaseQueryKey,
+    baseQueryKey: memberTypeBaseQueryKey,
 } = createDataLayerFactory<IMemberType, IMemberTypeRequest>({
     url: '/api/v1/member-type',
     baseKey: 'member-type',
@@ -26,6 +26,10 @@ export const {
 
 // Add custom API query hooks here if needed
 
-export const { API, route: memberTypeAPIRoute } = apiCrudService
+export const {
+    API,
+    route: memberTypeAPIRoute,
+    deleteMany: deleteManyMemberTypes,
+} = apiCrudService
 
 export const logger = Logger.getInstance('member-type')

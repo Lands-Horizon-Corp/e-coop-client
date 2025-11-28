@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef } from 'react'
+import { useCallback, useEffect, useMemo, useRef } from 'react'
 
 import {
     DefaultValues,
@@ -82,7 +82,10 @@ export const useFormHelper = <T extends FieldValues>({
         [hiddenFields, readOnly, disabledFields]
     )
 
-    const firstError = Object.values(form.formState.errors)[0]?.message
+    const firstError = useMemo(
+        () => Object.values(form.formState.errors)[0]?.message,
+        [form.formState.errors]
+    )
 
     const formRef = useFormAutoSave<T>({
         form,
