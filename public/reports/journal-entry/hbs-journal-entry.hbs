@@ -1,3 +1,4 @@
+
 <style>
     @page {
         margin: 0;
@@ -158,8 +159,8 @@
         background: #dbeafe;
         font-weight: 700;
         color: #1e40af;
-        border-top: 2px solid #3b82f6;
-        border-bottom: 2px solid #3b82f6;
+        border-top: 1px solid #3b82f6;
+        border-bottom: 1px solid #3b82f6;
     }
 
     .totals {
@@ -187,10 +188,11 @@
     /* Signatures - responsive grid */
     .signature-grid {
         display: grid;
-        grid-template-columns: 1fr;
+        grid-template-columns: 2fr;
         gap: clamp(0.5rem, 2%, 1rem);
         margin-top: clamp(0.75rem, 2.5%, 1.5rem);
         font-size: var(--fs-sm);
+        width: 100%;
     }
 
     @container (min-width: 500px) {
@@ -201,7 +203,7 @@
 
     @container (min-width: 700px) {
         .signature-grid {
-            grid-template-columns: repeat(4, 1fr);
+            grid-template-columns: repeat(2, 1fr);
         }
     }
 
@@ -286,22 +288,15 @@
     <div class="info-grid">
         <div class="info-item">
             <div>
-                <span class="info-label">Pay To:</span>
-                <span class="info-value">{{pay_to}}</span>
+                <span class="info-label">Name:</span>
+                <span class="info-value">{{name}}</span>
             </div>
-            <p class="info-subtext">Address: {{address}}</p>
-            <p class="info-subtext">Particulars: {{particulars}}</p>
+            <p class="info-subtext">particulars: {{particulars}}</p>
         </div>
         <div class="info-item">
             <p><span class="info-label">Voucher No:</span> <span class="info-value">{{voucher_no}}</span></p>
             <p><span class="info-label">Entry Date:</span> <span class="info-value">{{entry_date}}</span></p>
             <p><span class="info-label">Print Date:</span> <span class="info-value">{{print_date}}</span></p>
-            <p><span class="info-label">Date:</span> <span class="info-value">{{date}}</span></p>
-        </div>
-        <div class="info-item">
-            <p><span class="info-label">Amount:</span> <span class="info-value">₱{{amount}}</span></p>
-            <p><span class="info-label">Check No:</span> <span class="info-value">{{check_no}}</span></p>
-            <p><span class="info-label">Check Date:</span> <span class="info-value">{{check_date}}</span></p>
         </div>
     </div>
 
@@ -316,18 +311,13 @@
             </thead>
             <tbody>
                 {{#each account_entries}}
-                <tr>
+                <tr class="{{#if is_highlighted}}highlight{{/if}}">
                     <td>{{account_title}}</td>
                     <td class="text-right">{{debit}}</td>
                     <td class="text-right">{{credit}}</td>
                 </tr>
                 {{/each}}
-                <tr class="totals">
-                    <td>CASH ON HAND TOTAL</td>
-                    <td class="text-right">{{cash_on_hand_total_debit}}</td>
-                    <td class="text-right">{{cash_on_hand_total_credit}}</td>
-                </tr>
-                <tr class="totals">
+                 <tr class="totals">
                     <td>TOTAL</td>
                     <td class="text-right">{{total_debit}}</td>
                     <td class="text-right">{{total_credit}}</td>
@@ -337,7 +327,7 @@
     </div>
 
     <div class="amount-words">
-        *** {{total_amount_into_words}} ONLY ***
+        *** {{status}} ({{count}})***
     </div>
 
     <div class="signature-grid">
@@ -346,33 +336,8 @@
             <div class="signature-line">{{prepared_by}}</div>
         </div>
         <div class="signature-item">
-            <p class="signature-label">Payee:</p>
-            <div class="signature-line">{{payee}}</div>
-        </div>
-        <div class="signature-item">
-            <p class="signature-label">Certified Correct:</p>
-            <div class="signature-line">{{certified_correct}}</div>
-        </div>
-        <div class="signature-item">
-            <p class="signature-label">Paid by:</p>
-            <div class="signature-line">{{paid_by}}</div>
-        </div>
-    </div>
-
-    <div class="approval-section">
-        <p class="approval-label">Approved for Payment:</p>
-        <div class="approval-line">{{approved_for_payment}}</div>
-    </div>
-
-    <div class="info-grid" style="margin-top: clamp(0.75rem, 2.5%, 1.5rem); border-top: 1px solid #e5e7eb; padding-top: clamp(0.5rem, 2%, 1rem);">
-        <div class="info-item">
-            <p><span class="info-label">User ID:</span> <span class="info-value">{{user_id}}</span></p>
-        </div>
-        <div class="info-item">
-            <p><span class="info-label">Report Date:</span> <span class="info-value">{{report_date}}</span></p>
-        </div>
-        <div class="info-item">
-            <p><span class="info-label">Time:</span> <span class="info-value">{{time}}</span></p>
+            <p class="signature-label">Approved by:</p>
+            <div class="signature-line">{{approved_by}}</div>
         </div>
     </div>
 

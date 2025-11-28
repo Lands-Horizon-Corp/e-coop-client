@@ -38,7 +38,7 @@ export const PaperSizeContainer = ({
     height: customHeight,
     unit: customUnit = 'mm',
     orientation = 'portrait',
-    scale = 0.3,
+    scale = 1,
     showDimensions = true,
     children,
     className,

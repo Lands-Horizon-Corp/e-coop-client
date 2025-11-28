@@ -11,7 +11,7 @@ import JournalVoucherOtherAction from '@/modules/journal-voucher/components/tabl
 import useGeneratedReportConfigStore from '@/store/generated-report-config-store'
 
 import { EyeIcon, PencilFillIcon } from '@/components/icons'
-import { JournalVoucherTemplates } from '@/components/templates/journal-voucher'
+import { JournalVoucherTemplates } from '@/components/templates/template-journal-entry'
 import { Button } from '@/components/ui/button'
 import {
     DropdownMenu,

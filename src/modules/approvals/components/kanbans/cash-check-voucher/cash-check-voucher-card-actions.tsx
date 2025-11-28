@@ -11,7 +11,7 @@ import { useGenerateReport } from '@/modules/generated-report/components/generat
 import useGeneratedReportConfigStore from '@/store/generated-report-config-store'
 
 import { EyeIcon, PencilFillIcon, SignatureLightIcon } from '@/components/icons'
-import { CashCheckVoucherTemplates } from '@/components/templates/cash-check-voucher'
+import { CashCheckVoucherTemplates } from '@/components/templates/template-cash-check-disbursement'
 import { Button } from '@/components/ui/button'
 import {
     DropdownMenu,
@@ -143,7 +143,7 @@ export const CashCheckVoucherCardActions = ({
                 {...generateReport}
                 formProps={{
                     defaultValues: {
-                        name: 'Cash Check Voucher ',
+                        name: 'Cash Check disbursement',
                         description: 'Generated Cash Check Voucher',
                         model: 'CashCheckVoucher',
                         generated_report_type: 'pdf',

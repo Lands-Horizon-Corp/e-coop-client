@@ -71,38 +71,133 @@ export const sampleLoanReleaseData = [
         approved_for_payment: 'Engr. Raymond Cruz',
     },
 ]
+export const sampleCashCheckDisbursementData = [
+    {
+        header_title: 'XYZ COOPERATIVE CREDIT UNION',
+        header_address: '123 Main Street, Quezon City, Metro Manila',
+        tax_number: '008-456-789-001',
+        report_title: 'CASH/CHECK DISBURSEMENT',
+
+        pay_to: 'Maria Clara Santos',
+        address: '456 Luna St., Brgy. Santolan, Pasig City',
+        particulars: 'Payment for office supplies and equipment',
+
+        voucher_no: 'CDV-2025-00542',
+        entry_date: '2025-11-28',
+        print_date: '2025-11-28',
+        amount: 25000.0,
+        date: '2025-11-28',
+
+        account_entries: [
+            {
+                account_title: 'Office Supplies Expense',
+                debit: 15000.0,
+                credit: 0.0,
+            },
+            {
+                account_title: 'Equipment Expense',
+                debit: 10000.0,
+                credit: 0.0,
+            },
+            {
+                account_title: 'Cash in Bank - BPI',
+                debit: 0.0,
+                credit: 25000.0,
+            },
+        ],
+
+        cash_on_hand_total_debit: 25000.0,
+        cash_on_hand_total_credit: 25000.0,
+
+        total_debit: 25000.0,
+        total_credit: 25000.0,
+
+        check_no: 'CHK-987654',
+        check_date: '2025-11-28',
+
+        total_amount_into_words: 'TWENTY-FIVE THOUSAND PESOS',
+
+        prepared_by: 'Sarah Reyes',
+        payee: 'Maria Clara Santos',
+        certified_correct: 'John Martinez',
+        paid_by: 'Linda Aquino',
+        approved_for_payment: 'Dr. Roberto Fernandez',
+
+        user_id: 'USR-2025-0045',
+        report_date: '2025-11-28',
+        time: '14:30:00',
+    },
+]
+export const sampleJournalEntryData = [
+    {
+        header_title: 'ABC COOPERATIVE SOCIETY',
+        header_address: '789 Rizal Avenue, Manila City, Philippines',
+        tax_number: '005-123-456-789',
+
+        report_title: 'JOURNAL ENTRY VOUCHER',
+
+        name: 'Pedro Gonzales',
+        address: '321 Bonifacio St., Brgy. San Miguel, Taguig City',
+        particulars: 'Adjustment for office equipment depreciation',
+
+        voucher_no: 'JEV-2025-00321',
+        entry_date: '2025-11-28',
+        print_date: '2025-11-28',
+        amount: 8500.0,
+        date: '2025-11-28',
+
+        total_credit: 8500.0,
+        total_debit: 8500.0,
+
+        account_entries: [
+            {
+                account_title: 'Depreciation Expense - Office Equipment',
+                debit: 8500.0,
+                credit: 0.0,
+            },
+            {
+                account_title: 'Accumulated Depreciation - Office Equipment',
+                debit: 0.0,
+                credit: 8500.0,
+            },
+        ],
+
+        check_date: '2025-11-28',
+        check_no: 'N/A',
+
+        status: 'POSTED',
+        count: 2,
+
+        prepared_by: 'Angela Torres',
+        approved_by: 'Mr. Benjamin Cruz',
+    },
+]
 
 function RouteComponent() {
     return (
         <div className="size-full h-fit v1 flex items-center flex-wrap justify-center text-black p-8">
             <PaperSizeContainer className="" scale={1} size="STATEMENT">
                 <HbsCompiler
-                    data={sampleLoanReleaseData[0]}
-                    templatePath="/reports/loan-release-voucher/template-responsive.hbs"
+                    data={sampleCashCheckDisbursementData[0]}
+                    templatePath="/reports/cash-check-disbursement/hbs-cash-check-disbursement.hbs"
                 />
             </PaperSizeContainer>
             <PaperSizeContainer className="" scale={1} size="A5">
                 <HbsCompiler
-                    data={sampleLoanReleaseData[0]}
-                    templatePath="/reports/loan-release-voucher/template-responsive.hbs"
-                />
-            </PaperSizeContainer>
-            <PaperSizeContainer className="" scale={1} size="A4">
-                <HbsCompiler
-                    data={sampleLoanReleaseData[0]}
-                    templatePath="/reports/loan-release-voucher/template-3.hbs"
+                    data={sampleJournalEntryData[0]}
+                    templatePath="/reports/journal-entry/hbs-journal-entry.hbs"
                 />
             </PaperSizeContainer>
             <PaperSizeContainer className="" scale={1} size="B5">
                 <HbsCompiler
                     data={sampleLoanReleaseData[0]}
-                    templatePath="/reports/loan-release-voucher/template-responsive.hbs"
+                    templatePath="/reports/loan-release-voucher/template-1.hbs"
                 />
             </PaperSizeContainer>
             <PaperSizeContainer className="" scale={1} size="BANKBOOK">
                 <HbsCompiler
                     data={sampleLoanReleaseData[0]}
-                    templatePath="/reports/loan-release-voucher/template-responsive.hbs"
+                    templatePath="/reports/loan-release-voucher/hbs-loan-release-voucher.hbs"
                 />
             </PaperSizeContainer>
             <PaperSizeContainer className="" scale={1} size="CHECKBOOK">

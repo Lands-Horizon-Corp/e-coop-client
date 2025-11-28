@@ -30,6 +30,7 @@ export interface IReportJournalVoucherEntry {
     check_no: string
 
     status: string
+    count: number
 
     prepared_by: string
     approved_by: string

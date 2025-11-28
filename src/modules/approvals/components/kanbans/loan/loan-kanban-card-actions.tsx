@@ -16,7 +16,7 @@ import useConfirmModalStore from '@/store/confirm-modal-store'
 import useGeneratedReportConfigStore from '@/store/generated-report-config-store'
 
 import { EyeIcon, PencilFillIcon } from '@/components/icons'
-import { LoanVoucherReleaseTemplates } from '@/components/templates/loan-voucher-release'
+import { LoanVoucherReleaseTemplates } from '@/components/templates/template-loan-voucher-release'
 import { Button } from '@/components/ui/button'
 import {
     DropdownMenu,
