@@ -7,7 +7,10 @@ import { currencyFormat } from '@/modules/currency'
 import { useGetAllGeneralLedger } from '@/modules/general-ledger'
 
 import CopyTextButton from '@/components/copy-text-button'
+import { RefreshIcon } from '@/components/icons'
+import LoadingSpinner from '@/components/spinners/loading-spinner'
 import { Badge } from '@/components/ui/badge'
+import { Button } from '@/components/ui/button'
 
 import { useQeueryHookCallback } from '@/hooks/use-query-hook-cb'
 
@@ -48,6 +51,7 @@ const TransactionCurrentPaymentEntry = ({
         isLoading,
         isError,
         isSuccess,
+        isRefetching,
         refetch: refetchGeneralLedger,
     } = useGetAllGeneralLedger({
         transactionId,
@@ -80,12 +84,26 @@ const TransactionCurrentPaymentEntry = ({
                                 Total Amount
                             </p>
                         </div>
-                        <p className="text-lg font-bold text-primary dark:text-primary">
-                            {currencyFormat(totalAmount || 0, {
-                                currency: transaction?.currency,
-                                showSymbol: !!transaction?.currency,
-                            })}
-                        </p>
+                        <div className="flex items-center gap-x-1">
+                            <p className="text-lg font-bold text-primary dark:text-primary">
+                                {currencyFormat(totalAmount || 0, {
+                                    currency: transaction?.currency,
+                                    showSymbol: !!transaction?.currency,
+                                })}
+                            </p>
+                            <Button
+                                disabled={isRefetching}
+                                onClick={() => refetchGeneralLedger()}
+                                size="icon-sm"
+                                variant="ghost"
+                            >
+                                {isRefetching ? (
+                                    <LoadingSpinner />
+                                ) : (
+                                    <RefreshIcon />
+                                )}
+                            </Button>
+                        </div>
                     </div>
                 </div>
             </div>

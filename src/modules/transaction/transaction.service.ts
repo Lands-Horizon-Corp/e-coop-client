@@ -210,8 +210,11 @@ export const useSingleReverseTransaction = createMutationFactory<
                 `${transactionAPIRoute}/general-ledger/${general_ledger_id}/reverse`
             )
         ).data,
-    invalidationFn: (args) =>
-        createMutationInvalidateFn('single-reverse-transaction', args),
+    invalidationFn: (args) => {
+        args.queryClient.invalidateQueries({ queryKey: [generalLedgerBaseKey] })
+        args.queryClient.invalidateQueries({ queryKey: [baseQueryKey] })
+        createMutationInvalidateFn('single-reverse-transaction', args)
+    },
 })
 
 export const useAllReverseTransaction = createMutationFactory<

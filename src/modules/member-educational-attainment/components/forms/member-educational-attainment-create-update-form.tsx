@@ -219,7 +219,7 @@ export const MemberEducationalAttainmentCreateUpdateFormModal = ({
 }) => {
     return (
         <Modal
-            className={cn('', className)}
+            className={cn('!max-w-xl', className)}
             description={description}
             title={title}
             {...props}

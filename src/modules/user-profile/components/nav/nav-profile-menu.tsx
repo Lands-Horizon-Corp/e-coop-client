@@ -97,6 +97,7 @@ const NavProfileMenu = () => {
                     // user_organization_id: nextUserOrg.id,
                     organization_id: nextUserOrg.organization.id,
                 },
+                reloadDocument: true,
             })
 
             queryClient.invalidateQueries()

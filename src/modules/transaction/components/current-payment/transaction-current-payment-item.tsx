@@ -4,7 +4,7 @@ import { toast } from 'sonner'
 import { cn } from '@/helpers'
 import { dateAgo, toReadableDate } from '@/helpers/date-utils'
 import { currencyFormat } from '@/modules/currency'
-import { IGeneralLedger } from '@/modules/general-ledger'
+import { IGeneralLedger, generalLedgerBaseKey } from '@/modules/general-ledger'
 import { LedgerSourceBadge } from '@/modules/general-ledger/components/ledger-source-badge'
 import { useSingleReverseTransaction } from '@/modules/transaction'
 import { useTransactionReverseSecurityStore } from '@/store/transaction-reverse-security-store'
@@ -46,11 +46,7 @@ const TransactionCurrentPaymentItem = ({
         options: {
             onSuccess: () => {
                 queryClient.invalidateQueries({
-                    queryKey: [
-                        'general-ledger',
-                        'filtered-paginated',
-                        'transaction',
-                    ],
+                    queryKey: [generalLedgerBaseKey],
                     exact: false,
                 })
             },
