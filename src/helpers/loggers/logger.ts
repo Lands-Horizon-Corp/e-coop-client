@@ -16,16 +16,15 @@ class Logger {
     public info: LogMethod
     public debug: LogMethod
 
-    private constructor(module?: string) {
+    private constructor(module?: string, footstep: boolean = true) {
+        this.isDevelopment = ['development', 'local'].includes(APP_ENV)
         this.module = module
-        if (!Logger.hasLoggedAsciiArt) {
+        if (!Logger.hasLoggedAsciiArt && !this.isDevelopment) {
             console.log(
                 '\n                  ......                                    \n            .,,,,,,,,,,,,,,,,,,,                             \n        ,,,,,,,,,,,,,,,,,,,,,,,,,,                          \n      ,,,,,,,,,,,,,,  .,,,,,,,,,,,,,                        \n    ,,,,,,,,,,           ,,,,,,,,,,,,                       \n      ,,,,,,,          .,,,,,,,,,,,                          \n  ,*,,,,,,          ,,,,,,,,,,,,                             \n.**,,,,.**      .,,,,,,,,,,,                                \n.,,,,,,,**    ,,,,,,,,,,,                                   \n  .,,,,.**       ,,,,,,                                      \n    *******       ,                                         \n    **********              **,                             \n      ************,,  ,,*********,                          \n        **************************                          \n            ********************                             \n                  ******.\n'
             )
             Logger.hasLoggedAsciiArt = true
         }
-
-        this.isDevelopment = ['development', 'local'].includes(APP_ENV)
 
         if (typeof document !== 'undefined' && !this.isDevelopment) {
             document.addEventListener('contextmenu', (event) =>
@@ -51,75 +50,77 @@ class Logger {
         if (this.isDevelopment) {
             this.log = (...args) => {
                 console.log(...args)
-                this.footstep('info', args.join(' '), 'client_log')
+                this.footstep('info', args.join(' '), 'client_log', footstep)
             }
             this.warn = (...args) => {
                 console.warn(...args)
-                this.footstep('warning', args.join(' '), 'client_warning_log')
+                this.footstep('warning', args.join(' '), 'client_warning_log', footstep)
             }
             this.error = (...args) => {
                 console.error(...args)
-                this.footstep('error', args.join(' '), 'client_error_log')
+                this.footstep('error', args.join(' '), 'client_error_log', footstep)
             }
             this.info = (...args) => {
                 console.info(...args)
-                this.footstep('info', args.join(' '), 'client_info_log')
+                this.footstep('info', args.join(' '), 'client_info_log', footstep)
             }
             this.debug = (...args) => {
                 console.debug(...args)
-                this.footstep('debug', args.join(' '), 'client_debug_log')
+                this.footstep('debug', args.join(' '), 'client_debug_log', footstep)
             }
         } else {
             this.log = (...args) => {
-                this.footstep('info', args.join(' '), 'client_log')
+                this.footstep('info', args.join(' '), 'client_log', footstep)
             }
             this.warn = (...args) => {
-                this.footstep('warning', args.join(' '), 'client_warning_log')
+                this.footstep('warning', args.join(' '), 'client_warning_log', footstep)
             }
             this.error = (...args) => {
-                this.footstep('error', args.join(' '), 'client_error_log')
+                this.footstep('error', args.join(' '), 'client_error_log', footstep)
             }
             this.info = (...args) => {
-                this.footstep('info', args.join(' '), 'client_info_log')
+                this.footstep('info', args.join(' '), 'client_info_log', footstep)
             }
             this.debug = (...args) => {
-                this.footstep('debug', args.join(' '), 'client_debug_log')
+                this.footstep('debug', args.join(' '), 'client_debug_log', footstep)
             }
-            console.log = (..._args) => {}
-            console.warn = (..._args) => {}
-            console.error = (..._args) => {}
-            console.info = (..._args) => {}
-            console.debug = (..._args) => {}
+            console.log = (..._args) => { }
+            console.warn = (..._args) => { }
+            console.error = (..._args) => { }
+            console.info = (..._args) => { }
+            console.debug = (..._args) => { }
         }
     }
 
     public async footstep(
         level: TFootstepLevel,
         description: string,
-        activity: string
+        activity: string,
+        footstep: boolean = true
     ) {
         if (this.module) {
-            await createFootstep({
-                payload: {
-                    level,
-                    description,
-                    activity,
-                    module: this.module,
-                },
-            })
+            if (footstep)
+                await createFootstep({
+                    payload: {
+                        level,
+                        description,
+                        activity,
+                        module: this.module,
+                    },
+                })
         }
     }
 
-    public static getInstance(module: string = 'default'): Logger {
+    public static getInstance(module: string = 'default', footstep = true): Logger {
         if (!Logger.instances.has(module)) {
-            Logger.instances.set(module, new Logger(module))
+            Logger.instances.set(module, new Logger(module, footstep))
         }
-        return Logger.instances.get(module)!
+        return Logger.instances.get(module,)!
     }
 }
 
 // Default logger instance
-export default Logger.getInstance()
+export default Logger.getInstance('default', false)
 
 // Export the Logger class for module-specific instances
 export { Logger }

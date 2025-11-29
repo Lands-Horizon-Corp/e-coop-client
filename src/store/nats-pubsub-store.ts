@@ -56,7 +56,6 @@ export const useNatsStore = create<INatsState>((set, get) => ({
                 }
                 set({ connection: null })
             })
-
             logger.info('📡‧‧‧‧‧‧‧‧‧‧‧‧‧‧‧‧‧‧🛰️: Connected')
         } catch (error) {
             logger.error('📡‧‧‧‧‧‧❌‧‧‧‧‧‧‧🛰️: failed to connect:', error)
