@@ -38,10 +38,11 @@ export const useSubscribe = <T = unknown>(
 
         let sub: Subscription
         const subHandler = async () => {
-            sub = connection.subscribe(`${NATS_CLIENT}${subject}`)
-
+            const topic = `${NATS_CLIENT}${subject}`
+            sub = connection.subscribe(topic)
+            logger.info('🔔 subscribing to subject:', topic, false)
             for await (const msg of sub) {
-                logger.info('💬 received message on subject:', subject)
+                logger.info('💬 received message on subject:', topic, false)
                 const decodedData = sc.decode(msg.data)
                 const parsedData = JSON.parse(decodedData)
                 onReceive?.(parsedData)
