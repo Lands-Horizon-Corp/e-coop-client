@@ -38,7 +38,7 @@ export const useSubscribe = <T = unknown>(
 
         let sub: Subscription
         const subHandler = async () => {
-            const topic = `${NATS_CLIENT}${subject}`
+            const topic = `${NATS_CLIENT}.${subject}`
             sub = connection.subscribe(topic)
             logger.info('🔔 subscribing to subject:', topic, false)
             for await (const msg of sub) {
