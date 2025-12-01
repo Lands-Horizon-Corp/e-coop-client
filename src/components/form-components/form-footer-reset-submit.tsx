@@ -29,6 +29,9 @@ interface IFormResetSubmitFooterProps extends IClassProps {
     resetButtonType?: 'button' | 'reset'
     submitButtonType?: 'button' | 'submit'
 
+    // additional children between buttons
+    midChildren?: React.ReactNode
+
     onReset?: () => void
     onSubmit?: (e: MouseEvent<HTMLButtonElement>) => void
 }

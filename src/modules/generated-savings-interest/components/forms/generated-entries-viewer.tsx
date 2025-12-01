@@ -1,0 +1,269 @@
+import { useRef, useMemo } from 'react'
+
+import { formatNumber } from '@/helpers/number-utils'
+import { IGeneratedSavingsInterestEntry } from '@/modules/generated-savings-interest-entry'
+import { useVirtualizer } from '@tanstack/react-virtual'
+import {
+    flexRender,
+    getCoreRowModel,
+    useReactTable,
+    type ColumnDef,
+} from '@tanstack/react-table'
+
+// Mock data generator
+const generateMockData = (count: number): IGeneratedSavingsInterestEntry[] => {
+    const firstNames = [
+        'JULIET',
+        'ASUNCION',
+        'PURIFICACION',
+        'MATILDE',
+        'LOURDES',
+        'RODRIGO',
+        'ELEANOR',
+        'MARTINA',
+        'FLORENCIO',
+        'LORNA',
+        'ANITA',
+        'PEDRITA',
+        'SAMUEL',
+        'ESTEFANIA',
+        'PACITA',
+        'SANTIAGO',
+        'TERESITA',
+        'JUANITO',
+    ]
+    const lastNames = [
+        'APUSEM',
+        'BANGCOD',
+        'LABADOR',
+        'BATALLANG',
+        'GAO-AY',
+        'MUTONG',
+        'SUMABAT',
+        'BANGAOIL',
+        'ARZABAL',
+        'INCIONG',
+        'RUBANG',
+        'VALENCIA',
+        'LIYO',
+        'RAQUEPO',
+        'LIGAYO',
+        'NGASEO',
+        'TUCAY',
+        'SALLONG',
+        'FELINO',
+    ]
+
+    return Array.from({ length: count }, (_, i) => {
+        const firstName = firstNames[Math.floor(Math.random() * firstNames.length)]
+        const lastName = lastNames[Math.floor(Math.random() * lastNames.length)]
+        const balance = Math.random() * 100000 + 1000
+        const interestRate = 0.02 + Math.random() * 0.03
+
+        return {
+            id: `${i + 1}`,
+            created_at: new Date().toISOString(),
+            updated_at: new Date().toISOString(),
+            generated_savings_interest_id: '1',
+            account_id: `${300 + (i % 50)}`,
+            member_profile_id: `${1000000 + i}`,
+            interest_amount: balance * interestRate,
+            interest_tax: 0,
+            ending_balance: balance,
+            member_profile: {
+                id: `${1000000 + i}`,
+                passbook: `${String(i + 5).padStart(7, '0')}`,
+                full_name: `${lastName}, ${firstName}`,
+                created_at: new Date().toISOString(),
+                updated_at: new Date().toISOString(),
+            },
+            account: {
+                id: `${300 + (i % 50)}`,
+                name: `Account ${300 + (i % 50)}`,
+                created_at: new Date().toISOString(),
+                updated_at: new Date().toISOString(),
+            },
+        } as IGeneratedSavingsInterestEntry
+    })
+}
+
+interface GeneratedEntriesViewerProps {
+    data: IGeneratedSavingsInterestEntry[]
+}
+
+export function GeneratedEntriesViewer({ data }: GeneratedEntriesViewerProps) {
+    const parentRef = useRef<HTMLDivElement>(null)
+
+    const columns = useMemo<ColumnDef<IGeneratedSavingsInterestEntry>[]>(
+        () => [
+            {
+                accessorKey: 'member_profile.passbook',
+                header: 'PB No',
+                cell: (info) => info.getValue() || 'N/A',
+                size: 120,
+            },
+            {
+                accessorKey: 'member_profile.full_name',
+                header: 'Member Name',
+                cell: (info) => info.getValue() || 'N/A',
+                size: 200,
+            },
+            {
+                accessorKey: 'account.name',
+                header: 'Account No',
+                cell: (info) => info.getValue() || 'N/A',
+                size: 150,
+            },
+            {
+                accessorKey: 'ending_balance',
+                header: 'Ending Balance',
+                cell: (info) => formatNumber(info.getValue() as number, 2, 2),
+                size: 150,
+            },
+            {
+                accessorKey: 'interest_amount',
+                header: 'Interest Amt',
+                cell: (info) => formatNumber(info.getValue() as number, 2, 2),
+                size: 130,
+            },
+            {
+                accessorKey: 'interest_tax',
+                header: 'Interest Tax',
+                cell: (info) => formatNumber(info.getValue() as number, 2, 2),
+                size: 130,
+            },
+        ],
+        [],
+    )
+
+    const table = useReactTable({
+        data,
+        columns,
+        getCoreRowModel: getCoreRowModel(),
+    })
+
+    const { rows } = table.getRowModel()
+
+    const virtualizer = useVirtualizer({
+        count: rows.length,
+        getScrollElement: () => parentRef.current,
+        estimateSize: (index) => (index % 2 === 1 ? window.innerHeight * 0.05 : 53),
+        overscan: 20,
+        measureElement:
+            typeof window !== 'undefined' &&
+            navigator.userAgent.indexOf('Firefox') === -1
+                ? (element) => element?.getBoundingClientRect().height
+                : undefined,
+    })
+
+    return (
+        <div className="rounded-md border">
+            <div className="h-[600px] overflow-auto" ref={parentRef}>
+                <div style={{ height: `${virtualizer.getTotalSize()}px` }}>
+                    <table className="w-full">
+                        <thead>
+                            {table.getHeaderGroups().map((headerGroup) => (
+                                <tr key={headerGroup.id}>
+                                    {headerGroup.headers.map((header) => {
+                                        return (
+                                            <th
+                                                className={`border-b px-4 py-3 text-left align-middle font-medium text-muted-foreground ${
+                                                    [
+                                                        'ending_balance',
+                                                        'interest_amount',
+                                                        'interest_tax',
+                                                    ].includes(header.column.id)
+                                                        ? 'text-right'
+                                                        : ''
+                                                }`}
+                                                colSpan={header.colSpan}
+                                                key={header.id}
+                                                style={{
+                                                    width: header.getSize(),
+                                                }}
+                                            >
+                                                {header.isPlaceholder
+                                                    ? null
+                                                    : flexRender(
+                                                          header.column
+                                                              .columnDef.header,
+                                                          header.getContext(),
+                                                      )}
+                                            </th>
+                                        )
+                                    })}
+                                </tr>
+                            ))}
+                        </thead>
+                        <tbody>
+                            {virtualizer
+                                .getVirtualItems()
+                                .map((virtualRow, index) => {
+                                    const row = rows[virtualRow.index]
+                                    const isOdd = virtualRow.index % 2 === 1
+                                    return (
+                                        <tr
+                                            data-index={virtualRow.index}
+                                            key={row.id}
+                                            ref={(node) =>
+                                                virtualizer.measureElement(node)
+                                            }
+                                            style={{
+                                                height: isOdd ? '5vh' : undefined,
+                                                transform: `translateY(${
+                                                    virtualRow.start -
+                                                    index * virtualRow.size
+                                                }px)`,
+                                            }}
+                                        >
+                                            {row
+                                                .getVisibleCells()
+                                                .map((cell) => {
+                                                    return (
+                                                        <td
+                                                            className={`border-b px-4 py-3 align-middle ${
+                                                                cell.column
+                                                                    .id ===
+                                                                'member_profile.passbook'
+                                                                    ? 'font-medium'
+                                                                    : [
+                                                                            'ending_balance',
+                                                                            'interest_amount',
+                                                                            'interest_tax',
+                                                                        ].includes(
+                                                                            cell
+                                                                                .column
+                                                                                .id,
+                                                                        )
+                                                                      ? 'text-right font-mono'
+                                                                      : ''
+                                                            }`}
+                                                            key={cell.id}
+                                                        >
+                                                            {flexRender(
+                                                                cell.column
+                                                                    .columnDef
+                                                                    .cell,
+                                                                cell.getContext(),
+                                                            )}
+                                                        </td>
+                                                    )
+                                                })}
+                                        </tr>
+                                    )
+                                })}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div className="p-2 text-sm text-muted-foreground border-t">
+                Total Entries: {data.length.toLocaleString()}
+            </div>
+        </div>
+    )
+}
+
+export const TestGeneratedEntriesViewer = () => {
+    const mockData = useMemo(() => generateMockData(100000), [])
+    return <GeneratedEntriesViewer data={mockData} />
+}

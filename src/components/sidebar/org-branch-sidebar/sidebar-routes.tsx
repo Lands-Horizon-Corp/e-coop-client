@@ -28,6 +28,7 @@ import {
     MoneyCheckIcon,
     MoneyIcon,
     PeopleGroupIcon,
+    PercentIcon,
     // PlusIcon,
     PriceTagIcon,
     QrCodeIcon,
@@ -665,6 +666,20 @@ export const generateSidebarGroups = (
                     userType: ['employee', 'member', 'owner'],
                     shortDescription:
                         'Application settings and preferences for your settings or branch settings',
+                },
+            ],
+        },
+
+        {
+            title: 'System',
+            userType: ['employee', 'member'],
+            navItems: [
+                {
+                    type: 'item',
+                    icon: PercentIcon,
+                    userType: ['employee', 'owner'],
+                    title: 'Generate Savings Interest',
+                    url: `${baseUrl}/generate-savings-interest`,
                 },
             ],
         },

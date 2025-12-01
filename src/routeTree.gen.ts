@@ -66,6 +66,7 @@ import { Route as OrgOrgnameBranchBranchnamemeMyDisbursementTransactionRouteImpo
 import { Route as OrgOrgnameBranchBranchnamemeMyBranchFootstepsRouteImport } from './routes/org/$orgname/branch.$branchname/(me)/my-branch-footsteps'
 import { Route as OrgOrgnameBranchBranchnamemeMyAllFootstepsRouteImport } from './routes/org/$orgname/branch.$branchname/(me)/my-all-footsteps'
 import { Route as OrgOrgnameBranchBranchnameemployeeTimesheetsRouteImport } from './routes/org/$orgname/branch.$branchname/(employee)/timesheets'
+import { Route as OrgOrgnameBranchBranchnameemployeeGenerateSavingsInterestRouteImport } from './routes/org/$orgname/branch.$branchname/(employee)/generate-savings-interest'
 import { Route as OrgOrgnameBranchBranchnamecommonDashboardRouteImport } from './routes/org/$orgname/branch.$branchname/(common)/dashboard'
 import { Route as OrgOrgnameBranchBranchnamemeMyGeneralLedgerEntriesRouteRouteImport } from './routes/org/$orgname/branch.$branchname/(me)/my-general-ledger-entries/route'
 import { Route as OrgOrgnameBranchBranchnameemployeeGeneralLedgerRouteRouteImport } from './routes/org/$orgname/branch.$branchname/(employee)/general-ledger/route'
@@ -426,6 +427,12 @@ const OrgOrgnameBranchBranchnameemployeeTimesheetsRoute =
   OrgOrgnameBranchBranchnameemployeeTimesheetsRouteImport.update({
     id: '/(employee)/timesheets',
     path: '/timesheets',
+    getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
+  } as any)
+const OrgOrgnameBranchBranchnameemployeeGenerateSavingsInterestRoute =
+  OrgOrgnameBranchBranchnameemployeeGenerateSavingsInterestRouteImport.update({
+    id: '/(employee)/generate-savings-interest',
+    path: '/generate-savings-interest',
     getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
   } as any)
 const OrgOrgnameBranchBranchnamecommonDashboardRoute =
@@ -796,6 +803,7 @@ export interface FileRoutesByFullPath {
   '/org/$orgname/branch/$branchname/general-ledger': typeof OrgOrgnameBranchBranchnameemployeeGeneralLedgerRouteRoute
   '/org/$orgname/branch/$branchname/my-general-ledger-entries': typeof OrgOrgnameBranchBranchnamemeMyGeneralLedgerEntriesRouteRoute
   '/org/$orgname/branch/$branchname/dashboard': typeof OrgOrgnameBranchBranchnamecommonDashboardRoute
+  '/org/$orgname/branch/$branchname/generate-savings-interest': typeof OrgOrgnameBranchBranchnameemployeeGenerateSavingsInterestRoute
   '/org/$orgname/branch/$branchname/timesheets': typeof OrgOrgnameBranchBranchnameemployeeTimesheetsRoute
   '/org/$orgname/branch/$branchname/my-all-footsteps': typeof OrgOrgnameBranchBranchnamemeMyAllFootstepsRoute
   '/org/$orgname/branch/$branchname/my-branch-footsteps': typeof OrgOrgnameBranchBranchnamemeMyBranchFootstepsRoute
@@ -894,6 +902,7 @@ export interface FileRoutesByTo {
   '/org/$orgname/branch/$branchname/general-ledger': typeof OrgOrgnameBranchBranchnameemployeeGeneralLedgerRouteRoute
   '/org/$orgname/branch/$branchname/my-general-ledger-entries': typeof OrgOrgnameBranchBranchnamemeMyGeneralLedgerEntriesRouteRoute
   '/org/$orgname/branch/$branchname/dashboard': typeof OrgOrgnameBranchBranchnamecommonDashboardRoute
+  '/org/$orgname/branch/$branchname/generate-savings-interest': typeof OrgOrgnameBranchBranchnameemployeeGenerateSavingsInterestRoute
   '/org/$orgname/branch/$branchname/timesheets': typeof OrgOrgnameBranchBranchnameemployeeTimesheetsRoute
   '/org/$orgname/branch/$branchname/my-all-footsteps': typeof OrgOrgnameBranchBranchnamemeMyAllFootstepsRoute
   '/org/$orgname/branch/$branchname/my-branch-footsteps': typeof OrgOrgnameBranchBranchnamemeMyBranchFootstepsRoute
@@ -998,6 +1007,7 @@ export interface FileRoutesById {
   '/org/$orgname/branch/$branchname/(employee)/general-ledger': typeof OrgOrgnameBranchBranchnameemployeeGeneralLedgerRouteRoute
   '/org/$orgname/branch/$branchname/(me)/my-general-ledger-entries': typeof OrgOrgnameBranchBranchnamemeMyGeneralLedgerEntriesRouteRoute
   '/org/$orgname/branch/$branchname/(common)/dashboard': typeof OrgOrgnameBranchBranchnamecommonDashboardRoute
+  '/org/$orgname/branch/$branchname/(employee)/generate-savings-interest': typeof OrgOrgnameBranchBranchnameemployeeGenerateSavingsInterestRoute
   '/org/$orgname/branch/$branchname/(employee)/timesheets': typeof OrgOrgnameBranchBranchnameemployeeTimesheetsRoute
   '/org/$orgname/branch/$branchname/(me)/my-all-footsteps': typeof OrgOrgnameBranchBranchnamemeMyAllFootstepsRoute
   '/org/$orgname/branch/$branchname/(me)/my-branch-footsteps': typeof OrgOrgnameBranchBranchnamemeMyBranchFootstepsRoute
@@ -1102,6 +1112,7 @@ export interface FileRouteTypes {
     | '/org/$orgname/branch/$branchname/general-ledger'
     | '/org/$orgname/branch/$branchname/my-general-ledger-entries'
     | '/org/$orgname/branch/$branchname/dashboard'
+    | '/org/$orgname/branch/$branchname/generate-savings-interest'
     | '/org/$orgname/branch/$branchname/timesheets'
     | '/org/$orgname/branch/$branchname/my-all-footsteps'
     | '/org/$orgname/branch/$branchname/my-branch-footsteps'
@@ -1200,6 +1211,7 @@ export interface FileRouteTypes {
     | '/org/$orgname/branch/$branchname/general-ledger'
     | '/org/$orgname/branch/$branchname/my-general-ledger-entries'
     | '/org/$orgname/branch/$branchname/dashboard'
+    | '/org/$orgname/branch/$branchname/generate-savings-interest'
     | '/org/$orgname/branch/$branchname/timesheets'
     | '/org/$orgname/branch/$branchname/my-all-footsteps'
     | '/org/$orgname/branch/$branchname/my-branch-footsteps'
@@ -1303,6 +1315,7 @@ export interface FileRouteTypes {
     | '/org/$orgname/branch/$branchname/(employee)/general-ledger'
     | '/org/$orgname/branch/$branchname/(me)/my-general-ledger-entries'
     | '/org/$orgname/branch/$branchname/(common)/dashboard'
+    | '/org/$orgname/branch/$branchname/(employee)/generate-savings-interest'
     | '/org/$orgname/branch/$branchname/(employee)/timesheets'
     | '/org/$orgname/branch/$branchname/(me)/my-all-footsteps'
     | '/org/$orgname/branch/$branchname/(me)/my-branch-footsteps'
@@ -1758,6 +1771,13 @@ declare module '@tanstack/react-router' {
       path: '/timesheets'
       fullPath: '/org/$orgname/branch/$branchname/timesheets'
       preLoaderRoute: typeof OrgOrgnameBranchBranchnameemployeeTimesheetsRouteImport
+      parentRoute: typeof OrgOrgnameBranchBranchnameRouteRoute
+    }
+    '/org/$orgname/branch/$branchname/(employee)/generate-savings-interest': {
+      id: '/org/$orgname/branch/$branchname/(employee)/generate-savings-interest'
+      path: '/generate-savings-interest'
+      fullPath: '/org/$orgname/branch/$branchname/generate-savings-interest'
+      preLoaderRoute: typeof OrgOrgnameBranchBranchnameemployeeGenerateSavingsInterestRouteImport
       parentRoute: typeof OrgOrgnameBranchBranchnameRouteRoute
     }
     '/org/$orgname/branch/$branchname/(common)/dashboard': {
@@ -2226,6 +2246,7 @@ interface OrgOrgnameBranchBranchnameRouteRouteChildren {
   OrgOrgnameBranchBranchnameemployeeGeneralLedgerRouteRoute: typeof OrgOrgnameBranchBranchnameemployeeGeneralLedgerRouteRoute
   OrgOrgnameBranchBranchnamemeMyGeneralLedgerEntriesRouteRoute: typeof OrgOrgnameBranchBranchnamemeMyGeneralLedgerEntriesRouteRoute
   OrgOrgnameBranchBranchnamecommonDashboardRoute: typeof OrgOrgnameBranchBranchnamecommonDashboardRoute
+  OrgOrgnameBranchBranchnameemployeeGenerateSavingsInterestRoute: typeof OrgOrgnameBranchBranchnameemployeeGenerateSavingsInterestRoute
   OrgOrgnameBranchBranchnameemployeeTimesheetsRoute: typeof OrgOrgnameBranchBranchnameemployeeTimesheetsRoute
   OrgOrgnameBranchBranchnamemeMyAllFootstepsRoute: typeof OrgOrgnameBranchBranchnamemeMyAllFootstepsRoute
   OrgOrgnameBranchBranchnamemeMyBranchFootstepsRoute: typeof OrgOrgnameBranchBranchnamemeMyBranchFootstepsRoute
@@ -2289,6 +2310,8 @@ const OrgOrgnameBranchBranchnameRouteRouteChildren: OrgOrgnameBranchBranchnameRo
       OrgOrgnameBranchBranchnamemeMyGeneralLedgerEntriesRouteRoute,
     OrgOrgnameBranchBranchnamecommonDashboardRoute:
       OrgOrgnameBranchBranchnamecommonDashboardRoute,
+    OrgOrgnameBranchBranchnameemployeeGenerateSavingsInterestRoute:
+      OrgOrgnameBranchBranchnameemployeeGenerateSavingsInterestRoute,
     OrgOrgnameBranchBranchnameemployeeTimesheetsRoute:
       OrgOrgnameBranchBranchnameemployeeTimesheetsRoute,
     OrgOrgnameBranchBranchnamemeMyAllFootstepsRoute:
