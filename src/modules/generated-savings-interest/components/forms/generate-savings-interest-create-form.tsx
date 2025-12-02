@@ -4,18 +4,22 @@ import z from 'zod'
 
 import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
 
+import { formatNumber } from '@/helpers'
 import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
 import { cn } from '@/helpers/tw-utils'
 import { AccountPicker } from '@/modules/account'
+import GeneratedSavingsInterestEntriesView from '@/modules/generated-savings-interest-entry/components/generated-savings-interest-entries-view'
 import { IMemberType } from '@/modules/member-type'
 import MemberTypeCombobox from '@/modules/member-type/components/member-type-combobox'
 
 import FormFooterResetSubmit from '@/components/form-components/form-footer-reset-submit'
 import Modal, { IModalProps } from '@/components/modals/modal'
+import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Form } from '@/components/ui/form'
 import FormFieldWrapper from '@/components/ui/form-field-wrapper'
 import { Input } from '@/components/ui/input'
+import InputDate from '@/components/ui/input-date'
 import { Label } from '@/components/ui/label'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 
@@ -24,10 +28,16 @@ import { useFormHelper } from '@/hooks/use-form-helper'
 import { IClassProps, IForm } from '@/types'
 
 import { GENERATED_INTEREST_SAVINGS_COMPUTATION_TYPES } from '../../generated-savings-interest.constant'
-import { useCreateGeneratedSavingsInterest } from '../../generated-savings-interest.service'
+import {
+    useCreateGeneratedSavingsInterest,
+    useGenerateSavingsInterestProcessView,
+} from '../../generated-savings-interest.service'
 import { IGeneratedSavingsInterest } from '../../generated-savings-interest.types'
 import { COMPUTATION_TYPE_LABELS } from '../../generated-savings-interest.utils'
-import { GeneratedSavingsInterestSchema } from '../../generated-savings-interest.validation'
+import {
+    GeneratedSavingsInterestSchema,
+    GeneratedSavingsInterestViewSchema,
+} from '../../generated-savings-interest.validation'
 
 type TGeneratedSavingsInterestFormValues = z.infer<
     typeof GeneratedSavingsInterestSchema
@@ -60,6 +70,7 @@ const GeneratedSavingsInterestCreateForm = ({
             interest_tax_rate: 20,
             include_closed_account: false,
             include_existing_computed_interest: false,
+            entries: [],
             ...formProps.defaultValues,
         },
     })
@@ -74,7 +85,23 @@ const GeneratedSavingsInterestCreateForm = ({
         },
     })
 
-    const { formRef, handleFocusError, isDisabled } =
+    const generateMutation = useGenerateSavingsInterestProcessView({
+        options: {
+            onSuccess: (data) => {
+                form.setValue('entries', data.entries || [])
+                form.setValue('is_viewing_entries', true)
+                toast.success('Interest entries generated successfully')
+            },
+            onError: (error) => {
+                const errorMessage = serverRequestErrExtractor({ error })
+                toast.error(
+                    errorMessage || 'Failed to generate interest entries'
+                )
+            },
+        },
+    })
+
+    const { formRef, handleFocusError } =
         useFormHelper<TGeneratedSavingsInterestFormValues>({
             form,
             ...formProps,
@@ -88,9 +115,30 @@ const GeneratedSavingsInterestCreateForm = ({
         })
     }, handleFocusError)
 
+    const onProcess = async () => {
+        const formData = form.getValues()
+        form.trigger()
+        generateMutation.reset()
+
+        const result = GeneratedSavingsInterestViewSchema.safeParse(formData)
+
+        if (!result.success) {
+            toast.error(`Validation failed, please check the form fields.`)
+
+            handleFocusError()
+            return
+        }
+
+        toast.promise(generateMutation.mutateAsync(result.data), {
+            loading: 'Generating interest entries...',
+        })
+    }
+
     const { error: rawError, isPending, reset } = createMutation
 
-    const error = serverRequestErrExtractor({ error: rawError })
+    const error = serverRequestErrExtractor({
+        error: rawError || generateMutation.error,
+    })
 
     return (
         <Form {...form}>
@@ -113,7 +161,7 @@ const GeneratedSavingsInterestCreateForm = ({
                                 <Input
                                     {...field}
                                     autoComplete="off"
-                                    disabled={isDisabled(field.name)}
+                                    // disabled={isDisabled(field.name)}
                                     placeholder="Auto-generated"
                                     type="text"
                                 />
@@ -124,11 +172,12 @@ const GeneratedSavingsInterestCreateForm = ({
                             label="Last Comp. Date *"
                             name="last_computation_date"
                             render={({ field }) => (
-                                <Input
+                                <InputDate
                                     {...field}
-                                    disabled={isDisabled(field.name)}
-                                    placeholder="MM/DD/YYYY"
-                                    type="date"
+                                    className="block"
+                                    // disabled={isDisabled(field.name)}
+                                    placeholder="Entry Date"
+                                    value={field.value ?? ''}
                                 />
                             )}
                         />
@@ -137,16 +186,16 @@ const GeneratedSavingsInterestCreateForm = ({
                             label="New Comp. Date *"
                             name="new_computation_date"
                             render={({ field }) => (
-                                <Input
+                                <InputDate
                                     {...field}
-                                    disabled={isDisabled(field.name)}
-                                    placeholder="MM/DD/YYYY"
-                                    type="date"
+                                    className="block"
+                                    // disabled={isDisabled(field.name)}
+                                    placeholder="Entry Date"
+                                    value={field.value ?? ''}
                                 />
                             )}
                         />
                     </div>
-
                     {/* Accounts */}
                     <FormFieldWrapper
                         control={form.control}
@@ -167,7 +216,6 @@ const GeneratedSavingsInterestCreateForm = ({
                             />
                         )}
                     />
-
                     {/* Member Type */}
                     <FormFieldWrapper
                         control={form.control}
@@ -189,7 +237,6 @@ const GeneratedSavingsInterestCreateForm = ({
                             />
                         )}
                     />
-
                     {/* Computation Type */}
                     <FormFieldWrapper
                         control={form.control}
@@ -198,7 +245,7 @@ const GeneratedSavingsInterestCreateForm = ({
                         render={({ field }) => (
                             <RadioGroup
                                 className="grid rounded-xl bg-popover/20 grid-cols-2 p-3.5 gap-3"
-                                disabled={isDisabled(field.name)}
+                                // disabled={isDisabled(field.name)}
                                 onValueChange={field.onChange}
                                 value={field.value}
                             >
@@ -224,7 +271,6 @@ const GeneratedSavingsInterestCreateForm = ({
                             </RadioGroup>
                         )}
                     />
-
                     {/* Interest Tax Rate */}
                     <FormFieldWrapper
                         control={form.control}
@@ -233,7 +279,7 @@ const GeneratedSavingsInterestCreateForm = ({
                         render={({ field }) => (
                             <Input
                                 {...field}
-                                disabled={isDisabled(field.name)}
+                                // disabled={isDisabled(field.name)}
                                 max="100"
                                 min="0"
                                 onChange={(e) =>
@@ -245,7 +291,6 @@ const GeneratedSavingsInterestCreateForm = ({
                             />
                         )}
                     />
-
                     {/* Checkboxes */}
                     <div className="space-y-3 bg-popover/20 p-2.5 rounded-xl">
                         <p className="font-medium text-sm mb-2">
@@ -258,7 +303,7 @@ const GeneratedSavingsInterestCreateForm = ({
                                 <div className="flex items-center space-x-2">
                                     <Checkbox
                                         checked={field.value}
-                                        disabled={isDisabled(field.name)}
+                                        // disabled={isDisabled(field.name)}
                                         id="include_closed_account"
                                         onCheckedChange={field.onChange}
                                     />
@@ -279,7 +324,7 @@ const GeneratedSavingsInterestCreateForm = ({
                                 <div className="flex items-center space-x-2">
                                     <Checkbox
                                         checked={field.value}
-                                        disabled={isDisabled(field.name)}
+                                        // disabled={isDisabled(field.name)}
                                         id="include_existing_computed_interest"
                                         onCheckedChange={field.onChange}
                                     />
@@ -293,6 +338,12 @@ const GeneratedSavingsInterestCreateForm = ({
                             )}
                         />
                     </div>
+                    <EntriesSection
+                        form={form}
+                        isProcessing={generateMutation.isPending}
+                        onProcess={onProcess}
+                    />
+                    <EntriesModalSection form={form} />
                 </fieldset>
 
                 <FormFooterResetSubmit
@@ -304,10 +355,101 @@ const GeneratedSavingsInterestCreateForm = ({
                         reset()
                     }}
                     readOnly={formProps.readOnly}
-                    submitText="Process"
+                    submitText="Save"
                 />
             </form>
         </Form>
+    )
+}
+
+const EntriesSection = ({
+    form,
+    isProcessing,
+    onProcess,
+}: {
+    form: ReturnType<typeof useForm<TGeneratedSavingsInterestFormValues>>
+    isProcessing: boolean
+    onProcess: () => void
+}) => {
+    const entries = form.watch('entries') || []
+    const hasEntries = entries.length > 0
+
+    return (
+        <div
+            className={cn(
+                'flex rounded-xl p-4 items-center justify-between',
+                'border-2 transition-all duration-500 ease-in-out',
+                hasEntries
+                    ? 'bg-gradient-to-br from-primary/15 via-accent/10 to-primary/5 border-primary/30 shadow-sm'
+                    : 'bg-popover/20 border-transparent'
+            )}
+        >
+            <div className="flex items-center gap-3">
+                <p className="text-sm font-medium">Generated Entries</p>
+                <span
+                    className={cn(
+                        'px-3 py-1 rounded-md font-semibold text-sm',
+                        'transition-all duration-300 ease-in-out',
+                        hasEntries
+                            ? 'bg-primary text-primary-foreground shadow-sm scale-105'
+                            : 'bg-muted text-muted-foreground'
+                    )}
+                >
+                    {formatNumber(entries.length)}
+                </span>
+            </div>
+            <div className="flex gap-2">
+                {hasEntries && (
+                    <Button
+                        className="transition-all duration-300 ease-in-out animate-in fade-in slide-in-from-right-2"
+                        onClick={() =>
+                            form.setValue('is_viewing_entries', true)
+                        }
+                        size="sm"
+                        type="button"
+                        variant="outline"
+                    >
+                        View Entries
+                    </Button>
+                )}
+                <Button
+                    className="transition-all duration-300 ease-in-out"
+                    disabled={isProcessing}
+                    onClick={onProcess}
+                    size="sm"
+                    type="button"
+                    variant={hasEntries ? 'secondary' : 'default'}
+                >
+                    {isProcessing ? 'Processing...' : 'Generate / Process'}
+                </Button>
+            </div>
+        </div>
+    )
+}
+
+const EntriesModalSection = ({
+    form,
+}: {
+    form: ReturnType<typeof useForm<TGeneratedSavingsInterestFormValues>>
+}) => {
+    const entries = form.watch('entries') || []
+    const isViewingEntries = form.watch('is_viewing_entries') || false
+
+    return (
+        <Modal
+            className="!max-w-7xl"
+            description={`Showing ${formatNumber(entries.length)} generated entries. Review the computed interest amounts below.`}
+            onOpenChange={(open) => {
+                form.setValue('is_viewing_entries', open)
+            }}
+            open={isViewingEntries}
+            title="Generated Savings Interest Entries"
+        >
+            <GeneratedSavingsInterestEntriesView
+                className="h-[70vh] text-sm"
+                entries={entries}
+            />
+        </Modal>
     )
 }
 

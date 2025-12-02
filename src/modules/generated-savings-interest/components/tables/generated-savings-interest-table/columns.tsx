@@ -15,7 +15,7 @@ import { Checkbox } from '@/components/ui/checkbox'
 
 import { currencyFormat } from '@/modules/currency'
 
-import { IGeneratedSavingsInterest } from '../../generated-savings-interest.types'
+import { IGeneratedSavingsInterest } from '../../../generated-savings-interest.types'
 
 export const generatedSavingsInterestGlobalSearchTargets: IGlobalSearchTargets<IGeneratedSavingsInterest>[] =
     [

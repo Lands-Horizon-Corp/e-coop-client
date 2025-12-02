@@ -2,17 +2,20 @@ import { ReactNode } from 'react'
 
 import useConfirmModalStore from '@/store/confirm-modal-store'
 import { Row } from '@tanstack/react-table'
+import { List } from 'lucide-react'
 
 import RowActionsGroup from '@/components/data-table/data-table-row-actions'
 import DataTableRowContext from '@/components/data-table/data-table-row-context'
 import { useTableRowActionStore } from '@/components/data-table/store/data-table-action-store'
+import { ContextMenuItem } from '@/components/ui/context-menu'
 
-import { useDeleteGeneratedSavingsInterestById } from '../../generated-savings-interest.service'
-import { IGeneratedSavingsInterest } from '../../generated-savings-interest.types'
-import { GeneratedSavingsInterestCreateFormModal } from '../forms/generate-savings-interest-create-form'
+import { useDeleteGeneratedSavingsInterestById } from '../../../generated-savings-interest.service'
+import { IGeneratedSavingsInterest } from '../../../generated-savings-interest.types'
+import { GeneratedSavingsInterestCreateFormModal } from '../../forms/generate-savings-interest-create-form'
+import { GeneratedSavingsInterestEntryTableModal } from '../generated-savings-interest-entry-table'
 import { IGeneratedSavingsInterestTableActionComponentProp } from './columns'
 
-export type GeneratedSavingsInterestActionType = 'edit' | 'delete' | 'view'
+export type GeneratedSavingsInterestActionType = 'edit' | 'delete' | 'view' | 'manageEntries'
 
 export interface GeneratedSavingsInterestActionExtra {
     onDeleteSuccess?: () => void
@@ -52,6 +55,14 @@ const useGeneratedSavingsInterestActions = ({
         })
     }
 
+    const handleManageEntries = () => {
+        open('manageEntries', {
+            id: generatedSavingsInterest.id,
+            defaultValues: generatedSavingsInterest,
+            extra: { onDeleteSuccess },
+        })
+    }
+
     const handleEdit = () => {
         open('edit', {
             id: generatedSavingsInterest.id,
@@ -74,6 +85,7 @@ const useGeneratedSavingsInterestActions = ({
         generatedSavingsInterest,
         isDeletingGeneratedSavingsInterest,
         handleView,
+        handleManageEntries,
         handleEdit,
         handleDelete,
     }
@@ -89,7 +101,7 @@ export const GeneratedSavingsInterestAction = ({
     row,
     onDeleteSuccess,
 }: IGeneratedSavingsInterestTableActionProps) => {
-    const { isDeletingGeneratedSavingsInterest, handleEdit, handleDelete } =
+    const { isDeletingGeneratedSavingsInterest, handleManageEntries, handleEdit, handleDelete } =
         useGeneratedSavingsInterestActions({ row, onDeleteSuccess })
 
     return (
@@ -106,7 +118,14 @@ export const GeneratedSavingsInterestAction = ({
                     isAllowed: true,
                     onClick: handleEdit,
                 }}
-                otherActions={<></>}
+                otherActions={
+                    <>
+                        <ContextMenuItem onClick={handleManageEntries}>
+                            <List className="mr-2 h-4 w-4" />
+                            Manage Entries
+                        </ContextMenuItem>
+                    </>
+                }
                 row={row}
             />
         </>
@@ -124,7 +143,7 @@ export const GeneratedSavingsInterestRowContext = ({
     children,
     onDeleteSuccess,
 }: IGeneratedSavingsInterestRowContextProps) => {
-    const { isDeletingGeneratedSavingsInterest, handleEdit, handleDelete } =
+    const { isDeletingGeneratedSavingsInterest, handleManageEntries, handleEdit, handleDelete } =
         useGeneratedSavingsInterestActions({ row, onDeleteSuccess })
 
     return (
@@ -140,6 +159,14 @@ export const GeneratedSavingsInterestRowContext = ({
                     isAllowed: true,
                     onClick: handleEdit,
                 }}
+                otherActions={
+                    <>
+                        <ContextMenuItem onClick={handleManageEntries}>
+                            <List className="mr-2 h-4 w-4" />
+                            Manage Entries
+                        </ContextMenuItem>
+                    </>
+                }
                 row={row}
             >
                 {children}
@@ -165,6 +192,16 @@ export const GeneratedSavingsInterestTableActionManager = () => {
                     }}
                     onOpenChange={close}
                     open={state.isOpen}
+                />
+            )}
+            {state.action === 'manageEntries' && state.id && (
+                <GeneratedSavingsInterestEntryTableModal
+                    onOpenChange={close}
+                    open={state.isOpen}
+                    tableProps={{
+                        generatedSavingsInterestId: state.id,
+                    }}
+                    title={`Manage Entries - ${state.defaultValues?.document_no || 'N/A'}`}
                 />
             )}
         </>

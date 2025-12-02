@@ -1,11 +1,18 @@
-import { createDataLayerFactory } from '@/providers/repositories/data-layer-factory'
-
+import { useQuery } from '@tanstack/react-query'
 
 import { Logger } from '@/helpers/loggers'
+import { createDataLayerFactory } from '@/providers/repositories/data-layer-factory'
 
-import type { IGeneratedSavingsInterestEntry, IGeneratedSavingsInterestEntryRequest } from '../generated-savings-interest-entry'
+import type {
+    IGeneratedSavingsInterestEntry,
+    IGeneratedSavingsInterestEntryRequest,
+} from '../generated-savings-interest-entry'
 
-const { apiCrudHooks, apiCrudService, baseQueryKey : generatedSavingsInterestEntryBaseKey } = createDataLayerFactory<
+const {
+    apiCrudHooks,
+    apiCrudService,
+    baseQueryKey: generatedSavingsInterestEntryBaseKey,
+} = createDataLayerFactory<
     IGeneratedSavingsInterestEntry,
     IGeneratedSavingsInterestEntryRequest
 >({
@@ -38,7 +45,7 @@ export const {
     useCreate: useCreateGeneratedSavingsInterestEntry,
     useUpdateById: useUpdateGeneratedSavingsInterestEntryById,
 
-    useGetAll: useGetAllGeneratedSavingsInterestEntry,
+    // useGetAll: useGetAllGeneratedSavingsInterestEntry,
     useGetById: useGetGeneratedSavingsInterestEntryById,
     useGetPaginated: useGetPaginatedGeneratedSavingsInterestEntry,
 

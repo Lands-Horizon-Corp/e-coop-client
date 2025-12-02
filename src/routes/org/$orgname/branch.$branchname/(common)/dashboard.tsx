@@ -1,6 +1,5 @@
 import { createFileRoute } from '@tanstack/react-router'
 
-import { TestGeneratedEntriesViewer } from '@/modules/generated-savings-interest/components/forms/generated-entries-viewer'
 import Heartbeat from '@/modules/heartbeat/components/heartbeat'
 
 export const Route = createFileRoute(
@@ -13,7 +12,6 @@ function RouteComponent() {
     return (
         <div>
             <Heartbeat />
-            <TestGeneratedEntriesViewer />
         </div>
     )
 }

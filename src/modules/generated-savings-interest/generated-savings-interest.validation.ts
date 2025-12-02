@@ -33,8 +33,12 @@ export const GeneratedSavingsInterestSchema = z.object({
     include_existing_computed_interest: z.boolean().default(false),
 
     // for view only
-    entries: z.array(z.any()).optional(),
+    entries: z.array(z.any()).min(1),
+    is_viewing_entries: z.boolean().optional(),
 })
+
+export const GeneratedSavingsInterestViewSchema =
+    GeneratedSavingsInterestSchema.omit({ entries: true })
 
 export type TGeneratedSavingsInterestSchema = z.infer<
     typeof GeneratedSavingsInterestSchema

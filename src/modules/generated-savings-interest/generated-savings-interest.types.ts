@@ -41,7 +41,11 @@ export interface IGeneratedSavingsInterest extends IBaseEntityMeta {
 
 export type IGeneratedSavingsInterestRequest = TGeneratedSavingsInterestSchema
 
-
+export interface IGeneratedSavingsInterestView {
+    entries?: IGeneratedSavingsInterestEntry[]
+    total_tax: number
+    total_interest: number
+}
 
 export interface IGeneratedSavingsInterestPaginated
     extends IPaginatedResult<IGeneratedSavingsInterest> {}

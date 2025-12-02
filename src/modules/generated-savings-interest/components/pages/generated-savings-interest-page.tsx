@@ -7,7 +7,7 @@ import PageContainer from '@/components/containers/page-container'
 import { useModalState } from '@/hooks/use-modal-state'
 import { useSubscribe } from '@/hooks/use-pubsub'
 
-import GeneratedSavingsInterestTable from '../generated-savings-interest-table'
+import GeneratedSavingsInterestTable from '../tables/generated-savings-interest-table'
 import { GeneratedSavingsInterestCreateFormModal } from '../forms/generate-savings-interest-create-form'
 
 const GeneratedSavingsInterestPage = () => {
