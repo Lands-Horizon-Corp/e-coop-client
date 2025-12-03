@@ -131,6 +131,7 @@ const BrowseReferenceCreateUpdateForm = ({
                             <AccountPicker
                                 {...field}
                                 mode="all"
+                                nameOnly
                                 onSelect={(account) => {
                                     field.onChange(account.id)
                                     form.setValue('name', account?.name)

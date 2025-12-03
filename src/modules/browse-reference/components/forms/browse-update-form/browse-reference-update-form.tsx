@@ -24,6 +24,12 @@ import {
 import { Form } from '@/components/ui/form'
 import FormFieldWrapper from '@/components/ui/form-field-wrapper'
 import { Input } from '@/components/ui/input'
+import {
+    InputGroup,
+    InputGroupAddon,
+    InputGroupInput,
+    InputGroupText,
+} from '@/components/ui/input-group'
 import { Label } from '@/components/ui/label'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 import { Textarea } from '@/components/ui/textarea'
@@ -139,6 +145,7 @@ const BrowseReferenceUpdateForm = ({
                                 <AccountPicker
                                     {...field}
                                     mode="all"
+                                    nameOnly
                                     onSelect={(account) => {
                                         field.onChange(account.id)
                                         form.setValue('account', account, {
@@ -169,15 +176,21 @@ const BrowseReferenceUpdateForm = ({
                             label="Interest *"
                             name="interest_rate"
                             render={({ field }) => (
-                                <Input
-                                    {...field}
-                                    // disabled={isDisabled(field.name)}
-                                    onChange={(e) => {
-                                        field.onChange(e)
-                                        form.setValue('charges', undefined)
-                                    }}
-                                    placeholder="Interest Rate (%)"
-                                />
+                                <InputGroup>
+                                    <InputGroupInput
+                                        {...field}
+                                        // disabled={isDisabled(field.name)}
+                                        onChange={(e) => {
+                                            field.onChange(e.target.value)
+                                            form.setValue('charges', undefined)
+                                        }}
+                                        placeholder="0.00"
+                                        value={field.value}
+                                    />
+                                    <InputGroupAddon align="inline-end">
+                                        <InputGroupText>%</InputGroupText>
+                                    </InputGroupAddon>
+                                </InputGroup>
                             )}
                         />
                         <FormFieldWrapper
@@ -429,13 +442,26 @@ const BrowseReferenceUpdateForm = ({
                                         label="Other interest on saving computation interest rate *"
                                         name="other_interest_on_saving_computation_interest_rate"
                                         render={({ field }) => (
-                                            <Input
-                                                {...field}
-                                                // disabled={isDisabled(
-                                                // field.name
-                                                // )}
-                                                placeholder="Interest Rate"
-                                            />
+                                            <InputGroup>
+                                                <InputGroupInput
+                                                    {...field}
+                                                    // disabled={isDisabled(
+                                                    // field.name
+                                                    // )}
+                                                    onChange={(e) =>
+                                                        field.onChange(
+                                                            e.target.value
+                                                        )
+                                                    }
+                                                    placeholder="0.00"
+                                                    value={field.value}
+                                                />
+                                                <InputGroupAddon align="inline-end">
+                                                    <InputGroupText>
+                                                        %
+                                                    </InputGroupText>
+                                                </InputGroupAddon>
+                                            </InputGroup>
                                         )}
                                     />
                                 </fieldset>
