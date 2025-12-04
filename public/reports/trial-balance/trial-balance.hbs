@@ -1,0 +1,311 @@
+<style>
+    @page {
+        margin: 0;
+    }
+
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+   
+    .tb-report-container {
+        --fs-xs: clamp(0.45rem, 0.60vw + 0.15vh, 0.65rem);
+        --fs-sm: clamp(0.55rem, 0.75vw + 0.25vh, 0.75rem);
+        --fs-base: clamp(0.65rem, 0.90vw + 0.30vh, 0.85rem);
+        --fs-lg: clamp(0.75rem, 1.10vw + 0.40vh, 0.95rem);
+        --fs-xl: clamp(0.85rem, 1.50vw + 0.55vh, 1.25rem);
+        --fs-2xl: clamp(0.95rem, 1.80vw + 0.65vh, 1.65rem);
+
+        width: 100%;
+        height: 100%;
+        padding: clamp(3rem, 20%, 2rem);
+        padding-bottom: clamp(4rem, 12%, 7rem);
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+        color: #1f2937;
+        font-size: var(--fs-base);
+        line-height: 1.4;
+        display: flex;
+        flex-direction: column;
+        container-type: inline-size;
+        container-name: report;
+    }
+
+    .tb-report-header {
+        text-align: center;
+        margin-bottom: clamp(0.5rem, 2%, 1.5rem);
+        padding-bottom: clamp(0.25rem, 1.5%, 1rem);
+        border-bottom: 1px solid #e5e7eb;
+    }
+
+    .tb-report-header h1 {
+        font-size: var(--fs-lg);
+        font-weight: 800;
+        color: #111827;
+        margin-bottom: clamp(0.125rem, 0.5%, 0.375rem);
+        letter-spacing: -0.025em;
+    }
+
+    .tb-report-header .tb-address {
+        font-size: var(--fs-sm);
+        color: #6b7280;
+        margin: clamp(0.125rem, 0.5%, 0.25rem) 0;
+    }
+
+    .tb-report-header .tb-tin {
+        font-size: var(--fs-xs);
+        color: #9ca3af;
+    }
+
+    .tb-report-header h2 {
+        font-size: var(--fs-xl);
+        font-weight: 700;
+        text-transform: uppercase;
+        margin-top: clamp(0.375rem, 1%, 0.75rem);
+        color: #111827;
+    }
+
+    .as-of {
+        font-size: var(--fs-sm);
+        color: #374151;
+        margin-top: clamp(0.25rem, 1%, 0.5rem);
+        text-align: center;
+    }
+
+    .section-title {
+        font-size: var(--fs-base);
+        font-weight: 700;
+        color: #111827;
+        margin: clamp(0.5rem, 2%, 1rem) 0;
+        text-transform: uppercase;
+    }
+
+    .tb-table-wrapper {
+        width: 100%;
+        overflow-x: auto;
+        margin-bottom: clamp(0.5rem, 2%, 1rem);
+        border-radius: clamp(0.25rem, 0.5%, 0.5rem);
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        background: white;
+        font-size: var(--fs-sm);
+    }
+
+    thead {
+        background: #f9fafb;
+        position: sticky;
+        top: 0;
+
+        border-bottom: 2px solid #e5e7eb;
+    }
+
+    th {
+        text-transform: uppercase;
+        font-size: var(--fs-xs);
+        font-weight: 700;
+        color: #374151;
+        padding: clamp(0.25rem, 1%, 0.75rem) clamp(0.375rem, 1.5%, 1rem);
+        text-align: left;
+    }
+
+    .th-center {
+        text-align: center;
+    }
+
+    td {
+        font-size: inherit;
+        padding: clamp(0.25rem, 1%, 0.625rem) clamp(0.375rem, 1.5%, 1rem);
+        border-bottom: 1px solid #f3f4f6;
+    }
+
+    .tb-text-right {
+        text-align: right;
+        font-family: 'SF Mono', 'Monaco', 'Courier New', monospace;
+        font-variant-numeric: tabular-nums;
+    }
+
+    .tb-totals {
+        background: #f3f4f6;
+        font-weight: 700;
+        color: #111827;
+        font-size: var(--fs-base);
+        border-top: 2px solid #9ca3af;
+    }
+
+    .tb-signature-grid {
+        display: grid;
+        grid-template-columns: 2fr;
+        gap: clamp(0.5rem, 2%, 1rem);
+        margin-top: clamp(0.75rem, 2.5%, 1.5rem);
+        font-size: var(--fs-sm);
+        width: 100%;
+    }
+
+    @container (min-width: 500px) {
+        .tb-signature-grid {
+            grid-template-columns: repeat(3, 1fr);
+        }
+    }
+
+    .tb-signature-item {
+        text-align: center;
+    }
+
+    .tb-signature-label {
+        font-size: var(--fs-xs);
+        color: #6b7280;
+        margin-bottom: clamp(0.25rem, 1%, 0.5rem);
+    }
+
+    .tb-signature-line {
+        border-bottom: 1px solid #9ca3af;
+        padding: clamp(0.25rem, 1%, 0.5rem) 0;
+        min-height: clamp(1rem, 3%, 2rem);
+        font-weight: 500;
+        font-size: var(--fs-sm);
+        color: #1f2937;
+        margin-top: clamp(0.25rem, 1%, 0.5rem);
+    }
+
+    .trial-balance-report-footer {
+        margin-top: auto;
+        padding-top: clamp(0.5rem, 2%, 1rem);
+        border-top: 1px solid #e5e7eb;
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: clamp(0.25rem, 1%, 0.5rem);
+        font-size: var(--fs-xs);
+        color: #6b7280;
+    }
+
+    @container (min-width: 500px) {
+        .report-footer {
+            grid-template-columns: repeat(4, 1fr);
+        }
+    }
+
+    .tb-footer-item {
+        display: flex;
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .tb-footer-label {
+        font-weight: 600;
+        color: #374151;
+        margin-bottom: 0.125rem;
+    }
+
+    .tb-footer-value {
+        color: #1f2937;
+        font-family: 'SF Mono', 'Monaco', 'Courier New', monospace;
+    }
+
+    @media print {
+        .tb-report-container {
+            padding: 2%;
+        }
+
+        .tb-table-wrapper {
+            box-shadow: none;
+        }
+
+        * {
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+        }
+    }
+</style>
+
+<div class="tb-report-container">
+    <header class="tb-report-header">
+        <h1>{{header_title}}</h1>
+        <p class="tb-address">{{header_address}}</p>
+        <p class="tb-tin">TIN: {{tax_number}}</p>
+        <h2>{{report_title}}</h2>
+        <p class="as-of">As of: {{as_of_date}}</p>
+    </header>
+
+    <div class="tb-table-wrapper">
+        <table>
+            <thead>
+                <tr>
+                    <th rowspan="2">Account Title</th>
+                    <th class="th-center" colspan="2">Previous Month</th>
+                    <th class="th-center" colspan="2">Current Month</th>
+                    <th class="th-center" colspan="2">Balance</th>
+                </tr>
+                <tr>
+                    <th class="tb-text-right">Debit</th>
+                    <th class="tb-text-right">Credit</th>
+                    <th class="tb-text-right">Debit</th>
+                    <th class="tb-text-right">Credit</th>
+                    <th class="tb-text-right">Debit</th>
+                    <th class="tb-text-right">Credit</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#each account_entries}}
+                <tr>
+                    <td>{{account_title}}</td>
+                    <td class="tb-text-right">{{previous_month_debit}}</td>
+                    <td class="tb-text-right">{{previous_month_credit}}</td>
+                    <td class="tb-text-right">{{current_month_debit}}</td>
+                    <td class="tb-text-right">{{current_month_credit}}</td>
+                    <td class="tb-text-right">{{balance_debit}}</td>
+                    <td class="tb-text-right">{{balance_credit}}</td>
+                </tr>
+                {{/each}}
+                <tr class="tb-totals">
+                    <td>GRAND TOTAL</td>
+                    <td class="tb-text-right">{{grand_total_previous_month_debit}}</td>
+                    <td class="tb-text-right">{{grand_total_previous_month_credit}}</td>
+                    <td class="tb-text-right">{{grand_total_current_month_debit}}</td>
+                    <td class="tb-text-right">{{grand_total_current_month_credit}}</td>
+                    <td class="tb-text-right">{{grand_total_balance_debit}}</td>
+                    <td class="tb-text-right">{{grand_total_balance_credit}}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="tb-signature-grid">
+        <div class="tb-signature-item">
+            <div class="tb-signature-line">{{prepared_by}}</div>
+            <p class="tb-signature-label">Prepared by:</p>
+        </div>
+        <div class="tb-signature-item">
+            <div class="tb-signature-line">{{check_by}}</div>
+            <p class="tb-signature-label">Check by:</p>
+        </div>
+        <div class="tb-signature-item">
+            <div class="tb-signature-line">{{approved_by}}</div>
+            <p class="tb-signature-label">Approved by:</p>
+        </div>
+    </div>
+
+    <footer class="trial-balance-report-footer">
+        {{#if page_number}}
+        <div class="tb-footer-item">
+            <span class="tb-footer-label">Page</span>
+            <span class="tb-footer-value">{{page_number}}</span>
+        </div>
+        {{/if}}
+        <div class="tb-footer-item">
+            <span class="tb-footer-label">User ID</span>
+            <span class="tb-footer-value">{{user_id}}</span>
+        </div>
+        <div class="tb-footer-item">
+            <span class="tb-footer-label">Report Date</span>
+            <span class="tb-footer-value">{{report_date}}</span>
+        </div>
+        <div class="tb-footer-item">
+            <span class="tb-footer-label">Time</span>
+            <span class="tb-footer-value">{{time}}</span>
+        </div>
+    </footer>
+</div>

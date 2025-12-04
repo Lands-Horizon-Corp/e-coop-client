@@ -15,6 +15,8 @@ const registerHandlebarsHelpers = () => {
 
     Handlebars.registerHelper('eq', (a, b) => a === b)
 
+    Handlebars.registerHelper('equals', (a, b) => a === b)
+
     Handlebars.registerHelper('add', (a, b) => {
         const na = Number(a) || 0
         const nb = Number(b) || 0

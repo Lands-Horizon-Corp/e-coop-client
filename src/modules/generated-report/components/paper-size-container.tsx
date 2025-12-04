@@ -110,7 +110,9 @@ export const PaperSizeContainer = ({
                     height: `${heightPx}px`,
                 }}
             >
-                <div className="absolute inset-0 overflow-auto">{children}</div>
+                <div className="absolute inset-0 overflow-hidden">
+                    {children}
+                </div>
                 {/* Corner indicator */}
                 <div className="absolute top-0 right-0 w-8 h-8 border-t-2 border-r-2 border-primary/20" />
                 <div className="absolute bottom-0 left-0 w-8 h-8 border-b-2 border-l-2 border-primary/20" />

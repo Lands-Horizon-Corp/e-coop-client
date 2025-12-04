@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cash Check Disbursement - Statement</title>
+<style>
+    @page {
+        margin: 0;
+    }
+
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    html, body {
+        width: 8.5in;
+        height: 11in;
+        margin: 0;
+        padding: 0;
+    }
+
+    body {
+        background-color: #f9fafb;
+        padding: 0.25in;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .ccd-container {
+        /* Fixed font sizes for statement (8.5x11 in) */
+        --fs-xs: 9px;
+        --fs-sm: 10px;
+        --fs-base: 11px;
+        --fs-lg: 14px;
+        --fs-xl: 16px;
+        --fs-2xl: 20px;
+
+        width: 8.5in;
+        height: 11in;
+        padding: 0.5in;
+        background: white;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+        color: #1f2937;
+        font-size: var(--fs-base);
+        line-height: 1.4;
+        display: flex;
+        flex-direction: column;
+        box-sizing: border-box;
+    }
+
+    /* Header */
+    .ccd-header {
+        text-align: center;
+        margin-bottom: 0.5rem;
+        padding-bottom: 0.375rem;
+        border-bottom: 1px solid #e5e7eb;
+    }
+
+    .ccd-header h1 {
+        font-size: var(--fs-lg);
+        font-weight: 800;
+        color: #111827;
+        margin-bottom: 0.125rem;
+        letter-spacing: -0.025em;
+    }
+
+    .ccd-header .ccd-address {
+        font-size: var(--fs-sm);
+        color: #6b7280;
+        margin: 0.125rem 0;
+    }
+
+    .ccd-header .ccd-tin {
+        font-size: var(--fs-xs);
+        color: #9ca3af;
+    }
+
+    .ccd-header h2 {
+        font-size: 18px;
+        font-weight: 800;
+        text-transform: uppercase;
+        margin-top: 0.5rem;
+        color: #111827;
+        letter-spacing: -0.025em;
+    }
+
+    /* Info Grid */
+    .ccd-info-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.375rem;
+        margin-bottom: 0.75rem;
+        font-size: var(--fs-sm);
+    }
+
+    .ccd-info-item {
+        padding: 0.25rem;
+    }
+
+    .ccd-info-label {
+        font-size: var(--fs-sm);
+        font-weight: 600;
+        color: #374151;
+        display: inline-block;
+    }
+
+    .ccd-info-value {
+        font-size: var(--fs-sm);
+        color: #1f2937;
+        font-weight: 600;
+        padding-left: 0.25rem;
+    }
+
+    .ccd-info-subtext {
+        font-size: var(--fs-xs);
+        color: #6b7280;
+        margin-top: 0.125rem;
+    }
+
+    /* Table */
+    .ccd-table-wrapper {
+        width: 100%;
+        overflow-x: auto;
+        margin-bottom: 0.5rem;
+        border-radius: 0.25rem;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    }
+
+    .ccd-table-wrapper table {
+        width: 100%;
+        border-collapse: collapse;
+        background: white;
+        font-size: var(--fs-sm);
+    }
+
+    .ccd-table-wrapper thead {
+        background: #f9fafb;
+        position: sticky;
+        top: 0;
+    }
+
+    .ccd-table-wrapper th {
+        text-transform: uppercase;
+        font-size: var(--fs-xs);
+        font-weight: 700;
+        color: #374151;
+        padding: 0.5rem 0.375rem;
+        text-align: left;
+        border-bottom: 2px solid #e5e7eb;
+    }
+
+    .ccd-table-wrapper td {
+        font-size: inherit;
+        padding: 0.375rem 0.375rem;
+        border-bottom: 1px solid #f3f4f6;
+    }
+
+    .ccd-text-right {
+        text-align: right;
+        font-family: 'SF Mono', 'Monaco', 'Courier New', monospace;
+        font-variant-numeric: tabular-nums;
+    }
+
+    .ccd-highlight {
+        background: #dbeafe;
+        font-weight: 700;
+        color: #1e40af;
+        border-top: 1px solid #3b82f6;
+        border-bottom: 1px solid #3b82f6;
+    }
+
+    .ccd-totals {
+        background: #f3f4f6;
+        font-weight: 700;
+        color: #111827;
+        font-size: var(--fs-base);
+        border-top: 2px solid #9ca3af;
+    }
+
+    /* Amount in words */
+    .ccd-amount-words {
+        margin: 0.5rem 0;
+        padding: 0.5rem 0.375rem;
+        background: linear-gradient(to right, #fef3c7, #fde68a);
+        border: 1px solid #fbbf24;
+        border-radius: 0.25rem;
+        color: #78350f;
+        font-size: var(--fs-base);
+        font-weight: 600;
+        text-align: center;
+        letter-spacing: 0.025em;
+    }
+
+    /* Signatures */
+    .ccd-signature-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 0.75rem;
+        margin-top: 1rem;
+        font-size: var(--fs-sm);
+    }
+
+    .ccd-signature-item {
+        text-align: center;
+    }
+
+    .ccd-signature-label {
+        font-size: var(--fs-xs);
+        color: #6b7280;
+        margin-bottom: 0.375rem;
+    }
+
+    .ccd-signature-line {
+        border-bottom: 1px solid #9ca3af;
+        padding: 0.375rem 0;
+        min-height: 1.5rem;
+        font-weight: 500;
+        font-size: var(--fs-sm);
+        color: #1f2937;
+        margin-top: 0.375rem;
+    }
+
+    /* Approval section */
+    .ccd-approval-section {
+        margin-top: 1rem;
+        padding-top: 0.5rem;
+        border-top: 1px solid #e5e7eb;
+        text-align: center;
+    }
+
+    .ccd-approval-label {
+        font-size: var(--fs-base);
+        font-weight: 700;
+        text-transform: uppercase;
+        color: #111827;
+        margin-bottom: 0.5rem;
+    }
+
+    .ccd-approval-line {
+        max-width: 12rem;
+        margin: 0 auto;
+        border-bottom: 2px solid #374151;
+        padding: 0.375rem 0;
+        min-height: 1.5rem;
+        font-weight: 600;
+        color: #1f2937;
+        font-size: var(--fs-sm);
+    }
+
+    /* Footer */
+    .ccd-footer {
+        margin-top: auto;
+        padding-top: 0.5rem;
+        border-top: 1px solid #e5e7eb;
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 0.375rem;
+        font-size: var(--fs-xs);
+        color: #6b7280;
+    }
+
+    .ccd-footer-item {
+        display: flex;
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .ccd-footer-label {
+        font-weight: 600;
+        color: #374151;
+        margin-bottom: 0.125rem;
+    }
+
+    .ccd-footer-value {
+        color: #1f2937;
+        font-family: 'SF Mono', 'Monaco', 'Courier New', monospace;
+    }
+
+    /* Print optimization */
+    @media print {
+        html, body {
+            width: 8.5in;
+            height: 11in;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: white;
+            padding: 0;
+        }
+
+        .ccd-container {
+            padding: 0.5in;
+            box-shadow: none;
+        }
+
+        .ccd-table-wrapper {
+            box-shadow: none;
+        }
+
+        * {
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+        }
+    }
+</style>
+</head>
+<body>
+    <div class="ccd-container">
+        <header class="ccd-header">
+            <h1>{{header_title}}</h1>
+            <p class="ccd-address">{{header_address}}</p>
+            <p class="ccd-tin">TIN: {{tax_number}}</p>
+            <h2>{{report_title}}</h2>
+        </header>
+
+        <div class="ccd-info-grid">
+            <div class="ccd-info-item">
+                <div>
+                    <span class="ccd-info-label">Pay To:</span>
+                    <span class="ccd-info-value">{{pay_to}}</span>
+                </div>
+                <p class="ccd-info-subtext">Address: {{address}}</p>
+                <p class="ccd-info-subtext">Particulars: {{particulars}}</p>
+            </div>
+            <div class="ccd-info-item">
+                <p><span class="ccd-info-label">Voucher No:</span> <span class="ccd-info-value">{{voucher_no}}</span></p>
+                <p><span class="ccd-info-label">Entry Date:</span> <span class="ccd-info-value">{{entry_date}}</span></p>
+                <p><span class="ccd-info-label">Print Date:</span> <span class="ccd-info-value">{{print_date}}</span></p>
+                <p><span class="ccd-info-label">Date:</span> <span class="ccd-info-value">{{date}}</span></p>
+            </div>
+        </div>
+
+        <div class="ccd-table-wrapper">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Account Title</th>
+                        <th class="ccd-text-right">Debit (₱)</th>
+                        <th class="ccd-text-right">Credit (₱)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{#each account_entries}}
+                    <tr>
+                        <td>{{account_title}}</td>
+                        <td class="ccd-text-right">{{debit}}</td>
+                        <td class="ccd-text-right">{{credit}}</td>
+                    </tr>
+                    {{/each}}
+                    <tr class="ccd-highlight">
+                        <td>CASH ON HAND TOTAL</td>
+                        <td class="ccd-text-right">{{cash_on_hand_total_debit}}</td>
+                        <td class="ccd-text-right">{{cash_on_hand_total_credit}}</td>
+                    </tr>
+                    <tr class="ccd-totals">
+                        <td>TOTAL</td>
+                        <td class="ccd-text-right">{{total_debit}}</td>
+                        <td class="ccd-text-right">{{total_credit}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="ccd-amount-words">
+            *** {{total_amount_into_words}} ONLY ***
+        </div>
+
+        <div class="ccd-signature-grid">
+            <div class="ccd-signature-item">
+                <p class="ccd-signature-label">Prepared by:</p>
+                <div class="ccd-signature-line">{{prepared_by}}</div>
+            </div>
+            <div class="ccd-signature-item">
+                <p class="ccd-signature-label">Payee:</p>
+                <div class="ccd-signature-line">{{payee}}</div>
+            </div>
+            <div class="ccd-signature-item">
+                <p class="ccd-signature-label">Certified Correct:</p>
+                <div class="ccd-signature-line">{{certified_correct}}</div>
+            </div>
+            <div class="ccd-signature-item">
+                <p class="ccd-signature-label">Paid by:</p>
+                <div class="ccd-signature-line">{{paid_by}}</div>
+            </div>
+        </div>
+
+        <div class="ccd-approval-section">
+            <p class="ccd-approval-label">Approved for Payment:</p>
+            <div class="ccd-approval-line">{{approved_for_payment}}</div>
+        </div>
+
+        <footer class="ccd-footer">
+            <div class="ccd-footer-item">
+                <span class="ccd-footer-label">User ID</span>
+                <span class="ccd-footer-value">{{user_id}}</span>
+            </div>
+            <div class="ccd-footer-item">
+                <span class="ccd-footer-label">Report Date</span>
+                <span class="ccd-footer-value">{{report_date}}</span>
+            </div>
+            <div class="ccd-footer-item">
+                <span class="ccd-footer-label">Time</span>
+                <span class="ccd-footer-value">{{time}}</span>
+            </div>
+        </footer>
+    </div>
+</body>
+</html>

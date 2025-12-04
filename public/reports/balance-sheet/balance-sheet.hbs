@@ -1,0 +1,519 @@
+<style>
+    @page {
+        margin: 0;
+    }
+
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    .bs-report-container {
+        --fs-xs: clamp(0.45rem, 0.60vw + 0.15vh, 0.65rem);
+        --fs-sm: clamp(0.55rem, 0.75vw + 0.25vh, 0.75rem);
+        --fs-base: clamp(0.65rem, 0.90vw + 0.30vh, 0.85rem);
+        --fs-lg: clamp(0.75rem, 1.10vw + 0.40vh, 0.95rem);
+        --fs-xl: clamp(0.85rem, 1.50vw + 0.55vh, 1.25rem);
+        --fs-2xl: clamp(0.95rem, 1.80vw + 0.65vh, 1.65rem);
+
+        width: 100%;
+        height: 100%;
+        padding: clamp(2rem, 10%, 5.5rem);
+        background: white;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+        color: #1f2937;
+        font-size: var(--fs-base);
+        line-height: 1.4;
+        display: flex;
+        flex-direction: column;
+        position: relative;
+        container-type: inline-size;
+        container-name: report;
+    }
+
+    .bs-report-header {
+        text-align: center;
+        margin-bottom: clamp(0.5rem, 2%, 1.5rem);
+        padding-bottom: clamp(0.25rem, 1.5%, 1rem);
+        border-bottom: 1px solid #e5e7eb;
+    }
+
+    .bs-report-header h1 {
+        font-size: var(--fs-lg);
+        font-weight: 800;
+        color: #111827;
+        margin-bottom: clamp(0.125rem, 0.5%, 0.375rem);
+        letter-spacing: -0.025em;
+    }
+
+    .bs-report-header .bs-address {
+        font-size: var(--fs-sm);
+        color: #6b7280;
+        margin: clamp(0.125rem, 0.5%, 0.25rem) 0;
+    }
+
+    .bs-report-header .bs-tin {
+        font-size: var(--fs-xs);
+        color: #9ca3af;
+    }
+
+    .bs-report-header h2 {
+        font-size: var(--fs-xl);
+        font-weight: 700;
+        text-transform: uppercase;
+        margin-top: clamp(0.375rem, 1%, 0.75rem);
+        color: #111827;
+    }
+
+    .as-of-date {
+        font-size: var(--fs-sm);
+        color: #374151;
+        margin-top: clamp(0.25rem, 1%, 0.5rem);
+        text-align: center;
+    }
+
+    .section-title {
+        font-size: var(--fs-base);
+        font-weight: 700;
+        color: #111827;
+        margin: clamp(0.5rem, 2%, 1rem) 0 clamp(0.25rem, 1%, 0.5rem) 0;
+        text-transform: uppercase;
+        background: #f3f4f6;
+        padding: clamp(0.25rem, 1%, 0.5rem) clamp(0.375rem, 1.5%, 1rem);
+        border-left: 3px solid #3b82f6;
+    }
+
+    .account-group {
+        margin-bottom: clamp(0.5rem, 2%, 1rem);
+    }
+
+    .account-title {
+        font-size: var(--fs-sm);
+        font-weight: 600;
+        color: #374151;
+        margin: clamp(0.25rem, 1%, 0.5rem) 0;
+        padding-left: clamp(0.5rem, 2%, 1rem);
+    }
+
+    .account-entries {
+        margin-left: clamp(1rem, 3%, 2rem);
+    }
+
+    .entry-row {
+        display: grid;
+        grid-template-columns: 2fr 1fr;
+        gap: clamp(0.25rem, 1%, 0.5rem);
+        padding: clamp(0.125rem, 0.5%, 0.25rem) clamp(0.375rem, 1.5%, 1rem);
+        font-size: var(--fs-sm);
+        border-bottom: 1px solid #f3f4f6;
+    }
+
+    .entry-row.with-comparison {
+        grid-template-columns: 2fr 1fr 1fr 1fr 1fr;
+    }
+
+    .entry-description {
+        color: #1f2937;
+    }
+
+    .entry-amount {
+        text-align: right;
+        font-family: 'SF Mono', 'Monaco', 'Courier New', monospace;
+        font-variant-numeric: tabular-nums;
+        color: #1f2937;
+    }
+
+    .entry-change {
+        text-align: center;
+        font-size: var(--fs-xs);
+        font-weight: 600;
+    }
+
+    .entry-change.increase {
+        color: #059669;
+    }
+
+    .entry-change.decrease {
+        color: #dc2626;
+    }
+
+    .subtotal-row {
+        display: grid;
+        grid-template-columns: 2fr 1fr;
+        gap: clamp(0.25rem, 1%, 0.5rem);
+        padding: clamp(0.25rem, 1%, 0.5rem) clamp(0.375rem, 1.5%, 1rem);
+        font-size: var(--fs-sm);
+        font-weight: 600;
+        background: #f9fafb;
+        border-top: 1px solid #d1d5db;
+        border-bottom: 1px solid #d1d5db;
+        margin-top: clamp(0.125rem, 0.5%, 0.25rem);
+    }
+
+    .subtotal-label {
+        color: #374151;
+    }
+
+    .subtotal-amount {
+        text-align: right;
+        font-family: 'SF Mono', 'Monaco', 'Courier New', monospace;
+        font-variant-numeric: tabular-nums;
+        color: #1f2937;
+    }
+
+    .total-row {
+        display: grid;
+        grid-template-columns: 2fr 1fr;
+        gap: clamp(0.25rem, 1%, 0.5rem);
+        padding: clamp(0.375rem, 1.5%, 0.75rem) clamp(0.375rem, 1.5%, 1rem);
+        font-size: var(--fs-base);
+        font-weight: 700;
+        background: #f3f4f6;
+        border-top: 2px solid #9ca3af;
+        border-bottom: 2px solid #9ca3af;
+        margin: clamp(0.5rem, 2%, 1rem) 0;
+    }
+
+    .total-row.with-comparison {
+        grid-template-columns: 2fr 1fr 1fr 80px 70px;
+    }
+
+    .total-label {
+        color: #111827;
+        text-transform: uppercase;
+    }
+
+    .total-amount {
+        text-align: right;
+        font-family: 'SF Mono', 'Monaco', 'Courier New', monospace;
+        font-variant-numeric: tabular-nums;
+        color: #111827;
+    }
+
+    .total-change {
+        text-align: center;
+        font-size: var(--fs-sm);
+        font-weight: 700;
+    }
+
+    .total-change.increase {
+        color: #059669;
+    }
+
+    .total-change.decrease {
+        color: #dc2626;
+    }
+
+    .total-percentage {
+        text-align: right;
+        font-size: var(--fs-sm);
+        font-weight: 700;
+        color: #6b7280;
+    }
+
+    .bs-report-footer {
+        margin-top: auto;
+        padding-top: clamp(0.5rem, 2%, 1rem);
+        border-top: 1px solid #e5e7eb;
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: clamp(0.25rem, 1%, 0.5rem);
+        font-size: var(--fs-xs);
+        color: #6b7280;
+    }
+
+    @container (min-width: 500px) {
+        .bs-report-footer {
+            grid-template-columns: repeat(3, 1fr);
+        }
+    }
+
+    .bs-footer-item {
+        display: flex;
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .bs-footer-label {
+        font-weight: 600;
+        color: #374151;
+        margin-bottom: 0.125rem;
+    }
+
+    .bs-footer-value {
+        color: #1f2937;
+        font-family: 'SF Mono', 'Monaco', 'Courier New', monospace;
+    }
+
+    @media print {
+        .bs-report-container {
+            padding: 2%;
+        }
+
+        * {
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+        }
+    }
+</style>
+
+<div class="bs-report-container">
+    <header class="bs-report-header">
+        <h1>{{header_title}}</h1>
+        <p class="bs-address">{{header_address}}</p>
+        <p class="bs-tin">TIN: {{tax_number}}</p>
+        <h2>{{report_title}}</h2>
+        <p class="as-of-date">As of: {{as_of_date}}</p>
+    </header>
+
+    <!-- Column Headers -->
+    {{#if (equals report_type "STANDARD")}}
+    <div class="entry-row"
+        style="font-weight: 700; background: #f9fafb; border-bottom: 2px solid #d1d5db; padding-top: clamp(0.35rem, 1.5%, 0.5rem); padding-bottom: clamp(0.35rem, 1.5%, 0.5rem);">
+        <span class="entry-description"
+            style="text-transform: uppercase; font-size: var(--fs-sm); color: #374151;">ASSETS</span>
+        <span class="entry-amount"
+            style="text-transform: uppercase; font-size: var(--fs-sm); color: #374151;">CURRENT</span>
+    </div>
+    {{/if}}
+    {{#if (equals report_type "COMPARATIVE_MONTHLY")}}
+    <div class="entry-row with-comparison"
+        style="font-weight: 700; background: #f9fafb; border-bottom: 2px solid #d1d5db; padding-top: clamp(0.35rem, 1.5%, 0.5rem); padding-bottom: clamp(0.35rem, 1.5%, 0.5rem);">
+        <span class="entry-description"
+            style="text-transform: uppercase; font-size: var(--fs-sm); color: #374151;">ASSETS</span>
+        <span class="entry-amount"
+            style="text-transform: uppercase; font-size: var(--fs-sm); color: #374151;">CURRENT</span>
+        <span class="entry-amount"
+            style="text-transform: uppercase; font-size: var(--fs-sm); color: #374151;">PREVIOUS</span>
+        <span class="entry-change"
+            style="text-transform: uppercase; font-size: var(--fs-sm); color: #374151;">INC/DEC</span>
+        <span class="entry-percentage"
+            style="text-transform: uppercase; font-size: var(--fs-sm); color: #374151;">%</span>
+    </div>
+    {{/if}}
+    {{#if (equals report_type "COMPARATIVE_YEARLY")}}
+    <div class="entry-row with-comparison"
+        style="font-weight: 700; background: #f9fafb; border-bottom: 2px solid #d1d5db; padding-top: clamp(0.35rem, 1.5%, 0.5rem); padding-bottom: clamp(0.35rem, 1.5%, 0.5rem);">
+        <span class="entry-description"
+            style="text-transform: uppercase; font-size: var(--fs-sm); color: #374151;">ASSETS</span>
+        <span class="entry-amount"
+            style="text-transform: uppercase; font-size: var(--fs-sm); color: #374151;">CURRENT</span>
+        <span class="entry-amount" style="text-transform: uppercase; font-size: var(--fs-sm); color: #374151;">PREV.
+            YEAR</span>
+        <span class="entry-change"
+            style="text-transform: uppercase; font-size: var(--fs-sm); color: #374151;">INC/DEC</span>
+        <span class="entry-percentage"
+            style="text-transform: uppercase; font-size: var(--fs-sm); color: #374151;">%</span>
+    </div>
+    {{/if}}
+    {{#if (equals report_type "CLOSED_BOOK")}}
+    <div class="entry-row"
+        style="font-weight: 700; background: #f9fafb; border-bottom: 2px solid #d1d5db; padding-top: clamp(0.35rem, 1.5%, 0.5rem); padding-bottom: clamp(0.35rem, 1.5%, 0.5rem);">
+        <span class="entry-description"
+            style="text-transform: uppercase; font-size: var(--fs-sm); color: #374151;">ASSETS</span>
+        <span class="entry-amount"
+            style="text-transform: uppercase; font-size: var(--fs-sm); color: #374151;">CURRENT</span>
+    </div>
+    {{/if}}
+    {{#if (equals report_type "BUDGET_FORECASTING")}}
+    <div class="entry-row with-comparison"
+        style="font-weight: 700; background: #f9fafb; border-bottom: 2px solid #d1d5db; padding-top: clamp(0.35rem, 1.5%, 0.5rem); padding-bottom: clamp(0.35rem, 1.5%, 0.5rem);">
+        <span class="entry-description"
+            style="text-transform: uppercase; font-size: var(--fs-sm); color: #374151;">ASSETS</span>
+        <span class="entry-amount"
+            style="text-transform: uppercase; font-size: var(--fs-sm); color: #374151;">ACTUAL</span>
+        <span class="entry-amount"
+            style="text-transform: uppercase; font-size: var(--fs-sm); color: #374151;">BUDGET</span>
+        <span class="entry-amount"
+            style="text-transform: uppercase; font-size: var(--fs-sm); color: #374151;">VARIANCE</span>
+        <span class="entry-percentage"
+            style="text-transform: uppercase; font-size: var(--fs-sm); color: #374151;">%</span>
+    </div>
+    {{/if}}
+
+    {{#each asset_entries}}
+    {{#unless (equals ../report_type "CLOSED_BOOK")}}
+    <h3 class="section-title">{{account_title}}</h3>
+    {{/unless}}
+
+    <div class="account-group">
+        <div class="account-entries">
+            {{#each account_entries}}
+            <!-- Standard: current only -->
+            {{#if (equals ../../report_type "STANDARD")}}
+            <div class="entry-row">
+                <span class="entry-description">{{description}}</span>
+                <span class="entry-amount">{{current_amount}}</span>
+            </div>
+            {{/if}}
+
+            <!-- Comparative Monthly: current, previous, inc/dec, % -->
+            {{#if (equals ../../report_type "COMPARATIVE_MONTHLY")}}
+            <div class="entry-row with-comparison">
+                <span class="entry-description">{{description}}</span>
+                <span class="entry-amount">{{current_amount}}</span>
+                <span class="entry-amount">{{previous_amount}}</span>
+                <span
+                    class="entry-change {{#if inc_or_dec_amount}}{{#if (equals inc_or_dec_amount 'INC')}}increase{{else}}decrease{{/if}}{{/if}}">{{inc_or_dec_amount}}</span>
+                <span class="entry-percentage">{{percentage}}%</span>
+            </div>
+            {{/if}}
+
+            <!-- Comparative Yearly: current, previous year, inc/dec, % -->
+            {{#if (equals ../../report_type "COMPARATIVE_YEARLY")}}
+            <div class="entry-row with-comparison">
+                <span class="entry-description">{{description}}</span>
+                <span class="entry-amount">{{current_amount}}</span>
+                <span class="entry-amount">{{previous_year_amount}}</span>
+                <span
+                    class="entry-change {{#if inc_or_dec_amount}}{{#if (equals inc_or_dec_amount 'INC')}}increase{{else}}decrease{{/if}}{{/if}}">{{inc_or_dec_amount}}</span>
+                <span class="entry-percentage">{{percentage}}%</span>
+            </div>
+            {{/if}}
+
+            <!-- Closed Book: current only -->
+            {{#if (equals ../../report_type "CLOSED_BOOK")}}
+            <div class="entry-row">
+                <span class="entry-description">{{description}}</span>
+                <span class="entry-amount">{{current_amount}}</span>
+            </div>
+            {{/if}}
+
+            <!-- Budget Forecasting: actual, budget, variance, % -->
+            {{#if (equals ../../report_type "BUDGET_FORECASTING")}}
+            <div class="entry-row with-comparison">
+                <span class="entry-description">{{description}}</span>
+                <span class="entry-amount">{{actual_amount}}</span>
+                <span class="entry-amount">{{budget_amount}}</span>
+                <span class="entry-amount">{{variance_amount}}</span>
+                <span class="entry-percentage">{{percentage}}%</span>
+            </div>
+            {{/if}}
+            {{/each}}
+        </div>
+
+        {{#unless (equals ../report_type "CLOSED_BOOK")}}
+        {{#if total_cash_in_bank}}
+        <div class="subtotal-row">
+            <span class="subtotal-label">Total Cash in Bank</span>
+            <span class="subtotal-amount">{{total_cash_in_bank}}</span>
+        </div>
+        {{/if}}
+
+        {{#if petty_cash_fund}}
+        <div class="subtotal-row">
+            <span class="subtotal-label">Petty Cash Fund</span>
+            <span class="subtotal-amount">{{petty_cash_fund}}</span>
+        </div>
+        {{/if}}
+        {{/unless}}
+    </div>
+    {{/each}}
+
+    <!-- Total Property and Equipment -->
+    {{#unless (equals report_type "CLOSED_BOOK")}}
+    {{#if total_property_and_equipment_current}}
+    {{#if (equals report_type "STANDARD")}}
+    <div class="total-row">
+        <span class="total-label">Total Property and Equipment</span>
+        <span class="total-amount">{{total_property_and_equipment_current}}</span>
+    </div>
+    {{/if}}
+    {{#if (equals report_type "COMPARATIVE_MONTHLY")}}
+    <div class="total-row with-comparison">
+        <span class="total-label">Total Property and Equipment</span>
+        <span class="total-amount">{{total_property_and_equipment_current}}</span>
+        <span class="total-amount">{{total_property_and_equipment_previous}}</span>
+        <span
+            class="total-change {{#if total_property_and_equipment_inc_or_dec}}{{#if (equals total_property_and_equipment_inc_or_dec 'INC')}}increase{{else}}decrease{{/if}}{{/if}}">{{total_property_and_equipment_inc_or_dec}}</span>
+        <span class="total-percentage">{{total_property_and_equipment_percentage}}%</span>
+    </div>
+    {{/if}}
+    {{#if (equals report_type "COMPARATIVE_YEARLY")}}
+    <div class="total-row with-comparison">
+        <span class="total-label">Total Property and Equipment</span>
+        <span class="total-amount">{{total_property_and_equipment_current}}</span>
+        <span class="total-amount">{{total_property_and_equipment_previous_year}}</span>
+        <span
+            class="total-change {{#if total_property_and_equipment_inc_or_dec}}{{#if (equals total_property_and_equipment_inc_or_dec 'INC')}}increase{{else}}decrease{{/if}}{{/if}}">{{total_property_and_equipment_inc_or_dec}}</span>
+        <span class="total-percentage">{{total_property_and_equipment_percentage}}%</span>
+    </div>
+    {{/if}}
+    {{#if (equals report_type "BUDGET_FORECASTING")}}
+    <div class="total-row with-comparison">
+        <span class="total-label">Total Property and Equipment</span>
+        <span class="total-amount">{{total_property_and_equipment_actual}}</span>
+        <span class="total-amount">{{total_property_and_equipment_budget}}</span>
+        <span class="total-amount">{{total_property_and_equipment_variance}}</span>
+        <span class="total-percentage">{{total_property_and_equipment_percentage}}%</span>
+    </div>
+    {{/if}}
+    {{/if}}
+    {{/unless}}
+
+    <!-- Total Assets -->
+    {{#if (equals report_type "STANDARD")}}
+    <div class="total-row">
+        <span class="total-label">Total Assets</span>
+        <span class="total-amount">{{total_assets_current}}</span>
+    </div>
+    {{/if}}
+    {{#if (equals report_type "COMPARATIVE_MONTHLY")}}
+    <div class="total-row with-comparison">
+        <span class="total-label">Total Assets</span>
+        <span class="total-amount">{{total_assets_current}}</span>
+        <span class="total-amount">{{total_assets_previous}}</span>
+        <span
+            class="total-change {{#if total_assets_inc_or_dec}}{{#if (equals total_assets_inc_or_dec 'INC')}}increase{{else}}decrease{{/if}}{{/if}}">{{total_assets_inc_or_dec}}</span>
+        <span class="total-percentage">{{total_assets_percentage}}%</span>
+    </div>
+    {{/if}}
+    {{#if (equals report_type "COMPARATIVE_YEARLY")}}
+    <div class="total-row with-comparison">
+        <span class="total-label">Total Assets</span>
+        <span class="total-amount">{{total_assets_current}}</span>
+        <span class="total-amount">{{total_assets_previous_year}}</span>
+        <span
+            class="total-change {{#if total_assets_inc_or_dec}}{{#if (equals total_assets_inc_or_dec 'INC')}}increase{{else}}decrease{{/if}}{{/if}}">{{total_assets_inc_or_dec}}</span>
+        <span class="total-percentage">{{total_assets_percentage}}%</span>
+    </div>
+    {{/if}}
+    {{#if (equals report_type "CLOSED_BOOK")}}
+    <div class="total-row">
+        <span class="total-label">Total Assets</span>
+        <span class="total-amount">{{total_assets_current}}</span>
+    </div>
+    {{/if}}
+    {{#if (equals report_type "BUDGET_FORECASTING")}}
+    <div class="total-row with-comparison">
+        <span class="total-label">Total Assets</span>
+        <span class="total-amount">{{total_assets_actual}}</span>
+        <span class="total-amount">{{total_assets_budget}}</span>
+        <span class="total-amount">{{total_assets_variance}}</span>
+        <span class="total-percentage">{{total_assets_percentage}}%</span>
+    </div>
+    <div class="bs-total-row with-comparison">
+        <div class="bs-total-label">Total Property and Equipment</div>
+        <div class="bs-total-amount">{{total_property_and_equipment_actual}}</div>
+        <div class="bs-total-amount">{{total_property_and_equipment_budget}}</div>
+        <div class="bs-total-amount">{{total_property_and_equipment_variance}}</div>
+        <div class="bs-total-percentage">{{total_property_and_equipment_percentage}}%</div>
+    </div>
+    {{/if}}
+
+    <footer class="bs-report-footer">
+        <div class="bs-footer-item">
+            <span class="bs-footer-label">User ID</span>
+            <span class="bs-footer-value">{{user_id}}</span>
+        </div>
+        <div class="bs-footer-item">
+            <span class="bs-footer-label">Report Date</span>
+            <span class="bs-footer-value">{{report_date}}</span>
+        </div>
+        <div class="bs-footer-item">
+            <span class="bs-footer-label">Time</span>
+            <span class="bs-footer-value">{{time}}</span>
+        </div>
+    </footer>
+</div>

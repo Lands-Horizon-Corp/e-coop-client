@@ -1,8 +1,8 @@
 import { useEffect } from 'react'
 
 import { NATS_CLIENT } from '@/constants'
-import { useLiveMonitoringStore } from '@/store/live-monitoring-store'
 import logger from '@/helpers/loggers/logger'
+import { useLiveMonitoringStore } from '@/store/live-monitoring-store'
 import { type INatsConnectOpts, useNatsStore } from '@/store/nats-pubsub-store'
 import { StringCodec, type Subscription } from 'nats.ws'
 

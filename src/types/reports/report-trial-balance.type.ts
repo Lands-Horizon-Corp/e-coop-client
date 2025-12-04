@@ -6,25 +6,15 @@ export interface IReportTrialBalanceHeader {
     report_title: string
     as_of_date: string
 
-    previous_month_entries: [
+    account_entries: [
         {
             account_title: string
-            debit: number
-            credit: number
-        },
-    ]
-    current_month_entries: [
-        {
-            account_title: string
-            debit: number
-            credit: number
-        },
-    ]
-    balance_entries: [
-        {
-            account_title: string
-            debit: number
-            credit: number
+            previous_month_debit: number
+            previous_month_credit: number
+            current_month_debit: number
+            current_month_credit: number
+            balance_debit: number
+            balance_credit: number
         },
     ]
 
@@ -39,4 +29,9 @@ export interface IReportTrialBalanceHeader {
     prepared_by: string
     check_by: string
     approved_by: string
+
+    page_number?: number
+    user_id: string
+    report_date: string
+    time: string
 }

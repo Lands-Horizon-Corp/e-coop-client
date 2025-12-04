@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daily Collection Book - Responsive</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Inter', 'Helvetica Neue', Arial, sans-serif;
+            background: #f9fafb;
+            padding: clamp(0.5rem, 2vw, 2rem);
+            color: #111827;
+            line-height: 1.5;
+        }
+
+        /* Responsive container with queries */
+        .dcb-container {
+            container-type: inline-size;
+            container-name: dcb;
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            padding: clamp(1rem, 3%, 3rem);
+            border-radius: clamp(0.5rem, 1%, 1rem);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+
+            /* Responsive font sizes using clamp */
+            --fs-xs: clamp(0.45rem, 0.60vw + 0.15vh, 0.65rem);
+            --fs-sm: clamp(0.55rem, 0.75vw + 0.25vh, 0.75rem);
+            --fs-base: clamp(0.65rem, 0.90vw + 0.30vh, 0.85rem);
+            --fs-lg: clamp(0.85rem, 1.20vw + 0.40vh, 1.1rem);
+            --fs-xl: clamp(1.05rem, 1.50vw + 0.50vh, 1.35rem);
+            --fs-2xl: clamp(1.35rem, 2.00vw + 0.70vh, 1.75rem);
+        }
+
+        /* Header - responsive */
+        .dcb-header {
+            text-align: center;
+            margin-bottom: clamp(0.75rem, 2.5%, 1.5rem);
+            padding-bottom: clamp(0.5rem, 2%, 1rem);
+        }
+
+        .dcb-header h1 {
+            font-size: var(--fs-xl);
+            font-weight: 700;
+            color: #111827;
+            margin-bottom: clamp(0.25rem, 1%, 0.5rem);
+            letter-spacing: -0.025em;
+            line-height: 1.2;
+        }
+
+        .dcb-address {
+            font-size: var(--fs-sm);
+            color: #6b7280;
+            margin-bottom: clamp(0.125rem, 0.5%, 0.25rem);
+        }
+
+        .dcb-tin {
+            font-size: var(--fs-xs);
+            color: #9ca3af;
+            margin-bottom: clamp(0.25rem, 1%, 0.5rem);
+        }
+
+        .dcb-report-title {
+            font-size: var(--fs-lg);
+            font-weight: 800;
+            color: oklch(0.7227 0.192 149.5793);
+            margin-top: clamp(0.375rem, 1.5%, 0.75rem);
+            letter-spacing: -0.025em;
+        }
+
+        .dcb-date-range {
+            font-size: var(--fs-sm);
+            margin-top: clamp(0.25rem, 1%, 0.5rem);
+            color: #374151;
+        }
+
+        .dcb-date-range span {
+            font-weight: 700;
+            margin: 0 clamp(0.125rem, 0.5%, 0.25rem);
+        }
+
+        /* Table - fully responsive */
+        .dcb-table-wrapper {
+            width: 100%;
+            overflow-x: auto;
+            margin-bottom: clamp(0.5rem, 2%, 1rem);
+            border-radius: clamp(0.25rem, 0.5%, 0.5rem);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .dcb-table-wrapper table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            font-size: var(--fs-sm);
+        }
+
+        .dcb-table-wrapper thead {
+            background: linear-gradient(to bottom, #f9fafb, #f3f4f6);
+            position: sticky;
+            top: 0;
+        }
+
+        .dcb-table-wrapper th {
+            text-transform: uppercase;
+            font-size: var(--fs-xs);
+            font-weight: 700;
+            color: #374151;
+            padding: clamp(0.25rem, 1%, 0.75rem) clamp(0.375rem, 1.5%, 1rem);
+            text-align: left;
+            border-bottom: 2px solid #e5e7eb;
+            letter-spacing: 0.025em;
+        }
+
+        .dcb-table-wrapper td {
+            font-size: inherit;
+            padding: clamp(0.25rem, 1%, 0.625rem) clamp(0.375rem, 1.5%, 1rem);
+            border-bottom: 1px solid #f3f4f6;
+        }
+
+        .dcb-text-right {
+            text-align: right;
+            font-family: 'SF Mono', 'Monaco', 'Courier New', monospace;
+            font-variant-numeric: tabular-nums;
+        }
+
+        .dcb-highlight {
+            background: #dbeafe;
+            font-weight: 700;
+            color: #1e40af;
+            border-top: 2px solid oklch(0.7227 0.192 149.5793);
+            border-bottom: 2px solid oklch(0.7227 0.192 149.5793);
+        }
+
+        .dcb-totals {
+            background: #f3f4f6;
+            font-weight: 700;
+            color: #111827;
+            font-size: var(--fs-base);
+            border-top: 2px solid #9ca3af;
+        }
+
+        /* Signatures - responsive grid */
+        .dcb-signature-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: clamp(0.5rem, 2%, 1rem);
+            margin-top: clamp(0.75rem, 2.5%, 1.5rem);
+            font-size: var(--fs-sm);
+            width: 100%;
+        }
+
+        @container dcb (min-width: 400px) {
+            .dcb-signature-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @container dcb (min-width: 600px) {
+            .dcb-signature-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        .dcb-signature-item {
+            text-align: center;
+        }
+
+        .dcb-signature-label {
+            font-size: var(--fs-xs);
+            color: #6b7280;
+            margin-bottom: clamp(0.25rem, 1%, 0.5rem);
+        }
+
+        .dcb-signature-line {
+            border-bottom: 0.5px solid #424e6167;
+            padding: clamp(0.25rem, 1%, 0.5rem) 0;
+            min-height: clamp(1rem, 3%, 2rem);
+            font-weight: 500;
+            font-size: var(--fs-sm);
+            color: #1f2937;
+            margin-top: clamp(0.25rem, 1%, 0.5rem);
+        }
+
+        /* Footer - responsive grid */
+        .dcb-footer {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: clamp(0.25rem, 1%, 0.5rem);
+            margin-top: clamp(0.75rem, 2.5%, 1.5rem);
+            padding-top: clamp(0.5rem, 2%, 1rem);
+            border-top: 1px solid #e5e7eb;
+            font-size: var(--fs-xs);
+            color: #6b7280;
+        }
+
+        @container dcb (min-width: 400px) {
+            .dcb-footer {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        .dcb-footer-item {
+            display: flex;
+            flex-direction: column;
+            text-align: center;
+        }
+
+        .dcb-footer-label {
+            font-weight: 700;
+            color: #374151;
+            margin-bottom: clamp(0.125rem, 0.5%, 0.25rem);
+        }
+
+        .dcb-footer-value {
+            color: #1f2937;
+            font-family: monospace;
+        }
+
+        /* Print optimization */
+        @media print {
+            body {
+                background: white;
+                padding: 0;
+            }
+
+            .dcb-container {
+                padding: 2%;
+                box-shadow: none;
+            }
+            
+            .dcb-table-wrapper {
+                box-shadow: none;
+            }
+            
+            * {
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="dcb-container">
+        <header class="dcb-header">
+            <h1>{{header_title}}</h1>
+            <p class="dcb-address">{{header_address}}</p>
+            <p class="dcb-tin">TIN: {{tax_number}}</p>
+            <h2 class="dcb-report-title">{{report_title}}</h2>
+            <div class="dcb-date-range">
+                <span>FROM:</span> {{from_date}} <span>-</span> <span>TO:</span> {{to_date}}
+            </div>
+        </header>
+
+        <div class="dcb-table-wrapper">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Account Title</th>
+                        <th class="dcb-text-right">Debit (₱)</th>
+                        <th class="dcb-text-right">Credit (₱)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{#each account_entries}}
+                    <tr class="{{#if is_highlighted}}dcb-highlight{{/if}}">
+                        <td>{{account_title}}</td>
+                        <td class="dcb-text-right">{{debit}}</td>
+                        <td class="dcb-text-right">{{credit}}</td>
+                    </tr>
+                    {{/each}}
+                    <tr class="dcb-totals">
+                        <td>TOTAL</td>
+                        <td class="dcb-text-right">{{total_debit}}</td>
+                        <td class="dcb-text-right">{{total_credit}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="dcb-signature-grid">
+            <div class="dcb-signature-item">
+                <p class="dcb-signature-label">Prepared by:</p>
+                <div class="dcb-signature-line">{{prepared_by}}</div>
+            </div>
+            <div class="dcb-signature-item">
+                <p class="dcb-signature-label">Approved by:</p>
+                <div class="dcb-signature-line">{{approved_by}}</div>
+            </div>
+            <div class="dcb-signature-item">
+                <p class="dcb-signature-label">Checked by:</p>
+                <div class="dcb-signature-line">{{check_by}}</div>
+            </div>
+        </div>
+
+        <footer class="dcb-footer">
+            <div class="dcb-footer-item">
+                <span class="dcb-footer-label">User ID</span>
+                <span class="dcb-footer-value">{{user_id}}</span>
+            </div>
+            <div class="dcb-footer-item">
+                <span class="dcb-footer-label">Report Date</span>
+                <span class="dcb-footer-value">{{report_date}}</span>
+            </div>
+            <div class="dcb-footer-item">
+                <span class="dcb-footer-label">Time</span>
+                <span class="dcb-footer-value">{{time}}</span>
+            </div>
+        </footer>
+    </div>
+</body>
+</html>

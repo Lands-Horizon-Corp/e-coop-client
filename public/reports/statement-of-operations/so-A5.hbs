@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Statement of Operations - A5</title>
+    <style>
+        @page {
+            margin: 0;
+            size: 5.83in 8.27in;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            width: 5.83in;
+            height: 8.27in;
+            margin: 0;
+            padding: 0;
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+        }
+
+        body {
+            background-color: #f9fafb;
+            padding: 0.35in;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .so-container {
+            /* Fixed font sizes for A5 print */
+            --fs-xs: 7px;
+            --fs-sm: 8px;
+            --fs-base: 9px;
+            --fs-lg: 11px;
+            --fs-xl: 13px;
+            --fs-2xl: 16px;
+
+            width: 5.83in;
+            height: 8.27in;
+            padding: 0.4in;
+            background: white;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Inter', 'Helvetica Neue', Arial, sans-serif;
+            color: #111827;
+            font-size: var(--fs-base);
+            line-height: 1.4;
+            display: flex;
+            flex-direction: column;
+            box-sizing: border-box;
+        }
+
+        /* Header */
+        .so-header {
+            text-align: center;
+            margin-bottom: 0.5rem;
+            padding-bottom: 0.5rem;
+        }
+
+        .so-header h1 {
+            font-size: var(--fs-xl);
+            font-weight: 700;
+            color: #111827;
+            margin-bottom: 0.15rem;
+            letter-spacing: -0.025em;
+            line-height: 1.2;
+        }
+
+        .so-header .so-address {
+            font-size: var(--fs-xs);
+            color: #6b7280;
+            margin: 0.1rem 0;
+            line-height: 1.3;
+        }
+
+        .so-header .so-tin {
+            font-size: 6px;
+            color: #9ca3af;
+            margin-top: 0.05rem;
+        }
+
+        .so-report-title {
+            font-size: 14px;
+            font-weight: 800;
+            margin-top: 0.2rem;
+            letter-spacing: -0.025em;
+        }
+
+        .so-as-of-date {
+            font-size: var(--fs-xs);
+            color: #374151;
+            margin-top: 0.2rem;
+            font-weight: 600;
+        }
+
+        /* Content Area */
+        .so-content {
+            flex: 1;
+            overflow-y: auto;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Section Title */
+        .so-section-title {
+            font-size: var(--fs-sm);
+            font-weight: 700;
+            color: #111827;
+            margin: 0.4rem 0 0.25rem 0;
+            text-transform: uppercase;
+            background: linear-gradient(to right, #f3f4f6, #e5e7eb);
+            padding: 0.35rem 0.5rem;
+            border-left: 2px solid oklch(0.7227 0.192 149.5793);
+        }
+
+        /* Entry Rows */
+        .so-entry-row {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 0.35rem;
+            padding: 0.25rem 0.5rem 0.25rem 1rem;
+            font-size: var(--fs-xs);
+            border-bottom: 1px solid #f3f4f6;
+        }
+
+        .so-entry-row.with-comparison {
+            grid-template-columns: 2fr 1fr 1fr 45px 40px;
+        }
+
+        .so-entry-description {
+            color: #1f2937;
+        }
+
+        .so-entry-amount {
+            text-align: right;
+            font-family: 'SF Mono', 'Monaco', 'Courier New', monospace;
+            font-variant-numeric: tabular-nums;
+            color: #1f2937;
+        }
+
+        .so-entry-change {
+            text-align: center;
+            font-size: 6px;
+            font-weight: 700;
+        }
+
+        .so-entry-change.increase {
+            color: #059669;
+        }
+
+        .so-entry-change.decrease {
+            color: #dc2626;
+        }
+
+        .so-entry-percentage {
+            text-align: right;
+            font-size: 6px;
+            font-weight: 600;
+            color: #6b7280;
+        }
+
+        /* Subtotal Row */
+        .so-subtotal-row {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 0.35rem;
+            padding: 0.35rem 0.5rem;
+            font-size: var(--fs-xs);
+            font-weight: 700;
+            background: #f9fafb;
+            border-top: 1px solid #d1d5db;
+            border-bottom: 1px solid #d1d5db;
+            margin-top: 0.15rem;
+        }
+
+        .so-subtotal-row.with-comparison {
+            grid-template-columns: 2fr 1fr 1fr 45px 40px;
+        }
+
+        .so-subtotal-label {
+            color: #374151;
+        }
+
+        .so-subtotal-amount {
+            text-align: right;
+            font-family: 'SF Mono', 'Monaco', 'Courier New', monospace;
+            font-variant-numeric: tabular-nums;
+            color: #1f2937;
+        }
+
+        .so-subtotal-change {
+            text-align: center;
+            font-size: 6px;
+            font-weight: 700;
+        }
+
+        .so-subtotal-change.increase {
+            color: #059669;
+        }
+
+        .so-subtotal-change.decrease {
+            color: #dc2626;
+        }
+
+        .so-subtotal-percentage {
+            text-align: right;
+            font-size: 6px;
+            font-weight: 600;
+            color: #6b7280;
+        }
+
+        /* Total Row */
+        .so-total-row {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 0.35rem;
+            padding: 0.4rem 0.5rem;
+            font-size: var(--fs-sm);
+            font-weight: 700;
+            background: #f3f4f6;
+            border-top: 1.5px solid #9ca3af;
+            border-bottom: 1.5px solid #9ca3af;
+            margin: 0.4rem 0;
+        }
+
+        .so-total-row.with-comparison {
+            grid-template-columns: 2fr 1fr 1fr 45px 40px;
+        }
+
+        .so-total-label {
+            color: #111827;
+            text-transform: uppercase;
+        }
+
+        .so-total-amount {
+            text-align: right;
+            font-family: 'SF Mono', 'Monaco', 'Courier New', monospace;
+            font-variant-numeric: tabular-nums;
+            color: #111827;
+        }
+
+        .so-total-change {
+            text-align: center;
+            font-size: var(--fs-xs);
+            font-weight: 700;
+        }
+
+        .so-total-change.increase {
+            color: #059669;
+        }
+
+        .so-total-change.decrease {
+            color: #dc2626;
+        }
+
+        .so-total-percentage {
+            text-align: right;
+            font-size: 6px;
+            font-weight: 600;
+            color: #6b7280;
+        }
+
+        /* Footer */
+        .so-footer {
+            display: flex;
+            justify-content: space-between;
+            font-size: 6px;
+            color: #6b7280;
+            border-top: 1px solid #e5e7eb;
+            padding-top: 0.35rem;
+            margin-top: auto;
+            flex-wrap: wrap;
+            gap: 0.2rem;
+        }
+
+        .so-footer-item {
+            display: flex;
+            gap: 0.15rem;
+        }
+
+        .so-footer-label {
+            font-weight: 600;
+            color: #374151;
+        }
+
+        .so-footer-value {
+            color: #6b7280;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="so-container">
+        <header class="so-header">
+            <h1>{{header_title}}</h1>
+            <p class="so-address">{{header_address}}</p>
+            <p class="so-tin">TIN: {{tax_number}}</p>
+            <h2 class="so-report-title">{{report_title}}</h2>
+            <p class="so-as-of-date">As of {{as_of_date}}</p>
+        </header>
+
+        <div class="so-content">
+            <!-- Column Headers - Conditional based on report type -->
+            {{#if (equals report_type "COMPARATIVE_MONTHLY")}}
+            <div class="so-entry-row with-comparison" style="font-weight: 700; background: #f9fafb; border-bottom: 1.5px solid #d1d5db; padding-top: 0.35rem; padding-bottom: 0.35rem;">
+                <div style="text-transform: uppercase; font-size: var(--fs-xs); color: #374151;">DESC</div>
+                <div style="text-align: right; text-transform: uppercase; font-size: var(--fs-xs); color: #374151;">CURRENT</div>
+                <div style="text-align: right; text-transform: uppercase; font-size: var(--fs-xs); color: #374151;">PREV</div>
+                <div style="text-align: center; text-transform: uppercase; font-size: var(--fs-xs); color: #374151;">CHG</div>
+                <div style="text-align: right; text-transform: uppercase; font-size: var(--fs-xs); color: #374151;">%</div>
+            </div>
+            {{/if}}
+            {{#if (equals report_type "COMPARATIVE_YEARLY")}}
+            <div class="so-entry-row with-comparison" style="font-weight: 700; background: #f9fafb; border-bottom: 1.5px solid #d1d5db; padding-top: 0.35rem; padding-bottom: 0.35rem;">
+                <div style="text-transform: uppercase; font-size: var(--fs-xs); color: #374151;">DESC</div>
+                <div style="text-align: right; text-transform: uppercase; font-size: var(--fs-xs); color: #374151;">CY</div>
+                <div style="text-align: right; text-transform: uppercase; font-size: var(--fs-xs); color: #374151;">PY</div>
+                <div style="text-align: center; text-transform: uppercase; font-size: var(--fs-xs); color: #374151;">CHG</div>
+                <div style="text-align: right; text-transform: uppercase; font-size: var(--fs-xs); color: #374151;">%</div>
+            </div>
+            {{/if}}
+            {{#if (equals report_type "BUDGET_FORECASTING")}}
+            <div class="so-entry-row with-comparison" style="font-weight: 700; background: #f9fafb; border-bottom: 1.5px solid #d1d5db; padding-top: 0.35rem; padding-bottom: 0.35rem;">
+                <div style="text-transform: uppercase; font-size: var(--fs-xs); color: #374151;">DESC</div>
+                <div style="text-align: right; text-transform: uppercase; font-size: var(--fs-xs); color: #374151;">ACTUAL</div>
+                <div style="text-align: right; text-transform: uppercase; font-size: var(--fs-xs); color: #374151;">BUDGET</div>
+                <div style="text-align: center; text-transform: uppercase; font-size: var(--fs-xs); color: #374151;">VAR</div>
+                <div style="text-align: right; text-transform: uppercase; font-size: var(--fs-xs); color: #374151;">%</div>
+            </div>
+            {{/if}}
+            {{#if (equals report_type "STANDARD")}}
+            <div class="so-entry-row" style="font-weight: 700; background: #f9fafb; border-bottom: 1.5px solid #d1d5db; padding-top: 0.35rem; padding-bottom: 0.35rem;">
+                <div style="text-transform: uppercase; font-size: var(--fs-xs); color: #374151;">DESCRIPTION</div>
+                <div style="text-align: right; text-transform: uppercase; font-size: var(--fs-xs); color: #374151;">AMOUNT</div>
+            </div>
+            {{/if}}
+
+            <!-- Revenue Section -->
+            <div class="so-section-title">REVENUE</div>
+
+            {{#if (equals report_type "STANDARD")}}
+            <div class="so-entry-row">
+                <div class="so-entry-description">Revenue</div>
+                <div class="so-entry-amount">{{revenue_amount}}</div>
+            </div>
+            {{/if}}
+            {{#if (equals report_type "COMPARATIVE_MONTHLY")}}
+            <div class="so-entry-row with-comparison">
+                <div class="so-entry-description">Revenue</div>
+                <div class="so-entry-amount">{{revenue_amount}}</div>
+                <div class="so-entry-amount">{{revenue_previous}}</div>
+                <div class="so-entry-change {{#if revenue_inc_or_dec}}{{#if (equals revenue_inc_or_dec "INC")}}increase{{else}}decrease{{/if}}{{/if}}">{{revenue_inc_or_dec}}</div>
+                <div class="so-entry-percentage">{{revenue_percentage}}%</div>
+            </div>
+            {{/if}}
+            {{#if (equals report_type "COMPARATIVE_YEARLY")}}
+            <div class="so-entry-row with-comparison">
+                <div class="so-entry-description">Revenue</div>
+                <div class="so-entry-amount">{{revenue_amount}}</div>
+                <div class="so-entry-amount">{{revenue_previous_year}}</div>
+                <div class="so-entry-change {{#if revenue_inc_or_dec}}{{#if (equals revenue_inc_or_dec "INC")}}increase{{else}}decrease{{/if}}{{/if}}">{{revenue_inc_or_dec}}</div>
+                <div class="so-entry-percentage">{{revenue_percentage}}%</div>
+            </div>
+            {{/if}}
+            {{#if (equals report_type "BUDGET_FORECASTING")}}
+            <div class="so-entry-row with-comparison">
+                <div class="so-entry-description">Revenue</div>
+                <div class="so-entry-amount">{{revenue_actual}}</div>
+                <div class="so-entry-amount">{{revenue_budget}}</div>
+                <div class="so-entry-change {{#if revenue_variance}}{{#if (equals revenue_variance "Favorable")}}increase{{else}}decrease{{/if}}{{/if}}">{{revenue_variance}}</div>
+                <div class="so-entry-percentage">{{revenue_percentage}}%</div>
+            </div>
+            {{/if}}
+
+            {{#if (equals report_type "STANDARD")}}
+            <div class="so-total-row">
+                <div class="so-total-label">Total Revenue</div>
+                <div class="so-total-amount">{{total_revenue_amount}}</div>
+            </div>
+            {{/if}}
+            {{#if (equals report_type "COMPARATIVE_MONTHLY")}}
+            <div class="so-total-row with-comparison">
+                <div class="so-total-label">Total Revenue</div>
+                <div class="so-total-amount">{{total_revenue_amount}}</div>
+                <div class="so-total-amount">{{total_revenue_previous}}</div>
+                <div class="so-total-change {{#if total_revenue_inc_or_dec}}{{#if (equals total_revenue_inc_or_dec "INC")}}increase{{else}}decrease{{/if}}{{/if}}">{{total_revenue_inc_or_dec}}</div>
+                <div class="so-total-percentage">{{total_revenue_percentage}}%</div>
+            </div>
+            {{/if}}
+            {{#if (equals report_type "COMPARATIVE_YEARLY")}}
+            <div class="so-total-row with-comparison">
+                <div class="so-total-label">Total Revenue</div>
+                <div class="so-total-amount">{{total_revenue_amount}}</div>
+                <div class="so-total-amount">{{total_revenue_previous_year}}</div>
+                <div class="so-total-change {{#if total_revenue_inc_or_dec}}{{#if (equals total_revenue_inc_or_dec "INC")}}increase{{else}}decrease{{/if}}{{/if}}">{{total_revenue_inc_or_dec}}</div>
+                <div class="so-total-percentage">{{total_revenue_percentage}}%</div>
+            </div>
+            {{/if}}
+            {{#if (equals report_type "BUDGET_FORECASTING")}}
+            <div class="so-total-row with-comparison">
+                <div class="so-total-label">Total Revenue</div>
+                <div class="so-total-amount">{{total_revenue_actual}}</div>
+                <div class="so-total-amount">{{total_revenue_budget}}</div>
+                <div class="so-total-change {{#if total_revenue_variance}}{{#if (equals total_revenue_variance "Favorable")}}increase{{else}}decrease{{/if}}{{/if}}">{{total_revenue_variance}}</div>
+                <div class="so-total-percentage">{{total_revenue_percentage}}%</div>
+            </div>
+            {{/if}}
+
+            <!-- Expenses Section -->
+            <div class="so-section-title">EXPENSES</div>
+
+            <div class="so-section-title" style="font-size: var(--fs-xs); margin: 0.35rem 0 0.15rem 0; background: none; border-left: none; color: #374151; text-transform: capitalize;">Financial Cost</div>
+
+            {{#if (equals report_type "STANDARD")}}
+            <div class="so-subtotal-row">
+                <div class="so-subtotal-label">Total Financial Cost</div>
+                <div class="so-subtotal-amount">{{financial_cost.total_financial_cost_amount}}</div>
+            </div>
+            {{/if}}
+            {{#if (equals report_type "COMPARATIVE_MONTHLY")}}
+            <div class="so-subtotal-row with-comparison">
+                <div class="so-subtotal-label">Total Financial Cost</div>
+                <div class="so-subtotal-amount">{{financial_cost.total_financial_cost_amount}}</div>
+                <div class="so-subtotal-amount">{{financial_cost.total_financial_cost_previous}}</div>
+                <div class="so-subtotal-change {{#if financial_cost.total_financial_cost_inc_or_dec}}{{#if (equals financial_cost.total_financial_cost_inc_or_dec "INC")}}increase{{else}}decrease{{/if}}{{/if}}">{{financial_cost.total_financial_cost_inc_or_dec}}</div>
+                <div class="so-subtotal-percentage">{{financial_cost.total_financial_cost_percentage}}%</div>
+            </div>
+            {{/if}}
+            {{#if (equals report_type "COMPARATIVE_YEARLY")}}
+            <div class="so-subtotal-row with-comparison">
+                <div class="so-subtotal-label">Total Financial Cost</div>
+                <div class="so-subtotal-amount">{{financial_cost.total_financial_cost_amount}}</div>
+                <div class="so-subtotal-amount">{{financial_cost.total_financial_cost_previous_year}}</div>
+                <div class="so-subtotal-change {{#if financial_cost.total_financial_cost_inc_or_dec}}{{#if (equals financial_cost.total_financial_cost_inc_or_dec "INC")}}increase{{else}}decrease{{/if}}{{/if}}">{{financial_cost.total_financial_cost_inc_or_dec}}</div>
+                <div class="so-subtotal-percentage">{{financial_cost.total_financial_cost_percentage}}%</div>
+            </div>
+            {{/if}}
+            {{#if (equals report_type "BUDGET_FORECASTING")}}
+            <div class="so-subtotal-row with-comparison">
+                <div class="so-subtotal-label">Total Financial Cost</div>
+                <div class="so-subtotal-amount">{{financial_cost.total_financial_cost_actual}}</div>
+                <div class="so-subtotal-amount">{{financial_cost.total_financial_cost_budget}}</div>
+                <div class="so-subtotal-change {{#if financial_cost.total_financial_cost_variance}}{{#if (equals financial_cost.total_financial_cost_variance "Favorable")}}increase{{else}}decrease{{/if}}{{/if}}">{{financial_cost.total_financial_cost_variance}}</div>
+                <div class="so-subtotal-percentage">{{financial_cost.total_financial_cost_percentage}}%</div>
+            </div>
+            {{/if}}
+
+            <div class="so-section-title" style="font-size: var(--fs-xs); margin: 0.35rem 0 0.15rem 0; background: none; border-left: none; color: #374151; text-transform: capitalize;">Administrative Cost</div>
+
+            {{#if (equals report_type "STANDARD")}}
+            <div class="so-subtotal-row">
+                <div class="so-subtotal-label">Total Admin Cost</div>
+                <div class="so-subtotal-amount">{{administrative_cost.total_administrative_cost_amount}}</div>
+            </div>
+            {{/if}}
+            {{#if (equals report_type "COMPARATIVE_MONTHLY")}}
+            <div class="so-subtotal-row with-comparison">
+                <div class="so-subtotal-label">Total Admin Cost</div>
+                <div class="so-subtotal-amount">{{administrative_cost.total_administrative_cost_amount}}</div>
+                <div class="so-subtotal-amount">{{administrative_cost.total_administrative_cost_previous}}</div>
+                <div class="so-subtotal-change {{#if administrative_cost.total_administrative_cost_inc_or_dec}}{{#if (equals administrative_cost.total_administrative_cost_inc_or_dec "INC")}}increase{{else}}decrease{{/if}}{{/if}}">{{administrative_cost.total_administrative_cost_inc_or_dec}}</div>
+                <div class="so-subtotal-percentage">{{administrative_cost.total_administrative_cost_percentage}}%</div>
+            </div>
+            {{/if}}
+            {{#if (equals report_type "COMPARATIVE_YEARLY")}}
+            <div class="so-subtotal-row with-comparison">
+                <div class="so-subtotal-label">Total Admin Cost</div>
+                <div class="so-subtotal-amount">{{administrative_cost.total_administrative_cost_amount}}</div>
+                <div class="so-subtotal-amount">{{administrative_cost.total_administrative_cost_previous_year}}</div>
+                <div class="so-subtotal-change {{#if administrative_cost.total_administrative_cost_inc_or_dec}}{{#if (equals administrative_cost.total_administrative_cost_inc_or_dec "INC")}}increase{{else}}decrease{{/if}}{{/if}}">{{administrative_cost.total_administrative_cost_inc_or_dec}}</div>
+                <div class="so-subtotal-percentage">{{administrative_cost.total_administrative_cost_percentage}}%</div>
+            </div>
+            {{/if}}
+            {{#if (equals report_type "BUDGET_FORECASTING")}}
+            <div class="so-subtotal-row with-comparison">
+                <div class="so-subtotal-label">Total Admin Cost</div>
+                <div class="so-subtotal-amount">{{administrative_cost.total_administrative_cost_actual}}</div>
+                <div class="so-subtotal-amount">{{administrative_cost.total_administrative_cost_budget}}</div>
+                <div class="so-subtotal-change {{#if administrative_cost.total_administrative_cost_variance}}{{#if (equals administrative_cost.total_administrative_cost_variance "Favorable")}}increase{{else}}decrease{{/if}}{{/if}}">{{administrative_cost.total_administrative_cost_variance}}</div>
+                <div class="so-subtotal-percentage">{{administrative_cost.total_administrative_cost_percentage}}%</div>
+            </div>
+            {{/if}}
+
+            {{#if (equals report_type "STANDARD")}}
+            <div class="so-total-row">
+                <div class="so-total-label">Total Expenses</div>
+                <div class="so-total-amount">{{total_expenses_amount}}</div>
+            </div>
+            {{/if}}
+            {{#if (equals report_type "COMPARATIVE_MONTHLY")}}
+            <div class="so-total-row with-comparison">
+                <div class="so-total-label">Total Expenses</div>
+                <div class="so-total-amount">{{total_expenses_amount}}</div>
+                <div class="so-total-amount">{{total_expenses_previous}}</div>
+                <div class="so-total-change {{#if total_expenses_inc_or_dec}}{{#if (equals total_expenses_inc_or_dec "INC")}}increase{{else}}decrease{{/if}}{{/if}}">{{total_expenses_inc_or_dec}}</div>
+                <div class="so-total-percentage">{{total_expenses_percentage}}%</div>
+            </div>
+            {{/if}}
+            {{#if (equals report_type "COMPARATIVE_YEARLY")}}
+            <div class="so-total-row with-comparison">
+                <div class="so-total-label">Total Expenses</div>
+                <div class="so-total-amount">{{total_expenses_amount}}</div>
+                <div class="so-total-amount">{{total_expenses_previous_year}}</div>
+                <div class="so-total-change {{#if total_expenses_inc_or_dec}}{{#if (equals total_expenses_inc_or_dec "INC")}}increase{{else}}decrease{{/if}}{{/if}}">{{total_expenses_inc_or_dec}}</div>
+                <div class="so-total-percentage">{{total_expenses_percentage}}%</div>
+            </div>
+            {{/if}}
+            {{#if (equals report_type "BUDGET_FORECASTING")}}
+            <div class="so-total-row with-comparison">
+                <div class="so-total-label">Total Expenses</div>
+                <div class="so-total-amount">{{total_expenses_actual}}</div>
+                <div class="so-total-amount">{{total_expenses_budget}}</div>
+                <div class="so-total-change {{#if total_expenses_variance}}{{#if (equals total_expenses_variance "Favorable")}}increase{{else}}decrease{{/if}}{{/if}}">{{total_expenses_variance}}</div>
+                <div class="so-total-percentage">{{total_expenses_percentage}}%</div>
+            </div>
+            {{/if}}
+
+            <!-- Net Surplus Section -->
+            <div class="so-section-title">NET SURPLUS</div>
+
+            {{#if (equals report_type "STANDARD")}}
+            <div class="so-total-row">
+                <div class="so-total-label">Net Surplus</div>
+                <div class="so-total-amount">{{net_surplus_amount}}</div>
+            </div>
+            {{/if}}
+            {{#if (equals report_type "COMPARATIVE_MONTHLY")}}
+            <div class="so-total-row with-comparison">
+                <div class="so-total-label">Net Surplus</div>
+                <div class="so-total-amount">{{net_surplus_amount}}</div>
+                <div class="so-total-amount">{{net_surplus_previous}}</div>
+                <div class="so-total-change {{#if net_surplus_inc_or_dec}}{{#if (equals net_surplus_inc_or_dec "INC")}}increase{{else}}decrease{{/if}}{{/if}}">{{net_surplus_inc_or_dec}}</div>
+                <div class="so-total-percentage">{{net_surplus_percentage}}%</div>
+            </div>
+            {{/if}}
+            {{#if (equals report_type "COMPARATIVE_YEARLY")}}
+            <div class="so-total-row with-comparison">
+                <div class="so-total-label">Net Surplus</div>
+                <div class="so-total-amount">{{net_surplus_amount}}</div>
+                <div class="so-total-amount">{{net_surplus_previous_year}}</div>
+                <div class="so-total-change {{#if net_surplus_inc_or_dec}}{{#if (equals net_surplus_inc_or_dec "INC")}}increase{{else}}decrease{{/if}}{{/if}}">{{net_surplus_inc_or_dec}}</div>
+                <div class="so-total-percentage">{{net_surplus_percentage}}%</div>
+            </div>
+            {{/if}}
+            {{#if (equals report_type "BUDGET_FORECASTING")}}
+            <div class="so-total-row with-comparison">
+                <div class="so-total-label">Net Surplus</div>
+                <div class="so-total-amount">{{net_surplus_actual}}</div>
+                <div class="so-total-amount">{{net_surplus_budget}}</div>
+                <div class="so-total-change {{#if net_surplus_variance}}{{#if (equals net_surplus_variance "Favorable")}}increase{{else}}decrease{{/if}}{{/if}}">{{net_surplus_variance}}</div>
+                <div class="so-total-percentage">{{net_surplus_percentage}}%</div>
+            </div>
+            {{/if}}
+        </div>
+
+        <footer class="so-footer">
+            <div class="so-footer-item">
+                <span class="so-footer-label">User:</span>
+                <span class="so-footer-value">{{user_id}}</span>
+            </div>
+            <div class="so-footer-item">
+                <span class="so-footer-label">Date:</span>
+                <span class="so-footer-value">{{report_date}}</span>
+            </div>
+            <div class="so-footer-item">
+                <span class="so-footer-label">Pg:</span>
+                <span class="so-footer-value">{{page_number}}</span>
+            </div>
+        </footer>
+    </div>
+
+</body>
+
+</html>

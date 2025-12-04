@@ -54,41 +54,81 @@ class Logger {
             }
             this.warn = (...args) => {
                 console.warn(...args)
-                this.footstep('warning', args.join(' '), 'client_warning_log', footstep)
+                this.footstep(
+                    'warning',
+                    args.join(' '),
+                    'client_warning_log',
+                    footstep
+                )
             }
             this.error = (...args) => {
                 console.error(...args)
-                this.footstep('error', args.join(' '), 'client_error_log', footstep)
+                this.footstep(
+                    'error',
+                    args.join(' '),
+                    'client_error_log',
+                    footstep
+                )
             }
             this.info = (...args) => {
                 console.info(...args)
-                this.footstep('info', args.join(' '), 'client_info_log', footstep)
+                this.footstep(
+                    'info',
+                    args.join(' '),
+                    'client_info_log',
+                    footstep
+                )
             }
             this.debug = (...args) => {
                 console.debug(...args)
-                this.footstep('debug', args.join(' '), 'client_debug_log', footstep)
+                this.footstep(
+                    'debug',
+                    args.join(' '),
+                    'client_debug_log',
+                    footstep
+                )
             }
         } else {
             this.log = (...args) => {
                 this.footstep('info', args.join(' '), 'client_log', footstep)
             }
             this.warn = (...args) => {
-                this.footstep('warning', args.join(' '), 'client_warning_log', footstep)
+                this.footstep(
+                    'warning',
+                    args.join(' '),
+                    'client_warning_log',
+                    footstep
+                )
             }
             this.error = (...args) => {
-                this.footstep('error', args.join(' '), 'client_error_log', footstep)
+                this.footstep(
+                    'error',
+                    args.join(' '),
+                    'client_error_log',
+                    footstep
+                )
             }
             this.info = (...args) => {
-                this.footstep('info', args.join(' '), 'client_info_log', footstep)
+                this.footstep(
+                    'info',
+                    args.join(' '),
+                    'client_info_log',
+                    footstep
+                )
             }
             this.debug = (...args) => {
-                this.footstep('debug', args.join(' '), 'client_debug_log', footstep)
+                this.footstep(
+                    'debug',
+                    args.join(' '),
+                    'client_debug_log',
+                    footstep
+                )
             }
-            console.log = (..._args) => { }
-            console.warn = (..._args) => { }
-            console.error = (..._args) => { }
-            console.info = (..._args) => { }
-            console.debug = (..._args) => { }
+            console.log = (..._args) => {}
+            console.warn = (..._args) => {}
+            console.error = (..._args) => {}
+            console.info = (..._args) => {}
+            console.debug = (..._args) => {}
         }
     }
 
@@ -111,11 +151,14 @@ class Logger {
         }
     }
 
-    public static getInstance(module: string = 'default', footstep = true): Logger {
+    public static getInstance(
+        module: string = 'default',
+        footstep = true
+    ): Logger {
         if (!Logger.instances.has(module)) {
             Logger.instances.set(module, new Logger(module, footstep))
         }
-        return Logger.instances.get(module,)!
+        return Logger.instances.get(module)!
     }
 }
 

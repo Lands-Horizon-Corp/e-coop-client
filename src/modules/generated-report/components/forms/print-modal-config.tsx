@@ -65,19 +65,9 @@ const PrintReportForm = ({
     templateOptions,
     ...formProps
 }: IGeneratedReportFormProps) => {
-    const defaultTemplate: TemplateOptions = {
-        defaultSize: 'A4',
-        value: '/reports/loan-release-voucher/template-responsive.hbs',
-        label: 'Custom',
-        description: 'Define your own paper size dimensions',
-    }
-    const templates = templateOptions
-        ? [...templateOptions, defaultTemplate]
-        : [defaultTemplate]
-
     const [selectedTemplatePath, setSelectedTemplatePath] = useState<
         TemplateOptions | undefined
-    >(templates[0])
+    >(templateOptions?.[0])
     const form = useForm<TGeneratedReportFormValues>({
         resolver: standardSchemaResolver(GeneratedReportSchema),
         reValidateMode: 'onChange',
@@ -203,7 +193,7 @@ const PrintReportForm = ({
                                               )
                                     }
                                 >
-                                    {templates?.map((template, idx) => {
+                                    {templateOptions?.map((template, idx) => {
                                         return (
                                             <div key={idx}>
                                                 <div className="shadow-xs h-full relative flex w-full items-center gap-3 rounded-2xl border border-input p-4 outline-none duration-200 ease-out has-[:checked]:border-primary/30 has-[:checked]:bg-primary/40">

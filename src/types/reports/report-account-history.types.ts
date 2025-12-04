@@ -33,4 +33,5 @@ export interface IReportAccountHistory {
     user_id: string
     report_date: string
     time: string
+    page_number: number
 }
