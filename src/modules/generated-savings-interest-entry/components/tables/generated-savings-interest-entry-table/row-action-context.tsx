@@ -5,10 +5,11 @@ import { GeneratedSavingsInterestEntryCreateUpdateFormModal } from '@/modules/ge
 import { useDeleteGeneratedSavingsInterestEntryById } from '@/modules/generated-savings-interest-entry/generated-savings-interest-entry.service'
 import useConfirmModalStore from '@/store/confirm-modal-store'
 import { Row } from '@tanstack/react-table'
+import { Pencil, Trash2 } from 'lucide-react'
 
-import RowActionsGroup from '@/components/data-table/data-table-row-actions'
 import DataTableRowContext from '@/components/data-table/data-table-row-context'
 import { useTableRowActionStore } from '@/components/data-table/store/data-table-action-store'
+import { Button } from '@/components/ui/button'
 
 import { IGeneratedSavingsInterestEntryTableActionComponentProp } from './index'
 
@@ -76,33 +77,39 @@ export const GeneratedSavingsInterestEntryAction = ({
     row,
     onDeleteSuccess,
 }: IGeneratedSavingsInterestEntryTableActionProps) => {
-    const { isDeletingEntry, handleEdit, handleDelete } =
+    const { entry, isDeletingEntry, handleEdit, handleDelete } =
         useGeneratedSavingsInterestEntryActions({ row, onDeleteSuccess })
 
     return (
-        <>
-            <RowActionsGroup
-                canSelect
-                onDelete={{
-                    text: 'Delete',
-                    isAllowed: !isDeletingEntry,
-                    onClick: handleDelete,
-                }}
-                onEdit={{
-                    text: 'Edit',
-                    isAllowed: true,
-                    onClick: handleEdit,
-                }}
-                otherActions={<></>}
-                row={row}
-            />
-        </>
+        <div className="flex items-center gap-1">
+            <Button
+                disabled={!!entry.generated_savings_interest?.posted_date}
+                onClick={handleEdit}
+                size="icon-sm"
+                variant="ghost"
+            >
+                <Pencil className="size-3" />
+            </Button>
+            <Button
+                disabled={
+                    isDeletingEntry ||
+                    !!entry.generated_savings_interest?.posted_date
+                }
+                hoverVariant="destructive"
+                onClick={handleDelete}
+                size="icon-sm"
+                variant="ghost"
+            >
+                <Trash2 className="size-3" />
+            </Button>
+        </div>
     )
 }
 
 interface IGeneratedSavingsInterestEntryRowContextProps
     extends IGeneratedSavingsInterestEntryTableActionComponentProp {
     children?: ReactNode
+    readOnly?: boolean
     onDeleteSuccess?: () => void
 }
 
@@ -111,20 +118,23 @@ export const GeneratedSavingsInterestEntryRowContext = ({
     children,
     onDeleteSuccess,
 }: IGeneratedSavingsInterestEntryRowContextProps) => {
-    const { isDeletingEntry, handleEdit, handleDelete } =
+    const { entry, isDeletingEntry, handleEdit, handleDelete } =
         useGeneratedSavingsInterestEntryActions({ row, onDeleteSuccess })
 
     return (
         <>
             <DataTableRowContext
+                canSelect={false}
                 onDelete={{
                     text: 'Delete',
-                    isAllowed: !isDeletingEntry,
+                    isAllowed:
+                        !isDeletingEntry &&
+                        !entry.generated_savings_interest?.posted_date,
                     onClick: handleDelete,
                 }}
                 onEdit={{
                     text: 'Edit',
-                    isAllowed: true,
+                    isAllowed: !entry.generated_savings_interest?.posted_date,
                     onClick: handleEdit,
                 }}
                 row={row}
@@ -148,6 +158,9 @@ export const GeneratedSavingsInterestEntryTableActionManager = () => {
                 <GeneratedSavingsInterestEntryCreateUpdateFormModal
                     description="Update the savings interest entry details."
                     formProps={{
+                        readOnly:
+                            !!state.defaultValues?.generated_savings_interest
+                                ?.posted_date,
                         generatedSavingsInterestEntryId: state.id,
                         defaultValues: state.defaultValues,
                         onSuccess: () => close(),

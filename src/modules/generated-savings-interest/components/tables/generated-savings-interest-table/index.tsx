@@ -7,7 +7,8 @@ import { cn } from '@/helpers/tw-utils'
 import {
     IGeneratedSavingsInterest,
     deleteManyGeneratedSavingsInterest,
-    useGetPaginatedGeneratedSavingsInterest,
+    useGetAllGeneratedSavingsInterest,
+    // useGetPaginatedGeneratedSavingsInterest,
 } from '@/modules/generated-savings-interest'
 import {
     getCoreRowModel,
@@ -16,7 +17,7 @@ import {
 } from '@tanstack/react-table'
 
 import DataTable from '@/components/data-table'
-import DataTablePagination from '@/components/data-table/data-table-pagination'
+// import DataTablePagination from '@/components/data-table/data-table-pagination'
 import DataTableToolbar, {
     IDataTableToolbarProps,
 } from '@/components/data-table/data-table-toolbar'
@@ -28,7 +29,8 @@ import useDataTableState, {
 } from '@/components/data-table/use-datatable-state'
 
 import useDatableFilterState from '@/hooks/use-filter-state'
-import { usePagination } from '@/hooks/use-pagination'
+
+// import { usePagination } from '@/hooks/use-pagination'
 
 import GeneratedSavingsInterestTableColumns, {
     IGeneratedSavingsInterestTableColumnProps,
@@ -68,7 +70,6 @@ const GeneratedSavingsInterestTable = ({
     RowContextComponent = GeneratedSavingsInterestRowContext,
 }: GeneratedSavingsInterestTableProps) => {
     const queryClient = useQueryClient()
-    const { pagination, setPagination } = usePagination()
     const { sortingStateBase64, tableSorting, setTableSorting } =
         useDataTableSorting()
 
@@ -95,17 +96,16 @@ const GeneratedSavingsInterestTable = ({
 
     const filterState = useDatableFilterState({
         defaultFilter,
-        onFilterChange: () => setPagination({ ...pagination, pageIndex: 0 }),
+        // onFilterChange: () => setPagination({ ...pagination, pageIndex: 0 }),
     })
 
     const {
         isPending,
         isRefetching,
-        data: { data = [], totalPage = 1, pageSize = 10, totalSize = 0 } = {},
+        data = [],
         refetch,
-    } = useGetPaginatedGeneratedSavingsInterest({
+    } = useGetAllGeneratedSavingsInterest({
         query: {
-            ...pagination,
             sort: sortingStateBase64,
             filter: filterState.finalFilterPayloadBase64,
         },
@@ -122,21 +122,21 @@ const GeneratedSavingsInterestTable = ({
         },
         state: {
             sorting: tableSorting,
-            pagination,
+            // pagination,
             columnOrder: tableState.columnOrder,
             rowSelection: tableState.rowSelectionState.rowSelection,
             columnVisibility: tableState.columnVisibility,
         },
-        rowCount: pageSize,
+        rowCount: data.length,
         manualSorting: true,
-        pageCount: totalPage,
+        pageCount: 1,
         enableMultiSort: false,
         manualFiltering: true,
         manualPagination: true,
         columnResizeMode: 'onChange',
         getRowId: tableState.getRowIdFn,
         onSortingChange: setTableSorting,
-        onPaginationChange: setPagination,
+        // onPaginationChange: setPagination,
         getCoreRowModel: getCoreRowModel(),
         onColumnOrderChange: tableState.setColumnOrder,
         getSortedRowModel: getSortedRowModel(),
@@ -175,7 +175,8 @@ const GeneratedSavingsInterestTable = ({
                         }}
                         globalSearchProps={{
                             defaultMode: 'equal',
-                            targets: generatedSavingsInterestGlobalSearchTargets,
+                            targets:
+                                generatedSavingsInterestGlobalSearchTargets,
                         }}
                         refreshActionProps={{
                             onClick: () => refetch(),
@@ -199,7 +200,7 @@ const GeneratedSavingsInterestTable = ({
                         setColumnOrder={tableState.setColumnOrder}
                         table={table}
                     />
-                    <DataTablePagination table={table} totalSize={totalSize} />
+                    {/* <DataTablePagination table={table} totalSize={totalSize} /> */}
                 </div>
             </FilterContext.Provider>
             <GeneratedSavingsInterestTableActionManager />

@@ -1,6 +1,10 @@
-import z from 'zod'
+import { z } from 'zod'
 
-import { EntityIdSchema, entityIdSchema } from '@/validation'
+import {
+    EntityIdSchema,
+    entityIdSchema,
+    stringDateWithTransformSchema,
+} from '@/validation'
 
 import { GENERATED_INTEREST_SAVINGS_COMPUTATION_TYPES } from './generated-savings-interest.constant'
 
@@ -8,10 +12,8 @@ export const GeneratedSavingsInterestSchema = z.object({
     id: EntityIdSchema().optional(),
     document_no: z.string().optional(),
 
-    last_computation_date: z
-        .string()
-        .min(1, 'Last computation date is required'),
-    new_computation_date: z.string().min(1, 'New computation date is required'),
+    last_computation_date: stringDateWithTransformSchema,
+    new_computation_date: stringDateWithTransformSchema,
 
     account_id: entityIdSchema.optional().nullable(),
     account: z.any().optional(),
@@ -42,4 +44,21 @@ export const GeneratedSavingsInterestViewSchema =
 
 export type TGeneratedSavingsInterestSchema = z.infer<
     typeof GeneratedSavingsInterestSchema
+>
+
+export const GenerateSavingsInterestPostSchema = z.object({
+    check_voucher_number: z.string().optional().nullable(),
+
+    post_account_id: EntityIdSchema('Post Account is required'),
+    post_account: z.any(),
+
+    entry_date: stringDateWithTransformSchema,
+})
+
+export type TGeneratedSavingsInterestPostSchema = z.infer<
+    typeof GenerateSavingsInterestPostSchema
+>
+
+export type GenerateSavingsInterestPost = z.infer<
+    typeof GenerateSavingsInterestPostSchema
 >

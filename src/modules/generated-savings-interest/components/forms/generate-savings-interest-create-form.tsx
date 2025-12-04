@@ -5,10 +5,11 @@ import z from 'zod'
 import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
 
 import { formatNumber } from '@/helpers'
+import { toInputDateString } from '@/helpers/date-utils'
 import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
 import { cn } from '@/helpers/tw-utils'
 import { AccountPicker } from '@/modules/account'
-import GeneratedSavingsInterestEntriesView from '@/modules/generated-savings-interest-entry/components/generated-savings-interest-entries-view'
+import GeneratedSavingsInterestEntriesView from '@/modules/generated-savings-interest-entry/components/tables/generated-savings-interest-entries-view'
 import { IMemberType } from '@/modules/member-type'
 import MemberTypeCombobox from '@/modules/member-type/components/member-type-combobox'
 
@@ -25,12 +26,13 @@ import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 
 import { useFormHelper } from '@/hooks/use-form-helper'
 
-import { IClassProps, IForm } from '@/types'
+import { IClassProps, IForm, TEntityId } from '@/types'
 
 import { GENERATED_INTEREST_SAVINGS_COMPUTATION_TYPES } from '../../generated-savings-interest.constant'
 import {
     useCreateGeneratedSavingsInterest,
     useGenerateSavingsInterestProcessView,
+    useUpdateGeneratedSavingsInterestById,
 } from '../../generated-savings-interest.service'
 import { IGeneratedSavingsInterest } from '../../generated-savings-interest.types'
 import { COMPUTATION_TYPE_LABELS } from '../../generated-savings-interest.utils'
@@ -50,10 +52,13 @@ export interface IGeneratedSavingsInterestFormProps
             IGeneratedSavingsInterest,
             Error,
             TGeneratedSavingsInterestFormValues
-        > {}
+        > {
+    generatedSavingsInterestId?: TEntityId
+}
 
 const GeneratedSavingsInterestCreateForm = ({
     className,
+    generatedSavingsInterestId,
     ...formProps
 }: IGeneratedSavingsInterestFormProps) => {
     const form = useForm<TGeneratedSavingsInterestFormValues>({
@@ -63,15 +68,17 @@ const GeneratedSavingsInterestCreateForm = ({
         defaultValues: {
             document_no: '',
             last_computation_date: '',
-            new_computation_date: '',
             account_id: null,
             member_type_id: null,
             savings_computation_type: 'average_daily_balance',
-            interest_tax_rate: 20,
+            interest_tax_rate: 0,
             include_closed_account: false,
             include_existing_computed_interest: false,
             entries: [],
             ...formProps.defaultValues,
+            new_computation_date: toInputDateString(
+                formProps.defaultValues?.new_computation_date || new Date()
+            ),
         },
     })
 
@@ -81,6 +88,13 @@ const GeneratedSavingsInterestCreateForm = ({
                 formProps.onSuccess?.(newData)
                 form.reset()
             },
+            onError: formProps.onError,
+        },
+    })
+
+    const updateMutation = useUpdateGeneratedSavingsInterestById({
+        options: {
+            onSuccess: formProps.onSuccess,
             onError: formProps.onError,
         },
     })
@@ -108,10 +122,23 @@ const GeneratedSavingsInterestCreateForm = ({
         })
 
     const onSubmit = form.handleSubmit((data) => {
-        toast.promise(createMutation.mutateAsync(data), {
-            loading: 'Generating savings interest...',
-            success: 'Savings interest generated successfully',
-            error: 'Failed to generate savings interest',
+        const mutationPromise = generatedSavingsInterestId
+            ? updateMutation.mutateAsync({
+                  id: generatedSavingsInterestId,
+                  payload: data,
+              })
+            : createMutation.mutateAsync(data)
+
+        toast.promise(mutationPromise, {
+            loading: generatedSavingsInterestId
+                ? 'Updating savings interest...'
+                : 'Generating savings interest...',
+            success: generatedSavingsInterestId
+                ? 'Savings interest updated successfully'
+                : 'Savings interest generated successfully',
+            error: generatedSavingsInterestId
+                ? 'Failed to update savings interest'
+                : 'Failed to generate savings interest',
         })
     }, handleFocusError)
 
@@ -134,7 +161,11 @@ const GeneratedSavingsInterestCreateForm = ({
         })
     }
 
-    const { error: rawError, isPending, reset } = createMutation
+    const {
+        error: rawError,
+        isPending,
+        reset,
+    } = generatedSavingsInterestId ? updateMutation : createMutation
 
     const error = serverRequestErrExtractor({
         error: rawError || generateMutation.error,
@@ -143,7 +174,10 @@ const GeneratedSavingsInterestCreateForm = ({
     return (
         <Form {...form}>
             <form
-                className={cn('min-w-0 max-w-full flex-col gap-y-4', className)}
+                className={cn(
+                    'min-w-0 max-w-full flex flex-col gap-y-4',
+                    className
+                )}
                 onSubmit={onSubmit}
                 ref={formRef}
             >
@@ -340,6 +374,7 @@ const GeneratedSavingsInterestCreateForm = ({
                     </div>
                     <EntriesSection
                         form={form}
+                        isDisabledSection={!!generatedSavingsInterestId}
                         isProcessing={generateMutation.isPending}
                         onProcess={onProcess}
                     />
@@ -355,7 +390,7 @@ const GeneratedSavingsInterestCreateForm = ({
                         reset()
                     }}
                     readOnly={formProps.readOnly}
-                    submitText="Save"
+                    submitText={generatedSavingsInterestId ? 'Update' : 'Save'}
                 />
             </form>
         </Form>
@@ -365,8 +400,10 @@ const GeneratedSavingsInterestCreateForm = ({
 const EntriesSection = ({
     form,
     isProcessing,
+    isDisabledSection = false,
     onProcess,
 }: {
+    isDisabledSection?: boolean
     form: ReturnType<typeof useForm<TGeneratedSavingsInterestFormValues>>
     isProcessing: boolean
     onProcess: () => void
@@ -377,52 +414,61 @@ const EntriesSection = ({
     return (
         <div
             className={cn(
-                'flex rounded-xl p-4 items-center justify-between',
+                'rounded-xl p-4 space-y-2',
                 'border-2 transition-all duration-500 ease-in-out',
                 hasEntries
                     ? 'bg-gradient-to-br from-primary/15 via-accent/10 to-primary/5 border-primary/30 shadow-sm'
                     : 'bg-popover/20 border-transparent'
             )}
         >
-            <div className="flex items-center gap-3">
-                <p className="text-sm font-medium">Generated Entries</p>
-                <span
-                    className={cn(
-                        'px-3 py-1 rounded-md font-semibold text-sm',
-                        'transition-all duration-300 ease-in-out',
-                        hasEntries
-                            ? 'bg-primary text-primary-foreground shadow-sm scale-105'
-                            : 'bg-muted text-muted-foreground'
-                    )}
-                >
-                    {formatNumber(entries.length)}
-                </span>
-            </div>
-            <div className="flex gap-2">
-                {hasEntries && (
-                    <Button
-                        className="transition-all duration-300 ease-in-out animate-in fade-in slide-in-from-right-2"
-                        onClick={() =>
-                            form.setValue('is_viewing_entries', true)
-                        }
-                        size="sm"
-                        type="button"
-                        variant="outline"
+            <div className=" flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                    <p className="text-sm font-medium">Generated Entries</p>
+                    <span
+                        className={cn(
+                            'px-1.5 py-0.5 rounded-md font-semibold text-xs',
+                            'transition-all duration-300 ease-in-out',
+                            hasEntries
+                                ? 'bg-primary text-primary-foreground shadow-sm scale-105'
+                                : 'bg-muted text-muted-foreground'
+                        )}
                     >
-                        View Entries
+                        {formatNumber(entries.length)}
+                    </span>
+                </div>
+                <div className="flex gap-2">
+                    {hasEntries && (
+                        <Button
+                            className="transition-all duration-300 ease-in-out animate-in fade-in slide-in-from-right-2"
+                            onClick={() =>
+                                form.setValue('is_viewing_entries', true)
+                            }
+                            size="xs"
+                            type="button"
+                            variant="outline"
+                        >
+                            View Entries
+                        </Button>
+                    )}
+                    <Button
+                        className="transition-all duration-300 ease-in-out"
+                        disabled={isProcessing || isDisabledSection}
+                        onClick={onProcess}
+                        size="xs"
+                        type="button"
+                        variant={hasEntries ? 'secondary' : 'default'}
+                    >
+                        {isProcessing ? 'Processing...' : 'Generate / Process'}
                     </Button>
-                )}
-                <Button
-                    className="transition-all duration-300 ease-in-out"
-                    disabled={isProcessing}
-                    onClick={onProcess}
-                    size="sm"
-                    type="button"
-                    variant={hasEntries ? 'secondary' : 'default'}
-                >
-                    {isProcessing ? 'Processing...' : 'Generate / Process'}
-                </Button>
+                </div>
             </div>
+            {hasEntries && (
+                <p className="text-xs font-medium text-muted-foreground">
+                    You now generated an entr{entries.length > 1 ? 'ies' : 'y'}.
+                    You can change config and reprocess to get another result or
+                    you can save it
+                </p>
+            )}
         </div>
     )
 }

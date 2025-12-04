@@ -145,7 +145,8 @@ const GeneratedSavingsInterestEntryCreateUpdateForm = ({
                                 <AccountPicker
                                     {...field}
                                     disabled={isDisabled(field.name)}
-                                    mode="all"
+                                    mode="deposit"
+                                    nameOnly
                                     onSelect={(account) => {
                                         field.onChange(account?.id)
                                         form.setValue('account', account, {
@@ -171,8 +172,6 @@ const GeneratedSavingsInterestEntryCreateUpdateForm = ({
                                     id={field.name}
                                     min="0"
                                     placeholder="0.00"
-                                    step="0.01"
-                                    type="number"
                                 />
                             )}
                         />
@@ -188,8 +187,6 @@ const GeneratedSavingsInterestEntryCreateUpdateForm = ({
                                     disabled={isDisabled(field.name)}
                                     id={field.name}
                                     placeholder="0.00"
-                                    step="0.01"
-                                    type="number"
                                 />
                             )}
                         />

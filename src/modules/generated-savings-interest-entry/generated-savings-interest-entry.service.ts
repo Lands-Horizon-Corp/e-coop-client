@@ -1,12 +1,21 @@
-import { useQuery } from '@tanstack/react-query'
-
 import { Logger } from '@/helpers/loggers'
 import { createDataLayerFactory } from '@/providers/repositories/data-layer-factory'
+import {
+    createMutationFactory,
+    deleteMutationInvalidationFn,
+    updateMutationInvalidationFn,
+} from '@/providers/repositories/mutation-factory'
+
+import { TEntityId } from '@/types'
 
 import type {
     IGeneratedSavingsInterestEntry,
     IGeneratedSavingsInterestEntryRequest,
 } from '../generated-savings-interest-entry'
+import {
+    createGeneratedSavingsInterest,
+    generatedSavingsInterestBaseKey,
+} from '../generated-savings-interest/generated-savings-interest.service'
 
 const {
     apiCrudHooks,
@@ -25,7 +34,7 @@ export const {
     API, // rarely used, for raw calls
     route: generatedSavingsInterestEntryAPIRoute, // matches url above
 
-    create: createGeneratedSavingsInterestEntry,
+    // create: createGeneratedSavingsInterestEntry,
     updateById: updateGeneratedSavingsInterestEntryById,
 
     deleteById: deleteGeneratedSavingsInterestEntryById,
@@ -42,16 +51,88 @@ export const {
 export { generatedSavingsInterestEntryBaseKey } // Exported in case it's needed outside
 
 export const {
-    useCreate: useCreateGeneratedSavingsInterestEntry,
-    useUpdateById: useUpdateGeneratedSavingsInterestEntryById,
+    // useCreate: useCreateGeneratedSavingsInterestEntry,
+    // useUpdateById: useUpdateGeneratedSavingsInterestEntryById,
 
     // useGetAll: useGetAllGeneratedSavingsInterestEntry,
     useGetById: useGetGeneratedSavingsInterestEntryById,
     useGetPaginated: useGetPaginatedGeneratedSavingsInterestEntry,
 
-    useDeleteById: useDeleteGeneratedSavingsInterestEntryById,
+    // useDeleteById: useDeleteGeneratedSavingsInterestEntryById,
     useDeleteMany: useDeleteManyGeneratedSavingsInterestEntry,
 } = apiCrudHooks
+
+export const useDeleteGeneratedSavingsInterestEntryById = createMutationFactory<
+    void,
+    Error,
+    TEntityId
+>({
+    mutationFn: (id) => deleteGeneratedSavingsInterestEntryById({ id }),
+    invalidationFn: (args) => {
+        args.queryClient.invalidateQueries({
+            queryKey: [generatedSavingsInterestBaseKey],
+        })
+        args.queryClient.invalidateQueries({
+            queryKey: [generatedSavingsInterestEntryBaseKey],
+        })
+        deleteMutationInvalidationFn(generatedSavingsInterestBaseKey, args)
+    },
+})
+
+export const useCreateGeneratedSavingsInterestEntry = createMutationFactory<
+    IGeneratedSavingsInterestEntry,
+    Error,
+    IGeneratedSavingsInterestEntryRequest
+>({
+    mutationFn: async (payload) =>
+        createGeneratedSavingsInterest({
+            payload: payload,
+            url: `${generatedSavingsInterestEntryAPIRoute}/generated-savings-interest/${payload.generated_savings_interest_id}`,
+        }),
+    invalidationFn: ({
+        queryClient,
+        variables: { generated_savings_interest_id },
+    }) => {
+        queryClient.invalidateQueries({
+            queryKey: [
+                generatedSavingsInterestBaseKey,
+                generated_savings_interest_id,
+                'generated-savings-interest-entry',
+                'all',
+            ],
+        })
+    },
+    defaultInvalidates: [
+        [generatedSavingsInterestEntryBaseKey, 'paginated'],
+        [generatedSavingsInterestEntryBaseKey, 'all'],
+    ],
+})
+
+export const useUpdateGeneratedSavingsInterestEntryById = createMutationFactory<
+    IGeneratedSavingsInterestEntry,
+    Error,
+    { id: TEntityId; payload: IGeneratedSavingsInterestEntryRequest }
+>({
+    mutationFn: async (variables) => {
+        const response = await updateGeneratedSavingsInterestEntryById({
+            id: variables.id,
+            payload: variables.payload,
+        })
+        return response
+    },
+    invalidationFn: (args) => {
+        args.queryClient.invalidateQueries({
+            queryKey: [
+                generatedSavingsInterestBaseKey,
+                args.resultData.generated_savings_interest_id,
+                'generated-savings-interest-entry',
+                'all',
+            ],
+        })
+
+        updateMutationInvalidationFn(generatedSavingsInterestEntryBaseKey, args)
+    },
+})
 
 export const logger = Logger.getInstance('generated-savings-interest-entry')
 // custom hooks can go here

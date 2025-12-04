@@ -5,16 +5,19 @@ import {
     HookQueryOptions,
     createDataLayerFactory,
 } from '@/providers/repositories/data-layer-factory'
-import { createMutationFactory } from '@/providers/repositories/mutation-factory'
+import {
+    createMutationFactory,
+    updateMutationInvalidationFn,
+} from '@/providers/repositories/mutation-factory'
 
 import { TAPIQueryOptions, TEntityId } from '@/types'
 
 import type {
+    IGenerateSavingsInterestPostRequest,
     IGeneratedSavingsInterest,
     IGeneratedSavingsInterestRequest,
     IGeneratedSavingsInterestView,
 } from '../generated-savings-interest'
-import { IGeneratedSavingsInterestEntry } from '../generated-savings-interest-entry'
 
 const {
     apiCrudHooks,
@@ -76,21 +79,20 @@ export const useGenerateSavingsInterestProcessView = createMutationFactory<
 
         return response.data
     },
-    defaultInvalidates: [[generatedSavingsInterestBaseKey, 'all', 'view']],
+    defaultInvalidates: [[generatedSavingsInterestBaseKey, 'all']],
 })
 
 // Get all savings interest for this generated savings interest
-
-export const useGetAllGeneratedSavingsInterestEntry = ({
+export const useGetGeneratedSavingsInterestEntry = ({
     query,
     options,
     generatedSavingsInterestId,
 }: {
     generatedSavingsInterestId: TEntityId
     query?: TAPIQueryOptions
-    options?: HookQueryOptions<IGeneratedSavingsInterestEntry[], Error>
+    options?: HookQueryOptions<IGeneratedSavingsInterestView, Error>
 }) => {
-    return useQuery<IGeneratedSavingsInterestEntry[], Error>({
+    return useQuery<IGeneratedSavingsInterestView, Error>({
         ...options,
         queryKey: [
             generatedSavingsInterestBaseKey,
@@ -100,17 +102,103 @@ export const useGetAllGeneratedSavingsInterestEntry = ({
             query,
         ].filter(Boolean),
         queryFn: async () => {
-            const response =
-                await getAllGeneratedSavingsInterest<IGeneratedSavingsInterestEntry>(
-                    {
-                        query,
-                        url: `${generatedSavingsInterestAPIRoute}/generated-savings-interest/${generatedSavingsInterestId}/view`,
-                    }
-                )
-            return response
+            const response = await API.get<IGeneratedSavingsInterestView>(
+                `${generatedSavingsInterestAPIRoute}/${generatedSavingsInterestId}/view`
+            )
+            return response.data
         },
     })
 }
+
+// PRINT
+export const usePrintGeneratedSavingsInterest = createMutationFactory<
+    IGeneratedSavingsInterest,
+    Error,
+    { generatedSavingsInterestId: TEntityId }
+>({
+    mutationFn: async ({ generatedSavingsInterestId }) => {
+        const response = await API.put<void, IGeneratedSavingsInterest>(
+            `${generatedSavingsInterestAPIRoute}/${generatedSavingsInterestId}/print`
+        )
+        return response.data
+    },
+    invalidationFn: (args) =>
+        updateMutationInvalidationFn(generatedSavingsInterestBaseKey, args),
+    defaultInvalidates: [[generatedSavingsInterestBaseKey, 'all']],
+})
+
+// RE-PRINT
+export const useReprintGeneratedSavingsInterest = createMutationFactory<
+    IGeneratedSavingsInterest,
+    Error,
+    { generatedSavingsInterestId: TEntityId }
+>({
+    mutationFn: async ({ generatedSavingsInterestId }) => {
+        const response = await API.put<void, IGeneratedSavingsInterest>(
+            `${generatedSavingsInterestAPIRoute}/${generatedSavingsInterestId}/print-only`
+        )
+        return response.data
+    },
+    invalidationFn: (args) =>
+        updateMutationInvalidationFn(generatedSavingsInterestBaseKey, args),
+    defaultInvalidates: [[generatedSavingsInterestBaseKey, 'all']],
+})
+
+// UNDO PRINT
+export const useUndoPrintGeneratedSavingsInterest = createMutationFactory<
+    IGeneratedSavingsInterest,
+    Error,
+    { generatedSavingsInterestId: TEntityId }
+>({
+    mutationFn: async ({ generatedSavingsInterestId }) => {
+        const response = await API.put<void, IGeneratedSavingsInterest>(
+            `${generatedSavingsInterestAPIRoute}/${generatedSavingsInterestId}/print-undo`
+        )
+        return response.data
+    },
+    invalidationFn: (args) =>
+        updateMutationInvalidationFn(generatedSavingsInterestBaseKey, args),
+    defaultInvalidates: [[generatedSavingsInterestBaseKey, 'all']],
+})
+
+// POST The generated savings interest
+export const usePostGeneratedSavingsInterest = createMutationFactory<
+    IGeneratedSavingsInterest,
+    Error,
+    {
+        generatedSavingsId: TEntityId
+        payload: IGenerateSavingsInterestPostRequest
+    }
+>({
+    mutationFn: async ({ generatedSavingsId, payload }) => {
+        const response = await API.put<
+            typeof payload,
+            IGeneratedSavingsInterest
+        >(
+            `${generatedSavingsInterestAPIRoute}/${generatedSavingsId}/post`,
+            payload
+        )
+
+        return response.data
+    },
+    invalidationFn: ({ queryClient, variables }) => {
+        queryClient.invalidateQueries({
+            queryKey: [
+                generatedSavingsInterestBaseKey,
+                variables.generatedSavingsId,
+            ],
+        })
+        queryClient.invalidateQueries({
+            queryKey: [
+                generatedSavingsInterestBaseKey,
+                variables.generatedSavingsId,
+                'generated-savings-interest-entry',
+                'all',
+            ],
+        })
+    },
+    defaultInvalidates: [[generatedSavingsInterestBaseKey, 'all']],
+})
 
 export const logger = Logger.getInstance('generated-savings-interest')
 // custom hooks can go here

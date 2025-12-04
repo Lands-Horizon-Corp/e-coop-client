@@ -1,7 +1,10 @@
-import { RefObject, useEffect, useMemo, useRef } from 'react'
+import { RefObject, useEffect, useMemo, useRef, useState } from 'react'
+
+import Fuse from 'fuse.js'
 
 import { formatNumber } from '@/helpers/number-utils'
 import { cn } from '@/helpers/tw-utils'
+import { currencyFormat } from '@/modules/currency'
 import {
     type ColumnDef,
     Row,
@@ -16,14 +19,19 @@ import {
     useVirtualizer,
 } from '@tanstack/react-virtual'
 
+import { MagnifyingGlassIcon, RenderIcon, TIcon } from '@/components/icons'
+import ImageDisplay from '@/components/image-display'
+import { Input } from '@/components/ui/input'
 import { TableCell, TableRow } from '@/components/ui/table'
 
 import { IClassProps } from '@/types'
 
-import { IGeneratedSavingsInterestEntry } from '../generated-savings-interest-entry.types'
+import { IGeneratedSavingsInterestEntry } from '../../generated-savings-interest-entry.types'
 
 interface Props extends IClassProps {
     entries: IGeneratedSavingsInterestEntry[]
+    total_tax?: number
+    total_interest?: number
 }
 
 export const generateMockSavingsIntEntries = (
@@ -103,6 +111,31 @@ export const generateMockSavingsIntEntries = (
             },
         } as IGeneratedSavingsInterestEntry
     })
+}
+
+const SearchInput = ({ onSearch }: { onSearch: (value: string) => void }) => {
+    const [value, setValue] = useState('')
+
+    useEffect(() => {
+        const timeoutId = setTimeout(() => {
+            onSearch(value)
+        }, 300) // 300ms debounce
+
+        return () => clearTimeout(timeoutId)
+    }, [value, onSearch])
+
+    return (
+        <div className="relative w-full max-w-sm">
+            <Input
+                className="pr-9"
+                onChange={(e) => setValue(e.target.value)}
+                placeholder="Search by passbook number..."
+                type="text"
+                value={value}
+            />
+            <MagnifyingGlassIcon className="absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+        </div>
+    )
 }
 
 interface TableBodyProps {
@@ -214,57 +247,132 @@ function TableBodyRow({ row, virtualRow, rowVirtualizer }: TableBodyRowProps) {
     )
 }
 
-const GeneratedSavingsInterestEntriesView = ({ entries, className }: Props) => {
+const GeneratedSavingsInterestEntriesView = ({
+    entries,
+    total_tax = 0,
+    total_interest = 0,
+    className,
+}: Props) => {
     const tableContainerRef = useRef<HTMLDivElement>(null)
+    const [searchQuery, setSearchQuery] = useState('')
+
+    // Configure Fuse.js for fuzzy search on passbook
+    const fuse = useMemo(
+        () =>
+            new Fuse(entries, {
+                keys: ['member_profile.passbook'],
+                threshold: 0.3,
+                includeScore: true,
+            }),
+        [entries]
+    )
+
+    // Filter entries based on search query
+    const filteredEntries = useMemo(() => {
+        if (!searchQuery.trim()) {
+            return entries
+        }
+
+        const results = fuse.search(searchQuery)
+        return results.map((result) => result.item)
+    }, [entries, fuse, searchQuery])
 
     const columns = useMemo<ColumnDef<IGeneratedSavingsInterestEntry>[]>(
         () => [
             {
                 accessorKey: 'member_profile.passbook',
-                header: 'PB No',
+                header: () => <p className="w-full">PB No</p>,
                 cell: (info) =>
                     info.row.original.member_profile?.passbook || 'N/A',
                 size: 100,
             },
             {
                 accessorKey: 'member_profile.full_name',
-                header: 'Member Name',
-                cell: (info) =>
-                    info.row.original.member_profile?.full_name || 'N/A',
-                size: 130,
+                header: () => <p className="w-full">Member Name</p>,
+                cell: (info) => (
+                    <div className="flex items-center gap-1 min-w-0">
+                        <div className="flex-shrink-0">
+                            <ImageDisplay
+                                src={
+                                    info.row.original.member_profile?.media
+                                        ?.download_url
+                                }
+                            />
+                        </div>
+                        <span className="truncate">
+                            {info.row.original.member_profile?.full_name ||
+                                'N/A'}
+                        </span>
+                    </div>
+                ),
+                size: 280,
             },
             {
                 accessorKey: 'account.name',
-                header: 'Account',
-                cell: (info) => info.row.original.account?.name || 'N/A',
+                header: () => <p className="w-full">Account</p>,
+                cell: (info) => (
+                    <div className="flex items-center gap-1 min-w-0">
+                        <RenderIcon
+                            className="flex-shrink-0"
+                            icon={info.row.original.account?.icon as TIcon}
+                        />
+                        <span className="truncate">
+                            {info.row.original.account?.name || 'N/A'}
+                        </span>
+                    </div>
+                ),
                 size: 150,
             },
             {
                 accessorKey: 'ending_balance',
-                header: 'Ending Balance',
-                cell: (info) => formatNumber(info.getValue() as number, 2, 2),
+                header: () => (
+                    <p className="w-full text-right">Ending Balance</p>
+                ),
+                cell: (info) => {
+                    const currency = info.row.original.account?.currency
+                    return currencyFormat((info.getValue() as number) || 0, {
+                        currency,
+                        showSymbol: !!currency,
+                    })
+                },
                 size: 150,
             },
             {
                 accessorKey: 'interest_amount',
-                header: 'Interest Amt',
-                cell: (info) => formatNumber(info.getValue() as number, 2, 2),
+                header: () => <p className="w-full text-right">Interest Amt</p>,
+                cell: (info) => {
+                    const currency = info.row.original.account?.currency
+                    return currencyFormat((info.getValue() as number) || 0, {
+                        currency,
+                        showSymbol: !!currency,
+                    })
+                },
                 size: 130,
             },
             {
                 accessorKey: 'interest_tax',
-                header: 'Interest Tax',
-                cell: (info) => formatNumber(info.getValue() as number, 2, 2),
+                header: () => <p className="w-full text-right">Interest Tax</p>,
+                cell: (info) => {
+                    const currency = info.row.original.account?.currency
+                    return currencyFormat((info.getValue() as number) || 0, {
+                        currency,
+                        showSymbol: !!currency,
+                    })
+                },
                 size: 130,
             },
             {
                 id: 'net_interest',
-                header: 'Net Interest',
+                header: () => <p className="w-full text-right">Net Interest</p>,
                 cell: (info) => {
                     const netInterest =
-                        info.row.original.interest_amount -
-                        info.row.original.interest_tax
-                    return formatNumber(netInterest, 2, 2)
+                        (info.row.original.interest_amount || 0) -
+                        (info.row.original.interest_tax || 0)
+                    const currency = info.row.original.account?.currency
+                    return currencyFormat(netInterest, {
+                        currency,
+                        showSymbol: !!currency,
+                    })
                 },
                 size: 140,
             },
@@ -273,12 +381,11 @@ const GeneratedSavingsInterestEntriesView = ({ entries, className }: Props) => {
     )
 
     const table = useReactTable({
-        data: entries,
+        data: filteredEntries,
         columns,
         getCoreRowModel: getCoreRowModel(),
     })
 
-    // Calculate total size for proportional widths
     const totalSize = table
         .getAllColumns()
         .reduce((sum, col) => sum + col.getSize(), 0)
@@ -286,18 +393,43 @@ const GeneratedSavingsInterestEntriesView = ({ entries, className }: Props) => {
     return (
         <div
             className={cn(
-                'rounded-lg border h-full flex flex-col overflow-hidden',
+                'rounded-lg h-full flex flex-col overflow-hidden',
                 className
             )}
         >
+            <div className="flex items-center justify-between gap-4 px-4 py-3 rounded-t bg-muted/50">
+                <SearchInput onSearch={setSearchQuery} />
+                <div className="flex items-center gap-2">
+                    <span className="text-sm text-muted-foreground">
+                        {formatNumber(entries.length)} entr
+                        {entries.length > 1 ? 'ies' : 'y'}
+                    </span>
+                    <div className="flex items-center gap-2 px-4 py-2 rounded-lg bg-primary/10 border border-primary/70">
+                        <span className="text-sm font-medium text-muted-foreground">
+                            Total Interest:
+                        </span>
+                        <span className="text-sm font-semibold text-primary">
+                            {currencyFormat(total_interest)}
+                        </span>
+                    </div>
+                    <div className="flex items-center gap-2 px-4 py-2 rounded-lg bg-orange-400/10 border border-orange-400/70">
+                        <span className="text-sm font-medium text-muted-foreground">
+                            Total Tax:
+                        </span>
+                        <span className="text-sm font-semibold text-accent-foreground">
+                            {currencyFormat(total_tax)}
+                        </span>
+                    </div>
+                </div>
+            </div>
+
             <div
-                className="flex-1 overflow-auto ecoop-scroll relative"
+                className="flex-1 overflow-auto rounded-b-xl ecoop-scroll relative"
                 ref={tableContainerRef}
             >
-                <table style={{ display: 'grid', width: '100%' }}>
+                <table style={{ width: '100%' }}>
                     <thead
                         style={{
-                            display: 'grid',
                             position: 'sticky',
                             top: 0,
                             zIndex: 10,
@@ -329,14 +461,18 @@ const GeneratedSavingsInterestEntriesView = ({ entries, className }: Props) => {
                             </tr>
                         ))}
                     </thead>
-                    {entries.length === 0 ? (
+                    {filteredEntries.length === 0 ? (
                         <tbody>
-                            <tr className="border-b transition-colors hover:bg-muted/50">
+                            <tr className="border-b w-full transition-colors hover:bg-muted/50">
                                 <td
                                     className="h-24 text-center p-4 align-middle"
                                     colSpan={columns.length}
                                 >
-                                    No entries found
+                                    <p>
+                                        {searchQuery
+                                            ? 'No matching entries found'
+                                            : 'No entries found'}
+                                    </p>
                                 </td>
                             </tr>
                         </tbody>

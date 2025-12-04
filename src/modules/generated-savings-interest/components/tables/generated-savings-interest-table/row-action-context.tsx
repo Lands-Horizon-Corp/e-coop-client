@@ -1,21 +1,39 @@
 import { ReactNode } from 'react'
 
+import { toast } from 'sonner'
+
 import useConfirmModalStore from '@/store/confirm-modal-store'
 import { Row } from '@tanstack/react-table'
-import { List } from 'lucide-react'
 
 import RowActionsGroup from '@/components/data-table/data-table-row-actions'
 import DataTableRowContext from '@/components/data-table/data-table-row-context'
 import { useTableRowActionStore } from '@/components/data-table/store/data-table-action-store'
+import {
+    BoxesStackedIcon,
+    PaperPlaneIcon,
+    PrinterFillIcon,
+    UndoIcon,
+} from '@/components/icons'
 import { ContextMenuItem } from '@/components/ui/context-menu'
+import { DropdownMenuItem } from '@/components/ui/dropdown-menu'
 
-import { useDeleteGeneratedSavingsInterestById } from '../../../generated-savings-interest.service'
+import { GeneratedSavingsInterestEntryTableModal } from '../../../../generated-savings-interest-entry/components/tables/generated-savings-interest-entry-table'
+import {
+    useDeleteGeneratedSavingsInterestById,
+    usePrintGeneratedSavingsInterest,
+    useUndoPrintGeneratedSavingsInterest,
+} from '../../../generated-savings-interest.service'
 import { IGeneratedSavingsInterest } from '../../../generated-savings-interest.types'
 import { GeneratedSavingsInterestCreateFormModal } from '../../forms/generate-savings-interest-create-form'
-import { GeneratedSavingsInterestEntryTableModal } from '../generated-savings-interest-entry-table'
+import { GenerateSavingsInterestPostFormModal } from '../../forms/generate-savings-interest-post-form'
 import { IGeneratedSavingsInterestTableActionComponentProp } from './columns'
 
-export type GeneratedSavingsInterestActionType = 'edit' | 'delete' | 'view' | 'manageEntries'
+export type GeneratedSavingsInterestActionType =
+    | 'edit'
+    | 'delete'
+    | 'view'
+    | 'manageEntries'
+    | 'post'
 
 export interface GeneratedSavingsInterestActionExtra {
     onDeleteSuccess?: () => void
@@ -47,6 +65,30 @@ const useGeneratedSavingsInterestActions = ({
         },
     })
 
+    const {
+        isPending: isPrinting,
+        mutateAsync: printGeneratedSavingsInterest,
+    } = usePrintGeneratedSavingsInterest({
+        options: {
+            onSuccess: () => {
+                toast.success('Generated savings interest printed successfully')
+            },
+        },
+    })
+
+    const {
+        isPending: isUnprinting,
+        mutateAsync: undoPrintGeneratedSavingsInterest,
+    } = useUndoPrintGeneratedSavingsInterest({
+        options: {
+            onSuccess: () => {
+                toast.success(
+                    'Generated savings interest unprinted successfully'
+                )
+            },
+        },
+    })
+
     const handleView = () => {
         open('view', {
             id: generatedSavingsInterest.id,
@@ -71,6 +113,47 @@ const useGeneratedSavingsInterestActions = ({
         })
     }
 
+    const handlePost = () => {
+        open('post', {
+            id: generatedSavingsInterest.id,
+            defaultValues: generatedSavingsInterest,
+            extra: { onDeleteSuccess },
+        })
+    }
+
+    const handlePrint = () => {
+        toast.promise(
+            printGeneratedSavingsInterest({
+                generatedSavingsInterestId: generatedSavingsInterest.id,
+            }),
+            {
+                loading: 'Printing generated savings interest...',
+                success: 'Generated savings interest printed successfully',
+                error: 'Failed to print generated savings interest',
+            }
+        )
+    }
+
+    const handleUndoPrint = () => {
+        onOpen({
+            title: 'Undo Print',
+            description:
+                'Are you sure you want to undo print for this generated savings interest?',
+            onConfirm: () =>
+                toast.promise(
+                    undoPrintGeneratedSavingsInterest({
+                        generatedSavingsInterestId: generatedSavingsInterest.id,
+                    }),
+                    {
+                        loading: 'Undoing print...',
+                        success:
+                            'Generated savings interest unprinted successfully',
+                        error: 'Failed to undo print',
+                    }
+                ),
+        })
+    }
+
     const handleDelete = () => {
         onOpen({
             title: 'Delete Generated Savings Interest',
@@ -81,12 +164,27 @@ const useGeneratedSavingsInterestActions = ({
         })
     }
 
+    const isPosted = !!generatedSavingsInterest.posted_date
+    const isPrinted = !!generatedSavingsInterest.printed_date
+
+    const canPrint = !isPrinted && !isPosted
+    const canUndoPrint = isPrinted && !isPosted
+    const canPost = isPrinted && !isPosted
+
     return {
         generatedSavingsInterest,
         isDeletingGeneratedSavingsInterest,
+        isPrinting,
+        isUnprinting,
+        canPrint,
+        canUndoPrint,
+        canPost,
         handleView,
         handleManageEntries,
         handleEdit,
+        handlePost,
+        handlePrint,
+        handleUndoPrint,
         handleDelete,
     }
 }
@@ -101,8 +199,20 @@ export const GeneratedSavingsInterestAction = ({
     row,
     onDeleteSuccess,
 }: IGeneratedSavingsInterestTableActionProps) => {
-    const { isDeletingGeneratedSavingsInterest, handleManageEntries, handleEdit, handleDelete } =
-        useGeneratedSavingsInterestActions({ row, onDeleteSuccess })
+    const {
+        isDeletingGeneratedSavingsInterest,
+        isPrinting,
+        isUnprinting,
+        canPrint,
+        canUndoPrint,
+        canPost,
+        handleManageEntries,
+        handleEdit,
+        handlePost,
+        handlePrint,
+        handleUndoPrint,
+        handleDelete,
+    } = useGeneratedSavingsInterestActions({ row, onDeleteSuccess })
 
     return (
         <>
@@ -120,10 +230,31 @@ export const GeneratedSavingsInterestAction = ({
                 }}
                 otherActions={
                     <>
-                        <ContextMenuItem onClick={handleManageEntries}>
-                            <List className="mr-2 h-4 w-4" />
+                        <DropdownMenuItem
+                            disabled={!canPrint || isPrinting}
+                            onClick={handlePrint}
+                        >
+                            <PrinterFillIcon className="size-4 mr-2" />
+                            Print
+                        </DropdownMenuItem>
+                        <DropdownMenuItem
+                            disabled={!canUndoPrint || isUnprinting}
+                            onClick={handleUndoPrint}
+                        >
+                            <UndoIcon className="size-4 mr-2" />
+                            Undo Print
+                        </DropdownMenuItem>
+                        <DropdownMenuItem onClick={handleManageEntries}>
+                            <BoxesStackedIcon className="mr-2 size-4" />
                             Manage Entries
-                        </ContextMenuItem>
+                        </DropdownMenuItem>
+                        <DropdownMenuItem
+                            disabled={!canPost}
+                            onClick={handlePost}
+                        >
+                            <PaperPlaneIcon className="mr-2 size-4" />
+                            Post
+                        </DropdownMenuItem>
                     </>
                 }
                 row={row}
@@ -143,8 +274,20 @@ export const GeneratedSavingsInterestRowContext = ({
     children,
     onDeleteSuccess,
 }: IGeneratedSavingsInterestRowContextProps) => {
-    const { isDeletingGeneratedSavingsInterest, handleManageEntries, handleEdit, handleDelete } =
-        useGeneratedSavingsInterestActions({ row, onDeleteSuccess })
+    const {
+        isDeletingGeneratedSavingsInterest,
+        isPrinting,
+        isUnprinting,
+        canPrint,
+        canUndoPrint,
+        canPost,
+        handleManageEntries,
+        handleEdit,
+        handlePost,
+        handlePrint,
+        handleUndoPrint,
+        handleDelete,
+    } = useGeneratedSavingsInterestActions({ row, onDeleteSuccess })
 
     return (
         <>
@@ -161,9 +304,30 @@ export const GeneratedSavingsInterestRowContext = ({
                 }}
                 otherActions={
                     <>
+                        <ContextMenuItem
+                            disabled={!canPrint || isPrinting}
+                            onClick={handlePrint}
+                        >
+                            <PrinterFillIcon className="mr-2 size-4" />
+                            Print
+                        </ContextMenuItem>
+                        <ContextMenuItem
+                            disabled={!canUndoPrint || isUnprinting}
+                            onClick={handleUndoPrint}
+                        >
+                            <UndoIcon className="mr-2 size-4" />
+                            Undo Print
+                        </ContextMenuItem>
                         <ContextMenuItem onClick={handleManageEntries}>
-                            <List className="mr-2 h-4 w-4" />
+                            <BoxesStackedIcon className="mr-2 size-4" />
                             Manage Entries
+                        </ContextMenuItem>
+                        <ContextMenuItem
+                            disabled={!canPost}
+                            onClick={handlePost}
+                        >
+                            <PaperPlaneIcon className="mr-2 size-4" />
+                            Post
                         </ContextMenuItem>
                     </>
                 }
@@ -187,6 +351,7 @@ export const GeneratedSavingsInterestTableActionManager = () => {
             {state.action === 'edit' && state.defaultValues && (
                 <GeneratedSavingsInterestCreateFormModal
                     formProps={{
+                        readOnly: !!state.defaultValues?.printed_date,
                         defaultValues: state.defaultValues,
                         onSuccess: () => close(),
                     }}
@@ -199,9 +364,21 @@ export const GeneratedSavingsInterestTableActionManager = () => {
                     onOpenChange={close}
                     open={state.isOpen}
                     tableProps={{
+                        readOnly: !!state.defaultValues?.posted_date,
                         generatedSavingsInterestId: state.id,
                     }}
-                    title={`Manage Entries - ${state.defaultValues?.document_no || 'N/A'}`}
+                    title={`Manage Entries ${state.defaultValues?.document_no ? `for DOC ${state.defaultValues?.document_no}` : ''}`}
+                />
+            )}
+            {state.action === 'post' && state.id && (
+                <GenerateSavingsInterestPostFormModal
+                    formProps={{
+                        generatedSavingsInterestId: state.id,
+                        defaultValues: state.defaultValues,
+                        onSuccess: () => close(),
+                    }}
+                    onOpenChange={close}
+                    open={state.isOpen}
                 />
             )}
         </>

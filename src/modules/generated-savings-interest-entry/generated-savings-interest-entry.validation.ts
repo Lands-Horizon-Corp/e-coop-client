@@ -1,6 +1,6 @@
 import z from 'zod'
 
-import { entityIdSchema } from '@/validation'
+import { EntityIdSchema, entityIdSchema } from '@/validation'
 
 export const GeneratedSavingsInterestEntrySchema = z
     .object({
@@ -12,10 +12,14 @@ export const GeneratedSavingsInterestEntrySchema = z
         member_profile_id: entityIdSchema,
         member_profile: z.any(),
 
-        interest_amount: z
+        generated_savings_interest_id: EntityIdSchema(
+            'No Generated Savings Interest ID provided'
+        ),
+
+        interest_amount: z.coerce
             .number()
             .min(0, 'Interest amount must be non-negative'),
-        interest_tax: z.number(),
+        interest_tax: z.coerce.number(),
     })
     .superRefine((data, ctx) => {
         if (data.interest_amount < data.interest_tax) {

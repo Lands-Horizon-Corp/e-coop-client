@@ -1,5 +1,7 @@
 import { ReactNode } from 'react'
 
+import { dateAgo, toReadableDate } from '@/helpers/date-utils'
+import { currencyFormat } from '@/modules/currency'
 import { ColumnDef, Row } from '@tanstack/react-table'
 
 import DataTableColumnHeader from '@/components/data-table/data-table-column-header'
@@ -10,10 +12,13 @@ import DateFilter from '@/components/data-table/data-table-filters/date-filter'
 import NumberFilter from '@/components/data-table/data-table-filters/number-filter'
 import TextFilter from '@/components/data-table/data-table-filters/text-filter'
 import HeaderToggleSelect from '@/components/data-table/data-table-row-actions/header-toggle-select'
-import { PushPinSlashIcon } from '@/components/icons'
+import {
+    BadgeCheckFillIcon,
+    PushPinSlashIcon,
+    RenderIcon,
+    TIcon,
+} from '@/components/icons'
 import { Checkbox } from '@/components/ui/checkbox'
-
-import { currencyFormat } from '@/modules/currency'
 
 import { IGeneratedSavingsInterest } from '../../../generated-savings-interest.types'
 
@@ -116,11 +121,19 @@ const GeneratedSavingsInterestTableColumns = (
             },
         }) => (
             <div>
-                <span className="text-sm">
+                <p>
                     {last_computation_date
-                        ? new Date(last_computation_date).toLocaleDateString()
-                        : '-'}
-                </span>
+                        ? toReadableDate(last_computation_date)
+                        : ''}{' '}
+                </p>
+                {last_computation_date ? (
+                    <p className="text-xs text-muted-foreground/60">
+                        {toReadableDate(last_computation_date, 'h:mm a -')}{' '}
+                        {dateAgo(last_computation_date)}
+                    </p>
+                ) : (
+                    ''
+                )}
             </div>
         ),
         enableMultiSort: true,
@@ -149,11 +162,19 @@ const GeneratedSavingsInterestTableColumns = (
             },
         }) => (
             <div>
-                <span className="text-sm">
+                <p>
                     {new_computation_date
-                        ? new Date(new_computation_date).toLocaleDateString()
-                        : '-'}
-                </span>
+                        ? toReadableDate(new_computation_date)
+                        : ''}{' '}
+                </p>
+                {new_computation_date ? (
+                    <p className="text-xs text-muted-foreground/60">
+                        {toReadableDate(new_computation_date, 'h:mm a -')}{' '}
+                        {dateAgo(new_computation_date)}
+                    </p>
+                ) : (
+                    ''
+                )}
             </div>
         ),
         enableMultiSort: true,
@@ -183,6 +204,10 @@ const GeneratedSavingsInterestTableColumns = (
         }) => (
             <div className="flex min-w-0 flex-col">
                 <span className="truncate text-sm font-semibold">
+                    <RenderIcon
+                        className="inline mr-1"
+                        icon={account?.icon as TIcon}
+                    />
                     {account?.name || 'All Accounts'}
                 </span>
                 {account?.description && (
@@ -339,20 +364,31 @@ const GeneratedSavingsInterestTableColumns = (
                 original: { posted_date },
             },
         }) => (
-            <div>
-                <span className="text-sm">
-                    {posted_date
-                        ? new Date(posted_date).toLocaleDateString()
-                        : '-'}
-                </span>
+            <div className="flex items-start gap-2">
+                <div>
+                    <p>
+                        {posted_date && (
+                            <BadgeCheckFillIcon className="size-4 inline text-green-500 shrink-0 mr-1" />
+                        )}
+                        {posted_date ? toReadableDate(posted_date) : '-'}
+                    </p>
+                    {posted_date ? (
+                        <p className="text-xs text-muted-foreground/60">
+                            {toReadableDate(posted_date, 'h:mm a -')}{' '}
+                            {dateAgo(posted_date)}
+                        </p>
+                    ) : (
+                        ''
+                    )}
+                </div>
             </div>
         ),
         enableMultiSort: true,
         enableSorting: true,
         enableResizing: true,
         enableHiding: true,
-        size: 140,
-        minSize: 120,
+        size: 170,
+        minSize: 140,
     },
 
     ...createUpdateColumns<IGeneratedSavingsInterest>(),

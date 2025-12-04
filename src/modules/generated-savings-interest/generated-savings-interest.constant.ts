@@ -5,5 +5,5 @@ export const GENERATED_INTEREST_SAVINGS_COMPUTATION_TYPES = [
     'adb_end_balance',
     'monthly_lowest_balance_average',
     'monthly_end_balance_average',
-    'monthly_end_balance_total'
+    'monthly_end_balance_total',
 ] as const
