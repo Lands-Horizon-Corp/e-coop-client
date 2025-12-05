@@ -13,45 +13,37 @@ export interface IReportIncomeStatement {
         | 'CLOSED_BOOK'
         | 'BUDGET_FORECASTING'
 
-    income_entries: [
-        {
-            account_title: string
-            account_entries: [
-                {
-                    description: string
-                    current_amount?: string
-                    previous_amount?: string
-                    previous_year_amount?: string
-                    inc_or_dec_amount?: string
-                    percentage?: string
-                    actual_amount?: string
-                    budget_amount?: string
-                    variance_amount?: string
-                },
-            ]
-            total_revenue_amount?: string
-        },
-    ]
+    income_entries: Array<{
+        account_title: string
+        account_entries: Array<{
+            description: string
+            current_amount?: string
+            previous_amount?: string
+            previous_year_amount?: string
+            inc_or_dec_amount?: string
+            percentage?: string
+            actual_amount?: string
+            budget_amount?: string
+            variance_amount?: string
+        }>
+        total_revenue_amount?: string
+    }>
 
-    expense_entries: [
-        {
-            account_title: string
-            account_entries: [
-                {
-                    description: string
-                    current_amount?: string
-                    previous_amount?: string
-                    previous_year_amount?: string
-                    inc_or_dec_amount?: string
-                    percentage?: string
-                    actual_amount?: string
-                    budget_amount?: string
-                    variance_amount?: string
-                },
-            ]
-            total_int_expenses_on_deposits?: string
-        },
-    ]
+    expense_entries: Array<{
+        account_title: string
+        account_entries: Array<{
+            description: string
+            current_amount?: string
+            previous_amount?: string
+            previous_year_amount?: string
+            inc_or_dec_amount?: string
+            percentage?: string
+            actual_amount?: string
+            budget_amount?: string
+            variance_amount?: string
+        }>
+        total_int_expenses_on_deposits?: string
+    }>
 
     total_financial_cost_current?: string
     total_financial_cost_previous?: string
@@ -116,12 +108,10 @@ export interface IReportIncomeStatement {
     net_surplus_budget?: string
     net_surplus_variance?: string
 
-    net_surplus_entries_for_allocation?: [
-        {
-            net_surplus_account_titles: string
-            amount: string
-        },
-    ]
+    net_surplus_entries_for_allocation?: Array<{
+        net_surplus_account_titles: string
+        amount: string
+    }>
     total_net_surplus_allocated?: string
 
     prepared_by: string

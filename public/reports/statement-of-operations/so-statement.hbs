@@ -7,7 +7,7 @@
     <title>Statement of Operations</title>
     <style>
         @page {
-            margin: 0;
+            margin: 0.5in 0.5in 0.6in 0.5in;
             size: 8.5in 11in;
         }
 
@@ -20,7 +20,6 @@
         html,
         body {
             width: 8.5in;
-            height: 11in;
             margin: 0;
             padding: 0;
             -webkit-print-color-adjust: exact;
@@ -32,7 +31,7 @@
             padding: 0.5in;
             display: flex;
             justify-content: center;
-            align-items: center;
+            align-items: flex-start;
         }
 
         .so-container {
@@ -45,7 +44,7 @@
             --fs-2xl: 20px;
 
             width: 8.5in;
-            height: 11in;
+            min-height: 11in;
             padding: 0.6in;
             background: white;
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Inter', 'Helvetica Neue', Arial, sans-serif;
@@ -117,6 +116,8 @@
             background: linear-gradient(to right, #f3f4f6, #e5e7eb);
             padding: 0.5rem 0.75rem;
             border-left: 3px solid oklch(0.7227 0.192 149.5793);
+            page-break-after: avoid;
+            break-after: avoid;
         }
 
         /* Entry Rows */
@@ -127,8 +128,12 @@
             padding: 0.35rem 0.75rem 0.35rem 1.5rem;
             font-size: var(--fs-sm);
             border-bottom: 1px solid #f3f4f6;
+            page-break-inside: avoid;
+            break-inside: avoid;
         }
 
+            page-break-inside: avoid;
+            break-inside: avoid;
         .so-entry-row.with-comparison {
             grid-template-columns: 2fr 1fr 1fr 80px 70px;
         }
@@ -177,6 +182,8 @@
             border-top: 1px solid #d1d5db;
             border-bottom: 1px solid #d1d5db;
             margin-top: 0.25rem;
+            page-break-inside: avoid;
+            break-inside: avoid;
         }
 
         .so-subtotal-row.with-comparison {
@@ -274,7 +281,7 @@
             color: #6b7280;
             border-top: 1px solid #e5e7eb;
             padding-top: 0.5rem;
-            margin-top: auto;
+            margin-top: 1.5rem;
         }
 
         .so-footer-item {

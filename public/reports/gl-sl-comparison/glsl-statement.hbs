@@ -6,7 +6,8 @@
     <title>GL vs SL Comparison Report</title>
 <style>
     @page {
-        margin: 0;
+        margin: 0.5in 0.5in 0.6in 0.5in;
+        size: 8.5in 11in;
     }
 
     * {
@@ -17,7 +18,6 @@
 
     html, body {
         width: 8.5in;
-        height: 11in;
         margin: 0;
         padding: 0;
     }
@@ -27,7 +27,7 @@
         padding: 0.5in;
         display: flex;
         justify-content: center;
-        align-items: center;
+        align-items: flex-start;
     }
 
     .glsl-container {
@@ -41,7 +41,7 @@
         --primary: #008000;
 
         width: 8.5in;
-        height: 11in;
+        min-height: 11in;
         padding: 0.6in;
         background: white;
         font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Inter', 'Helvetica Neue', Arial, sans-serif;
@@ -112,6 +112,8 @@
         text-transform: uppercase;
         letter-spacing: 0.025em;
         border-bottom: 2px solid #e5e7eb;
+        page-break-after: avoid;
+        break-after: avoid;
     }
 
     .glsl-table-header > div {
@@ -130,6 +132,8 @@
         padding: 0.5rem 0.75rem;
         font-size: var(--fs-sm);
         border-bottom: 1px solid #f3f4f6;
+        page-break-inside: avoid;
+        break-inside: avoid;
     }
 
     .glsl-entry-row:hover {
@@ -221,7 +225,7 @@
         color: #6b7280;
         border-top: 1px solid #e5e7eb;
         padding-top: 0.3rem;
-        margin-top: auto;
+        margin-top: 1.5rem;
         width: 100%;
     }
 
@@ -241,7 +245,6 @@
     @media print {
         html, body {
             width: 8.5in;
-            height: 11in;
             margin: 0;
             padding: 0;
         }
@@ -254,6 +257,7 @@
         .glsl-container {
             padding: 0.5in;
             box-shadow: none;
+            min-height: auto;
         }
 
         * {

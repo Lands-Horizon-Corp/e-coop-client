@@ -6,13 +6,11 @@ export interface ReportGLBooksHeader {
     report_title: string
     from_date: string
     to_date: string
-    gl_account_entries: [
-        {
-            account_title: string
-            debit: number
-            credit: number
-        },
-    ]
+    gl_account_entries: Array<{
+        account_title: string
+        debit: number
+        credit: number
+    }>
     grand_total_debit: number
     grand_total_credit: number
 

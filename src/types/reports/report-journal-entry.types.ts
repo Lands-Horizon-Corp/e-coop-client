@@ -18,13 +18,11 @@ export interface IReportJournalVoucherEntry {
     total_credit: number
     total_debit: number
 
-    account_entries: [
-        {
-            account_title: string
-            debit: number
-            credit: number
-        },
-    ]
+    account_entries: Array<{
+        account_title: string
+        debit: number
+        credit: number
+    }>
 
     check_date: string
     check_no: string

@@ -15,13 +15,11 @@ export interface ILoanReleaseVoucher {
     processor: string
 
     due_date: string
-    loan_transaction_entries: [
-        {
-            account_title: string
-            debit: number
-            credit: number
-        },
-    ]
+    loan_transaction_entries: Array<{
+        account_title: string
+        debit: number
+        credit: number
+    }>
     cash_on_hand_total_debit: number
     cash_on_hand_total_credit: number
 

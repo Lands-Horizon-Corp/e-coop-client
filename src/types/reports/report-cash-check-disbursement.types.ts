@@ -15,13 +15,11 @@ export interface ICashCheckDisburment {
     amount: number
     date: string
 
-    account_entries: [
-        {
-            account_title: string
-            debit: number
-            credit: number
-        },
-    ]
+    account_entries: Array<{
+        account_title: string
+        debit: number
+        credit: number
+    }>
 
     cash_on_hand_total_credit: number
     cash_on_hand_total_debit: number

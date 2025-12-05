@@ -89,6 +89,7 @@ export default function HbsCompiler<TData>({
             dangerouslySetInnerHTML={{
                 __html: html,
             }}
+            style={{ isolation: 'isolate' }}
         />
     )
 }

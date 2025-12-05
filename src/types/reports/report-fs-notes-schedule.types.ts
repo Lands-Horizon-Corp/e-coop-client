@@ -14,19 +14,17 @@ export interface IReportFSNotesSchedule {
     date_to?: string
     current_assets: {
         account_title: string
-        assets: [
-            {
-                account_title: string
-                current_amount?: string
-                previous_amount?: string
-                previous_year_amount?: string
-                actual_amount?: string
-                budget_amount?: string
-                variance_amount?: string
-                inc_or_dec?: string
-                percentage?: string
-            },
-        ]
+        assets: Array<{
+            account_title: string
+            current_amount?: string
+            previous_amount?: string
+            previous_year_amount?: string
+            actual_amount?: string
+            budget_amount?: string
+            variance_amount?: string
+            inc_or_dec?: string
+            percentage?: string
+        }>
         total_loans_receivables_current?: string
         total_loans_receivables_previous?: string
         total_loans_receivables_previous_year?: string

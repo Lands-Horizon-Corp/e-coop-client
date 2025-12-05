@@ -7,26 +7,22 @@ export interface IReportBalanceSheet {
     as_of_date: string
 
     report_type: string
-    asset_entries: [
-        {
-            account_title: string
-            account_entries: [
-                {
-                    description: string
-                    budget_amount?: number
-                    actual_amount?: number
-                    current_amount?: number
-                    variance_amount?: number
-                    previous_amount?: number
-                    percentage?: number
-                    inc_or_dec_amount?: string
-                    previous_year_amount?: number
-                },
-            ]
-            total_cash_in_bank: number
-            petty_cash_fund: number
-        },
-    ]
+    asset_entries: Array<{
+        account_title: string
+        account_entries: Array<{
+            description: string
+            budget_amount?: number
+            actual_amount?: number
+            current_amount?: number
+            variance_amount?: number
+            previous_amount?: number
+            percentage?: number
+            inc_or_dec_amount?: string
+            previous_year_amount?: number
+        }>
+        total_cash_in_bank: number
+        petty_cash_fund: number
+    }>
 
     total_property_and_equipment_budget?: number
     total_property_and_equipment_actual?: number

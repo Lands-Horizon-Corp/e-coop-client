@@ -5,14 +5,12 @@ export interface IReportGLSLComparison {
 
     report_title: string
     as_of_date: string
-    account_entries: [
-        {
-            account_title: string
-            gl_amount: number
-            sl_amount: number
-            variance: number
-        },
-    ]
+    account_entries: Array<{
+        account_title: string
+        gl_amount: number
+        sl_amount: number
+        variance: number
+    }>
 
     prepared_by: string
     check_by: string
