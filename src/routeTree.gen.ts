@@ -67,6 +67,7 @@ import { Route as OrgOrgnameBranchBranchnamemeMyBranchFootstepsRouteImport } fro
 import { Route as OrgOrgnameBranchBranchnamemeMyAllFootstepsRouteImport } from './routes/org/$orgname/branch.$branchname/(me)/my-all-footsteps'
 import { Route as OrgOrgnameBranchBranchnameemployeeTimesheetsRouteImport } from './routes/org/$orgname/branch.$branchname/(employee)/timesheets'
 import { Route as OrgOrgnameBranchBranchnameemployeeGenerateSavingsInterestRouteImport } from './routes/org/$orgname/branch.$branchname/(employee)/generate-savings-interest'
+import { Route as OrgOrgnameBranchBranchnameemployeeGenerateMutualAidRouteImport } from './routes/org/$orgname/branch.$branchname/(employee)/generate-mutual-aid'
 import { Route as OrgOrgnameBranchBranchnamecommonDashboardRouteImport } from './routes/org/$orgname/branch.$branchname/(common)/dashboard'
 import { Route as OrgOrgnameBranchBranchnamemeMyGeneralLedgerEntriesRouteRouteImport } from './routes/org/$orgname/branch.$branchname/(me)/my-general-ledger-entries/route'
 import { Route as OrgOrgnameBranchBranchnameemployeeGeneralLedgerRouteRouteImport } from './routes/org/$orgname/branch.$branchname/(employee)/general-ledger/route'
@@ -433,6 +434,12 @@ const OrgOrgnameBranchBranchnameemployeeGenerateSavingsInterestRoute =
   OrgOrgnameBranchBranchnameemployeeGenerateSavingsInterestRouteImport.update({
     id: '/(employee)/generate-savings-interest',
     path: '/generate-savings-interest',
+    getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
+  } as any)
+const OrgOrgnameBranchBranchnameemployeeGenerateMutualAidRoute =
+  OrgOrgnameBranchBranchnameemployeeGenerateMutualAidRouteImport.update({
+    id: '/(employee)/generate-mutual-aid',
+    path: '/generate-mutual-aid',
     getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
   } as any)
 const OrgOrgnameBranchBranchnamecommonDashboardRoute =
@@ -803,6 +810,7 @@ export interface FileRoutesByFullPath {
   '/org/$orgname/branch/$branchname/general-ledger': typeof OrgOrgnameBranchBranchnameemployeeGeneralLedgerRouteRoute
   '/org/$orgname/branch/$branchname/my-general-ledger-entries': typeof OrgOrgnameBranchBranchnamemeMyGeneralLedgerEntriesRouteRoute
   '/org/$orgname/branch/$branchname/dashboard': typeof OrgOrgnameBranchBranchnamecommonDashboardRoute
+  '/org/$orgname/branch/$branchname/generate-mutual-aid': typeof OrgOrgnameBranchBranchnameemployeeGenerateMutualAidRoute
   '/org/$orgname/branch/$branchname/generate-savings-interest': typeof OrgOrgnameBranchBranchnameemployeeGenerateSavingsInterestRoute
   '/org/$orgname/branch/$branchname/timesheets': typeof OrgOrgnameBranchBranchnameemployeeTimesheetsRoute
   '/org/$orgname/branch/$branchname/my-all-footsteps': typeof OrgOrgnameBranchBranchnamemeMyAllFootstepsRoute
@@ -902,6 +910,7 @@ export interface FileRoutesByTo {
   '/org/$orgname/branch/$branchname/general-ledger': typeof OrgOrgnameBranchBranchnameemployeeGeneralLedgerRouteRoute
   '/org/$orgname/branch/$branchname/my-general-ledger-entries': typeof OrgOrgnameBranchBranchnamemeMyGeneralLedgerEntriesRouteRoute
   '/org/$orgname/branch/$branchname/dashboard': typeof OrgOrgnameBranchBranchnamecommonDashboardRoute
+  '/org/$orgname/branch/$branchname/generate-mutual-aid': typeof OrgOrgnameBranchBranchnameemployeeGenerateMutualAidRoute
   '/org/$orgname/branch/$branchname/generate-savings-interest': typeof OrgOrgnameBranchBranchnameemployeeGenerateSavingsInterestRoute
   '/org/$orgname/branch/$branchname/timesheets': typeof OrgOrgnameBranchBranchnameemployeeTimesheetsRoute
   '/org/$orgname/branch/$branchname/my-all-footsteps': typeof OrgOrgnameBranchBranchnamemeMyAllFootstepsRoute
@@ -1007,6 +1016,7 @@ export interface FileRoutesById {
   '/org/$orgname/branch/$branchname/(employee)/general-ledger': typeof OrgOrgnameBranchBranchnameemployeeGeneralLedgerRouteRoute
   '/org/$orgname/branch/$branchname/(me)/my-general-ledger-entries': typeof OrgOrgnameBranchBranchnamemeMyGeneralLedgerEntriesRouteRoute
   '/org/$orgname/branch/$branchname/(common)/dashboard': typeof OrgOrgnameBranchBranchnamecommonDashboardRoute
+  '/org/$orgname/branch/$branchname/(employee)/generate-mutual-aid': typeof OrgOrgnameBranchBranchnameemployeeGenerateMutualAidRoute
   '/org/$orgname/branch/$branchname/(employee)/generate-savings-interest': typeof OrgOrgnameBranchBranchnameemployeeGenerateSavingsInterestRoute
   '/org/$orgname/branch/$branchname/(employee)/timesheets': typeof OrgOrgnameBranchBranchnameemployeeTimesheetsRoute
   '/org/$orgname/branch/$branchname/(me)/my-all-footsteps': typeof OrgOrgnameBranchBranchnamemeMyAllFootstepsRoute
@@ -1112,6 +1122,7 @@ export interface FileRouteTypes {
     | '/org/$orgname/branch/$branchname/general-ledger'
     | '/org/$orgname/branch/$branchname/my-general-ledger-entries'
     | '/org/$orgname/branch/$branchname/dashboard'
+    | '/org/$orgname/branch/$branchname/generate-mutual-aid'
     | '/org/$orgname/branch/$branchname/generate-savings-interest'
     | '/org/$orgname/branch/$branchname/timesheets'
     | '/org/$orgname/branch/$branchname/my-all-footsteps'
@@ -1211,6 +1222,7 @@ export interface FileRouteTypes {
     | '/org/$orgname/branch/$branchname/general-ledger'
     | '/org/$orgname/branch/$branchname/my-general-ledger-entries'
     | '/org/$orgname/branch/$branchname/dashboard'
+    | '/org/$orgname/branch/$branchname/generate-mutual-aid'
     | '/org/$orgname/branch/$branchname/generate-savings-interest'
     | '/org/$orgname/branch/$branchname/timesheets'
     | '/org/$orgname/branch/$branchname/my-all-footsteps'
@@ -1315,6 +1327,7 @@ export interface FileRouteTypes {
     | '/org/$orgname/branch/$branchname/(employee)/general-ledger'
     | '/org/$orgname/branch/$branchname/(me)/my-general-ledger-entries'
     | '/org/$orgname/branch/$branchname/(common)/dashboard'
+    | '/org/$orgname/branch/$branchname/(employee)/generate-mutual-aid'
     | '/org/$orgname/branch/$branchname/(employee)/generate-savings-interest'
     | '/org/$orgname/branch/$branchname/(employee)/timesheets'
     | '/org/$orgname/branch/$branchname/(me)/my-all-footsteps'
@@ -1778,6 +1791,13 @@ declare module '@tanstack/react-router' {
       path: '/generate-savings-interest'
       fullPath: '/org/$orgname/branch/$branchname/generate-savings-interest'
       preLoaderRoute: typeof OrgOrgnameBranchBranchnameemployeeGenerateSavingsInterestRouteImport
+      parentRoute: typeof OrgOrgnameBranchBranchnameRouteRoute
+    }
+    '/org/$orgname/branch/$branchname/(employee)/generate-mutual-aid': {
+      id: '/org/$orgname/branch/$branchname/(employee)/generate-mutual-aid'
+      path: '/generate-mutual-aid'
+      fullPath: '/org/$orgname/branch/$branchname/generate-mutual-aid'
+      preLoaderRoute: typeof OrgOrgnameBranchBranchnameemployeeGenerateMutualAidRouteImport
       parentRoute: typeof OrgOrgnameBranchBranchnameRouteRoute
     }
     '/org/$orgname/branch/$branchname/(common)/dashboard': {
@@ -2246,6 +2266,7 @@ interface OrgOrgnameBranchBranchnameRouteRouteChildren {
   OrgOrgnameBranchBranchnameemployeeGeneralLedgerRouteRoute: typeof OrgOrgnameBranchBranchnameemployeeGeneralLedgerRouteRoute
   OrgOrgnameBranchBranchnamemeMyGeneralLedgerEntriesRouteRoute: typeof OrgOrgnameBranchBranchnamemeMyGeneralLedgerEntriesRouteRoute
   OrgOrgnameBranchBranchnamecommonDashboardRoute: typeof OrgOrgnameBranchBranchnamecommonDashboardRoute
+  OrgOrgnameBranchBranchnameemployeeGenerateMutualAidRoute: typeof OrgOrgnameBranchBranchnameemployeeGenerateMutualAidRoute
   OrgOrgnameBranchBranchnameemployeeGenerateSavingsInterestRoute: typeof OrgOrgnameBranchBranchnameemployeeGenerateSavingsInterestRoute
   OrgOrgnameBranchBranchnameemployeeTimesheetsRoute: typeof OrgOrgnameBranchBranchnameemployeeTimesheetsRoute
   OrgOrgnameBranchBranchnamemeMyAllFootstepsRoute: typeof OrgOrgnameBranchBranchnamemeMyAllFootstepsRoute
@@ -2310,6 +2331,8 @@ const OrgOrgnameBranchBranchnameRouteRouteChildren: OrgOrgnameBranchBranchnameRo
       OrgOrgnameBranchBranchnamemeMyGeneralLedgerEntriesRouteRoute,
     OrgOrgnameBranchBranchnamecommonDashboardRoute:
       OrgOrgnameBranchBranchnamecommonDashboardRoute,
+    OrgOrgnameBranchBranchnameemployeeGenerateMutualAidRoute:
+      OrgOrgnameBranchBranchnameemployeeGenerateMutualAidRoute,
     OrgOrgnameBranchBranchnameemployeeGenerateSavingsInterestRoute:
       OrgOrgnameBranchBranchnameemployeeGenerateSavingsInterestRoute,
     OrgOrgnameBranchBranchnameemployeeTimesheetsRoute:

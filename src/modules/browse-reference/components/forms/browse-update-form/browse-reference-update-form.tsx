@@ -182,7 +182,10 @@ const BrowseReferenceUpdateForm = ({
                                         // disabled={isDisabled(field.name)}
                                         onChange={(e) => {
                                             field.onChange(e.target.value)
-                                            form.setValue('charges', undefined)
+                                            form.setValue(
+                                                'charges',
+                                                '' as unknown as number
+                                            )
                                         }}
                                         placeholder="0.00"
                                         value={field.value}
@@ -205,7 +208,7 @@ const BrowseReferenceUpdateForm = ({
                                         field.onChange(e)
                                         form.setValue(
                                             'interest_rate',
-                                            undefined
+                                            '' as unknown as number
                                         )
                                     }}
                                     placeholder="Charges"

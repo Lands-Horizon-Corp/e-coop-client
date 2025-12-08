@@ -21,73 +21,71 @@ import { useFormHelper } from '@/hooks/use-form-helper'
 
 import { IClassProps, IForm, TEntityId } from '@/types'
 
-import { usePostGeneratedSavingsInterest } from '../../generated-savings-interest.service'
-import { IGeneratedSavingsInterest } from '../../generated-savings-interest.types'
-import { GenerateSavingsInterestPostSchema } from '../../generated-savings-interest.validation'
+import { usePostMutualFund } from '../../mutual-fund.service'
+import { IMutualFund, IMutualFundPostRequest } from '../../mutual-fund.types'
+import { MutualFundViewPostRequestSchema } from '../../mutual-fund.validation'
 
-type TGenerateSavingsInterestPostFormValues = z.infer<
-    typeof GenerateSavingsInterestPostSchema
->
+type TMutualFundPostFormValues = z.infer<typeof MutualFundViewPostRequestSchema>
 
-export interface IGenerateSavingsInterestPostFormProps
+export interface IMutualFundPostFormProps
     extends IClassProps,
         IForm<
-            Partial<TGenerateSavingsInterestPostFormValues>,
-            IGeneratedSavingsInterest,
+            Partial<IMutualFundPostRequest>,
+            IMutualFund,
             Error,
-            TGenerateSavingsInterestPostFormValues
+            TMutualFundPostFormValues
         > {
-    generatedSavingsInterestId: TEntityId
+    mutualFundId: TEntityId
 }
 
-const GenerateSavingsInterestPostForm = ({
+const MutualFundPostForm = ({
     className,
-    generatedSavingsInterestId,
+    mutualFundId,
     ...formProps
-}: IGenerateSavingsInterestPostFormProps) => {
-    const form = useForm<TGenerateSavingsInterestPostFormValues>({
-        resolver: standardSchemaResolver(GenerateSavingsInterestPostSchema),
+}: IMutualFundPostFormProps) => {
+    const form = useForm<TMutualFundPostFormValues>({
+        resolver: standardSchemaResolver(MutualFundViewPostRequestSchema),
         mode: 'onSubmit',
         reValidateMode: 'onChange',
         defaultValues: {
-            check_voucher_number: '',
             post_account_id: undefined,
             entry_date: toInputDateString(new Date()),
+            check_voucher_number: '',
             ...formProps.defaultValues,
         },
     })
 
-    const postMutation = usePostGeneratedSavingsInterest({
+    const postMutation = usePostMutualFund({
         options: {
             onSuccess: (data) => {
                 formProps.onSuccess?.(data)
                 form.reset()
-                toast.success('Savings interest posted successfully')
+                toast.success('Mutual fund posted successfully')
             },
             onError: (error) => {
                 formProps.onError?.(error)
                 const errorMessage = serverRequestErrExtractor({ error })
-                toast.error(errorMessage || 'Failed to post savings interest')
+                toast.error(errorMessage || 'Failed to post mutual fund')
             },
         },
     })
 
     const { formRef, handleFocusError } =
-        useFormHelper<TGenerateSavingsInterestPostFormValues>({
+        useFormHelper<TMutualFundPostFormValues>({
             form,
             ...formProps,
         })
 
     const onSubmit = form.handleSubmit((data) => {
         const mutationPromise = postMutation.mutateAsync({
-            generatedSavingsId: generatedSavingsInterestId,
+            mutualFundId,
             payload: data,
         })
 
         toast.promise(mutationPromise, {
-            loading: 'Posting savings interest...',
-            success: 'Savings interest posted successfully',
-            error: 'Failed to post savings interest',
+            loading: 'Posting mutual fund...',
+            success: 'Mutual fund posted successfully',
+            error: 'Failed to post mutual fund',
         })
     }, handleFocusError)
 
@@ -119,12 +117,9 @@ const GenerateSavingsInterestPostForm = ({
                                 mode="deposit"
                                 onSelect={(account) => {
                                     field.onChange(account?.id || undefined)
-                                    form.setValue('post_account', account, {
-                                        shouldDirty: true,
-                                    })
                                 }}
                                 placeholder="Select post account"
-                                value={form.getValues('post_account')}
+                                value={form.watch('account')}
                             />
                         )}
                     />
@@ -162,11 +157,10 @@ const GenerateSavingsInterestPostForm = ({
                 <div className="flex items-start gap-2 px-3 py-2 rounded text-sm bg-warning/10 text-warning-foreground/70 border-warning/20 border">
                     <WarningFillIcon className="size-5 text-warning-foreground/70 shrink-0 mt-0.5" />
                     <span className="text-xs font-medium">
-                        Represents the cost incurred by the cooperative for
-                        providing interest on member&apos;s savings or share
-                        capital. Posting interest increases this expense and
-                        reduces Cash on Hand, as funds are distributed or
-                        allocated to members.
+                        Posting the mutual fund records the transaction in the
+                        general ledger and allocates the benefit amount to the
+                        selected account. This action will mark the mutual fund
+                        as posted and prevent further modifications.
                     </span>
                 </div>
 
@@ -186,14 +180,14 @@ const GenerateSavingsInterestPostForm = ({
     )
 }
 
-export const GenerateSavingsInterestPostFormModal = ({
-    title = 'Post Savings Interest',
-    description = 'Fill out the form to post the generated savings interest.',
+export const MutualFundPostFormModal = ({
+    title = 'Post Mutual Fund',
+    description = 'Fill out the form to post the mutual fund record.',
     className,
     formProps,
     ...props
 }: IModalProps & {
-    formProps: Omit<IGenerateSavingsInterestPostFormProps, 'className'>
+    formProps: Omit<IMutualFundPostFormProps, 'className'>
 }) => {
     return (
         <Modal
@@ -202,7 +196,7 @@ export const GenerateSavingsInterestPostFormModal = ({
             title={title}
             {...props}
         >
-            <GenerateSavingsInterestPostForm
+            <MutualFundPostForm
                 {...formProps}
                 onSuccess={(data) => {
                     formProps?.onSuccess?.(data)
@@ -213,4 +207,4 @@ export const GenerateSavingsInterestPostFormModal = ({
     )
 }
 
-export default GenerateSavingsInterestPostForm
+export default MutualFundPostForm

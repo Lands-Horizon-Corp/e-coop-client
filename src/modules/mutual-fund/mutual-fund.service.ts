@@ -1,7 +1,23 @@
-import { Logger } from '@/helpers/loggers'
-import { createDataLayerFactory } from '@/providers/repositories/data-layer-factory'
+import { useQuery } from '@tanstack/react-query'
 
-import type { IMutualFund, IMutualFundRequest } from '../mutual-fund'
+import { Logger } from '@/helpers/loggers'
+import {
+    HookQueryOptions,
+    createDataLayerFactory,
+} from '@/providers/repositories/data-layer-factory'
+import {
+    createMutationFactory,
+    updateMutationInvalidationFn,
+} from '@/providers/repositories/mutation-factory'
+
+import { TAPIQueryOptions, TEntityId } from '@/types'
+
+import type {
+    IMutualFund,
+    IMutualFundPostRequest,
+    IMutualFundRequest,
+    IMutualFundView,
+} from '../mutual-fund'
 
 const {
     apiCrudHooks,
@@ -44,6 +60,135 @@ export const {
     useDeleteById: useDeleteMutualFundById,
     useDeleteMany: useDeleteManyMutualFund,
 } = apiCrudHooks
+
+// Process button - this processes but does not yet save the mutual fund entry
+export const useGenerateMutualFundProcessView = createMutationFactory<
+    IMutualFundView,
+    Error,
+    Omit<IMutualFundRequest, 'entries'>
+>({
+    mutationFn: async (payload) => {
+        const response = await API.post<typeof payload, IMutualFundView>(
+            `${mutualFundAPIRoute}/view`,
+            payload
+        )
+
+        return response.data
+    },
+    defaultInvalidates: [[mutualFundBaseKey, 'all']],
+})
+
+// Get all mutual fund entries for this mutual fund
+export const useGetMutualFundEntry = ({
+    query,
+    options,
+    mutualFundId,
+}: {
+    mutualFundId: TEntityId
+    query?: TAPIQueryOptions
+    options?: HookQueryOptions<IMutualFundView, Error>
+}) => {
+    return useQuery<IMutualFundView, Error>({
+        ...options,
+        queryKey: [
+            mutualFundBaseKey,
+            mutualFundId,
+            'mutual-fund-entry',
+            'all',
+            query,
+        ].filter(Boolean),
+        queryFn: async () => {
+            const response = await API.get<IMutualFundView>(
+                `${mutualFundAPIRoute}/${mutualFundId}/view`
+            )
+            return response.data
+        },
+    })
+}
+
+// PRINT
+export const usePrintMutualFund = createMutationFactory<
+    IMutualFund,
+    Error,
+    { mutualFundId: TEntityId }
+>({
+    mutationFn: async ({ mutualFundId }) => {
+        const response = await API.put<void, IMutualFund>(
+            `${mutualFundAPIRoute}/${mutualFundId}/print`
+        )
+        return response.data
+    },
+    invalidationFn: (args) =>
+        updateMutationInvalidationFn(mutualFundBaseKey, args),
+    defaultInvalidates: [[mutualFundBaseKey, 'all']],
+})
+
+// RE-PRINT
+export const useReprintMutualFund = createMutationFactory<
+    IMutualFund,
+    Error,
+    { mutualFundId: TEntityId }
+>({
+    mutationFn: async ({ mutualFundId }) => {
+        const response = await API.put<void, IMutualFund>(
+            `${mutualFundAPIRoute}/${mutualFundId}/print-only`
+        )
+        return response.data
+    },
+    invalidationFn: (args) =>
+        updateMutationInvalidationFn(mutualFundBaseKey, args),
+    defaultInvalidates: [[mutualFundBaseKey, 'all']],
+})
+
+// UNDO PRINT
+export const useUndoPrintMutualFund = createMutationFactory<
+    IMutualFund,
+    Error,
+    { mutualFundId: TEntityId }
+>({
+    mutationFn: async ({ mutualFundId }) => {
+        const response = await API.put<void, IMutualFund>(
+            `${mutualFundAPIRoute}/${mutualFundId}/print-undo`
+        )
+        return response.data
+    },
+    invalidationFn: (args) =>
+        updateMutationInvalidationFn(mutualFundBaseKey, args),
+    defaultInvalidates: [[mutualFundBaseKey, 'all']],
+})
+
+// POST The mutual fund
+export const usePostMutualFund = createMutationFactory<
+    IMutualFund,
+    Error,
+    {
+        mutualFundId: TEntityId
+        payload: Omit<IMutualFundPostRequest, 'entries'>
+    }
+>({
+    mutationFn: async ({ mutualFundId, payload }) => {
+        const response = await API.put<typeof payload, IMutualFund>(
+            `${mutualFundAPIRoute}/${mutualFundId}/post`,
+            payload
+        )
+
+        return response.data
+    },
+    invalidationFn: ({ queryClient, variables }) => {
+        queryClient.invalidateQueries({
+            queryKey: [mutualFundBaseKey, variables.mutualFundId],
+        })
+        queryClient.invalidateQueries({
+            queryKey: [
+                mutualFundBaseKey,
+                variables.mutualFundId,
+                'mutual-fund-entry',
+                'all',
+            ],
+        })
+    },
+    defaultInvalidates: [[mutualFundBaseKey, 'all']],
+})
 
 export const logger = Logger.getInstance('mutual-fund')
 // custom hooks can go here

@@ -5,7 +5,10 @@ import {
     HookQueryOptions,
     createDataLayerFactory,
 } from '@/providers/repositories/data-layer-factory'
-import { createMutationFactory } from '@/providers/repositories/mutation-factory'
+import {
+    createMutationFactory,
+    deleteMutationInvalidationFn,
+} from '@/providers/repositories/mutation-factory'
 
 import { TEntityId } from '@/types'
 
@@ -32,18 +35,35 @@ export const {
     create: createBrowseReference,
     route: browseReferenceAPIRoute,
     getPaginated: getPaginatedBrowseReference,
+    deleteById: deleteBrowseReferenceById,
 } = apiCrudService
 
 // 🪝 HOOK STARTS HERE
 // Expose CRUD hooks
 export const {
     // useCreate: useCreateBrowseReference,
-    useDeleteById: useDeleteBrowseReferenceById,
+    // useDeleteById: useDeleteBrowseReferenceById,
     useDeleteMany: useDeleteManyBrowseReferences,
     useGetAll: useGetAllBrowseReferences,
     useGetById: useGetBrowseReferenceById,
     useUpdateById: useUpdateBrowseReferenceById,
 } = apiCrudHooks
+
+export const useDeleteBrowseReferenceById = createMutationFactory<
+    void,
+    Error,
+    TEntityId
+>({
+    mutationFn: (id) => deleteBrowseReferenceById({ id }),
+    defaultInvalidates: [
+        [browseReferenceBaseKey, 'paginated'],
+        [browseReferenceBaseKey, 'all'],
+        [memberTypeBaseQueryKey, 'all'],
+    ],
+    invalidationFn: (args) => {
+        deleteMutationInvalidationFn(browseReferenceBaseKey, args)
+    },
+})
 
 export const useCreateBrowseReference = createMutationFactory<
     IBrowseReference,

@@ -185,25 +185,31 @@ const GeneratedSavingsInterestCreateForm = ({
                     className="min-w-0 max-w-full space-y-4"
                     disabled={isPending || formProps.readOnly}
                 >
+                    <FormFieldWrapper
+                        control={form.control}
+                        label="Doc. No:"
+                        name="document_no"
+                        render={({ field }) => (
+                            <Input
+                                {...field}
+                                autoComplete="off"
+                                // disabled={isDisabled(field.name)}
+                                placeholder="Auto-generated"
+                                type="text"
+                            />
+                        )}
+                    />
                     {/* Document Number and Computation Dates */}
-                    <div className="grid grid-cols-3 gap-4">
+                    <div className="grid grid-cols-2 gap-4">
                         <FormFieldWrapper
                             control={form.control}
-                            label="Doc. No:"
-                            name="document_no"
-                            render={({ field }) => (
-                                <Input
-                                    {...field}
-                                    autoComplete="off"
-                                    // disabled={isDisabled(field.name)}
-                                    placeholder="Auto-generated"
-                                    type="text"
-                                />
-                            )}
-                        />
-                        <FormFieldWrapper
-                            control={form.control}
-                            label="Last Comp. Date *"
+                            label={
+                                <>
+                                    <p>Last Computation Date *</p>
+                                    <p>mm/dd/yyyy</p>
+                                </>
+                            }
+                            labelClassName="w-full flex justify-between"
                             name="last_computation_date"
                             render={({ field }) => (
                                 <InputDate
@@ -217,7 +223,13 @@ const GeneratedSavingsInterestCreateForm = ({
                         />
                         <FormFieldWrapper
                             control={form.control}
-                            label="New Comp. Date *"
+                            label={
+                                <>
+                                    <p>Last Computation Date *</p>
+                                    <p>mm/dd/yyyy</p>
+                                </>
+                            }
+                            labelClassName="w-full flex justify-between"
                             name="new_computation_date"
                             render={({ field }) => (
                                 <InputDate

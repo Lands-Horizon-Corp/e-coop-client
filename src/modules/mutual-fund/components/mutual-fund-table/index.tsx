@@ -5,10 +5,9 @@ import { useQueryClient } from '@tanstack/react-query'
 import FilterContext from '@/contexts/filter-context/filter-context'
 import { cn } from '@/helpers/tw-utils'
 import {
-    IGeneratedSavingsInterest,
-    deleteManyGeneratedSavingsInterest,
-    useGetPaginatedGeneratedSavingsInterest,
-} from '@/modules/generated-savings-interest'
+    deleteManyMutualFund,
+    useGetPaginatedMutualFund,
+} from '@/modules/mutual-fund'
 import {
     getCoreRowModel,
     getSortedRowModel,
@@ -30,20 +29,21 @@ import useDataTableState, {
 import useDatableFilterState from '@/hooks/use-filter-state'
 import { usePagination } from '@/hooks/use-pagination'
 
-import GeneratedSavingsInterestTableColumns, {
-    IGeneratedSavingsInterestTableColumnProps,
-    generatedSavingsInterestGlobalSearchTargets,
+import { IMutualFund } from '../../mutual-fund.types'
+import MutualFundTableColumns, {
+    IMutualFundTableColumnProps,
+    mutualFundGlobalSearchTargets,
 } from './columns'
-import GeneratedSavingsInterestAction, {
-    GeneratedSavingsInterestRowContext,
-    GeneratedSavingsInterestTableActionManager,
+import MutualFundAction, {
+    MutualFundRowContext,
+    MutualFundTableActionManager,
 } from './row-action-context'
 
-export interface GeneratedSavingsInterestTableProps
-    extends TableProps<IGeneratedSavingsInterest>,
-        IGeneratedSavingsInterestTableColumnProps {
+export interface MutualFundTableProps
+    extends TableProps<IMutualFund>,
+        IMutualFundTableColumnProps {
     toolbarProps?: Omit<
-        IDataTableToolbarProps<IGeneratedSavingsInterest>,
+        IDataTableToolbarProps<IMutualFund>,
         | 'table'
         | 'refreshActionProps'
         | 'globalSearchProps'
@@ -54,8 +54,8 @@ export interface GeneratedSavingsInterestTableProps
     >
 }
 
-const GeneratedSavingsInterestTable = ({
-    persistKey = ['generated-savings-interest'],
+const MutualFundTable = ({
+    persistKey = ['mutual-fund'],
     className,
     toolbarProps,
     defaultFilter,
@@ -64,9 +64,9 @@ const GeneratedSavingsInterestTable = ({
     onDoubleClick = (row) => {
         row.toggleSelected()
     },
-    actionComponent = GeneratedSavingsInterestAction,
-    RowContextComponent = GeneratedSavingsInterestRowContext,
-}: GeneratedSavingsInterestTableProps) => {
+    actionComponent = MutualFundAction,
+    RowContextComponent = MutualFundRowContext,
+}: MutualFundTableProps) => {
     const queryClient = useQueryClient()
     const { pagination, setPagination } = usePagination()
     const { sortingStateBase64, tableSorting, setTableSorting } =
@@ -74,7 +74,7 @@ const GeneratedSavingsInterestTable = ({
 
     const columns = useMemo(
         () =>
-            GeneratedSavingsInterestTableColumns({
+            MutualFundTableColumns({
                 actionComponent,
             }),
         [actionComponent]
@@ -86,7 +86,7 @@ const GeneratedSavingsInterestTable = ({
             persistKey,
         })
 
-    const tableState = useDataTableState<IGeneratedSavingsInterest>({
+    const tableState = useDataTableState<IMutualFund>({
         key: finalKeys,
         defaultColumnVisibility: resolvedColumnVisibility,
         defaultColumnOrder: resolvedColumnOrder,
@@ -103,7 +103,7 @@ const GeneratedSavingsInterestTable = ({
         isRefetching,
         data: { data = [], totalPage = 1, pageSize = 10, totalSize = 0 } = {},
         refetch,
-    } = useGetPaginatedGeneratedSavingsInterest({
+    } = useGetPaginatedMutualFund({
         query: {
             ...pagination,
             sort: sortingStateBase64,
@@ -159,13 +159,10 @@ const GeneratedSavingsInterestTable = ({
                         deleteActionProps={{
                             onDeleteSuccess: () =>
                                 queryClient.invalidateQueries({
-                                    queryKey: [
-                                        'generated-savings-interest',
-                                        'paginated',
-                                    ],
+                                    queryKey: ['mutual-fund', 'paginated'],
                                 }),
                             onDelete: (selectedData) =>
-                                deleteManyGeneratedSavingsInterest({
+                                deleteManyMutualFund({
                                     ids: selectedData.map((data) => data.id),
                                 }),
                         }}
@@ -175,8 +172,7 @@ const GeneratedSavingsInterestTable = ({
                         }}
                         globalSearchProps={{
                             defaultMode: 'equal',
-                            targets:
-                                generatedSavingsInterestGlobalSearchTargets,
+                            targets: mutualFundGlobalSearchTargets,
                         }}
                         refreshActionProps={{
                             onClick: () => refetch(),
@@ -203,9 +199,9 @@ const GeneratedSavingsInterestTable = ({
                     <DataTablePagination table={table} totalSize={totalSize} />
                 </div>
             </FilterContext.Provider>
-            <GeneratedSavingsInterestTableActionManager />
+            <MutualFundTableActionManager />
         </TableRowActionStoreProvider>
     )
 }
 
-export default GeneratedSavingsInterestTable
+export default MutualFundTable

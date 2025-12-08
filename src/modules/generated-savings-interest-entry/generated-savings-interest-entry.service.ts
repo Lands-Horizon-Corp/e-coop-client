@@ -1,5 +1,10 @@
+import { useQuery } from '@tanstack/react-query'
+
 import { Logger } from '@/helpers/loggers'
-import { createDataLayerFactory } from '@/providers/repositories/data-layer-factory'
+import {
+    HookQueryOptions,
+    createDataLayerFactory,
+} from '@/providers/repositories/data-layer-factory'
 import {
     createMutationFactory,
     deleteMutationInvalidationFn,
@@ -10,6 +15,7 @@ import { TEntityId } from '@/types'
 
 import type {
     IGeneratedSavingsInterestEntry,
+    IGeneratedSavingsInterestEntryDailyBalanceView,
     IGeneratedSavingsInterestEntryRequest,
 } from '../generated-savings-interest-entry'
 import {
@@ -61,6 +67,29 @@ export const {
     // useDeleteById: useDeleteGeneratedSavingsInterestEntryById,
     useDeleteMany: useDeleteManyGeneratedSavingsInterestEntry,
 } = apiCrudHooks
+
+export const useGetGeneratedSavingsInterestDailyBalance = ({
+    id,
+    options,
+}: {
+    id: TEntityId
+    options?: HookQueryOptions<
+        IGeneratedSavingsInterestEntryDailyBalanceView,
+        Error
+    >
+}) => {
+    return useQuery<IGeneratedSavingsInterestEntryDailyBalanceView, Error>({
+        ...options,
+        queryKey: [generatedSavingsInterestBaseKey, id, 'daily-balance'],
+        queryFn: async () =>
+            await getGeneratedSavingsInterestEntryById<IGeneratedSavingsInterestEntryDailyBalanceView>(
+                {
+                    id,
+                    url: `${generatedSavingsInterestEntryAPIRoute}/${id}/daily-balance`,
+                }
+            ),
+    })
+}
 
 export const useDeleteGeneratedSavingsInterestEntryById = createMutationFactory<
     void,

@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
 
 import Fuse from 'fuse.js'
+import { toast } from 'sonner'
 
 import { cn } from '@/helpers'
 import { MemberTypeCreateUpdateFormModal } from '@/modules/member-type/components/forms/member-type-create-update-form'
@@ -38,6 +39,7 @@ import { useModalState } from '@/hooks/use-modal-state'
 
 import { IClassProps, TEntityId } from '@/types'
 
+import { useDeleteBrowseReferenceById } from '../../browse-reference.service'
 import { IBrowseReference } from '../../browse-reference.types'
 import { BrowseReferenceCreateUpdateFormModal } from '../forms/browse-reference-create-update-form'
 
@@ -286,6 +288,23 @@ const BrowseReferenceItem = ({
     onSelect: (referenceId: TEntityId) => void
     onDelete?: (referenceId: TEntityId) => void
 }) => {
+    const { mutateAsync: deleteBrowseReference, isPending: isDeleting } =
+        useDeleteBrowseReferenceById({
+            options: {
+                onSuccess: () => {
+                    onDelete?.(reference.id)
+                },
+            },
+        })
+
+    const handleDelete = () => {
+        toast.promise(deleteBrowseReference(reference.id), {
+            loading: 'Deleting browse reference...',
+            success: 'Browse reference deleted successfully',
+            error: 'Failed to delete browse reference',
+        })
+    }
+
     return (
         <div
             className={cn(
@@ -326,21 +345,18 @@ const BrowseReferenceItem = ({
                         Actions
                     </DropdownMenuLabel>
                     <DropdownMenuSeparator />
-                    {/* TODO: Add edit functionality */}
-                    {onDelete && (
-                        <DropdownMenuItem
-                            className="bg-destructive/05 text-destructive focus:bg-destructive focus:text-destructive-foreground"
-                            onClick={(e) => {
-                                e.stopPropagation()
-                                e.preventDefault()
-                                // TODO: Add confirmation modal
-                                onDelete(reference?.id)
-                            }}
-                        >
-                            <TrashIcon className="opacity-60 mr-1" />
-                            Delete
-                        </DropdownMenuItem>
-                    )}
+                    <DropdownMenuItem
+                        className="bg-destructive/05 text-destructive focus:bg-destructive focus:text-destructive-foreground"
+                        disabled={isDeleting}
+                        onClick={(e) => {
+                            e.stopPropagation()
+                            e.preventDefault()
+                            handleDelete()
+                        }}
+                    >
+                        <TrashIcon className="opacity-60 mr-1" />
+                        Delete
+                    </DropdownMenuItem>
                 </DropdownMenuContent>
             </DropdownMenu>
         </div>

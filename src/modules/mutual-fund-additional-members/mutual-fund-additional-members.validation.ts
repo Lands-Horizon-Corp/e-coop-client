@@ -5,7 +5,7 @@ import { entityIdSchema } from '@/validation'
 export const MutualFundAdditionalMembersSchema = z.object({
     id: entityIdSchema.optional(),
 
-    mutual_fund_id: entityIdSchema,
+    mutual_fund_id: entityIdSchema.optional(),
     mutual_fund: z.any().optional(),
 
     member_type_id: entityIdSchema,

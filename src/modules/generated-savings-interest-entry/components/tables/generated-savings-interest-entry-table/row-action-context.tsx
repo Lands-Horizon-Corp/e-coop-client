@@ -2,18 +2,20 @@ import { ReactNode } from 'react'
 
 import { IGeneratedSavingsInterestEntry } from '@/modules/generated-savings-interest-entry'
 import { GeneratedSavingsInterestEntryCreateUpdateFormModal } from '@/modules/generated-savings-interest-entry/components/forms/generated-savings-interest-entry-create-update-form'
+import { SavingsInterestEntryDailyBalanceViewModal } from '@/modules/generated-savings-interest-entry/components/savings-interest-entry-daily-balance-view'
 import { useDeleteGeneratedSavingsInterestEntryById } from '@/modules/generated-savings-interest-entry/generated-savings-interest-entry.service'
 import useConfirmModalStore from '@/store/confirm-modal-store'
 import { Row } from '@tanstack/react-table'
-import { Pencil, Trash2 } from 'lucide-react'
+import { Eye, Pencil, Trash2 } from 'lucide-react'
 
 import DataTableRowContext from '@/components/data-table/data-table-row-context'
 import { useTableRowActionStore } from '@/components/data-table/store/data-table-action-store'
 import { Button } from '@/components/ui/button'
+import { ContextMenuItem } from '@/components/ui/context-menu'
 
 import { IGeneratedSavingsInterestEntryTableActionComponentProp } from './index'
 
-export type GeneratedSavingsInterestEntryActionType = 'edit' | 'delete'
+export type GeneratedSavingsInterestEntryActionType = 'edit' | 'delete' | 'view'
 
 export interface GeneratedSavingsInterestEntryActionExtra {
     onDeleteSuccess?: () => void
@@ -51,6 +53,14 @@ const useGeneratedSavingsInterestEntryActions = ({
         })
     }
 
+    const handleView = () => {
+        open('view', {
+            id: entry.id,
+            defaultValues: entry,
+            extra: { onDeleteSuccess },
+        })
+    }
+
     const handleDelete = () => {
         onOpen({
             title: 'Delete Savings Interest Entry',
@@ -64,6 +74,7 @@ const useGeneratedSavingsInterestEntryActions = ({
         entry,
         isDeletingEntry,
         handleEdit,
+        handleView,
         handleDelete,
     }
 }
@@ -77,11 +88,14 @@ export const GeneratedSavingsInterestEntryAction = ({
     row,
     onDeleteSuccess,
 }: IGeneratedSavingsInterestEntryTableActionProps) => {
-    const { entry, isDeletingEntry, handleEdit, handleDelete } =
+    const { entry, isDeletingEntry, handleEdit, handleView, handleDelete } =
         useGeneratedSavingsInterestEntryActions({ row, onDeleteSuccess })
 
     return (
         <div className="flex items-center gap-1">
+            <Button onClick={handleView} size="icon-sm" variant="ghost">
+                <Eye className="size-3" />
+            </Button>
             <Button
                 disabled={!!entry.generated_savings_interest?.posted_date}
                 onClick={handleEdit}
@@ -118,7 +132,7 @@ export const GeneratedSavingsInterestEntryRowContext = ({
     children,
     onDeleteSuccess,
 }: IGeneratedSavingsInterestEntryRowContextProps) => {
-    const { entry, isDeletingEntry, handleEdit, handleDelete } =
+    const { entry, isDeletingEntry, handleEdit, handleView, handleDelete } =
         useGeneratedSavingsInterestEntryActions({ row, onDeleteSuccess })
 
     return (
@@ -137,6 +151,14 @@ export const GeneratedSavingsInterestEntryRowContext = ({
                     isAllowed: !entry.generated_savings_interest?.posted_date,
                     onClick: handleEdit,
                 }}
+                otherActions={
+                    <>
+                        <ContextMenuItem onClick={handleView}>
+                            <Eye className="mr-2 size-4" />
+                            View Daily Balance
+                        </ContextMenuItem>
+                    </>
+                }
                 row={row}
             >
                 {children}
@@ -168,6 +190,17 @@ export const GeneratedSavingsInterestEntryTableActionManager = () => {
                     onOpenChange={close}
                     open={state.isOpen}
                     title="Edit Savings Interest Entry"
+                />
+            )}
+            {state.action === 'view' && state.id && (
+                <SavingsInterestEntryDailyBalanceViewModal
+                    description="View the daily balance history and summary for this savings interest entry."
+                    onOpenChange={close}
+                    open={state.isOpen}
+                    title="Daily Balance View"
+                    viewProps={{
+                        generatedSavingsInterestEntryId: state.id,
+                    }}
                 />
             )}
         </>
