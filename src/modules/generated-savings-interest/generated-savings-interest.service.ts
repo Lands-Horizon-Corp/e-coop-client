@@ -15,6 +15,7 @@ import { TAPIQueryOptions, TEntityId } from '@/types'
 import type {
     IGenerateSavingsInterestPostRequest,
     IGeneratedSavingsInterest,
+    IGeneratedSavingsInterestPrintRequest,
     IGeneratedSavingsInterestRequest,
     IGeneratedSavingsInterestView,
 } from '../generated-savings-interest'
@@ -131,11 +132,18 @@ export const usePrintGeneratedSavingsInterest = createMutationFactory<
 export const useReprintGeneratedSavingsInterest = createMutationFactory<
     IGeneratedSavingsInterest,
     Error,
-    { generatedSavingsInterestId: TEntityId }
+    {
+        generatedSavingsInterestId: TEntityId
+        payload: IGeneratedSavingsInterestPrintRequest
+    }
 >({
-    mutationFn: async ({ generatedSavingsInterestId }) => {
-        const response = await API.put<void, IGeneratedSavingsInterest>(
-            `${generatedSavingsInterestAPIRoute}/${generatedSavingsInterestId}/print-only`
+    mutationFn: async ({ generatedSavingsInterestId, payload }) => {
+        const response = await API.put<
+            IGeneratedSavingsInterestPrintRequest,
+            IGeneratedSavingsInterest
+        >(
+            `${generatedSavingsInterestAPIRoute}/${generatedSavingsInterestId}/print-only`,
+            payload
         )
         return response.data
     },

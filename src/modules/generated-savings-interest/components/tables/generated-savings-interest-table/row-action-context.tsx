@@ -20,16 +20,17 @@ import { DropdownMenuItem } from '@/components/ui/dropdown-menu'
 import { GeneratedSavingsInterestEntryTableModal } from '../../../../generated-savings-interest-entry/components/tables/generated-savings-interest-entry-table'
 import {
     useDeleteGeneratedSavingsInterestById,
-    usePrintGeneratedSavingsInterest,
     useUndoPrintGeneratedSavingsInterest,
 } from '../../../generated-savings-interest.service'
 import { IGeneratedSavingsInterest } from '../../../generated-savings-interest.types'
 import { GeneratedSavingsInterestCreateFormModal } from '../../forms/generate-savings-interest-create-form'
 import { GenerateSavingsInterestPostFormModal } from '../../forms/generate-savings-interest-post-form'
+import { GeneratedSavingsInterestPrintFormModal } from '../../forms/mutual-fund-print-form'
 import { IGeneratedSavingsInterestTableActionComponentProp } from './columns'
 
 export type GeneratedSavingsInterestActionType =
     | 'edit'
+    | 'print'
     | 'delete'
     | 'view'
     | 'manageEntries'
@@ -62,17 +63,6 @@ const useGeneratedSavingsInterestActions = ({
     } = useDeleteGeneratedSavingsInterestById({
         options: {
             onSuccess: onDeleteSuccess,
-        },
-    })
-
-    const {
-        isPending: isPrinting,
-        mutateAsync: printGeneratedSavingsInterest,
-    } = usePrintGeneratedSavingsInterest({
-        options: {
-            onSuccess: () => {
-                toast.success('Generated savings interest printed successfully')
-            },
         },
     })
 
@@ -122,16 +112,10 @@ const useGeneratedSavingsInterestActions = ({
     }
 
     const handlePrint = () => {
-        toast.promise(
-            printGeneratedSavingsInterest({
-                generatedSavingsInterestId: generatedSavingsInterest.id,
-            }),
-            {
-                loading: 'Printing generated savings interest...',
-                success: 'Generated savings interest printed successfully',
-                error: 'Failed to print generated savings interest',
-            }
-        )
+        open('print', {
+            id: generatedSavingsInterest.id,
+            defaultValues: generatedSavingsInterest,
+        })
     }
 
     const handleUndoPrint = () => {
@@ -174,7 +158,6 @@ const useGeneratedSavingsInterestActions = ({
     return {
         generatedSavingsInterest,
         isDeletingGeneratedSavingsInterest,
-        isPrinting,
         isUnprinting,
         canPrint,
         canUndoPrint,
@@ -201,7 +184,6 @@ export const GeneratedSavingsInterestAction = ({
 }: IGeneratedSavingsInterestTableActionProps) => {
     const {
         isDeletingGeneratedSavingsInterest,
-        isPrinting,
         isUnprinting,
         canPrint,
         canUndoPrint,
@@ -231,7 +213,7 @@ export const GeneratedSavingsInterestAction = ({
                 otherActions={
                     <>
                         <DropdownMenuItem
-                            disabled={!canPrint || isPrinting}
+                            disabled={!canPrint}
                             onClick={handlePrint}
                         >
                             <PrinterFillIcon className="size-4 mr-2" />
@@ -276,7 +258,6 @@ export const GeneratedSavingsInterestRowContext = ({
 }: IGeneratedSavingsInterestRowContextProps) => {
     const {
         isDeletingGeneratedSavingsInterest,
-        isPrinting,
         isUnprinting,
         canPrint,
         canUndoPrint,
@@ -305,7 +286,7 @@ export const GeneratedSavingsInterestRowContext = ({
                 otherActions={
                     <>
                         <ContextMenuItem
-                            disabled={!canPrint || isPrinting}
+                            disabled={!canPrint}
                             onClick={handlePrint}
                         >
                             <PrinterFillIcon className="mr-2 size-4" />
@@ -372,6 +353,17 @@ export const GeneratedSavingsInterestTableActionManager = () => {
             )}
             {state.action === 'post' && state.id && (
                 <GenerateSavingsInterestPostFormModal
+                    formProps={{
+                        generatedSavingsInterestId: state.id,
+                        defaultValues: state.defaultValues,
+                        onSuccess: () => close(),
+                    }}
+                    onOpenChange={close}
+                    open={state.isOpen}
+                />
+            )}
+            {state.action === 'print' && state.id && (
+                <GeneratedSavingsInterestPrintFormModal
                     formProps={{
                         generatedSavingsInterestId: state.id,
                         defaultValues: state.defaultValues,

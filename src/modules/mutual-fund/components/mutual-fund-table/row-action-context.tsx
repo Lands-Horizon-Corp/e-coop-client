@@ -20,16 +20,17 @@ import { DropdownMenuItem } from '@/components/ui/dropdown-menu'
 
 import {
     useDeleteMutualFundById,
-    usePrintMutualFund,
     useUndoPrintMutualFund,
 } from '../../mutual-fund.service'
 import { IMutualFund } from '../../mutual-fund.types'
 import { MutualFundCreateUpdateFormModal } from '../forms/mutual-fund-create-update-form/mutual-fund-create-update-form'
+import { MutualFundPrintFormModal } from '../forms/mutual-fund-create-update-form/mutual-fund-print-form'
 import { MutualFundPostFormModal } from '../forms/mutual-fund-post-form'
 import { IMutualFundTableActionComponentProp } from './columns'
 
 export type MutualFundActionType =
     | 'edit'
+    | 'print'
     | 'delete'
     | 'view'
     | 'manageEntries'
@@ -60,15 +61,6 @@ const useMutualFundActions = ({
         useDeleteMutualFundById({
             options: {
                 onSuccess: onDeleteSuccess,
-            },
-        })
-
-    const { isPending: isPrinting, mutateAsync: printMutualFund } =
-        usePrintMutualFund({
-            options: {
-                onSuccess: () => {
-                    toast.success('Mutual fund printed successfully')
-                },
             },
         })
 
@@ -114,16 +106,7 @@ const useMutualFundActions = ({
     }
 
     const handlePrint = () => {
-        toast.promise(
-            printMutualFund({
-                mutualFundId: mutualFund.id,
-            }),
-            {
-                loading: 'Printing mutual fund...',
-                success: 'Mutual fund printed successfully',
-                error: 'Failed to print mutual fund',
-            }
-        )
+        open('print', { id: mutualFund.id, defaultValues: mutualFund })
     }
 
     const handleUndoPrint = () => {
@@ -164,7 +147,6 @@ const useMutualFundActions = ({
     return {
         mutualFund,
         isDeletingMutualFund,
-        isPrinting,
         isUnprinting,
         canPrint,
         canUndoPrint,
@@ -191,7 +173,6 @@ export const MutualFundAction = ({
 }: IMutualFundTableActionProps) => {
     const {
         isDeletingMutualFund,
-        isPrinting,
         isUnprinting,
         canPrint,
         canUndoPrint,
@@ -221,7 +202,7 @@ export const MutualFundAction = ({
                 otherActions={
                     <>
                         <DropdownMenuItem
-                            disabled={!canPrint || isPrinting}
+                            disabled={!canPrint}
                             onClick={handlePrint}
                         >
                             <PrinterFillIcon className="size-4 mr-2" />
@@ -266,7 +247,6 @@ export const MutualFundRowContext = ({
 }: IMutualFundRowContextProps) => {
     const {
         isDeletingMutualFund,
-        isPrinting,
         isUnprinting,
         canPrint,
         canUndoPrint,
@@ -295,7 +275,7 @@ export const MutualFundRowContext = ({
                 otherActions={
                     <>
                         <ContextMenuItem
-                            disabled={!canPrint || isPrinting}
+                            disabled={!canPrint}
                             onClick={handlePrint}
                         >
                             <PrinterFillIcon className="mr-2 size-4" />
@@ -358,6 +338,16 @@ export const MutualFundTableActionManager = () => {
                         mutualFundId: state.id,
                     }}
                     title={`Manage Entries ${state.defaultValues?.name ? `for ${state.defaultValues?.name}` : ''}`}
+                />
+            )}
+            {state.action === 'print' && state.id && (
+                <MutualFundPrintFormModal
+                    formProps={{
+                        mutualFundId: state.id,
+                        onSuccess: () => close(),
+                    }}
+                    onOpenChange={close}
+                    open={state.isOpen}
                 />
             )}
             {state.action === 'post' && state.id && (

@@ -59,3 +59,10 @@ export const MutualFundViewPostRequestSchema = z.object({
 export type TMutualFundViewPostRequestSchema = z.infer<
     typeof MutualFundViewPostRequestSchema
 >
+
+export const MutualFundPrintSchema = z.object({
+    sort_by: z.string(),
+    report_format: z.string(),
+})
+
+export type TMutualFundPrintSchema = z.infer<typeof MutualFundPrintSchema>

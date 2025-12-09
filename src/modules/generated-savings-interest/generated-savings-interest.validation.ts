@@ -37,7 +37,7 @@ export const GeneratedSavingsInterestSchema = z
         include_existing_computed_interest: z.boolean().default(false),
 
         // for view only
-        entries: z.array(z.any()).min(1),
+        entries: z.array(z.any()).min(1, 'At least one entry is required'),
         is_viewing_entries: z.boolean().optional(),
     })
     .superRefine((data, ctx) => {
@@ -59,7 +59,25 @@ export const GeneratedSavingsInterestSchema = z
     })
 
 export const GeneratedSavingsInterestViewSchema =
-    GeneratedSavingsInterestSchema.omit({ entries: true })
+    GeneratedSavingsInterestSchema.omit({ entries: true }).superRefine(
+        (data, ctx) => {
+            if (data.new_computation_date && data.last_computation_date) {
+                if (
+                    differenceInDays(
+                        new Date(data.new_computation_date),
+                        new Date(data.last_computation_date)
+                    ) < 30
+                ) {
+                    ctx.addIssue({
+                        code: 'custom',
+                        path: ['new_computation_date'],
+                        message:
+                            '30 Days must pass before a new computation can be made',
+                    })
+                }
+            }
+        }
+    )
 
 export type TGeneratedSavingsInterestSchema = z.infer<
     typeof GeneratedSavingsInterestSchema
@@ -80,4 +98,15 @@ export type TGeneratedSavingsInterestPostSchema = z.infer<
 
 export type GenerateSavingsInterestPost = z.infer<
     typeof GenerateSavingsInterestPostSchema
+>
+
+export const GeneratedSavingsInterestPrintSchema = z.object({
+    member_type_id: entityIdSchema.optional().nullable(),
+    member_type: z.any().optional(), // for UI display only
+
+    sort_by: z.string(),
+})
+
+export type TGeneratedSavingsInterestPrintSchema = z.infer<
+    typeof GeneratedSavingsInterestPrintSchema
 >

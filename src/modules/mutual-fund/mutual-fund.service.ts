@@ -15,6 +15,7 @@ import { TAPIQueryOptions, TEntityId } from '@/types'
 import type {
     IMutualFund,
     IMutualFundPostRequest,
+    IMutualFundPrintRequest,
     IMutualFundRequest,
     IMutualFundView,
 } from '../mutual-fund'
@@ -110,11 +111,12 @@ export const useGetMutualFundEntry = ({
 export const usePrintMutualFund = createMutationFactory<
     IMutualFund,
     Error,
-    { mutualFundId: TEntityId }
+    { mutualFundId: TEntityId; payload: IMutualFundPrintRequest }
 >({
-    mutationFn: async ({ mutualFundId }) => {
-        const response = await API.put<void, IMutualFund>(
-            `${mutualFundAPIRoute}/${mutualFundId}/print`
+    mutationFn: async ({ mutualFundId, payload }) => {
+        const response = await API.put<IMutualFundPrintRequest, IMutualFund>(
+            `${mutualFundAPIRoute}/${mutualFundId}/print`,
+            payload
         )
         return response.data
     },

@@ -12,6 +12,7 @@ import { MUTUAL_FUND_COMPUTATION_TYPES } from './mutual-fund.constant'
 import {
     MutualFundSchema,
     MutualFundViewSchema,
+    TMutualFundPrintSchema,
     TMutualFundViewPostRequestSchema,
 } from './mutual-fund.validation'
 
@@ -58,5 +59,7 @@ export interface IMutualFundView {
 }
 
 export type IMutualFundPostRequest = TMutualFundViewPostRequestSchema
+
+export type IMutualFundPrintRequest = TMutualFundPrintSchema
 
 export interface IMutualFundPaginated extends IPaginatedResult<IMutualFund> {}

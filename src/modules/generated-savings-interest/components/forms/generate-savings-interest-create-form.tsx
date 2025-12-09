@@ -424,64 +424,79 @@ const EntriesSection = ({
     const hasEntries = entries.length > 0
 
     return (
-        <div
-            className={cn(
-                'rounded-xl p-4 space-y-2',
-                'border-2 transition-all duration-500 ease-in-out',
-                hasEntries
-                    ? 'bg-gradient-to-br from-primary/15 via-accent/10 to-primary/5 border-primary/30 shadow-sm'
-                    : 'bg-popover/20 border-transparent'
-            )}
-        >
-            <div className=" flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                    <p className="text-sm font-medium">Generated Entries</p>
-                    <span
-                        className={cn(
-                            'px-1.5 py-0.5 rounded-md font-semibold text-xs',
-                            'transition-all duration-300 ease-in-out',
-                            hasEntries
-                                ? 'bg-primary text-primary-foreground shadow-sm scale-105'
-                                : 'bg-muted text-muted-foreground'
-                        )}
-                    >
-                        {formatNumber(entries.length)}
-                    </span>
-                </div>
-                <div className="flex gap-2">
-                    {hasEntries && (
-                        <Button
-                            className="transition-all duration-300 ease-in-out animate-in fade-in slide-in-from-right-2"
-                            onClick={() =>
-                                form.setValue('is_viewing_entries', true)
-                            }
-                            size="xs"
-                            type="button"
-                            variant="outline"
-                        >
-                            View Entries
-                        </Button>
+        <FormFieldWrapper
+            control={form.control}
+            name="entries"
+            render={({ field }) => (
+                <div
+                    {...field}
+                    className={cn(
+                        'rounded-xl p-4 space-y-2',
+                        'border-2 transition-all duration-500 ease-in-out',
+                        hasEntries
+                            ? 'bg-gradient-to-br from-primary/15 via-accent/10 to-primary/5 border-primary/30 shadow-sm'
+                            : 'bg-popover/20 border-transparent'
                     )}
-                    <Button
-                        className="transition-all duration-300 ease-in-out"
-                        disabled={isProcessing || isDisabledSection}
-                        onClick={onProcess}
-                        size="xs"
-                        type="button"
-                        variant={hasEntries ? 'secondary' : 'default'}
-                    >
-                        {isProcessing ? 'Processing...' : 'Generate / Process'}
-                    </Button>
+                >
+                    <div className=" flex items-center justify-between">
+                        <div className="flex items-center gap-3">
+                            <p className="text-sm font-medium">
+                                Generated Entries
+                            </p>
+                            <span
+                                className={cn(
+                                    'px-1.5 py-0.5 rounded-md font-semibold text-xs',
+                                    'transition-all duration-300 ease-in-out',
+                                    hasEntries
+                                        ? 'bg-primary text-primary-foreground shadow-sm scale-105'
+                                        : 'bg-muted text-muted-foreground'
+                                )}
+                            >
+                                {formatNumber(entries.length)}
+                            </span>
+                        </div>
+                        <div className="flex gap-2">
+                            {hasEntries && (
+                                <Button
+                                    className="transition-all duration-300 ease-in-out animate-in fade-in slide-in-from-right-2"
+                                    onClick={() =>
+                                        form.setValue(
+                                            'is_viewing_entries',
+                                            true
+                                        )
+                                    }
+                                    size="xs"
+                                    type="button"
+                                    variant="outline"
+                                >
+                                    View Entries
+                                </Button>
+                            )}
+                            <Button
+                                className="transition-all duration-300 ease-in-out"
+                                disabled={isProcessing || isDisabledSection}
+                                onClick={onProcess}
+                                size="xs"
+                                type="button"
+                                variant={hasEntries ? 'secondary' : 'default'}
+                            >
+                                {isProcessing
+                                    ? 'Processing...'
+                                    : 'Generate / Process'}
+                            </Button>
+                        </div>
+                    </div>
+                    {hasEntries && (
+                        <p className="text-xs font-medium text-muted-foreground">
+                            You now generated an entr
+                            {entries.length > 1 ? 'ies' : 'y'}. You can change
+                            config and reprocess to get another result or you
+                            can save it
+                        </p>
+                    )}
                 </div>
-            </div>
-            {hasEntries && (
-                <p className="text-xs font-medium text-muted-foreground">
-                    You now generated an entr{entries.length > 1 ? 'ies' : 'y'}.
-                    You can change config and reprocess to get another result or
-                    you can save it
-                </p>
             )}
-        </div>
+        />
     )
 }
 

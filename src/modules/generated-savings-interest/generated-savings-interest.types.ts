@@ -7,6 +7,7 @@ import { IUserBase } from '../user'
 import { GENERATED_INTEREST_SAVINGS_COMPUTATION_TYPES } from './generated-savings-interest.constant'
 import {
     TGeneratedSavingsInterestPostSchema,
+    TGeneratedSavingsInterestPrintSchema,
     TGeneratedSavingsInterestSchema,
 } from './generated-savings-interest.validation'
 
@@ -56,6 +57,9 @@ export interface IGeneratedSavingsInterestView {
     total_tax: number
     total_interest: number
 }
+
+export type IGeneratedSavingsInterestPrintRequest =
+    TGeneratedSavingsInterestPrintSchema
 
 export interface IGeneratedSavingsInterestPaginated
     extends IPaginatedResult<IGeneratedSavingsInterest> {}
