@@ -198,11 +198,13 @@ const TableBodyRow = ({
     )
 }
 
-interface CreateEntryButtonProps {
+const CreateEntryButton = ({
+    readOnly,
+    mutualFundId,
+}: {
     readOnly?: boolean
-}
-
-const CreateEntryButton = ({ readOnly }: CreateEntryButtonProps) => {
+    mutualFundId: TEntityId
+}) => {
     const modalState = useModalState()
 
     return (
@@ -217,10 +219,10 @@ const CreateEntryButton = ({ readOnly }: CreateEntryButtonProps) => {
                     Add
                 </Button>
             )}
-
             <MutualFundEntryCreateUpdateFormModal
                 formProps={{
                     defaultValues: {},
+                    mutualFundId,
                     onSuccess: () => {
                         modalState.onOpenChange(false)
                     },
@@ -368,7 +370,10 @@ export const MutualFundEntryTable = ({
                                 {currencyFormat(totalAmount)}
                             </span>
                         </div>
-                        <CreateEntryButton readOnly={readOnly} />
+                        <CreateEntryButton
+                            mutualFundId={mutualFundId}
+                            readOnly={readOnly}
+                        />
                         <Button
                             disabled={isFetching}
                             onClick={() => refetch()}

@@ -39,10 +39,12 @@ export interface IMutualFundEntryFormProps
             TMutualFundEntrySchema
         > {
     mutualFundEntryId?: TEntityId
+    mutualFundId?: TEntityId
 }
 
 const MutualFundEntryCreateUpdateForm = ({
     mutualFundEntryId,
+    mutualFundId,
     className,
     ...formProps
 }: IMutualFundEntryFormProps) => {
@@ -87,8 +89,11 @@ const MutualFundEntryCreateUpdateForm = ({
                 id: mutualFundEntryId,
                 payload: formData,
             })
-        } else {
-            createMutation.mutate(formData)
+        } else if (mutualFundId) {
+            createMutation.mutate({
+                mutualFundId: mutualFundId!,
+                payload: formData,
+            })
         }
     }, handleFocusError)
 

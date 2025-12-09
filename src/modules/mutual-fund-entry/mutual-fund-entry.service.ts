@@ -27,7 +27,7 @@ export const {
     API, // rarely used, for raw calls
     route: mutualFundEntryAPIRoute, // matches url above
 
-    // create: createMutualFundEntry,
+    create: createMutualFundEntry,
     updateById: updateMutualFundEntryById,
 
     deleteById: deleteMutualFundEntryById,
@@ -72,12 +72,12 @@ export const useDeleteMutualFundEntryById = createMutationFactory<
 export const useCreateMutualFundEntry = createMutationFactory<
     IMutualFundEntry,
     Error,
-    IMutualFundEntryRequest
+    { mutualFundId: TEntityId; payload: IMutualFundEntryRequest }
 >({
-    mutationFn: async (payload) =>
-        getMutualFundEntryById({
-            id: payload.id || '',
-            url: `${mutualFundEntryAPIRoute}`,
+    mutationFn: async ({ mutualFundId, payload }) =>
+        createMutualFundEntry({
+            payload,
+            url: `${mutualFundEntryAPIRoute}/mutual-fund/${mutualFundId}`,
         }),
     defaultInvalidates: [
         [mutualFundEntryBaseKey, 'paginated'],
