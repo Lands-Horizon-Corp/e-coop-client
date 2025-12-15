@@ -1,5 +1,3 @@
-'use client'
-
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 
 import { cn } from '@/helpers/tw-utils'

@@ -6,7 +6,7 @@ import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
 
 import { cn } from '@/helpers'
 import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
-import { AccountPicker } from '@/modules/account'
+import { AccountPicker, TAccountType } from '@/modules/account'
 import BankCombobox from '@/modules/bank/components/bank-combobox'
 import { CurrencyInput } from '@/modules/currency'
 import { IGeneralLedger } from '@/modules/general-ledger'
@@ -475,32 +475,45 @@ const PaymentWithTransactionForm = ({
                                         />
                                     )}
                                 />
-                                <FormFieldWrapper
-                                    control={form.control}
-                                    label="Loan"
-                                    labelClassName="text-xs font-medium text-muted-foreground"
-                                    name="loan_transaction_id"
-                                    render={({ field }) => (
-                                        <LoanTransactionCombobox
-                                            {...field}
-                                            disabled={isDisabled(
-                                                'loan_transaction_id'
-                                            )}
-                                            loanAccountId={form.watch(
-                                                'account_id'
-                                            )}
-                                            memberProfileId={memberProfileId}
-                                            mode="member-profile-loan-account"
-                                            onChange={(selectedLoanAccount) => {
-                                                field.onChange(
-                                                    selectedLoanAccount?.id
-                                                )
-                                            }}
-                                            placeholder="Select loan type"
-                                            value={field.value ?? undefined}
-                                        />
-                                    )}
-                                />
+                                {(
+                                    [
+                                        'Loan',
+                                        'SVF-Ledger',
+                                        'Interest',
+                                        'Fines',
+                                    ] as TAccountType[]
+                                ).includes(form.watch('account')?.type) && (
+                                    <FormFieldWrapper
+                                        control={form.control}
+                                        label="Loan"
+                                        labelClassName="text-xs font-medium text-muted-foreground"
+                                        name="loan_transaction_id"
+                                        render={({ field }) => (
+                                            <LoanTransactionCombobox
+                                                {...field}
+                                                disabled={isDisabled(
+                                                    'loan_transaction_id'
+                                                )}
+                                                loanAccountId={form.watch(
+                                                    'account_id'
+                                                )}
+                                                memberProfileId={
+                                                    memberProfileId
+                                                }
+                                                mode="member-profile-loan-account"
+                                                onChange={(
+                                                    selectedLoanAccount
+                                                ) => {
+                                                    field.onChange(
+                                                        selectedLoanAccount?.id
+                                                    )
+                                                }}
+                                                placeholder="Select loan type"
+                                                value={field.value ?? undefined}
+                                            />
+                                        )}
+                                    />
+                                )}
                                 <FormFieldWrapper
                                     control={form.control}
                                     label="Payment Type"

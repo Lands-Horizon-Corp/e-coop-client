@@ -1,5 +1,3 @@
-'use client'
-
 import { cn } from '@/helpers/tw-utils'
 
 import { Separator } from '@/components/ui/separator'

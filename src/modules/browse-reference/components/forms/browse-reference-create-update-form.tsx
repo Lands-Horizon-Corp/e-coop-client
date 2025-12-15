@@ -6,6 +6,7 @@ import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
 import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
 import { cn } from '@/helpers/tw-utils'
 import { AccountPicker } from '@/modules/account'
+import { CurrencyInput } from '@/modules/currency'
 
 import FormFooterResetSubmit from '@/components/form-components/form-footer-reset-submit'
 import { SettingsIcon } from '@/components/icons'
@@ -150,10 +151,13 @@ const BrowseReferenceCreateUpdateForm = ({
                             control={form.control}
                             label="Minimum Balance *"
                             name="minimum_balance"
-                            render={({ field }) => (
-                                <Input
+                            render={({ field: { onChange, ...field } }) => (
+                                <CurrencyInput
                                     {...field}
-                                    disabled={isDisabled(field.name)}
+                                    currency={form.watch('account')?.currency}
+                                    onValueChange={(newValue = '') => {
+                                        onChange(newValue)
+                                    }}
                                     placeholder="Minimum Balance"
                                 />
                             )}
@@ -178,16 +182,16 @@ const BrowseReferenceCreateUpdateForm = ({
                             control={form.control}
                             label="Charges *"
                             name="charges"
-                            render={({ field }) => (
-                                <Input
+                            render={({ field: { onChange, ...field } }) => (
+                                <CurrencyInput
                                     {...field}
-                                    disabled={isDisabled(field.name)}
-                                    onChange={(e) => {
-                                        field.onChange(e)
+                                    currency={form.watch('account')?.currency}
+                                    onValueChange={(newValue = '') => {
                                         form.setValue(
                                             'interest_rate',
                                             undefined
                                         )
+                                        onChange(newValue)
                                     }}
                                     placeholder="Charges"
                                 />
@@ -238,12 +242,16 @@ const BrowseReferenceCreateUpdateForm = ({
                                         control={form.control}
                                         label="Other interest on saving computation minimum balance *"
                                         name="other_interest_on_saving_computation_minimum_balance"
-                                        render={({ field }) => (
-                                            <Input
+                                        render={({
+                                            field: { onChange, ...field },
+                                        }) => (
+                                            <CurrencyInput
                                                 {...field}
-                                                disabled={isDisabled(
-                                                    field.name
-                                                )}
+                                                onValueChange={(
+                                                    newValue = ''
+                                                ) => {
+                                                    onChange(newValue)
+                                                }}
                                                 placeholder="Minimum Balance"
                                             />
                                         )}

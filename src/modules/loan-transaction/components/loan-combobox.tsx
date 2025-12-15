@@ -69,8 +69,9 @@ const LoanTransactionCombobox = React.forwardRef<HTMLButtonElement, Props>(
             query,
             options: {
                 enabled:
-                    loanAccountId !== undefined &&
-                    memberProfileId !== undefined,
+                    (loanAccountId !== undefined &&
+                        memberProfileId !== undefined) ||
+                    !disabled,
             },
         })
 
