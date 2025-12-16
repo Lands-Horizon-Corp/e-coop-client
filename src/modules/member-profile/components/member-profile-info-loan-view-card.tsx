@@ -29,6 +29,8 @@ interface Props extends IClassProps {
 const MemberProfileInfoViewLoanCard = ({ className, memberProfile }: Props) => {
     const fullInfoViewModal = useModalState()
 
+    if (!memberProfile) return null
+
     return (
         <div className={cn('rounded ring-2 p-4 ring-primary/40', className)}>
             <div className="flex items-center gap-x-2">

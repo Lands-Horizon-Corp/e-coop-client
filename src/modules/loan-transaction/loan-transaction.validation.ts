@@ -216,6 +216,7 @@ export const LoanTransactionSchema = z
         previous_loan: z.any(),
 
         is_add_on: z.boolean().optional(),
+        is_investment: z.boolean().default(false).optional(),
 
         applied_1: z.coerce
             .number('Invalid amount')
@@ -241,6 +242,24 @@ export const LoanTransactionSchema = z
         damayan_fund: z.coerce.number().optional(),
         share_capital: z.coerce.number().optional(),
         length_of_service: z.string().optional(),
+
+        additional_days: z.coerce.number().optional(), // new
+        number_of_months: z.coerce.number().optional(), // new
+        amount_granted: z.coerce.number().optional(), // new
+        advance_interest: z.coerce.number().optional(), // new
+        interest_rate: z.coerce.number().optional(), // new
+        fines_rate: z.coerce.number().optional(), // new
+        date_rebated: stringDateWithTransformSchema.optional(), // new
+        last_pay_date: stringDateWithTransformSchema.optional(), // new
+        count: z.coerce.number().optional(), // new
+        total_count: z.coerce.number().optional(), // new
+        original_ticket: z.coerce.string().optional(), // new
+        first_pay_date: stringDateWithTransformSchema.optional(),
+        first_pay_amount: z.coerce.number().optional(),
+        first_irr: z.coerce.number().optional(), // new
+        first_dq: z.coerce.number().optional(), // new
+        interest_previous_paid: z.coerce.number().optional(), // new
+        fines_previous_paid: z.coerce.number().optional(), // new
 
         exclude_sunday: z.boolean().optional(),
         exclude_holiday: z.boolean().optional(),
@@ -339,6 +358,12 @@ export const LoanTransactionSchema = z
     .and(withLoanType)
 
 export type TLoanTransactionSchema = z.infer<typeof LoanTransactionSchema>
+
+export const LoanEditTransactionSchema = LoanTransactionSchema
+
+export type TLoanEditTransactionSchema = z.infer<
+    typeof LoanEditTransactionSchema
+>
 
 // FOR LOAN SIGNATURE
 // for signature

@@ -17,6 +17,7 @@ import { IComakerMemberProfile } from '../comaker-member-profile'
 import type {
     IAllMembersLoanSummaryResponse,
     ILoanAmortizationSchedules,
+    ILoanEditTransactionRequest,
     ILoanPaymentResponse,
     ILoanTransaction,
     ILoanTransactionAdjustmentRequest,
@@ -530,6 +531,28 @@ export const useLoanSummaryClearCache = createMutationFactory<
     invalidationFn: ({ queryClient }) => {
         queryClient.invalidateQueries({
             queryKey: [loanTransactionBaseKey, 'all-members-summary'],
+        })
+        queryClient.invalidateQueries({
+            queryKey: [loanTransactionBaseKey, 'paginated'],
+        })
+    },
+})
+
+// edit loan
+export const useLoanEdit = createMutationFactory<
+    ILoanTransaction,
+    Error,
+    { id: TEntityId; payload: ILoanEditTransactionRequest }
+>({
+    mutationFn: async ({ id, payload }) => {
+        return await updateLoanTransactionById<
+            ILoanTransaction,
+            ILoanEditTransactionRequest
+        >({ id, payload })
+    },
+    invalidationFn: ({ queryClient }) => {
+        queryClient.invalidateQueries({
+            queryKey: [loanTransactionBaseKey],
         })
         queryClient.invalidateQueries({
             queryKey: [loanTransactionBaseKey, 'paginated'],

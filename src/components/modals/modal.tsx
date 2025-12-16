@@ -55,18 +55,25 @@ const Modal = ({
                 overlayClassName={cn('backdrop-blur', overlayClassName)}
                 showCloseButton={!showCloseButton}
             >
-                <DialogTitle className={cn('font-medium', titleClassName)}>
-                    {title}
-                </DialogTitle>
-                <DialogDescription
+                <div
                     className={cn(
-                        'mb-4',
-                        descriptionClassName,
-                        !description && 'hidden'
+                        'space-y-2',
+                        !title && !description && 'hidden'
                     )}
                 >
-                    {description}
-                </DialogDescription>
+                    <DialogTitle className={cn('font-medium', titleClassName)}>
+                        {title}
+                    </DialogTitle>
+                    <DialogDescription
+                        className={cn(
+                            '',
+                            descriptionClassName,
+                            !description && 'hidden'
+                        )}
+                    >
+                        {description}
+                    </DialogDescription>
+                </div>
                 {children}
                 {footer && <Separator className="bg-muted/70" />}
                 {footer}

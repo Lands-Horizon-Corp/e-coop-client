@@ -12,6 +12,7 @@ import DataTableRowContext from '@/components/data-table/data-table-row-context'
 import { useTableRowActionStore } from '@/components/data-table/store/data-table-action-store'
 import {
     CheckFillIcon,
+    PencilFillIcon,
     PrinterFillIcon,
     SignatureLightIcon,
     ThumbsUpIcon,
@@ -29,6 +30,7 @@ import {
 } from '../../loan-transaction.service'
 import { ILoanTransaction } from '../../loan-transaction.types'
 import { resolveLoanDatesToStatus } from '../../loan.utils'
+import { LoanEditFormModal } from '../forms/loan-edit-form'
 import { LoanTransactionPrintFormModal } from '../forms/loan-print-form'
 import { LoanTransactionCreateUpdateFormModal } from '../forms/loan-transaction-create-update-form'
 import { LoanTransactionSignatureUpdateFormModal } from '../forms/loan-transaction-signature-form'
@@ -40,6 +42,7 @@ import { ILoanTransactionTableActionComponentProp } from './columns'
 // ===== TYPE DEFINITIONS =====
 export type LoanTransactionActionType =
     | 'edit'
+    | 'loan-edit'
     | 'edit-confirm'
     | 'signature'
     | 'print'
@@ -117,6 +120,14 @@ const useLoanTransactionActions = ({
         })
     }
 
+    const handleEditLoan = () => {
+        open('loan-edit', {
+            id: loanTransaction.id,
+            defaultValues: loanTransaction,
+            extra: { onDeleteSuccess },
+        })
+    }
+
     const handleDelete = () => {
         onOpen({
             title: 'Delete Loan',
@@ -144,6 +155,7 @@ const useLoanTransactionActions = ({
 
         isDeletingLoanTransaction,
         handleEdit,
+        handleEditLoan,
         handleOpenEdit,
         handleSignature,
         handlePrint,
@@ -173,6 +185,7 @@ export const LoanTransactionAction = ({
 
         isDeletingLoanTransaction,
         handleEdit,
+        handleEditLoan,
         handleSignature,
         handlePrint,
         handleDelete,
@@ -194,6 +207,15 @@ export const LoanTransactionAction = ({
             }}
             otherActions={
                 <>
+                    {loanTransaction.released_date && (
+                        <DropdownMenuItem onClick={handleEditLoan}>
+                            <PencilFillIcon
+                                className="mr-2"
+                                strokeWidth={1.5}
+                            />
+                            Edit Loan
+                        </DropdownMenuItem>
+                    )}
                     <DropdownMenuItem onClick={handleSignature}>
                         <SignatureLightIcon
                             className="mr-2"
@@ -342,6 +364,7 @@ export const LoanTransactionRowContext = ({
 
         isDeletingLoanTransaction,
         handleEdit,
+        handleEditLoan,
         handleSignature,
         handlePrint,
         handleDelete,
@@ -357,11 +380,20 @@ export const LoanTransactionRowContext = ({
             }}
             onEdit={{
                 text: 'Edit',
-                isAllowed: true,
+                isAllowed: !loanTransaction.released_by,
                 onClick: handleEdit,
             }}
             otherActions={
                 <>
+                    {loanTransaction.released_date && (
+                        <ContextMenuItem onClick={handleEditLoan}>
+                            <PencilFillIcon
+                                className="mr-2"
+                                strokeWidth={1.5}
+                            />
+                            Edit Loan
+                        </ContextMenuItem>
+                    )}
                     <ContextMenuItem onClick={handleSignature}>
                         <SignatureLightIcon
                             className="mr-2"
@@ -560,6 +592,18 @@ export const LoanTransactionTableActionManager = () => {
                 <LoanApproveReleaseDisplayModal
                     loanTransaction={loanTransaction}
                     mode={approveReleaseMode}
+                    onOpenChange={close}
+                    open={state.isOpen}
+                />
+            )}
+
+            {state.action === 'loan-edit' && loanTransaction && (
+                <LoanEditFormModal
+                    formProps={{
+                        loanTransactionId: loanTransaction.id,
+                        defaultValues: loanTransaction,
+                    }}
+                    // loanTransaction={loanTransaction}
                     onOpenChange={close}
                     open={state.isOpen}
                 />

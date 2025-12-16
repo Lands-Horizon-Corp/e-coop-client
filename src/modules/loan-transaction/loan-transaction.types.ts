@@ -23,6 +23,7 @@ import { IMemberProfile } from '../member-profile'
 import { ITransactionBatch } from '../transaction-batch'
 import { IUser } from '../user'
 import {
+    LoanEditTransactionSchema,
     LoanTransactionPrintSchema,
     LoanTransactionSchema,
     TLoanTransactionAdjustmentSchema,
@@ -112,6 +113,21 @@ export interface ILoanTransaction
     previous_loan_id?: TEntityId
     previous_loan?: ILoanTransaction
     terms: number
+
+    number_of_months?: number // new
+    amount_granted?: number //new
+    advance_interest?: number // new
+    interest_rate?: number // new
+    fines_rate?: number // new
+    date_rebated?: string //new
+    last_pay_date?: string //new
+    total_count?: number // new
+    first_pay_date?: string // new
+    first_pay_amount?: number // new
+    first_irr?: number //new
+    first_dq?: number //new
+    interest_previous_paid?: number // new
+    fines_previous_paid?: number // new
 
     amortization: number
     is_add_on: boolean
@@ -241,6 +257,10 @@ export interface ILoanTransactionSignatures {
 }
 
 export type ILoanTransactionRequest = z.infer<typeof LoanTransactionSchema>
+
+export type ILoanEditTransactionRequest = z.infer<
+    typeof LoanEditTransactionSchema
+>
 
 export interface ILoanTransactionPaginated
     extends IPaginatedResult<ILoanTransaction> {}
