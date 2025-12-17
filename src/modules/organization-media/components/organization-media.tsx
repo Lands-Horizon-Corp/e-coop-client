@@ -263,8 +263,8 @@ const OrganizationMedia = ({ organizationId }: OrganizationMediaProps) => {
                     )}
                 </div>
             </Modal>
-
             <Button
+                variant={'secondary'}
                 onClick={() => {
                     organizationMediaState.onOpenChange(true)
                 }}
