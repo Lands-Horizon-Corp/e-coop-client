@@ -150,8 +150,8 @@ const UpdateOrganizationMediaForm = ({
 }
 
 export const UpdateOrganizationMediaFormModal = ({
-    title = 'Update Member Profile Media',
-    description = 'Fill out the form to update the member profile media.',
+    title = 'Update Organization Media',
+    description = 'Fill out the form to update the organization media.',
     className,
     formProps,
     ...props
