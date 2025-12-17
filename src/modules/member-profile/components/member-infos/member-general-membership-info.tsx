@@ -43,6 +43,7 @@ import { IBaseProps, TEntityId } from '@/types'
 
 import { IMemberProfile } from '../..'
 import { useGetMemberProfileById } from '../../member-profile.service'
+import { InfoField } from './info-field'
 import { MemberOverallInfoModal, SectionHeader } from './view-member-info'
 
 interface Props extends IBaseProps {
@@ -701,23 +702,6 @@ const UserQr = ({ memberProfile }: { memberProfile?: IMemberProfile }) => {
         </>
     )
 }
-
-export const InfoField = ({
-    label,
-    value,
-    className = '',
-}: {
-    label: string
-    value: string | React.ReactNode
-    className?: string
-}) => (
-    <div className={`space-y-1 ${className}`}>
-        <p className="text-xs font-medium text-muted-foreground uppercase tracking-wide">
-            {label}
-        </p>
-        <p className="text-sm font-medium text-foreground">{value || '—'}</p>
-    </div>
-)
 
 MemberGeneralMembershipInfo.displayName = 'MemberGeneralMembershipInfo'
 

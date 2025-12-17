@@ -69,17 +69,18 @@ const memberInfoTabs: {
         Component: (props) => <MemberMembershipInfo {...props} />,
     },
     {
-        value: 'comakers',
-        title: 'Comakers',
-        Icon: Users3FillIcon,
-        Component: (props) => <MemberComakerDisplay {...props} />,
-    },
-    {
         value: 'personal-infos',
         title: 'Personal Info',
         Icon: UserIcon,
         Component: (props) => <MemberPersonalInfo {...props} />,
     },
+    {
+        value: 'comakers',
+        title: 'Comakers',
+        Icon: Users3FillIcon,
+        Component: (props) => <MemberComakerDisplay {...props} />,
+    },
+
     {
         value: 'government-benefits',
         title: 'Government Benefits',
