@@ -185,6 +185,28 @@ const MemberOverallInfo = ({
     )
 }
 
+export const SectionHeader = ({
+    icon: Icon,
+    title,
+    subtitle,
+}: {
+    icon: IconType
+    title: string
+    subtitle?: string
+}) => (
+    <div className="flex items-center gap-3 mb-4">
+        <div className="p-2 rounded-lg bg-primary/10">
+            <Icon className="size-4 text-primary" />
+        </div>
+        <div>
+            <h3 className="font-semibold text-foreground">{title}</h3>
+            {subtitle && (
+                <p className="text-xs text-muted-foreground">{subtitle}</p>
+            )}
+        </div>
+    </div>
+)
+
 export default MemberOverallInfo
 
 export const MemberOverallInfoModal = ({
@@ -195,7 +217,7 @@ export const MemberOverallInfoModal = ({
     return (
         <Modal
             {...props}
-            className={cn('!max-w-[90vw] p-3', className)}
+            className={cn('!max-w-[90vw] px-6', className)}
             closeButtonClassName="top-1.5 right-1.5"
             descriptionClassName="hidden"
             titleClassName="hidden"

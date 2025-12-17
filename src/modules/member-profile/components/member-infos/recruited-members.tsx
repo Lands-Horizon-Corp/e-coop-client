@@ -64,14 +64,12 @@ const RecruitedMembers = forwardRef<HTMLDivElement, Props>(
                                 data.recruited_members?.map(
                                     ({
                                         id,
-                                        membersProfileRecruited: {
-                                            media,
-                                            passbook,
-                                            full_name,
-                                            member_type,
-                                            status,
-                                            created_at,
-                                        },
+                                        media,
+                                        passbook,
+                                        full_name,
+                                        member_type,
+                                        status,
+                                        created_at,
                                     }) => (
                                         <TableRow key={id}>
                                             <TableCell>

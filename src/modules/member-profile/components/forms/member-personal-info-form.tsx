@@ -149,20 +149,11 @@ const MemberPersonalInfoForm = ({
                                     name="media_id"
                                     render={({ field }) => {
                                         const value = form.watch('media')
-
                                         return (
                                             <ImageField
                                                 {...field}
                                                 onChange={(newImage) => {
-                                                    if (newImage)
-                                                        field.onChange(
-                                                            newImage.id
-                                                        )
-                                                    else
-                                                        field.onChange(
-                                                            undefined
-                                                        )
-
+                                                    field.onChange(newImage?.id)
                                                     form.setValue(
                                                         'media',
                                                         newImage
@@ -191,14 +182,7 @@ const MemberPersonalInfoForm = ({
                                             <SignatureField
                                                 {...field}
                                                 onChange={(newImage) => {
-                                                    if (newImage)
-                                                        field.onChange(
-                                                            newImage.id
-                                                        )
-                                                    else
-                                                        field.onChange(
-                                                            undefined
-                                                        )
+                                                    field.onChange(newImage?.id)
 
                                                     form.setValue(
                                                         'signature_media',
