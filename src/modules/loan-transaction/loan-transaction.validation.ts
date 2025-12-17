@@ -251,7 +251,7 @@ export const LoanTransactionSchema = z
         fines_rate: z.coerce.number().optional(), // new
         date_rebated: stringDateWithTransformSchema.optional(), // new
         last_pay_date: stringDateWithTransformSchema.optional(), // new
-        count: z.coerce.number().optional(), // new
+        count: z.coerce.number().optional(), // new validation / already existed in types
         total_count: z.coerce.number().optional(), // new
         original_ticket: z.coerce.string().optional(), // new
         first_pay_date: stringDateWithTransformSchema.optional(),

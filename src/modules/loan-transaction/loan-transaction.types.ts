@@ -114,6 +114,7 @@ export interface ILoanTransaction
     previous_loan?: ILoanTransaction
     terms: number
 
+    additional_days?: number // new
     number_of_months?: number // new
     amount_granted?: number //new
     advance_interest?: number // new
@@ -122,6 +123,7 @@ export interface ILoanTransaction
     date_rebated?: string //new
     last_pay_date?: string //new
     total_count?: number // new
+    original_ticket?: string // new
     first_pay_date?: string // new
     first_pay_amount?: number // new
     first_irr?: number //new
