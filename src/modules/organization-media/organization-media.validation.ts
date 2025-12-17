@@ -3,7 +3,7 @@ import z from 'zod'
 import { descriptionTransformerSanitizer, entityIdSchema } from '@/validation'
 
 export const OrganizationMediaSchema = z.object({
-    id: entityIdSchema.optional(),
+    id: entityIdSchema,
     name: z.string().min(1, 'OrganizationMedia name is required'),
     description: z
         .string()

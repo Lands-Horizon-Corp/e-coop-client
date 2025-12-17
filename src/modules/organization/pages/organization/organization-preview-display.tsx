@@ -6,6 +6,7 @@ import {
     IOrganization,
     UpdateOrganizationFormModal,
 } from '@/modules/organization'
+import OrganizationMedia from '@/modules/organization-media/components/organization-media'
 import { BranchInfoItem } from '@/modules/organization/organization-forms/branch-card-info'
 
 import {
@@ -310,6 +311,9 @@ const OrganizationPreviewDisplay = ({
                                     <EditPencilIcon className="mr-2 h-4 w-4" />
                                     Edit Organization
                                 </Button>
+                                <OrganizationMedia
+                                    organizationId={organizationId}
+                                />
                             </div>
                         </>
                     )}
