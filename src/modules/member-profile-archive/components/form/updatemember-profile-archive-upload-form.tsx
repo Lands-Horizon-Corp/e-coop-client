@@ -189,7 +189,7 @@ export const MemberProfileArchiveUploadFormModal = ({
         >
             <MemberProfileArchiveUploadForm
                 {...formProps}
-                className="min-w-0 max-w-full"
+                className="min-w-0 max-w-full bg-card p-4 rounded-xl"
                 onSubmit={(data) => {
                     formProps?.onSubmit?.(data)
                 }}

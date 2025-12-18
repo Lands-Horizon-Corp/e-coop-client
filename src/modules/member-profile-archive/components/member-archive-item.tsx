@@ -1,4 +1,4 @@
-import { dateAgo, toReadableDate } from '@/helpers/date-utils'
+import { toReadableDateTime } from '@/helpers/date-utils'
 import {
     TDownloadMediaProp,
     downloadMedia,
@@ -8,7 +8,12 @@ import {
 } from '@/modules/media'
 import MediaResourceFileIcon from '@/modules/media/components/media-resource-file-icon'
 
-import { DownloadIcon, TrashIcon } from '@/components/icons'
+import {
+    CalendarIcon,
+    DownloadIcon,
+    HardDriveIcon,
+    TrashIcon,
+} from '@/components/icons'
 import ImageDisplay from '@/components/image-display'
 import ActionTooltip from '@/components/tooltips/action-tooltip'
 import { AspectRatio } from '@/components/ui/aspect-ratio'
@@ -32,7 +37,6 @@ const MemberArchiveItem = ({
 }: MemberArchiveItemProps) => {
     const media = memberArchive.media
 
-    // Get file info to determine category
     const { fullFileName, fileType } = media
         ? getFileInfo(media)
         : { fullFileName: '', fileType: '' }
@@ -40,22 +44,20 @@ const MemberArchiveItem = ({
     const category = media ? getFileCategory(fullFileName, fileType) : 'unknown'
     const isImage = category === 'image'
 
-    // Handle download
     const handleDownload = () => {
         if (media?.download_url) {
             downloadMedia(media as TDownloadMediaProp)
         }
     }
 
-    // Get created date
     const createdDate = media?.created_at || memberArchive.created_at
 
     return (
         <div
-            className="space-y-2 min-w-0 max-w-full rounded-lg border border-secondary bg-popover p-3"
+            className="space-y-2 min-w-0 max-w-full rounded-lg border border-secondary hover:border-primary/60 duration-200 ease-in-out bg-popover p-3"
             onClick={(e) => e.stopPropagation()}
         >
-            <div className="flex space-x-3">
+            <div className="flex items-center gap-x-3">
                 <div className="size-12 items-center flex justify-center flex-shrink-0">
                     {media && isImage ? (
                         <AspectRatio ratio={1 / 1}>
@@ -73,47 +75,31 @@ const MemberArchiveItem = ({
                         />
                     ) : null}
                 </div>
-                <div className="flex-1 space-y-1 min-w-0 overflow-hidden">
-                    <p className="truncate text-sm font-semibold">
-                        {memberArchive.name}
+
+                <div className="flex-1 space-y-1 min-w-0">
+                    <p className="truncate font-medium">{media?.file_name}</p>
+                    <p className="truncate text-muted-foreground text-xs">
+                        {memberArchive?.description || 'No description'}
                     </p>
-                    {memberArchive.category && (
-                        <p className="text-xs text-muted-foreground">
-                            Category: {memberArchive.category}
-                        </p>
-                    )}
-                    {media && (
-                        <p className="text-xs text-muted-foreground">
-                            {formatBytes(media.file_size ?? 1)}
-                            {createdDate && (
-                                <span className="text-xs text-muted-foreground cursor-default">
-                                    {' '}
-                                    •{' '}
-                                    {toReadableDate(
-                                        createdDate,
-                                        'MMM d, yyyy'
-                                    )}{' '}
-                                    • {dateAgo(createdDate)}
-                                </span>
-                            )}
-                        </p>
-                    )}
-                    {memberArchive.description && (
-                        <p className="text-xs text-muted-foreground line-clamp-2">
-                            {memberArchive.description}
-                        </p>
-                    )}
-                    {uploadedBy && (
-                        <p className="text-xs text-muted-foreground">
-                            Uploaded by : {uploadedBy}
-                        </p>
-                    )}
+                    <p className="text-xs text-muted-foreground">
+                        Uploaded by : {uploadedBy ?? 'Unknown'}
+                    </p>
                 </div>
-                <div className="flex flex-col gap-1 flex-shrink-0">
-                    {/* Download Button */}
+
+                <div className="hidden md:flex items-center gap-6 text-sm text-muted-foreground">
+                    <span className="flex items-center gap-1">
+                        <HardDriveIcon className="size-3.5" />
+                        {formatBytes(media?.file_size ?? 0)}
+                    </span>
+                    <span className="flex items-center gap-1">
+                        <CalendarIcon className="size-3.5" />
+                        {createdDate ? toReadableDateTime(createdDate) : '-'}
+                    </span>
+                </div>
+                <div className="flex gap-1 flex-shrink-0">
                     {media?.download_url && (
                         <ActionTooltip
-                            side="left"
+                            side="bottom"
                             tooltipContent="Download file"
                         >
                             <Button
@@ -127,9 +113,11 @@ const MemberArchiveItem = ({
                             </Button>
                         </ActionTooltip>
                     )}
-                    {/* Delete Button */}
                     {onRemove && (
-                        <ActionTooltip side="left" tooltipContent="Delete file">
+                        <ActionTooltip
+                            side="bottom"
+                            tooltipContent="Delete file"
+                        >
                             <Button
                                 className="size-fit rounded-md p-1 hover:text-destructive-foreground"
                                 hoverVariant="destructive"

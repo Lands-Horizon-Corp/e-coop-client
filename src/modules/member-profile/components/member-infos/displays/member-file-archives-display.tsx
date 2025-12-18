@@ -18,11 +18,13 @@ import MemberArchiveItem from '@/modules/member-profile-archive/components/membe
 import { stringNormalizer } from '@/modules/timesheet/components/worktimer/utils'
 
 import {
+    CompressedFileFillIcon,
     FolderFillIcon,
     MagnifyingGlassIcon,
     PencilFillIcon,
     PlusIcon,
     RefreshIcon,
+    SortIcon,
 } from '@/components/icons'
 import LoadingSpinner from '@/components/spinners/loading-spinner'
 import ActionTooltip from '@/components/tooltips/action-tooltip'
@@ -51,17 +53,16 @@ import { useModalState } from '@/hooks/use-modal-state'
 
 import { IClassProps, TEntityId } from '@/types'
 
-import SectionTitle from '../section-title'
+import { SectionCard } from '../section-card'
 
 interface Props extends IClassProps {
     profileId: TEntityId
 }
 
+type TSortBy = 'upload_date' | 'name' | 'category'
 const MemberFileArchiveDisplay = ({ profileId, className }: Props) => {
     const [searchQuery, setSearchQuery] = useState('')
-    const [sortBy, setSortBy] = useState<'upload_date' | 'name' | 'category'>(
-        'upload_date'
-    )
+    const [sortBy, setSortBy] = useState<TSortBy>('upload_date')
     const [selectedCategories, setSelectedCategories] = useState<string[]>([])
 
     const uploaderModalState = useModalState()
@@ -134,199 +135,209 @@ const MemberFileArchiveDisplay = ({ profileId, className }: Props) => {
     }
 
     return (
-        <div className={cn('min-h-[50vh] space-y-4', className)}>
-            <MemberProfileArchiveUploadFormModal
-                {...uploaderModalState}
-                formProps={{
-                    memberProfileId: profileId,
-                    onSuccess: () => {
-                        uploaderModalState.onOpenChange(false)
-                    },
-                }}
-                key={uploaderModalState.open ? 'open' : 'closed'}
-            />
-            <div className="flex justify-between">
-                <SectionTitle
-                    Icon={FolderFillIcon}
-                    subTitle="View all archived files this user has"
-                    title="Member Archives"
+        <SectionCard
+            icon={<CompressedFileFillIcon className="h-5 w-5" />}
+            subtitle="View all archived files of this member."
+            title="Archives"
+        >
+            <div className={cn('min-h-[50vh] space-y-2', className)}>
+                <MemberProfileArchiveUploadFormModal
+                    {...uploaderModalState}
+                    formProps={{
+                        memberProfileId: profileId,
+                        onSuccess: () => {
+                            uploaderModalState.onOpenChange(false)
+                        },
+                    }}
+                    key={uploaderModalState.open ? 'open' : 'closed'}
                 />
+                <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+                    <div className="relative flex-1 max-w-md">
+                        <MagnifyingGlassIcon className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
+                        <Input
+                            className="h-10 pl-10 pr-4 bg-background border-border focus-visible:ring-primary"
+                            onChange={(e) => setSearchQuery(e.target.value)}
+                            placeholder="Search (file name, file type, category, description)"
+                            type="text"
+                            value={searchQuery}
+                        />
+                    </div>
+                    <div className="flex items-center gap-3">
+                        <p className="text-sm font-medium">Sort</p>
+                        <Select
+                            onValueChange={(sortVal) =>
+                                setSortBy(sortVal as TSortBy)
+                            }
+                            value={sortBy}
+                        >
+                            <SelectTrigger className="h-10 w-[150px] border-border bg-background">
+                                <SortIcon className="mr-2 size-4 text-muted-foreground" />
+                                <SelectValue placeholder="Sort by" />
+                            </SelectTrigger>
+                            <SelectContent>
+                                <SelectItem value="upload_date">
+                                    Upload date
+                                </SelectItem>
+                                <SelectItem value="name">Name</SelectItem>
+                                <SelectItem value="category">
+                                    Category
+                                </SelectItem>
+                            </SelectContent>
+                        </Select>
 
-                <div className="flex items-center gap-2">
-                    <p className="text-sm text-muted-foreground/80">
-                        {(data ?? []).length} Files
-                    </p>
-                    <Button
-                        disabled={isRefetching}
-                        onClick={() => refetch()}
-                        size="sm"
-                        variant="outline"
-                    >
-                        {isRefetching ? (
-                            <LoadingSpinner className="size-4" />
-                        ) : (
-                            <RefreshIcon className="size-4" />
-                        )}
-                    </Button>
-                    <Button
-                        onClick={() => uploaderModalState.onOpenChange(true)}
-                        size="sm"
-                        variant="outline"
-                    >
-                        <PlusIcon className="size-4" />
-                        Upload File
-                    </Button>
+                        <div className="flex items-center gap-1.5 text-sm text-muted-foreground">
+                            <span className="font-medium text-foreground">
+                                {memberProfileArchives?.length || 0}
+                            </span>
+                            <span>Files</span>
+                        </div>
+
+                        <Button
+                            disabled={isRefetching}
+                            onClick={() => refetch()}
+                            size="sm"
+                            variant="outline"
+                        >
+                            {isRefetching ? (
+                                <LoadingSpinner className="size-4" />
+                            ) : (
+                                <RefreshIcon className="size-4" />
+                            )}
+                        </Button>
+                        <Button
+                            onClick={() =>
+                                uploaderModalState.onOpenChange(true)
+                            }
+                            size="sm"
+                            variant="outline"
+                        >
+                            <PlusIcon className="size-4" />
+                            Upload File
+                        </Button>
+                    </div>
                 </div>
-            </div>
-            <div className=" flex gap-x-2 ">
-                <div className="w-[250px] rounded-xl border border-border/60">
-                    {!isPendingCategories ? (
-                        <ul className="flex w-full flex-col divide-y rounded-md border">
-                            {categories
-                                ?.sort((a, b) => b.count - a.count)
-                                .map(({ name, count }) => (
-                                    <li key={name}>
-                                        <Label
-                                            className="flex items-center justify-between gap-2 px-5 py-3 cursor-pointer"
-                                            htmlFor={name}
-                                        >
-                                            <span className="flex items-center gap-2">
-                                                {name}{' '}
-                                                <span className="bg-muted text-muted-foreground p-1 rounded-full">
-                                                    {count}
-                                                </span>
-                                            </span>
-                                            <Checkbox
-                                                checked={selectedCategories.includes(
-                                                    name
+                <div className=" flex gap-x-2">
+                    <div className="w-[250px] max-h-[90vh] overflow-auto ecoop-scroll rounded-xl border border-border/60">
+                        {!isPendingCategories ? (
+                            <ul className="flex w-full flex-col divide-y rounded-md border">
+                                {categories
+                                    ?.sort((a, b) => b.count - a.count)
+                                    .map(({ name, count }) => (
+                                        <li key={name}>
+                                            <Label
+                                                className={cn(
+                                                    'flex items-center duration-200 ease-in-out text-muted-foreground hover:text-foreground justify-between gap-2 px-5 py-3 cursor-pointer',
+                                                    selectedCategories.includes(
+                                                        name
+                                                    ) &&
+                                                        'bg-primary/10 text-primary hover:text-primary/70'
                                                 )}
-                                                id={name}
-                                                onCheckedChange={() =>
-                                                    handleCategoryToggle(name)
-                                                }
-                                            />
-                                        </Label>
+                                                htmlFor={name}
+                                            >
+                                                <p className="flex items-center gap-2">
+                                                    {name}
+                                                </p>
+                                                <span className="flex items-center gap-x-2">
+                                                    <span className="bg-muted p-1 rounded-full">
+                                                        {count}
+                                                    </span>
+                                                    <Checkbox
+                                                        checked={selectedCategories.includes(
+                                                            name
+                                                        )}
+                                                        id={name}
+                                                        onCheckedChange={() =>
+                                                            handleCategoryToggle(
+                                                                name
+                                                            )
+                                                        }
+                                                    />
+                                                </span>
+                                            </Label>
+                                        </li>
+                                    ))}
+                            </ul>
+                        ) : (
+                            <ul className="flex w-full flex-col divide-y rounded-md border">
+                                {Array.from({ length: 5 }).map((_, index) => (
+                                    <li className="px-5 py-3" key={index}>
+                                        <div className="flex items-center justify-between gap-2">
+                                            <div className="flex items-center gap-2">
+                                                <Skeleton className="size-4" />
+                                                <Skeleton className="h-4 w-24" />
+                                            </div>
+                                            <Skeleton className="size-4 rounded" />
+                                        </div>
                                     </li>
                                 ))}
-                        </ul>
-                    ) : (
-                        <ul className="flex w-full flex-col divide-y rounded-md border">
-                            {Array.from({ length: 5 }).map((_, index) => (
-                                <li className="px-5 py-3" key={index}>
-                                    <div className="flex items-center justify-between gap-2">
-                                        <div className="flex items-center gap-2">
-                                            <Skeleton className="size-4" />
-                                            <Skeleton className="h-4 w-24" />
-                                        </div>
-                                        <Skeleton className="size-4 rounded" />
+                            </ul>
+                        )}
+                    </div>
+                    <div className="space-y-4 max-h-[70vh] overflow-auto ecoop-scroll flex-1">
+                        {!data && error && (
+                            <FormErrorMessage
+                                className="w-fit mx-auto text-xs"
+                                errorMessage={error}
+                            />
+                        )}
+                        {isPending && profileId && (
+                            <LoadingSpinner className="mx-auto" />
+                        )}
+                        {data && (
+                            <div className="space-y-4">
+                                {filteredAndSortedData.length === 0 ? (
+                                    <Empty className="border border-dashed">
+                                        <EmptyHeader>
+                                            <EmptyMedia variant="icon">
+                                                <FolderFillIcon />
+                                            </EmptyMedia>
+                                            <EmptyTitle>
+                                                No Archives Found
+                                            </EmptyTitle>
+                                            <EmptyDescription>
+                                                {searchQuery
+                                                    ? 'No archives match your search criteria.'
+                                                    : 'This member has not archived any files yet.'}
+                                            </EmptyDescription>
+                                        </EmptyHeader>
+                                    </Empty>
+                                ) : (
+                                    <div className="space-y-2">
+                                        {filteredAndSortedData.map((item) => (
+                                            <MemberArchiveFileItem
+                                                id={item.id}
+                                                key={item.id}
+                                                media={item.media}
+                                                memberArchive={item}
+                                                uploadedBy={
+                                                    item.created_by
+                                                        ?.full_name ||
+                                                    'unknown user'
+                                                }
+                                            />
+                                        ))}
                                     </div>
-                                </li>
-                            ))}
-                        </ul>
-                    )}
-                </div>
-                <div className="space-y-4 flex-1">
-                    {!data && error && (
-                        <FormErrorMessage
-                            className="w-fit mx-auto text-xs"
-                            errorMessage={error}
-                        />
-                    )}
-                    {isPending && profileId && (
-                        <LoadingSpinner className="mx-auto" />
-                    )}
-                    {data && (
-                        <div className="space-y-4">
-                            {/* Search and Sort Controls */}
-                            <div className="flex items-center gap-4">
-                                <div className="flex-1 relative">
-                                    <MagnifyingGlassIcon className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
-                                    <Input
-                                        className="pl-10"
-                                        onChange={(e) =>
-                                            setSearchQuery(e.target.value)
-                                        }
-                                        placeholder="Search ( file name, file type, category, description )"
-                                        value={searchQuery}
-                                    />
-                                </div>
-                                <Select
-                                    onValueChange={(
-                                        value:
-                                            | 'upload_date'
-                                            | 'name'
-                                            | 'category'
-                                    ) => setSortBy(value)}
-                                    value={sortBy}
-                                >
-                                    <SelectTrigger className="w-[180px]">
-                                        <SelectValue placeholder="Sort by" />
-                                    </SelectTrigger>
-                                    <SelectContent>
-                                        <SelectItem value="upload_date">
-                                            Upload date
-                                        </SelectItem>
-                                        <SelectItem value="name">
-                                            Name
-                                        </SelectItem>
-                                        <SelectItem value="category">
-                                            Category
-                                        </SelectItem>
-                                    </SelectContent>
-                                </Select>
+                                )}
                             </div>
-
-                            {filteredAndSortedData.length === 0 ? (
-                                <Empty className="border border-dashed">
-                                    <EmptyHeader>
-                                        <EmptyMedia variant="icon">
-                                            <FolderFillIcon />
-                                        </EmptyMedia>
-                                        <EmptyTitle>
-                                            No Archives Found
-                                        </EmptyTitle>
-                                        <EmptyDescription>
-                                            {searchQuery
-                                                ? 'No archives match your search criteria.'
-                                                : 'This member has not archived any files yet.'}
-                                        </EmptyDescription>
-                                    </EmptyHeader>
-                                </Empty>
-                            ) : (
-                                <div className="space-y-2">
-                                    {filteredAndSortedData.map((item) => (
-                                        <MemberArchiveFileItem
-                                            id={item.id}
-                                            key={item.id}
-                                            media={item.media}
-                                            memberArchive={item}
-                                            uploadedBy={
-                                                item.created_by?.full_name ||
-                                                'unknown user'
-                                            }
-                                        />
-                                    ))}
-                                </div>
-                            )}
-                        </div>
-                    )}
-                    {!profileId && (
-                        <Empty className="border border-dashed">
-                            <EmptyHeader>
-                                <EmptyMedia variant="icon">
-                                    <FolderFillIcon />
-                                </EmptyMedia>
-                                <EmptyTitle>No User Account</EmptyTitle>
-                                <EmptyDescription>
-                                    We are unable to locate archives since this
-                                    member profile has no User Account.
-                                </EmptyDescription>
-                            </EmptyHeader>
-                        </Empty>
-                    )}
+                        )}
+                        {!profileId && (
+                            <Empty className="border border-dashed">
+                                <EmptyHeader>
+                                    <EmptyMedia variant="icon">
+                                        <FolderFillIcon />
+                                    </EmptyMedia>
+                                    <EmptyTitle>No User Account</EmptyTitle>
+                                    <EmptyDescription>
+                                        We are unable to locate archives since
+                                        this member profile has no User Account.
+                                    </EmptyDescription>
+                                </EmptyHeader>
+                            </Empty>
+                        )}
+                    </div>
                 </div>
             </div>
-        </div>
+        </SectionCard>
     )
 }
 
@@ -367,7 +378,7 @@ const MemberArchiveFileItem = ({
                 memberArchive={memberArchive}
                 onRemove={handleDelete}
                 otherAction={
-                    <ActionTooltip side="left" tooltipContent="Edit archive">
+                    <ActionTooltip side="bottom" tooltipContent="Edit archive">
                         <Button
                             className="size-fit rounded-md p-1 hover:text-destructive-foreground"
                             hoverVariant="destructive"
