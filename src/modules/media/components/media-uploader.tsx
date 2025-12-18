@@ -518,7 +518,7 @@ const MediaUploader = (props: MediaUploaderProps) => {
                     ${
                         isDragActive
                             ? 'border-primary bg-primary/5'
-                            : 'border-secondary bg-background hover:border-primary/50 hover:bg-muted/50'
+                            : 'border-secondary bg-secondary/30 hover:border-primary/50 hover:bg-muted/50'
                     }
                     ${disabled ? 'cursor-not-allowed opacity-50' : ''}
                     ${mode === 'single' && hasFiles ? 'cursor-not-allowed opacity-50' : ''}
