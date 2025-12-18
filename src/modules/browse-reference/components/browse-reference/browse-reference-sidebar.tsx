@@ -249,7 +249,7 @@ const MemberTypeAccordionItem = ({
                             size="sm"
                             variant="outline"
                         >
-                            <PlusIcon className="h-3.5 w-3.5 mr-1" />
+                            <PlusIcon className="size-3.5 mr-1" />
                             Add Reference
                         </Button>
                     </div>

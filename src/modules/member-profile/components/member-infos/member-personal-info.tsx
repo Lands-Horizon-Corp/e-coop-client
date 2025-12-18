@@ -329,7 +329,7 @@ const MemberPersonalInfo = forwardRef<HTMLDivElement, Props>(
                                     </Badge>
                                 </div>
                                 <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                                    <PhoneIcon className="h-3.5 w-3.5" />
+                                    <PhoneIcon className="size-3.5" />
                                     <span>{ref.contact_number}</span>
                                 </div>
                             </div>
