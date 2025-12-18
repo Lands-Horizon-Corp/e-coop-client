@@ -323,7 +323,7 @@ const LoanAllMemberSummary = ({ className }: Props) => {
                             <div>
                                 <div className="flex items-center justify-between mb-2">
                                     <span className="text-sm text-muted-foreground flex items-center gap-2">
-                                        <HandCoinsIcon className="h-3.5 w-3.5" />
+                                        <HandCoinsIcon className="size-3.5" />
                                         With Active Loans
                                     </span>
                                     <span className="text-sm font-semibold">
@@ -346,7 +346,7 @@ const LoanAllMemberSummary = ({ className }: Props) => {
                             <div>
                                 <div className="flex items-center justify-between mb-2">
                                     <span className="text-sm text-green-600 dark:text-green-400 flex items-center gap-2">
-                                        <CheckIcon className="h-3.5 w-3.5" />
+                                        <CheckIcon className="size-3.5" />
                                         Fully Paid
                                     </span>
                                     <span className="text-sm font-semibold text-green-600 dark:text-green-400">
@@ -363,7 +363,7 @@ const LoanAllMemberSummary = ({ className }: Props) => {
                             <div>
                                 <div className="flex items-center justify-between mb-2">
                                     <span className="text-sm text-red-600 dark:text-red-400 flex items-center gap-2">
-                                        <ClockIcon className="h-3.5 w-3.5" />
+                                        <ClockIcon className="size-3.5" />
                                         With Overdue
                                     </span>
                                     <span className="text-sm font-semibold text-red-600 dark:text-red-400">
