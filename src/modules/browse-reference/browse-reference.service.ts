@@ -116,4 +116,32 @@ export const useFilteredPaginatedBrowseReference = ({
     })
 }
 
+export const useGetBrowseReferenceByAccountMemberType = ({
+    options,
+    accountId,
+    memberTypeId,
+}: {
+    accountId: TEntityId
+    memberTypeId: TEntityId
+    options?: HookQueryOptions<IBrowseReference, Error>
+}) => {
+    return useQuery<IBrowseReference, Error>({
+        ...options,
+        queryKey: [
+            browseReferenceBaseKey,
+            'account',
+            accountId,
+            'member-type',
+            memberTypeId,
+        ],
+        queryFn: async () => {
+            const response = await API.get<IBrowseReference>(
+                `${browseReferenceAPIRoute}/account/${accountId}/member-type/${memberTypeId}`
+            )
+
+            return response.data
+        },
+    })
+}
+
 export const logger = Logger.getInstance('browse-reference')
