@@ -128,6 +128,10 @@ const OrganizationMedia = ({ organizationId }: OrganizationMediaProps) => {
                 <MediaUploaderModal
                     {...uploaderModalState}
                     uploaderProps={{
+                        accept: {
+                            'image/png': ['.png'],
+                            'image/jpg': ['.jpeg'],
+                        },
                         mode: 'multiple',
                         onMultipleUploadComplete: (uploadedMedias) => {
                             console.log(uploadedMedias)
@@ -267,6 +271,7 @@ const OrganizationMedia = ({ organizationId }: OrganizationMediaProps) => {
                 onClick={() => {
                     organizationMediaState.onOpenChange(true)
                 }}
+                size={'sm'}
                 variant={'secondary'}
             >
                 <FilesIcon />

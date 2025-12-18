@@ -17,6 +17,7 @@ import {
     OrganizationEditSchema,
     useUpdateOrganization,
 } from '@/modules/organization'
+import ThemePicker from '@/modules/settings/components/theme-picker'
 
 import {
     FacebookIcon,
@@ -158,6 +159,7 @@ const UpdateOrganizationForm = ({
     }, handleFocusError)
 
     const errorMessage = serverRequestErrExtractor({ error }) || firstError
+    console.log(form.watch('theme'))
 
     return (
         <Form {...form}>
@@ -167,6 +169,20 @@ const UpdateOrganizationForm = ({
                 ref={formRef}
             >
                 <div className="grid w-full grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+                    <FormFieldWrapper
+                        className="col-span-full "
+                        control={form.control}
+                        label="Select Theme"
+                        name="theme"
+                        render={({ field }) => (
+                            <ThemePicker
+                                onSelect={(selectedTheme) => {
+                                    field.onChange(selectedTheme)
+                                }}
+                                value={field.value}
+                            />
+                        )}
+                    />
                     <div className="col-span-full flex flex-col sm:flex-row gap-4 w-full">
                         <FormFieldWrapper
                             className="flex-1"

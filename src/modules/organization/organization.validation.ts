@@ -53,6 +53,8 @@ export const OrganizationSchema = z.object({
     youtube_link: z.url().optional(),
     personal_website_link: z.url().optional(),
     instagram_link: z.url().optional(),
+
+    theme: z.string().optional(),
 })
 // }).omit({ currency_id: true })
 

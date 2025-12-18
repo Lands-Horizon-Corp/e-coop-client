@@ -17,7 +17,7 @@ export type Theme = 'dark' | 'light' | 'system'
 export type ResolvedTheme = 'dark' | 'light'
 export type AnimationVariant = 'circle' | 'circle-blur' | 'polygon' | 'gif'
 
-type CustomThemeColors = {
+export type CustomThemeColors = {
     light: Record<string, string>
     dark: Record<string, string>
 }
