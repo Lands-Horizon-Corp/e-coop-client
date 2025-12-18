@@ -110,7 +110,7 @@ const SavingsInterestEntryDailyBalanceView = ({
                                 )}
                             </div>
 
-                            <div className="rounded-md border">
+                            <div className="rounded-md border bg-popover">
                                 <Table>
                                     <TableHeader>
                                         <TableRow>
@@ -136,7 +136,16 @@ const SavingsInterestEntryDailyBalanceView = ({
                                                     </TableCell>
                                                     <TableCell className="text-right font-semibold">
                                                         {currencyFormat(
-                                                            entry.balance
+                                                            entry.balance,
+                                                            {
+                                                                currency:
+                                                                    data.account
+                                                                        ?.currency,
+                                                                showSymbol:
+                                                                    !!data
+                                                                        .account
+                                                                        ?.currency,
+                                                            }
                                                         )}
                                                     </TableCell>
                                                     <TableCell className="text-center">
@@ -161,7 +170,7 @@ const SavingsInterestEntryDailyBalanceView = ({
 
             {/* Summary Card */}
             <div>
-                <div className="space-y-3">
+                <div className="space-y-3 sticky top-5">
                     {isPending ? (
                         <>
                             <Skeleton className="h-8 w-32" />
@@ -189,55 +198,100 @@ const SavingsInterestEntryDailyBalanceView = ({
                                     </CardTitle>
                                 </CardHeader>
                                 <CardContent className="space-y-4">
-                                    <div>
-                                        <p className="text-sm text-muted-foreground">
-                                            Beginning Balance
-                                        </p>
-                                        <p className="text-lg font-semibold">
-                                            {currencyFormat(
-                                                data.beginning_balance
-                                            )}
-                                        </p>
+                                    <div className="flex items-center gap-x-4">
+                                        <div>
+                                            <p className="text-sm text-muted-foreground">
+                                                Beginning
+                                            </p>
+                                            <p className="text-lg font-semibold">
+                                                {currencyFormat(
+                                                    data.beginning_balance,
+                                                    {
+                                                        currency:
+                                                            data.account
+                                                                ?.currency,
+                                                        showSymbol:
+                                                            !!data.account
+                                                                ?.currency,
+                                                    }
+                                                )}
+                                            </p>
+                                        </div>
+                                        <ArrowRightIcon className="size-6 mx-auto" />
+                                        <div className="w-fit">
+                                            <p className="text-sm text-muted-foreground">
+                                                Ending
+                                            </p>
+                                            <p className="text-lg font-semibold">
+                                                {currencyFormat(
+                                                    data.ending_balance,
+                                                    {
+                                                        currency:
+                                                            data.account
+                                                                ?.currency,
+                                                        showSymbol:
+                                                            !!data.account
+                                                                ?.currency,
+                                                    }
+                                                )}
+                                            </p>
+                                        </div>
                                     </div>
-                                    <div>
-                                        <p className="text-sm text-muted-foreground">
-                                            Ending Balance
-                                        </p>
-                                        <p className="text-lg font-semibold">
-                                            {currencyFormat(
-                                                data.ending_balance
-                                            )}
-                                        </p>
-                                    </div>
-                                    <div className="border-t pt-4">
-                                        <p className="text-sm text-muted-foreground">
-                                            Average Daily Balance
-                                        </p>
-                                        <p className="text-lg font-semibold text-primary">
-                                            {currencyFormat(
-                                                data.average_daily_balance
-                                            )}
-                                        </p>
-                                    </div>
-                                    <div>
-                                        <p className="text-sm text-muted-foreground">
-                                            Lowest Balance
-                                        </p>
-                                        <p className="text-lg font-semibold text-red-600">
-                                            {currencyFormat(
-                                                data.lowest_balance
-                                            )}
-                                        </p>
-                                    </div>
-                                    <div>
-                                        <p className="text-sm text-muted-foreground">
-                                            Highest Balance
-                                        </p>
-                                        <p className="text-lg font-semibold text-green-600">
-                                            {currencyFormat(
-                                                data.highest_balance
-                                            )}
-                                        </p>
+                                    <div className="border-t grid grid-cols-3 pt-4 gap-x-2">
+                                        <div>
+                                            <p className="text-sm text-muted-foreground">
+                                                Average
+                                            </p>
+                                            <p className="text-lg font-semibold text-primary">
+                                                {currencyFormat(
+                                                    data.average_daily_balance,
+                                                    {
+                                                        currency:
+                                                            data.account
+                                                                ?.currency,
+                                                        showSymbol:
+                                                            !!data.account
+                                                                ?.currency,
+                                                    }
+                                                )}
+                                            </p>
+                                        </div>
+                                        <div>
+                                            <p className="text-sm text-muted-foreground">
+                                                Lowest
+                                            </p>
+                                            <p className="text-lg font-semibold text-red-600">
+                                                {currencyFormat(
+                                                    data.lowest_balance,
+                                                    {
+                                                        currency:
+                                                            data.account
+                                                                ?.currency,
+                                                        showSymbol:
+                                                            !!data.account
+                                                                ?.currency,
+                                                    }
+                                                )}
+                                            </p>
+                                        </div>
+                                        <div>
+                                            <p className="text-sm text-muted-foreground">
+                                                Highest
+                                            </p>
+                                            <p className="text-lg font-semibold text-green-600">
+                                                {currencyFormat(
+                                                    data.highest_balance,
+                                                    {
+                                                        currency:
+                                                            data.account
+                                                                ?.currency,
+                                                        showSymbol:
+                                                            !!data.account
+                                                                ?.currency,
+                                                    }
+                                                )}
+                                            </p>
+                                        </div>
                                     </div>
                                 </CardContent>
                             </Card>
@@ -250,8 +304,8 @@ const SavingsInterestEntryDailyBalanceView = ({
 }
 
 export const SavingsInterestEntryDailyBalanceViewModal = ({
-    title = 'Daily Balance View',
-    description = 'View the daily balance history and summary',
+    // title = 'Daily Balance View',
+    // description = 'View the daily balance history and summary',
     className,
     viewProps,
     ...props
@@ -261,8 +315,8 @@ export const SavingsInterestEntryDailyBalanceViewModal = ({
     return (
         <Modal
             className={cn('!max-w-6xl', className)}
-            description={description}
-            title={title}
+            // description={description}
+            // title={title}
             {...props}
         >
             <SavingsInterestEntryDailyBalanceView {...viewProps} />

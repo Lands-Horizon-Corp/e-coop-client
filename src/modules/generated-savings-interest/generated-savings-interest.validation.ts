@@ -28,8 +28,8 @@ export const GeneratedSavingsInterestSchema = z
             'Invalid computation type'
         ),
 
-        interest_tax_rate: z
-            .number()
+        interest_tax_rate: z.coerce
+            .number<string>()
             .min(0, 'Interest tax rate must be non-negative')
             .max(100, 'Interest tax rate cannot exceed 100'),
 
@@ -38,6 +38,8 @@ export const GeneratedSavingsInterestSchema = z
 
         // for view only
         entries: z.array(z.any()).min(1, 'At least one entry is required'),
+        total_tax: z.coerce.number().optional(),
+        total_interest: z.coerce.number().optional(),
         is_viewing_entries: z.boolean().optional(),
     })
     .superRefine((data, ctx) => {

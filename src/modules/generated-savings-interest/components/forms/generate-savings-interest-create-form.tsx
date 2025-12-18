@@ -104,6 +104,8 @@ const GeneratedSavingsInterestCreateForm = ({
             onSuccess: (data) => {
                 form.setValue('entries', data.entries || [])
                 form.setValue('is_viewing_entries', true)
+                form.setValue('total_interest', data.total_interest || 0)
+                form.setValue('total_tax', data.total_tax || 0)
                 toast.success('Interest entries generated successfully')
             },
             onError: (error) => {
@@ -326,14 +328,9 @@ const GeneratedSavingsInterestCreateForm = ({
                             <Input
                                 {...field}
                                 // disabled={isDisabled(field.name)}
-                                max="100"
-                                min="0"
-                                onChange={(e) =>
-                                    field.onChange(Number(e.target.value))
-                                }
+                                onChange={(e) => field.onChange(e.target.value)}
                                 placeholder="20"
                                 step="0.01"
-                                type="number"
                             />
                         )}
                     />
@@ -521,6 +518,8 @@ const EntriesModalSection = ({
             <GeneratedSavingsInterestEntriesView
                 className="h-[70vh] text-sm"
                 entries={entries}
+                total_interest={form.getValues('total_interest')}
+                total_tax={form.getValues('total_tax')}
             />
         </Modal>
     )

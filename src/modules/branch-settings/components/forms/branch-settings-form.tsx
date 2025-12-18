@@ -223,8 +223,8 @@ const BranchSettingsForm = ({
                                 <p className="text-xs text-muted-foreground">
                                     An annual divisor is a number used to
                                     convert a yearly amount into a smaller
-                                    time-based amount—such as monthly, weekly,
-                                    or daily—by dividing it across the desired
+                                    time-based amount such as monthly, weekly,
+                                    or daily by dividing it across the desired
                                     period.
                                 </p>
                             </div>

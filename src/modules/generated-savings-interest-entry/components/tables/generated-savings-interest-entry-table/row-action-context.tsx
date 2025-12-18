@@ -194,10 +194,10 @@ export const GeneratedSavingsInterestEntryTableActionManager = () => {
             )}
             {state.action === 'view' && state.id && (
                 <SavingsInterestEntryDailyBalanceViewModal
-                    description="View the daily balance history and summary for this savings interest entry."
+                    // description="View the daily balance history and summary for this savings interest entry."
                     onOpenChange={close}
                     open={state.isOpen}
-                    title="Daily Balance View"
+                    // title="Daily Balance View"
                     viewProps={{
                         generatedSavingsInterestEntryId: state.id,
                     }}

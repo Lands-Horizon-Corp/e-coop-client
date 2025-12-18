@@ -80,7 +80,7 @@ export const useGenerateSavingsInterestProcessView = createMutationFactory<
 
         return response.data
     },
-    defaultInvalidates: [[generatedSavingsInterestBaseKey, 'all']],
+    defaultInvalidates: [[generatedSavingsInterestBaseKey, 'paginated']],
 })
 
 // Get all savings interest for this generated savings interest
@@ -125,7 +125,7 @@ export const usePrintGeneratedSavingsInterest = createMutationFactory<
     },
     invalidationFn: (args) =>
         updateMutationInvalidationFn(generatedSavingsInterestBaseKey, args),
-    defaultInvalidates: [[generatedSavingsInterestBaseKey, 'all']],
+    defaultInvalidates: [[generatedSavingsInterestBaseKey, 'paginated']],
 })
 
 // RE-PRINT
@@ -149,7 +149,7 @@ export const useReprintGeneratedSavingsInterest = createMutationFactory<
     },
     invalidationFn: (args) =>
         updateMutationInvalidationFn(generatedSavingsInterestBaseKey, args),
-    defaultInvalidates: [[generatedSavingsInterestBaseKey, 'all']],
+    defaultInvalidates: [[generatedSavingsInterestBaseKey, 'paginated']],
 })
 
 // UNDO PRINT
@@ -166,7 +166,7 @@ export const useUndoPrintGeneratedSavingsInterest = createMutationFactory<
     },
     invalidationFn: (args) =>
         updateMutationInvalidationFn(generatedSavingsInterestBaseKey, args),
-    defaultInvalidates: [[generatedSavingsInterestBaseKey, 'all']],
+    defaultInvalidates: [[generatedSavingsInterestBaseKey, 'paginated']],
 })
 
 // POST The generated savings interest
@@ -205,7 +205,7 @@ export const usePostGeneratedSavingsInterest = createMutationFactory<
             ],
         })
     },
-    defaultInvalidates: [[generatedSavingsInterestBaseKey, 'all']],
+    defaultInvalidates: [[generatedSavingsInterestBaseKey, 'paginated']],
 })
 
 export const logger = Logger.getInstance('generated-savings-interest')

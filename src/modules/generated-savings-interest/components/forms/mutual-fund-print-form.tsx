@@ -5,7 +5,7 @@ import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
 
 import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
 import { cn } from '@/helpers/tw-utils'
-import { useReprintGeneratedSavingsInterest } from '@/modules/generated-savings-interest/generated-savings-interest.service'
+import { usePrintGeneratedSavingsInterest, useReprintGeneratedSavingsInterest } from '@/modules/generated-savings-interest/generated-savings-interest.service'
 import { GeneratedSavingsInterestPrintSchema } from '@/modules/generated-savings-interest/generated-savings-interest.validation'
 import MemberTypeCombobox from '@/modules/member-type/components/member-type-combobox'
 
@@ -52,7 +52,7 @@ const GeneratedSavingsInterestPrintForm = ({
         },
     })
 
-    const printMutation = useReprintGeneratedSavingsInterest({
+    const printMutation = usePrintGeneratedSavingsInterest({
         options: {
             onSuccess: formProps.onSuccess,
             onError: formProps.onError,
@@ -103,7 +103,7 @@ const GeneratedSavingsInterestPrintForm = ({
                                 <MemberTypeCombobox
                                     {...field}
                                     onChange={(selected) => {
-                                        field.onChange(selected)
+                                        field.onChange(selected?.id)
                                     }}
                                     value={field.value!}
                                 />

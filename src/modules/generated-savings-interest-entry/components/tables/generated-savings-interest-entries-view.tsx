@@ -4,6 +4,7 @@ import Fuse from 'fuse.js'
 
 import { formatNumber } from '@/helpers/number-utils'
 import { cn } from '@/helpers/tw-utils'
+import { BrowseReferenceDisplayModal } from '@/modules/browse-reference/components/browse-reference-display'
 import { currencyFormat } from '@/modules/currency'
 import {
     type ColumnDef,
@@ -19,10 +20,18 @@ import {
     useVirtualizer,
 } from '@tanstack/react-virtual'
 
-import { MagnifyingGlassIcon, RenderIcon, TIcon } from '@/components/icons'
+import {
+    EyeIcon,
+    MagnifyingGlassIcon,
+    RenderIcon,
+    TIcon,
+} from '@/components/icons'
 import ImageDisplay from '@/components/image-display'
+import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { TableCell, TableRow } from '@/components/ui/table'
+
+import { useModalState } from '@/hooks/use-modal-state'
 
 import { IClassProps } from '@/types'
 
@@ -247,6 +256,34 @@ function TableBodyRow({ row, virtualRow, rowVirtualizer }: TableBodyRowProps) {
     )
 }
 
+const SavingsEntryAction = ({
+    row,
+}: {
+    row: Row<IGeneratedSavingsInterestEntry>
+}) => {
+    const modalState = useModalState()
+    const { account_id, member_profile } = row.original
+
+    return (
+        <>
+            <Button
+                onClick={() => modalState.onOpenChange(true)}
+                size="icon-sm"
+                variant="secondary"
+            >
+                <EyeIcon className="" />
+            </Button>
+            <BrowseReferenceDisplayModal
+                browseReferenceDisplayProps={{
+                    accountId: account_id,
+                    memberTypeId: member_profile!.member_type_id!,
+                }}
+                {...modalState}
+            />
+        </>
+    )
+}
+
 const GeneratedSavingsInterestEntriesView = ({
     entries,
     total_tax = 0,
@@ -362,19 +399,12 @@ const GeneratedSavingsInterestEntriesView = ({
                 size: 130,
             },
             {
-                id: 'net_interest',
-                header: () => <p className="w-full text-right">Net Interest</p>,
-                cell: (info) => {
-                    const netInterest =
-                        (info.row.original.interest_amount || 0) -
-                        (info.row.original.interest_tax || 0)
-                    const currency = info.row.original.account?.currency
-                    return currencyFormat(netInterest, {
-                        currency,
-                        showSymbol: !!currency,
-                    })
+                id: 'action',
+                header: () => <p className="w-full text-right"></p>,
+                cell: ({ row }) => {
+                    return <SavingsEntryAction row={row} />
                 },
-                size: 140,
+                size: 130,
             },
         ],
         []
