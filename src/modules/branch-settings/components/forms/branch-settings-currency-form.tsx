@@ -91,13 +91,16 @@ const BranchSettingsCurrencyForm = ({
                 ref={formRef}
             >
                 <TransactionReverseRequestFormModal
+                    description="This action needs extra admin/authorization"
                     formProps={{
+                        submitText: 'Save',
                         onSuccess: () => {
                             onSubmit()
                         },
                     }}
                     onOpenChange={modalState.onOpenChange}
                     open={modalState.open}
+                    title="Update Checkpoint"
                 />
                 <fieldset
                     className="space-y-6"
@@ -265,6 +268,55 @@ const BranchSettingsCurrencyForm = ({
                                     placeholder="Select default account"
                                     value={form.getValues(
                                         'cash_on_hand_account'
+                                    )}
+                                />
+                            )}
+                        />
+                        <FormFieldWrapper
+                            control={form.control}
+                            label={
+                                <span>
+                                    Mutual Fund account
+                                    <InfoTooltip
+                                        content={
+                                            <div className="flex gap-2 text-muted-foreground max-w-[400px]">
+                                                <MoneyIcon
+                                                    aria-hidden="true"
+                                                    className="size-6 shrink-0 opacity-60"
+                                                    size={16}
+                                                />
+                                                <div className="space-y-1">
+                                                    <p className="text-[13px] font-medium">
+                                                        Mutual Fund Account
+                                                    </p>
+                                                    <p className="text-muted-foreground text-xs">
+                                                        Indicates the account
+                                                        where mutual fund are
+                                                        deducted
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        }
+                                    />
+                                </span>
+                            }
+                            name="compassion_fund_account_id"
+                            render={({ field }) => (
+                                <AccountPicker
+                                    currencyId={form.getValues('currency_id')}
+                                    mode="currency-payment"
+                                    nameOnly
+                                    onSelect={(selectedAccount) => {
+                                        field.onChange(selectedAccount?.id)
+                                        form.setValue(
+                                            'compassion_fund_account',
+                                            selectedAccount,
+                                            { shouldDirty: true }
+                                        )
+                                    }}
+                                    placeholder="Select default account"
+                                    value={form.getValues(
+                                        'compassion_fund_account'
                                     )}
                                 />
                             )}

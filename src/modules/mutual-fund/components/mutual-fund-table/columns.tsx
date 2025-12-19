@@ -13,7 +13,7 @@ import DateFilter from '@/components/data-table/data-table-filters/date-filter'
 import NumberFilter from '@/components/data-table/data-table-filters/number-filter'
 import TextFilter from '@/components/data-table/data-table-filters/text-filter'
 import HeaderToggleSelect from '@/components/data-table/data-table-row-actions/header-toggle-select'
-import { PushPinSlashIcon } from '@/components/icons'
+import { BadgeCheckFillIcon, PushPinSlashIcon } from '@/components/icons'
 import { Checkbox } from '@/components/ui/checkbox'
 
 import { MUTUAL_FUND_COMPUTATION_TYPES } from '../../mutual-fund.constant'
@@ -253,7 +253,50 @@ const MutualFundTableColumns = (
         size: 140,
         minSize: 120,
     },
-
+    {
+        id: 'posted_date',
+        accessorKey: 'posted_date',
+        header: (props) => (
+            <DataTableColumnHeader {...props} title="Posted Date">
+                <ColumnActions {...props}>
+                    <DateFilter<IMutualFund>
+                        displayText="Posted Date"
+                        field="posted_date"
+                    />
+                </ColumnActions>
+            </DataTableColumnHeader>
+        ),
+        cell: ({
+            row: {
+                original: { posted_date },
+            },
+        }) => (
+            <div className="flex items-start gap-2">
+                <div>
+                    <p>
+                        {posted_date && (
+                            <BadgeCheckFillIcon className="size-4 inline text-green-500 shrink-0 mr-1" />
+                        )}
+                        {posted_date ? toReadableDate(posted_date) : '-'}
+                    </p>
+                    {posted_date ? (
+                        <p className="text-xs text-muted-foreground/60">
+                            {toReadableDate(posted_date, 'h:mm a -')}{' '}
+                            {dateAgo(posted_date)}
+                        </p>
+                    ) : (
+                        ''
+                    )}
+                </div>
+            </div>
+        ),
+        enableMultiSort: true,
+        enableSorting: true,
+        enableResizing: true,
+        enableHiding: true,
+        size: 170,
+        minSize: 140,
+    },
     ...createUpdateColumns<IMutualFund>(),
 ]
 

@@ -327,12 +327,6 @@ const MutualFundEntryView = ({
                 size: 150,
             },
             {
-                accessorKey: 'mutual_fund.name',
-                header: () => <p className="w-full">Mutual Fund</p>,
-                cell: (info) => info.row.original.mutual_fund?.name || 'N/A',
-                size: 180,
-            },
-            {
                 accessorKey: 'amount',
                 header: () => <p className="w-full text-right">Amount</p>,
                 cell: (info) => {

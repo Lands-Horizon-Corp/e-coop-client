@@ -86,6 +86,9 @@ export interface IBranchSettings extends IBaseEntityMeta {
     unbalanced_accounts: IUnbalanceAccount[]
     unbalanced_account_delete_ids: TEntityId[]
 
+    compassion_fund_account_id: TEntityId
+    compassion_fund_account: IAccount
+
     // account_for_overflow_id: TEntityId
     // account_for_overflow: IAccount
 

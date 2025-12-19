@@ -54,7 +54,7 @@ export type IMutualFundRequest = z.infer<typeof MutualFundSchema>
 export type IMutualFundViewRequest = z.infer<typeof MutualFundViewSchema>
 
 export interface IMutualFundView {
-    entries?: IMutualFundEntry[]
+    mutual_fund_entries?: IMutualFundEntry[]
     total_amount: number
 }
 

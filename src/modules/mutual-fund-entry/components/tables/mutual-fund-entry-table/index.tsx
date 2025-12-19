@@ -246,7 +246,10 @@ export const MutualFundEntryTable = ({
         mutualFundId,
     })
 
-    const entries = useMemo(() => data?.entries || [], [data?.entries])
+    const entries = useMemo(
+        () => data?.mutual_fund_entries || [],
+        [data?.mutual_fund_entries]
+    )
 
     const totalAmount = useMemo(
         () => data?.total_amount || 0,
@@ -481,7 +484,7 @@ export const MutualFundEntryTableModal = ({
         mutualFundId: tableProps.mutualFundId,
     })
 
-    const entries = data?.entries || []
+    const entries = data?.mutual_fund_entries || []
 
     const defaultDescription = `Showing ${formatNumber(entries.length)} mutual fund entries. You can edit or delete entries from this view.`
 

@@ -317,7 +317,7 @@ const AccountPicker = ({
                     </Button>
                     {allowClear && value && (
                         <Button
-                            className="cursor-pointer rounded-full !p-0 !px-0"
+                            className="cursor-pointer flex-shrink-0 rounded-full !p-0 !px-0"
                             onClick={(e) => {
                                 e.preventDefault()
                                 e.stopPropagation()

@@ -17,12 +17,15 @@ export const MutualFundSchema = z.object({
     member_profile_id: EntityIdSchema('Invalid member profile'),
     member_profile: z.any().optional(),
 
+    account_id: EntityIdSchema('Account ID is required'),
+    account: z.any(),
+
     name: z.string().min(1).max(255),
     description: z.string().optional(),
     date_of_death: stringDateWithTransformSchema,
     amount: z.coerce
         .number('Invalid amount')
-        .gte(0, 'Amount must be at least 0'),
+        .min(1, 'Amount must be at least 1'),
     computation_type: z.enum(MUTUAL_FUND_COMPUTATION_TYPES),
     extension_only: z.boolean().default(false),
 
@@ -37,21 +40,23 @@ export const MutualFundSchema = z.object({
     mutual_fund_table_delete_ids: z.array(entityIdSchema).optional(),
 
     // for view only
-    entries: z.array(z.any()).optional(),
+    mutual_fund_entries: z.array(z.any()).optional(),
     is_viewing_entries: z.boolean().optional(),
     total_amount: z.coerce.number().default(0),
 })
 
 export type TMutualFundSchema = z.infer<typeof MutualFundSchema>
 
-export const MutualFundViewSchema = MutualFundSchema.omit({ entries: true })
+export const MutualFundViewSchema = MutualFundSchema.omit({
+    mutual_fund_entries: true,
+})
 export type TMutualFundViewSchema = z.infer<typeof MutualFundViewSchema>
 
 export const MutualFundViewPostRequestSchema = z.object({
     check_voucher_number: z.string().optional(),
 
     post_account_id: EntityIdSchema('Invalid post account').optional(),
-    account: z.any(),
+    post_account: z.any(),
 
     entry_date: stringDateWithTransformSchema.optional(),
 })

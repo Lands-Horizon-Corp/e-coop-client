@@ -5,7 +5,7 @@ import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
 
 import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
 import { cn } from '@/helpers/tw-utils'
-import { usePrintGeneratedSavingsInterest, useReprintGeneratedSavingsInterest } from '@/modules/generated-savings-interest/generated-savings-interest.service'
+import { usePrintGeneratedSavingsInterest } from '@/modules/generated-savings-interest/generated-savings-interest.service'
 import { GeneratedSavingsInterestPrintSchema } from '@/modules/generated-savings-interest/generated-savings-interest.validation'
 import MemberTypeCombobox from '@/modules/member-type/components/member-type-combobox'
 

@@ -81,6 +81,9 @@ export const BranchSettingsCurrencySchema = z.object({
     paid_up_shared_capital_account_id: entityIdSchema,
     paid_up_shared_capital_account: z.any(),
 
+    compassion_fund_account_id: entityIdSchema,
+    compassion_fund_account: z.any(),
+
     unbalanced_accounts: z
         .array(UnbalanceAccountSchema)
         .default([])

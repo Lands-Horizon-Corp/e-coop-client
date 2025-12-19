@@ -7,6 +7,7 @@ import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
 import { toInputDateString } from '@/helpers/date-utils'
 import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
 import { cn } from '@/helpers/tw-utils'
+import { AccountPicker } from '@/modules/account'
 import MemberPicker from '@/modules/member-profile/components/member-picker'
 import MutualFundEntryView from '@/modules/mutual-fund-entry/components/tables/mutual-fund-entry-view'
 
@@ -74,7 +75,7 @@ const MutualFundCreateUpdateForm = ({
             amount: 0,
             computation_type: 'continuous',
             extension_only: false,
-            entries: [],
+            mutual_fund_entries: [],
             ...formProps.defaultValues,
             date_of_death: toInputDateString(
                 formProps.defaultValues?.date_of_death || new Date()
@@ -99,8 +100,11 @@ const MutualFundCreateUpdateForm = ({
     const generateMutation = useGenerateMutualFundProcessView({
         options: {
             onSuccess: (data) => {
-                form.setValue('entries', data.entries || [])
-                form.setValue('total_amount', data.total_amount || 0) // ✅ No manual computation needed
+                form.setValue(
+                    'mutual_fund_entries',
+                    data.mutual_fund_entries || []
+                )
+                form.setValue('total_amount', data.total_amount || 0)
                 form.setValue('is_viewing_entries', true)
                 toast.success('Mutual fund entries generated successfully')
             },
@@ -173,15 +177,42 @@ const MutualFundCreateUpdateForm = ({
     return (
         <Form {...form}>
             <form
-                className={cn('flex w-full flex-col gap-y-4', className)}
+                className={cn(
+                    'flex w-full flex-col gap-y-4 min-w-0 max-w-full ',
+                    className
+                )}
                 onSubmit={onSubmit}
                 ref={formRef}
             >
                 <fieldset
-                    className="grid gap-x-6 gap-y-4 sm:gap-y-3"
+                    className="grid gap-x-6 min-w-0 max-w-full gap-y-4 sm:gap-y-3"
                     disabled={isPending || formProps.readOnly}
                 >
-                    <fieldset className="space-y-3">
+                    <fieldset className="space-y-3 min-w-0 max-w-full ">
+                        <FormFieldWrapper
+                            control={form.control}
+                            label="Deceased Member *"
+                            name="member_profile_id"
+                            render={({ field }) => (
+                                <MemberPicker
+                                    allowShorcutCommand
+                                    disabled={isDisabled(field.name)}
+                                    onSelect={(selectedMember) => {
+                                        field.onChange(selectedMember?.id)
+                                        form.setValue(
+                                            'name',
+                                            `Mutual fund for ${selectedMember.full_name}`
+                                        )
+                                        form.setValue(
+                                            'member_profile',
+                                            selectedMember
+                                        )
+                                    }}
+                                    placeholder="Deceased Member"
+                                    value={form.getValues('member_profile')}
+                                />
+                            )}
+                        />
                         <FormFieldWrapper
                             control={form.control}
                             label="Name *"
@@ -197,25 +228,21 @@ const MutualFundCreateUpdateForm = ({
                         />
                         <FormFieldWrapper
                             control={form.control}
-                            label="Deceased Member *"
-                            name="member_profile_id"
+                            label="Account *"
+                            name="account_id"
                             render={({ field }) => (
-                                <MemberPicker
-                                    allowShorcutCommand
-                                    disabled={isDisabled(field.name)}
-                                    onSelect={(selectedMember) => {
-                                        field.onChange(selectedMember?.id)
-                                        form.setValue(
-                                            'member_profile',
-                                            selectedMember
-                                        )
+                                <AccountPicker
+                                    {...field}
+                                    mode="deposit"
+                                    onSelect={(account) => {
+                                        field.onChange(account?.id || undefined)
+                                        form.setValue('account', account)
                                     }}
-                                    placeholder="Deceased Member"
-                                    value={form.getValues('member_profile')}
+                                    placeholder="Select account"
+                                    value={form.watch('account')}
                                 />
                             )}
                         />
-
                         <div className="grid grid-cols-2 gap-4">
                             <FormFieldWrapper
                                 control={form.control}
@@ -412,7 +439,7 @@ const EntriesSection = ({
     isProcessing: boolean
     onProcess: () => void
 }) => {
-    const entries = form.watch('entries') || []
+    const entries = form.watch('mutual_fund_entries') || []
     const hasEntries = entries.length > 0
 
     return (
@@ -444,7 +471,7 @@ const EntriesSection = ({
                     {hasEntries && (
                         <Button
                             onClick={() => {
-                                form.setValue('entries', [])
+                                form.setValue('mutual_fund_entries', [])
                             }}
                             size="xs"
                             type="button"
@@ -481,7 +508,7 @@ const EntriesModalSection = ({
 }: {
     form: UseFormReturn<TMutualFundSchema>
 }) => {
-    const entries = form.watch('entries') || []
+    const entries = form.watch('mutual_fund_entries') || []
     const total = form.watch('total_amount')
     const isViewingEntries = form.watch('is_viewing_entries') || false
 

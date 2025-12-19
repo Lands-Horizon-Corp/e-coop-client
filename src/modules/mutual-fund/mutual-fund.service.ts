@@ -76,7 +76,7 @@ export const useGenerateMutualFundProcessView = createMutationFactory<
 
         return response.data
     },
-    defaultInvalidates: [[mutualFundBaseKey, 'all']],
+    defaultInvalidates: [[mutualFundBaseKey, 'paginated']],
 })
 
 // Get all mutual fund entries for this mutual fund
@@ -122,7 +122,7 @@ export const usePrintMutualFund = createMutationFactory<
     },
     invalidationFn: (args) =>
         updateMutationInvalidationFn(mutualFundBaseKey, args),
-    defaultInvalidates: [[mutualFundBaseKey, 'all']],
+    defaultInvalidates: [[mutualFundBaseKey, 'paginated']],
 })
 
 // RE-PRINT
@@ -139,7 +139,7 @@ export const useReprintMutualFund = createMutationFactory<
     },
     invalidationFn: (args) =>
         updateMutationInvalidationFn(mutualFundBaseKey, args),
-    defaultInvalidates: [[mutualFundBaseKey, 'all']],
+    defaultInvalidates: [[mutualFundBaseKey, 'paginated']],
 })
 
 // UNDO PRINT
@@ -156,7 +156,7 @@ export const useUndoPrintMutualFund = createMutationFactory<
     },
     invalidationFn: (args) =>
         updateMutationInvalidationFn(mutualFundBaseKey, args),
-    defaultInvalidates: [[mutualFundBaseKey, 'all']],
+    defaultInvalidates: [[mutualFundBaseKey, 'paginated']],
 })
 
 // POST The mutual fund
@@ -189,7 +189,7 @@ export const usePostMutualFund = createMutationFactory<
             ],
         })
     },
-    defaultInvalidates: [[mutualFundBaseKey, 'all']],
+    defaultInvalidates: [[mutualFundBaseKey, 'paginated']],
 })
 
 export const logger = Logger.getInstance('mutual-fund')

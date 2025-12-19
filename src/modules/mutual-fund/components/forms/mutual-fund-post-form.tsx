@@ -109,17 +109,21 @@ const MutualFundPostForm = ({
                 >
                     <FormFieldWrapper
                         control={form.control}
-                        label="Account *"
+                        label="Post Account"
                         name="post_account_id"
                         render={({ field }) => (
                             <AccountPicker
+                                allowClear
                                 {...field}
                                 mode="deposit"
+                                nameOnly
                                 onSelect={(account) => {
                                     field.onChange(account?.id || undefined)
+                                    form.setValue('post_account', account)
                                 }}
                                 placeholder="Select post account"
-                                value={form.watch('account')}
+                                triggerClassName="flex-1"
+                                value={form.watch('post_account')}
                             />
                         )}
                     />

@@ -15,7 +15,15 @@ const MutualFundPage = () => {
     const createModal = useModalState(false)
     const {
         currentAuth: {
-            user_organization: { branch_id },
+            user_organization: {
+                branch_id,
+                branch: {
+                    branch_setting: {
+                        compassion_fund_account,
+                        compassion_fund_account_id,
+                    },
+                },
+            },
         },
     } = useAuthUserWithOrgBranch()
 
@@ -41,6 +49,10 @@ const MutualFundPage = () => {
         <PageContainer>
             <MutualFundCreateUpdateFormModal
                 formProps={{
+                    defaultValues: {
+                        account: compassion_fund_account,
+                        account_id: compassion_fund_account_id,
+                    },
                     onSuccess: () => createModal.onOpenChange(false),
                 }}
                 {...createModal}
