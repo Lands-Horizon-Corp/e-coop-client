@@ -8,6 +8,7 @@ import { IComakerCollateral } from '../comaker-collateral'
 import { IComakerMemberProfile } from '../comaker-member-profile'
 import { ICurrency } from '../currency'
 import { IGeneralLedger } from '../general-ledger'
+import { ILoanAccount } from '../loan-account'
 import { ILoanAmortizationSchedule } from '../loan-amortization-schedule'
 import { ILoanClearanceAnalysis } from '../loan-clearance-analysis'
 import { ILoanClearanceAnalysisInstitution } from '../loan-clearance-analysis-institution'
@@ -203,6 +204,8 @@ export interface ILoanTransaction
 
     // ADDED FROM ZALZAL Dev Branch
     processing?: boolean
+
+    loan_accounts?: ILoanAccount[]
 }
 
 export interface ILoanTransactionStatusDates {

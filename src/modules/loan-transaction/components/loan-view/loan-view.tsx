@@ -7,7 +7,6 @@ import { currencyFormat } from '@/modules/currency'
 import {
     ILoanTransaction,
     useGetLoanTransactionById,
-    useGetLoanTransactionSummary,
     useProcessLoanTransactionById,
 } from '@/modules/loan-transaction'
 import { IMemberProfile } from '@/modules/member-profile'
@@ -42,10 +41,12 @@ import { IClassProps, TEntityId } from '@/types'
 import { LoanAddInterestFormModal } from '../forms/loan-add-interest-form'
 import { LoanInquireAdvanceInterestFinesModal } from '../forms/loan-inquire-advance-interest-fines-form'
 import { LoanViewSkeleton } from '../skeletons/loan-view-skeleton'
-import { LoanAccountsSummary } from './loan-account-summary'
+import { LoanAccountsView } from './loan-accounts-view'
 import { LoanComakersList } from './loan-comakers'
 import LoanLedgerHeader from './loan-ledger-header'
 import LoanLedgerTable from './loan-ledger-table/loan-ledger-table'
+
+// import GeneralLedgerTable from '@/modules/general-ledger/components/tables/general-ledger-table'
 
 interface LoanLedgerViewProps extends IClassProps {
     loanTransactionId: TEntityId
@@ -72,20 +73,7 @@ const LoanView = ({
         },
     })
 
-    const {
-        data: loanSummary,
-        isRefetching: isRefetchingSummary,
-        isPending: isPendingSummary,
-        refetch: refetchSummary,
-    } = useGetLoanTransactionSummary({
-        id: loanTransactionId,
-        options: {
-            enabled: !!loanTransactionId,
-        },
-    })
-
     const handleRefresh = () => {
-        refetchSummary()
         refetchLoanTransaction()
     }
 
@@ -113,7 +101,7 @@ const LoanView = ({
                 <>
                     <LoanLedgerHeader
                         canProcess={!isProcessing || !data.processing}
-                        canRefresh={!isRefetching && !isRefetchingSummary}
+                        canRefresh={!isRefetching}
                         handleProcess={() => {
                             toast.promise(processLoanTransaction(data.id), {
                                 loading: 'Processing loan...',
@@ -123,13 +111,14 @@ const LoanView = ({
                         }}
                         handleRefresh={handleRefresh}
                         loanTransaction={data}
-                        loanTransactionSummary={loanSummary}
+                        // loanTransactionSummary={loanSummary}
                     />
                     <LoanLedgerTable
                         className="h-[50vh] w-full rounded-lg"
-                        data={loanSummary?.general_ledger || []}
-                        view={isPendingSummary ? 'skeleton' : 'data'}
+                        data={[]}
+                        view={'skeleton'}
                     />
+                    {/* <GeneralLedgerTable className='h-[50vh] w-full rounded-lg' mode='' /> */}
 
                     <Tabs className="w-full" defaultValue="account-summary">
                         <ScrollArea>
@@ -153,13 +142,11 @@ const LoanView = ({
                         </ScrollArea>
 
                         <TabsContent value="account-summary">
-                            <LoanAccountsSummary
-                                loanTransactionAccountSummaries={
-                                    loanSummary?.account_summary.sort(
-                                        (
-                                            { account_history: a },
-                                            { account_history: b }
-                                        ) => sortAccountsByTypePriority(a, b)
+                            <LoanAccountsView
+                                loanTransactionAccounts={
+                                    (data?.loan_accounts || []).sort(
+                                        ({ account: a }, { account: b }) =>
+                                            sortAccountsByTypePriority(a, b)
                                     ) || []
                                 }
                             />
@@ -274,175 +261,7 @@ export const LoanQuickSummary = ({
             </Table>
 
             {/* Grouped Summary */}
-            <div className="flex w-fit gap-8 overflow-clip">
-                {/* Paid Group */}
-                {/* <div className="flex flex-col gap-2">
-                    <div className="flex items-center gap-2">
-                        <span className="text-xs text-muted-foreground font-semibold">
-                            Principal Paid:
-                        </span>
-                        <span className="px-2 py-1 rounded-md border border-border bg-secondary font-mono text-xs text-right">
-                            {typeof principal_paid === 'number' ? (
-                                currencyFormat(principal_paid, {
-                                    currency: loanTransaction.account?.currency,
-                                    showSymbol:
-                                        !!loanTransaction.account?.currency,
-                                })
-                            ) : (
-                                <span className="text-xs text-muted-foreground">
-                                    ...
-                                </span>
-                            )}
-                        </span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                        <span className="text-xs text-muted-foreground font-semibold">
-                            Prev. Int. Paid:
-                        </span>
-                        <span className="px-2 py-1 rounded-md border border-border bg-secondary font-mono text-xs text-right">
-                            {typeof previous_interest_paid === 'number' ? (
-                                currencyFormat(previous_interest_paid, {
-                                    currency: loanTransaction.account?.currency,
-                                    showSymbol:
-                                        !!loanTransaction.account?.currency,
-                                })
-                            ) : (
-                                <span className="text-xs text-muted-foreground">
-                                    ...
-                                </span>
-                            )}
-                        </span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                        <span className="text-xs text-muted-foreground font-semibold">
-                            Prev. Fines Paid:
-                        </span>
-                        <span className="px-2 py-1 rounded-md border border-border bg-secondary font-mono text-xs text-right">
-                            {typeof previous_fines_paid === 'number' ? (
-                                currencyFormat(previous_fines_paid, {
-                                    currency: loanTransaction.account?.currency,
-                                    showSymbol:
-                                        !!loanTransaction.account?.currency,
-                                })
-                            ) : (
-                                <span className="text-xs text-muted-foreground">
-                                    ...
-                                </span>
-                            )}
-                        </span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                        <span className="text-xs text-muted-foreground font-semibold">
-                            Interest Paid:
-                        </span>
-                        <span className="px-2 py-1 rounded-md border border-border bg-secondary font-mono text-xs text-right">
-                            {typeof interest_paid === 'number' ? (
-                                currencyFormat(interest_paid, {
-                                    currency: loanTransaction.account?.currency,
-                                    showSymbol:
-                                        !!loanTransaction.account?.currency,
-                                })
-                            ) : (
-                                <span className="text-xs text-muted-foreground">
-                                    ...
-                                </span>
-                            )}
-                        </span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                        <span className="text-xs text-muted-foreground font-semibold">
-                            Fines Paid:
-                        </span>
-                        <span className="px-2 py-1 rounded-md border border-border bg-secondary font-mono text-xs text-right">
-                            {typeof fines_paid === 'number' ? (
-                                currencyFormat(fines_paid, {
-                                    currency: loanTransaction.account?.currency,
-                                    showSymbol:
-                                        !!loanTransaction.account?.currency,
-                                })
-                            ) : (
-                                <span className="text-xs text-muted-foreground">
-                                    ...
-                                </span>
-                            )}
-                        </span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                        <span className="text-xs text-muted-foreground font-semibold">
-                            % Collection:
-                        </span>
-                        <span className="px-2 py-1 rounded-md border border-border bg-secondary font-mono text-xs text-right">
-                            {typeof collection_progress === 'number' ? (
-                                `${formatNumber(collection_progress, 2)}%`
-                            ) : (
-                                <span className="text-xs text-muted-foreground">
-                                    ...
-                                </span>
-                            )}
-                        </span>
-                    </div>
-                </div> */}
-
-                {/* Amortization Group */}
-                {/* <div className="flex flex-col gap-2">
-                    <div className="flex items-center gap-2">
-                        <span className="text-xs text-muted-foreground font-semibold">
-                            Int. Amort:
-                        </span>
-                        <span className="px-2 py-1 rounded-md border border-border bg-secondary font-mono text-xs text-right">
-                            {typeof interest_amortization === 'number' ? (
-                                formatNumber(interest_amortization, 2)
-                            ) : (
-                                <span className="text-xs text-muted-foreground">
-                                    ...
-                                </span>
-                            )}
-                        </span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                        <span className="text-xs text-muted-foreground font-semibold">
-                            Total Amort.:
-                        </span>
-                        <span className="px-2 py-1 rounded-md border border-border bg-secondary font-mono text-xs text-right">
-                            {typeof amortization === 'number' ? (
-                                formatNumber(amortization, 2)
-                            ) : (
-                                <span className="text-xs text-muted-foreground">
-                                    ...
-                                </span>
-                            )}
-                        </span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                        <span className="text-xs text-muted-foreground font-semibold">
-                            First IRR:
-                        </span>
-                        <span className="px-2 py-1 rounded-md border border-border bg-secondary text-xs text-right">
-                            {first_irr ? (
-                                first_irr
-                            ) : (
-                                <span className="text-xs text-muted-foreground">
-                                    ...
-                                </span>
-                            )}
-                        </span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                        <span className="text-xs text-muted-foreground font-semibold">
-                            First DQ:
-                        </span>
-                        <span className="px-2 py-1 rounded-md border border-border bg-secondary text-xs text-right">
-                            {first_dq ? (
-                                first_dq
-                            ) : (
-                                <span className="text-xs text-muted-foreground">
-                                    ...
-                                </span>
-                            )}
-                        </span>
-                    </div>
-                </div> */}
-            </div>
+            <div className="flex w-fit gap-8 overflow-clip"></div>
 
             {/* Actions */}
             <div className="flex flex-col gap-2 items-end justify-start min-w-[140px]">
