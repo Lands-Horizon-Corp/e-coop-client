@@ -115,7 +115,10 @@ export const useGetGeneratedSavingsInterestEntry = ({
 export const usePrintGeneratedSavingsInterest = createMutationFactory<
     IGeneratedSavingsInterest,
     Error,
-    { generatedSavingsInterestId: TEntityId }
+    {
+        generatedSavingsInterestId: TEntityId
+        payload: IGeneratedSavingsInterestPrintRequest
+    }
 >({
     mutationFn: async ({ generatedSavingsInterestId }) => {
         const response = await API.put<void, IGeneratedSavingsInterest>(
