@@ -227,7 +227,7 @@ const GeneralLedgerTableColumns = (
                 },
             }) => (
                 <p className="text-right font-semibold">
-                    {balance
+                    {balance !== undefined || balance !== null
                         ? currencyFormat(balance, {
                               currency,
                               showSymbol: !!currency,
