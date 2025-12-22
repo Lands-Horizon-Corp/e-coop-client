@@ -557,4 +557,25 @@ export const useLoanEdit = createMutationFactory<
     },
 })
 
+// GET LOAN AMORTIZATION SCHEDULES
+export const useGetLoanGuide = ({
+    loanTransactionId,
+    options,
+}: {
+    loanTransactionId: TEntityId
+    options?: HookQueryOptions<void, Error>
+}) => {
+    return useQuery<void, Error>({
+        ...options,
+        queryKey: [loanTransactionBaseKey, loanTransactionId, 'guide'],
+        queryFn: async () => {
+            const response = await API.get<void>(
+                `${loanTransactionAPIRoute}/${loanTransactionId}/guide`
+            )
+
+            return response.data
+        },
+    })
+}
+
 export const logger = Logger.getInstance('loan-transaction')
