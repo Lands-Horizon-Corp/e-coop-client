@@ -466,6 +466,7 @@ export type TLoanTransactionSuggestedSchema = z.infer<
 
 export const LoanTransactionAdjustmentSchema = z.object({
     voucher: z.coerce.string().optional(),
+    loan_accoun_id : EntityIdSchema('Loan Transaction Account is required'), 
     account_id: EntityIdSchema('Account is required'),
     account: z.any(),
     adjustment_type: z.enum(LOAN_ADJUSTMENT_TYPE),

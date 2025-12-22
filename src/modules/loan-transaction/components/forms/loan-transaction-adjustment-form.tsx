@@ -43,7 +43,6 @@ export interface ILoanTransactionAdjustmentFormProps
 
 const LoanTransactionAdjustmentForm = ({
     className,
-    loanTransactionId: loanTransactionId,
     ...formProps
 }: ILoanTransactionAdjustmentFormProps) => {
     const form = useForm<TLoanTransactionAdjustmentFormValues>({
@@ -76,22 +75,16 @@ const LoanTransactionAdjustmentForm = ({
         })
 
     const onSubmit = form.handleSubmit((formData) => {
-        if (!loanTransactionId)
+        if (!formData.loan_accoun_id)
             return toast.warning('Loan Transaction ID is missing')
 
         toast.promise(
-            adjustLoanTransaction(
-                {
-                    loanTransactionId,
-                    payload: formData,
+            adjustLoanTransaction(formData, {
+                onSuccess: () => {
+                    formProps.onSuccess?.(undefined as void)
                 },
-                {
-                    onSuccess: () => {
-                        formProps.onSuccess?.(undefined as void)
-                    },
-                    onError: formProps.onError,
-                }
-            ),
+                onError: formProps.onError,
+            }),
             {
                 loading: 'Applying adjustment...',
                 success: 'Adjustment applied successfully',
@@ -280,7 +273,7 @@ export const LoanTransactionAdjustmentFormModal = ({
     formProps,
     ...props
 }: IModalProps & {
-    formProps?: Omit<ILoanTransactionAdjustmentFormProps, 'className'>
+    formProps: Omit<ILoanTransactionAdjustmentFormProps, 'className'>
 }) => {
     return (
         <Modal

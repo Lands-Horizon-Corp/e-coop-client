@@ -1,3 +1,5 @@
+import { useQueryClient } from '@tanstack/react-query'
+
 import { cn } from '@/helpers'
 import { currencyFormat } from '@/modules/currency'
 import { ILoanAccount } from '@/modules/loan-account'
@@ -9,8 +11,15 @@ import {
     Wallet,
 } from 'lucide-react'
 
-import { LinkIcon, RenderIcon, TIcon } from '@/components/icons'
+import {
+    GearIcon,
+    LinkIcon,
+    RenderIcon,
+    SettingsIcon,
+    TIcon,
+} from '@/components/icons'
 import { Badge } from '@/components/ui/badge'
+import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader } from '@/components/ui/card'
 import {
     Empty,
@@ -20,7 +29,12 @@ import {
     EmptyTitle,
 } from '@/components/ui/empty'
 
-import { IClassProps } from '@/types'
+import { useModalState } from '@/hooks/use-modal-state'
+
+import { IClassProps, TEntityId } from '@/types'
+
+import { loanTransactionBaseKey } from '../../loan-transaction.service'
+import { LoanTransactionAdjustmentFormModal } from '../forms/loan-transaction-adjustment-form'
 
 // Quick Summary & Actions
 export const LoanAccountsView = ({
@@ -80,6 +94,8 @@ const LoanAccountCard = ({
     const netChange =
         account.total_add - account.total_deduction - account.total_payment
     const isPositive = netChange >= 0
+    const adjustModalState = useModalState()
+    const queryClient = useQueryClient()
 
     return (
         <Card
@@ -90,6 +106,23 @@ const LoanAccountCard = ({
             )}
             style={{ animationDelay: `${index * 100}ms` }}
         >
+            <LoanTransactionAdjustmentFormModal
+                {...adjustModalState}
+                formProps={{
+                    onSuccess: () =>
+                        queryClient.invalidateQueries({
+                            queryKey: [
+                                loanTransactionBaseKey,
+                                account.loan_transaction_id,
+                            ],
+                        }),
+                    defaultValues: {
+                        account: account.account,
+                        account_id: account.account.id,
+                        loan_accoun_id: account.id,
+                    },
+                }}
+            />
             <CardHeader className="pb-3">
                 <div className="flex items-center justify-between">
                     <div className="flex items-center gap-3">
@@ -109,14 +142,24 @@ const LoanAccountCard = ({
                             </p>
                         </div>
                     </div>
-                    {account.account?.type && (
-                        <Badge
-                            className="text-xs font-medium"
+                    <div className="flex items-center gap-x-1">
+                        {account.account?.type && (
+                            <Badge
+                                className="text-xs font-medium"
+                                variant="secondary"
+                            >
+                                {account.account.type}
+                            </Badge>
+                        )}
+                        <Button
+                            className="!p-1 !size-fit"
+                            onClick={() => adjustModalState.onOpenChange(true)}
+                            size="icon-sm"
                             variant="secondary"
                         >
-                            {account.account.type}
-                        </Badge>
-                    )}
+                            <GearIcon />
+                        </Button>
+                    </div>
                 </div>
             </CardHeader>
 

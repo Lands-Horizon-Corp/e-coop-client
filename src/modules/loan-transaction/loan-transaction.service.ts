@@ -420,19 +420,16 @@ export const useProcessLoanTransactionById = createMutationFactory<
 export const useAdjustmentLoanTransaction = createMutationFactory<
     void,
     Error,
-    { loanTransactionId: TEntityId; payload: ILoanTransactionAdjustmentRequest }
+    ILoanTransactionAdjustmentRequest
 >({
-    mutationFn: async ({ loanTransactionId, payload }) => {
+    mutationFn: async (payload) => {
         const response = await API.post<typeof payload, void>(
-            `${loanTransactionAPIRoute}/${loanTransactionId}/adjustment`,
+            `${loanTransactionAPIRoute}/adjustment`,
             payload
         )
         return response.data
     },
-    invalidationFn: ({ queryClient, variables }) => {
-        queryClient.invalidateQueries({
-            queryKey: [loanTransactionBaseKey, variables.loanTransactionId],
-        })
+    invalidationFn: ({ queryClient }) => {
         queryClient.invalidateQueries({
             queryKey: [loanTransactionBaseKey, 'paginated'],
         })
