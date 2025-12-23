@@ -11,13 +11,7 @@ import {
     Wallet,
 } from 'lucide-react'
 
-import {
-    GearIcon,
-    LinkIcon,
-    RenderIcon,
-    SettingsIcon,
-    TIcon,
-} from '@/components/icons'
+import { GearIcon, LinkIcon, RenderIcon, TIcon } from '@/components/icons'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader } from '@/components/ui/card'
@@ -31,7 +25,7 @@ import {
 
 import { useModalState } from '@/hooks/use-modal-state'
 
-import { IClassProps, TEntityId } from '@/types'
+import { IClassProps } from '@/types'
 
 import { loanTransactionBaseKey } from '../../loan-transaction.service'
 import { LoanTransactionAdjustmentFormModal } from '../forms/loan-transaction-adjustment-form'
