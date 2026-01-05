@@ -4,7 +4,6 @@ import { useQueryClient } from '@tanstack/react-query'
 import { useNavigate } from '@tanstack/react-router'
 import { toast } from 'sonner'
 
-import { toReadableDateShort } from '@/helpers/date-utils'
 import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
 import { cn } from '@/helpers/tw-utils'
 import { useAuthUser } from '@/modules/authentication/authgentication.store'
@@ -16,29 +15,9 @@ import {
 import { useSwitchOrganization } from '@/modules/user-organization/user-organization.service'
 import { useCategoryStore } from '@/store/onboarding/category-store'
 
-import {
-    ArrowRightIcon,
-    BuildingIcon,
-    DotBigIcon,
-    EyeIcon,
-    LoadingCircleIcon,
-    PencilFillIcon,
-    PinLocationIcon,
-    PlusIcon,
-} from '@/components/icons'
-import ImageDisplay from '@/components/image-display'
-import { Avatar, AvatarImage } from '@/components/ui/avatar'
-import { Badge } from '@/components/ui/badge'
+import { BuildingIcon, PlusIcon } from '@/components/icons'
 import { Button } from '@/components/ui/button'
-import {
-    Card,
-    CardContent,
-    CardFooter,
-    CardHeader,
-    CardTitle,
-} from '@/components/ui/card'
 import FormErrorMessage from '@/components/ui/form-error-message'
-import TruncatedText from '@/components/ui/truncated-text'
 
 import { useModalState } from '@/hooks/use-modal-state'
 import { useUrlModal } from '@/hooks/use-url-modal'
@@ -46,6 +25,7 @@ import { useUrlModal } from '@/hooks/use-url-modal'
 import { TEntityId } from '@/types'
 
 import OrganizationBranchesModal from './modal/org-branches-modal'
+import OrganizationList from './organization-list'
 import OrganizationPreviewModal from './organization-modal'
 
 type UserOrganizationsDashboardProps = {
@@ -171,191 +151,17 @@ const UserOrganizationsDashboard = ({
                 </Button>
             </div>
             <FormErrorMessage errorMessage={error} />
-            <div className="w-full grid grid-cols-1 lg:grid-cols-3 gap-y-5 mt-10">
-                {organizationsWithBranches.map((org) => {
-                    const mediaUrl = org.media?.download_url
-                    const coverUrl = org.cover_media?.download_url
-                    const isUserOwner =
-                        org.user_organizations[0]?.user_type === 'owner'
-                    const isOrgCreator = org.created_by_id === user.id
-
-                    return (
-                        <Card
-                            className="relative bg-sidebar/90 duration-300 max-w-xs min-h-60 rounded-3xl hover:bg-background dark:hover:bg-background/50"
-                            key={org.id}
-                        >
-                            <ImageDisplay
-                                className="h-full w-auto rounded-3xl -z-10  absolute inset-0"
-                                src={coverUrl ?? ''}
-                            />
-                            <CardHeader>
-                                <div className="flex items-center ">
-                                    <ImageDisplay
-                                        className="size-12"
-                                        src={mediaUrl ?? ''}
-                                    />
-                                    <Badge
-                                        className="h-8 ml-4"
-                                        variant={'outline'}
-                                    >
-                                        {toReadableDateShort(org.created_at)}
-                                    </Badge>
-                                </div>
-                                <CardTitle className="truncate min-w-0 text-xl">
-                                    {org.name}
-                                </CardTitle>
-                            </CardHeader>
-                            <CardContent className="">
-                                <TruncatedText
-                                    className="text-xs max-h-16 text-card-foreground ecoop-scroll overflow-auto"
-                                    maxLength={100}
-                                    text={org.description ?? ''}
-                                />
-                            </CardContent>
-                            <CardFooter className="flex justify-end space-x-1">
-                                {(isUserOwner || isOrgCreator) && (
-                                    <div className="flex justify-start gap-x-2">
-                                        <Button
-                                            className="rounded-full"
-                                            onClick={(e) => {
-                                                e.stopPropagation()
-                                                navigate({
-                                                    to: `/onboarding/create-branch/${org.id}` as string,
-                                                })
-                                            }}
-                                            size="icon"
-                                            variant={'secondary'}
-                                        >
-                                            <PencilFillIcon className=" h-4 w-4" />
-                                        </Button>
-                                    </div>
-                                )}
-                                <Button
-                                    className="rounded-full font-thin cursor-pointer"
-                                    onClick={(e) => {
-                                        e.stopPropagation()
-                                        openOrganizationModal(org.id)
-                                    }}
-                                    size={'icon'}
-                                    variant={'secondary'}
-                                >
-                                    <EyeIcon className="h-4 w-4" />
-                                </Button>
-
-                                <Button
-                                    className=" cursor-pointer"
-                                    onClick={() => {
-                                        openOrgBranch.onOpenChange(true)
-                                        setSelectedOrg(org)
-                                    }}
-                                    size={'sm'}
-                                >
-                                    visit
-                                </Button>
-                            </CardFooter>
-                        </Card>
-                    )
-                })}
-            </div>
-        </div>
-    )
-}
-
-type ListOfBranchesProps = {
-    userOrg: IUserOrganization
-    onClick: () => void
-    isCurrent: boolean
-    isLoading: boolean
-    onSelect: (org: IUserOrganization) => void
-}
-
-export const ListOfBranches = ({
-    userOrg,
-    onClick,
-    isCurrent,
-    isLoading,
-    onSelect,
-}: ListOfBranchesProps) => {
-    const mediaUrl = userOrg.branch?.media?.download_url
-    const isPending = userOrg.application_status === 'pending'
-    return (
-        <div key={userOrg.branch?.id ?? ''}>
-            <div className="relative inline-flex min-h-16 w-full justify-between rounded-xl bg-sidebar cursor-pointer items-center gap-x-2 border-0 p-2 hover:bg-card/70 ">
-                <div className="flex max-w-full min-w-0">
-                    <div className="inline-flex space-x-2 truncate">
-                        <div className="relative">
-                            <Avatar className="relative size-12">
-                                <AvatarImage src={mediaUrl} />
-                            </Avatar>
-                            <Button
-                                className="absolute rounded-full size-6 cursor-pointer bottom-0 right-0 "
-                                onClick={() => {
-                                    onSelect?.(userOrg)
-                                }}
-                                size={'icon'}
-                            >
-                                <PinLocationIcon className="size-fit" />
-                            </Button>{' '}
-                        </div>
-                        <div className="w-full items-center truncate min-w-0 max-w-full ">
-                            <div className="flex items-center text-xs text-muted-foreground">
-                                {userOrg.application_status}
-                                <DotBigIcon
-                                    className={cn(
-                                        'inline ml-1',
-                                        userOrg.application_status ===
-                                            'accepted'
-                                            ? 'text-green-400'
-                                            : 'text-destructive'
-                                    )}
-                                />
-                            </div>
-                            <h1 className="truncate">{userOrg.branch?.name}</h1>
-                            <div className="w-full">
-                                <div className="flex items-center max-w-full gap-y-2 text-xs">
-                                    <p className="truncate min-w-0 text-xs text-muted-foreground/80">
-                                        {userOrg.branch?.address}
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                {!isPending && (
-                    <div className="flex flex-col items-center ">
-                        <span className="text-muted-foreground text-xs">
-                            {' '}
-                            as {userOrg.user_type}
-                        </span>
-                        <Button
-                            disabled={
-                                userOrg.application_status === 'pending' ||
-                                isLoading
-                            }
-                            onClick={onClick}
-                            size="sm"
-                            variant={isCurrent ? 'default' : 'outline'}
-                        >
-                            {isLoading ? (
-                                <>
-                                    {isCurrent ? (
-                                        <LoadingCircleIcon className=" animate-spin" />
-                                    ) : (
-                                        'Switching...'
-                                    )}
-                                </>
-                            ) : isCurrent ? (
-                                'Current'
-                            ) : (
-                                <>
-                                    Switch <ArrowRightIcon />
-                                </>
-                            )}
-                        </Button>
-                    </div>
-                )}
-            </div>
+            <OrganizationList
+                openOrgModal={(id) => {
+                    openOrganizationModal(id)
+                }}
+                organization={organizationsWithBranches}
+                user={user}
+                visitOrgBranch={(org) => {
+                    openOrgBranch.onOpenChange(true)
+                    setSelectedOrg(org)
+                }}
+            />
         </div>
     )
 }

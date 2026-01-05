@@ -16,7 +16,7 @@ import { useModalState } from '@/hooks/use-modal-state'
 import { TEntityId } from '@/types'
 
 import Modal, { IModalProps } from '../../../../components/modals/modal'
-import { ListOfBranches } from '../with-organization'
+import ListOfBranches from '../list-of-branches'
 
 interface OrganizationBranchesModalProps extends IModalProps {
     organization: IOrgUserOrganizationGroup
