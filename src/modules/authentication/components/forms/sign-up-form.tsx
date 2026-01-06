@@ -252,6 +252,7 @@ const SignUpForm = ({ className, ...formProps }: ISignUpFormProps) => {
 
                         <FormFieldWrapper
                             control={form.control}
+                            label="User Name*"
                             name="user_name"
                             render={({ field }) => (
                                 <Input
@@ -265,6 +266,7 @@ const SignUpForm = ({ className, ...formProps }: ISignUpFormProps) => {
                         />
                         <FormFieldWrapper
                             control={form.control}
+                            label="Email*"
                             name="email"
                             render={({ field }) => (
                                 <Input
@@ -278,6 +280,7 @@ const SignUpForm = ({ className, ...formProps }: ISignUpFormProps) => {
                         />
                         <FormFieldWrapper
                             control={form.control}
+                            label="Password*"
                             name="password"
                             render={({ field }) => (
                                 <FormItem>
