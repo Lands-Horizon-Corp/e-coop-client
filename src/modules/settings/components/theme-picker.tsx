@@ -30,13 +30,18 @@ import { useTheme } from '../provider/theme-provider'
 
 interface ThemePickerProps extends IPickerBaseProps {}
 
-const ThemePicker = ({ onSelect, modalState, value }: ThemePickerProps) => {
+const ThemePicker = ({
+    onSelect,
+    modalState,
+    value = 'default',
+}: ThemePickerProps) => {
     const { theme, setTheme } = useTheme()
     const [state, setState] = useInternalState(
         false,
         modalState?.open,
         modalState?.onOpenChange
     )
+
     const defaultValue = [...Themes].find(
         (item) => item.name.toLowerCase() === (value as string).toLowerCase()
     )

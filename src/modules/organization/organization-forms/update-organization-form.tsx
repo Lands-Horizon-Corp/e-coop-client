@@ -159,7 +159,6 @@ const UpdateOrganizationForm = ({
     }, handleFocusError)
 
     const errorMessage = serverRequestErrExtractor({ error }) || firstError
-    console.log(form.watch('theme'))
 
     return (
         <Form {...form}>

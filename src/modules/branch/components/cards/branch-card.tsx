@@ -74,11 +74,11 @@ const getBranchTypeColor = (type: branchTypeEnum) => {
         case branchTypeEnum.CooperativeBranch:
             return 'bg-primary text-primary-foreground shadow-xs hover:bg-primary/90'
         case branchTypeEnum.BankingBranch:
-            return 'border bg-background shadow-xs hover:bg-accent hover: dark:bg-input/30 dark:border-input dark:hover:bg-input/50'
+            return 'border bg-background shadow-xs hover:bg-accent dark:bg-input/30 dark:border-input dark:hover:bg-input/50'
         case branchTypeEnum.BusinessBranch:
             return 'bg-secondary text-secondary-foreground shadow-xs hover:bg-secondary/80'
         default:
-            return 'bg-primary/20 text-primary shadow-xs hover:border-[1px] border-primary border-[.6px]'
+            return 'bg-primary/20 text-primary shadow-xs border-primary border-[.6px]'
     }
 }
 
@@ -89,7 +89,7 @@ export const BranchCardHeaderContent = ({
     const branchDescription = branch?.description || ''
 
     return (
-        <div className="space-y-2 w-full">
+        <div className="space-y-2 w-full ">
             <div className="inline-flex items-start min-w-0 max-w-full w-full justify-between gap-2">
                 <TooltipProvider>
                     <Tooltip delayDuration={500}>
@@ -99,7 +99,7 @@ export const BranchCardHeaderContent = ({
                                     'font-semibold truncate min-w-0 text-foreground leading-tight'
                                 )}
                             >
-                                {branchName} asfasfasdfasdf asdfas dfsaf sad
+                                {branchName}
                             </p>
                         </TooltipTrigger>
                         <TooltipContent>
@@ -107,7 +107,7 @@ export const BranchCardHeaderContent = ({
                         </TooltipContent>
                     </Tooltip>
                 </TooltipProvider>
-                <div className=" gap-2 min-w-fit">
+                <div className=" gap-2 min-w-fit ">
                     <div
                         className={cn(
                             'inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium',
@@ -297,7 +297,7 @@ export const BranchCard = ({
                         showActions={showActions}
                     />
                 }
-                className={cn('cursor-pointer', className)}
+                className={cn('cursor-pointer rounded-2xl', className)}
                 customHeader={
                     <>
                         <BranchCardHeaderContent

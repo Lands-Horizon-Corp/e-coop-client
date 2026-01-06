@@ -69,7 +69,7 @@ const OrganizationList = ({
                             </div>
                             <CardTitle className="truncate min-w-0 text-xl">
                                 <Tooltip delayDuration={800}>
-                                    <TooltipTrigger>
+                                    <TooltipTrigger asChild>
                                         <CopyTextButton textContent={org.id} />
                                     </TooltipTrigger>
                                     <TooltipContent className="bg-secondary text-primary">
