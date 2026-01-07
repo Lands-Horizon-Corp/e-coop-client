@@ -117,41 +117,41 @@ function RootLayout() {
                     theme="system"
                     toastOptions={{
                         classNames: {
-                            icon: 'flex items-center !mr-2 justify-center',
+                            icon: 'flex items-center justify-center !mr-2',
 
                             success:
                                 '!p-4 !rounded-xl !border-t-0 !border-x-0 !border-b-1 ' +
-                                '!bg-green-50 dark:!bg-gradient-to-tr ' +
-                                '!border-b-green-500 !border-green-600 ' +
-                                'dark:!from-green-500/20 dark:!to-background ' +
+                                '!bg-green-50 dark:!bg-transparent dark:!bg-gradient-to-tr ' +
+                                '!border-b-primary !border-primary ' +
+                                'dark:!from-primary dark:!to-background ' +
                                 '!text-foreground',
 
                             info:
                                 '!p-4 !rounded-xl !border-t-0 !border-x-0 !border-b-1 ' +
-                                '!bg-blue-50 dark:!bg-gradient-to-tr ' +
-                                '!border-b-blue-500 !border-blue-600 ' +
-                                'dark:!from-blue-500/20 dark:!to-background ' +
+                                '!bg-blue-50 dark:!bg-transparent dark:!bg-gradient-to-tr ' +
+                                '!border-b-primary !border-primary ' +
+                                'dark:!from-primary/70 dark:!to-background ' +
                                 '!text-foreground',
 
                             loading:
                                 '!p-4 !rounded-xl !border-t-0 !border-x-0 !border-b-1 ' +
-                                '!bg-primary/10 dark:!bg-gradient-to-tr ' +
+                                '!bg-primary/10 dark:!bg-transparent dark:!bg-gradient-to-tr ' +
                                 '!border-b-primary !border-primary ' +
                                 'dark:!from-primary/40 dark:!to-background ' +
                                 '!text-foreground',
 
                             error:
                                 '!p-4 !rounded-xl !border-t-0 !border-x-0 !border-b-1 ' +
-                                '!bg-rose-50 dark:!bg-gradient-to-tr ' +
-                                '!border-b-rose-400 !border-rose-400 ' +
-                                'dark:!from-rose-400/20 dark:!to-background ' +
+                                '!bg-rose-50 dark:!bg-transparent dark:!bg-gradient-to-tr ' +
+                                '!border-b-destructive !border-destructive ' +
+                                'dark:!from-destructive dark:!to-background ' +
                                 '!text-foreground',
 
                             warning:
                                 '!p-4 !rounded-xl !border-t-0 !border-x-0 !border-b-1 ' +
-                                '!bg-[#e8915f]/10 dark:!bg-gradient-to-tr ' +
-                                '!border-b-[#e8915f] !border-[#e8915f] ' +
-                                'dark:!from-[#e8915f]/20 dark:!to-popover ' +
+                                '!bg-[#e8915f]/10 dark:!bg-transparent dark:!bg-gradient-to-tr ' +
+                                '!border-b-warning !border-warning ' +
+                                'dark:!from-warning dark:!to-popover ' +
                                 '!text-foreground',
                         },
                     }}

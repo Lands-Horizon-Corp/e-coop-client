@@ -47,7 +47,7 @@ const CurrencyInput = React.forwardRef<HTMLInputElement, Props>(
             disabled,
             placeholder,
             className,
-            allowNegativeValue = false,
+            allowNegativeValue = true,
             decimalsLimit,
             showFlag = false,
             onValueChange,

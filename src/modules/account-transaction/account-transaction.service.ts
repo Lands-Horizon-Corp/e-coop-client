@@ -5,7 +5,10 @@ import {
     HookQueryOptions,
     createDataLayerFactory,
 } from '@/providers/repositories/data-layer-factory'
-import { createMutationFactory } from '@/providers/repositories/mutation-factory'
+import {
+    createMutationFactory,
+    updateMutationInvalidationFn,
+} from '@/providers/repositories/mutation-factory'
 
 import { TAPIQueryOptions, TEntityId } from '@/types'
 
@@ -48,7 +51,7 @@ export { accountTransactionBaseKey } // Exported in case it's needed outside
 
 export const {
     useCreate: useCreateAccountTransaction,
-    useUpdateById: useUpdateAccountTransactionById,
+    // useUpdateById: useUpdateAccountTransactionById,
 
     // useGetAll: useGetAllAccountTransaction,
     useGetById: useGetAccountTransactionById,
@@ -59,6 +62,20 @@ export const {
 } = apiCrudHooks
 
 export type AccountTransactionGetAllHookMode = 'all' | 'month-year'
+
+export const useUpdateAccountTransactionById = createMutationFactory<
+    IAccountTransaction,
+    Error,
+    { id: TEntityId; payload: IAccountTransactionRequest }
+>({
+    mutationFn: (variables) => updateAccountTransactionById(variables),
+    invalidationFn: (args) => {
+        args.queryClient.invalidateQueries({
+            queryKey: [accountTransactionBaseKey],
+        })
+        updateMutationInvalidationFn(accountTransactionBaseKey, args)
+    },
+})
 
 export const useGetAllAccountTransaction = ({
     mode = 'all',

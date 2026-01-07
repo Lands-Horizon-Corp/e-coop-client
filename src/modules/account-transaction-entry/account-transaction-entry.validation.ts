@@ -1,14 +1,14 @@
 import z from 'zod'
 
-import { EntityIdSchema, entityIdSchema } from '@/validation'
+import { entityIdSchema } from '@/validation'
 
 export const AccountTransactionEntrySchema = z.object({
     id: entityIdSchema.optional(),
 
-    account_transaction_id: EntityIdSchema,
+    account_transaction_id: z.any(),
     account_transaction: z.any(),
 
-    account_id: EntityIdSchema,
+    account_id: entityIdSchema,
     account: z.any(),
 
     debit: z.coerce.number<string>().default(0),

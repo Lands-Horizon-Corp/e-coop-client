@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 
 import { cn } from '@/helpers'
 import { toReadableDate } from '@/helpers/date-utils'
+import { currencyFormat } from '@/modules/currency'
 
 import {
     ArrowDownLeftIcon,
@@ -83,10 +84,10 @@ const AccountTransaction = () => {
                 </div>
                 <div>
                     <h1 className="text-2xl font-bold tracking-tight">
-                        Transaction Ledger
+                        Account Transaction
                     </h1>
                     <p className="text-sm text-muted-foreground">
-                        View and manage account entries
+                        View and manage account transactions
                     </p>
                 </div>
             </div>
@@ -290,7 +291,7 @@ export function YearCarousel({
                 <CarouselContent className="ml-0">
                     {years.map((year) => (
                         <CarouselItem
-                            className="basis-auto pl-1 flex justify-center"
+                            className="basis-auto pl-1 py-2 flex justify-center"
                             key={year}
                         >
                             <Badge
@@ -393,76 +394,72 @@ export function TransactionCard({
 }) {
     const isDebit = transaction.debit > 0
     const updateModalState = useModalState()
-
-    const currencyFormat = (amount: number) => {
-        if (amount === 0) return '—'
-        return new Intl.NumberFormat('en-US', {
-            style: 'currency',
-            currency: 'USD',
-            minimumFractionDigits: 2,
-        }).format(amount)
-    }
-
     return (
-        <Card
-            className="hover:shadow-md transition-shadow"
-            onClick={() => updateModalState.onOpenChange(true)}
-        >
-            <CardContent className="p-4">
-                <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4">
-                    <div className="flex items-center gap-3 flex-shrink-0">
-                        <div
-                            className={`p-2 rounded-full ${isDebit ? 'bg-destructive/10' : 'bg-success/10'}`}
+        <>
+            <Card
+                className="hover:shadow-md shadow-none rounded-xl cursor-pointer bg-secondary/20 transition-shadow"
+                onClick={() => updateModalState.onOpenChange(true)}
+            >
+                <CardContent className="p-4">
+                    <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4">
+                        <div className="flex items-center gap-3 flex-shrink-0">
+                            <div
+                                className={`p-2 rounded-full ${isDebit ? 'bg-destructive/10' : 'bg-success/10'}`}
+                            >
+                                {isDebit ? (
+                                    <ArrowUpRightIcon className="h-4 w-4 text-destructive" />
+                                ) : (
+                                    <ArrowDownLeftIcon className="h-4 w-4 text-success" />
+                                )}
+                            </div>
+                            <div className="text-sm text-muted-foreground font-medium">
+                                {toReadableDate(transaction.date)}
+                            </div>
+                        </div>
+
+                        <Badge
+                            className="w-fit flex items-center gap-1.5"
+                            variant="secondary"
                         >
-                            {isDebit ? (
-                                <ArrowUpRightIcon className="h-4 w-4 text-destructive" />
-                            ) : (
-                                <ArrowDownLeftIcon className="h-4 w-4 text-success" />
-                            )}
+                            <TextFileFillIcon className="h-3 w-3" />
+                            {transaction.jv_number}
+                        </Badge>
+
+                        <div className="flex-1 min-w-0">
+                            <p className="text-sm font-medium truncate">
+                                {transaction.description}
+                            </p>
                         </div>
-                        <div className="text-sm text-muted-foreground font-medium">
-                            {toReadableDate(transaction.date)}
-                        </div>
-                    </div>
 
-                    <Badge
-                        className="w-fit flex items-center gap-1.5"
-                        variant="secondary"
-                    >
-                        <TextFileFillIcon className="h-3 w-3" />
-                        {transaction.jv_number}
-                    </Badge>
-
-                    <div className="flex-1 min-w-0">
-                        <p className="text-sm font-medium truncate">
-                            {transaction.description}
-                        </p>
-                    </div>
-
-                    <div className="flex items-center gap-4 flex-shrink-0 ml-auto">
-                        <div className="text-right min-w-[90px]">
-                            <div className="text-xs text-muted-foreground mb-0.5">
-                                Debit
+                        <div className="flex items-center gap-4 flex-shrink-0 ml-auto">
+                            <div className="text-right min-w-[90px]">
+                                <div className="text-xs text-muted-foreground mb-0.5">
+                                    Debit
+                                </div>
+                                <span
+                                    className={`font-semibold ${transaction.debit > 0 ? 'text-destructive' : 'text-muted-foreground'}`}
+                                >
+                                    {currencyFormat(transaction.debit, {
+                                        showSymbol: false,
+                                    })}
+                                </span>
                             </div>
-                            <span
-                                className={`text-sm font-semibold ${transaction.debit > 0 ? 'text-destructive' : 'text-muted-foreground'}`}
-                            >
-                                {currencyFormat(transaction.debit)}
-                            </span>
-                        </div>
-                        <div className="text-right min-w-[90px]">
-                            <div className="text-xs text-muted-foreground mb-0.5">
-                                Credit
+                            <div className="text-right min-w-[90px]">
+                                <div className="text-xs text-muted-foreground mb-0.5">
+                                    Credit
+                                </div>
+                                <span
+                                    className={`font-semibold ${transaction.credit > 0 ? 'text-success' : 'text-muted-foreground'}`}
+                                >
+                                    {currencyFormat(transaction.credit, {
+                                        showSymbol: false,
+                                    })}
+                                </span>
                             </div>
-                            <span
-                                className={`text-sm font-semibold ${transaction.credit > 0 ? 'text-success' : 'text-muted-foreground'}`}
-                            >
-                                {currencyFormat(transaction.credit)}
-                            </span>
                         </div>
                     </div>
-                </div>
-            </CardContent>
+                </CardContent>
+            </Card>
             <AccountTransactionUpdateFormModal
                 formProps={{
                     accountTransactionId: transaction.id,
@@ -470,7 +467,7 @@ export function TransactionCard({
                 }}
                 {...updateModalState}
             />
-        </Card>
+        </>
     )
 }
 
@@ -482,6 +479,7 @@ const GenerateAccountTransaction = () => {
             <AccountTransactionGenerateFormModal
                 formProps={{
                     defaultValues: {
+                        start_date: new Date().toISOString(),
                         end_date: new Date().toISOString(),
                     },
                 }}

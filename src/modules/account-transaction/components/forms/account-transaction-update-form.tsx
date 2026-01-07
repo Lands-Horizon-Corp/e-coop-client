@@ -29,10 +29,12 @@ import { useFormHelper } from '@/hooks/use-form-helper'
 
 import { IClassProps, IForm, TEntityId } from '@/types'
 
+import { ACCOUNT_TRANSACTION_SOURCE_LABEL_MAP } from '../../account-transaction-constants'
 import { useUpdateAccountTransactionById } from '../../account-transaction.service'
 import {
     IAccountTransaction,
     IAccountTransactionRequest,
+    TAccountTransactionSource,
 } from '../../account-transaction.types'
 import { AccountTransactionSchema } from '../../account-transaction.validation'
 
@@ -107,7 +109,7 @@ const AccountTransactionUpdateForm = ({
                     className="grid gap-x-6 gap-y-4 sm:gap-y-3"
                     disabled={isPending || formProps.readOnly}
                 >
-                    <fieldset className="space-y-3 gap-x-4 grid grid-cols-12">
+                    <fieldset className="space-y-3 bg-popover p-4 rounded-xl gap-x-4 grid grid-cols-12">
                         <FormFieldWrapper
                             className="col-span-4"
                             control={form.control}
@@ -152,10 +154,14 @@ const AccountTransactionUpdateForm = ({
                                     disabled
                                     id={field.name}
                                     placeholder="Source"
+                                    value={
+                                        ACCOUNT_TRANSACTION_SOURCE_LABEL_MAP[
+                                            field.value as TAccountTransactionSource
+                                        ]
+                                    }
                                 />
                             )}
                         />
-
                         <FormFieldWrapper
                             className="relative col-span-full"
                             control={form.control}
@@ -170,7 +176,7 @@ const AccountTransactionUpdateForm = ({
                         />
                     </fieldset>
                     <TransactionEntriesTable
-                        className="mt-4"
+                        className="mt-4 bg-popover/40"
                         entries={
                             (form.watch('entries') ||
                                 []) as unknown as IAccountTransactionEntry[]
@@ -179,7 +185,6 @@ const AccountTransactionUpdateForm = ({
                         totalDebit={form.watch('debit')}
                     />
                 </fieldset>
-
                 <FormFooterResetSubmit
                     disableSubmit={!form.formState.isDirty}
                     error={error}
