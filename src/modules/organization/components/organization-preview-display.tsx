@@ -77,7 +77,7 @@ export const OrganizationPreviewDisplay = ({
             <div>
                 <div
                     className={cn(
-                        'flex relative w-full rounded-lg bg-cover !h-[50vh] bg-center ecoop-scroll max-h-screen',
+                        'flex relative w-full mask-b-from-70% mask-b-to-95% rounded-lg bg-cover !h-[50vh] bg-center ecoop-scroll max-h-screen',
                         className
                     )}
                     style={{
@@ -167,8 +167,7 @@ export const OrganizationPreviewDisplay = ({
                             </>
                         </div>
                         <div className="flex-1 relative flex-col !h-full space-y-2">
-                            <div className="flex ecoop-scroll max-h-54 overflow-x-auto flex-wrap gap-1">
-                                <div className="pointer-events-none absolute top-42 left-0 right-0 h-16 bg-gradient-to-b from-transparent to-background" />
+                            <div className="flex mask-b-from-50% mask-b-to-95% ecoop-scroll max-h-54 overflow-x-auto flex-wrap gap-1">
                                 <BranchInfoItem
                                     className="w-full"
                                     content={
@@ -186,105 +185,101 @@ export const OrganizationPreviewDisplay = ({
                                     title="Plan:"
                                     TitleIcon={StarIcon}
                                 />
-                                <span className="text-xs font-semibold">
-                                    Categories:
-                                    <TagIcon className="inline-block ml-1 mb-0.5 size-4 text-muted-foreground" />
-                                </span>
-                                {categories.map((catItem) => (
-                                    <Badge
-                                        className="mr-1 mb-1"
-                                        key={catItem.id}
-                                        variant="secondary"
-                                    >
-                                        {catItem.category?.name}
-                                    </Badge>
-                                ))}
-                            </div>
-                            <div className="space-y-2">
-                                <p className="text-xs font-semibold">
-                                    Socials <LinkIcon className="inline ml-1" />
-                                </p>
-                                <div className="space-y-2">
-                                    {organization?.personal_website_link && (
-                                        <div className="flex items-center gap-x-2">
-                                            <GlobeIcon />
-                                            <a
-                                                className="text-sm max-w-50 truncate text-muted-foreground hover:text-primary hover:underline break-all"
-                                                href={
-                                                    organization.personal_website_link
-                                                }
-                                                rel="noopener noreferrer"
-                                                target="_blank"
+                                {categories.length > 0 && (
+                                    <>
+                                        <span className="text-xs font-semibold">
+                                            Categories:
+                                            <TagIcon className="inline-block ml-1 mb-0.5 size-4 text-muted-foreground" />
+                                        </span>
+                                        {categories.map((catItem) => (
+                                            <Badge
+                                                className="mr-1 mb-1"
+                                                key={catItem.id}
+                                                variant="secondary"
                                             >
-                                                {
-                                                    organization.personal_website_link
-                                                }
-                                                ioashgoiashg oiasogoasgoasoigh
-                                                oasgoashgasoihgoihio
-                                            </a>
-                                        </div>
-                                    )}
-                                    {organization?.facebook_link && (
-                                        <div className="flex items-center gap-x-2">
-                                            <FacebookIcon />
-                                            <a
-                                                className="text-sm  max-w-50 truncate text-muted-foreground hover:text-primary hover:underline break-all"
-                                                href={
-                                                    organization.facebook_link
-                                                }
-                                                rel="noopener noreferrer"
-                                                target="_blank"
-                                            >
-                                                {organization.facebook_link}
-                                            </a>
-                                        </div>
-                                    )}
-                                    {organization?.x_link && (
-                                        <div className="flex items-center gap-x-2">
-                                            <XTwitterIcon />
-                                            <a
-                                                className="text-sm max-w-50 truncate text-muted-foreground hover:text-primary hover:underline break-all"
-                                                href={organization.x_link}
-                                                rel="noopener noreferrer"
-                                                target="_blank"
-                                            >
-                                                {organization.x_link}
-                                            </a>
-                                        </div>
-                                    )}
-                                    {organization?.instagram_link && (
-                                        <div className="flex items-center gap-x-2">
-                                            <InstagramIcon />
-                                            <a
-                                                className="text-sm max-w-50 truncate text-muted-foreground hover:text-primary hover:underline break-all"
-                                                href={
-                                                    organization.instagram_link
-                                                }
-                                                rel="noopener noreferrer"
-                                                target="_blank"
-                                            >
-                                                {organization.instagram_link}
-                                            </a>
-                                        </div>
-                                    )}
-                                    {organization?.youtube_link && (
-                                        <div className="flex items-center gap-x-2">
-                                            <YoutubeIcon />
-                                            <a
-                                                className="text-sm max-w-50 truncate text-muted-foreground hover:text-primary hover:underline break-all"
-                                                href={organization.youtube_link}
-                                                rel="noopener noreferrer"
-                                                target="_blank"
-                                            >
-                                                {organization.youtube_link}
-                                            </a>
-                                        </div>
-                                    )}
-                                </div>
+                                                {catItem.category?.name}
+                                            </Badge>
+                                        ))}
+                                    </>
+                                )}
                             </div>
                         </div>
                     </div>
-
+                    <div className="space-y-2">
+                        <p className="text-sm font-semibold">
+                            Socials{' '}
+                            <LinkIcon className="inline ml-1" size={20} />
+                        </p>
+                        <div className="flex flex-wrap space-x-2 gap-2">
+                            {organization?.personal_website_link && (
+                                <div className="flex items-center gap-x-2">
+                                    <GlobeIcon />
+                                    <a
+                                        className="text-sm max-w-50 truncate text-muted-foreground hover:text-primary hover:underline break-all"
+                                        href={
+                                            organization.personal_website_link
+                                        }
+                                        rel="noopener noreferrer"
+                                        target="_blank"
+                                    >
+                                        {organization.personal_website_link}
+                                    </a>
+                                </div>
+                            )}
+                            {organization?.facebook_link && (
+                                <div className="flex items-center gap-x-2">
+                                    <FacebookIcon />
+                                    <a
+                                        className="text-sm  max-w-50 truncate text-muted-foreground hover:text-primary hover:underline break-all"
+                                        href={organization.facebook_link}
+                                        rel="noopener noreferrer"
+                                        target="_blank"
+                                    >
+                                        {organization.facebook_link}
+                                    </a>
+                                </div>
+                            )}
+                            {organization?.x_link && (
+                                <div className="flex items-center gap-x-2">
+                                    <XTwitterIcon />
+                                    <a
+                                        className="text-sm max-w-50 truncate text-muted-foreground hover:text-primary hover:underline break-all"
+                                        href={organization.x_link}
+                                        rel="noopener noreferrer"
+                                        target="_blank"
+                                    >
+                                        {organization.x_link}
+                                    </a>
+                                </div>
+                            )}
+                            {organization?.instagram_link && (
+                                <div className="flex items-center gap-x-2">
+                                    <InstagramIcon />
+                                    <a
+                                        className="text-sm max-w-50 truncate text-muted-foreground hover:text-primary hover:underline break-all"
+                                        href={organization.instagram_link}
+                                        rel="noopener noreferrer"
+                                        target="_blank"
+                                    >
+                                        {organization.instagram_link}
+                                    </a>
+                                </div>
+                            )}
+                            {organization?.youtube_link && (
+                                <div className="flex items-center gap-x-2">
+                                    <YoutubeIcon />
+                                    <a
+                                        className="text-sm max-w-50 truncate text-muted-foreground hover:text-primary hover:underline break-all"
+                                        href={organization.youtube_link}
+                                        rel="noopener noreferrer"
+                                        target="_blank"
+                                    >
+                                        {organization.youtube_link}
+                                    </a>
+                                </div>
+                            )}
+                        </div>
+                    </div>
                     {/* Actions */}
                     {showActions && (
                         <>

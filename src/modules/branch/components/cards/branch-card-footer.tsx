@@ -50,18 +50,15 @@ export const BranchCardFooter = ({
                     </div>
                 )}
             </div>
-            <div className="flex items-center gap-1">
+            <div className="flex items-center">
                 <Tooltip>
                     <TooltipTrigger asChild>
                         <Button
-                            className={cn(
-                                'p-2 flex space-x-2 rounded-md hover:bg-accent transition-colors',
-                                'disabled:opacity-50 disabled:cursor-not-allowed'
-                            )}
                             disabled={isSeeding}
                             onClick={handleSwitch}
                             size={'sm'}
                             variant="secondary"
+                            className="rounded-xl"
                         >
                             {isCurrentBranch && <p className="text-xs">Go</p>}
                             <ArrowRightIcon className="h-4 w-4" />
@@ -78,6 +75,7 @@ export const BranchCardFooter = ({
                             onClick={handleEdit}
                             size={'icon'}
                             variant={'ghost'}
+                            className="rounded-xl"
                         >
                             <EditPencilIcon className="h-4 w-4" />
                         </Button>
@@ -96,6 +94,7 @@ export const BranchCardFooter = ({
                             }}
                             size={'icon'}
                             variant={'ghost'}
+                            className="rounded-xl"
                         >
                             {isDeleting ? (
                                 <div className="h-4 w-4 animate-spin rounded-full border-2 border-destructive border-t-transparent" />
