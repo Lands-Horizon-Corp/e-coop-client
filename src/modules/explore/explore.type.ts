@@ -8,8 +8,8 @@ export interface EmptyStateProps {
     icon: ReactNode
 }
 
-export interface ScrollableSectionProps {
-    group: any
-    sectionIndex: number
-    type: 'organizations' | 'branches'
-}
+// export interface ScrollableSectionProps {
+//     group: any
+//     sectionIndex: number
+//     type: 'organizations' | 'branches'
+// }

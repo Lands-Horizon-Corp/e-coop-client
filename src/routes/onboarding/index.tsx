@@ -2,6 +2,7 @@ import { createFileRoute } from '@tanstack/react-router'
 
 import LOADING_ARTWORK_GIF from '@/assets/gifs/e-coop-artwork-loading.gif'
 import { useAuthUser } from '@/modules/authentication/authgentication.store'
+import WithOrganization from '@/modules/organization/pages/onboarding/with-organization'
 import { useGetUserOrganizationByUserId } from '@/modules/user-organization/user-organization.service'
 
 import { LandmarkIcon } from '@/components/icons'
@@ -12,7 +13,6 @@ import { useSubscribe } from '@/hooks/use-pubsub'
 
 import ErrorPage from '../-common-pages/error-page'
 import NoOrganizationView from '../../modules/organization/components/no-organization-view'
-import WithOrganization from '../../modules/organization/components/with-organization'
 
 function RouteComponent() {
     const {
@@ -84,13 +84,7 @@ function RouteComponent() {
                 </GradientText>
                 Onboarding
             </h1>
-            {hasOrganization ? (
-                <WithOrganization
-                    organizationsWithBranches={userOrganizationsData}
-                />
-            ) : (
-                <NoOrganizationView />
-            )}
+            {hasOrganization ? <WithOrganization /> : <NoOrganizationView />}
         </div>
     )
 }

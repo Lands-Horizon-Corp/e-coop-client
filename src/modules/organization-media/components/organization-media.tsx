@@ -99,7 +99,7 @@ const OrganizationMedia = ({ organizationId }: OrganizationMediaProps) => {
             threshold: 0.3,
             includeScore: true,
         })
-    }, [OrganizationMedia])
+    }, [OrganizationMedias])
 
     const filteredAndSortedData = useMemo(() => {
         if (!OrganizationMedias) return []

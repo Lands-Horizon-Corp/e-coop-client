@@ -1,5 +1,3 @@
-import { useState } from 'react'
-
 import { useQueryClient } from '@tanstack/react-query'
 import { useNavigate } from '@tanstack/react-router'
 import { toast } from 'sonner'
@@ -8,12 +6,14 @@ import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
 import { cn } from '@/helpers/tw-utils'
 import { useAuthUser } from '@/modules/authentication/authgentication.store'
 import { useGetOrganizationById } from '@/modules/organization'
+import OrganizationBranchesModal from '@/modules/organization/components/modal/org-branches-modal'
+import { IUserOrganization } from '@/modules/user-organization'
 import {
-    IOrgUserOrganizationGroup,
-    IUserOrganization,
-} from '@/modules/user-organization'
-import { useSwitchOrganization } from '@/modules/user-organization/user-organization.service'
+    useGetCurrentUserOrganizations,
+    useSwitchOrganization,
+} from '@/modules/user-organization/user-organization.service'
 import { useCategoryStore } from '@/store/onboarding/category-store'
+import { useSelectedOrganizationStore } from '@/store/selected-organization.store'
 
 import { BuildingIcon, PlusIcon } from '@/components/icons'
 import { Button } from '@/components/ui/button'
@@ -22,59 +22,24 @@ import FormErrorMessage from '@/components/ui/form-error-message'
 import { useModalState } from '@/hooks/use-modal-state'
 import { useUrlModal } from '@/hooks/use-url-modal'
 
-import { TEntityId } from '@/types'
-
-import OrganizationBranchesModal from './modal/org-branches-modal'
+import OrganizationPreviewModal from '../../../components/modal/organization-preview-modal'
 import OrganizationList from './organization-list'
-import OrganizationPreviewModal from './organization-modal'
 
-type UserOrganizationsDashboardProps = {
-    organizationsWithBranches: IOrgUserOrganizationGroup[]
-}
-
-const UserOrganizationsDashboard = ({
-    organizationsWithBranches,
-}: UserOrganizationsDashboardProps) => {
+export const useHandleVisitOrganization = () => {
     const queryClient = useQueryClient()
     const navigate = useNavigate()
-    const openOrgBranch = useModalState(false)
     const {
         updateCurrentAuth,
         currentAuth: { user },
     } = useAuthUser()
-
-    const {
-        isOpen: isModalOpen,
-        paramValue: organizationId,
-        openWithParam: openOrganizationModal,
-        onOpenChange,
-    } = useUrlModal({ paramName: 'organization_id', defaultOpen: false })
-
-    const {
-        data: organization,
-        isLoading: isLoadingOrganization,
-        error: organizationError,
-    } = useGetOrganizationById({
-        id: organizationId || '',
-        options: {
-            enabled: !!organizationId,
-        },
-    })
-
     const { mutateAsync: switchOrganization } = useSwitchOrganization()
-    const { handleProceedToSetupOrg } = useCategoryStore()
-    const [switchingOrgId, setSwitchingOrgId] = useState<TEntityId | null>(null)
-    const [selectedOrg, setSelectedOrg] =
-        useState<IOrgUserOrganizationGroup | null>(null)
-
-    const error = serverRequestErrExtractor({ error: organizationError })
+    const { selectedOrg, setSelectedOrg, switchingOrgId, setSwitchingOrgId } =
+        useSelectedOrganizationStore()
 
     const handleVisit = async (userOrganization: IUserOrganization) => {
         setSwitchingOrgId(userOrganization.id)
-
         try {
             const response = await switchOrganization(userOrganization.id)
-
             if (response) {
                 await queryClient.invalidateQueries({
                     queryKey: ['auth', 'context'],
@@ -104,10 +69,48 @@ const UserOrganizationsDashboard = ({
         } catch (error) {
             console.error('Failed to switch organization:', error)
             toast.error('Failed to switch organization')
-        } finally {
-            setSwitchingOrgId(null)
         }
     }
+
+    return {
+        handleVisit,
+        user,
+        switchOrganization,
+        switchingOrgId,
+        selectedOrg,
+        setSelectedOrg,
+    }
+}
+
+const WithOrganization = () => {
+    const navigate = useNavigate()
+    const openOrgBranch = useModalState(false)
+    const { handleVisit, user, switchingOrgId, selectedOrg, setSelectedOrg } =
+        useHandleVisitOrganization()
+
+    const { data: organizationsWithBranches } = useGetCurrentUserOrganizations()
+
+    const {
+        isOpen: isModalOpen,
+        paramValue: organizationId,
+        openWithParam: openOrganizationModal,
+        onOpenChange,
+    } = useUrlModal({ paramName: 'organization_id', defaultOpen: false })
+
+    const {
+        data: organization,
+        isLoading: isLoadingOrganization,
+        error: organizationError,
+    } = useGetOrganizationById({
+        id: organizationId || '',
+        options: {
+            enabled: !!organizationId,
+        },
+    })
+
+    const { handleProceedToSetupOrg } = useCategoryStore()
+
+    const error = serverRequestErrExtractor({ error: organizationError })
 
     return (
         <div className="w-full mt-2">
@@ -151,19 +154,21 @@ const UserOrganizationsDashboard = ({
                 </Button>
             </div>
             <FormErrorMessage errorMessage={error} />
-            <OrganizationList
-                openOrgModal={(id) => {
-                    openOrganizationModal(id)
-                }}
-                organization={organizationsWithBranches}
-                user={user}
-                visitOrgBranch={(org) => {
-                    openOrgBranch.onOpenChange(true)
-                    setSelectedOrg(org)
-                }}
-            />
+            {organizationsWithBranches && (
+                <OrganizationList
+                    openOrgModal={(id) => {
+                        openOrganizationModal(id)
+                    }}
+                    organization={organizationsWithBranches}
+                    user={user}
+                    visitOrgBranch={(org) => {
+                        openOrgBranch.onOpenChange(true)
+                        setSelectedOrg(org)
+                    }}
+                />
+            )}
         </div>
     )
 }
 
-export default UserOrganizationsDashboard
+export default WithOrganization

@@ -1,18 +1,16 @@
 import { useQueryClient } from '@tanstack/react-query'
 import { toast } from 'sonner'
 
-import {
-    OrganizationPreviewDisplay,
-    useGetBranchesByOrganizationId,
-} from '@/modules/branch'
 import { BranchesSection } from '@/modules/branch/components/branches-section'
 import CreateUpdateBranchFormModal from '@/modules/branch/components/forms/create-branch-form'
 import { BranchesProvider } from '@/modules/branch/context/branches-context'
+import { useGetCurrentUserOrganizations } from '@/modules/user-organization'
 
 import { useModalState } from '@/hooks/use-modal-state'
 
-import OrganizationPreviewModalDetails from '../components/organization-preview-modal-details'
-import { IOrganization } from '../organization.types'
+import { IOrganization } from '../../organization.types'
+import OrganizationPreviewModalDetails from '../../pages/onboarding/with-organization/organization-preview-details-modal'
+import { OrganizationPreviewDisplay } from '../organization-preview-display'
 
 type OrganizationModalDetailsProps = {
     organization: IOrganization
@@ -36,9 +34,14 @@ const OrganizationModalDetails = ({
     const queryClient = useQueryClient()
     const createModal = useModalState()
 
+    const { data: userOrganizationsData, isPending: isPendingBranches } =
+        useGetCurrentUserOrganizations()
+
     const organizationId = organization.id
-    const { data: branches, isPending: isPendingBranches } =
-        useGetBranchesByOrganizationId({ organizationId: organization.id })
+
+    const userOrganizations = userOrganizationsData?.find(
+        (org) => org.id === organizationId
+    )?.user_organizations
 
     const handleCreateBranch = () => {
         createModal.onOpenChange(true)
@@ -47,11 +50,11 @@ const OrganizationModalDetails = ({
     return (
         <BranchesProvider
             value={{
-                branches,
                 isSeeding,
                 organizationId,
                 showActions,
                 showJoinBranch,
+                userOrganizations,
             }}
         >
             <div className="w-full flex flex-col space-y-6">

@@ -1,3 +1,4 @@
+import { IOrganization } from '@/modules/organization/organization.types'
 import { BuildingIcon, CalendarIcon, PhoneIcon, StarIcon } from 'lucide-react'
 
 import {
@@ -21,8 +22,6 @@ import {
     TooltipTrigger,
 } from '@/components/ui/tooltip'
 import TruncatedText from '@/components/ui/truncated-text'
-
-import { IOrganization } from '../organization.types'
 
 interface OrganizationDetailsProps {
     organization: IOrganization

@@ -261,7 +261,7 @@ export const ThemeProvider = ({
         return () => {
             window.removeEventListener('storage', handleStorageChange)
         }
-    }, [storageKey])
+    }, [storageKey, setThemeState])
 
     // Apply saved custom theme on mount and when resolved theme changes
     useEffect(() => {

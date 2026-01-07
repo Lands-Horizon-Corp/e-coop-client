@@ -16,6 +16,7 @@ import {
 } from '@/modules/cash-check-voucher'
 import CashCheckVoucherStatusIndicator from '@/modules/cash-check-voucher/components/cash-check-status-indicator'
 
+import { highlightMatch } from '@/components/hightlight-match'
 import {
     CollapseIcon,
     MagnifyingGlassIcon as SearchIcon,
@@ -32,7 +33,6 @@ import { Button } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
 
 import { JournalVoucherSkeletonCard } from '../../../../journal-voucher/components/journal-voucher-skeleton-card'
-import { highlightMatch } from '../journal-voucher/journal-voucher-kanban-main'
 import {
     CashCheckVoucherCard,
     CashCheckVoucherCardCreatorInfo,

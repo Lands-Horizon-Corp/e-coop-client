@@ -6,7 +6,7 @@ import {
     IOrganization,
     useGetAllOrganizationsExplore,
 } from '@/modules/organization'
-import { OrganizationCardWithToolTip } from '@/modules/organization/pages/organization'
+import OrganizationCardWithToolTip from '@/modules/organization/pages/organization/components/organization-card-with-tool-tip'
 
 import RefreshButton from '@/components/buttons/refresh-button'
 import { CompassIcon, StarIcon, TrendingDownIcon } from '@/components/icons'

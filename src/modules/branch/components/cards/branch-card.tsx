@@ -5,6 +5,7 @@ import { useNavigate } from '@tanstack/react-router'
 import { toast } from 'sonner'
 
 import { cn } from '@/helpers/tw-utils'
+import { useAuthStore } from '@/modules/authentication/authgentication.store'
 import {
     IBranch,
     PolicyAcceptanceModal,
@@ -13,7 +14,9 @@ import {
 } from '@/modules/branch'
 import CreateUpdateBranchFormModal from '@/modules/branch/components/forms/create-branch-form'
 import { useGetOrganizationWithPoliciesById } from '@/modules/organization'
+import { useHandleVisitOrganization } from '@/modules/organization/pages/onboarding/with-organization'
 import {
+    IUserOrganization,
     useCanUserCanJoinBranch,
     useJoinOrganization,
 } from '@/modules/user-organization'
@@ -47,6 +50,7 @@ interface BranchCardProps extends CardTopImageProps {
     onClick?: (branch: IBranch) => void
     showActions?: boolean
     showJoinBranch?: boolean
+    userOrganization?: IUserOrganization
 }
 
 interface BranchCardHeaderContentProps {
@@ -150,12 +154,16 @@ export const BranchCard = ({
     onClick,
     showActions = true,
     showJoinBranch = false,
+    userOrganization,
 }: BranchCardProps) => {
     const navigate = useNavigate()
     const updateModal = useModalState()
     const queryClient = useQueryClient()
     const { onOpen } = useConfirmModalStore()
     const { open, onOpenChange } = useModalState()
+    const {
+        currentAuth: { user_organization: currentUserOrg },
+    } = useAuthStore()
 
     const [selectedBranch, setSelectedBranch] = useState<IBranch | null>(null)
 
@@ -217,6 +225,8 @@ export const BranchCard = ({
         },
     })
 
+    const { handleVisit } = useHandleVisitOrganization()
+
     if (!branch || !branch.id) {
         return (
             <div
@@ -249,6 +259,17 @@ export const BranchCard = ({
     const handleCardClick = () => {
         if (onClick && !isSeeding) {
             onClick(branch)
+        }
+    }
+
+    const handleSwitch = (e?: React.MouseEvent) => {
+        e?.stopPropagation()
+        if (userOrganization) {
+            toast.promise(handleVisit(userOrganization), {
+                loading: `Switching to ${userOrganization.branch?.name}...`,
+                success: `Switched to ${userOrganization.branch?.name}`,
+                error: `Failed to switch to ${userOrganization.branch?.name}`,
+            })
         }
     }
 
@@ -292,6 +313,10 @@ export const BranchCard = ({
                         branch={branch}
                         handleDelete={handleDelete}
                         handleEdit={handleEdit}
+                        handleSwitch={handleSwitch}
+                        isCurrentBranch={
+                            currentUserOrg?.branch.id === branch.id
+                        }
                         isDeleting={isDeleting}
                         isSeeding={isSeeding}
                         showActions={showActions}

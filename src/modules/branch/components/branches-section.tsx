@@ -15,12 +15,12 @@ export const BranchesSection = ({
     onCreateBranch,
     isPending,
 }: BranchesSectionProps) => {
-    const { branches, isSeeding } = useBranchesContext()
+    const { userOrganizations, isSeeding } = useBranchesContext()
     if (isPending) {
         return <OrganizationSkeleton className="p-10" count={5} />
     }
 
-    if (!branches || branches.length === 0) {
+    if (!userOrganizations || userOrganizations.length === 0) {
         return (
             <EmptyBranchesState
                 isSeeding={isSeeding}
@@ -34,7 +34,7 @@ export const BranchesSection = ({
                 <div className="flex items-center gap-2">
                     <BranchIcon className="text-primary" />
                     <h2 className="text-lg font-semibold">
-                        Branches ({branches.length})
+                        Branches ({userOrganizations.length})
                     </h2>
                 </div>
             </div>

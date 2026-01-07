@@ -17,6 +17,7 @@ import {
 } from '@/modules/loan-transaction'
 import LoanStatusIndicator from '@/modules/loan-transaction/components/loan-status-indicator'
 
+import { highlightMatch } from '@/components/hightlight-match'
 import {
     CollapseIcon,
     MagnifyingGlassIcon as SearchIcon,
@@ -34,7 +35,6 @@ import { Button } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
 import { Skeleton } from '@/components/ui/skeleton'
 
-import { highlightMatch } from '../journal-voucher/journal-voucher-kanban-main'
 import {
     LoanTransactionCard,
     LoanTransactionCardCreatorInfo,

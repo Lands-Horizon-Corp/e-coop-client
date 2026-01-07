@@ -352,7 +352,6 @@ const OrganizationForm = () => {
                                         label="Currency"
                                         name="currency_id"
                                         render={({ field }) => {
-                                            console.log(field)
                                             return (
                                                 <CurrencyCombobox
                                                     {...field}

@@ -1,7 +1,7 @@
 import { useState } from 'react'
 
 import { cn } from '@/helpers/tw-utils'
-import { OrganizationPreviewDisplaySkeleton } from '@/modules/organization/pages/organization/organization-preview-display'
+import OrganizationPreviewDisplaySkeleton from '@/modules/organization/components/organization-preview-display-skeleton'
 
 import MapPicker from '@/components/map/map-picker'
 import Modal, { IModalProps } from '@/components/modals/modal'

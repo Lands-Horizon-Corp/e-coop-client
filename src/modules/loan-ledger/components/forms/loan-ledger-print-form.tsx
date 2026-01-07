@@ -29,7 +29,7 @@ export interface ILoanLedgerPrintFormProps
     extends IClassProps,
         IForm<
             Partial<TLoanLedgerPrintSchema>,
-            any,
+            unknown,
             Error,
             TLoanLedgerPrintSchema
         > {

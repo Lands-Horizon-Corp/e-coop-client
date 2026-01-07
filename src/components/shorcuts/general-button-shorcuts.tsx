@@ -12,7 +12,7 @@ import { Button } from '@/components/ui/button'
 
 import { useModalState } from '@/hooks/use-modal-state'
 
-import { highlightMatch } from '../../modules/approvals/components/kanbans/journal-voucher/journal-voucher-kanban-main'
+import { highlightMatch } from '../hightlight-match'
 import Modal from '../modals/modal'
 import GenericSearchInput from '../search/generic-search-input'
 import {

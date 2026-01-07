@@ -9,8 +9,8 @@ import Modal, { IModalProps } from '@/components/modals/modal'
 
 import { useModalState } from '@/hooks/use-modal-state'
 
-import OrganizationModalDetails from '../organization-forms/organization-modal-details'
-import { OrganizationPreviewDisplaySkeleton } from '../pages/organization/organization-preview-display'
+import OrganizationPreviewDisplaySkeleton from '../organization-preview-display-skeleton'
+import OrganizationModalDetails from './organization-details-modal'
 
 interface OrganizationModalProps extends IModalProps {
     organization?: IOrganization | null

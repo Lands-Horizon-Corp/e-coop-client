@@ -26,7 +26,6 @@ import ImageDisplay from '@/components/image-display'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
-import { Skeleton } from '@/components/ui/skeleton'
 import {
     Tooltip,
     TooltipContent,
@@ -38,6 +37,8 @@ import PreviewMediaWrapper from '@/components/wrappers/preview-media-wrapper'
 
 import { useModalState } from '@/hooks/use-modal-state'
 
+import OrganizationPreviewDisplaySkeleton from './organization-preview-display-skeleton'
+
 type OrganizationPreviewDisplayProps = {
     organization?: IOrganization
     onCreateBranch?: () => void
@@ -48,7 +49,7 @@ type OrganizationPreviewDisplayProps = {
     isEditMode?: boolean
 }
 
-const OrganizationPreviewDisplay = ({
+export const OrganizationPreviewDisplay = ({
     organization,
     onCreateBranch,
     isLoading,
@@ -83,7 +84,7 @@ const OrganizationPreviewDisplay = ({
                         backgroundImage: `url(${mediaUrl})`,
                     }}
                 >
-                    <div className="  absolute w-full min-h-52 bottom-0 px-4 sm:px-8  bg-gradient-to-t from-background via-[80%] via-background/20  to-transparent" />
+                    <div className="absolute w-full min-h-52 bottom-0 px-4 sm:px-8  bg-gradient-to-t from-background via-[80%] via-background/20  to-transparent" />
                 </div>
                 <UpdateOrganizationFormModal
                     {...updateModal}
@@ -322,46 +323,3 @@ const OrganizationPreviewDisplay = ({
         </TooltipProvider>
     )
 }
-
-export const OrganizationPreviewDisplaySkeleton = ({
-    className,
-}: {
-    className?: string
-}) => {
-    return (
-        <div
-            className={cn(
-                'flex relative w-full min-w-3xl bg-secondary rounded-t-4xl animate-pulse',
-                className
-            )}
-        >
-            <div className="absolute w-full bottom-0 pb-10 px-4 sm:px-8 pt-20 sm:pt-50 bg-gradient-to-t from-background via-background/95 via-30% to-transparent">
-                <div className="mb-4">
-                    <Skeleton className="size-24 rounded-xl mb-2 " />
-                    <div className="flex gap-4 mb-4">
-                        <Skeleton className="h-4 w-20" />
-                        <Skeleton className="h-4 w-24" />
-                    </div>
-                </div>
-                <div className="flex flex-col lg:flex-row gap-4 mb-6">
-                    <div className="flex-2">
-                        <div className="space-y-2">
-                            <Skeleton className="h-4 w-full" />
-                            <Skeleton className="h-4 w-2/3" />
-                        </div>
-                    </div>
-                    <div className="flex-1 space-y-3">
-                        <Skeleton className="h-8 w-full" />
-                        <Skeleton className="h-8 w-3/4" />
-                    </div>
-                </div>
-                <div className="flex flex-col sm:flex-row gap-2">
-                    <Skeleton className="h-9 w-32" />
-                    <Skeleton className="h-9 w-40" />
-                </div>
-            </div>
-        </div>
-    )
-}
-
-export default OrganizationPreviewDisplay

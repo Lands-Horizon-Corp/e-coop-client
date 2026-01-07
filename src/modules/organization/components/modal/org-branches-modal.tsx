@@ -39,7 +39,6 @@ const OrganizationBranchesModal = ({
     const [selectedOrg, setSelectedOrg] = useState<IUserOrganization | null>(
         null
     )
-
     const openBranchMapLocation = useModalState(false)
 
     return (

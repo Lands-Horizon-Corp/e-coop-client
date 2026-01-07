@@ -2,13 +2,13 @@ import { useQueryClient } from '@tanstack/react-query'
 import { toast } from 'sonner'
 
 import { cn } from '@/helpers/tw-utils'
-import { highlightMatch } from '@/modules/approvals/components/kanbans/journal-voucher/journal-voucher-kanban-main'
 import { useGetBranchesByOrganizationId } from '@/modules/branch'
 import {
     IOrganization,
     UpdateOrganizationFormModal,
 } from '@/modules/organization'
 
+import { highlightMatch } from '@/components/hightlight-match'
 import { ArrowChevronUpIcon, BadgeCheckFillIcon } from '@/components/icons'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'

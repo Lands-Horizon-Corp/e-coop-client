@@ -1,7 +1,7 @@
 import { useState } from 'react'
 
 import { IOrganization } from '@/modules/organization'
-import OrganizationPreviewModal from '@/modules/organization/components/organization-modal'
+import OrganizationPreviewModal from '@/modules/organization/components/modal/organization-preview-modal'
 
 import { Particles } from '@/components/ui/background-particles'
 import AuthGuard from '@/components/wrappers/auth-guard'

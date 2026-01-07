@@ -7,7 +7,7 @@ import {
     TGetAllByCategory,
     useGetAllOrganizationsByCategories,
 } from '@/modules/organization'
-import { OrganizationCardWithToolTip } from '@/modules/organization/pages/organization'
+import OrganizationCardWithToolTip from '@/modules/organization/pages/organization/components/organization-card-with-tool-tip'
 
 import RefreshButton from '@/components/buttons/refresh-button'
 import { CompassIcon } from '@/components/icons'

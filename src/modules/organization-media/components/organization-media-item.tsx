@@ -1,5 +1,4 @@
 import { dateAgo, toReadableDate } from '@/helpers/date-utils'
-import { highlightMatch } from '@/modules/approvals/components/kanbans/journal-voucher/journal-voucher-kanban-main'
 import {
     TDownloadMediaProp,
     downloadMedia,
@@ -9,6 +8,7 @@ import {
 } from '@/modules/media'
 import MediaResourceFileIcon from '@/modules/media/components/media-resource-file-icon'
 
+import { highlightMatch } from '@/components/hightlight-match'
 import { DownloadIcon, TrashIcon } from '@/components/icons'
 import ImageDisplay from '@/components/image-display'
 import ActionTooltip from '@/components/tooltips/action-tooltip'

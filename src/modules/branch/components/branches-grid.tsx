@@ -9,8 +9,13 @@ import { BranchCard } from './cards/branch-card'
 import BranchModalDisplay from './modal/branch-modal-display'
 
 export const BranchesGrid = () => {
-    const { branches, isSeeding, showActions, showJoinBranch, organizationId } =
-        useBranchesContext()
+    const {
+        isSeeding,
+        showActions,
+        showJoinBranch,
+        organizationId,
+        userOrganizations,
+    } = useBranchesContext()
 
     const branchModal = useModalState()
     const [selectedBranch, setSelectedBranch] = useState<IBranch | null>(null)
@@ -23,11 +28,11 @@ export const BranchesGrid = () => {
                 isLoading={false}
                 showActions={false}
             />
-            {branches?.map((branch) => (
+            {userOrganizations?.map((userOrganization) => (
                 <BranchCard
-                    branch={branch}
+                    branch={userOrganization.branch}
                     isSeeding={isSeeding}
-                    key={branch.id}
+                    key={userOrganization.branch.id}
                     onClick={(branch) => {
                         setSelectedBranch(branch)
                         branchModal.onOpenChange(true)
@@ -35,6 +40,7 @@ export const BranchesGrid = () => {
                     organizationId={organizationId}
                     showActions={showActions}
                     showJoinBranch={showJoinBranch}
+                    userOrganization={userOrganization}
                 />
             ))}
         </div>

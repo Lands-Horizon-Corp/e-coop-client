@@ -1,8 +1,4 @@
-import {
-    CheckFillIcon,
-    LoadingCircleIcon,
-    RocketIcon,
-} from '@/components/icons'
+import { LoadingCircleIcon, RocketIcon } from '@/components/icons'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 
@@ -40,7 +36,6 @@ export const CompletionSection = ({
                         </p>
                     </div>
                 </div>
-
                 <Button
                     className="primary"
                     disabled={isSeeding}
@@ -53,8 +48,8 @@ export const CompletionSection = ({
                         </>
                     ) : (
                         <>
-                            <CheckFillIcon className="mr-2 h-4 w-4" />
-                            Finish Setup
+                            {/* <CheckFillIcon className="mr-2 h-4 w-4" /> */}
+                            Start Seed
                         </>
                     )}
                 </Button>

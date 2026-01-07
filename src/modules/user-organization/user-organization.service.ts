@@ -73,6 +73,14 @@ export const getUserOrganizationUserById = async (userId: TEntityId) => {
         (await API.get<IUserOrganization<IUserBase>[]>(endpoint)).data
     )
 }
+export const getUserOrganizationByOrganizationId = async (
+    organizationId: TEntityId
+) => {
+    const endpoint = `${userOrganizationAPIRoute}/organization/${organizationId}`
+    return groupByOrganization(
+        (await API.get<IUserOrganization<IUserBase>[]>(endpoint)).data
+    )
+}
 
 export const getCurrentUserOrganizations = async () => {
     const endpoint = `${userOrganizationAPIRoute}/current`
@@ -191,6 +199,17 @@ export const useGetUserOrganizationByUserId = ({
         queryFn: () => getUserOrganizationUserById(userId),
         ...options,
         enabled: !!userId && (options?.enabled ?? true),
+    })
+}
+export const useGetUserOrganizationByOrganizationId = ({
+    options,
+    organizationId,
+}: Options & { organizationId: TEntityId }) => {
+    return useQuery<IOrgUserOrganizationGroup[]>({
+        queryKey: ['user-organization', 'current', organizationId],
+        queryFn: () => getUserOrganizationByOrganizationId(organizationId),
+        ...options,
+        enabled: !!organizationId && (options?.enabled ?? true),
     })
 }
 

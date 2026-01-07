@@ -66,7 +66,7 @@ export const OrganizationFormStepper = ({
                 className
             )}
         >
-            <FormStepper
+            <FormStepper<TOrganizationSchema>
                 activeStep={activeStep}
                 disabled={disabled}
                 form={form}

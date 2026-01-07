@@ -19,6 +19,7 @@ import {
 import { JournalVoucherSkeletonCard } from '@/modules/journal-voucher/components/journal-voucher-skeleton-card'
 import JournalVoucherStatusIndicator from '@/modules/journal-voucher/components/journal-voucher-status-indicator'
 
+import { highlightMatch } from '@/components/hightlight-match'
 import {
     CollapseIcon,
     MagnifyingGlassIcon as SearchIcon,
@@ -290,22 +291,5 @@ export const JournalVoucherKanbanMain = ({
                 )}
             </KanbanItemsContainer>
         </KanbanContainer>
-    )
-}
-
-export const highlightMatch = (text: string, search: string) => {
-    if (!search || !text) return text
-    const regex = new RegExp(`(${search})`, 'ig')
-    return text.split(regex).map((part, i) =>
-        regex.test(part) ? (
-            <span
-                className="bg-primary/20 text-primary rounded px-0.5 py-0.5 font-medium"
-                key={i}
-            >
-                {part}
-            </span>
-        ) : (
-            part
-        )
     )
 }

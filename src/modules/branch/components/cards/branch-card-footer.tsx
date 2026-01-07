@@ -1,6 +1,12 @@
 import { cn } from '@/helpers'
 
-import { CalendarIcon, EditPencilIcon, TrashIcon } from '@/components/icons'
+import {
+    ArrowRightIcon,
+    CalendarIcon,
+    EditPencilIcon,
+    TrashIcon,
+} from '@/components/icons'
+import { Button } from '@/components/ui/button'
 import {
     Tooltip,
     TooltipContent,
@@ -16,6 +22,8 @@ type CustomFooterProps = {
     handleEdit: () => void
     handleDelete: () => void
     showActions?: boolean
+    handleSwitch?: () => void
+    isCurrentBranch?: boolean
 }
 
 export const BranchCardFooter = ({
@@ -25,6 +33,8 @@ export const BranchCardFooter = ({
     handleEdit,
     handleDelete,
     showActions,
+    handleSwitch,
+    isCurrentBranch,
 }: CustomFooterProps) => {
     if (!showActions) return null
     return (
@@ -43,16 +53,34 @@ export const BranchCardFooter = ({
             <div className="flex items-center gap-1">
                 <Tooltip>
                     <TooltipTrigger asChild>
-                        <button
+                        <Button
                             className={cn(
-                                'p-2 rounded-md hover:bg-accent transition-colors',
+                                'p-2 flex space-x-2 rounded-md hover:bg-accent transition-colors',
                                 'disabled:opacity-50 disabled:cursor-not-allowed'
                             )}
                             disabled={isSeeding}
+                            onClick={handleSwitch}
+                            size={'sm'}
+                            variant="secondary"
+                        >
+                            {isCurrentBranch && <p className="text-xs">Go</p>}
+                            <ArrowRightIcon className="h-4 w-4" />
+                        </Button>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                        <p>{isCurrentBranch ? 'Current Branch' : 'Switch'}</p>
+                    </TooltipContent>
+                </Tooltip>
+                <Tooltip>
+                    <TooltipTrigger asChild>
+                        <Button
+                            disabled={isSeeding}
                             onClick={handleEdit}
+                            size={'icon'}
+                            variant={'ghost'}
                         >
                             <EditPencilIcon className="h-4 w-4" />
-                        </button>
+                        </Button>
                     </TooltipTrigger>
                     <TooltipContent>
                         <p>Edit branch</p>
@@ -60,23 +88,21 @@ export const BranchCardFooter = ({
                 </Tooltip>
                 <Tooltip>
                     <TooltipTrigger asChild>
-                        <button
-                            className={cn(
-                                'p-2 rounded-md hover:bg-destructive/10 hover:text-destructive transition-colors',
-                                'disabled:opacity-50 disabled:cursor-not-allowed'
-                            )}
+                        <Button
                             disabled={isSeeding || isDeleting}
                             onClick={(e) => {
                                 e.stopPropagation()
                                 handleDelete()
                             }}
+                            size={'icon'}
+                            variant={'ghost'}
                         >
                             {isDeleting ? (
                                 <div className="h-4 w-4 animate-spin rounded-full border-2 border-destructive border-t-transparent" />
                             ) : (
                                 <TrashIcon className="h-4 w-4" />
                             )}
-                        </button>
+                        </Button>
                     </TooltipTrigger>
                     <TooltipContent>
                         <p>Delete branch</p>

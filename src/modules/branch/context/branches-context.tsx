@@ -1,15 +1,15 @@
 import React, { createContext, useContext } from 'react'
 
-import { IBranch } from '@/modules/branch'
+import { IUserOrganization } from '@/modules/user-organization'
 
 import type { TEntityId } from '@/types'
 
 type Value = {
-    branches?: IBranch[]
     isSeeding?: boolean
     organizationId: TEntityId
     showActions?: boolean
     showJoinBranch?: boolean
+    userOrganizations?: IUserOrganization[]
 }
 
 const BranchesContext = createContext<Value | undefined>(undefined)
