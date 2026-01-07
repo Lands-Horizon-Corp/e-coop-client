@@ -13,8 +13,14 @@ export interface IAccountTransactionEntry extends IBaseEntityMeta {
     account_id: TEntityId
     account: IAccount
 
+    jv_number: string
+
+    date: string
+
     debit: number
     credit: number
+
+    balance: number
 }
 
 export type IAccountTransactionEntryRequest = z.infer<

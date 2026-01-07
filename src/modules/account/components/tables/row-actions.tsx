@@ -40,9 +40,14 @@ import {
     DropdownMenuSubTrigger,
 } from '@/components/ui/dropdown-menu'
 
+import ViewAccountTransactionLedger from '../account-transaction-ledger'
 import { IAccountsTableActionComponentProp } from './columns'
 
-export type AccountActionType = 'edit' | 'delete' | 'view-ledger'
+export type AccountActionType =
+    | 'edit'
+    | 'delete'
+    | 'view-ledger'
+    | 'view-accounting-ledger-transaction'
 
 export interface AccountActionExtra {
     onDeleteSuccess?: () => void
@@ -76,6 +81,14 @@ const useAccountActions = ({
             },
         })
 
+    const handleViewAccountingLedger = () => {
+        open('view-accounting-ledger-transaction', {
+            id: account.id,
+            defaultValues: account,
+            extra: {},
+        })
+    }
+
     const handleEdit = () => {
         open('edit', {
             id: account.id,
@@ -106,6 +119,7 @@ const useAccountActions = ({
         handleEdit,
         handleDelete,
         openLedgerModal,
+        handleViewAccountingLedger,
     }
 }
 
@@ -118,8 +132,13 @@ export const AccountAction = ({
     row,
     onDeleteSuccess,
 }: IAccountTableActionProps) => {
-    const { isDeletingAccount, handleEdit, handleDelete, openLedgerModal } =
-        useAccountActions({ row, onDeleteSuccess })
+    const {
+        isDeletingAccount,
+        handleEdit,
+        handleDelete,
+        openLedgerModal,
+        handleViewAccountingLedger,
+    } = useAccountActions({ row, onDeleteSuccess })
 
     return (
         <>
@@ -137,6 +156,12 @@ export const AccountAction = ({
                 }}
                 otherActions={
                     <>
+                        <DropdownMenuItem
+                            onClick={() => handleViewAccountingLedger()}
+                        >
+                            <BookOpenIcon className="mr-2" strokeWidth={1.5} />
+                            View Accounting Ledger
+                        </DropdownMenuItem>
                         <DropdownMenuSub>
                             <DropdownMenuSubTrigger>
                                 <BookOpenIcon
@@ -297,8 +322,13 @@ export const AccountRowContext = ({
     children,
     onDeleteSuccess,
 }: IAccountRowContextProps) => {
-    const { isDeletingAccount, handleEdit, handleDelete, openLedgerModal } =
-        useAccountActions({ row, onDeleteSuccess })
+    const {
+        isDeletingAccount,
+        handleEdit,
+        handleDelete,
+        openLedgerModal,
+        handleViewAccountingLedger,
+    } = useAccountActions({ row, onDeleteSuccess })
 
     return (
         <>
@@ -315,6 +345,13 @@ export const AccountRowContext = ({
                 }}
                 otherActions={
                     <>
+                        <ContextMenuItem
+                            onClick={() => handleViewAccountingLedger()}
+                        >
+                            <BookOpenIcon className="mr-2" strokeWidth={1.5} />
+                            View Accounting Ledger
+                        </ContextMenuItem>
+
                         <ContextMenuSub>
                             <ContextMenuSubTrigger>
                                 <BookOpenIcon
@@ -524,6 +561,23 @@ export const AccountTableActionManager = () => {
                     />
                 </Modal>
             )}
+            {state.action === 'view-accounting-ledger-transaction' &&
+                state.defaultValues && (
+                    <Modal
+                        className="!max-w-6xl w-full"
+                        description={`You are viewing account (${state.defaultValues.name}) ${getModalTitle(state.extra?.entryType).toLowerCase()}`}
+                        onOpenChange={close}
+                        open={state.isOpen}
+                        title={getModalTitle(state.extra?.entryType)}
+                    >
+                        <ViewAccountTransactionLedger
+                            accountId={state.defaultValues.id}
+                            // className="min-h-[90vh] !max-w-[90vw] min-w-0 max-h-[90vh]"
+                            // entryType={state.extra?.entryType || ''}
+                            // mode="account"
+                        />
+                    </Modal>
+                )}
         </>
     )
 }

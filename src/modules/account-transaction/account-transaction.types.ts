@@ -33,7 +33,7 @@ export type IAccountTransactionGenerateRequest =
     TAccountTransactionGenerateSchema
 
 export interface IAccountTransactionLedger {
-    account_transaction_entry: IAccountTransactionEntry
+    account_transaction_entry: IAccountTransactionEntry[]
     month: number
     debit: number
     credit: number
