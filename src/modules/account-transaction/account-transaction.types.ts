@@ -18,6 +18,7 @@ export interface IAccountTransaction extends IBaseEntityMeta {
     jv_number: string
     date: string
     description: string
+
     debit: number
     credit: number
 

@@ -2,10 +2,24 @@ import z from 'zod'
 
 import { entityIdSchema, stringDateWithTransformSchema } from '@/validation'
 
+import { AccountTransactionEntrySchema } from '../account-transaction-entry'
+
 export const AccountTransactionSchema = z.object({
     id: entityIdSchema.optional(),
     jv_number: z.coerce.string().min(1).max(255),
+
+    created_at: z.coerce.string(),
+
+    source: z.any(),
+
+    date: z.any(),
+
+    debit: z.coerce.number<number>(),
+    credit: z.coerce.number<number>(),
+
     description: z.coerce.string().optional(),
+
+    entries: z.array(AccountTransactionEntrySchema),
 })
 
 export const AccountTransactionGenerateSchema = z

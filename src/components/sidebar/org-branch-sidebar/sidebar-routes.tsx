@@ -689,6 +689,13 @@ export const generateSidebarGroups = (
                     title: 'Generate Mutual Fund/Aid',
                     url: `${baseUrl}/generate-mutual-aid`,
                 },
+                {
+                    type: 'item',
+                    icon: BookIcon,
+                    userType: ['employee', 'owner'],
+                    title: 'Account Transaction',
+                    url: `${baseUrl}/account-transaction`,
+                },
             ],
         },
 

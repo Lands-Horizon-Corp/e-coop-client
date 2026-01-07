@@ -1,15 +1,18 @@
 import z from 'zod'
 
-import { descriptionTransformerSanitizer, entityIdSchema } from '@/validation'
+import { EntityIdSchema, entityIdSchema } from '@/validation'
 
 export const AccountTransactionEntrySchema = z.object({
     id: entityIdSchema.optional(),
-    name: z.string().min(1, 'AccountTransactionEntry name is required'),
-    description: z
-        .string()
-        .min(10, 'Min 10 character description')
-        .optional()
-        .transform(descriptionTransformerSanitizer),
+
+    account_transaction_id: EntityIdSchema,
+    account_transaction: z.any(),
+
+    account_id: EntityIdSchema,
+    account: z.any(),
+
+    debit: z.coerce.number<string>().default(0),
+    credit: z.coerce.number<string>().default(0),
 })
 
 export type TAccountTransactionEntrySchema = z.infer<
