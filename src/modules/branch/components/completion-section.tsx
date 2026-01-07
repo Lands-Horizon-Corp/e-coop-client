@@ -18,7 +18,7 @@ export const CompletionSection = ({
     }
 
     return (
-        <Card className="border-primary sticky bottom-2 bg-secondary dark:border-primary dark:!bg-primary/30 backdrop-blur-2xl drop-shadow-2xl/50 drop-shadow-primary">
+        <Card className="border-primary sticky bottom-2 bg-secondary dark:border-primary dark:!bg-background  drop-shadow-2xl/50 drop-shadow-primary">
             <CardContent className="flex items-center justify-between p-6 ">
                 <div className="flex items-center gap-3">
                     <div className="flex h-10 w-10 items-center justify-center border border-primary rounded-full bg-primary/20 dark:bg-primary/50">

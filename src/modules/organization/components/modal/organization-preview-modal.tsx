@@ -1,5 +1,4 @@
 import { useQueryClient } from '@tanstack/react-query'
-import { toast } from 'sonner'
 
 import { cn } from '@/helpers/tw-utils'
 import CreateUpdateBranchFormModal from '@/modules/branch/components/forms/create-branch-form'
@@ -10,7 +9,7 @@ import Modal, { IModalProps } from '@/components/modals/modal'
 import { useModalState } from '@/hooks/use-modal-state'
 
 import OrganizationPreviewDisplaySkeleton from '../organization-preview-display-skeleton'
-import OrganizationModalDetails from './organization-details-modal'
+import OrganizationDetailsModal from './organization-details-modal'
 
 interface OrganizationModalProps extends IModalProps {
     organization?: IOrganization | null
@@ -57,7 +56,6 @@ const OrganizationPreviewModal = ({
                         queryClient.invalidateQueries({
                             queryKey: ['get-branches-by-organization-id'],
                         })
-                        toast.success('Branch created successfully!')
                     },
                 }}
                 title="Create Branch"
@@ -66,7 +64,7 @@ const OrganizationPreviewModal = ({
                 {isLoading ? (
                     <OrganizationPreviewDisplaySkeleton className="rounded-none min-h-screen overflow-y-hidden" />
                 ) : (
-                    <OrganizationModalDetails
+                    <OrganizationDetailsModal
                         organization={organization}
                         showActions={showActions}
                         showJoinBranch={showJoinBranch}

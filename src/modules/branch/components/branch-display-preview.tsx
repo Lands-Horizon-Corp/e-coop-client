@@ -1,5 +1,4 @@
 import { useQueryClient } from '@tanstack/react-query'
-import { toast } from 'sonner'
 
 import { cn } from '@/helpers/tw-utils'
 
@@ -113,7 +112,9 @@ const BranchPreviewDisplay = ({
                             queryClient.invalidateQueries({
                                 queryKey: ['branch', 'branches'],
                             })
-                            toast.success('Branch updated successfully!')
+                            queryClient.invalidateQueries({
+                                queryKey: ['user-organization', 'current'],
+                            })
                         },
                     }}
                 />

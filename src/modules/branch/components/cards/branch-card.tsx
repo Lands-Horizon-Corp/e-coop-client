@@ -218,6 +218,9 @@ export const BranchCard = ({
                         organizationId,
                     ],
                 })
+                queryClient.invalidateQueries({
+                    queryKey: ['user-organization', 'current'],
+                })
             },
             onError: () => {
                 toast.error('Failed to delete branch. Please try again.')
@@ -292,7 +295,9 @@ export const BranchCard = ({
                                 organizationId,
                             ],
                         })
-                        toast.success('Branch updated successfully!')
+                        queryClient.invalidateQueries({
+                            queryKey: ['user-organization', 'current'],
+                        })
                     },
                 }}
                 title={`Update ${branchName}`}

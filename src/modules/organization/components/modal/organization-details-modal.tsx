@@ -1,5 +1,4 @@
 import { useQueryClient } from '@tanstack/react-query'
-import { toast } from 'sonner'
 
 import { BranchesSection } from '@/modules/branch/components/branches-section'
 import CreateUpdateBranchFormModal from '@/modules/branch/components/forms/create-branch-form'
@@ -22,7 +21,7 @@ type OrganizationModalDetailsProps = {
     isSeeding?: boolean
 }
 
-const OrganizationModalDetails = ({
+const OrganizationDetailsModal = ({
     isPending: isPendingOrganization,
     showActions = true,
     handleJoin,
@@ -70,7 +69,9 @@ const OrganizationModalDetails = ({
                             queryClient.invalidateQueries({
                                 queryKey: ['get-branches-by-organization-id'],
                             })
-                            toast.success('Branch created successfully!')
+                            queryClient.invalidateQueries({
+                                queryKey: ['user-organization', 'current'],
+                            })
                         },
                     }}
                     title="Create Branch"
@@ -96,4 +97,4 @@ const OrganizationModalDetails = ({
         </BranchesProvider>
     )
 }
-export default OrganizationModalDetails
+export default OrganizationDetailsModal

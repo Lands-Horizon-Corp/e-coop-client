@@ -160,7 +160,7 @@ const JoinBranchWithCodeFormModal = ({
                 {data && data.branch && data.organization && (
                     <GradientBackground
                         imageBackgroundOpacity={0.1}
-                        mediaUrl={data.organization.media?.download_url}
+                        // mediaUrl={data.organization.media?.download_url}
                     >
                         <div className="relative z-50 flex min-h-16 w-full cursor-pointer items-center gap-x-4 rounded-2xl border-0 p-4 hover:bg-secondary/50 hover:no-underline">
                             <div className="flex grow flex-col gap-y-2">
@@ -174,13 +174,7 @@ const JoinBranchWithCodeFormModal = ({
                                     />
                                     <div className="p-2">
                                         <h1>{data.organization.name}</h1>
-                                        <PlainTextEditor
-                                            className="text-xs"
-                                            content={
-                                                data.organization
-                                                    ?.description ?? ''
-                                            }
-                                        />
+
                                         <p className="flex items-center gap-y-2 text-xs">
                                             {' '}
                                             <PinLocationIcon className="mr-2" />

@@ -1,3 +1,4 @@
+import { useQueryClient } from '@tanstack/react-query'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 import z from 'zod'
@@ -62,6 +63,8 @@ export const CreateUpdateBranchByOrgForm = ({
     ...formProps
 }: ICreateBranchFormProps) => {
     const { countryCode } = useLocationInfo()
+    const invalidate = useQueryClient()
+
     const form = useForm<TBranchSchema>({
         resolver: standardSchemaResolver(branchSchema),
         reValidateMode: 'onChange',
@@ -83,7 +86,9 @@ export const CreateUpdateBranchByOrgForm = ({
     } = useCreateBranchByOrganizationId({
         options: {
             onSuccess: (createdData) => {
-                toast.success(`Branch ${createdData.name} created successfully`)
+                invalidate.invalidateQueries({
+                    queryKey: ['user-organization', 'current'],
+                })
                 form.reset()
                 formProps.onSuccess?.(createdData)
             },
@@ -97,7 +102,6 @@ export const CreateUpdateBranchByOrgForm = ({
         useUpdateBranch({
             options: {
                 onSuccess: (data) => {
-                    toast.success(`Branch ${data.name} updated successfully`)
                     form.reset()
                     formProps.onSuccess?.(data)
                 },
