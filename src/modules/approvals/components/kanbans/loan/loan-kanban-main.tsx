@@ -60,7 +60,6 @@ export const LoanKanbanMain = ({
 }: LoanTransactionKanbanProps) => {
     const invalidate = useQueryClient()
     const [openLoans, setOpenLoans] = useState<string[]>([])
-
     const {
         data: rawLoans,
         isLoading,

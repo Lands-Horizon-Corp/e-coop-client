@@ -20,7 +20,7 @@ const TruncatedText = ({
     maxLength = 150,
     className,
     buttonClassName,
-    showMoreText = 'See more',
+    showMoreText = 'read more',
     showLessText = 'See less',
     onExpandedChange,
     renderText,

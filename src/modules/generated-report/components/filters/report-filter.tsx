@@ -150,7 +150,6 @@ export function GeneratedReportFilter({
         setCopied(true)
         setTimeout(() => setCopied(false), 2000)
     }
-    console.log(filter)
     return (
         <div className="w-full max-w-6xl mx-auto space-y-6">
             <Card>

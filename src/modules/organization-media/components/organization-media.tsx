@@ -134,7 +134,6 @@ const OrganizationMedia = ({ organizationId }: OrganizationMediaProps) => {
                         },
                         mode: 'multiple',
                         onMultipleUploadComplete: (uploadedMedias) => {
-                            console.log(uploadedMedias)
                             uploadOrganizationMedia({
                                 ids: uploadedMedias.map((m) => m.id),
                                 organizationId: organizationId,

@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import { useNavigate } from '@tanstack/react-router'
 import { useForm } from 'react-hook-form'
@@ -71,6 +71,7 @@ const OrganizationForm = () => {
     const { countryCode } = useLocationInfo()
     const [activeStep, setActiveStep] = useState(0)
     const { data: defaultCurrency } = useGetCurrentCurrency()
+
     const { selectedCategories, clearCategories, setOnOpenCategoryPicker } =
         useCategoryStore()
 
@@ -89,7 +90,6 @@ const OrganizationForm = () => {
             subscription_plan_id: '',
             media_id: '',
             cover_media_id: '',
-            currency_id: defaultCurrency?.id || undefined,
         },
     })
 
@@ -155,6 +155,12 @@ const OrganizationForm = () => {
     useAlertBeforeClosing(isDirty)
 
     const errorMessage = serverRequestErrExtractor({ error })
+
+    useEffect(() => {
+        if (defaultCurrency) {
+            form.setValue('currency_id', defaultCurrency.id)
+        }
+    }, [defaultCurrency, form])
 
     return (
         <Form {...form}>
@@ -345,19 +351,21 @@ const OrganizationForm = () => {
                                         control={form.control}
                                         label="Currency"
                                         name="currency_id"
-                                        render={({ field }) => (
-                                            <CurrencyCombobox
-                                                {...field}
-                                                onChange={(selected) =>
-                                                    field.onChange(selected.id)
-                                                }
-                                                placeholder="Select Currency"
-                                                value={
-                                                    field.value ||
-                                                    defaultCurrency?.id
-                                                }
-                                            />
-                                        )}
+                                        render={({ field }) => {
+                                            console.log(field)
+                                            return (
+                                                <CurrencyCombobox
+                                                    {...field}
+                                                    onChange={(selected) =>
+                                                        field.onChange(
+                                                            selected.id
+                                                        )
+                                                    }
+                                                    placeholder="Select Currency"
+                                                    value={field.value}
+                                                />
+                                            )
+                                        }}
                                     />
                                     <FormFieldWrapper
                                         className="col-span-full sm:col-span-1 lg:col-span-2"

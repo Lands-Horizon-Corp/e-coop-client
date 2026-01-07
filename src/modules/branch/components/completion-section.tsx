@@ -22,17 +22,21 @@ export const CompletionSection = ({
     }
 
     return (
-        <Card className="border-primary bg-secondary dark:border-primary dark:bg-primary/10">
-            <CardContent className="flex items-center justify-between p-6">
+        <Card className="border-primary sticky bottom-2 bg-secondary dark:border-primary dark:!bg-primary/30 backdrop-blur-2xl drop-shadow-2xl/50 drop-shadow-primary">
+            <CardContent className="flex items-center justify-between p-6 ">
                 <div className="flex items-center gap-3">
                     <div className="flex h-10 w-10 items-center justify-center border border-primary rounded-full bg-primary/20 dark:bg-primary/50">
                         <RocketIcon className="h-5 w-5 text-primary" />
                     </div>
                     <div>
-                        <h3 className="font-semibold ">Ready to launch!</h3>
+                        <h3 className="font-semibold ">
+                            Seed branch to complete setup
+                        </h3>
                         <p className="text-sm text-primary dark:text-primary-50">
-                            Your organization is set up with branches. Complete
-                            the setup to get started.
+                            Branches must be seeded before use. Creating an
+                            organization automatically creates and seeds its
+                            initial branch; you can add additional branches to
+                            existing organizations.
                         </p>
                     </div>
                 </div>

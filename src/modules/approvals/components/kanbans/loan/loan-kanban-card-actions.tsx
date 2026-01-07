@@ -177,9 +177,8 @@ export const LoanTransactionCardActions = ({
                     onSuccess: () => {
                         generateReport.onOpenChange(false)
                     },
-                    onSubmit: (data) => {
+                    onSubmit: () => {
                         handleOpenPrintModal()
-                        console.log('Generate to Print Submitted', data)
                     },
                     templateOptions: LoanVoucherReleaseTemplates,
                 }}

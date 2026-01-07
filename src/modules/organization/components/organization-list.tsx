@@ -39,9 +39,14 @@ const OrganizationList = ({
 }: OrganizationListProps) => {
     const navigate = useNavigate()
 
+    const sortedOrgFromLatest = [...organization].sort(
+        (a, b) =>
+            new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+    )
+
     return (
         <div className="w-full flex flex-wrap justify-center gap-5 gap-y-5 mt-10">
-            {organization.map((org) => {
+            {sortedOrgFromLatest.map((org) => {
                 const mediaUrl = org.media?.download_url
                 const coverUrl = org.cover_media?.download_url
                 const isUserOwner =
@@ -50,7 +55,7 @@ const OrganizationList = ({
 
                 return (
                     <Card
-                        className="relative bg-sidebar/90 duration-300 max-w-xs min-h-60 rounded-3xl hover:bg-background dark:hover:bg-background/50"
+                        className="relative bg-sidebar/90 duration-300 min-w-xs max-w-xs min-h-60 rounded-3xl hover:bg-background dark:hover:bg-background/50"
                         key={org.id}
                     >
                         <ImageDisplay
@@ -79,7 +84,12 @@ const OrganizationList = ({
                                 {org.name}
                             </CardTitle>
                         </CardHeader>
-                        <CardContent className="">
+                        <CardContent className="min-h-18 max-h-18 relative">
+                            {!org.description && (
+                                <p className="text-muted-foreground text-xs absolute left-1/2 top-1/2 -translate-y-1/2 -translate-x-1/2">
+                                    No Description Available
+                                </p>
+                            )}
                             <TruncatedText
                                 className="text-xs max-h-16 text-card-foreground ecoop-scroll overflow-auto"
                                 maxLength={100}

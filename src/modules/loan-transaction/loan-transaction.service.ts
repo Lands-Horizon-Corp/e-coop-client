@@ -142,12 +142,9 @@ export const useGetAllLoanTransaction = ({
                 url = `${loanTransactionAPIRoute}/member-profile/${memberProfileId}`
             } else if (mode === 'member-profile-loan-account') {
                 url = `${loanTransactionAPIRoute}/member-profile/${memberProfileId}/account/${loanAccountId}`
-            } else if (mode) {
-                url = `${loanTransactionAPIRoute}/${mode}`
             } else if (mode === 'release-today') {
                 url = `${loanTransactionAPIRoute}/released/today`
             }
-
             return getAllLoanTransaction({ url, query })
         },
     })
