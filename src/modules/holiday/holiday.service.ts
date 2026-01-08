@@ -107,6 +107,9 @@ export const useUpdateHolidayById = createMutationFactory<
         args.queryClient.invalidateQueries({
             queryKey: [holidayBaseKey, 'all'],
         })
+        args.queryClient.invalidateQueries({
+            queryKey: [holidayBaseKey, 'available-years'],
+        })
     },
 })
 

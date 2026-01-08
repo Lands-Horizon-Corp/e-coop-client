@@ -64,7 +64,10 @@ const HolidayCreateUpdateForm = ({
             ...withToastCallbacks({
                 textSuccess: 'Holiday updated',
                 textError: 'Failed to update holiday',
-                onSuccess: formProps.onSuccess,
+                onSuccess: (data) => {
+                    console.log(data)
+                    formProps.onSuccess?.(data)
+                },
                 onError: formProps.onError,
             }),
         },
