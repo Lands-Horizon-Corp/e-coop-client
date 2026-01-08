@@ -63,12 +63,6 @@ const ComputationSheetCalculator = ({
         )
     }
 
-    // console.log(schemeCalculatorResponse)
-    // console.log(
-    //     'schemeCalculatorResponse',
-    //     scheduleToTableRow(schemeCalculatorResponse?.schedule || [])
-    // )
-
     return (
         <div
             className={cn(

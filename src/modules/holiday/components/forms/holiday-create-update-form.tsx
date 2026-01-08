@@ -65,7 +65,6 @@ const HolidayCreateUpdateForm = ({
                 textSuccess: 'Holiday updated',
                 textError: 'Failed to update holiday',
                 onSuccess: (data) => {
-                    console.log(data)
                     formProps.onSuccess?.(data)
                 },
                 onError: formProps.onError,

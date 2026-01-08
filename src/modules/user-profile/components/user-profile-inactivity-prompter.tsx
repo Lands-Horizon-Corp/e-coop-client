@@ -41,7 +41,6 @@ const UserProfileInactivityPrompter = () => {
 
     useEffect(() => {
         restartTrackingRef.current = restartTracking
-        // console.log('restartTrackingRef updated')
     }, [restartTracking])
 
     useEffect(() => {
@@ -49,8 +48,6 @@ const UserProfileInactivityPrompter = () => {
             restartTrackingRef.current()
             setUserActivityState('active')
         }
-
-        // console.log('changes')
 
         setHandleRestartActivityTracking(handleRestart)
     }, [setHandleRestartActivityTracking, setUserActivityState])

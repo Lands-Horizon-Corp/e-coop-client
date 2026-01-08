@@ -31,7 +31,6 @@ const BranchModalDisplay = ({
     const [selectedBranch, setSelectedBranch] = useState<IBranch | null>(null)
     const openBranchMapLocation = useModalState(false)
     const { data: branch } = useGetBranchById({ id: branchId })
-    console.log(branch)
     if (!branch) return null
     return (
         <Modal

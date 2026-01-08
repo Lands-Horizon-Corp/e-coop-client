@@ -466,7 +466,6 @@ const HolidayItem = ({
                     defaultValues: holiday,
                     onSuccess: (data) => {
                         onSuccess?.(data)
-                        console.log('data', data)
                     },
                 }}
                 title="Edit Holiday"

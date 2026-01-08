@@ -153,13 +153,6 @@ export const useUserProfileInactivity = ({
                     calculateLastActivityFromNow(now, lastActivity) >=
                         activityGracePeriod
                 ) {
-                    // console.log('INACTIVE', {
-                    //     lastActivity,
-                    //     now,
-                    //     diff: now - lastActivity,
-                    //     grace: activityGracePeriod,
-                    // })
-
                     // User is inactive
                     isInactiveRef.current = true
 
@@ -174,13 +167,6 @@ export const useUserProfileInactivity = ({
 
                     // Call onInactivity callback
                     onInactivity?.(lastActivity, now)
-                } else if (lastActivity) {
-                    // console.log('ACTIVE', {
-                    //     // lastActivity,
-                    //     // now,
-                    //     diff: now - lastActivity,
-                    //     grace: activityGracePeriod,
-                    // })
                 }
             }, POLLING_INTERVAL)
         },
@@ -268,8 +254,6 @@ export const useUserProfileInactivity = ({
                         currentActivityTimestamp: timestamp,
                         eventType,
                     })
-
-                    // console.log('Activity saved to localStorage', { timestamp })
                 }
             }, ACTIVITY_DEBOUNCE_TIME)
         }

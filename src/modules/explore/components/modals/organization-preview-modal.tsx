@@ -35,7 +35,6 @@ const OrganizationBranchesModal = ({
     })
     const [selectedBranch, setSelectedBranch] = useState<TEntityId>()
     const branchModalState = useModalState(false)
-    console.log(branchModalState, selectedBranch)
     return (
         <Modal
             open
@@ -92,7 +91,6 @@ const OrganizationBranchesModal = ({
                             imageClassName=""
                             imageSrc={branch.media?.download_url}
                             onCardClick={() => {
-                                console.log('click')
                                 branchModalState.onOpenChange(true)
                                 setSelectedBranch(branch.id)
                             }}

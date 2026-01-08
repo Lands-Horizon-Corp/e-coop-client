@@ -32,7 +32,6 @@ export const useSubscribe = <T = unknown>(
             subject === undefined ||
             subject === null
         ) {
-            // console.log(subject, connection, isLiveEnabled)
             return
         }
 
