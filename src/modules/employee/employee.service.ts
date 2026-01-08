@@ -4,8 +4,9 @@ import qs from 'query-string'
 import { Logger } from '@/helpers/loggers'
 import {
     API,
+    IUserOrganization,
     IUserOrganizationPaginated,
-    // createUserOrganization,
+    createUserOrganization,
     deleteManyUserOrganization,
     deleteUserOrganizationById,
     // deleteUserOrganizationById,
@@ -15,11 +16,13 @@ import { HookQueryOptions } from '@/providers/repositories/data-layer-factory'
 import {
     createMutationFactory,
     deleteMutationInvalidationFn,
+    updateMutationInvalidationFn,
 } from '@/providers/repositories/mutation-factory'
 
 import { TAPIQueryOptions, TEntityId } from '@/types'
 
 import { IEmployee } from '../user'
+import { IEmployeeCreateRequest } from './employee.types'
 
 /**
  * 👻 Ghost Module: Employee
@@ -93,6 +96,30 @@ export const useDeleteEmployeeById = createMutationFactory<
     mutationFn: (id) => deleteUserOrganizationById({ id }),
     invalidationFn: (args) =>
         deleteMutationInvalidationFn(employeeBaseKey, args),
+})
+
+export const useCreateEmployee = createMutationFactory<
+    IUserOrganization,
+    Error,
+    { id?: TEntityId; url?: string; data: IEmployeeCreateRequest }
+>({
+    mutationFn: async (args) => {
+        const response = await createUserOrganization<typeof args.data>({
+            url: `${userOrganizationAPIRoute}/employee`,
+            payload: args.data,
+        })
+
+        return response
+    },
+    invalidationFn: (args) => {
+        args.queryClient.invalidateQueries({
+            queryKey: ['employee', 'paginated'],
+        })
+        args.queryClient.invalidateQueries({
+            queryKey: ['user-organization', args.resultData.id],
+        })
+        updateMutationInvalidationFn(employeeBaseKey, args)
+    },
 })
 
 export const logger = Logger.getInstance('employee')
