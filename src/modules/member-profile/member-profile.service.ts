@@ -165,6 +165,9 @@ export const useApproveMemberProfile = createMutationFactory<
 >({
     mutationFn: (id) => approveMemberProfile(id),
     invalidationFn: (args) => {
+        args.queryClient.invalidateQueries({
+            queryKey: [memberProfileBaseKey, 'all', 'pending'],
+        })
         updateMutationInvalidationFn(memberProfileBaseKey, args)
     },
 })
@@ -176,6 +179,9 @@ export const useDeclineMemberProfile = createMutationFactory<
 >({
     mutationFn: (id) => declineMemberProfile(id),
     invalidationFn: (args) => {
+        args.queryClient.invalidateQueries({
+            queryKey: [memberProfileBaseKey, 'all', 'pending'],
+        })
         updateMutationInvalidationFn(memberProfileBaseKey, args)
     },
 })
