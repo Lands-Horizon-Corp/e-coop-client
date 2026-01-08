@@ -42,7 +42,7 @@ const TimeInOut = ({
     } = useUploadMedia()
 
     const {
-        mutate: saveTimeInOut,
+        mutateAsync: saveTimeInOut,
         isPending: isSaving,
         error: rawError,
     } = useTimeInOut({
@@ -73,7 +73,11 @@ const TimeInOut = ({
             setImageId(uploaded)
         }
 
-        saveTimeInOut({ media_id: uploaded })
+        toast.promise(saveTimeInOut({ media_id: uploaded }), {
+            loading: 'Saving',
+            success: 'Saved',
+            error: 'Failed to save',
+        })
     }
 
     return (

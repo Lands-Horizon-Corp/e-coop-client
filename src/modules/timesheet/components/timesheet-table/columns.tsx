@@ -23,11 +23,7 @@ import { ITimesheet } from '../../timesheet.types'
 import { getTimeDifference } from '../worktimer/utils'
 
 export const timesheetGlobalSearchTargets: IGlobalSearchTargets<ITimesheet>[] =
-    [
-        { field: 'user.user_name', displayText: 'User' },
-        { field: 'time_in', displayText: 'Time In' },
-        { field: 'time_out', displayText: 'Time Out' },
-    ]
+    [{ field: 'user.user_name', displayText: 'User' }]
 
 export interface ITimesheetTableActionComponentProp {
     row: Row<ITimesheet>
@@ -49,6 +45,7 @@ const TimesheetTableColumns = (
                 <DataTableColumnHeader {...props} title="User">
                     <ColumnActions {...props}>
                         <TextFilter<ITimesheet>
+                            defaultMode="contains"
                             displayText="User"
                             field="user.user_name"
                         />
