@@ -92,11 +92,11 @@ const AdjustmentEntryTable = ({
     onDoubleClick = (row) => {
         row.toggleSelected()
     },
-    actionComponent = AdjustmentEntryAction,
-    RowContextComponent = AdjustmentEntryRowContext,
     mode = 'all',
     currencyId,
     userOrganizationId,
+    actionComponent = AdjustmentEntryAction,
+    RowContextComponent = AdjustmentEntryRowContext,
 }: TAdjustmentTableProps) => {
     const queryClient = useQueryClient()
     const { pagination, setPagination } = usePagination()

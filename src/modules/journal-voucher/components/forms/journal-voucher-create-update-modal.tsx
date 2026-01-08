@@ -149,6 +149,7 @@ const JournalVoucherCreateUpdateForm = ({
         }
 
         if (isUpdate) {
+            console.log(payload)
             updateJournalVoucher({
                 id: editJournalId,
                 payload: payload,

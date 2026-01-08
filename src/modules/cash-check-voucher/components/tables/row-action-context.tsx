@@ -136,9 +136,7 @@ export const CashCheckJournalVoucherAction = ({
     onDeleteSuccess,
 }: ICashCheckVoucherRowContextProps) => {
     const {
-        isDeletingCashCheckVoucher,
         handleEdit,
-        handleDelete,
         handleOpenCheckEntry,
         handleOpenSignature,
         handleOpenPrintModal,
@@ -150,11 +148,6 @@ export const CashCheckJournalVoucherAction = ({
         <>
             <RowActionsGroup
                 canSelect
-                onDelete={{
-                    text: 'Delete',
-                    isAllowed: !isDeletingCashCheckVoucher,
-                    onClick: handleDelete,
-                }}
                 onEdit={{
                     text: 'Edit',
                     isAllowed: true,
@@ -182,9 +175,7 @@ export const CashCheckVoucherRowContext = ({
     onDeleteSuccess,
 }: ICashCheckVoucherRowContextProps) => {
     const {
-        isDeletingCashCheckVoucher,
         handleEdit,
-        handleDelete,
         handleOpenCheckEntry,
         handleOpenSignature,
         handleApproveModal,
@@ -195,11 +186,6 @@ export const CashCheckVoucherRowContext = ({
     return (
         <>
             <DataTableRowContext
-                onDelete={{
-                    text: 'Delete',
-                    isAllowed: !isDeletingCashCheckVoucher,
-                    onClick: handleDelete,
-                }}
                 onEdit={{
                     text: 'Edit',
                     isAllowed: true,
@@ -242,7 +228,6 @@ export const CashCheckVoucherTableActionManager = () => {
                         defaultValues: state.defaultValues,
                         mode: 'update',
                         readOnly: isPrinted,
-                        onSuccess: () => close(),
                     }}
                     onOpenChange={close}
                     open={state.isOpen}

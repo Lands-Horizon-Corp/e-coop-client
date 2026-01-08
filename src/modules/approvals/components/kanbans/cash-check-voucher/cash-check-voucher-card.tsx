@@ -31,7 +31,7 @@ export const CashCheckVoucherCardCreatorInfo = ({
           ? `Approved by`
           : isPrinted
             ? `Printed by `
-            : cashCheckVoucher.created_by
+            : cashCheckVoucher.employee_user
               ? `Created by`
               : 'No Creator Info'
 
@@ -41,8 +41,8 @@ export const CashCheckVoucherCardCreatorInfo = ({
           ? ` ${cashCheckVoucher.approved_by?.full_name}`
           : isPrinted
             ? ` ${cashCheckVoucher.printed_by?.full_name}`
-            : cashCheckVoucher.created_by
-              ? ` ${cashCheckVoucher.created_by?.full_name}`
+            : cashCheckVoucher.employee_user
+              ? ` ${cashCheckVoucher.employee_user?.full_name}`
               : ''
 
     const mediaUrl = isReleased
@@ -51,8 +51,8 @@ export const CashCheckVoucherCardCreatorInfo = ({
           ? cashCheckVoucher.approved_by?.media?.download_url
           : isPrinted
             ? cashCheckVoucher.printed_by?.media?.download_url
-            : cashCheckVoucher.created_by
-              ? cashCheckVoucher.created_by?.media?.download_url
+            : cashCheckVoucher.employee_user
+              ? cashCheckVoucher.employee_user?.media?.download_url
               : ''
 
     return (

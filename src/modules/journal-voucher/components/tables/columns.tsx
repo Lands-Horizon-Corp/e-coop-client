@@ -7,9 +7,6 @@ import ColumnActions from '@/components/data-table/data-table-column-header/colu
 import { createUpdateColumns } from '@/components/data-table/data-table-common-columns'
 import { IGlobalSearchTargets } from '@/components/data-table/data-table-filters/data-table-global-search'
 import TextFilter from '@/components/data-table/data-table-filters/text-filter'
-import HeaderToggleSelect from '@/components/data-table/data-table-row-actions/header-toggle-select'
-import { PushPinIcon } from '@/components/icons'
-import { Checkbox } from '@/components/ui/checkbox'
 
 import JournalVoucherStatusIndicator from '../journal-voucher-status-indicator'
 
@@ -37,25 +34,26 @@ const JournalVoucherTableColumns = (
 ): ColumnDef<IJournalVoucher>[] => [
     {
         id: 'select',
-        header: ({ table, column }) => (
-            <div className={'flex w-fit items-center gap-x-1 px-2'}>
-                <HeaderToggleSelect table={table} />
-                {!column.getIsPinned() && (
-                    <PushPinIcon
-                        className="mr-2 size-3.5 cursor-pointer"
-                        onClick={() => column.pin('left')}
-                    />
-                )}
-            </div>
-        ),
+        // header: ({ table, column }) => (
+        //     <div className={'flex w-fit items-center gap-x-1 px-2'}>
+        //         <HeaderToggleSelect table={table} />
+        //         {!column.getIsPinned() && (
+        //             <PushPinIcon
+        //                 className="mr-2 size-3.5 cursor-pointer"
+        //                 onClick={() => column.pin('left')}
+        //             />
+        //         )}
+        //     </div>
+        // ),
         cell: ({ row }) => (
             <div className="flex w-fit items-center gap-x-1 px-0">
                 {opts?.actionComponent?.({ row })}
-                <Checkbox
+                {/* <Checkbox
+                    disabled
                     aria-label="Select row"
                     checked={row.getIsSelected()}
                     onCheckedChange={(value) => row.toggleSelected(!!value)}
-                />
+                /> */}
             </div>
         ),
         enableSorting: false,

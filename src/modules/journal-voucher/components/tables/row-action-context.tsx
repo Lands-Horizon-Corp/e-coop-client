@@ -120,9 +120,7 @@ export const JournalVoucherAction = ({
     onDeleteSuccess,
 }: IJournalVoucherTableActionProps) => {
     const {
-        isDeletingJournalVoucher,
         handleEdit,
-        handleDelete,
         handleOpenPrintModal,
         handleApproveModal,
         handleReleaseModal,
@@ -133,11 +131,6 @@ export const JournalVoucherAction = ({
             <div onClick={(e) => e.stopPropagation()}></div>
             <RowActionsGroup
                 canSelect
-                onDelete={{
-                    text: 'Delete',
-                    isAllowed: !isDeletingJournalVoucher,
-                    onClick: handleDelete,
-                }}
                 onEdit={{
                     text: 'Edit',
                     isAllowed: true,
@@ -169,9 +162,7 @@ export const JournalVoucherRowContext = ({
     onDeleteSuccess,
 }: IJournalVoucherRowContextProps) => {
     const {
-        isDeletingJournalVoucher,
         handleEdit,
-        handleDelete,
         handleApproveModal,
         handleReleaseModal,
         handleOpenPrintModal,
@@ -180,11 +171,6 @@ export const JournalVoucherRowContext = ({
     return (
         <>
             <DataTableRowContext
-                onDelete={{
-                    text: 'Delete',
-                    isAllowed: !isDeletingJournalVoucher,
-                    onClick: handleDelete,
-                }}
                 onEdit={{
                     text: 'Edit',
                     isAllowed: true,

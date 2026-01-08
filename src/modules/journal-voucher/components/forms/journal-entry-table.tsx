@@ -275,9 +275,10 @@ export const JournalEntryTable = ({
     })
 
     const { append: addRemoveId } = useFieldArray({
-        name: 'removed_journal_voucher_entry_ids',
+        name: 'journal_voucher_entries_deleted',
         control: form.control,
     })
+    console.log(form.getValues())
 
     const handleDeleteRow = useCallback(
         (index: number) => {

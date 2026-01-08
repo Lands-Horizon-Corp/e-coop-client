@@ -44,6 +44,8 @@ export interface IJournalVoucher extends IBaseEntityMeta {
 
     total_debit: number
     total_credit: number
+
+    employee_user: IUser
 }
 
 export interface IJournalVoucherRequest {
