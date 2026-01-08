@@ -99,28 +99,6 @@ export const QuickTransferTransactionForm = ({
         },
     })
 
-    const handleReset = (transaction: IGeneralLedger) => {
-        form.reset({
-            reference_number: userSettingOR,
-            description: '',
-            amount: undefined,
-            bank_id: undefined,
-            entry_date: undefined,
-            bank_reference_number: '',
-            proof_of_payment_media_id: undefined,
-            signature_media_id: undefined,
-            signature: undefined,
-            payment_type_id:
-                settings_payment_type_default_value_id || undefined,
-
-            // transaction-specific fields
-            member: transaction.member_profile,
-            member_profile_id: transaction.member_profile?.id ?? '',
-            account: transaction.account,
-            account_id: transaction.account_id,
-        })
-    }
-
     const {
         mutate: createQuickTransaction,
         isPending: isQuickTransactionPending,
@@ -129,7 +107,8 @@ export const QuickTransferTransactionForm = ({
         options: {
             onSuccess: (transaction) => {
                 onSuccess?.(transaction)
-                handleReset(transaction)
+                // handleReset(transaction)
+                form.setValue('amount', 0)
                 queryClient.invalidateQueries({
                     queryKey: ['member-accounting-ledger'],
                 })

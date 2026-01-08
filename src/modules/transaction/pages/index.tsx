@@ -222,7 +222,7 @@ const Transaction = ({ transactionId, fullPath }: TTransactionProps) => {
                         <TransactionMemberScanner
                             className="p-2"
                             fullPath={fullPath}
-                            handleSetTransactionId={() =>
+                            handleRemoveMember={() =>
                                 handleSetTransactionId({
                                     transactionId: undefined,
                                     fullPath,

@@ -1,6 +1,8 @@
 // Action.tsx
 import { ReactNode } from 'react'
 
+import { useQueryClient } from '@tanstack/react-query'
+
 import { withToastCallbacks } from '@/helpers/callback-helper'
 import useConfirmModalStore from '@/store/confirm-modal-store'
 import { Row } from '@tanstack/react-table'
@@ -24,6 +26,7 @@ const useAutomaticLoanDeductionActions = ({
     row,
     onDeleteSuccess,
 }: UseAutomaticLoanDeductionActionsProps) => {
+    const queryClient = useQueryClient()
     const automaticLoanDeduction = row.original
     const editModal = useModalState()
 
@@ -35,7 +38,12 @@ const useAutomaticLoanDeductionActions = ({
     } = useDeleteAutomaticLoanDeductionById({
         options: {
             ...withToastCallbacks({
-                onSuccess: onDeleteSuccess,
+                onSuccess: () => {
+                    onDeleteSuccess?.()
+                    queryClient.invalidateQueries({
+                        queryKey: ['automatic-loan-deduction', 'all'],
+                    })
+                },
             }),
         },
     })
@@ -52,6 +60,7 @@ const useAutomaticLoanDeductionActions = ({
     }
 
     return {
+        queryClient,
         automaticLoanDeduction,
         editModal,
         isDeletingAutomaticLoanDeduction,
@@ -122,6 +131,7 @@ export const AutomaticLoanDeductionRowContext = ({
     onDeleteSuccess,
 }: IAutomaticLoanDeductionRowContextProps) => {
     const {
+        queryClient,
         automaticLoanDeduction,
         editModal,
         isDeletingAutomaticLoanDeduction,
@@ -137,7 +147,12 @@ export const AutomaticLoanDeductionRowContext = ({
                     automaticLoanDeductionId: automaticLoanDeduction.id,
                     defaultValues: automaticLoanDeduction,
                     currency: automaticLoanDeduction.account?.currency,
-                    onSuccess: () => editModal.onOpenChange(false),
+                    onSuccess: () => {
+                        queryClient.invalidateQueries({
+                            queryKey: ['automatic-loan-deduction', 'all'],
+                        })
+                        editModal.onOpenChange(false)
+                    },
                 }}
             />
             <DataTableRowContext

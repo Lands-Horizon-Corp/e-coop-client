@@ -32,12 +32,13 @@ import { useGetMemberProfileById } from '../../member-profile/member-profile.ser
 interface MemberQrScannerProps extends IBaseProps {
     transactionId: TEntityId
     fullPath: string
-    handleSetTransactionId: () => void
+    handleRemoveMember?: () => void
 }
 
 const TransactionMemberScanner = ({
     className,
     transactionId,
+    handleRemoveMember,
 }: MemberQrScannerProps) => {
     const [startScan, setStartScan] = useState(false)
     // const { setActiveScope } = useShortcutContext()
@@ -49,6 +50,7 @@ const TransactionMemberScanner = ({
         openMemberPicker,
         setDecodedMemberProfile,
         decodedMemberProfile,
+        handleResetAll,
     } = useTransactionStore()
     const focusedId = decodedMemberProfile?.member_profile_id
     const {
@@ -178,7 +180,11 @@ const TransactionMemberScanner = ({
                             className="h-full"
                             hasTransaction={false}
                             memberInfo={selectedMember}
-                            onRemove={() => setSelectedMember(null)}
+                            onRemove={() => {
+                                setSelectedMember(null)
+                                handleResetAll()
+                                handleRemoveMember?.()
+                            }}
                         />
                     </div>
                 ) : (

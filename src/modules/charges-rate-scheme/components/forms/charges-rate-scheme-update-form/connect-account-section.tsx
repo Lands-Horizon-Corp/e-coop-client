@@ -45,7 +45,7 @@ const ConnectAccountSection = ({
     const modalState = useModalState()
     const isPending = false // Replace with actual loading state
 
-    const accounts = form.watch('charges_rate_scheme_accounts')
+    const accounts = form.watch('charges_rate_scheme_accounts') || []
 
     const { fields, append, remove } = useFieldArray({
         control: form.control,
