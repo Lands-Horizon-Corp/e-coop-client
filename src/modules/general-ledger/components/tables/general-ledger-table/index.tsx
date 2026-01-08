@@ -37,7 +37,10 @@ import GeneralLedgerTableColumns, {
     IGeneralLedgerTableColumnProps,
     generalLedgerGlobalSearchTargets,
 } from './columns'
-import { GeneralLedgerTableActionManager } from './row-action-context'
+import {
+    GeneralLedgerRowContext,
+    GeneralLedgerTableActionManager,
+} from './row-action-context'
 
 export interface GeneralLedgerTableProps
     extends TableProps<IGeneralLedger>,
@@ -101,7 +104,7 @@ const GeneralLedgerTable = ({
     },
     onSelectData,
     actionComponent,
-    RowContextComponent,
+    RowContextComponent = GeneralLedgerRowContext,
     ...modeProps
 }: TGeneralLedgerTableProps & {
     userOrganizationId?: TEntityId

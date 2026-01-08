@@ -358,7 +358,7 @@ const TransactionBatchCreateForm = ({
 
                     <FormFooterResetSubmit
                         className="sticky bottom-0"
-                        disableSubmit={!form.formState.isDirty}
+                        // disableSubmit={!form.formState.isDirty}
                         error={error}
                         isLoading={isPending}
                         onReset={() => {
