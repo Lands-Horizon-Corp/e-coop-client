@@ -76,7 +76,11 @@ const MutualFundTableColumns = (
         header: (props) => (
             <DataTableColumnHeader {...props} title="Name">
                 <ColumnActions {...props}>
-                    <TextFilter<IMutualFund> displayText="Name" field="name" />
+                    <TextFilter<IMutualFund>
+                        defaultMode="contains"
+                        displayText="Name"
+                        field="name"
+                    />
                 </ColumnActions>
             </DataTableColumnHeader>
         ),

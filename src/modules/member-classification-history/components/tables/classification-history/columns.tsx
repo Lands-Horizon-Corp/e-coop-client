@@ -30,8 +30,8 @@ export const memberClassificationHistoryGlobalSearchTargets: IGlobalSearchTarget
 const memberClassificationHistoryColumns =
     (): ColumnDef<IMemberClassificationHistory>[] => [
         {
-            id: 'memberClassificationName',
-            accessorKey: 'memberClassification.name',
+            id: 'member_classification.name',
+            accessorKey: 'member_classification.name',
             header: (props) => (
                 <DataTableColumnHeader {...props} title="Classification Name">
                     <ColumnActions {...props}>
@@ -50,8 +50,8 @@ const memberClassificationHistoryColumns =
             enableResizing: false,
         },
         {
-            id: 'memberClassificationDescription',
-            accessorKey: 'memberClassification.description',
+            id: 'member_classification.description',
+            accessorKey: 'member_classification.description',
             header: (props) => (
                 <DataTableColumnHeader {...props} title="Description">
                     <ColumnActions {...props}>

@@ -386,8 +386,8 @@ const MemberLoanTableSummaryColumns = (
             maxSize: 800,
         },
         {
-            id: 'processor',
-            accessorKey: 'employee_user',
+            id: 'employee_user.full_name',
+            accessorKey: 'employee_user.full_name',
             header: (props) => (
                 <DataTableColumnHeader {...props} title="Processor">
                     <ColumnActions {...props}>

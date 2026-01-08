@@ -114,12 +114,13 @@ const LoanTransactionTableColumns = (
             minSize: 180,
         },
         {
-            id: 'passbook',
+            id: 'member_profile.passbook',
             accessorKey: 'member_profile.passbook',
             header: (props) => (
                 <DataTableColumnHeader {...props} title="Passbook No.">
                     <ColumnActions {...props}>
                         <TextFilter<ILoanTransaction>
+                            defaultMode="contains"
                             displayText="Passbook"
                             field="member_profile.passbook"
                         />
@@ -416,12 +417,13 @@ const LoanTransactionTableColumns = (
             maxSize: 800,
         },
         {
-            id: 'processor',
-            accessorKey: 'employee_user',
+            id: 'employee_user.full_name',
+            accessorKey: 'employee_user.full_name',
             header: (props) => (
                 <DataTableColumnHeader {...props} title="Processor">
                     <ColumnActions {...props}>
                         <TextFilter<ILoanTransaction>
+                            defaultMode="contains"
                             displayText="Processor"
                             field="employee_user.full_name"
                         />

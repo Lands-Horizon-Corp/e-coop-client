@@ -22,8 +22,8 @@ export const memberTypeHistoryGlobalSearchTargets: IGlobalSearchTargets<IMemberT
 
 const memberTypeHistoryColumns = (): ColumnDef<IMemberTypeHistory>[] => [
     {
-        id: 'memberProfileId',
-        accessorKey: 'memberType.name',
+        id: 'member_type.name',
+        accessorKey: 'member_type.name',
         header: (props) => (
             <DataTableColumnHeader {...props} title="Member Type">
                 <ColumnActions {...props}>
@@ -40,8 +40,8 @@ const memberTypeHistoryColumns = (): ColumnDef<IMemberTypeHistory>[] => [
         enableResizing: false,
     },
     {
-        id: 'description',
-        accessorKey: 'memberType.description',
+        id: 'member_type.description',
+        accessorKey: 'member_type.description',
         header: (props) => (
             <DataTableColumnHeader {...props} title="Description">
                 <ColumnActions {...props}>

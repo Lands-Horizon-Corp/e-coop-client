@@ -45,6 +45,7 @@ const columns: ColumnDef<ICashCheckVoucherEntryRequest>[] = [
     {
         accessorKey: 'account',
         header: 'Account',
+        id: 'account',
         minSize: 200,
         size: 250,
         cell: (props) => {
@@ -109,6 +110,7 @@ const columns: ColumnDef<ICashCheckVoucherEntryRequest>[] = [
     },
     {
         accessorKey: 'loan_transaction_id',
+        id: 'loan_transaction_id',
         header: 'Loan',
         minSize: 120,
         size: 150,
@@ -153,6 +155,7 @@ const columns: ColumnDef<ICashCheckVoucherEntryRequest>[] = [
     },
     {
         accessorKey: 'debit',
+        id: 'debit',
         header: 'Debit',
         minSize: 100,
         size: 220,
@@ -186,6 +189,7 @@ const columns: ColumnDef<ICashCheckVoucherEntryRequest>[] = [
     },
     {
         accessorKey: 'credit',
+        id: 'credit',
         header: 'Credit',
         minSize: 100,
         size: 220,

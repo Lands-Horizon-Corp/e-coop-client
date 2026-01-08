@@ -72,6 +72,7 @@ const BillsAndCoinsTableColumns = (
             <DataTableColumnHeader {...props} title="Name">
                 <ColumnActions {...props}>
                     <TextFilter<IBillsAndCoin>
+                        defaultMode="contains"
                         displayText="Name"
                         field="name"
                     />

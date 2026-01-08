@@ -42,6 +42,7 @@ const BatchFundingTableColumns = (
             <DataTableColumnHeader {...props} title="Name">
                 <ColumnActions {...props}>
                     <TextFilter<IBatchFunding>
+                        defaultMode="contains"
                         displayText="Name"
                         field="name"
                     />

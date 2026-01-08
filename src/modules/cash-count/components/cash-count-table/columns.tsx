@@ -70,6 +70,7 @@ const CashCountTableColumns = (
                 <DataTableColumnHeader {...props} title="Name">
                     <ColumnActions {...props}>
                         <TextFilter<ICashCount>
+                            defaultMode="contains"
                             displayText="Name"
                             field="name"
                         />

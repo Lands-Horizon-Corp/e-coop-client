@@ -284,6 +284,7 @@ const MutualFundEntryView = ({
         () => [
             {
                 accessorKey: 'member_profile.passbook',
+                id: 'member_profile.passbook',
                 header: () => <p className="w-full">PB No</p>,
                 cell: (info) =>
                     info.row.original.member_profile?.passbook || 'N/A',
@@ -312,6 +313,7 @@ const MutualFundEntryView = ({
             },
             {
                 accessorKey: 'account.name',
+                id: 'account.name',
                 header: () => <p className="w-full">Account</p>,
                 cell: (info) => (
                     <div className="flex items-center gap-1 min-w-0">

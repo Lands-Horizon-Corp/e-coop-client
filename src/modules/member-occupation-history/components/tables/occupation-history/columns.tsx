@@ -22,8 +22,8 @@ export const memberOccupationHistoryGlobalSearchTargets: IGlobalSearchTargets<IM
 const memberOccupationHistoryColumns =
     (): ColumnDef<IMemberOccupationHistory>[] => [
         {
-            id: 'memberProfileId',
-            accessorKey: 'memberCenter.name',
+            id: 'member_center.name',
+            accessorKey: 'member_center.name',
             header: (props) => (
                 <DataTableColumnHeader {...props} title="Member Center">
                     <ColumnActions {...props}>

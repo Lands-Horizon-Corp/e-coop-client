@@ -66,7 +66,11 @@ const HolidayTableColumns = (
             header: (props) => (
                 <DataTableColumnHeader {...props} title="Name">
                     <ColumnActions {...props}>
-                        <TextFilter<IHoliday> displayText="Name" field="name" />
+                        <TextFilter<IHoliday>
+                            defaultMode="contains"
+                            displayText="Name"
+                            field="name"
+                        />
                     </ColumnActions>
                 </DataTableColumnHeader>
             ),
@@ -89,6 +93,7 @@ const HolidayTableColumns = (
                 <DataTableColumnHeader {...props} title="Description">
                     <ColumnActions {...props}>
                         <TextFilter<IHoliday>
+                            defaultMode="contains"
                             displayText="Description"
                             field="description"
                         />

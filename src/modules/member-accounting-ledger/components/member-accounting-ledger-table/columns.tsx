@@ -50,7 +50,7 @@ const MemberAccountingLedgerTableColumns = (
         enableHiding: false,
     },
     {
-        id: 'account',
+        id: 'account.name',
         accessorKey: 'account.name',
         header: (props) => (
             <DataTableColumnHeader {...props} title="Account Title">

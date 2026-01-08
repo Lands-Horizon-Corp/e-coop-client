@@ -278,6 +278,7 @@ const GeneralLedgerTableColumns = (
                 <DataTableColumnHeader {...props} title="Member">
                     <ColumnActions {...props}>
                         <TextFilter<IGeneralLedger>
+                            defaultMode="contains"
                             displayText="Member Name"
                             field="member_profile.full_name"
                         />

@@ -198,8 +198,8 @@ const CashCheckVoucherTableColumns = (
         minSize: 120,
     },
     {
-        id: 'action-status',
-        accessorKey: 'action-status',
+        id: 'action_status',
+        accessorKey: 'action_status',
         header: (props) => (
             <DataTableColumnHeader {...props} title="Action Status" />
         ),

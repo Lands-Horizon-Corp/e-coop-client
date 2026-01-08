@@ -21,8 +21,8 @@ export const memberGenderHistoryGlobalSearchTargets: IGlobalSearchTargets<IMembe
 
 const memberGenderHistoryColumns = (): ColumnDef<IMemberGenderHistory>[] => [
     {
-        id: 'memberProfileId',
-        accessorKey: 'memberGender.name',
+        id: 'member_gender.name',
+        accessorKey: 'member_gender.name',
         header: (props) => (
             <DataTableColumnHeader {...props} title="Gender">
                 <ColumnActions {...props}>

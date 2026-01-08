@@ -37,6 +37,7 @@ import { TJournalVoucherSchema } from '../../journal-voucher.validation'
 const columns: ColumnDef<IJournalVoucherEntryRequest>[] = [
     {
         accessorKey: 'account',
+        id: 'account',
         header: 'Account',
         minSize: 200,
         size: 350,

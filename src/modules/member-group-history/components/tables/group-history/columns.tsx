@@ -39,8 +39,8 @@ const memberGroupHistoryColumns = (): ColumnDef<IMemberGroupHistory>[] => [
         enableResizing: false,
     },
     {
-        id: 'memberCenterId',
-        accessorKey: 'memberCenterId',
+        id: 'member_center_id',
+        accessorKey: 'member_center_id',
         header: (props) => (
             <DataTableColumnHeader {...props} title="Description">
                 <ColumnActions {...props}>

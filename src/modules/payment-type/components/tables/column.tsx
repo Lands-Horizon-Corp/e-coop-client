@@ -66,6 +66,7 @@ export const PaymentTypeTableColumns = (
             <DataTableColumnHeader {...props} title="Payment Type Name">
                 <ColumnActions {...props}>
                     <TextFilter<IPaymentType>
+                        defaultMode="contains"
                         displayText="Payment Type Name"
                         field="name"
                     />
@@ -96,7 +97,11 @@ export const PaymentTypeTableColumns = (
         header: (props) => (
             <DataTableColumnHeader {...props} title="Type">
                 <ColumnActions {...props}>
-                    <TextFilter<IPaymentType> displayText="Type" field="type" />
+                    <TextFilter<IPaymentType>
+                        defaultMode="contains"
+                        displayText="Type"
+                        field="type"
+                    />
                 </ColumnActions>
             </DataTableColumnHeader>
         ),
@@ -149,6 +154,7 @@ export const PaymentTypeTableColumns = (
             <DataTableColumnHeader {...props} title="Description">
                 <ColumnActions {...props}>
                     <TextFilter<IPaymentType>
+                        defaultMode="contains"
                         displayText="Description"
                         field="description"
                     />

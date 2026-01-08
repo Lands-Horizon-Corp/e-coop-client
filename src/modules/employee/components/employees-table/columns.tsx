@@ -120,6 +120,7 @@ const EmployeesTableColumns = (
             <DataTableColumnHeader {...props} title="Username">
                 <ColumnActions {...props}>
                     <TextFilter<IUserOrganization>
+                        defaultMode="contains"
                         displayText="Username"
                         field="user.user_name"
                     />
@@ -298,7 +299,7 @@ const EmployeesTableColumns = (
     },
 
     {
-        id: 'type',
+        id: 'user_type',
         accessorKey: 'user_type',
         header: (props) => (
             <DataTableColumnHeader {...props} title="User Type">
