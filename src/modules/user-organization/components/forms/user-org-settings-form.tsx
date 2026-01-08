@@ -203,14 +203,14 @@ const UserOrgSettingsForm = ({
 
                         <FormFieldWrapper
                             control={form.control}
-                            label="User Setting Description"
+                            label="Note"
                             name="user_setting_description"
                             render={({ field }) => (
                                 <Textarea
                                     {...field}
                                     className="resize-none"
                                     disabled={isDisabled(field.name)}
-                                    placeholder="Enter user setting description"
+                                    placeholder="Enter user settings note"
                                     rows={3}
                                 />
                             )}

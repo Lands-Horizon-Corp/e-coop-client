@@ -270,6 +270,9 @@ const LoanTransactionCreateUpdateForm = ({
             user_organization: {
                 user_setting_used_or,
                 user_setting_number_padding,
+                branch: {
+                    branch_setting: { loan_applied_equal_to_balance },
+                },
             },
         },
     } = useAuthUserWithOrgBranch()
@@ -434,6 +437,10 @@ const LoanTransactionCreateUpdateForm = ({
 
     const mode_of_payment = form.watch('mode_of_payment')
     const memberProfile = form.watch('member_profile')
+
+    const isLoanAppliedEqualBalance =
+        !!form.watch('comaker_deposit_member_accounting_ledger_id') &&
+        loan_applied_equal_to_balance
 
     return (
         <Form {...form}>
@@ -946,9 +953,12 @@ const LoanTransactionCreateUpdateForm = ({
                                                                 'account'
                                                             )?.currency
                                                         }
-                                                        disabled={isDisabled(
-                                                            field.name
-                                                        )}
+                                                        disabled={
+                                                            isDisabled(
+                                                                field.name
+                                                            ) ||
+                                                            isLoanAppliedEqualBalance
+                                                        }
                                                         id={field.name}
                                                         onValueChange={(
                                                             newValue = ''
