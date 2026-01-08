@@ -68,7 +68,7 @@ export interface IAccount extends IAuditable, ITimeStamps {
     id: TEntityId
 
     // GENERAL CONFIG
-    index?: number
+    index: number
     is_internal?: boolean
     is_taxable?: boolean
     cash_on_hand?: boolean

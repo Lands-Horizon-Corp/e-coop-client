@@ -212,10 +212,7 @@ export const IAccountRequestSchema = z
         id: entityIdSchema.optional(),
 
         // GENERAL CONFIG
-        index: z.coerce
-            .number()
-            .min(0, 'Index must be non-negative integer')
-            .optional(),
+        index: z.coerce.number().min(0, 'Index must be non-negative integer'),
         is_internal: z.boolean().optional(),
         cash_on_hand: z.boolean().optional(),
         paid_up_share_capital: z.boolean().optional(),

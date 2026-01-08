@@ -32,77 +32,6 @@ import { IAccount } from '../../account.types'
 
 export const accountsGlobalSearchTargets: IGlobalSearchTargets<IAccount>[] = [
     { field: 'name', displayText: 'Name' },
-    { field: 'description', displayText: 'Description' },
-    { field: 'type', displayText: 'Account Type' },
-    { field: 'min_amount', displayText: 'Min Amount' },
-    { field: 'max_amount', displayText: 'Max Amount' },
-    { field: 'is_internal', displayText: 'Internal Account' },
-    { field: 'cash_on_hand', displayText: 'Cash On Hand' },
-    { field: 'paid_up_share_capital', displayText: 'Paid Up Share Capital' },
-    { field: 'fines_amort', displayText: 'Fines Amortization' },
-    { field: 'fines_maturity', displayText: 'Fines Maturity' },
-    { field: 'interest_standard', displayText: 'Interest Standard' },
-    { field: 'computation_type', displayText: 'Computation Type' },
-    {
-        field: 'earned_unearned_interest',
-        displayText: 'Earned/Unearned Interest',
-    },
-    {
-        field: 'other_information_of_an_account',
-        displayText: 'Other Information',
-    },
-    {
-        field: 'financial_statement_type',
-        displayText: 'Financial Statement Type',
-    },
-    { field: 'general_ledger_type', displayText: 'General Ledger Type' },
-    {
-        field: 'fines_grace_period_amortization',
-        displayText: 'Fines Grace Period (Amort.)',
-    },
-    {
-        field: 'additional_grace_period',
-        displayText: 'Additional Grace Period',
-    },
-    { field: 'no_grace_period_daily', displayText: 'Daily Grace Period' },
-    {
-        field: 'fines_grace_period_maturity',
-        displayText: 'Fines Grace Period (Maturity)',
-    },
-    {
-        field: 'yearly_subscription_fee',
-        displayText: 'Yearly Subscription Fee',
-    },
-    { field: 'cut_off_days', displayText: 'Cut-Off Days' },
-    {
-        field: 'lumpsum_computation_type',
-        displayText: 'Lumpsum Computation Type',
-    },
-    {
-        field: 'interest_fines_computation_diminishing',
-        displayText: 'Interest Fines Computation (Dim.)',
-    },
-    { field: 'loan_saving_type', displayText: 'Loan Saving Type' },
-    { field: 'interest_deduction', displayText: 'Interest Deduction' },
-    { field: 'other_deduction_entry', displayText: 'Other Deduction Entry' },
-    {
-        field: 'interest_saving_type_diminishing_straight',
-        displayText: 'Interest Saving Type (Dim. Straight)',
-    },
-    {
-        field: 'general_ledger_grouping_exclude_account',
-        displayText: 'Exclude from GL Grouping',
-    },
-    { field: 'currency.name', displayText: 'Currency Name' },
-    { field: 'currency.code', displayText: 'Currency Code' },
-    { field: 'member_type.name', displayText: 'Member Type' },
-    { field: 'account_category.name', displayText: 'Account Category' },
-    {
-        field: 'account_classification.name',
-        displayText: 'Account Classification',
-    },
-    { field: 'computation_sheet.name', displayText: 'Computation Sheet' },
-    { field: 'loan_account.name', displayText: 'Loan Account' },
 ]
 
 export interface IAccountsTableActionComponentProp {
@@ -174,6 +103,32 @@ const AccountsTableColumns = (
             enableHiding: false,
             size: 80,
             minSize: 80,
+        },
+        {
+            id: 'index',
+            accessorKey: 'index',
+            header: (props) => (
+                <DataTableColumnHeader {...props} title="No">
+                    <ColumnActions {...props}>
+                        <NumberFilter
+                            defaultMode="equal"
+                            displayText="No"
+                            field="index"
+                        />
+                    </ColumnActions>
+                </DataTableColumnHeader>
+            ),
+            cell: ({
+                row: {
+                    original: { index },
+                },
+            }) => (
+                <div className="font-medium flex items-center text-gray-600 dark:text-gray-400">
+                    {index}
+                </div>
+            ),
+            enableMultiSort: true,
+            size: 10,
         },
         {
             id: 'name',
@@ -374,7 +329,7 @@ const AccountsTableColumns = (
             size: 120,
         },
         {
-            id: 'interestStandard',
+            id: 'interest_standard',
             accessorKey: 'interest_standard',
             header: (props) => (
                 <DataTableColumnHeader {...props} title="Std. Interest">
@@ -428,7 +383,7 @@ const AccountsTableColumns = (
         //     size: 120,
         // },
         {
-            id: 'isInternal',
+            id: 'is_internal',
             accessorKey: 'is_internal',
             header: (props) => (
                 <DataTableColumnHeader {...props} title="Internal?">
@@ -446,7 +401,7 @@ const AccountsTableColumns = (
 
         // 4. Operational Details (Less frequently needed, but still important)
         {
-            id: 'computationType',
+            id: 'computation_type',
             accessorKey: 'computation_type',
             header: (props) => (
                 <DataTableColumnHeader {...props} title="Computation Type">
@@ -470,7 +425,7 @@ const AccountsTableColumns = (
             size: 180,
         },
         {
-            id: 'earnedUnearnedInterest',
+            id: 'earned_unearned_interest',
             accessorKey: 'earned_unearned_interest',
             header: (props) => (
                 <DataTableColumnHeader {...props} title="Interest Recognition">
@@ -486,7 +441,7 @@ const AccountsTableColumns = (
             size: 180,
         },
         {
-            id: 'generalLedgerType',
+            id: 'general_ledger_type',
             accessorKey: 'general_ledger_type',
             header: (props) => (
                 <DataTableColumnHeader {...props} title="GL Type">
@@ -506,11 +461,11 @@ const AccountsTableColumns = (
                     )}
                 </>
             ),
-            enableSorting: true,
+            enableSorting: false,
             size: 180,
         },
         {
-            id: 'createdAt',
+            id: 'created_at',
             accessorKey: 'created_at', // Use 'created_at' as accessorKey if that's the field name in IAccount
             header: (props) => (
                 <DataTableColumnHeader {...props} title="Date Created">
@@ -563,7 +518,7 @@ const AccountsTableColumns = (
             size: 200,
         },
         {
-            id: 'otherInformationOfAnAccount',
+            id: 'other_information_of_an_account',
             accessorKey: 'other_information_of_an_account',
             header: (props) => (
                 <DataTableColumnHeader {...props} title="Other Info">
@@ -584,7 +539,7 @@ const AccountsTableColumns = (
             size: 200,
         },
         {
-            id: 'finesAmort',
+            id: 'fines_amort',
             accessorKey: 'fines_amort',
             header: (props) => (
                 <DataTableColumnHeader {...props} title="Fines Amort. (%)">
@@ -612,7 +567,7 @@ const AccountsTableColumns = (
             size: 100,
         },
         {
-            id: 'finesMaturity',
+            id: 'fines_maturity',
             accessorKey: 'fines_maturity',
             header: (props) => (
                 <DataTableColumnHeader {...props} title="Fines Maturity (%)">
@@ -640,7 +595,7 @@ const AccountsTableColumns = (
             size: 100,
         },
         {
-            id: 'cashOnHand',
+            id: 'cash_on_hand',
             accessorKey: 'cash_on_hand',
             header: (props) => (
                 <DataTableColumnHeader {...props} title="Cash On Hand">
@@ -668,7 +623,7 @@ const AccountsTableColumns = (
             size: 100,
         },
         {
-            id: 'paidUpShareCapital',
+            id: 'paid_up_share_capital',
             accessorKey: 'paid_up_share_capital',
             header: (props) => (
                 <DataTableColumnHeader {...props} title="Paid Up Share Capital">
@@ -685,7 +640,7 @@ const AccountsTableColumns = (
             size: 150,
         },
         {
-            id: 'finesGracePeriodAmortization',
+            id: 'fines_grace_period_amortization',
             accessorKey: 'fines_grace_period_amortization',
             header: (props) => (
                 <DataTableColumnHeader {...props} title="Amort. Grace Period">
@@ -711,7 +666,7 @@ const AccountsTableColumns = (
             size: 150,
         },
         {
-            id: 'additionalGracePeriod',
+            id: 'additional_grace_period',
             accessorKey: 'additional_grace_period',
             header: (props) => (
                 <DataTableColumnHeader {...props} title="Addl. Grace Period">
@@ -737,7 +692,7 @@ const AccountsTableColumns = (
             size: 150,
         },
         {
-            id: 'numberGracePeriodDaily',
+            id: 'no_grace_period_daily',
             accessorKey: 'no_grace_period_daily',
             header: (props) => (
                 <DataTableColumnHeader {...props} title="Daily Grace Period">
@@ -754,7 +709,7 @@ const AccountsTableColumns = (
             size: 150,
         },
         {
-            id: 'finesGracePeriodMaturity',
+            id: 'fines_grace_period_maturity',
             accessorKey: 'fines_grace_period_maturity',
             header: (props) => (
                 <DataTableColumnHeader {...props} title="Maturity Grace Period">
@@ -780,7 +735,7 @@ const AccountsTableColumns = (
             size: 150,
         },
         {
-            id: 'yearlySubscriptionFee',
+            id: 'yearly_subscription_fee',
             accessorKey: 'yearly_subscription_fee',
             header: (props) => (
                 <DataTableColumnHeader {...props} title="Annual Fee">
@@ -806,7 +761,7 @@ const AccountsTableColumns = (
             size: 100,
         },
         {
-            id: 'cutOffDays',
+            id: 'cut_off_days',
             accessorKey: 'cut_off_days',
             header: (props) => (
                 <DataTableColumnHeader {...props} title="cut-Off Days">
@@ -832,7 +787,7 @@ const AccountsTableColumns = (
             size: 120,
         },
         {
-            id: 'lumpsumComputationType',
+            id: 'lumpsum_computation_type',
             accessorKey: 'lumpsum_computation_type',
             header: (props) => (
                 <DataTableColumnHeader {...props} title="Lumpsum Comp. Type">
@@ -853,7 +808,7 @@ const AccountsTableColumns = (
             size: 150,
         },
         {
-            id: 'interestFinesComputationDiminishing',
+            id: 'interest_fines_computation_diminishing',
             accessorKey: 'interest_fines_computation_diminishing',
             header: (props) => (
                 <DataTableColumnHeader
@@ -877,7 +832,7 @@ const AccountsTableColumns = (
             size: 200,
         },
         {
-            id: 'loanSavingType',
+            id: 'loan_saving_type',
             accessorKey: 'loan_saving_type',
             header: (props) => (
                 <DataTableColumnHeader {...props} title="Loan Saving Type">
@@ -894,7 +849,7 @@ const AccountsTableColumns = (
             size: 150,
         },
         {
-            id: 'interestDeduction',
+            id: 'interest_deduction',
             accessorKey: 'interest_deduction',
             header: (props) => (
                 <DataTableColumnHeader {...props} title="Interest Deduction">
@@ -928,7 +883,7 @@ const AccountsTableColumns = (
             size: 120,
         },
         {
-            id: 'otherDeductionEntry',
+            id: 'other_deduction_entry',
             accessorKey: 'other_deduction_entry',
             header: (props) => (
                 <DataTableColumnHeader {...props} title="Other Deduction Entry">
@@ -947,7 +902,7 @@ const AccountsTableColumns = (
             size: 150,
         },
         {
-            id: 'interestSavingTypeDiminishingStraight',
+            id: 'interest_saving_type_diminishing_straight',
             accessorKey: 'interest_saving_type_diminishing_straight',
             header: (props) => (
                 <DataTableColumnHeader
@@ -971,7 +926,7 @@ const AccountsTableColumns = (
             size: 200,
         },
         {
-            id: 'generalLedgerGroupingExcludeAccount',
+            id: 'general_ledger_grouping_exclude_account',
             accessorKey: 'general_ledger_grouping_exclude_account',
             header: (props) => (
                 <DataTableColumnHeader

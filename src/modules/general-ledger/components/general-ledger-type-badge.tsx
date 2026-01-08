@@ -36,7 +36,7 @@ const generalLedgerTypeStyles: Record<
     Revenue: {
         label: 'Revenue',
         bgColor: 'bg-primary',
-        textColor: 'text-primary',
+        textColor: 'text-primary-foreground',
     },
     Expenses: {
         label: 'Expenses',

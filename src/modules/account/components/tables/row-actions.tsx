@@ -6,6 +6,7 @@ import {
     AccountCreateUpdateFormModal,
     IAccount,
     useDeleteById,
+    useMoveAccountOrderIndex,
 } from '@/modules/account'
 import { TEntryType } from '@/modules/general-ledger'
 import GeneralLedgerTable from '@/modules/general-ledger/components/tables/general-ledger-table'
@@ -16,6 +17,8 @@ import RowActionsGroup from '@/components/data-table/data-table-row-actions'
 import DataTableRowContext from '@/components/data-table/data-table-row-context'
 import { useTableRowActionStore } from '@/components/data-table/store/data-table-action-store'
 import {
+    ArrowDownIcon,
+    ArrowUpIcon,
     BillIcon,
     BookOpenIcon,
     BookStackIcon,
@@ -81,6 +84,8 @@ const useAccountActions = ({
             },
         })
 
+    const moveAccountIndexMutation = useMoveAccountOrderIndex()
+
     const handleViewAccountingLedger = () => {
         open('view-accounting-ledger-transaction', {
             id: account.id,
@@ -116,6 +121,7 @@ const useAccountActions = ({
     return {
         account,
         isDeletingAccount,
+        moveAccountIndexMutation,
         handleEdit,
         handleDelete,
         openLedgerModal,
@@ -133,7 +139,9 @@ export const AccountAction = ({
     onDeleteSuccess,
 }: IAccountTableActionProps) => {
     const {
+        account,
         isDeletingAccount,
+        moveAccountIndexMutation,
         handleEdit,
         handleDelete,
         openLedgerModal,
@@ -156,6 +164,34 @@ export const AccountAction = ({
                 }}
                 otherActions={
                     <>
+                        <DropdownMenuItem
+                            disabled={moveAccountIndexMutation.isPending}
+                            onClick={() =>
+                                toast.promise(
+                                    moveAccountIndexMutation.mutateAsync({
+                                        accountId: account.id,
+                                        to: 'top',
+                                    })
+                                )
+                            }
+                        >
+                            <ArrowUpIcon className="mr-2" strokeWidth={1.5} />
+                            Move to Top
+                        </DropdownMenuItem>
+                        <DropdownMenuItem
+                            disabled={moveAccountIndexMutation.isPending}
+                            onClick={() =>
+                                toast.promise(
+                                    moveAccountIndexMutation.mutateAsync({
+                                        accountId: account.id,
+                                        to: 'bottom',
+                                    })
+                                )
+                            }
+                        >
+                            <ArrowDownIcon className="mr-2" strokeWidth={1.5} />
+                            Move to Bottom
+                        </DropdownMenuItem>
                         <DropdownMenuItem
                             onClick={() => handleViewAccountingLedger()}
                         >
@@ -323,7 +359,9 @@ export const AccountRowContext = ({
     onDeleteSuccess,
 }: IAccountRowContextProps) => {
     const {
+        account,
         isDeletingAccount,
+        moveAccountIndexMutation,
         handleEdit,
         handleDelete,
         openLedgerModal,
@@ -351,7 +389,34 @@ export const AccountRowContext = ({
                             <BookOpenIcon className="mr-2" strokeWidth={1.5} />
                             View Accounting Ledger
                         </ContextMenuItem>
-
+                        <ContextMenuItem
+                            disabled={moveAccountIndexMutation.isPending}
+                            onClick={() =>
+                                toast.promise(
+                                    moveAccountIndexMutation.mutateAsync({
+                                        accountId: account.id,
+                                        to: 'top',
+                                    })
+                                )
+                            }
+                        >
+                            <ArrowUpIcon className="mr-2" strokeWidth={1.5} />
+                            Move to Top
+                        </ContextMenuItem>
+                        <ContextMenuItem
+                            disabled={moveAccountIndexMutation.isPending}
+                            onClick={() =>
+                                toast.promise(
+                                    moveAccountIndexMutation.mutateAsync({
+                                        accountId: account.id,
+                                        to: 'bottom',
+                                    })
+                                )
+                            }
+                        >
+                            <ArrowDownIcon className="mr-2" strokeWidth={1.5} />
+                            Move to Bottom
+                        </ContextMenuItem>
                         <ContextMenuSub>
                             <ContextMenuSubTrigger>
                                 <BookOpenIcon

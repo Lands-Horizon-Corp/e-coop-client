@@ -375,4 +375,21 @@ export const useDisconnectAccount = createMutationFactory<
     ],
 })
 
+export const useMoveAccountOrderIndex = createMutationFactory<
+    void,
+    Error,
+    { accountId?: TEntityId; to: 'top' | 'bottom' }
+>({
+    mutationFn: async ({ accountId, to }) => {
+        const response = await API.put<void, void>(
+            `${accountAPIRoute}/${accountId}/index/${to}`
+        )
+        return response.data
+    },
+    defaultInvalidates: [
+        [accountBaseQueryKey, 'paginated'],
+        [accountBaseQueryKey, 'all', 'loan-account-connections'],
+    ],
+})
+
 export const logger = Logger.getInstance('account')

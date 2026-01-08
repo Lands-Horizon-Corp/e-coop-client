@@ -142,8 +142,26 @@ const AccountHeaderForm = ({
                     )}
                 />
             </div>
-            <div className="grid flex-2 w-full gap-x-2 grid-cols-4">
+            <div className="grid flex-2 w-full gap-x-2 grid-cols-12">
                 <FormFieldWrapper
+                    className="col-span-1"
+                    control={form.control}
+                    disabled={isReadOnly}
+                    label="Index *"
+                    name="index"
+                    render={({ field }) => (
+                        <Input
+                            {...field}
+                            autoComplete="off"
+                            disabled={isDisabled(field.name)}
+                            id={field.name}
+                            placeholder="Index"
+                            value={field.value ?? ''}
+                        />
+                    )}
+                />
+                <FormFieldWrapper
+                    className="col-span-5"
                     control={form.control}
                     label="Loan Account"
                     name="loan_account_id"
@@ -176,7 +194,7 @@ const AccountHeaderForm = ({
                     )}
                 />
                 <FormFieldWrapper
-                    className="col-span-1"
+                    className="col-span-3"
                     control={form.control}
                     label="Member Type"
                     name="member_type_id"
@@ -192,6 +210,7 @@ const AccountHeaderForm = ({
                     )}
                 />
                 <FormFieldWrapper
+                    className="col-span-3"
                     control={form.control}
                     label="Account Classification"
                     name="account_classification_id"
@@ -207,6 +226,7 @@ const AccountHeaderForm = ({
                     )}
                 />
                 <FormFieldWrapper
+                    className="col-span-3"
                     control={form.control}
                     label="Account Category"
                     name="account_category_id"
