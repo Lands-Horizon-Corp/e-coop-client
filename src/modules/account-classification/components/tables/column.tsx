@@ -65,6 +65,7 @@ const AccountClassificationTableColumns = (
             <DataTableColumnHeader {...props} title="Classification Name">
                 <ColumnActions {...props}>
                     <TextFilter<IAccountClassification>
+                        defaultMode="contains"
                         displayText="Classification Name"
                         field="name"
                     />
@@ -77,9 +78,7 @@ const AccountClassificationTableColumns = (
             },
         }) => (
             <div className="flex min-w-0 items-center gap-3">
-                <span className="truncate text-xs text-muted-foreground/70">
-                    {name || '-'}
-                </span>
+                <span className="truncate ">{name || '-'}</span>
             </div>
         ),
         enableMultiSort: true,
@@ -96,6 +95,7 @@ const AccountClassificationTableColumns = (
             <DataTableColumnHeader {...props} title="Description">
                 <ColumnActions {...props}>
                     <TextFilter<IAccountClassification>
+                        defaultMode="contains"
                         displayText="Description"
                         field="description"
                     />
@@ -106,7 +106,7 @@ const AccountClassificationTableColumns = (
             row: {
                 original: { description },
             },
-        }) => <div>{description || '-'}</div>,
+        }) => <p className="text-muted-foreground">{description || '-'}</p>,
         enableMultiSort: true,
         enableSorting: true,
         enableResizing: true,

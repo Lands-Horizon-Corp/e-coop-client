@@ -37,7 +37,10 @@ import AccountCategoryTableColumns, {
     AccountCategoryGlobalSearchTargets,
     IAccountCategoryTableColumnProps,
 } from './column'
-import { AccountCategoryTableActionManager } from './row-action-context'
+import {
+    AccountCategoryRowContext,
+    AccountCategoryTableActionManager,
+} from './row-action-context'
 
 export interface AccountCategoryTableProps
     extends TableProps<IAccountCategory>,
@@ -65,7 +68,7 @@ const AccountCategoryTable = ({
         row.toggleSelected()
     },
     actionComponent,
-    RowContextComponent,
+    RowContextComponent = AccountCategoryRowContext,
 }: AccountCategoryTableProps) => {
     const queryClient = useQueryClient()
     const { pagination, setPagination } = usePagination()
