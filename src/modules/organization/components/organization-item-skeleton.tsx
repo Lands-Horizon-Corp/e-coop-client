@@ -40,7 +40,12 @@ export const OrganizationSkeleton = ({
     customSkeleton,
 }: OrganizationItemSkeletonProps) => {
     return (
-        <div className={cn('gap-3 flex flex-wrap', mainClassName)}>
+        <div
+            className={cn(
+                'gap-3 flex flexitems-center justify-center w-full flex-wrap',
+                mainClassName
+            )}
+        >
             {Array.from({ length: count }).map((_, index) => {
                 return customSkeleton ? (
                     <div key={index}>{customSkeleton}</div>

@@ -5,7 +5,7 @@ import { toast } from 'sonner'
 import { useGetBranchesByOrganizationId } from '@/modules/branch'
 import CreateUpdateBranchFormModal from '@/modules/branch/components/forms/create-branch-form'
 import { useGetOrganizationById } from '@/modules/organization'
-import OrganizationDetailsModal from '@/modules/organization/components/modal/organization-details-modal'
+import OrganizationDetailsModals from '@/modules/organization/components/modal/organization-details-modal'
 import { useSeedOrganization } from '@/modules/user-organization/user-organization.service'
 
 import { Alert, AlertDescription } from '@/components/ui/alert'
@@ -85,7 +85,7 @@ const CreateBranch = () => {
                 title="Create Branch"
             />
             {organization && (
-                <OrganizationDetailsModal
+                <OrganizationDetailsModals
                     isPending={isPendingOrganization}
                     isSeeding={isSeeding}
                     organization={organization}

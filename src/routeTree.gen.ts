@@ -29,12 +29,12 @@ import { Route as AccountProfileAppearanceRouteImport } from './routes/account-p
 import { Route as AccountProfileActivityLogsRouteImport } from './routes/account-profile/activity-logs'
 import { Route as landingSubscriptionRouteImport } from './routes/(landing)/subscription'
 import { Route as landingFrequentlyAskedQuestionsRouteImport } from './routes/(landing)/frequently-asked-questions'
-import { Route as landingExploreRouteImport } from './routes/(landing)/explore'
 import { Route as landingDevelopersRouteImport } from './routes/(landing)/developers'
 import { Route as landingContactRouteImport } from './routes/(landing)/contact'
 import { Route as landingAboutRouteImport } from './routes/(landing)/about'
 import { Route as OnboardingOrganizationRouteRouteImport } from './routes/onboarding/organization/route'
 import { Route as landingPolicyRouteRouteImport } from './routes/(landing)/policy/route'
+import { Route as landingExploreRouteRouteImport } from './routes/(landing)/explore/route'
 import { Route as OnboardingOrganizationIndexRouteImport } from './routes/onboarding/organization/index'
 import { Route as OnboardingOrganizationOrganization_idRouteImport } from './routes/onboarding/organization/$organization_id'
 import { Route as OnboardingCreateBranchOrganization_idRouteImport } from './routes/onboarding/create-branch.$organization_id'
@@ -54,6 +54,7 @@ import { Route as landingPolicyCookiePolicyRouteImport } from './routes/(landing
 import { Route as landingPolicyComplaintHandlingAndDisputePolicyRouteImport } from './routes/(landing)/policy/complaint-handling-and-dispute-policy'
 import { Route as landingPolicyCodeOfConductEthicsPolicyRouteImport } from './routes/(landing)/policy/code-of-conduct-ethics-policy'
 import { Route as landingPolicyAmlCtfPolicyRouteImport } from './routes/(landing)/policy/aml-ctf-policy'
+import { Route as landingExploreOrganization_idRouteImport } from './routes/(landing)/explore/$organization_id'
 import { Route as OrgOrgnameBranchBranchnameRouteRouteImport } from './routes/org/$orgname/branch.$branchname/route'
 import { Route as OrgOrgnameBranchBranchnameIndexRouteImport } from './routes/org/$orgname/branch.$branchname/index'
 import { Route as OrgOrgnameBranchBranchnameDevDocumentationRouteImport } from './routes/org/$orgname/branch.$branchname/dev/documentation'
@@ -214,11 +215,6 @@ const landingFrequentlyAskedQuestionsRoute =
     path: '/frequently-asked-questions',
     getParentRoute: () => landingRouteRoute,
   } as any)
-const landingExploreRoute = landingExploreRouteImport.update({
-  id: '/explore',
-  path: '/explore',
-  getParentRoute: () => landingRouteRoute,
-} as any)
 const landingDevelopersRoute = landingDevelopersRouteImport.update({
   id: '/developers',
   path: '/developers',
@@ -243,6 +239,11 @@ const OnboardingOrganizationRouteRoute =
 const landingPolicyRouteRoute = landingPolicyRouteRouteImport.update({
   id: '/policy',
   path: '/policy',
+  getParentRoute: () => landingRouteRoute,
+} as any)
+const landingExploreRouteRoute = landingExploreRouteRouteImport.update({
+  id: '/explore',
+  path: '/explore',
   getParentRoute: () => landingRouteRoute,
 } as any)
 const OnboardingOrganizationIndexRoute =
@@ -356,6 +357,12 @@ const landingPolicyAmlCtfPolicyRoute =
     id: '/aml-ctf-policy',
     path: '/aml-ctf-policy',
     getParentRoute: () => landingPolicyRouteRoute,
+  } as any)
+const landingExploreOrganization_idRoute =
+  landingExploreOrganization_idRouteImport.update({
+    id: '/$organization_id',
+    path: '/$organization_id',
+    getParentRoute: () => landingExploreRouteRoute,
   } as any)
 const OrgOrgnameBranchBranchnameRouteRoute =
   OrgOrgnameBranchBranchnameRouteRouteImport.update({
@@ -774,12 +781,12 @@ export interface FileRoutesByFullPath {
   '/auth': typeof AuthRouteRouteWithChildren
   '/onboarding': typeof OnboardingRouteRouteWithChildren
   '/playground': typeof PlaygroundRoute
+  '/explore': typeof landingExploreRouteRouteWithChildren
   '/policy': typeof landingPolicyRouteRouteWithChildren
   '/onboarding/organization': typeof OnboardingOrganizationRouteRouteWithChildren
   '/about': typeof landingAboutRoute
   '/contact': typeof landingContactRoute
   '/developers': typeof landingDevelopersRoute
-  '/explore': typeof landingExploreRoute
   '/frequently-asked-questions': typeof landingFrequentlyAskedQuestionsRoute
   '/subscription': typeof landingSubscriptionRoute
   '/account-profile/activity-logs': typeof AccountProfileActivityLogsRoute
@@ -793,6 +800,7 @@ export interface FileRoutesByFullPath {
   '/auth/sign-up': typeof AuthSignUpLazyRoute
   '/account-profile/': typeof AccountProfileIndexRoute
   '/onboarding/': typeof OnboardingIndexRoute
+  '/explore/$organization_id': typeof landingExploreOrganization_idRoute
   '/policy/aml-ctf-policy': typeof landingPolicyAmlCtfPolicyRoute
   '/policy/code-of-conduct-ethics-policy': typeof landingPolicyCodeOfConductEthicsPolicyRoute
   '/policy/complaint-handling-and-dispute-policy': typeof landingPolicyComplaintHandlingAndDisputePolicyRoute
@@ -876,11 +884,11 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/auth': typeof AuthRouteRouteWithChildren
   '/playground': typeof PlaygroundRoute
+  '/explore': typeof landingExploreRouteRouteWithChildren
   '/policy': typeof landingPolicyRouteRouteWithChildren
   '/about': typeof landingAboutRoute
   '/contact': typeof landingContactRoute
   '/developers': typeof landingDevelopersRoute
-  '/explore': typeof landingExploreRoute
   '/frequently-asked-questions': typeof landingFrequentlyAskedQuestionsRoute
   '/subscription': typeof landingSubscriptionRoute
   '/account-profile/activity-logs': typeof AccountProfileActivityLogsRoute
@@ -895,6 +903,7 @@ export interface FileRoutesByTo {
   '/': typeof landingIndexRoute
   '/account-profile': typeof AccountProfileIndexRoute
   '/onboarding': typeof OnboardingIndexRoute
+  '/explore/$organization_id': typeof landingExploreOrganization_idRoute
   '/policy/aml-ctf-policy': typeof landingPolicyAmlCtfPolicyRoute
   '/policy/code-of-conduct-ethics-policy': typeof landingPolicyCodeOfConductEthicsPolicyRoute
   '/policy/complaint-handling-and-dispute-policy': typeof landingPolicyComplaintHandlingAndDisputePolicyRoute
@@ -981,12 +990,12 @@ export interface FileRoutesById {
   '/auth': typeof AuthRouteRouteWithChildren
   '/onboarding': typeof OnboardingRouteRouteWithChildren
   '/playground': typeof PlaygroundRoute
+  '/(landing)/explore': typeof landingExploreRouteRouteWithChildren
   '/(landing)/policy': typeof landingPolicyRouteRouteWithChildren
   '/onboarding/organization': typeof OnboardingOrganizationRouteRouteWithChildren
   '/(landing)/about': typeof landingAboutRoute
   '/(landing)/contact': typeof landingContactRoute
   '/(landing)/developers': typeof landingDevelopersRoute
-  '/(landing)/explore': typeof landingExploreRoute
   '/(landing)/frequently-asked-questions': typeof landingFrequentlyAskedQuestionsRoute
   '/(landing)/subscription': typeof landingSubscriptionRoute
   '/account-profile/activity-logs': typeof AccountProfileActivityLogsRoute
@@ -1001,6 +1010,7 @@ export interface FileRoutesById {
   '/(landing)/': typeof landingIndexRoute
   '/account-profile/': typeof AccountProfileIndexRoute
   '/onboarding/': typeof OnboardingIndexRoute
+  '/(landing)/explore/$organization_id': typeof landingExploreOrganization_idRoute
   '/(landing)/policy/aml-ctf-policy': typeof landingPolicyAmlCtfPolicyRoute
   '/(landing)/policy/code-of-conduct-ethics-policy': typeof landingPolicyCodeOfConductEthicsPolicyRoute
   '/(landing)/policy/complaint-handling-and-dispute-policy': typeof landingPolicyComplaintHandlingAndDisputePolicyRoute
@@ -1089,12 +1099,12 @@ export interface FileRouteTypes {
     | '/auth'
     | '/onboarding'
     | '/playground'
+    | '/explore'
     | '/policy'
     | '/onboarding/organization'
     | '/about'
     | '/contact'
     | '/developers'
-    | '/explore'
     | '/frequently-asked-questions'
     | '/subscription'
     | '/account-profile/activity-logs'
@@ -1108,6 +1118,7 @@ export interface FileRouteTypes {
     | '/auth/sign-up'
     | '/account-profile/'
     | '/onboarding/'
+    | '/explore/$organization_id'
     | '/policy/aml-ctf-policy'
     | '/policy/code-of-conduct-ethics-policy'
     | '/policy/complaint-handling-and-dispute-policy'
@@ -1191,11 +1202,11 @@ export interface FileRouteTypes {
   to:
     | '/auth'
     | '/playground'
+    | '/explore'
     | '/policy'
     | '/about'
     | '/contact'
     | '/developers'
-    | '/explore'
     | '/frequently-asked-questions'
     | '/subscription'
     | '/account-profile/activity-logs'
@@ -1210,6 +1221,7 @@ export interface FileRouteTypes {
     | '/'
     | '/account-profile'
     | '/onboarding'
+    | '/explore/$organization_id'
     | '/policy/aml-ctf-policy'
     | '/policy/code-of-conduct-ethics-policy'
     | '/policy/complaint-handling-and-dispute-policy'
@@ -1295,12 +1307,12 @@ export interface FileRouteTypes {
     | '/auth'
     | '/onboarding'
     | '/playground'
+    | '/(landing)/explore'
     | '/(landing)/policy'
     | '/onboarding/organization'
     | '/(landing)/about'
     | '/(landing)/contact'
     | '/(landing)/developers'
-    | '/(landing)/explore'
     | '/(landing)/frequently-asked-questions'
     | '/(landing)/subscription'
     | '/account-profile/activity-logs'
@@ -1315,6 +1327,7 @@ export interface FileRouteTypes {
     | '/(landing)/'
     | '/account-profile/'
     | '/onboarding/'
+    | '/(landing)/explore/$organization_id'
     | '/(landing)/policy/aml-ctf-policy'
     | '/(landing)/policy/code-of-conduct-ethics-policy'
     | '/(landing)/policy/complaint-handling-and-dispute-policy'
@@ -1540,13 +1553,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof landingFrequentlyAskedQuestionsRouteImport
       parentRoute: typeof landingRouteRoute
     }
-    '/(landing)/explore': {
-      id: '/(landing)/explore'
-      path: '/explore'
-      fullPath: '/explore'
-      preLoaderRoute: typeof landingExploreRouteImport
-      parentRoute: typeof landingRouteRoute
-    }
     '/(landing)/developers': {
       id: '/(landing)/developers'
       path: '/developers'
@@ -1580,6 +1586,13 @@ declare module '@tanstack/react-router' {
       path: '/policy'
       fullPath: '/policy'
       preLoaderRoute: typeof landingPolicyRouteRouteImport
+      parentRoute: typeof landingRouteRoute
+    }
+    '/(landing)/explore': {
+      id: '/(landing)/explore'
+      path: '/explore'
+      fullPath: '/explore'
+      preLoaderRoute: typeof landingExploreRouteRouteImport
       parentRoute: typeof landingRouteRoute
     }
     '/onboarding/organization/': {
@@ -1714,6 +1727,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/policy/aml-ctf-policy'
       preLoaderRoute: typeof landingPolicyAmlCtfPolicyRouteImport
       parentRoute: typeof landingPolicyRouteRoute
+    }
+    '/(landing)/explore/$organization_id': {
+      id: '/(landing)/explore/$organization_id'
+      path: '/$organization_id'
+      fullPath: '/explore/$organization_id'
+      preLoaderRoute: typeof landingExploreOrganization_idRouteImport
+      parentRoute: typeof landingExploreRouteRoute
     }
     '/org/$orgname/branch/$branchname': {
       id: '/org/$orgname/branch/$branchname'
@@ -2138,6 +2158,17 @@ declare module '@tanstack/react-router' {
   }
 }
 
+interface landingExploreRouteRouteChildren {
+  landingExploreOrganization_idRoute: typeof landingExploreOrganization_idRoute
+}
+
+const landingExploreRouteRouteChildren: landingExploreRouteRouteChildren = {
+  landingExploreOrganization_idRoute: landingExploreOrganization_idRoute,
+}
+
+const landingExploreRouteRouteWithChildren =
+  landingExploreRouteRoute._addFileChildren(landingExploreRouteRouteChildren)
+
 interface landingPolicyRouteRouteChildren {
   landingPolicyAmlCtfPolicyRoute: typeof landingPolicyAmlCtfPolicyRoute
   landingPolicyCodeOfConductEthicsPolicyRoute: typeof landingPolicyCodeOfConductEthicsPolicyRoute
@@ -2178,22 +2209,22 @@ const landingPolicyRouteRouteWithChildren =
   landingPolicyRouteRoute._addFileChildren(landingPolicyRouteRouteChildren)
 
 interface landingRouteRouteChildren {
+  landingExploreRouteRoute: typeof landingExploreRouteRouteWithChildren
   landingPolicyRouteRoute: typeof landingPolicyRouteRouteWithChildren
   landingAboutRoute: typeof landingAboutRoute
   landingContactRoute: typeof landingContactRoute
   landingDevelopersRoute: typeof landingDevelopersRoute
-  landingExploreRoute: typeof landingExploreRoute
   landingFrequentlyAskedQuestionsRoute: typeof landingFrequentlyAskedQuestionsRoute
   landingSubscriptionRoute: typeof landingSubscriptionRoute
   landingIndexRoute: typeof landingIndexRoute
 }
 
 const landingRouteRouteChildren: landingRouteRouteChildren = {
+  landingExploreRouteRoute: landingExploreRouteRouteWithChildren,
   landingPolicyRouteRoute: landingPolicyRouteRouteWithChildren,
   landingAboutRoute: landingAboutRoute,
   landingContactRoute: landingContactRoute,
   landingDevelopersRoute: landingDevelopersRoute,
-  landingExploreRoute: landingExploreRoute,
   landingFrequentlyAskedQuestionsRoute: landingFrequentlyAskedQuestionsRoute,
   landingSubscriptionRoute: landingSubscriptionRoute,
   landingIndexRoute: landingIndexRoute,

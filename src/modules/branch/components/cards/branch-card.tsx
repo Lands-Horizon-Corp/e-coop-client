@@ -161,6 +161,7 @@ export const BranchCard = ({
     const queryClient = useQueryClient()
     const { onOpen } = useConfirmModalStore()
     const { open, onOpenChange } = useModalState()
+
     const {
         currentAuth: { user_organization: currentUserOrg },
     } = useAuthStore()

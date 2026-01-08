@@ -8,18 +8,21 @@ import Modal, { IModalProps } from '@/components/modals/modal'
 
 import { useModalState } from '@/hooks/use-modal-state'
 
+import { TEntityId } from '@/types'
+
+import { useGetBranchById } from '../../branch.service'
 import { IBranch } from '../../branch.types'
 import BranchPreviewDisplay from '../branch-display-preview'
 
 interface OrganizationModalProps extends IModalProps {
-    branch?: IBranch | null
+    branchId: TEntityId
     className?: string
     showActions?: boolean
     isLoading?: boolean
 }
 
 const BranchModalDisplay = ({
-    branch,
+    branchId,
     className,
     showActions,
     isLoading,
@@ -27,6 +30,8 @@ const BranchModalDisplay = ({
 }: OrganizationModalProps) => {
     const [selectedBranch, setSelectedBranch] = useState<IBranch | null>(null)
     const openBranchMapLocation = useModalState(false)
+    const { data: branch } = useGetBranchById({ id: branchId })
+    console.log(branch)
     if (!branch) return null
     return (
         <Modal

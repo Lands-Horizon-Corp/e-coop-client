@@ -16,6 +16,7 @@ export const BranchesSection = ({
     isPending,
 }: BranchesSectionProps) => {
     const { userOrganizations, isSeeding } = useBranchesContext()
+
     if (isPending) {
         return <OrganizationSkeleton className="p-10" count={5} />
     }

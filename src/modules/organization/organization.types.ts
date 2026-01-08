@@ -52,7 +52,10 @@ export interface IOrganization extends ITimeStamps, IAuditable {
     is_private?: boolean
 
     terms_and_conditions?: string
-
+    privacy_policy: string
+    refund_policy: string
+    user_agreement: string
+    cookie_policy: string
     // SOCIALS
     facebook_link?: string
     x_link?: string

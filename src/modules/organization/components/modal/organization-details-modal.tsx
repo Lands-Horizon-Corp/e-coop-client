@@ -11,7 +11,7 @@ import { IOrganization } from '../../organization.types'
 import OrganizationPreviewModalDetails from '../../pages/onboarding/with-organization/organization-preview-details-modal'
 import { OrganizationPreviewDisplay } from '../organization-preview-display'
 
-type OrganizationModalDetailsProps = {
+type OrganizationDetailsModalProps = {
     organization: IOrganization
     isPending?: boolean
     showActions?: boolean
@@ -29,7 +29,7 @@ const OrganizationDetailsModal = ({
     showJoinBranch,
     organization,
     isSeeding,
-}: OrganizationModalDetailsProps) => {
+}: OrganizationDetailsModalProps) => {
     const queryClient = useQueryClient()
     const createModal = useModalState()
 

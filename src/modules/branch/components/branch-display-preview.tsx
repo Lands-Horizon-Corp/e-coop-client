@@ -91,7 +91,7 @@ const BranchPreviewDisplay = ({
             <div>
                 <div
                     className={cn(
-                        'flex relative w-full bg-cover bg-center flex-col gap-y-2 ecoop-scroll h-[50vh]',
+                        'flex relative w-full mask-b-from-70% mask-b-to-95%  bg-cover bg-center flex-col gap-y-2 ecoop-scroll h-[50vh]',
                         'max-h-screen',
                         className
                     )}
@@ -222,9 +222,9 @@ const BranchPreviewDisplay = ({
                                             <div className="w-10 h-10 dark:bg-primary/20 bg-primary/20 rounded-xl flex items-center justify-center">
                                                 <LocationIcon className="h-5 w-5 text-primary dark:text-primary/50" />
                                             </div>
-                                            <h3 className="font-semibold text-foreground">
+                                            <p className="font-semibold text-foreground">
                                                 Location
-                                            </h3>
+                                            </p>
                                         </div>
 
                                         <div className="space-y-4">
@@ -311,9 +311,9 @@ const BranchPreviewDisplay = ({
                                             >
                                                 <InfoIcon className=" size-5 text-primary " />
                                             </Button>
-                                            <h3 className="font-semibold text-[min(16px,2.5vw)] text-foreground">
+                                            <p className="font-semibold text-[min(16px,2.5vw)] text-foreground">
                                                 Description
-                                            </h3>
+                                            </p>
                                         </CardTitle>
                                     </CardHeader>
                                     <CardContent>
@@ -348,9 +348,9 @@ const BranchPreviewDisplay = ({
                                             >
                                                 <PhoneOutlineIcon className=" size-3 text-primary " />
                                             </Button>
-                                            <h3 className="font-semibold text-[min(16px,2.5vw)] text-foreground">
+                                            <p className="font-semibold text-[min(16px,2.5vw)] text-foreground">
                                                 Contact Information
-                                            </h3>
+                                            </p>
                                         </CardTitle>
                                     </CardHeader>
                                     <CardContent>

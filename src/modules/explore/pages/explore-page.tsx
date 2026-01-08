@@ -1,14 +1,15 @@
 import { useState } from 'react'
 
 import { IOrganization } from '@/modules/organization'
-import OrganizationPreviewModal from '@/modules/organization/components/modal/organization-preview-modal'
 
 import { Particles } from '@/components/ui/background-particles'
 import AuthGuard from '@/components/wrappers/auth-guard'
 
 import { useModalState } from '@/hooks/use-modal-state'
+import { useUrlModal } from '@/hooks/use-url-modal'
 
 import ExploreHeader from '../components/explore-header'
+import OrganizationBranchesModal from '../components/modals/organization-preview-modal'
 import useExploreData from '../hooks/use-explore-data'
 import { getCategories } from '../utils/data-grouping'
 import { ExploreCategoriesMain } from './explore-by-categories'
@@ -18,10 +19,21 @@ const ExplorePage = () => {
     const orgModal = useModalState()
     const [searchTerm, setSearchTerm] = useState('')
 
-    const [selectedOrganization, setSelectedOrganization] =
-        useState<IOrganization | null>(null)
-
     const { hasError, organizations } = useExploreData()
+
+    const categories = getCategories(organizations)
+
+    const {
+        isOpen: isModalOpen,
+        paramValue: organizationId,
+        openWithParam: openOrganizationModal,
+        onOpenChange,
+    } = useUrlModal({ paramName: 'organization_id', defaultOpen: false })
+
+    const handleOpenOrgPreview = (organization: IOrganization) => {
+        orgModal.onOpenChange(true)
+        openOrganizationModal(organization.id)
+    }
 
     if (hasError) {
         return (
@@ -35,19 +47,15 @@ const ExplorePage = () => {
         )
     }
 
-    const categories = getCategories(organizations)
-    const handleOpenOrgPreview = (organization: IOrganization) => {
-        orgModal.onOpenChange(true)
-        setSelectedOrganization(organization)
-    }
-
     return (
-        <AuthGuard>
-            <OrganizationPreviewModal
-                {...orgModal}
-                organization={selectedOrganization}
-                showActions={false}
-            />
+        <>
+            {organizationId && (
+                <OrganizationBranchesModal
+                    onOpenChange={onOpenChange}
+                    open={isModalOpen}
+                    organizationId={organizationId}
+                />
+            )}
             <div className="to-background/0 via-background/0 from-primary/50 top-0 absolute overflow-y-hidden -mt-36 -z-10 h-screen w-[100%] bg-radial-[ellipse_100%_80%_at_10%_10%] to-100% dark:block hidden" />
             <div className="min-h-screen max-w-full">
                 <Particles
@@ -82,7 +90,7 @@ const ExplorePage = () => {
                     </div>
                 </div>
             </div>
-        </AuthGuard>
+        </>
     )
 }
 

@@ -9,7 +9,7 @@ import Modal, { IModalProps } from '@/components/modals/modal'
 import { useModalState } from '@/hooks/use-modal-state'
 
 import OrganizationPreviewDisplaySkeleton from '../organization-preview-display-skeleton'
-import OrganizationDetailsModal from './organization-details-modal'
+import OrganizationDetailsModals from './organization-details-modal'
 
 interface OrganizationModalProps extends IModalProps {
     organization?: IOrganization | null
@@ -64,7 +64,7 @@ const OrganizationPreviewModal = ({
                 {isLoading ? (
                     <OrganizationPreviewDisplaySkeleton className="rounded-none min-h-screen overflow-y-hidden" />
                 ) : (
-                    <OrganizationDetailsModal
+                    <OrganizationDetailsModals
                         organization={organization}
                         showActions={showActions}
                         showJoinBranch={showJoinBranch}

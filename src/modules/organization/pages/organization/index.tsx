@@ -186,6 +186,7 @@ const Organization = () => {
                                             handleOpenModalPreview={
                                                 handleOpenModalPreview
                                             }
+                                            key={org.id}
                                             organization={org}
                                             searchTerm={searchTerm}
                                         />

@@ -1,5 +1,3 @@
-import { cn } from '@/helpers'
-
 import {
     ArrowRightIcon,
     CalendarIcon,
@@ -54,11 +52,11 @@ export const BranchCardFooter = ({
                 <Tooltip>
                     <TooltipTrigger asChild>
                         <Button
+                            className="rounded-xl"
                             disabled={isSeeding}
                             onClick={handleSwitch}
                             size={'sm'}
                             variant="secondary"
-                            className="rounded-xl"
                         >
                             {isCurrentBranch && <p className="text-xs">Go</p>}
                             <ArrowRightIcon className="h-4 w-4" />
@@ -71,11 +69,11 @@ export const BranchCardFooter = ({
                 <Tooltip>
                     <TooltipTrigger asChild>
                         <Button
+                            className="rounded-xl"
                             disabled={isSeeding}
                             onClick={handleEdit}
                             size={'icon'}
                             variant={'ghost'}
-                            className="rounded-xl"
                         >
                             <EditPencilIcon className="h-4 w-4" />
                         </Button>
@@ -87,6 +85,7 @@ export const BranchCardFooter = ({
                 <Tooltip>
                     <TooltipTrigger asChild>
                         <Button
+                            className="rounded-xl"
                             disabled={isSeeding || isDeleting}
                             onClick={(e) => {
                                 e.stopPropagation()
@@ -94,7 +93,6 @@ export const BranchCardFooter = ({
                             }}
                             size={'icon'}
                             variant={'ghost'}
-                            className="rounded-xl"
                         >
                             {isDeleting ? (
                                 <div className="h-4 w-4 animate-spin rounded-full border-2 border-destructive border-t-transparent" />
