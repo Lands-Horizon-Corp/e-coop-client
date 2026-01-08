@@ -381,6 +381,12 @@ export const useUserOrgAcceptJoinRequest = createMutationFactory<
     TEntityId
 >({
     mutationFn: (id) => acceptJoinRequest(id),
+    invalidationFn: (args) => {
+        args.queryClient.invalidateQueries({
+            queryKey: [baseQueryKey, 'join-request', 'all'],
+        })
+        updateMutationInvalidationFn(baseQueryKey, args)
+    },
 })
 
 export const useUserOrgRejectJoinRequest = createMutationFactory<
@@ -389,7 +395,12 @@ export const useUserOrgRejectJoinRequest = createMutationFactory<
     TEntityId
 >({
     mutationFn: (id) => rejectJoinRequest(id),
-    invalidationFn: (args) => updateMutationInvalidationFn(baseQueryKey, args),
+    invalidationFn: (args) => {
+        args.queryClient.invalidateQueries({
+            queryKey: [baseQueryKey, 'join-request', 'all'],
+        })
+        updateMutationInvalidationFn(baseQueryKey, args)
+    },
 })
 
 export const useUpdateUserOrganizationPermission = createMutationFactory<
