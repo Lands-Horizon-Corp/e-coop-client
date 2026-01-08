@@ -72,6 +72,7 @@ const useMemberTypeActions = ({
             to: '../../schemes' as string,
             search: {
                 tab: 'browse-reference',
+                memberTypeId: memberType.id,
             },
         })
     }

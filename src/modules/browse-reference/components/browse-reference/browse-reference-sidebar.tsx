@@ -45,6 +45,7 @@ import { BrowseReferenceCreateUpdateFormModal } from '../forms/browse-reference-
 
 interface Props extends IClassProps {
     selectedReferenceId?: TEntityId
+    defaultExpandedMemberTypeId?: TEntityId
     onSelectReference?: (referenceId: TEntityId) => void
     onDeleteReference?: (referenceId: TEntityId) => void
 }
@@ -77,6 +78,7 @@ const BrowseReferenceSearchInput = ({
 const BrowseReferenceSidebar = ({
     className,
     selectedReferenceId,
+    defaultExpandedMemberTypeId,
     onSelectReference,
     onDeleteReference,
 }: Props) => {
@@ -166,7 +168,11 @@ const BrowseReferenceSidebar = ({
                         )}
                     </p>
                 )}
-                <Accordion className="w-full min-w-0 space-y-2" type="single">
+                <Accordion
+                    className="w-full min-w-0 space-y-2"
+                    defaultValue={`member-type-${defaultExpandedMemberTypeId}`}
+                    type="single"
+                >
                     {filteredData.map((memberType) => (
                         <MemberTypeAccordionItem
                             key={memberType.id}

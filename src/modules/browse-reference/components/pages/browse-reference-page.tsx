@@ -1,11 +1,19 @@
 import PageContainer from '@/components/containers/page-container'
 
+import { TEntityId } from '@/types'
+
 import BrowseReferenceSchemeEditor from '../browse-reference/browse-reference-editor'
 
-const BrowseReferencePage = () => {
+const BrowseReferencePage = ({
+    defaultExpandedMemberTypeId,
+}: {
+    defaultExpandedMemberTypeId?: TEntityId
+}) => {
     return (
         <PageContainer className="!p-0">
-            <BrowseReferenceSchemeEditor />
+            <BrowseReferenceSchemeEditor
+                defaultExpandedMemberTypeId={defaultExpandedMemberTypeId}
+            />
         </PageContainer>
     )
 }

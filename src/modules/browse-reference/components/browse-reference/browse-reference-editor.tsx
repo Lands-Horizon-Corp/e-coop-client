@@ -46,9 +46,14 @@ import { useGetBrowseReferenceById } from '../../browse-reference.service'
 import BrowseReferenceUpdateForm from '../forms/browse-update-form/browse-reference-update-form'
 import BrowseReferenceSidebar from './browse-reference-sidebar'
 
-interface Props extends IClassProps {}
+interface Props extends IClassProps {
+    defaultExpandedMemberTypeId?: TEntityId
+}
 
-const BrowseReferenceSchemeEditor = ({ className }: Props) => {
+const BrowseReferenceSchemeEditor = ({
+    className,
+    defaultExpandedMemberTypeId,
+}: Props) => {
     const [selectedReferenceId, setSelectedReferenceId] = useState<
         TEntityId | undefined
     >()
@@ -73,6 +78,7 @@ const BrowseReferenceSchemeEditor = ({ className }: Props) => {
         >
             <BrowseReferenceSidebar
                 className="sticky top-0"
+                defaultExpandedMemberTypeId={defaultExpandedMemberTypeId}
                 onDeleteReference={(referenceId) => {
                     if (selectedReferenceId === referenceId)
                         setSelectedReferenceId(undefined)

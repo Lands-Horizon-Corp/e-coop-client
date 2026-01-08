@@ -14,6 +14,8 @@ import {
 } from '@/components/icons'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 
+import { TEntityId } from '@/types'
+
 type Tabs =
     | 'computation-sheet-scheme'
     | 'loan-charges-scheme'
@@ -27,13 +29,14 @@ export const Route = createFileRoute(
     validateSearch: (search: Record<string, unknown>) => {
         return {
             tab: (search.tab as Tabs) || 'loan-scheme',
+            memberTypeId: search.memberTypeId as TEntityId | undefined,
         }
     },
 })
 
 function RouteComponent() {
     const navigate = useNavigate()
-    const { tab = 'loan-scheme' } =
+    const { tab = 'loan-scheme', memberTypeId } =
         useSearch({
             from: '/org/$orgname/branch/$branchname/(employee)/schemes/',
         }) || 'computation-sheet-scheme'
@@ -122,7 +125,9 @@ function RouteComponent() {
                     className="min-w-0 w-full"
                     value="browse-reference"
                 >
-                    <BrowseReferencePage />
+                    <BrowseReferencePage
+                        defaultExpandedMemberTypeId={memberTypeId}
+                    />
                 </TabsContent>
             </Tabs>
         </PageContainer>
