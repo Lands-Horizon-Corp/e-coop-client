@@ -171,7 +171,7 @@ const BrowseExcludeIncludeAccountTable = ({
                         setFilterLogic: filterState.setFilterLogic,
                     }}
                     globalSearchProps={{
-                        defaultMode: 'equal',
+                        defaultMode: 'contains',
                         targets: browseExcludeIncludeAccountGlobalSearchTargets,
                         defaultVisible: false,
                     }}

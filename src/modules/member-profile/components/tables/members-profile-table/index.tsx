@@ -1,10 +1,12 @@
 import { useMemo } from 'react'
 
-import { keepPreviousData, useQueryClient } from '@tanstack/react-query'
+import { keepPreviousData } from '@tanstack/react-query'
 import qs from 'query-string'
+import { toast } from 'sonner'
 
 import FilterContext from '@/contexts/filter-context/filter-context'
 import { cn } from '@/helpers'
+import { IQRMemberProfileDecodedResult } from '@/modules/qr-crypto'
 import {
     getCoreRowModel,
     getSortedRowModel,
@@ -22,13 +24,17 @@ import { useDataTableSorting } from '@/components/data-table/use-datatable-sorti
 import useDataTableState, {
     useResolvedColumnOrder,
 } from '@/components/data-table/use-datatable-state'
+import { ScanQrIcon } from '@/components/icons'
+import { QrCodeScannerModal } from '@/components/qrcode-scanner'
+import { Button } from '@/components/ui/button'
 
 import useDatableFilterState from '@/hooks/use-filter-state'
+import { useModalState } from '@/hooks/use-modal-state'
 import { usePagination } from '@/hooks/use-pagination'
 
 import {
     IMemberProfile,
-    deleteManyMemberProfiles,
+    // deleteManyMemberProfiles,
     useGetPaginatedMemberProfiles,
 } from '../../..'
 import membersColumns, {
@@ -70,7 +76,7 @@ const MemberProfileTable = ({
     actionComponent = MemberProfileAction,
     RowContextComponent = MemberProfileRowContext,
 }: MemberProfileTableProps) => {
-    const queryClient = useQueryClient()
+    // const queryClient = useQueryClient()
     const { pagination, setPagination } = usePagination()
     const { sortingStateBase64, tableSorting, setTableSorting } =
         useDataTableSorting()
@@ -182,16 +188,16 @@ const MemberProfileTable = ({
                     )}
                 >
                     <DataTableToolbar
-                        deleteActionProps={{
-                            onDeleteSuccess: () =>
-                                queryClient.invalidateQueries({
-                                    queryKey: ['member-profile', 'paginated'],
-                                }),
-                            onDelete: (selectedData) =>
-                                deleteManyMemberProfiles({
-                                    ids: selectedData.map((data) => data.id),
-                                }),
-                        }}
+                        // deleteActionProps={{
+                        //     onDeleteSuccess: () =>
+                        //         queryClient.invalidateQueries({
+                        //             queryKey: ['member-profile', 'paginated'],
+                        //         }),
+                        //     onDelete: (selectedData) =>
+                        //         deleteManyMemberProfiles({
+                        //             ids: selectedData.map((data) => data.id),
+                        //         }),
+                        // }}
                         exportActionProps={{
                             isLoading: isPending,
                             filters: exportfilter,
@@ -203,7 +209,7 @@ const MemberProfileTable = ({
                             setFilterLogic: filterState.setFilterLogic,
                         }}
                         globalSearchProps={{
-                            defaultMode: 'equal',
+                            defaultMode: 'contains',
                             targets: memberGlobalSearchTargets,
                         }}
                         refreshActionProps={{
@@ -213,6 +219,23 @@ const MemberProfileTable = ({
                         scrollableProps={{ isScrollable, setIsScrollable }}
                         table={table}
                         {...toolbarProps}
+                        otherActionLeft={
+                            <MemberQRScannerSearch
+                                onFound={(data) => {
+                                    if (data.type !== 'member-qr') {
+                                        return toast.error(
+                                            'Invalid QR. Please use a valid Member Profile QR'
+                                        )
+                                    }
+                                    filterState.setFilter('full_name', {
+                                        dataType: 'text',
+                                        displayText: 'Full Name',
+                                        mode: 'contains',
+                                        value: data.data.full_name,
+                                    })
+                                }}
+                            />
+                        }
                     />
                     <DataTable
                         className={cn('mb-2', isScrollable && 'flex-1')}
@@ -230,6 +253,32 @@ const MemberProfileTable = ({
                 <MemberProfileTableActionManager />
             </FilterContext.Provider>
         </TableRowActionStoreProvider>
+    )
+}
+
+const MemberQRScannerSearch = ({
+    onFound,
+}: {
+    onFound: (QRDecoded: IQRMemberProfileDecodedResult) => void
+}) => {
+    const modalState = useModalState()
+
+    return (
+        <>
+            <Button
+                className=""
+                onClick={() => modalState.onOpenChange(true)}
+                size="icon-sm"
+            >
+                <ScanQrIcon />
+            </Button>
+            <QrCodeScannerModal<IQRMemberProfileDecodedResult, Error>
+                {...modalState}
+                qrScannerProps={{
+                    onSuccessDecode: onFound,
+                }}
+            />
+        </>
     )
 }
 

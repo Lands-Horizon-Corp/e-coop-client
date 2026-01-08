@@ -214,7 +214,7 @@ const AccountsTable = ({
                             setFilterLogic: filterState.setFilterLogic,
                         }}
                         globalSearchProps={{
-                            defaultMode: 'equal',
+                            defaultMode: 'contains',
                             targets: accountsGlobalSearchTargets,
                         }}
                         refreshActionProps={{

@@ -174,7 +174,7 @@ const GeneratedSavingsInterestTable = ({
                             setFilterLogic: filterState.setFilterLogic,
                         }}
                         globalSearchProps={{
-                            defaultMode: 'equal',
+                            defaultMode: 'contains',
                             targets:
                                 generatedSavingsInterestGlobalSearchTargets,
                         }}

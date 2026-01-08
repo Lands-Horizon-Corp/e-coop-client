@@ -174,7 +174,7 @@ const HolidaysTable = ({
                         setFilterLogic: filterState.setFilterLogic,
                     }}
                     globalSearchProps={{
-                        defaultMode: 'equal',
+                        defaultMode: 'contains',
                         targets: holidayGlobalSearchTargets,
                     }}
                     refreshActionProps={{

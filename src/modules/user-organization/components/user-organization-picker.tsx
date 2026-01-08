@@ -82,8 +82,7 @@ const UserOrganizationPicker = forwardRef<HTMLButtonElement, Props>(
                 enabled: !disabled && state,
             },
             query: {
-                pagination,
-                showMessage: false,
+                ...pagination,
                 filter: finalFilterPayloadBase64,
             },
         })

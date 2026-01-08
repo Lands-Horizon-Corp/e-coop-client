@@ -119,10 +119,12 @@ interface CountryDropdownProps {
     disabled?: boolean
     placeholder?: string
     slim?: boolean
+    customTriggerClassName?: string
 }
 
 const CountryComboboxComponent = (
     {
+        customTriggerClassName,
         options = availableCountries,
         onChange,
         undefinable,
@@ -169,15 +171,14 @@ const CountryComboboxComponent = (
         [onChange]
     )
 
-    const triggerClasses = cn(
-        'flex h-9 w-full items-center justify-between whitespace-nowrap rounded-md border border-input bg-background px-3 py-2 text-sm shadow-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-ring disabled:cursor-not-allowed disabled:opacity-50 [&>span]:line-clamp-1',
-        slim === true && 'w-20'
-    )
-
     return (
         <Popover modal onOpenChange={setOpen} open={open}>
             <PopoverTrigger
-                className={triggerClasses}
+                className={cn(
+                    'flex h-9 w-full items-center justify-between whitespace-nowrap rounded-md border border-input bg-background px-3 py-2 text-sm shadow-smm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-ring disabled:cursor-not-allowed disabled:opacity-50 [&>span]:line-clamp-1',
+                    slim === true && 'w-20',
+                    customTriggerClassName
+                )}
                 disabled={disabled}
                 ref={ref}
                 {...props}
@@ -232,18 +233,6 @@ const CountryComboboxComponent = (
                         </div>
                         <CommandEmpty>No country found.</CommandEmpty>
                         <CommandGroup>
-                            {undefinable && (
-                                <CommandItem
-                                    className="justify-center text-muted-foreground"
-                                    onSelect={() => {
-                                        setOpen(false)
-                                        onChange?.(undefined)
-                                    }}
-                                    value={undefined}
-                                >
-                                    Select None
-                                </CommandItem>
-                            )}
                             {filteredCountries
                                 .filter((x) => x.name)
                                 .map((option, key: number) => (
@@ -278,6 +267,18 @@ const CountryComboboxComponent = (
                                     </CommandItem>
                                 ))}
                         </CommandGroup>
+                        {undefinable && (
+                            <CommandItem
+                                className="justify-center sticky bottom-0 bg-popover text-muted-foreground"
+                                onSelect={() => {
+                                    setOpen(false)
+                                    onChange?.(undefined)
+                                }}
+                                value={undefined}
+                            >
+                                Select None
+                            </CommandItem>
+                        )}
                     </CommandList>
                 </Command>
             </PopoverContent>

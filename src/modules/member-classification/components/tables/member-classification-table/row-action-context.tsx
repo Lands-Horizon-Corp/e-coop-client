@@ -15,7 +15,6 @@ import { MemberClassificationCreateUpdateFormModal } from '../../member-classifi
 import { IMemberClassificationTableActionComponentProp } from './columns'
 
 export type MemberClassificationActionType = 'edit' | 'delete'
-
 export type MemberClassificationActionExtra = Record<string, never>
 
 interface UseMemberClassificationActionsProps {
@@ -28,6 +27,7 @@ const useMemberClassificationActions = ({
     onDeleteSuccess,
 }: UseMemberClassificationActionsProps) => {
     const memberClassification = row.original
+
     const { open } = useTableRowActionStore<
         IMemberClassification,
         MemberClassificationActionType,
@@ -72,7 +72,6 @@ const useMemberClassificationActions = ({
 
 interface IMemberClassificationTableActionProps
     extends IMemberClassificationTableActionComponentProp {
-    onMemberClassificationUpdate?: () => void
     onDeleteSuccess?: () => void
 }
 
@@ -85,7 +84,7 @@ export const MemberClassificationAction = ({
 
     return (
         <>
-            <div onClick={(e) => e.stopPropagation()}></div>
+            <div onClick={(e) => e.stopPropagation()} />
             <RowActionsGroup
                 canSelect
                 onDelete={{
@@ -98,7 +97,6 @@ export const MemberClassificationAction = ({
                     isAllowed: true,
                     onClick: handleEdit,
                 }}
-                otherActions={<>{/* Additional actions can be added here */}</>}
                 row={row}
             />
         </>
@@ -120,23 +118,21 @@ export const MemberClassificationRowContext = ({
         useMemberClassificationActions({ row, onDeleteSuccess })
 
     return (
-        <>
-            <DataTableRowContext
-                onDelete={{
-                    text: 'Delete',
-                    isAllowed: !isDeletingMemberClassification,
-                    onClick: handleDelete,
-                }}
-                onEdit={{
-                    text: 'Edit',
-                    isAllowed: true,
-                    onClick: handleEdit,
-                }}
-                row={row}
-            >
-                {children}
-            </DataTableRowContext>
-        </>
+        <DataTableRowContext
+            onDelete={{
+                text: 'Delete',
+                isAllowed: !isDeletingMemberClassification,
+                onClick: handleDelete,
+            }}
+            onEdit={{
+                text: 'Edit',
+                isAllowed: true,
+                onClick: handleEdit,
+            }}
+            row={row}
+        >
+            {children}
+        </DataTableRowContext>
     )
 }
 

@@ -155,7 +155,7 @@ const IncludeNegativeAccountTable = ({
                         setFilterLogic: filterState.setFilterLogic,
                     }}
                     globalSearchProps={{
-                        defaultMode: 'equal',
+                        defaultMode: 'contains',
                         defaultVisible: false,
                         targets: includeNegativeAccountGlobalSearchTargets,
                     }}

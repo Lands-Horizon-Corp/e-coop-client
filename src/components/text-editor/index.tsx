@@ -88,7 +88,7 @@ const TextEditor = forwardRef<HTMLDivElement, Props>(
         }
 
         return (
-            <div className={cn('flex flex-col h-full', className)}>
+            <div className={cn('flex flex-col space-y-2 h-full', className)}>
                 {showToolbar && editor && (
                     <Toolbar
                         activeHeading={activeHeading}

@@ -177,7 +177,7 @@ const CompanyTable = ({
                         setFilterLogic: filterState.setFilterLogic,
                     }}
                     globalSearchProps={{
-                        defaultMode: 'equal',
+                        defaultMode: 'contains',
                         targets: companyGlobalSearchTargets,
                     }}
                     refreshActionProps={{

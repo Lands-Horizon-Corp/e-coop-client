@@ -129,6 +129,7 @@ const MemberMembershipForm = ({
                                 render={({ field }) => (
                                     <Input
                                         {...field}
+                                        className="bg-background"
                                         disabled={isDisabled(field.name)}
                                         id={field.name}
                                         placeholder="Passbook"
@@ -143,6 +144,7 @@ const MemberMembershipForm = ({
                                 render={({ field }) => (
                                     <Input
                                         {...field}
+                                        className="bg-background"
                                         disabled={isDisabled(field.name)}
                                         id={field.name}
                                         placeholder="Old Reference ID"
@@ -284,6 +286,7 @@ const MemberMembershipForm = ({
                                                     )
                                             }}
                                             placeholder="Select Recruiter"
+                                            triggerClassName="bg-background"
                                             value={value}
                                         />
                                     )

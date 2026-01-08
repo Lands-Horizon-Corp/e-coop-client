@@ -187,7 +187,7 @@ const DisbursementTable = ({
                             setFilterLogic: filterState.setFilterLogic,
                         }}
                         globalSearchProps={{
-                            defaultMode: 'equal',
+                            defaultMode: 'contains',
                             targets: disbursementGlobalSearchTargets,
                         }}
                         refreshActionProps={{

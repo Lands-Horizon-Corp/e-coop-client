@@ -185,7 +185,7 @@ const FootstepTable = ({
                             setFilterLogic: filterState.setFilterLogic,
                         }}
                         globalSearchProps={{
-                            defaultMode: 'equal',
+                            defaultMode: 'contains',
                             targets: footstepGlobalSearchTargets,
                         }}
                         refreshActionProps={{

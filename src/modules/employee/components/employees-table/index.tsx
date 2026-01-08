@@ -166,7 +166,7 @@ const EmployeesTable = ({
                         setFilterLogic: filterState.setFilterLogic,
                     }}
                     globalSearchProps={{
-                        defaultMode: 'equal',
+                        defaultMode: 'contains',
                         targets: employeesGlobalSearchTargets,
                     }}
                     refreshActionProps={{

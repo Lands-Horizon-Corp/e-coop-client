@@ -190,7 +190,7 @@ const MemberCenterTable = ({
                             setFilterLogic: filterState.setFilterLogic,
                         }}
                         globalSearchProps={{
-                            defaultMode: 'equal',
+                            defaultMode: 'contains',
                             targets: memberCenterGlobalSearchTargets,
                         }}
                         refreshActionProps={{

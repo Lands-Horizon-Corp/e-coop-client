@@ -166,7 +166,7 @@ const MemberOccupationHistoryTable = ({
                         setFilterLogic: filterState.setFilterLogic,
                     }}
                     globalSearchProps={{
-                        defaultMode: 'equal',
+                        defaultMode: 'contains',
                         targets: memberOccupationHistoryGlobalSearchTargets,
                     }}
                     refreshActionProps={{

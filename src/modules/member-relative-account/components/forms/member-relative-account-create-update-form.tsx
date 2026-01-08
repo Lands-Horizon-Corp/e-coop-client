@@ -144,6 +144,7 @@ const MemberRelativeAccountCreateUpdateForm = ({
                                             )
                                         }}
                                         placeholder="Relative Member Profile"
+                                        triggerClassName="bg-popover"
                                         value={form.getValues(
                                             'relative_member'
                                         )}
@@ -158,6 +159,7 @@ const MemberRelativeAccountCreateUpdateForm = ({
                             render={({ field }) => (
                                 <RelationshipCombobox
                                     {...field}
+                                    className="bg-popover"
                                     disabled={isDisabled(field.name)}
                                     id={field.name}
                                     placeholder="Relationship"
@@ -174,7 +176,7 @@ const MemberRelativeAccountCreateUpdateForm = ({
                                     content={field.value}
                                     disabled={isDisabled(field.name)}
                                     placeholder="Description..."
-                                    textEditorClassName="!max-w-none bg-background"
+                                    textEditorClassName="!max-w-none bg-popover"
                                 />
                             )}
                         />

@@ -171,7 +171,7 @@ const MutualFundTable = ({
                             setFilterLogic: filterState.setFilterLogic,
                         }}
                         globalSearchProps={{
-                            defaultMode: 'equal',
+                            defaultMode: 'contains',
                             targets: mutualFundGlobalSearchTargets,
                         }}
                         refreshActionProps={{

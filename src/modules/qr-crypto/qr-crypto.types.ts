@@ -40,6 +40,7 @@ export interface IQRInvitationCode {
 }
 
 export interface IQRMemberProfile {
+    full_name: string
     firstname: string
     lastname: string
     middlename: string

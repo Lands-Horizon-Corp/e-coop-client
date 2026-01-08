@@ -5,13 +5,15 @@ import { Row } from '@tanstack/react-table'
 
 import RowActionsGroup from '@/components/data-table/data-table-row-actions'
 import DataTableRowContext from '@/components/data-table/data-table-row-context'
-
-import { useModalState } from '@/hooks/use-modal-state'
+import { useTableRowActionStore } from '@/components/data-table/store/data-table-action-store'
 
 import { useDeleteById } from '../../member-group.service'
 import { IMemberGroup } from '../../member-group.types'
 import { MemberGroupCreateUpdateFormModal } from '../member-group-create-update-form'
 import { IMemberGroupTableActionComponentProp } from './columns'
+
+export type MemberGroupActionType = 'edit' | 'delete'
+export type MemberGroupActionExtra = Record<string, never>
 
 interface UseMemberGroupActionsProps {
     row: Row<IMemberGroup>
@@ -22,8 +24,13 @@ const useMemberGroupActions = ({
     row,
     onDeleteSuccess,
 }: UseMemberGroupActionsProps) => {
-    const updateModal = useModalState()
     const group = row.original
+
+    const { open } = useTableRowActionStore<
+        IMemberGroup,
+        MemberGroupActionType,
+        MemberGroupActionExtra
+    >()
 
     const { onOpen } = useConfirmModalStore()
 
@@ -33,7 +40,12 @@ const useMemberGroupActions = ({
         },
     })
 
-    const handleEdit = () => updateModal.onOpenChange(true)
+    const handleEdit = () => {
+        open('edit', {
+            id: group.id,
+            defaultValues: group,
+        })
+    }
 
     const handleDelete = () => {
         onOpen({
@@ -45,7 +57,6 @@ const useMemberGroupActions = ({
 
     return {
         group,
-        updateModal,
         isDeletingGroup,
         handleEdit,
         handleDelete,
@@ -54,7 +65,6 @@ const useMemberGroupActions = ({
 
 interface IMemberGroupTableActionProps
     extends IMemberGroupTableActionComponentProp {
-    onGroupUpdate?: () => void
     onDeleteSuccess?: () => void
 }
 
@@ -62,21 +72,13 @@ export const MemberGroupAction = ({
     row,
     onDeleteSuccess,
 }: IMemberGroupTableActionProps) => {
-    const { group, updateModal, isDeletingGroup, handleEdit, handleDelete } =
-        useMemberGroupActions({ row, onDeleteSuccess })
+    const { isDeletingGroup, handleEdit, handleDelete } = useMemberGroupActions(
+        { row, onDeleteSuccess }
+    )
 
     return (
         <>
-            <div onClick={(e) => e.stopPropagation()}>
-                <MemberGroupCreateUpdateFormModal
-                    {...updateModal}
-                    formProps={{
-                        groupId: group.id,
-                        defaultValues: { ...group },
-                        onSuccess: () => updateModal.onOpenChange(false),
-                    }}
-                />
-            </div>
+            <div onClick={(e) => e.stopPropagation()} />
             <RowActionsGroup
                 canSelect
                 onDelete={{
@@ -89,7 +91,6 @@ export const MemberGroupAction = ({
                     isAllowed: true,
                     onClick: handleEdit,
                 }}
-                otherActions={<>{/* Additional actions can be added here */}</>}
                 row={row}
             />
         </>
@@ -107,34 +108,55 @@ export const MemberGroupRowContext = ({
     children,
     onDeleteSuccess,
 }: IMemberGroupRowContextProps) => {
-    const { group, updateModal, isDeletingGroup, handleEdit, handleDelete } =
-        useMemberGroupActions({ row, onDeleteSuccess })
+    const { isDeletingGroup, handleEdit, handleDelete } = useMemberGroupActions(
+        { row, onDeleteSuccess }
+    )
+
+    return (
+        <DataTableRowContext
+            onDelete={{
+                text: 'Delete',
+                isAllowed: !isDeletingGroup,
+                onClick: handleDelete,
+            }}
+            onEdit={{
+                text: 'Edit',
+                isAllowed: true,
+                onClick: handleEdit,
+            }}
+            row={row}
+        >
+            {children}
+        </DataTableRowContext>
+    )
+}
+
+export const MemberGroupTableActionManager = () => {
+    const { state, close } = useTableRowActionStore<
+        IMemberGroup,
+        MemberGroupActionType,
+        MemberGroupActionExtra
+    >()
+
+    if (!state || !state.defaultValues) return null
+
+    const group = state.defaultValues
 
     return (
         <>
-            <MemberGroupCreateUpdateFormModal
-                {...updateModal}
-                formProps={{
-                    groupId: group.id,
-                    defaultValues: { ...group },
-                    onSuccess: () => updateModal.onOpenChange(false),
-                }}
-            />
-            <DataTableRowContext
-                onDelete={{
-                    text: 'Delete',
-                    isAllowed: !isDeletingGroup,
-                    onClick: handleDelete,
-                }}
-                onEdit={{
-                    text: 'Edit',
-                    isAllowed: true,
-                    onClick: handleEdit,
-                }}
-                row={row}
-            >
-                {children}
-            </DataTableRowContext>
+            {state.action === 'edit' && (
+                <MemberGroupCreateUpdateFormModal
+                    description="Modify/Update group information..."
+                    formProps={{
+                        groupId: group.id,
+                        defaultValues: group,
+                        onSuccess: close,
+                    }}
+                    onOpenChange={close}
+                    open={state.isOpen}
+                    title="Update Group"
+                />
+            )}
         </>
     )
 }

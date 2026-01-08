@@ -194,7 +194,7 @@ const MemberClassificationTable = ({
                             setFilterLogic: filterState.setFilterLogic,
                         }}
                         globalSearchProps={{
-                            defaultMode: 'equal',
+                            defaultMode: 'contains',
                             targets: memberClassificationGlobalSearchTargets,
                         }}
                         refreshActionProps={{

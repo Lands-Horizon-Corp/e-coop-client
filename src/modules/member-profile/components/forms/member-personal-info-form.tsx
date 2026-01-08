@@ -216,6 +216,7 @@ const MemberPersonalInfoForm = ({
                                         <Input
                                             {...field}
                                             autoComplete="given-name"
+                                            className="bg-background"
                                             disabled={isDisabled(field.name)}
                                             id={field.name}
                                             placeholder="First Name"
@@ -233,6 +234,7 @@ const MemberPersonalInfoForm = ({
                                         <Input
                                             {...field}
                                             autoComplete="additional-name"
+                                            className="bg-background"
                                             disabled={isDisabled(field.name)}
                                             id={field.name}
                                             placeholder="Middle Name"
@@ -250,6 +252,7 @@ const MemberPersonalInfoForm = ({
                                         <Input
                                             {...field}
                                             autoComplete="family-name"
+                                            className="bg-background"
                                             disabled={isDisabled(field.name)}
                                             id={field.name}
                                             placeholder="Last Name"
@@ -267,6 +270,7 @@ const MemberPersonalInfoForm = ({
                                         <Input
                                             {...field}
                                             autoComplete="honorific-suffix"
+                                            className="bg-background"
                                             disabled={isDisabled(field.name)}
                                             id={field.name}
                                             placeholder=""
@@ -317,6 +321,7 @@ const MemberPersonalInfoForm = ({
                                 render={({ field }) => (
                                     <InputDate
                                         {...field}
+                                        className="bg-background"
                                         disabled={isDisabled(field.name)}
                                         value={field.value ?? ''}
                                     />
@@ -377,6 +382,7 @@ const MemberPersonalInfoForm = ({
                                 render={({ field }) => (
                                     <Input
                                         {...field}
+                                        className="bg-background"
                                         disabled={isDisabled(field.name)}
                                         id={field.name}
                                         placeholder="Business Address"
@@ -391,6 +397,7 @@ const MemberPersonalInfoForm = ({
                                 render={({ field }) => (
                                     <Input
                                         {...field}
+                                        className="bg-background"
                                         disabled={isDisabled(field.name)}
                                         id={field.name}
                                         placeholder="Business Contact"

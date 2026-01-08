@@ -10,7 +10,7 @@ export const MemberDepartmentSchema = z.object({
     id: entityIdSchema.optional(),
     name: z.string().min(1, 'Department name is required'),
     description: descriptionSchema
-        .min(15, 'Department Description is required')
+        .min(1, 'Department Description is required')
         .optional()
         .transform(descriptionTransformerSanitizer),
     icon: z.string().optional(),

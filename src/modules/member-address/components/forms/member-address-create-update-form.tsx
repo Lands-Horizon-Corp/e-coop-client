@@ -135,6 +135,7 @@ const MemberAddressCreateUpdateForm = ({
                             render={({ field }) => (
                                 <Input
                                     {...field}
+                                    className="bg-popover"
                                     disabled={isDisabled(field.name)}
                                     id={field.name}
                                     placeholder="Label"
@@ -148,6 +149,7 @@ const MemberAddressCreateUpdateForm = ({
                             render={({ field }) => (
                                 <CountryCombobox
                                     {...field}
+                                    customTriggerClassName="bg-popover"
                                     defaultValue={field.value}
                                     disabled={isDisabled(field.name)}
                                     onChange={(country) =>
@@ -164,6 +166,7 @@ const MemberAddressCreateUpdateForm = ({
                             render={({ field }) => (
                                 <Textarea
                                     {...field}
+                                    className="bg-popover"
                                     disabled={isDisabled(field.name)}
                                     id={field.name}
                                     placeholder="Type complete address here"
@@ -177,6 +180,7 @@ const MemberAddressCreateUpdateForm = ({
                             render={({ field }) => (
                                 <Input
                                     {...field}
+                                    className="bg-popover"
                                     disabled={isDisabled(field.name)}
                                     id={field.name}
                                     placeholder="City"
@@ -191,6 +195,7 @@ const MemberAddressCreateUpdateForm = ({
                                 render={({ field }) => (
                                     <Input
                                         {...field}
+                                        className="bg-popover"
                                         disabled={isDisabled(field.name)}
                                         id={field.name}
                                         placeholder="Postal Code"
@@ -204,6 +209,7 @@ const MemberAddressCreateUpdateForm = ({
                                 render={({ field }) => (
                                     <Input
                                         {...field}
+                                        className="bg-popover"
                                         disabled={isDisabled(field.name)}
                                         id={field.name}
                                         placeholder="Province/State"
@@ -219,6 +225,7 @@ const MemberAddressCreateUpdateForm = ({
                                 render={({ field }) => (
                                     <Input
                                         {...field}
+                                        className="bg-popover"
                                         disabled={isDisabled(field.name)}
                                         id={field.name}
                                         placeholder="Barangay"
@@ -233,6 +240,7 @@ const MemberAddressCreateUpdateForm = ({
                             render={({ field }) => (
                                 <Textarea
                                     {...field}
+                                    className="bg-popover"
                                     disabled={isDisabled(field.name)}
                                     id={field.name}
                                     placeholder="Landmark"
@@ -240,7 +248,7 @@ const MemberAddressCreateUpdateForm = ({
                             )}
                         />
                         <MapPicker
-                            className="w-full"
+                            className="w-full bg-popover"
                             disabled={isPending || formProps.readOnly}
                             onChange={(location) => {
                                 if (location) {

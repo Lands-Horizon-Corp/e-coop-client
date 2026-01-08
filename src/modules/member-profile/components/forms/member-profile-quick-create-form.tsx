@@ -270,7 +270,7 @@ const MemberProfileQuickCreateForm = ({
                             />
                             <FormFieldWrapper
                                 control={form.control}
-                                label="Gender *"
+                                label="Gender"
                                 name="member_gender_id"
                                 render={({ field }) => (
                                     <MemberGenderCombobox
@@ -323,7 +323,7 @@ const MemberProfileQuickCreateForm = ({
                             />
                             <FormFieldWrapper
                                 control={form.control}
-                                label="Birth Place"
+                                label="Birth Place *"
                                 name="birth_place"
                                 render={({ field }) => (
                                     <CountryCombobox
@@ -453,6 +453,7 @@ const MemberProfileQuickCreateForm = ({
                             <p>New Account</p>
                             <FormFieldWrapper
                                 control={form.control}
+                                label="Username"
                                 name="new_user_info.user_name"
                                 render={({ field }) => (
                                     <Input
@@ -465,6 +466,7 @@ const MemberProfileQuickCreateForm = ({
                             />
                             <FormFieldWrapper
                                 control={form.control}
+                                label="Email"
                                 name="new_user_info.email"
                                 render={({ field }) => (
                                     <Input
@@ -477,6 +479,7 @@ const MemberProfileQuickCreateForm = ({
                             />
                             <FormFieldWrapper
                                 control={form.control}
+                                label="Password"
                                 name="new_user_info.password"
                                 render={({ field }) => (
                                     <FormItem>
@@ -537,7 +540,7 @@ export const MemberProfileQuickCreateFormModal = ({
 }) => {
     return (
         <Modal
-            className={cn('!max-w-4xl', className)}
+            className={cn('!max-w-4xl bg-popover', className)}
             description={description}
             title={title}
             {...props}

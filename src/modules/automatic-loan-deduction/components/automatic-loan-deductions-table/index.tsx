@@ -178,7 +178,7 @@ const AutomaticLoanDeductionTable = ({
                         setFilterLogic: filterState.setFilterLogic,
                     }}
                     globalSearchProps={{
-                        defaultMode: 'equal',
+                        defaultMode: 'contains',
                         targets: automaticLoanDeductionGlobalSearchTargets,
                     }}
                     refreshActionProps={{

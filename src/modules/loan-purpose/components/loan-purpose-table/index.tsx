@@ -185,7 +185,7 @@ const LoanPurposeTable = ({
                             setFilterLogic: filterState.setFilterLogic,
                         }}
                         globalSearchProps={{
-                            defaultMode: 'equal',
+                            defaultMode: 'contains',
                             targets: loanPurposeGlobalSearchTargets,
                         }}
                         refreshActionProps={{

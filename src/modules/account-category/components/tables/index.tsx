@@ -194,7 +194,7 @@ const AccountCategoryTable = ({
                             setFilterLogic: filterState.setFilterLogic,
                         }}
                         globalSearchProps={{
-                            defaultMode: 'equal',
+                            defaultMode: 'contains',
                             targets: AccountCategoryGlobalSearchTargets,
                         }}
                         refreshActionProps={{

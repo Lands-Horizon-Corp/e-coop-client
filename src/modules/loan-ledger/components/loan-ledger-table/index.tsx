@@ -171,7 +171,7 @@ const LoanLedgerTable = ({
                             setFilterLogic: filterState.setFilterLogic,
                         }}
                         globalSearchProps={{
-                            defaultMode: 'equal',
+                            defaultMode: 'contains',
                             targets: loanLedgerGlobalSearchTargets,
                         }}
                         refreshActionProps={{

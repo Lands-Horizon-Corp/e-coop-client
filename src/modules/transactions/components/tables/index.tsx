@@ -208,7 +208,7 @@ const TransactionsTable = ({
                             setFilterLogic: filterState.setFilterLogic,
                         }}
                         globalSearchProps={{
-                            defaultMode: 'equal',
+                            defaultMode: 'contains',
                             targets: transactionGlobalSearchTargets,
                         }}
                         refreshActionProps={{

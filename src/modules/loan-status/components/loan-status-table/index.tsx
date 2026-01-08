@@ -177,7 +177,7 @@ const LoanStatusTable = ({
                             setFilterLogic: filterState.setFilterLogic,
                         }}
                         globalSearchProps={{
-                            defaultMode: 'equal',
+                            defaultMode: 'contains',
                             targets: loanStatusGlobalSearchTargets,
                         }}
                         refreshActionProps={{

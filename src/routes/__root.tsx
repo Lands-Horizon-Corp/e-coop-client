@@ -135,10 +135,11 @@ function RootLayout() {
 
                             loading:
                                 '!p-4 !rounded-xl !border-t-0 !border-x-0 !border-b-1 ' +
-                                '!bg-primary/10 dark:!bg-transparent dark:!bg-gradient-to-tr ' +
-                                '!border-b-primary !border-primary ' +
-                                'dark:!from-primary/40 dark:!to-background ' +
-                                '!text-foreground',
+                                '!bg-muted ' +
+                                'dark:!bg-transparent dark:!bg-gradient-to-tr ' +
+                                '!border-b-muted-foreground/30 !border-muted-foreground/20 ' +
+                                'dark:!from-muted dark:!to-background ' +
+                                '!text-muted-foreground',
 
                             error:
                                 '!p-4 !rounded-xl !border-t-0 !border-x-0 !border-b-1 ' +
@@ -149,7 +150,7 @@ function RootLayout() {
 
                             warning:
                                 '!p-4 !rounded-xl !border-t-0 !border-x-0 !border-b-1 ' +
-                                '!bg-[#e8915f]/10 dark:!bg-transparent dark:!bg-gradient-to-tr ' +
+                                '!bg-[#e8915f]/60 dark:!bg-transparent dark:!bg-gradient-to-tr ' +
                                 '!border-b-warning !border-warning ' +
                                 'dark:!from-warning dark:!to-popover ' +
                                 '!text-foreground',

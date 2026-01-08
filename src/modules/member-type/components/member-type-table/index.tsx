@@ -179,7 +179,7 @@ const MemberTypeTable = ({
                             setFilterLogic: filterState.setFilterLogic,
                         }}
                         globalSearchProps={{
-                            defaultMode: 'equal',
+                            defaultMode: 'contains',
                             targets: memberTypeGlobalSearchTargets,
                         }}
                         refreshActionProps={{

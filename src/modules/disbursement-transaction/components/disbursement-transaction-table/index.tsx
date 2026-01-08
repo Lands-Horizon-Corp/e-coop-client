@@ -184,7 +184,7 @@ const DisbursementTransactionTable = ({
                             setFilterLogic: filterState.setFilterLogic,
                         }}
                         globalSearchProps={{
-                            defaultMode: 'equal',
+                            defaultMode: 'contains',
                             targets: disbursementTransactionGlobalSearchTargets,
                         }}
                         refreshActionProps={{

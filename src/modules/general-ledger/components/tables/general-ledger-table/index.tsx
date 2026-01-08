@@ -215,7 +215,7 @@ const GeneralLedgerTable = ({
                             setFilterLogic: filterState.setFilterLogic,
                         }}
                         globalSearchProps={{
-                            defaultMode: 'equal',
+                            defaultMode: 'contains',
                             targets: generalLedgerGlobalSearchTargets,
                         }}
                         refreshActionProps={{

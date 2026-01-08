@@ -169,7 +169,7 @@ const CancelledCashCheckVoucherTable = ({
                         setFilterLogic: filterState.setFilterLogic,
                     }}
                     globalSearchProps={{
-                        defaultMode: 'equal',
+                        defaultMode: 'contains',
                         targets: cancelledCashCheckVoucherGlobalSearchTargets,
                     }}
                     refreshActionProps={{

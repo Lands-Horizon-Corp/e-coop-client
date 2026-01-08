@@ -166,7 +166,7 @@ const MemberCenterHistoryTable = ({
                         setFilterLogic: filterState.setFilterLogic,
                     }}
                     globalSearchProps={{
-                        defaultMode: 'equal',
+                        defaultMode: 'contains',
                         targets: memberCenterHistoryGlobalSearchTargets,
                     }}
                     refreshActionProps={{

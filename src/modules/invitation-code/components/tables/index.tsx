@@ -185,7 +185,7 @@ const InvitationCodeTable = ({
                             setFilterLogic: filterState.setFilterLogic,
                         }}
                         globalSearchProps={{
-                            defaultMode: 'equal',
+                            defaultMode: 'contains',
                             targets: InvitationCodeGlobalSearchTargets,
                         }}
                         refreshActionProps={{

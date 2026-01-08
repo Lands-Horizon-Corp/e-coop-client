@@ -174,7 +174,7 @@ const MemberLoanTableSummary = ({
                         setFilterLogic: filterState.setFilterLogic,
                     }}
                     globalSearchProps={{
-                        defaultMode: 'equal',
+                        defaultMode: 'contains',
                         targets: memberLoanTableSummaryGlobalSearchTargets,
                     }}
                     refreshActionProps={{

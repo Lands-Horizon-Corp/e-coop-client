@@ -159,6 +159,7 @@ const MemberGovernmentBenefitCreateUpdateForm = ({
                                 render={({ field }) => (
                                     <CountryCombobox
                                         {...field}
+                                        customTriggerClassName="bg-popover"
                                         defaultValue={field.value}
                                         disabled={isDisabled(field.name)}
                                         onChange={(country) => {
@@ -176,7 +177,7 @@ const MemberGovernmentBenefitCreateUpdateForm = ({
                                 name="name"
                                 render={({ field }) => (
                                     <GovernmentIdCombobox
-                                        className="col-span-full"
+                                        className="col-span-full bg-popover"
                                         disabled={!isoAlpha3}
                                         isoAlpha3={isoAlpha3}
                                         {...field}
@@ -205,6 +206,7 @@ const MemberGovernmentBenefitCreateUpdateForm = ({
                                 render={({ field }) => (
                                     <Input
                                         {...field}
+                                        className="bg-popover"
                                         disabled={isDisabled(field.name)}
                                         id={field.name}
                                         placeholder="Value or ID No"
@@ -221,7 +223,7 @@ const MemberGovernmentBenefitCreateUpdateForm = ({
                                 render={({ field }) => (
                                     <InputDate
                                         {...field}
-                                        className="block"
+                                        className="block bg-popover"
                                         disabled={isDisabled(field.name)}
                                         placeholder="Expiry Date"
                                         value={field.value ?? ''}
@@ -239,7 +241,7 @@ const MemberGovernmentBenefitCreateUpdateForm = ({
                                     content={field.value}
                                     disabled={isDisabled(field.name)}
                                     placeholder="Description..."
-                                    textEditorClassName="!max-w-none bg-background"
+                                    textEditorClassName="!max-w-none bg-popover"
                                 />
                             )}
                         />

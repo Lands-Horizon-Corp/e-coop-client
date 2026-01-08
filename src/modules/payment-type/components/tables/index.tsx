@@ -193,7 +193,7 @@ export const PaymentTypeTable = ({
                             setFilterLogic: filterState.setFilterLogic,
                         }}
                         globalSearchProps={{
-                            defaultMode: 'equal',
+                            defaultMode: 'contains',
                             targets: PaymentTypeGlobalSearchTargets,
                         }}
                         refreshActionProps={{

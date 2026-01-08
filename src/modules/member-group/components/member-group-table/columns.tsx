@@ -66,6 +66,7 @@ const MemberGroupTableColumns = (
                 <DataTableColumnHeader {...props} title="Name">
                     <ColumnActions {...props}>
                         <TextFilter<IMemberGroup>
+                            defaultMode="contains"
                             displayText="Name"
                             field="name"
                         />
@@ -91,6 +92,7 @@ const MemberGroupTableColumns = (
                 <DataTableColumnHeader {...props} title="Description">
                     <ColumnActions {...props}>
                         <TextFilter<IMemberGroup>
+                            defaultMode="contains"
                             displayText="Description"
                             field="description"
                         />

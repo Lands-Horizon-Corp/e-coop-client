@@ -121,19 +121,17 @@ const MemberGenderCreateUpdateForm = ({
                         />
                     </fieldset>
                 </fieldset>
-                {!genderId && (
-                    <FormFooterResetSubmit
-                        disableSubmit={!form.formState.isDirty}
-                        error={error}
-                        isLoading={isPending}
-                        onReset={() => {
-                            form.reset()
-                            reset()
-                        }}
-                        readOnly={formProps.readOnly}
-                        submitText={genderId ? 'Update' : 'Create'}
-                    />
-                )}
+                <FormFooterResetSubmit
+                    disableSubmit={!form.formState.isDirty}
+                    error={error}
+                    isLoading={isPending}
+                    onReset={() => {
+                        form.reset()
+                        reset()
+                    }}
+                    readOnly={formProps.readOnly}
+                    submitText={genderId ? 'Update' : 'Create'}
+                />
             </form>
         </Form>
     )

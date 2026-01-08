@@ -188,7 +188,7 @@ const TimesheetTable = ({
                         setFilterLogic: filterState.setFilterLogic,
                     }}
                     globalSearchProps={{
-                        defaultMode: 'equal',
+                        defaultMode: 'contains',
                         targets: timesheetGlobalSearchTargets,
                     }}
                     refreshActionProps={{

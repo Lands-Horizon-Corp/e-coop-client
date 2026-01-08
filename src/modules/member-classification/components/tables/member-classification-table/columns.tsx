@@ -70,6 +70,7 @@ const memberClassificationTableColumns = (
                 <DataTableColumnHeader {...props} title="Name">
                     <ColumnActions {...props}>
                         <TextFilter<IMemberClassification>
+                            defaultMode="contains"
                             displayText="Name"
                             field="name"
                         />
@@ -95,6 +96,7 @@ const memberClassificationTableColumns = (
                 <DataTableColumnHeader {...props} title="Description">
                     <ColumnActions {...props}>
                         <TextFilter<IMemberClassification>
+                            defaultMode="contains"
                             displayText="Description"
                             field="description"
                         />

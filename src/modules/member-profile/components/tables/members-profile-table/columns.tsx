@@ -32,10 +32,8 @@ import { IMemberProfile } from '../../..'
 
 export const memberGlobalSearchTargets: IGlobalSearchTargets<IMemberProfile>[] =
     [
-        { field: 'first_name', displayText: 'Name' },
         { field: 'full_name', displayText: 'Full Name' },
         { field: 'contact_number', displayText: 'Contact' },
-        { field: 'status', displayText: 'Verify Status' },
     ]
 
 export interface IMemberProfileTableActionComponentProp {
@@ -208,7 +206,7 @@ const MemberProfileTableColumns = (
                 <DataTableColumnHeader {...props} title="Suffix">
                     <ColumnActions {...props}>
                         <TextFilter
-                            defaultMode="equal"
+                            defaultMode="contains"
                             displayText="Suffix"
                             field="suffix"
                         />
@@ -232,7 +230,7 @@ const MemberProfileTableColumns = (
                 <DataTableColumnHeader {...props} title="PB">
                     <ColumnActions {...props}>
                         <TextFilter
-                            defaultMode="equal"
+                            defaultMode="contains"
                             displayText="Passbook"
                             field="passbook"
                         />
@@ -269,6 +267,7 @@ const MemberProfileTableColumns = (
                 <DataTableColumnHeader {...props} title="Contact Number">
                     <ColumnActions {...props}>
                         <TextFilter<IMemberProfile>
+                            defaultMode="contains"
                             displayText="Contact"
                             field="contact_number"
                         />
@@ -299,6 +298,7 @@ const MemberProfileTableColumns = (
                 <DataTableColumnHeader {...props} title="Gender">
                     <ColumnActions {...props}>
                         <TextFilter<IMemberProfile>
+                            defaultMode="contains"
                             displayText="Gender"
                             field="member_gender.name"
                         />
@@ -322,7 +322,7 @@ const MemberProfileTableColumns = (
                 <DataTableColumnHeader {...props} title="Member Type">
                     <ColumnActions {...props}>
                         <TextFilter
-                            defaultMode="equal"
+                            defaultMode="contains"
                             displayText="Member Type"
                             field="member_type.name"
                         />

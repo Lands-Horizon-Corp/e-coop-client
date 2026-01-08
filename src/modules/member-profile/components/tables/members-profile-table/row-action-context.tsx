@@ -208,9 +208,9 @@ export const MemberProfileAction = ({
 }: IMemberProfileTableActionProps) => {
     const {
         member,
-        isDeleting,
+        // isDeleting,
         handleEdit,
-        handleDelete,
+        // handleDelete,
         handleInfo,
         handleHistory,
         handleClose,
@@ -225,11 +225,11 @@ export const MemberProfileAction = ({
     return (
         <RowActionsGroup
             canSelect
-            onDelete={{
-                text: 'Delete',
-                isAllowed: !isDeleting,
-                onClick: handleDelete,
-            }}
+            // onDelete={{
+            //     text: 'Delete',
+            //     isAllowed: !isDeleting,
+            //     onClick: handleDelete,
+            // }}
             onEdit={{
                 text: 'Edit',
                 isAllowed: true,
@@ -438,9 +438,9 @@ export const MemberProfileRowContext = ({
 }: IMemberProfileRowContextProps) => {
     const {
         member,
-        isDeleting,
+        // isDeleting,
         handleEdit,
-        handleDelete,
+        // handleDelete,
         handleInfo,
         handleHistory,
         handleClose,
@@ -454,11 +454,11 @@ export const MemberProfileRowContext = ({
 
     return (
         <DataTableRowContext
-            onDelete={{
-                text: 'Delete',
-                isAllowed: !isDeleting,
-                onClick: handleDelete,
-            }}
+            // onDelete={{
+            //     text: 'Delete',
+            //     isAllowed: !isDeleting,
+            //     onClick: handleDelete,
+            // }}
             onEdit={{
                 text: 'Edit',
                 isAllowed: true,

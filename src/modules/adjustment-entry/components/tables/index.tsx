@@ -236,7 +236,7 @@ const AdjustmentEntryTable = ({
                         }}
                         // --- Global Search Props ---
                         globalSearchProps={{
-                            defaultMode: 'equal',
+                            defaultMode: 'contains',
                             targets: adjustmentEntryGlobalSearchTargets,
                         }}
                         // --- Refresh Action Props ---

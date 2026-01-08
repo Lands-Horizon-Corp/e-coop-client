@@ -198,7 +198,7 @@ const MemberDepartmentTable = ({
                         setFilterLogic: filterState.setFilterLogic,
                     }}
                     globalSearchProps={{
-                        defaultMode: 'equal',
+                        defaultMode: 'contains',
                         targets: memberDepartmentGlobalSearchTargets,
                     }}
                     refreshActionProps={{

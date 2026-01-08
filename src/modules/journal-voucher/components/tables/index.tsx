@@ -189,7 +189,7 @@ const JournalVoucherTable = ({
                             setFilterLogic: filterState.setFilterLogic,
                         }}
                         globalSearchProps={{
-                            defaultMode: 'equal',
+                            defaultMode: 'contains',
                             targets: journalVoucherGlobalSearchTargets,
                         }}
                         refreshActionProps={{

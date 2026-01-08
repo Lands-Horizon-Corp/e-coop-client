@@ -185,7 +185,7 @@ const BankTable = ({
                             setFilterLogic: filterState.setFilterLogic,
                         }}
                         globalSearchProps={{
-                            defaultMode: 'equal',
+                            defaultMode: 'contains',
                             targets: bankGlobalSearchTargets,
                         }}
                         refreshActionProps={{

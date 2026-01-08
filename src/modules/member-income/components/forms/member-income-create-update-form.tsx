@@ -132,6 +132,7 @@ const MemberIncomeCreateUpdateForm = ({
                             render={({ field }) => (
                                 <Input
                                     {...field}
+                                    className="bg-popover"
                                     disabled={isDisabled(field.name)}
                                     id={field.name}
                                     placeholder="Name"
@@ -145,6 +146,7 @@ const MemberIncomeCreateUpdateForm = ({
                             render={({ field }) => (
                                 <Input
                                     {...field}
+                                    className="bg-popover"
                                     disabled={isDisabled(field.name)}
                                     id={field.name}
                                     placeholder="Income Source"
@@ -159,6 +161,7 @@ const MemberIncomeCreateUpdateForm = ({
                                 render={({ field: { onChange, ...field } }) => (
                                     <CurrencyInput
                                         {...field}
+                                        className="bg-popover"
                                         disabled={isDisabled(field.name)}
                                         onValueChange={(newValue = '') => {
                                             onChange(newValue)
@@ -177,7 +180,7 @@ const MemberIncomeCreateUpdateForm = ({
                                 render={({ field }) => (
                                     <InputDate
                                         {...field}
-                                        className="block"
+                                        className="block bg-popover"
                                         disabled={isDisabled(field.name)}
                                         placeholder="Release Date"
                                         value={field.value ?? ''}
