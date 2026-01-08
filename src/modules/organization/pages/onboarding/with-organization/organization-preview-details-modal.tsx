@@ -68,9 +68,9 @@ const OrganizationPreviewModalDetails = ({
                             >
                                 <InfoIcon className=" size-5 text-primary " />
                             </Button>
-                            <h3 className="font-semibold text-[min(16px,2.5vw)] text-foreground">
+                            <p className="font-semibold text-[min(16px,2.5vw)] text-foreground">
                                 Details
-                            </h3>
+                            </p>
                         </CardTitle>
                     </CardHeader>
                     <CardContent>
@@ -104,9 +104,9 @@ const OrganizationPreviewModalDetails = ({
                             >
                                 <PhoneOutlineIcon className=" size-3 text-primary " />
                             </Button>
-                            <h3 className="font-semibold text-[min(16px,2.5vw)] text-foreground">
+                            <p className="font-semibold text-[min(16px,2.5vw)] text-foreground">
                                 Contact Information
-                            </h3>
+                            </p>
                         </CardTitle>
                     </CardHeader>
                     <CardContent>
