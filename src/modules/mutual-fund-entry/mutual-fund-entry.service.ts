@@ -12,6 +12,7 @@ import type {
     IMutualFundEntry,
     IMutualFundEntryRequest,
 } from '../mutual-fund-entry'
+import { mutualFundBaseKey } from '../mutual-fund/mutual-fund.service'
 
 const {
     apiCrudHooks,
@@ -99,6 +100,9 @@ export const useUpdateMutualFundEntryById = createMutationFactory<
     },
     invalidationFn: (args) => {
         updateMutationInvalidationFn(mutualFundEntryBaseKey, args)
+        args.queryClient.invalidateQueries({
+            queryKey: [mutualFundBaseKey, args.resultData.mutual_fund_id],
+        })
     },
 })
 

@@ -334,7 +334,7 @@ const BranchSettingsCurrencyForm = ({
                         reset?.()
                     }}
                     readOnly={formProps.readOnly}
-                    submitText="Update Branch Settings"
+                    submitText="Update Currency / Accounts"
                 />
             </form>
         </Form>

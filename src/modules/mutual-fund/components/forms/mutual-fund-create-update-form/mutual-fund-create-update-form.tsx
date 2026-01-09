@@ -107,6 +107,7 @@ const MutualFundCreateUpdateForm = ({
                 form.setValue('total_amount', data.total_amount || 0)
                 form.setValue('is_viewing_entries', true)
                 toast.success('Mutual fund entries generated successfully')
+                form.trigger()
             },
             onError: (error) => {
                 const errorMessage = serverRequestErrExtractor({ error })
