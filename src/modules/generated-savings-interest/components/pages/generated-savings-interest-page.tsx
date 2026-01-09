@@ -15,7 +15,12 @@ const GeneratedSavingsInterestPage = () => {
     const createModal = useModalState(false)
     const {
         currentAuth: {
-            user_organization: { branch_id },
+            user_organization: {
+                branch_id,
+                branch: {
+                    branch_setting: { tax_interest },
+                },
+            },
         },
     } = useAuthUserWithOrgBranch()
 
@@ -40,7 +45,14 @@ const GeneratedSavingsInterestPage = () => {
     return (
         <PageContainer>
             {/* TODO: Create GeneratedSavingsInterestCreateUpdateFormModal */}
-            <GeneratedSavingsInterestCreateFormModal {...createModal} />
+            <GeneratedSavingsInterestCreateFormModal
+                formProps={{
+                    defaultValues: {
+                        interest_tax_rate: tax_interest,
+                    },
+                }}
+                {...createModal}
+            />
             <GeneratedSavingsInterestTable
                 className="max-h-[90vh] min-h-[90vh] w-full"
                 toolbarProps={{

@@ -84,7 +84,9 @@ export const WithNewUserAccountSchema = z.discriminatedUnion(
 export const QuickCreateMemberProfileSchema = z
     .object({
         old_reference_id: z.string().optional(),
-        passbook: z.string().optional(),
+        passbook: z.coerce
+            .string<string>('Passbook is required')
+            .min(3, 'Minimum 3 Characters'),
 
         organization_id: entityIdSchema.optional(),
         branch_id: entityIdSchema.optional(),

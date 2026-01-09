@@ -58,6 +58,7 @@ const MemberProfileQuickCreateForm = ({
         defaultValues: {
             first_name: '',
             last_name: '',
+            passbook: '',
             status: 'for review',
             civil_status: 'single',
             is_mutual_fund_member: false,
@@ -514,6 +515,7 @@ const MemberProfileQuickCreateForm = ({
                     creation
                 </span>
                 <FormFooterResetSubmit
+                    className="sticky bottom-0"
                     disableSubmit={!form.formState.isDirty}
                     error={error}
                     isLoading={isPending}

@@ -89,6 +89,8 @@ export interface IBranchSettings extends IBaseEntityMeta {
     compassion_fund_account_id: TEntityId
     compassion_fund_account: IAccount
 
+    tax_interest: number // perc
+
     // account_for_overflow_id: TEntityId
     // account_for_overflow: IAccount
 

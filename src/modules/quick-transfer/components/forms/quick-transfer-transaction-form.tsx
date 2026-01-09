@@ -99,6 +99,28 @@ export const QuickTransferTransactionForm = ({
         },
     })
 
+    const handleReset = () => {
+        form.reset({
+            reference_number: userSettingOR,
+            description: '',
+            amount: undefined,
+            bank_id: undefined,
+            entry_date: undefined,
+            bank_reference_number: '',
+            proof_of_payment_media_id: undefined,
+            signature_media_id: undefined,
+            signature: undefined,
+            payment_type_id:
+                settings_payment_type_default_value_id || undefined,
+
+            // transaction-specific fields
+            member: undefined,
+            member_profile_id: undefined,
+            account: undefined,
+            account_id: undefined,
+        })
+    }
+
     const {
         mutate: createQuickTransaction,
         isPending: isQuickTransactionPending,
@@ -222,8 +244,11 @@ export const QuickTransferTransactionForm = ({
             <form className="min-w-[200px] relative" onSubmit={handleSubmit}>
                 <TransactionNoFoundBatch mode="deposit-withdrawal" />
                 <div className="flex flex-end">
-                    <CommandShortcut className="rounded-md bg-primary/20 p-1">
-                        <div className="text-[min(10px,1rem)] text-muted-foreground/80">
+                    <CommandShortcut
+                        className="rounded-md border text-foreground hover:bg-popover/70 p-1"
+                        onClick={() => handleReset()}
+                    >
+                        <div className="text-[min(10px,1rem)]">
                             ↵ select member | Esc - reset Form
                         </div>
                     </CommandShortcut>
@@ -568,7 +593,7 @@ export const QuickTransferTransactionForm = ({
                         readOnly
                     }
                     error={errorMessage}
-                    isLoading={isQuickTransactionPending || !isFormIsDirty}
+                    isLoading={isQuickTransactionPending}
                     onReset={() => form.reset()}
                     submitText={
                         <p className="">

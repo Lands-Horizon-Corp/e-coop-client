@@ -18,10 +18,7 @@ import { ContextMenuItem } from '@/components/ui/context-menu'
 import { DropdownMenuItem } from '@/components/ui/dropdown-menu'
 
 import { GeneratedSavingsInterestEntryTableModal } from '../../../../generated-savings-interest-entry/components/tables/generated-savings-interest-entry-table'
-import {
-    useDeleteGeneratedSavingsInterestById,
-    useUndoPrintGeneratedSavingsInterest,
-} from '../../../generated-savings-interest.service'
+import { useUndoPrintGeneratedSavingsInterest } from '../../../generated-savings-interest.service'
 import { IGeneratedSavingsInterest } from '../../../generated-savings-interest.types'
 import { GeneratedSavingsInterestCreateFormModal } from '../../forms/generate-savings-interest-create-form'
 import { GenerateSavingsInterestPostFormModal } from '../../forms/generate-savings-interest-post-form'
@@ -57,14 +54,14 @@ const useGeneratedSavingsInterestActions = ({
     >()
     const { onOpen } = useConfirmModalStore()
 
-    const {
-        isPending: isDeletingGeneratedSavingsInterest,
-        mutate: deleteGeneratedSavingsInterest,
-    } = useDeleteGeneratedSavingsInterestById({
-        options: {
-            onSuccess: onDeleteSuccess,
-        },
-    })
+    // const {
+    //     isPending: isDeletingGeneratedSavingsInterest,
+    //     mutate: deleteGeneratedSavingsInterest,
+    // } = useDeleteGeneratedSavingsInterestById({
+    //     options: {
+    //         onSuccess: onDeleteSuccess,
+    //     },
+    // })
 
     const {
         isPending: isUnprinting,
@@ -138,15 +135,15 @@ const useGeneratedSavingsInterestActions = ({
         })
     }
 
-    const handleDelete = () => {
-        onOpen({
-            title: 'Delete Generated Savings Interest',
-            description:
-                'Are you sure you want to delete this generated savings interest record?',
-            onConfirm: () =>
-                deleteGeneratedSavingsInterest(generatedSavingsInterest.id),
-        })
-    }
+    // const handleDelete = () => {
+    //     onOpen({
+    //         title: 'Delete Generated Savings Interest',
+    //         description:
+    //             'Are you sure you want to delete this generated savings interest record?',
+    //         onConfirm: () =>
+    //             deleteGeneratedSavingsInterest(generatedSavingsInterest.id),
+    //     })
+    // }
 
     const isPosted = !!generatedSavingsInterest.posted_date
     const isPrinted = !!generatedSavingsInterest.printed_date
@@ -157,7 +154,6 @@ const useGeneratedSavingsInterestActions = ({
 
     return {
         generatedSavingsInterest,
-        isDeletingGeneratedSavingsInterest,
         isUnprinting,
         canPrint,
         canUndoPrint,
@@ -168,7 +164,6 @@ const useGeneratedSavingsInterestActions = ({
         handlePost,
         handlePrint,
         handleUndoPrint,
-        handleDelete,
     }
 }
 
@@ -183,7 +178,8 @@ export const GeneratedSavingsInterestAction = ({
     onDeleteSuccess,
 }: IGeneratedSavingsInterestTableActionProps) => {
     const {
-        isDeletingGeneratedSavingsInterest,
+        generatedSavingsInterest,
+        // isDeletingGeneratedSavingsInterest,
         isUnprinting,
         canPrint,
         canUndoPrint,
@@ -193,18 +189,18 @@ export const GeneratedSavingsInterestAction = ({
         handlePost,
         handlePrint,
         handleUndoPrint,
-        handleDelete,
+        // handleDelete,
     } = useGeneratedSavingsInterestActions({ row, onDeleteSuccess })
 
     return (
         <>
             <RowActionsGroup
                 canSelect
-                onDelete={{
-                    text: 'Delete',
-                    isAllowed: !isDeletingGeneratedSavingsInterest,
-                    onClick: handleDelete,
-                }}
+                // onDelete={{
+                //     text: 'Delete',
+                //     isAllowed: !isDeletingGeneratedSavingsInterest,
+                //     onClick: handleDelete,
+                // }}
                 onEdit={{
                     text: 'Edit',
                     isAllowed: true,
@@ -226,7 +222,10 @@ export const GeneratedSavingsInterestAction = ({
                             <UndoIcon className="size-4 mr-2" />
                             Undo Print
                         </DropdownMenuItem>
-                        <DropdownMenuItem onClick={handleManageEntries}>
+                        <DropdownMenuItem
+                            disabled={!!generatedSavingsInterest.printed_date}
+                            onClick={handleManageEntries}
+                        >
                             <BoxesStackedIcon className="mr-2 size-4" />
                             Manage Entries
                         </DropdownMenuItem>
@@ -257,7 +256,8 @@ export const GeneratedSavingsInterestRowContext = ({
     onDeleteSuccess,
 }: IGeneratedSavingsInterestRowContextProps) => {
     const {
-        isDeletingGeneratedSavingsInterest,
+        // isDeletingGeneratedSavingsInterest,
+        generatedSavingsInterest,
         isUnprinting,
         canPrint,
         canUndoPrint,
@@ -267,17 +267,17 @@ export const GeneratedSavingsInterestRowContext = ({
         handlePost,
         handlePrint,
         handleUndoPrint,
-        handleDelete,
+        // handleDelete,
     } = useGeneratedSavingsInterestActions({ row, onDeleteSuccess })
 
     return (
         <>
             <DataTableRowContext
-                onDelete={{
-                    text: 'Delete',
-                    isAllowed: !isDeletingGeneratedSavingsInterest,
-                    onClick: handleDelete,
-                }}
+                // onDelete={{
+                //     text: 'Delete',
+                //     isAllowed: !isDeletingGeneratedSavingsInterest,
+                //     onClick: handleDelete,
+                // }}
                 onEdit={{
                     text: 'Edit',
                     isAllowed: true,
@@ -299,7 +299,10 @@ export const GeneratedSavingsInterestRowContext = ({
                             <UndoIcon className="mr-2 size-4" />
                             Undo Print
                         </ContextMenuItem>
-                        <ContextMenuItem onClick={handleManageEntries}>
+                        <ContextMenuItem
+                            disabled={!!generatedSavingsInterest.printed_date}
+                            onClick={handleManageEntries}
+                        >
                             <BoxesStackedIcon className="mr-2 size-4" />
                             Manage Entries
                         </ContextMenuItem>

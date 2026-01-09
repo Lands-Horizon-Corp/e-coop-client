@@ -107,6 +107,7 @@ const GeneratedSavingsInterestCreateForm = ({
                 form.setValue('total_interest', data.total_interest || 0)
                 form.setValue('total_tax', data.total_tax || 0)
                 toast.success('Interest entries generated successfully')
+                form.trigger()
             },
             onError: (error) => {
                 const errorMessage = serverRequestErrExtractor({ error })

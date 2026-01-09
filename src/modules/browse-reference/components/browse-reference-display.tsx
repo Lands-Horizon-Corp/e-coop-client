@@ -400,17 +400,23 @@ export const BrowseReferenceDisplay = ({
                         <InfoItem
                             icon={<MoneyIcon />}
                             label="Minimum Balance"
-                            value={currencyFormat(data.minimum_balance)}
+                            value={currencyFormat(data.minimum_balance, {
+                                currency: data.account.currency,
+                                showSymbol: !!data.account.currency,
+                            })}
                         />
                         <InfoItem
                             icon={<PercentIcon />}
                             label="Interest Rate"
-                            value={formatNumber(data.interest_rate)}
+                            value={`${formatNumber(data.interest_rate)} %`}
                         />
                         <InfoItem
                             icon={<MoneyBagIcon />}
                             label="Charges"
-                            value={currencyFormat(data.charges)}
+                            value={currencyFormat(data.charges, {
+                                currency: data.account.currency,
+                                showSymbol: !!data.account.currency,
+                            })}
                         />
                         <InfoItem
                             icon={<TrendingUpIcon />}

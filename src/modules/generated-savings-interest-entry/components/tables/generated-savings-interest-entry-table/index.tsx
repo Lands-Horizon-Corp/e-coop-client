@@ -11,6 +11,7 @@ import Fuse from 'fuse.js'
 
 import { formatNumber } from '@/helpers/number-utils'
 import { cn } from '@/helpers/tw-utils'
+import { useAuthUserWithOrgBranch } from '@/modules/authentication/authgentication.store'
 import { currencyFormat } from '@/modules/currency'
 import { IGeneratedSavingsInterestEntry } from '@/modules/generated-savings-interest-entry'
 import { GeneratedSavingsInterestEntryCreateUpdateFormModal } from '@/modules/generated-savings-interest-entry/components/forms/generated-savings-interest-entry-create-update-form'
@@ -219,6 +220,16 @@ const CreateEntryButton = ({
 }: CreateEntryButtonProps) => {
     const modalState = useModalState()
 
+    const {
+        currentAuth: {
+            user_organization: {
+                branch: {
+                    branch_setting: { tax_interest },
+                },
+            },
+        },
+    } = useAuthUserWithOrgBranch()
+
     return (
         <>
             {!readOnly && (
@@ -237,6 +248,7 @@ const CreateEntryButton = ({
                     defaultValues: {
                         generated_savings_interest_id:
                             generatedSavingsInterestId,
+                        interest_tax: tax_interest,
                     },
                     onSuccess: () => {
                         modalState.onOpenChange(false)

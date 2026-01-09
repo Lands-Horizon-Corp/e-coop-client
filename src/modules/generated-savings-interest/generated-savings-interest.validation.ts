@@ -88,7 +88,9 @@ export type TGeneratedSavingsInterestSchema = z.infer<
 export const GenerateSavingsInterestPostSchema = z.object({
     check_voucher_number: z.string().optional().nullable(),
 
-    post_account_id: EntityIdSchema('Post Account is required'),
+    post_account_id: EntityIdSchema('Post Account is required')
+        .optional()
+        .nullable(),
     post_account: z.any(),
 
     entry_date: stringDateWithTransformSchema,

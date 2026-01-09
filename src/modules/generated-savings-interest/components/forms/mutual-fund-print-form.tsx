@@ -152,7 +152,6 @@ const GeneratedSavingsInterestPrintForm = ({
                 </fieldset>
 
                 <FormFooterResetSubmit
-                    disableSubmit={!form.formState.isDirty}
                     error={error}
                     isLoading={isPending}
                     onReset={() => {

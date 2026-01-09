@@ -16,6 +16,7 @@ import {
     HandCoinsIcon,
     InfoIcon,
     MoneyCheckIcon,
+    PercentIcon,
     ReceiptIcon,
     UserIcon,
 } from '@/components/icons'
@@ -102,7 +103,6 @@ const BranchSettingsForm = ({
             check_voucher_use_date_or: false,
 
             loan_applied_equal_to_balance: true,
-
             ...formProps.defaultValues,
         },
     })
@@ -208,6 +208,35 @@ const BranchSettingsForm = ({
                             )}
                         />
                     </div>
+                    <Separator />
+
+                    <div className="space-y-4 p-4 bg-secondary/60 dark:bg-popover rounded-xl">
+                        <div className="flex items-center gap-3">
+                            <div className="size-fit rounded-full bg-blue-100 p-2 dark:bg-blue-900/20">
+                                <PercentIcon className="size-5 text-blue-600 dark:text-blue-400" />
+                            </div>
+                            <div>
+                                <h3 className="font-semibold">Tax Interest</h3>
+                                <p className="text-xs text-muted-foreground">
+                                    Configure tax interest
+                                </p>
+                            </div>
+                        </div>
+
+                        <FormFieldWrapper
+                            control={form.control}
+                            name="tax_interest"
+                            render={({ field }) => (
+                                <InputGroup>
+                                    <InputGroupInput {...field} />
+                                    <InputGroupAddon align="inline-end">
+                                        <InputGroupText>%</InputGroupText>
+                                    </InputGroupAddon>
+                                </InputGroup>
+                            )}
+                        />
+                    </div>
+
                     <Separator />
 
                     {/* Anual Divisor */}

@@ -10,7 +10,7 @@ import { cn } from '@/helpers/tw-utils'
 import { AccountPicker } from '@/modules/account'
 
 import FormFooterResetSubmit from '@/components/form-components/form-footer-reset-submit'
-import { WarningFillIcon } from '@/components/icons'
+import { BadgeExclamationFillIcon, WarningFillIcon } from '@/components/icons'
 import Modal, { IModalProps } from '@/components/modals/modal'
 import { Form } from '@/components/ui/form'
 import FormFieldWrapper from '@/components/ui/form-field-wrapper'
@@ -51,7 +51,6 @@ const GenerateSavingsInterestPostForm = ({
         reValidateMode: 'onChange',
         defaultValues: {
             check_voucher_number: '',
-            post_account_id: undefined,
             entry_date: toInputDateString(new Date()),
             ...formProps.defaultValues,
         },
@@ -111,7 +110,7 @@ const GenerateSavingsInterestPostForm = ({
                 >
                     <FormFieldWrapper
                         control={form.control}
-                        label="Account *"
+                        label="Account"
                         name="post_account_id"
                         render={({ field }) => (
                             <AccountPicker
@@ -128,6 +127,17 @@ const GenerateSavingsInterestPostForm = ({
                             />
                         )}
                     />
+
+                    <div className="flex items-start gap-2 px-3 py-2 rounded text-sm bg-muted/10 text-muted-foreground/70 border-border border">
+                        <BadgeExclamationFillIcon className="size-4 text-blue-400/70 shrink-0 mt-0.5" />
+                        <span className="text-xs font-medium">
+                            This post account will be credited or debited based
+                            on the corresponding ledger entry. When savings
+                            interest is generated, the funds are deducted from
+                            this account and credited to the generated savings
+                            interest account. (OPTIONAL)
+                        </span>
+                    </div>
 
                     <FormFieldWrapper
                         control={form.control}
@@ -171,7 +181,7 @@ const GenerateSavingsInterestPostForm = ({
                 </div>
 
                 <FormFooterResetSubmit
-                    disableSubmit={!form.formState.isDirty}
+                    // disableSubmit={!form.formState.isDirty}
                     error={error}
                     isLoading={isPending}
                     onReset={() => {
