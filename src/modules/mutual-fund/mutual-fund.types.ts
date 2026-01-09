@@ -24,6 +24,9 @@ export interface IMutualFund extends IBaseEntityMeta {
     member_profile?: IMemberProfile
     mutual_fund_table_id?: TEntityId
 
+    account: IAccount
+    account_id: TEntityId
+
     mutual_fund_table?: IMutualFundTable
     additional_members?: IMutualFundAdditionalMembers[]
 
@@ -54,6 +57,8 @@ export type IMutualFundRequest = z.infer<typeof MutualFundSchema>
 export type IMutualFundViewRequest = z.infer<typeof MutualFundViewSchema>
 
 export interface IMutualFundView {
+    mutual_fund: IMutualFund
+
     mutual_fund_entries?: IMutualFundEntry[]
     total_amount: number
 }

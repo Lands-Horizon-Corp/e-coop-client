@@ -18,6 +18,8 @@ import {
 import { ContextMenuItem } from '@/components/ui/context-menu'
 import { DropdownMenuItem } from '@/components/ui/dropdown-menu'
 
+import { TEntityId } from '@/types'
+
 import {
     useDeleteMutualFundById,
     useUndoPrintMutualFund,
@@ -335,7 +337,7 @@ export const MutualFundTableActionManager = () => {
                     open={state.isOpen}
                     tableProps={{
                         readOnly: !!state.defaultValues?.posted_date,
-                        mutualFundId: state.id,
+                        mutualFundId: state.defaultValues?.id as TEntityId,
                     }}
                     title={`Manage Entries ${state.defaultValues?.name ? `for ${state.defaultValues?.name}` : ''}`}
                 />

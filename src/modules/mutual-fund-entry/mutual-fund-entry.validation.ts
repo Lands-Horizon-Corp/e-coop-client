@@ -11,9 +11,7 @@ export const MutualFundEntrySchema = z.object({
     account_id: EntityIdSchema('Account is required'),
     account: z.any(),
 
-    amount: z.coerce
-        .number()
-        .min(0, 'Amount must be greater than or equal to 0'),
+    amount: z.coerce.number().min(1, 'Amount must be greater than 0'),
 })
 
 export type TMutualFundEntrySchema = z.infer<typeof MutualFundEntrySchema>

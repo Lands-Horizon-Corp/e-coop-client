@@ -15,6 +15,7 @@ import { currencyFormat } from '@/modules/currency'
 import { IMutualFundEntry } from '@/modules/mutual-fund-entry'
 import { MutualFundEntryCreateUpdateFormModal } from '@/modules/mutual-fund-entry/components/forms/mutual-fund-entry-create-update-form'
 import { useGetMutualFundEntry } from '@/modules/mutual-fund/mutual-fund.service'
+import { IMutualFund } from '@/modules/mutual-fund/mutual-fund.types'
 import {
     type ColumnDef,
     Row,
@@ -200,10 +201,10 @@ const TableBodyRow = ({
 
 const CreateEntryButton = ({
     readOnly,
-    mutualFundId,
+    mutualFund,
 }: {
     readOnly?: boolean
-    mutualFundId: TEntityId
+    mutualFund: IMutualFund
 }) => {
     const modalState = useModalState()
 
@@ -221,8 +222,11 @@ const CreateEntryButton = ({
             )}
             <MutualFundEntryCreateUpdateFormModal
                 formProps={{
-                    defaultValues: {},
-                    mutualFundId,
+                    defaultValues: {
+                        account: mutualFund.account,
+                        account_id: mutualFund.account_id,
+                    },
+                    mutualFundId: mutualFund?.id,
                     onSuccess: () => {
                         modalState.onOpenChange(false)
                     },
@@ -243,7 +247,10 @@ export const MutualFundEntryTable = ({
     const [searchQuery, setSearchQuery] = useState('')
 
     const { data, isLoading, isFetching, refetch } = useGetMutualFundEntry({
-        mutualFundId,
+        mutualFundId: mutualFundId,
+        options: {
+            enabled: !!mutualFundId,
+        },
     })
 
     const entries = useMemo(
@@ -367,16 +374,24 @@ export const MutualFundEntryTable = ({
                     <div className="flex items-center gap-2">
                         <div className="flex items-center gap-2 px-4 py-2 rounded-lg bg-primary/10 border border-primary/70">
                             <span className="text-sm font-medium text-muted-foreground">
-                                Total Interest:
+                                Total Amount:
                             </span>
                             <span className="text-sm font-semibold text-primary">
-                                {currencyFormat(totalAmount)}
+                                {currencyFormat(totalAmount, {
+                                    currency:
+                                        data?.mutual_fund.account?.currency,
+                                    showSymbol:
+                                        !!data?.mutual_fund?.account?.currency,
+                                })}
                             </span>
                         </div>
-                        <CreateEntryButton
-                            mutualFundId={mutualFundId}
-                            readOnly={readOnly}
-                        />
+                        {data?.mutual_fund && (
+                            <CreateEntryButton
+                                mutualFund={data.mutual_fund}
+                                readOnly={readOnly}
+                            />
+                        )}
+
                         <Button
                             disabled={isFetching}
                             onClick={() => refetch()}

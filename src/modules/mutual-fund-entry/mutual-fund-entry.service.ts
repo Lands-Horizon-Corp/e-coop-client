@@ -66,6 +66,12 @@ export const useDeleteMutualFundEntryById = createMutationFactory<
         args.queryClient.invalidateQueries({
             queryKey: [mutualFundEntryBaseKey],
         })
+        args.queryClient.invalidateQueries({
+            queryKey: [mutualFundEntryBaseKey],
+        })
+        args.queryClient.invalidateQueries({
+            queryKey: [mutualFundBaseKey],
+        })
         deleteMutationInvalidationFn(mutualFundEntryBaseKey, args)
     },
 })
@@ -80,6 +86,15 @@ export const useCreateMutualFundEntry = createMutationFactory<
             payload,
             url: `${mutualFundEntryAPIRoute}/mutual-fund/${mutualFundId}`,
         }),
+    invalidationFn: (args) => {
+        args.queryClient.invalidateQueries({
+            queryKey: [
+                mutualFundBaseKey,
+                args.resultData.mutual_fund_id,
+                'mutual-fund-entry',
+            ],
+        })
+    },
     defaultInvalidates: [
         [mutualFundEntryBaseKey, 'paginated'],
         [mutualFundEntryBaseKey, 'all'],
@@ -102,6 +117,13 @@ export const useUpdateMutualFundEntryById = createMutationFactory<
         updateMutationInvalidationFn(mutualFundEntryBaseKey, args)
         args.queryClient.invalidateQueries({
             queryKey: [mutualFundBaseKey, args.resultData.mutual_fund_id],
+        })
+        args.queryClient.invalidateQueries({
+            queryKey: [
+                mutualFundBaseKey,
+                args.resultData.mutual_fund_id,
+                'mutual-fund-entry',
+            ],
         })
     },
 })
