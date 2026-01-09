@@ -114,15 +114,11 @@ const TransactionMemberScanner = ({
             {/* Left: Scanner Column */}
             {!selectedMember && (
                 <div className="flex flex-col flex-shrink-0 justify-center items-center">
-                    {/* Inner Scanner Wrapper: Removed mr-1/mb-1. Added consistent p-2 for spacing. */}
-                    <div className="w-full  flex justify-center">
+                    <div className="w-full flex justify-center">
                         <div
                             className={cn(
-                                // Apply styles for the active scanner state
-                                startScan && !selectedMember
-                                    ? 'size-40'
-                                    : // Apply padding for the static placeholder state
-                                      'p-4'
+                                '',
+                                startScan && !selectedMember ? 'size-48' : 'p-4'
                             )}
                         >
                             {startScan && !selectedMember ? (
@@ -138,8 +134,7 @@ const TransactionMemberScanner = ({
                                     }}
                                 />
                             ) : (
-                                // Placeholder box: use size-full and flex-1 to occupy space consistently
-                                <div className="flex flex-col size-full aspect-square items-center justify-center text-center gap-y-2">
+                                <div className="flex flex-col size-40 aspect-square items-center justify-center text-center gap-y-2">
                                     <ScanLineIcon className=" text-muted-foreground/70 size-[40%]" />
                                     <Button
                                         disabled={
@@ -164,7 +159,6 @@ const TransactionMemberScanner = ({
             )}
 
             {/* Right: Content Column */}
-            {/* Use 'flex-1 min-w-0' to make it take up the rest of the space in xl:flex-row */}
             <div className="flex flex-col flex-1 h-full">
                 {isPending && decodedMemberProfile !== undefined && (
                     <p className="text-muted-foreground/70 flex items-center">

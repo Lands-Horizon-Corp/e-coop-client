@@ -1,4 +1,5 @@
 import { useForm } from 'react-hook-form'
+import { toast } from 'sonner'
 import z from 'zod'
 
 import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
@@ -64,7 +65,7 @@ const TransactionReverseRequestForm = ({
         })
 
     const {
-        mutate: requestReverse,
+        mutateAsync: requestReverse,
         error: rawError,
         isPending,
         isSuccess,
@@ -76,10 +77,16 @@ const TransactionReverseRequestForm = ({
     })
 
     const onSubmit = form.handleSubmit(async (formData) => {
-        requestReverse({
-            user_organization_id: formData.user_organization_id,
-            password: formData.password,
-        })
+        toast.promise(
+            requestReverse({
+                user_organization_id: formData.user_organization_id,
+                password: formData.password,
+            }),
+            {
+                loading: 'verifying user...',
+                success: 'Success verification.',
+            }
+        )
     }, handleFocusError)
 
     const error = serverRequestErrExtractor({ error: rawError })

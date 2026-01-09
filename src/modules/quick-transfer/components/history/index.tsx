@@ -16,12 +16,12 @@ import { PaginationState } from '@tanstack/react-table'
 import { useHotkeys } from 'react-hotkeys-hook'
 
 import RefreshButton from '@/components/buttons/refresh-button'
-import { HistoryIcon } from '@/components/icons'
+import { HistoryIcon, RenderIcon, TIcon } from '@/components/icons'
 import ImageDisplay from '@/components/image-display'
 import MiniPaginationBar from '@/components/pagination-bars/mini-pagination-bar'
 import SheetModal from '@/components/sheet/sheet'
+import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
-import { ScrollArea } from '@/components/ui/scroll-area'
 import { Separator } from '@/components/ui/separator'
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
@@ -192,8 +192,9 @@ const TransactionDepositWithdrawCardListItem = ({
     onClick,
 }: TransactionDepositWithdrawCardListItemProps) => {
     return (
-        <div className="w-full space-x-2 cursor-pointer flex flex-row  items-center p-3 rounded-xl bg-muted/30">
-            <div className="icon">
+        <div className="w-full min-w-0 max-w-full space-x-2 cursor-pointer flex flex-row items-center p-3 rounded-xl bg-muted/30">
+            {/* LEFT ICON */}
+            <div className="flex-none">
                 <Sheet>
                     <SheetTrigger asChild className="text-xs">
                         <LedgerSourceBadge
@@ -202,28 +203,48 @@ const TransactionDepositWithdrawCardListItem = ({
                             source={item.source}
                         />
                     </SheetTrigger>
-                    <SheetContent className="min-w-full max-w-[400px] md:min-w-[500px] overflow-y-auto ecoop-scroll p-0 border m-5 pt-4 rounded-lg ">
+
+                    <SheetContent className="min-w-full max-w-[400px] md:min-w-[500px] overflow-y-auto ecoop-scroll p-0 border m-5 pt-4 rounded-lg">
                         <TransactionDetailsCard transaction={item} />
                     </SheetContent>
                 </Sheet>
             </div>
-            <div className="content grow">
-                <p onClick={() => onClick?.()}>
-                    {item.member_profile?.full_name || 'Unknown Member'}
-                    {item.reference_number !== '' && (
+
+            {/* CENTER CONTENT */}
+            <div className="grow min-w-0">
+                <div
+                    className="flex items-center gap-2 min-w-0"
+                    onClick={() => onClick?.()}
+                >
+                    {/* TRUNCATED NAME */}
+                    <p className="flex-1 min-w-0 truncate">
+                        {item.member_profile?.full_name || 'Unknown Member'}
+                    </p>
+
+                    {/* ACCOUNT BADGE */}
+                    <Badge className="shrink-0">
+                        <RenderIcon
+                            className="mr-1"
+                            icon={item.account.icon as TIcon}
+                        />
+                        {item.account.name}
+                    </Badge>
+                </div>
+
+                {item.reference_number && (
+                    <div className="mt-1">
                         <span className="text-xs rounded-sm bg-secondary px-1.5 py-1">
                             - {item.reference_number}
                         </span>
-                    )}
-                    <span className="italic text-xs">{item.source}</span>
+                    </div>
+                )}
+                <p className="text-[11px] text-muted-foreground mt-1">
+                    {toReadableDateTime(item.created_at)}
                 </p>
-                <div className="flex">
-                    <p className="text-[11px] text-muted-foreground">
-                        {toReadableDateTime(item.created_at)}
-                    </p>
-                </div>
             </div>
-            <div className="actions text-xs text-end">
+
+            {/* RIGHT AMOUNT */}
+            <div className="flex-none shrink-0 text-xs min-w-fit text-right">
                 <p className="font-bold text-primary dark:text-primary">
                     {currencyFormat(item.balance, {
                         currency: item.currency,
@@ -283,26 +304,24 @@ const CurrentTransactionWithdrawHistoryData = ({
     })
 
     return (
-        <>
-            <ScrollArea className="">
-                <div className="w-full flex items-center justify-end">
-                    <RefreshButton
-                        className="bg-transparent size-7 "
-                        isLoading={isLoadingCurrentTransaction}
-                        onClick={refetchCurrentTransaction}
-                    />
-                </div>
-                <div className="w-full flex flex-col h-[80vh] space-y-1.5">
-                    {isNoCurrentTransaction && <TransactionNoFound />}
-                    {currentGeneralLedger?.data.map((transaction) => (
-                        <div key={transaction.id}>
-                            <TransactionDepositWithdrawCardListItem
-                                item={transaction}
-                            />
-                        </div>
-                    ))}
-                </div>
-            </ScrollArea>
+        <div className="min-w-0 max-w-full ">
+            <div className="w-full flex items-center justify-end">
+                <RefreshButton
+                    className="bg-transparent size-7"
+                    isLoading={isLoadingCurrentTransaction}
+                    onClick={refetchCurrentTransaction}
+                />
+            </div>
+            <div className="w-full overflow-auto ecoop-scroll min-w-full flex flex-col h-[80vh] space-y-1.5">
+                {isNoCurrentTransaction && <TransactionNoFound />}
+                {currentGeneralLedger?.data.map((transaction) => (
+                    <div key={transaction.id}>
+                        <TransactionDepositWithdrawCardListItem
+                            item={transaction}
+                        />
+                    </div>
+                ))}
+            </div>
             <div className="sticky bottom-0 left-0 right-0 bg-background pt-2">
                 <MiniPaginationBar
                     disablePageMove={isFetchingCurrentTransaction}
@@ -326,7 +345,7 @@ const CurrentTransactionWithdrawHistoryData = ({
                     }}
                 />
             </div>
-        </>
+        </div>
     )
 }
 type CurrentTransactionWithdrawHistoryProps = {
@@ -360,13 +379,13 @@ const CurrentTransactionWithdrawHistory = ({
                 History
             </Button>
             <SheetModal
-                className=" min-w-full max-w-[500px] md:min-w-[600px] "
+                className=" max-w-[500px] md:min-w-[600px] "
                 onOpenChange={setOnOpen}
                 open={onOpen}
             >
-                <div>
-                    <div className="overflow-y-auto ecoop-scroll w-full p-5">
-                        <Tabs className="" defaultValue={modeState}>
+                <div className="">
+                    <div className="overflow-y-auto min-w-0 ecoop-scroll w-full p-5">
+                        <Tabs className=" min-w-0" defaultValue={modeState}>
                             <div className="items-center flex h-full ">
                                 <TabsList className="bg-muted/30 relative rounded-lg p-1 h-full">
                                     <TabsTrigger
@@ -385,7 +404,7 @@ const CurrentTransactionWithdrawHistory = ({
                                     </TabsTrigger>
                                 </TabsList>
                             </div>
-                            <TabsContent value={modeState}>
+                            <TabsContent className="!min-w-0" value={modeState}>
                                 <CurrentTransactionWithdrawHistoryData
                                     mode={mode}
                                     modeState={modeState}

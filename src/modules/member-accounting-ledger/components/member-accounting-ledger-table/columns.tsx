@@ -18,8 +18,8 @@ import TextFilter from '@/components/data-table/data-table-filters/text-filter'
 
 export const memberGeneralLedgerGlobalSearchTargets: IGlobalSearchTargets<IMemberAccountingLedger>[] =
     [
-        { field: 'member_profile_id', displayText: 'Member Profile ID' },
-        { field: 'account_id', displayText: 'Account ID' },
+        { field: 'member_profile.full_name', displayText: 'Member Profile ID' },
+        { field: 'account.name', displayText: 'Account ID' },
     ]
 
 export interface IMemberAccountingLedgerTableActionComponentProp {
@@ -56,6 +56,7 @@ const MemberAccountingLedgerTableColumns = (
             <DataTableColumnHeader {...props} title="Account Title">
                 <ColumnActions {...props}>
                     <TextFilter<IMemberAccountingLedger>
+                        defaultMode="contains"
                         displayText="Account Title/Name"
                         field="account.name"
                     />

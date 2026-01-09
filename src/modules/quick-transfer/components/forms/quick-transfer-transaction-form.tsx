@@ -22,20 +22,20 @@ import {
 } from '@/modules/quick-transfer'
 import {
     PaymentTypeCombobox,
-    // TransactionAmountField,
     TransactionModalJointMember,
     TransactionNoFoundBatch,
     TransactionReferenceNumber,
     useCreateQuickTransactionPayment,
 } from '@/modules/transaction'
+import TransactionReverseRequestFormModal from '@/modules/transaction/components/modals/transaction-modal-request-reverse'
 import { useGetUserSettings } from '@/modules/user-profile'
+import { useTransactionReverseSecurityStore } from '@/store/transaction-reverse-security-store'
 import { useDepositWithdrawStore } from '@/store/transaction/deposit-withdraw-store'
 import { useHotkeys } from 'react-hotkeys-hook'
 
 import FormFooterResetSubmit from '@/components/form-components/form-footer-reset-submit'
-// import { useShortcutContext } from '@/components/shorcuts/general-shortcuts-wrapper'
+import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
-import { CommandShortcut } from '@/components/ui/command'
 import { Form } from '@/components/ui/form'
 import FormFieldWrapper from '@/components/ui/form-field-wrapper'
 import ImageField from '@/components/ui/image-field'
@@ -65,13 +65,15 @@ export const QuickTransferTransactionForm = ({
     defaultValues,
     disabledFields,
 }: TransactionEntryFormProps) => {
-    // const { setActiveScope } = useShortcutContext()
     const {
         userSettingOR,
         settings_accounting_withdraw_default_value,
         settings_accounting_deposit_default_value,
         settings_payment_type_default_value_id,
     } = useGetUserSettings()
+
+    const { onOpenReverseRequestAction, isOpen, onClose, modalData } =
+        useTransactionReverseSecurityStore()
 
     const defaultAccount =
         mode === 'withdraw'
@@ -139,20 +141,34 @@ export const QuickTransferTransactionForm = ({
     })
     const { data: paymentType } = useGetAll()
 
+    const handleSubmitForm = (data: TQuickWithdrawSchemaFormValues) => {
+        const entryDate = data.entry_date
+            ? new Date(data.entry_date).toISOString()
+            : undefined
+
+        createQuickTransaction({
+            data: {
+                ...data,
+                entry_date: entryDate,
+            },
+            mode: mode,
+        })
+    }
+
     const handleSubmit = form.handleSubmit(
         (data: TQuickWithdrawSchemaFormValues, event) => {
             event?.preventDefault()
-            const entryDate = data.entry_date
-                ? new Date(data.entry_date).toISOString()
-                : undefined
 
-            createQuickTransaction({
-                data: {
-                    ...data,
-                    entry_date: entryDate,
-                },
-                mode: mode,
-            })
+            if (data.amount < 0) {
+                console.log('data amount is negative')
+                onOpenReverseRequestAction({
+                    onSuccess: () => {
+                        handleSubmitForm(data)
+                    },
+                })
+                return
+            }
+            handleSubmitForm(data)
         }
     )
 
@@ -203,31 +219,35 @@ export const QuickTransferTransactionForm = ({
         }
     )
 
+    const handleResetAll = () => {
+        form.reset()
+        setSelectedMember(null)
+        form.reset({
+            reference_number: userSettingOR,
+            description: '',
+            amount: undefined,
+            bank_id: undefined,
+            entry_date: undefined,
+            bank_reference_number: '',
+            proof_of_payment_media_id: undefined,
+            signature_media_id: undefined,
+            signature: undefined,
+            payment_type_id:
+                settings_payment_type_default_value_id || undefined,
+
+            // transaction-specific fields
+            member: null,
+            member_profile_id: '',
+            account: defaultAccount,
+            account_id: defaultAccount?.id || undefined,
+        })
+    }
+
     useHotkeys(
         'esc',
         (e) => {
             e.preventDefault()
-            form.reset()
-            setSelectedMember(null)
-            form.reset({
-                reference_number: userSettingOR,
-                description: '',
-                amount: undefined,
-                bank_id: undefined,
-                entry_date: undefined,
-                bank_reference_number: '',
-                proof_of_payment_media_id: undefined,
-                signature_media_id: undefined,
-                signature: undefined,
-                payment_type_id:
-                    settings_payment_type_default_value_id || undefined,
-
-                // transaction-specific fields
-                member: null,
-                member_profile_id: '',
-                account: defaultAccount,
-                account_id: defaultAccount?.id || undefined,
-            })
+            handleResetAll()
         },
         {
             scopes: [SHORTCUT_SCOPES.QUICK_TRANSFER],
@@ -241,17 +261,30 @@ export const QuickTransferTransactionForm = ({
 
     return (
         <Form {...form}>
+            <TransactionReverseRequestFormModal
+                formProps={{
+                    onSuccess: () => {
+                        modalData?.onSuccess?.()
+                    },
+                }}
+                onOpenChange={onClose}
+                open={isOpen}
+                title={modalData?.title || 'Request Reverse Transaction'}
+            />
             <form className="min-w-[200px] relative" onSubmit={handleSubmit}>
                 <TransactionNoFoundBatch mode="deposit-withdrawal" />
-                <div className="flex flex-end">
-                    <CommandShortcut
-                        className="rounded-md border text-foreground hover:bg-popover/70 p-1"
-                        onClick={() => handleReset()}
+                <div className="flex justify-end w-full ">
+                    <Button
+                        className="text-[min(10px,1rem)] "
+                        onClick={(e) => {
+                            e.preventDefault()
+                            handleResetAll()
+                        }}
+                        size={'sm'}
+                        variant="outline"
                     >
-                        <div className="text-[min(10px,1rem)]">
-                            ↵ select member | Esc - reset Form
-                        </div>
-                    </CommandShortcut>
+                        ↵ select member | Esc - reset Form
+                    </Button>
                 </div>
                 <div className="grid grid-cols-1 gap-2 lg:grid-cols-2">
                     {/* Member */}

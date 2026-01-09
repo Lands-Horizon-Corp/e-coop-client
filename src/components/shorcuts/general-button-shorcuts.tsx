@@ -127,19 +127,21 @@ const GeneralButtonShortcuts = ({ className }: { className?: string }) => {
             </Button>
             <Modal
                 className="min-w-fit lg:min-w-[1200px] h-fit bg-background border-border text-foreground p-6 -space-y-3 flex flex-col"
-                descriptionClassName="text-sm text-center text-muted-foreground"
+                description="Here are some useful keyboard shortcuts to help you navigate and perform actions quickly."
+                descriptionClassName="text-sm text-start text-muted-foreground"
                 onOpenChange={onOpenChange}
                 open={open}
                 title="All Keyboard Shortcuts"
-                titleClassName="text-lg font-semibold text-center"
+                titleClassName="text-lg font-semibold"
             >
-                <div className="-translate-y-5">
-                    <GenericSearchInput
-                        placeholder="search command key"
-                        setSearchTerm={setSearchTerm}
-                    />
+                <div className="">
                     {/* Main Content Area - Columns */}
-                    <div className="flex-1 bg-sidebar/50 mt-3 p-5 rounded-xl grid grid-cols-1 lg:grid-cols-3 gap-3 ecoop-scroll overflow-y-auto">
+                    <div className="flex-1 bg-sidebar/50 mt-3 px-5 rounded-xl grid grid-cols-1 lg:grid-cols-3 gap-3 ecoop-scroll overflow-y-auto">
+                        <GenericSearchInput
+                            className=" col-span-3 w-full"
+                            placeholder="search command key"
+                            setSearchTerm={setSearchTerm}
+                        />{' '}
                         {!filteredGroupShorcuts.length && (
                             <Empty className="sticky top-0 col-span-3">
                                 <EmptyHeader>
