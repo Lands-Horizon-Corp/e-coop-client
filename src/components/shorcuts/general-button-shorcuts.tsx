@@ -127,7 +127,6 @@ const GeneralButtonShortcuts = ({ className }: { className?: string }) => {
             </Button>
             <Modal
                 className="min-w-fit lg:min-w-[1200px] h-fit bg-background border-border text-foreground p-6 -space-y-3 flex flex-col"
-                description="Here are some useful keyboard shortcuts to help you navigate and perform actions quickly."
                 descriptionClassName="text-sm text-center text-muted-foreground"
                 onOpenChange={onOpenChange}
                 open={open}

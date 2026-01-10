@@ -6,18 +6,11 @@ import {
     useState,
 } from 'react'
 
-import {
-    getLocalStorage,
-    removeLocalStorage,
-    setLocalStorage,
-    useLocalStorage,
-} from '@/hooks/use-localstorage'
-
 export type Theme = 'dark' | 'light' | 'system'
 export type ResolvedTheme = 'dark' | 'light'
 export type AnimationVariant = 'circle' | 'circle-blur' | 'polygon' | 'gif'
 
-export type CustomThemeColors = {
+type CustomThemeColors = {
     light: Record<string, string>
     dark: Record<string, string>
 }
@@ -52,8 +45,8 @@ type ThemeProviderState = {
 }
 
 const initialState: ThemeProviderState = {
-    theme: 'dark', // Changed from 'system' to 'dark'
-    resolvedTheme: 'dark', // Changed from 'light' to 'dark'
+    theme: 'system',
+    resolvedTheme: 'light',
     customTheme: 'Default',
     animationVariant: 'circle',
     mouseTrailEnabled: true,
@@ -75,57 +68,61 @@ const ThemeProviderContext = createContext<ThemeProviderState>(initialState)
 
 export const ThemeProvider = ({
     children,
-    defaultTheme = 'dark', // Changed from 'system' to 'dark'
+    defaultTheme = 'system',
     storageKey = 'ecoop-system-theme',
     ...props
 }: ThemeProviderProps) => {
-    const [theme, setThemeState] = useLocalStorage<Theme>(
-        storageKey,
-        defaultTheme
+    const [theme, setTheme] = useState<Theme>(
+        () => (localStorage.getItem(storageKey) as Theme) || defaultTheme
     )
-    const [resolvedTheme, setResolvedTheme] = useState<ResolvedTheme>('dark')
-    const [customTheme, setCustomThemeState] = useLocalStorage<string>(
-        'ecoop-custom-theme',
-        'Default'
-    )
+    const [resolvedTheme, setResolvedTheme] = useState<ResolvedTheme>('light')
+    const [customTheme, setCustomThemeState] = useState<string>(() => {
+        return localStorage.getItem('ecoop-custom-theme') || 'Default'
+    })
     const [animationVariant, setAnimationVariantState] =
-        useLocalStorage<AnimationVariant>('ecoop-animation-variant', 'circle')
-    const [mouseTrailEnabled, setMouseTrailEnabledState] =
-        useLocalStorage<boolean>('ecoop-mouse-trail-enabled', false)
-    const [autoThemeEnabled, setAutoThemeEnabledState] =
-        useLocalStorage<boolean>('ecoop-auto-theme-enabled', false)
-    const [lightModeTime, setLightModeTimeState] = useLocalStorage<string>(
-        'ecoop-light-mode-time',
-        '07:00'
-    )
-    const [darkModeTime, setDarkModeTimeState] = useLocalStorage<string>(
-        'ecoop-dark-mode-time',
-        '17:00'
-    )
-    const [manualOverride, setManualOverride] = useLocalStorage<boolean>(
-        'ecoop-manual-override',
-        false
-    )
-    const [manualOverrideTime, setManualOverrideTime] = useLocalStorage<number>(
-        'ecoop-manual-override-time',
-        0
-    )
-
-    // Check and clear expired manual override
-    useEffect(() => {
-        if (manualOverride && manualOverrideTime) {
-            const now = Date.now()
-            if (now - manualOverrideTime > 30 * 60 * 1000) {
-                setManualOverride(false)
-                setManualOverrideTime(0)
-            }
+        useState<AnimationVariant>(() => {
+            return (
+                (localStorage.getItem(
+                    'ecoop-animation-variant'
+                ) as AnimationVariant) || 'circle'
+            )
+        })
+    const [mouseTrailEnabled, setMouseTrailEnabledState] = useState<boolean>(
+        () => {
+            const stored = localStorage.getItem('ecoop-mouse-trail-enabled')
+            return stored !== null ? stored === 'true' : false
         }
-    }, [
-        manualOverride,
-        manualOverrideTime,
-        setManualOverride,
-        setManualOverrideTime,
-    ])
+    )
+    const [autoThemeEnabled, setAutoThemeEnabledState] = useState<boolean>(
+        () => {
+            const stored = localStorage.getItem('ecoop-auto-theme-enabled')
+            return stored !== null ? stored === 'true' : false
+        }
+    )
+    const [lightModeTime, setLightModeTimeState] = useState<string>(() => {
+        return localStorage.getItem('ecoop-light-mode-time') || '07:00'
+    })
+    const [darkModeTime, setDarkModeTimeState] = useState<string>(() => {
+        return localStorage.getItem('ecoop-dark-mode-time') || '17:00'
+    })
+    const [manualOverride, setManualOverride] = useState<boolean>(() => {
+        const stored = localStorage.getItem('ecoop-manual-override')
+        const storedTime = localStorage.getItem('ecoop-manual-override-time')
+
+        if (stored === 'true' && storedTime) {
+            const overrideTime = parseInt(storedTime, 10)
+            const now = Date.now()
+
+            // Clear override if it's been more than 30 minutes
+            if (now - overrideTime > 30 * 60 * 1000) {
+                localStorage.removeItem('ecoop-manual-override')
+                localStorage.removeItem('ecoop-manual-override-time')
+                return false
+            }
+            return true
+        }
+        return false
+    })
 
     const removeClassTheme = useCallback((root: HTMLElement) => {
         if (!root) return
@@ -141,53 +138,42 @@ export const ThemeProvider = ({
         root.classList.add(theme)
     }, [])
 
-    const setCustomTheme = useCallback(
-        (themeName: string) => {
-            setCustomThemeState(themeName)
-        },
-        [setCustomThemeState]
-    )
+    const setCustomTheme = useCallback((themeName: string) => {
+        setCustomThemeState(themeName)
+        localStorage.setItem('ecoop-custom-theme', themeName)
+    }, [])
 
-    const setAnimationVariant = useCallback(
-        (variant: AnimationVariant) => {
-            setAnimationVariantState(variant)
-        },
-        [setAnimationVariantState]
-    )
+    const setAnimationVariant = useCallback((variant: AnimationVariant) => {
+        setAnimationVariantState(variant)
+        localStorage.setItem('ecoop-animation-variant', variant)
+    }, [])
 
-    const setMouseTrailEnabled = useCallback(
-        (enabled: boolean) => {
-            setMouseTrailEnabledState(enabled)
-        },
-        [setMouseTrailEnabledState]
-    )
+    const setMouseTrailEnabled = useCallback((enabled: boolean) => {
+        setMouseTrailEnabledState(enabled)
+        localStorage.setItem('ecoop-mouse-trail-enabled', enabled.toString())
+    }, [])
 
-    const setAutoThemeEnabled = useCallback(
-        (enabled: boolean) => {
-            setAutoThemeEnabledState(enabled)
+    const setAutoThemeEnabled = useCallback((enabled: boolean) => {
+        setAutoThemeEnabledState(enabled)
+        localStorage.setItem('ecoop-auto-theme-enabled', enabled.toString())
 
-            // Clear manual override when auto theme is re-enabled
-            if (enabled) {
-                setManualOverride(false)
-                setManualOverrideTime(0)
-            }
-        },
-        [setAutoThemeEnabledState, setManualOverride, setManualOverrideTime]
-    )
+        // Clear manual override when auto theme is re-enabled
+        if (enabled) {
+            setManualOverride(false)
+            localStorage.removeItem('ecoop-manual-override')
+            localStorage.removeItem('ecoop-manual-override-time')
+        }
+    }, [])
 
-    const setLightModeTime = useCallback(
-        (time: string) => {
-            setLightModeTimeState(time)
-        },
-        [setLightModeTimeState]
-    )
+    const setLightModeTime = useCallback((time: string) => {
+        setLightModeTimeState(time)
+        localStorage.setItem('ecoop-light-mode-time', time)
+    }, [])
 
-    const setDarkModeTime = useCallback(
-        (time: string) => {
-            setDarkModeTimeState(time)
-        },
-        [setDarkModeTimeState]
-    )
+    const setDarkModeTime = useCallback((time: string) => {
+        setDarkModeTimeState(time)
+        localStorage.setItem('ecoop-dark-mode-time', time)
+    }, [])
 
     const applyCustomThemeColors = useCallback(
         (colors: CustomThemeColors, themeName: string) => {
@@ -206,9 +192,12 @@ export const ThemeProvider = ({
                 Object.entries(modeColors).forEach(([property, value]) => {
                     root.style.setProperty(property, value)
                 })
-                setLocalStorage('ecoop-theme-colors', colors)
+                localStorage.setItem(
+                    'ecoop-theme-colors',
+                    JSON.stringify(colors)
+                )
             } else {
-                removeLocalStorage('ecoop-theme-colors')
+                localStorage.removeItem('ecoop-theme-colors')
             }
         },
         [resolvedTheme]
@@ -253,7 +242,7 @@ export const ThemeProvider = ({
     useEffect(() => {
         const handleStorageChange = (event: StorageEvent) => {
             if (event.key === storageKey && event.newValue) {
-                setThemeState(event.newValue as Theme)
+                setTheme(event.newValue as Theme)
             }
         }
 
@@ -261,13 +250,12 @@ export const ThemeProvider = ({
         return () => {
             window.removeEventListener('storage', handleStorageChange)
         }
-    }, [storageKey, setThemeState])
+    }, [storageKey])
 
     // Apply saved custom theme on mount and when resolved theme changes
     useEffect(() => {
-        const savedCustomTheme = getLocalStorage<string>('ecoop-custom-theme')
-        const savedThemeColors =
-            getLocalStorage<CustomThemeColors>('ecoop-theme-colors')
+        const savedCustomTheme = localStorage.getItem('ecoop-custom-theme')
+        const savedThemeColors = localStorage.getItem('ecoop-theme-colors')
 
         if (
             savedCustomTheme &&
@@ -275,7 +263,7 @@ export const ThemeProvider = ({
             savedThemeColors
         ) {
             try {
-                const colors = savedThemeColors
+                const colors = JSON.parse(savedThemeColors) as CustomThemeColors
                 const root = document.documentElement
                 const modeColors = colors[resolvedTheme]
 
@@ -295,12 +283,12 @@ export const ThemeProvider = ({
                     setCustomThemeState(savedCustomTheme)
                 }
             } catch {
-                removeLocalStorage('ecoop-theme-colors')
-                setLocalStorage('ecoop-custom-theme', 'Default')
+                localStorage.removeItem('ecoop-theme-colors')
+                localStorage.setItem('ecoop-custom-theme', 'Default')
                 setCustomThemeState('Default')
             }
         }
-    }, [resolvedTheme, customTheme, setCustomThemeState])
+    }, [resolvedTheme, customTheme])
 
     // Automatic theme switching based on time
     useEffect(() => {
@@ -333,7 +321,8 @@ export const ThemeProvider = ({
             const targetTheme: Theme = shouldBeDark ? 'dark' : 'light'
 
             if (theme !== targetTheme) {
-                setThemeState(targetTheme)
+                localStorage.setItem(storageKey, targetTheme)
+                setTheme(targetTheme)
             }
         }
 
@@ -350,7 +339,7 @@ export const ThemeProvider = ({
         lightModeTime,
         darkModeTime,
         theme,
-        setThemeState,
+        storageKey,
     ])
     const value = {
         theme,
@@ -363,18 +352,24 @@ export const ThemeProvider = ({
         darkModeTime,
         manualOverride,
         setTheme: (theme: Theme) => {
-            setThemeState(theme)
+            localStorage.setItem(storageKey, theme)
+            setTheme(theme)
 
             // Set manual override flag when theme is manually changed
             if (autoThemeEnabled && (theme === 'light' || theme === 'dark')) {
                 setManualOverride(true)
-                setManualOverrideTime(Date.now())
+                localStorage.setItem('ecoop-manual-override', 'true')
+                localStorage.setItem(
+                    'ecoop-manual-override-time',
+                    Date.now().toString()
+                )
 
                 // Clear manual override after 30 minutes
                 setTimeout(
                     () => {
                         setManualOverride(false)
-                        setManualOverrideTime(0)
+                        localStorage.removeItem('ecoop-manual-override')
+                        localStorage.removeItem('ecoop-manual-override-time')
                     },
                     30 * 60 * 1000
                 )
