@@ -101,28 +101,6 @@ export const QuickTransferTransactionForm = ({
         },
     })
 
-    const handleReset = () => {
-        form.reset({
-            reference_number: userSettingOR,
-            description: '',
-            amount: undefined,
-            bank_id: undefined,
-            entry_date: undefined,
-            bank_reference_number: '',
-            proof_of_payment_media_id: undefined,
-            signature_media_id: undefined,
-            signature: undefined,
-            payment_type_id:
-                settings_payment_type_default_value_id || undefined,
-
-            // transaction-specific fields
-            member: undefined,
-            member_profile_id: undefined,
-            account: undefined,
-            account_id: undefined,
-        })
-    }
-
     const {
         mutate: createQuickTransaction,
         isPending: isQuickTransactionPending,
