@@ -227,7 +227,10 @@ export const useTransactionBatchRequestBlotterView = createMutationFactory<
     TEntityId
 >({
     mutationFn: (id) => requestTransactionBatchBlotterView(id),
-    defaultInvalidates: [[transactionBatchQueryKey, 'current']],
+    defaultInvalidates: [
+        [transactionBatchQueryKey, 'current'],
+        [transactionBatchQueryKey, 'view-requests'],
+    ],
 })
 
 // approve a transactionbatch with request view pending
@@ -239,6 +242,11 @@ export const useTransactionBatchAcceptBlotterView = createMutationFactory<
     mutationFn: async (id) => await allowBlotterView(id),
     invalidationFn: (args) =>
         updateMutationInvalidationFn('transaction-batch', args),
+    defaultInvalidates: [
+        [transactionBatchQueryKey, 'current'],
+        [transactionBatchQueryKey, 'end-approvals'],
+        [transactionBatchQueryKey, 'view-requests'],
+    ],
 })
 
 // end current transaction batch
@@ -250,6 +258,11 @@ export const useTransactionBatchEndCurrentBatch = createMutationFactory<
     mutationFn: (data) => endCurrentBatch(data),
     invalidationFn: (args) =>
         updateMutationInvalidationFn('transaction-batch', args),
+    defaultInvalidates: [
+        [transactionBatchQueryKey, 'current'],
+        [transactionBatchQueryKey, 'end-approvals'],
+        [transactionBatchQueryKey, 'view-requests'],
+    ],
 })
 
 // update batch cash count
@@ -259,6 +272,10 @@ export const useUpdateBatchCashCounts = createMutationFactory<
     ICashCountBatchRequest
 >({
     mutationFn: (data) => updateBatchCashCount(data),
+    defaultInvalidates: [
+        [transactionBatchQueryKey, 'current'],
+        [transactionBatchQueryKey, 'view-requests'],
+    ],
 })
 
 // set current transaction batch deposit in bank
@@ -276,6 +293,10 @@ export const useTransactionBatchSetDepositInBank = createMutationFactory<
             queryKey: [transactionBatchQueryKey, 'current'],
         })
     },
+    defaultInvalidates: [
+        [transactionBatchQueryKey, 'current'],
+        [transactionBatchQueryKey, 'view-requests'],
+    ],
 })
 
 // get all blotter view request
@@ -315,6 +336,11 @@ export const useTransBatchUpdateSignApproval = createMutationFactory<
     { id: TEntityId; payload: ITransactionBatchSignatures }
 >({
     mutationFn: (data) => updateEndedBatchApprovalsSignature(data),
+    defaultInvalidates: [
+        [transactionBatchQueryKey, 'current'],
+        [transactionBatchQueryKey, 'end-approvals'],
+        [transactionBatchQueryKey, 'view-requests'],
+    ],
 })
 
 export const logger = Logger.getInstance('transaction-batch')
