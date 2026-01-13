@@ -554,7 +554,7 @@ export const QuickTransferTransactionForm = ({
                             <Textarea
                                 {...field}
                                 autoComplete="off"
-                                className="h-full"
+                                className="h-full min-h-full max-h-fit ecoop-scroll"
                                 disabled={isDisabled('description')}
                                 id={field.name}
                                 placeholder="what is this payment for?"
