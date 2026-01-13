@@ -142,6 +142,12 @@ export const useGetAllLoanTransaction = ({
                 url = `${loanTransactionAPIRoute}/member-profile/${memberProfileId}`
             } else if (mode === 'member-profile-loan-account') {
                 url = `${loanTransactionAPIRoute}/member-profile/${memberProfileId}/account/${loanAccountId}`
+            } else if (mode === 'draft') {
+                url = `${loanTransactionAPIRoute}/draft`
+            } else if (mode === 'printed') {
+                url = `${loanTransactionAPIRoute}/printed`
+            } else if (mode === 'approved') {
+                url = `${loanTransactionAPIRoute}/approved`
             } else if (mode === 'release-today') {
                 url = `${loanTransactionAPIRoute}/released/today`
             }
