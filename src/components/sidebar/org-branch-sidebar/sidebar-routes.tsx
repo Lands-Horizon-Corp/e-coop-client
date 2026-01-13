@@ -352,7 +352,7 @@ export const generateSidebarGroups = (
                     title: 'Loans',
                     url: `${baseUrl}/loan/loans`,
                     userType: ['employee', 'owner'],
-                    shortDescription: 'Manage Loans',
+                    shortDescription: 'Manage Loans / apply loan',
                 },
                 {
                     type: 'item',

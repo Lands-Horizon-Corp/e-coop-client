@@ -227,6 +227,7 @@ export const useTransactionBatchRequestBlotterView = createMutationFactory<
     TEntityId
 >({
     mutationFn: (id) => requestTransactionBatchBlotterView(id),
+    defaultInvalidates: [[transactionBatchQueryKey, 'current']],
 })
 
 // approve a transactionbatch with request view pending
