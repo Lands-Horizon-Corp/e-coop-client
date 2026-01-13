@@ -248,7 +248,8 @@ export const AccountLedgerTable = ({ entries }: AccountLedgerTableProps) => {
                                         className="font-semibold text-sm text-totals-foreground"
                                         colSpan={2}
                                     >
-                                        MONTH-END BALANCE ({MONTH_NAMES[monthEntry.month - 1]})
+                                        MONTH-END BALANCE (
+                                        {MONTH_NAMES[monthEntry.month - 1]})
                                     </TableCell>
                                     <TableCell className="text-right font-mono tabular-nums font-bold text-totals-foreground">
                                         {monthEntry.debit > 0

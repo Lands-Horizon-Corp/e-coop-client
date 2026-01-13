@@ -16,7 +16,7 @@ export const PaymentWithTransactionSchema = z.object({
     proof_of_payment_media_id: entityIdSchema.optional(),
     bank_id: entityIdSchema.optional(),
     bank_reference_number: z.string().optional(),
-    entry_date: stringDateWithTransformSchema.optional(), 
+    entry_date: stringDateWithTransformSchema.optional(),
     account_id: EntityIdSchema('Account').min(1),
 
     loan_transaction_id: EntityIdSchema('Loan transaction').optional(),
