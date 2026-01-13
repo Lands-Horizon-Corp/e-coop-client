@@ -14,7 +14,6 @@ import {
     MoneyStackIcon,
 } from '@/components/icons'
 import Modal, { IModalProps } from '@/components/modals/modal'
-import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 
 import { useInternalState } from '@/hooks/use-internal-state'
@@ -46,12 +45,12 @@ const HistoryTabs: {
         Component: ({ transactionBatchId, className }) => (
             <div
                 className={cn(
-                    'flex min-h-[94%] flex-1 flex-col gap-y-4 rounded-xl bg-background p-4',
+                    'flex min-h-[94%] flex-1 flex-col gap-y-4 rounded-xl bg-background p-0',
                     className
                 )}
             >
                 <DisbursementTransactionTable
-                    className="grow"
+                    className="grow p-0"
                     mode="transaction-batch"
                     transactionBatchId={transactionBatchId}
                 />
@@ -65,12 +64,12 @@ const HistoryTabs: {
         Component: ({ transactionBatchId, className }) => (
             <div
                 className={cn(
-                    'flex min-h-[94%] flex-1 flex-col gap-y-4 rounded-xl bg-background p-4',
+                    'flex min-h-[94%] flex-1 flex-col gap-y-4 rounded-xl bg-background p-0',
                     className
                 )}
             >
                 <GeneralLedgerTable
-                    className="grow"
+                    className="grow p-0"
                     entryType=""
                     mode="transaction-batch"
                     transactionBatchId={transactionBatchId}
@@ -85,12 +84,12 @@ const HistoryTabs: {
         Component: ({ transactionBatchId, className }) => (
             <div
                 className={cn(
-                    'flex min-h-[94%] flex-1 flex-col gap-y-4 rounded-xl bg-background p-4',
+                    'flex min-h-[94%] flex-1 flex-col gap-y-4 rounded-xl bg-background p-0',
                     className
                 )}
             >
                 <GeneralLedgerTable
-                    className="grow"
+                    className="grow p-0"
                     entryType="check-entry"
                     mode="transaction-batch"
                     transactionBatchId={transactionBatchId}
@@ -105,12 +104,12 @@ const HistoryTabs: {
         Component: ({ transactionBatchId, className }) => (
             <div
                 className={cn(
-                    'flex min-h-[94%] flex-1 flex-col gap-y-4 rounded-xl bg-background p-4',
+                    'flex min-h-[94%] flex-1 flex-col gap-y-4 rounded-xl bg-background p-0',
                     className
                 )}
             >
                 <GeneralLedgerTable
-                    className="grow"
+                    className="grow p-0"
                     entryType="online-entry"
                     mode="transaction-batch"
                     transactionBatchId={transactionBatchId}
@@ -125,12 +124,12 @@ const HistoryTabs: {
         Component: ({ transactionBatchId, className }) => (
             <div
                 className={cn(
-                    'flex min-h-[94%] flex-1 flex-col gap-y-4 rounded-xl bg-background p-4',
+                    'flex min-h-[94%] flex-1 flex-col gap-y-4 rounded-xl bg-background p-0',
                     className
                 )}
             >
                 <GeneralLedgerTable
-                    className="grow"
+                    className="grow p-0"
                     entryType="cash-entry"
                     mode="transaction-batch"
                     transactionBatchId={transactionBatchId}
@@ -145,12 +144,12 @@ const HistoryTabs: {
         Component: ({ transactionBatchId, className }) => (
             <div
                 className={cn(
-                    'flex min-h-[94%] flex-1 flex-col gap-y-4 rounded-xl bg-background p-4',
+                    'flex min-h-[94%] flex-1 flex-col gap-y-4 rounded-xl bg-background p-0',
                     className
                 )}
             >
                 <GeneralLedgerTable
-                    className="grow"
+                    className="grow p-0"
                     entryType="payment-entry"
                     mode="transaction-batch"
                     transactionBatchId={transactionBatchId}
@@ -165,12 +164,12 @@ const HistoryTabs: {
         Component: ({ transactionBatchId, className }) => (
             <div
                 className={cn(
-                    'flex min-h-[94%] flex-1 flex-col gap-y-4 rounded-xl bg-background p-4',
+                    'flex min-h-[94%] flex-1 flex-col gap-y-4 rounded-xl bg-background p-0',
                     className
                 )}
             >
                 <GeneralLedgerTable
-                    className="grow"
+                    className="grow p-0"
                     entryType="withdraw-entry"
                     mode="transaction-batch"
                     transactionBatchId={transactionBatchId}
@@ -185,12 +184,12 @@ const HistoryTabs: {
         Component: ({ transactionBatchId, className }) => (
             <div
                 className={cn(
-                    'flex min-h-[94%] flex-1 flex-col gap-y-4 rounded-xl bg-background p-4',
+                    'flex min-h-[94%] flex-1 flex-col gap-y-4 rounded-xl bg-background p-0',
                     className
                 )}
             >
                 <GeneralLedgerTable
-                    className="grow"
+                    className="grow p-0"
                     entryType="deposit-entry"
                     mode="transaction-batch"
                     transactionBatchId={transactionBatchId}
@@ -218,18 +217,19 @@ const TransactionBatchHistories = ({
     )
 
     return (
-        <div className="flex min-h-[90vh] w-full max-w-full flex-1 flex-col gap-y-4 p-4">
+        <div className="flex min-h-[90vh] min-w-0 flex-1 flex-col gap-y-4 p-4">
             <Tabs
                 className="flex-1 flex-col"
                 defaultValue="batch-funding"
                 onValueChange={handleChange}
                 value={value}
             >
-                <ScrollArea>
-                    <TabsList className="mb-3 h-auto min-w-full justify-start gap-2 rounded-none border-b bg-transparent px-0 py-1 text-foreground">
+                {/* <ScrollArea> */}
+                <div className="overflow-x-auto max-w-full ecoop-scroll overflow-y-hidden">
+                    <TabsList className="mb-3 justify-start gap-2 rounded-none bg-transparent px-0 py-4 text-foreground">
                         {HistoryTabs.map((tab) => (
                             <TabsTrigger
-                                className="relative after:absolute after:inset-x-0 after:bottom-0 after:-mb-1 after:h-0.5 after:duration-300 after:ease-in-out hover:bg-accent hover:text-foreground data-[state=active]:bg-transparent data-[state=active]:shadow-none data-[state=active]:after:bg-primary data-[state=active]:hover:bg-accent"
+                                className="relative after:absolute after:inset-x-0 h-fit after:bottom-0 after:-mb-1 after:duration-300 after:ease-in-out hover:bg-accent hover:text-foreground data-[state=active]:bg-transparent data-[state=active]:shadow-none data-[state=active]:after:bg-primary data-[state=active]:hover:bg-accent"
                                 key={tab.value}
                                 value={tab.value}
                             >
@@ -244,8 +244,9 @@ const TransactionBatchHistories = ({
                             </TabsTrigger>
                         ))}
                     </TabsList>
-                    <ScrollBar orientation="horizontal" />
-                </ScrollArea>
+                </div>
+                {/* <ScrollBar orientation="horizontal" /> */}
+                {/* </ScrollArea> */}
                 {HistoryTabs.map((tab) => (
                     <TabsContent asChild key={tab.value} value={tab.value}>
                         {tab.Component({ transactionBatchId })}

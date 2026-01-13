@@ -10,12 +10,12 @@ const BatchFundingHistory = ({
     return (
         <div
             className={cn(
-                'flex min-h-[94%] flex-1 flex-col gap-y-4 rounded-xl bg-background p-4',
+                'flex min-h-[94%] flex-1 flex-col gap-y-4 rounded-xl bg-background p-0',
                 className
             )}
         >
             <BatchBatchFundingTable
-                className="grow"
+                className="grow p-0"
                 transactionBatchId={transactionBatchId}
             />
         </div>
