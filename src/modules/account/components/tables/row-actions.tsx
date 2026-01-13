@@ -630,10 +630,10 @@ export const AccountTableActionManager = () => {
                 state.defaultValues && (
                     <Modal
                         className="!max-w-6xl w-full"
-                        description={`You are viewing account (${state.defaultValues.name}) ${getModalTitle(state.extra?.entryType).toLowerCase()}`}
+                        description={`You are viewing account (${state.defaultValues.name}) accounting transaction`}
                         onOpenChange={close}
                         open={state.isOpen}
-                        title={getModalTitle(state.extra?.entryType)}
+                        title="Accounting Transaction"
                     >
                         <ViewAccountTransactionLedger
                             accountId={state.defaultValues.id}

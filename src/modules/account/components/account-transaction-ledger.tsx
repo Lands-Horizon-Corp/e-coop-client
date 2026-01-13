@@ -134,6 +134,9 @@ interface AccountLedgerTableProps {
 }
 
 export const AccountLedgerTable = ({ entries }: AccountLedgerTableProps) => {
+    const parsedCurrency =
+        entries[0]?.account_transaction_entry[0]?.account?.currency
+
     return (
         <div className="rounded-b-lg overflow-hidden">
             <Table>
@@ -186,7 +189,14 @@ export const AccountLedgerTable = ({ entries }: AccountLedgerTableProps) => {
                                                         {currencyFormat(
                                                             entry.debit,
                                                             {
-                                                                showSymbol: false,
+                                                                currency:
+                                                                    entry
+                                                                        ?.account
+                                                                        ?.currency,
+                                                                showSymbol:
+                                                                    !!entry
+                                                                        ?.account
+                                                                        ?.currency,
                                                             }
                                                         )}
                                                     </span>
@@ -198,7 +208,14 @@ export const AccountLedgerTable = ({ entries }: AccountLedgerTableProps) => {
                                                         {currencyFormat(
                                                             entry.credit,
                                                             {
-                                                                showSymbol: false,
+                                                                currency:
+                                                                    entry
+                                                                        ?.account
+                                                                        ?.currency,
+                                                                showSymbol:
+                                                                    !!entry
+                                                                        ?.account
+                                                                        ?.currency,
                                                             }
                                                         )}
                                                     </span>
@@ -211,9 +228,14 @@ export const AccountLedgerTable = ({ entries }: AccountLedgerTableProps) => {
                                                         'text-destructive'
                                                 )}
                                             >
-                                                {entry.balance < 0 && '-'}
+                                                {entry.balance < 0}
                                                 {currencyFormat(entry.balance, {
-                                                    showSymbol: false,
+                                                    currency:
+                                                        entry?.account
+                                                            ?.currency,
+                                                    showSymbol:
+                                                        !!entry?.account
+                                                            ?.currency,
                                                 })}
                                             </TableCell>
                                         </TableRow>
@@ -226,23 +248,33 @@ export const AccountLedgerTable = ({ entries }: AccountLedgerTableProps) => {
                                         className="font-semibold text-sm text-totals-foreground"
                                         colSpan={2}
                                     >
-                                        MONTH-END BALANCE [
-                                        {MONTH_NAMES[monthEntry.month - 1]}]
+                                        MONTH-END BALANCE ({MONTH_NAMES[monthEntry.month - 1]})
                                     </TableCell>
                                     <TableCell className="text-right font-mono tabular-nums font-bold text-totals-foreground">
                                         {monthEntry.debit > 0
                                             ? currencyFormat(
-                                                  monthEntry.debit || 0
+                                                  monthEntry.debit || 0,
+                                                  {
+                                                      currency: parsedCurrency,
+                                                      showSymbol:
+                                                          !!parsedCurrency,
+                                                  }
                                               )
                                             : ''}
                                     </TableCell>
                                     <TableCell className="text-right font-mono tabular-nums font-bold text-totals-foreground">
                                         {monthEntry.credit > 0
                                             ? currencyFormat(
-                                                  monthEntry.credit || 0
+                                                  monthEntry.credit || 0,
+                                                  {
+                                                      currency: parsedCurrency,
+                                                      showSymbol:
+                                                          !!parsedCurrency,
+                                                  }
                                               )
                                             : ''}
                                     </TableCell>
+                                    <TableCell className="text-right font-mono tabular-nums font-bold text-totals-foreground" />
                                 </TableRow>
                             </>
                         )
