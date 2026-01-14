@@ -22,26 +22,63 @@ export interface IUserOrganization<TUser = IUserBase>
         Omit<IUserOrganizationSettings, 'user_type' | 'description'> {
     id: TEntityId
 
-    organization_id: TEntityId
-    organization: IOrganization
+    // organization_id: TEntityId
+    // organization: IOrganization
 
-    branch_id: TEntityId
-    branch: IBranch
+    // branch_id: TEntityId
+    // branch: IBranch
 
     description?: string
+    application_description?: string
+    user_setting_description: string
 
     user_id: TEntityId
     user: TUser
 
     user_type: TUserType
 
-    application_description?: string
     application_status: TUserOrganizationApplicationStatus
 
-    // Perms
+    developer_secret_key: string
+    is_seeded: boolean
+
+    /** Permissions */
     permission_name: string
     permission_description: string
     permissions: TPermission[]
+
+    /** Payment OR Settings */
+    payment_or_unique: boolean
+    payment_or_allow_user_input: boolean
+    payment_or_current: number
+    payment_or_end: number
+    payment_or_iteration: number
+    payment_or_use_date_or: boolean
+    payment_allow_prefix: boolean
+    payment_padding: number
+
+    /** Financial Rules */
+    allow_withdraw_negative_balance: boolean
+    allow_withdraw_exact_balance: boolean
+    maintaining_balance: boolean
+
+    /** Status */
+    status: TUserOrganizationApplicationStatus
+    last_online_at: string
+    time_machine_time?: string
+
+    /** Accounting Defaults */
+    settings_accounting_payment_default_value_id?: TEntityId
+    settings_accounting_payment_default_value?: IAccount
+
+    settings_accounting_deposit_default_value_id?: TEntityId
+    settings_accounting_deposit_default_value?: IAccount
+
+    settings_accounting_withdraw_default_value_id?: TEntityId
+    settings_accounting_withdraw_default_value?: IAccount
+
+    settings_payment_type_default_value_id?: TEntityId
+    settings_payment_type_default_value?: IPaymentType
 }
 
 export interface IUserOrganizationResponse {
