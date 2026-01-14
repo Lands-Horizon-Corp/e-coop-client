@@ -16,7 +16,7 @@ export interface IBranchSettings extends IBaseEntityMeta {
     id: TEntityId
 
     currency_id: TEntityId
-    currency?: ICurrency
+    currency: ICurrency
 
     cash_on_hand_account_id?: TEntityId
     cash_on_hand_account?: IAccount
