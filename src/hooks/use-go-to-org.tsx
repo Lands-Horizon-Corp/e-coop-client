@@ -1,6 +1,7 @@
 import { useRouter } from '@tanstack/react-router'
 
 import { useAuthUser } from '@/modules/authentication/authgentication.store'
+import { useHotkeys } from 'react-hotkeys-hook'
 
 export const useGoToOrg = () => {
     const {
@@ -28,5 +29,11 @@ export const useGoToOrg = () => {
             })
         }
     }
+
+    useHotkeys('esc', (e) => {
+        e.preventDefault()
+        handleGetStarted()
+    })
+
     return { handleGetStarted }
 }
