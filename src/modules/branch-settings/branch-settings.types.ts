@@ -82,7 +82,7 @@ export interface IBranchSettings extends IBaseEntityMeta {
     loan_voucher_or_current: number
     loan_voucher_or_iteration: number
     loan_voucher_padding: number
-
+    loan_applied_equal_to_balance: boolean
     /** Check Voucher – General */
     check_voucher_general: boolean
     check_voucher_general_allow_user_input: boolean

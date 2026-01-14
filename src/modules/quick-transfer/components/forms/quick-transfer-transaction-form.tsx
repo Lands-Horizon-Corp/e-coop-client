@@ -138,7 +138,6 @@ export const QuickTransferTransactionForm = ({
             event?.preventDefault()
 
             if (data.amount < 0) {
-                console.log('data amount is negative')
                 onOpenReverseRequestAction({
                     onSuccess: () => {
                         handleSubmitForm(data)
