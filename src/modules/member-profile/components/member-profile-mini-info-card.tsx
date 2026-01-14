@@ -126,7 +126,11 @@ const MemberProfileMiniInfoCard = ({ className, memberProfile }: Props) => {
                                     </HoverCard>
                                 )}
                                 <Badge variant="outline">
-                                    {memberProfile.member_type?.name}
+                                    {memberProfile.member_type?.name || (
+                                        <span className="italic text-muted">
+                                            no type
+                                        </span>
+                                    )}
                                 </Badge>
                                 {memberProfile.is_closed ? (
                                     <Badge variant="destructive">Closed</Badge>

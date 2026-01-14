@@ -342,7 +342,7 @@ const MemberPersonalInfo = forwardRef<HTMLDivElement, Props>(
                     subtitle="Academic background and qualifications"
                     title="Educational Attainments"
                 >
-                    <div className="space-y-4">
+                    <div className="grid grid-cols-2 gap-4">
                         {memberData?.member_educational_attainments?.map(
                             (edu) => (
                                 <div

@@ -27,15 +27,15 @@ import { IClassProps, TEntityId } from '@/types'
 import { IMemberProfile, useGetMemberProfileById } from '../..'
 import MemberCloseAccountBanner from './banners/member-closed-account-banner'
 import MemberInfoBanner from './banners/member-info-banner'
-import MemberComakerDisplay from './displays/member-comaker-display'
 import MemberFileArchiveDisplay from './displays/member-file-archives-display'
 import MemberAccountsLoans from './member-accounts-loans'
-import MemberFinancialInfo from './member-financial-info'
+import MemberComakers from './member-comakers'
+import MemberFinancials from './member-financial-info'
 import MemberMembershipInfo from './member-general-membership-info'
 import MemberGovernmentBenefits from './member-government-benefits-info'
 import MemberMediasInfo from './member-medias-info'
 import MemberPersonalInfo from './member-personal-info'
-import RecruitedMembers from './recruited-members'
+import MemberRecruits from './recruited-members'
 
 interface MemberOverallInfoProps {
     memberProfileId: TEntityId
@@ -78,7 +78,7 @@ const memberInfoTabs: {
         value: 'comakers',
         title: 'Comakers',
         Icon: Users3FillIcon,
-        Component: (props) => <MemberComakerDisplay {...props} />,
+        Component: (props) => <MemberComakers {...props} />,
     },
 
     {
@@ -103,13 +103,13 @@ const memberInfoTabs: {
         value: 'financial',
         title: 'Financial',
         Icon: CreditCardIcon,
-        Component: (props) => <MemberFinancialInfo {...props} />,
+        Component: (props) => <MemberFinancials {...props} />,
     },
     {
         value: 'recruited-members',
         title: 'Recruited Members',
         Icon: UserPlusIcon,
-        Component: (props) => <RecruitedMembers {...props} />,
+        Component: (props) => <MemberRecruits {...props} />,
     },
 ]
 

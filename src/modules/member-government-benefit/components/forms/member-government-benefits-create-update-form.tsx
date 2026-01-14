@@ -63,7 +63,7 @@ const MemberGovernmentBenefitCreateUpdateForm = ({
         mode: 'onSubmit',
         defaultValues: {
             name: '',
-            country_code: '',
+            country_code: 'PHL',
             value: '',
             description: '',
             ...formProps.defaultValues,
