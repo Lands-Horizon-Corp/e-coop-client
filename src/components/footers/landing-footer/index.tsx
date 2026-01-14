@@ -1,7 +1,5 @@
 import { Link, useRouter } from '@tanstack/react-router'
 
-import { useAuthStore } from '@/modules/authentication/authgentication.store'
-
 import EcoopLogo from '@/components/ecoop-logo'
 import {
     DownloadIcon,
@@ -15,6 +13,7 @@ import {
 import { Button } from '@/components/ui/button'
 
 import usePWA from '@/hooks/pwa-hook'
+import { useGoToOrg } from '@/hooks/use-go-to-org'
 
 import {
     EMAIL,
@@ -27,31 +26,10 @@ import {
 
 const NeonFooter = () => {
     const { navigate } = useRouter()
-    const {
-        currentAuth: { user_organization },
-    } = useAuthStore()
 
     const { installApp, isDevelopment } = usePWA()
 
-    const handleGetStarted = () => {
-        if (!user_organization?.organization || !user_organization?.branch) {
-            navigate({ to: '/onboarding' as string })
-        } else {
-            const orgName = user_organization.organization?.name
-                .toLowerCase()
-                .replace(/[^a-z0-9]+/g, '-')
-                .replace(/^-+|-+$/g, '')
-
-            const branchName = user_organization?.branch.name
-                .toLowerCase()
-                .replace(/[^a-z0-9]+/g, '-')
-                .replace(/^-+|-+$/g, '')
-
-            navigate({
-                to: `/org/${orgName}/branch/${branchName}` as string,
-            })
-        }
-    }
+    const { handleGetStarted } = useGoToOrg()
 
     const policies = [
         {

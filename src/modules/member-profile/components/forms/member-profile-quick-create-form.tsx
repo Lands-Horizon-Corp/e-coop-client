@@ -111,7 +111,7 @@ const MemberProfileQuickCreateForm = ({
     return (
         <Form {...form}>
             <form
-                className={cn('flex w-full flex-col gap-y-4', className)}
+                className={cn('flex w-full flex-col v1 gap-y-4', className)}
                 onSubmit={onSubmit}
                 ref={formRef}
             >

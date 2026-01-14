@@ -3,16 +3,17 @@ import { createFileRoute } from '@tanstack/react-router'
 import { dateAgo, toReadableDate } from '@/helpers/date-utils'
 import { useAuthUser } from '@/modules/authentication/authgentication.store'
 import { IUserBase } from '@/modules/user'
-// import { useUserProfileInactivity } from '@/modules/user-profile'
 import AccountProfilePicture from '@/modules/user-profile/components/account-profile-picture'
 import AccountGeneralForm from '@/modules/user-profile/components/forms/account-general-form'
 import { AccountProfileFormModal } from '@/modules/user-profile/components/forms/account-profile-form'
 
-import { EmailIcon, PencilFillIcon } from '@/components/icons'
+import { BackIcon, EmailIcon, PencilFillIcon } from '@/components/icons'
 import { Button } from '@/components/ui/button'
 
 import { useModalState } from '@/hooks/use-modal-state'
 import { useSubscribe } from '@/hooks/use-pubsub'
+
+import { useGoToOrg } from '../../hooks/use-go-to-org'
 
 export const Route = createFileRoute('/account-profile/')({
     component: RouteComponent,
@@ -23,17 +24,30 @@ function RouteComponent() {
         currentAuth: { user },
         updateCurrentAuth,
     } = useAuthUser()
+
     const editProfileState = useModalState()
 
     useSubscribe<IUserBase>(`user.update.${user.id}`, (newUserData) => {
         updateCurrentAuth({ user: newUserData })
     })
 
-    // useUserProfileInactivity({})
+    const { handleGetStarted } = useGoToOrg()
 
     return (
         <div className="space-y-4 max-w-4xl rounded-3xl mx-auto p-4">
+            <div className="flex justify-end">
+                <Button
+                    className=""
+                    onClick={handleGetStarted}
+                    size={'sm'}
+                    variant={'ghost'}
+                >
+                    <BackIcon className="" size={20} />
+                    Go Back
+                </Button>
+            </div>
             <div className="bg-[url('/profile-cover-light.png')] dark:bg-[url('profile-cover-dark.png')] bg-no-repeat bg-cover rounded-3xl h-48"></div>
+
             <div className="relative flex justify-between">
                 <span className="absolute -top-16 left-4">
                     <AccountProfilePicture className="size-32" user={user} />
