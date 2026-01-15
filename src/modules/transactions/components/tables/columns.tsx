@@ -159,6 +159,7 @@ const TransactionTableColumns = (
                 <DataTableColumnHeader {...props} title="Description">
                     <ColumnActions {...props}>
                         <TextFilter<ITransaction>
+                            defaultMode="contains"
                             displayText="Description"
                             field="description"
                         />

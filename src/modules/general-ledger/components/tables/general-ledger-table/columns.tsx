@@ -1,8 +1,9 @@
 import { ReactNode } from 'react'
 
+import { dateAgo, toReadableDate } from '@/helpers/date-utils'
 import { currencyFormat } from '@/modules/currency'
 import { LedgerSourceBadge } from '@/modules/general-ledger/components/ledger-source-badge'
-import { GENERAL_LEDGER_SOURCES } from '@/modules/general-ledger/constants'
+import { GENERAL_LEDGER_SOURCES } from '@/modules/general-ledger/general-ledger.constants'
 import {
     IGeneralLedger,
     TGeneralLedgerSource,
@@ -13,7 +14,8 @@ import DataTableColumnHeader from '@/components/data-table/data-table-column-hea
 import ColumnActions from '@/components/data-table/data-table-column-header/column-actions'
 import { createUpdateColumns } from '@/components/data-table/data-table-common-columns'
 import { IGlobalSearchTargets } from '@/components/data-table/data-table-filters/data-table-global-search'
-import DataTableMultiSelectFilter from '@/components/data-table/data-table-filters/multi-select-filter'
+import DataTableMultiSelectFilter from '@/components/data-table/data-table-filters/data-table-multi-select-filter'
+import DateFilter from '@/components/data-table/data-table-filters/date-filter'
 import NumberFilter from '@/components/data-table/data-table-filters/number-filter'
 import TextFilter from '@/components/data-table/data-table-filters/text-filter'
 import HeaderToggleSelect from '@/components/data-table/data-table-row-actions/header-toggle-select'
@@ -135,7 +137,7 @@ const GeneralLedgerTableColumns = (
                 <div className="space-y-1">
                     <p className="font-medium">{account?.name || '-'}</p>
                     <p className="text-xs text-muted-foreground/70 font-mono">
-                        {account?.alternative_code || ''}
+                        {account?.loan_account_id || ''}
                     </p>
                 </div>
             ),
@@ -217,14 +219,7 @@ const GeneralLedgerTableColumns = (
             id: 'balance',
             accessorKey: 'balance',
             header: (props) => (
-                <DataTableColumnHeader {...props} title="Balance">
-                    <ColumnActions {...props}>
-                        <NumberFilter<IGeneralLedger>
-                            displayText="Balance"
-                            field="balance"
-                        />
-                    </ColumnActions>
-                </DataTableColumnHeader>
+                <DataTableColumnHeader {...props} title="Balance" />
             ),
             cell: ({
                 row: {
@@ -232,7 +227,7 @@ const GeneralLedgerTableColumns = (
                 },
             }) => (
                 <p className="text-right font-semibold">
-                    {balance
+                    {balance !== undefined || balance !== null
                         ? currencyFormat(balance, {
                               currency,
                               showSymbol: !!currency,
@@ -283,6 +278,7 @@ const GeneralLedgerTableColumns = (
                 <DataTableColumnHeader {...props} title="Member">
                     <ColumnActions {...props}>
                         <TextFilter<IGeneralLedger>
+                            defaultMode="contains"
                             displayText="Member Name"
                             field="member_profile.full_name"
                         />
@@ -397,6 +393,41 @@ const GeneralLedgerTableColumns = (
             enableHiding: true,
             size: 160,
             minSize: 120,
+        },
+        {
+            id: 'entry_date',
+            accessorKey: 'entry_date',
+            header: (props) => (
+                <DataTableColumnHeader {...props} title="Entry Date">
+                    <ColumnActions {...props}>
+                        <DateFilter
+                            displayText="Entry Date"
+                            field="entry_date"
+                        />
+                    </ColumnActions>
+                </DataTableColumnHeader>
+            ),
+            cell: ({
+                row: {
+                    original: { entry_date },
+                },
+            }) => (
+                <div>
+                    <p>{entry_date ? toReadableDate(entry_date) : ''} </p>
+                    {entry_date ? (
+                        <p className="text-xs text-muted-foreground/60">
+                            {toReadableDate(entry_date, 'h:mm a -')}{' '}
+                            {dateAgo(entry_date)}
+                        </p>
+                    ) : (
+                        ''
+                    )}
+                </div>
+            ),
+            enableMultiSort: true,
+            enableSorting: true,
+            enableResizing: true,
+            minSize: 200,
         },
         ...createUpdateColumns<IGeneralLedger>().filter(
             (col) => col.id === 'updated_at'

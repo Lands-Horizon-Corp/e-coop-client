@@ -103,25 +103,37 @@ export const findCountry = (query: string): Country | undefined => {
     return results[0]?.item
 }
 
+type TCountryChangeMode =
+    | {
+          undefinable?: true
+          onChange?: (country: Country | undefined) => void
+      }
+    | {
+          undefinable?: false
+          onChange?: (country: Country) => void
+      }
+
 interface CountryDropdownProps {
     options?: Country[]
-    onChange?: (country: Country) => void
     defaultValue?: string
     disabled?: boolean
     placeholder?: string
     slim?: boolean
+    customTriggerClassName?: string
 }
 
 const CountryComboboxComponent = (
     {
+        customTriggerClassName,
         options = availableCountries,
         onChange,
+        undefinable,
         defaultValue,
         disabled = false,
         placeholder = 'Select a country',
         slim = false,
         ...props
-    }: CountryDropdownProps,
+    }: CountryDropdownProps & TCountryChangeMode,
     ref: React.ForwardedRef<HTMLButtonElement>
 ) => {
     const [open, setOpen] = useState(false)
@@ -159,15 +171,14 @@ const CountryComboboxComponent = (
         [onChange]
     )
 
-    const triggerClasses = cn(
-        'flex h-9 w-full items-center justify-between whitespace-nowrap rounded-md border border-input bg-background px-3 py-2 text-sm shadow-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-ring disabled:cursor-not-allowed disabled:opacity-50 [&>span]:line-clamp-1',
-        slim === true && 'w-20'
-    )
-
     return (
         <Popover modal onOpenChange={setOpen} open={open}>
             <PopoverTrigger
-                className={triggerClasses}
+                className={cn(
+                    'flex h-9 w-full items-center justify-between whitespace-nowrap rounded-md border border-input bg-background px-3 py-2 text-sm shadow-smm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-ring disabled:cursor-not-allowed disabled:opacity-50 [&>span]:line-clamp-1',
+                    slim === true && 'w-20',
+                    customTriggerClassName
+                )}
                 disabled={disabled}
                 ref={ref}
                 {...props}
@@ -256,6 +267,18 @@ const CountryComboboxComponent = (
                                     </CommandItem>
                                 ))}
                         </CommandGroup>
+                        {undefinable && (
+                            <CommandItem
+                                className="justify-center sticky bottom-0 bg-popover text-muted-foreground"
+                                onSelect={() => {
+                                    setOpen(false)
+                                    onChange?.(undefined)
+                                }}
+                                value={undefined}
+                            >
+                                Select None
+                            </CommandItem>
+                        )}
                     </CommandList>
                 </Command>
             </PopoverContent>

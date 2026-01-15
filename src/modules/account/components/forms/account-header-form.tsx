@@ -3,7 +3,9 @@ import { Path, UseFormReturn } from 'react-hook-form'
 import { AccountCategoryComboBox } from '@/modules/account-category'
 import { AccountClassificationComboBox } from '@/modules/account-classification'
 import { CurrencyCombobox } from '@/modules/currency'
+import { GENERAL_LEDGER_TYPE } from '@/modules/general-ledger/general-ledger.constants'
 import MemberTypeCombobox from '@/modules/member-type/components/member-type-combobox'
+import { PaymentTypeCombobox } from '@/modules/transaction'
 import { EyeIcon } from 'lucide-react'
 
 import IconCombobox from '@/components/comboboxes/icon-combobox'
@@ -38,8 +40,10 @@ import {
 
 import { useModalState } from '@/hooks/use-modal-state'
 
-import { GeneralLedgerTypeEnum } from '../../account.types'
+import { TEntityId } from '@/types'
+
 import { TAccountFormValues } from '../../account.validation'
+import AccountPicker from '../picker/account-picker'
 
 type AccountHeaderProps = {
     form: UseFormReturn<TAccountFormValues>
@@ -122,41 +126,75 @@ const AccountHeaderForm = ({
                                         'select General Ledger Type'}
                                 </SelectTrigger>
                                 <SelectContent>
-                                    {Object.values(GeneralLedgerTypeEnum).map(
-                                        (account) => {
-                                            return (
-                                                <SelectItem
-                                                    key={account}
-                                                    value={account}
-                                                >
-                                                    {account}
-                                                </SelectItem>
-                                            )
-                                        }
-                                    )}
+                                    {GENERAL_LEDGER_TYPE.map((account) => {
+                                        return (
+                                            <SelectItem
+                                                key={account}
+                                                value={account}
+                                            >
+                                                {account}
+                                            </SelectItem>
+                                        )
+                                    })}
                                 </SelectContent>
                             </Select>
                         </FormControl>
                     )}
                 />
             </div>
-            <div className="grid flex-2 w-full gap-x-2 grid-cols-4">
+            <div className="grid flex-2 w-full gap-x-2 grid-cols-12">
                 <FormFieldWrapper
+                    className="col-span-1"
                     control={form.control}
-                    label="Alternative Code"
-                    name="alternative_code"
+                    disabled={isReadOnly}
+                    label="Index *"
+                    name="index"
                     render={({ field }) => (
                         <Input
                             {...field}
                             autoComplete="off"
                             disabled={isDisabled(field.name)}
                             id={field.name}
-                            placeholder="Account Name"
+                            placeholder="Index"
+                            value={field.value ?? ''}
                         />
                     )}
                 />
                 <FormFieldWrapper
-                    className="col-span-1"
+                    className="col-span-5"
+                    control={form.control}
+                    label="Loan Account"
+                    name="loan_account_id"
+                    render={({ field }) => (
+                        <AccountPicker
+                            currencyId={form.watch('currency_id') as TEntityId}
+                            disabled={
+                                isDisabled(field.name) ||
+                                [
+                                    'Other',
+                                    'Deposit',
+                                    'A/R-Ledger',
+                                    'A/R-Aging',
+                                    'W-Off',
+                                    'Loan',
+                                    'A/P-Ledger',
+                                ].includes(form.watch('type'))
+                            }
+                            mode="currency-loan"
+                            nameOnly
+                            onSelect={(account) => {
+                                field.onChange(account.id)
+                                form.setValue('loan_account', account, {
+                                    shouldDirty: true,
+                                })
+                            }}
+                            placeholder="Select an account"
+                            value={form.getValues('loan_account')}
+                        />
+                    )}
+                />
+                <FormFieldWrapper
+                    className="col-span-3"
                     control={form.control}
                     label="Member Type"
                     name="member_type_id"
@@ -164,56 +202,88 @@ const AccountHeaderForm = ({
                         <MemberTypeCombobox
                             {...field}
                             disabled={isDisabled(field.name)}
-                            onChange={(selected) => field.onChange(selected.id)}
+                            onChange={(selected) =>
+                                field.onChange(selected?.id)
+                            }
                             placeholder="Select Member Type"
                         />
                     )}
                 />
                 <FormFieldWrapper
+                    className="col-span-3"
                     control={form.control}
                     label="Account Classification"
                     name="account_classification_id"
                     render={({ field }) => (
                         <AccountClassificationComboBox
                             disabled={isDisabled(field.name)}
-                            onChange={(selected) => field.onChange(selected.id)}
+                            onChange={(selected) =>
+                                field.onChange(selected?.id)
+                            }
                             placeholder="Select Account Classification"
                             value={field.value}
                         />
                     )}
                 />
                 <FormFieldWrapper
+                    className="col-span-3"
                     control={form.control}
                     label="Account Category"
                     name="account_category_id"
                     render={({ field }) => (
                         <AccountCategoryComboBox
                             disabled={isDisabled(field.name)}
-                            onChange={(selected) => field.onChange(selected.id)}
+                            onChange={(selected) =>
+                                field.onChange(selected?.id)
+                            }
                             placeholder="Select Account Category"
                             value={field.value}
                         />
                     )}
                 />
             </div>
-            <FormFieldWrapper
-                className="col-span-4"
-                control={form.control}
-                label="Account Description"
-                name="description"
-                render={({ field }) => {
-                    const { ref: _ref, ...rest } = field
-                    return (
-                        <TextEditor
-                            {...rest}
-                            content={field.value ?? ''}
-                            disabled={isDisabled(field.name)}
-                            placeholder="Write some description about the account..."
-                            textEditorClassName="!max-w-none !h-12"
-                        />
-                    )
-                }}
-            />
+            <div className="grid grid-cols-4 gap-x-3">
+                <FormFieldWrapper
+                    className="col-span-3 "
+                    control={form.control}
+                    label="Account Description"
+                    name="description"
+                    render={({ field }) => {
+                        const { ref: _ref, ...rest } = field
+                        return (
+                            <TextEditor
+                                {...rest}
+                                content={field.value ?? ''}
+                                disabled={isDisabled(field.name)}
+                                placeholder="Write some description about the account..."
+                                textEditorClassName="!max-w-none !h-12"
+                            />
+                        )
+                    }}
+                />
+                <FormFieldWrapper
+                    className="col-span-1 self-end"
+                    control={form.control}
+                    label="Default Payment Type"
+                    name="default_payment_type_id"
+                    render={({ field }) => {
+                        return (
+                            <PaymentTypeCombobox
+                                {...field}
+                                disabled={isDisabled(field.name)}
+                                onChange={(selectedPaymentType) => {
+                                    field.onChange(selectedPaymentType?.id)
+                                    form.setValue(
+                                        'default_payment_type',
+                                        selectedPaymentType
+                                    )
+                                }}
+                                placeholder="Write some description about the account..."
+                            />
+                        )
+                    }}
+                />
+            </div>
         </div>
     )
 }
@@ -226,15 +296,13 @@ export const AccountGlSourceVisibility = ({
     const modalState = useModalState()
     return (
         <Popover modal {...modalState}>
-            <PopoverTrigger
-                className="flex items-center"
-                onClick={(e) => {
-                    modalState.onOpenChange(true)
-                    e.preventDefault()
-                }}
-            >
+            <PopoverTrigger asChild>
                 <Button
                     className="mb-0 rounded-full size-fit !p-0 border-accent !py-0.5 !px-2 "
+                    onClick={(e) => {
+                        modalState.onOpenChange(true)
+                        e.preventDefault()
+                    }}
                     size="sm"
                     variant="outline"
                 >

@@ -7,9 +7,9 @@ const CashEntryPage = () => {
         <PageContainer>
             <GeneralLedgerTable
                 className="max-h-[90vh] min-h-[90vh] w-full"
+                entryType="cash-entry"
                 excludeColumnIds={['balance']}
                 mode="branch"
-                TEntryType="cash-entry"
             />
         </PageContainer>
     )

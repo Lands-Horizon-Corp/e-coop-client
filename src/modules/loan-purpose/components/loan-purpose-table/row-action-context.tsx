@@ -6,13 +6,16 @@ import { Row } from '@tanstack/react-table'
 
 import RowActionsGroup from '@/components/data-table/data-table-row-actions'
 import DataTableRowContext from '@/components/data-table/data-table-row-context'
-
-import { useModalState } from '@/hooks/use-modal-state'
+import { useTableRowActionStore } from '@/components/data-table/store/data-table-action-store'
 
 import { useDeleteLoanPurposeById } from '../../loan-purpose.service'
 import { ILoanPurpose } from '../../loan-purpose.types'
 import { LoanPurposeCreateUpdateFormModal } from '../forms/loan-purpose-create-update-form'
 import { ILoanPurposeTableActionComponentProp } from './columns'
+
+export type LoanPurposeActionType = 'edit' | 'delete'
+
+export type LoanPurposeActionExtra = Record<string, never>
 
 interface UseLoanPurposeActionsProps {
     row: Row<ILoanPurpose>
@@ -23,8 +26,12 @@ const useLoanPurposeActions = ({
     row,
     onDeleteSuccess,
 }: UseLoanPurposeActionsProps) => {
-    const updateModal = useModalState()
     const loanPurpose = row.original
+    const { open } = useTableRowActionStore<
+        ILoanPurpose,
+        LoanPurposeActionType,
+        LoanPurposeActionExtra
+    >()
 
     const { onOpen } = useConfirmModalStore()
 
@@ -38,7 +45,12 @@ const useLoanPurposeActions = ({
             },
         })
 
-    const handleEdit = () => updateModal.onOpenChange(true)
+    const handleEdit = () => {
+        open('edit', {
+            id: loanPurpose.id,
+            defaultValues: loanPurpose,
+        })
+    }
 
     const handleDelete = () => {
         onOpen({
@@ -50,7 +62,6 @@ const useLoanPurposeActions = ({
 
     return {
         loanPurpose,
-        updateModal,
         isDeletingLoanPurpose,
         handleEdit,
         handleDelete,
@@ -67,26 +78,12 @@ export const LoanPurposeAction = ({
     row,
     onDeleteSuccess,
 }: ILoanPurposeTableActionProps) => {
-    const {
-        loanPurpose,
-        updateModal,
-        isDeletingLoanPurpose,
-        handleEdit,
-        handleDelete,
-    } = useLoanPurposeActions({ row, onDeleteSuccess })
+    const { isDeletingLoanPurpose, handleEdit, handleDelete } =
+        useLoanPurposeActions({ row, onDeleteSuccess })
 
     return (
         <>
-            <div onClick={(e) => e.stopPropagation()}>
-                <LoanPurposeCreateUpdateFormModal
-                    {...updateModal}
-                    formProps={{
-                        loanPurposeId: loanPurpose.id,
-                        defaultValues: loanPurpose,
-                        onSuccess: () => updateModal.onOpenChange(false),
-                    }}
-                />
-            </div>
+            <div onClick={(e) => e.stopPropagation()}></div>
             <RowActionsGroup
                 canSelect
                 onDelete={{
@@ -117,24 +114,11 @@ export const LoanPurposeRowContext = ({
     children,
     onDeleteSuccess,
 }: ILoanPurposeRowContextProps) => {
-    const {
-        loanPurpose,
-        updateModal,
-        isDeletingLoanPurpose,
-        handleEdit,
-        handleDelete,
-    } = useLoanPurposeActions({ row, onDeleteSuccess })
+    const { isDeletingLoanPurpose, handleEdit, handleDelete } =
+        useLoanPurposeActions({ row, onDeleteSuccess })
 
     return (
         <>
-            <LoanPurposeCreateUpdateFormModal
-                {...updateModal}
-                formProps={{
-                    loanPurposeId: loanPurpose.id,
-                    defaultValues: loanPurpose,
-                    onSuccess: () => updateModal.onOpenChange(false),
-                }}
-            />
             <DataTableRowContext
                 onDelete={{
                     text: 'Delete',
@@ -150,6 +134,34 @@ export const LoanPurposeRowContext = ({
             >
                 {children}
             </DataTableRowContext>
+        </>
+    )
+}
+
+export const LoanPurposeTableActionManager = () => {
+    const { state, close } = useTableRowActionStore<
+        ILoanPurpose,
+        LoanPurposeActionType,
+        LoanPurposeActionExtra
+    >()
+
+    if (!state || !state.defaultValues) return null
+
+    const loanPurpose = state.defaultValues
+
+    return (
+        <>
+            {state.action === 'edit' && (
+                <LoanPurposeCreateUpdateFormModal
+                    formProps={{
+                        loanPurposeId: loanPurpose.id,
+                        defaultValues: loanPurpose,
+                        onSuccess: close,
+                    }}
+                    onOpenChange={close}
+                    open={state.isOpen}
+                />
+            )}
         </>
     )
 }

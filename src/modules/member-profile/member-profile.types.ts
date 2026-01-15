@@ -46,7 +46,7 @@ import {
     IMemberJointAccountRequest,
 } from '../member-joint-account/member-joint-account.types'
 import { IMemberOccupation } from '../member-occupation/member-occupation.types'
-import { IMemberRecruitedMembers } from '../member-recruits/member-recruits.types'
+// import { IMemberRecruitedMembers } from '../member-recruits/member-recruits.types'
 import {
     IMemberRelativeAccount,
     IMemberRelativeAccountRequest,
@@ -82,6 +82,8 @@ export interface IMemberProfileRequest {
     occupationId?: TEntityId
     businessAddress?: string
     businessContact?: string
+
+    birth_place?: string // ISO ALPHA-3
 
     status: TGeneralStatus
     isClosed: boolean
@@ -191,7 +193,7 @@ export interface IMemberProfile extends ITimeStamps, IAuditable {
     // memberEducationalAttainmentId?: TEntityId
     member_educational_attainments?: IMemberEducationalAttainment[]
 
-    recruited_members?: IMemberRecruitedMembers[]
+    recruited_members?: IMemberProfile[]
 
     member_assets?: IMemberAsset[]
     member_incomes?: IMemberIncome[]
@@ -242,6 +244,8 @@ export interface IMemberProfilePersonalInfoRequest {
     birthdate?: string
     contact_number?: string
     business_contact_number?: string
+
+    birth_place?: string // ISO ALPHA-3
 
     civil_status: TCivilStatus
 

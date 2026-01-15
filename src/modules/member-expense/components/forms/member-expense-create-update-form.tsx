@@ -126,6 +126,7 @@ const MemberExpenseCreateUpdateForm = ({
                             render={({ field }) => (
                                 <Input
                                     {...field}
+                                    className="bg-popover"
                                     disabled={isDisabled(field.name)}
                                     id={field.name}
                                     placeholder="Expense Name"
@@ -139,6 +140,7 @@ const MemberExpenseCreateUpdateForm = ({
                             render={({ field: { onChange, ...field } }) => (
                                 <CurrencyInput
                                     {...field}
+                                    className="bg-popover"
                                     disabled={isDisabled(field.name)}
                                     onValueChange={(newValue = '') => {
                                         onChange(newValue)
@@ -157,14 +159,14 @@ const MemberExpenseCreateUpdateForm = ({
                                     content={field.value}
                                     disabled={isDisabled(field.name)}
                                     placeholder="Asset Description..."
-                                    textEditorClassName="bg-background !max-w-none"
+                                    textEditorClassName="bg-popover !max-w-none"
                                 />
                             )}
                         />
                     </fieldset>
                 </fieldset>
                 <FormFooterResetSubmit
-                    disableSubmit={!form.formState.isDirty}
+                    disableSubmit={!form.formState.isDirty || isPending}
                     error={error}
                     isLoading={isPending}
                     onReset={() => {
@@ -190,7 +192,7 @@ export const MemberExpenseCreateUpdateFormModal = ({
 }) => {
     return (
         <Modal
-            className={cn('', className)}
+            className={cn('!max-w-xl', className)}
             description={description}
             title={title}
             {...props}

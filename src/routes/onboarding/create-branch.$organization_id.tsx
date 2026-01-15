@@ -6,6 +6,7 @@ import { entityIdSchema } from '@/validation'
 
 const routeSchema = z.object({
     organization_id: entityIdSchema,
+    user_organization_id: entityIdSchema.optional(),
 })
 
 export const Route = createFileRoute(

@@ -12,13 +12,13 @@ export const JournalVoucherSkeletonCard = ({
     return (
         <div
             className={cn(
-                'space-y-4 relative min-w-[400px] h-fit rounded-xl border p-4 shadow-sm bg-background',
+                'space-y-2 relative min-w-[300px] h-fit rounded-xl border p-4 shadow-sm bg-background',
                 className
             )}
         >
             {/* Header Section: Title/Voucher No. and View/Status Indicator */}
             <div className="flex justify-between items-start">
-                <Skeleton className="h-6 w-3/5" />
+                <Skeleton className="h-5 w-3/5" />
                 <div className="flex items-center gap-2">
                     <Skeleton className="h-6 w-16 rounded-full" />
                 </div>
@@ -26,21 +26,11 @@ export const JournalVoucherSkeletonCard = ({
 
             {/* --- TransactionUserInfoGrid 1: Summary --- */}
             <div className="space-y-2">
-                <Skeleton className="h-7 w-full" />
-                <div className="grid grid-cols-2 gap-x-4 gap-y-2">
-                    {/* Debit / Credit */}
-                    <Skeleton className="h-5 w-full" />
-                    <Skeleton className="h-5 w-full" />
-                    {/* Description / Reference */}
-                    <Skeleton className="h-5 w-full" />
-                    <Skeleton className="h-5 w-full" />
-                    {/* Date / Print No. */}
-                </div>
+                <Skeleton className="h-5 w-full" />
             </div>
 
             {/* --- TransactionUserInfoGrid 3: Tags --- */}
             <div className="space-y-2">
-                <Skeleton className="h-4 w-24" />
                 <div className="flex flex-wrap gap-1">
                     <Skeleton className="h-6 w-16 rounded-full" />
                     <Skeleton className="h-6 w-20 rounded-full" />
@@ -55,7 +45,7 @@ export const JournalVoucherSkeletonCard = ({
                         <Skeleton className="h-3 w-24 ml-auto" />
                         <Skeleton className="h-3 w-16 ml-auto" />
                     </div>
-                    <Skeleton className="size-12 rounded-full ml-auto" />
+                    <Skeleton className="size-8 rounded-full ml-auto" />
                 </div>
             </div>
         </div>

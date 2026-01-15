@@ -1,4 +1,4 @@
-import { cn, formatCurrency } from '@/helpers'
+import { cn } from '@/helpers'
 import { dateAgo, toReadableDate } from '@/helpers/date-utils'
 import { currencyFormat } from '@/modules/currency'
 import TransactionUserInfoGrid from '@/modules/transaction/components/transaction-user-info-grid'
@@ -104,9 +104,9 @@ export const CashCheckVoucherCard = ({
                         },
                         {
                             label: 'Date',
-                            value: cashCheckVoucher.date
+                            value: cashCheckVoucher.entry_date
                                 ? new Date(
-                                      cashCheckVoucher.date
+                                      cashCheckVoucher.entry_date
                                   ).toLocaleDateString(undefined, {
                                       year: 'numeric',
                                       month: 'short',
@@ -169,7 +169,7 @@ export const CashCheckVoucherCard = ({
                         },
                         {
                             label: 'Check Amount',
-                            value: formatCurrency(
+                            value: currencyFormat(
                                 cashCheckVoucher.check_entry_amount ?? 0
                             ),
                         },
@@ -254,7 +254,7 @@ export const CashCheckVoucherCard = ({
                 />
             )}
             <p className="text-xs text-end text-muted-foreground/70 truncate">
-                {dateAgo(cashCheckVoucher.date)}
+                {dateAgo(cashCheckVoucher.entry_date)}
             </p>
         </div>
     )

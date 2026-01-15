@@ -8,9 +8,10 @@ const AppSidebarToggle = () => {
 
     return (
         <Button
-            className="size-fit p-2 px-0"
+            hoverVariant="primary"
             onClick={() => toggleSidebar()}
-            variant="secondary"
+            size="icon-sm"
+            variant="outline"
         >
             {open ? (
                 <SidebarLeftOpenIcon className="animate-in fade-in-30 duration-500" />

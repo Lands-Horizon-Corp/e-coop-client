@@ -1,7 +1,10 @@
+import { Path } from 'react-hook-form'
+
 import {
     StepConfig,
     StepValidation,
 } from '../../../components/form-stepper/form-stepper'
+import { TOrganizationSchema } from '../organization.validation'
 
 export const organizationSteps: StepConfig[] = [
     {
@@ -30,9 +33,18 @@ export const organizationSteps: StepConfig[] = [
     },
 ]
 
-export const organizationStepValidations: Record<number, StepValidation> = {
+export const organizationStepValidations: Record<
+    number,
+    StepValidation<TOrganizationSchema>
+> = {
     0: {
-        fields: ['name', 'media_id', 'email', 'cover_media_id', 'description'],
+        fields: [
+            'name',
+            'media_id',
+            'email',
+            'cover_media_id',
+            'description',
+        ] as Path<TOrganizationSchema>[],
         // validator: async (form) => {
         //     // Example: Check if organization name is unique
         //     const name = form.getValues('name')
@@ -46,7 +58,7 @@ export const organizationStepValidations: Record<number, StepValidation> = {
         // }
     },
     1: {
-        fields: ['subscription_plan_id'],
+        fields: ['subscription_plan_id'] as Path<TOrganizationSchema>[],
         // validator: async (form) => {
         //     const planId = form.getValues('subscription_plan_id')
         //     if (!planId) {
@@ -57,9 +69,9 @@ export const organizationStepValidations: Record<number, StepValidation> = {
         // }
     },
     2: {
-        fields: [],
+        fields: [] as Path<TOrganizationSchema>[],
     },
     3: {
-        fields: [],
+        fields: [] as Path<TOrganizationSchema>[],
     },
 }

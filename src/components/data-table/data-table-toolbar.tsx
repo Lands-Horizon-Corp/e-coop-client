@@ -8,8 +8,8 @@ import { useHotkeys } from 'react-hotkeys-hook'
 import DataTableActiveFilters from '@/components/data-table/data-table-actions/data-table-active-filters'
 import DataTableDeleteSelected from '@/components/data-table/data-table-actions/data-table-delete-selected'
 import { type IDataTableDeleteSelectedProps } from '@/components/data-table/data-table-actions/data-table-delete-selected'
-import DataTableExportButton from '@/components/data-table/data-table-actions/data-table-export'
-import { type IDataTableExportProps } from '@/components/data-table/data-table-actions/data-table-export'
+import DataTableExportButton from '@/components/data-table/data-table-actions/data-table-generate-report'
+import { type IDataTableExportProps } from '@/components/data-table/data-table-actions/data-table-generate-report'
 import DataTableOptionsMenu from '@/components/data-table/data-table-actions/data-table-options-menu'
 import { type IDataTableScrollableOptionProps } from '@/components/data-table/data-table-actions/data-table-options-menu/scroll-option'
 import { Separator } from '@/components/ui/separator'
@@ -17,7 +17,6 @@ import { Separator } from '@/components/ui/separator'
 import { IClassProps } from '@/types'
 
 import RefreshButton, { IRefreshButtonProps } from '../buttons/refresh-button'
-// import { useShortcutContext } from '../shorcuts/general-shortcuts-wrapper'
 import DatatableColumnVisibility from './data-table-actions/data-table-column-visibility'
 import DataTableCreateAction, {
     IDataTableCreateActionProps,
@@ -61,8 +60,6 @@ const DataTableToolbar = <TData,>({
     refreshActionProps,
     otherActionLeft,
 }: IDataTableToolbarProps<TData>) => {
-    // const { setActiveScope, activeScope } = useShortcutContext()
-
     useHotkeys(
         'Enter',
         (e) => {
@@ -77,25 +74,14 @@ const DataTableToolbar = <TData,>({
         [createActionProps, hideCreateButton]
     )
 
-    // const hanldeSetScope = () => {
-    //     if (activeScope !== SHORTCUT_SCOPES.DATA_TABLE) {
-    //         setActiveScope(SHORTCUT_SCOPES.DATA_TABLE)
-    //     }
-    // }
-
     return (
-        <div
-            className="ecoop-scroll flex w-full max-w-full shrink-0 items-center justify-between gap-x-2 overflow-auto"
-            // onClick={hanldeSetScope}
-            // onFocus={hanldeSetScope}
-            // onMouseOver={hanldeSetScope}
-        >
-            <div className="flex items-center gap-x-2">
+        <div className="ecoop-scroll flex w-full max-w-full shrink-0 items-center justify-between gap-x-2 overflow-auto">
+            <div className="flex items-center gap-x-1">
+                {otherActionLeft}
                 {globalSearchProps ? (
                     <DataTableGlobalSearch {...globalSearchProps} />
                 ) : null}
                 <DataTableActiveFilters />
-                {otherActionLeft}
             </div>
             <div className="flex items-center gap-x-2">
                 <div className="flex items-center">

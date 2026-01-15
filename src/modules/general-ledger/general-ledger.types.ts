@@ -10,7 +10,10 @@ import { IPaymentType } from '../payment-type/payment-type.types'
 import { ITransactionBatch } from '../transaction-batch/transaction-batch.types'
 import { ITransaction } from '../transaction/transaction.types'
 import { IUserBase } from '../user/user.types'
-import { GENERAL_LEDGER_SOURCES } from './constants'
+import {
+    GENERAL_LEDGER_SOURCES,
+    GENERAL_LEDGER_TYPE,
+} from './general-ledger.constants'
 
 export type TEntryType =
     | ''
@@ -27,9 +30,12 @@ export type TEntryType =
 
 export type TGeneralLedgerSource = (typeof GENERAL_LEDGER_SOURCES)[number]
 
+export type TGeneralLedgerType = (typeof GENERAL_LEDGER_TYPE)[number]
+
 export interface IGeneralLedger extends IBaseEntityMeta {
     account_id: TEntityId
-    account: IAccount | null
+    account: IAccount
+    account_history_id: TEntityId
 
     transaction_id: TEntityId
     transaction: ITransaction | null
@@ -76,7 +82,7 @@ export interface IGeneralLedger extends IBaseEntityMeta {
     currency_id: TEntityId
     currency: ICurrency
 
-    entry_date: TEntityId
+    entry_date: string
     bank_reference_number: string
     description: string
     print_number?: number

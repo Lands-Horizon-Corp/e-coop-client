@@ -12,13 +12,7 @@ export default function (plop) {
                 type: 'input',
                 name: 'name',
                 message:
-                    'Bigay mo name 🏷️ (small case lang, e.g. "member type", "user" ):',
-            },
-            {
-                type: 'input',
-                name: 'baseKey',
-                message:
-                    'Bigay mo base key 🔖 (small case lang boi, e.g. "user", "member type"):',
+                    'Bigay mo base name 🏷️ (small case lang, e.g. "member type", "user" ):',
             },
         ],
         actions: [

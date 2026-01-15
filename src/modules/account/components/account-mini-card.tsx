@@ -15,7 +15,7 @@ import { Card, CardContent, CardHeader } from '@/components/ui/card'
 
 import { IClassProps, TEntityId } from '@/types'
 
-import { useGetById } from '../account.service'
+import { useGetAccountById } from '../account.service'
 import { IAccount } from '../account.types'
 
 interface Props extends IClassProps {
@@ -24,7 +24,7 @@ interface Props extends IClassProps {
 }
 
 const AccountMiniCard = ({ accountId, defaultAccount, className }: Props) => {
-    const { data, isPending, refetch } = useGetById({
+    const { data, isPending, refetch } = useGetAccountById({
         id: accountId,
         options: {
             initialData: defaultAccount,
@@ -61,10 +61,10 @@ const AccountMiniCard = ({ accountId, defaultAccount, className }: Props) => {
                                 />
                             )}
                         </div>
-                        {data?.alternative_code && (
+                        {data?.loan_account && (
                             <div className="flex items-center gap-1 mt-1 text-sm text-muted-foreground">
                                 <HashIcon className="h-3 w-3" />
-                                <span>{data?.alternative_code ?? '-'}</span>
+                                <span>{data?.loan_account.name ?? '-'}</span>
                             </div>
                         )}
                     </div>

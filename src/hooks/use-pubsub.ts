@@ -1,8 +1,8 @@
 import { useEffect } from 'react'
 
 import { NATS_CLIENT } from '@/constants'
+import logger from '@/helpers/loggers/logger'
 import { useLiveMonitoringStore } from '@/store/live-monitoring-store'
-// import logger from '@/helpers/loggers/logger'
 import { type INatsConnectOpts, useNatsStore } from '@/store/nats-pubsub-store'
 import { StringCodec, type Subscription } from 'nats.ws'
 
@@ -34,11 +34,14 @@ export const useSubscribe = <T = unknown>(
         ) {
             return
         }
+
         let sub: Subscription
         const subHandler = async () => {
-            sub = connection.subscribe(`${NATS_CLIENT}${subject}`)
-
+            const topic = `${NATS_CLIENT}.${subject}`
+            sub = connection.subscribe(topic)
+            logger.info('🔔 subscribing to subject:', topic, false)
             for await (const msg of sub) {
+                logger.info('💬 received message on subject:', topic, false)
                 const decodedData = sc.decode(msg.data)
                 const parsedData = JSON.parse(decodedData)
                 onReceive?.(parsedData)

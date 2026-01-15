@@ -136,11 +136,10 @@ export function CurrencyBadge({
         >
             <CircleFlag
                 className={cn(
-                    'inline-flex h-5 w-5 shrink-0 items-center justify-center overflow-hidden rounded-full',
+                    'inline-flex size-4 shrink-0 items-center justify-center overflow-hidden rounded-full',
                     emojiSizeVariants({ size })
                 )}
                 countryCode={alpha2.toLowerCase()}
-                height={20}
             />
             {/* {
                 <span className={)}>
@@ -177,7 +176,7 @@ export function CurrencyCountryFlag({
     return (
         <CircleFlag
             className={cn(
-                'inline-flex h-5 w-5 shrink-0 items-center justify-center overflow-hidden rounded-full',
+                'inline-flex size-4 shrink-0 items-center justify-center overflow-hidden rounded-full',
                 className
             )}
             countryCode={alpha2.toLowerCase()}

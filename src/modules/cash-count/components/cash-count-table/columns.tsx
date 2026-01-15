@@ -18,7 +18,6 @@ import { ICashCount } from '../../cash-count.types'
 export const cashCountGlobalSearchTargets: IGlobalSearchTargets<ICashCount>[] =
     [
         { field: 'name', displayText: 'Name' },
-        { field: 'country_code', displayText: 'Country Code' },
         { field: 'employee_user.first_name', displayText: 'Employee Name' },
         { field: 'transaction_batch_id', displayText: 'Transaction Batch ID' },
     ]
@@ -71,6 +70,7 @@ const CashCountTableColumns = (
                 <DataTableColumnHeader {...props} title="Name">
                     <ColumnActions {...props}>
                         <TextFilter<ICashCount>
+                            defaultMode="contains"
                             displayText="Name"
                             field="name"
                         />

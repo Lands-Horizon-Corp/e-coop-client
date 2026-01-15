@@ -40,6 +40,7 @@ const TransactionAccountMemberLedger = ({
                 memberProfileId={memberProfileId}
                 mode="member"
                 onRowClick={onRowClick}
+                persistKey={['general-ledger', 'transaction']}
             />
         </>
     )

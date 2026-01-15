@@ -69,7 +69,7 @@ const ThemeProviderContext = createContext<ThemeProviderState>(initialState)
 export const ThemeProvider = ({
     children,
     defaultTheme = 'system',
-    storageKey = 'vite-ui-theme',
+    storageKey = 'ecoop-system-theme',
     ...props
 }: ThemeProviderProps) => {
     const [theme, setTheme] = useState<Theme>(

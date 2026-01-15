@@ -73,6 +73,7 @@ const PermissionTemplateTableColumns = (
                 >
                     <ColumnActions {...props}>
                         <TextFilter<IPermissionTemplate>
+                            defaultMode="contains"
                             displayText="Name"
                             field="name"
                         />
@@ -98,6 +99,7 @@ const PermissionTemplateTableColumns = (
                 <DataTableColumnHeader {...props} title="Description">
                     <ColumnActions {...props}>
                         <TextFilter<IPermissionTemplate>
+                            defaultMode="contains"
                             displayText="Description"
                             field="description"
                         />

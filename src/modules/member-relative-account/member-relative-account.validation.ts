@@ -4,7 +4,10 @@ import { descriptionTransformerSanitizer, entityIdSchema } from '@/validation'
 
 import { FAMILY_RELATIONSHIP } from './member-relative.constants'
 
-export const FamilyRelationshipSchema = z.enum(FAMILY_RELATIONSHIP) // Member profile
+export const FamilyRelationshipSchema = z.enum(
+    FAMILY_RELATIONSHIP,
+    'Invalid relationship'
+) // Member profile
 
 // STRICTLY BASED ON IMemberRelativeAccountRequest
 export const MemberRelativeAccountSchema = z.object({

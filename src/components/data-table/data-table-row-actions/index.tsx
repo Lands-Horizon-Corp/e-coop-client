@@ -7,7 +7,7 @@ import {
     DotsVerticalIcon,
     EyeNoneIcon,
     PencilFillIcon,
-    TrashIcon,
+    TrashFillIcon,
 } from '@/components/icons'
 import { Button } from '@/components/ui/button'
 import {
@@ -42,7 +42,7 @@ const RowActionsGroup = <TData,>({
     onView,
     onEdit,
     onDelete,
-    canSelect,
+    canSelect = true,
     otherActions,
 }: Props<TData>) => {
     if (!onDelete && !onView && !onEdit && !otherActions) return null
@@ -92,7 +92,7 @@ const RowActionsGroup = <TData,>({
                         disabled={!onDelete.isAllowed}
                         onClick={onDelete.onClick}
                     >
-                        <TrashIcon className="mr-2" /> {onDelete.text}
+                        <TrashFillIcon className="mr-2" /> {onDelete.text}
                     </DropdownMenuItem>
                 )}
             </DropdownMenuContent>

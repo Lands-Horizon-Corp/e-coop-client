@@ -14,6 +14,7 @@ import MemberGenderCombobox from '@/modules/member-gender/components/member-gend
 import MemberOccupationCombobox from '@/modules/member-occupation/components/member-occupation-combobox'
 
 import CivilStatusCombobox from '@/components/comboboxes/civil-status-combobox'
+import { CountryCombobox } from '@/components/comboboxes/country-combobox'
 import FormFooterResetSubmit from '@/components/form-components/form-footer-reset-submit'
 import { VerifiedPatchIcon } from '@/components/icons'
 import TextEditor from '@/components/text-editor'
@@ -148,20 +149,11 @@ const MemberPersonalInfoForm = ({
                                     name="media_id"
                                     render={({ field }) => {
                                         const value = form.watch('media')
-
                                         return (
                                             <ImageField
                                                 {...field}
                                                 onChange={(newImage) => {
-                                                    if (newImage)
-                                                        field.onChange(
-                                                            newImage.id
-                                                        )
-                                                    else
-                                                        field.onChange(
-                                                            undefined
-                                                        )
-
+                                                    field.onChange(newImage?.id)
                                                     form.setValue(
                                                         'media',
                                                         newImage
@@ -190,14 +182,7 @@ const MemberPersonalInfoForm = ({
                                             <SignatureField
                                                 {...field}
                                                 onChange={(newImage) => {
-                                                    if (newImage)
-                                                        field.onChange(
-                                                            newImage.id
-                                                        )
-                                                    else
-                                                        field.onChange(
-                                                            undefined
-                                                        )
+                                                    field.onChange(newImage?.id)
 
                                                     form.setValue(
                                                         'signature_media',
@@ -231,6 +216,7 @@ const MemberPersonalInfoForm = ({
                                         <Input
                                             {...field}
                                             autoComplete="given-name"
+                                            className="bg-background"
                                             disabled={isDisabled(field.name)}
                                             id={field.name}
                                             placeholder="First Name"
@@ -248,6 +234,7 @@ const MemberPersonalInfoForm = ({
                                         <Input
                                             {...field}
                                             autoComplete="additional-name"
+                                            className="bg-background"
                                             disabled={isDisabled(field.name)}
                                             id={field.name}
                                             placeholder="Middle Name"
@@ -265,6 +252,7 @@ const MemberPersonalInfoForm = ({
                                         <Input
                                             {...field}
                                             autoComplete="family-name"
+                                            className="bg-background"
                                             disabled={isDisabled(field.name)}
                                             id={field.name}
                                             placeholder="Last Name"
@@ -282,6 +270,7 @@ const MemberPersonalInfoForm = ({
                                         <Input
                                             {...field}
                                             autoComplete="honorific-suffix"
+                                            className="bg-background"
                                             disabled={isDisabled(field.name)}
                                             id={field.name}
                                             placeholder=""
@@ -332,6 +321,7 @@ const MemberPersonalInfoForm = ({
                                 render={({ field }) => (
                                     <InputDate
                                         {...field}
+                                        className="bg-background"
                                         disabled={isDisabled(field.name)}
                                         value={field.value ?? ''}
                                     />
@@ -392,6 +382,7 @@ const MemberPersonalInfoForm = ({
                                 render={({ field }) => (
                                     <Input
                                         {...field}
+                                        className="bg-background"
                                         disabled={isDisabled(field.name)}
                                         id={field.name}
                                         placeholder="Business Address"
@@ -406,9 +397,25 @@ const MemberPersonalInfoForm = ({
                                 render={({ field }) => (
                                     <Input
                                         {...field}
+                                        className="bg-background"
                                         disabled={isDisabled(field.name)}
                                         id={field.name}
                                         placeholder="Business Contact"
+                                    />
+                                )}
+                            />
+                            <FormFieldWrapper
+                                control={form.control}
+                                label="Birth Place"
+                                name="birth_place"
+                                render={({ field }) => (
+                                    <CountryCombobox
+                                        {...field}
+                                        defaultValue={field.value}
+                                        onChange={(country) => {
+                                            field.onChange(country?.alpha3)
+                                        }}
+                                        undefinable={false}
                                     />
                                 )}
                             />
@@ -455,7 +462,7 @@ const MemberPersonalInfoForm = ({
 
                 <FormFooterResetSubmit
                     className="sticky bottom-4"
-                    disableSubmit={!form.formState.isDirty}
+                    disableSubmit={!form.formState.isDirty || isPending}
                     error={error}
                     isLoading={isPending}
                     onReset={() => {

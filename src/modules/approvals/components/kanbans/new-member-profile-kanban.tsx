@@ -46,7 +46,6 @@ const NewMemberProfileKanban = (_props: Props) => {
 
     useSubscribe(`member_profile.update.branch.${branch_id}`, () => {
         toast.info('Member profile Kanban - update : Triggered')
-
         queryClient.invalidateQueries({
             queryKey: ['member-profile', 'all', 'pending'],
         })

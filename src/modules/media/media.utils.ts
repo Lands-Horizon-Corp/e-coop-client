@@ -289,6 +289,7 @@ export const getFileType = (file: File): FileCategory => {
 }
 
 export type TDownloadMediaProp = File | string | IMedia
+
 export const downloadMedia = (media: TDownloadMediaProp) => {
     if (!(media instanceof File) && typeof media !== 'string') {
         downloadFile(media.download_url, media.file_name || 'download')

@@ -1,16 +1,14 @@
-import { toReadableDate } from '@/helpers/date-utils'
 import { IAccountClassification } from '@/modules/account-classification'
 import { ColumnDef, Row } from '@tanstack/react-table'
 
 import DataTableColumnHeader from '@/components/data-table/data-table-column-header'
 import ColumnActions from '@/components/data-table/data-table-column-header/column-actions'
+import { createUpdateColumns } from '@/components/data-table/data-table-common-columns'
 import { IGlobalSearchTargets } from '@/components/data-table/data-table-filters/data-table-global-search'
 import TextFilter from '@/components/data-table/data-table-filters/text-filter'
 import HeaderToggleSelect from '@/components/data-table/data-table-row-actions/header-toggle-select'
 import { PushPinSlashIcon } from '@/components/icons'
 import { Checkbox } from '@/components/ui/checkbox'
-
-import AccountClassificationAction from './row-action'
 
 export const AccountClassificationGlobalSearchTargets: IGlobalSearchTargets<IAccountClassification>[] =
     [
@@ -67,6 +65,7 @@ const AccountClassificationTableColumns = (
             <DataTableColumnHeader {...props} title="Classification Name">
                 <ColumnActions {...props}>
                     <TextFilter<IAccountClassification>
+                        defaultMode="contains"
                         displayText="Classification Name"
                         field="name"
                     />
@@ -79,9 +78,7 @@ const AccountClassificationTableColumns = (
             },
         }) => (
             <div className="flex min-w-0 items-center gap-3">
-                <span className="truncate text-xs text-muted-foreground/70">
-                    {name || '-'}
-                </span>
+                <span className="truncate ">{name || '-'}</span>
             </div>
         ),
         enableMultiSort: true,
@@ -98,6 +95,7 @@ const AccountClassificationTableColumns = (
             <DataTableColumnHeader {...props} title="Description">
                 <ColumnActions {...props}>
                     <TextFilter<IAccountClassification>
+                        defaultMode="contains"
                         displayText="Description"
                         field="description"
                     />
@@ -108,7 +106,7 @@ const AccountClassificationTableColumns = (
             row: {
                 original: { description },
             },
-        }) => <div>{description || '-'}</div>,
+        }) => <p className="text-muted-foreground">{description || '-'}</p>,
         enableMultiSort: true,
         enableSorting: true,
         enableResizing: true,
@@ -116,40 +114,7 @@ const AccountClassificationTableColumns = (
         size: 180,
         minSize: 180,
     },
-    {
-        id: 'created_at',
-        accessorKey: 'created_at',
-        header: (props) => (
-            <DataTableColumnHeader {...props} title="Date Created">
-                <ColumnActions {...props} />
-            </DataTableColumnHeader>
-        ),
-        cell: ({
-            row: {
-                original: { created_at },
-            },
-        }) => (
-            <span className="text-sm font-semibold">
-                {created_at ? toReadableDate(created_at) : '-'}
-            </span>
-        ),
-        enableMultiSort: true,
-        enableSorting: true,
-        enableResizing: true,
-        enableHiding: false,
-        size: 180,
-        minSize: 150,
-    },
-    {
-        id: 'actions',
-        header: () => null,
-        cell: ({ row }) => <AccountClassificationAction row={row} />,
-        enableSorting: false,
-        enableResizing: false,
-        enableHiding: false,
-        size: 80,
-        minSize: 80,
-    },
+    ...createUpdateColumns<IAccountClassification>(),
 ]
 
 export default AccountClassificationTableColumns

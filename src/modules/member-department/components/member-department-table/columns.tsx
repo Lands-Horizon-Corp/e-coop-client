@@ -66,6 +66,7 @@ const MemberDepartmentTableColumns = (
             <DataTableColumnHeader {...props} title="Department">
                 <ColumnActions {...props}>
                     <TextFilter<IMemberDepartment>
+                        defaultMode="contains"
                         displayText="Department Name"
                         field="name"
                     />

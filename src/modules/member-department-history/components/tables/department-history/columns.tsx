@@ -23,7 +23,7 @@ export const memberDepartmentHistoryGlobalSearchTargets: IGlobalSearchTargets<IM
 const memberDepartmentHistoryColumns =
     (): ColumnDef<IMemberDepartmentHistory>[] => [
         {
-            id: 'department',
+            id: 'member_department.name',
             accessorKey: 'member_department.name',
             header: (props) => (
                 <DataTableColumnHeader {...props} title="Department">

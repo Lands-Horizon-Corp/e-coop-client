@@ -2,11 +2,8 @@ import { UseFormReturn, useFieldArray } from 'react-hook-form'
 import { toast } from 'sonner'
 
 import { cn } from '@/helpers'
-import {
-    AccountCreateUpdateFormModal,
-    AccountPicker,
-    IAccount,
-} from '@/modules/account'
+import { AccountPicker, IAccount } from '@/modules/account'
+import { AccountViewerModal } from '@/modules/account/components/account-viewer/account-viewer'
 import { TChargesRateSchemeSchema } from '@/modules/charges-rate-scheme/charges-rate-scheme.validation'
 import useConfirmModalStore from '@/store/confirm-modal-store'
 
@@ -48,7 +45,7 @@ const ConnectAccountSection = ({
     const modalState = useModalState()
     const isPending = false // Replace with actual loading state
 
-    const accounts = form.watch('charges_rate_scheme_accounts')
+    const accounts = form.watch('charges_rate_scheme_accounts') || []
 
     const { fields, append, remove } = useFieldArray({
         control: form.control,
@@ -175,15 +172,12 @@ const AccountItem = ({ account, onRemove }: IAccountItemProps) => {
 
     return (
         <li className="p-3 rounded-md border hover:border-primary cursor-pointer duration-200 text-xs bg-card space-y-1">
-            <AccountCreateUpdateFormModal
+            <AccountViewerModal
                 {...openAccountState}
-                description="View account details"
-                formProps={{
-                    readOnly: true,
+                accountViewerProps={{
                     accountId: account.id,
-                    defaultValues: account,
+                    defaultValue: account,
                 }}
-                title="View Account"
             />
             <div className="flex items-center gap-x-2">
                 <RenderIcon className="shrink-0" icon={account?.icon} />

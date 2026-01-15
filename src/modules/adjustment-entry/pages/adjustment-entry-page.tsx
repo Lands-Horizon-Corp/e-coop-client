@@ -1,22 +1,25 @@
 import { useState } from 'react'
 
 import { useQueryClient } from '@tanstack/react-query'
+import { toast } from 'sonner'
 
 import { useAuthUserWithOrgBranch } from '@/modules/authentication/authgentication.store'
 import { CurrencyCombobox, ICurrency } from '@/modules/currency'
 import EmployeePicker from '@/modules/employee/components/employee-picker'
+import { useTransactionBatchStore } from '@/modules/transaction-batch/store/transaction-batch-store'
 import { IEmployee } from '@/modules/user'
 import { IUserOrganization } from '@/modules/user-organization'
 
 import PageContainer from '@/components/containers/page-container'
 import { XIcon } from '@/components/icons'
-import { Button } from '@/components/ui/button'
+import { Button, buttonVariants } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
 
 import { useModalState } from '@/hooks/use-modal-state'
 
 import { TEntityId } from '@/types'
 
+import { IAdjustmentEntryTotal } from '../adjustment-entry.types'
 import { AdjustmentEntryTotal } from '../components/adjustment-entry-total'
 import { AdjustmentEntryCreateUpdateFormModal } from '../components/forms/adjustment-entry-form-modal'
 import AdjustmentEntryTable from '../components/tables'
@@ -27,6 +30,11 @@ const AdjustmentEntryPage = () => {
     } = useAuthUserWithOrgBranch()
     const queryClient = useQueryClient()
     const createModal = useModalState(false)
+    const [focusedTotal, setFocusedTotal] = useState<
+        IAdjustmentEntryTotal | undefined
+    >()
+
+    const { data } = useTransactionBatchStore()
     const [userOrganization, setUserOrganization] = useState<
         IUserOrganization<IEmployee> | undefined
     >(user_organization as IUserOrganization<IEmployee>)
@@ -36,10 +44,19 @@ const AdjustmentEntryPage = () => {
 
     return (
         <PageContainer>
+            {focusedTotal?.is_balanced === false && (
+                <div className="px-2 py-1 mb-3 rounded-md bg-destructive text-xs w-full text-center border-destructive">
+                    In this adjustment entry, the total debits and total credits
+                    must be balanced.
+                </div>
+            )}
             <AdjustmentEntryCreateUpdateFormModal
                 {...createModal}
                 description="Enter the details for the new adjustment entry."
                 formProps={{
+                    defaultValues: {
+                        entry_date: userOrganization?.time_machine_time,
+                    },
                     baseCurrency: currency,
                     onSuccess: () => {
                         queryClient.invalidateQueries({
@@ -53,6 +70,7 @@ const AdjustmentEntryPage = () => {
                 className="selft-start w-full"
                 currencyId={currency?.id as TEntityId}
                 mode={userOrganization ? 'currency-employee' : 'currency'}
+                onLoad={(data) => setFocusedTotal(data)}
                 userOrganizationId={userOrganization?.id as TEntityId}
             >
                 <div className="flex flex-1 items-center gap-x-2">
@@ -88,14 +106,24 @@ const AdjustmentEntryPage = () => {
                     </div>
                 </div>
             </AdjustmentEntryTotal>
-
             <AdjustmentEntryTable
                 className="max-h-[90vh] min-h-[80vh] w-full py-2"
                 currencyId={currency?.id as TEntityId}
                 mode={userOrganization ? 'currency-employee' : 'currency'}
                 toolbarProps={{
                     createActionProps: {
-                        onClick: () => createModal.onOpenChange(true),
+                        className: buttonVariants({
+                            variant: !focusedTotal?.is_balanced
+                                ? 'alert'
+                                : 'default',
+                        }),
+                        onClick: () => {
+                            if (!data)
+                                return toast.warning(
+                                    'Please create transaction batch first before making any Adjustment.'
+                                )
+                            createModal.onOpenChange(true)
+                        },
                     },
                 }}
                 userOrganizationId={userOrganization?.id as TEntityId}

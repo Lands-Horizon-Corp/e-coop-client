@@ -4,9 +4,14 @@ import { Row } from '@tanstack/react-table'
 
 import RowActionsGroup from '@/components/data-table/data-table-row-actions'
 import DataTableRowContext from '@/components/data-table/data-table-row-context'
+import { useTableRowActionStore } from '@/components/data-table/store/data-table-action-store'
 
 import { ICashCount } from '../../cash-count.types'
 import { ICashCountTableActionComponentProp } from './columns'
+
+export type CashCountActionType = 'edit' | 'delete'
+
+export type CashCountActionExtra = Record<string, never>
 
 interface UseCashCountActionsProps {
     row: Row<ICashCount>
@@ -15,10 +20,25 @@ interface UseCashCountActionsProps {
 
 const useCashCountActions = ({ row }: UseCashCountActionsProps) => {
     const cashCount = row.original
+    const { open } = useTableRowActionStore<
+        ICashCount,
+        CashCountActionType,
+        CashCountActionExtra
+    >()
 
-    const handleEdit = () => {}
+    const handleEdit = () => {
+        open('edit', {
+            id: cashCount.id,
+            defaultValues: cashCount,
+        })
+    }
 
-    const handleDelete = () => {}
+    const handleDelete = () => {
+        open('delete', {
+            id: cashCount.id,
+            defaultValues: cashCount,
+        })
+    }
 
     return {
         cashCount,
@@ -67,6 +87,10 @@ export const CashCountRowContext = ({
             <DataTableRowContext row={row}>{children}</DataTableRowContext>
         </>
     )
+}
+
+export const CashCountTableActionManager = () => {
+    return null
 }
 
 export default CashCountAction

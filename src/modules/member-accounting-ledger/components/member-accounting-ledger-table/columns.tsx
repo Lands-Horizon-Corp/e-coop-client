@@ -18,8 +18,8 @@ import TextFilter from '@/components/data-table/data-table-filters/text-filter'
 
 export const memberGeneralLedgerGlobalSearchTargets: IGlobalSearchTargets<IMemberAccountingLedger>[] =
     [
-        { field: 'member_profile_id', displayText: 'Member Profile ID' },
-        { field: 'account_id', displayText: 'Account ID' },
+        { field: 'member_profile.full_name', displayText: 'Member Profile ID' },
+        { field: 'account.name', displayText: 'Account ID' },
     ]
 
 export interface IMemberAccountingLedgerTableActionComponentProp {
@@ -50,12 +50,13 @@ const MemberAccountingLedgerTableColumns = (
         enableHiding: false,
     },
     {
-        id: 'account',
+        id: 'account.name',
         accessorKey: 'account.name',
         header: (props) => (
             <DataTableColumnHeader {...props} title="Account Title">
                 <ColumnActions {...props}>
                     <TextFilter<IMemberAccountingLedger>
+                        defaultMode="contains"
                         displayText="Account Title/Name"
                         field="account.name"
                     />
@@ -63,7 +64,7 @@ const MemberAccountingLedgerTableColumns = (
             </DataTableColumnHeader>
         ),
         cell: ({ row: { original } }) => (
-            <p>
+            <div>
                 <span className="mr-1">{original.account?.name || '-'}</span>
                 {original.account?.currency && (
                     <CurrencyBadge
@@ -72,7 +73,7 @@ const MemberAccountingLedgerTableColumns = (
                         size="sm"
                     />
                 )}
-            </p>
+            </div>
         ),
         enableMultiSort: true,
         enableSorting: true,

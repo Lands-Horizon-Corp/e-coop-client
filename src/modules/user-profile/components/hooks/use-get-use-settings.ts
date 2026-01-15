@@ -9,11 +9,12 @@ export const useGetUserSettings = () => {
             user_setting_number_padding: user_setting_number_padding,
         },
     } = user
-
+    console.log(userSettingOR)
     return {
-        userSettingOR: userSettingOR
-            .toString()
-            .padStart(user_setting_number_padding, '0'),
+        userSettingOR:
+            userSettingOR
+                ?.toString()
+                ?.padStart(user_setting_number_padding, '0') ?? '',
         ...user.user_organization,
     }
 }

@@ -21,9 +21,7 @@ export type TUserOrgPermissionSchema = z.infer<typeof UserOrgPermissionSchema>
 export const UserOrganizationSettingsSchema = z.object({
     user_type: z.enum(USER_TYPE),
     description: z.string(),
-    user_setting_description: z
-        .string()
-        .min(1, 'Setting description is required'),
+    user_setting_description: z.coerce.string(),
     user_setting_start_or: z.coerce
         .number()
         .min(0, 'Start OR must be non-negative'),
@@ -67,6 +65,15 @@ export const UserOrganizationSettingsSchema = z.object({
         .optional()
         .nullable(),
     settings_accounting_withdraw_default_value: z.any().optional(),
+
+    time_machine_time: z.coerce.string().transform((val) => {
+        if (!val || val === '') return undefined
+
+        const date = new Date(val)
+        if (isNaN(date.getTime())) return undefined
+
+        return date.toISOString()
+    }),
 })
 
 export type TUserOrganizationSettingsSchema = z.infer<

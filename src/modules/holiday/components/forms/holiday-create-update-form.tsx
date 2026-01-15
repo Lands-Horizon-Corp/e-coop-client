@@ -64,7 +64,9 @@ const HolidayCreateUpdateForm = ({
             ...withToastCallbacks({
                 textSuccess: 'Holiday updated',
                 textError: 'Failed to update holiday',
-                onSuccess: formProps.onSuccess,
+                onSuccess: (data) => {
+                    formProps.onSuccess?.(data)
+                },
                 onError: formProps.onError,
             }),
         },
@@ -176,7 +178,7 @@ const HolidayCreateUpdateForm = ({
                     </fieldset>
                 </fieldset>
                 <FormFooterResetSubmit
-                    disableSubmit={!form.formState.isDirty}
+                    disableSubmit={!form.formState.isDirty || isPending}
                     error={error}
                     isLoading={isPending}
                     onReset={() => {

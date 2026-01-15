@@ -1,10 +1,10 @@
-import { UseFormReturn } from 'react-hook-form'
+import { Path, UseFormReturn } from 'react-hook-form'
 
-import { TOrganizationFormValues } from '../organization.validation'
+import { TOrganizationSchema } from '../organization.validation'
 import { organizationStepValidations } from './organization-stepper-config'
 
 export const useOrganizationFormStepperNavigation = (
-    form: UseFormReturn<TOrganizationFormValues>,
+    form: UseFormReturn<TOrganizationSchema>,
     activeStep: number,
     setActiveStep: (step: number) => void,
     totalSteps: number
@@ -18,7 +18,9 @@ export const useOrganizationFormStepperNavigation = (
         }
 
         if (validation.fields.length > 0) {
-            return await form.trigger(validation.fields as any)
+            return await form.trigger(
+                validation.fields as unknown as Path<TOrganizationSchema>
+            )
         }
 
         return true

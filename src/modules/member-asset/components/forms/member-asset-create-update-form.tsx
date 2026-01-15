@@ -131,6 +131,7 @@ const MemberAssetCreateUpdateForm = ({
                             render={({ field }) => (
                                 <Input
                                     {...field}
+                                    className="bg-popover"
                                     disabled={isDisabled(field.name)}
                                     id={field.name}
                                     placeholder="Asset Name"
@@ -145,6 +146,7 @@ const MemberAssetCreateUpdateForm = ({
                                 render={({ field: { onChange, ...field } }) => (
                                     <CurrencyInput
                                         {...field}
+                                        className="bg-popover"
                                         disabled={isDisabled(field.name)}
                                         onValueChange={(newValue = '') => {
                                             onChange(newValue)
@@ -163,7 +165,7 @@ const MemberAssetCreateUpdateForm = ({
                                 render={({ field }) => (
                                     <InputDate
                                         {...field}
-                                        className="block"
+                                        className="block bg-popover"
                                         disabled={isDisabled(field.name)}
                                         placeholder="Entry Date"
                                         value={field.value ?? ''}
@@ -181,7 +183,7 @@ const MemberAssetCreateUpdateForm = ({
                                     content={field.value}
                                     disabled={isDisabled(field.name)}
                                     placeholder="Asset Description..."
-                                    textEditorClassName="bg-background !max-w-none"
+                                    textEditorClassName="bg-popover !max-w-none"
                                 />
                             )}
                         />
@@ -216,7 +218,7 @@ const MemberAssetCreateUpdateForm = ({
                 </fieldset>
                 <FormFooterResetSubmit
                     className="sticky bottom-0 bg-background/80"
-                    disableSubmit={!form.formState.isDirty}
+                    disableSubmit={!form.formState.isDirty || isPending}
                     error={error}
                     isLoading={isPending}
                     onReset={() => {

@@ -2,7 +2,6 @@ import { cn, formatNumber } from '@/helpers'
 import { currencyFormat } from '@/modules/currency'
 
 import { CalendarNumberIcon, EyeIcon } from '@/components/icons'
-import Modal from '@/components/modals/modal'
 import { Button } from '@/components/ui/button'
 import CopyWrapper from '@/components/wrappers/copy-wrapper'
 
@@ -11,11 +10,11 @@ import { useModalState } from '@/hooks/use-modal-state'
 import { IClassProps } from '@/types'
 
 import { ILoanTransaction } from '../loan-transaction.types'
-import LoanAmortization from './loan-amortization'
+import { LoanAmortizationModal } from './loan-amortization'
 import LoanModeOfPaymentBadge from './loan-mode-of-payment-badge'
 import LoanStatusIndicator from './loan-status-indicator'
 import { LoanTypeBadge } from './loan-type-badge'
-import { LoanViewModal } from './loan-view'
+import { LoanViewModal } from './loan-view/loan-view'
 
 interface Props extends IClassProps {
     loanTransaction: ILoanTransaction
@@ -26,20 +25,20 @@ const LoanMiniInfoCard = ({ className, loanTransaction }: Props) => {
 
     return (
         <div className={cn('bg-popover p-4 rounded border', className)}>
-            <Modal
-                {...amortViewer}
+            {/* <Modal
                 className="!max-w-[90vw] p-0 shadow-none border-none bg-transparent gap-y-0"
+            > */}
+            <LoanAmortizationModal
+                {...amortViewer}
+                className="col-span-5 p-0"
                 closeButtonClassName="top-2 right-2"
                 description=""
                 descriptionClassName="sr-only"
+                loanTransactionId={loanTransaction.id}
                 title=""
                 titleClassName="sr-only"
-            >
-                <LoanAmortization
-                    className="col-span-5 p-0 bg-transparent"
-                    loanTransactionId={loanTransaction.id}
-                />
-            </Modal>
+            />
+            {/* </Modal> */}
             <div className="flex items-center justify-between">
                 <div>
                     <p>Loan Summary</p>
@@ -122,8 +121,8 @@ export const LoanMicroInfoCard = ({ className, loanTransaction }: Props) => {
                     <p>Loan Summary</p>
                     <div className="text-xs">
                         <CopyWrapper textToCopy={loanTransaction.id}>
-                            <span className="text-muted-foreground/70">
-                                Copy ID
+                            <span className="text-muted-foreground/50 hover:text-muted-foreground">
+                                {loanTransaction.id}
                             </span>
                         </CopyWrapper>
                     </div>

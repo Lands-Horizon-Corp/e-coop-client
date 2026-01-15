@@ -1,4 +1,5 @@
 import { useForm } from 'react-hook-form'
+import { toast } from 'sonner'
 import z from 'zod'
 
 import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
@@ -39,10 +40,13 @@ export interface ITransactionBatchEndFormProps
             IVerification,
             Error,
             TTransactionReverseRequestValues
-        > {}
+        > {
+    submitText?: string
+}
 
 const TransactionReverseRequestForm = ({
     className,
+    submitText = 'Request Reverse',
     ...formProps
 }: ITransactionBatchEndFormProps) => {
     const form = useForm<TTransactionReverseRequestValues>({
@@ -61,7 +65,7 @@ const TransactionReverseRequestForm = ({
         })
 
     const {
-        mutate: requestReverse,
+        mutateAsync: requestReverse,
         error: rawError,
         isPending,
         isSuccess,
@@ -73,10 +77,16 @@ const TransactionReverseRequestForm = ({
     })
 
     const onSubmit = form.handleSubmit(async (formData) => {
-        requestReverse({
-            user_organization_id: formData.user_organization_id,
-            password: formData.password,
-        })
+        toast.promise(
+            requestReverse({
+                user_organization_id: formData.user_organization_id,
+                password: formData.password,
+            }),
+            {
+                loading: 'verifying user...',
+                success: 'Success verification.',
+            }
+        )
     }, handleFocusError)
 
     const error = serverRequestErrExtractor({ error: rawError })
@@ -139,7 +149,7 @@ const TransactionReverseRequestForm = ({
                         size="sm"
                         type="submit"
                     >
-                        {isPending ? <LoadingSpinner /> : 'Request Reverse'}
+                        {isPending ? <LoadingSpinner /> : submitText}
                     </Button>
                 </div>
             </form>

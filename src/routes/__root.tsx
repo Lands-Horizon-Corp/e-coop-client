@@ -117,15 +117,43 @@ function RootLayout() {
                     theme="system"
                     toastOptions={{
                         classNames: {
-                            icon: 'flex items-center !mr-2 justify-center',
+                            icon: 'flex items-center justify-center !mr-2',
+
                             success:
-                                '!bg-gradient-to-tr !p-4 !rounded-xl !border-t-0 !border-x-0 !border-b-1 !border-b-green-500 !from-green-500/20 !to-background !text-foreground !border-green-600',
-                            info: '!bg-gradient-to-tr !p-4 !rounded-xl !border-t-0 !border-x-0 !border-b-1 !border-b-blue-500 !from-blue-500/20 !to-background !text-foreground !border-blue-600',
+                                '!p-4 !rounded-xl !border-t-0 !border-x-0 !border-b-1 ' +
+                                '!bg-green-50 dark:!bg-transparent dark:!bg-gradient-to-tr ' +
+                                '!border-b-primary !border-primary ' +
+                                'dark:!from-primary dark:!to-background ' +
+                                '!text-foreground',
+
+                            info:
+                                '!p-4 !rounded-xl !border-t-0 !border-x-0 !border-b-1 ' +
+                                '!bg-blue-50 dark:!bg-transparent dark:!bg-gradient-to-tr ' +
+                                '!border-b-primary !border-primary ' +
+                                'dark:!from-primary/70 dark:!to-background ' +
+                                '!text-foreground',
+
                             loading:
-                                '!bg-gradient-to-tr !p-4 !rounded-xl !border-t-0 !border-x-0 !border-b-1 !border-b-primary !from-primary/40 !to-background !text-foreground !border-primary',
-                            error: '!bg-gradient-to-tr !p-4 !rounded-xl !border-t-0 !border-x-0 !border-b-1 !border-b-rose-400 !from-rose-400/20 !to-background !text-foreground !border-rose-400',
+                                '!p-4 !rounded-xl !border-t-0 !border-x-0 !border-b-1 ' +
+                                '!bg-muted ' +
+                                'dark:!bg-transparent dark:!bg-gradient-to-tr ' +
+                                '!border-b-muted-foreground/30 !border-muted-foreground/20 ' +
+                                'dark:!from-muted dark:!to-background ' +
+                                '!text-muted-foreground',
+
+                            error:
+                                '!p-4 !rounded-xl !border-t-0 !border-x-0 !border-b-1 ' +
+                                '!bg-rose-50 dark:!bg-transparent dark:!bg-gradient-to-tr ' +
+                                '!border-b-destructive !border-destructive ' +
+                                'dark:!from-destructive dark:!to-background ' +
+                                '!text-foreground',
+
                             warning:
-                                '!bg-gradient-to-tr !p-4 !rounded-xl !border-t-0 !border-x-0 !border-b-1 !border-b-[#e8915f] !from-[#e8915f]/20 !to-popover !text-foreground !border-[#e8915f]',
+                                '!p-4 !rounded-xl !border-t-0 !border-x-0 !border-b-1 ' +
+                                '!bg-[#e8915f]/60 dark:!bg-transparent dark:!bg-gradient-to-tr ' +
+                                '!border-b-warning !border-warning ' +
+                                'dark:!from-warning dark:!to-popover ' +
+                                '!text-foreground',
                         },
                     }}
                 />

@@ -39,3 +39,7 @@ export const dateAgo = (inputDate: Date | string | number) => {
         addSuffix: true,
     })
 }
+
+export function getCurrentTimezone(): string {
+    return Intl.DateTimeFormat().resolvedOptions().timeZone
+}

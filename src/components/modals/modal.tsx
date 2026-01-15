@@ -2,7 +2,6 @@ import { type ReactNode } from 'react'
 
 import type * as DialogPrimitive from '@radix-ui/react-dialog'
 
-// import { SHORTCUT_SCOPES } from '@/constants'
 import { cn } from '@/helpers/tw-utils'
 import type {
     IBaseProps,
@@ -18,15 +17,10 @@ import {
 } from '@/components/ui/dialog'
 import { Separator } from '@/components/ui/separator'
 
-// import GeneralShortcutsWrapper, {
-//     useShortcutContext,
-// } from '../shorcuts/general-shortcuts-wrapper'
-
 export interface IModalClassNames extends DialogExtraProps, IClassProps {
     titleClassName?: string
     descriptionClassName?: string
 }
-
 export interface IModalProps
     extends IBaseProps,
         DialogPrimitive.DialogProps,
@@ -50,19 +44,7 @@ const Modal = ({
     descriptionClassName,
     ...other
 }: IModalProps) => {
-    // const { setActiveScope } = useShortcutContext()
-
-    // useEffect(() => {
-    //     if (other.open) {
-    //         setActiveScope(SHORTCUT_SCOPES.MODAL)
-    //     }
-    //     return () => {
-    //         setActiveScope(SHORTCUT_SCOPES.GLOBAL)
-    //     }
-    // }, [other.open, setActiveScope])
-
     return (
-        // <GeneralShortcutsWrapper mode={SHORTCUT_SCOPES.MODAL}>
         <Dialog {...other}>
             <DialogContent
                 className={cn(
@@ -73,24 +55,30 @@ const Modal = ({
                 overlayClassName={cn('backdrop-blur', overlayClassName)}
                 showCloseButton={!showCloseButton}
             >
-                <DialogTitle className={cn('font-medium', titleClassName)}>
-                    {title}
-                </DialogTitle>
-                <DialogDescription
+                <div
                     className={cn(
-                        'mb-4',
-                        descriptionClassName,
-                        !description && 'hidden'
+                        'space-y-2',
+                        !title && !description && 'hidden'
                     )}
                 >
-                    {description}
-                </DialogDescription>
+                    <DialogTitle className={cn('font-medium', titleClassName)}>
+                        {title}
+                    </DialogTitle>
+                    <DialogDescription
+                        className={cn(
+                            '',
+                            descriptionClassName,
+                            !description && 'hidden'
+                        )}
+                    >
+                        {description}
+                    </DialogDescription>
+                </div>
                 {children}
                 {footer && <Separator className="bg-muted/70" />}
                 {footer}
             </DialogContent>
         </Dialog>
-        // </GeneralShortcutsWrapper>
     )
 }
 

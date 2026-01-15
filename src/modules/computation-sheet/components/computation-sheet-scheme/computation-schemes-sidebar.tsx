@@ -220,8 +220,8 @@ const LoanComputationSheet = ({
                             }}
                             hideOnSuccess={false}
                         />
-                        <div className=" flex-1">
-                            <p className="truncate">
+                        <div className="min-w-0 flex-1">
+                            <p className="truncate text-sm">
                                 <span>{scheme.name}</span>
                             </p>
                             <CurrencyBadge

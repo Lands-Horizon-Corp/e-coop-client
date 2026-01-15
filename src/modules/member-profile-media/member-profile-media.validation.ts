@@ -3,7 +3,7 @@ import z from 'zod'
 import { entityIdSchema } from '@/validation'
 
 export const MemberProfileMediaSchema = z.object({
-    id: entityIdSchema.optional(),
+    id: entityIdSchema,
     name: z.coerce
         .string()
         .min(1, 'MemberProfileMedia name is required')

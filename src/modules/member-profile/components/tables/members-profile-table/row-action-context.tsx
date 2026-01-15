@@ -1,8 +1,8 @@
-import { ReactNode, useState } from 'react'
+import { ReactNode } from 'react'
 
 import { useRouter } from '@tanstack/react-router'
-import { toast } from 'sonner'
 
+import { withToastCallbacks } from '@/helpers/callback-helper'
 import FootstepTable from '@/modules/footstep/components/footsteps-table'
 import { TEntryType } from '@/modules/general-ledger'
 import GeneralLedgerTable from '@/modules/general-ledger/components/tables/general-ledger-table'
@@ -16,6 +16,7 @@ import { Row } from '@tanstack/react-table'
 
 import RowActionsGroup from '@/components/data-table/data-table-row-actions'
 import DataTableRowContext from '@/components/data-table/data-table-row-context'
+import { useTableRowActionStore } from '@/components/data-table/store/data-table-action-store'
 import {
     BillIcon,
     BookIcon,
@@ -51,12 +52,28 @@ import {
     DropdownMenuSubTrigger,
 } from '@/components/ui/dropdown-menu'
 
-import { useModalState } from '@/hooks/use-modal-state'
-
 import { IMemberProfile, useDeleteMemberProfileById } from '../../..'
 import { MemberHistoriesModal } from '../../member-histories'
 import { MemberOverallInfoModal } from '../../member-infos/view-member-info'
 import { IMemberProfileTableActionComponentProp } from './columns'
+
+// ===== TYPE DEFINITIONS =====
+export type MemberProfileActionType =
+    | 'info'
+    | 'history'
+    | 'close'
+    | 'footstep'
+    | 'transaction'
+    | 'ledger'
+    | 'accounting-ledger'
+    | 'loan-list'
+    | 'qr'
+    | 'delete'
+
+export interface MemberProfileActionExtra {
+    onDeleteSuccess?: () => void
+    entryType?: TEntryType
+}
 
 interface UseMemberProfileActionsProps {
     row: Row<IMemberProfile>
@@ -67,74 +84,72 @@ const useMemberProfileActions = ({
     row,
     onDeleteSuccess,
 }: UseMemberProfileActionsProps) => {
-    const member = row.original
     const router = useRouter()
+    const member = row.original
     const { onOpen } = useInfoModalStore()
     const { onOpen: onOpenConfirm } = useConfirmModalStore()
+    const { open } = useTableRowActionStore<
+        IMemberProfile,
+        MemberProfileActionType,
+        MemberProfileActionExtra
+    >()
 
-    const infoModal = useModalState(false)
-    const loanListModal = useModalState(false)
-    const closeModal = useModalState(false)
-    const historyModal = useModalState(false)
-    const footstepModal = useModalState(false)
-    const transactionModal = useModalState(false)
-    const ledgerTableModal = useModalState()
-    const accountingLedgerModal = useModalState()
-
-    const [selectedEntryType, setSelectedEntryType] = useState<TEntryType>('')
-
-    const { mutateAsync: deleteProfile, isPending: isDeleting } =
+    const { mutate: deleteProfile, isPending: isDeleting } =
         useDeleteMemberProfileById({
             options: {
-                onSuccess: onDeleteSuccess,
+                ...withToastCallbacks({
+                    textSuccess: 'Deleted member profile',
+                    onSuccess: onDeleteSuccess,
+                }),
             },
         })
-
-    const handleEdit = () => {
-        router.navigate({
-            to: `../member-profile/${member.id}/personal-info`,
-        })
-    }
 
     const handleDelete = () => {
         onOpenConfirm({
             title: 'Delete Member Profile',
             description: `Are you sure you want to delete ${member.full_name}'s profile? This action cannot be undone.`,
-            onConfirm: () =>
-                toast.promise(deleteProfile(member.id), {
-                    loading: 'Deleting member profile...',
-                    success: 'Member profile deleted successfully.',
-                    error: (err) =>
-                        `Failed to delete member profile. ${
-                            err?.message ?? 'Please try again later.'
-                        }`,
-                }),
+            onConfirm: () => deleteProfile(member.id),
         })
     }
 
-    const openLedgerModal = (entryType: TEntryType) => {
-        setSelectedEntryType(entryType)
-        ledgerTableModal.onOpenChange(true)
+    const handleInfo = () => {
+        open('info', { id: member.id, defaultValues: member })
     }
 
-    const getModalTitle = () => {
-        if (!selectedEntryType) return 'General Ledger'
+    const handleHistory = () => {
+        open('history', { id: member.id, defaultValues: member })
+    }
 
-        const entryTypeNames: Record<TEntryType, string> = {
-            '': 'General Ledger',
-            'check-entry': 'Check Entry',
-            'online-entry': 'Online Entry',
-            'cash-entry': 'Cash Entry',
-            'payment-entry': 'Payment Entry',
-            'withdraw-entry': 'Withdraw Entry',
-            'deposit-entry': 'Deposit Entry',
-            'journal-entry': 'Journal Entry',
-            'adjustment-entry': 'Adjustment Entry',
-            'journal-voucher': 'Journal Voucher',
-            'check-voucher': 'Check Voucher',
-        }
+    const handleClose = () => {
+        open('close', {
+            id: member.id,
+            defaultValues: member,
+            extra: { onDeleteSuccess },
+        })
+    }
 
-        return entryTypeNames[selectedEntryType] || 'General Ledger'
+    const handleFootstep = () => {
+        open('footstep', { id: member.id, defaultValues: member })
+    }
+
+    const handleTransaction = () => {
+        open('transaction', { id: member.id, defaultValues: member })
+    }
+
+    const handleLedger = (entryType: TEntryType = '') => {
+        open('ledger', {
+            id: member.id,
+            defaultValues: member,
+            extra: { entryType },
+        })
+    }
+
+    const handleAccountingLedger = () => {
+        open('accounting-ledger', { id: member.id, defaultValues: member })
+    }
+
+    const handleLoanList = () => {
+        open('loan-list', { id: member.id, defaultValues: member })
     }
 
     const handleShowQR = () => {
@@ -158,22 +173,25 @@ const useMemberProfileActions = ({
         })
     }
 
+    const handleEdit = () => {
+        router.navigate({
+            to: `../member-profile/${member.id}/personal-info`,
+        })
+    }
+
     return {
         member,
-        infoModal,
-        closeModal,
-        historyModal,
-        loanListModal,
-        footstepModal,
-        transactionModal,
-        ledgerTableModal,
-        accountingLedgerModal,
-        selectedEntryType,
         isDeleting,
         handleEdit,
         handleDelete,
-        openLedgerModal,
-        getModalTitle,
+        handleInfo,
+        handleHistory,
+        handleClose,
+        handleFootstep,
+        handleTransaction,
+        handleLedger,
+        handleAccountingLedger,
+        handleLoanList,
         handleShowQR,
     }
 }
@@ -190,351 +208,220 @@ export const MemberProfileAction = ({
 }: IMemberProfileTableActionProps) => {
     const {
         member,
-        infoModal,
-        closeModal,
-        historyModal,
-        loanListModal,
-        footstepModal,
-        transactionModal,
-        ledgerTableModal,
-        selectedEntryType,
-        accountingLedgerModal,
+        // isDeleting,
         handleEdit,
-        handleDelete,
-        openLedgerModal,
-        getModalTitle,
+        // handleDelete,
+        handleInfo,
+        handleHistory,
+        handleClose,
+        handleFootstep,
+        handleTransaction,
+        handleLedger,
+        handleAccountingLedger,
+        handleLoanList,
         handleShowQR,
     } = useMemberProfileActions({ row, onDeleteSuccess })
 
     return (
-        <>
-            <div onClick={(e) => e.stopPropagation()}>
-                {member && (
-                    <>
-                        <Modal
-                            {...ledgerTableModal}
-                            className="!max-w-[95vw]"
-                            description={`You are viewing ${member.full_name}'s ${getModalTitle().toLowerCase()}`}
-                            title={getModalTitle()}
-                        >
-                            <GeneralLedgerTable
-                                className="min-h-[75vh] min-w-0 max-h-[75vh]"
-                                excludeColumnIds={['balance']}
-                                memberProfileId={member.id}
-                                mode="member"
-                                TEntryType={selectedEntryType}
-                            />
-                        </Modal>
+        <RowActionsGroup
+            canSelect
+            // onDelete={{
+            //     text: 'Delete',
+            //     isAllowed: !isDeleting,
+            //     onClick: handleDelete,
+            // }}
+            onEdit={{
+                text: 'Edit',
+                isAllowed: true,
+                onClick: () => {
+                    handleEdit()
+                },
+            }}
+            otherActions={
+                <>
+                    <DropdownMenuItem onClick={handleInfo}>
+                        <EyeIcon className="mr-2" strokeWidth={1.5} />
+                        View Member&apos;s Info
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={handleHistory}>
+                        <UserClockFillIcon className="mr-2" strokeWidth={1.5} />
+                        Member History
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={handleTransaction}>
+                        <ReceiptIcon className="mr-2" strokeWidth={1.5} />
+                        View Transactions
+                    </DropdownMenuItem>
+                    <DropdownMenuItem
+                        disabled={!member.user_id}
+                        onClick={handleFootstep}
+                    >
+                        <FootstepsIcon className="mr-2" strokeWidth={1.5} />
+                        See Footstep
+                    </DropdownMenuItem>
 
-                        <MemberHistoriesModal
-                            {...historyModal}
-                            memberHistoryProps={{
-                                profileId: member.id,
-                            }}
-                        />
-                        <MemberOverallInfoModal
-                            {...infoModal}
-                            overallInfoProps={{
-                                memberProfileId: member.id,
-                            }}
-                        />
-                        <MemberProfileCloseFormModal
-                            {...closeModal}
-                            formProps={{
-                                profileId: member.id,
-                                defaultValues: {
-                                    remarks: member.member_close_remarks ?? [],
-                                },
-                            }}
-                        />
-                        <Modal
-                            {...footstepModal}
-                            className="!max-w-[95vw]"
-                            description={`You are viewing ${member.full_name}'s footstep`}
-                            title={
-                                <div className="flex gap-x-2 items-center">
-                                    <ImageDisplay
-                                        className="rounded-xl size-12"
-                                        src={member.media?.download_url}
+                    <DropdownMenuItem onClick={handleAccountingLedger}>
+                        <BookIcon className="mr-2" strokeWidth={1.5} />
+                        View Accounting Ledger
+                    </DropdownMenuItem>
+
+                    <DropdownMenuSub>
+                        <DropdownMenuSubTrigger>
+                            <BookOpenIcon className="mr-2" strokeWidth={1.5} />
+                            GL Entries
+                        </DropdownMenuSubTrigger>
+                        <DropdownMenuPortal>
+                            <DropdownMenuSubContent>
+                                <DropdownMenuItem
+                                    onClick={() => handleLedger('')}
+                                >
+                                    <BookThickIcon
+                                        className="mr-2"
+                                        strokeWidth={1.5}
                                     />
-                                    <div className="space-y-1">
-                                        <p>{member.full_name}</p>
-                                        <p className="text-sm text-muted-foreground/80">
-                                            Member
-                                        </p>
-                                    </div>
-                                </div>
-                            }
-                        >
-                            <FootstepTable
-                                className="min-h-[90vh] min-w-0 max-h-[90vh]"
-                                memberProfileId={member.id}
-                                mode="member-profile"
-                            />
-                        </Modal>
+                                    General Ledger
+                                </DropdownMenuItem>
 
-                        <Modal
-                            {...transactionModal}
-                            className="!max-w-[95vw]"
-                            description={`You are viewing ${member.full_name}'s transactions`}
-                            title="Transactions"
-                        >
-                            <TransactionsTable
-                                className="min-h-[90vh] min-w-0 max-h-[90vh]"
-                                memberProfileId={member.id}
-                                mode="member-profile"
-                                onRowClick={() => {}}
-                            />
-                        </Modal>
+                                <DropdownMenuItem
+                                    onClick={() => handleLedger('check-entry')}
+                                >
+                                    <MoneyCheckIcon
+                                        className="mr-2"
+                                        strokeWidth={1.5}
+                                    />
+                                    Check Entry
+                                </DropdownMenuItem>
 
-                        <Modal
-                            {...accountingLedgerModal}
-                            className="!max-w-[95vw]"
-                            title={`${member.first_name}'s Accounting Ledger`}
-                        >
-                            <MemberAccountingLedgerTable
-                                className="min-h-[75vh] min-w-0 max-h-[75vh]"
-                                memberProfileId={member.id}
-                                mode="member"
-                            />
-                        </Modal>
+                                <DropdownMenuItem
+                                    onClick={() => handleLedger('online-entry')}
+                                >
+                                    <BillIcon
+                                        className="mr-2"
+                                        strokeWidth={1.5}
+                                    />
+                                    Online Entry
+                                </DropdownMenuItem>
 
-                        <Modal
-                            {...loanListModal}
-                            className="!max-w-[95vw]"
-                            title={`${member.first_name}'s Loans`}
-                        >
-                            <LoanTransactionTable
-                                className="min-h-[80vh] min-w-0 max-h-[80vh]"
-                                memberProfileId={member.id}
-                                mode="member-profile"
-                            />
-                        </Modal>
-                    </>
-                )}
-            </div>
-            <RowActionsGroup
-                canSelect
-                onDelete={{
-                    text: 'Delete',
-                    isAllowed: true,
-                    onClick: () => handleDelete(),
-                }}
-                onEdit={{
-                    text: 'Edit',
-                    isAllowed: true,
-                    onClick: handleEdit,
-                }}
-                otherActions={
-                    <>
-                        <DropdownMenuItem
-                            onClick={() => infoModal.onOpenChange(true)}
-                        >
-                            <EyeIcon className="mr-2" strokeWidth={1.5} />
-                            View Member&apos;s Info
-                        </DropdownMenuItem>
-                        <DropdownMenuItem
-                            onClick={() => historyModal.onOpenChange(true)}
-                        >
-                            <UserClockFillIcon
-                                className="mr-2"
-                                strokeWidth={1.5}
-                            />
-                            Member History
-                        </DropdownMenuItem>
-                        <DropdownMenuItem
-                            onClick={() => transactionModal.onOpenChange(true)}
-                        >
-                            <ReceiptIcon className="mr-2" strokeWidth={1.5} />
-                            View Transactions
-                        </DropdownMenuItem>
-                        <DropdownMenuItem
-                            disabled={!member.user_id}
-                            onClick={() => footstepModal.onOpenChange(true)}
-                        >
-                            <FootstepsIcon className="mr-2" strokeWidth={1.5} />
-                            See Footstep
-                        </DropdownMenuItem>
+                                <DropdownMenuItem
+                                    onClick={() => handleLedger('cash-entry')}
+                                >
+                                    <HandCoinsIcon
+                                        className="mr-2"
+                                        strokeWidth={1.5}
+                                    />
+                                    Cash Entry
+                                </DropdownMenuItem>
 
-                        <DropdownMenuItem
-                            onClick={() =>
-                                accountingLedgerModal.onOpenChange(true)
-                            }
-                        >
-                            <BookIcon className="mr-2" strokeWidth={1.5} />
-                            View Accounting Ledger
-                        </DropdownMenuItem>
+                                <DropdownMenuItem
+                                    onClick={() =>
+                                        handleLedger('payment-entry')
+                                    }
+                                >
+                                    <BillIcon
+                                        className="mr-2"
+                                        strokeWidth={1.5}
+                                    />
+                                    Payment Entry
+                                </DropdownMenuItem>
 
-                        <DropdownMenuSub>
-                            <DropdownMenuSubTrigger>
-                                <BookOpenIcon
-                                    className="mr-2"
-                                    strokeWidth={1.5}
-                                />
-                                GL Entries
-                            </DropdownMenuSubTrigger>
-                            <DropdownMenuPortal>
-                                <DropdownMenuSubContent>
-                                    <DropdownMenuItem
-                                        onClick={() => openLedgerModal('')}
-                                    >
-                                        <BookThickIcon
-                                            className="mr-2"
-                                            strokeWidth={1.5}
-                                        />
-                                        General Ledger
-                                    </DropdownMenuItem>
+                                <DropdownMenuItem
+                                    onClick={() =>
+                                        handleLedger('withdraw-entry')
+                                    }
+                                >
+                                    <HandCoinsIcon
+                                        className="mr-2"
+                                        strokeWidth={1.5}
+                                    />
+                                    Withdraw Entry
+                                </DropdownMenuItem>
 
-                                    <DropdownMenuItem
-                                        onClick={() =>
-                                            openLedgerModal('check-entry')
-                                        }
-                                    >
-                                        <MoneyCheckIcon
-                                            className="mr-2"
-                                            strokeWidth={1.5}
-                                        />
-                                        Check Entry
-                                    </DropdownMenuItem>
+                                <DropdownMenuItem
+                                    onClick={() =>
+                                        handleLedger('deposit-entry')
+                                    }
+                                >
+                                    <HandCoinsIcon
+                                        className="mr-2"
+                                        strokeWidth={1.5}
+                                    />
+                                    Deposit Entry
+                                </DropdownMenuItem>
 
-                                    <DropdownMenuItem
-                                        onClick={() =>
-                                            openLedgerModal('online-entry')
-                                        }
-                                    >
-                                        <BillIcon
-                                            className="mr-2"
-                                            strokeWidth={1.5}
-                                        />
-                                        Online Entry
-                                    </DropdownMenuItem>
+                                <DropdownMenuItem
+                                    onClick={() =>
+                                        handleLedger('journal-entry')
+                                    }
+                                >
+                                    <BookStackIcon
+                                        className="mr-2"
+                                        strokeWidth={1.5}
+                                    />
+                                    Journal Entry
+                                </DropdownMenuItem>
 
-                                    <DropdownMenuItem
-                                        onClick={() =>
-                                            openLedgerModal('cash-entry')
-                                        }
-                                    >
-                                        <HandCoinsIcon
-                                            className="mr-2"
-                                            strokeWidth={1.5}
-                                        />
-                                        Cash Entry
-                                    </DropdownMenuItem>
+                                <DropdownMenuItem
+                                    onClick={() =>
+                                        handleLedger('adjustment-entry')
+                                    }
+                                >
+                                    <SettingsIcon
+                                        className="mr-2"
+                                        strokeWidth={1.5}
+                                    />
+                                    Adjustment Entry
+                                </DropdownMenuItem>
 
-                                    <DropdownMenuItem
-                                        onClick={() =>
-                                            openLedgerModal('payment-entry')
-                                        }
-                                    >
-                                        <BillIcon
-                                            className="mr-2"
-                                            strokeWidth={1.5}
-                                        />
-                                        Payment Entry
-                                    </DropdownMenuItem>
+                                <DropdownMenuItem
+                                    onClick={() =>
+                                        handleLedger('journal-voucher')
+                                    }
+                                >
+                                    <BillIcon
+                                        className="mr-2"
+                                        strokeWidth={1.5}
+                                    />
+                                    Journal Voucher
+                                </DropdownMenuItem>
 
-                                    <DropdownMenuItem
-                                        onClick={() =>
-                                            openLedgerModal('withdraw-entry')
-                                        }
-                                    >
-                                        <HandCoinsIcon
-                                            className="mr-2"
-                                            strokeWidth={1.5}
-                                        />
-                                        Withdraw Entry
-                                    </DropdownMenuItem>
+                                <DropdownMenuItem
+                                    onClick={() =>
+                                        handleLedger('check-voucher')
+                                    }
+                                >
+                                    <MoneyCheckIcon
+                                        className="mr-2"
+                                        strokeWidth={1.5}
+                                    />
+                                    Check Voucher
+                                </DropdownMenuItem>
+                            </DropdownMenuSubContent>
+                        </DropdownMenuPortal>
+                    </DropdownMenuSub>
 
-                                    <DropdownMenuItem
-                                        onClick={() =>
-                                            openLedgerModal('deposit-entry')
-                                        }
-                                    >
-                                        <HandCoinsIcon
-                                            className="mr-2"
-                                            strokeWidth={1.5}
-                                        />
-                                        Deposit Entry
-                                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={handleShowQR}>
+                        <QrCodeIcon className="mr-2" />
+                        Member Profile QR
+                    </DropdownMenuItem>
 
-                                    <DropdownMenuItem
-                                        onClick={() =>
-                                            openLedgerModal('journal-entry')
-                                        }
-                                    >
-                                        <BookStackIcon
-                                            className="mr-2"
-                                            strokeWidth={1.5}
-                                        />
-                                        Journal Entry
-                                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={handleLoanList}>
+                        <WalletIcon className="mr-2" />
+                        Loans
+                    </DropdownMenuItem>
 
-                                    <DropdownMenuItem
-                                        onClick={() =>
-                                            openLedgerModal('adjustment-entry')
-                                        }
-                                    >
-                                        <SettingsIcon
-                                            className="mr-2"
-                                            strokeWidth={1.5}
-                                        />
-                                        Adjustment Entry
-                                    </DropdownMenuItem>
-
-                                    <DropdownMenuItem
-                                        onClick={() =>
-                                            openLedgerModal('journal-voucher')
-                                        }
-                                    >
-                                        <BillIcon
-                                            className="mr-2"
-                                            strokeWidth={1.5}
-                                        />
-                                        Journal Voucher
-                                    </DropdownMenuItem>
-
-                                    <DropdownMenuItem
-                                        onClick={() =>
-                                            openLedgerModal('check-voucher')
-                                        }
-                                    >
-                                        <MoneyCheckIcon
-                                            className="mr-2"
-                                            strokeWidth={1.5}
-                                        />
-                                        Check Voucher
-                                    </DropdownMenuItem>
-                                </DropdownMenuSubContent>
-                            </DropdownMenuPortal>
-                        </DropdownMenuSub>
-
-                        <DropdownMenuItem onClick={handleShowQR}>
-                            <QrCodeIcon className="mr-2" />
-                            Member Profile QR
-                        </DropdownMenuItem>
-
-                        <DropdownMenuItem
-                            onClick={() => loanListModal.onOpenChange(true)}
-                        >
-                            <WalletIcon className="mr-2" />
-                            Loans
-                        </DropdownMenuItem>
-
-                        <DropdownMenuItem
-                            className="focus:bg-destructive focus:text-destructive-foreground"
-                            onClick={() => closeModal.onOpenChange(true)}
-                        >
-                            <HeartBreakFillIcon
-                                className="mr-2 text-rose-500 duration-200 group-focus:text-destructive-foreground"
-                                strokeWidth={1.5}
-                            />
-                            Close Profile/Account
-                        </DropdownMenuItem>
-                    </>
-                }
-                row={row}
-            />
-        </>
+                    <DropdownMenuItem
+                        className="focus:bg-destructive focus:text-destructive-foreground"
+                        onClick={handleClose}
+                    >
+                        <HeartBreakFillIcon
+                            className="mr-2 text-rose-500 duration-200 group-focus:text-destructive-foreground"
+                            strokeWidth={1.5}
+                        />
+                        Close Profile/Account
+                    </DropdownMenuItem>
+                </>
+            }
+            row={row}
+        />
     )
 }
 
@@ -551,352 +438,385 @@ export const MemberProfileRowContext = ({
 }: IMemberProfileRowContextProps) => {
     const {
         member,
-        infoModal,
-        closeModal,
-        historyModal,
-        loanListModal,
-        footstepModal,
-        transactionModal,
-        ledgerTableModal,
-        selectedEntryType,
-        accountingLedgerModal,
-        isDeleting,
+        // isDeleting,
         handleEdit,
-        handleDelete,
-        openLedgerModal,
-        getModalTitle,
+        // handleDelete,
+        handleInfo,
+        handleHistory,
+        handleClose,
+        handleFootstep,
+        handleTransaction,
+        handleLedger,
+        handleAccountingLedger,
+        handleLoanList,
         handleShowQR,
     } = useMemberProfileActions({ row, onDeleteSuccess })
 
     return (
-        <>
-            {member && (
+        <DataTableRowContext
+            // onDelete={{
+            //     text: 'Delete',
+            //     isAllowed: !isDeleting,
+            //     onClick: handleDelete,
+            // }}
+            onEdit={{
+                text: 'Edit',
+                isAllowed: true,
+                onClick: () => {
+                    handleEdit()
+                },
+            }}
+            otherActions={
                 <>
-                    <Modal
-                        {...ledgerTableModal}
-                        className="!max-w-[95vw]"
-                        description={`You are viewing ${member.full_name}'s ${getModalTitle().toLowerCase()}`}
-                        title={getModalTitle()}
+                    <ContextMenuItem onClick={handleInfo}>
+                        <EyeIcon className="mr-2" strokeWidth={1.5} />
+                        View Member&apos;s Info
+                    </ContextMenuItem>
+                    <ContextMenuItem onClick={handleHistory}>
+                        <UserClockFillIcon className="mr-2" strokeWidth={1.5} />
+                        Member History
+                    </ContextMenuItem>
+                    <ContextMenuItem onClick={handleTransaction}>
+                        <ReceiptIcon className="mr-2" strokeWidth={1.5} />
+                        View Transactions
+                    </ContextMenuItem>
+                    <ContextMenuItem
+                        disabled={!member.user_id}
+                        onClick={handleFootstep}
                     >
-                        <GeneralLedgerTable
-                            className="min-h-[75vh] min-w-0 max-h-[75vh]"
-                            excludeColumnIds={['balance']}
-                            memberProfileId={member.id}
-                            mode="member"
-                            TEntryType={selectedEntryType}
-                        />
-                    </Modal>
+                        <FootstepsIcon className="mr-2" strokeWidth={1.5} />
+                        See Footstep
+                    </ContextMenuItem>
 
-                    <Modal
-                        {...accountingLedgerModal}
-                        className="!max-w-[95vw]"
-                        title={`${member.first_name}'s Accounting Ledger`}
-                    >
-                        <MemberAccountingLedgerTable
-                            className="min-h-[75vh] min-w-0 max-h-[75vh]"
-                            memberProfileId={member.id}
-                            mode="member"
-                        />
-                    </Modal>
+                    <ContextMenuItem onClick={handleAccountingLedger}>
+                        <BookIcon className="mr-2" strokeWidth={1.5} />
+                        View Accounting Ledger
+                    </ContextMenuItem>
 
-                    <MemberHistoriesModal
-                        {...historyModal}
-                        memberHistoryProps={{
-                            profileId: member.id,
-                        }}
-                    />
-                    <MemberOverallInfoModal
-                        {...infoModal}
-                        overallInfoProps={{
-                            memberProfileId: member.id,
-                        }}
-                    />
-                    <MemberProfileCloseFormModal
-                        {...closeModal}
-                        formProps={{
-                            profileId: member.id,
-                            defaultValues: {
-                                remarks: member.member_close_remarks ?? [],
-                            },
-                        }}
-                    />
-                    <Modal
-                        {...footstepModal}
-                        className="!max-w-[95vw]"
-                        description={`You are viewing ${member.full_name}'s footstep`}
-                        title={
-                            <div className="flex gap-x-2 items-center">
-                                <ImageDisplay
-                                    className="rounded-xl size-12"
-                                    src={member.media?.download_url}
-                                />
-                                <div className="space-y-1">
-                                    <p>{member.full_name}</p>
-                                    <p className="text-sm text-muted-foreground/80">
-                                        Member
-                                    </p>
-                                </div>
-                            </div>
-                        }
-                    >
-                        <FootstepTable
-                            className="min-h-[90vh] min-w-0 max-h-[90vh]"
-                            memberProfileId={member.id}
-                            mode="member-profile"
-                        />
-                    </Modal>
+                    <ContextMenuSub>
+                        <ContextMenuSubTrigger>
+                            <BookOpenIcon className="mr-2" strokeWidth={1.5} />
+                            GL Entries
+                        </ContextMenuSubTrigger>
+                        <ContextMenuPortal>
+                            <ContextMenuSubContent>
+                                <ContextMenuItem
+                                    onClick={() => handleLedger('')}
+                                >
+                                    <BookThickIcon
+                                        className="mr-2"
+                                        strokeWidth={1.5}
+                                    />
+                                    General Ledger
+                                </ContextMenuItem>
 
-                    <Modal
-                        {...transactionModal}
-                        className="!max-w-[95vw]"
-                        description={`You are viewing ${member.full_name}'s transactions`}
-                        title="Transactions"
-                    >
-                        <TransactionsTable
-                            className="min-h-[90vh] min-w-0 max-h-[90vh]"
-                            memberProfileId={member.id}
-                            mode="member-profile"
-                            onRowClick={() => {}}
-                        />
-                    </Modal>
+                                <ContextMenuItem
+                                    onClick={() => handleLedger('check-entry')}
+                                >
+                                    <MoneyCheckIcon
+                                        className="mr-2"
+                                        strokeWidth={1.5}
+                                    />
+                                    Check Entry
+                                </ContextMenuItem>
 
-                    <Modal
-                        {...loanListModal}
-                        className="!max-w-[95vw]"
-                        title={`${member.first_name}'s Loans`}
+                                <ContextMenuItem
+                                    onClick={() => handleLedger('online-entry')}
+                                >
+                                    <BillIcon
+                                        className="mr-2"
+                                        strokeWidth={1.5}
+                                    />
+                                    Online Entry
+                                </ContextMenuItem>
+
+                                <ContextMenuItem
+                                    onClick={() => handleLedger('cash-entry')}
+                                >
+                                    <HandCoinsIcon
+                                        className="mr-2"
+                                        strokeWidth={1.5}
+                                    />
+                                    Cash Entry
+                                </ContextMenuItem>
+
+                                <ContextMenuItem
+                                    onClick={() =>
+                                        handleLedger('payment-entry')
+                                    }
+                                >
+                                    <BillIcon
+                                        className="mr-2"
+                                        strokeWidth={1.5}
+                                    />
+                                    Payment Entry
+                                </ContextMenuItem>
+
+                                <ContextMenuItem
+                                    onClick={() =>
+                                        handleLedger('withdraw-entry')
+                                    }
+                                >
+                                    <HandCoinsIcon
+                                        className="mr-2"
+                                        strokeWidth={1.5}
+                                    />
+                                    Withdraw Entry
+                                </ContextMenuItem>
+
+                                <ContextMenuItem
+                                    onClick={() =>
+                                        handleLedger('deposit-entry')
+                                    }
+                                >
+                                    <HandCoinsIcon
+                                        className="mr-2"
+                                        strokeWidth={1.5}
+                                    />
+                                    Deposit Entry
+                                </ContextMenuItem>
+
+                                <ContextMenuItem
+                                    onClick={() =>
+                                        handleLedger('journal-entry')
+                                    }
+                                >
+                                    <BookStackIcon
+                                        className="mr-2"
+                                        strokeWidth={1.5}
+                                    />
+                                    Journal Entry
+                                </ContextMenuItem>
+
+                                <ContextMenuItem
+                                    onClick={() =>
+                                        handleLedger('adjustment-entry')
+                                    }
+                                >
+                                    <SettingsIcon
+                                        className="mr-2"
+                                        strokeWidth={1.5}
+                                    />
+                                    Adjustment Entry
+                                </ContextMenuItem>
+
+                                <ContextMenuItem
+                                    onClick={() =>
+                                        handleLedger('journal-voucher')
+                                    }
+                                >
+                                    <BillIcon
+                                        className="mr-2"
+                                        strokeWidth={1.5}
+                                    />
+                                    Journal Voucher
+                                </ContextMenuItem>
+
+                                <ContextMenuItem
+                                    onClick={() =>
+                                        handleLedger('check-voucher')
+                                    }
+                                >
+                                    <MoneyCheckIcon
+                                        className="mr-2"
+                                        strokeWidth={1.5}
+                                    />
+                                    Check Voucher
+                                </ContextMenuItem>
+                            </ContextMenuSubContent>
+                        </ContextMenuPortal>
+                    </ContextMenuSub>
+
+                    <ContextMenuItem onClick={handleShowQR}>
+                        <QrCodeIcon className="mr-2" />
+                        Member Profile QR
+                    </ContextMenuItem>
+
+                    <ContextMenuItem onClick={handleLoanList}>
+                        <WalletIcon className="mr-2" />
+                        Loans
+                    </ContextMenuItem>
+
+                    <ContextMenuItem
+                        className="focus:bg-destructive focus:text-destructive-foreground"
+                        onClick={handleClose}
                     >
-                        <LoanTransactionTable
-                            className="min-h-[80vh] min-w-0 max-h-[80vh]"
-                            memberProfileId={member.id}
-                            mode="member-profile"
+                        <HeartBreakFillIcon
+                            className="mr-2 text-rose-500 duration-200 group-focus:text-destructive-foreground"
+                            strokeWidth={1.5}
                         />
-                    </Modal>
+                        Close Profile/Account
+                    </ContextMenuItem>
                 </>
+            }
+            row={row}
+        >
+            {children}
+        </DataTableRowContext>
+    )
+}
+
+const getEntryTypeTitle = (entryType: TEntryType): string => {
+    if (!entryType) return 'General Ledger'
+
+    const entryTypeNames: Record<TEntryType, string> = {
+        '': 'General Ledger',
+        'check-entry': 'Check Entry',
+        'online-entry': 'Online Entry',
+        'cash-entry': 'Cash Entry',
+        'payment-entry': 'Payment Entry',
+        'withdraw-entry': 'Withdraw Entry',
+        'deposit-entry': 'Deposit Entry',
+        'journal-entry': 'Journal Entry',
+        'adjustment-entry': 'Adjustment Entry',
+        'journal-voucher': 'Journal Voucher',
+        'check-voucher': 'Check Voucher',
+    }
+
+    return entryTypeNames[entryType] || 'General Ledger'
+}
+
+export const MemberProfileTableActionManager = () => {
+    const { state, close } = useTableRowActionStore<
+        IMemberProfile,
+        MemberProfileActionType,
+        MemberProfileActionExtra
+    >()
+
+    const member = state.defaultValues
+    const entryType = state.extra?.entryType ?? ''
+
+    return (
+        <>
+            {state.action === 'info' && member && (
+                <MemberOverallInfoModal
+                    onOpenChange={close}
+                    open={state.isOpen}
+                    overallInfoProps={{
+                        memberProfileId: member.id,
+                    }}
+                />
             )}
-            <DataTableRowContext
-                onDelete={{
-                    text: 'Delete',
-                    isAllowed: !isDeleting,
-                    onClick: handleDelete,
-                }}
-                onEdit={{
-                    text: 'Edit',
-                    isAllowed: true,
-                    onClick: handleEdit,
-                }}
-                otherActions={
-                    <>
-                        <ContextMenuItem
-                            onClick={() => infoModal.onOpenChange(true)}
-                        >
-                            <EyeIcon className="mr-2" strokeWidth={1.5} />
-                            View Member&apos;s Info
-                        </ContextMenuItem>
-                        <ContextMenuItem
-                            onClick={() => historyModal.onOpenChange(true)}
-                        >
-                            <UserClockFillIcon
-                                className="mr-2"
-                                strokeWidth={1.5}
+
+            {state.action === 'history' && member && (
+                <MemberHistoriesModal
+                    memberHistoryProps={{
+                        profileId: member.id,
+                    }}
+                    onOpenChange={close}
+                    open={state.isOpen}
+                />
+            )}
+
+            {state.action === 'close' && member && (
+                <MemberProfileCloseFormModal
+                    formProps={{
+                        profileId: member.id,
+                        defaultValues: {
+                            remarks: member.member_close_remarks ?? [],
+                        },
+                    }}
+                    onOpenChange={close}
+                    open={state.isOpen}
+                />
+            )}
+
+            {state.action === 'footstep' && member && (
+                <Modal
+                    className="!max-w-[95vw]"
+                    description={`You are viewing ${member.full_name}'s footstep`}
+                    onOpenChange={close}
+                    open={state.isOpen}
+                    title={
+                        <div className="flex gap-x-2 items-center">
+                            <ImageDisplay
+                                className="rounded-xl size-12"
+                                src={member.media?.download_url}
                             />
-                            Member History
-                        </ContextMenuItem>
-                        <ContextMenuItem
-                            onClick={() => transactionModal.onOpenChange(true)}
-                        >
-                            <ReceiptIcon className="mr-2" strokeWidth={1.5} />
-                            View Transactions
-                        </ContextMenuItem>
-                        <ContextMenuItem
-                            disabled={!member.user_id}
-                            onClick={() => footstepModal.onOpenChange(true)}
-                        >
-                            <FootstepsIcon className="mr-2" strokeWidth={1.5} />
-                            See Footstep
-                        </ContextMenuItem>
+                            <div className="space-y-1">
+                                <p>{member.full_name}</p>
+                                <p className="text-sm text-muted-foreground/80">
+                                    Member
+                                </p>
+                            </div>
+                        </div>
+                    }
+                >
+                    <FootstepTable
+                        className="min-h-[90vh] min-w-0 max-h-[90vh]"
+                        memberProfileId={member.id}
+                        mode="member-profile"
+                    />
+                </Modal>
+            )}
 
-                        <ContextMenuItem
-                            onClick={() =>
-                                accountingLedgerModal.onOpenChange(true)
-                            }
-                        >
-                            <BookIcon className="mr-2" strokeWidth={1.5} />
-                            View Accounting Ledger
-                        </ContextMenuItem>
+            {state.action === 'transaction' && member && (
+                <Modal
+                    className="!max-w-[95vw]"
+                    description={`You are viewing ${member.full_name}'s transactions`}
+                    onOpenChange={close}
+                    open={state.isOpen}
+                    title="Transactions"
+                >
+                    <TransactionsTable
+                        className="min-h-[90vh] min-w-0 max-h-[90vh]"
+                        memberProfileId={member.id}
+                        mode="member-profile"
+                        onRowClick={() => {}}
+                    />
+                </Modal>
+            )}
 
-                        <ContextMenuSub>
-                            <ContextMenuSubTrigger>
-                                <BookOpenIcon
-                                    className="mr-2"
-                                    strokeWidth={1.5}
-                                />
-                                GL Entries
-                            </ContextMenuSubTrigger>
-                            <ContextMenuPortal>
-                                <ContextMenuSubContent>
-                                    <ContextMenuItem
-                                        onClick={() => openLedgerModal('')}
-                                    >
-                                        <BookThickIcon
-                                            className="mr-2"
-                                            strokeWidth={1.5}
-                                        />
-                                        General Ledger
-                                    </ContextMenuItem>
+            {state.action === 'ledger' && member && (
+                <Modal
+                    className="!max-w-[95vw]"
+                    description={`You are viewing ${member.full_name}'s ${getEntryTypeTitle(entryType).toLowerCase()}`}
+                    onOpenChange={close}
+                    open={state.isOpen}
+                    title={getEntryTypeTitle(entryType)}
+                >
+                    <GeneralLedgerTable
+                        className="min-h-[75vh] min-w-0 max-h-[75vh]"
+                        entryType={entryType}
+                        excludeColumnIds={['balance']}
+                        memberProfileId={member.id}
+                        mode="member"
+                    />
+                </Modal>
+            )}
 
-                                    <ContextMenuItem
-                                        onClick={() =>
-                                            openLedgerModal('check-entry')
-                                        }
-                                    >
-                                        <MoneyCheckIcon
-                                            className="mr-2"
-                                            strokeWidth={1.5}
-                                        />
-                                        Check Entry
-                                    </ContextMenuItem>
+            {state.action === 'accounting-ledger' && member && (
+                <Modal
+                    className="!max-w-[95vw]"
+                    onOpenChange={close}
+                    open={state.isOpen}
+                    title={`${member.first_name}'s Accounting Ledger`}
+                >
+                    <MemberAccountingLedgerTable
+                        className="min-h-[75vh] min-w-0 max-h-[75vh]"
+                        memberProfileId={member.id}
+                        mode="member"
+                    />
+                </Modal>
+            )}
 
-                                    <ContextMenuItem
-                                        onClick={() =>
-                                            openLedgerModal('online-entry')
-                                        }
-                                    >
-                                        <BillIcon
-                                            className="mr-2"
-                                            strokeWidth={1.5}
-                                        />
-                                        Online Entry
-                                    </ContextMenuItem>
-
-                                    <ContextMenuItem
-                                        onClick={() =>
-                                            openLedgerModal('cash-entry')
-                                        }
-                                    >
-                                        <HandCoinsIcon
-                                            className="mr-2"
-                                            strokeWidth={1.5}
-                                        />
-                                        Cash Entry
-                                    </ContextMenuItem>
-
-                                    <ContextMenuItem
-                                        onClick={() =>
-                                            openLedgerModal('payment-entry')
-                                        }
-                                    >
-                                        <BillIcon
-                                            className="mr-2"
-                                            strokeWidth={1.5}
-                                        />
-                                        Payment Entry
-                                    </ContextMenuItem>
-
-                                    <ContextMenuItem
-                                        onClick={() =>
-                                            openLedgerModal('withdraw-entry')
-                                        }
-                                    >
-                                        <HandCoinsIcon
-                                            className="mr-2"
-                                            strokeWidth={1.5}
-                                        />
-                                        Withdraw Entry
-                                    </ContextMenuItem>
-
-                                    <ContextMenuItem
-                                        onClick={() =>
-                                            openLedgerModal('deposit-entry')
-                                        }
-                                    >
-                                        <HandCoinsIcon
-                                            className="mr-2"
-                                            strokeWidth={1.5}
-                                        />
-                                        Deposit Entry
-                                    </ContextMenuItem>
-
-                                    <ContextMenuItem
-                                        onClick={() =>
-                                            openLedgerModal('journal-entry')
-                                        }
-                                    >
-                                        <BookStackIcon
-                                            className="mr-2"
-                                            strokeWidth={1.5}
-                                        />
-                                        Journal Entry
-                                    </ContextMenuItem>
-
-                                    <ContextMenuItem
-                                        onClick={() =>
-                                            openLedgerModal('adjustment-entry')
-                                        }
-                                    >
-                                        <SettingsIcon
-                                            className="mr-2"
-                                            strokeWidth={1.5}
-                                        />
-                                        Adjustment Entry
-                                    </ContextMenuItem>
-
-                                    <ContextMenuItem
-                                        onClick={() =>
-                                            openLedgerModal('journal-voucher')
-                                        }
-                                    >
-                                        <BillIcon
-                                            className="mr-2"
-                                            strokeWidth={1.5}
-                                        />
-                                        Journal Voucher
-                                    </ContextMenuItem>
-
-                                    <ContextMenuItem
-                                        onClick={() =>
-                                            openLedgerModal('check-voucher')
-                                        }
-                                    >
-                                        <MoneyCheckIcon
-                                            className="mr-2"
-                                            strokeWidth={1.5}
-                                        />
-                                        Check Voucher
-                                    </ContextMenuItem>
-                                </ContextMenuSubContent>
-                            </ContextMenuPortal>
-                        </ContextMenuSub>
-
-                        <ContextMenuItem onClick={handleShowQR}>
-                            <QrCodeIcon className="mr-2" />
-                            Member Profile QR
-                        </ContextMenuItem>
-
-                        <ContextMenuItem
-                            onClick={() => loanListModal.onOpenChange(true)}
-                        >
-                            <WalletIcon className="mr-2" />
-                            Loans
-                        </ContextMenuItem>
-
-                        <ContextMenuItem
-                            className="focus:bg-destructive focus:text-destructive-foreground"
-                            onClick={() => closeModal.onOpenChange(true)}
-                        >
-                            <HeartBreakFillIcon
-                                className="mr-2 text-rose-500 duration-200 group-focus:text-destructive-foreground"
-                                strokeWidth={1.5}
-                            />
-                            Close Profile/Account
-                        </ContextMenuItem>
-                    </>
-                }
-                row={row}
-            >
-                {children}
-            </DataTableRowContext>
+            {state.action === 'loan-list' && member && (
+                <Modal
+                    className="!max-w-[95vw]"
+                    onOpenChange={close}
+                    open={state.isOpen}
+                    title={`${member.first_name}'s Loans`}
+                >
+                    <LoanTransactionTable
+                        className="min-h-[80vh] min-w-0 max-h-[80vh]"
+                        memberProfileId={member.id}
+                        mode="member-profile"
+                    />
+                </Modal>
+            )}
         </>
     )
 }
 
+// Default export for backward compatibility
 export default MemberProfileAction

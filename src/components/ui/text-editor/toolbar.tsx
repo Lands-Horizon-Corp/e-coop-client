@@ -178,10 +178,7 @@ const Toolbar = ({
 
     return (
         <div
-            className={cn(
-                `flex w-full min-w-fit flex-wrap space-x-2`,
-                className
-            )}
+            className={cn(`flex w-full min-w-0 flex-wrap space-x-2`, className)}
         >
             {toolbarItems.map((item) => {
                 const IconComponent = item.icon

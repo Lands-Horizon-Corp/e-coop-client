@@ -40,7 +40,6 @@ function RouteComponent() {
                         </div>
                         <AuthFooter />
                     </div>
-
                     <SidePanelPoster />
                 </main>
             </div>

@@ -91,13 +91,16 @@ const BranchSettingsCurrencyForm = ({
                 ref={formRef}
             >
                 <TransactionReverseRequestFormModal
+                    description="This action needs extra admin/authorization"
                     formProps={{
+                        submitText: 'Save',
                         onSuccess: () => {
                             onSubmit()
                         },
                     }}
                     onOpenChange={modalState.onOpenChange}
                     open={modalState.open}
+                    title="Update Checkpoint"
                 />
                 <fieldset
                     className="space-y-6"
@@ -109,12 +112,31 @@ const BranchSettingsCurrencyForm = ({
                             <div className="size-fit rounded-full bg-yellow-100 p-2 dark:bg-yellow-900/20">
                                 <BankIcon className="size-5 " />
                             </div>
-                            <div>
+                            <div className="flex-1">
                                 <h3 className="font-semibold">
                                     Currency & Default Accounts
                                 </h3>
                                 <p className="text-xs text-muted-foreground">
                                     Configure currency and default accounts
+                                </p>
+                            </div>
+                        </div>
+
+                        {/* Important Notice */}
+                        <div className="flex gap-3 p-3 bg-accent/50 border border-border rounded-lg">
+                            <InfoIcon className="size-5 shrink-0 text-primary mt-0.5" />
+                            <div className="space-y-1">
+                                <p className="text-sm font-medium text-foreground">
+                                    Currency Configuration Requirements
+                                </p>
+                                <p className="text-xs text-muted-foreground">
+                                    To enable multi-currency support, the Paid
+                                    Up Share Capital and Cash on Hand accounts
+                                    must use the same currency as your default
+                                    currency. If you change the default currency
+                                    and no corresponding accounts exist for that
+                                    currency, please create these accounts first
+                                    before saving your changes.
                                 </p>
                             </div>
                         </div>
@@ -250,78 +272,27 @@ const BranchSettingsCurrencyForm = ({
                                 />
                             )}
                         />
-
-                        <UnbalanceAccountSection form={form} />
-
-                        {/* <FormFieldWrapper
-                            control={form.control}
-                            label={
-                                <span>
-                                    Account for Overflow
-                                    <InfoTooltip
-                                        content={
-                                            <div className="flex gap-2 text-muted-foreground max-w-[400px]">
-                                                <InfoIcon
-                                                    aria-hidden="true"
-                                                    className="size-6 shrink-0 opacity-60"
-                                                    size={16}
-                                                />
-                                                <div className="space-y-1">
-                                                    <p className="text-[13px] font-medium">
-                                                        Account for Overflow
-                                                    </p>
-                                                    <p className="text-muted-foreground text-xs">
-                                                        Account to handle
-                                                        overflow transactions
-                                                    </p>
-                                                </div>
-                                            </div>
-                                        }
-                                    />
-                                </span>
-                            }
-                            name="account_for_overflow_id"
-                            render={({ field }) => (
-                                <AccountPicker
-                                    currencyId={form.getValues('currency_id')}
-                                    mode="currency"
-                                    nameOnly
-                                    onSelect={(selectedAccount) => {
-                                        field.onChange(selectedAccount?.id)
-                                        form.setValue(
-                                            'account_for_overflow',
-                                            selectedAccount,
-                                            { shouldDirty: true }
-                                        )
-                                    }}
-                                    placeholder="Select overflow account"
-                                    value={form.getValues(
-                                        'account_for_overflow'
-                                    )}
-                                />
-                            )}
-                        />
-
                         <FormFieldWrapper
                             control={form.control}
                             label={
                                 <span>
-                                    Account for Underflow
+                                    Mutual Fund account
                                     <InfoTooltip
                                         content={
                                             <div className="flex gap-2 text-muted-foreground max-w-[400px]">
-                                                <InfoIcon
+                                                <MoneyIcon
                                                     aria-hidden="true"
                                                     className="size-6 shrink-0 opacity-60"
                                                     size={16}
                                                 />
                                                 <div className="space-y-1">
                                                     <p className="text-[13px] font-medium">
-                                                        Account for Underflow
+                                                        Mutual Fund Account
                                                     </p>
                                                     <p className="text-muted-foreground text-xs">
-                                                        Account to handle
-                                                        underflow transactions
+                                                        Indicates the account
+                                                        where mutual fund are
+                                                        deducted
                                                     </p>
                                                 </div>
                                             </div>
@@ -329,32 +300,33 @@ const BranchSettingsCurrencyForm = ({
                                     />
                                 </span>
                             }
-                            name="account_for_underflow_id"
+                            name="compassion_fund_account_id"
                             render={({ field }) => (
                                 <AccountPicker
                                     currencyId={form.getValues('currency_id')}
-                                    mode="currency"
+                                    mode="currency-payment"
                                     nameOnly
                                     onSelect={(selectedAccount) => {
                                         field.onChange(selectedAccount?.id)
                                         form.setValue(
-                                            'account_for_underflow',
+                                            'compassion_fund_account',
                                             selectedAccount,
                                             { shouldDirty: true }
                                         )
                                     }}
-                                    placeholder="Select underflow account"
+                                    placeholder="Select default account"
                                     value={form.getValues(
-                                        'account_for_underflow'
+                                        'compassion_fund_account'
                                     )}
                                 />
                             )}
-                        /> */}
+                        />
+                        <UnbalanceAccountSection form={form} />
                     </div>
                 </fieldset>
                 <FormFooterResetSubmit
                     className="sticky bottom-0 bg-popover p-4 rounded-xl"
-                    disableSubmit={!form.formState.isDirty}
+                    disableSubmit={!form.formState.isDirty || isPending}
                     error={error}
                     isLoading={isPending}
                     onReset={() => {
@@ -362,7 +334,7 @@ const BranchSettingsCurrencyForm = ({
                         reset?.()
                     }}
                     readOnly={formProps.readOnly}
-                    submitText="Update Branch Settings"
+                    submitText="Update Currency / Accounts"
                 />
             </form>
         </Form>
@@ -383,7 +355,7 @@ const UnbalanceAccountSection = ({
     const currencyId = form.watch('currency_id')
 
     return (
-        <div className="space-y-4 p-4 bg-secondary/60 dark:bg-popover rounded-xl">
+        <div className="space-y-4 p-0 bg-secondary/60 dark:bg-popover rounded-xl">
             <div className="flex items-center justify-between">
                 <div className="flex flex-1 items-center gap-3">
                     <div>

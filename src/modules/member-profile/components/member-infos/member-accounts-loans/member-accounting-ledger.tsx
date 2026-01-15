@@ -241,9 +241,9 @@ const MemberAccountingLedger = ({ memberProfileId, className }: Props) => {
                                 <GeneralLedgerTable
                                     accountId={focused.accountId}
                                     className="min-h-[70vh] max-h-[70vh] w-full"
+                                    entryType="check-entry"
                                     memberProfileId={focused.memberProfileId}
                                     mode="member-account"
-                                    TEntryType="check-entry"
                                 />
                             </TabsContent>
 
@@ -251,9 +251,9 @@ const MemberAccountingLedger = ({ memberProfileId, className }: Props) => {
                                 <GeneralLedgerTable
                                     accountId={focused.accountId}
                                     className="min-h-[70vh] max-h-[70vh] w-full"
+                                    entryType="online-entry"
                                     memberProfileId={focused.memberProfileId}
                                     mode="member-account"
-                                    TEntryType="online-entry"
                                 />
                             </TabsContent>
 
@@ -261,9 +261,9 @@ const MemberAccountingLedger = ({ memberProfileId, className }: Props) => {
                                 <GeneralLedgerTable
                                     accountId={focused.accountId}
                                     className="min-h-[70vh] max-h-[70vh] w-full"
+                                    entryType="cash-entry"
                                     memberProfileId={focused.memberProfileId}
                                     mode="member-account"
-                                    TEntryType="cash-entry"
                                 />
                             </TabsContent>
 
@@ -271,9 +271,9 @@ const MemberAccountingLedger = ({ memberProfileId, className }: Props) => {
                                 <GeneralLedgerTable
                                     accountId={focused.accountId}
                                     className="min-h-[70vh] max-h-[70vh] w-full"
+                                    entryType="payment-entry"
                                     memberProfileId={focused.memberProfileId}
                                     mode="member-account"
-                                    TEntryType="payment-entry"
                                 />
                             </TabsContent>
 
@@ -281,9 +281,9 @@ const MemberAccountingLedger = ({ memberProfileId, className }: Props) => {
                                 <GeneralLedgerTable
                                     accountId={focused.accountId}
                                     className="min-h-[70vh] max-h-[70vh] w-full"
+                                    entryType="withdraw-entry"
                                     memberProfileId={focused.memberProfileId}
                                     mode="member-account"
-                                    TEntryType="withdraw-entry"
                                 />
                             </TabsContent>
 
@@ -291,9 +291,9 @@ const MemberAccountingLedger = ({ memberProfileId, className }: Props) => {
                                 <GeneralLedgerTable
                                     accountId={focused.accountId}
                                     className="min-h-[70vh] max-h-[70vh] w-full"
+                                    entryType="deposit-entry"
                                     memberProfileId={focused.memberProfileId}
                                     mode="member-account"
-                                    TEntryType="deposit-entry"
                                 />
                             </TabsContent>
                         </Tabs>
@@ -301,7 +301,7 @@ const MemberAccountingLedger = ({ memberProfileId, className }: Props) => {
                 </Modal>
             )}
             <MemberAccountingLedgerTable
-                className="w-full"
+                className="w-full flex-1"
                 memberProfileId={memberProfileId}
                 mode="member"
                 onRowClick={(data) =>
@@ -311,10 +311,6 @@ const MemberAccountingLedger = ({ memberProfileId, className }: Props) => {
                         account: data.original.account,
                     })
                 }
-            />
-            <MemberAccountingLedgerTotal
-                className="w-fit self-end"
-                memberProfileId={memberProfileId}
             />
         </div>
     )

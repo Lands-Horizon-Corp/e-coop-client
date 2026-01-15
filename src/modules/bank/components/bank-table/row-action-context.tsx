@@ -6,23 +6,31 @@ import { Row } from '@tanstack/react-table'
 
 import RowActionsGroup from '@/components/data-table/data-table-row-actions'
 import DataTableRowContext from '@/components/data-table/data-table-row-context'
-
-import { useModalState } from '@/hooks/use-modal-state'
+import { useTableRowActionStore } from '@/components/data-table/store/data-table-action-store'
 
 import { IBank, useDeleteBankById } from '../..'
 import { BankCreateUpdateFormModal } from '../forms/bank-create-update-form'
 import { IBankTableActionComponentProp } from './columns'
 
-// ===== SHARED HOOK =====
+// ===== TYPE DEFINITIONS =====
+export type BankActionType = 'edit' | 'delete'
+
+export interface BankActionExtra {
+    onDeleteSuccess?: () => void
+}
+
 interface UseBankActionsProps {
     row: Row<IBank>
     onDeleteSuccess?: () => void
 }
 
 const useBankActions = ({ row, onDeleteSuccess }: UseBankActionsProps) => {
-    const updateModal = useModalState()
     const bank = row.original
-
+    const { open } = useTableRowActionStore<
+        IBank,
+        BankActionType,
+        BankActionExtra
+    >()
     const { onOpen } = useConfirmModalStore()
 
     const { isPending: isDeletingBank, mutate: deleteBank } = useDeleteBankById(
@@ -36,7 +44,13 @@ const useBankActions = ({ row, onDeleteSuccess }: UseBankActionsProps) => {
         }
     )
 
-    const handleEdit = () => updateModal.onOpenChange(true)
+    const handleEdit = () => {
+        open('edit', {
+            id: bank.id,
+            defaultValues: bank,
+            extra: { onDeleteSuccess },
+        })
+    }
 
     const handleDelete = () => {
         onOpen({
@@ -48,7 +62,6 @@ const useBankActions = ({ row, onDeleteSuccess }: UseBankActionsProps) => {
 
     return {
         bank,
-        updateModal,
         isDeletingBank,
         handleEdit,
         handleDelete,
@@ -61,37 +74,27 @@ interface IBankTableActionProps extends IBankTableActionComponentProp {
 }
 
 export const BankAction = ({ row, onDeleteSuccess }: IBankTableActionProps) => {
-    const { bank, updateModal, isDeletingBank, handleEdit, handleDelete } =
-        useBankActions({ row, onDeleteSuccess })
+    const { isDeletingBank, handleEdit, handleDelete } = useBankActions({
+        row,
+        onDeleteSuccess,
+    })
 
     return (
-        <>
-            <div onClick={(e) => e.stopPropagation()}>
-                <BankCreateUpdateFormModal
-                    {...updateModal}
-                    formProps={{
-                        autoSave: true,
-                        bankId: bank.id,
-                        defaultValues: { ...bank },
-                    }}
-                />
-            </div>
-            <RowActionsGroup
-                canSelect
-                onDelete={{
-                    text: 'Delete',
-                    isAllowed: !isDeletingBank,
-                    onClick: handleDelete,
-                }}
-                onEdit={{
-                    text: 'Edit',
-                    isAllowed: true,
-                    onClick: handleEdit,
-                }}
-                otherActions={<>{/* Additional actions can be added here */}</>}
-                row={row}
-            />
-        </>
+        <RowActionsGroup
+            canSelect
+            onDelete={{
+                text: 'Delete',
+                isAllowed: !isDeletingBank,
+                onClick: handleDelete,
+            }}
+            onEdit={{
+                text: 'Edit',
+                isAllowed: true,
+                onClick: handleEdit,
+            }}
+            otherActions={<>{/* Additional actions can be added here */}</>}
+            row={row}
+        />
     )
 }
 
@@ -105,34 +108,50 @@ export const BankRowContext = ({
     children,
     onDeleteSuccess,
 }: IBankRowContextProps) => {
-    const { bank, updateModal, isDeletingBank, handleEdit, handleDelete } =
-        useBankActions({ row, onDeleteSuccess })
+    const { isDeletingBank, handleEdit, handleDelete } = useBankActions({
+        row,
+        onDeleteSuccess,
+    })
+
+    return (
+        <DataTableRowContext
+            onDelete={{
+                text: 'Delete',
+                isAllowed: !isDeletingBank,
+                onClick: handleDelete,
+            }}
+            onEdit={{
+                text: 'Edit',
+                isAllowed: true,
+                onClick: handleEdit,
+            }}
+            row={row}
+        >
+            {children}
+        </DataTableRowContext>
+    )
+}
+
+export const BankTableActionManager = () => {
+    const { state, close } = useTableRowActionStore<
+        IBank,
+        BankActionType,
+        BankActionExtra
+    >()
 
     return (
         <>
-            <BankCreateUpdateFormModal
-                {...updateModal}
-                formProps={{
-                    bankId: bank.id,
-                    defaultValues: { ...bank },
-                    onSuccess: () => updateModal.onOpenChange(false),
-                }}
-            />
-            <DataTableRowContext
-                onDelete={{
-                    text: 'Delete',
-                    isAllowed: !isDeletingBank,
-                    onClick: handleDelete,
-                }}
-                onEdit={{
-                    text: 'Edit',
-                    isAllowed: true,
-                    onClick: handleEdit,
-                }}
-                row={row}
-            >
-                {children}
-            </DataTableRowContext>
+            {state.action === 'edit' && state.defaultValues && (
+                <BankCreateUpdateFormModal
+                    formProps={{
+                        bankId: state.id,
+                        defaultValues: state.defaultValues,
+                        onSuccess: () => close(),
+                    }}
+                    onOpenChange={close}
+                    open={state.isOpen}
+                />
+            )}
         </>
     )
 }

@@ -214,7 +214,7 @@ const MemberAccountGeneralLedgerTableColumns = (
     },
 
     {
-        id: 'member_profile',
+        id: 'member_profile.full_name',
         accessorKey: 'member_profile.full_name',
         header: (props) => (
             <DataTableColumnHeader {...props} title="Member">
@@ -247,7 +247,7 @@ const MemberAccountGeneralLedgerTableColumns = (
     },
 
     {
-        id: 'employee',
+        id: 'employee_user',
         accessorKey: 'employee_user',
         header: (props) => (
             <DataTableColumnHeader {...props} title="Employee/Teller">

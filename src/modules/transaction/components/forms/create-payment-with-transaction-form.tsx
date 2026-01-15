@@ -6,10 +6,12 @@ import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
 
 import { cn } from '@/helpers'
 import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
-import { AccountPicker } from '@/modules/account'
+import { AccountPicker, TAccountType } from '@/modules/account'
 import BankCombobox from '@/modules/bank/components/bank-combobox'
 import { CurrencyInput } from '@/modules/currency'
 import { IGeneralLedger } from '@/modules/general-ledger'
+import { LoanGuideModal } from '@/modules/loan-guide/components/loan-guide'
+import LoanTransactionCombobox from '@/modules/loan-transaction/components/loan-combobox'
 import { IMedia } from '@/modules/media'
 import { useGetAll } from '@/modules/payment-type'
 import { IPaymentRequest } from '@/modules/quick-transfer'
@@ -28,6 +30,7 @@ import { useTransactionReverseSecurityStore } from '@/store/transaction-reverse-
 import { useTransactionStore } from '@/store/transaction/transaction-store'
 import { useHotkeys } from 'react-hotkeys-hook'
 
+import { CalendarNumberIcon } from '@/components/icons'
 import LoadingSpinner from '@/components/spinners/loading-spinner'
 import {
     Accordion,
@@ -47,6 +50,8 @@ import InputDate from '@/components/ui/input-date'
 import { Label } from '@/components/ui/label'
 import SignatureField from '@/components/ui/signature-field'
 import { Textarea } from '@/components/ui/textarea'
+
+import { useModalState } from '@/hooks/use-modal-state'
 
 import { IClassProps, IForm, TEntityId } from '@/types'
 
@@ -79,6 +84,7 @@ const PaymentWithTransactionForm = ({
     readOnly,
 }: PaymentWithTransactionFormProps) => {
     const { focusTypePayment, selectedAccount } = useTransactionStore()
+    const loanPaymentGuideModal = useModalState()
 
     const {
         userSettingOR,
@@ -156,11 +162,10 @@ const PaymentWithTransactionForm = ({
     const { onOpenReverseRequestAction } = useTransactionReverseSecurityStore()
 
     const handleSubmitForm = (data: TPaymentWithTransactionFormValues) => {
-        const entryDate = data.entry_date
-            ? new Date(data.entry_date).toISOString()
-            : undefined
         const transactionpayPayload: ITransactionRequest = {
             ...data,
+            currency_id: (transaction?.currency_id ||
+                currentTransactionBatch?.currency_id) as TEntityId,
             member_profile_id: memberProfileId,
             member_joint_account_id: memberJointId,
             source: 'payment',
@@ -168,7 +173,9 @@ const PaymentWithTransactionForm = ({
         creatTransactionDeposit({
             data: {
                 ...data,
-                entry_date: entryDate,
+                currency_id:
+                    transaction?.currency_id ||
+                    currentTransactionBatch?.currency_id,
             },
             mode: 'payment',
             transactionId,
@@ -237,7 +244,7 @@ const PaymentWithTransactionForm = ({
                 <TransactionNoFoundBatch mode="payment" />
                 <Form {...form}>
                     <form
-                        className=" !w-full flex flex-col lg:justify-between lg:flex-row overflow-auto "
+                        className="!w-full flex flex-col overflow-auto "
                         onSubmit={handleSubmit}
                     >
                         <div className="overflow-y-auto ecoop-scroll w-full p-2">
@@ -359,7 +366,7 @@ const PaymentWithTransactionForm = ({
                                     </CardContent>
                                 </Card>
                             )}
-                            <div className="grid grid-cols-1 md:grid-cols-2 md:gap-y-7 xl:grid-cols-4 w-full  gap-4">
+                            <div className="grid grid-cols-1 md:grid-cols-2 md:gap-y-7 xl:grid-cols-5 w-full  gap-4">
                                 <div className="relative">
                                     <FormFieldWrapper
                                         className="relative"
@@ -468,6 +475,45 @@ const PaymentWithTransactionForm = ({
                                         />
                                     )}
                                 />
+                                {(
+                                    [
+                                        'Loan',
+                                        'SVF-Ledger',
+                                        'Interest',
+                                        'Fines',
+                                    ] as TAccountType[]
+                                ).includes(form.watch('account')?.type) && (
+                                    <FormFieldWrapper
+                                        control={form.control}
+                                        label="Loan"
+                                        labelClassName="text-xs font-medium text-muted-foreground"
+                                        name="loan_transaction_id"
+                                        render={({ field }) => (
+                                            <LoanTransactionCombobox
+                                                {...field}
+                                                disabled={isDisabled(
+                                                    'loan_transaction_id'
+                                                )}
+                                                loanAccountId={form.watch(
+                                                    'account_id'
+                                                )}
+                                                memberProfileId={
+                                                    memberProfileId
+                                                }
+                                                mode="member-profile-loan-account"
+                                                onChange={(
+                                                    selectedLoanAccount
+                                                ) => {
+                                                    field.onChange(
+                                                        selectedLoanAccount?.id
+                                                    )
+                                                }}
+                                                placeholder="Select loan type"
+                                                value={field.value ?? undefined}
+                                            />
+                                        )}
+                                    />
+                                )}
                                 <FormFieldWrapper
                                     control={form.control}
                                     label="Payment Type"
@@ -481,7 +527,7 @@ const PaymentWithTransactionForm = ({
                                             )}
                                             onChange={(selectedPaymentType) => {
                                                 field.onChange(
-                                                    selectedPaymentType.id
+                                                    selectedPaymentType?.id
                                                 )
                                                 if (isOnlinePayment) {
                                                     form.setValue(
@@ -590,29 +636,71 @@ const PaymentWithTransactionForm = ({
                             </Accordion>
                             <FormErrorMessage errorMessage={errorMessage} />
                         </div>
-                        <div className="flex items-center px-2 justify-end mb-2 gap-x-2">
-                            <Button
-                                className=" w-full self-end px-8 sm:w-fit"
-                                id="select-member-button"
-                                onClick={() => formReset()}
-                                size="sm"
-                                type="button"
-                                variant="ghost"
-                            >
-                                reset
-                            </Button>
-                            <Button
-                                className="w-full self-end px-8 sm:w-fit"
-                                disabled={isPending}
-                                size="sm"
-                                type="submit"
-                            >
-                                {isPending ? (
-                                    <LoadingSpinner />
-                                ) : (
-                                    <>{focusTypePayment}</>
-                                )}
-                            </Button>
+                        <div className="flex items-center mb-2 justify-end">
+                            {form.watch('loan_transaction_id') && (
+                                <>
+                                    <div
+                                        className="absolute"
+                                        onClick={(e) => e.stopPropagation()}
+                                    >
+                                        {/* <LoanPaymentScheduleModal
+                                            {...loanPaymentScheduleModal}
+                                            loanPaymentProps={{
+                                                accountDefaultId:
+                                                    form.watch('account_id'),
+                                                loanTransactionId: form.watch(
+                                                    'loan_transaction_id'
+                                                ) as TEntityId,
+                                            }}
+                                        /> */}
+                                        <LoanGuideModal
+                                            {...loanPaymentGuideModal}
+                                            loanTransactionId={
+                                                form.watch(
+                                                    'loan_transaction_id'
+                                                )!
+                                            }
+                                        />
+                                    </div>
+                                    <Button
+                                        className="text-xs px-2 w-fit ml-2 mr-auto"
+                                        onClick={() =>
+                                            loanPaymentGuideModal.onOpenChange(
+                                                true
+                                            )
+                                        }
+                                        size="sm"
+                                        type="button"
+                                    >
+                                        <CalendarNumberIcon /> Loan Payment
+                                        Schedule
+                                    </Button>
+                                </>
+                            )}
+                            <div className="flex flex-1 items-center place-self-end px-2 justify-end gap-x-2">
+                                <Button
+                                    className=" w-full self-end px-8 sm:w-fit"
+                                    id="select-member-button"
+                                    onClick={() => formReset()}
+                                    size="sm"
+                                    type="button"
+                                    variant="ghost"
+                                >
+                                    reset
+                                </Button>
+                                <Button
+                                    className="w-full self-end px-8 sm:w-fit"
+                                    disabled={isPending}
+                                    size="sm"
+                                    type="submit"
+                                >
+                                    {isPending ? (
+                                        <LoadingSpinner />
+                                    ) : (
+                                        <>{focusTypePayment}</>
+                                    )}
+                                </Button>
+                            </div>
                         </div>
                     </form>
                 </Form>

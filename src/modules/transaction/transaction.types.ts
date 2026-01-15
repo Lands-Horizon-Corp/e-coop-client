@@ -9,6 +9,7 @@ import { IMemberJointAccount } from '../member-joint-account'
 import { IMemberProfile } from '../member-profile'
 import { ITransactionBatch } from '../transaction-batch'
 import { IUserBase } from '../user/user.types'
+import { TTransactionSchema } from './transaction.validation'
 
 export interface ITransactionRequest {
     signature_media_id?: TEntityId
@@ -20,6 +21,8 @@ export interface ITransactionRequest {
     reference_number?: string
     source?: TGeneralLedgerSource
     description?: string
+
+    currency_id: TEntityId
 }
 
 export interface ITransaction extends IBaseEntityMeta {
@@ -68,3 +71,5 @@ export type TCreateTransactionPaymentProps = {
     data: IPaymentRequest
     transactionId: string
 }
+
+export type TTransactionRequest = TTransactionSchema

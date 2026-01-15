@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 
 import { cn } from '@/helpers'
 
@@ -84,12 +84,9 @@ const GenericPicker = <T extends { id: TEntityId }>({
                     // />
                     <div className="relative flex items-center border-b px-3">
                         <MagnifyingGlassIcon className="mr-2 size-4 shrink-0 opacity-50" />
-                        <Input
-                            className="flex h-11 w-full  focus-visible:ring-0 px-0 border-0 !bg-transparent py-3 text-sm outline-none placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50"
-                            onChange={(e) => onSearchChange(e.target.value)}
-                            placeholder={
-                                searchPlaceHolder ?? 'Search anything...'
-                            }
+                        <GenericPickerInputSearch
+                            onChange={onSearchChange}
+                            placeHolder={searchPlaceHolder}
                         />
                         {otherSearchInputChild}
                     </div>
@@ -123,6 +120,37 @@ const GenericPicker = <T extends { id: TEntityId }>({
             </Command>
             {children}
         </Modal>
+    )
+}
+
+const GenericPickerInputSearch = ({
+    placeHolder = 'Search...',
+    defaultValue = '',
+    onChange,
+}: {
+    defaultValue?: string
+    placeHolder?: string
+    onChange?: (value: string) => void
+}) => {
+    const [searchValue, setSearchValue] = React.useState(defaultValue)
+
+    useEffect(() => {
+        const interval = setTimeout(() => {
+            onChange?.(searchValue)
+        }, 500)
+
+        return () => {
+            clearTimeout(interval)
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [searchValue])
+
+    return (
+        <Input
+            className="flex h-11 w-full  focus-visible:ring-0 px-0 border-0 !bg-transparent py-3 text-sm outline-none placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50"
+            onChange={(e) => setSearchValue(e.target.value)}
+            placeholder={placeHolder ?? 'Search anything...'}
+        />
     )
 }
 

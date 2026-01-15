@@ -4,6 +4,7 @@ import { IBaseEntityMeta, IPaginatedResult, TEntityId } from '@/types'
 
 import { IAccount } from '../account'
 import { ICurrency } from '../currency'
+import { IMemberGender } from '../member-gender'
 import { IMemberType } from '../member-type'
 import { IUnbalanceAccount } from '../unbalance-account'
 import {
@@ -14,83 +15,97 @@ import {
 export interface IBranchSettings extends IBaseEntityMeta {
     id: TEntityId
 
-    branch_id: TEntityId
-
-    withdraw_allow_user_input: boolean
-    /** Validation: omitempty */
-    withdraw_prefix: string
-    /** Validation: min=0 */
-    withdraw_or_start: number
-    /** Validation: min=0 */
-    withdraw_or_current: number
-    /** Validation: min=0 */
-    withdraw_or_end: number
-    /** Validation: min=0 */
-    withdraw_or_iteration: number
-    withdraw_or_unique: boolean
-    withdraw_use_date_or: boolean
-    deposit_allow_user_input: boolean
-    /** Validation: omitempty */
-    deposit_prefix: string
-    /** Validation: min=0 */
-    deposit_or_start: number
-    /** Validation: min=0 */
-    deposit_or_current: number
-    /** Validation: min=0 */
-    deposit_or_end: number
-    /** Validation: min=0 */
-    deposit_or_iteration: number
-    deposit_or_unique: boolean
-    deposit_use_date_or: boolean
-    loan_allow_user_input: boolean
-    /** Validation: omitempty */
-    loan_prefix: string
-    /** Validation: min=0 */
-    loan_or_start: number
-    /** Validation: min=0 */
-    loan_or_current: number
-    /** Validation: min=0 */
-    loan_or_end: number
-    /** Validation: min=0 */
-    loan_or_iteration: number
-    loan_or_unique: boolean
-    loan_use_date_or: boolean
-    check_voucher_allow_user_input: boolean
-    /** Validation: omitempty */
-    check_voucher_prefix: string
-    /** Validation: min=0 */
-    check_voucher_or_start: number
-    /** Validation: min=0 */
-    check_voucher_or_current: number
-    /** Validation: min=0 */
-    check_voucher_or_end: number
-    /** Validation: min=0 */
-    check_voucher_or_iteration: number
-    check_voucher_or_unique: boolean
-    check_voucher_use_date_or: boolean
-
-    default_member_type_id: TEntityId
-    default_member_type: IMemberType
-
     currency_id: TEntityId
     currency: ICurrency
 
-    cash_on_hand_account_id: TEntityId
-    cash_on_hand_account: IAccount
+    cash_on_hand_account_id?: TEntityId
+    cash_on_hand_account?: IAccount
 
-    paid_up_shared_capital_account_id: TEntityId
-    paid_up_shared_capital_account: IAccount
+    paid_up_shared_capital_account_id?: TEntityId
+    paid_up_shared_capital_account?: IAccount
 
+    compassion_fund_account_id?: TEntityId
+    compassion_fund_account?: IAccount
+
+    /** Withdraw OR Settings */
+    withdraw_allow_user_input: boolean
+    withdraw_prefix: string
+    withdraw_or_start: number
+    withdraw_or_current: number
+    withdraw_or_end: number
+    withdraw_or_iteration: number
+    withdraw_use_date_or: boolean
+    withdraw_padding: number
+    withdraw_common_or?: string
+
+    /** Deposit OR Settings */
+    deposit_or_start: number
+    deposit_or_current: number
+    deposit_or_end: number
+    deposit_or_iteration: number
+    deposit_use_date_or: boolean
+    deposit_padding: number
+    deposit_common_or?: string
+
+    /** Cash Check Voucher */
+    cash_check_voucher_allow_user_input: boolean
+    cash_check_voucher_or_unique: boolean
+    cash_check_voucher_prefix: string
+    cash_check_voucher_or_start: number
+    cash_check_voucher_or_current: number
+    cash_check_voucher_or_iteration: number
+    cash_check_voucher_padding: number
+
+    /** Journal Voucher */
+    journal_voucher_allow_user_input: boolean
+    journal_voucher_or_unique: boolean
+    journal_voucher_prefix: string
+    journal_voucher_or_start: number
+    journal_voucher_or_current: number
+    journal_voucher_or_iteration: number
+    journal_voucher_padding: number
+
+    /** Adjustment Voucher */
+    adjustment_voucher_allow_user_input: boolean
+    adjustment_voucher_or_unique: boolean
+    adjustment_voucher_prefix: string
+    adjustment_voucher_or_start: number
+    adjustment_voucher_or_current: number
+    adjustment_voucher_or_iteration: number
+    adjustment_voucher_padding: number
+
+    /** Loan Voucher */
+    loan_voucher_allow_user_input: boolean
+    loan_voucher_or_unique: boolean
+    loan_voucher_prefix: string
+    loan_voucher_or_start: number
+    loan_voucher_or_current: number
+    loan_voucher_or_iteration: number
+    loan_voucher_padding: number
     loan_applied_equal_to_balance: boolean
+    /** Check Voucher – General */
+    check_voucher_general: boolean
+    check_voucher_general_allow_user_input: boolean
+    check_voucher_general_or_unique: boolean
+    check_voucher_general_prefix: string
+    check_voucher_general_or_start: number
+    check_voucher_general_or_current: number
+    check_voucher_general_or_iteration: number
+    check_voucher_general_padding: number
 
-    unbalanced_accounts: IUnbalanceAccount[]
-    unbalanced_account_delete_ids: TEntityId[]
+    tax_interest: number // percentage
 
-    // account_for_overflow_id: TEntityId
-    // account_for_overflow: IAccount
+    default_member_gender_id?: TEntityId
+    default_member_gender?: IMemberGender
 
-    // account_for_underflow_id: TEntityId
-    // account_for_underflow: IAccount
+    default_member_type_id?: TEntityId
+    default_member_type?: IMemberType
+
+    /** Accounting */
+    annual_divisor: number
+
+    /** Unbalanced Accounts */
+    unbalanced_accounts?: IUnbalanceAccount[]
 }
 
 export type IBranchSettingsRequest = z.infer<typeof BranchSettingsSchema>

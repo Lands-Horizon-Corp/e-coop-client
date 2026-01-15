@@ -1,5 +1,7 @@
 import { useState } from 'react'
 
+import { useQueryClient } from '@tanstack/react-query'
+
 import { cn } from '@/helpers'
 import { useAuthUserWithOrgBranch } from '@/modules/authentication/authgentication.store'
 
@@ -21,6 +23,7 @@ import ChargesRateSchemesSidebar from './charges-rate-schemes-sidebar'
 interface Props extends IClassProps {}
 
 const ChargesRateSchemeEditor = ({ className }: Props) => {
+    const queryClient = useQueryClient()
     const [chargesRateScheme, setChargesRateScheme] = useState<
         IChargesRateScheme | undefined
     >()
@@ -48,6 +51,9 @@ const ChargesRateSchemeEditor = ({ className }: Props) => {
                 onDeletedScheme={(scheme) => {
                     if (chargesRateScheme?.id === scheme.id)
                         setChargesRateScheme(undefined)
+                    queryClient.invalidateQueries({
+                        queryKey: ['charges-rate-scheme', 'all'],
+                    })
                 }}
                 onSelect={(selectedScheme) =>
                     setChargesRateScheme(selectedScheme)
@@ -74,6 +80,11 @@ const ChargesRateSchemeEditor = ({ className }: Props) => {
                         className="flex-1 p-4 rounded-xl bg-popover/70"
                         defaultValues={chargesRateScheme}
                         key={chargesRateScheme.id}
+                        onSuccess={() => {
+                            queryClient.invalidateQueries({
+                                queryKey: ['charges-rate-scheme', 'all'],
+                            })
+                        }}
                     />
                     <div></div>
                 </>

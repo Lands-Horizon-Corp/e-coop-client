@@ -5,13 +5,18 @@ import { Row } from '@tanstack/react-table'
 
 import RowActionsGroup from '@/components/data-table/data-table-row-actions'
 import DataTableRowContext from '@/components/data-table/data-table-row-context'
-
-import { useModalState } from '@/hooks/use-modal-state'
+import { useTableRowActionStore } from '@/components/data-table/store/data-table-action-store'
 
 import { useDeleteBillsAndCoinsById } from '../../bill-and-coins.service'
 import { IBillsAndCoin } from '../../bill-and-coins.types'
 import { BillsAndCoinCreateUpdateFormModal } from '../bills-and-coin-create-update-form'
 import { IBillsAndCoinsTableActionComponentProp } from './columns'
+
+export type BillsAndCoinsActionType = 'edit' | 'delete'
+
+export interface BillsAndCoinsActionExtra {
+    onDeleteSuccess?: () => void
+}
 
 interface UseBillsAndCoinsActionsProps {
     row: Row<IBillsAndCoin>
@@ -22,9 +27,12 @@ const useBillsAndCoinsActions = ({
     row,
     onDeleteSuccess,
 }: UseBillsAndCoinsActionsProps) => {
-    const updateModal = useModalState()
     const billsAndCoin = row.original
-
+    const { open } = useTableRowActionStore<
+        IBillsAndCoin,
+        BillsAndCoinsActionType,
+        BillsAndCoinsActionExtra
+    >()
     const { onOpen } = useConfirmModalStore()
 
     const { isPending: isDeletingBillsAndCoin, mutate: deleteBillsAndCoin } =
@@ -34,7 +42,13 @@ const useBillsAndCoinsActions = ({
             },
         })
 
-    const handleEdit = () => updateModal.onOpenChange(true)
+    const handleEdit = () => {
+        open('edit', {
+            id: billsAndCoin.id,
+            defaultValues: billsAndCoin,
+            extra: { onDeleteSuccess },
+        })
+    }
 
     const handleDelete = () => {
         onOpen({
@@ -47,7 +61,6 @@ const useBillsAndCoinsActions = ({
 
     return {
         billsAndCoin,
-        updateModal,
         isDeletingBillsAndCoin,
         handleEdit,
         handleDelete,
@@ -64,26 +77,11 @@ export const BillsAndCoinsAction = ({
     row,
     onDeleteSuccess,
 }: IBillsAndCoinsTableActionProps) => {
-    const {
-        billsAndCoin,
-        updateModal,
-        isDeletingBillsAndCoin,
-        handleEdit,
-        handleDelete,
-    } = useBillsAndCoinsActions({ row, onDeleteSuccess })
+    const { isDeletingBillsAndCoin, handleEdit, handleDelete } =
+        useBillsAndCoinsActions({ row, onDeleteSuccess })
 
     return (
         <>
-            <div onClick={(e) => e.stopPropagation()}>
-                <BillsAndCoinCreateUpdateFormModal
-                    {...updateModal}
-                    formProps={{
-                        billsAndCoinId: billsAndCoin.id,
-                        defaultValues: billsAndCoin,
-                        onSuccess: () => updateModal.onOpenChange(false),
-                    }}
-                />
-            </div>
             <RowActionsGroup
                 canSelect
                 onDelete={{
@@ -96,7 +94,7 @@ export const BillsAndCoinsAction = ({
                     isAllowed: true,
                     onClick: handleEdit,
                 }}
-                otherActions={<>{/* Additional actions can be added here */}</>}
+                otherActions={<></>}
                 row={row}
             />
         </>
@@ -114,24 +112,11 @@ export const BillsAndCoinsRowContext = ({
     children,
     onDeleteSuccess,
 }: IBillsAndCoinsRowContextProps) => {
-    const {
-        billsAndCoin,
-        updateModal,
-        isDeletingBillsAndCoin,
-        handleEdit,
-        handleDelete,
-    } = useBillsAndCoinsActions({ row, onDeleteSuccess })
+    const { isDeletingBillsAndCoin, handleEdit, handleDelete } =
+        useBillsAndCoinsActions({ row, onDeleteSuccess })
 
     return (
         <>
-            <BillsAndCoinCreateUpdateFormModal
-                {...updateModal}
-                formProps={{
-                    billsAndCoinId: billsAndCoin.id,
-                    defaultValues: billsAndCoin,
-                    onSuccess: () => updateModal.onOpenChange(false),
-                }}
-            />
             <DataTableRowContext
                 onDelete={{
                     text: 'Delete',
@@ -147,6 +132,30 @@ export const BillsAndCoinsRowContext = ({
             >
                 {children}
             </DataTableRowContext>
+        </>
+    )
+}
+
+export const BillsAndCoinsTableActionManager = () => {
+    const { state, close } = useTableRowActionStore<
+        IBillsAndCoin,
+        BillsAndCoinsActionType,
+        BillsAndCoinsActionExtra
+    >()
+
+    return (
+        <>
+            {state.action === 'edit' && state.defaultValues && (
+                <BillsAndCoinCreateUpdateFormModal
+                    formProps={{
+                        billsAndCoinId: state.id,
+                        defaultValues: state.defaultValues,
+                        onSuccess: () => close(),
+                    }}
+                    onOpenChange={close}
+                    open={state.isOpen}
+                />
+            )}
         </>
     )
 }

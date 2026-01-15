@@ -1,6 +1,6 @@
 import { useRef } from 'react'
 
-import { FieldValues, UseFormReturn } from 'react-hook-form'
+import { FieldValues, Path, UseFormReturn } from 'react-hook-form'
 
 import { cn } from '@/helpers'
 
@@ -22,9 +22,9 @@ export type StepConfig = {
     isCheck?: boolean
 }
 
-export type StepValidation = {
-    fields: string[]
-    validator?: (form: UseFormReturn<any>) => Promise<boolean> | boolean
+export type StepValidation<T extends FieldValues = FieldValues> = {
+    fields: Path<T>[]
+    validator?: (form: UseFormReturn<T>) => Promise<boolean> | boolean
 }
 
 type FormStepperProps<T extends FieldValues = FieldValues> = {
@@ -32,7 +32,7 @@ type FormStepperProps<T extends FieldValues = FieldValues> = {
     form: UseFormReturn<T>
     steps: StepConfig[]
     onStepChange: (step: number) => void
-    stepValidations?: Record<number, StepValidation>
+    stepValidations?: Record<number, StepValidation<T>>
     disabled?: boolean
     showCheckIcon?: boolean
     className?: string
@@ -100,7 +100,7 @@ export const FormStepper = <T extends FieldValues>({
 
         // Use form field validation
         if (validation.fields.length > 0) {
-            return await form.trigger(validation.fields as any)
+            return await form.trigger(validation.fields)
         }
 
         return true

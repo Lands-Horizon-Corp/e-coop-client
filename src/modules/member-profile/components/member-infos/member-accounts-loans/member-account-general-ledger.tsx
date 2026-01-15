@@ -111,7 +111,10 @@ const MemberAccountGeneralLedger = ({
     ...other
 }: Props) => {
     return (
-        <div className="space-y-4 min-h-[95vh] min-w-0 max-w-full">
+        <div
+            className="space-y-4 min-h-[95vh] min-w-0 max-w-full"
+            onClick={(e) => e.stopPropagation()}
+        >
             <div className="grid grid-cols-2 gap-x-2">
                 <AccountMiniCard
                     accountId={other.accountId}

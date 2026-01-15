@@ -1,10 +1,16 @@
+import { useQuery } from '@tanstack/react-query'
+
 import { Logger } from '@/helpers/loggers'
-import { createDataLayerFactory } from '@/providers/repositories/data-layer-factory'
+import {
+    HookQueryOptions,
+    createDataLayerFactory,
+} from '@/providers/repositories/data-layer-factory'
 import { createMutationFactory } from '@/providers/repositories/mutation-factory'
 
-import { TEntityId } from '@/types'
+import { TAPIQueryOptions, TEntityId } from '@/types'
 
 import type {
+    IGovernmentId,
     IMemberGovernmentBenefit,
     IMemberGovernmentBenefitRequest,
 } from './member-government-benefit.types'
@@ -20,6 +26,8 @@ const { apiCrudHooks, apiCrudService } = createDataLayerFactory<
 
 // ⚙️🛠️ API SERVICE HERE
 export const MemberGovernmentBenefitAPI = apiCrudService
+
+export const { API, getAll } = MemberGovernmentBenefitAPI
 
 // Custom API for creating a government benefit for a member
 export const createMemberGovernmentBenefit = async (
@@ -132,5 +140,30 @@ export const useDeleteMemberGovernmentBenefit = createMutationFactory<
         })
     },
 })
+
+export const governmentIdBaseKey = 'government-ids'
+export const governmentIdAPIRoute = '/api/v1/government-ids'
+
+export const useGetAllGovernmentIds = ({
+    isoAlpha3,
+    query,
+    options,
+}: {
+    isoAlpha3: string
+    query?: TAPIQueryOptions
+    options?: HookQueryOptions<IGovernmentId[], Error>
+}) => {
+    return useQuery<IGovernmentId[], Error>({
+        ...options,
+        queryKey: [governmentIdBaseKey, 'all', isoAlpha3, query].filter(
+            Boolean
+        ),
+        queryFn: async () =>
+            await getAll<IGovernmentId>({
+                url: `${governmentIdAPIRoute}/${isoAlpha3}`,
+                query,
+            }),
+    })
+}
 
 export const logger = Logger.getInstance('member-government-benefit')

@@ -68,6 +68,7 @@ const memberOccupationColumns = (
                 <DataTableColumnHeader {...props} title="Name">
                     <ColumnActions {...props}>
                         <TextFilter<IMemberOccupation>
+                            defaultMode="contains"
                             displayText="Name"
                             field="name"
                         />
@@ -92,6 +93,7 @@ const memberOccupationColumns = (
                 <DataTableColumnHeader {...props} title="Description">
                     <ColumnActions {...props}>
                         <TextFilter<IMemberOccupation>
+                            defaultMode="contains"
                             displayText="Description"
                             field="description"
                         />

@@ -1,5 +1,12 @@
+import { useQuery } from '@tanstack/react-query'
+
 import { Logger } from '@/helpers/loggers'
-import { createDataLayerFactory } from '@/providers/repositories/data-layer-factory'
+import {
+    HookQueryOptions,
+    createDataLayerFactory,
+} from '@/providers/repositories/data-layer-factory'
+
+import { TEntityId } from '@/types'
 
 import type { IComakerMemberProfile, IComakerMemberProfileRequest } from '.'
 
@@ -46,6 +53,24 @@ export const {
     useDeleteById: useDeleteComakerMemberProfileById,
     useDeleteMany: useDeleteManyComakerMemberProfile,
 } = apiCrudHooks
+
+// /api/v1/member-profile-comaker/member-profile/:member_profile_id
+export const useMemberProfileComakers = ({
+    id,
+    options,
+}: {
+    id: TEntityId
+    options?: HookQueryOptions<IComakerMemberProfile[], Error>
+}) => {
+    return useQuery<IComakerMemberProfile[], Error>({
+        ...options,
+        queryKey: [comakerMemberProfileBaseKey, id],
+        queryFn: async () =>
+            await getAllComakerMemberProfile<IComakerMemberProfile>({
+                url: `/api/v1/member-profile-comaker/member-profile/${id}`,
+            }),
+    })
+}
 
 // custom hooks can go here
 export const logger = Logger.getInstance('collectors-member-account-entry')

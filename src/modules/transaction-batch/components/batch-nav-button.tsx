@@ -10,6 +10,7 @@ import {
 } from '@/modules/transaction-batch'
 import { useTransactionBatchStore } from '@/modules/transaction-batch/store/transaction-batch-store'
 import { IEmployee } from '@/modules/user'
+import { useHotkeys } from 'react-hotkeys-hook'
 
 import { LayersIcon, LayersSharpDotIcon } from '@/components/icons'
 import { Button } from '@/components/ui/button'
@@ -97,14 +98,21 @@ const TransactionBatchNavButton = (_props: Props) => {
         }
     )
 
+    useHotkeys('alt+s', (e) => {
+        modalState.onOpenChange(true)
+        e.preventDefault()
+    })
+
     if (!transactionBatch)
         return (
             <>
                 <Button
-                    className="group rounded-full text-foreground/70"
+                    className="group rounded-lg border"
                     hoverVariant="primary"
                     onClick={() => modalState.onOpenChange((prev) => !prev)}
-                    variant="secondary"
+                    shadow="none"
+                    size="xs"
+                    variant="outline-ghost"
                 >
                     <LayersIcon className="duration-300 group-hover:text-inherit" />
                     Start Batch
@@ -131,12 +139,13 @@ const TransactionBatchNavButton = (_props: Props) => {
         <Popover modal>
             <PopoverTrigger asChild>
                 <Button
-                    className="group rounded-full"
+                    className="group rounded-lg border"
                     hoverVariant="primary"
-                    size="sm"
-                    variant="secondary"
+                    shadow="none"
+                    size="xs"
+                    variant="default"
                 >
-                    <LayersSharpDotIcon className="text-primary duration-300 group-hover:text-inherit" />
+                    <LayersSharpDotIcon className="duration-300 group-hover:text-inherit" />
                     Manage Batch
                 </Button>
             </PopoverTrigger>

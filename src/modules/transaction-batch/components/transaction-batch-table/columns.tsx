@@ -79,6 +79,7 @@ const TransactionBatchTableColumns = (
                 <DataTableColumnHeader {...props} title="Batch Name">
                     <ColumnActions {...props}>
                         <TextFilter<ITransactionBatch>
+                            defaultMode="contains"
                             displayText="Batch Name"
                             field="batch_name"
                         />
@@ -242,7 +243,7 @@ const TransactionBatchTableColumns = (
             minSize: 160,
         },
         {
-            id: 'ended',
+            id: 'is_closed',
             accessorKey: 'is_closed',
             header: (props) => (
                 <DataTableColumnHeader {...props} title="Ended" />
@@ -278,7 +279,7 @@ const TransactionBatchTableColumns = (
             minSize: 120,
         },
         {
-            id: 'blotter_view',
+            id: 'can_view',
             accessorKey: 'can_view',
             header: (props) => (
                 <DataTableColumnHeader {...props} title="Blotter View" />
@@ -320,6 +321,7 @@ const TransactionBatchTableColumns = (
                 <DataTableColumnHeader {...props} title="Description">
                     <ColumnActions {...props}>
                         <TextFilter<ITransactionBatch>
+                            defaultMode="contains"
                             displayText="Description"
                             field="description"
                         />

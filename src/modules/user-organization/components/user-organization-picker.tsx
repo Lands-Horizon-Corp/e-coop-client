@@ -57,6 +57,7 @@ const UserOrganizationPicker = forwardRef<HTMLButtonElement, Props>(
         const { finalFilterPayloadBase64, bulkSetFilter } = useFilterState({
             defaultFilter,
             defaultFilterMode: 'OR',
+            debounceFinalFilterMs: 0,
             onFilterChange: () =>
                 setPagination((prev) => ({
                     ...prev,
@@ -67,7 +68,7 @@ const UserOrganizationPicker = forwardRef<HTMLButtonElement, Props>(
         const {
             data = {
                 data: [],
-                pageIndex: 1,
+                pageIndex: 0,
                 pageSize: 10,
                 totalPage: 1,
                 totalSize: 0,
@@ -81,8 +82,7 @@ const UserOrganizationPicker = forwardRef<HTMLButtonElement, Props>(
                 enabled: !disabled && state,
             },
             query: {
-                pagination,
-                showMessage: false,
+                ...pagination,
                 filter: finalFilterPayloadBase64,
             },
         })

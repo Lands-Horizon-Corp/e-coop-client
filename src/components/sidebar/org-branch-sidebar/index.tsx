@@ -10,7 +10,7 @@ import { TUserType } from '@/modules/user'
 import EcoopLogo from '@/components/ecoop-logo'
 import ActionTooltip from '@/components/tooltips/action-tooltip'
 import AppSidebarItem from '@/components/ui/app-sidebar/app-sidebar-item'
-import AppSidebarQruickNavigate from '@/components/ui/app-sidebar/app-sidebar-quick-navigate'
+import AppSidebarQuickNavigate from '@/components/ui/app-sidebar/app-sidebar-quick-navigate'
 import AppSidebarUser from '@/components/ui/app-sidebar/app-sidebar-user'
 import { flatSidebarGroupItem } from '@/components/ui/app-sidebar/app-sidebar-utils'
 import { Badge } from '@/components/ui/badge'
@@ -134,7 +134,7 @@ const OrgBranchSidebar = (props: IBaseProps) => {
                         </SidebarMenuButton>
                     </SidebarMenuItem>
                 </SidebarMenu>
-                <AppSidebarQruickNavigate groups={item} />
+                <AppSidebarQuickNavigate groups={item} />
             </SidebarHeader>
             <SidebarContent className="ecoop-scroll group-data-[collapsible=icon]:overflow-y-auto ">
                 {memoizedSidebarRouteGroup.map((navGroupItem, i) => {

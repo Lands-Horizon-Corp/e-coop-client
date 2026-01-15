@@ -84,7 +84,9 @@ export const WithNewUserAccountSchema = z.discriminatedUnion(
 export const QuickCreateMemberProfileSchema = z
     .object({
         old_reference_id: z.string().optional(),
-        passbook: z.string().optional(),
+        passbook: z.coerce
+            .string<string>('Passbook is required')
+            .min(3, 'Minimum 3 Characters'),
 
         organization_id: entityIdSchema.optional(),
         branch_id: entityIdSchema.optional(),
@@ -94,6 +96,10 @@ export const QuickCreateMemberProfileSchema = z
         last_name: z.string().min(1, 'Last name is required'),
         full_name: z.string().optional(),
         suffix: z.string().max(15).optional(),
+        birth_place: z.coerce
+            .string()
+            .min(3, 'Birth Place is required')
+            .max(3, 'Birth Place must be ISO Alpha-3 code'), // ISO ALPHA-3
         contact_number: z.string().optional(),
         birthdate: stringDateSchema
             .refine(
@@ -135,7 +141,10 @@ export const MemberProfilePersonalInfoSchema = z.object({
     contact_number: z.string().optional(),
 
     civil_status: civilStatusSchema,
-
+    birth_place: z.coerce
+        .string()
+        .min(3, 'Birth Place is required')
+        .max(3, 'Birth Place must be ISO Alpha-3 code'), // ISO ALPHA-3
     member_occupation_id: entityIdSchema.optional(),
 
     business_address: z.string().optional(),

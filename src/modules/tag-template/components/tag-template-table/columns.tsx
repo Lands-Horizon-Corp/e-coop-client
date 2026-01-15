@@ -67,7 +67,11 @@ const TagTemplateTableColumns = (
         header: (props) => (
             <DataTableColumnHeader {...props} title="Name">
                 <ColumnActions {...props}>
-                    <TextFilter<ITagTemplate> displayText="Name" field="name" />
+                    <TextFilter<ITagTemplate>
+                        defaultMode="contains"
+                        displayText="Name"
+                        field="name"
+                    />
                 </ColumnActions>
             </DataTableColumnHeader>
         ),

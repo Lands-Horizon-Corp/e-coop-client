@@ -2,7 +2,7 @@ import z from 'zod'
 
 import { IBaseEntityMeta, IPaginatedResult, TEntityId } from '@/types'
 
-import { AccountTypeEnum, IAccount } from '../account'
+import { IAccount, TAccountType } from '../account'
 import { IChargesRateScheme } from '../charges-rate-scheme'
 import { IComputationSheet } from '../computation-sheet'
 import { AutomaticLoanDeductionSchema } from './automatic-loan-deduction.validation'
@@ -51,7 +51,7 @@ export type AutomaticLoanDeductionEntry = {
     charges_amount: number
     charges_divisor: number
 
-    account_type?: AccountTypeEnum // for checking
+    account_type?: TAccountType // for checking
     interest_standard?: number // use this if charges_perc_1 & 2 no value
 
     min_amount: number

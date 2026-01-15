@@ -15,11 +15,7 @@ import { Checkbox } from '@/components/ui/checkbox'
 import { IMemberType } from '../../member-type.types'
 
 export const memberTypeGlobalSearchTargets: IGlobalSearchTargets<IMemberType>[] =
-    [
-        { field: 'name', displayText: 'Name' },
-        { field: 'description', displayText: 'Description' },
-        { field: 'prefix', displayText: 'Prefix' },
-    ]
+    [{ field: 'name', displayText: 'Name' }]
 
 export interface IMemberTypeTableActionComponentProp {
     row: Row<IMemberType>
@@ -69,6 +65,7 @@ const memberTypeTableColumns = (
                 <DataTableColumnHeader {...props} title="Name">
                     <ColumnActions {...props}>
                         <TextFilter<IMemberType>
+                            defaultMode="contains"
                             displayText="Name"
                             field="name"
                         />
@@ -92,6 +89,7 @@ const memberTypeTableColumns = (
                 <DataTableColumnHeader {...props} title="Prefix">
                     <ColumnActions {...props}>
                         <TextFilter<IMemberType>
+                            defaultMode="contains"
                             displayText="Prefix"
                             field="prefix"
                         />
@@ -115,6 +113,7 @@ const memberTypeTableColumns = (
                 <DataTableColumnHeader {...props} title="Description">
                     <ColumnActions {...props}>
                         <TextFilter<IMemberType>
+                            defaultMode="contains"
                             displayText="Description"
                             field="description"
                         />

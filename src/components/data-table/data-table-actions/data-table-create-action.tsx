@@ -10,6 +10,7 @@ export interface IDataTableCreateActionProps
     label?: string
     isHidden?: boolean
     isLoading?: boolean
+    className?: string
     Icon?: IconType
     onClick: () => void
 }

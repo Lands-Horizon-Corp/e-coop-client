@@ -1,43 +1,44 @@
 import { cn } from '@/helpers/tw-utils'
-import { FinancialStatementTypeEnum } from '@/modules/account'
 
 import { Badge } from '@/components/ui/badge'
 
+import { TFinancialStatementType } from '../financial-statement-definition.types'
+
 interface FinancialStatementTypeBadgeProps {
-    type: FinancialStatementTypeEnum
+    type: TFinancialStatementType
     className?: string
     description?: string
 }
 
 const financialStatementTypeStyles: Record<
-    FinancialStatementTypeEnum,
+    TFinancialStatementType,
     {
         label: string
         bgColor: string
         textColor: string
     }
 > = {
-    [FinancialStatementTypeEnum.Assets]: {
+    Assets: {
         label: 'Assets',
         bgColor: 'bg-emerald-500',
         textColor: 'text-emerald-50',
     },
-    [FinancialStatementTypeEnum.Liabilities]: {
+    Liabilities: {
         label: 'Liabilities',
         bgColor: 'bg-rose-500',
         textColor: 'text-rose-50',
     },
-    [FinancialStatementTypeEnum.Equity]: {
+    Equity: {
         label: 'Equity',
         bgColor: 'bg-indigo-500',
         textColor: 'text-indigo-50',
     },
-    [FinancialStatementTypeEnum.Revenue]: {
+    Revenue: {
         label: 'Revenue',
         bgColor: 'bg-primary',
         textColor: 'text-primary',
     },
-    [FinancialStatementTypeEnum.Expenses]: {
+    Expenses: {
         label: 'Expenses',
         bgColor: 'bg-stone-500',
         textColor: 'text-stone-50',

@@ -1,6 +1,7 @@
 import { useMemo } from 'react'
 
 import { useQueryClient } from '@tanstack/react-query'
+import qs from 'query-string'
 
 import FilterContext from '@/contexts/filter-context/filter-context'
 import { cn } from '@/helpers/tw-utils'
@@ -17,7 +18,9 @@ import DataTableToolbar, {
 } from '@/components/data-table/data-table-toolbar'
 import { TableProps } from '@/components/data-table/table.type'
 import { useDataTableSorting } from '@/components/data-table/use-datatable-sorting'
-import useDataTableState from '@/components/data-table/use-datatable-state'
+import useDataTableState, {
+    useResolvedColumnOrder,
+} from '@/components/data-table/use-datatable-state'
 
 import useDatableFilterState from '@/hooks/use-filter-state'
 import { usePagination } from '@/hooks/use-pagination'
@@ -51,6 +54,7 @@ export interface MemberDepartmentTableProps
 }
 
 const MemberDepartmentTable = ({
+    persistKey = ['member-department'],
     className,
     toolbarProps,
     defaultFilter,
@@ -75,6 +79,12 @@ const MemberDepartmentTable = ({
         [actionComponent]
     )
 
+    const { resolvedColumnOrder, resolvedColumnVisibility, finalKeys } =
+        useResolvedColumnOrder({
+            columns,
+            persistKey,
+        })
+
     const {
         getRowIdFn,
         columnOrder,
@@ -86,7 +96,9 @@ const MemberDepartmentTable = ({
         rowSelectionState,
         createHandleRowSelectionChange,
     } = useDataTableState<IMemberDepartment>({
-        defaultColumnOrder: columns.map((c) => c.id!),
+        key: finalKeys,
+        defaultColumnOrder: resolvedColumnOrder,
+        defaultColumnVisibility: resolvedColumnVisibility,
         onSelectData,
     })
 
@@ -140,6 +152,14 @@ const MemberDepartmentTable = ({
         onRowSelectionChange: handleRowSelectionChange,
     })
 
+    const exportfilter = qs.stringify(
+        {
+            ...pagination,
+            sort: sortingStateBase64,
+            filter: filterState.finalFilterPayloadBase64,
+        },
+        { skipNull: true }
+    )
     return (
         <FilterContext.Provider value={filterState}>
             <div
@@ -161,10 +181,11 @@ const MemberDepartmentTable = ({
                             }),
                     }}
                     exportActionProps={{
-                        pagination,
                         isLoading: isPending,
-                        filters: filterState.finalFilterPayload,
-                        disabled: isPending || isRefetching,
+                        filters: exportfilter,
+                        model: 'MemberDepartment',
+                        url: 'api/v1/member-department/search',
+
                         // Uncomment and implement export functions when available
                         // exportAll: MemberDepartmentService.exportAll,
                         // exportCurrentPage: (ids) =>
@@ -177,7 +198,7 @@ const MemberDepartmentTable = ({
                         setFilterLogic: filterState.setFilterLogic,
                     }}
                     globalSearchProps={{
-                        defaultMode: 'equal',
+                        defaultMode: 'contains',
                         targets: memberDepartmentGlobalSearchTargets,
                     }}
                     refreshActionProps={{

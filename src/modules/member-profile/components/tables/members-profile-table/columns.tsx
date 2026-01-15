@@ -1,6 +1,7 @@
 import { ReactNode } from 'react'
 
 import { CIVIL_STATUS, GENERAL_STATUS } from '@/constants'
+import { cn } from '@/helpers'
 import GeneralStatusBadge from '@/modules/authentication/components/general-status-badge'
 import CivilStatusBadge from '@/modules/member-profile/components/badges/civil-status-badge'
 import { useInfoModalStore } from '@/store/info-modal-store'
@@ -11,11 +12,16 @@ import DataTableColumnHeader from '@/components/data-table/data-table-column-hea
 import ColumnActions from '@/components/data-table/data-table-column-header/column-actions'
 import { createUpdateColumns } from '@/components/data-table/data-table-common-columns'
 import { IGlobalSearchTargets } from '@/components/data-table/data-table-filters/data-table-global-search'
-import DataTableMultiSelectFilter from '@/components/data-table/data-table-filters/multi-select-filter'
+import DataTableMultiSelectFilter from '@/components/data-table/data-table-filters/data-table-multi-select-filter'
 import TextFilter from '@/components/data-table/data-table-filters/text-filter'
-import { PushPinSlashIcon, QrCodeIcon } from '@/components/icons'
+import {
+    HeartBreakFillIcon,
+    PushPinSlashIcon,
+    QrCodeIcon,
+} from '@/components/icons'
 import ImageNameDisplay from '@/components/image-name-display'
 import { QrCodeDownloadable } from '@/components/qr-code'
+import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
 import CopyWrapper from '@/components/wrappers/copy-wrapper'
@@ -26,10 +32,8 @@ import { IMemberProfile } from '../../..'
 
 export const memberGlobalSearchTargets: IGlobalSearchTargets<IMemberProfile>[] =
     [
-        { field: 'first_name', displayText: 'Name' },
         { field: 'full_name', displayText: 'Full Name' },
         { field: 'contact_number', displayText: 'Contact' },
-        { field: 'status', displayText: 'Verify Status' },
     ]
 
 export interface IMemberProfileTableActionComponentProp {
@@ -101,15 +105,24 @@ const MemberProfileTableColumns = (
             ),
             cell: ({
                 row: {
-                    original: { full_name, media },
+                    original: { full_name, media, is_closed },
                 },
             }) => (
-                <div onClick={(e) => e.stopPropagation()}>
+                <div className="space-y-2" onClick={(e) => e.stopPropagation()}>
                     <ImageNameDisplay
-                        className="mx-auto"
+                        className={cn(
+                            'mx-auto',
+                            is_closed && '!text-destructive'
+                        )}
                         name={full_name}
                         src={media?.download_url}
                     />
+                    {is_closed && (
+                        <Badge className="bg-destructive/20 text-xs text-destructive hover:bg-destructive/40 border border-destructive/50">
+                            <HeartBreakFillIcon className="inline mr-1" />{' '}
+                            Closed Account
+                        </Badge>
+                    )}
                 </div>
             ),
             enableMultiSort: true,
@@ -193,7 +206,7 @@ const MemberProfileTableColumns = (
                 <DataTableColumnHeader {...props} title="Suffix">
                     <ColumnActions {...props}>
                         <TextFilter
-                            defaultMode="equal"
+                            defaultMode="contains"
                             displayText="Suffix"
                             field="suffix"
                         />
@@ -217,7 +230,7 @@ const MemberProfileTableColumns = (
                 <DataTableColumnHeader {...props} title="PB">
                     <ColumnActions {...props}>
                         <TextFilter
-                            defaultMode="equal"
+                            defaultMode="contains"
                             displayText="Passbook"
                             field="passbook"
                         />
@@ -254,6 +267,7 @@ const MemberProfileTableColumns = (
                 <DataTableColumnHeader {...props} title="Contact Number">
                     <ColumnActions {...props}>
                         <TextFilter<IMemberProfile>
+                            defaultMode="contains"
                             displayText="Contact"
                             field="contact_number"
                         />
@@ -284,6 +298,7 @@ const MemberProfileTableColumns = (
                 <DataTableColumnHeader {...props} title="Gender">
                     <ColumnActions {...props}>
                         <TextFilter<IMemberProfile>
+                            defaultMode="contains"
                             displayText="Gender"
                             field="member_gender.name"
                         />
@@ -307,7 +322,7 @@ const MemberProfileTableColumns = (
                 <DataTableColumnHeader {...props} title="Member Type">
                     <ColumnActions {...props}>
                         <TextFilter
-                            defaultMode="equal"
+                            defaultMode="contains"
                             displayText="Member Type"
                             field="member_type.name"
                         />
@@ -324,7 +339,6 @@ const MemberProfileTableColumns = (
             size: 150,
             minSize: 150,
         },
-
         {
             id: 'status',
             accessorKey: 'status',

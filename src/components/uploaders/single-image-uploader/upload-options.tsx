@@ -46,7 +46,7 @@ const SingleImageUploadOption = ({ onPhotoChoose }: Props) => {
             className="flex flex-col justify-center"
             defaultValue="file-choose"
         >
-            <TabsList className="w-fit bg-transparent">
+            <TabsList className="w-fit">
                 <TabsTrigger value="file-choose">Choose File</TabsTrigger>
                 <TabsTrigger value="camera-capture">Camera</TabsTrigger>
             </TabsList>

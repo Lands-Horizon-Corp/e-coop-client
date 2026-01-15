@@ -1,6 +1,7 @@
 import { useMemo } from 'react'
 
 import { useQueryClient } from '@tanstack/react-query'
+import qs from 'query-string'
 
 import FilterContext from '@/contexts/filter-context/filter-context'
 import { cn } from '@/helpers'
@@ -144,7 +145,14 @@ const AutomaticLoanDeductionTable = ({
         getSortedRowModel: getSortedRowModel(),
         columnResizeMode: 'onChange',
     })
-
+    const exportfilter = qs.stringify(
+        {
+            ...pagination,
+            sort: sortingStateBase64,
+            filter: filterState.finalFilterPayloadBase64,
+        },
+        { skipNull: true }
+    )
     return (
         <FilterContext.Provider value={filterState}>
             <div className={cn('flex h-full flex-col gap-y-2', className)}>
@@ -160,17 +168,17 @@ const AutomaticLoanDeductionTable = ({
                             }),
                     }}
                     exportActionProps={{
-                        pagination,
-                        filters: filterState.finalFilterPayload,
-                        disabled: isPending || isRefetching,
                         isLoading: isPending,
+                        filters: exportfilter,
+                        model: 'AutomaticLoanDeduction',
+                        url: '/api/v1/automatic-loan-deduction/search',
                     }}
                     filterLogicProps={{
                         filterLogic: filterState.filterLogic,
                         setFilterLogic: filterState.setFilterLogic,
                     }}
                     globalSearchProps={{
-                        defaultMode: 'equal',
+                        defaultMode: 'contains',
                         targets: automaticLoanDeductionGlobalSearchTargets,
                     }}
                     refreshActionProps={{

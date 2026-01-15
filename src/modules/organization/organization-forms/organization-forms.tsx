@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import { useNavigate } from '@tanstack/react-router'
 import { useForm } from 'react-hook-form'
@@ -17,8 +17,8 @@ import { CurrencyBadge } from '@/modules/currency/components/currency-badge'
 import { IMedia } from '@/modules/media'
 import {
     ICreateOrganizationResponse,
+    IOrganizationRequest,
     OrganizationSchema,
-    TOrganizationFormValues,
 } from '@/modules/organization'
 import { useCreateOrganization } from '@/modules/organization'
 import { IOrganizationCategoryRequest } from '@/modules/organization-category'
@@ -38,7 +38,7 @@ import ImageDisplay from '@/components/image-display'
 import TextEditor from '@/components/text-editor'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card'
+import { Card, CardContent, CardFooter } from '@/components/ui/card'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Form, FormControl } from '@/components/ui/form'
 import FormErrorMessage from '@/components/ui/form-error-message'
@@ -51,6 +51,7 @@ import { PlainTextEditor } from '@/components/ui/text-editor'
 import PreviewMediaWrapper from '@/components/wrappers/preview-media-wrapper'
 
 import { useAlertBeforeClosing } from '@/hooks/use-alert-before-closing'
+import { useFormHelper } from '@/hooks/use-form-helper'
 import { useLocationInfo } from '@/hooks/use-location-info'
 
 import { TEntityId } from '@/types'
@@ -70,12 +71,13 @@ const OrganizationForm = () => {
     const { countryCode } = useLocationInfo()
     const [activeStep, setActiveStep] = useState(0)
     const { data: defaultCurrency } = useGetCurrentCurrency()
+
     const { selectedCategories, clearCategories, setOnOpenCategoryPicker } =
         useCategoryStore()
 
     const navigate = useNavigate()
 
-    const form = useForm<TOrganizationFormValues>({
+    const form = useForm<IOrganizationRequest>({
         resolver: standardSchemaResolver(OrganizationSchema),
         reValidateMode: 'onChange',
         mode: 'onSubmit',
@@ -88,10 +90,12 @@ const OrganizationForm = () => {
             subscription_plan_id: '',
             media_id: '',
             cover_media_id: '',
-            currency_id: defaultCurrency?.id || undefined,
         },
     })
 
+    const { firstError } = useFormHelper<IOrganizationRequest>({
+        form,
+    })
     const { data: currencyData } = useGetCurrencyById({
         id: form.watch('currency_id'),
     })
@@ -117,7 +121,7 @@ const OrganizationForm = () => {
         },
     })
 
-    const handleSubmit = async (data: TOrganizationFormValues) => {
+    const handleSubmit = async (data: IOrganizationRequest) => {
         if (!form.formState.isValid) return
         const requestData = {
             ...data,
@@ -152,6 +156,12 @@ const OrganizationForm = () => {
 
     const errorMessage = serverRequestErrExtractor({ error })
 
+    useEffect(() => {
+        if (defaultCurrency) {
+            form.setValue('currency_id', defaultCurrency.id)
+        }
+    }, [defaultCurrency, form])
+
     return (
         <Form {...form}>
             <form
@@ -160,10 +170,12 @@ const OrganizationForm = () => {
             >
                 <Card
                     className={cn(
-                        'flex-1 w-full max-w-full min-w-6xl shadow-none rounded-none sm:rounded-lg border-none sm:border bg-transparent sm:bg-card/50  flex flex-col'
+                        'flex-1 w-full pt-5 max-w-full min-w-6xl shadow-none rounded-none sm:rounded-lg border-none sm:border bg-transparent sm:bg-card/50  flex flex-col'
                     )}
                 >
-                    <CardHeader className="text-lg px-4 sm:px-6"></CardHeader>
+                    {activeStep > 0 && (
+                        <FormErrorMessage errorMessage={firstError} />
+                    )}
                     <OrganizationFormStepper
                         activeStep={activeStep}
                         className="px-2 sm:px-0 block md:hidden xl:block"
@@ -339,19 +351,20 @@ const OrganizationForm = () => {
                                         control={form.control}
                                         label="Currency"
                                         name="currency_id"
-                                        render={({ field }) => (
-                                            <CurrencyCombobox
-                                                {...field}
-                                                onChange={(selected) =>
-                                                    field.onChange(selected.id)
-                                                }
-                                                placeholder="Select Currency"
-                                                value={
-                                                    field.value ||
-                                                    defaultCurrency?.id
-                                                }
-                                            />
-                                        )}
+                                        render={({ field }) => {
+                                            return (
+                                                <CurrencyCombobox
+                                                    {...field}
+                                                    onChange={(selected) =>
+                                                        field.onChange(
+                                                            selected.id
+                                                        )
+                                                    }
+                                                    placeholder="Select Currency"
+                                                    value={field.value}
+                                                />
+                                            )
+                                        }}
                                     />
                                     <FormFieldWrapper
                                         className="col-span-full sm:col-span-1 lg:col-span-2"
@@ -484,7 +497,7 @@ const OrganizationForm = () => {
                             )}
                             {activeStep === 3 && (
                                 <div className="space-y-4">
-                                    <div className="text-center sm:text-left">
+                                    <div className="text-center sm:text-center">
                                         <h1 className="inline-flex items-center justify-center sm:justify-start text-xl sm:text-2xl font-semibold mb-2">
                                             Almost done!
                                             <RocketIcon className="text-primary ml-1" />

@@ -7,7 +7,7 @@ import {
     TGetAllByCategory,
     useGetAllOrganizationsByCategories,
 } from '@/modules/organization'
-import { OrganizationMiniCard } from '@/modules/organization/components/organization-mini-card'
+import OrganizationCardWithToolTip from '@/modules/organization/pages/organization/components/organization-card-with-tool-tip'
 
 import RefreshButton from '@/components/buttons/refresh-button'
 import { CompassIcon } from '@/components/icons'
@@ -16,13 +16,12 @@ import {
     Carousel,
     CarouselContent,
     CarouselItem,
-    CarouselNext,
-    CarouselPrevious,
 } from '@/components/ui/carousel'
 
 import EmptyState from '../components/empty-state'
 import LoadingSkeleton from '../components/loading-skeleton'
 import { organizationFuseOptions } from '../utils/data-grouping'
+import { ExplorePageCardPreviewController } from './explore-featured'
 
 export const useSearchOrganizationsByCategories = (
     data: TGetAllByCategory[] | undefined,
@@ -101,7 +100,7 @@ export const ExploreCategoriesMain = ({
             handleSelectedOrganization={handleSelectedOrganization}
             isLoading={isLoading}
             item={item}
-            key={index}
+            key={item?.category?.id ?? index}
             refetch={handleRefetch}
             searchTerm={searchTerm}
         />
@@ -115,9 +114,11 @@ const ExploreByCategories = ({
     refetch,
     item: { category, organizations },
 }: ExploreByCategoriesProps) => {
-    const workingOrganizations = useMemo(
-        () => organizations ?? [],
-        [organizations]
+    const onOpenModalPreview = useCallback(
+        (org: IOrganization) => {
+            handleSelectedOrganization?.(org)
+        },
+        [handleSelectedOrganization]
     )
 
     return (
@@ -126,7 +127,7 @@ const ExploreByCategories = ({
                 <div className="flex items-center gap-2">
                     <h2 className="text-xl font-semibold">{category.name}</h2>
                     <Badge className="ml-2" variant="secondary">
-                        {workingOrganizations.length}
+                        {organizations.length}
                     </Badge>
                 </div>
                 <RefreshButton
@@ -144,7 +145,7 @@ const ExploreByCategories = ({
                 <CarouselContent>
                     {isLoading ? (
                         <LoadingSkeleton />
-                    ) : workingOrganizations.length === 0 ? (
+                    ) : organizations.length === 0 ? (
                         <div className="w-full">
                             <EmptyState
                                 icon={
@@ -154,31 +155,24 @@ const ExploreByCategories = ({
                             />
                         </div>
                     ) : (
-                        workingOrganizations.map((item, index) => (
+                        organizations.map((org, index) => (
                             <CarouselItem
-                                className="md:basis-1/2 lg:basis-1/5"
-                                key={index}
+                                className="md:basis-1/2 pl-2 lg:basis-1/6"
+                                key={org?.id ?? index}
                                 onClick={() =>
-                                    handleSelectedOrganization?.(item)
+                                    handleSelectedOrganization?.(org)
                                 }
                             >
-                                <OrganizationMiniCard
-                                    className="max-h-96 min-h-96"
-                                    onCardClick={() => {
-                                        // setSelectedOrganization(item)
-                                        // orgModal.onOpenChange(true)
-                                    }}
-                                    organization={item}
+                                <OrganizationCardWithToolTip
+                                    handleOpenModalPreview={onOpenModalPreview}
+                                    organization={org}
                                     searchTerm={searchTerm}
-                                    showActions={false}
-                                    showContact={false}
                                 />
                             </CarouselItem>
                         ))
                     )}
                 </CarouselContent>
-                <CarouselPrevious />
-                <CarouselNext />
+                <ExplorePageCardPreviewController />
             </Carousel>
         </div>
     )

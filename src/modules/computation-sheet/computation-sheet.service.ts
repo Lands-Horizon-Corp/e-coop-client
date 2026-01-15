@@ -9,8 +9,8 @@ import { TEntityId } from '@/types'
 
 import type {
     IComputationSheet,
-    IComputationSheetCalculator,
-    IComputationSheetCalculatorRequest,
+    IComputationSheetAmortizationResponse,
+    IComputationSheetAmortizationResponseRequest,
     IComputationSheetRequest,
 } from '../computation-sheet'
 
@@ -72,14 +72,14 @@ export const useUpdateComputationSheetById = createMutationFactory<
 
 // Use for scheme calculator
 export const useCalculateSchemeAmortization = createMutationFactory<
-    IComputationSheetCalculator,
+    IComputationSheetAmortizationResponse,
     Error,
-    { id: TEntityId; data: IComputationSheetCalculatorRequest }
+    { id: TEntityId; data: IComputationSheetAmortizationResponseRequest }
 >({
     mutationFn: async ({ id, data }) => {
         const response = await API.post<
-            IComputationSheetCalculatorRequest,
-            IComputationSheetCalculator
+            IComputationSheetAmortizationResponseRequest,
+            IComputationSheetAmortizationResponse
         >(`${computationSheetAPIRoute}/${id}/calculator`, data)
         return response.data
     },

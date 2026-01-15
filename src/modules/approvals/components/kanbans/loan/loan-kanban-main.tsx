@@ -17,6 +17,7 @@ import {
 } from '@/modules/loan-transaction'
 import LoanStatusIndicator from '@/modules/loan-transaction/components/loan-status-indicator'
 
+import { highlightMatch } from '@/components/hightlight-match'
 import {
     CollapseIcon,
     MagnifyingGlassIcon as SearchIcon,
@@ -32,8 +33,8 @@ import {
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
+import { Skeleton } from '@/components/ui/skeleton'
 
-import { highlightMatch } from '../journal-voucher/journal-voucher-kanban-main'
 import {
     LoanTransactionCard,
     LoanTransactionCardCreatorInfo,
@@ -59,7 +60,6 @@ export const LoanKanbanMain = ({
 }: LoanTransactionKanbanProps) => {
     const invalidate = useQueryClient()
     const [openLoans, setOpenLoans] = useState<string[]>([])
-
     const {
         data: rawLoans,
         isLoading,
@@ -107,8 +107,6 @@ export const LoanKanbanMain = ({
         return fuse.search(searchTerm).map((result) => result.item)
     }, [searchTerm, fuse, loanData])
 
-    if (!rawLoans) return null
-
     const allIds = filteredLoans.map((loan) => loan.id)
     const hasItem = filteredLoans.length > 0
     const isExpanded = openLoans.length > 0
@@ -129,7 +127,17 @@ export const LoanKanbanMain = ({
         }
     }
 
-    if (isLoading) return <JournalVoucherSkeletonCard className="w-[420px]" />
+    if (isLoading)
+        return (
+            <div className="w-full px-4">
+                <Skeleton className="h-6 w-3/4 mb-4" />
+                <Skeleton className="h-1 w-full mb-2" />
+                <div className="w-full py-2 pt-5 h-40 space-y-3">
+                    <JournalVoucherSkeletonCard />
+                    <JournalVoucherSkeletonCard />
+                </div>
+            </div>
+        )
 
     const handleInvalidate = () => {
         invalidate.invalidateQueries({
@@ -140,7 +148,7 @@ export const LoanKanbanMain = ({
     return (
         <KanbanContainer
             className={cn(
-                'w-[420px] h-full shrink-0 relative',
+                '2xl:w-[24%] lg:w-[350px] w-[300px] h-full shrink-0 relative',
                 isSelected && 'ring-2 ring-primary/20 bg-primary/5'
             )}
         >

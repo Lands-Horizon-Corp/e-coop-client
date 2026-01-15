@@ -7,11 +7,14 @@ import { Row } from '@tanstack/react-table'
 
 import RowActionsGroup from '@/components/data-table/data-table-row-actions'
 import DataTableRowContext from '@/components/data-table/data-table-row-context'
-
-import { useModalState } from '@/hooks/use-modal-state'
+import { useTableRowActionStore } from '@/components/data-table/store/data-table-action-store'
 
 import { MemberOccupationCreateUpdateFormModal } from '../../member-occupation-create-update-form'
 import { IMemberOccupationTableActionComponentProp } from './columns'
+
+export type MemberOccupationActionType = 'edit' | 'delete'
+
+export type MemberOccupationActionExtra = Record<string, never>
 
 interface UseMemberOccupationActionsProps {
     row: Row<IMemberOccupation>
@@ -22,8 +25,12 @@ const useMemberOccupationActions = ({
     row,
     onDeleteSuccess,
 }: UseMemberOccupationActionsProps) => {
-    const updateModal = useModalState()
     const memberOccupation = row.original
+    const { open } = useTableRowActionStore<
+        IMemberOccupation,
+        MemberOccupationActionType,
+        MemberOccupationActionExtra
+    >()
 
     const { onOpen } = useConfirmModalStore()
 
@@ -36,7 +43,12 @@ const useMemberOccupationActions = ({
         },
     })
 
-    const handleEdit = () => updateModal.onOpenChange(true)
+    const handleEdit = () => {
+        open('edit', {
+            id: memberOccupation.id,
+            defaultValues: memberOccupation,
+        })
+    }
 
     const handleDelete = () => {
         onOpen({
@@ -49,7 +61,6 @@ const useMemberOccupationActions = ({
 
     return {
         memberOccupation,
-        updateModal,
         isDeletingMemberOccupation,
         handleEdit,
         handleDelete,
@@ -66,28 +77,12 @@ export const MemberOccupationAction = ({
     row,
     onDeleteSuccess,
 }: IMemberOccupationTableActionProps) => {
-    const {
-        memberOccupation,
-        updateModal,
-        isDeletingMemberOccupation,
-        handleEdit,
-        handleDelete,
-    } = useMemberOccupationActions({ row, onDeleteSuccess })
+    const { isDeletingMemberOccupation, handleEdit, handleDelete } =
+        useMemberOccupationActions({ row, onDeleteSuccess })
 
     return (
         <>
-            <div onClick={(e) => e.stopPropagation()}>
-                <MemberOccupationCreateUpdateFormModal
-                    {...updateModal}
-                    description="Modify/Update this member occupation..."
-                    formProps={{
-                        memberOccupationId: memberOccupation.id,
-                        defaultValues: { ...memberOccupation },
-                        onSuccess: () => updateModal.onOpenChange(false),
-                    }}
-                    title="Update Member Occupation"
-                />
-            </div>
+            <div onClick={(e) => e.stopPropagation()}></div>
             <RowActionsGroup
                 canSelect
                 onDelete={{
@@ -118,26 +113,11 @@ export const MemberOccupationRowContext = ({
     children,
     onDeleteSuccess,
 }: IMemberOccupationRowContextProps) => {
-    const {
-        memberOccupation,
-        updateModal,
-        isDeletingMemberOccupation,
-        handleEdit,
-        handleDelete,
-    } = useMemberOccupationActions({ row, onDeleteSuccess })
+    const { isDeletingMemberOccupation, handleEdit, handleDelete } =
+        useMemberOccupationActions({ row, onDeleteSuccess })
 
     return (
         <>
-            <MemberOccupationCreateUpdateFormModal
-                {...updateModal}
-                description="Modify/Update this member occupation..."
-                formProps={{
-                    memberOccupationId: memberOccupation.id,
-                    defaultValues: { ...memberOccupation },
-                    onSuccess: () => updateModal.onOpenChange(false),
-                }}
-                title="Update Member Occupation"
-            />
             <DataTableRowContext
                 onDelete={{
                     text: 'Delete',
@@ -153,6 +133,36 @@ export const MemberOccupationRowContext = ({
             >
                 {children}
             </DataTableRowContext>
+        </>
+    )
+}
+
+export const MemberOccupationTableActionManager = () => {
+    const { state, close } = useTableRowActionStore<
+        IMemberOccupation,
+        MemberOccupationActionType,
+        MemberOccupationActionExtra
+    >()
+
+    if (!state || !state.defaultValues) return null
+
+    const memberOccupation = state.defaultValues
+
+    return (
+        <>
+            {state.action === 'edit' && (
+                <MemberOccupationCreateUpdateFormModal
+                    description="Modify/Update this member occupation..."
+                    formProps={{
+                        memberOccupationId: memberOccupation.id,
+                        defaultValues: memberOccupation,
+                        onSuccess: close,
+                    }}
+                    onOpenChange={close}
+                    open={state.isOpen}
+                    title="Update Member Occupation"
+                />
+            )}
         </>
     )
 }

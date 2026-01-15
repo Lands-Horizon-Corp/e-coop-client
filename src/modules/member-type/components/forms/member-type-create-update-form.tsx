@@ -8,8 +8,8 @@ import { cn } from '@/helpers/tw-utils'
 import {
     IMemberType,
     MemberTypeSchema,
-    useCreate,
-    useUpdateById,
+    useCreateMemberType,
+    useUpdateMemberTypeById,
 } from '@/modules/member-type'
 
 import FormFooterResetSubmit from '@/components/form-components/form-footer-reset-submit'
@@ -48,14 +48,14 @@ const MemberTypeCreateUpdateForm = ({
         },
     })
 
-    const createMutation = useCreate({
+    const createMutation = useCreateMemberType({
         options: {
             onSuccess: formProps.onSuccess,
             onError: formProps.onError,
         },
     })
 
-    const updateMutation = useUpdateById({
+    const updateMutation = useUpdateMemberTypeById({
         options: {
             onSuccess: formProps.onSuccess,
             onError: formProps.onError,
@@ -144,7 +144,7 @@ const MemberTypeCreateUpdateForm = ({
                 </fieldset>
 
                 <FormFooterResetSubmit
-                    disableSubmit={!form.formState.isDirty}
+                    disableSubmit={!form.formState.isDirty || isPending}
                     error={error}
                     isLoading={isPending}
                     onReset={() => {

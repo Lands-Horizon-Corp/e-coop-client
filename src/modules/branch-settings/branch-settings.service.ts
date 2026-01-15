@@ -73,6 +73,7 @@ export const useUpdateCurrentBranchSettings = createMutationFactory<
     mutationFn: (data) => updateCurrentBranchSettings(data),
     invalidationFn: (args) =>
         updateMutationInvalidationFn('branch-settings', args),
+    defaultInvalidates: [['auth', 'context']],
 })
 
 //  For branch settings currency

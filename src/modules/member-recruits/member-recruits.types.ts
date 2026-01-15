@@ -7,20 +7,20 @@ import { IMemberProfile } from '../member-profile/member-profile.types'
 
 export interface IMemberRecruitedMembers extends ITimeStamps {
     id: TEntityId
-    membersProfileId: TEntityId
-    membersProfileRecruitedId: TEntityId
-    dateRecruited: string
+    member_profile_id: TEntityId
+    members_profile_recruited_id: TEntityId
+    date_recruited: string
     description: string
     name: string
-    membersProfile: IMemberProfile
-    membersProfileRecruited: IMemberProfile
+    members_profile: IMemberProfile
+    members_profile_recruited?: IMemberProfile
 }
 
 export const memberRecruitsSchema = z.object({
     id: entityIdSchema.optional(),
-    membersProfileId: entityIdSchema.optional(),
-    membersProfileRecruitedId: entityIdSchema,
-    dateRecruited: z.string().min(1, 'Date recruited is required'),
+    members_profile_id: entityIdSchema.optional(),
+    members_profile_recruited_id: entityIdSchema,
+    date_recruited: z.string().min(1, 'Date recruited is required'),
     description: z
         .string()
         .optional()

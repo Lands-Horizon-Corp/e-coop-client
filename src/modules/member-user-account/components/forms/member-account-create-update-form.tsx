@@ -164,6 +164,7 @@ const MemberUserAccountCreateUpdateForm = ({
                                     <Input
                                         {...field}
                                         autoComplete="given-name"
+                                        className="bg-popover"
                                         disabled={isDisabled(field.name)}
                                         id={field.name}
                                         placeholder="First Name"
@@ -179,6 +180,7 @@ const MemberUserAccountCreateUpdateForm = ({
                                     <Input
                                         {...field}
                                         autoComplete="additional-name"
+                                        className="bg-popover"
                                         disabled={isDisabled(field.name)}
                                         id={field.name}
                                         placeholder="Middle Name"
@@ -194,6 +196,7 @@ const MemberUserAccountCreateUpdateForm = ({
                                     <Input
                                         {...field}
                                         autoComplete="family-name"
+                                        className="bg-popover"
                                         disabled={isDisabled(field.name)}
                                         id={field.name}
                                         placeholder="Last Name"
@@ -212,7 +215,7 @@ const MemberUserAccountCreateUpdateForm = ({
                             render={({ field }) => (
                                 <InputDate
                                     {...field}
-                                    className="block"
+                                    className="block bg-popover"
                                     disabled={isDisabled(field.name)}
                                     value={field.value ?? ''}
                                 />
@@ -237,7 +240,7 @@ const MemberUserAccountCreateUpdateForm = ({
                                     />
                                     <PhoneInput
                                         {...field}
-                                        className="w-full"
+                                        className="w-full bg-popover"
                                         defaultCountry="PH"
                                         disabled={isDisabled(field.name)}
                                     />
@@ -257,6 +260,7 @@ const MemberUserAccountCreateUpdateForm = ({
                                 <Input
                                     {...field}
                                     autoComplete="username"
+                                    className="bg-popover"
                                     disabled={isDisabled(field.name)}
                                     id={field.name}
                                     placeholder="Username"
@@ -271,6 +275,7 @@ const MemberUserAccountCreateUpdateForm = ({
                                 <Input
                                     {...field}
                                     autoComplete="email"
+                                    className="bg-popover"
                                     disabled={isDisabled(field.name)}
                                     id={field.name}
                                     placeholder="example@email.com"

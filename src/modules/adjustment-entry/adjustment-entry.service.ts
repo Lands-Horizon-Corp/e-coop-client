@@ -12,6 +12,7 @@ import type {
     IAdjustmentEntry,
     IAdjustmentEntryPaginated,
     IAdjustmentEntryRequest,
+    IAdjustmentEntryTotal,
     TAdjustmentEntryHookMode,
 } from '../adjustment-entry'
 
@@ -57,11 +58,6 @@ export const {
     useDeleteMany: useDeleteManyAdjustmentEntry,
 } = apiCrudHooks
 
-type AdjustmentEntryTotal = {
-    total_debit: number
-    total_credit: number
-}
-
 export const useAdjustmentEntryTotal = ({
     options,
     mode = 'all',
@@ -69,11 +65,11 @@ export const useAdjustmentEntryTotal = ({
     currencyId,
 }: {
     mode?: TAdjustmentEntryHookMode
-    options?: HookQueryOptions<AdjustmentEntryTotal, Error>
+    options?: HookQueryOptions<IAdjustmentEntryTotal, Error>
     userOrganizationId?: TEntityId
     currencyId?: TEntityId
 }) => {
-    return useQuery<AdjustmentEntryTotal, Error>({
+    return useQuery<IAdjustmentEntryTotal, Error>({
         ...options,
         queryKey: [
             'adjustment-entry',
@@ -82,7 +78,7 @@ export const useAdjustmentEntryTotal = ({
             userOrganizationId,
             currencyId,
         ].filter(Boolean),
-        queryFn: async (): Promise<AdjustmentEntryTotal> => {
+        queryFn: async (): Promise<IAdjustmentEntryTotal> => {
             let url = `${adjustmentEntryAPIRoute}/total`
 
             if (mode === 'currency' && userOrganizationId && currencyId) {
@@ -98,7 +94,7 @@ export const useAdjustmentEntryTotal = ({
             }
 
             const res = await API.get(url)
-            return res.data as AdjustmentEntryTotal
+            return res.data as IAdjustmentEntryTotal
         },
     })
 }

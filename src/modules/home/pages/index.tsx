@@ -1,4 +1,3 @@
-// assuming you have this utility
 import { Particles } from '@/components/ui/background-particles'
 
 import FaqSection from '../components/home/faq-section'

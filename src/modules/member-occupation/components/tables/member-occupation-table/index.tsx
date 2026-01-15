@@ -1,6 +1,7 @@
 import { useMemo } from 'react'
 
 import { useQueryClient } from '@tanstack/react-query'
+import qs from 'query-string'
 
 import FilterContext from '@/contexts/filter-context/filter-context'
 import { cn } from '@/helpers/tw-utils'
@@ -20,9 +21,12 @@ import DataTablePagination from '@/components/data-table/data-table-pagination'
 import DataTableToolbar, {
     IDataTableToolbarProps,
 } from '@/components/data-table/data-table-toolbar'
+import { TableRowActionStoreProvider } from '@/components/data-table/store/data-table-action-store'
 import { TableProps } from '@/components/data-table/table.type'
 import { useDataTableSorting } from '@/components/data-table/use-datatable-sorting'
-import useDataTableState from '@/components/data-table/use-datatable-state'
+import useDataTableState, {
+    useResolvedColumnOrder,
+} from '@/components/data-table/use-datatable-state'
 
 import useDatableFilterState from '@/hooks/use-filter-state'
 import { usePagination } from '@/hooks/use-pagination'
@@ -33,6 +37,7 @@ import memberOccupationColumns, {
 } from './columns'
 import MemberOccupationAction, {
     MemberOccupationRowContext,
+    MemberOccupationTableActionManager,
 } from './row-action-context'
 
 export interface MemberOccupationTableProps
@@ -51,6 +56,7 @@ export interface MemberOccupationTableProps
 }
 
 const MemberOccupationTable = ({
+    persistKey = ['member-occupation'],
     className,
     toolbarProps,
     defaultFilter,
@@ -72,6 +78,12 @@ const MemberOccupationTable = ({
         [actionComponent]
     )
 
+    const { resolvedColumnOrder, resolvedColumnVisibility, finalKeys } =
+        useResolvedColumnOrder({
+            columns,
+            persistKey,
+        })
+
     const {
         getRowIdFn,
         columnOrder,
@@ -83,7 +95,9 @@ const MemberOccupationTable = ({
         rowSelectionState,
         createHandleRowSelectionChange,
     } = useDataTableState<IMemberOccupation>({
-        defaultColumnOrder: columns.map((c) => c.id!),
+        key: finalKeys,
+        defaultColumnOrder: resolvedColumnOrder,
+        defaultColumnVisibility: resolvedColumnVisibility,
         onSelectData,
     })
 
@@ -137,70 +151,75 @@ const MemberOccupationTable = ({
         onRowSelectionChange: handleRowSelectionChange,
     })
 
+    const exportfilter = qs.stringify(
+        {
+            ...pagination,
+            sort: sortingStateBase64,
+            filter: filterState.finalFilterPayloadBase64,
+        },
+        { skipNull: true }
+    )
     return (
         <FilterContext.Provider value={filterState}>
-            <div
-                className={cn(
-                    'flex h-full flex-col gap-y-2',
-                    className,
-                    !isScrollable && 'h-fit !max-h-none'
-                )}
-            >
-                <DataTableToolbar
-                    deleteActionProps={{
-                        onDeleteSuccess: () =>
-                            queryClient.invalidateQueries({
-                                queryKey: ['member-occupation', 'paginated'],
-                            }),
-                        onDelete: (selectedData) =>
-                            MemberOccupationAPI.deleteMany({
-                                ids: selectedData.map((item) => item.id),
-                            }),
-                    }}
-                    exportActionProps={{
-                        pagination,
-                        isLoading: isPending,
-                        filters: filterState.finalFilterPayload,
-                        disabled: isPending || isRefetching,
-                        // exportAll: MemberOccupationService.exportAll,
-                        // exportCurrentPage: (ids) =>
-                        //     MemberOccupationService.exportSelected(
-                        //         ids.map((item) => item.id)
-                        //     ),
-                        // exportSelected: (ids) =>
-                        //     MemberOccupationService.exportSelected(
-                        //         ids.map((item) => item.id)
-                        //     ),
-                    }}
-                    filterLogicProps={{
-                        filterLogic: filterState.filterLogic,
-                        setFilterLogic: filterState.setFilterLogic,
-                    }}
-                    globalSearchProps={{
-                        defaultMode: 'contains',
-                        targets: memberOccupationGlobalSearchTargets,
-                    }}
-                    refreshActionProps={{
-                        onClick: () => refetch(),
-                        isLoading: isPending || isRefetching,
-                    }}
-                    scrollableProps={{ isScrollable, setIsScrollable }}
-                    table={table}
-                    {...toolbarProps}
-                />
-                <DataTable
-                    className="mb-2"
-                    isScrollable={isScrollable}
-                    isStickyFooter
-                    isStickyHeader
-                    onDoubleClick={onDoubleClick}
-                    onRowClick={onRowClick}
-                    RowContextComponent={RowContextComponent}
-                    setColumnOrder={setColumnOrder}
-                    table={table}
-                />
-                <DataTablePagination table={table} totalSize={totalSize} />
-            </div>
+            <TableRowActionStoreProvider>
+                <div
+                    className={cn(
+                        'flex h-full flex-col gap-y-2',
+                        className,
+                        !isScrollable && 'h-fit !max-h-none'
+                    )}
+                >
+                    <DataTableToolbar
+                        deleteActionProps={{
+                            onDeleteSuccess: () =>
+                                queryClient.invalidateQueries({
+                                    queryKey: [
+                                        'member-occupation',
+                                        'paginated',
+                                    ],
+                                }),
+                            onDelete: (selectedData) =>
+                                MemberOccupationAPI.deleteMany({
+                                    ids: selectedData.map((item) => item.id),
+                                }),
+                        }}
+                        exportActionProps={{
+                            isLoading: isPending,
+                            filters: exportfilter,
+                            model: 'MemberOccupation',
+                            url: 'api/v1/member-occupation/search',
+                        }}
+                        filterLogicProps={{
+                            filterLogic: filterState.filterLogic,
+                            setFilterLogic: filterState.setFilterLogic,
+                        }}
+                        globalSearchProps={{
+                            defaultMode: 'contains',
+                            targets: memberOccupationGlobalSearchTargets,
+                        }}
+                        refreshActionProps={{
+                            onClick: () => refetch(),
+                            isLoading: isPending || isRefetching,
+                        }}
+                        scrollableProps={{ isScrollable, setIsScrollable }}
+                        table={table}
+                        {...toolbarProps}
+                    />
+                    <DataTable
+                        className="mb-2"
+                        isScrollable={isScrollable}
+                        isStickyFooter
+                        isStickyHeader
+                        onDoubleClick={onDoubleClick}
+                        onRowClick={onRowClick}
+                        RowContextComponent={RowContextComponent}
+                        setColumnOrder={setColumnOrder}
+                        table={table}
+                    />
+                    <DataTablePagination table={table} totalSize={totalSize} />
+                    <MemberOccupationTableActionManager />
+                </div>
+            </TableRowActionStoreProvider>
         </FilterContext.Provider>
     )
 }

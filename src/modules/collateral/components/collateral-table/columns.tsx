@@ -57,7 +57,11 @@ const CollateralTableColumns = (
         header: (props) => (
             <DataTableColumnHeader {...props} title="Name">
                 <ColumnActions {...props}>
-                    <TextFilter<ICollateral> displayText="Name" field="name" />
+                    <TextFilter<ICollateral>
+                        defaultMode="contains"
+                        displayText="Name"
+                        field="name"
+                    />
                 </ColumnActions>
             </DataTableColumnHeader>
         ),

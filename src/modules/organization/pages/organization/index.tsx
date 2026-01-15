@@ -1,32 +1,60 @@
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 
 import { useSearch } from '@tanstack/react-router'
+import Fuse from 'fuse.js'
 
 import { useAuthUser } from '@/modules/authentication/authgentication.store'
+import { organizationFuseOptions } from '@/modules/explore/utils/data-grouping'
 import { IOrganization, useGetAllOrganizations } from '@/modules/organization'
-import {
-    OrganizationItem,
-    OrganizationItemSkeleton,
-} from '@/modules/organization'
+import { OrganizationItemSkeleton } from '@/modules/organization'
+import ErrorPage from '@/routes/-common-pages/error-page'
+import { useHotkeys } from 'react-hotkeys-hook'
 
-import {
-    ChevronLeftIcon,
-    ChevronRightIcon,
-    GridIcon,
-    ListOrderedIcon as ListIcon,
-    QrCodeIcon,
-    MagnifyingGlassIcon as SearchIcon,
-} from '@/components/icons'
+import { QrCodeIcon } from '@/components/icons'
 import { Button } from '@/components/ui/button'
-import FormErrorMessage from '@/components/ui/form-error-message'
-import { Input } from '@/components/ui/input'
-import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group'
+import { Skeleton } from '@/components/ui/skeleton'
 
+import { useModalState } from '@/hooks/use-modal-state'
 import { useSubscribe } from '@/hooks/use-pubsub'
 
+import OrganizationPreviewModal from '../../components/modal/organization-preview-modal'
 import JoinBranchWithCodeFormModal from '../../organization-forms/join-organization-form'
+import { JoinOrgSearch } from './components/join-org-search'
+import OrganizationCardWithToolTip from './components/organization-card-with-tool-tip'
 
-type ViewMode = 'netflix' | 'grid' | 'list'
+type filterSearchOrganizationProp = {
+    organizations?: IOrganization[]
+    searchTerm: string
+}
+
+const useFilterSearchOrganization = ({
+    organizations,
+    searchTerm,
+}: filterSearchOrganizationProp) => {
+    const workingOrganizations = useMemo(
+        () => organizations ?? [],
+        [organizations]
+    )
+
+    const fuse = useMemo(() => {
+        return new Fuse<IOrganization>(
+            workingOrganizations,
+            organizationFuseOptions
+        )
+    }, [workingOrganizations])
+
+    const filteredOrganizations = useMemo(() => {
+        if (!searchTerm?.trim()) {
+            return workingOrganizations
+        }
+
+        return fuse.search(searchTerm).map((result) => result.item)
+    }, [searchTerm, fuse, workingOrganizations])
+
+    return {
+        organizations: filteredOrganizations,
+    }
+}
 
 const Organization = () => {
     const {
@@ -36,11 +64,17 @@ const Organization = () => {
 
     const {
         data: Organizations,
-        isPending,
         isError,
         isFetching,
+        isLoading,
         refetch,
+        error,
     } = useGetAllOrganizations()
+
+    const [searchTerm, setSearchTerm] = useState('')
+    const [selectedOrganization, setSelectedOrganization] =
+        useState<IOrganization>()
+    const orgModalState = useModalState()
 
     useSubscribe(`user_organization.create.user.${user.id}`, () => refetch())
     useSubscribe(`user_organization.update.user.${user.id}`, () => refetch())
@@ -48,96 +82,51 @@ const Organization = () => {
 
     const [onOpenJoinWithCodeModal, setOpenJoinWithCodeModal] =
         useState(!!invitation_code)
-    const [searchTerm, setSearchTerm] = useState('')
-    const [viewMode, setViewMode] = useState<ViewMode>('netflix')
 
     const isNoOrganization = Organizations?.length === 0
 
-    const filteredOrganizations =
-        Organizations?.filter(
-            (org) =>
-                org.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                org.description
-                    ?.toLowerCase()
-                    .includes(searchTerm.toLowerCase()) ||
-                org.organization_categories?.some((cat) =>
-                    cat.category?.name
-                        .toLowerCase()
-                        .includes(searchTerm.toLowerCase())
-                )
-        ) || []
-
-    // Group organizations by categories for Netflix layout
-    const groupedOrganizations = () => {
-        if (!filteredOrganizations.length) return []
-
-        const groups: { title: string; organizations: IOrganization[] }[] = []
-
-        // Featured/Recent organizations
-        groups.push({
-            title: 'Featured Organizations',
-            organizations: filteredOrganizations.slice(0, 8),
-        })
-
-        // Group by categories
-        const categoryMap = new Map<string, IOrganization[]>()
-
-        filteredOrganizations.forEach((org) => {
-            if (org.organization_categories?.length) {
-                org.organization_categories.forEach((cat) => {
-                    const categoryName = cat.category?.name || 'Other'
-                    if (!categoryMap.has(categoryName)) {
-                        categoryMap.set(categoryName, [])
-                    }
-                    categoryMap.get(categoryName)?.push(org)
-                })
-            } else {
-                if (!categoryMap.has('General')) {
-                    categoryMap.set('General', [])
-                }
-                categoryMap.get('General')?.push(org)
-            }
-        })
-
-        categoryMap.forEach((orgs, category) => {
-            if (orgs.length > 0) {
-                groups.push({
-                    title: `${category} Organizations`,
-                    organizations: orgs.slice(0, 10),
-                })
-            }
-        })
-
-        return groups
+    const { organizations } = useFilterSearchOrganization({
+        organizations: Organizations,
+        searchTerm,
+    })
+    const handleOpenModalPreview = (org: IOrganization) => {
+        setSelectedOrganization(org)
+        orgModalState.onOpenChange(true)
     }
 
-    const scroll = (direction: 'left' | 'right', containerId: string) => {
-        const container = document.getElementById(containerId)
-        if (container) {
-            const scrollAmount = 300
-            container.scrollBy({
-                left: direction === 'left' ? -scrollAmount : scrollAmount,
-                behavior: 'smooth',
-            })
+    useHotkeys(
+        'enter',
+        (e) => {
+            e.preventDefault()
+            const searchInput = document.querySelector(
+                'input[placeholder*="Search"]'
+            ) as HTMLInputElement
+            if (searchInput) {
+                searchInput.focus()
+            }
+        },
+        {
+            keydown: true,
+            keyup: true,
         }
-    }
-
-    const handleJoinOrganization = (_: IOrganization) => {
-        // Implement join logic here
-    }
+    )
 
     if (isError) {
         return (
             <div className="w-full py-2">
-                <FormErrorMessage
-                    errorMessage={'Something went wrong! Failed to load data.'}
-                />
+                <ErrorPage error={error as Error} reset={() => {}} />
             </div>
         )
     }
 
     return (
-        <div className="w-full ">
+        <div className="w-full min-w-6xl py-5 ">
+            <OrganizationPreviewModal
+                organization={selectedOrganization}
+                showActions={false}
+                showJoinBranch
+                {...orgModalState}
+            />
             <JoinBranchWithCodeFormModal
                 defaultCode={invitation_code}
                 onOpenChange={setOpenJoinWithCodeModal}
@@ -145,85 +134,28 @@ const Organization = () => {
                 title="Enter Code to Join a Branch"
                 titleClassName="text-lg font-semibold"
             />
-
             {/* Header */}
-            <div className="top-0 z-40  backdrop-blur-sm border-b">
-                <div className="container mx-auto pb-2">
-                    <div className="flex items-center justify-between mb-4">
-                        <div>
-                            <h1 className="text-3xl font-bold bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent">
-                                Organizations
-                            </h1>
-                            <p className="text-muted-foreground">
-                                Discover and join organizations that match your
-                                interests
-                            </p>
-                        </div>
-
-                        <div className="flex items-center gap-3">
-                            {/* View Mode Toggle */}
-                            <ToggleGroup
-                                className="border"
-                                onValueChange={(value) =>
-                                    value && setViewMode(value as ViewMode)
-                                }
-                                type="single"
-                                value={viewMode}
-                            >
-                                <ToggleGroupItem size="sm" value="netflix">
-                                    <GridIcon className="h-4 w-4" />
-                                </ToggleGroupItem>
-                                <ToggleGroupItem size="sm" value="grid">
-                                    <GridIcon className="h-4 w-4" />
-                                </ToggleGroupItem>
-                                <ToggleGroupItem size="sm" value="list">
-                                    <ListIcon className="h-4 w-4" />
-                                </ToggleGroupItem>
-                            </ToggleGroup>
-
-                            <Button
-                                onClick={() => setOpenJoinWithCodeModal(true)}
-                                size="sm"
-                                variant="outline"
-                            >
-                                <QrCodeIcon className="mr-2 h-4 w-4" />
-                                Join with Code
-                            </Button>
-                        </div>
-                    </div>
-
-                    {/* Search */}
-                    <div className="relative max-w-md">
-                        <SearchIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                        <Input
-                            className="pl-10"
-                            onChange={(e) => setSearchTerm(e.target.value)}
-                            placeholder="Search organizations..."
-                            value={searchTerm}
-                        />
-                    </div>
-                </div>
-            </div>
-
+            <JoinOrgSearch
+                refetch={refetch}
+                setOpenJoinWithCodeModal={setOpenJoinWithCodeModal}
+                setSearchTerm={setSearchTerm}
+            />
             {/* Content */}
-            <div className="container mx-auto px-4 py-6">
-                {isPending ? (
-                    <div className="space-y-8">
-                        {Array.from({ length: 3 }).map((_, sectionIndex) => (
-                            <div className="space-y-4" key={sectionIndex}>
-                                <div className="h-6 bg-muted animate-pulse rounded w-48" />
-                                <div className="flex gap-4 overflow-hidden">
-                                    {Array.from({ length: 5 }).map(
-                                        (_, index) => (
-                                            <OrganizationItemSkeleton
-                                                key={index}
-                                            />
-                                        )
-                                    )}
+            <div className="container mx-auto py-3 min-w-fit">
+                {isLoading || isFetching ? (
+                    <>
+                        <OrganizationItemSkeleton
+                            count={16}
+                            customSkeleton={
+                                <div className="flex flex-col gap-y-2 h-[200px] w-[250px]">
+                                    <Skeleton className="flex-5" />
+                                    <Skeleton className="flex-1" />
                                 </div>
-                            </div>
-                        ))}
-                    </div>
+                            }
+                            itemClassName="min-w-[17rem]"
+                            mainClassName="grid !grid-cols-4"
+                        />
+                    </>
                 ) : (
                     <>
                         {isNoOrganization || !Organizations ? (
@@ -247,128 +179,25 @@ const Organization = () => {
                                 </div>
                             </div>
                         ) : (
-                            <>
-                                {viewMode === 'netflix' && (
-                                    <div className="space-y-8">
-                                        {groupedOrganizations().map(
-                                            (group, sectionIndex) => (
-                                                <div
-                                                    className="space-y-4"
-                                                    key={sectionIndex}
-                                                >
-                                                    <h2 className="text-xl font-semibold text-foreground">
-                                                        {group.title}
-                                                    </h2>
-
-                                                    <div className="relative group">
-                                                        {/* Left Arrow */}
-                                                        <Button
-                                                            className="absolute left-0 top-1/2 -translate-y-1/2 z-30 opacity-0 group-hover:opacity-100 transition-opacity bg-background/80 hover:bg-background"
-                                                            onClick={() =>
-                                                                scroll(
-                                                                    'left',
-                                                                    `scroll-${sectionIndex}`
-                                                                )
-                                                            }
-                                                            size="sm"
-                                                            variant="ghost"
-                                                        >
-                                                            <ChevronLeftIcon className="h-6 w-6" />
-                                                        </Button>
-
-                                                        {/* Organizations Scroll Container */}
-                                                        <div
-                                                            className="flex gap-4 overflow-x-auto scrollbar-hide pb-4 scroll-smooth"
-                                                            id={`scroll-${sectionIndex}`}
-                                                            style={{
-                                                                scrollbarWidth:
-                                                                    'none',
-                                                                msOverflowStyle:
-                                                                    'none',
-                                                            }}
-                                                        >
-                                                            {group.organizations.map(
-                                                                (
-                                                                    organization
-                                                                ) => (
-                                                                    <OrganizationItem
-                                                                        key={
-                                                                            organization.id
-                                                                        }
-                                                                        onJoin={
-                                                                            handleJoinOrganization
-                                                                        }
-                                                                        organization={
-                                                                            organization
-                                                                        }
-                                                                        variant="netflix"
-                                                                    />
-                                                                )
-                                                            )}
-                                                        </div>
-
-                                                        {/* Right Arrow */}
-                                                        <Button
-                                                            className="absolute right-0 top-1/2 -translate-y-1/2 z-30 opacity-0 group-hover:opacity-100 transition-opacity bg-background/80 hover:bg-background"
-                                                            onClick={() =>
-                                                                scroll(
-                                                                    'right',
-                                                                    `scroll-${sectionIndex}`
-                                                                )
-                                                            }
-                                                            size="sm"
-                                                            variant="ghost"
-                                                        >
-                                                            <ChevronRightIcon className="h-6 w-6" />
-                                                        </Button>
-                                                    </div>
-                                                </div>
-                                            )
-                                        )}
-                                    </div>
-                                )}
-
-                                {viewMode === 'grid' && (
-                                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                                        {filteredOrganizations.map(
-                                            (organization) => (
-                                                <OrganizationItem
-                                                    key={organization.id}
-                                                    onJoin={
-                                                        handleJoinOrganization
-                                                    }
-                                                    organization={organization}
-                                                    variant="grid"
-                                                />
-                                            )
-                                        )}
-                                    </div>
-                                )}
-
-                                {viewMode === 'list' && (
-                                    <div className="space-y-4">
-                                        {filteredOrganizations.map(
-                                            (organization) => (
-                                                <OrganizationItem
-                                                    key={organization.id}
-                                                    onJoin={
-                                                        handleJoinOrganization
-                                                    }
-                                                    organization={organization}
-                                                    variant="list"
-                                                />
-                                            )
-                                        )}
-                                    </div>
-                                )}
-                            </>
+                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                                {organizations?.map((org) => {
+                                    return (
+                                        <OrganizationCardWithToolTip
+                                            handleOpenModalPreview={
+                                                handleOpenModalPreview
+                                            }
+                                            key={org.id}
+                                            organization={org}
+                                            searchTerm={searchTerm}
+                                        />
+                                    )
+                                })}
+                            </div>
                         )}
                     </>
                 )}
-
-                {/* Loading Indicator */}
                 <div className="flex w-full animate-pulse justify-center text-xs opacity-30 mt-8">
-                    {isFetching ? 'Fetching data...' : null}
+                    {isFetching ? 'Loading data...' : null}
                 </div>
             </div>
         </div>

@@ -6,8 +6,8 @@ import FilterContext from '@/contexts/filter-context/filter-context'
 import { cn } from '@/helpers/tw-utils'
 import {
     IMemberType,
-    MemberTypeAPI,
-    useGetPaginated,
+    deleteManyMemberTypes,
+    useGetPaginatedMemberTypes,
 } from '@/modules/member-type'
 import {
     getCoreRowModel,
@@ -20,9 +20,12 @@ import DataTablePagination from '@/components/data-table/data-table-pagination'
 import DataTableToolbar, {
     IDataTableToolbarProps,
 } from '@/components/data-table/data-table-toolbar'
+import { TableRowActionStoreProvider } from '@/components/data-table/store/data-table-action-store'
 import { TableProps } from '@/components/data-table/table.type'
 import { useDataTableSorting } from '@/components/data-table/use-datatable-sorting'
-import useDataTableState from '@/components/data-table/use-datatable-state'
+import useDataTableState, {
+    useResolvedColumnOrder,
+} from '@/components/data-table/use-datatable-state'
 
 import useDatableFilterState from '@/hooks/use-filter-state'
 import { usePagination } from '@/hooks/use-pagination'
@@ -31,7 +34,10 @@ import MemberTypeTableColumns, {
     IMemberTypeTableColumnProps,
     memberTypeGlobalSearchTargets,
 } from './columns'
-import MemberTypeAction, { MemberTypeRowContext } from './row-action-context'
+import MemberTypeAction, {
+    MemberTypeRowContext,
+    MemberTypeTableActionManager,
+} from './row-action-context'
 
 export interface MemberTypeTableProps
     extends TableProps<IMemberType>,
@@ -49,6 +55,7 @@ export interface MemberTypeTableProps
 }
 
 const MemberTypeTable = ({
+    persistKey = ['member-type'],
     className,
     toolbarProps,
     defaultFilter,
@@ -73,6 +80,12 @@ const MemberTypeTable = ({
         [actionComponent]
     )
 
+    const { resolvedColumnOrder, resolvedColumnVisibility, finalKeys } =
+        useResolvedColumnOrder({
+            columns,
+            persistKey,
+        })
+
     const {
         getRowIdFn,
         columnOrder,
@@ -84,7 +97,9 @@ const MemberTypeTable = ({
         rowSelectionState,
         createHandleRowSelectionChange,
     } = useDataTableState<IMemberType>({
-        defaultColumnOrder: columns.map((c) => c.id!),
+        key: finalKeys,
+        defaultColumnOrder: resolvedColumnOrder,
+        defaultColumnVisibility: resolvedColumnVisibility,
         onSelectData,
     })
 
@@ -98,7 +113,7 @@ const MemberTypeTable = ({
         isRefetching,
         data: { data = [], totalPage = 1, pageSize = 10, totalSize = 0 } = {},
         refetch,
-    } = useGetPaginated({
+    } = useGetPaginatedMemberTypes({
         query: {
             ...pagination,
             sort: sortingStateBase64,
@@ -140,53 +155,56 @@ const MemberTypeTable = ({
 
     return (
         <FilterContext.Provider value={filterState}>
-            <div
-                className={cn(
-                    'flex h-full flex-col gap-y-2',
-                    className,
-                    !isScrollable && 'h-fit !max-h-none'
-                )}
-            >
-                <DataTableToolbar
-                    deleteActionProps={{
-                        onDeleteSuccess: () =>
-                            queryClient.invalidateQueries({
-                                queryKey: ['member-type', 'paginated'],
-                            }),
-                        onDelete: (selectedData) =>
-                            MemberTypeAPI.deleteMany({
-                                ids: selectedData.map((data) => data.id),
-                            }),
-                    }}
-                    filterLogicProps={{
-                        filterLogic: filterState.filterLogic,
-                        setFilterLogic: filterState.setFilterLogic,
-                    }}
-                    globalSearchProps={{
-                        defaultMode: 'equal',
-                        targets: memberTypeGlobalSearchTargets,
-                    }}
-                    refreshActionProps={{
-                        onClick: () => refetch(),
-                        isLoading: isPending || isRefetching,
-                    }}
-                    scrollableProps={{ isScrollable, setIsScrollable }}
-                    table={table}
-                    {...toolbarProps}
-                />
-                <DataTable
-                    className="mb-2"
-                    isScrollable={isScrollable}
-                    isStickyFooter
-                    isStickyHeader
-                    onDoubleClick={onDoubleClick}
-                    onRowClick={onRowClick}
-                    RowContextComponent={RowContextComponent}
-                    setColumnOrder={setColumnOrder}
-                    table={table}
-                />
-                <DataTablePagination table={table} totalSize={totalSize} />
-            </div>
+            <TableRowActionStoreProvider>
+                <div
+                    className={cn(
+                        'flex h-full flex-col gap-y-2',
+                        className,
+                        !isScrollable && 'h-fit !max-h-none'
+                    )}
+                >
+                    <DataTableToolbar
+                        deleteActionProps={{
+                            onDeleteSuccess: () =>
+                                queryClient.invalidateQueries({
+                                    queryKey: ['member-type', 'paginated'],
+                                }),
+                            onDelete: (selectedData) =>
+                                deleteManyMemberTypes({
+                                    ids: selectedData.map((data) => data.id),
+                                }),
+                        }}
+                        filterLogicProps={{
+                            filterLogic: filterState.filterLogic,
+                            setFilterLogic: filterState.setFilterLogic,
+                        }}
+                        globalSearchProps={{
+                            defaultMode: 'contains',
+                            targets: memberTypeGlobalSearchTargets,
+                        }}
+                        refreshActionProps={{
+                            onClick: () => refetch(),
+                            isLoading: isPending || isRefetching,
+                        }}
+                        scrollableProps={{ isScrollable, setIsScrollable }}
+                        table={table}
+                        {...toolbarProps}
+                    />
+                    <DataTable
+                        className="mb-2"
+                        isScrollable={isScrollable}
+                        isStickyFooter
+                        isStickyHeader
+                        onDoubleClick={onDoubleClick}
+                        onRowClick={onRowClick}
+                        RowContextComponent={RowContextComponent}
+                        setColumnOrder={setColumnOrder}
+                        table={table}
+                    />
+                    <DataTablePagination table={table} totalSize={totalSize} />
+                    <MemberTypeTableActionManager />
+                </div>
+            </TableRowActionStoreProvider>
         </FilterContext.Provider>
     )
 }

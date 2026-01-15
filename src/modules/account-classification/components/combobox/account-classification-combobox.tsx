@@ -30,13 +30,15 @@ interface Props {
     disabled?: boolean
     className?: string
     placeholder?: string
-    onChange?: (selected: IAccountClassification) => void
+    undefinable?: boolean
+    onChange?: (selected: IAccountClassification | undefined) => void
 }
 
 const AccountClassificationComboBox = ({
     value,
     className,
     disabled = false,
+    undefinable = true,
     placeholder = 'Select Account Classification...',
     onChange,
 }: Props) => {
@@ -84,6 +86,18 @@ const AccountClassificationComboBox = ({
                                     No Account Classfication found
                                 </CommandEmpty>
                                 <CommandGroup>
+                                    {undefinable && (
+                                        <CommandItem
+                                            className="justify-center text-muted-foreground"
+                                            onSelect={() => {
+                                                setOpen(false)
+                                                onChange?.(undefined)
+                                            }}
+                                            value={undefined}
+                                        >
+                                            Select None
+                                        </CommandItem>
+                                    )}
                                     {accountClassification?.map((option) => (
                                         <CommandItem
                                             key={option.id}

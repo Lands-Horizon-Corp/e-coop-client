@@ -5,12 +5,11 @@ import { toast } from 'sonner'
 import { useGetBranchesByOrganizationId } from '@/modules/branch'
 import CreateUpdateBranchFormModal from '@/modules/branch/components/forms/create-branch-form'
 import { useGetOrganizationById } from '@/modules/organization'
-import OrganizationModalDetails from '@/modules/organization/pages/organization/organization-modal-details'
+import OrganizationDetailsModals from '@/modules/organization/components/modal/organization-details-modal'
 import { useSeedOrganization } from '@/modules/user-organization/user-organization.service'
 
 import { Alert, AlertDescription } from '@/components/ui/alert'
 
-import { useLocationInfo } from '@/hooks/use-location-info'
 import { useModalState } from '@/hooks/use-modal-state'
 
 import { CompletionSection } from './completion-section'
@@ -19,7 +18,6 @@ const CreateBranch = () => {
     const { organization_id: organizationId } = useParams({
         from: '/onboarding/create-branch/$organization_id',
     })
-    const countryCode = useLocationInfo().countryCode
     const navigate = useNavigate()
     const { mutateAsync: seed, isPending: isSeeding } = useSeedOrganization()
     const queryClient = useQueryClient()
@@ -68,16 +66,13 @@ const CreateBranch = () => {
     }
 
     return (
-        <div className="w-full h-full bg-background/20 backdrop-blur-2xl flex flex-col space-y-6">
+        <div className="w-full h-full rounded-lg -mt-3 flex flex-col space-y-6">
             <CreateUpdateBranchFormModal
                 {...createModal}
-                className="w-full min-w-[80rem] max-w-[80rem]"
                 description="Fill out the form to add new branch"
                 formProps={{
                     organizationId,
-                    defaultValues: {
-                        country_code: countryCode || 'PH',
-                    },
+                    defaultValues: {},
                     hiddenFields: ['is_main_branch'],
                     onSuccess: () => {
                         createModal.onOpenChange(false)
@@ -90,8 +85,9 @@ const CreateBranch = () => {
                 title="Create Branch"
             />
             {organization && (
-                <OrganizationModalDetails
+                <OrganizationDetailsModals
                     isPending={isPendingOrganization}
+                    isSeeding={isSeeding}
                     organization={organization}
                 />
             )}

@@ -129,6 +129,7 @@ const MemberMembershipForm = ({
                                 render={({ field }) => (
                                     <Input
                                         {...field}
+                                        className="bg-background"
                                         disabled={isDisabled(field.name)}
                                         id={field.name}
                                         placeholder="Passbook"
@@ -143,6 +144,7 @@ const MemberMembershipForm = ({
                                 render={({ field }) => (
                                     <Input
                                         {...field}
+                                        className="bg-background"
                                         disabled={isDisabled(field.name)}
                                         id={field.name}
                                         placeholder="Old Reference ID"
@@ -174,7 +176,7 @@ const MemberMembershipForm = ({
                                         {...field}
                                         disabled={isDisabled(field.name)}
                                         onChange={(selected) =>
-                                            field.onChange(selected.id)
+                                            field.onChange(selected?.id)
                                         }
                                         placeholder="Select Member Type"
                                     />
@@ -284,6 +286,7 @@ const MemberMembershipForm = ({
                                                     )
                                             }}
                                             placeholder="Select Recruiter"
+                                            triggerClassName="bg-background"
                                             value={value}
                                         />
                                     )
@@ -369,7 +372,7 @@ const MemberMembershipForm = ({
                     </div>
                 </fieldset>
                 <FormFooterResetSubmit
-                    disableSubmit={!form.formState.isDirty}
+                    disableSubmit={!form.formState.isDirty || isPending}
                     error={error}
                     isLoading={isPending}
                     onReset={() => {

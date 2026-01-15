@@ -63,7 +63,7 @@ const CopyTextButton = <TErr = Error,>({
                 <CheckIcon
                     className={cn(
                         'inline text-primary size-4 mr-1',
-                        className,
+                        iconClassName,
                         successClassName
                     )}
                 />

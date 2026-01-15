@@ -4,11 +4,11 @@ import { toReadableDate } from '@/helpers/date-utils'
 import { cn } from '@/helpers/tw-utils'
 import { AccountTypeBadge } from '@/modules/account'
 import { ComputationTypeBadge } from '@/modules/computation-type/components/computation-type-badge'
+import { currencyFormat } from '@/modules/currency'
 import { CurrencyBadge } from '@/modules/currency/components/currency-badge'
 import { GeneralLedgerTypeBadge } from '@/modules/general-ledger/components/general-ledger-type-badge'
 import { ColumnDef, Row } from '@tanstack/react-table'
 
-import CopyTextButton from '@/components/copy-text-button'
 import DataTableColumnHeader from '@/components/data-table/data-table-column-header'
 import ColumnActions from '@/components/data-table/data-table-column-header/column-actions'
 import { IGlobalSearchTargets } from '@/components/data-table/data-table-filters/data-table-global-search'
@@ -28,74 +28,10 @@ import { Badge } from '@/components/ui/badge'
 import { Checkbox } from '@/components/ui/checkbox'
 import { PlainTextEditor } from '@/components/ui/text-editor'
 
-import { IAccount, InterestDeductionEnum } from '../../account.types'
+import { IAccount } from '../../account.types'
 
 export const accountsGlobalSearchTargets: IGlobalSearchTargets<IAccount>[] = [
-    { field: 'accountCode', displayText: 'Account Code' },
-    { field: 'description', displayText: 'Description' },
-    { field: 'altDescription', displayText: 'Alternative Description' },
-    { field: 'type', displayText: 'Account Type' },
-    { field: 'maxAmount', displayText: 'Max Amount' },
-    { field: 'minAmount', displayText: 'Min Amount' },
-    { field: 'computationType', displayText: 'Computation Type' },
-    {
-        field: 'earnedUnearnedInterest',
-        displayText: 'Earned/Unearned Interest',
-    },
-    {
-        field: 'otherInformationOfAnAccount',
-        displayText: 'Other Information',
-    },
     { field: 'name', displayText: 'Name' },
-    { field: 'isInternal', displayText: 'Internal Account' },
-    { field: 'cashOnHand', displayText: 'Cash On Hand' },
-    { field: 'paidUpShareCapital', displayText: 'Paid Up Share Capital' },
-    { field: 'finesAmort', displayText: 'Fines Amortization' },
-    { field: 'finesMaturity', displayText: 'Fines Maturity' },
-    { field: 'interestStandard', displayText: 'Interest Standard' },
-    { field: 'interestSecured', displayText: 'Interest Secured' },
-    {
-        field: 'financialStatementType',
-        displayText: 'Financial Statement Type',
-    },
-    { field: 'generalLedgerType', displayText: 'General Ledger Type' },
-    {
-        field: 'finesGracePeriodAmortization',
-        displayText: 'Fines Grace Period (Amort.)',
-    },
-    {
-        field: 'additionalGracePeriod',
-        displayText: 'Additional Grace Period',
-    },
-    { field: 'numberGracePeriodDaily', displayText: 'Daily Grace Period' },
-    {
-        field: 'finesGracePeriodMaturity',
-        displayText: 'Fines Grace Period (Maturity)',
-    },
-    {
-        field: 'yearlySubscriptionFee',
-        displayText: 'Yearly Subscription Fee',
-    },
-    { field: 'loanCutOffDays', displayText: 'Loan Cut-Off Days' },
-    {
-        field: 'lumpsumComputationType',
-        displayText: 'Lumpsum Computation Type',
-    },
-    {
-        field: 'interestFinesComputationDiminishing',
-        displayText: 'Interest Fines Computation (Dim.)',
-    },
-    { field: 'loanSavingType', displayText: 'Loan Saving Type' },
-    { field: 'interestDeduction', displayText: 'Interest Deduction' },
-    { field: 'otherDeductionEntry', displayText: 'Other Deduction Entry' },
-    {
-        field: 'interestSavingTypeDiminishingStraight',
-        displayText: 'Interest Saving Type (Dim. Straight)',
-    },
-    {
-        field: 'generalLedgerGroupingExcludeAccount',
-        displayText: 'Exclude from GL Grouping',
-    },
 ]
 
 export interface IAccountsTableActionComponentProp {
@@ -169,6 +105,32 @@ const AccountsTableColumns = (
             minSize: 80,
         },
         {
+            id: 'index',
+            accessorKey: 'index',
+            header: (props) => (
+                <DataTableColumnHeader {...props} title="No">
+                    <ColumnActions {...props}>
+                        <NumberFilter
+                            defaultMode="equal"
+                            displayText="No"
+                            field="index"
+                        />
+                    </ColumnActions>
+                </DataTableColumnHeader>
+            ),
+            cell: ({
+                row: {
+                    original: { index },
+                },
+            }) => (
+                <div className="font-medium flex items-center text-gray-600 dark:text-gray-400">
+                    {index}
+                </div>
+            ),
+            enableMultiSort: true,
+            size: 10,
+        },
+        {
             id: 'name',
             accessorKey: 'name',
             header: (props) => (
@@ -208,7 +170,7 @@ const AccountsTableColumns = (
                         <TextFilter
                             defaultMode="contains"
                             displayText="Currency"
-                            field="currency"
+                            field="currency.currency_code"
                         />
                     </ColumnActions>
                 </DataTableColumnHeader>
@@ -229,39 +191,39 @@ const AccountsTableColumns = (
             enableMultiSort: true,
             size: 130,
         },
-        {
-            id: 'accountCode',
-            accessorKey: 'alternative_code',
-            header: (props) => (
-                <DataTableColumnHeader {...props} title="Code">
-                    <ColumnActions {...props}>
-                        <TextFilter
-                            defaultMode="contains"
-                            displayText="Account Code"
-                            field="alternative_code"
-                        />
-                    </ColumnActions>
-                </DataTableColumnHeader>
-            ),
-            cell: ({
-                row: {
-                    original: { alternative_code },
-                },
-            }) => (
-                <div className="flex items-center justify-between gap-x-2 text-sm">
-                    <p className="w-full rounded-lg bg-background p-1 px-2 text-xs">
-                        {' '}
-                        {alternative_code}
-                    </p>
-                    <CopyTextButton
-                        className="size-5"
-                        textContent={alternative_code ?? ''}
-                    />
-                </div>
-            ),
-            enableMultiSort: true,
-            size: 120,
-        },
+        // {
+        //     id: 'accountCode',
+        //     accessorKey: 'alternative_code',
+        //     header: (props) => (
+        //         <DataTableColumnHeader {...props} title="Code">
+        //             <ColumnActions {...props}>
+        //                 <TextFilter
+        //                     defaultMode="contains"
+        //                     displayText="Account Code"
+        //                     field="alternative_code"
+        //                 />
+        //             </ColumnActions>
+        //         </DataTableColumnHeader>
+        //     ),
+        //     cell: ({
+        //         row: {
+        //             original: { alternative_code },
+        //         },
+        //     }) => (
+        //         <div className="flex items-center justify-between gap-x-2 text-sm">
+        //             <p className="w-full rounded-lg bg-background p-1 px-2 text-xs">
+        //                 {' '}
+        //                 {alternative_code}
+        //             </p>
+        //             <CopyTextButton
+        //                 className="size-5"
+        //                 textContent={alternative_code ?? ''}
+        //             />
+        //         </div>
+        //     ),
+        //     enableMultiSort: true,
+        //     size: 120,
+        // },
         {
             id: 'type',
             accessorKey: 'type',
@@ -307,26 +269,29 @@ const AccountsTableColumns = (
             size: 250,
         },
         {
-            id: 'minAmount',
-            accessorKey: 'minAmount',
+            id: 'min_amount',
+            accessorKey: 'min_amount',
             header: (props) => (
                 <DataTableColumnHeader {...props} title="Min Amount">
                     <ColumnActions {...props}>
                         <NumberFilter
                             displayText="Min Amount"
-                            field="minAmount"
+                            field="min_amount"
                         />
                     </ColumnActions>
                 </DataTableColumnHeader>
             ),
             cell: ({
                 row: {
-                    original: { minAmount },
+                    original: { min_amount, currency },
                 },
             }) => (
                 <div className="text-right font-mono">
-                    {minAmount !== undefined
-                        ? minAmount.toLocaleString()
+                    {min_amount !== undefined
+                        ? currencyFormat(min_amount, {
+                              currency,
+                              showSymbol: !!currency,
+                          })
                         : 'N/A'}
                 </div>
             ), // Format as currency
@@ -334,26 +299,29 @@ const AccountsTableColumns = (
             size: 120,
         },
         {
-            id: 'maxAmount',
-            accessorKey: 'maxAmount',
+            id: 'max_amount',
+            accessorKey: 'max_amount',
             header: (props) => (
                 <DataTableColumnHeader {...props} title="Max Amount">
                     <ColumnActions {...props}>
                         <NumberFilter
                             displayText="Max Amount"
-                            field="maxAmount"
+                            field="max_amount"
                         />
                     </ColumnActions>
                 </DataTableColumnHeader>
             ),
             cell: ({
                 row: {
-                    original: { maxAmount },
+                    original: { max_amount, currency },
                 },
             }) => (
                 <div className="text-right font-mono">
-                    {maxAmount !== undefined
-                        ? maxAmount.toLocaleString()
+                    {max_amount !== undefined
+                        ? currencyFormat(max_amount, {
+                              currency: currency,
+                              showSymbol: !!currency,
+                          })
                         : 'N/A'}
                 </div>
             ), // Format as currency
@@ -361,7 +329,7 @@ const AccountsTableColumns = (
             size: 120,
         },
         {
-            id: 'interestStandard',
+            id: 'interest_standard',
             accessorKey: 'interest_standard',
             header: (props) => (
                 <DataTableColumnHeader {...props} title="Std. Interest">
@@ -387,35 +355,35 @@ const AccountsTableColumns = (
             enableSorting: true,
             size: 100,
         },
+        // {
+        //     id: 'interestSecured',
+        //     accessorKey: 'interest_secured',
+        //     header: (props) => (
+        //         <DataTableColumnHeader {...props} title="Secured Interest">
+        //             <ColumnActions {...props}>
+        //                 <NumberFilter
+        //                     displayText="Interest Secured"
+        //                     field="interest_secured"
+        //                 />
+        //             </ColumnActions>
+        //         </DataTableColumnHeader>
+        //     ),
+        //     cell: ({
+        //         row: {
+        //             original: { interest_secured },
+        //         },
+        //     }) => (
+        //         <div className="text-right">
+        //             {interest_secured !== undefined
+        //                 ? `${(interest_secured * 100).toFixed(2)}%`
+        //                 : 'N/A'}
+        //         </div>
+        //     ), // Format as percentage
+        //     enableSorting: true,
+        //     size: 120,
+        // },
         {
-            id: 'interestSecured',
-            accessorKey: 'interest_secured',
-            header: (props) => (
-                <DataTableColumnHeader {...props} title="Secured Interest">
-                    <ColumnActions {...props}>
-                        <NumberFilter
-                            displayText="Interest Secured"
-                            field="interest_secured"
-                        />
-                    </ColumnActions>
-                </DataTableColumnHeader>
-            ),
-            cell: ({
-                row: {
-                    original: { interest_secured },
-                },
-            }) => (
-                <div className="text-right">
-                    {interest_secured !== undefined
-                        ? `${(interest_secured * 100).toFixed(2)}%`
-                        : 'N/A'}
-                </div>
-            ), // Format as percentage
-            enableSorting: true,
-            size: 120,
-        },
-        {
-            id: 'isInternal',
+            id: 'is_internal',
             accessorKey: 'is_internal',
             header: (props) => (
                 <DataTableColumnHeader {...props} title="Internal?">
@@ -433,7 +401,7 @@ const AccountsTableColumns = (
 
         // 4. Operational Details (Less frequently needed, but still important)
         {
-            id: 'computationType',
+            id: 'computation_type',
             accessorKey: 'computation_type',
             header: (props) => (
                 <DataTableColumnHeader {...props} title="Computation Type">
@@ -457,7 +425,7 @@ const AccountsTableColumns = (
             size: 180,
         },
         {
-            id: 'earnedUnearnedInterest',
+            id: 'earned_unearned_interest',
             accessorKey: 'earned_unearned_interest',
             header: (props) => (
                 <DataTableColumnHeader {...props} title="Interest Recognition">
@@ -473,7 +441,7 @@ const AccountsTableColumns = (
             size: 180,
         },
         {
-            id: 'generalLedgerType',
+            id: 'general_ledger_type',
             accessorKey: 'general_ledger_type',
             header: (props) => (
                 <DataTableColumnHeader {...props} title="GL Type">
@@ -493,11 +461,11 @@ const AccountsTableColumns = (
                     )}
                 </>
             ),
-            enableSorting: true,
+            enableSorting: false,
             size: 180,
         },
         {
-            id: 'createdAt',
+            id: 'created_at',
             accessorKey: 'created_at', // Use 'created_at' as accessorKey if that's the field name in IAccount
             header: (props) => (
                 <DataTableColumnHeader {...props} title="Date Created">
@@ -550,7 +518,7 @@ const AccountsTableColumns = (
             size: 200,
         },
         {
-            id: 'otherInformationOfAnAccount',
+            id: 'other_information_of_an_account',
             accessorKey: 'other_information_of_an_account',
             header: (props) => (
                 <DataTableColumnHeader {...props} title="Other Info">
@@ -571,7 +539,7 @@ const AccountsTableColumns = (
             size: 200,
         },
         {
-            id: 'finesAmort',
+            id: 'fines_amort',
             accessorKey: 'fines_amort',
             header: (props) => (
                 <DataTableColumnHeader {...props} title="Fines Amort. (%)">
@@ -599,7 +567,7 @@ const AccountsTableColumns = (
             size: 100,
         },
         {
-            id: 'finesMaturity',
+            id: 'fines_maturity',
             accessorKey: 'fines_maturity',
             header: (props) => (
                 <DataTableColumnHeader {...props} title="Fines Maturity (%)">
@@ -627,7 +595,7 @@ const AccountsTableColumns = (
             size: 100,
         },
         {
-            id: 'cashOnHand',
+            id: 'cash_on_hand',
             accessorKey: 'cash_on_hand',
             header: (props) => (
                 <DataTableColumnHeader {...props} title="Cash On Hand">
@@ -655,7 +623,7 @@ const AccountsTableColumns = (
             size: 100,
         },
         {
-            id: 'paidUpShareCapital',
+            id: 'paid_up_share_capital',
             accessorKey: 'paid_up_share_capital',
             header: (props) => (
                 <DataTableColumnHeader {...props} title="Paid Up Share Capital">
@@ -672,7 +640,7 @@ const AccountsTableColumns = (
             size: 150,
         },
         {
-            id: 'finesGracePeriodAmortization',
+            id: 'fines_grace_period_amortization',
             accessorKey: 'fines_grace_period_amortization',
             header: (props) => (
                 <DataTableColumnHeader {...props} title="Amort. Grace Period">
@@ -698,7 +666,7 @@ const AccountsTableColumns = (
             size: 150,
         },
         {
-            id: 'additionalGracePeriod',
+            id: 'additional_grace_period',
             accessorKey: 'additional_grace_period',
             header: (props) => (
                 <DataTableColumnHeader {...props} title="Addl. Grace Period">
@@ -724,8 +692,8 @@ const AccountsTableColumns = (
             size: 150,
         },
         {
-            id: 'numberGracePeriodDaily',
-            accessorKey: 'number_grace_period_daily',
+            id: 'no_grace_period_daily',
+            accessorKey: 'no_grace_period_daily',
             header: (props) => (
                 <DataTableColumnHeader {...props} title="Daily Grace Period">
                     <ColumnActions {...props} />
@@ -733,15 +701,15 @@ const AccountsTableColumns = (
             ),
             cell: ({
                 row: {
-                    original: { number_grace_period_daily },
+                    original: { no_grace_period_daily },
                 },
-            }) => <EnabledDisabled isEnabled={number_grace_period_daily} />,
+            }) => <EnabledDisabled isEnabled={no_grace_period_daily} />,
             enableSorting: true,
             enableHiding: true,
             size: 150,
         },
         {
-            id: 'finesGracePeriodMaturity',
+            id: 'fines_grace_period_maturity',
             accessorKey: 'fines_grace_period_maturity',
             header: (props) => (
                 <DataTableColumnHeader {...props} title="Maturity Grace Period">
@@ -767,7 +735,7 @@ const AccountsTableColumns = (
             size: 150,
         },
         {
-            id: 'yearlySubscriptionFee',
+            id: 'yearly_subscription_fee',
             accessorKey: 'yearly_subscription_fee',
             header: (props) => (
                 <DataTableColumnHeader {...props} title="Annual Fee">
@@ -793,25 +761,25 @@ const AccountsTableColumns = (
             size: 100,
         },
         {
-            id: 'loanCutOffDays',
-            accessorKey: 'loan_cut_off_days',
+            id: 'cut_off_days',
+            accessorKey: 'cut_off_days',
             header: (props) => (
-                <DataTableColumnHeader {...props} title="Loan Cut-Off Days">
+                <DataTableColumnHeader {...props} title="cut-Off Days">
                     <ColumnActions {...props}>
                         <NumberFilter
-                            displayText="Loan Cut-Off Days"
-                            field="loan_cut_off_days"
+                            displayText="Cut-Off Days"
+                            field="cut_off_days"
                         />
                     </ColumnActions>
                 </DataTableColumnHeader>
             ),
             cell: ({
                 row: {
-                    original: { loan_cut_off_days },
+                    original: { cut_off_days },
                 },
             }) => (
                 <div className="text-right text-xs">
-                    {loan_cut_off_days || 'N/A'}
+                    {cut_off_days || 'N/A'}
                 </div>
             ),
             enableSorting: true,
@@ -819,7 +787,7 @@ const AccountsTableColumns = (
             size: 120,
         },
         {
-            id: 'lumpsumComputationType',
+            id: 'lumpsum_computation_type',
             accessorKey: 'lumpsum_computation_type',
             header: (props) => (
                 <DataTableColumnHeader {...props} title="Lumpsum Comp. Type">
@@ -840,7 +808,7 @@ const AccountsTableColumns = (
             size: 150,
         },
         {
-            id: 'interestFinesComputationDiminishing',
+            id: 'interest_fines_computation_diminishing',
             accessorKey: 'interest_fines_computation_diminishing',
             header: (props) => (
                 <DataTableColumnHeader
@@ -864,7 +832,7 @@ const AccountsTableColumns = (
             size: 200,
         },
         {
-            id: 'loanSavingType',
+            id: 'loan_saving_type',
             accessorKey: 'loan_saving_type',
             header: (props) => (
                 <DataTableColumnHeader {...props} title="Loan Saving Type">
@@ -881,7 +849,7 @@ const AccountsTableColumns = (
             size: 150,
         },
         {
-            id: 'interestDeduction',
+            id: 'interest_deduction',
             accessorKey: 'interest_deduction',
             header: (props) => (
                 <DataTableColumnHeader {...props} title="Interest Deduction">
@@ -896,14 +864,14 @@ const AccountsTableColumns = (
                 <div className="flex items-center justify-start gap-x-1 text-xs">
                     <p
                         className={cn(
-                            interest_deduction === InterestDeductionEnum.Above
+                            interest_deduction === 'Above'
                                 ? 'text-blue-500'
                                 : 'text-destructive'
                         )}
                     >
                         {interest_deduction}
                     </p>
-                    {interest_deduction === InterestDeductionEnum.Above ? (
+                    {interest_deduction === 'Above' ? (
                         <ArrowUpLong className="text-blue-400" />
                     ) : (
                         <ArrowUpLong className="rotate-180 text-destructive" />
@@ -915,7 +883,7 @@ const AccountsTableColumns = (
             size: 120,
         },
         {
-            id: 'otherDeductionEntry',
+            id: 'other_deduction_entry',
             accessorKey: 'other_deduction_entry',
             header: (props) => (
                 <DataTableColumnHeader {...props} title="Other Deduction Entry">
@@ -934,7 +902,7 @@ const AccountsTableColumns = (
             size: 150,
         },
         {
-            id: 'interestSavingTypeDiminishingStraight',
+            id: 'interest_saving_type_diminishing_straight',
             accessorKey: 'interest_saving_type_diminishing_straight',
             header: (props) => (
                 <DataTableColumnHeader
@@ -958,7 +926,7 @@ const AccountsTableColumns = (
             size: 200,
         },
         {
-            id: 'generalLedgerGroupingExcludeAccount',
+            id: 'general_ledger_grouping_exclude_account',
             accessorKey: 'general_ledger_grouping_exclude_account',
             header: (props) => (
                 <DataTableColumnHeader

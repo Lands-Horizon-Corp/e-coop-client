@@ -5,33 +5,46 @@ import {
     HookQueryOptions,
     createDataLayerFactory,
 } from '@/providers/repositories/data-layer-factory'
+import {
+    createMutationFactory,
+    updateMutationInvalidationFn,
+} from '@/providers/repositories/mutation-factory'
 
 import { TEntityId } from '@/types'
 
 import { ICategory } from '../category'
 import {
     IOrganization,
+    IOrganizationEditRequest,
     IOrganizationRequest,
     IOrganizationWithPolicies,
 } from './organization.types'
 
-const { apiCrudHooks, apiCrudService } = createDataLayerFactory<
-    IOrganization,
-    IOrganizationRequest
->({ url: 'api/v1/organization', baseKey: 'organization' })
+const {
+    apiCrudHooks,
+    apiCrudService,
+    baseQueryKey: organizationBaseKey,
+} = createDataLayerFactory<IOrganization, IOrganizationRequest>({
+    url: 'api/v1/organization',
+    baseKey: 'organization',
+})
 
 const {
     useCreate: useCreateOrganization,
-    useUpdateById: useUpdateOrganization,
+    // useUpdateById: useUpdateOrganization,
     useGetById: useGetOrganizationById,
     useGetAll,
 } = apiCrudHooks
 
-const { getById: getOrganizationById, route, API } = apiCrudService
+const {
+    getById: getOrganizationById,
+    updateById: updateOrganizationById,
+    route,
+    API,
+} = apiCrudService
 
 export {
     useCreateOrganization,
-    useUpdateOrganization,
     useGetAll,
     apiCrudHooks,
     apiCrudService,
@@ -53,6 +66,20 @@ export const useGetAllOrganizations = ({
         ...options,
     })
 }
+
+export const useUpdateOrganization = createMutationFactory<
+    IOrganization,
+    Error,
+    { id: TEntityId; payload: IOrganizationRequest | IOrganizationEditRequest }
+>({
+    mutationFn: (variables) =>
+        updateOrganizationById({
+            id: variables.id,
+            payload: variables.payload,
+        }),
+    invalidationFn: (args) =>
+        updateMutationInvalidationFn(organizationBaseKey, args),
+})
 
 export const useGetOrganizationWithPoliciesById = ({
     options,

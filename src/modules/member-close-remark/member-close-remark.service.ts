@@ -6,7 +6,7 @@ import { HookMutationOptions } from '@/providers/repositories/mutation-factory'
 
 import { TEntityId } from '@/types'
 
-import { updateMemberProfileById } from '../member-profile/member-profile.service'
+import { memberProfileAPIRoute } from '../member-profile/member-profile.service'
 import type { IMemberProfile } from '../member-profile/member-profile.types'
 import type {
     IMemberCloseRemark,
@@ -22,22 +22,7 @@ const { apiCrudHooks, apiCrudService } = createDataLayerFactory<
 })
 
 // ⚙️🛠️ API SERVICE HERE
-export const MemberCloseRemarkAPI = apiCrudService
-
-// Close Member Profile Account API
-export const closeMemberProfileAccount = async (
-    id: TEntityId,
-    closeRemark: IMemberCloseRemarkRequest[]
-) => {
-    return await updateMemberProfileById<
-        IMemberProfile,
-        IMemberCloseRemarkRequest[]
-    >({
-        id,
-        payload: closeRemark,
-        targetUrl: `/close`,
-    })
-}
+export const { API } = apiCrudService
 
 // 🪝 HOOK STARTS HERE
 export const {
@@ -69,8 +54,13 @@ export const useCloseMemberProfile = ({
         meta: {
             invalidates: [['member-profile']],
         },
-        mutationFn: async ({ profileId, data }) =>
-            await closeMemberProfileAccount(profileId, data),
+        mutationFn: async ({ profileId, data }) => {
+            const response = await API.post<
+                IMemberCloseRemarkRequest[],
+                IMemberProfile
+            >(`${memberProfileAPIRoute}/${profileId}/close`, data)
+            return response.data
+        },
     })
 }
 

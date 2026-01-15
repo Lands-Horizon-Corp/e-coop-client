@@ -16,15 +16,19 @@ const buttonVariants = cva(
                 destructive:
                     'bg-destructive text-white shadow-xs hover:bg-destructive/90 focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40 dark:bg-destructive/70',
                 outline:
-                    'border bg-background shadow-xs hover:bg-accent hover: dark:bg-input/30 dark:border-input dark:hover:bg-input/50',
+                    'border bg-background shadow-xs hover:bg-accent dark:bg-input/30 dark:border-input dark:hover:bg-input/50',
+                'outline-ghost':
+                    'border border-border dark:border-border/40 bg-background shadow-xs hover:bg-accent dark:hover:bg-input/50',
                 secondary:
-                    'bg-secondary text-secondary-foreground shadow-xs hover:bg-secondary/80',
-                ghost: 'hover:bg-accent hover: dark:hover:bg-accent/50',
+                    'bg-secondary text-secondary-foreground hover:bg-secondary/80',
+                ghost: 'hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50',
+                alert: 'bg-red-600 text-white hover:bg-red-700 animate-pulse-alert shadow-lg',
                 link: 'text-primary underline-offset-4 hover:underline',
             },
             hoverVariant: {
                 nostyle: '',
                 default: '',
+                accent: 'hover:bg-accent/80',
                 primary:
                     'hover:bg-primary/90 hover:text-primary-foreground hover:dark:bg-primary/90 hover:dark:text-primary-foreground',
                 destructive:
@@ -34,18 +38,25 @@ const buttonVariants = cva(
                 ghost: 'hover:bg-accent hover:',
                 link: 'hover:underline',
             },
+            shadow: {
+                nostyle: '',
+                default: 'shadow-xs',
+                none: 'shadow-none',
+            },
             size: {
                 nostyle: '',
                 default: 'h-9 px-4 py-2 has-[>svg]:px-3',
                 sm: 'h-8 rounded-md gap-1.5 px-3 has-[>svg]:px-2.5',
                 lg: 'h-10 rounded-md px-6 has-[>svg]:px-4',
                 icon: 'size-9',
-                xs: 'size-3 p-0',
+                'icon-sm': 'size-8',
+                xs: 'text-xs px-2 py-1',
             },
         },
         defaultVariants: {
             variant: 'default',
             size: 'default',
+            shadow: 'none',
         },
     }
 )
@@ -61,6 +72,7 @@ function Button({
     variant,
     size,
     hoverVariant,
+    shadow,
     asChild = false,
     ...props
 }: ButtonProps) {
@@ -69,7 +81,13 @@ function Button({
     return (
         <Comp
             className={cn(
-                buttonVariants({ variant, size, hoverVariant, className })
+                buttonVariants({
+                    variant,
+                    size,
+                    hoverVariant,
+                    shadow,
+                    className,
+                })
             )}
             data-slot="button"
             {...props}

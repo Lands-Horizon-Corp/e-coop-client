@@ -1,5 +1,3 @@
-'use client'
-
 import ContactForm from '@/modules/contact-us/components/forms/contact-us-create-form'
 import { Mail, MapPin, Phone } from 'lucide-react'
 

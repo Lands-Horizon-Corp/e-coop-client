@@ -25,7 +25,7 @@ interface Props {
     groups: TQuickSearchGroup[]
 }
 
-const AppSidebarQruickNavigate = ({ groups }: Props) => {
+const AppSidebarQuickNavigate = ({ groups }: Props) => {
     const { open: sidebarOpen } = useSidebar()
     const [open, setOpen] = useState(false)
     const [searchQuery, setSearchQuery] = useState('')
@@ -134,6 +134,7 @@ const AppSidebarQruickNavigate = ({ groups }: Props) => {
                 }}
                 open={open}
                 overlayClassName="backdrop-blur-sm text-gray-400"
+                shouldFilter={false}
             >
                 <CommandInput
                     onValueChange={setSearchQuery}
@@ -144,7 +145,7 @@ const AppSidebarQruickNavigate = ({ groups }: Props) => {
                     <CommandEmpty>No results found.</CommandEmpty>
                     {filteredGroups.map((group, index) => {
                         return (
-                            <Fragment key={group.title}>
+                            <Fragment key={`${group.title}-${searchQuery}`}>
                                 <CommandGroup heading={group.title}>
                                     {group.items.map((groupItem) => (
                                         <CommandItem
@@ -194,4 +195,4 @@ const AppSidebarQruickNavigate = ({ groups }: Props) => {
     )
 }
 
-export default AppSidebarQruickNavigate
+export default AppSidebarQuickNavigate

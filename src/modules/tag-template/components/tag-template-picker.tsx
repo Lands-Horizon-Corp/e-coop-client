@@ -48,6 +48,7 @@ const TagTemplatePicker = forwardRef<HTMLButtonElement, Props>(
 
         const { finalFilterPayloadBase64, bulkSetFilter } = useFilterState({
             defaultFilterMode: 'OR',
+            debounceFinalFilterMs: 0,
         })
 
         const {
@@ -103,12 +104,12 @@ const TagTemplatePicker = forwardRef<HTMLButtonElement, Props>(
                             bulkSetFilter(
                                 [
                                     {
-                                        displayText: 'full name',
-                                        field: 'fullName',
+                                        displayText: 'Tag Name',
+                                        field: 'name',
                                     },
                                     {
-                                        displayText: 'PB',
-                                        field: 'memberProfile.passbookNumber',
+                                        displayText: 'Tag Description',
+                                        field: 'description',
                                     },
                                 ],
                                 {

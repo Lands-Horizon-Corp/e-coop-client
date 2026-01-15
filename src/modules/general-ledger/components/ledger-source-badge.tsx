@@ -67,7 +67,7 @@ const iconSizeVariants = cva('flex-shrink-0', {
     variants: {
         size: {
             sm: 'h-3 w-3',
-            md: 'h-3.5 w-3.5',
+            md: 'size-3.5',
             lg: 'h-4 w-4',
         },
     },

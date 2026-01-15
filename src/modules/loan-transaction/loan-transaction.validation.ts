@@ -13,6 +13,7 @@ import { LoanClearanceAnalysisInstitutionSchema } from '../loan-clearance-analys
 import { LoanTermsAndConditionAmountReceiptSchema } from '../loan-terms-and-condition-amount-receipt'
 import { LoanTermsAndConditionSuggestedPaymentSchema } from '../loan-terms-and-condition-suggested-payment'
 import {
+    LOAN_ADJUSTMENT_TYPE,
     LOAN_COLLECTOR_PLACE,
     LOAN_COMAKER_TYPE,
     // LOAN_COMAKER_TYPE,
@@ -21,7 +22,7 @@ import {
     WEEKDAYS,
 } from './loan.constants'
 
-export const WithModeOfPayment = z.discriminatedUnion(
+export const WithModeOfPaymentSchema = z.discriminatedUnion(
     'mode_of_payment',
     [
         z.object({
@@ -215,6 +216,7 @@ export const LoanTransactionSchema = z
         previous_loan: z.any(),
 
         is_add_on: z.boolean().optional(),
+        is_investment: z.boolean().default(false).optional(),
 
         applied_1: z.coerce
             .number('Invalid amount')
@@ -240,6 +242,24 @@ export const LoanTransactionSchema = z
         damayan_fund: z.coerce.number().optional(),
         share_capital: z.coerce.number().optional(),
         length_of_service: z.string().optional(),
+
+        additional_days: z.coerce.number().optional(), // new
+        number_of_months: z.coerce.number().optional(), // new
+        amount_granted: z.coerce.number().optional(), // new
+        advance_interest: z.coerce.number().optional(), // new
+        interest_rate: z.coerce.number().optional(), // new
+        fines_rate: z.coerce.number().optional(), // new
+        date_rebated: stringDateWithTransformSchema.optional(), // new
+        last_pay_date: stringDateWithTransformSchema.optional(), // new
+        count: z.coerce.number().optional(), // new validation / already existed in types
+        total_count: z.coerce.number().optional(), // new
+        original_ticket: z.coerce.string().optional(), // new
+        first_pay_date: stringDateWithTransformSchema.optional(),
+        first_pay_amount: z.coerce.number().optional(),
+        first_irr: z.coerce.number().optional(), // new
+        first_dq: z.coerce.number().optional(), // new
+        interest_previous_paid: z.coerce.number().optional(), // new
+        fines_previous_paid: z.coerce.number().optional(), // new
 
         exclude_sunday: z.boolean().optional(),
         exclude_holiday: z.boolean().optional(),
@@ -333,11 +353,17 @@ export const LoanTransactionSchema = z
 
         amortization: z.coerce.number().optional(), //For UI only
     })
-    .and(WithModeOfPayment)
+    .and(WithModeOfPaymentSchema)
     .and(WithComaker)
     .and(withLoanType)
 
 export type TLoanTransactionSchema = z.infer<typeof LoanTransactionSchema>
+
+export const LoanEditTransactionSchema = LoanTransactionSchema
+
+export type TLoanEditTransactionSchema = z.infer<
+    typeof LoanEditTransactionSchema
+>
 
 // FOR LOAN SIGNATURE
 // for signature
@@ -436,4 +462,19 @@ export const LoanTransactionSuggestedSchema = z.object({
 
 export type TLoanTransactionSuggestedSchema = z.infer<
     typeof LoanTransactionSuggestedSchema
+>
+
+export const LoanTransactionAdjustmentSchema = z.object({
+    voucher: z.coerce.string().optional(),
+    loan_accoun_id: EntityIdSchema('Loan Transaction Account is required'),
+    account_id: EntityIdSchema('Account is required'),
+    account: z.any(),
+    adjustment_type: z.enum(LOAN_ADJUSTMENT_TYPE),
+    amount: z.coerce
+        .number('Invalid amount')
+        .min(0.0000001, 'Amount must not less than 0'),
+})
+
+export type TLoanTransactionAdjustmentSchema = z.infer<
+    typeof LoanTransactionAdjustmentSchema
 >

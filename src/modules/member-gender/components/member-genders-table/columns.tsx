@@ -69,6 +69,7 @@ const MemberGenderTableColumns = (
                 <DataTableColumnHeader {...props} title="Name">
                     <ColumnActions {...props}>
                         <TextFilter<IMemberGender>
+                            defaultMode="contains"
                             displayText="Name"
                             field="name"
                         />
@@ -94,6 +95,7 @@ const MemberGenderTableColumns = (
                 <DataTableColumnHeader {...props} title="Description">
                     <ColumnActions {...props}>
                         <TextFilter<IMemberGender>
+                            defaultMode="contains"
                             displayText="Description"
                             field="description"
                         />

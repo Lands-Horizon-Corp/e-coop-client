@@ -19,6 +19,7 @@ import {
 import { JournalVoucherSkeletonCard } from '@/modules/journal-voucher/components/journal-voucher-skeleton-card'
 import JournalVoucherStatusIndicator from '@/modules/journal-voucher/components/journal-voucher-status-indicator'
 
+import { highlightMatch } from '@/components/hightlight-match'
 import {
     CollapseIcon,
     MagnifyingGlassIcon as SearchIcon,
@@ -142,7 +143,7 @@ export const JournalVoucherKanbanMain = ({
     return (
         <KanbanContainer
             className={cn(
-                'w-[420px] h-full shrink-0 relative',
+                '2xl:w-[24%] lg:w-[350px] w-[300px] h-full shrink-0 relative',
                 isSelected && 'ring-2 ring-primary/20 bg-primary/5'
             )}
         >
@@ -240,7 +241,7 @@ export const JournalVoucherKanbanMain = ({
                                             content={journalVoucher.name}
                                         >
                                             <AccordionTrigger className="truncate min-w-0 max-w-full h-10">
-                                                <p className="truncate text-lg font-bold border text-foreground/95">
+                                                <p className="truncate text-sm font-bold text-foreground/95">
                                                     {searchTerm
                                                         ? highlightMatch(
                                                               journalVoucher.name ||
@@ -290,22 +291,5 @@ export const JournalVoucherKanbanMain = ({
                 )}
             </KanbanItemsContainer>
         </KanbanContainer>
-    )
-}
-
-export const highlightMatch = (text: string, search: string) => {
-    if (!search || !text) return text
-    const regex = new RegExp(`(${search})`, 'ig')
-    return text.split(regex).map((part, i) =>
-        regex.test(part) ? (
-            <span
-                className="bg-primary/20 text-primary rounded px-0.5 py-0.5 font-medium"
-                key={i}
-            >
-                {part}
-            </span>
-        ) : (
-            part
-        )
     )
 }

@@ -15,6 +15,7 @@ import MemberTypeCombobox from '@/modules/member-type/components/member-type-com
 import { HandCoinsIcon, PieChartIcon } from 'lucide-react'
 
 import CivilStatusCombobox from '@/components/comboboxes/civil-status-combobox'
+import { CountryCombobox } from '@/components/comboboxes/country-combobox'
 import GeneralStatusCombobox from '@/components/comboboxes/general-status-combobox'
 import FormFooterResetSubmit from '@/components/form-components/form-footer-reset-submit'
 import { VerifiedPatchIcon } from '@/components/icons'
@@ -57,6 +58,7 @@ const MemberProfileQuickCreateForm = ({
         defaultValues: {
             first_name: '',
             last_name: '',
+            passbook: '',
             status: 'for review',
             civil_status: 'single',
             is_mutual_fund_member: false,
@@ -109,7 +111,7 @@ const MemberProfileQuickCreateForm = ({
     return (
         <Form {...form}>
             <form
-                className={cn('flex w-full flex-col gap-y-4', className)}
+                className={cn('flex w-full flex-col v1 gap-y-4', className)}
                 onSubmit={onSubmit}
                 ref={formRef}
             >
@@ -132,7 +134,7 @@ const MemberProfileQuickCreateForm = ({
                                         {...field}
                                         disabled={isDisabled(field.name)}
                                         onChange={(selected) =>
-                                            field.onChange(selected.id)
+                                            field.onChange(selected?.id)
                                         }
                                         placeholder="Select Member Type"
                                     />
@@ -269,7 +271,7 @@ const MemberProfileQuickCreateForm = ({
                             />
                             <FormFieldWrapper
                                 control={form.control}
-                                label="Gender *"
+                                label="Gender"
                                 name="member_gender_id"
                                 render={({ field }) => (
                                     <MemberGenderCombobox
@@ -318,6 +320,21 @@ const MemberProfileQuickCreateForm = ({
                                             defaultCountry="PH"
                                         />
                                     </div>
+                                )}
+                            />
+                            <FormFieldWrapper
+                                control={form.control}
+                                label="Birth Place *"
+                                name="birth_place"
+                                render={({ field }) => (
+                                    <CountryCombobox
+                                        {...field}
+                                        defaultValue={field.value}
+                                        onChange={(country) => {
+                                            field.onChange(country?.alpha3)
+                                        }}
+                                        undefinable={true}
+                                    />
                                 )}
                             />
                         </div>
@@ -437,6 +454,7 @@ const MemberProfileQuickCreateForm = ({
                             <p>New Account</p>
                             <FormFieldWrapper
                                 control={form.control}
+                                label="Username"
                                 name="new_user_info.user_name"
                                 render={({ field }) => (
                                     <Input
@@ -449,6 +467,7 @@ const MemberProfileQuickCreateForm = ({
                             />
                             <FormFieldWrapper
                                 control={form.control}
+                                label="Email"
                                 name="new_user_info.email"
                                 render={({ field }) => (
                                     <Input
@@ -461,6 +480,7 @@ const MemberProfileQuickCreateForm = ({
                             />
                             <FormFieldWrapper
                                 control={form.control}
+                                label="Password"
                                 name="new_user_info.password"
                                 render={({ field }) => (
                                     <FormItem>
@@ -495,7 +515,8 @@ const MemberProfileQuickCreateForm = ({
                     creation
                 </span>
                 <FormFooterResetSubmit
-                    disableSubmit={!form.formState.isDirty}
+                    className="sticky bottom-0"
+                    disableSubmit={!form.formState.isDirty || isPending}
                     error={error}
                     isLoading={isPending}
                     onReset={() => {
@@ -521,7 +542,7 @@ export const MemberProfileQuickCreateFormModal = ({
 }) => {
     return (
         <Modal
-            className={cn('!max-w-4xl', className)}
+            className={cn('!max-w-4xl bg-popover', className)}
             description={description}
             title={title}
             {...props}

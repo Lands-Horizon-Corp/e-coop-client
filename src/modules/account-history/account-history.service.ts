@@ -5,6 +5,7 @@ import {
     HookQueryOptions,
     createDataLayerFactory,
 } from '@/providers/repositories/data-layer-factory'
+import { createMutationFactory } from '@/providers/repositories/mutation-factory'
 
 import { TEntityId } from '@/types'
 
@@ -12,6 +13,8 @@ import type {
     IAccountHistory,
     IAccountHistoryRequest,
 } from '../account-history'
+import { accountBaseQueryKey } from '../account/account.service'
+import { IAccount } from '../account/account.types'
 
 const {
     apiCrudHooks,
@@ -69,12 +72,43 @@ export const useGetAccountHistoryByAccountId = ({
     options?: HookQueryOptions<IAccountHistory[], Error>
 }) => {
     return useQuery<IAccountHistory[], Error>({
-        queryKey: ['account-history', accountId, query],
+        queryKey: [accountHistoryBaseKey, 'all', accountId, query].filter(
+            Boolean
+        ),
         queryFn: async () => {
             return getAccountHistoryByAccountId(accountId)
         },
         ...options,
     })
 }
+
+export const useAccountHistoryRestore = createMutationFactory<
+    IAccount,
+    Error,
+    { accountHistoryId: TEntityId }
+>({
+    mutationFn: ({ accountHistoryId }) =>
+        createAccountHistory<void | undefined, IAccount>({
+            payload: undefined,
+            url: `${accountHistoryAPIRoute}/${accountHistoryId}/restore`,
+        }),
+    invalidationFn: ({ variables, queryClient, resultData }) => {
+        queryClient.invalidateQueries({
+            queryKey: [accountBaseQueryKey, resultData.id],
+        })
+
+        queryClient.invalidateQueries({
+            queryKey: [
+                accountHistoryBaseKey,
+                'all',
+                variables.accountHistoryId,
+            ],
+        })
+    },
+    defaultInvalidates: [
+        [accountHistoryBaseKey, 'paginated'],
+        [accountHistoryBaseKey, 'all'],
+    ],
+})
 
 export const logger = Logger.getInstance('account-history')

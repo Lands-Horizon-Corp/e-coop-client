@@ -128,6 +128,7 @@ const MemberContactCreateUpdateForm = ({
                             render={({ field }) => (
                                 <Input
                                     {...field}
+                                    className="bg-popover"
                                     disabled={isDisabled(field.name)}
                                     id={field.name}
                                     placeholder="Name"
@@ -149,7 +150,7 @@ const MemberContactCreateUpdateForm = ({
                                     />
                                     <PhoneInput
                                         {...field}
-                                        className="w-full"
+                                        className="w-full bg-popover"
                                         defaultCountry="PH"
                                     />
                                 </div>
@@ -162,6 +163,7 @@ const MemberContactCreateUpdateForm = ({
                             render={({ field }) => (
                                 <Textarea
                                     {...field}
+                                    className="bg-popover"
                                     disabled={isDisabled(field.name)}
                                     id={field.name}
                                     placeholder="Description"
@@ -171,7 +173,7 @@ const MemberContactCreateUpdateForm = ({
                     </fieldset>
                 </fieldset>
                 <FormFooterResetSubmit
-                    disableSubmit={!form.formState.isDirty}
+                    disableSubmit={!form.formState.isDirty || isPending}
                     error={error}
                     isLoading={isPending}
                     onReset={() => {

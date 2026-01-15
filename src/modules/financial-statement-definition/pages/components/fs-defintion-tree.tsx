@@ -5,7 +5,6 @@ import { toast } from 'sonner'
 import { sortBy } from '@/helpers/common-helper'
 import {
     AccountCreateUpdateFormModal,
-    FinancialStatementTypeEnum,
     useDeleteAccountFromGLFS,
     useUpdateAccountIndex,
 } from '@/modules/account'
@@ -13,6 +12,7 @@ import { AccountPicker } from '@/modules/account'
 import { IAccount } from '@/modules/account'
 import {
     IFinancialStatementDefinition,
+    IFinancialStatementDefinitionRequest,
     useConnectAccount,
     useDeleteById,
     useUpdateIndex,
@@ -325,9 +325,7 @@ const FinancialStatementDefinitionTreeViewer = ({
 
     const formDefaultValues = onCreate
         ? {
-              financial_statement_type:
-                  selectedFinancialStatementTypes ||
-                  FinancialStatementTypeEnum.Assets,
+              financial_statement_type: selectedFinancialStatementTypes,
           }
         : {
               ...node,
@@ -376,7 +374,8 @@ const FinancialStatementDefinitionTreeViewer = ({
                 <FinancialStatementCreateUpdateFormModal
                     description={createOrUpdateDescription}
                     formProps={{
-                        defaultValues: formDefaultValues,
+                        defaultValues:
+                            formDefaultValues as IFinancialStatementDefinitionRequest,
                         financialStatementDefinitionEntriesId:
                             financialStatementDefinitionEntriesId,
                         financialStatementAccountsGroupingId:

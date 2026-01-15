@@ -1,0 +1,409 @@
+<style>
+    @page { margin: 0; }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    .is-report-container {
+        --fs-xs: clamp(0.45rem, 0.60vw + 0.15vh, 0.65rem);
+        --fs-sm: clamp(0.55rem, 0.75vw + 0.25vh, 0.75rem);
+        --fs-base: clamp(0.65rem, 0.90vw + 0.30vh, 0.85rem);
+        --fs-lg: clamp(0.75rem, 1.10vw + 0.40vh, 0.95rem);
+        --fs-xl: clamp(0.85rem, 1.50vw + 0.55vh, 1.25rem);
+        --fs-2xl: clamp(0.95rem, 1.80vw + 0.65vh, 1.65rem);
+
+        width: 100%;
+        height: 100%;
+        padding: clamp(2rem, 10%, 5.5rem);
+        background: white;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+        color: #1f2937;
+        font-size: var(--fs-base);
+        line-height: 1.4;
+        display: flex;
+        flex-direction: column;
+        position: relative;
+        container-type: inline-size;
+        container-name: report;
+    }
+
+    .is-report-header {
+        text-align: center;
+        margin-bottom: clamp(0.5rem, 2%, 1.5rem);
+        padding-bottom: clamp(0.25rem, 1.5%, 1rem);
+        border-bottom: 1px solid #e5e7eb;
+    }
+
+    .is-report-header h1 {
+        font-size: var(--fs-lg);
+        font-weight: 800;
+        color: #111827;
+        margin-bottom: clamp(0.125rem, 0.5%, 0.375rem);
+        letter-spacing: -0.025em;
+    }
+
+    .is-report-header .is-address {
+        font-size: var(--fs-sm);
+        color: #6b7280;
+        margin: clamp(0.125rem, 0.5%, 0.25rem) 0;
+    }
+
+    .is-report-header .is-tin {
+        font-size: var(--fs-xs);
+        color: #9ca3af;
+    }
+
+    .is-report-header h2 {
+        font-size: var(--fs-xl);
+        font-weight: 700;
+        text-transform: uppercase;
+        margin-top: clamp(0.375rem, 1%, 0.75rem);
+        color: #111827;
+    }
+
+    .ended-date {
+        font-size: var(--fs-sm);
+        color: #374151;
+        margin-top: clamp(0.25rem, 1%, 0.5rem);
+        text-align: center;
+    }
+
+    .section-title {
+        font-size: var(--fs-base);
+        font-weight: 700;
+        color: #111827;
+        margin: clamp(0.5rem, 2%, 1rem) 0 clamp(0.25rem, 1%, 0.5rem) 0;
+        text-transform: uppercase;
+        background: #f3f4f6;
+        padding: clamp(0.25rem, 1%, 0.5rem) clamp(0.375rem, 1.5%, 1rem);
+        border-left: 3px solid #3b82f6;
+    }
+
+    .account-group {
+        margin-bottom: clamp(0.5rem, 2%, 1rem);
+    }
+
+    .account-title {
+        font-size: var(--fs-sm);
+        font-weight: 600;
+        color: #374151;
+        margin: clamp(0.25rem, 1%, 0.5rem) 0;
+        padding-left: clamp(0.5rem, 2%, 1rem);
+    }
+
+    .account-entries {
+        margin-left: clamp(1rem, 3%, 2rem);
+    }
+
+    .entry-row {
+        display: grid;
+        grid-template-columns: 2fr 1fr 1fr;
+        gap: clamp(0.25rem, 1%, 0.5rem);
+        padding: clamp(0.125rem, 0.5%, 0.25rem) clamp(0.375rem, 1.5%, 1rem);
+        font-size: var(--fs-sm);
+        border-bottom: 1px solid #f3f4f6;
+    }
+
+    .entry-row.with-comparison {
+        grid-template-columns: 2fr 1fr 1fr 1fr 1fr;
+    }
+
+    .entry-description {
+        color: #1f2937;
+    }
+
+    .entry-amount {
+        text-align: right;
+        font-family: 'SF Mono', 'Monaco', 'Courier New', monospace;
+        font-variant-numeric: tabular-nums;
+        color: #1f2937;
+    }
+
+    .entry-change {
+        text-align: center;
+        font-size: var(--fs-xs);
+        font-weight: 600;
+    }
+
+    .entry-change.increase { color: #059669; }
+    .entry-change.decrease { color: #dc2626; }
+
+    .subtotal-row {
+        display: grid;
+        grid-template-columns: 2fr 1fr;
+        gap: clamp(0.25rem, 1%, 0.5rem);
+        padding: clamp(0.25rem, 1%, 0.5rem) clamp(0.375rem, 1.5%, 1rem);
+        font-size: var(--fs-sm);
+        font-weight: 600;
+        background: #f9fafb;
+        border-top: 1px solid #d1d5db;
+        border-bottom: 1px solid #d1d5db;
+        margin-top: clamp(0.125rem, 0.5%, 0.25rem);
+    }
+
+    .subtotal-label {
+        color: #374151;
+    }
+
+    .subtotal-amount {
+        text-align: right;
+        font-family: 'SF Mono', 'Monaco', 'Courier New', monospace;
+        font-variant-numeric: tabular-nums;
+        color: #1f2937;
+    }
+
+    .total-row {
+        display: grid;
+        grid-template-columns: 2fr 1fr;
+        gap: clamp(0.25rem, 1%, 0.5rem);
+        padding: clamp(0.375rem, 1.5%, 0.75rem) clamp(0.375rem, 1.5%, 1rem);
+        font-size: var(--fs-base);
+        font-weight: 700;
+        background: #f3f4f6;
+        border-top: 2px solid #9ca3af;
+        border-bottom: 2px solid #9ca3af;
+        margin: clamp(0.5rem, 2%, 1rem) 0;
+    }
+
+    .total-label {
+        color: #111827;
+        text-transform: uppercase;
+    }
+
+    .total-amount {
+        text-align: right;
+        font-family: 'SF Mono', 'Monaco', 'Courier New', monospace;
+        font-variant-numeric: tabular-nums;
+        color: #111827;
+    }
+
+    .net-surplus-row {
+        display: grid;
+        grid-template-columns: 2fr 1fr;
+        gap: clamp(0.25rem, 1%, 0.5rem);
+        padding: clamp(0.5rem, 2%, 1rem) clamp(0.375rem, 1.5%, 1rem);
+        font-size: var(--fs-lg);
+        font-weight: 800;
+        background: linear-gradient(to right, #dbeafe, #bfdbfe);
+        border: 2px solid #3b82f6;
+        border-radius: clamp(0.25rem, 0.5%, 0.5rem);
+        margin: clamp(0.75rem, 2.5%, 1.5rem) 0;
+    }
+
+    .net-surplus-label {
+        color: #1e40af;
+        text-transform: uppercase;
+    }
+
+    .net-surplus-amount {
+        text-align: right;
+        font-family: 'SF Mono', 'Monaco', 'Courier New', monospace;
+        font-variant-numeric: tabular-nums;
+        color: #1e40af;
+    }
+
+    .is-signature-grid {
+        display: grid;
+        grid-template-columns: 2fr;
+        gap: clamp(0.5rem, 2%, 1rem);
+        margin-top: clamp(0.75rem, 2.5%, 1.5rem);
+        font-size: var(--fs-sm);
+        width: 100%;
+    }
+
+    @container (min-width: 500px) {
+        .is-signature-grid {
+            grid-template-columns: repeat(3, 1fr);
+        }
+    }
+
+    .is-signature-item {
+        text-align: center;
+    }
+
+    .is-signature-label {
+        font-size: var(--fs-xs);
+        color: #6b7280;
+        margin-bottom: clamp(0.25rem, 1%, 0.5rem);
+    }
+
+    .is-signature-line {
+        border-bottom: 1px solid #9ca3af;
+        padding: clamp(0.25rem, 1%, 0.5rem) 0;
+        min-height: clamp(1rem, 3%, 2rem);
+        font-weight: 500;
+        font-size: var(--fs-sm);
+        color: #1f2937;
+        margin-top: clamp(0.25rem, 1%, 0.5rem);
+    }
+
+    .report-content {
+        flex: 1;
+        overflow-y: auto;
+        margin-bottom: clamp(1rem, 3%, 2rem);
+    }
+
+    .is-report-footer {
+        margin-top: auto;
+        padding-top: clamp(0.5rem, 2%, 1rem);
+        border-top: 1px solid #e5e7eb;
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: clamp(0.25rem, 1%, 0.5rem);
+        font-size: var(--fs-xs);
+        color: #6b7280;
+    }
+
+    @container (min-width: 500px) {
+        .is-report-footer {
+            grid-template-columns: repeat(4, 1fr);
+        }
+    }
+
+    .is-footer-item {
+        display: flex;
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .is-footer-label {
+        font-weight: 600;
+        color: #374151;
+        margin-bottom: 0.125rem;
+    }
+
+    .is-footer-value {
+        color: #1f2937;
+        font-family: 'SF Mono', 'Monaco', 'Courier New', monospace;
+    }
+
+    @media print {
+        .is-report-container {
+            padding: 2%;
+        }
+
+        * {
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+        }
+    }
+</style>
+
+<div class="is-report-container">
+    <header class="is-report-header">
+        <h1>{{header_title}}</h1>
+        <p class="is-address">{{header_address}}</p>
+        <p class="is-tin">TIN: {{tax_number}}</p>
+        <h2>{{report_title}}</h2>
+        <p class="ended-date">For the period ended: {{ended_date}}</p>
+    </header>
+
+    <h3 class="section-title">Income</h3>
+    {{#each income_entries}}
+    <div class="account-group">
+        <div class="account-title">{{account_title}}</div>
+        <div class="account-entries">
+            {{#each account_entries}}
+            <div class="entry-row{{#if previous_amount}} with-comparison{{/if}}">
+                <span class="entry-description">{{description}}</span>
+                <span class="entry-amount">{{current_amount}}</span>
+                {{#if previous_amount}}
+                <span class="entry-amount">{{previous_amount}}</span>
+                <span class="entry-change {{#if inc_or_dec}}{{#if (eq inc_or_dec 'INC')}}increase{{else}}decrease{{/if}}{{/if}}">{{inc_or_dec}}</span>
+                <span class="entry-amount">{{percentage}}%</span>
+                {{/if}}
+            </div>
+            {{/each}}
+        </div>
+        <div class="subtotal-row">
+            <span class="subtotal-label">Total {{account_title}}</span>
+            <span class="subtotal-amount">{{total_account_amount}}</span>
+        </div>
+    </div>
+    {{/each}}
+
+    <div class="total-row">
+        <span class="total-label">Total Income</span>
+        <span class="total-amount">{{total_income}}</span>
+    </div>
+
+    <h3 class="section-title">Expenses</h3>
+    {{#each expense_entries}}
+    <div class="account-group">
+        <div class="account-title">{{account_title}}</div>
+        <div class="account-entries">
+            {{#each account_entries}}
+            <div class="entry-row">
+                <span class="entry-description">{{description}}</span>
+                <span class="entry-amount">{{amount}}</span>
+            </div>
+            {{/each}}
+        </div>
+        <div class="subtotal-row">
+            <span class="subtotal-label">Total {{account_title}}</span>
+            <span class="subtotal-amount">{{total_account_amount}}</span>
+        </div>
+    </div>
+    {{/each}}
+
+    <div class="subtotal-row">
+        <span class="subtotal-label">Total Financial Cost</span>
+        <span class="subtotal-amount">{{total_financial_cost}}</span>
+    </div>
+    <div class="subtotal-row">
+        <span class="subtotal-label">Personnel Cost</span>
+        <span class="subtotal-amount">{{personnel_cost}}</span>
+    </div>
+    <div class="subtotal-row">
+        <span class="subtotal-label">Total Personnel Cost</span>
+        <span class="subtotal-amount">{{total_personnel_cost}}</span>
+    </div>
+    <div class="subtotal-row">
+        <span class="subtotal-label">Administrative Cost</span>
+        <span class="subtotal-amount">{{administrative_cost}}</span>
+    </div>
+
+    <div class="total-row">
+        <span class="total-label">Total Expenses</span>
+        <span class="total-amount">{{total_expense}}</span>
+    </div>
+
+    <div class="net-surplus-row">
+        <span class="net-surplus-label">Net Surplus</span>
+        <span class="net-surplus-amount">{{net_surplus}}</span>
+    </div>
+
+    <div class="is-signature-grid">
+        <div class="is-signature-item">
+            <div class="is-signature-line">{{prepared_by}}</div>
+            <p class="is-signature-label">Prepared by:</p>
+        </div>
+        <div class="is-signature-item">
+            <div class="is-signature-line">{{check_by}}</div>
+            <p class="is-signature-label">Checked by:</p>
+        </div>
+        <div class="is-signature-item">
+            <div class="is-signature-line">{{approved_by}}</div>
+            <p class="is-signature-label">Approved by:</p>
+        </div>
+    </div>
+
+    <footer class="is-report-footer">
+        {{#if page_number}}
+        <div class="is-footer-item">
+            <span class="is-footer-label">Page</span>
+            <span class="is-footer-value">{{page_number}}</span>
+        </div>
+        {{/if}}
+        <div class="is-footer-item">
+            <span class="is-footer-label">User ID</span>
+            <span class="is-footer-value">{{user_id}}</span>
+        </div>
+        <div class="is-footer-item">
+            <span class="is-footer-label">Report Date</span>
+            <span class="is-footer-value">{{report_date}}</span>
+        </div>
+        <div class="is-footer-item">
+            <span class="is-footer-label">Time</span>
+            <span class="is-footer-value">{{time}}</span>
+        </div>
+    </footer>
+</div>

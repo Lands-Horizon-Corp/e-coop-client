@@ -6,17 +6,19 @@ import {
     IOrganization,
     useGetAllOrganizationsExplore,
 } from '@/modules/organization'
-import { OrganizationMiniCard } from '@/modules/organization/components/organization-mini-card'
+import OrganizationCardWithToolTip from '@/modules/organization/pages/organization/components/organization-card-with-tool-tip'
 
 import RefreshButton from '@/components/buttons/refresh-button'
 import { CompassIcon, StarIcon, TrendingDownIcon } from '@/components/icons'
+import {
+    ImagePreviewNext,
+    ImagePreviewPrevious,
+} from '@/components/image-preview/image-preview'
 import { Badge } from '@/components/ui/badge'
 import {
     Carousel,
     CarouselContent,
     CarouselItem,
-    CarouselNext,
-    CarouselPrevious,
 } from '@/components/ui/carousel'
 
 import EmptyState from '../components/empty-state'
@@ -63,16 +65,20 @@ const ExploreFeatured = ({
     }, [searchTerm, fuse, workingOrganizations])
 
     return (
-        <div>
+        <div className="">
             <div className={`flex items-center gap-2 my-2 justify-between`}>
                 <div className="flex items-center gap-2">
-                    {mode === 'featured' ? <StarIcon /> : <TrendingDownIcon />}
+                    {mode === 'featured' ? (
+                        <StarIcon className="text-primary" />
+                    ) : (
+                        <TrendingDownIcon className="text-pr" />
+                    )}
                     <h2 className="text-xl font-semibold">
                         {mode === 'featured'
                             ? 'Featured Organizations'
                             : 'Recently Viewed Organizations'}
                     </h2>
-                    <Badge className="ml-2" variant="secondary">
+                    <Badge className="ml-2">
                         {filteredOrganizations.length}
                     </Badge>
                 </div>
@@ -107,32 +113,37 @@ const ExploreFeatured = ({
                     ) : (
                         filteredOrganizations.map((item, index) => (
                             <CarouselItem
-                                className="md:basis-1/2 lg:basis-1/5"
+                                className="md:basis-1/2 pl-2 lg:basis-1/6"
                                 key={index}
-                                onClick={() =>
-                                    handleSelectedOrganization?.(item)
-                                }
                             >
-                                <OrganizationMiniCard
-                                    className="max-h-96 min-h-96"
-                                    onCardClick={() => {
-                                        // setSelectedOrganization(item)
-                                        // orgModal.onOpenChange(true)
+                                <OrganizationCardWithToolTip
+                                    handleOpenModalPreview={(org) => {
+                                        handleSelectedOrganization?.(org)
                                     }}
                                     organization={item}
                                     searchTerm={searchTerm}
-                                    showActions={false}
-                                    showContact={false}
                                 />
                             </CarouselItem>
                         ))
                     )}
                 </CarouselContent>
-                <CarouselPrevious />
-                <CarouselNext />
+                <ExplorePageCardPreviewController />
             </Carousel>
         </div>
     )
 }
 
 export default ExploreFeatured
+
+export const ExplorePageCardPreviewController = () => {
+    return (
+        <div>
+            <ImagePreviewPrevious
+                className={`-left-10 border-0 rounded-none rounded-tl-xs rounded-bl-xs h-full  from-background/20 !opacity-80 to-background bg-gradient-to-r`}
+            />
+            <ImagePreviewNext
+                className={`-right-5 ease-in-out duration-300 h-full px-2 w-[3.5rem] -translate-x-5 rounded-none rounded-tr-xs !opacity-80 rounded-br-xs border-0 !bg-background/50 dark:from-background dark:to-background/0 dark:via-background via-10% dark:bg-gradient-to-l`}
+            />
+        </div>
+    )
+}

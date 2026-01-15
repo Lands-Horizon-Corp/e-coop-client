@@ -20,7 +20,7 @@ import { IBillsAndCoin } from '../../bill-and-coins.types'
 export const billsAndCoinsGlobalSearchTargets: IGlobalSearchTargets<IBillsAndCoin>[] =
     [
         { field: 'name', displayText: 'Name' },
-        { field: 'country_code', displayText: 'Country Code' },
+        { field: 'currency.currency_code', displayText: 'Currency' },
     ]
 
 export interface IBillsAndCoinsTableActionComponentProp {
@@ -72,6 +72,7 @@ const BillsAndCoinsTableColumns = (
             <DataTableColumnHeader {...props} title="Name">
                 <ColumnActions {...props}>
                     <TextFilter<IBillsAndCoin>
+                        defaultMode="contains"
                         displayText="Name"
                         field="name"
                     />

@@ -3,6 +3,7 @@ import { useParams } from '@tanstack/react-router'
 import { orgBannerList } from '@/assets/pre-organization-banner-background'
 import { Branch } from '@/modules/branch'
 import {
+    IOrganization,
     IOrganizationWithPolicies,
     useGetOrganizationWithPoliciesById,
 } from '@/modules/organization'
@@ -41,11 +42,11 @@ const OrganizationDetails = () => {
 }
 
 type OrganizationHeaderProps = {
-    organization?: IOrganizationWithPolicies
+    organization?: IOrganization
     isPending: boolean
 }
 
-const OrganizationHeader = ({
+export const OrganizationHeader = ({
     organization,
     isPending,
 }: OrganizationHeaderProps) => {
@@ -111,7 +112,7 @@ type BranchesSectionProps = {
     organizationId: string
 }
 
-function BranchesSection({ organizationId }: BranchesSectionProps) {
+export const BranchesSection = ({ organizationId }: BranchesSectionProps) => {
     const {
         data: joinableBranches,
         isPending: isPendingBranches,

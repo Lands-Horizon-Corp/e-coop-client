@@ -1,4 +1,4 @@
-import { Dispatch } from 'react'
+import { useState } from 'react'
 
 import {
     Select,
@@ -8,54 +8,25 @@ import {
     SelectValue,
 } from '@/components/ui/select'
 
-import { ExploreView, SortBy } from '../explore.type'
-
 type FiltersToolbarProps = {
-    selectedCategory: string
-    setSelectedCategory: (category: string) => void
-    selectedLocation: string
-    setSelectedLocation: (location: string) => void
     categories: string[]
-    locations: string[]
-    activeView: ExploreView
-    setActiveView: Dispatch<React.SetStateAction<ExploreView>>
-    sortBy: SortBy
-    setSortBy: Dispatch<React.SetStateAction<SortBy>>
+    setSearchTerm: (term: string) => void
 }
 
-const FiltersToolbar = ({
-    selectedCategory,
-    setSelectedCategory,
-    selectedLocation,
-    setSelectedLocation,
-    categories,
-    locations,
-    activeView,
-    sortBy,
-    setSortBy,
-}: FiltersToolbarProps) => {
-    return (
-        <div className="flex items-center gap-3">
-            <Select
-                onValueChange={(value) => setSortBy(value as SortBy)}
-                value={sortBy}
-            >
-                <SelectTrigger className="w-32">
-                    <SelectValue placeholder="Sort By" />
-                </SelectTrigger>
-                <SelectContent>
-                    <SelectItem value="recent">Recent</SelectItem>
-                    <SelectItem value="name">Name</SelectItem>
-                    <SelectItem value="location">Location</SelectItem>
-                </SelectContent>
-            </Select>
+const FiltersToolbar = ({ categories, setSearchTerm }: FiltersToolbarProps) => {
+    const [selectedCategory, setSelectedCategory] = useState('')
 
-            {activeView === 'organizations' && (
+    return (
+        <div className="flex w-full justify-end items-center gap-3">
+            {
                 <Select
-                    onValueChange={setSelectedCategory}
+                    onValueChange={(category) => {
+                        setSelectedCategory(category)
+                        setSearchTerm(category === 'all' ? '' : category)
+                    }}
                     value={selectedCategory}
                 >
-                    <SelectTrigger className="w-40">
+                    <SelectTrigger className="w-">
                         <SelectValue placeholder="Category" />
                     </SelectTrigger>
                     <SelectContent>
@@ -67,26 +38,7 @@ const FiltersToolbar = ({
                         ))}
                     </SelectContent>
                 </Select>
-            )}
-
-            {activeView === 'branches' && (
-                <Select
-                    onValueChange={setSelectedLocation}
-                    value={selectedLocation}
-                >
-                    <SelectTrigger className="w-40">
-                        <SelectValue placeholder="Location" />
-                    </SelectTrigger>
-                    <SelectContent>
-                        <SelectItem value="all">All Locations</SelectItem>
-                        {locations.map((location) => (
-                            <SelectItem key={location} value={location}>
-                                {location}
-                            </SelectItem>
-                        ))}
-                    </SelectContent>
-                </Select>
-            )}
+            }
         </div>
     )
 }

@@ -111,7 +111,7 @@ const TransactionMemberProfile = ({
                                     </DrawerTrigger>
                                     <DrawerContent className="h-full w-full">
                                         <MemberOverallInfo
-                                            className="overflow-y-auto px-5"
+                                            className="overflow-y-auto ecoop-scroll  px-5"
                                             memberProfileId={memberInfo?.id}
                                         />
                                     </DrawerContent>

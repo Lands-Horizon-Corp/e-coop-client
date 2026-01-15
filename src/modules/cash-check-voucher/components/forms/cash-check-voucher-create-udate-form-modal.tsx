@@ -8,6 +8,7 @@ import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
 
 import { cn } from '@/helpers'
 import { withToastCallbacks } from '@/helpers/callback-helper'
+import { toInputDateString } from '@/helpers/date-utils'
 import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
 import {
     CashCheckVoucherSchema,
@@ -23,6 +24,7 @@ import { CurrencyCombobox, currencyFormat } from '@/modules/currency'
 import { IMemberProfile } from '@/modules/member-profile'
 import MemberPicker from '@/modules/member-profile/components/member-picker'
 import { useTransactionBatchStore } from '@/modules/transaction-batch/store/transaction-batch-store'
+import { getTimeMachineValue } from '@/modules/user-organization/user-organization-utils'
 import { useMemberPickerStore } from '@/store/member-picker-store'
 import { useHotkeys } from 'react-hotkeys-hook'
 
@@ -92,6 +94,9 @@ const CashCheckVoucherCreateUpdateForm = ({
         mode: 'onSubmit',
         defaultValues: {
             ...defaultValues,
+            released_date: toInputDateString(
+                defaultValues?.entry_date || getTimeMachineValue()
+            ),
         },
     })
     const CashCheckVoucherTransactionId = form.watch('id') || cashCheckVoucherId

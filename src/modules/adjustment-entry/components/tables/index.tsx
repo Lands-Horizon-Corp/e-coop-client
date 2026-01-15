@@ -2,6 +2,7 @@
 import { useMemo } from 'react'
 
 import { useQueryClient } from '@tanstack/react-query'
+import qs from 'query-string'
 
 import FilterContext from '@/contexts/filter-context/filter-context'
 import { cn } from '@/helpers/tw-utils'
@@ -22,9 +23,12 @@ import DataTablePagination from '@/components/data-table/data-table-pagination'
 import DataTableToolbar, {
     IDataTableToolbarProps,
 } from '@/components/data-table/data-table-toolbar'
+import { TableRowActionStoreProvider } from '@/components/data-table/store/data-table-action-store'
 import { TableProps } from '@/components/data-table/table.type'
 import { useDataTableSorting } from '@/components/data-table/use-datatable-sorting'
-import useDataTableState from '@/components/data-table/use-datatable-state'
+import useDataTableState, {
+    useResolvedColumnOrder,
+} from '@/components/data-table/use-datatable-state'
 
 import useDatableFilterState from '@/hooks/use-filter-state'
 import { usePagination } from '@/hooks/use-pagination'
@@ -38,6 +42,7 @@ import AdjustmentEntryTableColumns, {
 import {
     AdjustmentEntryAction,
     AdjustmentEntryRowContext,
+    AdjustmentEntryTableActionManager,
 } from './row-action-context'
 
 export interface BaseAdjustmentEntryTableProps
@@ -78,6 +83,7 @@ export type TAdjustmentTableProps = BaseAdjustmentEntryTableProps &
     )
 
 const AdjustmentEntryTable = ({
+    persistKey = ['adjustment-entry'],
     className,
     toolbarProps,
     defaultFilter,
@@ -86,11 +92,11 @@ const AdjustmentEntryTable = ({
     onDoubleClick = (row) => {
         row.toggleSelected()
     },
-    actionComponent = AdjustmentEntryAction,
-    RowContextComponent = AdjustmentEntryRowContext,
     mode = 'all',
     currencyId,
     userOrganizationId,
+    actionComponent = AdjustmentEntryAction,
+    RowContextComponent = AdjustmentEntryRowContext,
 }: TAdjustmentTableProps) => {
     const queryClient = useQueryClient()
     const { pagination, setPagination } = usePagination()
@@ -106,19 +112,17 @@ const AdjustmentEntryTable = ({
         [actionComponent]
     )
 
+    const { resolvedColumnOrder, resolvedColumnVisibility, finalKeys } =
+        useResolvedColumnOrder({
+            columns,
+            persistKey,
+        })
+
     // --- Data Table State ---
-    const {
-        getRowIdFn,
-        columnOrder,
-        setColumnOrder,
-        isScrollable,
-        setIsScrollable,
-        columnVisibility,
-        setColumnVisibility,
-        rowSelectionState,
-        createHandleRowSelectionChange,
-    } = useDataTableState<IAdjustmentEntry>({
-        defaultColumnOrder: columns.map((c) => c.id!),
+    const tableState = useDataTableState<IAdjustmentEntry>({
+        key: finalKeys,
+        defaultColumnVisibility: resolvedColumnVisibility,
+        defaultColumnOrder: resolvedColumnOrder,
         onSelectData,
     })
 
@@ -147,7 +151,8 @@ const AdjustmentEntryTable = ({
     })
 
     // --- Row Selection Handler ---
-    const handleRowSelectionChange = createHandleRowSelectionChange(data)
+    const handleRowSelectionChange =
+        tableState.createHandleRowSelectionChange(data)
 
     // --- TanStack Table Instance ---
     const table = useReactTable({
@@ -159,9 +164,9 @@ const AdjustmentEntryTable = ({
         state: {
             sorting: tableSorting,
             pagination,
-            columnOrder,
-            rowSelection: rowSelectionState.rowSelection,
-            columnVisibility,
+            columnOrder: tableState.columnOrder,
+            rowSelection: tableState.rowSelectionState.rowSelection,
+            columnVisibility: tableState.columnVisibility,
         },
         rowCount: pageSize,
         // Server-side control flags
@@ -173,84 +178,98 @@ const AdjustmentEntryTable = ({
         // Other settings
         enableMultiSort: false,
         columnResizeMode: 'onChange',
-        getRowId: getRowIdFn,
+        getRowId: tableState.getRowIdFn,
 
         // Handlers
         onSortingChange: setTableSorting,
         onPaginationChange: setPagination,
-        onColumnOrderChange: setColumnOrder,
-        onColumnVisibilityChange: setColumnVisibility,
+        onColumnOrderChange: tableState.setColumnOrder,
+        onColumnVisibilityChange: tableState.setColumnVisibility,
         onRowSelectionChange: handleRowSelectionChange,
 
         // Models
         getCoreRowModel: getCoreRowModel(),
         getSortedRowModel: getSortedRowModel(),
+        defaultColumn: { minSize: 100, size: 150, maxSize: 800 },
     })
-
+    const exportfilter = qs.stringify(
+        {
+            ...pagination,
+            sort: sortingStateBase64,
+            filter: filterState.finalFilterPayloadBase64,
+        },
+        { skipNull: true }
+    )
     return (
-        <FilterContext.Provider value={filterState}>
-            <div
-                className={cn(
-                    'flex h-full flex-col gap-y-2',
-                    className,
-                    !isScrollable && 'h-fit !max-h-none'
-                )}
-            >
-                <DataTableToolbar
-                    // --- Delete Action Props ---
-                    deleteActionProps={{
-                        onDeleteSuccess: () =>
-                            queryClient.invalidateQueries({
-                                queryKey: ['adjustment-entry', 'paginated'],
-                            }),
-                        onDelete: (selectedData) =>
-                            deleteManyAdjustmentEntry({
-                                ids: selectedData.map((data) => data.id),
-                            }),
-                    }}
-                    // --- Export Action Props (Placeholder) ---
-                    exportActionProps={{
-                        pagination,
-                        isLoading: isPending,
-                        filters: filterState.finalFilterPayload,
-                        disabled: isPending || isRefetching,
-                    }}
-                    // --- Filter Logic Props ---
-                    filterLogicProps={{
-                        filterLogic: filterState.filterLogic,
-                        setFilterLogic: filterState.setFilterLogic,
-                    }}
-                    // --- Global Search Props ---
-                    globalSearchProps={{
-                        defaultMode: 'equal',
-                        targets: adjustmentEntryGlobalSearchTargets,
-                    }}
-                    // --- Refresh Action Props ---
-                    refreshActionProps={{
-                        onClick: () => refetch(),
-                        isLoading: isPending || isRefetching,
-                    }}
-                    // --- Scrollable Props ---
-                    scrollableProps={{ isScrollable, setIsScrollable }}
-                    table={table}
-                    {...toolbarProps}
-                />
+        <TableRowActionStoreProvider>
+            <FilterContext.Provider value={filterState}>
+                <div
+                    className={cn(
+                        'flex h-full flex-col gap-y-2',
+                        className,
+                        !tableState.isScrollable && 'h-fit !max-h-none'
+                    )}
+                >
+                    <DataTableToolbar
+                        // --- Delete Action Props ---
+                        deleteActionProps={{
+                            onDeleteSuccess: () =>
+                                queryClient.invalidateQueries({
+                                    queryKey: ['adjustment-entry', 'paginated'],
+                                }),
+                            onDelete: (selectedData) =>
+                                deleteManyAdjustmentEntry({
+                                    ids: selectedData.map((data) => data.id),
+                                }),
+                        }}
+                        // --- Export Action Props (Placeholder) ---
+                        exportActionProps={{
+                            isLoading: isPending,
+                            filters: exportfilter,
+                            model: 'AdjustmentEntry',
+                            url: 'api/v1/adjustment-entry/search',
+                        }}
+                        // --- Filter Logic Props ---
+                        filterLogicProps={{
+                            filterLogic: filterState.filterLogic,
+                            setFilterLogic: filterState.setFilterLogic,
+                        }}
+                        // --- Global Search Props ---
+                        globalSearchProps={{
+                            defaultMode: 'contains',
+                            targets: adjustmentEntryGlobalSearchTargets,
+                        }}
+                        // --- Refresh Action Props ---
+                        refreshActionProps={{
+                            onClick: () => refetch(),
+                            isLoading: isPending || isRefetching,
+                        }}
+                        // --- Scrollable Props ---
+                        scrollableProps={{
+                            isScrollable: tableState.isScrollable,
+                            setIsScrollable: tableState.setIsScrollable,
+                        }}
+                        table={table}
+                        {...toolbarProps}
+                    />
 
-                <DataTable
-                    className="mb-2"
-                    isScrollable={isScrollable}
-                    isStickyFooter
-                    isStickyHeader
-                    onDoubleClick={onDoubleClick}
-                    onRowClick={onRowClick}
-                    RowContextComponent={RowContextComponent}
-                    setColumnOrder={setColumnOrder}
-                    table={table}
-                />
+                    <DataTable
+                        className="mb-2"
+                        isScrollable={tableState.isScrollable}
+                        isStickyFooter
+                        isStickyHeader
+                        onDoubleClick={onDoubleClick}
+                        onRowClick={onRowClick}
+                        RowContextComponent={RowContextComponent}
+                        setColumnOrder={tableState.setColumnOrder}
+                        table={table}
+                    />
 
-                <DataTablePagination table={table} totalSize={totalSize} />
-            </div>
-        </FilterContext.Provider>
+                    <DataTablePagination table={table} totalSize={totalSize} />
+                </div>
+            </FilterContext.Provider>
+            <AdjustmentEntryTableActionManager />
+        </TableRowActionStoreProvider>
     )
 }
 

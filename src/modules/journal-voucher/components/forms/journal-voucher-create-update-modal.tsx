@@ -8,6 +8,7 @@ import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
 
 import { cn } from '@/helpers'
 import { withToastCallbacks } from '@/helpers/callback-helper'
+import { toInputDateString } from '@/helpers/date-utils'
 import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
 import CompanyCombobox from '@/modules/company/components/combobox'
 import { CurrencyCombobox, currencyFormat } from '@/modules/currency'
@@ -23,6 +24,7 @@ import { JournalVoucherTagsManagerPopover } from '@/modules/journal-voucher-tag/
 import { IMemberProfile } from '@/modules/member-profile'
 import MemberPicker from '@/modules/member-profile/components/member-picker'
 import { useTransactionBatchStore } from '@/modules/transaction-batch/store/transaction-batch-store'
+import { getTimeMachineValue } from '@/modules/user-organization/user-organization-utils'
 import { useMemberPickerStore } from '@/store/member-picker-store'
 import { useHotkeys } from 'react-hotkeys-hook'
 
@@ -35,6 +37,7 @@ import { Form } from '@/components/ui/form'
 import FormFieldWrapper from '@/components/ui/form-field-wrapper'
 import { Input } from '@/components/ui/input'
 import InputDate from '@/components/ui/input-date'
+import { Textarea } from '@/components/ui/textarea'
 
 import { useFormHelper } from '@/hooks/use-form-helper'
 
@@ -88,6 +91,9 @@ const JournalVoucherCreateUpdateForm = ({
         mode: 'onSubmit',
         defaultValues: {
             ...defaultValues,
+            date: toInputDateString(
+                defaultValues?.date || getTimeMachineValue()
+            ),
         },
     })
 
@@ -284,8 +290,24 @@ const JournalVoucherCreateUpdateForm = ({
                                 />
                             )}
                         />
+                        <FormFieldWrapper
+                            className="col-span-2"
+                            control={form.control}
+                            label="Particulars / Description *"
+                            name="description"
+                            render={({ field }) => {
+                                return (
+                                    <div className="relative w-full">
+                                        <Textarea
+                                            className="!text-md pr-12 font-semibold"
+                                            {...field}
+                                        />
+                                    </div>
+                                )
+                            }}
+                        />
                     </div>
-                    <div className="col-span-4 relative grid grid-cols-2 gap-x-2">
+                    <div className="col-span-4 relative grid grid-cols-2 gap-2">
                         <FormFieldWrapper
                             className="relative"
                             control={form.control}
@@ -351,8 +373,36 @@ const JournalVoucherCreateUpdateForm = ({
                                 />
                             )}
                         />
+
+                        <FormFieldWrapper
+                            className="relative"
+                            control={form.control}
+                            description="mm/dd/yyyy"
+                            descriptionClassName="absolute top-0 right-0"
+                            label="Date"
+                            name="date"
+                            render={({ field }) => (
+                                <InputDate
+                                    {...field}
+                                    value={field.value ?? ''}
+                                />
+                            )}
+                        />
+                        <FormFieldWrapper
+                            control={form.control}
+                            label="Reference"
+                            name="reference"
+                            render={({ field }) => (
+                                <Input
+                                    {...field}
+                                    disabled={isDisabled(field.name)}
+                                    id={field.name}
+                                    placeholder="Enter reference"
+                                />
+                            )}
+                        />
                     </div>
-                    <FormFieldWrapper
+                    {/* <FormFieldWrapper
                         control={form.control}
                         label="CV Number"
                         name="cash_voucher_number"
@@ -365,31 +415,7 @@ const JournalVoucherCreateUpdateForm = ({
                                 value={field.value || ''}
                             />
                         )}
-                    />
-                    <FormFieldWrapper
-                        className="relative"
-                        control={form.control}
-                        description="mm/dd/yyyy"
-                        descriptionClassName="absolute top-0 right-0"
-                        label="Date"
-                        name="date"
-                        render={({ field }) => (
-                            <InputDate {...field} value={field.value ?? ''} />
-                        )}
-                    />
-                    <FormFieldWrapper
-                        control={form.control}
-                        label="Reference"
-                        name="reference"
-                        render={({ field }) => (
-                            <Input
-                                {...field}
-                                disabled={isDisabled(field.name)}
-                                id={field.name}
-                                placeholder="Enter reference"
-                            />
-                        )}
-                    />
+                    /> */}
 
                     {defaultMode !== 'create' && (
                         <>
@@ -478,7 +504,7 @@ export const JournalVoucherCreateUpdateFormModal = ({
 
     return (
         <Modal
-            className={cn('!min-w-2xl !max-w-7xl', className)}
+            className={cn('!min-w-2xl !max-w-5xl', className)}
             title={
                 <div>
                     <p className="font-medium">

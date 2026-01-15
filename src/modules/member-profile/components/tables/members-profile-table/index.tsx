@@ -1,9 +1,12 @@
 import { useMemo } from 'react'
 
-import { keepPreviousData, useQueryClient } from '@tanstack/react-query'
+import { keepPreviousData } from '@tanstack/react-query'
+import qs from 'query-string'
+import { toast } from 'sonner'
 
 import FilterContext from '@/contexts/filter-context/filter-context'
 import { cn } from '@/helpers'
+import { IQRMemberProfileDecodedResult } from '@/modules/qr-crypto'
 import {
     getCoreRowModel,
     getSortedRowModel,
@@ -15,16 +18,23 @@ import DataTablePagination from '@/components/data-table/data-table-pagination'
 import DataTableToolbar, {
     IDataTableToolbarProps,
 } from '@/components/data-table/data-table-toolbar'
+import { TableRowActionStoreProvider } from '@/components/data-table/store/data-table-action-store'
 import { TableProps } from '@/components/data-table/table.type'
 import { useDataTableSorting } from '@/components/data-table/use-datatable-sorting'
-import useDataTableState from '@/components/data-table/use-datatable-state'
+import useDataTableState, {
+    useResolvedColumnOrder,
+} from '@/components/data-table/use-datatable-state'
+import { ScanQrIcon } from '@/components/icons'
+import { QrCodeScannerModal } from '@/components/qrcode-scanner'
+import { Button } from '@/components/ui/button'
 
 import useDatableFilterState from '@/hooks/use-filter-state'
+import { useModalState } from '@/hooks/use-modal-state'
 import { usePagination } from '@/hooks/use-pagination'
 
 import {
     IMemberProfile,
-    deleteManyMemberProfiles,
+    // deleteManyMemberProfiles,
     useGetPaginatedMemberProfiles,
 } from '../../..'
 import membersColumns, {
@@ -33,6 +43,7 @@ import membersColumns, {
 } from './columns'
 import MemberProfileAction, {
     MemberProfileRowContext,
+    MemberProfileTableActionManager,
 } from './row-action-context'
 
 // import { MemberProfileRowContext } from './row-action-context'
@@ -53,6 +64,7 @@ export interface MemberProfileTableProps
 }
 
 const MemberProfileTable = ({
+    persistKey = ['member-profile'],
     className,
     toolbarProps,
     defaultFilter,
@@ -64,7 +76,7 @@ const MemberProfileTable = ({
     actionComponent = MemberProfileAction,
     RowContextComponent = MemberProfileRowContext,
 }: MemberProfileTableProps) => {
-    const queryClient = useQueryClient()
+    // const queryClient = useQueryClient()
     const { pagination, setPagination } = usePagination()
     const { sortingStateBase64, tableSorting, setTableSorting } =
         useDataTableSorting()
@@ -77,6 +89,12 @@ const MemberProfileTable = ({
         [actionComponent]
     )
 
+    const { resolvedColumnOrder, resolvedColumnVisibility, finalKeys } =
+        useResolvedColumnOrder({
+            columns,
+            persistKey,
+        })
+
     const {
         getRowIdFn,
         columnOrder,
@@ -88,11 +106,13 @@ const MemberProfileTable = ({
         rowSelectionState,
         createHandleRowSelectionChange,
     } = useDataTableState<IMemberProfile>({
+        key: finalKeys,
         defaultColumnVisibility: {
             isEmailVerified: false,
             isContactVerified: false,
+            ...resolvedColumnVisibility,
         },
-        defaultColumnOrder: columns.map((c) => c.id!),
+        defaultColumnOrder: resolvedColumnOrder,
         onSelectData,
     })
 
@@ -149,73 +169,116 @@ const MemberProfileTable = ({
         onRowSelectionChange: handleRowSelectionChange,
     })
 
+    const exportfilter = qs.stringify(
+        {
+            ...pagination,
+            sort: sortingStateBase64,
+            filter: filterState.finalFilterPayloadBase64,
+        },
+        { skipNull: true }
+    )
     return (
-        <FilterContext.Provider value={filterState}>
-            <div
-                className={cn(
-                    'flex h-full flex-col gap-y-2',
-                    className,
-                    !isScrollable && 'h-fit !max-h-none'
-                )}
+        <TableRowActionStoreProvider<IMemberProfile>>
+            <FilterContext.Provider value={filterState}>
+                <div
+                    className={cn(
+                        'flex h-full flex-col gap-y-2',
+                        className,
+                        !isScrollable && 'h-fit !max-h-none'
+                    )}
+                >
+                    <DataTableToolbar
+                        // deleteActionProps={{
+                        //     onDeleteSuccess: () =>
+                        //         queryClient.invalidateQueries({
+                        //             queryKey: ['member-profile', 'paginated'],
+                        //         }),
+                        //     onDelete: (selectedData) =>
+                        //         deleteManyMemberProfiles({
+                        //             ids: selectedData.map((data) => data.id),
+                        //         }),
+                        // }}
+                        exportActionProps={{
+                            isLoading: isPending,
+                            filters: exportfilter,
+                            model: 'MemberProfile',
+                            url: 'api/v1/member-profile/search',
+                        }}
+                        filterLogicProps={{
+                            filterLogic: filterState.filterLogic,
+                            setFilterLogic: filterState.setFilterLogic,
+                        }}
+                        globalSearchProps={{
+                            defaultMode: 'contains',
+                            targets: memberGlobalSearchTargets,
+                        }}
+                        refreshActionProps={{
+                            onClick: () => refetch(),
+                            isLoading: isPending || isRefetching,
+                        }}
+                        scrollableProps={{ isScrollable, setIsScrollable }}
+                        table={table}
+                        {...toolbarProps}
+                        otherActionLeft={
+                            <MemberQRScannerSearch
+                                onFound={(data) => {
+                                    if (data.type !== 'member-qr') {
+                                        return toast.error(
+                                            'Invalid QR. Please use a valid Member Profile QR'
+                                        )
+                                    }
+                                    filterState.setFilter('full_name', {
+                                        dataType: 'text',
+                                        displayText: 'Full Name',
+                                        mode: 'contains',
+                                        value: data.data.full_name,
+                                    })
+                                }}
+                            />
+                        }
+                    />
+                    <DataTable
+                        className={cn('mb-2', isScrollable && 'flex-1')}
+                        isScrollable={isScrollable}
+                        isStickyFooter
+                        isStickyHeader
+                        onDoubleClick={onDoubleClick}
+                        onRowClick={onRowClick}
+                        RowContextComponent={RowContextComponent}
+                        setColumnOrder={setColumnOrder}
+                        table={table}
+                    />
+                    <DataTablePagination table={table} totalSize={totalSize} />
+                </div>
+                <MemberProfileTableActionManager />
+            </FilterContext.Provider>
+        </TableRowActionStoreProvider>
+    )
+}
+
+const MemberQRScannerSearch = ({
+    onFound,
+}: {
+    onFound: (QRDecoded: IQRMemberProfileDecodedResult) => void
+}) => {
+    const modalState = useModalState()
+
+    return (
+        <>
+            <Button
+                className=""
+                onClick={() => modalState.onOpenChange(true)}
+                size="icon-sm"
             >
-                <DataTableToolbar
-                    deleteActionProps={{
-                        onDeleteSuccess: () =>
-                            queryClient.invalidateQueries({
-                                queryKey: ['member-profile', 'paginated'],
-                            }),
-                        onDelete: (selectedData) =>
-                            deleteManyMemberProfiles({
-                                ids: selectedData.map((data) => data.id),
-                            }),
-                    }}
-                    exportActionProps={{
-                        pagination,
-                        isLoading: isPending,
-                        filters: filterState.finalFilterPayload,
-                        disabled: isPending || isRefetching,
-                        // exportAll: MemberProfileService.exportAll,
-                        // exportAllFiltered:
-                        //     MemberProfileService.exportAllFiltered,
-                        // exportCurrentPage: (ids) =>
-                        //     MemberProfileService.exportSelected(
-                        //         ids.map((data) => data.id)
-                        //     ),
-                        // exportSelected: (ids) =>
-                        //     MemberProfileService.exportSelected(
-                        //         ids.map((data) => data.id)
-                        //     ),
-                    }}
-                    filterLogicProps={{
-                        filterLogic: filterState.filterLogic,
-                        setFilterLogic: filterState.setFilterLogic,
-                    }}
-                    globalSearchProps={{
-                        defaultMode: 'equal',
-                        targets: memberGlobalSearchTargets,
-                    }}
-                    refreshActionProps={{
-                        onClick: () => refetch(),
-                        isLoading: isPending || isRefetching,
-                    }}
-                    scrollableProps={{ isScrollable, setIsScrollable }}
-                    table={table}
-                    {...toolbarProps}
-                />
-                <DataTable
-                    className={cn('mb-2', isScrollable && 'flex-1')}
-                    isScrollable={isScrollable}
-                    isStickyFooter
-                    isStickyHeader
-                    onDoubleClick={onDoubleClick}
-                    onRowClick={onRowClick}
-                    RowContextComponent={RowContextComponent}
-                    setColumnOrder={setColumnOrder}
-                    table={table}
-                />
-                <DataTablePagination table={table} totalSize={totalSize} />
-            </div>
-        </FilterContext.Provider>
+                <ScanQrIcon />
+            </Button>
+            <QrCodeScannerModal<IQRMemberProfileDecodedResult, Error>
+                {...modalState}
+                qrScannerProps={{
+                    onSuccessDecode: onFound,
+                }}
+            />
+        </>
     )
 }
 

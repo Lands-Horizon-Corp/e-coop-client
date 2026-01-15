@@ -10,7 +10,6 @@ import {
     switchOrganization,
     useGetCurrentUserOrganizations,
 } from '@/modules/user-organization'
-import UserAvatar from '@/modules/user/components/user-avatar'
 import useConfirmModalStore from '@/store/confirm-modal-store'
 
 import {
@@ -98,6 +97,7 @@ const NavProfileMenu = () => {
                     // user_organization_id: nextUserOrg.id,
                     organization_id: nextUserOrg.organization.id,
                 },
+                reloadDocument: true,
             })
 
             queryClient.invalidateQueries()
@@ -112,18 +112,17 @@ const NavProfileMenu = () => {
         <Popover modal>
             <PopoverTrigger asChild>
                 <Button
-                    className="rounded-full p-0.5"
-                    size="icon"
-                    variant="outline"
+                    className="rounded-full border-1 hover:border-1 hover:border-primary border-transparent size-fit"
+                    hoverVariant="nostyle"
+                    size="icon-sm"
+                    variant="outline-ghost"
                 >
                     {isPending ? (
                         <LoadingSpinner />
                     ) : (
-                        <UserAvatar
-                            className="size-full capitalize"
-                            fallback={user.user_name.charAt(0) ?? '-'}
-                            fallbackClassName="bg-transparent"
-                            src={user.media?.download_url ?? ''}
+                        <ImageDisplay
+                            className="p-0"
+                            src={user.media?.download_url}
                         />
                     )}
                 </Button>

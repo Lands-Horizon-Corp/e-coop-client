@@ -22,8 +22,8 @@ export const memberCenterHistoryGlobalSearchTargets: IGlobalSearchTargets<IMembe
 
 const memberCenterHistoryColumns = (): ColumnDef<IMemberCenterHistory>[] => [
     {
-        id: 'memberProfileId',
-        accessorKey: 'memberCenter.name',
+        id: 'member_center.name',
+        accessorKey: 'member_center.name',
         header: (props) => (
             <DataTableColumnHeader {...props} title="Member Center">
                 <ColumnActions {...props}>
@@ -40,8 +40,8 @@ const memberCenterHistoryColumns = (): ColumnDef<IMemberCenterHistory>[] => [
         enableResizing: false,
     },
     {
-        id: 'memberCenterId',
-        accessorKey: 'memberCenterId',
+        id: 'member_center_id',
+        accessorKey: 'member_center_id',
         header: (props) => (
             <DataTableColumnHeader {...props} title="Description">
                 <ColumnActions {...props}>

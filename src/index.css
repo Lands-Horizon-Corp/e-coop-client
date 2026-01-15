@@ -445,20 +445,190 @@ body[data-scroll-locked] {
     }
 }
 
-/* Custom text-destructive utility class */
-.text-destructive {
-    color: oklch(var(--destructive));
+.r1 {
+    @apply border-1 border-red-500;
 }
-/* text-editor.css */
-/* .text-editor-content {
-    flex: 1;
-    min-height: 0;
-    height: 100%;
+.g1 {
+    @apply border-1 border-green-500;
 }
 
-.text-editor-content .ProseMirror {
-    height: 100%;
-    overflow-y: auto;
-    outline: none;
-    padding: 12px;
-} */
+.v1 {
+    @apply border-1 border-violet-500;
+}
+
+.flex-center {
+    @apply flex w-full items-center justify-center;
+}
+@keyframes scroll-left {
+    0% {
+        transform: translateX(0);
+    }
+    100% {
+        transform: translateX(-50%);
+    }
+}
+
+@keyframes scroll-right {
+    0% {
+        transform: translateX(0);
+    }
+    100% {
+        transform: translateX(50%);
+    }
+}
+
+.animate-scroll-left {
+    animation: scroll-left 15s linear infinite;
+}
+
+.animate-scroll-right {
+    animation: scroll-right 15s linear infinite;
+}
+
+@keyframes scroll {
+    0% {
+        transform: translateX(0);
+    }
+    100% {
+        transform: translateX(-50%);
+    }
+}
+
+.animate-scroll {
+    animation: scroll 10s linear infinite;
+}
+
+@keyframes electric-flow {
+    0% {
+        stroke-dashoffset: 20;
+    }
+    100% {
+        stroke-dashoffset: 0;
+    }
+}
+
+@keyframes electric-particle {
+    0% {
+        opacity: 0;
+        transform: scale(0.5);
+    }
+    10% {
+        opacity: 1;
+        transform: scale(1);
+    }
+    90% {
+        opacity: 1;
+        transform: scale(1);
+    }
+    100% {
+        opacity: 0;
+        transform: scale(0.5);
+    }
+}
+
+.animate-electric-flow {
+    animation: electric-flow linear infinite;
+}
+
+.animate-electric-particle {
+    animation: electric-particle linear infinite;
+}
+@keyframes code-slide-up {
+    0% {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    20% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+    80% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+    100% {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+}
+
+.animate-code-slide {
+    animation: code-slide-up 3s ease-in-out infinite;
+}
+
+.animate-code-slide-delay {
+    animation: code-slide-up 3s ease-in-out infinite;
+    animation-delay: 1.5s;
+}
+
+@keyframes scroll-up {
+    0% {
+        transform: translateY(0);
+    }
+    100% {
+        transform: translateY(-50%);
+    }
+}
+
+@keyframes scroll-down {
+    0% {
+        transform: translateY(0);
+    }
+    100% {
+        transform: translateY(50%);
+    }
+}
+
+.animate-scroll-up {
+    animation: scroll-up 15s linear infinite;
+}
+
+.animate-scroll-down {
+    animation: scroll-down 15s linear infinite;
+}
+
+/* Vertical scroll on hover only */
+.animate-scroll-up-hover {
+    animation-play-state: paused;
+}
+
+.group:hover .animate-scroll-up-hover {
+    animation: scroll-up 15s linear infinite;
+}
+
+.animate-scroll-down-hover {
+    animation-play-state: paused;
+}
+
+.group:hover .animate-scroll-down-hover {
+    animation: scroll-down 15s linear infinite;
+}
+
+/* adding alert button animation with pulsing glow effect */
+/* Updated pulse-alert animation to include expanding ring ripple effect */
+@keyframes pulse-alert {
+    0% {
+        opacity: 1;
+        box-shadow:
+            0 0 0 0 rgba(239, 68, 68, 0.7),
+            0 0 20px 4px rgba(239, 68, 68, 0.5);
+    }
+    50% {
+        opacity: 0.9;
+        box-shadow:
+            0 0 0 10px rgba(239, 68, 68, 0),
+            0 0 30px 8px rgba(239, 68, 68, 0.3);
+    }
+    100% {
+        opacity: 1;
+        box-shadow:
+            0 0 0 0 rgba(239, 68, 68, 0),
+            0 0 20px 4px rgba(239, 68, 68, 0.5);
+    }
+}
+
+@layer utilities {
+    .animate-pulse-alert {
+        animation: pulse-alert 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+    }
+}

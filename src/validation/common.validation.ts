@@ -11,12 +11,12 @@ import {
 import { sanitizeNumberInput } from '@/helpers/common-helper'
 
 export const entityIdSchema = z.uuidv4()
-export const EntityIdSchema = (fieldName?: string) =>
-    z.uuidv4({ error: `${fieldName ? fieldName : 'Field'} is required` })
+export const EntityIdSchema = (fieldName: string = 'Field') =>
+    z.uuidv4({ error: `${fieldName} is required` })
 
-export const descriptionSchema = z
-    .string({ error: 'Description is required' })
-    .min(1)
+export const descriptionSchema = z.coerce.string({
+    error: 'Description is required',
+})
 
 export const organizationBranchIdsSchema = z.object({
     organization_id: entityIdSchema.optional(),
@@ -37,10 +37,7 @@ export const mediaSchema = z.object({
     deleted_at: z.string().optional(),
 })
 
-export const emailSchema = z
-    .string()
-    .min(1, 'Email is required')
-    .email('Invalid email')
+export const emailSchema = z.email('Invalid email address')
 
 export const userNameSchema = z.string().min(1, 'Username is required')
 
@@ -133,8 +130,8 @@ export const amount = z.preprocess(
 )
 
 export const PercentageSchema = z.coerce
-    .number()
+    .number('Must be valid percentage')
     .min(0, 'Minimum 0 %')
     .max(100, 'Max is 100 %')
 
-export const DaySchema = z.coerce.number().int().nonnegative()
+export const DaySchema = z.coerce.number('Must be a number').int().nonnegative()

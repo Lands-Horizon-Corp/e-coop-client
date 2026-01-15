@@ -153,12 +153,12 @@ const MemberProfileSettings = ({
                 </>
             )}
             <Tabs
-                className="flex w-full gap-x-4"
+                className="flex w-full flex-row gap-x-4"
                 onValueChange={handleChange}
                 value={value}
             >
                 <ScrollArea>
-                    <TabsList className="border-bx mb-3 h-auto min-w-full flex-col justify-start gap-x-2 gap-y-1 rounded-none bg-transparent px-0 py-1 text-foreground">
+                    <TabsList className="border-bx mb-3 h-auto flex-col justify-start gap-x-2 gap-y-1 rounded-none bg-transparent px-0 py-1 text-foreground">
                         {SettingsTabs.map((tab) => (
                             <TabsTrigger
                                 className="dara-[state=active]:border relative w-full justify-start rounded-md from-primary/20 to-transparent text-muted-foreground after:absolute after:inset-y-0 after:left-0 after:w-0.5 after:content-[''] hover:text-foreground data-[state=active]:bg-secondary data-[state=active]:bg-gradient-to-r data-[state=active]:shadow-none data-[state=active]:after:bg-primary dark:bg-transparent"

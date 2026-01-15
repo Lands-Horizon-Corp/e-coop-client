@@ -163,7 +163,7 @@ const TagTemplateTable = ({
                         setFilterLogic: filterState.setFilterLogic,
                     }}
                     globalSearchProps={{
-                        defaultMode: 'equal',
+                        defaultMode: 'contains',
                         targets: tagTemplateGlobalSearchTargets,
                     }}
                     refreshActionProps={{

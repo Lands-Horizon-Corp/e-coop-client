@@ -4,7 +4,7 @@ import { Card, CardContent } from '@/components/ui/card'
 
 interface EmptyBranchesStateProps {
     onCreateBranch: () => void
-    isSeeding: boolean
+    isSeeding?: boolean
 }
 
 export const EmptyBranchesState = ({

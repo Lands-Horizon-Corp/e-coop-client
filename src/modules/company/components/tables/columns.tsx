@@ -67,6 +67,7 @@ const CompanyTableColumns = (
             <DataTableColumnHeader {...props} title="Company">
                 <ColumnActions {...props}>
                     <TextFilter<ICompany>
+                        defaultMode="contains"
                         displayText="Company Name"
                         field="name"
                     />
@@ -75,7 +76,7 @@ const CompanyTableColumns = (
         ),
         cell: ({
             row: {
-                original: { name, media, description },
+                original: { name, media },
             },
         }) => (
             <div className="flex min-w-0 items-center gap-3">
@@ -88,9 +89,6 @@ const CompanyTableColumns = (
                 <div className="flex min-w-0 flex-col">
                     <span className="truncate font-semibold">
                         {name || '-'}
-                    </span>
-                    <span className="truncate text-xs text-muted-foreground/70">
-                        {description || '-'}
                     </span>
                 </div>
             </div>
@@ -109,6 +107,7 @@ const CompanyTableColumns = (
             <DataTableColumnHeader {...props} title="Description">
                 <ColumnActions {...props}>
                     <TextFilter<ICompany>
+                        defaultMode="contains"
                         displayText="Description"
                         field="description"
                     />

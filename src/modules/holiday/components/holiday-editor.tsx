@@ -306,6 +306,9 @@ const HolidayEditor = ({ className }: Props) => {
                         holiday={holiday}
                         isGhost={false}
                         key={holiday.id}
+                        onSuccess={(data) => {
+                            setYear(new Date(data.entry_date).getFullYear())
+                        }}
                     />
                 ))}{' '}
                 {templateHolidays.length > 0 &&
@@ -407,12 +410,25 @@ const HolidayItem = ({
     holiday,
     className,
     isGhost = false,
-}: { holiday: IHoliday; isGhost: boolean } & IClassProps) => {
+    onSuccess,
+}: {
+    holiday: IHoliday
+    isGhost: boolean
+    onSuccess?: (holiday: IHoliday) => void
+} & IClassProps) => {
     const { onOpen: onOpenConfirm } = useConfirmModalStore()
     const editModalState = useModalState()
     const queryClient = useQueryClient()
 
-    const deleteHolidayMutation = useDeleteHolidayById()
+    const deleteHolidayMutation = useDeleteHolidayById({
+        options: {
+            onSuccess: () => {
+                queryClient.invalidateQueries({
+                    queryKey: [holidayBaseKey, 'available-years'],
+                })
+            },
+        },
+    })
 
     const handleDelete = () => {
         onOpenConfirm({
@@ -448,12 +464,15 @@ const HolidayItem = ({
                 formProps={{
                     holidayId: holiday.id,
                     defaultValues: holiday,
+                    onSuccess: (data) => {
+                        onSuccess?.(data)
+                    },
                 }}
                 title="Edit Holiday"
             />
             <CurrencyBadge
                 currency={holiday.currency}
-                displayFormat="country"
+                displayFormat="code"
                 size="sm"
             />
             <div

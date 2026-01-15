@@ -4,9 +4,14 @@ import { Row } from '@tanstack/react-table'
 
 import RowActionsGroup from '@/components/data-table/data-table-row-actions'
 import DataTableRowContext from '@/components/data-table/data-table-row-context'
+import { useTableRowActionStore } from '@/components/data-table/store/data-table-action-store'
 
 import { IDisbursementTransaction } from '../../disbursement-transaction.types'
 import { IDisbursementTransactionTableActionComponentProp } from './columns'
+
+export type DisbursementTransactionActionType = 'edit' | 'delete'
+
+export type DisbursementTransactionActionExtra = Record<string, never>
 
 interface UseDisbursementTransactionActionsProps {
     row: Row<IDisbursementTransaction>
@@ -17,10 +22,25 @@ const useDisbursementTransactionActions = ({
     row,
 }: UseDisbursementTransactionActionsProps) => {
     const disbursementTransaction = row.original
+    const { open } = useTableRowActionStore<
+        IDisbursementTransaction,
+        DisbursementTransactionActionType,
+        DisbursementTransactionActionExtra
+    >()
 
-    const handleEdit = () => {}
+    const handleEdit = () => {
+        open('edit', {
+            id: disbursementTransaction.id,
+            defaultValues: disbursementTransaction,
+        })
+    }
 
-    const handleDelete = () => {}
+    const handleDelete = () => {
+        open('delete', {
+            id: disbursementTransaction.id,
+            defaultValues: disbursementTransaction,
+        })
+    }
 
     return {
         disbursementTransaction,
@@ -77,6 +97,10 @@ export const DisbursementTransactionRowContext = ({
             <DataTableRowContext row={row}>{children}</DataTableRowContext>
         </>
     )
+}
+
+export const DisbursementTransactionTableActionManager = () => {
+    return null
 }
 
 export default DisbursementTransactionAction

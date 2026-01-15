@@ -1,14 +1,11 @@
-import { useState } from 'react'
-
 import { useForm } from 'react-hook-form'
+import { toast } from 'sonner'
 
 import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
 
 import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
 import { cn } from '@/helpers/tw-utils'
 import {
-    AccountTypeEnum,
-    ComputationTypeEnum,
     IAccount,
     IAccountRequest,
     IAccountRequestSchema,
@@ -34,6 +31,7 @@ import AccountContentForm from './account-content-form'
 import AccountHeaderForm, {
     AccountGlSourceVisibility,
 } from './account-header-form'
+import LoanConnectAccountSection from './sections/loan-connect-account-section'
 
 export interface IAccountCreateUpdateFormProps
     extends IClassProps,
@@ -44,16 +42,12 @@ export interface IAccountCreateUpdateFormProps
 const AccountCreateUpdateForm = ({
     className,
     accountId,
+    autoSave = false,
     ...formProps
 }: IAccountCreateUpdateFormProps) => {
     const { currentAuth } = useAuthUserWithOrgBranch()
     const organizationId = currentAuth.user_organization.organization_id
     const branchId = currentAuth.user_organization.branch_id
-
-    const [selectedAccountType, setSelectedAccountType] =
-        useState<AccountTypeEnum>(
-            formProps.defaultValues?.type || AccountTypeEnum.Other
-        )
 
     const form = useForm<TAccountFormValues>({
         resolver: standardSchemaResolver(IAccountRequestSchema),
@@ -70,7 +64,7 @@ const AccountCreateUpdateForm = ({
             compassion_fund: false,
             compassion_fund_amount: 0,
             icon: 'Money Bag',
-            computation_type: ComputationTypeEnum.Straight,
+            type: 'Other',
             currency_id:
                 currentAuth.user_organization.branch.branch_setting.currency_id,
             ...formProps.defaultValues,
@@ -84,14 +78,19 @@ const AccountCreateUpdateForm = ({
     })
 
     const updateMutation = useUpdateById({
-        options: { onSuccess: formProps.onSuccess },
+        options: {
+            onSuccess: (newData) => {
+                formProps.onSuccess?.(newData)
+                form.reset(newData as unknown as IAccountRequest)
+            },
+        },
     })
 
     const { formRef, handleFocusError, isDisabled, firstError } =
         useFormHelper<TAccountFormValues>({
             form,
             ...formProps,
-            autoSave: accountId !== undefined,
+            autoSave,
         })
 
     const onSubmit = form.handleSubmit((data: TAccountFormValues) => {
@@ -101,9 +100,20 @@ const AccountCreateUpdateForm = ({
             ...data,
         }
         if (accountId) {
-            updateMutation.mutate({ id: accountId, payload: request })
+            toast.promise(
+                updateMutation.mutateAsync({ id: accountId, payload: request }),
+                {
+                    loading: 'Updating account...',
+                    success: 'Account updated successfully!',
+                    error: 'Failed to update account.',
+                }
+            )
         } else {
-            createMutation.mutate(request)
+            toast.promise(createMutation.mutateAsync(request), {
+                loading: 'Creating account...',
+                success: 'Account created successfully!',
+                error: 'Failed to create account.',
+            })
         }
     }, handleFocusError)
 
@@ -124,8 +134,14 @@ const AccountCreateUpdateForm = ({
                 <div className="absolute top-4 inline-flex space-x-2 right-10">
                     {accountId && (
                         <>
-                            {' '}
-                            <AccountHistorySheet accountId={accountId} />
+                            <AccountHistorySheet
+                                accountId={accountId}
+                                onRestore={(restoredAccount) =>
+                                    form.reset(
+                                        restoredAccount as unknown as IAccountRequest
+                                    )
+                                }
+                            />
                             <AccountTagsManagerPopover
                                 accountId={accountId}
                                 size="sm"
@@ -145,12 +161,13 @@ const AccountCreateUpdateForm = ({
                     isDisabled={isDisabled}
                     isReadOnly={formProps.readOnly}
                 />
-                <AccountContentForm
-                    form={form}
-                    isDisabled={isDisabled}
-                    selectedAccountType={selectedAccountType}
-                    setSelectedAccountType={setSelectedAccountType}
-                />
+                <div className="flex gap-x-2">
+                    <AccountContentForm form={form} isDisabled={isDisabled} />
+                    <LoanConnectAccountSection
+                        className="my-2 w-[320px] shrink-0 max-w-[320px]"
+                        form={form}
+                    />
+                </div>
                 {!formProps.readOnly && (
                     <div className="space-y-2 sticky bottom-0">
                         <div className="flex items-center justify-end gap-x-2">
@@ -202,7 +219,7 @@ export const AccountCreateUpdateFormModal = ({
 }) => {
     return (
         <Modal
-            className={cn('!max-w-[95vw]', className)}
+            className={cn('!max-w-[99vw] bg-popover', className)}
             description={description}
             title={title}
             {...props}

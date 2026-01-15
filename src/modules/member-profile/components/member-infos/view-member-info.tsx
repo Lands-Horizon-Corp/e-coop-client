@@ -7,12 +7,14 @@ import { IconType } from 'react-icons/lib'
 
 import {
     BankIcon,
+    CompressedFileFillIcon,
     CreditCardIcon,
     FolderFillIcon,
     UserCogIcon,
     UserIcon,
     UserPlusIcon,
     UserTagIcon,
+    Users3FillIcon,
 } from '@/components/icons'
 import Modal, { IModalProps } from '@/components/modals/modal'
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area'
@@ -25,13 +27,15 @@ import { IClassProps, TEntityId } from '@/types'
 import { IMemberProfile, useGetMemberProfileById } from '../..'
 import MemberCloseAccountBanner from './banners/member-closed-account-banner'
 import MemberInfoBanner from './banners/member-info-banner'
+import MemberFileArchiveDisplay from './displays/member-file-archives-display'
 import MemberAccountsLoans from './member-accounts-loans'
-import MemberFinancialInfo from './member-financial-info'
+import MemberComakers from './member-comakers'
+import MemberFinancials from './member-financial-info'
 import MemberMembershipInfo from './member-general-membership-info'
 import MemberGovernmentBenefits from './member-government-benefits-info'
 import MemberMediasInfo from './member-medias-info'
 import MemberPersonalInfo from './member-personal-info'
-import RecruitedMembers from './recruited-members'
+import MemberRecruits from './recruited-members'
 
 interface MemberOverallInfoProps {
     memberProfileId: TEntityId
@@ -71,6 +75,13 @@ const memberInfoTabs: {
         Component: (props) => <MemberPersonalInfo {...props} />,
     },
     {
+        value: 'comakers',
+        title: 'Comakers',
+        Icon: Users3FillIcon,
+        Component: (props) => <MemberComakers {...props} />,
+    },
+
+    {
         value: 'government-benefits',
         title: 'Government Benefits',
         Icon: UserCogIcon,
@@ -78,21 +89,27 @@ const memberInfoTabs: {
     },
     {
         value: 'medias',
-        title: "Member Media's",
+        title: 'Files',
         Icon: FolderFillIcon,
         Component: (props) => <MemberMediasInfo {...props} />,
+    },
+    {
+        value: 'archives',
+        title: 'Archives',
+        Icon: CompressedFileFillIcon,
+        Component: (props) => <MemberFileArchiveDisplay {...props} />,
     },
     {
         value: 'financial',
         title: 'Financial',
         Icon: CreditCardIcon,
-        Component: (props) => <MemberFinancialInfo {...props} />,
+        Component: (props) => <MemberFinancials {...props} />,
     },
     {
         value: 'recruited-members',
         title: 'Recruited Members',
         Icon: UserPlusIcon,
-        Component: (props) => <RecruitedMembers {...props} />,
+        Component: (props) => <MemberRecruits {...props} />,
     },
 ]
 
@@ -169,6 +186,28 @@ const MemberOverallInfo = ({
     )
 }
 
+export const SectionHeader = ({
+    icon: Icon,
+    title,
+    subtitle,
+}: {
+    icon: IconType
+    title: string
+    subtitle?: string
+}) => (
+    <div className="flex items-center gap-3 mb-4">
+        <div className="p-2 rounded-lg bg-primary/10">
+            <Icon className="size-4 text-primary" />
+        </div>
+        <div>
+            <h3 className="font-semibold text-foreground">{title}</h3>
+            {subtitle && (
+                <p className="text-xs text-muted-foreground">{subtitle}</p>
+            )}
+        </div>
+    </div>
+)
+
 export default MemberOverallInfo
 
 export const MemberOverallInfoModal = ({
@@ -179,7 +218,7 @@ export const MemberOverallInfoModal = ({
     return (
         <Modal
             {...props}
-            className={cn('!max-w-[90vw] p-3', className)}
+            className={cn('!max-w-[90vw] px-6', className)}
             closeButtonClassName="top-1.5 right-1.5"
             descriptionClassName="hidden"
             titleClassName="hidden"

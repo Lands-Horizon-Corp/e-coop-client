@@ -24,7 +24,7 @@
         "fmt": "eslint . --fix && prettier . -w",
         "build": "tsc -b && vite build",
         "vc": "eslint . && prettier . -c && vitest run && tsc -b --verbose && vite build",
-        "dp": "bun run fmt && bun run vc",
+        "dick": "bun run fmt && bun run vc",
         "gen-mod": "bunx plop module-gen",
         "unused": "knip"
     },
@@ -111,7 +111,7 @@
         "jsdom": "^27.0.0",
         "leaflet": "^1.9.4",
         "lodash-es": "^4.17.21",
-        "lucide-react": "^0.544.0",
+        "lucide-react": "^0.554.0",
         "minimatch": "^10.0.3",
         "motion": "^12.23.24",
         "nats.ws": "^1.30.3",

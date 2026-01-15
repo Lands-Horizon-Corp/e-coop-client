@@ -12,15 +12,22 @@ import {
 
 import { TAPIQueryOptions, TEntityId } from '@/types'
 
-import { IAmortizationSchedule } from '../amortization'
+import { IComakerMemberProfile } from '../comaker-member-profile'
+import { ILoanGuide } from '../loan-guide'
+// import { IAmortizationSchedule } from '../amortization'
 import type {
+    IAllMembersLoanSummaryResponse,
+    ILoanAmortizationSchedules,
+    ILoanEditTransactionRequest,
+    // ILoanPaymentResponse,
     ILoanTransaction,
+    ILoanTransactionAdjustmentRequest,
     ILoanTransactionPaginated,
-    ILoanTransactionPayableAccounts,
     ILoanTransactionPrintRequest,
     ILoanTransactionRequest,
     ILoanTransactionSignatureRequest,
     ILoanTransactionSuggestedRequest,
+    ILoanTransactionSummary,
     TLoanMode,
 } from '../loan-transaction'
 
@@ -134,23 +141,43 @@ export const useGetAllLoanTransaction = ({
 
             if (mode === 'member-profile') {
                 url = `${loanTransactionAPIRoute}/member-profile/${memberProfileId}`
-            }
-
-            if (mode === 'member-profile-loan-account') {
+            } else if (mode === 'member-profile-loan-account') {
                 url = `${loanTransactionAPIRoute}/member-profile/${memberProfileId}/account/${loanAccountId}`
-            }
-
-            if (mode) {
-                url = `${loanTransactionAPIRoute}/${mode}`
-            }
-            if (mode === 'release-today') {
+            } else if (mode === 'draft') {
+                url = `${loanTransactionAPIRoute}/draft`
+            } else if (mode === 'printed') {
+                url = `${loanTransactionAPIRoute}/printed`
+            } else if (mode === 'approved') {
+                url = `${loanTransactionAPIRoute}/approved`
+            } else if (mode === 'release-today') {
                 url = `${loanTransactionAPIRoute}/released/today`
             }
-
             return getAllLoanTransaction({ url, query })
         },
     })
 }
+
+//
+
+// export const useLoanPaymentSchedule = ({
+//     loanTransactionId,
+//     options,
+// }: {
+//     options?: HookQueryOptions<ILoanPaymentResponse, Error>
+//     loanTransactionId: TEntityId
+// }) => {
+//     return useQuery<ILoanPaymentResponse, Error>({
+//         ...options,
+//         queryKey: [loanTransactionBaseKey, loanTransactionId, 'payment'],
+//         queryFn: async () => {
+//             const response = await API.get<ILoanPaymentResponse>(
+//                 `${loanTransactionAPIRoute}/${loanTransactionId}/payment`
+//             )
+
+//             return response.data
+//         },
+//     })
+// }
 
 // custom hooks can go here
 
@@ -197,46 +224,22 @@ export const useGetPaginatedLoanTransaction = ({
     })
 }
 
-// GET LOAN AMORT
+// GET LOAN AMORTIZATION SCHEDULES
 export const useGetLoanAmortization = ({
     loanTransactionId,
     options,
 }: {
     loanTransactionId: TEntityId
-    options?: HookQueryOptions<IAmortizationSchedule, Error>
+    options?: HookQueryOptions<ILoanAmortizationSchedules, Error>
 }) => {
-    return useQuery<IAmortizationSchedule, Error>({
+    return useQuery<ILoanAmortizationSchedules, Error>({
         ...options,
         queryKey: [loanTransactionBaseKey, loanTransactionId, 'amortization'],
         queryFn: async () => {
-            const response = await API.get<IAmortizationSchedule>(
-                `${loanTransactionAPIRoute}/${loanTransactionId}/amortization-schedule`
+            const response = await API.get<ILoanAmortizationSchedules>(
+                `${loanTransactionAPIRoute}/${loanTransactionId}/schedule`
             )
 
-            return response.data
-        },
-    })
-}
-
-// GET Loan Transaction Payable Accounts
-export const useGetLoanTransactionPayableAccounts = ({
-    loanTransactionId,
-    options,
-}: {
-    loanTransactionId: TEntityId
-    options?: HookQueryOptions<ILoanTransactionPayableAccounts, Error>
-}) => {
-    return useQuery<ILoanTransactionPayableAccounts, Error>({
-        ...options,
-        queryKey: [
-            loanTransactionBaseKey,
-            loanTransactionId,
-            'payable-accounts',
-        ],
-        queryFn: async () => {
-            const response = await API.get<ILoanTransactionPayableAccounts>(
-                `${loanTransactionAPIRoute}/${loanTransactionId}/payable-accounts`
-            )
             return response.data
         },
     })
@@ -368,12 +371,215 @@ export const useLoanTransactionSuggestedAmortization = createMutationFactory<
     ILoanTransactionSuggestedRequest
 >({
     mutationFn: async (payload) => {
-        const response = await API.post<
-            ILoanTransactionSuggestedRequest,
-            { terms: number }
-        >(`${loanTransactionAPIRoute}/suggested`, payload)
+        const response = await API.post<typeof payload, { terms: number }>(
+            `${loanTransactionAPIRoute}/suggested`,
+            payload
+        )
         return response.data
     },
 })
+
+// PROCESSING
+
+// loan processing all
+export const useProcessAllLoanTransaction = createMutationFactory<
+    void,
+    Error,
+    void
+>({
+    mutationFn: async () => {
+        const response = await API.post<void, void>(
+            `${loanTransactionAPIRoute}/process`
+        )
+        return response.data
+    },
+})
+
+// loan processing specific loan transaction
+export const useProcessLoanTransactionById = createMutationFactory<
+    void,
+    Error,
+    TEntityId
+>({
+    mutationFn: async (loanTransactionId) => {
+        const response = await API.post<void, void>(
+            `${loanTransactionAPIRoute}/${loanTransactionId}/process`
+        )
+        return response.data
+    },
+    invalidationFn: ({ queryClient, variables }) => {
+        queryClient.invalidateQueries({
+            queryKey: [loanTransactionBaseKey, variables],
+        })
+        queryClient.invalidateQueries({
+            queryKey: [loanTransactionBaseKey, variables, 'payment'],
+        })
+        queryClient.invalidateQueries({
+            queryKey: [loanTransactionBaseKey, 'paginated'],
+        })
+    },
+})
+
+// loan transaction adjustment
+export const useAdjustmentLoanTransaction = createMutationFactory<
+    void,
+    Error,
+    ILoanTransactionAdjustmentRequest
+>({
+    mutationFn: async (payload) => {
+        const response = await API.post<typeof payload, void>(
+            `${loanTransactionAPIRoute}/adjustment`,
+            payload
+        )
+        return response.data
+    },
+    invalidationFn: ({ queryClient }) => {
+        queryClient.invalidateQueries({
+            queryKey: [loanTransactionBaseKey, 'paginated'],
+        })
+    },
+})
+
+// loan transaction summary
+export const useGetLoanTransactionSummary = ({
+    id,
+    options,
+}: {
+    id: TEntityId
+    options?: HookQueryOptions<ILoanTransactionSummary, Error>
+}) => {
+    return useQuery<ILoanTransactionSummary, Error>({
+        ...options,
+        queryKey: [loanTransactionBaseKey, id, 'summary'],
+        queryFn: async () => {
+            const response = await API.get<ILoanTransactionSummary>(
+                `${loanTransactionAPIRoute}/${id}/summary`
+            )
+            return response.data
+        },
+    })
+}
+
+// GET LOAN SUMMARIES
+// export const useLoanAllMemberSummary = ({
+//     loanTransactionId,
+//     options,
+// }: {
+//     loanTransactionId: TEntityId
+//     options?: HookQueryOptions<ILoanTransactionSummaryResponse, Error>
+// }) => {
+//     return useQuery<ILoanTransactionSummaryResponse, Error>({
+//         ...options,
+//         queryKey: [loanTransactionBaseKey, 'summary'],
+//         queryFn: async () => {
+//             const response = await API.get<ILoanAmortizationSchedules>(
+//                 `${loanTransactionAPIRoute}/${loanTransactionId}/schedule`
+//             )
+
+//             return response.data
+//         },
+//     })
+// }
+
+// loan comakers
+// /api/v1/loan-transaction/
+export const useLoanComakers = ({
+    loanTransactiionId,
+    options,
+}: {
+    loanTransactiionId: TEntityId
+    options?: HookQueryOptions<IComakerMemberProfile[], Error>
+}) => {
+    return useQuery<IComakerMemberProfile[], Error>({
+        ...options,
+        queryKey: [loanTransactionBaseKey, loanTransactiionId, 'comakers'],
+        queryFn: async () => {
+            const response = await API.get<IComakerMemberProfile[]>(
+                `${loanTransactionAPIRoute}/member-profile/${loanTransactiionId}/comaker`
+            )
+            return response.data
+        },
+    })
+}
+
+// GET ALL MEMBER LOAN SUMMARIES
+export const useLoanAllMemberLoanSummary = ({
+    options,
+}: {
+    options?: HookQueryOptions<IAllMembersLoanSummaryResponse, Error>
+}) => {
+    return useQuery<IAllMembersLoanSummaryResponse, Error>({
+        ...options,
+        queryKey: [loanTransactionBaseKey, 'all-members-summary'],
+        queryFn: async () => {
+            const response = await API.get<IAllMembersLoanSummaryResponse>(
+                `${loanTransactionAPIRoute}/all-members-summary`
+            )
+            return response.data
+        },
+    })
+}
+
+// loan all summary clear cache
+export const useLoanSummaryClearCache = createMutationFactory<
+    void,
+    Error,
+    void
+>({
+    mutationFn: async () => {
+        await API.delete(`${loanTransactionAPIRoute}/all-members-summary/cache`)
+    },
+    invalidationFn: ({ queryClient }) => {
+        queryClient.invalidateQueries({
+            queryKey: [loanTransactionBaseKey, 'all-members-summary'],
+        })
+        queryClient.invalidateQueries({
+            queryKey: [loanTransactionBaseKey, 'paginated'],
+        })
+    },
+})
+
+// edit loan
+export const useLoanEdit = createMutationFactory<
+    ILoanTransaction,
+    Error,
+    { id: TEntityId; payload: ILoanEditTransactionRequest }
+>({
+    mutationFn: async ({ id, payload }) => {
+        return await updateLoanTransactionById<
+            ILoanTransaction,
+            ILoanEditTransactionRequest
+        >({ id, payload })
+    },
+    invalidationFn: ({ queryClient }) => {
+        queryClient.invalidateQueries({
+            queryKey: [loanTransactionBaseKey],
+        })
+        queryClient.invalidateQueries({
+            queryKey: [loanTransactionBaseKey, 'paginated'],
+        })
+    },
+})
+
+// GET LOAN GUIDE
+export const useGetLoanGuide = ({
+    loanTransactionId,
+    options,
+}: {
+    loanTransactionId: TEntityId
+    options?: HookQueryOptions<ILoanGuide, Error>
+}) => {
+    return useQuery<ILoanGuide, Error>({
+        ...options,
+        queryKey: [loanTransactionBaseKey, loanTransactionId, 'guide'],
+        queryFn: async () => {
+            const response = await API.get<ILoanGuide>(
+                `${loanTransactionAPIRoute}/${loanTransactionId}/guide`
+            )
+
+            return response.data
+        },
+    })
+}
 
 export const logger = Logger.getInstance('loan-transaction')

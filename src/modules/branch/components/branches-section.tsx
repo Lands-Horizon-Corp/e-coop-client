@@ -1,34 +1,27 @@
-import { IBranch } from '@/modules/branch'
+import OrganizationSkeleton from '@/modules/organization/components/organization-item-skeleton'
 
 import { BranchIcon } from '@/components/icons'
 
-import { TEntityId } from '@/types'
-
+import { useBranchesContext } from '../context/branches-context'
 import { BranchesGrid } from './branches-grid'
 import { EmptyBranchesState } from './empty-branches-state'
 
 interface BranchesSectionProps {
-    branches: IBranch[] | undefined
-    isPending: boolean
-    isSeeding: boolean
-    organizationId: TEntityId
     onCreateBranch: () => void
-    showActions?: boolean
+    isPending: boolean
 }
 
 export const BranchesSection = ({
-    branches,
-    isPending,
-    isSeeding,
-    organizationId,
     onCreateBranch,
-    showActions = true,
+    isPending,
 }: BranchesSectionProps) => {
+    const { userOrganizations, isSeeding } = useBranchesContext()
+
     if (isPending) {
-        return <div>Loading branches...</div>
+        return <OrganizationSkeleton className="p-10" count={5} />
     }
 
-    if (!branches || branches.length === 0) {
+    if (!userOrganizations || userOrganizations.length === 0) {
         return (
             <EmptyBranchesState
                 isSeeding={isSeeding}
@@ -36,23 +29,17 @@ export const BranchesSection = ({
             />
         )
     }
-
     return (
         <div className="space-y-4 px-6">
             <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
                     <BranchIcon className="text-primary" />
                     <h2 className="text-lg font-semibold">
-                        Branches ({branches.length})
+                        Branches ({userOrganizations.length})
                     </h2>
                 </div>
             </div>
-            <BranchesGrid
-                branches={branches}
-                isSeeding={isSeeding}
-                organizationId={organizationId}
-                showActions={showActions}
-            />
+            <BranchesGrid />
         </div>
     )
 }

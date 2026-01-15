@@ -11,13 +11,23 @@ import { cn } from '@/helpers/tw-utils'
 import { useUploadMedia } from '@/modules/media'
 import { IMedia } from '@/modules/media/media.types'
 import {
-    EditOrganizationSchema,
+    IOrganization,
+    IOrganizationEditRequest,
     IOrganizationRequest,
-    TEditOrganizationFormValues,
+    OrganizationEditSchema,
     useUpdateOrganization,
 } from '@/modules/organization'
+import ThemePicker from '@/modules/settings/components/theme-picker'
 
-import { VerifiedPatchIcon } from '@/components/icons'
+import {
+    FacebookIcon,
+    GlobeIcon,
+    InstagramIcon,
+    LinkIcon,
+    VerifiedPatchIcon,
+    XTwitterIcon,
+    YoutubeIcon,
+} from '@/components/icons'
 import Modal, { IModalProps } from '@/components/modals/modal'
 import LoadingSpinner from '@/components/spinners/loading-spinner'
 import TextEditor from '@/components/text-editor'
@@ -27,8 +37,19 @@ import FormErrorMessage from '@/components/ui/form-error-message'
 import FormFieldWrapper from '@/components/ui/form-field-wrapper'
 import ImageField from '@/components/ui/image-field'
 import { Input } from '@/components/ui/input'
+import {
+    InputGroup,
+    InputGroupAddon,
+    InputGroupButton,
+    InputGroupInput,
+} from '@/components/ui/input-group'
 import { PhoneInput } from '@/components/ui/phone-input'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import {
+    Tooltip,
+    TooltipContent,
+    TooltipTrigger,
+} from '@/components/ui/tooltip'
 
 import { useFormHelper } from '@/hooks/use-form-helper'
 import { useLocationInfo } from '@/hooks/use-location-info'
@@ -37,12 +58,7 @@ import { IClassProps, IForm, TEntityId } from '@/types'
 
 export interface IEditOrganizationFormProps
     extends IClassProps,
-        IForm<
-            Partial<IOrganizationRequest>,
-            IOrganizationRequest,
-            string,
-            TEditOrganizationFormValues
-        > {
+        IForm<Partial<IOrganizationEditRequest>, IOrganization, string> {
     organizationId?: TEntityId
     coverMedia?: IMedia
     media?: IMedia
@@ -64,8 +80,8 @@ const UpdateOrganizationForm = ({
         coverMedia?.download_url || ''
     )
 
-    const form = useForm<TEditOrganizationFormValues>({
-        resolver: standardSchemaResolver(EditOrganizationSchema),
+    const form = useForm<IOrganizationRequest>({
+        resolver: standardSchemaResolver(OrganizationEditSchema),
         reValidateMode: 'onChange',
         mode: 'onSubmit',
         defaultValues: {
@@ -94,8 +110,8 @@ const UpdateOrganizationForm = ({
     const { isPending: isUploadingPhoto, mutateAsync: uploadPhoto } =
         useUploadMedia()
 
-    const { formRef, handleFocusError, isDisabled } =
-        useFormHelper<TEditOrganizationFormValues>({
+    const { formRef, handleFocusError, isDisabled, firstError } =
+        useFormHelper<IOrganizationRequest>({
             form,
             ...formProps,
             autoSave: false,
@@ -142,7 +158,8 @@ const UpdateOrganizationForm = ({
         }
     }, handleFocusError)
 
-    const errorMessage = serverRequestErrExtractor({ error })
+    const errorMessage = serverRequestErrExtractor({ error }) || firstError
+
     return (
         <Form {...form}>
             <form
@@ -151,6 +168,20 @@ const UpdateOrganizationForm = ({
                 ref={formRef}
             >
                 <div className="grid w-full grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+                    <FormFieldWrapper
+                        className="col-span-full "
+                        control={form.control}
+                        label="Select Theme"
+                        name="theme"
+                        render={({ field }) => (
+                            <ThemePicker
+                                onSelect={(selectedTheme) => {
+                                    field.onChange(selectedTheme)
+                                }}
+                                value={field.value}
+                            />
+                        )}
+                    />
                     <div className="col-span-full flex flex-col sm:flex-row gap-4 w-full">
                         <FormFieldWrapper
                             className="flex-1"
@@ -455,6 +486,154 @@ const UpdateOrganizationForm = ({
                             />
                         </TabsContent>
                     </Tabs>
+                    <div className="space-y-2 bg-popover p-4 rounded-lg border">
+                        <p>
+                            <LinkIcon className="inline mr-1" /> Social Media
+                            Links
+                        </p>
+                        <div className="grid grid-cols-5 gap-x-2">
+                            <FormFieldWrapper
+                                control={form.control}
+                                hiddenFields={formProps.hiddenFields}
+                                name="facebook_link"
+                                render={({ field }) => (
+                                    <InputGroup>
+                                        <InputGroupInput
+                                            {...field}
+                                            placeholder="https://facebook.com/me"
+                                        />
+                                        <InputGroupAddon align="inline-end">
+                                            <Tooltip>
+                                                <TooltipTrigger asChild>
+                                                    <InputGroupButton
+                                                        className="rounded-full"
+                                                        size="icon-xs"
+                                                    >
+                                                        <FacebookIcon />
+                                                    </InputGroupButton>
+                                                </TooltipTrigger>
+                                                <TooltipContent>
+                                                    Add your Facebook link
+                                                </TooltipContent>
+                                            </Tooltip>
+                                        </InputGroupAddon>
+                                    </InputGroup>
+                                )}
+                            />
+                            <FormFieldWrapper
+                                control={form.control}
+                                hiddenFields={formProps.hiddenFields}
+                                name="x_link"
+                                render={({ field }) => (
+                                    <InputGroup>
+                                        <InputGroupInput
+                                            {...field}
+                                            placeholder="https://x.com/me"
+                                        />
+                                        <InputGroupAddon align="inline-end">
+                                            <Tooltip>
+                                                <TooltipTrigger asChild>
+                                                    <InputGroupButton
+                                                        className="rounded-full"
+                                                        size="icon-xs"
+                                                    >
+                                                        <XTwitterIcon />
+                                                    </InputGroupButton>
+                                                </TooltipTrigger>
+                                                <TooltipContent>
+                                                    Add X / Twitter Link
+                                                </TooltipContent>
+                                            </Tooltip>
+                                        </InputGroupAddon>
+                                    </InputGroup>
+                                )}
+                            />
+                            <FormFieldWrapper
+                                control={form.control}
+                                hiddenFields={formProps.hiddenFields}
+                                name="youtube_link"
+                                render={({ field }) => (
+                                    <InputGroup>
+                                        <InputGroupInput
+                                            {...field}
+                                            placeholder="https://youtube.com/me"
+                                        />
+                                        <InputGroupAddon align="inline-end">
+                                            <Tooltip>
+                                                <TooltipTrigger asChild>
+                                                    <InputGroupButton
+                                                        className="rounded-full"
+                                                        size="icon-xs"
+                                                    >
+                                                        <YoutubeIcon />
+                                                    </InputGroupButton>
+                                                </TooltipTrigger>
+                                                <TooltipContent>
+                                                    Add Youtube link
+                                                </TooltipContent>
+                                            </Tooltip>
+                                        </InputGroupAddon>
+                                    </InputGroup>
+                                )}
+                            />
+                            <FormFieldWrapper
+                                control={form.control}
+                                hiddenFields={formProps.hiddenFields}
+                                name="instagram_link"
+                                render={({ field }) => (
+                                    <InputGroup>
+                                        <InputGroupInput
+                                            {...field}
+                                            placeholder="https://instagram.com/me"
+                                        />
+                                        <InputGroupAddon align="inline-end">
+                                            <Tooltip>
+                                                <TooltipTrigger asChild>
+                                                    <InputGroupButton
+                                                        className="rounded-full"
+                                                        size="icon-xs"
+                                                    >
+                                                        <InstagramIcon />
+                                                    </InputGroupButton>
+                                                </TooltipTrigger>
+                                                <TooltipContent>
+                                                    Instagram Link
+                                                </TooltipContent>
+                                            </Tooltip>
+                                        </InputGroupAddon>
+                                    </InputGroup>
+                                )}
+                            />
+                            <FormFieldWrapper
+                                control={form.control}
+                                hiddenFields={formProps.hiddenFields}
+                                name="personal_website_link"
+                                render={({ field }) => (
+                                    <InputGroup>
+                                        <InputGroupInput
+                                            {...field}
+                                            placeholder="https://mysite.com"
+                                        />
+                                        <InputGroupAddon align="inline-end">
+                                            <Tooltip>
+                                                <TooltipTrigger asChild>
+                                                    <InputGroupButton
+                                                        className="rounded-full"
+                                                        size="icon-xs"
+                                                    >
+                                                        <GlobeIcon />
+                                                    </InputGroupButton>
+                                                </TooltipTrigger>
+                                                <TooltipContent>
+                                                    Personal Website Link
+                                                </TooltipContent>
+                                            </Tooltip>
+                                        </InputGroupAddon>
+                                    </InputGroup>
+                                )}
+                            />
+                        </div>
+                    </div>
                     <div className="space-y-2">
                         <FormErrorMessage errorMessage={errorMessage} />
                         <div className="flex items-center justify-end gap-x-2">

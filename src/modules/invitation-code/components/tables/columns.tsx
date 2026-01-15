@@ -68,11 +68,12 @@ const InvitationCodeTableColumns = (
     },
     {
         id: 'code',
-        accessorKey: 'Code',
+        accessorKey: 'code',
         header: (props) => (
             <DataTableColumnHeader {...props} title="Code">
                 <ColumnActions {...props}>
                     <TextFilter<IInvitationCode>
+                        defaultMode="contains"
                         displayText="Code"
                         field="code"
                     />
@@ -103,7 +104,7 @@ const InvitationCodeTableColumns = (
         minSize: 220,
     },
     {
-        id: 'expiry',
+        id: 'expiration_date',
         accessorKey: 'expiration_date',
         header: (props) => (
             <DataTableColumnHeader {...props} title="Expiration Date">
@@ -138,6 +139,7 @@ const InvitationCodeTableColumns = (
             <DataTableColumnHeader {...props} title="Description">
                 <ColumnActions {...props}>
                     <TextFilter<IInvitationCode>
+                        defaultMode="contains"
                         displayText="Description"
                         field="description"
                     />

@@ -34,7 +34,6 @@ interface PickerProp extends IPickerBaseProps<IAccount> {
     nameOnly?: boolean
     hideDescription?: boolean
     allowClear?: boolean
-
     mode: TPaginatedAccountHookMode
 }
 
@@ -46,8 +45,10 @@ type FinalProp = PickerProp &
                   | 'currency'
                   | 'currency-loan'
                   | 'currency-payment'
+                  | 'loan-accounts-currency'
                   | 'currency-cash-and-cash-equivalence'
                   | 'currency-paid-up-shared-capital'
+                  | 'loan-connectable-account-currency' // - This returns SVF, Interest, Fines accounts that can be connected to a loan account based on currency
               >
           }
         | {
@@ -55,8 +56,10 @@ type FinalProp = PickerProp &
                   | 'currency'
                   | 'currency-payment'
                   | 'currency-loan'
+                  | 'loan-accounts-currency'
                   | 'currency-cash-and-cash-equivalence'
                   | 'currency-paid-up-shared-capital'
+                  | 'loan-connectable-account-currency' // - This returns SVF, Interest, Fines accounts that can be connected to a loan account based on currency
               currencyId: TEntityId
           }
     )
@@ -89,8 +92,9 @@ const AccountPicker = ({
         pageSize: PICKERS_SELECT_PAGE_SIZE,
     })
 
-    const { finalFilterPayload, bulkSetFilter } = useFilterState({
+    const { finalFilterPayloadBase64, bulkSetFilter } = useFilterState({
         defaultFilterMode: 'OR',
+        debounceFinalFilterMs: 0,
         onFilterChange: () =>
             setPagination((prev) => ({
                 ...prev,
@@ -107,9 +111,9 @@ const AccountPicker = ({
         mode,
         currencyId,
         query: {
-            pagination,
+            ...pagination,
             showMessage: false,
-            filterPayload: finalFilterPayload,
+            filter: finalFilterPayloadBase64,
         },
         options: {
             enabled: !disabled,
@@ -143,21 +147,12 @@ const AccountPicker = ({
                 listHeading={`Matched Results (${totalSize})`}
                 onOpenChange={setState}
                 onSearchChange={(searchValue) => {
-                    bulkSetFilter(
-                        [
-                            { displayText: 'name', field: 'Name' },
-                            {
-                                displayText: 'alternative-code',
-                                field: 'Alternative Code',
-                            },
-                        ],
-                        {
-                            displayText: '',
-                            mode: 'equal',
-                            dataType: 'text',
-                            value: searchValue,
-                        }
-                    )
+                    bulkSetFilter([{ displayText: 'Name', field: 'name' }], {
+                        displayText: '',
+                        mode: 'contains',
+                        dataType: 'text',
+                        value: searchValue,
+                    })
                 }}
                 onSelect={(account) => {
                     queryClient.setQueryData(['account', value], account)
@@ -322,7 +317,7 @@ const AccountPicker = ({
                     </Button>
                     {allowClear && value && (
                         <Button
-                            className="cursor-pointer rounded-full !p-0 !px-0"
+                            className="cursor-pointer flex-shrink-0 rounded-full !p-0 !px-0"
                             onClick={(e) => {
                                 e.preventDefault()
                                 e.stopPropagation()

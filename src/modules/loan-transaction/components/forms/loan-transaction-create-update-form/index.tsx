@@ -8,6 +8,8 @@ import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
 import { cn } from '@/helpers'
 import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
 import { AccountPicker } from '@/modules/account'
+import { AccountViewerModal } from '@/modules/account/components/account-viewer/account-viewer'
+import { LoanConnectedAccountsConnected } from '@/modules/account/components/account-viewer/loan-content'
 import { useAuthUserWithOrgBranch } from '@/modules/authentication/authgentication.store'
 import { CurrencyInput } from '@/modules/currency'
 import LoanPurposeCombobox from '@/modules/loan-purpose/components/loan-purpose-combobox'
@@ -31,7 +33,9 @@ import {
     BuildingBranchIcon,
     CheckIcon,
     DotsHorizontalIcon,
+    EyeIcon,
     HashIcon,
+    LinkIcon,
     PercentIcon,
     PinLocationIcon,
     QuestionCircleIcon,
@@ -266,6 +270,9 @@ const LoanTransactionCreateUpdateForm = ({
             user_organization: {
                 user_setting_used_or,
                 user_setting_number_padding,
+                branch: {
+                    branch_setting: { loan_applied_equal_to_balance },
+                },
             },
         },
     } = useAuthUserWithOrgBranch()
@@ -341,8 +348,8 @@ const LoanTransactionCreateUpdateForm = ({
             form,
             ...formProps,
             readOnly: isReadOnly,
-            autoSave: !!loanTransactionId,
-            autoSaveDelay: 2000,
+            autoSave: false,
+            // autoSaveDelay: 2000,
         })
 
     const onSubmit = form.handleSubmit(
@@ -383,6 +390,7 @@ const LoanTransactionCreateUpdateForm = ({
                         }),
                 })
             }
+
             if (promise)
                 toast.promise(promise, {
                     loading: 'Saving...',
@@ -429,6 +437,10 @@ const LoanTransactionCreateUpdateForm = ({
 
     const mode_of_payment = form.watch('mode_of_payment')
     const memberProfile = form.watch('member_profile')
+
+    const isLoanAppliedEqualBalance =
+        !!form.watch('comaker_deposit_member_accounting_ledger_id') &&
+        loan_applied_equal_to_balance
 
     return (
         <Form {...form}>
@@ -571,23 +583,7 @@ const LoanTransactionCreateUpdateForm = ({
                                 )
                             }}
                         />
-                        <FormFieldWrapper
-                            control={form.control}
-                            label="Loan Account"
-                            name="account_id"
-                            render={({ field }) => (
-                                <AccountPicker
-                                    disabled={isDisabled(field.name)}
-                                    mode="loan"
-                                    onSelect={(account) => {
-                                        field.onChange(account?.id)
-                                        form.setValue('account', account)
-                                    }}
-                                    placeholder="Select Loan Account"
-                                    value={form.getValues('account')}
-                                />
-                            )}
-                        />
+                        <AccountPickerField disabled={readOnly} form={form} />
                     </div>
                     <Tabs
                         className="max-w-full min-w-0"
@@ -957,9 +953,12 @@ const LoanTransactionCreateUpdateForm = ({
                                                                 'account'
                                                             )?.currency
                                                         }
-                                                        disabled={isDisabled(
-                                                            field.name
-                                                        )}
+                                                        disabled={
+                                                            isDisabled(
+                                                                field.name
+                                                            ) ||
+                                                            isLoanAppliedEqualBalance
+                                                        }
                                                         id={field.name}
                                                         onValueChange={(
                                                             newValue = ''
@@ -1455,6 +1454,86 @@ const SuggestedAmortizationSection = ({
             >
                 <PercentIcon />
             </Button>
+        </>
+    )
+}
+
+const AccountPickerField = ({
+    disabled,
+    form,
+}: {
+    disabled?: boolean
+    form: UseFormReturn<TLoanTransactionSchema>
+}) => {
+    const accountViewerModal = useModalState()
+    const accountId = form.watch('account_id')
+    const account = form.watch('account')
+
+    return (
+        <>
+            <FormFieldWrapper
+                control={form.control}
+                label={
+                    <>
+                        Loan Account
+                        {accountId && (
+                            <>
+                                <AccountViewerModal
+                                    {...accountViewerModal}
+                                    accountViewerProps={{
+                                        accountId,
+                                        defaultValue: account,
+                                    }}
+                                />
+                                <Button
+                                    className="size-fit p-1"
+                                    onClick={() =>
+                                        accountViewerModal.onOpenChange(true)
+                                    }
+                                    // size="icon"
+                                    type="button"
+                                    variant="ghost"
+                                >
+                                    <EyeIcon /> View Account
+                                </Button>
+                            </>
+                        )}
+                    </>
+                }
+                labelClassName="flex justify-between items-end"
+                name="account_id"
+                render={({ field }) => (
+                    <AccountPicker
+                        disabled={disabled}
+                        mode="loan"
+                        onSelect={(account) => {
+                            field.onChange(account?.id)
+                            form.setValue('account', account)
+                        }}
+                        placeholder="Select Loan Account"
+                        value={form.getValues('account')}
+                    />
+                )}
+            />
+            {accountId && (
+                <div className="space-y-3">
+                    <div>
+                        <p className="font-medium text-sm">
+                            <LinkIcon className="inline" /> Loan Account
+                            Connection
+                        </p>
+                        <p className="text-sm text-muted-foreground mt-1">
+                            These accounts that are connected may affect how
+                            interest, fines, and other charges are computed for
+                            this loan account.
+                        </p>
+                    </div>
+                    <LoanConnectedAccountsConnected
+                        accountId={account.id}
+                        className="md:grid-cols-3"
+                    />
+                </div>
+            )}
         </>
     )
 }

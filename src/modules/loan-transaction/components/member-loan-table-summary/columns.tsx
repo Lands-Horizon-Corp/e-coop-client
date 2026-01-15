@@ -1,7 +1,7 @@
 import { ReactNode } from 'react'
 
-import { formatNumber } from '@/helpers'
 import { dateAgo, toReadableDate } from '@/helpers/date-utils'
+import { currencyFormat } from '@/modules/currency'
 import { ColumnDef, Row } from '@tanstack/react-table'
 
 import DataTableColumnHeader from '@/components/data-table/data-table-column-header'
@@ -143,6 +143,36 @@ const MemberLoanTableSummaryColumns = (
             maxSize: 800,
         },
         {
+            id: 'balance',
+            accessorKey: 'balance',
+            header: (props) => (
+                <DataTableColumnHeader {...props} title="Balance">
+                    <ColumnActions {...props}>
+                        <NumberFilter<ILoanTransaction>
+                            displayText="Balance"
+                            field="balance"
+                        />
+                    </ColumnActions>
+                </DataTableColumnHeader>
+            ),
+            cell: ({
+                row: {
+                    original: { balance },
+                },
+            }) => (
+                <div className="!text-wrap text-muted-foreground">
+                    {balance}
+                </div>
+            ),
+            enableMultiSort: true,
+            enableSorting: true,
+            enableResizing: true,
+            enableHiding: true,
+            size: 200,
+            minSize: 200,
+            maxSize: 800,
+        },
+        {
             id: 'count',
             header: (props) => (
                 <DataTableColumnHeader {...props} title="Count" />
@@ -215,127 +245,9 @@ const MemberLoanTableSummaryColumns = (
             enableSorting: true,
             enableResizing: true,
             enableHiding: true,
-            size: 300,
-            minSize: 300,
-            maxSize: 800,
-        },
-        {
-            id: 'balance',
-            accessorKey: 'balance',
-            header: (props) => (
-                <DataTableColumnHeader {...props} title="Balance">
-                    <ColumnActions {...props}>
-                        <NumberFilter<ILoanTransaction>
-                            displayText="Balance"
-                            field="balance"
-                        />
-                    </ColumnActions>
-                </DataTableColumnHeader>
-            ),
-            cell: ({
-                row: {
-                    original: { balance },
-                },
-            }) => (
-                <div className="!text-wrap text-muted-foreground">
-                    {balance}
-                </div>
-            ),
-            enableMultiSort: true,
-            enableSorting: true,
-            enableResizing: true,
-            enableHiding: true,
-            size: 200,
-            minSize: 200,
-            maxSize: 800,
-        },
-        {
-            id: 'last_pay',
-            accessorKey: 'last_pay',
-            header: (props) => (
-                <DataTableColumnHeader {...props} title="Loan Type">
-                    <ColumnActions {...props}>
-                        <NumberFilter<ILoanTransaction>
-                            displayText="Last Pay"
-                            field="last_pay"
-                        />
-                    </ColumnActions>
-                </DataTableColumnHeader>
-            ),
-            cell: ({
-                row: {
-                    original: { last_pay },
-                },
-            }) => (
-                <div className="!text-wrap text-muted-foreground">
-                    {last_pay}
-                </div>
-            ),
-            enableMultiSort: true,
-            enableSorting: true,
-            enableResizing: true,
-            enableHiding: true,
-            size: 250,
-            minSize: 250,
-            maxSize: 800,
-        },
-        {
-            id: 'interest',
-            accessorKey: 'interest',
-            header: (props) => (
-                <DataTableColumnHeader {...props} title="Interest">
-                    <ColumnActions {...props}>
-                        <NumberFilter<ILoanTransaction>
-                            displayText="Interest"
-                            field="interest"
-                        />
-                    </ColumnActions>
-                </DataTableColumnHeader>
-            ),
-            cell: ({
-                row: {
-                    original: { interest },
-                },
-            }) => (
-                <div className="!text-wrap text-muted-foreground">
-                    {interest}
-                </div>
-            ),
-            enableMultiSort: true,
-            enableSorting: true,
-            enableResizing: true,
-            enableHiding: true,
-            size: 300,
-            minSize: 300,
-            maxSize: 800,
-        },
-        {
-            id: 'fines',
-            accessorKey: 'fines',
-            header: (props) => (
-                <DataTableColumnHeader {...props} title="Fines">
-                    <ColumnActions {...props}>
-                        <NumberFilter<ILoanTransaction>
-                            displayText="Fines"
-                            field="fines"
-                        />
-                    </ColumnActions>
-                </DataTableColumnHeader>
-            ),
-            cell: ({
-                row: {
-                    original: { fines },
-                },
-            }) => (
-                <div className="!text-wrap text-muted-foreground">{fines}</div>
-            ),
-            enableMultiSort: true,
-            enableSorting: true,
-            enableResizing: true,
-            enableHiding: true,
-            size: 200,
-            minSize: 200,
-            maxSize: 400,
+            size: 150,
+            minSize: 150,
+            maxSize: 200,
         },
         {
             id: 'applied_1',
@@ -352,11 +264,14 @@ const MemberLoanTableSummaryColumns = (
             ),
             cell: ({
                 row: {
-                    original: { applied_1 },
+                    original: { applied_1, account },
                 },
             }) => (
-                <p className="!text-wrap font-mono text-lg text-right text-muted-foreground">
-                    {formatNumber(applied_1, 0, 1)}
+                <p className="!text-wrap font-mono text-right text-muted-foreground">
+                    {currencyFormat(applied_1, {
+                        currency: account?.currency,
+                        showSymbol: !!account?.currency,
+                    })}
                 </p>
             ),
             enableMultiSort: true,
@@ -471,8 +386,8 @@ const MemberLoanTableSummaryColumns = (
             maxSize: 800,
         },
         {
-            id: 'processor',
-            accessorKey: 'employee_user',
+            id: 'employee_user.full_name',
+            accessorKey: 'employee_user.full_name',
             header: (props) => (
                 <DataTableColumnHeader {...props} title="Processor">
                     <ColumnActions {...props}>

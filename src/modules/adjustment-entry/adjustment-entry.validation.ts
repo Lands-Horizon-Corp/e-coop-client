@@ -7,7 +7,6 @@ export const AdjustmentEntrySchema = z.object({
     account_id: entityIdSchema,
     account: z.any().optional(), // for UI
     member_profile_id: entityIdSchema.optional(),
-    employee_user_id: entityIdSchema.optional(),
     payment_type_id: entityIdSchema.optional(),
 
     type_of_payment_type: z.string().max(255).optional(),
@@ -16,7 +15,10 @@ export const AdjustmentEntrySchema = z.object({
         .max(255)
         .transform(descriptionTransformerSanitizer)
         .optional(),
-    reference_number: z.string().max(255).optional(),
+    reference_number: z
+        .string()
+        .min(1, 'Reference number is required')
+        .max(255),
     entry_date: z.string().refine((date) => !isNaN(Date.parse(date)), {
         message: 'Invalid date format',
     }),

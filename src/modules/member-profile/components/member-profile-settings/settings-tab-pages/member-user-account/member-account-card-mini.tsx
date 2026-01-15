@@ -10,7 +10,7 @@ type Props = {
 
 const UserAccountCardMini = ({ user }: Props) => {
     return (
-        <div className="flex max-w-md items-center gap-x-4 rounded-2xl border-2 bg-background p-1">
+        <div className="flex max-w-md items-center min-w-0 gap-x-4 rounded-2xl border-2 bg-background p-4">
             <PreviewMediaWrapper media={user.media}>
                 <ImageDisplay
                     className="size-20 rounded-xl"
@@ -18,10 +18,10 @@ const UserAccountCardMini = ({ user }: Props) => {
                     src={user.media?.download_url}
                 />
             </PreviewMediaWrapper>
-            <div className="flex-1 space-y-1 pr-4">
+            <div className="flex-1 space-y-1 pr-4 min-w-0">
                 <p className="inline-flex w-full items-center justify-between font-medium">
-                    <span>{user.full_name}</span>
-                    <span className="ml-1 text-xs font-normal text-primary">
+                    <span className="min-w-0 truncate">{user.full_name}</span>
+                    <span className="ml-1 min-w-0 text-xs font-normal text-primary">
                         @{user.user_name}
                     </span>
                 </p>

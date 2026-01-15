@@ -5,23 +5,31 @@ import { toast } from 'sonner'
 
 import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
 
-import { formatNumber } from '@/helpers'
-import { dateAgo, toInputDateString } from '@/helpers/date-utils'
+import { cn } from '@/helpers'
+import {
+    dateAgo,
+    toInputDateString,
+    toReadableDate,
+} from '@/helpers/date-utils'
 import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
 import { AccountTypeBadge } from '@/modules/account'
 import { useAuthUserWithOrgBranch } from '@/modules/authentication/authgentication.store'
 import BankCombobox from '@/modules/bank/components/bank-combobox'
-import { ICurrency } from '@/modules/currency'
+import { ICurrency, currencyFormat } from '@/modules/currency'
 import CurrencyInput from '@/modules/currency/components/currency-input'
-import { TGeneralLedgerSource } from '@/modules/general-ledger'
-import { ILoanPayableAccount } from '@/modules/loan-transaction'
+import { IGeneralLedger } from '@/modules/general-ledger'
+import { LoanGuideModal } from '@/modules/loan-guide/components/loan-guide'
+// import { LoanPaymentScheduleModal } from '@/modules/loan-transaction/components/loan-payment-schedule'
+// import { LoanPaymentStatusBadge } from '@/modules/loan-transaction/components/loan-payment-status-type-badges'
 import { IMedia } from '@/modules/media'
 import { IPaymentType } from '@/modules/payment-type'
 import {
     ITransaction,
     PaymentTypeCombobox,
+    TTransactionRequest,
+    TransactionModalSuccessPayment,
     useCreateMultiTransactionPayment,
-    useCreateTransaction,
+    useCreateTransactionStandalone,
 } from '@/modules/transaction'
 
 import FormFooterResetSubmit from '@/components/form-components/form-footer-reset-submit'
@@ -48,9 +56,11 @@ import SignatureField from '@/components/ui/signature-field'
 import { Textarea } from '@/components/ui/textarea'
 
 import { useFormHelper } from '@/hooks/use-form-helper'
+import { useModalState } from '@/hooks/use-modal-state'
 
 import { IForm, TEntityId } from '@/types'
 
+import { ILoanPayableAccount } from '../../loan-payment.types'
 import {
     LoanPayablePaymentSchema,
     TLoanPayablePaymentSchema,
@@ -65,7 +75,8 @@ export interface LoanPayablesFormProps
     > {
     payables: ILoanPayableAccount[]
     memberProfileId: TEntityId
-    currency?: ICurrency
+    loanTransactionId: TEntityId
+    currency: ICurrency
     className?: string
 }
 
@@ -73,9 +84,13 @@ const LoanPayablesForm = ({
     payables,
     currency,
     className,
+    loanTransactionId,
     ...formProps
 }: LoanPayablesFormProps) => {
     const [transaction, setTransaction] = useState<ITransaction>()
+    const [successTransaction, setSuccessTransaction] =
+        useState<IGeneralLedger | null>(null)
+    const [showSuccessModal, setShowSuccessModal] = useState(false)
 
     const {
         currentAuth: {
@@ -105,6 +120,9 @@ const LoanPayablesForm = ({
                 amount: p.suggested_payment_amount || 0,
                 payment_type: settings_payment_type_default_value || undefined,
                 payment_type_id: settings_payment_type_default_value_id || '',
+                last_payment_date: p.last_payment_date,
+                supposed_payment_date: p.supposed_payment_date,
+                // payment_schedule: p.payment_schedule,
             })),
             ...formProps.defaultValues,
         },
@@ -145,7 +163,7 @@ const LoanPayablesForm = ({
         form.setValue('payables', newPayables)
     }
 
-    const createTransaction = useCreateTransaction()
+    const createTransaction = useCreateTransactionStandalone()
     const multiPaymentMutation = useCreateMultiTransactionPayment()
 
     const onSubmit = form.handleSubmit(async (data) => {
@@ -156,9 +174,10 @@ const LoanPayablesForm = ({
             let focusedTransaction = transaction
 
             if (!focusedTransaction) {
-                const payload = {
+                const payload: TTransactionRequest = {
                     member_profile_id: formProps.memberProfileId,
-                    source: 'payment' as TGeneralLedgerSource,
+                    // source: 'payment' as TGeneralLedgerSource,
+                    currency_id: currency?.id,
                     reference_number: data.reference_number,
                     is_reference_number_checked:
                         data.is_reference_number_checked,
@@ -174,14 +193,25 @@ const LoanPayablesForm = ({
             toast.loading('Saving payments...', { id: toastId })
 
             if (focusedTransaction) {
-                await multiPaymentMutation.mutateAsync({
+                const result = await multiPaymentMutation.mutateAsync({
                     transactionId: focusedTransaction.id,
-                    payments: data.payables.map((entry) => ({
-                        ...entry,
-                        transaction_id: focusedTransaction.id,
-                    })),
+                    payments: data.payables
+                        .filter((entry) => entry.amount !== 0)
+                        .map((entry) => ({
+                            ...entry,
+                            currency_id:
+                                currency.id || entry.account?.currency_id,
+                            transaction_id: focusedTransaction.id,
+                        })),
                 })
                 toast.success('Payment complete!', { id: toastId })
+
+                // Show success modal with the payment transaction
+                if (result) {
+                    setSuccessTransaction(result)
+                    setShowSuccessModal(true)
+                }
+
                 formProps.onSuccess?.(focusedTransaction)
             }
         } catch (error) {
@@ -201,6 +231,8 @@ const LoanPayablesForm = ({
         form.setValue('total_amount', payableTotals)
     }
 
+    const loanPaymentScheduleModal = useModalState()
+
     return (
         <Form {...form}>
             <form
@@ -208,13 +240,29 @@ const LoanPayablesForm = ({
                 onSubmit={onSubmit}
                 ref={formRef}
             >
+                {/*
+                    TODO: LOAN GUIDE
+                <LoanPaymentScheduleModal
+                    {...loanPaymentScheduleModal}
+                    loanPaymentProps={{
+                        loanTransactionId,
+                        accountDefaultId: payables[0]?.account_id,
+                    }}
+                /> */}
+                <LoanGuideModal
+                    {...loanPaymentScheduleModal}
+                    loanTransactionId={loanTransactionId}
+                />
                 <div className="flex items-center justify-between">
                     <p>Payable Accounts</p>
                     <p className="text-sm text-accent-foreground px-2 py-0.5 rounded-full bg-accent">
                         <span className="text-xs text-muted-foreground/60">
                             suggested:{' '}
                         </span>
-                        {formatNumber(totalSuggestedAmount)}
+                        {currencyFormat(totalSuggestedAmount, {
+                            currency,
+                            showSymbol: !!currency,
+                        })}
                     </p>
                 </div>
                 <div className="flex items-end justify-between gap-x-2">
@@ -290,8 +338,14 @@ const LoanPayablesForm = ({
                             />
                         )}
                     />
-                    <Button disabled={formProps.readOnly} type="button">
-                        <CalendarNumberIcon /> Amort
+                    <Button
+                        disabled={formProps.readOnly}
+                        onClick={() =>
+                            loanPaymentScheduleModal.onOpenChange(true)
+                        }
+                        type="button"
+                    >
+                        <CalendarNumberIcon /> Payment Schedule
                     </Button>
                 </div>
                 <Separator />
@@ -307,31 +361,70 @@ const LoanPayablesForm = ({
 
                         return (
                             <div
-                                className="rounded-xl p-3 space-y-1 bg-popover"
+                                className="rounded-xl p-3 space-y-2 bg-popover"
                                 key={p.account_id}
                             >
                                 <div className="flex items-center justify-between">
-                                    <div className="mb-2">
-                                        <p className="inline mr-1">
-                                            {p.account?.name || (
-                                                <span className="text-xs text-muted-foreground/80">
-                                                    Unknown
-                                                </span>
+                                    <div>
+                                        <div className="flex items-center gap-x-1">
+                                            <p className="inline mr-1">
+                                                {p.account?.name || (
+                                                    <span className="text-xs text-muted-foreground/80">
+                                                        Unknown
+                                                    </span>
+                                                )}
+                                            </p>
+                                            {p.account?.type && (
+                                                <AccountTypeBadge
+                                                    type={p.account.type}
+                                                />
                                             )}
-                                        </p>
-                                        {p.account?.type && (
-                                            <AccountTypeBadge
-                                                type={p.account.type}
-                                            />
-                                        )}
+                                        </div>
                                     </div>
-                                    {p.last_payment_date && (
+                                    <div className="flex items-center gap-x-1">
+                                        <div className="flex justify-end"></div>
+                                        {/* {p.payment_schedule?.payment_status && (
+                                            <LoanPaymentStatusBadge
+                                                size="sm"
+                                                status={
+                                                    p.payment_schedule
+                                                        .payment_status
+                                                }
+                                            />
+                                        )} */}
+                                        {p.supposed_payment_date &&
+                                            !p.is_past_due && (
+                                                <p className="text-xs text-primary-foreground px-2 py-1 bg-primary rounded-md flex gap-x-1 items-center">
+                                                    <span className="size-1 inline-block rounded-full bg-primary-foreground" />{' '}
+                                                    Suggested Date :{' '}
+                                                    {toReadableDate(
+                                                        p.supposed_payment_date
+                                                    )}
+                                                </p>
+                                            )}
+                                        {p.supposed_payment_date &&
+                                            p.is_past_due && (
+                                                <p className="text-xs text-rose-700 px-2 py-1 bg-rose-400/20 rounded-md dark:text-rose-400 flex gap-x-1 items-center">
+                                                    <span className="size-1 inline-block animate-pulse rounded-full bg-destructive" />{' '}
+                                                    {toReadableDate(
+                                                        p.supposed_payment_date
+                                                    )}{' '}
+                                                    -{' '}
+                                                    {dateAgo(
+                                                        p.supposed_payment_date
+                                                    )}
+                                                </p>
+                                            )}
+                                    </div>
+
+                                    {/* {p.last_payment_date && (
                                         <p className="text-xs text-right text-muted-foreground/60">
                                             Last Pay :{' '}
                                             {dateAgo(p.last_payment_date)}
                                         </p>
-                                    )}
+                                    )} */}
                                 </div>
+                                <Separator />
                                 <div className="flex items-end gap-x-2">
                                     <FormFieldWrapper
                                         control={form.control}
@@ -348,7 +441,7 @@ const LoanPayablesForm = ({
                                                     selectedPaymentType
                                                 ) => {
                                                     field.onChange(
-                                                        selectedPaymentType.id
+                                                        selectedPaymentType?.id
                                                     )
                                                     form.setValue(
                                                         `payables.${idx}.payment_type`,
@@ -363,7 +456,37 @@ const LoanPayablesForm = ({
                                     <FormFieldWrapper
                                         className="w-3/6"
                                         control={form.control}
-                                        label="Amount"
+                                        label={
+                                            <>
+                                                <p>Amount</p>
+                                                {p.suggested_payment_amount ? (
+                                                    <p
+                                                        className={cn(
+                                                            'text-xs text-primary',
+                                                            p.is_past_due
+                                                                ? 'text-rose-700 dark:text-rose-400'
+                                                                : ''
+                                                        )}
+                                                    >
+                                                        Suggested:{' '}
+                                                        {currencyFormat(
+                                                            p.suggested_payment_amount,
+                                                            {
+                                                                currency:
+                                                                    form.watch(
+                                                                        `payables.${idx}.account`
+                                                                    )?.currency,
+                                                                showSymbol:
+                                                                    !!form.watch(
+                                                                        `payables.${idx}.account`
+                                                                    )?.currency,
+                                                            }
+                                                        )}
+                                                    </p>
+                                                ) : null}
+                                            </>
+                                        }
+                                        labelClassName="justify-between flex"
                                         name={`payables.${idx}.amount`}
                                         render={({
                                             field: { onChange, ...field },
@@ -388,7 +511,11 @@ const LoanPayablesForm = ({
                                                         Number(newValue) || 0
                                                     )
                                                 }}
-                                                placeholder="Amount"
+                                                placeholder={
+                                                    p.suggested_payment_amount
+                                                        ? `${p.suggested_payment_amount}`
+                                                        : 'Amount'
+                                                }
                                             />
                                         )}
                                     />
@@ -594,6 +721,17 @@ const LoanPayablesForm = ({
                     submitText="Pay"
                 />
             </form>
+
+            <TransactionModalSuccessPayment
+                isOpen={showSuccessModal}
+                onClose={() => {
+                    setShowSuccessModal(false)
+                    setSuccessTransaction(null)
+                }}
+                onOpenChange={setShowSuccessModal}
+                open={showSuccessModal}
+                transaction={successTransaction}
+            />
         </Form>
     )
 }

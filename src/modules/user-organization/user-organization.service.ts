@@ -73,6 +73,14 @@ export const getUserOrganizationUserById = async (userId: TEntityId) => {
         (await API.get<IUserOrganization<IUserBase>[]>(endpoint)).data
     )
 }
+export const getUserOrganizationByOrganizationId = async (
+    organizationId: TEntityId
+) => {
+    const endpoint = `${userOrganizationAPIRoute}/organization/${organizationId}`
+    return groupByOrganization(
+        (await API.get<IUserOrganization<IUserBase>[]>(endpoint)).data
+    )
+}
 
 export const getCurrentUserOrganizations = async () => {
     const endpoint = `${userOrganizationAPIRoute}/current`
@@ -191,6 +199,17 @@ export const useGetUserOrganizationByUserId = ({
         queryFn: () => getUserOrganizationUserById(userId),
         ...options,
         enabled: !!userId && (options?.enabled ?? true),
+    })
+}
+export const useGetUserOrganizationByOrganizationId = ({
+    options,
+    organizationId,
+}: Options & { organizationId: TEntityId }) => {
+    return useQuery<IOrgUserOrganizationGroup[]>({
+        queryKey: ['user-organization', 'current', organizationId],
+        queryFn: () => getUserOrganizationByOrganizationId(organizationId),
+        ...options,
+        enabled: !!organizationId && (options?.enabled ?? true),
     })
 }
 
@@ -362,6 +381,12 @@ export const useUserOrgAcceptJoinRequest = createMutationFactory<
     TEntityId
 >({
     mutationFn: (id) => acceptJoinRequest(id),
+    invalidationFn: (args) => {
+        args.queryClient.invalidateQueries({
+            queryKey: [baseQueryKey, 'join-request', 'all'],
+        })
+        updateMutationInvalidationFn(baseQueryKey, args)
+    },
 })
 
 export const useUserOrgRejectJoinRequest = createMutationFactory<
@@ -370,7 +395,12 @@ export const useUserOrgRejectJoinRequest = createMutationFactory<
     TEntityId
 >({
     mutationFn: (id) => rejectJoinRequest(id),
-    invalidationFn: (args) => updateMutationInvalidationFn(baseQueryKey, args),
+    invalidationFn: (args) => {
+        args.queryClient.invalidateQueries({
+            queryKey: [baseQueryKey, 'join-request', 'all'],
+        })
+        updateMutationInvalidationFn(baseQueryKey, args)
+    },
 })
 
 export const useUpdateUserOrganizationPermission = createMutationFactory<
@@ -385,6 +415,31 @@ export const useUpdateUserOrganizationPermission = createMutationFactory<
         // special ocasion since both of them need each other, I hardcoded this here
         // instead of importing employee service base key because it will circular depndency
         updateMutationInvalidationFn('employee', args)
+    },
+})
+
+export const useCancelTimeMachineTime = createMutationFactory<
+    IUserOrganization,
+    Error,
+    void
+>({
+    mutationFn: async () => {
+        const response = await API.put<void, IUserOrganization>(
+            `${userOrganizationAPIRoute}/time-machine/cancel`
+        )
+        return response.data
+    },
+    invalidationFn: (args) => {
+        args.queryClient.invalidateQueries({
+            queryKey: ['auth', 'context'],
+        })
+        args.queryClient.invalidateQueries({
+            queryKey: ['employee', 'paginated'],
+        })
+        args.queryClient.invalidateQueries({
+            queryKey: ['user-organization', args.resultData.id],
+        })
+        updateMutationInvalidationFn('user-organization', args)
     },
 })
 
@@ -404,5 +459,25 @@ export const useUpdateUserOrganizationSettings = createMutationFactory<
         updateMutationInvalidationFn('user-organization', args)
     },
 })
+
+export const useCanUserCanJoinBranch = ({
+    options,
+    organizationId,
+    branchId,
+}: {
+    options?: HookQueryOptions<boolean, Error>
+    organizationId?: TEntityId
+    branchId?: TEntityId
+} = {}) => {
+    return useQuery<boolean, Error>({
+        ...options,
+        queryKey: ['can-user-join', organizationId, branchId],
+        queryFn: async () => {
+            if (!organizationId || !branchId) return false
+            return canJoinOrganizationMember(organizationId, branchId)
+        },
+        enabled: !!organizationId && !!branchId && (options?.enabled ?? true),
+    })
+}
 
 export const logger = Logger.getInstance('user-organization')

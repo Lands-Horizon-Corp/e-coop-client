@@ -11,6 +11,7 @@ import Modal, { IModalProps } from '@/components/modals/modal'
 import { Form } from '@/components/ui/form'
 import FormFieldWrapper from '@/components/ui/form-field-wrapper'
 import { Input } from '@/components/ui/input'
+import { Textarea } from '@/components/ui/textarea'
 
 import { useFormHelper } from '@/hooks/use-form-helper'
 
@@ -107,7 +108,7 @@ const MemberGroupCreateUpdateForm = ({
                             label="Description"
                             name="description"
                             render={({ field }) => (
-                                <Input
+                                <Textarea
                                     {...field}
                                     autoComplete="group-description"
                                     disabled={isDisabled(field.name)}
@@ -119,7 +120,7 @@ const MemberGroupCreateUpdateForm = ({
                     </fieldset>
                 </fieldset>
                 <FormFooterResetSubmit
-                    disableSubmit={!form.formState.isDirty}
+                    disableSubmit={!form.formState.isDirty || isPending}
                     error={error}
                     isLoading={isPending}
                     onReset={() => {

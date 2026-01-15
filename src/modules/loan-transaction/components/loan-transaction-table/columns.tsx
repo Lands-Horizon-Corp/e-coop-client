@@ -1,13 +1,15 @@
 import { ReactNode } from 'react'
 
-import { formatNumber } from '@/helpers'
 import { toReadableDateTime } from '@/helpers/date-utils'
+import { currencyFormat } from '@/modules/currency'
 import { ColumnDef, Row } from '@tanstack/react-table'
 
 import DataTableColumnHeader from '@/components/data-table/data-table-column-header'
 import ColumnActions from '@/components/data-table/data-table-column-header/column-actions'
 import { createUpdateColumns } from '@/components/data-table/data-table-common-columns'
 import { IGlobalSearchTargets } from '@/components/data-table/data-table-filters/data-table-global-search'
+import DataTableMultiSelectFilter from '@/components/data-table/data-table-filters/data-table-multi-select-filter'
+import NumberFilter from '@/components/data-table/data-table-filters/number-filter'
 import TextFilter from '@/components/data-table/data-table-filters/text-filter'
 import HeaderToggleSelect from '@/components/data-table/data-table-row-actions/header-toggle-select'
 import {
@@ -112,12 +114,13 @@ const LoanTransactionTableColumns = (
             minSize: 180,
         },
         {
-            id: 'passbook',
+            id: 'member_profile.passbook',
             accessorKey: 'member_profile.passbook',
             header: (props) => (
                 <DataTableColumnHeader {...props} title="Passbook No.">
                     <ColumnActions {...props}>
                         <TextFilter<ILoanTransaction>
+                            defaultMode="contains"
                             displayText="Passbook"
                             field="member_profile.passbook"
                         />
@@ -246,11 +249,14 @@ const LoanTransactionTableColumns = (
             ),
             cell: ({
                 row: {
-                    original: { applied_1 },
+                    original: { applied_1, account },
                 },
             }) => (
                 <p className="!text-wrap font-mono text-lg text-right text-muted-foreground">
-                    {formatNumber(applied_1, 0, 1)}
+                    {currencyFormat(applied_1, {
+                        currency: account?.currency,
+                        showSymbol: !!account?.currency,
+                    })}
                 </p>
             ),
             enableMultiSort: true,
@@ -411,12 +417,13 @@ const LoanTransactionTableColumns = (
             maxSize: 800,
         },
         {
-            id: 'processor',
-            accessorKey: 'employee_user',
+            id: 'employee_user.full_name',
+            accessorKey: 'employee_user.full_name',
             header: (props) => (
                 <DataTableColumnHeader {...props} title="Processor">
                     <ColumnActions {...props}>
                         <TextFilter<ILoanTransaction>
+                            defaultMode="contains"
                             displayText="Processor"
                             field="employee_user.full_name"
                         />
@@ -435,6 +442,79 @@ const LoanTransactionTableColumns = (
                             src={employee_user.media_id}
                         />
                     )}
+                </div>
+            ),
+            enableMultiSort: true,
+            enableSorting: true,
+            enableResizing: true,
+            enableHiding: true,
+            size: 300,
+            minSize: 300,
+            maxSize: 800,
+        },
+        {
+            id: 'count',
+            accessorKey: 'count',
+            header: (props) => (
+                <DataTableColumnHeader {...props} title="Loan Count">
+                    <ColumnActions {...props}>
+                        <NumberFilter<ILoanTransaction>
+                            displayText="Loan Count"
+                            field="count"
+                        />
+                    </ColumnActions>
+                </DataTableColumnHeader>
+            ),
+            cell: ({
+                row: {
+                    original: { count },
+                },
+            }) => (
+                <div className="!text-wrap text-muted-foreground">
+                    {count && count}
+                </div>
+            ),
+            enableMultiSort: true,
+            enableSorting: true,
+            enableResizing: true,
+            enableHiding: true,
+            size: 300,
+            minSize: 300,
+            maxSize: 800,
+        },
+        {
+            id: 'processing',
+            accessorKey: 'processing',
+            header: (props) => (
+                <DataTableColumnHeader {...props} title="Processing">
+                    <ColumnActions {...props}>
+                        <DataTableMultiSelectFilter<ILoanTransaction, boolean>
+                            dataType="boolean"
+                            defaultMode="contains"
+                            displayText="Processing Status"
+                            field="processing"
+                            mode="contains"
+                            multiSelectOptions={[
+                                {
+                                    label: 'Processing',
+                                    value: true,
+                                },
+                                {
+                                    label: 'Not Processing',
+                                    value: false,
+                                },
+                            ]}
+                        />
+                    </ColumnActions>
+                </DataTableColumnHeader>
+            ),
+            cell: ({
+                row: {
+                    original: { count },
+                },
+            }) => (
+                <div className="!text-wrap text-muted-foreground">
+                    {count && count}
                 </div>
             ),
             enableMultiSort: true,

@@ -1,6 +1,7 @@
 import { useMemo } from 'react'
 
 import { useQueryClient } from '@tanstack/react-query'
+import qs from 'query-string'
 
 import FilterContext from '@/contexts/filter-context/filter-context'
 import { cn } from '@/helpers'
@@ -15,9 +16,12 @@ import DataTablePagination from '@/components/data-table/data-table-pagination'
 import DataTableToolbar, {
     IDataTableToolbarProps,
 } from '@/components/data-table/data-table-toolbar'
+import { TableRowActionStoreProvider } from '@/components/data-table/store/data-table-action-store'
 import { TableProps } from '@/components/data-table/table.type'
 import { useDataTableSorting } from '@/components/data-table/use-datatable-sorting'
-import useDataTableState from '@/components/data-table/use-datatable-state'
+import useDataTableState, {
+    useResolvedColumnOrder,
+} from '@/components/data-table/use-datatable-state'
 
 import useDatableFilterState from '@/hooks/use-filter-state'
 import { usePagination } from '@/hooks/use-pagination'
@@ -31,6 +35,7 @@ import LoanStatusTableColumns, {
     ILoanStatusTableColumnProps,
     loanStatusGlobalSearchTargets,
 } from './columns'
+import { LoanStatusTableActionManager } from './row-action-context'
 
 export interface LoanStatusTableProps
     extends TableProps<ILoanStatus>,
@@ -48,6 +53,7 @@ export interface LoanStatusTableProps
 }
 
 const LoanStatusTable = ({
+    persistKey = ['loan-status'],
     className,
     toolbarProps,
     defaultFilter,
@@ -67,18 +73,16 @@ const LoanStatusTable = ({
         [actionComponent]
     )
 
-    const {
-        getRowIdFn,
-        columnOrder,
-        setColumnOrder,
-        isScrollable,
-        setIsScrollable,
-        columnVisibility,
-        setColumnVisibility,
-        rowSelectionState,
-        createHandleRowSelectionChange,
-    } = useDataTableState<ILoanStatus>({
-        defaultColumnOrder: columns.map((c) => c.id!),
+    const { resolvedColumnOrder, resolvedColumnVisibility, finalKeys } =
+        useResolvedColumnOrder({
+            columns,
+            persistKey,
+        })
+
+    const tableState = useDataTableState<ILoanStatus>({
+        key: finalKeys,
+        defaultColumnVisibility: resolvedColumnVisibility,
+        defaultColumnOrder: resolvedColumnOrder,
         onSelectData,
     })
 
@@ -100,7 +104,8 @@ const LoanStatusTable = ({
         },
     })
 
-    const handleRowSelectionChange = createHandleRowSelectionChange(data)
+    const handleRowSelectionChange =
+        tableState.createHandleRowSelectionChange(data)
 
     const table = useReactTable({
         columns,
@@ -111,9 +116,9 @@ const LoanStatusTable = ({
         state: {
             sorting: tableSorting,
             pagination,
-            columnOrder,
-            rowSelection: rowSelectionState.rowSelection,
-            columnVisibility,
+            columnOrder: tableState.columnOrder,
+            rowSelection: tableState.rowSelectionState.rowSelection,
+            columnVisibility: tableState.columnVisibility,
         },
         rowCount: pageSize,
         manualSorting: true,
@@ -122,73 +127,82 @@ const LoanStatusTable = ({
         manualFiltering: true,
         manualPagination: true,
         columnResizeMode: 'onChange',
-        getRowId: getRowIdFn,
+        getRowId: tableState.getRowIdFn,
         onSortingChange: setTableSorting,
         onPaginationChange: setPagination,
         getCoreRowModel: getCoreRowModel(),
-        onColumnOrderChange: setColumnOrder,
+        onColumnOrderChange: tableState.setColumnOrder,
         getSortedRowModel: getSortedRowModel(),
-        onColumnVisibilityChange: setColumnVisibility,
+        onColumnVisibilityChange: tableState.setColumnVisibility,
         onRowSelectionChange: handleRowSelectionChange,
+        defaultColumn: { minSize: 100, size: 150, maxSize: 800 },
     })
-
+    const exportfilter = qs.stringify(
+        {
+            ...pagination,
+            sort: sortingStateBase64,
+            filter: filterState.finalFilterPayloadBase64,
+        },
+        { skipNull: true }
+    )
     return (
         <FilterContext.Provider value={filterState}>
-            <div
-                className={cn(
-                    'flex h-full flex-col gap-y-2',
-                    className,
-                    !isScrollable && 'h-fit !max-h-none'
-                )}
-            >
-                <DataTableToolbar
-                    deleteActionProps={{
-                        onDeleteSuccess: () =>
-                            queryClient.invalidateQueries({
-                                queryKey: ['loan-status', 'paginated'],
-                            }),
-                        onDelete: (selectedData) =>
-                            deleteManyLoanStatus({
-                                ids: selectedData.map((data) => data.id),
-                            }),
-                    }}
-                    exportActionProps={{
-                        pagination,
-                        isLoading: isPending,
-                        filters: filterState.finalFilterPayload,
-                        disabled: isPending || isRefetching,
-                        // exportAll: exportAll,
-                        // exportCurrentPage: (ids) =>
-                        //     exportSelected(ids.map((data) => data.id)),
-                        // exportSelected: (ids) =>
-                        //     exportSelected(ids.map((data) => data.id)),
-                    }}
-                    filterLogicProps={{
-                        filterLogic: filterState.filterLogic,
-                        setFilterLogic: filterState.setFilterLogic,
-                    }}
-                    globalSearchProps={{
-                        defaultMode: 'equal',
-                        targets: loanStatusGlobalSearchTargets,
-                    }}
-                    refreshActionProps={{
-                        onClick: () => refetch(),
-                        isLoading: isPending || isRefetching,
-                    }}
-                    scrollableProps={{ isScrollable, setIsScrollable }}
-                    table={table}
-                    {...toolbarProps}
-                />
-                <DataTable
-                    className="mb-2"
-                    isScrollable={isScrollable}
-                    isStickyFooter
-                    isStickyHeader
-                    setColumnOrder={setColumnOrder}
-                    table={table}
-                />
-                <DataTablePagination table={table} totalSize={totalSize} />
-            </div>
+            <TableRowActionStoreProvider>
+                <div
+                    className={cn(
+                        'flex h-full flex-col gap-y-2',
+                        className,
+                        !tableState.isScrollable && 'h-fit !max-h-none'
+                    )}
+                >
+                    <DataTableToolbar
+                        deleteActionProps={{
+                            onDeleteSuccess: () =>
+                                queryClient.invalidateQueries({
+                                    queryKey: ['loan-status', 'paginated'],
+                                }),
+                            onDelete: (selectedData) =>
+                                deleteManyLoanStatus({
+                                    ids: selectedData.map((data) => data.id),
+                                }),
+                        }}
+                        exportActionProps={{
+                            isLoading: isPending,
+                            filters: exportfilter,
+                            model: 'LoanStatus',
+                            url: 'api/v1/loan-status/search',
+                        }}
+                        filterLogicProps={{
+                            filterLogic: filterState.filterLogic,
+                            setFilterLogic: filterState.setFilterLogic,
+                        }}
+                        globalSearchProps={{
+                            defaultMode: 'contains',
+                            targets: loanStatusGlobalSearchTargets,
+                        }}
+                        refreshActionProps={{
+                            onClick: () => refetch(),
+                            isLoading: isPending || isRefetching,
+                        }}
+                        scrollableProps={{
+                            isScrollable: tableState.isScrollable,
+                            setIsScrollable: tableState.setIsScrollable,
+                        }}
+                        table={table}
+                        {...toolbarProps}
+                    />
+                    <DataTable
+                        className="mb-2"
+                        isScrollable={tableState.isScrollable}
+                        isStickyFooter
+                        isStickyHeader
+                        setColumnOrder={tableState.setColumnOrder}
+                        table={table}
+                    />
+                    <DataTablePagination table={table} totalSize={totalSize} />
+                    <LoanStatusTableActionManager />
+                </div>
+            </TableRowActionStoreProvider>
         </FilterContext.Provider>
     )
 }

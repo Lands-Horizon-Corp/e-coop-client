@@ -6,8 +6,7 @@ import { Row } from '@tanstack/react-table'
 
 import RowActionsGroup from '@/components/data-table/data-table-row-actions'
 import DataTableRowContext from '@/components/data-table/data-table-row-context'
-
-import { useModalState } from '@/hooks/use-modal-state'
+import { useTableRowActionStore } from '@/components/data-table/store/data-table-action-store'
 
 import { IJournalVoucher, useDeleteJournalVoucherById } from '../..'
 import JournalVoucherApproveReleaseDisplayModal, {
@@ -18,6 +17,17 @@ import { JournalVoucherCreateUpdateFormModal } from '../forms/journal-voucher-cr
 import { IJournalVoucherTableActionComponentProp } from './columns'
 import JournalVoucherOtherAction from './journal-voucher-other-action'
 
+export type JournalVoucherActionType =
+    | 'edit'
+    | 'print'
+    | 'approve-release'
+    | 'delete'
+
+export interface JournalVoucherActionExtra {
+    onDeleteSuccess?: () => void
+    approveReleaseMode?: TJournalVoucherApproveReleaseDisplayMode
+}
+
 interface UseJournalVoucherActionsProps {
     row: Row<IJournalVoucher>
     onDeleteSuccess?: () => void
@@ -27,12 +37,14 @@ const useJournalVoucherActions = ({
     row,
     onDeleteSuccess,
 }: UseJournalVoucherActionsProps) => {
-    const updateModal = useModalState()
-    const printModal = useModalState()
-    const approveModal = useModalState()
-    const releaseModal = useModalState()
     const journalVoucher = row.original
     const { onOpen } = useConfirmModalStore()
+    const { open } = useTableRowActionStore<
+        IJournalVoucher,
+        JournalVoucherActionType,
+        JournalVoucherActionExtra
+    >()
+
     const {
         isPending: isDeletingJournalVoucher,
         mutate: deleteJournalVoucher,
@@ -46,7 +58,11 @@ const useJournalVoucherActions = ({
     })
 
     const handleEdit = () => {
-        updateModal.onOpenChange(true)
+        open('edit', {
+            id: journalVoucher.id,
+            defaultValues: journalVoucher,
+            extra: { onDeleteSuccess },
+        })
     }
 
     const handleDelete = () => {
@@ -59,26 +75,36 @@ const useJournalVoucherActions = ({
     }
 
     const handleOpenPrintModal = () => {
-        printModal.onOpenChange(true)
+        open('print', {
+            id: journalVoucher.id,
+            defaultValues: journalVoucher,
+            extra: { onDeleteSuccess },
+        })
     }
+
     const handleApproveModal = () => {
-        approveModal.onOpenChange(true)
+        open('approve-release', {
+            id: journalVoucher.id,
+            defaultValues: journalVoucher,
+            extra: { onDeleteSuccess, approveReleaseMode: 'approve' },
+        })
     }
+
     const handleReleaseModal = () => {
-        releaseModal.onOpenChange(true)
+        open('approve-release', {
+            id: journalVoucher.id,
+            defaultValues: journalVoucher,
+            extra: { onDeleteSuccess, approveReleaseMode: 'release' },
+        })
     }
 
     return {
         journalVoucher,
-        updateModal,
         isDeletingJournalVoucher,
         handleEdit,
         handleDelete,
-        printModal,
         handleOpenPrintModal,
-        approveModal,
         handleApproveModal,
-        releaseModal,
         handleReleaseModal,
     }
 }
@@ -94,62 +120,17 @@ export const JournalVoucherAction = ({
     onDeleteSuccess,
 }: IJournalVoucherTableActionProps) => {
     const {
-        journalVoucher,
-        updateModal,
-        isDeletingJournalVoucher,
         handleEdit,
-        handleDelete,
         handleOpenPrintModal,
-        printModal,
-        approveModal,
         handleApproveModal,
-        releaseModal,
         handleReleaseModal,
     } = useJournalVoucherActions({ row, onDeleteSuccess })
-    const isPrinted = !!journalVoucher.printed_date
 
     return (
         <>
-            <div onClick={(e) => e.stopPropagation()}>
-                <JournalVoucherPrintFormModal
-                    {...printModal}
-                    formProps={{
-                        defaultValues: { ...journalVoucher },
-                        journalVoucherId: journalVoucher.id,
-                    }}
-                />
-                <JournalVoucherCreateUpdateFormModal
-                    {...updateModal}
-                    formProps={{
-                        journalVoucherId: journalVoucher.id,
-                        defaultValues: { ...journalVoucher },
-                        readOnly: isPrinted,
-                        mode: isPrinted ? 'readOnly' : 'update',
-                    }}
-                />
-                {['approve', 'undo-approve', 'release'].map((mode) => {
-                    const modalState =
-                        mode === 'approve' ? approveModal : releaseModal
-                    return (
-                        <div key={mode}>
-                            <JournalVoucherApproveReleaseDisplayModal
-                                {...modalState}
-                                journalVoucher={journalVoucher}
-                                mode={
-                                    mode as TJournalVoucherApproveReleaseDisplayMode
-                                }
-                            />
-                        </div>
-                    )
-                })}
-            </div>
+            <div onClick={(e) => e.stopPropagation()}></div>
             <RowActionsGroup
                 canSelect
-                onDelete={{
-                    text: 'Delete',
-                    isAllowed: !isDeletingJournalVoucher,
-                    onClick: handleDelete,
-                }}
                 onEdit={{
                     text: 'Edit',
                     isAllowed: true,
@@ -181,58 +162,15 @@ export const JournalVoucherRowContext = ({
     onDeleteSuccess,
 }: IJournalVoucherRowContextProps) => {
     const {
-        journalVoucher,
-        updateModal,
-        isDeletingJournalVoucher,
         handleEdit,
-        handleDelete,
         handleApproveModal,
-        approveModal,
         handleReleaseModal,
-        releaseModal,
         handleOpenPrintModal,
-        printModal,
     } = useJournalVoucherActions({ row, onDeleteSuccess })
-    const isPrinted = !!journalVoucher.printed_date
+
     return (
         <>
-            <JournalVoucherPrintFormModal
-                {...printModal}
-                formProps={{
-                    defaultValues: { ...journalVoucher },
-                    journalVoucherId: journalVoucher.id,
-                }}
-            />
-            <JournalVoucherCreateUpdateFormModal
-                {...updateModal}
-                formProps={{
-                    journalVoucherId: journalVoucher.id,
-                    defaultValues: { ...journalVoucher },
-                    readOnly: isPrinted,
-                    mode: isPrinted ? 'readOnly' : 'update',
-                }}
-            />
-            {['approve', 'undo-approve', 'release'].map((mode) => {
-                const modalState =
-                    mode === 'approve' ? approveModal : releaseModal
-                return (
-                    <div key={mode}>
-                        <JournalVoucherApproveReleaseDisplayModal
-                            {...modalState}
-                            journalVoucher={journalVoucher}
-                            mode={
-                                mode as TJournalVoucherApproveReleaseDisplayMode
-                            }
-                        />
-                    </div>
-                )
-            })}
             <DataTableRowContext
-                onDelete={{
-                    text: 'Delete',
-                    isAllowed: !isDeletingJournalVoucher,
-                    onClick: handleDelete,
-                }}
                 onEdit={{
                     text: 'Edit',
                     isAllowed: true,
@@ -251,6 +189,55 @@ export const JournalVoucherRowContext = ({
             >
                 {children}
             </DataTableRowContext>
+        </>
+    )
+}
+
+export const JournalVoucherTableActionManager = () => {
+    const { state, close } = useTableRowActionStore<
+        IJournalVoucher,
+        JournalVoucherActionType,
+        JournalVoucherActionExtra
+    >()
+
+    if (!state || !state.defaultValues) return null
+
+    const journalVoucher = state.defaultValues
+    const isPrinted = !!journalVoucher.printed_date
+    const approveReleaseMode = state.extra?.approveReleaseMode ?? 'approve'
+
+    return (
+        <>
+            {state.action === 'edit' && (
+                <JournalVoucherCreateUpdateFormModal
+                    formProps={{
+                        journalVoucherId: journalVoucher.id,
+                        defaultValues: journalVoucher,
+                        readOnly: isPrinted,
+                        mode: isPrinted ? 'readOnly' : 'update',
+                    }}
+                    onOpenChange={close}
+                    open={state.isOpen}
+                />
+            )}
+            {state.action === 'print' && (
+                <JournalVoucherPrintFormModal
+                    formProps={{
+                        defaultValues: journalVoucher,
+                        journalVoucherId: journalVoucher.id,
+                    }}
+                    onOpenChange={close}
+                    open={state.isOpen}
+                />
+            )}
+            {state.action === 'approve-release' && (
+                <JournalVoucherApproveReleaseDisplayModal
+                    journalVoucher={journalVoucher}
+                    mode={approveReleaseMode}
+                    onOpenChange={close}
+                    open={state.isOpen}
+                />
+            )}
         </>
     )
 }

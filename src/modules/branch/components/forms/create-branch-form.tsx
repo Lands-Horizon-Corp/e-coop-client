@@ -1,13 +1,15 @@
+import { useQueryClient } from '@tanstack/react-query'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 import z from 'zod'
 
 import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
 
+import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
 import { cn } from '@/helpers/tw-utils'
+import { CurrencyCombobox } from '@/modules/currency'
 import { IMedia } from '@/modules/media'
 
-import { CountryCombobox } from '@/components/comboboxes/country-combobox'
 import { LoadingSpinnerIcon } from '@/components/icons'
 import MapPicker from '@/components/map/map-picker'
 import Modal, { IModalProps } from '@/components/modals/modal'
@@ -18,6 +20,12 @@ import FormErrorMessage from '@/components/ui/form-error-message'
 import FormFieldWrapper from '@/components/ui/form-field-wrapper'
 import ImageField from '@/components/ui/image-field'
 import { Input } from '@/components/ui/input'
+import {
+    InputGroup,
+    InputGroupAddon,
+    InputGroupInput,
+    InputGroupText,
+} from '@/components/ui/input-group'
 import { PhoneInput } from '@/components/ui/phone-input'
 import {
     Select,
@@ -55,12 +63,13 @@ export const CreateUpdateBranchByOrgForm = ({
     ...formProps
 }: ICreateBranchFormProps) => {
     const { countryCode } = useLocationInfo()
+    const invalidate = useQueryClient()
+
     const form = useForm<TBranchSchema>({
         resolver: standardSchemaResolver(branchSchema),
         reValidateMode: 'onChange',
         mode: 'onSubmit',
         defaultValues: {
-            country_code: countryCode,
             media: formProps.defaultValues?.media,
             description: formProps.defaultValues?.description ?? '',
             type:
@@ -77,7 +86,9 @@ export const CreateUpdateBranchByOrgForm = ({
     } = useCreateBranchByOrganizationId({
         options: {
             onSuccess: (createdData) => {
-                toast.success(`Branch ${createdData.name} created successfully`)
+                invalidate.invalidateQueries({
+                    queryKey: ['user-organization', 'current'],
+                })
                 form.reset()
                 formProps.onSuccess?.(createdData)
             },
@@ -91,7 +102,6 @@ export const CreateUpdateBranchByOrgForm = ({
         useUpdateBranch({
             options: {
                 onSuccess: (data) => {
-                    toast.success(`Branch ${data.name} updated successfully`)
                     form.reset()
                     formProps.onSuccess?.(data)
                 },
@@ -131,18 +141,19 @@ export const CreateUpdateBranchByOrgForm = ({
 
     const createDisabled = isPedingCreateBranch
 
-    const combinedError = error
+    const combinedError = serverRequestErrExtractor({ error: error })
 
     const isDirty = Object.keys(form.formState.dirtyFields).length > 0
 
     useAlertBeforeClosing(isDirty)
     return (
-        <div className="mt-10">
+        <div className="">
             <Form {...form}>
                 <form className="w-full" onSubmit={handleSubmit} ref={formRef}>
-                    <div className="flex w-full gap-x-5">
-                        <div className="grid w-1/2 grow grid-cols-2 gap-5">
+                    <div className="grid grid-cols-3 gap-2">
+                        <div className="inline-flex space-x-2 col-span-2">
                             <FormFieldWrapper
+                                className="flex-3"
                                 control={form.control}
                                 label="Branch Name"
                                 name="name"
@@ -156,6 +167,7 @@ export const CreateUpdateBranchByOrgForm = ({
                                 )}
                             />
                             <FormFieldWrapper
+                                className="flex-1"
                                 control={form.control}
                                 label="Branch Email"
                                 name="email"
@@ -168,6 +180,37 @@ export const CreateUpdateBranchByOrgForm = ({
                                     />
                                 )}
                             />
+                        </div>
+                        <FormFieldWrapper
+                            className="row-span-2"
+                            control={form.control}
+                            label="Branch Photo"
+                            name="media_id"
+                            render={({ field }) => {
+                                const value = form.watch('media')
+
+                                return (
+                                    <ImageField
+                                        {...field}
+                                        className="h-28"
+                                        onChange={(newImage) => {
+                                            if (newImage)
+                                                field.onChange(newImage.id)
+                                            else field.onChange(undefined)
+
+                                            form.setValue('media', newImage)
+                                        }}
+                                        placeholder="Upload Branch Photo"
+                                        value={
+                                            value
+                                                ? (value as IMedia).download_url
+                                                : value
+                                        }
+                                    />
+                                )
+                            }}
+                        />
+                        <div className="flex justify-evenly space-x-2 col-span-2">
                             <FormFieldWrapper
                                 control={form.control}
                                 label="Branch Type"
@@ -201,7 +244,6 @@ export const CreateUpdateBranchByOrgForm = ({
                                     </Select>
                                 )}
                             />
-
                             <FormFieldWrapper
                                 control={form.control}
                                 label="Contact Number"
@@ -216,234 +258,201 @@ export const CreateUpdateBranchByOrgForm = ({
                                 )}
                             />
                             <FormFieldWrapper
-                                className="grow"
                                 control={form.control}
-                                label="Address"
-                                name="address"
+                                label="Currency"
+                                name="currency_id"
                                 render={({ field }) => (
-                                    <Input
-                                        {...field}
-                                        disabled={isLoading}
-                                        placeholder="Enter address"
-                                        value={field.value || ''}
+                                    <CurrencyCombobox
+                                        onChange={(selected) =>
+                                            field.onChange(selected.id)
+                                        }
+                                        placeholder="Select Currency"
+                                        value={field.value}
                                     />
                                 )}
                             />
-                            <FormFieldWrapper
-                                control={form.control}
-                                label="Province"
-                                name="province"
-                                render={({ field }) => (
-                                    <Input
-                                        {...field}
-                                        disabled={isLoading}
-                                        placeholder="Enter province"
-                                        value={field.value || ''}
-                                    />
-                                )}
-                            />
-                            <FormFieldWrapper
-                                control={form.control}
-                                label="City"
-                                name="city"
-                                render={({ field }) => (
-                                    <Input
-                                        {...field}
-                                        disabled={isLoading}
-                                        placeholder="Enter city"
-                                        value={field.value || ''}
-                                    />
-                                )}
-                            />
-                            <FormFieldWrapper
-                                control={form.control}
-                                label="Barangay"
-                                name="barangay"
-                                render={({ field }) => (
-                                    <Input
-                                        {...field}
-                                        disabled={isLoading}
-                                        placeholder="Enter barangay"
-                                        value={field.value || ''}
-                                    />
-                                )}
-                            />
-                            <div className="col-span-2 grid grid-cols-3 gap-x-2">
-                                <FormFieldWrapper
-                                    control={form.control}
-                                    label="Region"
-                                    name="region"
-                                    render={({ field }) => (
-                                        <Input
-                                            {...field}
-                                            disabled={isLoading}
-                                            placeholder="Enter region"
-                                            value={field.value || ''}
-                                        />
-                                    )}
-                                />
-                                <FormFieldWrapper
-                                    control={form.control}
-                                    label="Postal Code"
-                                    name="postal_code"
-                                    render={({ field }) => (
-                                        <Input
-                                            {...field}
-                                            disabled={isLoading}
-                                            placeholder="Enter postal code"
-                                            value={field.value || ''}
-                                        />
-                                    )}
-                                />
-                                <FormFieldWrapper
-                                    control={form.control}
-                                    label="Country Code"
-                                    name="country_code"
-                                    render={({ field }) => (
-                                        <CountryCombobox
-                                            {...field}
-                                            defaultValue={field.value}
-                                            disabled={isLoading}
-                                            onChange={(country) =>
-                                                field.onChange(country.alpha2)
-                                            }
-                                        />
-                                    )}
-                                />
-                            </div>
                         </div>
-                        <div className="grid grid-cols-1">
-                            <FormFieldWrapper
-                                control={form.control}
-                                label="Branch Photo"
-                                name="media_id"
-                                render={({ field }) => {
-                                    const value = form.watch('media')
 
-                                    return (
-                                        <ImageField
-                                            {...field}
-                                            onChange={(newImage) => {
-                                                if (newImage)
-                                                    field.onChange(newImage.id)
-                                                else field.onChange(undefined)
-
-                                                form.setValue('media', newImage)
-                                            }}
-                                            placeholder="Upload Branch Photo"
-                                            value={
-                                                value
-                                                    ? (value as IMedia)
-                                                          .download_url
-                                                    : value
-                                            }
+                        <FormFieldWrapper
+                            control={form.control}
+                            label="Address"
+                            name="address"
+                            render={({ field }) => (
+                                <Input
+                                    {...field}
+                                    disabled={isLoading}
+                                    placeholder="Enter address"
+                                    value={field.value || ''}
+                                />
+                            )}
+                        />
+                        <FormFieldWrapper
+                            control={form.control}
+                            label="Province"
+                            name="province"
+                            render={({ field }) => (
+                                <Input
+                                    {...field}
+                                    disabled={isLoading}
+                                    placeholder="Enter province"
+                                    value={field.value || ''}
+                                />
+                            )}
+                        />
+                        <FormFieldWrapper
+                            control={form.control}
+                            label="City"
+                            name="city"
+                            render={({ field }) => (
+                                <Input
+                                    {...field}
+                                    disabled={isLoading}
+                                    placeholder="Enter city"
+                                    value={field.value || ''}
+                                />
+                            )}
+                        />
+                        <FormFieldWrapper
+                            control={form.control}
+                            label="Barangay"
+                            name="barangay"
+                            render={({ field }) => (
+                                <Input
+                                    {...field}
+                                    disabled={isLoading}
+                                    placeholder="Enter barangay"
+                                    value={field.value || ''}
+                                />
+                            )}
+                        />
+                        <FormFieldWrapper
+                            control={form.control}
+                            label="Region"
+                            name="region"
+                            render={({ field }) => (
+                                <Input
+                                    {...field}
+                                    disabled={isLoading}
+                                    placeholder="Enter region"
+                                    value={field.value || ''}
+                                />
+                            )}
+                        />
+                        <FormFieldWrapper
+                            control={form.control}
+                            label="Postal Code"
+                            name="postal_code"
+                            render={({ field }) => (
+                                <Input
+                                    {...field}
+                                    disabled={isLoading}
+                                    placeholder="Enter postal code"
+                                    value={field.value || ''}
+                                />
+                            )}
+                        />
+                        <FormFieldWrapper
+                            className="col-span-2"
+                            control={form.control}
+                            label="Branch Description"
+                            name="description"
+                            render={({ field }) => {
+                                const { ref: _ref, ...rest } = field
+                                return (
+                                    <FormControl>
+                                        <TextEditor
+                                            {...rest}
+                                            className="w-full h-fit"
+                                            content={field.value ?? ''}
+                                            disabled={isLoading}
+                                            placeholder="Write some description about your branch..."
+                                            textEditorClassName="!h-14"
                                         />
-                                    )
-                                }}
-                            />
-                            <FormFieldWrapper
-                                className="col-span-4 max-w-full"
-                                control={form.control}
-                                label="Branch Description"
-                                name="description"
-                                render={({ field }) => {
-                                    const { ref: _ref, ...rest } = field
-                                    return (
-                                        <FormControl>
-                                            <TextEditor
-                                                {...rest}
-                                                className="max-w-[500px] w-full"
-                                                content={field.value ?? ''}
+                                    </FormControl>
+                                )
+                            }}
+                        />
+
+                        <div className="flex flex-col row-span-2 space-y-4">
+                            <div className="flex gap-x-2 items-center ">
+                                <FormFieldWrapper
+                                    className="grow"
+                                    control={form.control}
+                                    label="Latitude"
+                                    name="latitude"
+                                    render={({ field }) => (
+                                        <div className="flex grow flex-col gap-y-2">
+                                            <Input
+                                                {...field}
                                                 disabled={isLoading}
-                                                placeholder="Write some description about your branch..."
-                                                textEditorClassName="!h-32"
+                                                onChange={field.onChange}
+                                                placeholder="latitude"
+                                                value={field.value || ''}
                                             />
-                                        </FormControl>
-                                    )
-                                }}
-                            />
-                            <div>
-                                <div className="flex flex-col space-y-2">
-                                    <div className="flex gap-x-2 items-center ">
-                                        <FormFieldWrapper
-                                            className="grow"
-                                            control={form.control}
-                                            label="Latitude"
-                                            name="latitude"
-                                            render={({ field }) => (
-                                                <div className="flex grow flex-col gap-y-2">
-                                                    <Input
-                                                        {...field}
-                                                        disabled={isLoading}
-                                                        onChange={
-                                                            field.onChange
-                                                        }
-                                                        placeholder="latitude"
-                                                        value={
-                                                            field.value || ''
-                                                        }
-                                                    />
-                                                </div>
-                                            )}
-                                        />
-                                        <FormFieldWrapper
-                                            className="grow"
-                                            control={form.control}
-                                            label="Longitude"
-                                            name="longitude"
-                                            render={({ field }) => (
-                                                <div className="flex grow flex-col gap-y-2">
-                                                    <Input
-                                                        {...field}
-                                                        disabled={isLoading}
-                                                        onChange={
-                                                            field.onChange
-                                                        }
-                                                        placeholder="Longitude"
-                                                        value={
-                                                            field.value || ''
-                                                        }
-                                                    />
-                                                </div>
-                                            )}
-                                        />
-                                    </div>
-                                    <MapPicker
-                                        disabled={isLoading}
-                                        onChange={(location) => {
-                                            if (location) {
-                                                form.setValue(
-                                                    'latitude',
-                                                    location.lat
-                                                )
-                                                form.setValue(
-                                                    'longitude',
-                                                    location.lng
-                                                )
-                                            } else {
-                                                form.setValue('latitude', 0)
-                                                form.setValue('longitude', 0)
-                                            }
-                                        }}
-                                        placeholder="Click to select branch location"
-                                        title="Select Branch Location"
-                                        value={{
-                                            lat:
-                                                form.watch('latitude') ||
-                                                14.780043,
-                                            lng:
-                                                form.watch('longitude') ||
-                                                121.046351,
-                                        }}
-                                        variant="outline"
-                                    />
-                                </div>
+                                        </div>
+                                    )}
+                                />
+                                <FormFieldWrapper
+                                    className="grow"
+                                    control={form.control}
+                                    label="Longitude"
+                                    name="longitude"
+                                    render={({ field }) => (
+                                        <div className="flex grow flex-col gap-y-2">
+                                            <Input
+                                                {...field}
+                                                disabled={isLoading}
+                                                onChange={field.onChange}
+                                                placeholder="Longitude"
+                                                value={field.value || ''}
+                                            />
+                                        </div>
+                                    )}
+                                />
                             </div>
+                            <MapPicker
+                                disabled={isLoading}
+                                onChange={(location) => {
+                                    if (location) {
+                                        form.setValue('latitude', location.lat)
+                                        form.setValue('longitude', location.lng)
+                                    } else {
+                                        form.setValue('latitude', 0)
+                                        form.setValue('longitude', 0)
+                                    }
+                                }}
+                                placeholder="Click to select branch location"
+                                title="Select Branch Location"
+                                value={{
+                                    lat: form.watch('latitude') || 14.780043,
+                                    lng: form.watch('longitude') || 121.046351,
+                                }}
+                                variant="outline"
+                            />
                         </div>
+                        <FormFieldWrapper
+                            className="col-span-2"
+                            control={form.control}
+                            label="Tax Identification Number"
+                            name="tax_identification_number"
+                            render={({ field }) => (
+                                <InputGroup>
+                                    <InputGroupInput
+                                        {...field}
+                                        placeholder="360"
+                                        type="text"
+                                    />
+                                    <InputGroupAddon align="inline-end">
+                                        <InputGroupText>TAX</InputGroupText>
+                                    </InputGroupAddon>
+                                </InputGroup>
+                            )}
+                        />
                     </div>
+
                     <FormErrorMessage
                         className="my-5 w-full"
-                        errorMessage={combinedError?.message ?? undefined}
+                        errorMessage={combinedError}
                     />
                     <div className="mt-5 flex justify-end gap-x-2">
                         <Button
@@ -493,7 +502,7 @@ export const CreateUpdateBranchFormModal = ({
 }) => {
     return (
         <Modal
-            className={cn('max-w-[75rem] p-10', className)}
+            className={cn('p-7 w-full min-w-6xl max-w-7xl', className)}
             description={description}
             title={title}
             {...props}

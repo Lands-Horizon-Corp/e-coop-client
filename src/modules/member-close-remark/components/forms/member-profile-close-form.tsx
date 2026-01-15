@@ -86,8 +86,6 @@ const MemberProfileCloseForm = ({
         keyName: 'fieldKey',
     })
 
-    form.watch('remarks')
-
     const handleSubmit = form.handleSubmit(({ remarks }: TMemberCloseForm) => {
         closeAccount({ profileId, data: remarks })
     }, handleFocusError)
@@ -122,7 +120,7 @@ const MemberProfileCloseForm = ({
                                 >
                                     {remarksFields.map((field, index) => (
                                         <div
-                                            className="relative space-y-2 rounded-xl border bg-background p-4"
+                                            className="relative space-y-2 rounded-xl border bg-popover dark:bg-background p-4"
                                             key={field.fieldKey}
                                         >
                                             <FormFieldWrapper

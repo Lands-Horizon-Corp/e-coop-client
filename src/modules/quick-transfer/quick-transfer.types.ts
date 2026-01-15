@@ -10,7 +10,7 @@ export interface IPaymentRequest {
     bank_id?: TEntityId
     bank_reference_number?: string
     entry_date?: string
-    account_id?: TEntityId
+    currency_id?: TEntityId
     payment_type_id?: TEntityId
 
     description?: string

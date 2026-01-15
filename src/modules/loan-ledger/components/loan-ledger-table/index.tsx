@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
 
-// import { useQueryClient } from '@tanstack/react-query'
+import qs from 'query-string'
 
 import FilterContext from '@/contexts/filter-context/filter-context'
 import { cn } from '@/helpers/tw-utils'
@@ -16,9 +16,12 @@ import DataTablePagination from '@/components/data-table/data-table-pagination'
 import DataTableToolbar, {
     IDataTableToolbarProps,
 } from '@/components/data-table/data-table-toolbar'
+import { TableRowActionStoreProvider } from '@/components/data-table/store/data-table-action-store'
 import { TableProps } from '@/components/data-table/table.type'
 import { useDataTableSorting } from '@/components/data-table/use-datatable-sorting'
-import useDataTableState from '@/components/data-table/use-datatable-state'
+import useDataTableState, {
+    useResolvedColumnOrder,
+} from '@/components/data-table/use-datatable-state'
 
 import useDatableFilterState from '@/hooks/use-filter-state'
 import { usePagination } from '@/hooks/use-pagination'
@@ -27,7 +30,10 @@ import LoanLedgerTableColumns, {
     ILoanLedgerTableColumnProps,
     loanLedgerGlobalSearchTargets,
 } from './columns'
-import LoanLedgerAction, { LoanLedgerRowContext } from './row-action-context'
+import LoanLedgerAction, {
+    LoanLedgerRowContext,
+    LoanLedgerTableActionManager,
+} from './row-action-context'
 
 export interface LoanLedgerTableProps
     extends TableProps<ILoanLedger>,
@@ -45,6 +51,7 @@ export interface LoanLedgerTableProps
 }
 
 const LoanLedgerTable = ({
+    persistKey = ['loan-ledger'],
     className,
     toolbarProps,
     defaultFilter,
@@ -69,18 +76,16 @@ const LoanLedgerTable = ({
         [actionComponent]
     )
 
-    const {
-        getRowIdFn,
-        columnOrder,
-        setColumnOrder,
-        isScrollable,
-        setIsScrollable,
-        columnVisibility,
-        setColumnVisibility,
-        rowSelectionState,
-        createHandleRowSelectionChange,
-    } = useDataTableState<ILoanLedger>({
-        defaultColumnOrder: columns.map((c) => c.id!),
+    const { resolvedColumnOrder, resolvedColumnVisibility, finalKeys } =
+        useResolvedColumnOrder({
+            columns,
+            persistKey,
+        })
+
+    const tableState = useDataTableState<ILoanLedger>({
+        key: finalKeys,
+        defaultColumnVisibility: resolvedColumnVisibility,
+        defaultColumnOrder: resolvedColumnOrder,
         onSelectData,
     })
 
@@ -103,7 +108,8 @@ const LoanLedgerTable = ({
         options: { enabled: false },
     })
 
-    const handleRowSelectionChange = createHandleRowSelectionChange(data)
+    const handleRowSelectionChange =
+        tableState.createHandleRowSelectionChange(data)
 
     const table = useReactTable({
         columns,
@@ -114,9 +120,9 @@ const LoanLedgerTable = ({
         state: {
             sorting: tableSorting,
             pagination,
-            columnOrder,
-            rowSelection: rowSelectionState.rowSelection,
-            columnVisibility,
+            columnOrder: tableState.columnOrder,
+            rowSelection: tableState.rowSelectionState.rowSelection,
+            columnVisibility: tableState.columnVisibility,
         },
         rowCount: pageSize,
         manualSorting: true,
@@ -125,62 +131,75 @@ const LoanLedgerTable = ({
         manualFiltering: true,
         manualPagination: true,
         columnResizeMode: 'onChange',
-        getRowId: getRowIdFn,
+        getRowId: tableState.getRowIdFn,
         onSortingChange: setTableSorting,
         onPaginationChange: setPagination,
         getCoreRowModel: getCoreRowModel(),
-        onColumnOrderChange: setColumnOrder,
+        onColumnOrderChange: tableState.setColumnOrder,
         getSortedRowModel: getSortedRowModel(),
-        onColumnVisibilityChange: setColumnVisibility,
+        onColumnVisibilityChange: tableState.setColumnVisibility,
         onRowSelectionChange: handleRowSelectionChange,
+        defaultColumn: { minSize: 100, size: 150, maxSize: 800 },
     })
-
+    const exportfilter = qs.stringify(
+        {
+            ...pagination,
+            sort: sortingStateBase64,
+            filter: filterState.finalFilterPayloadBase64,
+        },
+        { skipNull: true }
+    )
     return (
         <FilterContext.Provider value={filterState}>
-            <div
-                className={cn(
-                    'flex h-full flex-col gap-y-2',
-                    className,
-                    !isScrollable && 'h-fit !max-h-none'
-                )}
-            >
-                <DataTableToolbar
-                    exportActionProps={{
-                        pagination,
-                        isLoading: isPending,
-                        filters: filterState.finalFilterPayload,
-                        disabled: isPending || isRefetching,
-                    }}
-                    filterLogicProps={{
-                        filterLogic: filterState.filterLogic,
-                        setFilterLogic: filterState.setFilterLogic,
-                    }}
-                    globalSearchProps={{
-                        defaultMode: 'equal',
-                        targets: loanLedgerGlobalSearchTargets,
-                    }}
-                    refreshActionProps={{
-                        onClick: () => refetch(),
-                        isLoading: isPending || isRefetching,
-                    }}
-                    // No delete/export actions for loan ledger
-                    scrollableProps={{ isScrollable, setIsScrollable }}
-                    table={table}
-                    {...toolbarProps}
-                />
-                <DataTable
-                    className="mb-2"
-                    isScrollable={isScrollable}
-                    isStickyFooter
-                    isStickyHeader
-                    onDoubleClick={onDoubleClick}
-                    onRowClick={onRowClick}
-                    RowContextComponent={RowContextComponent}
-                    setColumnOrder={setColumnOrder}
-                    table={table}
-                />
-                <DataTablePagination table={table} totalSize={totalSize} />
-            </div>
+            <TableRowActionStoreProvider>
+                <div
+                    className={cn(
+                        'flex h-full flex-col gap-y-2',
+                        className,
+                        !tableState.isScrollable && 'h-fit !max-h-none'
+                    )}
+                >
+                    <DataTableToolbar
+                        exportActionProps={{
+                            isLoading: isPending,
+                            filters: exportfilter,
+                            model: 'LoanLedger',
+                            url: 'api/v1/loan-ledger/search',
+                        }}
+                        filterLogicProps={{
+                            filterLogic: filterState.filterLogic,
+                            setFilterLogic: filterState.setFilterLogic,
+                        }}
+                        globalSearchProps={{
+                            defaultMode: 'contains',
+                            targets: loanLedgerGlobalSearchTargets,
+                        }}
+                        refreshActionProps={{
+                            onClick: () => refetch(),
+                            isLoading: isPending || isRefetching,
+                        }}
+                        scrollableProps={{
+                            isScrollable: tableState.isScrollable,
+                            setIsScrollable: tableState.setIsScrollable,
+                        }}
+                        table={table}
+                        {...toolbarProps}
+                    />
+                    <DataTable
+                        className="mb-2"
+                        isScrollable={tableState.isScrollable}
+                        isStickyFooter
+                        isStickyHeader
+                        onDoubleClick={onDoubleClick}
+                        onRowClick={onRowClick}
+                        RowContextComponent={RowContextComponent}
+                        setColumnOrder={tableState.setColumnOrder}
+                        table={table}
+                    />
+                    <DataTablePagination table={table} totalSize={totalSize} />
+                    <LoanLedgerTableActionManager />
+                </div>
+            </TableRowActionStoreProvider>
         </FilterContext.Provider>
     )
 }

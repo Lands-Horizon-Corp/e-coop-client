@@ -241,7 +241,3 @@ export const sortByCurrency = <T extends Record<string, unknown>>(
         return comparison
     })
 }
-
-export function getCurrentTimezone(): string {
-    return Intl.DateTimeFormat().resolvedOptions().timeZone
-}

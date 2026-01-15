@@ -1,3 +1,5 @@
+import { useEffect } from 'react'
+
 import { cn, formatNumber } from '@/helpers'
 
 import { RefreshIcon } from '@/components/icons'
@@ -6,7 +8,11 @@ import { Button } from '@/components/ui/button'
 
 import { IBaseProps, TEntityId } from '@/types'
 
-import { TAdjustmentEntryHookMode, useAdjustmentEntryTotal } from '..'
+import {
+    IAdjustmentEntryTotal,
+    TAdjustmentEntryHookMode,
+    useAdjustmentEntryTotal,
+} from '..'
 
 type AdjustmentEntryTotalProps = {
     mode: Exclude<TAdjustmentEntryHookMode, 'all'>
@@ -31,9 +37,11 @@ export const AdjustmentEntryTotal = ({
     className,
     currencyId,
     userOrganizationId,
+    onLoad,
 }: TAdjustmentEntryTotalProps & {
     currencyId?: TEntityId
     userOrganizationId?: TEntityId
+    onLoad?: (adjustmentEntryTotalData: IAdjustmentEntryTotal) => void
 }) => {
     const { data, isPending, refetch } = useAdjustmentEntryTotal({
         options: { enabled: true },
@@ -42,10 +50,17 @@ export const AdjustmentEntryTotal = ({
         userOrganizationId,
     })
 
+    useEffect(() => {
+        if (data && onLoad) {
+            onLoad(data)
+        }
+    }, [data, onLoad])
+
     return (
         <div
             className={cn(
                 'flex justify-end bg-gradient-to-tr from-card/20 to-primary/10 rounded-2xl relative px-4 py-1 border gap-x-8',
+                !data?.is_balanced && 'to-rose-600/10 border-rose-400',
                 className
             )}
         >
@@ -65,7 +80,13 @@ export const AdjustmentEntryTotal = ({
             {children}
 
             <div className="p-2 space-y-1">
-                <p className="text-primary text-xl font-bold">
+                <p
+                    className={cn(
+                        'text-primary text-xl font-bold',
+                        !data?.is_balanced &&
+                            'text-rose-400 border-rose-400 animate-pulse'
+                    )}
+                >
                     {formatNumber(data?.total_debit ?? 0, 2)}
                 </p>
 
@@ -75,7 +96,13 @@ export const AdjustmentEntryTotal = ({
             </div>
 
             <div className="p-2 space-y-1">
-                <p className="text-primary text-xl font-bold">
+                <p
+                    className={cn(
+                        'text-primary text-xl font-bold',
+                        !data?.is_balanced &&
+                            'text-rose-400 border-rose-400 animate-pulse'
+                    )}
+                >
                     {formatNumber(data?.total_credit ?? 0, 2)}
                 </p>
 

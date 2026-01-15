@@ -68,7 +68,7 @@ export interface ICashCheckVoucher extends IBaseEntityMeta {
     printed_date?: string
     approved_date?: string
     released_date?: string
-    date: string
+    entry_date: string
 
     //signatories
     approved_by_signature_media_id?: string

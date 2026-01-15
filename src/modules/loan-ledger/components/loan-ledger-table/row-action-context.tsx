@@ -4,29 +4,49 @@ import { Row } from '@tanstack/react-table'
 
 import RowActionsGroup from '@/components/data-table/data-table-row-actions'
 import DataTableRowContext from '@/components/data-table/data-table-row-context'
+import { useTableRowActionStore } from '@/components/data-table/store/data-table-action-store'
 import { HashIcon, PrinterFillIcon } from '@/components/icons'
 import { ContextMenuItem } from '@/components/ui/context-menu'
 import { DropdownMenuItem } from '@/components/ui/dropdown-menu'
 
-import { useModalState } from '@/hooks/use-modal-state'
-
 import { ILoanLedger } from '../../loan-ledger.types'
 import { LoanLedgerChangeLineFormModal } from '../forms/loan-ledger-change-line-form'
 import { LoanLedgerPrintFormModal } from '../forms/loan-ledger-print-form'
+
+export type LoanLedgerActionType = 'change-line' | 'print'
+
+export type LoanLedgerActionExtra = Record<string, never>
 
 interface UseLoanLedgerActionsProps {
     row: Row<ILoanLedger>
 }
 
 const useLoanLedgerActions = ({ row }: UseLoanLedgerActionsProps) => {
-    const editLineModal = useModalState()
-    const printModal = useModalState()
     const ledger = row.original
+    const { open } = useTableRowActionStore<
+        ILoanLedger,
+        LoanLedgerActionType,
+        LoanLedgerActionExtra
+    >()
+
+    const handleChangeLine = () => {
+        open('change-line', {
+            id: ledger.id,
+            defaultValues: ledger,
+        })
+    }
+
+    const handlePrint = () => {
+        open('print', {
+            id: ledger.id,
+            defaultValues: ledger,
+        })
+    }
 
     return {
         ledger,
-        editLineModal,
-        printModal,
+        handleChangeLine,
+        handlePrint,
     }
 }
 
@@ -38,41 +58,19 @@ export interface ILoanLedgerTableActionComponentProp {
 export const LoanLedgerAction = ({
     row,
 }: ILoanLedgerTableActionComponentProp) => {
-    const { ledger, editLineModal, printModal } = useLoanLedgerActions({
-        row,
-    })
+    const { handleChangeLine, handlePrint } = useLoanLedgerActions({ row })
 
     return (
         <>
-            <div onClick={(e) => e.stopPropagation()}>
-                <LoanLedgerChangeLineFormModal
-                    {...editLineModal}
-                    formProps={{
-                        loanLedgerId: ledger.id,
-                        defaultValues: { line_number: ledger.line_number },
-                        onSuccess: () => editLineModal.onOpenChange(false),
-                    }}
-                />
-                <LoanLedgerPrintFormModal
-                    {...printModal}
-                    formProps={{
-                        loanLedgerId: row.original?.id,
-                        defaultValues: { line_number: ledger.line_number },
-                    }}
-                />
-            </div>
+            <div onClick={(e) => e.stopPropagation()}></div>
             <RowActionsGroup
                 canSelect
                 otherActions={
                     <>
-                        <DropdownMenuItem
-                            onClick={() => editLineModal.onOpenChange(true)}
-                        >
+                        <DropdownMenuItem onClick={handleChangeLine}>
                             <HashIcon className="mr-1" /> Change Line#
                         </DropdownMenuItem>
-                        <DropdownMenuItem
-                            onClick={() => printModal.onOpenChange(true)}
-                        >
+                        <DropdownMenuItem onClick={handlePrint}>
                             <PrinterFillIcon className="mr-1" /> Print Ledger
                         </DropdownMenuItem>
                     </>
@@ -90,39 +88,18 @@ export const LoanLedgerRowContext = ({
     row,
     children,
 }: ILoanLedgerRowContextProps) => {
-    const { ledger, editLineModal, printModal } = useLoanLedgerActions({
-        row,
-    })
+    const { handleChangeLine, handlePrint } = useLoanLedgerActions({ row })
 
     return (
         <>
-            <LoanLedgerChangeLineFormModal
-                {...editLineModal}
-                formProps={{
-                    loanLedgerId: ledger.id,
-                    defaultValues: { line_number: ledger.line_number },
-                    onSuccess: () => editLineModal.onOpenChange(false),
-                }}
-            />
-            <LoanLedgerPrintFormModal
-                {...printModal}
-                formProps={{
-                    loanLedgerId: row.original?.id,
-                    defaultValues: { line_number: ledger.line_number },
-                }}
-            />
             <DataTableRowContext
                 otherActions={
                     <>
-                        <ContextMenuItem
-                            onSelect={() => editLineModal.onOpenChange(true)}
-                        >
+                        <ContextMenuItem onSelect={handleChangeLine}>
                             <HashIcon className="mr-2" strokeWidth={1.5} />
                             Change Line
                         </ContextMenuItem>
-                        <ContextMenuItem
-                            onSelect={() => printModal.onOpenChange(true)}
-                        >
+                        <ContextMenuItem onSelect={handlePrint}>
                             <PrinterFillIcon
                                 className="mr-2"
                                 strokeWidth={1.5}
@@ -135,6 +112,44 @@ export const LoanLedgerRowContext = ({
             >
                 {children}
             </DataTableRowContext>
+        </>
+    )
+}
+
+export const LoanLedgerTableActionManager = () => {
+    const { state, close } = useTableRowActionStore<
+        ILoanLedger,
+        LoanLedgerActionType,
+        LoanLedgerActionExtra
+    >()
+
+    if (!state || !state.defaultValues) return null
+
+    const ledger = state.defaultValues
+
+    return (
+        <>
+            {state.action === 'change-line' && (
+                <LoanLedgerChangeLineFormModal
+                    formProps={{
+                        loanLedgerId: ledger.id,
+                        defaultValues: { line_number: ledger.line_number },
+                        onSuccess: close,
+                    }}
+                    onOpenChange={close}
+                    open={state.isOpen}
+                />
+            )}
+            {state.action === 'print' && (
+                <LoanLedgerPrintFormModal
+                    formProps={{
+                        loanLedgerId: ledger.id,
+                        defaultValues: { line_number: ledger.line_number },
+                    }}
+                    onOpenChange={close}
+                    open={state.isOpen}
+                />
+            )}
         </>
     )
 }

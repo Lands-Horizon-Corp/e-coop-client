@@ -6,6 +6,7 @@ import { ColumnDef, Row } from '@tanstack/react-table'
 import { IChildProps, IClassProps } from '@/types'
 
 export interface TableProps<T> extends IClassProps {
+    persistKey?: string[]
     defaultFilter?: TFilterObject
     defaultColumnSort?: string[]
     excludeColumnIds?: string[]

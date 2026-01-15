@@ -6,8 +6,12 @@ import CashCheckVoucherCreateUpdateFormModal from '@/modules/cash-check-voucher/
 import CashCheckVoucherPrintFormModal from '@/modules/cash-check-voucher/components/forms/cash-check-voucher-print-form-modal'
 import CashCheckVoucherOtherAction from '@/modules/cash-check-voucher/components/tables/cash-check-other-voucher'
 import { TCashCheckVoucherApproveReleaseDisplayMode } from '@/modules/cash-check-voucher/components/tables/row-action-context'
+import PrintReportFormModal from '@/modules/generated-report/components/forms/print-modal-config'
+import { useGenerateReport } from '@/modules/generated-report/components/generate-report-hooks/use-report-generate'
+import useGeneratedReportConfigStore from '@/store/generated-report-config-store'
 
 import { EyeIcon, PencilFillIcon, SignatureLightIcon } from '@/components/icons'
+import { CashCheckVoucherTemplates } from '@/components/templates/template-cash-check-disbursement'
 import { Button } from '@/components/ui/button'
 import {
     DropdownMenu,
@@ -34,6 +38,7 @@ const useCardKanbanActions = ({
     const printModal = useModalState()
     const approveModal = useModalState()
     const releaseModal = useModalState()
+    const generateReport = useModalState()
 
     const handleOpenPrintModal = () => {
         printModal.onOpenChange(true)
@@ -52,6 +57,10 @@ const useCardKanbanActions = ({
         cashCheckSignatureVoucher.onOpenChange(true)
     }
 
+    const handleGenerateReport = () => {
+        generateReport.onOpenChange(true)
+    }
+
     return {
         handleOpenViewModal,
         cashCheckVoucherModalState,
@@ -65,6 +74,8 @@ const useCardKanbanActions = ({
         handleApproveModal,
         releaseModal,
         handleReleaseModal,
+        generateReport,
+        handleGenerateReport,
     }
 }
 
@@ -97,7 +108,16 @@ export const CashCheckVoucherCardActions = ({
         handleReleaseModal,
         printModal,
         handleOpenPrintModal,
+        generateReport,
     } = useCardKanbanActions({ cashCheckVoucher, refetch })
+
+    const { clear } = useGeneratedReportConfigStore()
+
+    const createGeneratedReport = useGenerateReport({
+        onSuccess: () => {
+            clear()
+        },
+    })
 
     return (
         <>
@@ -115,8 +135,29 @@ export const CashCheckVoucherCardActions = ({
                     cashCheckVoucherId: cashCheckVoucher.id,
                     onSuccess: () => {
                         refetch()
+                        createGeneratedReport?.handleGenerateReport()
                     },
                 }}
+            />
+            <PrintReportFormModal
+                {...generateReport}
+                formProps={{
+                    defaultValues: {
+                        name: 'Cash Check disbursement',
+                        description: 'Generated Cash Check Voucher',
+                        model: 'CashCheckVoucher',
+                        generated_report_type: 'pdf',
+                        url: `/api/v1/cash-check-voucher/${cashCheckVoucher.id}`,
+                    },
+                    onSuccess: () => {
+                        generateReport.onOpenChange(false)
+                    },
+                    onSubmit: () => {
+                        handleOpenPrintModal()
+                    },
+                    templateOptions: CashCheckVoucherTemplates,
+                }}
+                title="Generate to Print"
             />
             <CashCheckVoucherTransactionSignatureUpdateFormModal
                 {...cashCheckSignatureVoucher}
@@ -180,7 +221,9 @@ export const CashCheckVoucherCardActions = ({
                         <DropdownMenuContent>
                             <CashCheckVoucherOtherAction
                                 onApprove={handleApproveModal}
-                                onPrint={handleOpenPrintModal}
+                                onPrint={() => {
+                                    generateReport.onOpenChange(true)
+                                }}
                                 onRefetch={refetch}
                                 onRelease={handleReleaseModal}
                                 row={cashCheckVoucher}

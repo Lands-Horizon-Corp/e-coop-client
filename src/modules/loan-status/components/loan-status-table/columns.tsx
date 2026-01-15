@@ -69,6 +69,7 @@ const LoanStatusTableColumns = (
                 <DataTableColumnHeader {...props} title="Name">
                     <ColumnActions {...props}>
                         <TextFilter<ILoanStatus>
+                            defaultMode="contains"
                             displayText="Name"
                             field="name"
                         />

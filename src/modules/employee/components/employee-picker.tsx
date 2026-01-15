@@ -55,6 +55,7 @@ const EmployeePicker = forwardRef<HTMLButtonElement, Props>(
 
         const { finalFilterPayloadBase64, bulkSetFilter } = useFilterState({
             defaultFilterMode: 'OR',
+            debounceFinalFilterMs: 0,
             onFilterChange: () =>
                 setPagination((prev) => ({
                     ...prev,
@@ -194,7 +195,7 @@ const EmployeePicker = forwardRef<HTMLButtonElement, Props>(
                             <div>
                                 <PreviewMediaWrapper media={value?.user?.media}>
                                     <ImageDisplay
-                                        src={value?.user.media?.download_url}
+                                        src={value?.user?.media?.download_url}
                                     />
                                 </PreviewMediaWrapper>
                             </div>

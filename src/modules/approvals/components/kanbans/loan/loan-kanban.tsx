@@ -78,6 +78,7 @@ const LoanKanban = ({ className }: { className?: string }) => {
                 menuItems={LoanKanbanMenu}
                 {...searchKanban}
             />
+
             <div className="flex-1 flex overflow-auto ecoop-scroll">
                 {selectedMode ? (
                     // Single Mode View - When a specific mode is selected

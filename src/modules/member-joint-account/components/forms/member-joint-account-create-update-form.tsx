@@ -207,6 +207,7 @@ const MemberJointAccountCreateUpdateForm = ({
                                         <Input
                                             {...field}
                                             autoComplete="given-name"
+                                            className="bg-popover"
                                             disabled={isDisabled(field.name)}
                                             id={field.name}
                                             placeholder="First Name"
@@ -224,6 +225,7 @@ const MemberJointAccountCreateUpdateForm = ({
                                         <Input
                                             {...field}
                                             autoComplete="additional-name"
+                                            className="bg-popover"
                                             disabled={isDisabled(field.name)}
                                             id={field.name}
                                             placeholder="Middle Name"
@@ -241,6 +243,7 @@ const MemberJointAccountCreateUpdateForm = ({
                                         <Input
                                             {...field}
                                             autoComplete="family-name"
+                                            className="bg-popover"
                                             disabled={isDisabled(field.name)}
                                             id={field.name}
                                             placeholder="Last Name"
@@ -258,6 +261,7 @@ const MemberJointAccountCreateUpdateForm = ({
                                         <Input
                                             {...field}
                                             autoComplete="honorific-suffix"
+                                            className="bg-popover"
                                             disabled={isDisabled(field.name)}
                                             id={field.name}
                                             placeholder=""
@@ -277,6 +281,7 @@ const MemberJointAccountCreateUpdateForm = ({
                                 render={({ field }) => (
                                     <InputDate
                                         {...field}
+                                        className="bg-popover"
                                         disabled={isDisabled(field.name)}
                                         id={field.name}
                                         placeholder="Birthday"
@@ -290,6 +295,7 @@ const MemberJointAccountCreateUpdateForm = ({
                                 render={({ field }) => (
                                     <RelationshipCombobox
                                         {...field}
+                                        className="bg-popover"
                                         disabled={isDisabled(field.name)}
                                         id={field.name}
                                         placeholder="Select Relationship"
@@ -308,14 +314,14 @@ const MemberJointAccountCreateUpdateForm = ({
                                     content={field.value}
                                     disabled={isDisabled(field.name)}
                                     placeholder="Description..."
-                                    textEditorClassName="!max-w-none bg-background"
+                                    textEditorClassName="!max-w-none bg-popover"
                                 />
                             )}
                         />
                     </fieldset>
                 </fieldset>
                 <FormFooterResetSubmit
-                    disableSubmit={!form.formState.isDirty}
+                    disableSubmit={!form.formState.isDirty || isPending}
                     error={error}
                     isLoading={isPending}
                     onReset={() => {

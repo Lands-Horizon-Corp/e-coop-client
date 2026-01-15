@@ -30,7 +30,7 @@ import {
 
 import { useShortcut } from '@/hooks/use-shorcuts'
 
-import { FinancialStatementTypeEnum } from '../financial-statement-definition.types'
+import { FINANCIAL_STATEMENT_TYPE } from '../financial-statement-definition.constants'
 import { FinancialStatementDefinitionTreeViewer } from './components'
 import FinancialStatementSkeleton from './components/financial-statement-skeleton'
 
@@ -70,7 +70,7 @@ const FinancialStatementDefinition = () => {
     ) => {
         setFinancialStatmentAccountsGroupingId(grouping.id)
 
-        const GeneralLedgerTypeArray = Object.values(FinancialStatementTypeEnum)
+        const GeneralLedgerTypeArray = FINANCIAL_STATEMENT_TYPE
         const matchedType = GeneralLedgerTypeArray.find(
             (type) => type === grouping.name
         )

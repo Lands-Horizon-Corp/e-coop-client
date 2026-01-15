@@ -146,7 +146,7 @@ const ByTermMopMemberTypeSection = ({
                             <MemberTypeCombobox
                                 {...field}
                                 onChange={(memberType) => {
-                                    field.onChange(memberType.id)
+                                    field.onChange(memberType?.id)
                                     form.setValue('member_type', memberType)
                                 }}
                                 placeholder="Member Type"

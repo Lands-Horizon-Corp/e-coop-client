@@ -1,19 +1,17 @@
-import { useCallback, useState } from 'react'
+import { useCallback } from 'react'
 
 import { toast } from 'sonner'
 
-import { PAGINATION_INITIAL_INDEX } from '@/constants'
 import { cn } from '@/helpers'
 import { currencyFormat } from '@/modules/currency'
-import { useFilteredPaginatedGeneralLedger } from '@/modules/general-ledger'
-import { PaginationState } from '@tanstack/react-table'
+import { useGetAllGeneralLedger } from '@/modules/general-ledger'
 
 import CopyTextButton from '@/components/copy-text-button'
-import { useDataTableSorting } from '@/components/data-table/use-datatable-sorting'
-import MiniPaginationBar from '@/components/pagination-bars/mini-pagination-bar'
+import { RefreshIcon } from '@/components/icons'
+import LoadingSpinner from '@/components/spinners/loading-spinner'
 import { Badge } from '@/components/ui/badge'
+import { Button } from '@/components/ui/button'
 
-import useFilterState from '@/hooks/use-filter-state'
 import { useQeueryHookCallback } from '@/hooks/use-query-hook-cb'
 
 import { TEntityId } from '@/types'
@@ -48,37 +46,19 @@ const TransactionCurrentPaymentEntry = ({
     transaction,
     totalAmount,
 }: CurrentPaymentsEntryListProps) => {
-    const [pagination, setPagination] = useState<PaginationState>({
-        pageIndex: PAGINATION_INITIAL_INDEX,
-        pageSize: 20,
-    })
-    const { sortingStateBase64 } = useDataTableSorting()
-
-    const { finalFilterPayloadBase64 } = useFilterState({
-        defaultFilterMode: 'OR',
-        onFilterChange: () =>
-            setPagination((prev) => ({
-                ...prev,
-                pageIndex: PAGINATION_INITIAL_INDEX,
-            })),
-    })
-
     const {
         data: generalLedgerBasedTransaction,
         isLoading,
-        isFetching,
         isError,
         isSuccess,
-    } = useFilteredPaginatedGeneralLedger({
+        isRefetching,
+        refetch: refetchGeneralLedger,
+    } = useGetAllGeneralLedger({
         transactionId,
         mode: 'transaction',
         options: {
             retry: 0,
-        },
-        query: {
-            ...pagination,
-            sort: sortingStateBase64,
-            filter: finalFilterPayloadBase64,
+            enabled: !!transactionId,
         },
     })
 
@@ -93,12 +73,8 @@ const TransactionCurrentPaymentEntry = ({
         isSuccess: isSuccess,
     })
 
-    const hasPayments =
-        generalLedgerBasedTransaction &&
-        generalLedgerBasedTransaction.data.length > 0
-
     return (
-        <div className="flex min-h-[100%] h-fit flex-col gap-y-2 p-4 overflow-hidden  rounded-2xl bg-card">
+        <div className="flex min-h-[100%] h-fit flex-col gap-y-2 mb-2 p-4 overflow-hidden  rounded-2xl bg-card">
             <div className="flex items-center gap-x-2">
                 <div className=" flex-grow rounded-xl py-2">
                     <div className="flex items-center justify-between gap-x-2">
@@ -108,35 +84,34 @@ const TransactionCurrentPaymentEntry = ({
                                 Total Amount
                             </p>
                         </div>
-                        <p className="text-lg font-bold text-primary dark:text-primary">
-                            {currencyFormat(totalAmount || 0, {
-                                currency: transaction?.currency,
-                                showSymbol: !!transaction?.currency,
-                            })}
-                        </p>
+                        <div className="flex items-center gap-x-1">
+                            <p className="text-lg font-bold text-primary dark:text-primary">
+                                {currencyFormat(totalAmount || 0, {
+                                    currency: transaction?.currency,
+                                    showSymbol: !!transaction?.currency,
+                                })}
+                            </p>
+                            <Button
+                                disabled={isRefetching}
+                                onClick={() => refetchGeneralLedger()}
+                                size="icon-sm"
+                                variant="ghost"
+                            >
+                                {isRefetching ? (
+                                    <LoadingSpinner />
+                                ) : (
+                                    <RefreshIcon />
+                                )}
+                            </Button>
+                        </div>
                     </div>
                 </div>
             </div>
             {/* <Separator /> */}
             <TransactionCurrentPaymentItem
-                currentPayment={generalLedgerBasedTransaction?.data || []}
-                hasPayments={hasPayments}
+                currentPayment={generalLedgerBasedTransaction || []}
+                handleRefetchTransaction={() => refetchGeneralLedger()}
                 isLoading={isLoading}
-            />
-            <MiniPaginationBar
-                disablePageMove={isFetching}
-                onNext={({ pageIndex }) =>
-                    setPagination((prev) => ({ ...prev, pageIndex }))
-                }
-                onPrev={({ pageIndex }) =>
-                    setPagination((prev) => ({ ...prev, pageIndex }))
-                }
-                pagination={{
-                    pageIndex: pagination.pageIndex,
-                    pageSize: pagination.pageSize,
-                    totalPage: generalLedgerBasedTransaction?.totalPage || 0,
-                    totalSize: generalLedgerBasedTransaction?.totalSize || 0,
-                }}
             />
         </div>
     )

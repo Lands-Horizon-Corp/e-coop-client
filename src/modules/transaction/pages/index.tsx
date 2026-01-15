@@ -5,13 +5,12 @@ import { useNavigate } from '@tanstack/react-router'
 import { toast } from 'sonner'
 
 import { SHORTCUT_SCOPES } from '@/constants'
-import { AccountTypeEnum } from '@/modules/account'
 import { IGeneralLedger } from '@/modules/general-ledger'
 import {
     ITransaction,
     TransactionCurrentPaymentEntry,
     TransactionModalSuccessPayment,
-    useGetById,
+    useGetTransactionById,
 } from '@/modules/transaction'
 import { useTransactionBatchStore } from '@/modules/transaction-batch/store/transaction-batch-store'
 import TransactionMemberScanner from '@/modules/transaction/components/transaction-member-scanner'
@@ -24,7 +23,7 @@ import { ResetIcon } from '@/components/icons'
 // import { useShortcutContext } from '@/components/shorcuts/general-shortcuts-wrapper'
 import { Button } from '@/components/ui/button'
 
-import { useModalState } from '@/hooks/use-modal-state'
+// import { useModalState } from '@/hooks/use-modal-state'
 import { useSubscribe } from '@/hooks/use-pubsub'
 import { useQeueryHookCallback } from '@/hooks/use-query-hook-cb'
 
@@ -44,7 +43,7 @@ const Transaction = ({ transactionId, fullPath }: TTransactionProps) => {
     const { hasNoTransactionBatch, data: currentTransactionBatch } =
         useTransactionBatchStore()
     const { modalData, isOpen, onClose } = useTransactionReverseSecurityStore()
-    const loanPickerState = useModalState()
+    // const loanPickerState = useModalState()
     // const { setActiveScope } = useShortcutContext()
 
     const {
@@ -83,7 +82,7 @@ const Transaction = ({ transactionId, fullPath }: TTransactionProps) => {
         isError,
         isSuccess,
         error,
-    } = useGetById({
+    } = useGetTransactionById({
         id: transactionId,
         options: {
             enabled: !!transactionId,
@@ -152,6 +151,10 @@ const Transaction = ({ transactionId, fullPath }: TTransactionProps) => {
         }
     })
 
+    const isTransactionMismatchCurrentBatch = !transaction
+        ? false
+        : currentTransactionBatch?.id !== transaction?.transaction_batch_id
+
     return (
         <div
         // onClick={() => {
@@ -188,7 +191,7 @@ const Transaction = ({ transactionId, fullPath }: TTransactionProps) => {
 
                 <div className="flex h-full flex-col lg:flex-row  w-full gap-2 overflow-hidden">
                     {/* Left Section (Payment) */}
-                    <div className="w-full lg:w-[40%] ecoop-scroll flex flex-col py-2 overflow-y-auto">
+                    <div className="w-full lg:w-[40%] ecoop-scroll flex flex-col overflow-y-auto">
                         <TransactionCurrentPaymentEntry
                             fullPath={fullPath}
                             totalAmount={transaction?.amount}
@@ -202,6 +205,9 @@ const Transaction = ({ transactionId, fullPath }: TTransactionProps) => {
                                     e.preventDefault()
                                     handleResetAll()
                                     handleSetTransactionId({ fullPath })
+                                    queryClient.resetQueries({
+                                        queryKey: ['transaction'],
+                                    })
                                 }}
                                 size="sm"
                                 variant="outline"
@@ -216,7 +222,7 @@ const Transaction = ({ transactionId, fullPath }: TTransactionProps) => {
                         <TransactionMemberScanner
                             className="p-2"
                             fullPath={fullPath}
-                            handleSetTransactionId={() =>
+                            handleRemoveMember={() =>
                                 handleSetTransactionId({
                                     transactionId: undefined,
                                     fullPath,
@@ -233,12 +239,9 @@ const Transaction = ({ transactionId, fullPath }: TTransactionProps) => {
                                     )
                                 }
 
-                                if (
-                                    data.original.account?.type ===
-                                    AccountTypeEnum.Loan
-                                ) {
-                                    return loanPickerState.onOpenChange(true)
-                                }
+                                // if (data.original.account?.type === 'Loan') {
+                                //     return loanPickerState.onOpenChange(true)
+                                // }
 
                                 if (
                                     data.original.account.currency_id !==
@@ -257,7 +260,7 @@ const Transaction = ({ transactionId, fullPath }: TTransactionProps) => {
                 </div>
                 {/* bottom Section (transaction  Payment) */}
             </PageContainer>
-            {selectedMember && (
+            {selectedMember && !isTransactionMismatchCurrentBatch && (
                 <PaymentWithTransactionForm
                     currentTransactionBatch={currentTransactionBatch}
                     memberJointId={selectedJointMember?.id}

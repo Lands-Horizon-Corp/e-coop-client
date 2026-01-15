@@ -1,6 +1,6 @@
 import z from 'zod'
 
-import { entityIdSchema } from '@/validation'
+import { PercentageSchema, entityIdSchema } from '@/validation'
 
 import { UnbalanceAccountSchema } from '../unbalance-account'
 
@@ -60,6 +60,13 @@ export const BranchSettingsSchema = z.object({
     default_member_type_id: entityIdSchema,
 
     loan_applied_equal_to_balance: z.boolean().default(true),
+
+    annual_divisor: z.coerce
+        .number()
+        .int('Should be whole number')
+        .min(0)
+        .optional(),
+    tax_interest: PercentageSchema.optional(),
 })
 
 export type TBranchSettingsSchema = z.infer<typeof BranchSettingsSchema>
@@ -73,6 +80,9 @@ export const BranchSettingsCurrencySchema = z.object({
 
     paid_up_shared_capital_account_id: entityIdSchema,
     paid_up_shared_capital_account: z.any(),
+
+    compassion_fund_account_id: entityIdSchema,
+    compassion_fund_account: z.any(),
 
     unbalanced_accounts: z
         .array(UnbalanceAccountSchema)

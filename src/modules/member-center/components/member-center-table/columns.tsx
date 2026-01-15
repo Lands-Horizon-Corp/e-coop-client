@@ -69,6 +69,7 @@ const memberCenterTableColumns = (
                 <DataTableColumnHeader {...props} title="Name">
                     <ColumnActions {...props}>
                         <TextFilter<IMemberCenter>
+                            defaultMode="contains"
                             displayText="Name"
                             field="name"
                         />
@@ -93,6 +94,7 @@ const memberCenterTableColumns = (
                 <DataTableColumnHeader {...props} title="Description">
                     <ColumnActions {...props}>
                         <TextFilter<IMemberCenter>
+                            defaultMode="contains"
                             displayText="Description"
                             field="description"
                         />

@@ -232,7 +232,7 @@ const CheckRemittanceCreateUpdateForm = ({
                     />
                 </fieldset>
                 <FormFooterResetSubmit
-                    disableSubmit={!form.formState.isDirty}
+                    disableSubmit={!form.formState.isDirty || isPending}
                     error={error}
                     isLoading={isPending}
                     onReset={() => {
@@ -258,7 +258,7 @@ export const CheckRemittanceCreateUpdateFormModal = ({
 }) => {
     return (
         <Modal
-            className={cn('', className)}
+            className={cn('!max-w-xl', className)}
             description={description}
             title={title}
             {...props}

@@ -22,20 +22,20 @@ import {
 } from '@/modules/quick-transfer'
 import {
     PaymentTypeCombobox,
-    // TransactionAmountField,
     TransactionModalJointMember,
     TransactionNoFoundBatch,
     TransactionReferenceNumber,
     useCreateQuickTransactionPayment,
 } from '@/modules/transaction'
+import TransactionReverseRequestFormModal from '@/modules/transaction/components/modals/transaction-modal-request-reverse'
 import { useGetUserSettings } from '@/modules/user-profile'
+import { useTransactionReverseSecurityStore } from '@/store/transaction-reverse-security-store'
 import { useDepositWithdrawStore } from '@/store/transaction/deposit-withdraw-store'
 import { useHotkeys } from 'react-hotkeys-hook'
 
 import FormFooterResetSubmit from '@/components/form-components/form-footer-reset-submit'
-// import { useShortcutContext } from '@/components/shorcuts/general-shortcuts-wrapper'
+import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
-import { CommandShortcut } from '@/components/ui/command'
 import { Form } from '@/components/ui/form'
 import FormFieldWrapper from '@/components/ui/form-field-wrapper'
 import ImageField from '@/components/ui/image-field'
@@ -65,13 +65,15 @@ export const QuickTransferTransactionForm = ({
     defaultValues,
     disabledFields,
 }: TransactionEntryFormProps) => {
-    // const { setActiveScope } = useShortcutContext()
     const {
         userSettingOR,
         settings_accounting_withdraw_default_value,
         settings_accounting_deposit_default_value,
         settings_payment_type_default_value_id,
     } = useGetUserSettings()
+
+    const { onOpenReverseRequestAction, isOpen, onClose, modalData } =
+        useTransactionReverseSecurityStore()
 
     const defaultAccount =
         mode === 'withdraw'
@@ -99,28 +101,6 @@ export const QuickTransferTransactionForm = ({
         },
     })
 
-    const handleReset = (transaction: IGeneralLedger) => {
-        form.reset({
-            reference_number: userSettingOR,
-            description: '',
-            amount: undefined,
-            bank_id: undefined,
-            entry_date: undefined,
-            bank_reference_number: '',
-            proof_of_payment_media_id: undefined,
-            signature_media_id: undefined,
-            signature: undefined,
-            payment_type_id:
-                settings_payment_type_default_value_id || undefined,
-
-            // transaction-specific fields
-            member: transaction.member_profile,
-            member_profile_id: transaction.member_profile?.id ?? '',
-            account: transaction.account,
-            account_id: transaction.account_id,
-        })
-    }
-
     const {
         mutate: createQuickTransaction,
         isPending: isQuickTransactionPending,
@@ -129,7 +109,8 @@ export const QuickTransferTransactionForm = ({
         options: {
             onSuccess: (transaction) => {
                 onSuccess?.(transaction)
-                handleReset(transaction)
+                // handleReset(transaction)
+                form.setValue('amount', 0)
                 queryClient.invalidateQueries({
                     queryKey: ['member-accounting-ledger'],
                 })
@@ -138,20 +119,33 @@ export const QuickTransferTransactionForm = ({
     })
     const { data: paymentType } = useGetAll()
 
+    const handleSubmitForm = (data: TQuickWithdrawSchemaFormValues) => {
+        const entryDate = data.entry_date
+            ? new Date(data.entry_date).toISOString()
+            : undefined
+
+        createQuickTransaction({
+            data: {
+                ...data,
+                entry_date: entryDate,
+            },
+            mode: mode,
+        })
+    }
+
     const handleSubmit = form.handleSubmit(
         (data: TQuickWithdrawSchemaFormValues, event) => {
             event?.preventDefault()
-            const entryDate = data.entry_date
-                ? new Date(data.entry_date).toISOString()
-                : undefined
 
-            createQuickTransaction({
-                data: {
-                    ...data,
-                    entry_date: entryDate,
-                },
-                mode: mode,
-            })
+            if (data.amount < 0) {
+                onOpenReverseRequestAction({
+                    onSuccess: () => {
+                        handleSubmitForm(data)
+                    },
+                })
+                return
+            }
+            handleSubmitForm(data)
         }
     )
 
@@ -202,31 +196,35 @@ export const QuickTransferTransactionForm = ({
         }
     )
 
+    const handleResetAll = () => {
+        form.reset()
+        setSelectedMember(null)
+        form.reset({
+            reference_number: userSettingOR,
+            description: '',
+            amount: undefined,
+            bank_id: undefined,
+            entry_date: undefined,
+            bank_reference_number: '',
+            proof_of_payment_media_id: undefined,
+            signature_media_id: undefined,
+            signature: undefined,
+            payment_type_id:
+                settings_payment_type_default_value_id || undefined,
+
+            // transaction-specific fields
+            member: null,
+            member_profile_id: '',
+            account: defaultAccount,
+            account_id: defaultAccount?.id || undefined,
+        })
+    }
+
     useHotkeys(
         'esc',
         (e) => {
             e.preventDefault()
-            form.reset()
-            setSelectedMember(null)
-            form.reset({
-                reference_number: userSettingOR,
-                description: '',
-                amount: undefined,
-                bank_id: undefined,
-                entry_date: undefined,
-                bank_reference_number: '',
-                proof_of_payment_media_id: undefined,
-                signature_media_id: undefined,
-                signature: undefined,
-                payment_type_id:
-                    settings_payment_type_default_value_id || undefined,
-
-                // transaction-specific fields
-                member: null,
-                member_profile_id: '',
-                account: defaultAccount,
-                account_id: defaultAccount?.id || undefined,
-            })
+            handleResetAll()
         },
         {
             scopes: [SHORTCUT_SCOPES.QUICK_TRANSFER],
@@ -240,14 +238,30 @@ export const QuickTransferTransactionForm = ({
 
     return (
         <Form {...form}>
+            <TransactionReverseRequestFormModal
+                formProps={{
+                    onSuccess: () => {
+                        modalData?.onSuccess?.()
+                    },
+                }}
+                onOpenChange={onClose}
+                open={isOpen}
+                title={modalData?.title || 'Request Reverse Transaction'}
+            />
             <form className="min-w-[200px] relative" onSubmit={handleSubmit}>
                 <TransactionNoFoundBatch mode="deposit-withdrawal" />
-                <div className="flex flex-end">
-                    <CommandShortcut className="rounded-md bg-primary/20 p-1">
-                        <div className="text-[min(10px,1rem)] text-muted-foreground/80">
-                            ↵ select member | Esc - reset Form
-                        </div>
-                    </CommandShortcut>
+                <div className="flex justify-end w-full ">
+                    <Button
+                        className="text-[min(10px,1rem)] "
+                        onClick={(e) => {
+                            e.preventDefault()
+                            handleResetAll()
+                        }}
+                        size={'sm'}
+                        variant="outline"
+                    >
+                        ↵ select member | Esc - reset Form
+                    </Button>
                 </div>
                 <div className="grid grid-cols-1 gap-2 lg:grid-cols-2">
                     {/* Member */}
@@ -414,7 +428,7 @@ export const QuickTransferTransactionForm = ({
                                 disabled={isDisabled('payment_type_id')}
                                 onChange={(selectedPaymentType) => {
                                     if (isDisabled('payment_type_id')) return
-                                    field.onChange(selectedPaymentType.id)
+                                    field.onChange(selectedPaymentType?.id)
                                 }}
                                 placeholder="Select a payment type"
                                 value={field.value ?? undefined}
@@ -539,7 +553,7 @@ export const QuickTransferTransactionForm = ({
                             <Textarea
                                 {...field}
                                 autoComplete="off"
-                                className="h-full"
+                                className="h-full min-h-full max-h-fit ecoop-scroll"
                                 disabled={isDisabled('description')}
                                 id={field.name}
                                 placeholder="what is this payment for?"
@@ -589,7 +603,7 @@ export const QuickTransferTransactionForm = ({
                         readOnly
                     }
                     error={errorMessage}
-                    isLoading={isQuickTransactionPending || !isFormIsDirty}
+                    isLoading={isQuickTransactionPending}
                     onReset={() => form.reset()}
                     submitText={
                         <p className="">

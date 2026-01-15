@@ -20,7 +20,7 @@ import { useModalState } from '@/hooks/use-modal-state'
 
 import {
     IComputationSheet,
-    IComputationSheetCalculator,
+    IComputationSheetAmortizationResponse,
 } from '../computation-sheet.types'
 import ComputationSheetCalculator from './computation-sheet-calculator'
 import { ComputationSheetCreateUpdateFormModal } from './forms/computation-sheet-create-update-form'
@@ -36,7 +36,7 @@ const ComputationSheetSchemeCard = ({ computationSheet }: Props) => {
         TMockCloanInputSchema | undefined
     >()
     const [recentCalcResult, setRecentCalcResult] = useState<
-        IComputationSheetCalculator | undefined
+        IComputationSheetAmortizationResponse | undefined
     >()
 
     return (

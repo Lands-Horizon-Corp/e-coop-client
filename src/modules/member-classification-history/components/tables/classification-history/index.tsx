@@ -18,7 +18,9 @@ import DataTableToolbar, {
 } from '@/components/data-table/data-table-toolbar'
 import { TableProps } from '@/components/data-table/table.type'
 import { useDataTableSorting } from '@/components/data-table/use-datatable-sorting'
-import useDataTableState from '@/components/data-table/use-datatable-state'
+import useDataTableState, {
+    useResolvedColumnOrder,
+} from '@/components/data-table/use-datatable-state'
 
 import useDatableFilterState from '@/hooks/use-filter-state'
 import { usePagination } from '@/hooks/use-pagination'
@@ -49,6 +51,7 @@ export interface MemberClassificationHistoryTableProps
 
 const MemberClassificationHistoryTable = ({
     profileId,
+    persistKey = ['member-classification-history', profileId],
     className,
     toolbarProps,
 }: MemberClassificationHistoryTableProps) => {
@@ -59,6 +62,12 @@ const MemberClassificationHistoryTable = ({
         useDataTableSorting()
 
     const columns = useMemo(() => memberClassificationHistoryColumns(), [])
+
+    const { resolvedColumnOrder, resolvedColumnVisibility, finalKeys } =
+        useResolvedColumnOrder({
+            columns,
+            persistKey,
+        })
 
     const {
         getRowIdFn,
@@ -71,7 +80,9 @@ const MemberClassificationHistoryTable = ({
         rowSelectionState,
         createHandleRowSelectionChange,
     } = useDataTableState<IMemberClassificationHistory>({
-        defaultColumnOrder: columns.map((c) => c.id!),
+        key: finalKeys,
+        defaultColumnOrder: resolvedColumnOrder,
+        defaultColumnVisibility: resolvedColumnVisibility,
     })
 
     const filterState = useDatableFilterState({
@@ -139,7 +150,7 @@ const MemberClassificationHistoryTable = ({
                         setFilterLogic: filterState.setFilterLogic,
                     }}
                     globalSearchProps={{
-                        defaultMode: 'equal',
+                        defaultMode: 'contains',
                         targets: memberClassificationHistoryGlobalSearchTargets,
                     }}
                     refreshActionProps={{

@@ -1,4 +1,4 @@
-import { ReactNode, useState } from 'react'
+import { ReactNode } from 'react'
 
 import { TEntryType } from '@/modules/general-ledger'
 import GeneralLedgerTable from '@/modules/general-ledger/components/tables/general-ledger-table'
@@ -6,6 +6,7 @@ import { Row } from '@tanstack/react-table'
 
 import RowActionsGroup from '@/components/data-table/data-table-row-actions'
 import DataTableRowContext from '@/components/data-table/data-table-row-context'
+import { useTableRowActionStore } from '@/components/data-table/store/data-table-action-store'
 import {
     BillIcon,
     BookOpenIcon,
@@ -31,10 +32,14 @@ import {
     DropdownMenuSubTrigger,
 } from '@/components/ui/dropdown-menu'
 
-import { useModalState } from '@/hooks/use-modal-state'
-
 import { ITransaction } from '../../../transaction/transaction.types'
 import { ITransactionTableActionComponentProp } from './columns'
+
+export type TransactionActionType = 'view-ledger'
+
+export interface TransactionActionExtra {
+    entryType?: TEntryType
+}
 
 interface UseTransactionActionsProps {
     row: Row<ITransaction>
@@ -43,17 +48,22 @@ interface UseTransactionActionsProps {
 
 const useTransactionActions = ({ row }: UseTransactionActionsProps) => {
     const transaction = row.original
-
-    const ledgerTableModal = useModalState()
-    const [selectedEntryType, setSelectedEntryType] = useState<TEntryType>('')
+    const { open } = useTableRowActionStore<
+        ITransaction,
+        TransactionActionType,
+        TransactionActionExtra
+    >()
 
     const openLedgerModal = (entryType: TEntryType) => {
-        setSelectedEntryType(entryType)
-        ledgerTableModal.onOpenChange(true)
+        open('view-ledger', {
+            id: transaction.id,
+            defaultValues: transaction,
+            extra: { entryType },
+        })
     }
 
-    const getModalTitle = () => {
-        if (!selectedEntryType) return 'General Ledger'
+    const getModalTitle = (entryType?: TEntryType) => {
+        if (!entryType) return 'General Ledger'
 
         const entryTypeNames: Record<TEntryType, string> = {
             '': 'General Ledger',
@@ -69,13 +79,11 @@ const useTransactionActions = ({ row }: UseTransactionActionsProps) => {
             'check-voucher': 'Check Voucher',
         }
 
-        return entryTypeNames[selectedEntryType] || 'General Ledger'
+        return entryTypeNames[entryType] || 'General Ledger'
     }
 
     return {
         transaction,
-        ledgerTableModal,
-        selectedEntryType,
         openLedgerModal,
         getModalTitle,
     }
@@ -91,31 +99,11 @@ export const TransactionAction = ({
     row,
     onDeleteSuccess,
 }: ITransactionTableActionProps) => {
-    const {
-        selectedEntryType,
-        transaction,
-        ledgerTableModal,
-        openLedgerModal,
-        getModalTitle,
-    } = useTransactionActions({ row, onDeleteSuccess })
+    const { openLedgerModal } = useTransactionActions({ row, onDeleteSuccess })
 
     return (
         <>
-            <div onClick={(e) => e.stopPropagation()}>
-                <Modal
-                    {...ledgerTableModal}
-                    className="max-w-[95vw]"
-                    description={`You are viewing transaction ${transaction.reference_number}'s ${getModalTitle().toLowerCase()}`}
-                    title={getModalTitle()}
-                >
-                    <GeneralLedgerTable
-                        className="min-h-[90vh] min-w-0 max-h-[90vh]"
-                        mode="transaction"
-                        TEntryType={selectedEntryType}
-                        transactionId={transaction.id}
-                    />
-                </Modal>
-            </div>
+            <div onClick={(e) => e.stopPropagation()}></div>
 
             <RowActionsGroup
                 canSelect
@@ -282,29 +270,10 @@ export const TransactionRowContext = ({
     children,
     onDeleteSuccess,
 }: ITransactionRowContextProps) => {
-    const {
-        transaction,
-        ledgerTableModal,
-        selectedEntryType,
-        openLedgerModal,
-        getModalTitle,
-    } = useTransactionActions({ row, onDeleteSuccess })
+    const { openLedgerModal } = useTransactionActions({ row, onDeleteSuccess })
 
     return (
         <>
-            <Modal
-                {...ledgerTableModal}
-                className="max-w-[95vw]"
-                description={`You are viewing transaction ${transaction.reference_number}'s ${getModalTitle().toLowerCase()}`}
-                title={getModalTitle()}
-            >
-                <GeneralLedgerTable
-                    className="min-h-[90vh] min-w-0 max-h-[90vh]"
-                    mode="transaction"
-                    TEntryType={selectedEntryType}
-                    transactionId={transaction.id}
-                />
-            </Modal>
             <DataTableRowContext
                 otherActions={
                     <>
@@ -460,7 +429,60 @@ export const TransactionRowContext = ({
     )
 }
 
-// Maintain backward compatibility
+export const TransactionTableActionManager = () => {
+    const { state, close } = useTableRowActionStore<
+        ITransaction,
+        TransactionActionType,
+        TransactionActionExtra
+    >()
+
+    if (!state || !state.defaultValues) return null
+
+    const transaction = state.defaultValues
+    const entryType = state.extra?.entryType || ''
+
+    const getModalTitle = (entryType?: TEntryType) => {
+        if (!entryType) return 'General Ledger'
+
+        const entryTypeNames: Record<TEntryType, string> = {
+            '': 'General Ledger',
+            'check-entry': 'Check Entry',
+            'online-entry': 'Online Entry',
+            'cash-entry': 'Cash Entry',
+            'payment-entry': 'Payment Entry',
+            'withdraw-entry': 'Withdraw Entry',
+            'deposit-entry': 'Deposit Entry',
+            'journal-entry': 'Journal Entry',
+            'adjustment-entry': 'Adjustment Entry',
+            'journal-voucher': 'Journal Voucher',
+            'check-voucher': 'Check Voucher',
+        }
+
+        return entryTypeNames[entryType] || 'General Ledger'
+    }
+
+    return (
+        <>
+            {state.action === 'view-ledger' && (
+                <Modal
+                    className="max-w-[95vw]"
+                    description={`You are viewing transaction ${transaction.reference_number}'s ${getModalTitle(entryType).toLowerCase()}`}
+                    onOpenChange={close}
+                    open={state.isOpen}
+                    title={getModalTitle(entryType)}
+                >
+                    <GeneralLedgerTable
+                        className="min-h-[90vh] min-w-0 max-h-[90vh]"
+                        entryType={entryType}
+                        mode="transaction"
+                        transactionId={transaction.id}
+                    />
+                </Modal>
+            )}
+        </>
+    )
+}
+
 const TransactionTableAction = ({ row }: ITransactionTableActionProps) => {
     return <TransactionAction row={row} />
 }

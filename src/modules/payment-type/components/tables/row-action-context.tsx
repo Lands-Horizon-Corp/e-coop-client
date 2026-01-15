@@ -12,10 +12,13 @@ import { Row } from '@tanstack/react-table'
 
 import RowActionsGroup from '@/components/data-table/data-table-row-actions'
 import DataTableRowContext from '@/components/data-table/data-table-row-context'
-
-import { useModalState } from '@/hooks/use-modal-state'
+import { useTableRowActionStore } from '@/components/data-table/store/data-table-action-store'
 
 import { IPaymentTypeTableActionComponentProp } from './column'
+
+export type PaymentTypeActionType = 'edit' | 'delete'
+
+export type PaymentTypeActionExtra = Record<string, never>
 
 interface UsePaymentTypeActionsProps {
     row: Row<IPaymentType>
@@ -26,15 +29,24 @@ const usePaymentTypeActions = ({
     row,
     onDeleteSuccess,
 }: UsePaymentTypeActionsProps) => {
-    const updateModal = useModalState()
     const paymentType = row.original
+    const { open } = useTableRowActionStore<
+        IPaymentType,
+        PaymentTypeActionType,
+        PaymentTypeActionExtra
+    >()
 
     const { onOpen } = useConfirmModalStore()
 
     const { mutate: deletePaymentType, isPending: isDeletingPaymentType } =
         useDeleteById({ options: { onSuccess: onDeleteSuccess } })
 
-    const handleEdit = () => updateModal.onOpenChange(true)
+    const handleEdit = () => {
+        open('edit', {
+            id: paymentType.id,
+            defaultValues: paymentType,
+        })
+    }
 
     const handleDelete = () => {
         onOpen({
@@ -46,7 +58,6 @@ const usePaymentTypeActions = ({
 
     return {
         paymentType,
-        updateModal,
         isDeletingPaymentType,
         handleEdit,
         handleDelete,
@@ -63,37 +74,12 @@ export const PaymentTypeActions = ({
     row,
     onDeleteSuccess,
 }: IPaymentTypeTableActionProps) => {
-    const {
-        paymentType,
-        updateModal,
-        isDeletingPaymentType,
-        handleEdit,
-        handleDelete,
-    } = usePaymentTypeActions({ row, onDeleteSuccess })
+    const { isDeletingPaymentType, handleEdit, handleDelete } =
+        usePaymentTypeActions({ row, onDeleteSuccess })
 
     return (
         <>
-            <div onClick={(e) => e.stopPropagation()}>
-                <PaymentTypeCreateUpdateFormModal
-                    {...updateModal}
-                    description="Update details for this payment type."
-                    formProps={{
-                        paymentTypeId: paymentType.id,
-                        defaultValues: {
-                            name: paymentType.name,
-                            description: paymentType.description,
-                            number_of_days: paymentType.number_of_days,
-                            type: paymentType.type,
-                        },
-                        onSuccess: () => {
-                            toast.success('Payment type updated successfully')
-                            updateModal.onOpenChange(false)
-                        },
-                    }}
-                    title="Edit Payment Type"
-                    titleClassName="font-bold"
-                />
-            </div>
+            <div onClick={(e) => e.stopPropagation()}></div>
             <RowActionsGroup
                 canSelect
                 onDelete={{
@@ -124,32 +110,11 @@ export const PaymentTypeRowContext = ({
     children,
     onDeleteSuccess,
 }: IPaymentTypeRowContextProps) => {
-    const {
-        paymentType,
-        updateModal,
-        isDeletingPaymentType,
-        handleEdit,
-        handleDelete,
-    } = usePaymentTypeActions({ row, onDeleteSuccess })
+    const { isDeletingPaymentType, handleEdit, handleDelete } =
+        usePaymentTypeActions({ row, onDeleteSuccess })
 
     return (
         <>
-            <PaymentTypeCreateUpdateFormModal
-                {...updateModal}
-                description="Update details for this payment type."
-                formProps={{
-                    paymentTypeId: paymentType.id,
-                    defaultValues: {
-                        name: paymentType.name,
-                        description: paymentType.description,
-                        number_of_days: paymentType.number_of_days,
-                        type: paymentType.type,
-                    },
-                    onSuccess: () => updateModal.onOpenChange(false),
-                }}
-                title="Edit Payment Type"
-                titleClassName="font-bold"
-            />
             <DataTableRowContext
                 onDelete={{
                     text: 'Delete',
@@ -165,6 +130,45 @@ export const PaymentTypeRowContext = ({
             >
                 {children}
             </DataTableRowContext>
+        </>
+    )
+}
+
+export const PaymentTypeTableActionManager = () => {
+    const { state, close } = useTableRowActionStore<
+        IPaymentType,
+        PaymentTypeActionType,
+        PaymentTypeActionExtra
+    >()
+
+    if (!state || !state.defaultValues) return null
+
+    const paymentType = state.defaultValues
+
+    return (
+        <>
+            {state.action === 'edit' && (
+                <PaymentTypeCreateUpdateFormModal
+                    description="Update details for this payment type."
+                    formProps={{
+                        paymentTypeId: paymentType.id,
+                        defaultValues: {
+                            name: paymentType.name,
+                            description: paymentType.description,
+                            number_of_days: paymentType.number_of_days,
+                            type: paymentType.type,
+                        },
+                        onSuccess: () => {
+                            toast.success('Payment type updated successfully')
+                            close()
+                        },
+                    }}
+                    onOpenChange={close}
+                    open={state.isOpen}
+                    title="Edit Payment Type"
+                    titleClassName="font-bold"
+                />
+            )}
         </>
     )
 }

@@ -35,10 +35,6 @@ export const isString = (value: unknown): boolean => {
     )
 }
 
-export const isArray = (value: unknown): boolean => {
-    return Array.isArray(value) && value !== null && value !== undefined
-}
-
 export const isBoolean = (value: unknown): boolean => {
     return typeof value === 'boolean' && value !== null && value !== undefined
 }
@@ -130,9 +126,19 @@ export function sortBy<T>(
     }
 }
 
-export const formatCurrency = (amount: number): string => {
-    return new Intl.NumberFormat('en-PH', {
-        style: 'currency',
-        currency: 'PHP',
-    }).format(amount)
+//  ARRAY HELPERS
+
+export const isArray = (value: unknown): boolean => {
+    return Array.isArray(value) && value !== null && value !== undefined
+}
+
+// ONLY USE THIS FOR PRIMITIVE ARRAYS (number | string)
+export const isArrayEqual = (
+    arr1: Array<number | string | boolean>,
+    arr2: Array<number | string | boolean>
+) => {
+    return (
+        arr1.length === arr2.length &&
+        arr1.every((value, index) => value === arr2[index])
+    )
 }

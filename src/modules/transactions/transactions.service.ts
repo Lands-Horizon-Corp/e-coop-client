@@ -5,7 +5,11 @@ import { HookQueryOptions } from '@/providers/repositories/data-layer-factory'
 
 import { TAPIQueryOptions } from '@/types'
 
-import { ITransactionPaginated, getPaginated, route } from '../transaction'
+import {
+    ITransactionPaginated,
+    getPaginated,
+    transactionAPIRoute,
+} from '../transaction'
 
 export type TTransactionHookMode =
     | 'current-branch'
@@ -44,11 +48,11 @@ export const useFilteredPaginatedTransaction = ({
 
             switch (mode) {
                 case 'current-branch':
-                    url = `${route}/branch/search`
+                    url = `${transactionAPIRoute}/branch/search`
                     break
 
                 case 'current-user':
-                    url = `${route}/current/search`
+                    url = `${transactionAPIRoute}/current/search`
                     break
 
                 case 'member-profile':
@@ -57,14 +61,14 @@ export const useFilteredPaginatedTransaction = ({
                             'memberProfileId is required for member-profile mode'
                         )
                     }
-                    url = `${route}/member-profile/${memberProfileId}/search`
+                    url = `${transactionAPIRoute}/member-profile/${memberProfileId}/search`
                     break
 
                 case 'employee':
                     if (!userId) {
                         throw new Error('userId is required for employee mode')
                     }
-                    url = `${route}/employee/${userId}/search`
+                    url = `${transactionAPIRoute}/employee/${userId}/search`
                     break
 
                 case 'transaction-batch':
@@ -73,7 +77,7 @@ export const useFilteredPaginatedTransaction = ({
                             'transactionBatchId is required for transaction-batch mode'
                         )
                     }
-                    url = `${route}/transaction-batch/${transactionBatchId}/search`
+                    url = `${transactionAPIRoute}/transaction-batch/${transactionBatchId}/search`
                     break
 
                 default:

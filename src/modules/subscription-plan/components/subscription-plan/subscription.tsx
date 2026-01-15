@@ -10,7 +10,11 @@ import FormErrorMessage from '@/components/ui/form-error-message'
 
 import { TEntityId } from '@/types'
 
-import { ISubscriptionPlan, TPricingPlanMode, useGetAll } from '../../'
+import {
+    ISubscriptionPlan,
+    TPricingPlanMode,
+    useGetAllSubscriptionPlans,
+} from '../../'
 
 interface SubscriptionProps {
     onChange?: (value: TEntityId) => void
@@ -25,7 +29,8 @@ const SubscriptionPlanPicker = ({
     value,
 }: SubscriptionProps) => {
     const [mode, setMode] = useState<TPricingPlanMode>('monthly')
-    const { data: subscriptionPlans, error: responseError } = useGetAll()
+    const { data: subscriptionPlans, error: responseError } =
+        useGetAllSubscriptionPlans({ mode: 'timezone' })
 
     const error = serverRequestErrExtractor({ error: responseError })
 
@@ -63,7 +68,7 @@ const SubscriptionPlanPicker = ({
                 <FormErrorMessage className="my-24" errorMessage={error} />
                 {subscriptionPlans && (
                     <>
-                        <div className="flex flex-wrap gap-2 py-8 min-w-fit">
+                        <div className="flex justify-center flex-wrap gap-2 py-8 min-w-fit">
                             {subscriptionPlans.map((subscriptionPlan) => (
                                 <Card
                                     className="max-w-[300px] border-0 bg-transparent flex-1"

@@ -9,24 +9,32 @@ export const abbreviateUUID = (uuid: string, abbrevLength = 7) => {
 
 export const imageCompressed = async (file: File): Promise<File> => {
     let processedFile = file
-    const imageTypes = ['image/jpeg', 'image/png', 'image/jpg']
+    const imageTypes = ['image/jpeg', 'image/png', 'image/jpg', 'image/webp']
     const isImage =
         imageTypes.includes(file.type) ||
         file.name.toLowerCase().endsWith('.jpg') ||
         file.name.toLowerCase().endsWith('.jpeg') ||
-        file.name.toLowerCase().endsWith('.png')
+        file.name.toLowerCase().endsWith('.png') ||
+        file.name.toLowerCase().endsWith('.webp')
 
     if (isImage) {
         const options = {
             maxSizeMB: 1,
             maxWidthOrHeight: 1920,
+            fileName: file.name,
             useWebWorker: true,
             fileType: file.type,
             initialQuality: 0.8,
         }
 
         try {
-            processedFile = await imageCompression(file, options)
+            const compressedImage = await imageCompression(file, options)
+
+            const newFile = new File([compressedImage], file.name, {
+                type: file.type,
+            })
+
+            processedFile = newFile
         } catch {
             processedFile = file
         }

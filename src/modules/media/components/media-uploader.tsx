@@ -34,6 +34,7 @@ interface BaseMediaUploaderProps {
     maxFiles?: number
     disabled?: boolean
     className?: string
+    onUploadStateChange?: (isUploading: boolean) => void
 }
 
 interface SingleModeProps extends BaseMediaUploaderProps {
@@ -48,7 +49,7 @@ interface MultipleModeProps extends BaseMediaUploaderProps {
     onSingleUploadComplete?: never
 }
 
-type MediaUploaderProps = SingleModeProps | MultipleModeProps
+export type MediaUploaderProps = SingleModeProps | MultipleModeProps
 
 interface FileUploadState {
     file: File
@@ -70,6 +71,8 @@ interface FileItemProps {
     onRemoveFile?: () => void
     displayMode?: boolean
     uploadedBy?: string
+    otherAction?: React.ReactNode
+    onUploadStateChange?: (isUploading: boolean) => void
 }
 
 const FileItem = ({
@@ -77,6 +80,7 @@ const FileItem = ({
     uploadDetails,
     media,
     uploadedBy,
+    otherAction,
     onRemoveFile,
 }: FileItemProps) => {
     // Determine what to display based on media or file
@@ -199,6 +203,7 @@ const FileItem = ({
                             </Button>
                         </ActionTooltip>
                     )}
+                    {otherAction}
                 </div>
             </div>
             {uploadDetails?.isUploading && (
@@ -217,11 +222,12 @@ const FileItem = ({
 const MediaUploader = (props: MediaUploaderProps) => {
     const {
         mode,
-        maxSize = 100 * 1024 * 1024, // 100MB default
+        maxSize = 10 * 1024 * 1024, // 10 MB default
         accept,
         maxFiles = mode === 'single' ? 1 : 10,
         disabled = false,
         className = '',
+        onUploadStateChange,
     } = props
 
     const [fileStates, setFileStates] = useState<Map<string, FileUploadState>>(
@@ -232,6 +238,7 @@ const MediaUploader = (props: MediaUploaderProps) => {
         null
     )
     const completionCalledRef = useRef(false)
+    const uploadStartCalledRef = useRef(false)
 
     // Generate unique key for file
     const getFileKey = (file: File): string => {
@@ -301,13 +308,18 @@ const MediaUploader = (props: MediaUploaderProps) => {
                         ) {
                             props.onMultipleUploadComplete(uploadedMedias)
                         }
+
+                        // Call onUploadStateChange when all uploads finish
+                        if (onUploadStateChange) {
+                            onUploadStateChange(false)
+                        }
                     }, 0)
                 }
 
                 return prev
             })
         },
-        [mode, props]
+        [mode, props, onUploadStateChange]
     )
 
     // Process upload queue
@@ -320,6 +332,12 @@ const MediaUploader = (props: MediaUploaderProps) => {
         if (!fileState || fileState.isUploading || fileState.media) {
             setUploadQueue((prev) => prev.slice(1))
             return
+        }
+
+        // Call onUploadStateChange when upload starts (only once)
+        if (!uploadStartCalledRef.current && onUploadStateChange) {
+            uploadStartCalledRef.current = true
+            onUploadStateChange(true)
         }
 
         setCurrentlyUploading(nextFileKey)
@@ -400,6 +418,7 @@ const MediaUploader = (props: MediaUploaderProps) => {
         fileStates,
         uploadFile,
         checkAllUploadsComplete,
+        onUploadStateChange,
     ])
 
     // Handle files dropped (just add to state, don't upload yet)
@@ -444,8 +463,9 @@ const MediaUploader = (props: MediaUploaderProps) => {
             }
         })
 
-        // Reset completion flag when starting uploads
+        // Reset completion and upload start flags when starting uploads
         completionCalledRef.current = false
+        uploadStartCalledRef.current = false
         setUploadQueue((prev) => [...prev, ...newQueue])
     }, [fileStates])
 
@@ -498,7 +518,7 @@ const MediaUploader = (props: MediaUploaderProps) => {
                     ${
                         isDragActive
                             ? 'border-primary bg-primary/5'
-                            : 'border-secondary bg-background hover:border-primary/50 hover:bg-muted/50'
+                            : 'border-secondary bg-secondary/30 hover:border-primary/50 hover:bg-muted/50'
                     }
                     ${disabled ? 'cursor-not-allowed opacity-50' : ''}
                     ${mode === 'single' && hasFiles ? 'cursor-not-allowed opacity-50' : ''}

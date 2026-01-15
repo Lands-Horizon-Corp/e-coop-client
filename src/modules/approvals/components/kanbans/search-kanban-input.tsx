@@ -62,83 +62,92 @@ export const SearchKanbanInput = <T extends string>({
     }
 
     return (
-        <div className="flex w-full border-b p-4">
+        <div className="flex w-full border-b p-2">
             <div
                 className={cn('relative flex-1', showSearch ? 'min-w-md' : '')}
             >
-                {showSearch && (
-                    <div className="relative">
-                        <Input
-                            className="relative pr-11 pl-10"
-                            onChange={(e) => setSearchTerm(e.target.value)}
-                            placeholder={
-                                searchAllModes
-                                    ? 'Search across all voucher types...'
-                                    : `Search ${selectedItem?.name.toLowerCase()} vouchers...`
-                            }
-                            value={searchTerm}
-                        />
-                        {searchTerm && (
-                            <Badge
-                                className={cn(
-                                    'shrink-1 absolute right-10 top-1/2 -translate-y-1/2 text-xs py-0',
-                                    searchAllModes &&
-                                        'bg-primary/9 !h-fit text-primary border-primary/20'
-                                )}
-                                variant="secondary"
-                            >
-                                {searchAllModes
-                                    ? 'Searching All Modes'
-                                    : `Searching in ${selectedItem?.name}`}
-                            </Badge>
-                        )}
-                        <MagnifyingGlassIcon className="absolute left-4 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
-                        {searchTerm && (
-                            <Button
-                                className="absolute right-2 top-1/2 -translate-y-1/2 h-6 w-6 p-0"
-                                onClick={handleClearSearch}
-                                size="sm"
-                                variant="ghost"
-                            >
-                                <XIcon className="h-4 w-3" />
-                            </Button>
-                        )}
-                    </div>
-                )}
                 <div className="flex items-center">
-                    <div className="inline-flex items-center space-x-1 py-2">
-                        <SearchIcon className=" size-4 text-primary" />
-                        <Label
+                    <div className="inline-flex w-full items-center space-x-1">
+                        <div
                             className={cn(
-                                'flex items-center cursor-pointer transition-colors',
+                                'flex items-center flex-2  cursor-pointer transition-colors',
                                 searchAllModes && 'text-primary font-medium'
                             )}
-                            htmlFor="search-all-modes"
-                            onClick={() =>
-                                handleSearchAllModesChange(!searchAllModes)
-                            }
                         >
-                            <span className="mr-1">Search All Modes</span>
-                            {showSearch && (
-                                <span className="text-xs mt-1 text-muted-foreground/70">
-                                    (Search across all voucher types )
-                                </span>
+                            <Button
+                                className="text-primary border-primary/20 mr-2 cursor-pointer hover:bg-primary/5 flex items-center gap-1 text-xs py-0"
+                                onClick={() => handleRedirectToSearchPage()}
+                                variant={'outline'}
+                            >
+                                visit
+                                <LinkIcon />
+                            </Button>
+                            {showSearch ? (
+                                <div className="relative w-full">
+                                    <Input
+                                        className="relative pr-11 pl-10"
+                                        onChange={(e) =>
+                                            setSearchTerm(e.target.value)
+                                        }
+                                        placeholder={
+                                            searchAllModes
+                                                ? 'Search across all voucher types...(esc to close search)'
+                                                : `Search ${selectedItem?.name.toLowerCase()} vouchers...(esc to close search)`
+                                        }
+                                        value={searchTerm}
+                                    />
+                                    {searchTerm && (
+                                        <Badge
+                                            className={cn(
+                                                'shrink-1 absolute right-10 top-1/2 -translate-y-1/2 text-xs py-0',
+                                                searchAllModes &&
+                                                    'bg-primary/9 !h-fit text-primary border-primary/20'
+                                            )}
+                                            variant="secondary"
+                                        >
+                                            {searchAllModes
+                                                ? 'Searching All Modes'
+                                                : `Searching in ${selectedItem?.name}`}
+                                        </Badge>
+                                    )}
+                                    <MagnifyingGlassIcon className="absolute left-4 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
+                                    {searchTerm && (
+                                        <Button
+                                            className="absolute right-2 top-1/2 -translate-y-1/2 h-6 w-6 p-0"
+                                            onClick={handleClearSearch}
+                                            size="sm"
+                                            variant="ghost"
+                                        >
+                                            <XIcon className="h-4 w-3" />
+                                        </Button>
+                                    )}
+                                </div>
+                            ) : (
+                                <Button
+                                    className="inline-flex items-center space-x-2"
+                                    onClick={() => {
+                                        handleSearchAllModesChange(true)
+                                    }}
+                                    variant={'outline'}
+                                >
+                                    <SearchIcon className=" size-4 text-primary" />
+                                    <span className="mr-1">
+                                        Search All Modes
+                                    </span>
+                                    {showSearch && (
+                                        <span className="text-xs mt-1 text-muted-foreground/70">
+                                            (Search across all voucher types )
+                                        </span>
+                                    )}
+                                    <Kbd>Enter </Kbd>
+                                </Button>
                             )}
-                        </Label>
-                        <Kbd>Enter</Kbd>
-                        <Badge
-                            className="text-primary border-primary/20 cursor-pointer hover:bg-primary/5 flex items-center gap-1 text-xs py-0"
-                            onClick={() => handleRedirectToSearchPage()}
-                            variant={'outline'}
-                        >
-                            visit
-                            <LinkIcon />
-                        </Badge>
+                        </div>
                     </div>
                 </div>
             </div>
             <div className="flex pl-2 flex-col space-y-2 items-end-safe ">
-                <div className="flex-2 flex items-center justify-end w-full gap-6">
+                <div className="flex-2 px-2 flex items-center justify-end w-full gap-2">
                     <Label className="text-sm font-medium text-muted-foreground">
                         {selectedMode ? 'Selected Mode:' : 'Filter by Mode:'}
                         {!selectedMode && !searchAllModes && (
@@ -147,21 +156,12 @@ export const SearchKanbanInput = <T extends string>({
                             </span>
                         )}
                     </Label>
-                    <div></div>
                     <div className="flex gap-4">
                         {menuItems.map((item) => (
                             <div
                                 className="flex items-center space-x-2"
                                 key={String(item.value)}
                             >
-                                <Checkbox
-                                    checked={selectedMode === item.value}
-                                    disabled={searchAllModes}
-                                    id={`mode-${String(item.value)}`}
-                                    onCheckedChange={() =>
-                                        handleModeChange(item.value)
-                                    }
-                                />
                                 <Label
                                     className={cn(
                                         'flex items-center cursor-pointer transition-colors',
@@ -175,6 +175,14 @@ export const SearchKanbanInput = <T extends string>({
                                     {item.icon}
                                     {item.name}
                                 </Label>
+                                <Checkbox
+                                    checked={selectedMode === item.value}
+                                    disabled={searchAllModes}
+                                    id={`mode-${String(item.value)}`}
+                                    onCheckedChange={() =>
+                                        handleModeChange(item.value)
+                                    }
+                                />
                             </div>
                         ))}
                     </div>
