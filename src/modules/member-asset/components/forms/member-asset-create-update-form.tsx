@@ -218,7 +218,7 @@ const MemberAssetCreateUpdateForm = ({
                 </fieldset>
                 <FormFooterResetSubmit
                     className="sticky bottom-0 bg-background/80"
-                    disableSubmit={!form.formState.isDirty}
+                    disableSubmit={!form.formState.isDirty || isPending}
                     error={error}
                     isLoading={isPending}
                     onReset={() => {

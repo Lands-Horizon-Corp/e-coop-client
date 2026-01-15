@@ -46,7 +46,7 @@ const AmortizationScheduleTable = ({
             >
                 <TableHeader className="sticky top-0 z-10 bg-background/90 backdrop-blur-xs">
                     <TableRow>
-                        <TableHead className="min-w-[200px]  sticky left-0 backdrop-blur-sm bg-background/60">
+                        <TableHead className="min-w-[200px] sticky left-0 backdrop-blur-sm bg-background/60">
                             Date
                         </TableHead>
                         <TableHead className="">Balance</TableHead>

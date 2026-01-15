@@ -669,7 +669,7 @@ const UserOrgSettingsForm = ({
                 </fieldset>
                 <FormFooterResetSubmit
                     className="sticky bottom-0 bg-popover rounded-xl p-4"
-                    disableSubmit={!form.formState.isDirty}
+                    disableSubmit={!form.formState.isDirty || isPending}
                     error={error}
                     isLoading={isPending}
                     onReset={() => {

@@ -18,8 +18,9 @@ import BankCombobox from '@/modules/bank/components/bank-combobox'
 import { ICurrency, currencyFormat } from '@/modules/currency'
 import CurrencyInput from '@/modules/currency/components/currency-input'
 import { IGeneralLedger } from '@/modules/general-ledger'
-import { LoanPaymentScheduleModal } from '@/modules/loan-transaction/components/loan-payment-schedule'
-import { LoanPaymentStatusBadge } from '@/modules/loan-transaction/components/loan-payment-status-type-badges'
+import { LoanGuideModal } from '@/modules/loan-guide/components/loan-guide'
+// import { LoanPaymentScheduleModal } from '@/modules/loan-transaction/components/loan-payment-schedule'
+// import { LoanPaymentStatusBadge } from '@/modules/loan-transaction/components/loan-payment-status-type-badges'
 import { IMedia } from '@/modules/media'
 import { IPaymentType } from '@/modules/payment-type'
 import {
@@ -121,7 +122,7 @@ const LoanPayablesForm = ({
                 payment_type_id: settings_payment_type_default_value_id || '',
                 last_payment_date: p.last_payment_date,
                 supposed_payment_date: p.supposed_payment_date,
-                payment_schedule: p.payment_schedule,
+                // payment_schedule: p.payment_schedule,
             })),
             ...formProps.defaultValues,
         },
@@ -239,12 +240,18 @@ const LoanPayablesForm = ({
                 onSubmit={onSubmit}
                 ref={formRef}
             >
+                {/*
+                    TODO: LOAN GUIDE
                 <LoanPaymentScheduleModal
                     {...loanPaymentScheduleModal}
                     loanPaymentProps={{
                         loanTransactionId,
                         accountDefaultId: payables[0]?.account_id,
                     }}
+                /> */}
+                <LoanGuideModal
+                    {...loanPaymentScheduleModal}
+                    loanTransactionId={loanTransactionId}
                 />
                 <div className="flex items-center justify-between">
                     <p>Payable Accounts</p>
@@ -376,7 +383,7 @@ const LoanPayablesForm = ({
                                     </div>
                                     <div className="flex items-center gap-x-1">
                                         <div className="flex justify-end"></div>
-                                        {p.payment_schedule?.payment_status && (
+                                        {/* {p.payment_schedule?.payment_status && (
                                             <LoanPaymentStatusBadge
                                                 size="sm"
                                                 status={
@@ -384,7 +391,7 @@ const LoanPayablesForm = ({
                                                         .payment_status
                                                 }
                                             />
-                                        )}
+                                        )} */}
                                         {p.supposed_payment_date &&
                                             !p.is_past_due && (
                                                 <p className="text-xs text-primary-foreground px-2 py-1 bg-primary rounded-md flex gap-x-1 items-center">

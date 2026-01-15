@@ -13,12 +13,13 @@ import {
 import { TAPIQueryOptions, TEntityId } from '@/types'
 
 import { IComakerMemberProfile } from '../comaker-member-profile'
+import { ILoanGuide } from '../loan-guide'
 // import { IAmortizationSchedule } from '../amortization'
 import type {
     IAllMembersLoanSummaryResponse,
     ILoanAmortizationSchedules,
     ILoanEditTransactionRequest,
-    ILoanPaymentResponse,
+    // ILoanPaymentResponse,
     ILoanTransaction,
     ILoanTransactionAdjustmentRequest,
     ILoanTransactionPaginated,
@@ -158,25 +159,25 @@ export const useGetAllLoanTransaction = ({
 
 //
 
-export const useLoanPaymentSchedule = ({
-    loanTransactionId,
-    options,
-}: {
-    options?: HookQueryOptions<ILoanPaymentResponse, Error>
-    loanTransactionId: TEntityId
-}) => {
-    return useQuery<ILoanPaymentResponse, Error>({
-        ...options,
-        queryKey: [loanTransactionBaseKey, loanTransactionId, 'payment'],
-        queryFn: async () => {
-            const response = await API.get<ILoanPaymentResponse>(
-                `${loanTransactionAPIRoute}/${loanTransactionId}/payment`
-            )
+// export const useLoanPaymentSchedule = ({
+//     loanTransactionId,
+//     options,
+// }: {
+//     options?: HookQueryOptions<ILoanPaymentResponse, Error>
+//     loanTransactionId: TEntityId
+// }) => {
+//     return useQuery<ILoanPaymentResponse, Error>({
+//         ...options,
+//         queryKey: [loanTransactionBaseKey, loanTransactionId, 'payment'],
+//         queryFn: async () => {
+//             const response = await API.get<ILoanPaymentResponse>(
+//                 `${loanTransactionAPIRoute}/${loanTransactionId}/payment`
+//             )
 
-            return response.data
-        },
-    })
-}
+//             return response.data
+//         },
+//     })
+// }
 
 // custom hooks can go here
 
@@ -560,19 +561,19 @@ export const useLoanEdit = createMutationFactory<
     },
 })
 
-// GET LOAN AMORTIZATION SCHEDULES
+// GET LOAN GUIDE
 export const useGetLoanGuide = ({
     loanTransactionId,
     options,
 }: {
     loanTransactionId: TEntityId
-    options?: HookQueryOptions<void, Error>
+    options?: HookQueryOptions<ILoanGuide, Error>
 }) => {
-    return useQuery<void, Error>({
+    return useQuery<ILoanGuide, Error>({
         ...options,
         queryKey: [loanTransactionBaseKey, loanTransactionId, 'guide'],
         queryFn: async () => {
-            const response = await API.get<void>(
+            const response = await API.get<ILoanGuide>(
                 `${loanTransactionAPIRoute}/${loanTransactionId}/guide`
             )
 

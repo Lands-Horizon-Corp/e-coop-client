@@ -232,7 +232,7 @@ const TimeDepositTypeUpdateForm = ({
                     </fieldset>
                 </fieldset>
                 <FormFooterResetSubmit
-                    disableSubmit={!form.formState.isDirty}
+                    disableSubmit={!form.formState.isDirty || isPending}
                     isLoading={isPending}
                     onReset={() => {
                         form.reset()

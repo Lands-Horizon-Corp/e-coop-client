@@ -4,6 +4,7 @@ import { cn } from '@/helpers'
 import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
 import { sortAccountsByTypePriority } from '@/modules/account/account.utils'
 import { currencyFormat } from '@/modules/currency'
+import LoanGuide from '@/modules/loan-guide/components/loan-guide'
 import {
     ILoanTransaction,
     useGetLoanTransactionById,
@@ -44,8 +45,8 @@ import { LoanViewSkeleton } from '../skeletons/loan-view-skeleton'
 import { LoanAccountsView } from './loan-accounts-view'
 import { LoanComakersList } from './loan-comakers'
 import LoanLedgerHeader from './loan-ledger-header'
-import LoanLedgerTable from './loan-ledger-table/loan-ledger-table'
 
+// import LoanLedgerTable from './loan-ledger-table/loan-ledger-table'
 // import GeneralLedgerTable from '@/modules/general-ledger/components/tables/general-ledger-table'
 
 interface LoanLedgerViewProps extends IClassProps {
@@ -113,12 +114,17 @@ const LoanView = ({
                         loanTransaction={data}
                         // loanTransactionSummary={loanSummary}
                     />
-                    <LoanLedgerTable
+                    {/* <LoanLedgerTable
                         className="h-[50vh] w-full rounded-lg"
                         data={[]}
                         view={'skeleton'}
-                    />
+                    /> */}
                     {/* <GeneralLedgerTable className='h-[50vh] w-full rounded-lg' mode='' /> */}
+
+                    <LoanGuide
+                        className="max-h-[80vh] flex"
+                        loanTransactionId={loanTransactionId}
+                    />
 
                     <Tabs className="w-full" defaultValue="account-summary">
                         <ScrollArea>

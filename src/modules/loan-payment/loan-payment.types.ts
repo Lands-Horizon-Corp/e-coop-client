@@ -1,7 +1,8 @@
 import { TEntityId } from '@/types'
 
 import { IAccount } from '../account'
-import { ILoanPaymentSchedule } from '../loan-transaction'
+
+// import { ILoanPaymentSchedule } from '../loan-transaction'
 
 export interface ILoanPayableAccount {
     account: IAccount
@@ -13,5 +14,5 @@ export interface ILoanPayableAccount {
     supposed_payment_date?: string
     suggested_payment_amount: number
 
-    payment_schedule?: ILoanPaymentSchedule
+    // payment_schedule?: ILoanPaymentSchedule
 }

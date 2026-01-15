@@ -13,7 +13,10 @@ import {
     AiFillShop as ShopIcon,
     AiOutlineClear as SmallBrushIcon,
 } from 'react-icons/ai'
-import { BiErrorCircle as WarningIcon } from 'react-icons/bi'
+import {
+    BiErrorCircle as WarningIcon,
+    BiSolidZap as ZapIcon,
+} from 'react-icons/bi'
 import {
     BsRocketTakeoff as BsRocketTakeoffIcon,
     BsBuildingGear as BuildingCogIcon,
@@ -608,6 +611,7 @@ export {
     WarningIcon,
     MonitorIcon,
     OptionsIcon,
+    ZapIcon,
     UserCogIcon,
     GendersIcon,
     RefreshIcon,
@@ -955,6 +959,7 @@ export const IconMap = {
     Clock: ClockIcon,
     Close: CloseIcon,
     Email: EmailIcon,
+    Zap: ZapIcon,
     Image: ImageIcon,
     Check: CheckIcon,
     Phone: PhoneIcon,

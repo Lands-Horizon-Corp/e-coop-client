@@ -10,8 +10,8 @@ import { AccountPicker, TAccountType } from '@/modules/account'
 import BankCombobox from '@/modules/bank/components/bank-combobox'
 import { CurrencyInput } from '@/modules/currency'
 import { IGeneralLedger } from '@/modules/general-ledger'
+import { LoanGuideModal } from '@/modules/loan-guide/components/loan-guide'
 import LoanTransactionCombobox from '@/modules/loan-transaction/components/loan-combobox'
-import { LoanPaymentScheduleModal } from '@/modules/loan-transaction/components/loan-payment-schedule'
 import { IMedia } from '@/modules/media'
 import { useGetAll } from '@/modules/payment-type'
 import { IPaymentRequest } from '@/modules/quick-transfer'
@@ -84,7 +84,7 @@ const PaymentWithTransactionForm = ({
     readOnly,
 }: PaymentWithTransactionFormProps) => {
     const { focusTypePayment, selectedAccount } = useTransactionStore()
-    const loanPaymentScheduleModal = useModalState()
+    const loanPaymentGuideModal = useModalState()
 
     const {
         userSettingOR,
@@ -643,7 +643,7 @@ const PaymentWithTransactionForm = ({
                                         className="absolute"
                                         onClick={(e) => e.stopPropagation()}
                                     >
-                                        <LoanPaymentScheduleModal
+                                        {/* <LoanPaymentScheduleModal
                                             {...loanPaymentScheduleModal}
                                             loanPaymentProps={{
                                                 accountDefaultId:
@@ -652,12 +652,20 @@ const PaymentWithTransactionForm = ({
                                                     'loan_transaction_id'
                                                 ) as TEntityId,
                                             }}
+                                        /> */}
+                                        <LoanGuideModal
+                                            {...loanPaymentGuideModal}
+                                            loanTransactionId={
+                                                form.watch(
+                                                    'loan_transaction_id'
+                                                )!
+                                            }
                                         />
                                     </div>
                                     <Button
                                         className="text-xs px-2 w-fit ml-2 mr-auto"
                                         onClick={() =>
-                                            loanPaymentScheduleModal.onOpenChange(
+                                            loanPaymentGuideModal.onOpenChange(
                                                 true
                                             )
                                         }

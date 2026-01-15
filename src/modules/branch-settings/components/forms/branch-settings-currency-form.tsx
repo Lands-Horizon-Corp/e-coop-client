@@ -326,7 +326,7 @@ const BranchSettingsCurrencyForm = ({
                 </fieldset>
                 <FormFooterResetSubmit
                     className="sticky bottom-0 bg-popover p-4 rounded-xl"
-                    disableSubmit={!form.formState.isDirty}
+                    disableSubmit={!form.formState.isDirty || isPending}
                     error={error}
                     isLoading={isPending}
                     onReset={() => {
