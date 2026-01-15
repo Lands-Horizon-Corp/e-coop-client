@@ -1,6 +1,7 @@
 import { ReactNode, forwardRef } from 'react'
 
 import { cn } from '@/helpers'
+import { currencyFormat } from '@/modules/currency'
 import { IMemberAsset } from '@/modules/member-asset'
 import { IMemberExpense } from '@/modules/member-expense'
 import { IMemberIncome } from '@/modules/member-income'
@@ -13,6 +14,11 @@ import {
     TrendingUp,
 } from 'lucide-react'
 
+import {
+    MoneyBagIcon,
+    TrendingDownIcon,
+    TrendingUpIcon,
+} from '@/components/icons'
 import { Badge } from '@/components/ui/badge'
 import {
     Collapsible,
@@ -81,13 +87,6 @@ const InfoItem = ({
     )
 }
 
-const formatCurrency = (amount: number) => {
-    return new Intl.NumberFormat('en-US', {
-        style: 'currency',
-        currency: 'USD',
-    }).format(amount)
-}
-
 const formatDate = (dateString?: string) => {
     if (!dateString) return 'N/A'
     return new Date(dateString).toLocaleDateString('en-US', {
@@ -133,7 +132,7 @@ const IncomeCard = ({ income }: { income: IMemberIncome }) => {
                     className="border-green-500/30 text-green-400"
                     variant="outline"
                 >
-                    {formatCurrency(income.amount)}
+                    {currencyFormat(income.amount)}
                 </Badge>
             </div>
 
@@ -157,7 +156,7 @@ const IncomeCard = ({ income }: { income: IMemberIncome }) => {
                     <InfoItem
                         icon={DollarSign}
                         label="Amount"
-                        value={formatCurrency(income.amount)}
+                        value={currencyFormat(income.amount)}
                     />
                     {income.release_date && (
                         <InfoItem
@@ -196,7 +195,7 @@ const AssetCard = ({ asset }: { asset: IMemberAsset }) => {
                     className="border-blue-500/30 text-blue-400"
                     variant="outline"
                 >
-                    {formatCurrency(asset.cost)}
+                    {currencyFormat(asset.cost)}
                 </Badge>
             </div>
 
@@ -220,7 +219,7 @@ const AssetCard = ({ asset }: { asset: IMemberAsset }) => {
                     <InfoItem
                         icon={DollarSign}
                         label="Cost"
-                        value={formatCurrency(asset.cost)}
+                        value={currencyFormat(asset.cost)}
                     />
                     <InfoItem
                         icon={Calendar}
@@ -272,7 +271,7 @@ const ExpenseCard = ({ expense }: { expense: IMemberExpense }) => {
                     className="border-red-500/30 text-red-400"
                     variant="outline"
                 >
-                    {formatCurrency(expense.amount)}
+                    {currencyFormat(expense.amount)}
                 </Badge>
             </div>
 
@@ -281,7 +280,7 @@ const ExpenseCard = ({ expense }: { expense: IMemberExpense }) => {
                     <InfoItem
                         icon={DollarSign}
                         label="Amount"
-                        value={formatCurrency(expense.amount)}
+                        value={currencyFormat(expense.amount)}
                     />
                     <InfoItem
                         icon={Calendar}
@@ -309,6 +308,166 @@ const ExpenseCard = ({ expense }: { expense: IMemberExpense }) => {
     )
 }
 
+export function SummarySidebar({
+    assets,
+    incomes,
+    expenses,
+    className,
+}: {
+    assets: IMemberAsset[]
+    incomes: IMemberIncome[]
+    expenses: IMemberExpense[]
+    className?: string
+}) {
+    const totalIncome = incomes.reduce((sum, item) => sum + item.amount, 0)
+    const totalExpenses = expenses.reduce((sum, item) => sum + item.amount, 0)
+    const totalAssets = assets.reduce((sum, item) => sum + item.cost, 0)
+    const netBalance = totalIncome - totalExpenses
+
+    return (
+        <aside
+            className={cn(
+                'w-72 bg-sidebar border rounded-xl h-fit p-4 flex flex-col',
+                className
+            )}
+        >
+            <h2 className="text-lg font-semibold text-sidebar-foreground mb-6">
+                Financial Summary
+            </h2>
+
+            <div className="space-y-6 flex-1 overflow-y-auto">
+                {/* Income Section */}
+                <div>
+                    <h3 className="text-sm font-semibold text-income mb-2 uppercase tracking-wide">
+                        Income
+                        <TrendingUpIcon className="text-primary inline ml-2" />
+                    </h3>
+                    <div className="space-y-1 mb-2">
+                        {incomes.length === 0 && (
+                            <p className="text-sm text-muted-foreground text-center">
+                                no income yet
+                            </p>
+                        )}
+                        {incomes.map((income) => (
+                            <div
+                                className="flex justify-between text-sm"
+                                key={income.id}
+                            >
+                                <span className="text-muted-foreground">
+                                    {income.name}
+                                </span>
+                                <span className="text-sidebar-foreground">
+                                    {currencyFormat(income.amount)}
+                                </span>
+                            </div>
+                        ))}
+                    </div>
+                    <div className="flex justify-between text-sm font-semibold border-t border-border pt-2">
+                        <span className="text-sidebar-foreground">
+                            Total Income
+                        </span>
+                        <span className="text-income">
+                            {currencyFormat(totalIncome)}
+                        </span>
+                    </div>
+                </div>
+
+                {/* Expense Section */}
+                <div>
+                    <h3 className="text-sm font-semibold text-expense mb-2 uppercase tracking-wide">
+                        Expenses
+                        <TrendingDownIcon className="text-primary ml-2 inline" />{' '}
+                    </h3>
+                    <div className="space-y-1 mb-2">
+                        {incomes.length === 0 && (
+                            <p className="text-sm  text-muted-foreground text-center">
+                                no expenses yet
+                            </p>
+                        )}
+                        {expenses.map((expense) => (
+                            <div
+                                className="flex justify-between text-sm"
+                                key={expense.id}
+                            >
+                                <span className="text-muted-foreground">
+                                    {expense.name}
+                                </span>
+                                <span className="text-sidebar-foreground">
+                                    {currencyFormat(expense.amount)}
+                                </span>
+                            </div>
+                        ))}
+                    </div>
+                    <div className="flex justify-between text-sm font-semibold border-t border-border pt-2">
+                        <span className="text-sidebar-foreground">
+                            Total Expenses
+                        </span>
+                        <span className="text-expense">
+                            {currencyFormat(totalExpenses)}
+                        </span>
+                    </div>
+                </div>
+
+                {/* Assets Section */}
+                <div>
+                    <h3 className="text-sm font-semibold text-asset mb-2 uppercase tracking-wide">
+                        Assets
+                        <MoneyBagIcon className="text-primary inline ml-2" />
+                    </h3>
+                    <div className="space-y-1 mb-2">
+                        {assets.length === 0 && (
+                            <p className="text-sm text-muted-foreground text-center">
+                                no assets yet
+                            </p>
+                        )}
+                        {assets.map((asset) => (
+                            <div
+                                className="flex justify-between text-sm"
+                                key={asset.id}
+                            >
+                                <span className="text-muted-foreground">
+                                    {asset.name}
+                                </span>
+                                <span className="text-sidebar-foreground">
+                                    {currencyFormat(asset.cost)}
+                                </span>
+                            </div>
+                        ))}
+                    </div>
+                    <div className="flex justify-between text-sm font-semibold border-t border-border pt-2">
+                        <span className="text-sidebar-foreground">
+                            Total Assets
+                        </span>
+                        <span className="text-asset">
+                            {currencyFormat(totalAssets)}
+                        </span>
+                    </div>
+                </div>
+
+                {/* Divider */}
+                <div className="border-t border-border" />
+
+                {/* Net Balance */}
+                <div
+                    className={cn(
+                        'p-4 rounded-lg',
+                        netBalance >= 0 ? ' bg-primary/10' : 'bg-destructive'
+                    )}
+                >
+                    <div className="flex justify-between items-center">
+                        <span className="text-sm font-semibold text-sidebar-foreground">
+                            Net Balance
+                        </span>
+                        <span className="text-xl font-bold">
+                            {currencyFormat(netBalance)}
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </aside>
+    )
+}
+
 const MemberFinancials = forwardRef<HTMLDivElement, Props>(
     ({ className, profileId, defaultData }, ref) => {
         const { data } = useGetMemberProfileById({
@@ -328,86 +487,96 @@ const MemberFinancials = forwardRef<HTMLDivElement, Props>(
                 )}
                 ref={ref}
             >
-                <SectionCard
-                    icon={<Banknote className="h-5 w-5" />}
-                    subtitle="Different source of income of this member"
-                    title="Income"
-                >
-                    {incomes.length > 0 ? (
-                        <div className="space-y-4 grid-cols-2 grid gap-x-4">
-                            {incomes.map((income, index) => (
-                                <div
-                                    className="animate-fade-in"
-                                    key={income.id}
-                                    style={{
-                                        animationDelay: `${index * 100}ms`,
-                                    }}
-                                >
-                                    <IncomeCard income={income} />
+                <div className="flex gap-x-4">
+                    <SummarySidebar
+                        assets={assets}
+                        className="sticky top-0"
+                        expenses={expenses}
+                        incomes={incomes}
+                    />
+                    <div className="flex flex-1 flex-col gap-y-4">
+                        <SectionCard
+                            icon={<Banknote className="h-5 w-5" />}
+                            subtitle="Different source of income of this member"
+                            title="Income"
+                        >
+                            {incomes.length > 0 ? (
+                                <div className="space-y-4 grid-cols-2 grid gap-x-4">
+                                    {incomes.map((income, index) => (
+                                        <div
+                                            className="animate-fade-in"
+                                            key={income.id}
+                                            style={{
+                                                animationDelay: `${index * 100}ms`,
+                                            }}
+                                        >
+                                            <IncomeCard income={income} />
+                                        </div>
+                                    ))}
                                 </div>
-                            ))}
-                        </div>
-                    ) : (
-                        <EmptyState
-                            icon={Banknote}
-                            message="No income details found"
-                        />
-                    )}
-                </SectionCard>
+                            ) : (
+                                <EmptyState
+                                    icon={Banknote}
+                                    message="No income details found"
+                                />
+                            )}
+                        </SectionCard>
 
-                <SectionCard
-                    icon={<Building2 className="h-5 w-5" />}
-                    subtitle="List of member assets"
-                    title="Assets"
-                >
-                    {assets.length > 0 ? (
-                        <div className="space-y-4 grid-cols-2 grid gap-x-4">
-                            {assets.map((asset, index) => (
-                                <div
-                                    className="animate-fade-in"
-                                    key={asset.id}
-                                    style={{
-                                        animationDelay: `${index * 100}ms`,
-                                    }}
-                                >
-                                    <AssetCard asset={asset} />
+                        <SectionCard
+                            icon={<Building2 className="h-5 w-5" />}
+                            subtitle="List of member assets"
+                            title="Assets"
+                        >
+                            {assets.length > 0 ? (
+                                <div className="space-y-4 grid-cols-2 grid gap-x-4">
+                                    {assets.map((asset, index) => (
+                                        <div
+                                            className="animate-fade-in"
+                                            key={asset.id}
+                                            style={{
+                                                animationDelay: `${index * 100}ms`,
+                                            }}
+                                        >
+                                            <AssetCard asset={asset} />
+                                        </div>
+                                    ))}
                                 </div>
-                            ))}
-                        </div>
-                    ) : (
-                        <EmptyState
-                            icon={Building2}
-                            message="No assets details"
-                        />
-                    )}
-                </SectionCard>
+                            ) : (
+                                <EmptyState
+                                    icon={Building2}
+                                    message="No assets details"
+                                />
+                            )}
+                        </SectionCard>
 
-                <SectionCard
-                    icon={<Receipt className="h-5 w-5" />}
-                    subtitle="Different expenses"
-                    title="Expenses"
-                >
-                    {expenses.length > 0 ? (
-                        <div className="space-y-4 grid-cols-3 grid gap-x-4">
-                            {expenses.map((expense, index) => (
-                                <div
-                                    className="animate-fade-in"
-                                    key={expense.id}
-                                    style={{
-                                        animationDelay: `${index * 100}ms`,
-                                    }}
-                                >
-                                    <ExpenseCard expense={expense} />
+                        <SectionCard
+                            icon={<Receipt className="h-5 w-5" />}
+                            subtitle="Different expenses"
+                            title="Expenses"
+                        >
+                            {expenses.length > 0 ? (
+                                <div className="space-y-4 grid-cols-3 grid gap-x-4">
+                                    {expenses.map((expense, index) => (
+                                        <div
+                                            className="animate-fade-in"
+                                            key={expense.id}
+                                            style={{
+                                                animationDelay: `${index * 100}ms`,
+                                            }}
+                                        >
+                                            <ExpenseCard expense={expense} />
+                                        </div>
+                                    ))}
                                 </div>
-                            ))}
-                        </div>
-                    ) : (
-                        <EmptyState
-                            icon={Receipt}
-                            message="No income details found"
-                        />
-                    )}
-                </SectionCard>
+                            ) : (
+                                <EmptyState
+                                    icon={Receipt}
+                                    message="No income details found"
+                                />
+                            )}
+                        </SectionCard>
+                    </div>
+                </div>
             </div>
         )
     }
