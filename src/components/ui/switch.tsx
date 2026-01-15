@@ -11,7 +11,7 @@ interface SwitchProps
 
 const Switch = React.forwardRef<
     React.ComponentRef<typeof SwitchPrimitives.Root>,
-    SwitchProps 
+    SwitchProps
 >(({ className, thumbClassName, ...props }, ref) => (
     <SwitchPrimitives.Root
         className={cn(
