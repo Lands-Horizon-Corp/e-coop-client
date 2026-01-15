@@ -3,6 +3,25 @@ import { IGeneralLedger } from '@/modules/general-ledger'
 import { TLoanLedgerNormalized } from '@/modules/loan-transaction/loan-transaction.types'
 
 import { TEntityId } from '@/types'
+import crypto from 'crypto'
+
+const generateSecureId = (length: number): string => {
+    const byteLength = Math.ceil((length * 5) / 8) // base-36 ~ 5 bits per char
+    let randomBytes: Uint8Array
+
+    if (typeof window !== 'undefined' && window.crypto && window.crypto.getRandomValues) {
+        randomBytes = new Uint8Array(byteLength)
+        window.crypto.getRandomValues(randomBytes)
+    } else {
+        // Node.js / non-browser fallback
+        randomBytes = crypto.randomBytes(byteLength)
+    }
+
+    return Array.from(randomBytes)
+        .map((b) => b.toString(36).padStart(2, '0'))
+        .join('')
+        .substring(0, length)
+}
 
 export const getLedgerUniqueAccounts = ({
     ledgerEntries = [],
@@ -316,7 +335,7 @@ export const loanNormalizeLedgerEntries = ({
             generalLedgerPaymentPerAccount[missingAcc.id] = []
             for (let i = 0; i < maxPayment; i++) {
                 generalLedgerPaymentPerAccount[missingAcc.id].push({
-                    id: `ghost-${Math.random().toString(36).substring(2, 15)}`,
+                    id: `ghost-${generateSecureId(13)}`,
                     entry_date: new Date(
                         entry.uniqueKey.split('-')[0]
                     ).toISOString(),
@@ -362,7 +381,7 @@ export const loanNormalizeLedgerEntries = ({
             generalLedgerPayments.push(ledger)
             result.push({
                 ...ledger,
-                uid: Math.random().toString(36).substring(2, 15), // just for uniqueness
+                uid: generateSecureId(13), // just for uniqueness
                 entry_date: entry.uniqueKey.split('-')[0],
             })
         }
