@@ -1,23 +1,32 @@
 import { useCallback } from 'react'
 
+import { UseFormReturn } from 'react-hook-form'
 import { toast } from 'sonner'
+import z from 'zod'
 
 import { cn } from '@/helpers'
 import { currencyFormat } from '@/modules/currency'
 import { useGetAllGeneralLedger } from '@/modules/general-ledger'
+import { useGetUserSettings } from '@/modules/user-profile'
 
 import CopyTextButton from '@/components/copy-text-button'
 import { RefreshIcon } from '@/components/icons'
 import LoadingSpinner from '@/components/spinners/loading-spinner'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
+import { Checkbox } from '@/components/ui/checkbox'
+import { Form } from '@/components/ui/form'
+import FormFieldWrapper from '@/components/ui/form-field-wrapper'
+import { Label } from '@/components/ui/label'
+import { Switch } from '@/components/ui/switch'
 
 import { useQeueryHookCallback } from '@/hooks/use-query-hook-cb'
 
 import { TEntityId } from '@/types'
 
-import { ITransaction } from '../..'
+import { ITransaction, ReferenceNumberSchema } from '../..'
 import TransactionHistory from '../history'
+import ReferenceNumber from '../input/transaction-reference-number-field'
 import TransactionCurrentPaymentItem from './transaction-current-payment-item'
 
 type itemgBadgeTypeProps = {
@@ -39,13 +48,17 @@ type CurrentPaymentsEntryListProps = {
     transaction: ITransaction
     totalAmount?: number
     fullPath: string
+
+    form: UseFormReturn<z.infer<typeof ReferenceNumberSchema>>
 }
 const TransactionCurrentPaymentEntry = ({
     fullPath,
     transactionId,
     transaction,
     totalAmount,
+    form,
 }: CurrentPaymentsEntryListProps) => {
+    const { userSettingOR } = useGetUserSettings()
     const {
         data: generalLedgerBasedTransaction,
         isLoading,
@@ -74,37 +87,81 @@ const TransactionCurrentPaymentEntry = ({
     })
 
     return (
-        <div className="flex min-h-[100%] h-fit flex-col gap-y-2 mb-2 p-4 overflow-hidden  rounded-2xl bg-card">
-            <div className="flex items-center gap-x-2">
-                <div className=" flex-grow rounded-xl py-2">
-                    <div className="flex items-center justify-between gap-x-2">
-                        <div className="flex items-center gap-x-2">
-                            <TransactionHistory fullPath={fullPath} />
-                            <p className="text-sm font-bold uppercase text-muted-foreground">
-                                Total Amount
-                            </p>
-                        </div>
-                        <div className="flex items-center gap-x-1">
-                            <p className="text-lg font-bold text-primary dark:text-primary">
-                                {currencyFormat(totalAmount || 0, {
-                                    currency: transaction?.currency,
-                                    showSymbol: !!transaction?.currency,
-                                })}
-                            </p>
-                            <Button
-                                disabled={isRefetching}
-                                onClick={() => refetchGeneralLedger()}
-                                size="icon-sm"
-                                variant="ghost"
-                            >
-                                {isRefetching ? (
-                                    <LoadingSpinner />
-                                ) : (
-                                    <RefreshIcon />
-                                )}
-                            </Button>
-                        </div>
+        <div className="flex min-h-[100%] h-fit flex-col gap-y-2 mb-2 p-4 overflow-hidden rounded-2xl bg-card/50">
+            <div className="flex space-x-2">
+                <div className="flex gap-1 bg-gradient-to-br from-primary/10 to-background border border-primary/10  rounded-lg p-2">
+                    <div>
+                        <Form {...form}>
+                            <div className="flex flex-wrap gap-3 items-start w-full">
+                                <FormFieldWrapper
+                                    control={form.control}
+                                    labelClassName="text-xs font-medium relative text-muted-foreground"
+                                    name="reference_number"
+                                    render={({ field }) => (
+                                        <ReferenceNumber
+                                            {...field}
+                                            id={field.name}
+                                            onChange={field.onChange}
+                                            placeholder="Reference Number"
+                                            ref={field.ref}
+                                            value={field.value}
+                                        />
+                                    )}
+                                />
+                                <FormFieldWrapper
+                                    className=""
+                                    control={form.control}
+                                    labelClassName="text-xs font-medium text-muted-foreground"
+                                    name="or_auto_generated"
+                                    render={({ field }) => (
+                                        <div className="flex items-center">
+                                            <Switch
+                                                checked={field.value}
+                                                className="mr-2 max-h-4 max-w-9"
+                                                onCheckedChange={(value) => {
+                                                    field.onChange(value)
+                                                    if (value) {
+                                                        form.setValue(
+                                                            'reference_number',
+                                                            userSettingOR
+                                                        )
+                                                    }
+                                                }}
+                                                thumbClassName="size-3"
+                                            />
+                                            <Label className="text-xs font-medium text-muted-foreground">
+                                                OR Auto Generated
+                                            </Label>
+                                        </div>
+                                    )}
+                                />
+                            </div>
+                        </Form>
                     </div>
+
+                    <Button
+                        disabled={isRefetching}
+                        onClick={(e) => {
+                            e.preventDefault()
+                            refetchGeneralLedger()
+                        }}
+                        size="icon-sm"
+                        variant="ghost"
+                    >
+                        {isRefetching ? <LoadingSpinner /> : <RefreshIcon />}
+                    </Button>
+                    <TransactionHistory fullPath={fullPath} />
+                </div>
+                <div className="flex-1 flex py-5 flex-col min-w-[8rem] items-center justify-center bg-gradient-to-br from-primary/10 to-background/10 border border-primary/10 rounded-lg h-full w-full gap-x-1">
+                    <p className="text-xs font-bold uppercase text-muted-foreground">
+                        Total Amount
+                    </p>
+                    <p className="text-lg font-bold text-primary dark:text-primary">
+                        {currencyFormat(totalAmount || 0, {
+                            currency: transaction?.currency,
+                            showSymbol: !!transaction?.currency,
+                        })}
+                    </p>
                 </div>
             </div>
             {/* <Separator /> */}

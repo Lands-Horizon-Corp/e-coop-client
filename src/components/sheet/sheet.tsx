@@ -2,7 +2,6 @@ import { type ReactNode } from 'react'
 
 import * as SheetPrimitive from '@radix-ui/react-dialog'
 
-// import { SHORTCUT_SCOPES } from '@/constants'
 import { cn } from '@/helpers/tw-utils'
 import type {
     IBaseProps,
@@ -16,8 +15,6 @@ import {
     SheetDescription,
     SheetTitle,
 } from '@/components/ui/sheet'
-
-// import GeneralShortcutsWrapper from '../shorcuts/general-shortcuts-wrapper'
 
 export interface ISheetClassNames extends IClassProps {
     titleClassName?: string
@@ -43,22 +40,13 @@ const SheetModal = ({
     descriptionClassName,
     ...other
 }: ISheetProps) => {
-    // const { setActiveScope } = useShortcutContext()
-
-    // useEffect(() => {
-    //     if (other.open) {
-    //         setActiveScope(SHORTCUT_SCOPES.SHEET)
-    //     }
-    //     return () => {
-    //         setActiveScope(SHORTCUT_SCOPES.GLOBAL)
-    //     }
-    // }, [other.open, setActiveScope])
-
     return (
-        // <GeneralShortcutsWrapper mode={SHORTCUT_SCOPES.SHEET}>
         <Sheet {...other}>
             <SheetContent
                 className={cn('shadow-2 ecoop-scroll font-inter', className)}
+                onEscapeKeyDown={(e) => {
+                    e.stopPropagation()
+                }}
             >
                 <SheetTitle className={cn('font-medium', titleClassName)}>
                     {title}
@@ -77,7 +65,6 @@ const SheetModal = ({
                 {footer}
             </SheetContent>
         </Sheet>
-        // </GeneralShortcutsWrapper>
     )
 }
 

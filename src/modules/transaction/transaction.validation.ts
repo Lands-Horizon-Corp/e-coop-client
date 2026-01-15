@@ -8,7 +8,7 @@ import {
 } from '@/validation'
 
 export const PaymentWithTransactionSchema = z.object({
-    reference_number: z.string().min(1, 'Reference number is required'),
+    // reference_number: z.string().min(1, 'Reference number is required'),
     amount: z.coerce
         .number({ error: 'Amount is required' })
         .refine((val) => val !== 0, '0 Amount is not allowed'),

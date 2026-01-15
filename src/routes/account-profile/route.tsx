@@ -12,6 +12,7 @@ import useConfirmModalStore from '@/store/confirm-modal-store'
 import {
     AngryIcon,
     ArrowUpRightIcon,
+    BackIcon,
     CheckFillIcon,
     // ChevronLeftIcon,
     ChevronRightIcon,
@@ -37,6 +38,7 @@ import {
 } from '@/components/icons'
 import ImageDisplay from '@/components/image-display'
 import UserProfileNav from '@/components/nav/navs/user-profile-nav'
+import { Button } from '@/components/ui/button'
 import {
     Sidebar,
     SidebarContent,
@@ -50,6 +52,8 @@ import {
 } from '@/components/ui/sidebar'
 import AuthGuard from '@/components/wrappers/auth-guard'
 
+import { useGetIntoBranch } from '@/hooks/use-go-to-org'
+
 import { IClassProps } from '@/types'
 
 // ACCOUNT SETTINGS NOT TIED TO COOP
@@ -58,6 +62,7 @@ export const Route = createFileRoute('/account-profile')({
 })
 
 function RouteComponent() {
+    const { handleGetStarted } = useGetIntoBranch()
     return (
         <AuthGuard>
             <SidebarProvider>
@@ -385,6 +390,17 @@ function RouteComponent() {
                 </Sidebar>
                 <SidebarInset className="ecoop-scroll max-h-[98vh] w-full overflow-y-auto">
                     <UserProfileNav className="sticky top-0 z-50 bg-background/90 mx-0 lg:px-5" />
+                    <div className="mx-auto max-w-4xl w-4xl flex justify-end px-2">
+                        <Button
+                            className=""
+                            onClick={handleGetStarted}
+                            size={'sm'}
+                            variant={'ghost'}
+                        >
+                            <BackIcon className="" size={20} />
+                            Go Back
+                        </Button>
+                    </div>
                     <main>
                         <Outlet />
                     </main>

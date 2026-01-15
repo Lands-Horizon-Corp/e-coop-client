@@ -1,6 +1,7 @@
 import { useEffect } from 'react'
 
-import { Path, useForm } from 'react-hook-form'
+import { Path, UseFormReturn, useForm } from 'react-hook-form'
+import z from 'zod'
 
 import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
 
@@ -40,14 +41,12 @@ import {
 } from '@/components/ui/accordion'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
-import { Checkbox } from '@/components/ui/checkbox'
 import { Form } from '@/components/ui/form'
 import FormErrorMessage from '@/components/ui/form-error-message'
 import FormFieldWrapper from '@/components/ui/form-field-wrapper'
 import ImageField from '@/components/ui/image-field'
 import { Input } from '@/components/ui/input'
 import InputDate from '@/components/ui/input-date'
-import { Label } from '@/components/ui/label'
 import SignatureField from '@/components/ui/signature-field'
 import { Textarea } from '@/components/ui/textarea'
 
@@ -55,7 +54,7 @@ import { useModalState } from '@/hooks/use-modal-state'
 
 import { IClassProps, IForm, TEntityId } from '@/types'
 
-import ReferenceNumber from '../input/transaction-reference-number-field'
+import { ReferenceNumberSchema } from '../../pages/index'
 
 interface PaymentWithTransactionFormProps
     extends IClassProps,
@@ -70,6 +69,7 @@ interface PaymentWithTransactionFormProps
     transactionId?: TEntityId
     memberProfileId?: TEntityId
     memberJointId?: TEntityId
+    referenceNumberForm: UseFormReturn<z.infer<typeof ReferenceNumberSchema>>
 }
 
 const PaymentWithTransactionForm = ({
@@ -82,12 +82,12 @@ const PaymentWithTransactionForm = ({
     disabledFields,
     currentTransactionBatch,
     readOnly,
+    referenceNumberForm,
 }: PaymentWithTransactionFormProps) => {
     const { focusTypePayment, selectedAccount } = useTransactionStore()
     const loanPaymentGuideModal = useModalState()
 
     const {
-        userSettingOR,
         settings_accounting_payment_default_value,
         settings_accounting_payment_default_value_id,
         settings_payment_type_default_value_id,
@@ -102,7 +102,6 @@ const PaymentWithTransactionForm = ({
             account: settings_accounting_payment_default_value || undefined,
             payment_type_id:
                 settings_payment_type_default_value_id || undefined,
-            reference_number: userSettingOR,
             entry_date: new Date().toISOString(),
             description: '',
         },
@@ -115,12 +114,17 @@ const PaymentWithTransactionForm = ({
                 account_id: selectedAccount?.id,
             })
         }
-        form.setFocus('amount')
-    }, [selectedAccount, form])
+        referenceNumberForm.setFocus('reference_number')
+        if (transaction) {
+            referenceNumberForm.setValue(
+                'reference_number',
+                transaction?.reference_number
+            )
+        }
+    }, [selectedAccount, form, transaction])
 
     const formReset = () => {
         form.reset({
-            reference_number: userSettingOR,
             description: '',
             amount: undefined,
             bank_id: undefined,
@@ -152,6 +156,10 @@ const PaymentWithTransactionForm = ({
                     settings_payment_type_default_value_id || ''
                 )
                 form.setFocus('amount')
+                referenceNumberForm.setValue(
+                    'reference_number',
+                    transaction.reference_number
+                )
                 onSuccess?.(transaction)
             },
         },
@@ -161,7 +169,9 @@ const PaymentWithTransactionForm = ({
 
     const { onOpenReverseRequestAction } = useTransactionReverseSecurityStore()
 
-    const handleSubmitForm = (data: TPaymentWithTransactionFormValues) => {
+    const handleSubmitForm = async (
+        data: TPaymentWithTransactionFormValues
+    ) => {
         const transactionpayPayload: ITransactionRequest = {
             ...data,
             currency_id: (transaction?.currency_id ||
@@ -169,6 +179,9 @@ const PaymentWithTransactionForm = ({
             member_profile_id: memberProfileId,
             member_joint_account_id: memberJointId,
             source: 'payment',
+            reference_number: referenceNumberForm.getValues('reference_number'),
+            is_reference_number_checked:
+                referenceNumberForm.getValues('or_auto_generated'),
         }
         creatTransactionDeposit({
             data: {
@@ -184,8 +197,10 @@ const PaymentWithTransactionForm = ({
     }
 
     const handleSubmit = form.handleSubmit(
-        (data: TPaymentWithTransactionFormValues, event) => {
+        async (data: TPaymentWithTransactionFormValues, event) => {
             event?.preventDefault()
+            const trigger = await referenceNumberForm.trigger()
+            if (!trigger) return
             if (data.amount < 0) {
                 onOpenReverseRequestAction({
                     onSuccess: () => {
@@ -205,9 +220,6 @@ const PaymentWithTransactionForm = ({
     const isOnlinePayment = ['bank', 'online', 'check'].includes(
         paymentTypeType?.toLowerCase() ?? ''
     )
-    const handleSetOR = () => {
-        form.setValue('reference_number', userSettingOR)
-    }
 
     const isDisabled = (field: Path<TPaymentWithTransactionFormValues>) =>
         readOnly || disabledFields?.includes(field) || isPending || false
@@ -239,7 +251,7 @@ const PaymentWithTransactionForm = ({
     const errorMessage = serverRequestErrExtractor({ error })
 
     return (
-        <Card className="sticky bottom-2 left-5 right-5 m-2 w-[99%] !p-0 h-fit bg-sidebar/93">
+        <Card className="sticky bottom-5 xl:bottom-5 left-5 right-5 m-2 w-[70%] border-0 !p-0 h-fit bg-sidebar/93">
             <CardContent className="!h-fit p-2 lg:!p-0 items-center w-full lg:!w-full">
                 <TransactionNoFoundBatch mode="payment" />
                 <Form {...form}>
@@ -250,7 +262,7 @@ const PaymentWithTransactionForm = ({
                         <div className="overflow-y-auto ecoop-scroll w-full p-2">
                             {isOnlinePayment && (
                                 <Card className="absolute bottom-[105%] bg-sidebar left-0 ">
-                                    <CardContent className="grid w-ful grid-cols-1 lg:grid-cols-5 !min-w-fit gap-5 p-0 py-2 px-2 ">
+                                    <CardContent className="grid w-ful grid-cols-1 md:grid-cols-2 lg:grid-cols-4 !min-w-fit gap-5 p-0 py-2 px-2 ">
                                         <FormFieldWrapper
                                             control={form.control}
                                             label="Bank"
@@ -366,59 +378,7 @@ const PaymentWithTransactionForm = ({
                                     </CardContent>
                                 </Card>
                             )}
-                            <div className="grid grid-cols-1 md:grid-cols-2 md:gap-y-7 xl:grid-cols-5 w-full  gap-4">
-                                <div className="relative">
-                                    <FormFieldWrapper
-                                        className="relative"
-                                        control={form.control}
-                                        label="Reference Number"
-                                        labelClassName="text-xs font-medium relative text-muted-foreground"
-                                        name="reference_number"
-                                        render={({ field }) => (
-                                            <div className="flex flex-col ">
-                                                <ReferenceNumber
-                                                    {...field}
-                                                    disabled={isDisabled(
-                                                        'reference_number'
-                                                    )}
-                                                    id={field.name}
-                                                    onChange={field.onChange}
-                                                    placeholder="Reference Number"
-                                                    ref={field.ref}
-                                                    value={field.value}
-                                                />
-                                            </div>
-                                        )}
-                                    />
-                                    <FormFieldWrapper
-                                        className="absolute left-1 -bottom-8 w-fit"
-                                        control={form.control}
-                                        labelClassName="text-xs font-medium  text-muted-foreground"
-                                        name="or_auto_generated"
-                                        render={({ field }) => (
-                                            <div className="flex py-2 items-center">
-                                                <Checkbox
-                                                    checked={field.value}
-                                                    className="mr-2"
-                                                    disabled={isDisabled(
-                                                        'or_auto_generated'
-                                                    )}
-                                                    onCheckedChange={(
-                                                        value
-                                                    ) => {
-                                                        field.onChange(value)
-                                                        if (value) {
-                                                            handleSetOR()
-                                                        }
-                                                    }}
-                                                />
-                                                <Label className="text-xs font-medium text-muted-foreground">
-                                                    OR Auto Generated
-                                                </Label>
-                                            </div>
-                                        )}
-                                    />
-                                </div>
+                            <div className="grid grid-cols-1 md:grid-cols-2 md:gap-y-7 xl:grid-cols-3 w-full gap-4">
                                 <FormFieldWrapper
                                     className="mt-2.5 md:mt-0 "
                                     control={form.control}

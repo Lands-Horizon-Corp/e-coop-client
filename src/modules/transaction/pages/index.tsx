@@ -1,8 +1,12 @@
-import { useCallback } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 
 import { useQueryClient } from '@tanstack/react-query'
 import { useNavigate } from '@tanstack/react-router'
+import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
+import z from 'zod'
+
+import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
 
 import { SHORTCUT_SCOPES } from '@/constants'
 import { IGeneralLedger } from '@/modules/general-ledger'
@@ -14,9 +18,10 @@ import {
 } from '@/modules/transaction'
 import { useTransactionBatchStore } from '@/modules/transaction-batch/store/transaction-batch-store'
 import TransactionMemberScanner from '@/modules/transaction/components/transaction-member-scanner'
+import { useGetUserSettings } from '@/modules/user-profile'
 import { useTransactionReverseSecurityStore } from '@/store/transaction-reverse-security-store'
 import { useTransactionStore } from '@/store/transaction/transaction-store'
-import { useHotkeys } from 'react-hotkeys-hook'
+import { useHotkeys, useHotkeysContext } from 'react-hotkeys-hook'
 
 import PageContainer from '@/components/containers/page-container'
 import { ResetIcon } from '@/components/icons'
@@ -38,13 +43,24 @@ type TTransactionProps = {
     fullPath: string
 }
 
+export const ReferenceNumberSchema = z.object({
+    reference_number: z.string().min(1, 'Reference number is required'),
+    or_auto_generated: z.boolean().optional(),
+})
+
 const Transaction = ({ transactionId, fullPath }: TTransactionProps) => {
     const queryClient = useQueryClient()
     const { hasNoTransactionBatch, data: currentTransactionBatch } =
         useTransactionBatchStore()
     const { modalData, isOpen, onClose } = useTransactionReverseSecurityStore()
-    // const loanPickerState = useModalState()
-    // const { setActiveScope } = useShortcutContext()
+    const { userSettingOR } = useGetUserSettings()
+
+    const referenceNumberForm = useForm<z.infer<typeof ReferenceNumberSchema>>({
+        resolver: standardSchemaResolver(ReferenceNumberSchema),
+        defaultValues: {
+            reference_number: userSettingOR,
+        },
+    })
 
     const {
         selectedMember,
@@ -135,11 +151,12 @@ const Transaction = ({ transactionId, fullPath }: TTransactionProps) => {
         'Escape',
         (e) => {
             e.preventDefault()
+            e.stopPropagation()
             handleResetAll()
             handleSetTransactionId({ fullPath })
+            referenceNumberForm.reset()
         },
         {
-            scopes: [SHORTCUT_SCOPES.PAYMENT],
             enableOnFormTags: ['INPUT', 'SELECT', 'TEXTAREA'],
         }
     )
@@ -189,10 +206,11 @@ const Transaction = ({ transactionId, fullPath }: TTransactionProps) => {
                     transaction={transactionFormSuccess}
                 />
 
-                <div className="flex h-full flex-col lg:flex-row  w-full gap-2 overflow-hidden">
+                <div className="flex h-full flex-col lg:flex-row w-full gap-2 overflow-hidden">
                     {/* Left Section (Payment) */}
-                    <div className="w-full lg:w-[40%] ecoop-scroll flex flex-col overflow-y-auto">
+                    <div className="w-full lg:w-[40%] ecoop-scroll pr-[1px] flex flex-col overflow-y-auto">
                         <TransactionCurrentPaymentEntry
+                            form={referenceNumberForm}
                             fullPath={fullPath}
                             totalAmount={transaction?.amount}
                             transaction={transaction as ITransaction}
@@ -293,6 +311,7 @@ const Transaction = ({ transactionId, fullPath }: TTransactionProps) => {
                         // setActiveScope(SHORTCUT_SCOPES.PAYMENT)
                     }}
                     readOnly={!hasNoTransactionBatch}
+                    referenceNumberForm={referenceNumberForm}
                     transaction={transaction}
                     transactionId={transactionId}
                 />

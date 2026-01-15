@@ -81,7 +81,10 @@ export const TransactionHistory = ({
         <>
             <Button
                 className={className}
-                onClick={() => setOnOpen(true)}
+                onClick={(e) => {
+                    e.preventDefault()
+                    setOnOpen(true)
+                }}
                 size="sm"
                 variant="outline"
             >

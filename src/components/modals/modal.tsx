@@ -52,6 +52,9 @@ const Modal = ({
                     className
                 )}
                 closeButtonClassName={closeButtonClassName}
+                onEscapeKeyDown={(e) => {
+                    e.stopPropagation()
+                }}
                 overlayClassName={cn('backdrop-blur', overlayClassName)}
                 showCloseButton={!showCloseButton}
             >

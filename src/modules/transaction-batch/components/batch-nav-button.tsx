@@ -152,6 +152,9 @@ const TransactionBatchNavButton = (_props: Props) => {
             <PopoverContent
                 align="end"
                 className="h-fit w-fit border-none bg-transparent p-0 shadow-none"
+                onEscapeKeyDown={(e) => {
+                    e.stopPropagation()
+                }}
             >
                 <TransactionBatch
                     onBatchEnded={() => setData(null)}

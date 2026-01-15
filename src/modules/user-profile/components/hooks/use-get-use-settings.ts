@@ -9,7 +9,6 @@ export const useGetUserSettings = () => {
             user_setting_number_padding: user_setting_number_padding,
         },
     } = user
-    console.log(userSettingOR)
     return {
         userSettingOR:
             userSettingOR
