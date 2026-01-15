@@ -1,15 +1,19 @@
 import { IAccount } from '@/modules/account'
 import { IGeneralLedger } from '@/modules/general-ledger'
 import { TLoanLedgerNormalized } from '@/modules/loan-transaction/loan-transaction.types'
+import crypto from 'crypto'
 
 import { TEntityId } from '@/types'
-import crypto from 'crypto'
 
 const generateSecureId = (length: number): string => {
     const byteLength = Math.ceil((length * 5) / 8) // base-36 ~ 5 bits per char
     let randomBytes: Uint8Array
 
-    if (typeof window !== 'undefined' && window.crypto && window.crypto.getRandomValues) {
+    if (
+        typeof window !== 'undefined' &&
+        window.crypto &&
+        window.crypto.getRandomValues
+    ) {
         randomBytes = new Uint8Array(byteLength)
         window.crypto.getRandomValues(randomBytes)
     } else {
