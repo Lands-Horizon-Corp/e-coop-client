@@ -776,7 +776,6 @@ const OrgOrgnameBranchBranchnamemaintenancemembersMemberProfileMemberIdSettingsI
   )
 
 export interface FileRoutesByFullPath {
-  '/': typeof landingIndexRoute
   '/account-profile': typeof AccountProfileRouteRouteWithChildren
   '/auth': typeof AuthRouteRouteWithChildren
   '/onboarding': typeof OnboardingRouteRouteWithChildren
@@ -798,6 +797,7 @@ export interface FileRoutesByFullPath {
   '/onboarding/setup-org': typeof OnboardingSetupOrgRoute
   '/org/$orgname': typeof OrgOrgnameRouteWithChildren
   '/auth/sign-up': typeof AuthSignUpLazyRoute
+  '/': typeof landingIndexRoute
   '/account-profile/': typeof AccountProfileIndexRoute
   '/onboarding/': typeof OnboardingIndexRoute
   '/explore/$organization_id': typeof landingExploreOrganization_idRoute
@@ -1094,7 +1094,6 @@ export interface FileRoutesById {
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
-    | '/'
     | '/account-profile'
     | '/auth'
     | '/onboarding'
@@ -1116,6 +1115,7 @@ export interface FileRouteTypes {
     | '/onboarding/setup-org'
     | '/org/$orgname'
     | '/auth/sign-up'
+    | '/'
     | '/account-profile/'
     | '/onboarding/'
     | '/explore/$organization_id'
@@ -1450,8 +1450,8 @@ declare module '@tanstack/react-router' {
     }
     '/(landing)': {
       id: '/(landing)'
-      path: '/'
-      fullPath: '/'
+      path: ''
+      fullPath: ''
       preLoaderRoute: typeof landingRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
