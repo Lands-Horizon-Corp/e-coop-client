@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback } from 'react'
 
 import { useQueryClient } from '@tanstack/react-query'
 import { useNavigate } from '@tanstack/react-router'
@@ -8,7 +8,6 @@ import z from 'zod'
 
 import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
 
-import { SHORTCUT_SCOPES } from '@/constants'
 import { IGeneralLedger } from '@/modules/general-ledger'
 import {
     ITransaction,
@@ -21,14 +20,12 @@ import TransactionMemberScanner from '@/modules/transaction/components/transacti
 import { useGetUserSettings } from '@/modules/user-profile'
 import { useTransactionReverseSecurityStore } from '@/store/transaction-reverse-security-store'
 import { useTransactionStore } from '@/store/transaction/transaction-store'
-import { useHotkeys, useHotkeysContext } from 'react-hotkeys-hook'
+import { useHotkeys } from 'react-hotkeys-hook'
 
 import PageContainer from '@/components/containers/page-container'
 import { ResetIcon } from '@/components/icons'
-// import { useShortcutContext } from '@/components/shorcuts/general-shortcuts-wrapper'
 import { Button } from '@/components/ui/button'
 
-// import { useModalState } from '@/hooks/use-modal-state'
 import { useSubscribe } from '@/hooks/use-pubsub'
 import { useQeueryHookCallback } from '@/hooks/use-query-hook-cb'
 
