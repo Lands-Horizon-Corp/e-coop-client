@@ -336,78 +336,6 @@ export function SummarySidebar({
             </h2>
 
             <div className="space-y-6 flex-1 overflow-y-auto">
-                {/* Income Section */}
-                <div>
-                    <h3 className="text-sm font-semibold text-income mb-2 uppercase tracking-wide">
-                        Income
-                        <TrendingUpIcon className="text-primary inline ml-2" />
-                    </h3>
-                    <div className="space-y-1 mb-2">
-                        {incomes.length === 0 && (
-                            <p className="text-sm text-muted-foreground text-center">
-                                no income yet
-                            </p>
-                        )}
-                        {incomes.map((income) => (
-                            <div
-                                className="flex justify-between text-sm"
-                                key={income.id}
-                            >
-                                <span className="text-muted-foreground">
-                                    {income.name}
-                                </span>
-                                <span className="text-sidebar-foreground">
-                                    {currencyFormat(income.amount)}
-                                </span>
-                            </div>
-                        ))}
-                    </div>
-                    <div className="flex justify-between text-sm font-semibold border-t border-border pt-2">
-                        <span className="text-sidebar-foreground">
-                            Total Income
-                        </span>
-                        <span className="text-income">
-                            {currencyFormat(totalIncome)}
-                        </span>
-                    </div>
-                </div>
-
-                {/* Expense Section */}
-                <div>
-                    <h3 className="text-sm font-semibold text-expense mb-2 uppercase tracking-wide">
-                        Expenses
-                        <TrendingDownIcon className="text-primary ml-2 inline" />{' '}
-                    </h3>
-                    <div className="space-y-1 mb-2">
-                        {incomes.length === 0 && (
-                            <p className="text-sm  text-muted-foreground text-center">
-                                no expenses yet
-                            </p>
-                        )}
-                        {expenses.map((expense) => (
-                            <div
-                                className="flex justify-between text-sm"
-                                key={expense.id}
-                            >
-                                <span className="text-muted-foreground">
-                                    {expense.name}
-                                </span>
-                                <span className="text-sidebar-foreground">
-                                    {currencyFormat(expense.amount)}
-                                </span>
-                            </div>
-                        ))}
-                    </div>
-                    <div className="flex justify-between text-sm font-semibold border-t border-border pt-2">
-                        <span className="text-sidebar-foreground">
-                            Total Expenses
-                        </span>
-                        <span className="text-expense">
-                            {currencyFormat(totalExpenses)}
-                        </span>
-                    </div>
-                </div>
-
                 {/* Assets Section */}
                 <div>
                     <h3 className="text-sm font-semibold text-asset mb-2 uppercase tracking-wide">
@@ -443,10 +371,78 @@ export function SummarySidebar({
                         </span>
                     </div>
                 </div>
-
+                {/* Income Section */}
+                <div>
+                    <h3 className="text-sm font-semibold text-income mb-2 uppercase tracking-wide">
+                        Income
+                        <TrendingUpIcon className="text-primary inline ml-2" />
+                    </h3>
+                    <div className="space-y-1 mb-2">
+                        {incomes.length === 0 && (
+                            <p className="text-sm text-muted-foreground text-center">
+                                no income yet
+                            </p>
+                        )}
+                        {incomes.map((income) => (
+                            <div
+                                className="flex justify-between text-sm"
+                                key={income.id}
+                            >
+                                <span className="text-muted-foreground">
+                                    {income.name}
+                                </span>
+                                <span className="text-sidebar-foreground">
+                                    {currencyFormat(income.amount)}
+                                </span>
+                            </div>
+                        ))}
+                    </div>
+                    <div className="flex justify-between text-sm font-semibold border-t border-border pt-2">
+                        <span className="text-sidebar-foreground">
+                            Total Income
+                        </span>
+                        <span className="text-income">
+                            {currencyFormat(totalIncome)}
+                        </span>
+                    </div>
+                </div>
+                {/* Expense Section */}
+                <div>
+                    <h3 className="text-sm font-semibold text-expense mb-2 uppercase tracking-wide">
+                        Expenses
+                        <TrendingDownIcon className="text-primary ml-2 inline" />{' '}
+                    </h3>
+                    <div className="space-y-1 mb-2">
+                        {incomes.length === 0 && (
+                            <p className="text-sm  text-muted-foreground text-center">
+                                no expenses yet
+                            </p>
+                        )}
+                        {expenses.map((expense) => (
+                            <div
+                                className="flex justify-between text-sm"
+                                key={expense.id}
+                            >
+                                <span className="text-muted-foreground">
+                                    {expense.name}
+                                </span>
+                                <span className="text-sidebar-foreground">
+                                    {currencyFormat(expense.amount)}
+                                </span>
+                            </div>
+                        ))}
+                    </div>
+                    <div className="flex justify-between text-sm font-semibold border-t border-border pt-2">
+                        <span className="text-sidebar-foreground">
+                            Total Expenses
+                        </span>
+                        <span className="text-expense">
+                            {currencyFormat(totalExpenses)}
+                        </span>
+                    </div>
+                </div>
                 {/* Divider */}
                 <div className="border-t border-border" />
-
                 {/* Net Balance */}
                 <div
                     className={cn(
