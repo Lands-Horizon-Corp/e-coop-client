@@ -13,7 +13,7 @@ import { Button } from '@/components/ui/button'
 import { useModalState } from '@/hooks/use-modal-state'
 import { useSubscribe } from '@/hooks/use-pubsub'
 
-import { useGoToOrg } from '../../hooks/use-go-to-org'
+import { useGetIntoBranch } from '../../hooks/use-go-to-org'
 
 export const Route = createFileRoute('/account-profile/')({
     component: RouteComponent,
@@ -31,7 +31,7 @@ function RouteComponent() {
         updateCurrentAuth({ user: newUserData })
     })
 
-    const { handleGetStarted } = useGoToOrg()
+    const { handleGetStarted } = useGetIntoBranch()
 
     return (
         <div className="space-y-4 max-w-4xl rounded-3xl mx-auto p-4">

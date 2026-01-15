@@ -13,7 +13,7 @@ import {
 import { Button } from '@/components/ui/button'
 
 import usePWA from '@/hooks/pwa-hook'
-import { useGoToOrg } from '@/hooks/use-go-to-org'
+import { useGetIntoBranch } from '@/hooks/use-go-to-org'
 
 import {
     EMAIL,
@@ -29,7 +29,7 @@ const NeonFooter = () => {
 
     const { installApp, isDevelopment } = usePWA()
 
-    const { handleGetStarted } = useGoToOrg()
+    const { handleGetStarted } = useGetIntoBranch()
 
     const policies = [
         {
