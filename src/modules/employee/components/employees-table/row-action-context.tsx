@@ -102,7 +102,7 @@ const useEmployeeActions = ({
 
     const openLedger = (type: TEntryType) => {
         setEntryType(type)
-        open('ledger', { extra: { entryType: type } })
+        open('ledger', { defaultValues: employee, extra: { entryType: type } })
     }
 
     const getLedgerTitle = () => {
@@ -143,7 +143,7 @@ export const EmployeesAction = ({
     row,
     onDeleteSuccess,
 }: IEmployeesTableActionProps) => {
-    const { isDeletingEmployee, handleDelete, openLedger, open } =
+    const { employee, isDeletingEmployee, handleDelete, openLedger, open } =
         useEmployeeActions({ row, onDeleteSuccess })
 
     return (
@@ -158,7 +158,13 @@ export const EmployeesAction = ({
                 }}
                 otherActions={
                     <>
-                        <DropdownMenuItem onClick={() => open('permissions')}>
+                        <DropdownMenuItem
+                            onClick={() =>
+                                open('permissions', {
+                                    defaultValues: employee,
+                                })
+                            }
+                        >
                             <UserShieldIcon
                                 className="mr-2"
                                 strokeWidth={1.5}
@@ -167,18 +173,34 @@ export const EmployeesAction = ({
                         </DropdownMenuItem>
 
                         <DropdownMenuItem
-                            onClick={() => open('transaction-batch')}
+                            onClick={() =>
+                                open('transaction-batch', {
+                                    defaultValues: employee,
+                                })
+                            }
                         >
                             <LayersIcon className="mr-2" strokeWidth={1.5} />
                             View Transaction Batch
                         </DropdownMenuItem>
 
-                        <DropdownMenuItem onClick={() => open('transactions')}>
+                        <DropdownMenuItem
+                            onClick={() =>
+                                open('transactions', {
+                                    defaultValues: employee,
+                                })
+                            }
+                        >
                             <ReceiptIcon className="mr-2" strokeWidth={1.5} />
                             View Transactions
                         </DropdownMenuItem>
 
-                        <DropdownMenuItem onClick={() => open('timesheets')}>
+                        <DropdownMenuItem
+                            onClick={() =>
+                                open('timesheets', {
+                                    defaultValues: employee,
+                                })
+                            }
+                        >
                             <BriefCaseClockIcon
                                 className="mr-2"
                                 strokeWidth={1.5}
@@ -186,13 +208,23 @@ export const EmployeesAction = ({
                             View Timesheets
                         </DropdownMenuItem>
 
-                        <DropdownMenuItem onClick={() => open('footsteps')}>
+                        <DropdownMenuItem
+                            onClick={() =>
+                                open('footsteps', {
+                                    defaultValues: employee,
+                                })
+                            }
+                        >
                             <FootstepsIcon className="mr-2" strokeWidth={1.5} />
                             View Footsteps
                         </DropdownMenuItem>
 
                         <DropdownMenuItem
-                            onClick={() => open('disbursement-transactions')}
+                            onClick={() =>
+                                open('disbursement-transactions', {
+                                    defaultValues: employee,
+                                })
+                            }
                         >
                             <HandDropCoinsIcon
                                 className="mr-2"
@@ -255,7 +287,11 @@ export const EmployeesAction = ({
                             </DropdownMenuPortal>
                         </DropdownMenuSub>
 
-                        <DropdownMenuItem onClick={() => open('settings')}>
+                        <DropdownMenuItem
+                            onClick={() =>
+                                open('settings', { defaultValues: employee })
+                            }
+                        >
                             <GearIcon className="mr-2" strokeWidth={1.5} />
                             Settings
                         </DropdownMenuItem>
@@ -277,7 +313,7 @@ export const EmployeesRowContext = ({
     children,
     onDeleteSuccess,
 }: IEmployeesRowContextProps) => {
-    const { isDeletingEmployee, handleDelete, openLedger, open } =
+    const { employee, isDeletingEmployee, handleDelete, openLedger, open } =
         useEmployeeActions({ row, onDeleteSuccess })
 
     return (
@@ -289,31 +325,65 @@ export const EmployeesRowContext = ({
             }}
             otherActions={
                 <>
-                    <ContextMenuItem onClick={() => open('permissions')}>
+                    <ContextMenuItem
+                        onClick={() =>
+                            open('permissions', {
+                                defaultValues: employee,
+                            })
+                        }
+                    >
                         <UserShieldIcon className="mr-2" strokeWidth={1.5} />
                         Edit permission
                     </ContextMenuItem>
-                    <ContextMenuItem onClick={() => open('transaction-batch')}>
+                    <ContextMenuItem
+                        onClick={() =>
+                            open('transaction-batch', {
+                                defaultValues: employee,
+                            })
+                        }
+                    >
                         <LayersIcon className="mr-2" strokeWidth={1.5} />
                         View Transaction Batch
                     </ContextMenuItem>
-                    <ContextMenuItem onClick={() => open('transactions')}>
+                    <ContextMenuItem
+                        onClick={() =>
+                            open('transactions', {
+                                defaultValues: employee,
+                            })
+                        }
+                    >
                         <ReceiptIcon className="mr-2" strokeWidth={1.5} />
                         View Transactions
                     </ContextMenuItem>
-                    <ContextMenuItem onClick={() => open('timesheets')}>
+                    <ContextMenuItem
+                        onClick={() =>
+                            open('timesheets', {
+                                defaultValues: employee,
+                            })
+                        }
+                    >
                         <BriefCaseClockIcon
                             className="mr-2"
                             strokeWidth={1.5}
                         />
                         View Timesheets
                     </ContextMenuItem>
-                    <ContextMenuItem onClick={() => open('footsteps')}>
+                    <ContextMenuItem
+                        onClick={() =>
+                            open('footsteps', {
+                                defaultValues: employee,
+                            })
+                        }
+                    >
                         <FootstepsIcon className="mr-2" strokeWidth={1.5} />
                         View Footsteps
                     </ContextMenuItem>
                     <ContextMenuItem
-                        onClick={() => open('disbursement-transactions')}
+                        onClick={() =>
+                            open('disbursement-transactions', {
+                                defaultValues: employee,
+                            })
+                        }
                     >
                         <HandDropCoinsIcon className="mr-2" strokeWidth={1.5} />
                         Disbursement Transactions
@@ -344,7 +414,11 @@ export const EmployeesRowContext = ({
                             </ContextMenuSubContent>
                         </ContextMenuPortal>
                     </ContextMenuSub>
-                    <ContextMenuItem onClick={() => open('settings')}>
+                    <ContextMenuItem
+                        onClick={() =>
+                            open('settings', { defaultValues: employee })
+                        }
+                    >
                         <GearIcon className="mr-2" strokeWidth={1.5} />
                         Settings
                     </ContextMenuItem>
@@ -439,7 +513,7 @@ export const EmployeesTableActionManager = () => {
                     title="Transaction Batch"
                 >
                     <TransactionBatchTable
-                        className="min-h-[90vh]"
+                        className="min-h-[90vh] max-w-full"
                         mode="employee"
                         userOrganizationId={employee.id}
                     />

@@ -457,12 +457,12 @@ export const generateSidebarGroups = (
             userType: ['employee', 'owner'],
             navItems: [
                 {
-                    title: 'View Employees',
+                    title: 'Employees',
                     url: `${baseUrl}/employees/view-employees`,
                     icon: UserListIcon,
                     type: 'item',
                     userType: ['employee', 'owner'],
-                    shortDescription: 'Browse all employees',
+                    shortDescription: 'Browse/view all employees',
                 },
                 {
                     title: 'Permission Template',

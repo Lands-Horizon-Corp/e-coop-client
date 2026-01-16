@@ -45,6 +45,12 @@ const TransactionNoFoundBatch = ({ mode }: TransactionNoFoundBatchProps) => {
                         name: `${user.user_name}-batch-${toReadableDate(new Date(), 'MM-dd-yyyy')}`.toLowerCase(),
                         branch_id: user_organization.branch_id,
                         organization_id: user_organization.organization_id,
+                        provided_by_user: user_organization,
+                        provided_by_user_id: user.id,
+                        currency:
+                            user_organization.branch.branch_setting.currency,
+                        currency_id:
+                            user_organization.branch.branch_setting.currency.id,
                     },
                     onSuccess: handleSuccess,
                 }}

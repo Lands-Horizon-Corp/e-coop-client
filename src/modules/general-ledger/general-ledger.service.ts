@@ -60,16 +60,24 @@ export const getMemberAccountGeneralLedgerTotal = async ({
     return response.data
 }
 
-type TGetAllGeneralLedgerMode = 'all' | 'loan-transaction' | 'transaction'
+type TGetAllGeneralLedgerMode =
+    | 'all'
+    | 'loan-transaction'
+    | 'transaction'
+    | 'member-account'
 
 export const getAllGeneralLedger = async ({
     mode,
     transactionId,
     loanTransactionId,
+    memberProfileId,
+    accountId,
 }: {
     mode?: TGetAllGeneralLedgerMode
     loanTransactionId?: TEntityId
     transactionId?: TEntityId
+    memberProfileId?: TEntityId
+    accountId?: TEntityId
 }) => {
     let url = `${generalLedgerAPIRoute}`
 
@@ -77,6 +85,8 @@ export const getAllGeneralLedger = async ({
         url = `${generalLedgerAPIRoute}/loan-transaction/${loanTransactionId}`
     } else if (mode === 'transaction' && transactionId) {
         url = `${generalLedgerAPIRoute}/transaction/${transactionId}`
+    } else if (mode === 'member-account' && memberProfileId && accountId) {
+        url = `${generalLedgerAPIRoute}/member-profile/${memberProfileId}/account/${accountId}/`
     }
 
     const response = await getAllGeneralLedgers({ url })
@@ -93,12 +103,17 @@ export const useGetAllGeneralLedger = ({
     options,
     transactionId,
     loanTransactionId,
+    memberProfileId,
+    accountId,
 }: {
     mode?: TGetAllGeneralLedgerMode
-    loanTransactionId?: TEntityId
-    transactionId?: TEntityId
     query?: TAPIQueryOptions
     options?: HookQueryOptions<IGeneralLedger[], Error>
+
+    loanTransactionId?: TEntityId
+    transactionId?: TEntityId
+    memberProfileId?: TEntityId
+    accountId?: TEntityId
 }) => {
     return useQuery<IGeneralLedger[], Error>({
         ...options,
@@ -108,6 +123,8 @@ export const useGetAllGeneralLedger = ({
             mode,
             transactionId,
             loanTransactionId,
+            memberProfileId,
+            accountId,
             query,
         ].filter(Boolean),
         queryFn: async () =>
@@ -115,6 +132,8 @@ export const useGetAllGeneralLedger = ({
                 mode,
                 transactionId,
                 loanTransactionId,
+                accountId,
+                memberProfileId,
             }),
     })
 }
