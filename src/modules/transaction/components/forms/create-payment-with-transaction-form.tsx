@@ -26,6 +26,7 @@ import {
     useCreateTransactionPaymentByMode,
 } from '@/modules/transaction'
 import { TTransactionBatchFullorMin } from '@/modules/transaction-batch'
+import { useTransactionBatchStore } from '@/modules/transaction-batch/store/transaction-batch-store'
 import { useGetUserSettings } from '@/modules/user-profile'
 import { useTransactionReverseSecurityStore } from '@/store/transaction-reverse-security-store'
 import { useTransactionStore } from '@/store/transaction/transaction-store'
@@ -249,138 +250,195 @@ const PaymentWithTransactionForm = ({
     )
 
     const errorMessage = serverRequestErrExtractor({ error })
+    const { hasNoTransactionBatch } = useTransactionBatchStore()
 
     return (
-        <Card className="sticky bottom-5 xl:bottom-5 left-5 right-5 m-2 w-[70%] border-0 !p-0 h-fit bg-sidebar/93">
+        <Card
+            className={cn(
+                'sticky bottom-5 left-5 right-5 m-2 border-0 w-full md:w-fit !p-0 h-fit bg-sidebar/93',
+                !hasNoTransactionBatch ? 'xl:!py-5' : 'py-0'
+            )}
+        >
             <CardContent className="!h-fit p-2 lg:!p-0 items-center w-full lg:!w-full">
                 <TransactionNoFoundBatch mode="payment" />
                 <Form {...form}>
                     <form
-                        className="!w-full flex flex-col overflow-auto "
+                        className="w-full md:w-fit flex flex-col overflow-auto overflow-y-auto ecoop-scroll p-2"
                         onSubmit={handleSubmit}
                     >
-                        <div className="overflow-y-auto ecoop-scroll w-full p-2">
-                            {isOnlinePayment && (
-                                <Card className="absolute bottom-[105%] bg-sidebar left-0 ">
-                                    <CardContent className="grid w-ful grid-cols-1 md:grid-cols-2 lg:grid-cols-4 !min-w-fit gap-5 p-0 py-2 px-2 ">
-                                        <FormFieldWrapper
-                                            control={form.control}
-                                            label="Bank"
-                                            labelClassName="text-xs font-medium relative text-muted-foreground"
-                                            name="bank_id"
-                                            render={({ field }) => (
-                                                <BankCombobox
+                        {isOnlinePayment && (
+                            <Card className="absolute bottom-[105%] bg-sidebar left-0 ">
+                                <CardContent className="grid w-full grid-cols-1 md:grid-cols-2 xl:grid-cols-4 !min-w-fit gap-5 p-0 py-2 px-2 ">
+                                    <FormFieldWrapper
+                                        control={form.control}
+                                        label="Bank"
+                                        labelClassName="text-xs font-medium relative text-muted-foreground"
+                                        name="bank_id"
+                                        render={({ field }) => (
+                                            <BankCombobox
+                                                {...field}
+                                                disabled={isDisabled('bank_id')}
+                                                onChange={(selectedBank) =>
+                                                    field.onChange(
+                                                        selectedBank.id
+                                                    )
+                                                }
+                                                placeholder="Select a bank"
+                                                value={field.value ?? undefined}
+                                            />
+                                        )}
+                                    />
+                                    <FormFieldWrapper
+                                        className="relative"
+                                        control={form.control}
+                                        description="mm/dd/yyyy"
+                                        descriptionClassName="absolute top-0 right-0"
+                                        label="Bank Date"
+                                        labelClassName="text-xs font-medium relative text-muted-foreground"
+                                        name="entry_date"
+                                        render={({ field }) => (
+                                            <InputDate
+                                                {...field}
+                                                className="block"
+                                                disabled={isDisabled(
+                                                    'entry_date'
+                                                )}
+                                                placeholder="Bank Date"
+                                                value={field.value ?? ''}
+                                            />
+                                        )}
+                                    />
+                                    <FormFieldWrapper
+                                        control={form.control}
+                                        label="Bank Reference Number"
+                                        labelClassName="text-xs font-medium relative text-muted-foreground"
+                                        name="bank_reference_number"
+                                        render={({ field }) => (
+                                            <Input
+                                                {...field}
+                                                disabled={isDisabled(
+                                                    'bank_reference_number'
+                                                )}
+                                                onChange={field.onChange}
+                                                placeholder="add a bank reference number"
+                                                value={field.value ?? undefined}
+                                            />
+                                        )}
+                                    />
+                                    <FormFieldWrapper
+                                        control={form.control}
+                                        label="Proof of Payment"
+                                        labelClassName="text-xs font-medium relative text-muted-foreground"
+                                        name="proof_of_payment_media_id"
+                                        render={({ field }) => {
+                                            const value = form.watch(
+                                                'proof_of_payment_media'
+                                            )
+                                            return (
+                                                <ImageField
                                                     {...field}
+                                                    className="!max-h-10"
                                                     disabled={isDisabled(
-                                                        'bank_id'
+                                                        'proof_of_payment_media_id'
                                                     )}
-                                                    onChange={(selectedBank) =>
-                                                        field.onChange(
-                                                            selectedBank.id
-                                                        )
-                                                    }
-                                                    placeholder="Select a bank"
-                                                    value={
-                                                        field.value ?? undefined
-                                                    }
-                                                />
-                                            )}
-                                        />
-                                        <FormFieldWrapper
-                                            className="relative"
-                                            control={form.control}
-                                            description="mm/dd/yyyy"
-                                            descriptionClassName="absolute top-0 right-0"
-                                            label="Bank Date"
-                                            labelClassName="text-xs font-medium relative text-muted-foreground"
-                                            name="entry_date"
-                                            render={({ field }) => (
-                                                <InputDate
-                                                    {...field}
-                                                    className="block"
-                                                    disabled={isDisabled(
-                                                        'entry_date'
-                                                    )}
-                                                    placeholder="Bank Date"
-                                                    value={field.value ?? ''}
-                                                />
-                                            )}
-                                        />
-                                        <FormFieldWrapper
-                                            control={form.control}
-                                            label="Bank Reference Number"
-                                            labelClassName="text-xs font-medium relative text-muted-foreground"
-                                            name="bank_reference_number"
-                                            render={({ field }) => (
-                                                <Input
-                                                    {...field}
-                                                    disabled={isDisabled(
-                                                        'bank_reference_number'
-                                                    )}
-                                                    onChange={field.onChange}
-                                                    placeholder="add a bank reference number"
-                                                    value={
-                                                        field.value ?? undefined
-                                                    }
-                                                />
-                                            )}
-                                        />
-                                        <FormFieldWrapper
-                                            control={form.control}
-                                            label="Proof of Payment"
-                                            labelClassName="text-xs font-medium relative text-muted-foreground"
-                                            name="proof_of_payment_media_id"
-                                            render={({ field }) => {
-                                                const value = form.watch(
-                                                    'proof_of_payment_media'
-                                                )
-                                                return (
-                                                    <ImageField
-                                                        {...field}
-                                                        className="!max-h-10"
-                                                        disabled={isDisabled(
-                                                            'proof_of_payment_media_id'
-                                                        )}
-                                                        isFieldView
-                                                        onChange={(
-                                                            newImage
-                                                        ) => {
-                                                            if (newImage) {
-                                                                field.onChange(
-                                                                    newImage.id
-                                                                )
-                                                                form.setValue(
-                                                                    'proof_of_payment_media',
-                                                                    newImage as IMedia
-                                                                )
-                                                            } else {
-                                                                field.onChange(
-                                                                    undefined
-                                                                )
-                                                                form.setValue(
-                                                                    'proof_of_payment_media',
-                                                                    undefined
-                                                                )
-                                                            }
-                                                        }}
-                                                        placeholder="Upload Photo"
-                                                        value={
-                                                            value
-                                                                ? (
-                                                                      value as IMedia
-                                                                  ).download_url
-                                                                : value
+                                                    isFieldView
+                                                    onChange={(newImage) => {
+                                                        if (newImage) {
+                                                            field.onChange(
+                                                                newImage.id
+                                                            )
+                                                            form.setValue(
+                                                                'proof_of_payment_media',
+                                                                newImage as IMedia
+                                                            )
+                                                        } else {
+                                                            field.onChange(
+                                                                undefined
+                                                            )
+                                                            form.setValue(
+                                                                'proof_of_payment_media',
+                                                                undefined
+                                                            )
                                                         }
-                                                    />
+                                                    }}
+                                                    placeholder="Upload Photo"
+                                                    value={
+                                                        value
+                                                            ? (value as IMedia)
+                                                                  .download_url
+                                                            : value
+                                                    }
+                                                />
+                                            )
+                                        }}
+                                    />
+                                </CardContent>
+                            </Card>
+                        )}
+                        <div className="grid md:grid-cols-2 xl:grid-cols-3  gap-2">
+                            <FormFieldWrapper
+                                className="self-center"
+                                control={form.control}
+                                label="Payment Type"
+                                labelClassName="text-xs font-medium text-muted-foreground"
+                                name="payment_type_id"
+                                render={({ field }) => (
+                                    <PaymentTypeCombobox
+                                        {...field}
+                                        disabled={isDisabled('payment_type_id')}
+                                        onChange={(selectedPaymentType) => {
+                                            field.onChange(
+                                                selectedPaymentType?.id
+                                            )
+                                            if (isOnlinePayment) {
+                                                form.setValue(
+                                                    'entry_date',
+                                                    new Date().toISOString(),
+                                                    {
+                                                        shouldValidate: true,
+                                                    }
                                                 )
-                                            }}
-                                        />
-                                    </CardContent>
-                                </Card>
-                            )}
-                            <div className="grid grid-cols-1 md:grid-cols-2 md:gap-y-7 xl:grid-cols-3 w-full gap-4">
+                                            }
+                                        }}
+                                        placeholder="Select a payment type"
+                                        value={field.value ?? undefined}
+                                    />
+                                )}
+                            />
+                            <FormFieldWrapper
+                                className="self-center"
+                                control={form.control}
+                                label="Account"
+                                labelClassName="text-xs font-medium text-muted-foreground"
+                                name="account_id"
+                                render={({ field }) => (
+                                    <AccountPicker
+                                        currencyId={
+                                            (transaction?.currency_id ||
+                                                currentTransactionBatch?.currency_id) as TEntityId
+                                        }
+                                        disabled={isDisabled('account_id')}
+                                        mode={
+                                            transaction ||
+                                            currentTransactionBatch
+                                                ? 'currency-payment'
+                                                : focusTypePayment
+                                        }
+                                        nameOnly
+                                        onSelect={(account) => {
+                                            field.onChange(account.id)
+                                            form.setValue('account', account, {
+                                                shouldDirty: true,
+                                            })
+                                        }}
+                                        placeholder="Select an account"
+                                        value={form.watch('account')}
+                                    />
+                                )}
+                            />
+                            <div className="flex space-x-2">
                                 <FormFieldWrapper
-                                    className="mt-2.5 md:mt-0 "
+                                    className="mt-2.5 md:mt-0  self-center"
                                     control={form.control}
                                     label="Amount"
                                     labelClassName="text-xs font-medium text-muted-foreground"
@@ -398,205 +456,146 @@ const PaymentWithTransactionForm = ({
                                                 onChange(newValue)
                                             }
                                             placeholder="Amount"
+                                            showIcon
                                         />
                                     )}
                                 />
-                                <FormFieldWrapper
-                                    control={form.control}
-                                    label="Account"
-                                    labelClassName="text-xs font-medium text-muted-foreground"
-                                    name="account_id"
-                                    render={({ field }) => (
-                                        <AccountPicker
-                                            currencyId={
-                                                (transaction?.currency_id ||
-                                                    currentTransactionBatch?.currency_id) as TEntityId
-                                            }
-                                            disabled={isDisabled('account_id')}
-                                            mode={
-                                                transaction ||
-                                                currentTransactionBatch
-                                                    ? 'currency-payment'
-                                                    : focusTypePayment
-                                            }
-                                            nameOnly
-                                            onSelect={(account) => {
-                                                field.onChange(account.id)
-                                                form.setValue(
-                                                    'account',
-                                                    account,
-                                                    {
-                                                        shouldDirty: true,
-                                                    }
-                                                )
-                                            }}
-                                            placeholder="Select an account"
-                                            value={form.watch('account')}
-                                        />
+                                <Button
+                                    className="self-center px-8 mt-6 "
+                                    disabled={isPending}
+                                    type="submit"
+                                >
+                                    {isPending ? (
+                                        <LoadingSpinner />
+                                    ) : (
+                                        <>{focusTypePayment}</>
                                     )}
-                                />
-                                {(
-                                    [
-                                        'Loan',
-                                        'SVF-Ledger',
-                                        'Interest',
-                                        'Fines',
-                                    ] as TAccountType[]
-                                ).includes(form.watch('account')?.type) && (
-                                    <FormFieldWrapper
-                                        control={form.control}
-                                        label="Loan"
-                                        labelClassName="text-xs font-medium text-muted-foreground"
-                                        name="loan_transaction_id"
-                                        render={({ field }) => (
-                                            <LoanTransactionCombobox
-                                                {...field}
-                                                disabled={isDisabled(
-                                                    'loan_transaction_id'
-                                                )}
-                                                loanAccountId={form.watch(
-                                                    'account_id'
-                                                )}
-                                                memberProfileId={
-                                                    memberProfileId
-                                                }
-                                                mode="member-profile-loan-account"
-                                                onChange={(
-                                                    selectedLoanAccount
-                                                ) => {
-                                                    field.onChange(
-                                                        selectedLoanAccount?.id
-                                                    )
-                                                }}
-                                                placeholder="Select loan type"
-                                                value={field.value ?? undefined}
-                                            />
-                                        )}
-                                    />
-                                )}
+                                </Button>
+                            </div>
+                            {(
+                                [
+                                    'Loan',
+                                    'SVF-Ledger',
+                                    'Interest',
+                                    'Fines',
+                                ] as TAccountType[]
+                            ).includes(form.watch('account')?.type) && (
                                 <FormFieldWrapper
                                     control={form.control}
-                                    label="Payment Type"
+                                    label="Loan"
                                     labelClassName="text-xs font-medium text-muted-foreground"
-                                    name="payment_type_id"
+                                    name="loan_transaction_id"
                                     render={({ field }) => (
-                                        <PaymentTypeCombobox
+                                        <LoanTransactionCombobox
                                             {...field}
                                             disabled={isDisabled(
-                                                'payment_type_id'
+                                                'loan_transaction_id'
                                             )}
-                                            onChange={(selectedPaymentType) => {
+                                            loanAccountId={form.watch(
+                                                'account_id'
+                                            )}
+                                            memberProfileId={memberProfileId}
+                                            mode="member-profile-loan-account"
+                                            onChange={(selectedLoanAccount) => {
                                                 field.onChange(
-                                                    selectedPaymentType?.id
+                                                    selectedLoanAccount?.id
                                                 )
-                                                if (isOnlinePayment) {
-                                                    form.setValue(
-                                                        'entry_date',
-                                                        new Date().toISOString(),
-                                                        {
-                                                            shouldValidate: true,
-                                                        }
-                                                    )
-                                                }
                                             }}
-                                            placeholder="Select a payment type"
+                                            placeholder="Select loan type"
                                             value={field.value ?? undefined}
                                         />
                                     )}
                                 />
-                            </div>
+                            )}
 
-                            <Accordion
-                                className="w-full col-span-4 !p-0 overflow-auto"
-                                collapsible
-                                type="single"
-                            >
-                                <AccordionItem
-                                    className=" w-full border-0"
-                                    value="item-1"
-                                >
-                                    <AccordionTrigger
-                                        className={cn(
-                                            'p-1 text-sm justify-end text-primary flex w-full gap-x-2'
-                                        )}
-                                    >
-                                        others
-                                    </AccordionTrigger>
-                                    <AccordionContent className="overflow-x-auto ecoop-scroll flex gap-x-2 ">
-                                        <FormFieldWrapper
-                                            className="h-full col-span-2"
-                                            control={form.control}
-                                            label="Description"
-                                            name="description"
-                                            render={({ field }) => (
-                                                <Textarea
-                                                    {...field}
-                                                    autoComplete="off"
-                                                    className="!h-12 !max-h-20 !border"
-                                                    disabled={isDisabled(
-                                                        'description'
-                                                    )}
-                                                    id={field.name}
-                                                    placeholder="a short description..."
-                                                    value={field.value}
-                                                />
-                                            )}
-                                        />
-                                        <FormFieldWrapper
-                                            className="h-15"
-                                            control={form.control}
-                                            label="Signature"
-                                            name="signature_media_id"
-                                            render={({ field }) => {
-                                                const value =
-                                                    form.watch('signature')
-                                                return (
-                                                    <SignatureField
-                                                        {...field}
-                                                        className="!max-h-15 min-h-15 "
-                                                        disabled={isDisabled(
-                                                            'signature_media_id'
-                                                        )}
-                                                        hideIcon
-                                                        onChange={(
-                                                            newImage
-                                                        ) => {
-                                                            if (newImage) {
-                                                                field.onChange(
-                                                                    newImage.id
-                                                                )
-                                                                form.setValue(
-                                                                    'signature',
-                                                                    newImage as IMedia
-                                                                )
-                                                            } else {
-                                                                field.onChange(
-                                                                    undefined
-                                                                )
-                                                                form.setValue(
-                                                                    'signature',
-                                                                    undefined
-                                                                )
-                                                            }
-                                                        }}
-                                                        placeholder="Signature"
-                                                        value={
-                                                            value
-                                                                ? (
-                                                                      value as IMedia
-                                                                  ).download_url
-                                                                : value
-                                                        }
-                                                    />
-                                                )
-                                            }}
-                                        />
-                                    </AccordionContent>
-                                </AccordionItem>
-                            </Accordion>
                             <FormErrorMessage errorMessage={errorMessage} />
                         </div>
-                        <div className="flex items-center mb-2 justify-end">
+                        <Accordion
+                            className="w-full col-span-4 !p-0 overflow-auto"
+                            collapsible
+                            type="single"
+                        >
+                            <AccordionItem
+                                className=" w-full border-0"
+                                value="item-1"
+                            >
+                                <AccordionTrigger
+                                    className={cn(
+                                        'p-1 text-sm justify-end text-primary flex w-full gap-x-2'
+                                    )}
+                                >
+                                    others
+                                </AccordionTrigger>
+                                <AccordionContent className="overflow-x-auto ecoop-scroll flex gap-x-2 ">
+                                    <FormFieldWrapper
+                                        className="h-full col-span-2"
+                                        control={form.control}
+                                        label="Description"
+                                        name="description"
+                                        render={({ field }) => (
+                                            <Textarea
+                                                {...field}
+                                                autoComplete="off"
+                                                className="!h-12 !max-h-20 !border"
+                                                disabled={isDisabled(
+                                                    'description'
+                                                )}
+                                                id={field.name}
+                                                placeholder="a short description..."
+                                                value={field.value}
+                                            />
+                                        )}
+                                    />
+                                    <FormFieldWrapper
+                                        className="h-15"
+                                        control={form.control}
+                                        label="Signature"
+                                        name="signature_media_id"
+                                        render={({ field }) => {
+                                            const value =
+                                                form.watch('signature')
+                                            return (
+                                                <SignatureField
+                                                    {...field}
+                                                    className="!max-h-15 min-h-15 "
+                                                    disabled={isDisabled(
+                                                        'signature_media_id'
+                                                    )}
+                                                    hideIcon
+                                                    onChange={(newImage) => {
+                                                        if (newImage) {
+                                                            field.onChange(
+                                                                newImage.id
+                                                            )
+                                                            form.setValue(
+                                                                'signature',
+                                                                newImage as IMedia
+                                                            )
+                                                        } else {
+                                                            field.onChange(
+                                                                undefined
+                                                            )
+                                                            form.setValue(
+                                                                'signature',
+                                                                undefined
+                                                            )
+                                                        }
+                                                    }}
+                                                    placeholder="Signature"
+                                                    value={
+                                                        value
+                                                            ? (value as IMedia)
+                                                                  .download_url
+                                                            : value
+                                                    }
+                                                />
+                                            )
+                                        }}
+                                    />
+                                </AccordionContent>
+                            </AccordionItem>
+                        </Accordion>
+                        <div className="flex items-center w-fit mb-2 justify-end">
                             {form.watch('loan_transaction_id') && (
                                 <>
                                     <div
@@ -637,30 +636,6 @@ const PaymentWithTransactionForm = ({
                                     </Button>
                                 </>
                             )}
-                            <div className="flex flex-1 items-center place-self-end px-2 justify-end gap-x-2">
-                                <Button
-                                    className=" w-full self-end px-8 sm:w-fit"
-                                    id="select-member-button"
-                                    onClick={() => formReset()}
-                                    size="sm"
-                                    type="button"
-                                    variant="ghost"
-                                >
-                                    reset
-                                </Button>
-                                <Button
-                                    className="w-full self-end px-8 sm:w-fit"
-                                    disabled={isPending}
-                                    size="sm"
-                                    type="submit"
-                                >
-                                    {isPending ? (
-                                        <LoadingSpinner />
-                                    ) : (
-                                        <>{focusTypePayment}</>
-                                    )}
-                                </Button>
-                            </div>
                         </div>
                     </form>
                 </Form>

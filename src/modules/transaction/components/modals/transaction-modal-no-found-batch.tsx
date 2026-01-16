@@ -52,9 +52,9 @@ const TransactionNoFoundBatch = ({ mode }: TransactionNoFoundBatchProps) => {
 
             <div
                 className={cn(
-                    'flex flex-col items-center py-5 justify-center text-center animate-in fade-in zoom-in-95 duration-300',
+                    'flex flex-col items-center py-5 !h-full p-2 justify-center text-center animate-in fade-in zoom-in-95 duration-300',
                     mode === 'payment'
-                        ? 'inset-0 absolute -top-10 h-fit z-50 border  rounded-lg bg-background/30 backdrop-blur-sm'
+                        ? 'inset-0 absolute  z-50 border rounded-lg bg-background/30 backdrop-blur-sm'
                         : 'inset-0 absolute top-90 h-fit z-50 backdrop-blur-sm w-full border rounded-xl bg-muted/30 my-4'
                 )}
             >
@@ -69,11 +69,11 @@ const TransactionNoFoundBatch = ({ mode }: TransactionNoFoundBatchProps) => {
                 </div>
 
                 {/* Content */}
-                <div className="max-w-[420px] space-y-2 mb-8">
-                    <h3 className="text-xl font-semibold tracking-tight">
+                <div className="max-w-[420px]  space-y-2 mb-4">
+                    <h3 className=" text-[max(15px,.9vw)] font-semibold tracking-tight">
                         No Transaction Batch Found
                     </h3>
-                    <p className="text-sm text-muted-foreground">
+                    <p className="text-[max(13px,.6vw)] text-muted-foreground">
                         You need an active batch to process{' '}
                         {mode === 'payment' ? 'payments' : 'deposits'}. Create a
                         new one to get started.
@@ -82,7 +82,7 @@ const TransactionNoFoundBatch = ({ mode }: TransactionNoFoundBatchProps) => {
 
                 {/* Actions */}
                 <div className="flex flex-col sm:flex-row items-center gap-3">
-                    <Button asChild variant="outline">
+                    <Button asChild size={'sm'} variant="outline">
                         <Link
                             to={
                                 '/org/$orgname/branch/$branchname/dashboard' as string
@@ -98,6 +98,7 @@ const TransactionNoFoundBatch = ({ mode }: TransactionNoFoundBatchProps) => {
                             e.preventDefault()
                             createBatchModalState.onOpenChange(true)
                         }}
+                        size={'sm'}
                     >
                         <PlusCircle className="mr-2 h-4 w-4" />
                         Start Transaction Batch
