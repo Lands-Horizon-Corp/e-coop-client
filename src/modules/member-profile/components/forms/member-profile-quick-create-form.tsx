@@ -45,7 +45,7 @@ type TMemberProfileQuickFormValues = z.infer<
 
 export interface IMemberProfileQuickCreateFormProps
     extends IClassProps,
-    IForm<Partial<TMemberProfileQuickFormValues>, IMemberProfile> { }
+        IForm<Partial<TMemberProfileQuickFormValues>, IMemberProfile> {}
 
 const MemberProfileQuickCreateForm = ({
     className,
@@ -311,7 +311,7 @@ const MemberProfileQuickCreateForm = ({
                                             className={cn(
                                                 'absolute right-2 top-1/2 z-20 size-4 -translate-y-1/2 text-primary delay-300 duration-300 ease-in-out',
                                                 (invalid || error) &&
-                                                'text-destructive'
+                                                    'text-destructive'
                                             )}
                                         />
                                         <PhoneInput
