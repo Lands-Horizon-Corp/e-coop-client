@@ -47,6 +47,7 @@ export interface MemberAccountingLedgerTableProps
         | 'deleteActionProps'
     >
     mode: TMemberAccountingLedgerHookMode
+    hideToolbar?: boolean
 }
 
 export type TMemberAccountingLedgerTableProps =
@@ -64,6 +65,7 @@ const MemberAccountingLedgerTable = ({
     className,
     toolbarProps,
     defaultFilter,
+    hideToolbar = false,
     onRowClick,
     onDoubleClick = (row) => {
         row.toggleSelected()
@@ -160,26 +162,28 @@ const MemberAccountingLedgerTable = ({
                     !tableState.isScrollable && 'h-fit !max-h-none'
                 )}
             >
-                <DataTableToolbar
-                    filterLogicProps={{
-                        filterLogic: filterState.filterLogic,
-                        setFilterLogic: filterState.setFilterLogic,
-                    }}
-                    globalSearchProps={{
-                        defaultMode: 'contains',
-                        targets: memberGeneralLedgerGlobalSearchTargets,
-                    }}
-                    refreshActionProps={{
-                        onClick: () => refetch(),
-                        isLoading: isPending || isRefetching,
-                    }}
-                    scrollableProps={{
-                        isScrollable: tableState.isScrollable,
-                        setIsScrollable: tableState.setIsScrollable,
-                    }}
-                    table={table}
-                    {...toolbarProps}
-                />
+                {!hideToolbar && (
+                    <DataTableToolbar
+                        filterLogicProps={{
+                            filterLogic: filterState.filterLogic,
+                            setFilterLogic: filterState.setFilterLogic,
+                        }}
+                        globalSearchProps={{
+                            defaultMode: 'contains',
+                            targets: memberGeneralLedgerGlobalSearchTargets,
+                        }}
+                        refreshActionProps={{
+                            onClick: () => refetch(),
+                            isLoading: isPending || isRefetching,
+                        }}
+                        scrollableProps={{
+                            isScrollable: tableState.isScrollable,
+                            setIsScrollable: tableState.setIsScrollable,
+                        }}
+                        table={table}
+                        {...toolbarProps}
+                    />
+                )}
                 <DataTable
                     className="mb-2"
                     isScrollable={tableState.isScrollable}

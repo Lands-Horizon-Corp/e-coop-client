@@ -302,6 +302,7 @@ const MemberAccountingLedger = ({ memberProfileId, className }: Props) => {
             )}
             <MemberAccountingLedgerTable
                 className="w-full flex-1"
+                hideToolbar
                 memberProfileId={memberProfileId}
                 mode="member"
                 onRowClick={(data) =>

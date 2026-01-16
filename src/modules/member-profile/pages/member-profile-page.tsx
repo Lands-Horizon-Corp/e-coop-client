@@ -19,7 +19,11 @@ function ViewMemberProfilePage() {
                 branch_id,
                 organization_id,
                 branch: {
-                    branch_setting: { default_member_type_id, currency },
+                    branch_setting: {
+                        default_member_type_id,
+                        currency,
+                        default_member_gender_id,
+                    },
                 },
             },
         },
@@ -53,6 +57,7 @@ function ViewMemberProfilePage() {
                         branch_id,
                         member_type_id: default_member_type_id,
                         birth_place: currency.iso_3166_alpha3?.toUpperCase(),
+                        member_gender_id: default_member_gender_id,
                     },
                     onSuccess: () => {},
                 }}

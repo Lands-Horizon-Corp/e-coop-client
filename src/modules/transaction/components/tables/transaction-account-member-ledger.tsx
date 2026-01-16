@@ -37,6 +37,7 @@ const TransactionAccountMemberLedger = ({
                     </>
                 )}
                 className="w-full min-h-[40vh] h-full"
+                hideToolbar
                 memberProfileId={memberProfileId}
                 mode="member"
                 onRowClick={onRowClick}
