@@ -9,13 +9,19 @@ import {
     TPaginatedAccountHookMode,
     useFilteredPaginatedAccount,
 } from '@/modules/account'
-import { AccountTypeBadge } from '@/modules/account'
-import { FinancialStatementTypeBadge } from '@/modules/financial-statement-definition/components/financial-statement-type-badge'
-import { GeneralLedgerTypeBadge } from '@/modules/general-ledger/components/general-ledger-type-badge'
+// import { AccountTypeBadge } from '@/modules/account'
+// import { FinancialStatementTypeBadge } from '@/modules/financial-statement-definition/components/financial-statement-type-badge'
+// import { GeneralLedgerTypeBadge } from '@/modules/general-ledger/components/general-ledger-type-badge'
 import { IPickerBaseProps } from '@/types/component-types/picker'
 import { PaginationState } from '@tanstack/react-table'
 
-import { ChevronDownIcon, RenderIcon, TIcon, XIcon } from '@/components/icons'
+import {
+    ChevronDownIcon,
+    EyeIcon,
+    RenderIcon,
+    TIcon,
+    XIcon,
+} from '@/components/icons'
 import MiniPaginationBar from '@/components/pagination-bars/mini-pagination-bar'
 import GenericPicker from '@/components/pickers/generic-picker'
 import LoadingSpinner from '@/components/spinners/loading-spinner'
@@ -23,9 +29,12 @@ import { Button } from '@/components/ui/button'
 
 import useFilterState from '@/hooks/use-filter-state'
 import { useInternalState } from '@/hooks/use-internal-state'
+import { useModalState } from '@/hooks/use-modal-state'
 import { useShortcut } from '@/hooks/use-shorcuts'
 
 import { TEntityId } from '@/types'
+
+import { AccountViewerModal } from '../account-viewer/account-viewer'
 
 interface PickerProp extends IPickerBaseProps<IAccount> {
     allowShorcutCommand?: boolean
@@ -161,46 +170,7 @@ const AccountPicker = ({
                 }}
                 open={state}
                 renderItem={(Account) => (
-                    <div className="flex w-full items-center justify-between py-1">
-                        <div className="flex items-center gap-x-2">
-                            {Account.icon && Account.icon.length > 0 && (
-                                <span className="bg-muted rounded-full p-0.5">
-                                    <RenderIcon icon={Account.icon as TIcon} />
-                                </span>
-                            )}
-                            <span className="text-ellipsis text-left text-foreground/80">
-                                {Account.currency?.emoji
-                                    ? `${Account.currency?.emoji} `
-                                    : '🏳️ '}
-                                {Account.name}
-                                <br />
-                                <span className="text-xs text-muted-foreground/70">
-                                    {Account.description}
-                                </span>
-                            </span>
-                        </div>
-
-                        <p className="mr-2 flex gap-x-2 items-center font-mono text-xs italic text-foreground/40">
-                            {Account.type && (
-                                <AccountTypeBadge
-                                    description="(Type)"
-                                    type={Account.type}
-                                />
-                            )}
-                            {Account.general_ledger_type && (
-                                <GeneralLedgerTypeBadge
-                                    description="(GL)"
-                                    type={Account.general_ledger_type}
-                                />
-                            )}
-                            {Account.financial_statement_type && (
-                                <FinancialStatementTypeBadge
-                                    description=" (FS)"
-                                    type={Account.financial_statement_type}
-                                />
-                            )}
-                        </p>
-                    </div>
+                    <AccountItem account={Account} key={Account.id} />
                 )}
                 searchPlaceHolder="Search account name"
             >
@@ -278,7 +248,7 @@ const AccountPicker = ({
                                         )}
                                     </span>
                                 )}
-                                {!nameOnly && (
+                                {/* {!nameOnly && (
                                     <span className="ml-2 flex-none flex gap-x-1 items-center font-mono text-sm text-foreground/30 flex-shrink-0">
                                         {value?.type && (
                                             <AccountTypeBadge
@@ -301,7 +271,7 @@ const AccountPicker = ({
                                             />
                                         )}
                                     </span>
-                                )}
+                                )} */}
                             </span>
 
                             {/* Shortcut Command */}
@@ -332,6 +302,74 @@ const AccountPicker = ({
                 </div>
             )}
         </>
+    )
+}
+
+const AccountItem = ({ account }: { account: IAccount }) => {
+    const viewAccountModal = useModalState()
+
+    return (
+        <div className="flex w-full items-center justify-between py-1">
+            <div className="flex items-center gap-x-2">
+                {account.icon && account.icon.length > 0 && (
+                    <span className="bg-muted rounded-full p-0.5">
+                        <RenderIcon icon={account.icon as TIcon} />
+                    </span>
+                )}
+                <span className="text-ellipsis text-left text-foreground/80">
+                    {account.currency?.emoji
+                        ? `${account.currency?.emoji} `
+                        : '🏳️ '}
+                    {account.name}
+                    <br />
+                    <span className="text-xs text-muted-foreground/70">
+                        {account.description}
+                    </span>
+                </span>
+            </div>
+            <div className="absolute" onClick={(e) => e.stopPropagation()}>
+                <AccountViewerModal
+                    {...viewAccountModal}
+                    accountViewerProps={{
+                        accountId: account.id,
+                        defaultValue: account,
+                    }}
+                />
+            </div>
+            <Button
+                className="cursor-pointer bg-background/40"
+                onClick={(e) => {
+                    e.stopPropagation()
+                    viewAccountModal.onOpenChange(true)
+                }}
+                size="icon-sm"
+                type="button"
+                variant="ghost"
+            >
+                <EyeIcon className="size-2" />
+            </Button>
+            {/* 
+                        <p className="mr-2 flex gap-x-2 items-center font-mono text-xs italic text-foreground/40">
+                            {Account.type && (
+                                <AccountTypeBadge
+                                    description="(Type)"
+                                    type={Account.type}
+                                />
+                            )}
+                            {Account.general_ledger_type && (
+                                <GeneralLedgerTypeBadge
+                                    description="(GL)"
+                                    type={Account.general_ledger_type}
+                                />
+                            )}
+                            {Account.financial_statement_type && (
+                                <FinancialStatementTypeBadge
+                                    description=" (FS)"
+                                    type={Account.financial_statement_type}
+                                />
+                            )}
+                        </p> */}
+        </div>
     )
 }
 

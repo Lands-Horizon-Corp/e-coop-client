@@ -64,7 +64,7 @@ const MemberProfileQuickCreateForm = ({
             is_mutual_fund_member: false,
             is_micro_finance_member: false,
             create_new_user: false,
-            birth_place : 'PHL',
+            birth_place: 'PHL',
             ...formProps.defaultValues,
             birthdate: toInputDateString(
                 formProps.defaultValues?.birthdate ?? new Date()
