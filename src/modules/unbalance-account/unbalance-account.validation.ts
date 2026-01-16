@@ -14,6 +14,9 @@ export const UnbalanceAccountSchema = z.object({
     account_for_overage_id: EntityIdSchema('Overage Account is required'),
     account_for_overage: z.any(),
 
+    cash_on_hand_account_id: EntityIdSchema('Cash on hand account is required'),
+    cash_on_hand_account: z.any(),
+
     member_profile_id_for_shortage: entityIdSchema.optional(),
     member_profile_for_shortage: z.any().optional(),
 

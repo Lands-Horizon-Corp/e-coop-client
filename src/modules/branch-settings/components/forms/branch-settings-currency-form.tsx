@@ -7,7 +7,6 @@ import { withToastCallbacks } from '@/helpers/callback-helper'
 import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
 import { AccountPicker, IAccount } from '@/modules/account'
 import { CurrencyCombobox } from '@/modules/currency'
-import { IMemberProfile } from '@/modules/member-profile'
 import MemberPicker from '@/modules/member-profile/components/member-picker'
 import TransactionReverseRequestFormModal from '@/modules/transaction/components/modals/transaction-modal-request-reverse'
 import { canAddMemberProfile } from '@/modules/unbalance-account/unbalance-account.utils'
@@ -381,25 +380,20 @@ const UnbalanceAccountSection = ({
                             currency_id: currencyId,
                             currency: currency,
 
-                            account_for_overage:
-                                undefined as unknown as IAccount,
-                            account_for_overage_id:
-                                undefined as unknown as TEntityId,
+                            account_for_overage: undefined!,
+                            account_for_overage_id: undefined!,
 
-                            account_for_shortage:
-                                undefined as unknown as IAccount,
-                            account_for_shortage_id:
-                                undefined as unknown as TEntityId,
+                            account_for_shortage: undefined!,
+                            account_for_shortage_id: undefined!,
 
-                            member_profile_id_for_overage:
-                                undefined as unknown as TEntityId,
-                            member_profile_for_overage:
-                                undefined as unknown as IMemberProfile,
+                            member_profile_id_for_overage: undefined!,
+                            member_profile_for_overage: undefined!,
 
-                            member_profile_id_for_shortage:
-                                undefined as unknown as TEntityId,
-                            member_profile_for_shortage:
-                                undefined as unknown as IMemberProfile,
+                            cash_on_hand_account: undefined!,
+                            cash_on_hand_account_id: undefined!,
+
+                            member_profile_id_for_shortage: undefined!,
+                            member_profile_for_shortage: undefined!,
                         })
                     }
                     type="button"
@@ -535,7 +529,7 @@ const UnbalanceAccountSection = ({
                                             </Button>
                                         </div>
 
-                                        <div className="grid grid-cols-2 gap-3">
+                                        <div className="grid grid-cols-3 gap-3">
                                             <FormFieldWrapper
                                                 control={form.control}
                                                 label="Account for Shortage"
@@ -631,6 +625,38 @@ const UnbalanceAccountSection = ({
                                                 )}
                                             />
 
+                                            <FormFieldWrapper
+                                                control={form.control}
+                                                label="Cash on hand"
+                                                name={`unbalanced_accounts.${index}.cash_on_hand_account_id`}
+                                                render={({ field }) => (
+                                                    <AccountPicker
+                                                        currencyId={
+                                                            basedCurrencyId
+                                                        }
+                                                        mode="currency"
+                                                        nameOnly
+                                                        onSelect={(
+                                                            selectedAccount
+                                                        ) => {
+                                                            field.onChange(
+                                                                selectedAccount?.id
+                                                            )
+                                                            form.setValue(
+                                                                `unbalanced_accounts.${index}.cash_on_hand_account`,
+                                                                selectedAccount,
+                                                                {
+                                                                    shouldDirty: true,
+                                                                }
+                                                            )
+                                                        }}
+                                                        placeholder="Select account"
+                                                        value={form.getValues(
+                                                            `unbalanced_accounts.${index}.cash_on_hand_account`
+                                                        )}
+                                                    />
+                                                )}
+                                            />
                                             {shortageCanAddMemberProfile ? (
                                                 <FormFieldWrapper
                                                     control={form.control}
