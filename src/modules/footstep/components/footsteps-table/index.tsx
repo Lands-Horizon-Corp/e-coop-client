@@ -129,7 +129,7 @@ const FootstepTable = ({
         userOrgId,
         memberProfileId,
         query: {
-            pagination,
+            ...pagination,
             sort: sortingStateBase64,
             filter: filterState.finalFilterPayloadBase64,
         },
