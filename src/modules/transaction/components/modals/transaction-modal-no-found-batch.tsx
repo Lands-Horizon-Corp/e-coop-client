@@ -9,8 +9,9 @@ import { ITransactionBatchMinimal } from '@/modules/transaction-batch'
 import { TransactionBatchCreateFormModal } from '@/modules/transaction-batch/components/forms/transaction-batch-create-form'
 import { useTransactionBatchStore } from '@/modules/transaction-batch/store/transaction-batch-store'
 import { IEmployee } from '@/modules/user'
-import { FileQuestion, LayoutDashboard, PlusCircle } from 'lucide-react'
+import { LayoutDashboard, PlusCircle } from 'lucide-react'
 
+import { EmptyIcon } from '@/components/icons'
 import { Button } from '@/components/ui/button'
 
 import { useModalState } from '@/hooks/use-modal-state'
@@ -58,20 +59,20 @@ const TransactionNoFoundBatch = ({ mode }: TransactionNoFoundBatchProps) => {
 
             <div
                 className={cn(
-                    'flex flex-col items-center py-5 !h-full p-2 justify-center text-center animate-in fade-in zoom-in-95 duration-300',
+                    'flex flex-col items-center py-5 p-2 justify-center text-center animate-in fade-in zoom-in-95 duration-300',
                     mode === 'payment'
-                        ? 'inset-0 absolute  z-50 border rounded-lg bg-background/30 backdrop-blur-sm'
-                        : 'inset-0 absolute top-90 h-fit z-50 backdrop-blur-sm w-full border rounded-xl bg-muted/30 my-4'
+                        ? 'inset-0 absolute z-50 border rounded-lg bg-background/30 backdrop-blur-sm'
+                        : 'inset-0 absolute top-[70%] h-fit z-50 backdrop-blur-sm w-full border rounded-xl bg-muted/30 my-4'
                 )}
             >
                 {/* Icon Circle */}
                 <div
                     className={cn(
-                        'flex h-20 w-20 items-center justify-center rounded-full bg-muted mb-6',
+                        'flex size-15 items-center justify-center rounded-full bg-muted mb-3',
                         mode === 'payment' ? 'hidden' : ''
                     )}
                 >
-                    <FileQuestion className="h-10 w-10 text-muted-foreground" />
+                    <EmptyIcon className=" size-7 text-muted-foreground" />
                 </div>
 
                 {/* Content */}

@@ -24,6 +24,7 @@ import { useQeueryHookCallback } from '@/hooks/use-query-hook-cb'
 import { TEntityId } from '@/types'
 
 import { ITransaction, ReferenceNumberSchema } from '../..'
+import { paymentORBuilder } from '../../transaction.utils'
 import TransactionHistory from '../history'
 import ReferenceNumber from '../input/transaction-reference-number-field'
 import TransactionCurrentPaymentItem from './transaction-current-payment-item'
@@ -57,7 +58,9 @@ const TransactionCurrentPaymentEntry = ({
     totalAmount,
     form,
 }: CurrentPaymentsEntryListProps) => {
-    const { userSettingOR } = useGetUserSettings()
+    const { payment_or_allow_user_input, userOrganization } =
+        useGetUserSettings()
+
     const {
         data: generalLedgerBasedTransaction,
         isLoading,
@@ -99,6 +102,9 @@ const TransactionCurrentPaymentEntry = ({
                                     render={({ field }) => (
                                         <ReferenceNumber
                                             {...field}
+                                            disabled={
+                                                !payment_or_allow_user_input
+                                            }
                                             id={field.name}
                                             onChange={field.onChange}
                                             placeholder="Reference Number"
@@ -122,7 +128,9 @@ const TransactionCurrentPaymentEntry = ({
                                                     if (value) {
                                                         form.setValue(
                                                             'reference_number',
-                                                            userSettingOR
+                                                            paymentORBuilder(
+                                                                userOrganization
+                                                            )
                                                         )
                                                     }
                                                 }}

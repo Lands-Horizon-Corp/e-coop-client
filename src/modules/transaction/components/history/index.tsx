@@ -17,7 +17,6 @@ import { HistoryIcon } from '@/components/icons'
 import MiniPaginationBar from '@/components/pagination-bars/mini-pagination-bar'
 import SheetModal from '@/components/sheet/sheet'
 import { Button } from '@/components/ui/button'
-import { ScrollArea } from '@/components/ui/scroll-area'
 
 import useDatableFilterState from '@/hooks/use-filter-state'
 
@@ -108,29 +107,25 @@ export const TransactionHistory = ({
                     {isLoadingCurrentTransaction ? (
                         <PaymentsEntryListSkeleton itemNumber={10} />
                     ) : (
-                        <ScrollArea>
-                            <div className="min-h-[90vh] h-[90vh] flex flex-col space-y-1.5">
-                                {isNoCurrentTransaction ? (
-                                    <TransactionNoFound />
-                                ) : (
-                                    CurrentTransaction?.data.map(
-                                        (transaction) => (
-                                            <div key={transaction.id}>
-                                                <TransactionDetails
-                                                    item={transaction}
-                                                    onClick={() =>
-                                                        handleNavigate(
-                                                            transaction.id,
-                                                            fullPath
-                                                        )
-                                                    }
-                                                />
-                                            </div>
-                                        )
-                                    )
-                                )}
-                            </div>
-                        </ScrollArea>
+                        <div className="min-h-[90vh] h-[80vh] flex flex-col space-y-1.5">
+                            {isNoCurrentTransaction ? (
+                                <TransactionNoFound />
+                            ) : (
+                                CurrentTransaction?.data.map((transaction) => (
+                                    <div key={transaction.id}>
+                                        <TransactionDetails
+                                            item={transaction}
+                                            onClick={() =>
+                                                handleNavigate(
+                                                    transaction.id,
+                                                    fullPath
+                                                )
+                                            }
+                                        />
+                                    </div>
+                                ))
+                            )}
+                        </div>
                     )}
                 </div>
                 <div className="sticky bottom-0 left-0 right-0">

@@ -1,4 +1,4 @@
-import { useCallback } from 'react'
+import { useCallback, useEffect } from 'react'
 
 import { useQueryClient } from '@tanstack/react-query'
 import { useNavigate } from '@tanstack/react-router'
@@ -34,6 +34,7 @@ import { TEntityId } from '@/types'
 import PaymentWithTransactionForm from '../components/forms/create-payment-with-transaction-form'
 import TransactionReverseRequestFormModal from '../components/modals/transaction-modal-request-reverse'
 import TransactionAccountMemberLedger from '../components/tables/transaction-account-member-ledger'
+import { paymentORBuilder } from '../transaction.utils'
 
 type TTransactionProps = {
     transactionId: TEntityId
@@ -50,14 +51,25 @@ const Transaction = ({ transactionId, fullPath }: TTransactionProps) => {
     const { hasNoTransactionBatch, data: currentTransactionBatch } =
         useTransactionBatchStore()
     const { modalData, isOpen, onClose } = useTransactionReverseSecurityStore()
-    const { userSettingOR } = useGetUserSettings()
+    const { payment_or_allow_user_input, userOrganization } =
+        useGetUserSettings()
 
     const referenceNumberForm = useForm<z.infer<typeof ReferenceNumberSchema>>({
         resolver: standardSchemaResolver(ReferenceNumberSchema),
         defaultValues: {
-            reference_number: userSettingOR,
+            reference_number: '',
+            or_auto_generated: false,
         },
     })
+    useEffect(() => {
+        if (!payment_or_allow_user_input) {
+            referenceNumberForm.setValue('or_auto_generated', true)
+            referenceNumberForm.setValue(
+                'reference_number',
+                paymentORBuilder(userOrganization)
+            )
+        }
+    }, [referenceNumberForm, payment_or_allow_user_input])
 
     const {
         selectedMember,
@@ -73,6 +85,7 @@ const Transaction = ({ transactionId, fullPath }: TTransactionProps) => {
         selectedJointMember,
         setOpenMemberPicker,
     } = useTransactionStore()
+
     const navigate = useNavigate()
 
     const handleSetTransactionId = ({
@@ -170,11 +183,7 @@ const Transaction = ({ transactionId, fullPath }: TTransactionProps) => {
         : currentTransactionBatch?.id !== transaction?.transaction_batch_id
 
     return (
-        <div
-        // onClick={() => {
-        //     setActiveScope(SHORTCUT_SCOPES.PAYMENT)
-        // }}
-        >
+        <div>
             <TransactionReverseRequestFormModal
                 formProps={{
                     onSuccess: () => {
@@ -305,7 +314,6 @@ const Transaction = ({ transactionId, fullPath }: TTransactionProps) => {
                             fullPath,
                         })
                         handleOnSuccessPaymentCallBack(transaction)
-                        // setActiveScope(SHORTCUT_SCOPES.PAYMENT)
                     }}
                     readOnly={!hasNoTransactionBatch}
                     referenceNumberForm={referenceNumberForm}

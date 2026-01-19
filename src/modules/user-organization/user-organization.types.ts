@@ -106,35 +106,34 @@ export interface IUserOrganizationPermissionRequest {
 }
 
 export interface IUserOrganizationSettings {
-    user_type: TUserType
-    description: string
+    user_type?: TUserType
+    description?: string
 
-    user_setting_description: string
-    user_setting_start_or: number
-    user_setting_end_or: number
-    user_setting_used_or: number
-    user_setting_start_voucher: number
-    user_setting_end_voucher: number
-    user_setting_used_voucher: number
-    user_setting_number_padding: number
+    application_description?: string
+    application_status?: TUserOrganizationApplicationStatus
 
-    allow_withdraw_negative_balance: boolean
-    allow_withdraw_exact_balance: boolean
-    maintaining_balance: boolean
+    user_setting_description?: string
 
-    settings_accounting_payment_default_value_id?: TEntityId | null
-    settings_accounting_payment_default_value?: IAccount
+    payment_or_unique?: boolean
+    payment_or_allow_user_input?: boolean
+    payment_or_current?: number
+    payment_or_end?: number
+    payment_or_start?: number
+    payment_or_iteration?: number
+    payment_or_use_date_or?: boolean
+    payment_prefix?: string
+    payment_padding?: number
 
-    settings_accounting_deposit_default_value_id?: TEntityId | null
-    settings_accounting_deposit_default_value?: IAccount
-
-    settings_accounting_withdraw_default_value_id?: TEntityId | null
-    settings_accounting_withdraw_default_value?: IAccount
-
-    settings_payment_type_default_value_id?: TEntityId | null
-    settings_payment_type_default_value?: IPaymentType
+    allow_withdraw_negative_balance?: boolean
+    allow_withdraw_exact_balance?: boolean
+    maintaining_balance?: boolean
 
     time_machine_time?: string
+
+    settings_accounting_payment_default_value_id?: TEntityId | null
+    settings_accounting_deposit_default_value_id?: TEntityId | null
+    settings_accounting_withdraw_default_value_id?: TEntityId | null
+    settings_payment_type_default_value_id?: TEntityId | null
 }
 
 export interface IUserOrganizationSettingsRequest

@@ -416,7 +416,10 @@ export const EmployeesRowContext = ({
                     </ContextMenuSub>
                     <ContextMenuItem
                         onClick={() =>
-                            open('settings', { defaultValues: employee })
+                            open('settings', {
+                                defaultValues: employee,
+                                id: employee.id,
+                            })
                         }
                     >
                         <GearIcon className="mr-2" strokeWidth={1.5} />
@@ -567,6 +570,7 @@ export const EmployeesTableActionManager = () => {
                     formProps={{
                         mode: 'specific',
                         defaultValues: employee,
+                        userOrganizationId: employee.id,
                     }}
                     onOpenChange={close}
                     open={state.isOpen}

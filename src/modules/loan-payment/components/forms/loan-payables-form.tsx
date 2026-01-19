@@ -95,8 +95,6 @@ const LoanPayablesForm = ({
     const {
         currentAuth: {
             user_organization: {
-                user_setting_used_or,
-                user_setting_number_padding,
                 settings_payment_type_default_value_id,
                 settings_payment_type_default_value,
             },
@@ -301,22 +299,22 @@ const LoanPayablesForm = ({
                                     onClick={() => {
                                         alert('trigged')
 
-                                        const constructedOR =
-                                            user_setting_used_or
-                                                .toString()
-                                                .padStart(
-                                                    user_setting_number_padding,
-                                                    '0'
-                                                )
+                                        // const constructedOR =
+                                        //     user_setting_used_or
+                                        //         .toString()
+                                        //         .padStart(
+                                        //             user_setting_number_padding,
+                                        //             '0'
+                                        //         )
 
-                                        form.setValue(
-                                            'reference_number',
-                                            constructedOR,
-                                            {
-                                                shouldDirty: true,
-                                            }
-                                        )
-                                        toast.info(`Set or to ${constructedOR}`)
+                                        // form.setValue(
+                                        //     'reference_number',
+                                        //     constructedOR,
+                                        //     {
+                                        //         shouldDirty: true,
+                                        //     }
+                                        // )
+                                        // toast.info(`Set or to ${constructedOR}`)
                                     }}
                                     type="button"
                                 >

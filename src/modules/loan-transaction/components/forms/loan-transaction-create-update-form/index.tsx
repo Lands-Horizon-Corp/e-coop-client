@@ -268,8 +268,8 @@ const LoanTransactionCreateUpdateForm = ({
     const {
         currentAuth: {
             user_organization: {
-                user_setting_used_or,
-                user_setting_number_padding,
+                // user_setting_used_or,
+                // user_setting_number_padding,
                 branch: {
                     branch_setting: { loan_applied_equal_to_balance },
                 },
@@ -653,25 +653,23 @@ const LoanTransactionCreateUpdateForm = ({
                                                             'official_receipt_number'
                                                         )}
                                                         onClick={() => {
-                                                            const constructedOR =
-                                                                user_setting_used_or
-                                                                    .toString()
-                                                                    .padStart(
-                                                                        user_setting_number_padding,
-                                                                        '0'
-                                                                    )
-
-                                                            form.setValue(
-                                                                'official_receipt_number',
-                                                                constructedOR,
-                                                                {
-                                                                    shouldDirty: true,
-                                                                }
-                                                            )
-
-                                                            toast.info(
-                                                                `Set or to ${constructedOR}`
-                                                            )
+                                                            // const constructedOR =
+                                                            //     user_setting_used_or
+                                                            //         .toString()
+                                                            //         .padStart(
+                                                            //             user_setting_number_padding,
+                                                            //             '0'
+                                                            //         )
+                                                            // form.setValue(
+                                                            //     'official_receipt_number',
+                                                            //     constructedOR,
+                                                            //     {
+                                                            //         shouldDirty: true,
+                                                            //     }
+                                                            // )
+                                                            // toast.info(
+                                                            //     `Set or to ${constructedOR}`
+                                                            // )
                                                         }}
                                                         type="button"
                                                     >

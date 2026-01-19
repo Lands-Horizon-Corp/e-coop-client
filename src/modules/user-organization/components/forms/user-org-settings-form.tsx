@@ -77,13 +77,13 @@ const UserOrgSettingsForm = ({
             user_type: 'member',
             description: '',
             user_setting_description: '',
-            user_setting_start_or: 0,
-            user_setting_end_or: 0,
-            user_setting_used_or: 0,
-            user_setting_start_voucher: 0,
-            user_setting_end_voucher: 0,
-            user_setting_used_voucher: 0,
-            user_setting_number_padding: 0,
+            payment_or_current: 0,
+            payment_or_start: 0,
+            payment_or_end: 0,
+            payment_or_iteration: 0,
+            payment_or_use_date_or: false,
+            payment_prefix: '',
+            payment_padding: 0,
             allow_withdraw_negative_balance: false,
             allow_withdraw_exact_balance: false,
             maintaining_balance: false,
@@ -216,7 +216,6 @@ const UserOrgSettingsForm = ({
                             )}
                         />
                     </div>
-
                     <Separator />
 
                     {/* Time Machine Section */}
@@ -314,7 +313,7 @@ const UserOrgSettingsForm = ({
                             <FormFieldWrapper
                                 control={form.control}
                                 label="Start OR"
-                                name="user_setting_start_or"
+                                name="payment_or_start"
                                 render={({ field }) => (
                                     <Input
                                         {...field}
@@ -327,8 +326,8 @@ const UserOrgSettingsForm = ({
 
                             <FormFieldWrapper
                                 control={form.control}
-                                label="End OR"
-                                name="user_setting_end_or"
+                                label="current OR"
+                                name="payment_or_current"
                                 render={({ field }) => (
                                     <Input
                                         {...field}
@@ -341,8 +340,8 @@ const UserOrgSettingsForm = ({
 
                             <FormFieldWrapper
                                 control={form.control}
-                                label="Used OR"
-                                name="user_setting_used_or"
+                                label="End OR"
+                                name="payment_or_end"
                                 render={({ field }) => (
                                     <Input
                                         {...field}
@@ -355,8 +354,21 @@ const UserOrgSettingsForm = ({
 
                             <FormFieldWrapper
                                 control={form.control}
-                                label="Start Voucher"
-                                name="user_setting_start_voucher"
+                                label="Payment Iteration"
+                                name="payment_or_iteration"
+                                render={({ field }) => (
+                                    <Input
+                                        {...field}
+                                        disabled={isDisabled(field.name)}
+                                        min="0"
+                                        placeholder="Start Voucher"
+                                    />
+                                )}
+                            />
+                            <FormFieldWrapper
+                                control={form.control}
+                                label="Payment Prefix"
+                                name="payment_prefix"
                                 render={({ field }) => (
                                     <Input
                                         {...field}
@@ -369,22 +381,8 @@ const UserOrgSettingsForm = ({
 
                             <FormFieldWrapper
                                 control={form.control}
-                                label="End Voucher"
-                                name="user_setting_end_voucher"
-                                render={({ field }) => (
-                                    <Input
-                                        {...field}
-                                        disabled={isDisabled(field.name)}
-                                        min="0"
-                                        placeholder="End Voucher"
-                                    />
-                                )}
-                            />
-
-                            <FormFieldWrapper
-                                control={form.control}
-                                label="Used Voucher"
-                                name="user_setting_used_voucher"
+                                label="Payment Padding"
+                                name="payment_padding"
                                 render={({ field }) => (
                                     <Input
                                         {...field}
@@ -394,21 +392,106 @@ const UserOrgSettingsForm = ({
                                     />
                                 )}
                             />
-
-                            <FormFieldWrapper
-                                control={form.control}
-                                label="Number Padding"
-                                name="user_setting_number_padding"
-                                render={({ field }) => (
-                                    <Input
-                                        {...field}
-                                        disabled={isDisabled(field.name)}
-                                        min="0"
-                                        placeholder="Number Padding"
-                                    />
-                                )}
-                            />
                         </div>
+                        <FormFieldWrapper
+                            control={form.control}
+                            name="payment_or_use_date_or"
+                            render={({ field }) => (
+                                <div className="shadow-xs bg-background/50 relative flex w-full items-start gap-2 rounded-lg border border-input p-4 outline-none duration-200 ease-out has-[:checked]:border-primary/30 has-[:checked]:bg-gradient-to-br has-[:checked]:from-primary/50 has-[:checked]:to-primary/10">
+                                    <Switch
+                                        aria-describedby={`${field.name}`}
+                                        checked={field.value}
+                                        className="order-1 after:absolute after:inset-0"
+                                        disabled={isDisabled(field.name)}
+                                        id={field.name}
+                                        onCheckedChange={field.onChange}
+                                    />
+                                    <div className="flex grow items-center gap-3">
+                                        <div className="size-fit rounded-full bg-secondary p-2">
+                                            <BillIcon />
+                                        </div>
+                                        <div className="grid gap-2">
+                                            <Label htmlFor={field.name}>
+                                                Allow to use Payment date OR
+                                            </Label>
+                                            <p
+                                                className="text-xs text-muted-foreground"
+                                                id={`${field.name}`}
+                                            >
+                                                Allow the user to use payment
+                                                date OR.
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
+                        />
+                        <FormFieldWrapper
+                            control={form.control}
+                            name="payment_or_unique"
+                            render={({ field }) => (
+                                <div className="shadow-xs bg-background/50 relative flex w-full items-start gap-2 rounded-lg border border-input p-4 outline-none duration-200 ease-out has-[:checked]:border-primary/30 has-[:checked]:bg-gradient-to-br has-[:checked]:from-primary/50 has-[:checked]:to-primary/10">
+                                    <Switch
+                                        aria-describedby={`${field.name}`}
+                                        checked={field.value}
+                                        className="order-1 after:absolute after:inset-0"
+                                        disabled={isDisabled(field.name)}
+                                        id={field.name}
+                                        onCheckedChange={field.onChange}
+                                    />
+                                    <div className="flex grow items-center gap-3">
+                                        <div className="size-fit rounded-full bg-secondary p-2">
+                                            <BillIcon />
+                                        </div>
+                                        <div className="grid gap-2">
+                                            <Label htmlFor={field.name}>
+                                                Allow to use unique payment OR
+                                            </Label>
+                                            <p
+                                                className="text-xs text-muted-foreground"
+                                                id={`${field.name}`}
+                                            >
+                                                Allow the user to use unique
+                                                payment OR.
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
+                        />
+                        <FormFieldWrapper
+                            control={form.control}
+                            name="payment_or_allow_user_input"
+                            render={({ field }) => (
+                                <div className="shadow-xs bg-background/50 relative flex w-full items-start gap-2 rounded-lg border border-input p-4 outline-none duration-200 ease-out has-[:checked]:border-primary/30 has-[:checked]:bg-gradient-to-br has-[:checked]:from-primary/50 has-[:checked]:to-primary/10">
+                                    <Switch
+                                        aria-describedby={`${field.name}`}
+                                        checked={field.value}
+                                        className="order-1 after:absolute after:inset-0"
+                                        disabled={isDisabled(field.name)}
+                                        id={field.name}
+                                        onCheckedChange={field.onChange}
+                                    />
+                                    <div className="flex grow items-center gap-3">
+                                        <div className="size-fit rounded-full bg-secondary p-2">
+                                            <BillIcon />
+                                        </div>
+                                        <div className="grid gap-2">
+                                            <Label htmlFor={field.name}>
+                                                Allow user to input OR
+                                            </Label>
+                                            <p
+                                                className="text-xs text-muted-foreground"
+                                                id={`${field.name}`}
+                                            >
+                                                Allow the user to use or user
+                                                input.
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
+                        />
                     </div>
 
                     <Separator />

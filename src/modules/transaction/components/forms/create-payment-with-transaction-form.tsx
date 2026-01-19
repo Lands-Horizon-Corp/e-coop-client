@@ -122,7 +122,7 @@ const PaymentWithTransactionForm = ({
                 transaction?.reference_number
             )
         }
-    }, [selectedAccount, form, transaction])
+    }, [selectedAccount, form, transaction, referenceNumberForm])
 
     const formReset = () => {
         form.reset({
@@ -375,7 +375,7 @@ const PaymentWithTransactionForm = ({
                                 </CardContent>
                             </Card>
                         )}
-                        <div className="grid md:grid-cols-2 xl:grid-cols-3  gap-2">
+                        <div className="grid md:grid-cols-2 xl:grid-cols-4 grid-flow-col-dense gap-2">
                             <FormFieldWrapper
                                 className="self-center"
                                 control={form.control}
@@ -436,9 +436,9 @@ const PaymentWithTransactionForm = ({
                                     />
                                 )}
                             />
-                            <div className="flex space-x-2">
+                            <div className="flex col-span-2 space-x-2">
                                 <FormFieldWrapper
-                                    className="mt-2.5 md:mt-0  self-center"
+                                    className="mt-2.5 md:mt-0 self-center"
                                     control={form.control}
                                     label="Amount"
                                     labelClassName="text-xs font-medium text-muted-foreground"
@@ -461,7 +461,7 @@ const PaymentWithTransactionForm = ({
                                     )}
                                 />
                                 <Button
-                                    className="self-center px-8 mt-6 "
+                                    className="self-start px-8 mt-6 min-w-[15rem] "
                                     disabled={isPending}
                                     type="submit"
                                 >

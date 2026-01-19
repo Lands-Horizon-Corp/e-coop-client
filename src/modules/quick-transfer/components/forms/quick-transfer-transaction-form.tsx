@@ -66,7 +66,6 @@ export const QuickTransferTransactionForm = ({
     disabledFields,
 }: TransactionEntryFormProps) => {
     const {
-        userSettingOR,
         settings_accounting_withdraw_default_value,
         settings_accounting_deposit_default_value,
         settings_payment_type_default_value_id,
@@ -200,7 +199,7 @@ export const QuickTransferTransactionForm = ({
         form.reset()
         setSelectedMember(null)
         form.reset({
-            reference_number: userSettingOR,
+            reference_number: '',
             description: '',
             amount: undefined,
             bank_id: undefined,
@@ -357,12 +356,6 @@ export const QuickTransferTransactionForm = ({
                                         if (isDisabled('or_auto_generated'))
                                             return
                                         field.onChange(checked)
-                                        if (checked) {
-                                            form.setValue(
-                                                'reference_number',
-                                                userSettingOR
-                                            )
-                                        }
                                     }}
                                 />
                                 <span className="text-sm text-muted-foreground">
