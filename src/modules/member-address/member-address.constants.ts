@@ -20,4 +20,5 @@ export const HOME_TYPES = [
     'Farmhouse',
     'Cabin',
     'Other',
-]
+] as const
+

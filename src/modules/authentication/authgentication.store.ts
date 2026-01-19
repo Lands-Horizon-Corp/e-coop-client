@@ -20,7 +20,7 @@ export const useAuthStore = create<UserAuthStore>((set) => ({
     currentAuth: {
         user: undefined,
         user_organization: null,
-        reports: [],
+        // reports: [],
     },
     authStatus: 'loading',
     setCurrentAuth: (newAuth: IAuthContext) =>
@@ -43,7 +43,7 @@ export const useAuthStore = create<UserAuthStore>((set) => ({
             currentAuth: defaultAuthContextValue ?? {
                 user: undefined,
                 user_organization: null,
-                reports: [],
+                member_profile: null,
             },
             authStatus: 'unauthorized',
         })

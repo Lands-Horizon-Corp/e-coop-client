@@ -79,9 +79,11 @@ const DataTableToolbar = <TData,>({
             <div className="flex items-center gap-x-1">
                 {otherActionLeft}
                 {globalSearchProps ? (
-                    <DataTableGlobalSearch {...globalSearchProps} />
+                    <>
+                        <DataTableGlobalSearch {...globalSearchProps} />
+                        <DataTableActiveFilters />
+                    </>
                 ) : null}
-                <DataTableActiveFilters />
             </div>
             <div className="flex items-center gap-x-2">
                 <div className="flex items-center">

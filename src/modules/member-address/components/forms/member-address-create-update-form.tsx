@@ -26,6 +26,7 @@ import {
 } from '../../member-address.service'
 import { IMemberAddress } from '../../member-address.types'
 import { MemberAddressSchema } from '../../member-address.validation'
+import HomeTypeCombobox from '../home-type-combobox'
 
 type TMemberAddressFormValues = z.infer<typeof MemberAddressSchema>
 
@@ -52,7 +53,7 @@ const MemberAddressCreateUpdateForm = ({
         reValidateMode: 'onChange',
         mode: 'onSubmit',
         defaultValues: {
-            label: '',
+            label: 'House',
             city: '',
             country_code: '',
             postal_code: '',
@@ -130,10 +131,10 @@ const MemberAddressCreateUpdateForm = ({
                     <fieldset className="space-y-3">
                         <FormFieldWrapper
                             control={form.control}
-                            label="Label *"
+                            label="Home Type *"
                             name="label"
                             render={({ field }) => (
-                                <Input
+                                <HomeTypeCombobox
                                     {...field}
                                     className="bg-popover"
                                     disabled={isDisabled(field.name)}

@@ -135,10 +135,16 @@ const TransactionMemberAccountLedger = ({
                     <TabsContent asChild value="general-ledger">
                         <MemberAccountGeneralLedger
                             memberAccountLedgerId={
-                                focusedLedger.memberProfileId
+                                focusedLedger.memberAccountingLedgerId!
                             }
                             {...focusedLedger}
                         />
+                        {/* <MemberAccountGeneralLedger
+                            memberAccountLedgerId={
+                                focusedLedger.memberProfileId
+                            }
+                            {...focusedLedger}
+                        /> */}
                     </TabsContent>
 
                     <TabsContent asChild value="check-entry">

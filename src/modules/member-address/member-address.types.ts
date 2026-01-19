@@ -3,6 +3,7 @@ import z from 'zod'
 import { IBaseEntityMeta, TEntityId } from '@/types/common'
 
 import { IMemberProfile } from '../member-profile/member-profile.types'
+import { HOME_TYPES } from './member-address.constants'
 import { MemberAddressSchema } from './member-address.validation'
 
 export interface IMemberAddress extends IBaseEntityMeta {
@@ -10,7 +11,7 @@ export interface IMemberAddress extends IBaseEntityMeta {
     member_profile_id: TEntityId
     member_profile: IMemberProfile
 
-    label: string
+    label: THomeType
     address: string
     country_code: string
 
@@ -23,6 +24,8 @@ export interface IMemberAddress extends IBaseEntityMeta {
     longitude?: number
     latitude?: number
 }
+
+export type THomeType = (typeof HOME_TYPES)[number]
 
 // LATEST FROM ERD
 export type IMemberAddressRequest = z.infer<typeof MemberAddressSchema>

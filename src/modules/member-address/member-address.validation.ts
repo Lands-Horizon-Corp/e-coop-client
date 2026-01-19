@@ -2,10 +2,14 @@ import z from 'zod'
 
 import { entityIdSchema } from '@/validation'
 
+import { HOME_TYPES } from './member-address.constants'
+
+export const HomeTypeSchema = z.enum(HOME_TYPES, 'Invalid home type')
+
 export const MemberAddressSchema = z.object({
     id: z.string().optional(),
     member_profile_id: entityIdSchema,
-    label: z.string().min(1, 'Label is required'),
+    label: HomeTypeSchema,
     country_code: z.string().min(1, 'Country code is required'),
     address: z.string().min(1, 'Address is required'),
     city: z.string().optional(),
