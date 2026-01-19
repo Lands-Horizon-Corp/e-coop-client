@@ -7,6 +7,7 @@ import {
     LETTERS_REGEX,
     NUMBER_LETTER_REGEX,
     PASSWORD_MIN_LENGTH,
+    SEX,
 } from '@/constants'
 import { sanitizeNumberInput } from '@/helpers/common-helper'
 
@@ -135,3 +136,5 @@ export const PercentageSchema = z.coerce
     .max(100, 'Max is 100 %')
 
 export const DaySchema = z.coerce.number('Must be a number').int().nonnegative()
+
+export const SexSchema = z.enum(SEX, 'Please select a valid sex')

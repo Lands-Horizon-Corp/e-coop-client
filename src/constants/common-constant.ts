@@ -17,6 +17,10 @@ export const predefinedSuffixes = [
 
 export const FEEDBACK_TYPE = ['bug', 'feature', 'general'] as const
 
+export const SEX = ['male', 'female', 'n/a'] as const
+
+export type TSex = (typeof SEX)[number]
+
 export const GENERAL_STATUS = [
     'pending',
     'for review',
@@ -27,10 +31,10 @@ export const GENERAL_STATUS = [
 export const CIVIL_STATUS = [
     'married',
     'single',
-    'widowed',
-    'divorced',
+    // 'widowed',
+    // 'divorced',
     'separated',
-    'civil partnership',
+    // 'civil partnership',
 ] as const
 
 export const USER_ORG_APPLICATION_STATUS = [

@@ -429,7 +429,7 @@ const GeneralLedgerTableColumns = (
             enableResizing: true,
             minSize: 200,
         },
-        ...createUpdateColumns<IGeneralLedger>({ withFilter : false }).filter(
+        ...createUpdateColumns<IGeneralLedger>({ withFilter: false }).filter(
             (col) => col.id === 'updated_at'
         ),
     ]

@@ -15,6 +15,7 @@ import MemberOccupationCombobox from '@/modules/member-occupation/components/mem
 
 import CivilStatusCombobox from '@/components/comboboxes/civil-status-combobox'
 import { CountryCombobox } from '@/components/comboboxes/country-combobox'
+import SexCombobox from '@/components/comboboxes/sex-combobox'
 import FormFooterResetSubmit from '@/components/form-components/form-footer-reset-submit'
 import { VerifiedPatchIcon } from '@/components/icons'
 import TextEditor from '@/components/text-editor'
@@ -69,6 +70,7 @@ const MemberPersonalInfoForm = ({
         reValidateMode: 'onChange',
         mode: 'onSubmit',
         defaultValues: {
+            sex: 'female',
             ...defaultValues,
             birthdate: toInputDateString(
                 defaultValues?.birthdate ?? new Date()
@@ -279,7 +281,7 @@ const MemberPersonalInfoForm = ({
                                 />
                             </div>
                         </div>
-                        <div className="grid grid-cols-1 gap-2 sm:grid-cols-3">
+                        <div className="grid grid-cols-1 gap-2 sm:grid-cols-4">
                             <FormFieldWrapper
                                 control={form.control}
                                 hiddenFields={hiddenFields}
@@ -291,6 +293,19 @@ const MemberPersonalInfoForm = ({
                                         disabled={isDisabled(field.name)}
                                         id={field.name}
                                         placeholder="Civil Status"
+                                    />
+                                )}
+                            />
+                            <FormFieldWrapper
+                                className="col-span-1"
+                                control={form.control}
+                                label="Sex *"
+                                name="sex"
+                                render={({ field }) => (
+                                    <SexCombobox
+                                        {...field}
+                                        disabled={isDisabled(field.name)}
+                                        placeholder="Sex"
                                     />
                                 )}
                             />

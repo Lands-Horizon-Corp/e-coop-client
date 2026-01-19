@@ -14,6 +14,7 @@ import MemberLoanSummary from './member-loan-summary'
 
 interface Props extends IBaseProps {
     memberProfileId: TEntityId
+    memberAccountingLedgerId: TEntityId
     defaultMemberProfile?: IMemberProfile
 }
 

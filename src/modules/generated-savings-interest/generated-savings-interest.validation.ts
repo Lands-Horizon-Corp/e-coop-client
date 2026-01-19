@@ -9,7 +9,6 @@ import { differenceInDays } from 'date-fns'
 
 import { GENERATED_INTEREST_SAVINGS_COMPUTATION_TYPES } from './generated-savings-interest.constant'
 
-
 // Base schema without refinements
 const GeneratedSavingsInterestBaseSchema = z.object({
     id: EntityIdSchema().optional(),
@@ -44,27 +43,8 @@ const GeneratedSavingsInterestBaseSchema = z.object({
     is_viewing_entries: z.boolean().optional(),
 })
 
-export const GeneratedSavingsInterestSchema = GeneratedSavingsInterestBaseSchema.superRefine((data, ctx) => {
-    if (data.new_computation_date && data.last_computation_date) {
-        if (
-            differenceInDays(
-                new Date(data.new_computation_date),
-                new Date(data.last_computation_date)
-            ) < 30
-        ) {
-            ctx.addIssue({
-                code: 'custom',
-                path: ['new_computation_date'],
-                message:
-                    '30 Days must pass before a new computation can be made',
-            })
-        }
-    }
-})
-
-// Use .omit() on base schema, then add refinements
-export const GeneratedSavingsInterestViewSchema = GeneratedSavingsInterestBaseSchema.omit({ entries: true }).superRefine(
-    (data, ctx) => {
+export const GeneratedSavingsInterestSchema =
+    GeneratedSavingsInterestBaseSchema.superRefine((data, ctx) => {
         if (data.new_computation_date && data.last_computation_date) {
             if (
                 differenceInDays(
@@ -80,8 +60,29 @@ export const GeneratedSavingsInterestViewSchema = GeneratedSavingsInterestBaseSc
                 })
             }
         }
-    }
-)
+    })
+
+// Use .omit() on base schema, then add refinements
+export const GeneratedSavingsInterestViewSchema =
+    GeneratedSavingsInterestBaseSchema.omit({ entries: true }).superRefine(
+        (data, ctx) => {
+            if (data.new_computation_date && data.last_computation_date) {
+                if (
+                    differenceInDays(
+                        new Date(data.new_computation_date),
+                        new Date(data.last_computation_date)
+                    ) < 30
+                ) {
+                    ctx.addIssue({
+                        code: 'custom',
+                        path: ['new_computation_date'],
+                        message:
+                            '30 Days must pass before a new computation can be made',
+                    })
+                }
+            }
+        }
+    )
 
 export type TGeneratedSavingsInterestSchema = z.infer<
     typeof GeneratedSavingsInterestSchema

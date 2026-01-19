@@ -17,6 +17,7 @@ import { HandCoinsIcon, PieChartIcon } from 'lucide-react'
 import CivilStatusCombobox from '@/components/comboboxes/civil-status-combobox'
 import { CountryCombobox } from '@/components/comboboxes/country-combobox'
 import GeneralStatusCombobox from '@/components/comboboxes/general-status-combobox'
+import SexCombobox from '@/components/comboboxes/sex-combobox'
 import FormFooterResetSubmit from '@/components/form-components/form-footer-reset-submit'
 import { VerifiedPatchIcon } from '@/components/icons'
 import Modal, { IModalProps } from '@/components/modals/modal'
@@ -59,6 +60,7 @@ const MemberProfileQuickCreateForm = ({
             first_name: '',
             last_name: '',
             passbook: '',
+            sex: 'female',
             status: 'for review',
             civil_status: 'single',
             is_mutual_fund_member: false,
@@ -296,6 +298,19 @@ const MemberProfileQuickCreateForm = ({
                                     <InputDate
                                         {...field}
                                         value={field.value ?? ''}
+                                    />
+                                )}
+                            />
+                            <FormFieldWrapper
+                                className="col-span-1"
+                                control={form.control}
+                                label="Sex *"
+                                name="sex"
+                                render={({ field }) => (
+                                    <SexCombobox
+                                        {...field}
+                                        disabled={isDisabled(field.name)}
+                                        placeholder="Sex"
                                     />
                                 )}
                             />

@@ -25,8 +25,9 @@ const MemberAccountGeneralLedgerAction = ({
                         setFocusedLedger({
                             memberProfileId:
                                 memberAccountLedger?.member_profile_id,
-                            accountId: memberAccountLedger?.account_id,
                             account: memberAccountLedger?.account,
+                            accountId: memberAccountLedger?.account_id,
+                            memberAccountingLedgerId: memberAccountLedger?.id,
                         })
                     },
                 }}

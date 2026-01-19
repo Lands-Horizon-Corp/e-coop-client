@@ -2,7 +2,7 @@ import { useMemo } from 'react'
 
 import { cn } from '@/helpers'
 import {
-    TGeneralLedgerMode,
+    TGetAllGeneralLedgerMode,
     // useFilteredPaginatedGeneralLedger,
     useGetAllGeneralLedger,
 } from '@/modules/general-ledger/general-ledger.service'
@@ -53,7 +53,7 @@ export interface GeneralLedgerRunningTableBaseProps
         | 'exportActionProps'
         | 'deleteActionProps'
     >
-    mode: TGeneralLedgerMode
+    mode: TGetAllGeneralLedgerMode
     entryType?: TEntryType
 }
 
@@ -70,9 +70,8 @@ export type TGeneralLedgerRunningTableProps =
           transactionId: TEntityId
       })
     | (GeneralLedgerRunningTableBaseProps & {
-          mode: 'member-account'
-          memberProfileId: TEntityId
-          accountId: TEntityId
+          mode: 'member-accounting-ledger'
+          memberAccountingLedgerId: TEntityId
       })
 
 const GeneralLedgerRunningTable = ({
@@ -87,12 +86,13 @@ const GeneralLedgerRunningTable = ({
         row.toggleSelected()
     },
     onSelectData,
-    actionComponent,
+    // actionComponent,
     RowContextComponent = GeneralLedgerRunningRowContext,
     ...modeProps
 }: TGeneralLedgerRunningTableProps & {
     userOrganizationId?: TEntityId
     memberProfileId?: TEntityId
+    memberAccountingLedgerId?: TEntityId
     accountId?: TEntityId
     transactionBatchId?: TEntityId
     transactionId?: TEntityId
@@ -102,9 +102,7 @@ const GeneralLedgerRunningTable = ({
         useDataTableSorting()
 
     const columns = useMemo(() => {
-        const allColumns = GeneralLedgerTableColumns({
-            actionComponent,
-        })
+        const allColumns = GeneralLedgerTableColumns()
 
         if (excludeColumnIds && excludeColumnIds.length > 0) {
             return allColumns.filter(
@@ -113,7 +111,7 @@ const GeneralLedgerRunningTable = ({
         }
 
         return allColumns
-    }, [actionComponent, excludeColumnIds])
+    }, [excludeColumnIds])
 
     const { resolvedColumnOrder, resolvedColumnVisibility, finalKeys } =
         useResolvedColumnOrder({
@@ -135,16 +133,12 @@ const GeneralLedgerRunningTable = ({
         refetch,
     } = useGetAllGeneralLedger({
         mode,
+        memberAccountingLedgerId: modeProps.memberAccountingLedgerId,
         // entryType,
         query: {
             ...pagination,
             sort: sortingStateBase64,
         },
-        // userOrganizationId: modeProps.userOrganizationId,
-        memberProfileId: modeProps.memberProfileId,
-        accountId: modeProps.accountId,
-        // transactionBatchId: modeProps.transactionBatchId,
-        transactionId: modeProps.transactionId,
     })
 
     const table = useReactTable({

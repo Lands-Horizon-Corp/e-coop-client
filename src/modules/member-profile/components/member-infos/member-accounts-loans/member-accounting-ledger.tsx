@@ -110,6 +110,7 @@ export const MemberAccountingLedgerTotal = ({
 const MemberAccountingLedger = ({ memberProfileId, className }: Props) => {
     const [focused, setFocused] = useState<
         | {
+              memberAccountingLedgerId: TEntityId
               memberProfileId: TEntityId
               accountId: TEntityId
               account?: IAccount
@@ -234,7 +235,12 @@ const MemberAccountingLedger = ({ memberProfileId, className }: Props) => {
                             </ScrollArea>
 
                             <TabsContent asChild value="general-ledger">
-                                <MemberAccountGeneralLedger {...focused} />
+                                <MemberAccountGeneralLedger
+                                    memberAccountLedgerId={
+                                        focused.memberAccountingLedgerId
+                                    }
+                                    {...focused}
+                                />
                             </TabsContent>
 
                             <TabsContent asChild value="check-entry">
@@ -310,6 +316,7 @@ const MemberAccountingLedger = ({ memberProfileId, className }: Props) => {
                         accountId: data.original.account_id,
                         memberProfileId: data.original.member_profile_id,
                         account: data.original.account,
+                        memberAccountingLedgerId: data.original.id,
                     })
                 }
             />

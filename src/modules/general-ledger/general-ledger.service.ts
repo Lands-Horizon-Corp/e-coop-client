@@ -60,23 +60,23 @@ export const getMemberAccountGeneralLedgerTotal = async ({
     return response.data
 }
 
-type TGetAllGeneralLedgerMode =
+export type TGetAllGeneralLedgerMode =
     | 'all'
     | 'loan-transaction'
     | 'transaction'
-    | 'member-account'
+    | 'member-accounting-ledger'
 
 export const getAllGeneralLedger = async ({
     mode,
     transactionId,
     loanTransactionId,
-    memberProfileId,
-    accountId,
+    memberAccountingLedgerId,
 }: {
     mode?: TGetAllGeneralLedgerMode
     loanTransactionId?: TEntityId
     transactionId?: TEntityId
     memberProfileId?: TEntityId
+    memberAccountingLedgerId?: TEntityId
     accountId?: TEntityId
 }) => {
     let url = `${generalLedgerAPIRoute}`
@@ -85,8 +85,11 @@ export const getAllGeneralLedger = async ({
         url = `${generalLedgerAPIRoute}/loan-transaction/${loanTransactionId}`
     } else if (mode === 'transaction' && transactionId) {
         url = `${generalLedgerAPIRoute}/transaction/${transactionId}`
-    } else if (mode === 'member-account' && memberProfileId && accountId) {
-        url = `${generalLedgerAPIRoute}/member-profile/${memberProfileId}/account/${accountId}/`
+    } else if (
+        mode === 'member-accounting-ledger' &&
+        memberAccountingLedgerId !== undefined
+    ) {
+        url = `${generalLedgerAPIRoute}/member-accounting-ledger/${memberAccountingLedgerId}/`
     }
 
     const response = await getAllGeneralLedgers({ url })
@@ -101,15 +104,17 @@ export const useGetAllGeneralLedger = ({
     mode = 'all',
     query,
     options,
-    transactionId,
-    loanTransactionId,
-    memberProfileId,
     accountId,
+    transactionId,
+    memberProfileId,
+    loanTransactionId,
+    memberAccountingLedgerId,
 }: {
     mode?: TGetAllGeneralLedgerMode
     query?: TAPIQueryOptions
     options?: HookQueryOptions<IGeneralLedger[], Error>
 
+    memberAccountingLedgerId?: TEntityId
     loanTransactionId?: TEntityId
     transactionId?: TEntityId
     memberProfileId?: TEntityId
@@ -121,19 +126,21 @@ export const useGetAllGeneralLedger = ({
             generalLedgerBaseKey,
             'all',
             mode,
-            transactionId,
-            loanTransactionId,
-            memberProfileId,
-            accountId,
             query,
+            accountId,
+            transactionId,
+            memberProfileId,
+            loanTransactionId,
+            memberAccountingLedgerId,
         ].filter(Boolean),
         queryFn: async () =>
             getAllGeneralLedger({
                 mode,
-                transactionId,
-                loanTransactionId,
                 accountId,
+                transactionId,
                 memberProfileId,
+                loanTransactionId,
+                memberAccountingLedgerId,
             }),
     })
 }

@@ -101,6 +101,7 @@ export const MemberAccountLedgerTotal = ({
 
 interface Props extends IBaseProps {
     memberProfileId: TEntityId
+    memberAccountLedgerId: TEntityId
     accountId: TEntityId
     defaultAccount?: IAccount
 }
@@ -123,11 +124,10 @@ const MemberAccountGeneralLedger = ({
                 <MemberAccountLedgerTotal {...other} />
             </div>
             <GeneralLedgerRunningTable
-                accountId={other.accountId}
                 className={cn('bg-background p-2 rounded-xl', className)}
                 excludeColumnIds={['account']}
-                memberProfileId={other.memberProfileId}
-                mode="member-account"
+                memberAccountingLedgerId={other.memberAccountLedgerId}
+                mode="member-accounting-ledger"
             />
         </div>
     )

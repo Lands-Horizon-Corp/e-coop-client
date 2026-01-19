@@ -133,7 +133,12 @@ const TransactionMemberAccountLedger = ({
                     </ScrollArea>
 
                     <TabsContent asChild value="general-ledger">
-                        <MemberAccountGeneralLedger {...focusedLedger} />
+                        <MemberAccountGeneralLedger
+                            memberAccountLedgerId={
+                                focusedLedger.memberProfileId
+                            }
+                            {...focusedLedger}
+                        />
                     </TabsContent>
 
                     <TabsContent asChild value="check-entry">

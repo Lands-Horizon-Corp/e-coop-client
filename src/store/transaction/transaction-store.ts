@@ -55,6 +55,7 @@ export interface TransactionPropsStore {
                   memberProfileId: TEntityId
                   accountId: TEntityId
                   account?: IAccount
+                  memberAccountingLedgerId: TEntityId
               }
             | undefined
     ) => void

@@ -1,6 +1,7 @@
 import z from 'zod'
 
 import {
+    SexSchema,
     birthDateSchema,
     civilStatusSchema,
     contactNumberSchema,
@@ -54,7 +55,7 @@ export const MemberCreateUpdateAccountSchema = z
         if (data.password || data.confirmPassword) {
             if (data.password !== data.confirmPassword) {
                 ctx.addIssue({
-                    code: z.ZodIssueCode.custom,
+                    code: 'custom',
                     path: ['confirmPassword'],
                     message: 'Passwords do not match.',
                 })
@@ -111,6 +112,7 @@ export const QuickCreateMemberProfileSchema = z
                 { message: 'Birthdate must be in the past' }
             )
             .transform((val) => new Date(val).toISOString()),
+        sex: SexSchema,
         member_gender_id: entityIdSchema.optional(),
 
         civil_status: civilStatusSchema,
@@ -149,6 +151,8 @@ export const MemberProfilePersonalInfoSchema = z.object({
 
     business_address: z.string().optional(),
     business_contact_number: z.string().optional(),
+
+    sex: SexSchema,
 
     notes: z.string().optional(),
     description: z

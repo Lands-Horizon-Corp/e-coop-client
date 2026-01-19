@@ -50,6 +50,7 @@ const memberInfoTabs: {
     Component: (
         props: IClassProps & {
             profileId: TEntityId
+            memberAccountingLedgerId?: TEntityId
             defaultData?: IMemberProfile
         }
     ) => ReactNode
@@ -59,7 +60,11 @@ const memberInfoTabs: {
         title: 'Accounts & Loans',
         Icon: BankIcon,
         Component: (props) => (
-            <MemberAccountsLoans memberProfileId={props.profileId} {...props} />
+            <MemberAccountsLoans
+                memberAccountingLedgerId={props.memberAccountingLedgerId!}
+                memberProfileId={props.profileId}
+                {...props}
+            />
         ),
     },
     {

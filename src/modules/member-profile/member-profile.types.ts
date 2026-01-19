@@ -1,3 +1,5 @@
+import { TSex } from '@/constants'
+
 import {
     IAuditable,
     IPaginatedResult,
@@ -188,6 +190,7 @@ export interface IMemberProfile extends ITimeStamps, IAuditable {
 
     qr_code: IQrScanResult<string, 'member-qr'>
 
+    sex: TSex
     // occupationId?: TEntityId
 
     // memberEducationalAttainmentId?: TEntityId
