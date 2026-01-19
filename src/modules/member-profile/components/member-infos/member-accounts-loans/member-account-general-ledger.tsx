@@ -2,7 +2,7 @@ import { cn } from '@/helpers'
 import { IAccount } from '@/modules/account'
 import AccountMiniCard from '@/modules/account/components/account-mini-card'
 import { currencyFormat } from '@/modules/currency'
-import GeneralLedgerTable from '@/modules/general-ledger/components/tables/general-ledger-table'
+import GeneralLedgerRunningTable from '@/modules/general-ledger/components/tables/general-ledger-running-table'
 import { useMemberAccountGeneralLedgerTotal } from '@/modules/member-accounting-ledger/member-accounting-ledger.service'
 
 import { RefreshIcon } from '@/components/icons'
@@ -122,7 +122,7 @@ const MemberAccountGeneralLedger = ({
                 />
                 <MemberAccountLedgerTotal {...other} />
             </div>
-            <GeneralLedgerTable
+            <GeneralLedgerRunningTable
                 accountId={other.accountId}
                 className={cn('bg-background p-2 rounded-xl', className)}
                 excludeColumnIds={['account']}

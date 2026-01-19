@@ -7,9 +7,13 @@ import DataTableColumnHeader from './data-table-column-header'
 import ColumnActions from './data-table-column-header/column-actions'
 import DateFilter from './data-table-filters/date-filter'
 
-export const createUpdateColumns = <
-    T extends ITimeStamps = ITimeStamps,
->(): ColumnDef<T>[] => {
+export const createUpdateColumns = <T extends ITimeStamps = ITimeStamps>(
+    {
+        withFilter = false,
+    }: {
+        withFilter?: boolean
+    } = { withFilter: false }
+): ColumnDef<T>[] => {
     return [
         {
             id: 'created_at',
@@ -17,10 +21,12 @@ export const createUpdateColumns = <
             header: (props) => (
                 <DataTableColumnHeader {...props} title="Date Created">
                     <ColumnActions {...props}>
-                        <DateFilter
-                            displayText="Date Created"
-                            field="created_at"
-                        />
+                        {withFilter && (
+                            <DateFilter
+                                displayText="Date Created"
+                                field="created_at"
+                            />
+                        )}
                     </ColumnActions>
                 </DataTableColumnHeader>
             ),
@@ -52,10 +58,12 @@ export const createUpdateColumns = <
             header: (props) => (
                 <DataTableColumnHeader {...props} title="Date Updated">
                     <ColumnActions {...props}>
-                        <DateFilter
-                            displayText="Date Updated"
-                            field="updated_at"
-                        />
+                        {withFilter && (
+                            <DateFilter
+                                displayText="Date Updated"
+                                field="updated_at"
+                            />
+                        )}
                     </ColumnActions>
                 </DataTableColumnHeader>
             ),

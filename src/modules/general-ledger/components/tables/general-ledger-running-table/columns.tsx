@@ -3,21 +3,13 @@ import { ReactNode } from 'react'
 import { dateAgo, toReadableDate } from '@/helpers/date-utils'
 import { currencyFormat } from '@/modules/currency'
 import { LedgerSourceBadge } from '@/modules/general-ledger/components/ledger-source-badge'
-import { GENERAL_LEDGER_SOURCES } from '@/modules/general-ledger/general-ledger.constants'
-import {
-    IGeneralLedger,
-    TGeneralLedgerSource,
-} from '@/modules/general-ledger/general-ledger.types'
+import { IGeneralLedger } from '@/modules/general-ledger/general-ledger.types'
 import { ColumnDef, Row } from '@tanstack/react-table'
 
 import DataTableColumnHeader from '@/components/data-table/data-table-column-header'
 import ColumnActions from '@/components/data-table/data-table-column-header/column-actions'
 import { createUpdateColumns } from '@/components/data-table/data-table-common-columns'
-import { IGlobalSearchTargets } from '@/components/data-table/data-table-filters/data-table-global-search'
-import DataTableMultiSelectFilter from '@/components/data-table/data-table-filters/data-table-multi-select-filter'
-import DateFilter from '@/components/data-table/data-table-filters/date-filter'
-import NumberFilter from '@/components/data-table/data-table-filters/number-filter'
-import TextFilter from '@/components/data-table/data-table-filters/text-filter'
+// import { IGlobalSearchTargets } from '@/components/data-table/data-table-filters/data-table-global-search'
 import HeaderToggleSelect from '@/components/data-table/data-table-row-actions/header-toggle-select'
 import { PushPinSlashIcon } from '@/components/icons'
 import ImageNameDisplay from '@/components/image-name-display'
@@ -25,19 +17,19 @@ import { Badge } from '@/components/ui/badge'
 import { Checkbox } from '@/components/ui/checkbox'
 import CopyWrapper from '@/components/wrappers/copy-wrapper'
 
-export const generalLedgerGlobalSearchTargets: IGlobalSearchTargets<IGeneralLedger>[] =
-    [
-        { field: 'reference_number', displayText: 'Reference Number' },
-        {
-            field: 'transaction_reference_number',
-            displayText: 'Transaction Reference',
-        },
-        { field: 'source', displayText: 'Source' },
-        { field: 'account.name', displayText: 'Account Name' },
-        { field: 'account.code', displayText: 'Account Code' },
-        { field: 'member_profile.full_name', displayText: 'Member Name' },
-        { field: 'employee_user.full_name', displayText: 'Employee Name' },
-    ]
+// export const generalLedgerGlobalSearchTargets: IGlobalSearchTargets<IGeneralLedger>[] =
+//     [
+//         { field: 'reference_number', displayText: 'Reference Number' },
+//         {
+//             field: 'transaction_reference_number',
+//             displayText: 'Transaction Reference',
+//         },
+//         { field: 'source', displayText: 'Source' },
+//         { field: 'account.name', displayText: 'Account Name' },
+//         { field: 'account.code', displayText: 'Account Code' },
+//         { field: 'member_profile.full_name', displayText: 'Member Name' },
+//         { field: 'employee_user.full_name', displayText: 'Employee Name' },
+//     ]
 
 export interface IGeneralLedgerTableActionComponentProp {
     row: Row<IGeneralLedger>
@@ -87,12 +79,7 @@ const GeneralLedgerRunningTableColumns = (
             accessorKey: 'reference_number',
             header: (props) => (
                 <DataTableColumnHeader {...props} title="Reference No.">
-                    <ColumnActions {...props}>
-                        <TextFilter<IGeneralLedger>
-                            displayText="Reference No."
-                            field="reference_number"
-                        />
-                    </ColumnActions>
+                    <ColumnActions {...props} />
                 </DataTableColumnHeader>
             ),
             cell: ({
@@ -121,12 +108,7 @@ const GeneralLedgerRunningTableColumns = (
             accessorKey: 'account',
             header: (props) => (
                 <DataTableColumnHeader {...props} title="Account">
-                    <ColumnActions {...props}>
-                        <TextFilter<IGeneralLedger>
-                            displayText="Account Name"
-                            field="account.name"
-                        />
-                    </ColumnActions>
+                    <ColumnActions {...props} />
                 </DataTableColumnHeader>
             ),
             cell: ({
@@ -153,12 +135,7 @@ const GeneralLedgerRunningTableColumns = (
             accessorKey: 'credit',
             header: (props) => (
                 <DataTableColumnHeader {...props} title="Credit">
-                    <ColumnActions {...props}>
-                        <NumberFilter<IGeneralLedger>
-                            displayText="Credit"
-                            field="credit"
-                        />
-                    </ColumnActions>
+                    <ColumnActions {...props} />
                 </DataTableColumnHeader>
             ),
             cell: ({
@@ -186,12 +163,7 @@ const GeneralLedgerRunningTableColumns = (
             accessorKey: 'debit',
             header: (props) => (
                 <DataTableColumnHeader {...props} title="Debit">
-                    <ColumnActions {...props}>
-                        <NumberFilter<IGeneralLedger>
-                            displayText="Debit"
-                            field="debit"
-                        />
-                    </ColumnActions>
+                    <ColumnActions {...props} />
                 </DataTableColumnHeader>
             ),
             cell: ({
@@ -247,12 +219,7 @@ const GeneralLedgerRunningTableColumns = (
             accessorKey: 'type',
             header: (props) => (
                 <DataTableColumnHeader {...props} title="Type">
-                    <ColumnActions {...props}>
-                        <TextFilter<IGeneralLedger>
-                            displayText="Type"
-                            field="type"
-                        />
-                    </ColumnActions>
+                    <ColumnActions {...props} />
                 </DataTableColumnHeader>
             ),
             cell: ({
@@ -276,13 +243,7 @@ const GeneralLedgerRunningTableColumns = (
             accessorKey: 'member_profile.full_name',
             header: (props) => (
                 <DataTableColumnHeader {...props} title="Member">
-                    <ColumnActions {...props}>
-                        <TextFilter<IGeneralLedger>
-                            defaultMode="contains"
-                            displayText="Member Name"
-                            field="member_profile.full_name"
-                        />
-                    </ColumnActions>
+                    <ColumnActions {...props} />
                 </DataTableColumnHeader>
             ),
             cell: ({
@@ -313,12 +274,7 @@ const GeneralLedgerRunningTableColumns = (
             accessorKey: 'employee_user',
             header: (props) => (
                 <DataTableColumnHeader {...props} title="Employee/Teller">
-                    <ColumnActions {...props}>
-                        <TextFilter<IGeneralLedger>
-                            displayText="Employee/Teller"
-                            field="employee_user.full_name"
-                        />
-                    </ColumnActions>
+                    <ColumnActions {...props} />
                 </DataTableColumnHeader>
             ),
             cell: ({
@@ -349,25 +305,7 @@ const GeneralLedgerRunningTableColumns = (
             accessorKey: 'source',
             header: (props) => (
                 <DataTableColumnHeader {...props} title="Source">
-                    <ColumnActions {...props}>
-                        <DataTableMultiSelectFilter<
-                            IGeneralLedger,
-                            TGeneralLedgerSource
-                        >
-                            dataType="text"
-                            displayText="Source"
-                            field="source"
-                            mode="contains"
-                            multiSelectOptions={GENERAL_LEDGER_SOURCES.map(
-                                (source) => ({
-                                    label:
-                                        source.charAt(0).toUpperCase() +
-                                        source.slice(1),
-                                    value: source,
-                                })
-                            )}
-                        />
-                    </ColumnActions>
+                    <ColumnActions {...props} />
                 </DataTableColumnHeader>
             ),
             cell: ({
@@ -399,12 +337,7 @@ const GeneralLedgerRunningTableColumns = (
             accessorKey: 'entry_date',
             header: (props) => (
                 <DataTableColumnHeader {...props} title="Entry Date">
-                    <ColumnActions {...props}>
-                        <DateFilter
-                            displayText="Entry Date"
-                            field="entry_date"
-                        />
-                    </ColumnActions>
+                    <ColumnActions {...props} />
                 </DataTableColumnHeader>
             ),
             cell: ({

@@ -1,10 +1,10 @@
 import { useMemo } from 'react'
 
-import FilterContext from '@/contexts/filter-context/filter-context'
 import { cn } from '@/helpers'
 import {
     TGeneralLedgerMode,
-    useFilteredPaginatedGeneralLedger,
+    // useFilteredPaginatedGeneralLedger,
+    useGetAllGeneralLedger,
 } from '@/modules/general-ledger/general-ledger.service'
 import {
     IGeneralLedger,
@@ -17,7 +17,6 @@ import {
 } from '@tanstack/react-table'
 
 import DataTable from '@/components/data-table'
-import DataTablePagination from '@/components/data-table/data-table-pagination'
 import DataTableToolbar, {
     IDataTableToolbarProps,
 } from '@/components/data-table/data-table-toolbar'
@@ -28,14 +27,13 @@ import useDataTableState, {
     useResolvedColumnOrder,
 } from '@/components/data-table/use-datatable-state'
 
-import useDatableFilterState from '@/hooks/use-filter-state'
 import { usePagination } from '@/hooks/use-pagination'
 
 import { TEntityId } from '@/types'
 
 import GeneralLedgerTableColumns, {
     IGeneralLedgerTableColumnProps,
-    generalLedgerGlobalSearchTargets,
+    // generalLedgerGlobalSearchTargets,
 } from './columns'
 import {
     GeneralLedgerRunningRowContext,
@@ -83,7 +81,6 @@ const GeneralLedgerRunningTable = ({
     className,
     entryType,
     toolbarProps,
-    defaultFilter,
     excludeColumnIds,
     onRowClick = () => {},
     onDoubleClick = (row) => {
@@ -131,37 +128,28 @@ const GeneralLedgerRunningTable = ({
         onSelectData,
     })
 
-    const filterState = useDatableFilterState({
-        defaultFilter,
-        onFilterChange: () => setPagination({ ...pagination, pageIndex: 0 }),
-    })
-
     const {
         isPending,
         isRefetching,
-        data: { data = [], totalPage = 1, pageSize = 10, totalSize = 0 } = {},
+        data = [],
         refetch,
-    } = useFilteredPaginatedGeneralLedger({
+    } = useGetAllGeneralLedger({
         mode,
-        entryType,
+        // entryType,
         query: {
             ...pagination,
             sort: sortingStateBase64,
-            filter: filterState.finalFilterPayloadBase64,
         },
-        userOrganizationId: modeProps.userOrganizationId,
+        // userOrganizationId: modeProps.userOrganizationId,
         memberProfileId: modeProps.memberProfileId,
         accountId: modeProps.accountId,
-        transactionBatchId: modeProps.transactionBatchId,
+        // transactionBatchId: modeProps.transactionBatchId,
         transactionId: modeProps.transactionId,
     })
 
-    const handleRowSelectionChange =
-        tableState.createHandleRowSelectionChange(data)
-
     const table = useReactTable({
         columns,
-        data: data,
+        data,
         initialState: {
             columnPinning: { left: ['select'] },
         },
@@ -172,9 +160,7 @@ const GeneralLedgerRunningTable = ({
             rowSelection: tableState.rowSelectionState.rowSelection,
             columnVisibility: tableState.columnVisibility,
         },
-        rowCount: pageSize,
         manualSorting: true,
-        pageCount: totalPage,
         enableMultiSort: false,
         manualFiltering: true,
         manualPagination: true,
@@ -186,54 +172,47 @@ const GeneralLedgerRunningTable = ({
         onColumnOrderChange: tableState.setColumnOrder,
         getSortedRowModel: getSortedRowModel(),
         onColumnVisibilityChange: tableState.setColumnVisibility,
-        onRowSelectionChange: handleRowSelectionChange,
+        // onRowSelectionChange: handleRowSelectionChange,
     })
 
     return (
         <TableRowActionStoreProvider>
-            <FilterContext.Provider value={filterState}>
-                <div
-                    className={cn(
-                        'flex h-full flex-col gap-y-2',
-                        className,
-                        !tableState.isScrollable && 'h-fit !max-h-none'
-                    )}
-                >
-                    <DataTableToolbar
-                        filterLogicProps={{
-                            filterLogic: filterState.filterLogic,
-                            setFilterLogic: filterState.setFilterLogic,
-                        }}
-                        globalSearchProps={{
-                            defaultMode: 'contains',
-                            targets: generalLedgerGlobalSearchTargets,
-                        }}
-                        refreshActionProps={{
-                            onClick: () => refetch(),
-                            isLoading: isPending || isRefetching,
-                        }}
-                        scrollableProps={{
-                            isScrollable: tableState.isScrollable,
-                            setIsScrollable: tableState.setIsScrollable,
-                        }}
-                        table={table}
-                        {...toolbarProps}
-                    />
-                    <DataTable
-                        className="mb-2"
-                        isScrollable={tableState.isScrollable}
-                        isStickyFooter
-                        isStickyHeader
-                        onDoubleClick={onDoubleClick}
-                        onRowClick={onRowClick}
-                        RowContextComponent={RowContextComponent}
-                        setColumnOrder={tableState.setColumnOrder}
-                        table={table}
-                    />
-                    <DataTablePagination table={table} totalSize={totalSize} />
-                </div>
-                <GeneralLedgerRunningTableActionManager />
-            </FilterContext.Provider>
+            <div
+                className={cn(
+                    'flex h-full flex-col gap-y-2',
+                    className,
+                    !tableState.isScrollable && 'h-fit !max-h-none'
+                )}
+            >
+                <DataTableToolbar
+                    // globalSearchProps={{
+                    //     defaultMode: 'contains',
+                    //     targets: generalLedgerGlobalSearchTargets,
+                    // }}
+                    refreshActionProps={{
+                        onClick: () => refetch(),
+                        isLoading: isPending || isRefetching,
+                    }}
+                    scrollableProps={{
+                        isScrollable: tableState.isScrollable,
+                        setIsScrollable: tableState.setIsScrollable,
+                    }}
+                    table={table}
+                    {...toolbarProps}
+                />
+                <DataTable
+                    className="mb-2"
+                    isScrollable={tableState.isScrollable}
+                    isStickyFooter
+                    isStickyHeader
+                    onDoubleClick={onDoubleClick}
+                    onRowClick={onRowClick}
+                    RowContextComponent={RowContextComponent}
+                    setColumnOrder={tableState.setColumnOrder}
+                    table={table}
+                />
+            </div>
+            <GeneralLedgerRunningTableActionManager />
         </TableRowActionStoreProvider>
     )
 }
