@@ -9,6 +9,7 @@ import {
     TGeneralStatus,
 } from '@/types'
 
+import { IAccount } from '../account'
 import { IBranch } from '../branch'
 import { IMedia } from '../media/media.types'
 import {
@@ -163,6 +164,9 @@ export interface IMemberProfile extends ITimeStamps, IAuditable {
 
     recruited_by_member_profile_id: TEntityId
     recruited_by_member_profile: IMemberProfile
+
+    account_wallet_id: TEntityId
+    account_wallet: IAccount
 
     is_closed: boolean
     is_mutual_fund_member: boolean

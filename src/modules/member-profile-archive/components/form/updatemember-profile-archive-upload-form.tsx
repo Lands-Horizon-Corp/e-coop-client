@@ -142,6 +142,8 @@ const MemberProfileArchiveUploadForm = ({
                             />
                         </div>
                         <MediaUploader
+                            maxFiles={5}
+                            maxSize={1 * 1024 * 1024}
                             mode="multiple"
                             onMultipleUploadComplete={(uploadedFiles) => {
                                 form.setValue(
