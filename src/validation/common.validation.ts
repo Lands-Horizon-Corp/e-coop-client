@@ -9,7 +9,6 @@ import {
     PASSWORD_MIN_LENGTH,
     SEX,
 } from '@/constants'
-import { sanitizeNumberInput } from '@/helpers/common-helper'
 
 export const entityIdSchema = z.uuidv4()
 export const EntityIdSchema = (fieldName: string = 'Field') =>
@@ -102,33 +101,6 @@ export const contactNumberSchema = z.string().min(1, 'Contact Number is empty')
 export const generalStatusSchema = z.enum(GENERAL_STATUS)
 
 export const civilStatusSchema = z.enum(CIVIL_STATUS) //TODO: MOVE TO member profile constant.ts
-
-export const amount = z.preprocess(
-    (val) => {
-        if (typeof val === 'string') {
-            const sanitized = sanitizeNumberInput(val)
-
-            if ((sanitized.match(/\./g)?.length ?? 0) > 1) {
-                return undefined
-            }
-
-            const parsed = parseFloat(sanitized)
-
-            return sanitized === '' || isNaN(parsed) || parsed === 0
-                ? undefined
-                : parsed
-        }
-
-        return typeof val === 'number' && !isNaN(val) && val !== 0
-            ? val
-            : undefined
-    },
-    z.coerce
-        .number({
-            error: 'Amount must be a number',
-        })
-        .max(500000000, 'Amount cannot exceed Five Million (500,000,000)')
-)
 
 export const PercentageSchema = z.coerce
     .number('Must be valid percentage')

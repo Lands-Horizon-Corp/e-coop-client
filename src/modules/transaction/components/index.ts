@@ -13,7 +13,6 @@ export { default as TransactionCreateWithPaymentFormModal } from './forms/create
 export { default as TransactionHistory } from './history'
 
 //export inputs
-export { default as TransactionAmountField } from './input/transaction-amount-field'
 export { default as TransactionReferenceNumber } from './input/transaction-reference-number-field'
 
 //export modals
