@@ -21,4 +21,3 @@ export const HOME_TYPES = [
     'Cabin',
     'Other',
 ] as const
-

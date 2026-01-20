@@ -17,7 +17,9 @@ import {
     PopoverContent,
     PopoverTrigger,
 } from '@/components/ui/popover'
-import { HOME_TYPES, THomeType } from '../member-address.constants'
+
+import { HOME_TYPES } from '../member-address.constants'
+import { THomeType } from '../member-address.types'
 
 interface Props
     extends Omit<React.ComponentPropsWithoutRef<'button'>, 'onChange'> {
@@ -75,9 +77,7 @@ const HomeTypeCombobox = React.forwardRef<HTMLButtonElement, Props>(
                             placeholder="Search home type..."
                         />
                         <CommandList className="ecoop-scroll">
-                            <CommandEmpty>
-                                No home type found.
-                            </CommandEmpty>
+                            <CommandEmpty>No home type found.</CommandEmpty>
                             <CommandGroup>
                                 {homeTypes.map((type) => (
                                     <CommandItem
