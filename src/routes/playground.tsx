@@ -1,3 +1,4 @@
+// import { useSubscribe } from '@/hooks/use-pubsub'
 import { createFileRoute } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/playground')({
@@ -71,6 +72,8 @@ function RouteComponent() {
     //         data: sampleTrialBalance,
     //     },
     // ]
+
+    // useSubscribe('live-mode', (data) => console.log('RECEIVED!',data))
 
     return (
         <div className="size-full h-fit flex flex-col items-center p-8 gap-12 bg-gray-100">

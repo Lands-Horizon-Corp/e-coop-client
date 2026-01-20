@@ -1,13 +1,9 @@
-import { useCallback } from 'react'
-
 import { Outlet, createRootRoute } from '@tanstack/react-router'
-import { AxiosError } from 'axios'
 import { DndProvider } from 'react-dnd'
 import { HTML5Backend } from 'react-dnd-html5-backend'
 
 import { NATS_PASS, NATS_USER } from '@/constants'
-import { IAuthContext, useAuthContext } from '@/modules/authentication'
-import { useAuthStore } from '@/modules/authentication/authgentication.store'
+import AuthLoader from '@/modules/authentication/components/auth-loader'
 import UserProfileInactivityPrompter from '@/modules/user-profile/components/user-profile-inactivity-prompter'
 import { ActionSecurityProvider } from '@/providers/action-security-provider'
 import ConnectionProvider from '@/providers/connection-provider'
@@ -26,7 +22,6 @@ import LoadingSpinner from '@/components/spinners/loading-spinner'
 import { Toaster } from '@/components/ui/sonner'
 
 import { useNatsConnect } from '@/hooks/use-pubsub'
-import { useQeueryHookCallback } from '@/hooks/use-query-hook-cb'
 
 import ErrorPage from './-common-pages/error-page'
 import NotFoundPage from './-common-pages/not-found-page'
@@ -38,52 +33,11 @@ export const Route = createRootRoute({
 })
 
 function RootLayout() {
-    const { setAuthStatus, setCurrentAuth, resetAuth } = useAuthStore()
-
-    const { error, isError, data, isSuccess } = useAuthContext({
-        options: {
-            refetchOnWindowFocus: false,
-            retry: 0,
-        },
-    })
-
-    const handleSuccess = useCallback(
-        (authorizationContext: IAuthContext) => {
-            setCurrentAuth(authorizationContext)
-            setAuthStatus('authorized')
-        },
-        [setAuthStatus, setCurrentAuth]
-    )
-
-    const handleError = useCallback(
-        (rawError: Error) => {
-            if (rawError instanceof AxiosError && rawError.status === 401) {
-                resetAuth()
-                setAuthStatus('unauthorized')
-                return null
-            }
-            if (rawError instanceof AxiosError && rawError.status === 500) {
-                setAuthStatus('error')
-                return null
-            }
-            setAuthStatus('error')
-        },
-        [resetAuth, setAuthStatus]
-    )
-
-    useQeueryHookCallback({
-        data,
-        error,
-        isError,
-        isSuccess,
-        onSuccess: handleSuccess,
-        onError: handleError,
-    })
-
     useNatsConnect({ user: NATS_USER, pass: NATS_PASS })
 
     return (
         <div className="relative">
+            <AuthLoader />
             <DndProvider backend={HTML5Backend}>
                 <Toaster
                     className="z-[9999] toaster group"
