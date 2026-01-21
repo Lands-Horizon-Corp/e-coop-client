@@ -204,7 +204,6 @@ const PaymentWithTransactionForm = ({
         }
         const isDirty =
             referenceNumberForm.formState.dirtyFields.reference_number
-        console.log('isDirty', isDirty)
         if (isDirty) {
             handleResetTransaction()
             creatTransactionDeposit({

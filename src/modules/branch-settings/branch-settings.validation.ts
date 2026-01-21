@@ -59,7 +59,7 @@ export const BranchSettingRequestSchema = z.object({
     check_voucher_general_or_current: z.coerce.number(),
     check_voucher_general_padding: z.coerce.number(),
 
-    default_member_gender_id: entityIdSchema.optional().nullable(),
+    default_member_gender_id: entityIdSchema.optional(),
     default_member_type_id: entityIdSchema.optional(),
     default_member_type: z.any(),
 

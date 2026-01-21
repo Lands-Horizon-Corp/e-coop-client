@@ -5,6 +5,7 @@ import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
 import { cn } from '@/helpers'
 import { withToastCallbacks } from '@/helpers/callback-helper'
 import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
+import MemberGenderCombobox from '@/modules/member-gender/components/member-gender-combobox'
 import MemberTypeCombobox from '@/modules/member-type/components/member-type-combobox'
 import { DivideIcon } from 'lucide-react'
 
@@ -154,7 +155,7 @@ const BranchSettingsForm = ({
             ...formProps,
             autoSave: false,
         })
-    console.log(form.formState.errors)
+
     const onSubmit = form.handleSubmit(
         async (formData) => await updateMutation.mutateAsync(formData),
         handleFocusError
@@ -235,6 +236,21 @@ const BranchSettingsForm = ({
                                     }}
                                     placeholder="Select default member type"
                                     value={field.value}
+                                />
+                            )}
+                        />
+                        <FormFieldWrapper
+                            control={form.control}
+                            label="Default Gender *"
+                            name="default_member_gender_id"
+                            render={({ field }) => (
+                                <MemberGenderCombobox
+                                    {...field}
+                                    disabled={isDisabled(field.name)}
+                                    onChange={(selected) =>
+                                        field.onChange(selected.id)
+                                    }
+                                    placeholder="Select Gender"
                                 />
                             )}
                         />
