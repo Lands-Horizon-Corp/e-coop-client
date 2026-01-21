@@ -131,8 +131,7 @@ const useInvitationCodeActions = ({
     }
 }
 
-interface IInvitationCodeTableActionProps
-    extends IInvitationTableActionComponentProp {
+interface IInvitationCodeTableActionProps extends IInvitationTableActionComponentProp {
     onInvitationUpdate?: () => void
     onDeleteSuccess?: () => void
 }
@@ -187,8 +186,7 @@ export const InvitationCodeAction = ({
     )
 }
 
-interface IInvitationCodeRowContextProps
-    extends IInvitationTableActionComponentProp {
+interface IInvitationCodeRowContextProps extends IInvitationTableActionComponentProp {
     children?: ReactNode
     onDeleteSuccess?: () => void
 }

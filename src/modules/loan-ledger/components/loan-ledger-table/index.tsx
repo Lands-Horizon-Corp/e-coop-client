@@ -36,8 +36,7 @@ import LoanLedgerAction, {
 } from './row-action-context'
 
 export interface LoanLedgerTableProps
-    extends TableProps<ILoanLedger>,
-        ILoanLedgerTableColumnProps {
+    extends TableProps<ILoanLedger>, ILoanLedgerTableColumnProps {
     toolbarProps?: Omit<
         IDataTableToolbarProps<ILoanLedger>,
         | 'table'

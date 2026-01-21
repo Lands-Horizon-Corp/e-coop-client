@@ -39,7 +39,8 @@ type TMemberProfileMembershipInfoFormValues = z.infer<
 >
 
 export interface IMemberProfileMembershipInfoFormProps
-    extends IClassProps,
+    extends
+        IClassProps,
         IForm<
             Partial<IMemberProfileMembershipInfoRequest>,
             IMemberProfile,

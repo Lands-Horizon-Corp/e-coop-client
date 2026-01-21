@@ -26,12 +26,11 @@ import {
     TBrowseExcludeIncludeAccountsSchema,
 } from '../../browse-exclude-include-accounts.validation'
 
-export interface IBrowseExcludeIncludeAccountsFormProps
-    extends IForm<
-        Partial<TBrowseExcludeIncludeAccountsSchema>,
-        IBrowseExcludeIncludeAccountsRequest,
-        Error
-    > {
+export interface IBrowseExcludeIncludeAccountsFormProps extends IForm<
+    Partial<TBrowseExcludeIncludeAccountsSchema>,
+    IBrowseExcludeIncludeAccountsRequest,
+    Error
+> {
     browseExcludeIncludeAccountId?: TEntityId
     className?: string
 }

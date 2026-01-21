@@ -155,7 +155,8 @@ const Steps: Step[] = [
 ]
 
 export interface ILoanTransactionSignatureFormProps
-    extends IClassProps,
+    extends
+        IClassProps,
         IForm<
             Partial<ILoanTransactionSignatures>,
             ILoanTransactionSignatures,

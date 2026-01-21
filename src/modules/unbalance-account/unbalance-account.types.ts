@@ -33,5 +33,4 @@ export interface IUnbalanceAccount extends IBaseEntityMeta {
 
 export type IUnbalanceAccountRequest = z.infer<typeof UnbalanceAccountSchema>
 
-export interface IUnbalanceAccountPaginated
-    extends IPaginatedResult<IUnbalanceAccount> {}
+export interface IUnbalanceAccountPaginated extends IPaginatedResult<IUnbalanceAccount> {}

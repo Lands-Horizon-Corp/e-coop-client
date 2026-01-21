@@ -219,8 +219,7 @@ export interface IMemberProfile extends ITimeStamps, IAuditable {
     latitude?: number
 }
 
-export interface IMemberProfilePaginated
-    extends IPaginatedResult<IMemberProfile> {}
+export interface IMemberProfilePaginated extends IPaginatedResult<IMemberProfile> {}
 
 export type IMemberProfilePicker = Pick<
     IMemberProfile,

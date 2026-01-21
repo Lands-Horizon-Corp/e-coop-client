@@ -30,14 +30,15 @@ import {
     MemberCenterCreateUpdateFormModal,
 } from './member-center-create-update-form'
 
-export interface IMemberCenterComboboxCreateProps
-    extends Pick<
-        IMemberCenterCreateUpdateFormProps,
-        'defaultValues' | 'disabledFields' | 'hiddenFields'
-    > {}
+export interface IMemberCenterComboboxCreateProps extends Pick<
+    IMemberCenterCreateUpdateFormProps,
+    'defaultValues' | 'disabledFields' | 'hiddenFields'
+> {}
 
-interface Props
-    extends Omit<React.ComponentPropsWithoutRef<'button'>, 'onChange'> {
+interface Props extends Omit<
+    React.ComponentPropsWithoutRef<'button'>,
+    'onChange'
+> {
     value?: TEntityId
     disabled?: boolean
     className?: string

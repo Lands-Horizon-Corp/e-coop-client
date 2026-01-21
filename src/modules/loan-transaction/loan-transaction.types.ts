@@ -69,7 +69,8 @@ export type TLoanMode =
     | 'release-today'
 
 export interface ILoanTransaction
-    extends IBaseEntityMeta,
+    extends
+        IBaseEntityMeta,
         ILoanTransactionSignatures,
         ILoanTransactionStatusDates {
     voucher?: string
@@ -267,8 +268,7 @@ export type ILoanEditTransactionRequest = z.infer<
     typeof LoanEditTransactionSchema
 >
 
-export interface ILoanTransactionPaginated
-    extends IPaginatedResult<ILoanTransaction> {}
+export interface ILoanTransactionPaginated extends IPaginatedResult<ILoanTransaction> {}
 
 // Loan Transaction Signature
 export type ILoanTransactionSignatureRequest = TLoanTransactionSignatureSchema

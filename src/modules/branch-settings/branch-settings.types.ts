@@ -110,8 +110,7 @@ export interface IBranchSettings extends IBaseEntityMeta {
 
 export type IBranchSettingsRequest = z.infer<typeof BranchSettingsSchema>
 
-export interface IBranchSettingsPaginated
-    extends IPaginatedResult<IBranchSettings> {}
+export interface IBranchSettingsPaginated extends IPaginatedResult<IBranchSettings> {}
 
 //  FOR BRANCH SETTINGS CURRENCY
 

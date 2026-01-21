@@ -42,8 +42,7 @@ import JournalVoucherAction, {
 } from './row-action-context'
 
 export interface JournalVoucherTableProps
-    extends TableProps<IJournalVoucher>,
-        IJournalVoucherTableColumnProps {
+    extends TableProps<IJournalVoucher>, IJournalVoucherTableColumnProps {
     toolbarProps?: Omit<
         IDataTableToolbarProps<IJournalVoucher>,
         | 'table'

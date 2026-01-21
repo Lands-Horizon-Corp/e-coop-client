@@ -31,7 +31,8 @@ import {
 } from '../../branch-settings.validation'
 
 export interface IBranchSettingsCurrencyFormProps
-    extends IClassProps,
+    extends
+        IClassProps,
         IForm<Partial<TBranchSettingsCurrencySchema>, IBranchSettings, Error> {}
 
 const BranchSettingsCurrencyForm = ({

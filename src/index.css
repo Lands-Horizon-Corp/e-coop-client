@@ -1,6 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Architects+Daughter&family=Knewave&family=Londrina+Solid:wght@100;300;400;900&display=swap');
 @import 'tailwindcss';
-@plugin "tailwindcss-animate";
+@plugin 'tailwindcss-animate';
 
 .ecoop::-webkit-scrollbar {
     @apply h-2 w-[.5vw];

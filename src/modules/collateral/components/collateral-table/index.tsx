@@ -37,8 +37,7 @@ import CollateralAction, {
 } from './row-action-context'
 
 export interface CollateralTableProps
-    extends TableProps<ICollateral>,
-        ICollateralTableColumnProps {
+    extends TableProps<ICollateral>, ICollateralTableColumnProps {
     toolbarProps?: Omit<
         IDataTableToolbarProps<ICollateral>,
         | 'table'

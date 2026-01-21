@@ -32,7 +32,8 @@ import { TransactionBatchEndSchema } from '../../transaction-batch.validation'
 type TTransactionBatchEndFormValues = z.infer<typeof TransactionBatchEndSchema>
 
 export interface ITransactionBatchEndFormProps
-    extends IClassProps,
+    extends
+        IClassProps,
         IForm<
             Partial<ITransactionBatchEndRequest>,
             ITransactionBatchMinimal,

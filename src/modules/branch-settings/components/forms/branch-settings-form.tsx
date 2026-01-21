@@ -50,7 +50,8 @@ import {
 export type TBranchSettingsFormValues = TBranchSettingsSchema
 
 export interface IBranchSettingsFormProps
-    extends IClassProps,
+    extends
+        IClassProps,
         IForm<Partial<TBranchSettingsFormValues>, IBranchSettings, Error> {}
 
 const BranchSettingsForm = ({

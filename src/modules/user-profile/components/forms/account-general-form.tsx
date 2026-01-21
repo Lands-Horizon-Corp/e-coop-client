@@ -26,8 +26,7 @@ import { UserProfileGeneralSchema } from '../../user-profile.validation'
 type TAccountGeneralFormValues = z.infer<typeof UserProfileGeneralSchema>
 
 export interface IAccountGeneralFormProps
-    extends IClassProps,
-        IForm<Partial<TAccountGeneralFormValues>, IUserBase> {
+    extends IClassProps, IForm<Partial<TAccountGeneralFormValues>, IUserBase> {
     accountId?: TEntityId
 }
 

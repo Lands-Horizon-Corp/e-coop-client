@@ -67,8 +67,7 @@ const useBillsAndCoinsActions = ({
     }
 }
 
-interface IBillsAndCoinsTableActionProps
-    extends IBillsAndCoinsTableActionComponentProp {
+interface IBillsAndCoinsTableActionProps extends IBillsAndCoinsTableActionComponentProp {
     onBillsAndCoinsUpdate?: () => void
     onDeleteSuccess?: () => void
 }
@@ -101,8 +100,7 @@ export const BillsAndCoinsAction = ({
     )
 }
 
-interface IBillsAndCoinsRowContextProps
-    extends IBillsAndCoinsTableActionComponentProp {
+interface IBillsAndCoinsRowContextProps extends IBillsAndCoinsTableActionComponentProp {
     children?: ReactNode
     onDeleteSuccess?: () => void
 }

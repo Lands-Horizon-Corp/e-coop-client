@@ -66,13 +66,12 @@ import {
     TLoanPayablePaymentSchema,
 } from '../../loan-payment.validation'
 
-export interface LoanPayablesFormProps
-    extends IForm<
-        Partial<TLoanPayablePaymentSchema>,
-        ITransaction,
-        Error,
-        TLoanPayablePaymentSchema
-    > {
+export interface LoanPayablesFormProps extends IForm<
+    Partial<TLoanPayablePaymentSchema>,
+    ITransaction,
+    Error,
+    TLoanPayablePaymentSchema
+> {
     payables: ILoanPayableAccount[]
     memberProfileId: TEntityId
     loanTransactionId: TEntityId

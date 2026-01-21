@@ -13,18 +13,15 @@ export type TBatchBalanceStatus =
     | 'balance overage'
     | 'balance shortage'
 
-export interface ITransactionBatchRequest
-    extends Omit<
-        IBatchFundingRequest,
-        'transaction_batch_id' | 'provided_by_user_id'
-    > {
+export interface ITransactionBatchRequest extends Omit<
+    IBatchFundingRequest,
+    'transaction_batch_id' | 'provided_by_user_id'
+> {
     provided_by_user_id?: TEntityId
 }
 
 export interface ITransactionBatch
-    extends ITimeStamps,
-        IAuditable,
-        ITransactionBatchSignatures {
+    extends ITimeStamps, IAuditable, ITransactionBatchSignatures {
     id: TEntityId
 
     organization_id: TEntityId
@@ -76,25 +73,24 @@ export interface ITransactionBatch
     currency: ICurrency
 }
 
-export interface ITransactionBatchMinimal
-    extends Omit<
-        ITransactionBatch,
-        | 'total_cash_collection'
-        | 'total_deposit_entry'
-        | 'petty_cash'
-        | 'loan_releases'
-        | 'time_deposit_withdrawal'
-        | 'savings_withdrawal'
-        | 'total_cash_handled'
-        | 'total_supposed_remitance'
-        | 'total_cash_on_hand'
-        | 'total_check_remittance'
-        | 'total_online_remittance'
-        | 'total_deposit_in_bank'
-        | 'total_actual_remittance'
-        | 'total_actual_supposed_comparison'
-        | keyof ITransactionBatchSignatures
-    > {}
+export interface ITransactionBatchMinimal extends Omit<
+    ITransactionBatch,
+    | 'total_cash_collection'
+    | 'total_deposit_entry'
+    | 'petty_cash'
+    | 'loan_releases'
+    | 'time_deposit_withdrawal'
+    | 'savings_withdrawal'
+    | 'total_cash_handled'
+    | 'total_supposed_remitance'
+    | 'total_cash_on_hand'
+    | 'total_check_remittance'
+    | 'total_online_remittance'
+    | 'total_deposit_in_bank'
+    | 'total_actual_remittance'
+    | 'total_actual_supposed_comparison'
+    | keyof ITransactionBatchSignatures
+> {}
 
 export type TTransactionBatchFullorMin =
     | ITransactionBatch
@@ -161,5 +157,4 @@ export interface ITransactionBatchEndRequest {
     employee_by_position: string
 }
 
-export interface ITransactionBatchPaginated
-    extends IPaginatedResult<ITransactionBatch> {}
+export interface ITransactionBatchPaginated extends IPaginatedResult<ITransactionBatch> {}

@@ -40,8 +40,7 @@ import MemberTypeAction, {
 } from './row-action-context'
 
 export interface MemberTypeTableProps
-    extends TableProps<IMemberType>,
-        IMemberTypeTableColumnProps {
+    extends TableProps<IMemberType>, IMemberTypeTableColumnProps {
     toolbarProps?: Omit<
         IDataTableToolbarProps<IMemberType>,
         | 'table'

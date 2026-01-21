@@ -36,7 +36,8 @@ import CancelledCashCheckVoucherAction, {
 } from './row-action-context'
 
 export interface CancelledCashCheckVoucherTableProps
-    extends TableProps<ICancelledCashCheckVoucher>,
+    extends
+        TableProps<ICancelledCashCheckVoucher>,
         ICancelledCashCheckVoucherTableColumnProps {
     toolbarProps?: Omit<
         IDataTableToolbarProps<ICancelledCashCheckVoucher>,

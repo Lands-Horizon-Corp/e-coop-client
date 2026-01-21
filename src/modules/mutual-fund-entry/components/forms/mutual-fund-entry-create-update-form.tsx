@@ -31,7 +31,8 @@ import { MutualFundEntrySchema } from '../../mutual-fund-entry.validation'
 type TMutualFundEntrySchema = z.infer<typeof MutualFundEntrySchema>
 
 export interface IMutualFundEntryFormProps
-    extends IClassProps,
+    extends
+        IClassProps,
         IForm<
             Partial<IMutualFundEntryRequest>,
             IMutualFundEntry,

@@ -159,7 +159,8 @@ const Steps: Step[] = [
 ]
 
 export interface ICashCheckVoucherCreateUpdateFormProps
-    extends IClassProps,
+    extends
+        IClassProps,
         IForm<
             ICashCheckVoucher,
             ICashCheckVoucherRequest,

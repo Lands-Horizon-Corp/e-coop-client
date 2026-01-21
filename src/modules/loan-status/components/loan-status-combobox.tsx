@@ -35,14 +35,15 @@ import {
     LoanStatusCreateUpdateFormModal,
 } from './forms/loan-status-create-update-form'
 
-export interface ILoanStatusComboboxCreateProps
-    extends Pick<
-        ILoanStatusFormProps,
-        'defaultValues' | 'disabledFields' | 'hiddenFields'
-    > {}
+export interface ILoanStatusComboboxCreateProps extends Pick<
+    ILoanStatusFormProps,
+    'defaultValues' | 'disabledFields' | 'hiddenFields'
+> {}
 
-interface Props
-    extends Omit<React.ComponentPropsWithoutRef<'button'>, 'onChange'> {
+interface Props extends Omit<
+    React.ComponentPropsWithoutRef<'button'>,
+    'onChange'
+> {
     value?: TEntityId
     disabled?: boolean
     className?: string

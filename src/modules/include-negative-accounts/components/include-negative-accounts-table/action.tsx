@@ -58,8 +58,7 @@ const useIncludeNegativeAccountActions = ({
     }
 }
 
-interface IncludeNegativeAccountActionProps
-    extends IIncludeNegativeAccountTableActionComponentProp {
+interface IncludeNegativeAccountActionProps extends IIncludeNegativeAccountTableActionComponentProp {
     onDeleteSuccess?: () => void
 }
 
@@ -98,8 +97,7 @@ const IncludeNegativeAccountAction = ({
     )
 }
 
-interface IncludeNegativeAccountRowContextProps
-    extends IIncludeNegativeAccountTableActionComponentProp {
+interface IncludeNegativeAccountRowContextProps extends IIncludeNegativeAccountTableActionComponentProp {
     children?: ReactNode
     onDeleteSuccess?: () => void
 }

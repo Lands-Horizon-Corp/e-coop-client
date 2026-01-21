@@ -35,7 +35,8 @@ import { SignInSchema } from '../../authentication.validation'
 type TSignIn = z.infer<typeof SignInSchema>
 
 interface ISignInFormProps
-    extends IClassProps,
+    extends
+        IClassProps,
         Omit<IForm<Partial<TSignIn>, IAuthContext>, 'preventExitOnDirty'> {}
 
 const SignInForm = ({ className, ...formProps }: ISignInFormProps) => {

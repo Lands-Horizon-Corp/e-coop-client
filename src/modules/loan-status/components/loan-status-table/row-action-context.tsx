@@ -68,8 +68,7 @@ const useLoanStatusActions = ({
     }
 }
 
-interface ILoanStatusTableActionProps
-    extends ILoanStatusTableActionComponentProp {
+interface ILoanStatusTableActionProps extends ILoanStatusTableActionComponentProp {
     onLoanStatusUpdate?: () => void
     onDeleteSuccess?: () => void
 }
@@ -103,8 +102,7 @@ export const LoanStatusAction = ({
     )
 }
 
-interface ILoanStatusRowContextProps
-    extends ILoanStatusTableActionComponentProp {
+interface ILoanStatusRowContextProps extends ILoanStatusTableActionComponentProp {
     children?: ReactNode
     onDeleteSuccess?: () => void
 }

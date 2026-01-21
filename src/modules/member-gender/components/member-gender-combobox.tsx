@@ -30,14 +30,15 @@ import {
     MemberGenderCreateUpdateFormModal,
 } from './member-gender-create-update-form'
 
-export interface IMemberGenderComboboxCreateProps
-    extends Pick<
-        IMemberGenderFormProps,
-        'defaultValues' | 'disabledFields' | 'hiddenFields'
-    > {}
+export interface IMemberGenderComboboxCreateProps extends Pick<
+    IMemberGenderFormProps,
+    'defaultValues' | 'disabledFields' | 'hiddenFields'
+> {}
 
-interface Props
-    extends Omit<React.ComponentPropsWithoutRef<'button'>, 'onChange'> {
+interface Props extends Omit<
+    React.ComponentPropsWithoutRef<'button'>,
+    'onChange'
+> {
     value?: TEntityId
     disabled?: boolean
     className?: string

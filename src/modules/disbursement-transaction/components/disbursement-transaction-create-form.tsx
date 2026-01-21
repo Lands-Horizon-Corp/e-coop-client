@@ -30,7 +30,8 @@ import {
 } from '../'
 
 export interface IDisbursementTransactionFormProps
-    extends IClassProps,
+    extends
+        IClassProps,
         IForm<
             Partial<TDisbursementTransactionFormValue>,
             IDisbursementTransaction,

@@ -16,8 +16,9 @@ import QrCodeScanner from '@/components/qrcode-scanner'
 import LoadingSpinner from '@/components/spinners/loading-spinner'
 import { Button } from '@/components/ui/button'
 
-interface MemberProfilePickerWithScannerProps
-    extends Partial<IPickerBaseProps<IMemberProfile>> {
+interface MemberProfilePickerWithScannerProps extends Partial<
+    IPickerBaseProps<IMemberProfile>
+> {
     className?: string
     isUpdate?: boolean
     handleSuccessScan: (data: IQRMemberProfileDecodedResult) => void

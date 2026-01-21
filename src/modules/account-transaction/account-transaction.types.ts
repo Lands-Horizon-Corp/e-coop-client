@@ -39,5 +39,4 @@ export interface IAccountTransactionLedger {
     credit: number
 }
 
-export interface IAccountTransactionPaginated
-    extends IPaginatedResult<IAccountTransaction> {}
+export interface IAccountTransactionPaginated extends IPaginatedResult<IAccountTransaction> {}

@@ -177,8 +177,7 @@ const useTransactionBatchActions = ({
     }
 }
 
-interface ITransactionBatchTableActionProps
-    extends ITransactionBatchTableActionComponentProp {
+interface ITransactionBatchTableActionProps extends ITransactionBatchTableActionComponentProp {
     onBatchUpdate?: () => void
     onDeleteSuccess?: () => void
 }
@@ -396,8 +395,7 @@ export const TransactionBatchAction = ({
     )
 }
 
-interface ITransactionBatchRowContextProps
-    extends ITransactionBatchTableActionComponentProp {
+interface ITransactionBatchRowContextProps extends ITransactionBatchTableActionComponentProp {
     children?: ReactNode
     onDeleteSuccess?: () => void
 }

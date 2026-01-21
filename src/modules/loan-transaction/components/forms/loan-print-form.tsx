@@ -26,7 +26,8 @@ import {
 } from '../../loan-transaction.validation'
 
 export interface ILoanTransactionPrintFormProps
-    extends IClassProps,
+    extends
+        IClassProps,
         IForm<
             Partial<TLoanTransactionPrintSchema>,
             ILoanTransaction,

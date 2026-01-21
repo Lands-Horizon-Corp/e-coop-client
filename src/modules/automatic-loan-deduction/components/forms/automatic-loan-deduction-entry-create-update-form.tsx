@@ -39,12 +39,11 @@ import {
     TAutomaticLoanDeductionSchema,
 } from '../../automatic-loan-deduction.validation'
 
-export interface IAutomaticLoanDeductionFormProps
-    extends IForm<
-        Partial<TAutomaticLoanDeductionSchema>,
-        IAutomaticLoanDeductionRequest,
-        Error
-    > {
+export interface IAutomaticLoanDeductionFormProps extends IForm<
+    Partial<TAutomaticLoanDeductionSchema>,
+    IAutomaticLoanDeductionRequest,
+    Error
+> {
     automaticLoanDeductionId?: TEntityId
     currency?: ICurrency
     className?: string

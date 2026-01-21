@@ -57,7 +57,8 @@ import { useLocationInfo } from '@/hooks/use-location-info'
 import { IClassProps, IForm, TEntityId } from '@/types'
 
 export interface IEditOrganizationFormProps
-    extends IClassProps,
+    extends
+        IClassProps,
         IForm<Partial<IOrganizationEditRequest>, IOrganization, string> {
     organizationId?: TEntityId
     coverMedia?: IMedia

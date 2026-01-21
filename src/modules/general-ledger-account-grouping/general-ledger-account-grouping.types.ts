@@ -36,5 +36,4 @@ export interface IGeneralLedgerAccountGroupingRequest {
     to_code?: number
 }
 
-export interface IPaginatedGeneralLedgerAccountGroupingRequest
-    extends IPaginatedResult<IGeneralLedgerAccountGrouping> {}
+export interface IPaginatedGeneralLedgerAccountGroupingRequest extends IPaginatedResult<IGeneralLedgerAccountGrouping> {}

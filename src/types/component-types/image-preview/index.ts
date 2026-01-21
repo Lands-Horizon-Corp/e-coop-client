@@ -36,8 +36,7 @@ export interface ImagePreviewPanelProps {
     scrollIntoView: React.RefObject<HTMLDivElement>
 }
 
-export interface DownloadProps
-    extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+export interface DownloadProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
     fileUrl?: string
     fileName: string
     fileType: string

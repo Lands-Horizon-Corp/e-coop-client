@@ -134,8 +134,7 @@ const useEmployeeActions = ({
     }
 }
 
-interface IEmployeesTableActionProps
-    extends IEmployeesTableActionComponentProp {
+interface IEmployeesTableActionProps extends IEmployeesTableActionComponentProp {
     onDeleteSuccess?: () => void
 }
 

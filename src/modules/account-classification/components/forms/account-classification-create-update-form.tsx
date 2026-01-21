@@ -30,7 +30,8 @@ import { useFormHelper } from '@/hooks/use-form-helper'
 import { IClassProps, IForm, TEntityId } from '@/types'
 
 export interface AccountClassificationFormProps
-    extends IClassProps,
+    extends
+        IClassProps,
         IForm<
             Partial<IAccountClassificationRequest>,
             IAccountClassification,

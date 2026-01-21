@@ -30,14 +30,15 @@ import {
     MemberGroupCreateUpdateFormModal,
 } from './member-group-create-update-form'
 
-export interface IMemberGroupComboboxCreateProps
-    extends Pick<
-        IMemberGroupFormProps,
-        'defaultValues' | 'disabledFields' | 'hiddenFields'
-    > {}
+export interface IMemberGroupComboboxCreateProps extends Pick<
+    IMemberGroupFormProps,
+    'defaultValues' | 'disabledFields' | 'hiddenFields'
+> {}
 
-interface Props
-    extends Omit<React.ComponentPropsWithoutRef<'button'>, 'onChange'> {
+interface Props extends Omit<
+    React.ComponentPropsWithoutRef<'button'>,
+    'onChange'
+> {
     value?: TEntityId
     disabled?: boolean
     className?: string

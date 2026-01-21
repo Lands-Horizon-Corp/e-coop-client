@@ -46,8 +46,7 @@ import {
 } from './row-action-context'
 
 export interface BaseAdjustmentEntryTableProps
-    extends TableProps<IAdjustmentEntry>,
-        IAdjustmentEntryTableColumnProps {
+    extends TableProps<IAdjustmentEntry>, IAdjustmentEntryTableColumnProps {
     toolbarProps?: Omit<
         IDataTableToolbarProps<IAdjustmentEntry>,
         | 'table'

@@ -9,9 +9,7 @@ import { ITimeDepositType } from '../time-deposit-type'
 import { TTimeDepositComputationSchema } from './time-deposit-computation.validation'
 
 export interface ITimeDepositComputation
-    extends ITimeStamps,
-        IAuditable,
-        IOrgBranchIdentity {
+    extends ITimeStamps, IAuditable, IOrgBranchIdentity {
     id: TEntityId
 
     time_deposit_type_id: TEntityId

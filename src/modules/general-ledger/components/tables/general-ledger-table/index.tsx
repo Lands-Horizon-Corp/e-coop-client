@@ -43,8 +43,7 @@ import {
 } from './row-action-context'
 
 export interface GeneralLedgerTableProps
-    extends TableProps<IGeneralLedger>,
-        IGeneralLedgerTableColumnProps {
+    extends TableProps<IGeneralLedger>, IGeneralLedgerTableColumnProps {
     toolbarProps?: Omit<
         IDataTableToolbarProps<IGeneralLedger>,
         | 'table'

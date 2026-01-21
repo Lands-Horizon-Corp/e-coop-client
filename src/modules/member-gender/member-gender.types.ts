@@ -13,5 +13,4 @@ export interface IMemberGender extends IBaseEntityMeta {
 
 export type IMemberGenderRequest = z.infer<typeof GenderSchema>
 
-export interface IMemberGenderPaginated
-    extends IPaginatedResult<IMemberGender> {}
+export interface IMemberGenderPaginated extends IPaginatedResult<IMemberGender> {}

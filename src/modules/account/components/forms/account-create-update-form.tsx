@@ -34,7 +34,8 @@ import AccountHeaderForm, {
 import LoanConnectAccountSection from './sections/loan-connect-account-section'
 
 export interface IAccountCreateUpdateFormProps
-    extends IClassProps,
+    extends
+        IClassProps,
         IForm<Partial<IAccountRequest>, IAccount, string, TAccountFormValues> {
     accountId?: TEntityId
 }

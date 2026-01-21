@@ -35,8 +35,7 @@ import CompanyTableColumns, {
 import CompanyAction, { CompanyRowContext } from './row-action-context'
 
 export interface CompanyTableProps
-    extends TableProps<ICompany>,
-        ICompanyTableColumnProps {
+    extends TableProps<ICompany>, ICompanyTableColumnProps {
     toolbarProps?: Omit<
         IDataTableToolbarProps<ICompany>,
         | 'table'

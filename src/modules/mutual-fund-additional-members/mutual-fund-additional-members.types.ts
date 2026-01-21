@@ -21,5 +21,4 @@ export type IMutualFundAdditionalMembersRequest = z.infer<
     typeof MutualFundAdditionalMembersSchema
 >
 
-export interface IMutualFundAdditionalMembersPaginated
-    extends IPaginatedResult<IMutualFundAdditionalMembers> {}
+export interface IMutualFundAdditionalMembersPaginated extends IPaginatedResult<IMutualFundAdditionalMembers> {}

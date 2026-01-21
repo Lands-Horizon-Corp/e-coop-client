@@ -79,8 +79,7 @@ const useGeneratedSavingsInterestEntryActions = ({
     }
 }
 
-interface IGeneratedSavingsInterestEntryTableActionProps
-    extends IGeneratedSavingsInterestEntryTableActionComponentProp {
+interface IGeneratedSavingsInterestEntryTableActionProps extends IGeneratedSavingsInterestEntryTableActionComponentProp {
     onDeleteSuccess?: () => void
 }
 
@@ -120,8 +119,7 @@ export const GeneratedSavingsInterestEntryAction = ({
     )
 }
 
-interface IGeneratedSavingsInterestEntryRowContextProps
-    extends IGeneratedSavingsInterestEntryTableActionComponentProp {
+interface IGeneratedSavingsInterestEntryRowContextProps extends IGeneratedSavingsInterestEntryTableActionComponentProp {
     children?: ReactNode
     readOnly?: boolean
     onDeleteSuccess?: () => void

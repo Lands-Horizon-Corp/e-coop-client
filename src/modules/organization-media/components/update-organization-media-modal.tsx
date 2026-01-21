@@ -32,7 +32,8 @@ type TOrganizationMediaFormValues = z.infer<typeof OrganizationMediaSchema> & {
 }
 
 export interface IOrganizationMediaFormProps
-    extends IClassProps,
+    extends
+        IClassProps,
         IForm<
             Partial<IOrganizationMediaRequest>,
             IOrganizationMedia,

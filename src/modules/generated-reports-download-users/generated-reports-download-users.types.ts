@@ -25,5 +25,4 @@ export type IGeneratedReportsDownloadUsersRequest = z.infer<
     typeof GeneratedReportsDownloadUsersSchema
 >
 
-export interface IGeneratedReportsDownloadUsersPaginated
-    extends IPaginatedResult<IGeneratedReportsDownloadUsers> {}
+export interface IGeneratedReportsDownloadUsersPaginated extends IPaginatedResult<IGeneratedReportsDownloadUsers> {}

@@ -26,8 +26,7 @@ import { MemberGroupSchema } from '../member-group.validation'
 type TGroupFormValues = z.infer<typeof MemberGroupSchema>
 
 export interface IMemberGroupFormProps
-    extends IClassProps,
-        IForm<Partial<IMemberGroupRequest>, IMemberGroup> {
+    extends IClassProps, IForm<Partial<IMemberGroupRequest>, IMemberGroup> {
     groupId?: TEntityId
 }
 

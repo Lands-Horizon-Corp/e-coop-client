@@ -49,8 +49,7 @@ import MemberProfileAction, {
 // import { MemberProfileRowContext } from './row-action-context'
 
 export interface MemberProfileTableProps
-    extends TableProps<IMemberProfile>,
-        IMemberProfilesTableColumnProps {
+    extends TableProps<IMemberProfile>, IMemberProfilesTableColumnProps {
     toolbarProps?: Omit<
         IDataTableToolbarProps<IMemberProfile>,
         | 'table'

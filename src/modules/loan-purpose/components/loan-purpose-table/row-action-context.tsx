@@ -68,8 +68,7 @@ const useLoanPurposeActions = ({
     }
 }
 
-interface ILoanPurposeTableActionProps
-    extends ILoanPurposeTableActionComponentProp {
+interface ILoanPurposeTableActionProps extends ILoanPurposeTableActionComponentProp {
     onLoanPurposeUpdate?: () => void
     onDeleteSuccess?: () => void
 }
@@ -103,8 +102,7 @@ export const LoanPurposeAction = ({
     )
 }
 
-interface ILoanPurposeRowContextProps
-    extends ILoanPurposeTableActionComponentProp {
+interface ILoanPurposeRowContextProps extends ILoanPurposeTableActionComponentProp {
     children?: ReactNode
     onDeleteSuccess?: () => void
 }

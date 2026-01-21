@@ -17,9 +17,7 @@ export interface ICollectorsMemberAccountEntryRequest {
 }
 
 export interface ICollectorsMemberAccountEntry
-    extends ITimeStamps,
-        IAuditable,
-        IOrgBranchIdentity {
+    extends ITimeStamps, IAuditable, IOrgBranchIdentity {
     id: TEntityId
     collector_user_id?: TEntityId
     collector_user?: IUser

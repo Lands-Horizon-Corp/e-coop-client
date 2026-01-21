@@ -59,8 +59,9 @@ const journalVoucherStatusLabels = {
     released: 'Released',
 } as const
 
-export interface JournalVoucherStatusBadgeProps
-    extends VariantProps<typeof journalVoucherStatusVariants> {
+export interface JournalVoucherStatusBadgeProps extends VariantProps<
+    typeof journalVoucherStatusVariants
+> {
     className?: string
     showIcon?: boolean
     status: TJournalVoucherModeType

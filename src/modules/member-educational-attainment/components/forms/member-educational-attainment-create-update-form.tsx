@@ -30,7 +30,8 @@ type TEducationalAttainmentFormValues = z.infer<
 >
 
 export interface IMemberEducationalAttainmentFormProps
-    extends IClassProps,
+    extends
+        IClassProps,
         IForm<
             Partial<IMemberEducationalAttainment>,
             IMemberEducationalAttainment,

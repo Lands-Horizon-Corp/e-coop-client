@@ -41,8 +41,7 @@ import {
 } from './row-action-context'
 
 export interface InvitationCodeProps
-    extends TableProps<IInvitationCode>,
-        IInvitationCodeTableColumnProps {
+    extends TableProps<IInvitationCode>, IInvitationCodeTableColumnProps {
     toolbarProps?: Omit<
         IDataTableToolbarProps<IInvitationCode>,
         | 'table'

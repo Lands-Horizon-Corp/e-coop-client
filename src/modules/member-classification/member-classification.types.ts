@@ -23,5 +23,4 @@ export type IMemberClassificationRequest = z.infer<
     typeof MemberClassificationSchema
 >
 
-export interface IMemberClassificationPaginated
-    extends IPaginatedResult<IMemberClassification> {}
+export interface IMemberClassificationPaginated extends IPaginatedResult<IMemberClassification> {}

@@ -11,8 +11,7 @@ import { IClassProps } from '@/types'
 import DefaultDropArea from '../drop-areas/default-drop-area'
 
 interface Props
-    extends IClassProps,
-        Omit<DropzoneOptions, 'onDrop' | 'multiple'> {
+    extends IClassProps, Omit<DropzoneOptions, 'onDrop' | 'multiple'> {
     dropText?: string
     RenderDropArea?: (props: { isDragActive: boolean }) => ReactNode
     onFileSelect: (files: FileList) => void

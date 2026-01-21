@@ -48,8 +48,10 @@ export interface CustomColumnMeta<TData extends object> {
     handleDeleteRow?: (row: Row<TData>) => void
 }
 
-interface CustomCellContext<TData extends object>
-    extends CellContext<TData, unknown> {
+interface CustomCellContext<TData extends object> extends CellContext<
+    TData,
+    unknown
+> {
     inputType?:
         | 'text'
         | 'checkbox'

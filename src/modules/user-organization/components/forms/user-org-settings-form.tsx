@@ -47,7 +47,8 @@ import {
 export type TUserOrgSettingsFormValues = TUserOrganizationSettingsSchema
 
 export interface IUserOrgSettingsFormProps
-    extends IClassProps,
+    extends
+        IClassProps,
         IForm<Partial<TUserOrgSettingsFormValues>, IUserOrganization, Error> {
     mode: 'current' | 'specific'
     userOrganizationId?: TEntityId

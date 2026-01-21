@@ -49,7 +49,8 @@ import { JournalEntryTable } from './journal-entry-table'
 type TJournalVoucherFormValues = z.infer<typeof JournalVoucherSchema>
 
 export interface IJournalVoucherCreateUpdateFormProps
-    extends IClassProps,
+    extends
+        IClassProps,
         IForm<
             Partial<IJournalVoucher>,
             IJournalVoucherRequest,

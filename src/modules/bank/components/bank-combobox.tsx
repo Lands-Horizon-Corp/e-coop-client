@@ -29,11 +29,10 @@ import {
     IBankFormProps,
 } from './forms/bank-create-update-form'
 
-export interface IBankComboboxCreateProps
-    extends Pick<
-        IBankFormProps,
-        'defaultValues' | 'disabledFields' | 'hiddenFields'
-    > {}
+export interface IBankComboboxCreateProps extends Pick<
+    IBankFormProps,
+    'defaultValues' | 'disabledFields' | 'hiddenFields'
+> {}
 
 interface Props {
     value?: TEntityId
