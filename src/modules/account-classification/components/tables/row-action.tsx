@@ -5,6 +5,7 @@ import {
     IAccountClassification,
     useDeleteById,
 } from '@/modules/account-classification'
+import { getCrudPermissionFromAuthStore } from '@/modules/authentication/authgentication.store'
 import useConfirmModalStore from '@/store/confirm-modal-store'
 import { Row } from '@tanstack/react-table'
 
@@ -37,6 +38,12 @@ const useAccountClassificationActions = ({
     >()
     const { onOpen } = useConfirmModalStore()
 
+    // 🔐 Instance-level CRUD permissions
+    const accountClassificationCrudPerms = getCrudPermissionFromAuthStore({
+        resourceType: 'AccountClassification',
+        resource: accountClassification,
+    })
+
     const {
         mutate: deleteAccountClassification,
         isPending: isDeletingAccountClassification,
@@ -62,6 +69,7 @@ const useAccountClassificationActions = ({
 
     return {
         accountClassification,
+        accountClassificationCrudPerms,
         isDeletingAccountClassification,
         handleEdit,
         handleDelete,
@@ -78,27 +86,34 @@ export const AccountClassificationAction = ({
     row,
     onDeleteSuccess,
 }: IAccountClassificationActionProps) => {
-    const { isDeletingAccountClassification, handleEdit, handleDelete } =
-        useAccountClassificationActions({ row, onDeleteSuccess })
+    const {
+        accountClassificationCrudPerms,
+        isDeletingAccountClassification,
+        handleEdit,
+        handleDelete,
+    } = useAccountClassificationActions({ row, onDeleteSuccess })
 
     return (
-        <>
-            <RowActionsGroup
-                canSelect
-                onDelete={{
-                    text: 'Delete',
-                    isAllowed: !isDeletingAccountClassification,
-                    onClick: handleDelete,
-                }}
-                onEdit={{
-                    text: 'Edit',
-                    isAllowed: true,
-                    onClick: handleEdit,
-                }}
-                otherActions={<></>}
-                row={row}
-            />
-        </>
+        <RowActionsGroup
+            canSelect
+            onDelete={{
+                text: 'Delete',
+                isAllowed:
+                    !isDeletingAccountClassification &&
+                    (accountClassificationCrudPerms.Delete ||
+                        accountClassificationCrudPerms.OwnDelete),
+                onClick: handleDelete,
+            }}
+            onEdit={{
+                text: 'Edit',
+                isAllowed:
+                    accountClassificationCrudPerms.Update ||
+                    accountClassificationCrudPerms.OwnUpdate,
+                onClick: handleEdit,
+            }}
+            otherActions={<></>}
+            row={row}
+        />
     )
 }
 
@@ -113,27 +128,34 @@ export const AccountClassificationRowContext = ({
     children,
     onDeleteSuccess,
 }: IAccountClassificationRowContextProps) => {
-    const { isDeletingAccountClassification, handleEdit, handleDelete } =
-        useAccountClassificationActions({ row, onDeleteSuccess })
+    const {
+        accountClassificationCrudPerms,
+        isDeletingAccountClassification,
+        handleEdit,
+        handleDelete,
+    } = useAccountClassificationActions({ row, onDeleteSuccess })
 
     return (
-        <>
-            <DataTableRowContext
-                onDelete={{
-                    text: 'Delete',
-                    isAllowed: !isDeletingAccountClassification,
-                    onClick: handleDelete,
-                }}
-                onEdit={{
-                    text: 'Edit',
-                    isAllowed: true,
-                    onClick: handleEdit,
-                }}
-                row={row}
-            >
-                {children}
-            </DataTableRowContext>
-        </>
+        <DataTableRowContext
+            onDelete={{
+                text: 'Delete',
+                isAllowed:
+                    !isDeletingAccountClassification &&
+                    (accountClassificationCrudPerms.Delete ||
+                        accountClassificationCrudPerms.OwnDelete),
+                onClick: handleDelete,
+            }}
+            onEdit={{
+                text: 'Edit',
+                isAllowed:
+                    accountClassificationCrudPerms.Update ||
+                    accountClassificationCrudPerms.OwnUpdate,
+                onClick: handleEdit,
+            }}
+            row={row}
+        >
+            {children}
+        </DataTableRowContext>
     )
 }
 
