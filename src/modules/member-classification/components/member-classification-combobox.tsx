@@ -29,14 +29,15 @@ import {
     MemberClassificationCreateUpdateFormModal,
 } from './member-classification-create-update-form'
 
-export interface IMemberClassificationComboboxCreateProps
-    extends Pick<
-        IMemberClassificationCreateUpdateFormProps,
-        'defaultValues' | 'disabledFields' | 'hiddenFields'
-    > {}
+export interface IMemberClassificationComboboxCreateProps extends Pick<
+    IMemberClassificationCreateUpdateFormProps,
+    'defaultValues' | 'disabledFields' | 'hiddenFields'
+> {}
 
-interface Props
-    extends Omit<React.ComponentPropsWithoutRef<'button'>, 'onChange'> {
+interface Props extends Omit<
+    React.ComponentPropsWithoutRef<'button'>,
+    'onChange'
+> {
     value?: TEntityId
     disabled?: boolean
     className?: string

@@ -34,7 +34,8 @@ type TMemberProfileArchiveFormValues = z.infer<
 }
 
 export interface IMemberProfileArchiveFormProps
-    extends IClassProps,
+    extends
+        IClassProps,
         IForm<
             Partial<IMemberProfileArchiveRequest>,
             IMemberProfileArchive,

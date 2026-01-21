@@ -283,8 +283,8 @@ export const PERMISSION_ALL_RESOURCE_ACTION: {
     },
     {
         resource: 'AccountTag',
-        label: 'Tag of Account',
-        description: 'Manage Account Tag',
+        label: 'Account Tags',
+        description: 'Manage Account Tags of an Account',
         supportedActions: generateBaseAction({
             excludeActions: [
                 'Approve',
@@ -294,6 +294,14 @@ export const PERMISSION_ALL_RESOURCE_ACTION: {
                 'OwnDelete',
                 'OwnUpdate',
             ],
+        }),
+    },
+    {
+        resource: 'AccountTransaction',
+        label: 'Account Transactions',
+        description: 'View Transactions of an account',
+        supportedActions: generateBaseAction({
+            excludeActions: ['Read', 'Create'],
         }),
     },
     // {

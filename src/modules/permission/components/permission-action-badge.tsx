@@ -91,8 +91,9 @@ const iconSizeVariants = cva('flex-shrink-0', {
     },
 })
 
-interface PermissionActionBadgeProps
-    extends VariantProps<typeof permissionActionVariants> {
+interface PermissionActionBadgeProps extends VariantProps<
+    typeof permissionActionVariants
+> {
     action: TPermissionAction
     className?: string
     showIcon?: boolean

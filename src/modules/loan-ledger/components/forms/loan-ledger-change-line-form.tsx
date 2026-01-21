@@ -28,7 +28,8 @@ import {
 } from '../../loan-ledger.validation'
 
 export interface ILoanLedgerChangeLineFormProps
-    extends IClassProps,
+    extends
+        IClassProps,
         IForm<
             Partial<ILoanLedgerChangeLineRequest>,
             ILoanLedger,

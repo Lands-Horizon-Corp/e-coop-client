@@ -22,9 +22,7 @@ export interface IModalClassNames extends DialogExtraProps, IClassProps {
     descriptionClassName?: string
 }
 export interface IModalProps
-    extends IBaseProps,
-        DialogPrimitive.DialogProps,
-        IModalClassNames {
+    extends IBaseProps, DialogPrimitive.DialogProps, IModalClassNames {
     title?: string | ReactNode
     description?: string | ReactNode
     footer?: React.ReactNode

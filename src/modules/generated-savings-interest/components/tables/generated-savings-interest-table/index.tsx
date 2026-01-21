@@ -40,7 +40,8 @@ import GeneratedSavingsInterestAction, {
 } from './row-action-context'
 
 export interface GeneratedSavingsInterestTableProps
-    extends TableProps<IGeneratedSavingsInterest>,
+    extends
+        TableProps<IGeneratedSavingsInterest>,
         IGeneratedSavingsInterestTableColumnProps {
     toolbarProps?: Omit<
         IDataTableToolbarProps<IGeneratedSavingsInterest>,

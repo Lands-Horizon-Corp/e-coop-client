@@ -31,7 +31,8 @@ type ILoanTermsAndConditionAmountReceiptForForm = z.infer<
 >
 
 export interface ILoanTermsAndConditionAmountReceiptFormProps
-    extends IClassProps,
+    extends
+        IClassProps,
         IForm<
             Partial<TLoanTermsAndConditionAmountReceiptFormValues>,
             ILoanTermsAndConditionAmountReceiptForForm,

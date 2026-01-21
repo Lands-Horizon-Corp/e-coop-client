@@ -64,8 +64,7 @@ const usePaymentTypeActions = ({
     }
 }
 
-interface IPaymentTypeTableActionProps
-    extends IPaymentTypeTableActionComponentProp {
+interface IPaymentTypeTableActionProps extends IPaymentTypeTableActionComponentProp {
     onPaymentTypeUpdate?: () => void
     onDeleteSuccess?: () => void
 }
@@ -99,8 +98,7 @@ export const PaymentTypeActions = ({
     )
 }
 
-interface IPaymentTypeRowContextProps
-    extends IPaymentTypeTableActionComponentProp {
+interface IPaymentTypeRowContextProps extends IPaymentTypeTableActionComponentProp {
     children?: ReactNode
     onDeleteSuccess?: () => void
 }

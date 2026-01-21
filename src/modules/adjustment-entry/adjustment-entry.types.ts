@@ -59,7 +59,6 @@ export interface IAdjustmentEntryTotal {
     is_balanced: boolean
 }
 
-export interface IAdjustmentEntryPaginated
-    extends IPaginatedResult<IAdjustmentEntry> {}
+export interface IAdjustmentEntryPaginated extends IPaginatedResult<IAdjustmentEntry> {}
 
 export type TAdjustmentEntryHookMode = 'all' | 'currency' | 'currency-employee'

@@ -31,7 +31,8 @@ import HomeTypeCombobox from '../home-type-combobox'
 type TMemberAddressFormValues = z.infer<typeof MemberAddressSchema>
 
 export interface IMemberAddressFormProps
-    extends IClassProps,
+    extends
+        IClassProps,
         IForm<
             Partial<IMemberAddress>,
             IMemberAddress,

@@ -31,7 +31,8 @@ type TMemberProfileArchiveUploadFormValues = z.infer<
 >
 
 export interface IMemberProfileArchiveUploadFormProps
-    extends IClassProps,
+    extends
+        IClassProps,
         IForm<
             Partial<IMemberProfileArchiveBulkRequest>,
             unknown,

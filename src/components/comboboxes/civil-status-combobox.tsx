@@ -21,8 +21,10 @@ import {
 
 import { TCivilStatus } from '@/types'
 
-interface Props
-    extends Omit<React.ComponentPropsWithoutRef<'button'>, 'onChange'> {
+interface Props extends Omit<
+    React.ComponentPropsWithoutRef<'button'>,
+    'onChange'
+> {
     value?: TCivilStatus
     disabled?: boolean
     className?: string

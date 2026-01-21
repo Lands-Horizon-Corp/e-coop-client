@@ -58,7 +58,8 @@ import { IClassProps, IForm, TEntityId } from '@/types'
 import { ReferenceNumberSchema } from '../../pages/index'
 
 interface PaymentWithTransactionFormProps
-    extends IClassProps,
+    extends
+        IClassProps,
         IForm<
             Partial<IPaymentRequest>,
             IGeneralLedger,

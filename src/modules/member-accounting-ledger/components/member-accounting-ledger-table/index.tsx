@@ -34,7 +34,8 @@ import MemberAccountingLedgerTableColumns, {
 } from './columns'
 
 export interface MemberAccountingLedgerTableProps
-    extends TableProps<IMemberAccountingLedger>,
+    extends
+        TableProps<IMemberAccountingLedger>,
         IMemberAccountingLedgerTableColumnProps {
     toolbarProps?: Omit<
         IDataTableToolbarProps<IMemberAccountingLedger>,

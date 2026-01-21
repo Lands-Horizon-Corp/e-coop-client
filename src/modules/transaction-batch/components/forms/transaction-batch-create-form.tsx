@@ -38,7 +38,8 @@ import { TransactionBatchCreateSchema } from '../../transaction-batch.validation
 type TTransactionBatchFormValues = z.infer<typeof TransactionBatchCreateSchema>
 
 export interface ITransactionBatchCreateFormProps
-    extends IClassProps,
+    extends
+        IClassProps,
         IForm<
             Partial<IBatchFundingRequest>,
             ITransactionBatchMinimal,

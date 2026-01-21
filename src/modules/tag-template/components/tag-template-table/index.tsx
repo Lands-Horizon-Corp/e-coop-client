@@ -34,8 +34,7 @@ import TagTemplateTableColumns, {
 import { TagTemplateRowContext } from './row-action-context'
 
 export interface TagTemplateTableProps
-    extends TableProps<ITagTemplate>,
-        ITagTemplateTableColumnProps {
+    extends TableProps<ITagTemplate>, ITagTemplateTableColumnProps {
     toolbarProps?: Omit<
         IDataTableToolbarProps<ITagTemplate>,
         | 'table'

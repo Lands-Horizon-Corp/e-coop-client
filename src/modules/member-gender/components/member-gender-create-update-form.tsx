@@ -27,7 +27,8 @@ import { IClassProps, IForm, TEntityId } from '@/types'
 type TGenderFormValues = z.infer<typeof GenderSchema>
 
 export interface IMemberGenderFormProps
-    extends IClassProps,
+    extends
+        IClassProps,
         IForm<Partial<IMemberGenderRequest>, IMemberGender, Error> {
     genderId?: TEntityId
 }

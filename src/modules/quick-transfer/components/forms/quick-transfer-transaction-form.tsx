@@ -48,7 +48,8 @@ import { Textarea } from '@/components/ui/textarea'
 import { IClassProps, IForm } from '@/types'
 
 interface TransactionEntryFormProps
-    extends IClassProps,
+    extends
+        IClassProps,
         IForm<
             Partial<IPaymentQuickRequest>,
             IGeneralLedger,

@@ -30,7 +30,8 @@ import {
 } from '../../loan-status.validation'
 
 export interface ILoanStatusFormProps
-    extends IClassProps,
+    extends
+        IClassProps,
         IForm<Partial<ILoanStatusRequest>, ILoanStatus, Error> {
     loanStatusId?: TEntityId
 }

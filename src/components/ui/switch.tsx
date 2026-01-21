@@ -4,8 +4,9 @@ import * as SwitchPrimitives from '@radix-ui/react-switch'
 
 import { cn } from '@/helpers/tw-utils'
 
-interface SwitchProps
-    extends React.ComponentPropsWithoutRef<typeof SwitchPrimitives.Root> {
+interface SwitchProps extends React.ComponentPropsWithoutRef<
+    typeof SwitchPrimitives.Root
+> {
     thumbClassName?: string // Added this to customize thumb
 }
 

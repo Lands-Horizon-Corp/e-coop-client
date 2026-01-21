@@ -49,9 +49,7 @@ export interface IOrgBranchIdentity {
 
 /* Use this only if entity has timestamps, auditable, and has org and branch */
 export interface IBaseEntityMeta
-    extends ITimeStamps,
-        IAuditable,
-        IOrgBranchIdentity {
+    extends ITimeStamps, IAuditable, IOrgBranchIdentity {
     id: TEntityId
 }
 

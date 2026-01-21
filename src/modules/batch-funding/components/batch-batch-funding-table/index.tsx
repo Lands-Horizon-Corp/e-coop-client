@@ -29,8 +29,7 @@ import BatchFundingTableColumns, {
 import { BatchFundingRowContext } from './row-action-context'
 
 export interface BatchFundingTableProps
-    extends TableProps<IBatchFunding>,
-        IBatchFundingTableColumnProps {
+    extends TableProps<IBatchFunding>, IBatchFundingTableColumnProps {
     toolbarProps?: Omit<
         IDataTableToolbarProps<IBatchFunding>,
         | 'table'

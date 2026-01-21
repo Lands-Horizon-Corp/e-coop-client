@@ -76,8 +76,7 @@ const useAccountClassificationActions = ({
     }
 }
 
-interface IAccountClassificationActionProps
-    extends IAccountClassificationTableActionComponentProp {
+interface IAccountClassificationActionProps extends IAccountClassificationTableActionComponentProp {
     onAccountClassificationUpdate?: () => void
     onDeleteSuccess?: () => void
 }
@@ -117,8 +116,7 @@ export const AccountClassificationAction = ({
     )
 }
 
-interface IAccountClassificationRowContextProps
-    extends IAccountClassificationTableActionComponentProp {
+interface IAccountClassificationRowContextProps extends IAccountClassificationTableActionComponentProp {
     children?: ReactNode
     onDeleteSuccess?: () => void
 }

@@ -56,8 +56,7 @@ const useMemberDepartmentActions = ({
     }
 }
 
-interface IMemberDepartmentTableActionProps
-    extends IMemberDepartmentTableActionComponentProp {
+interface IMemberDepartmentTableActionProps extends IMemberDepartmentTableActionComponentProp {
     onMemberDepartmentUpdate?: () => void
     onDeleteSuccess?: () => void
 }
@@ -105,8 +104,7 @@ export const MemberDepartmentAction = ({
     )
 }
 
-interface IMemberDepartmentRowContextProps
-    extends IMemberDepartmentTableActionComponentProp {
+interface IMemberDepartmentRowContextProps extends IMemberDepartmentTableActionComponentProp {
     children?: ReactNode
     onDeleteSuccess?: () => void
 }

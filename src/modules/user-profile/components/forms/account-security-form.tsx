@@ -29,7 +29,8 @@ import { UserProfileSecuritySchema } from '../../user-profile.validation'
 type TAccountSecurityFormValues = z.infer<typeof UserProfileSecuritySchema>
 
 export interface IAccountSecurityFormProps
-    extends IClassProps,
+    extends
+        IClassProps,
         IForm<Partial<TAccountSecurityFormValues>, IUserBase> {}
 
 const AccountSecurityForm = ({

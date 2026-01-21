@@ -69,8 +69,7 @@ const useAutomaticLoanDeductionActions = ({
     }
 }
 
-interface IAutomaticLoanDeductionTableActionProps
-    extends IAutomaticLoanDeductionTableActionComponentProp {
+interface IAutomaticLoanDeductionTableActionProps extends IAutomaticLoanDeductionTableActionComponentProp {
     onAutomaticLoanDeductionUpdate?: () => void
     onDeleteSuccess?: () => void
 }
@@ -119,8 +118,7 @@ export const AutomaticLoanDeductionAction = ({
     )
 }
 
-interface IAutomaticLoanDeductionRowContextProps
-    extends IAutomaticLoanDeductionTableActionComponentProp {
+interface IAutomaticLoanDeductionRowContextProps extends IAutomaticLoanDeductionTableActionComponentProp {
     children?: ReactNode
     onDeleteSuccess?: () => void
 }

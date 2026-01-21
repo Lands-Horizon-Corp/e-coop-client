@@ -164,8 +164,7 @@ const useLoanTransactionActions = ({
     }
 }
 
-interface ILoanTransactionTableActionProps
-    extends ILoanTransactionTableActionComponentProp {
+interface ILoanTransactionTableActionProps extends ILoanTransactionTableActionComponentProp {
     onLoanTransactionUpdate?: () => void
     onDeleteSuccess?: () => void
 }
@@ -342,8 +341,7 @@ export const LoanTransactionAction = ({
     )
 }
 
-interface ILoanTransactionRowContextProps
-    extends ILoanTransactionTableActionComponentProp {
+interface ILoanTransactionRowContextProps extends ILoanTransactionTableActionComponentProp {
     children?: ReactNode
     onDeleteSuccess?: () => void
 }

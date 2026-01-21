@@ -2,8 +2,10 @@ import { useEffect, useState } from 'react'
 
 import { Input, InputProps } from './input'
 
-interface DebouncedInputProps<T>
-    extends Omit<InputProps, 'value' | 'onChange'> {
+interface DebouncedInputProps<T> extends Omit<
+    InputProps,
+    'value' | 'onChange'
+> {
     value: T
     onChange: (value: T) => void
     debounceTime?: number

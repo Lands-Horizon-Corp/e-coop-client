@@ -41,8 +41,7 @@ import {
 } from './row-action-context'
 
 export interface LoanPurposeTableProps
-    extends TableProps<ILoanPurpose>,
-        ILoanPurposeTableColumnProps {
+    extends TableProps<ILoanPurpose>, ILoanPurposeTableColumnProps {
     toolbarProps?: Omit<
         IDataTableToolbarProps<ILoanPurpose>,
         | 'table'

@@ -29,12 +29,11 @@ import {
 
 type TFormValues = TIncludeNegativeAccountsSchema
 
-export interface IIncludeNegativeAccountFormProps
-    extends IForm<
-        Partial<TFormValues>,
-        IIncludeNegativeAccountsRequest,
-        Error
-    > {
+export interface IIncludeNegativeAccountFormProps extends IForm<
+    Partial<TFormValues>,
+    IIncludeNegativeAccountsRequest,
+    Error
+> {
     includeNegativeAccountId?: TEntityId
     className?: string
 }

@@ -46,7 +46,8 @@ type TGeneratedSavingsInterestFormValues = z.infer<
 >
 
 export interface IGeneratedSavingsInterestFormProps
-    extends IClassProps,
+    extends
+        IClassProps,
         IForm<
             Partial<TGeneratedSavingsInterestFormValues>,
             IGeneratedSavingsInterest,

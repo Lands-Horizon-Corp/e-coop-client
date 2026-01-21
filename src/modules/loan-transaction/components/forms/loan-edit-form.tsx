@@ -42,7 +42,8 @@ import LoanComakerSection from './loan-transaction-create-update-form/loan-comak
 type TLoanEditFormValues = z.infer<typeof LoanEditTransactionSchema>
 
 export interface ILoanEditFormProps
-    extends IClassProps,
+    extends
+        IClassProps,
         IForm<
             Partial<ILoanEditTransactionRequest>,
             ILoanTransaction,

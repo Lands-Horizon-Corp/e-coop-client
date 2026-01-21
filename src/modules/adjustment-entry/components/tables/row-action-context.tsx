@@ -84,8 +84,7 @@ const useAdjustmentEntryActions = ({
     }
 }
 
-interface IAdjustmentEntryTableActionProps
-    extends IAdjustmentEntryTableActionComponentProp {
+interface IAdjustmentEntryTableActionProps extends IAdjustmentEntryTableActionComponentProp {
     onEntryUpdate?: () => void
     onDeleteSuccess?: () => void
 }
@@ -114,8 +113,7 @@ export const AdjustmentEntryAction = ({
     )
 }
 
-interface IAdjustmentEntryRowContextProps
-    extends IAdjustmentEntryTableActionComponentProp {
+interface IAdjustmentEntryRowContextProps extends IAdjustmentEntryTableActionComponentProp {
     children?: ReactNode
     onDeleteSuccess?: () => void
 }

@@ -75,8 +75,7 @@ const useAccountCategoryActions = ({
     }
 }
 
-interface IAccountCategoryActionProps
-    extends IAccountCategoryTableActionComponentProp {
+interface IAccountCategoryActionProps extends IAccountCategoryTableActionComponentProp {
     onAccountCategoryUpdate?: () => void
     onDeleteSuccess?: () => void
 }
@@ -116,8 +115,7 @@ export const AccountCategoryAction = ({
     )
 }
 
-interface IAccountCategoryRowContextProps
-    extends IAccountCategoryTableActionComponentProp {
+interface IAccountCategoryRowContextProps extends IAccountCategoryTableActionComponentProp {
     children?: ReactNode
     onDeleteSuccess?: () => void
 }

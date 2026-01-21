@@ -109,8 +109,7 @@ const useJournalVoucherActions = ({
     }
 }
 
-interface IJournalVoucherTableActionProps
-    extends IJournalVoucherTableActionComponentProp {
+interface IJournalVoucherTableActionProps extends IJournalVoucherTableActionComponentProp {
     onJournalVoucherUpdate?: () => void
     onDeleteSuccess?: () => void
 }
@@ -150,8 +149,7 @@ export const JournalVoucherAction = ({
     )
 }
 
-interface IJournalVoucherRowContextProps
-    extends IJournalVoucherTableActionComponentProp {
+interface IJournalVoucherRowContextProps extends IJournalVoucherTableActionComponentProp {
     children?: ReactNode
     onDeleteSuccess?: () => void
 }

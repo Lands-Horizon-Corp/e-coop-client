@@ -40,8 +40,7 @@ import {
 } from './row-actions'
 
 export interface AccountsTableProps
-    extends TableProps<IAccount>,
-        IAccountsTableColumnProps {
+    extends TableProps<IAccount>, IAccountsTableColumnProps {
     toolbarProps?: Omit<
         IDataTableToolbarProps<IAccount>,
         | 'table'

@@ -58,8 +58,7 @@ const useCancelledCashCheckVoucherActions = ({
     }
 }
 
-interface ICancelledCashCheckVoucherTableActionProps
-    extends ICancelledCashCheckVoucherTableActionComponentProp {
+interface ICancelledCashCheckVoucherTableActionProps extends ICancelledCashCheckVoucherTableActionComponentProp {
     onVoucherUpdate?: () => void
     onDeleteSuccess?: () => void
 }
@@ -107,8 +106,7 @@ export const CancelledCashCheckVoucherAction = ({
     )
 }
 
-interface ICancelledCashCheckVoucherRowContextProps
-    extends ICancelledCashCheckVoucherTableActionComponentProp {
+interface ICancelledCashCheckVoucherRowContextProps extends ICancelledCashCheckVoucherTableActionComponentProp {
     children?: ReactNode
     onDeleteSuccess?: () => void
 }

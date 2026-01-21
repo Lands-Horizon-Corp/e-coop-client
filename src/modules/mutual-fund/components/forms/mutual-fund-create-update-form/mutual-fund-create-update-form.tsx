@@ -50,7 +50,8 @@ import MutualFundTableSection from './mutual-fund-table-section'
 type TMutualFundSchema = z.infer<typeof MutualFundSchema>
 
 export interface IMutualFundFormProps
-    extends IClassProps,
+    extends
+        IClassProps,
         IForm<
             Partial<IMutualFundRequest>,
             IMutualFund,

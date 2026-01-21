@@ -18,9 +18,7 @@ export interface IMemberDamayanExtensionEntryRequest {
 }
 
 export interface IMemberDamayanExtensionEntryResponse
-    extends ITimeStamps,
-        IAuditable,
-        IOrgBranchIdentity {
+    extends ITimeStamps, IAuditable, IOrgBranchIdentity {
     id: TEntityId
     member_profile_id: TEntityId
     member_profile?: IMemberProfile

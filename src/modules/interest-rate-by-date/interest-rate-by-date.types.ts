@@ -18,5 +18,4 @@ export type IInterestRateByDateRequest = z.infer<
     typeof InterestRateByDateSchema
 >
 
-export interface IInterestRateByDatePaginated
-    extends IPaginatedResult<IInterestRateByDate> {}
+export interface IInterestRateByDatePaginated extends IPaginatedResult<IInterestRateByDate> {}

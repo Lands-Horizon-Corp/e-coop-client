@@ -14,5 +14,4 @@ export type ILoanClearanceAnalysisInstitutionRequest = z.infer<
     typeof LoanClearanceAnalysisInstitutionSchema
 >
 
-export interface ILoanClearanceAnalysisInstitutionPaginated
-    extends IPaginatedResult<ILoanClearanceAnalysisInstitution> {}
+export interface ILoanClearanceAnalysisInstitutionPaginated extends IPaginatedResult<ILoanClearanceAnalysisInstitution> {}

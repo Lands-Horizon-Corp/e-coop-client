@@ -24,8 +24,10 @@ import { TEntityId } from '@/types'
 
 import { useGetMemberProfileArchiveCategory } from '../member-profile-archive.service'
 
-interface Props
-    extends Omit<React.ComponentPropsWithoutRef<'button'>, 'onChange'> {
+interface Props extends Omit<
+    React.ComponentPropsWithoutRef<'button'>,
+    'onChange'
+> {
     value?: string
     disabled?: boolean
     className?: string

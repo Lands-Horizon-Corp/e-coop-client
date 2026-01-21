@@ -47,7 +47,8 @@ import PaperSizeSelector, { TPaperSizeName } from './paper-size-selector'
 export type TGeneratedReportFormValues = z.infer<typeof GeneratedReportSchema>
 
 export interface IGeneratedReportFormProps
-    extends IClassProps,
+    extends
+        IClassProps,
         IForm<
             Partial<IGeneratedReportRequest>,
             IGeneratedReport,

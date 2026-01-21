@@ -40,8 +40,7 @@ import MutualFundAction, {
 } from './row-action-context'
 
 export interface MutualFundTableProps
-    extends TableProps<IMutualFund>,
-        IMutualFundTableColumnProps {
+    extends TableProps<IMutualFund>, IMutualFundTableColumnProps {
     toolbarProps?: Omit<
         IDataTableToolbarProps<IMutualFund>,
         | 'table'

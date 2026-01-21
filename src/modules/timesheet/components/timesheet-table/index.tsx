@@ -36,8 +36,7 @@ import TimesheetTableColumns, {
 import { TimesheetRowContext } from './row-action-context'
 
 export interface TimesheetTableProps
-    extends TableProps<ITimesheet>,
-        ITimesheetTableColumnProps {
+    extends TableProps<ITimesheet>, ITimesheetTableColumnProps {
     toolbarProps?: Omit<
         IDataTableToolbarProps<ITimesheet>,
         | 'table'

@@ -43,7 +43,8 @@ import {
 } from './row-action'
 
 export interface AccountClassificationTableProps
-    extends TableProps<IAccountClassification>,
+    extends
+        TableProps<IAccountClassification>,
         IAccountClassificationTableColumnProps {
     toolbarProps?: Omit<
         IDataTableToolbarProps<IAccountClassification>,

@@ -35,7 +35,8 @@ import memberOccupationHistoryColumns, {
 } from './columns'
 
 export interface MemberOccupationHistoryTableProps
-    extends TableProps<IMemberOccupationHistory>,
+    extends
+        TableProps<IMemberOccupationHistory>,
         IMemberOccupationHistoryColumnProps {
     toolbarProps?: Omit<
         IDataTableToolbarProps<IMemberOccupationHistory>,

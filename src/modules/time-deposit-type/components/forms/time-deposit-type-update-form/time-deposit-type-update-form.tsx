@@ -34,7 +34,8 @@ import {
 import TimeDepositComputationSection from './time-deposit-computation-section'
 
 export interface ITimeDepositTypeFormProps
-    extends IClassProps,
+    extends
+        IClassProps,
         IForm<
             Partial<ITimeDepositTypeRequest>,
             ITimeDepositType,

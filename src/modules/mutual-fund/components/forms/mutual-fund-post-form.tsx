@@ -28,7 +28,8 @@ import { MutualFundViewPostRequestSchema } from '../../mutual-fund.validation'
 type TMutualFundPostFormValues = z.infer<typeof MutualFundViewPostRequestSchema>
 
 export interface IMutualFundPostFormProps
-    extends IClassProps,
+    extends
+        IClassProps,
         IForm<
             Partial<IMutualFundPostRequest>,
             IMutualFund,

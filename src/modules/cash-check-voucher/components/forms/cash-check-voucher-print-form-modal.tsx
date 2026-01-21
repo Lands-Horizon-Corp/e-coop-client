@@ -23,7 +23,8 @@ import { useFormHelper } from '@/hooks/use-form-helper'
 import { IClassProps, IForm, TEntityId } from '@/types'
 
 export interface ICashCheckVoucherPrintFormProps
-    extends IClassProps,
+    extends
+        IClassProps,
         IForm<
             Partial<TCashCheckVoucherPrintSchema>,
             ICashCheckVoucher,

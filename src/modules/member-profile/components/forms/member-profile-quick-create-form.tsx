@@ -45,7 +45,8 @@ type TMemberProfileQuickFormValues = z.infer<
 >
 
 export interface IMemberProfileQuickCreateFormProps
-    extends IClassProps,
+    extends
+        IClassProps,
         IForm<Partial<TMemberProfileQuickFormValues>, IMemberProfile> {}
 
 const MemberProfileQuickCreateForm = ({

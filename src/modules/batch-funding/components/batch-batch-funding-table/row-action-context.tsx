@@ -23,8 +23,7 @@ const useBatchFundingActions = ({ row }: UseBatchFundingActionsProps) => {
     }
 }
 
-interface IBatchFundingTableActionProps
-    extends IBatchFundingTableActionComponentProp {
+interface IBatchFundingTableActionProps extends IBatchFundingTableActionComponentProp {
     onBatchFundingUpdate?: () => void
     onDeleteSuccess?: () => void
 }
@@ -47,8 +46,7 @@ export const BatchFundingAction = ({
     )
 }
 
-interface IBatchFundingRowContextProps
-    extends IBatchFundingTableActionComponentProp {
+interface IBatchFundingRowContextProps extends IBatchFundingTableActionComponentProp {
     children?: ReactNode
     onDeleteSuccess?: () => void
 }

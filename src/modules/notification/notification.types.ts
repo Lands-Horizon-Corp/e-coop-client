@@ -22,7 +22,6 @@ export interface INotification extends IBaseEntityMeta {
 
 export type INotificationRequest = z.infer<typeof NotificationSchema>
 
-export interface INotificationPaginated
-    extends IPaginatedResult<INotification> {}
+export interface INotificationPaginated extends IPaginatedResult<INotification> {}
 
 export type INotificationViewRequest = { ids: TEntityId[] }

@@ -37,8 +37,7 @@ import {
 type TSignUpForm = z.infer<typeof SignUpSchema>
 
 interface ISignUpFormProps
-    extends IClassProps,
-        IForm<Partial<ISignUpRequest>, IAuthContext> {}
+    extends IClassProps, IForm<Partial<ISignUpRequest>, IAuthContext> {}
 
 const SignUpForm = ({ className, ...formProps }: ISignUpFormProps) => {
     const form = useForm<TSignUpForm>({

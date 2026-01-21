@@ -51,7 +51,8 @@ import {
 export type TBranchSettingsFormValues = TBranchSettingsRequestSchema
 
 export interface IBranchSettingsFormProps
-    extends IClassProps,
+    extends
+        IClassProps,
         IForm<Partial<TBranchSettingsFormValues>, IBranchSettings, Error> {}
 
 const BranchSettingsForm = ({

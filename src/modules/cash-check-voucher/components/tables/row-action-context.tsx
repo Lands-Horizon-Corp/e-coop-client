@@ -125,8 +125,7 @@ const useCashCheckVoucherActions = ({
     }
 }
 
-interface ICashCheckVoucherRowContextProps
-    extends ICashCheckVoucherTableActionComponentProp {
+interface ICashCheckVoucherRowContextProps extends ICashCheckVoucherTableActionComponentProp {
     children?: ReactNode
     onDeleteSuccess?: () => void
 }
