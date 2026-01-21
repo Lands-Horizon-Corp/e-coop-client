@@ -1,7 +1,10 @@
 import { ReactNode } from 'react'
 
 import { withToastCallbacks } from '@/helpers/callback-helper'
-import { useAuthUserWithOrgBranch } from '@/modules/authentication/authgentication.store'
+import {
+    hasPermissionFromAuth,
+    useAuthUserWithOrgBranch,
+} from '@/modules/authentication/authgentication.store'
 import useConfirmModalStore from '@/store/confirm-modal-store'
 import { Row } from '@tanstack/react-table'
 
@@ -65,6 +68,7 @@ const useAdjustmentEntryActions = ({
             onConfirm: () => deleteEntry(adjustmentEntry.id),
         })
     }
+
     const handleOnView = () => {
         open('view', {
             id: adjustmentEntry.id,
@@ -98,13 +102,18 @@ export const AdjustmentEntryAction = ({
         onDeleteSuccess,
     })
 
+    const canView = hasPermissionFromAuth({
+        action: 'Read',
+        resourceType: 'AdjustmentEntry',
+    })
+
     return (
         <>
             <RowActionsGroup
                 canSelect={false}
                 onView={{
                     text: 'view',
-                    isAllowed: true,
+                    isAllowed: canView,
                     onClick: handleOnView,
                 }}
                 row={row}
@@ -128,13 +137,18 @@ export const AdjustmentEntryRowContext = ({
         onDeleteSuccess,
     })
 
+    const canView = hasPermissionFromAuth({
+        action: 'Read',
+        resourceType: 'AdjustmentEntry',
+    })
+
     return (
         <>
             <DataTableRowContext
                 canSelect={false}
                 onView={{
                     text: 'view',
-                    isAllowed: true,
+                    isAllowed: canView,
                     onClick: handleOnView,
                 }}
                 row={row}

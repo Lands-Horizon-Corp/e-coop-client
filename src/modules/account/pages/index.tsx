@@ -4,7 +4,6 @@ import {
     useAuthUserWithOrgBranch,
 } from '@/modules/authentication/authgentication.store'
 import PermissionGuard from '@/modules/permission/components/permission-guard'
-import PermissionNotAllowedDisplay from '@/modules/permission/components/permission-not-allowed-display'
 import { hasPermission } from '@/modules/permission/permission.utils'
 
 import PageContainer from '@/components/containers/page-container'
@@ -24,13 +23,7 @@ export const Account = () => {
 
     return (
         <PageContainer>
-            <PermissionGuard
-                action="Read"
-                NotAllowedComponent={(props) => (
-                    <PermissionNotAllowedDisplay {...props} />
-                )}
-                resourceType="Account"
-            >
+            <PermissionGuard action="Read" resourceType="AdjustmentEntry">
                 <div className="flex w-full flex-col  items-start gap-4">
                     <AccountCreateUpdateFormModal
                         className=" min-w-[80vw] max-w-[80vw]"

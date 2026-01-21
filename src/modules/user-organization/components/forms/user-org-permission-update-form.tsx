@@ -189,6 +189,7 @@ const UserOrgPermissionUpdateForm = ({
                     </fieldset>
                 </fieldset>
                 <FormFooterResetSubmit
+                    className="sticky bottom-0 bg-popover/40 p-4"
                     disableSubmit={!form.formState.isDirty || isPending}
                     error={error}
                     isLoading={isPending}

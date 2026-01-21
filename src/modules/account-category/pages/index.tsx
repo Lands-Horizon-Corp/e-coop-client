@@ -8,7 +8,6 @@ import {
     useAuthUserWithOrgBranch,
 } from '@/modules/authentication/authgentication.store'
 import PermissionGuard from '@/modules/permission/components/permission-guard'
-import PermissionNotAllowedDisplay from '@/modules/permission/components/permission-not-allowed-display'
 import { hasPermission } from '@/modules/permission/permission.utils'
 
 import PageContainer from '@/components/containers/page-container'
@@ -28,13 +27,7 @@ export const AccountCategoryPage = () => {
 
     return (
         <PageContainer>
-            <PermissionGuard
-                action="Read"
-                NotAllowedComponent={(props) => (
-                    <PermissionNotAllowedDisplay {...props} />
-                )}
-                resourceType="AccountCategory"
-            >
+            <PermissionGuard action="Read" resourceType="AdjustmentEntry">
                 <>
                     <AccountCategoryFormModal
                         branchId={branchId}

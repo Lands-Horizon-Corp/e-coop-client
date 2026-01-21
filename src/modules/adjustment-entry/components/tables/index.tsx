@@ -54,7 +54,6 @@ export interface BaseAdjustmentEntryTableProps
         | 'globalSearchProps'
         | 'scrollableProps'
         | 'filterLogicProps'
-        | 'exportActionProps'
         | 'deleteActionProps'
     >
     currencyId?: TEntityId

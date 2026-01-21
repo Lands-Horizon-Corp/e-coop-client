@@ -77,7 +77,7 @@ export const PERMISSION_BASE_RESOURCE = [
     // 'AccountHistory',
     'AccountTag',
     'AccountTransaction',
-    'AccountTransactionEntry',
+    // 'AccountTransactionEntry',
     'AdjustmentEntry',
     'AdjustmentEntryTag',
     'Approvals',
@@ -300,9 +300,13 @@ export const PERMISSION_ALL_RESOURCE_ACTION: {
         resource: 'AccountTransaction',
         label: 'Account Transactions',
         description: 'View Transactions of an account',
-        supportedActions: generateBaseAction({
-            excludeActions: ['Read', 'Create'],
-        }),
+        supportedActions: ['Read', 'Create'],
+    },
+    {
+        resource: 'AdjustmentEntry',
+        label: 'Adjustment Entry',
+        description: 'View Adjustment Entry',
+        supportedActions: ['Read', 'Create', 'Export'],
     },
     // {
     //     resource: 'MemberGroup',
