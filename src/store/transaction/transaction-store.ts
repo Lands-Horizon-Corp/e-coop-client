@@ -114,7 +114,7 @@ export const useTransactionStore = create<TransactionPropsStore>(
         handleResetAll: () =>
             set(() => ({
                 focusTypePayment: 'payment',
-                selectedMember: null,
+                // selectedMember: null,
                 openPaymentsEntryModal: false,
                 openMemberPicker: false,
                 selectedAccountId: undefined,

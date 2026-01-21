@@ -48,28 +48,14 @@ export const ReferenceNumberSchema = z.object({
 
 const Transaction = ({ transactionId, fullPath }: TTransactionProps) => {
     const queryClient = useQueryClient()
+
     const { hasNoTransactionBatch, data: currentTransactionBatch } =
         useTransactionBatchStore()
+
     const { modalData, isOpen, onClose } = useTransactionReverseSecurityStore()
+
     const { payment_or_allow_user_input, userOrganization } =
         useGetUserSettings()
-
-    const referenceNumberForm = useForm<z.infer<typeof ReferenceNumberSchema>>({
-        resolver: standardSchemaResolver(ReferenceNumberSchema),
-        defaultValues: {
-            reference_number: '',
-            or_auto_generated: false,
-        },
-    })
-    useEffect(() => {
-        if (!payment_or_allow_user_input) {
-            referenceNumberForm.setValue('or_auto_generated', true)
-            referenceNumberForm.setValue(
-                'reference_number',
-                paymentORResolver(userOrganization)
-            )
-        }
-    }, [referenceNumberForm, payment_or_allow_user_input])
 
     const {
         selectedMember,
@@ -85,6 +71,14 @@ const Transaction = ({ transactionId, fullPath }: TTransactionProps) => {
         selectedJointMember,
         setOpenMemberPicker,
     } = useTransactionStore()
+
+    const referenceNumberForm = useForm<z.infer<typeof ReferenceNumberSchema>>({
+        resolver: standardSchemaResolver(ReferenceNumberSchema),
+        defaultValues: {
+            reference_number: paymentORResolver(userOrganization),
+            or_auto_generated: false,
+        },
+    })
 
     const navigate = useNavigate()
 
@@ -164,11 +158,13 @@ const Transaction = ({ transactionId, fullPath }: TTransactionProps) => {
             e.stopPropagation()
             handleResetAll()
             handleSetTransactionId({ fullPath })
-            referenceNumberForm.reset()
+            referenceNumberForm.setValue(
+                'reference_number',
+                paymentORResolver(userOrganization)
+            )
+            referenceNumberForm.clearErrors('reference_number')
         },
-        {
-            enableOnFormTags: ['INPUT', 'SELECT', 'TEXTAREA'],
-        }
+        [referenceNumberForm]
     )
 
     useHotkeys('Enter', (e) => {
@@ -181,6 +177,38 @@ const Transaction = ({ transactionId, fullPath }: TTransactionProps) => {
     const isTransactionMismatchCurrentBatch = !transaction
         ? false
         : currentTransactionBatch?.id !== transaction?.transaction_batch_id
+
+    useEffect(() => {
+        if (!payment_or_allow_user_input) {
+            referenceNumberForm.setValue('or_auto_generated', true)
+            referenceNumberForm.setValue(
+                'reference_number',
+                paymentORResolver(userOrganization)
+            )
+        }
+    }, [referenceNumberForm, payment_or_allow_user_input])
+
+    // useEffect(() => {
+
+    //     if (referenceNumber === resolvedOR) {
+    //         return
+    //     }
+
+    //     const timeoutId = setTimeout(() => {
+    //         onOpen({
+    //             title: 'Reference Number Changed',
+    //             description: 'Confirm to reset and create new Transaction.',
+    //             onConfirm: () => {
+    //                 handleResetAll()
+    //                 handleSetTransactionId({fullPath})
+    //             },
+    //         })
+    //     }, 1500)
+
+    //     return () => {
+    //         clearTimeout(timeoutId)
+    //     }
+    // }, [userOrganization, referenceNumberForm.watch('reference_number')])
 
     return (
         <div>
@@ -287,6 +315,9 @@ const Transaction = ({ transactionId, fullPath }: TTransactionProps) => {
             {selectedMember && !isTransactionMismatchCurrentBatch && (
                 <PaymentWithTransactionForm
                     currentTransactionBatch={currentTransactionBatch}
+                    handleResetTransaction={() => {
+                        handleSetTransactionId({ fullPath })
+                    }}
                     memberJointId={selectedJointMember?.id}
                     memberProfileId={selectedMember?.id}
                     onSuccess={(transaction) => {

@@ -1,5 +1,6 @@
 import { useEffect } from 'react'
 
+import { useQueryClient } from '@tanstack/react-query'
 import { Path, UseFormReturn, useForm } from 'react-hook-form'
 import z from 'zod'
 
@@ -21,6 +22,7 @@ import {
     ITransactionRequest,
     PaymentTypeCombobox,
     PaymentWithTransactionSchema,
+    TPaymentTransactionProps,
     TPaymentWithTransactionFormValues,
     TransactionNoFoundBatch,
     useCreateTransactionPaymentByMode,
@@ -72,6 +74,7 @@ interface PaymentWithTransactionFormProps
     memberProfileId?: TEntityId
     memberJointId?: TEntityId
     referenceNumberForm: UseFormReturn<z.infer<typeof ReferenceNumberSchema>>
+    handleResetTransaction: () => void
 }
 
 const PaymentWithTransactionForm = ({
@@ -85,10 +88,11 @@ const PaymentWithTransactionForm = ({
     currentTransactionBatch,
     readOnly,
     referenceNumberForm,
+    handleResetTransaction,
 }: PaymentWithTransactionFormProps) => {
     const { focusTypePayment, selectedAccount } = useTransactionStore()
     const loanPaymentGuideModal = useModalState()
-
+    const queryClient = useQueryClient()
     const {
         settings_accounting_payment_default_value,
         settings_accounting_payment_default_value_id,
@@ -158,10 +162,11 @@ const PaymentWithTransactionForm = ({
                     settings_payment_type_default_value_id || ''
                 )
                 form.setFocus('amount')
-                referenceNumberForm.setValue(
-                    'reference_number',
-                    transaction.reference_number
-                )
+                referenceNumberForm.resetField('reference_number', {
+                    keepDirty: false,
+                    defaultValue: transaction.reference_number,
+                })
+                queryClient.invalidateQueries({ queryKey: ['auth', 'context'] })
                 onSuccess?.(transaction)
             },
         },
@@ -174,7 +179,7 @@ const PaymentWithTransactionForm = ({
     const handleSubmitForm = async (
         data: TPaymentWithTransactionFormValues
     ) => {
-        const transactionpayPayload: ITransactionRequest = {
+        const transactionPaymentPayload: ITransactionRequest = {
             ...data,
             currency_id: (transaction?.currency_id ||
                 currentTransactionBatch?.currency_id) as TEntityId,
@@ -185,7 +190,8 @@ const PaymentWithTransactionForm = ({
             is_reference_number_checked:
                 referenceNumberForm.getValues('or_auto_generated'),
         }
-        creatTransactionDeposit({
+
+        const finalPayload: TPaymentTransactionProps = {
             data: {
                 ...data,
                 currency_id:
@@ -194,8 +200,22 @@ const PaymentWithTransactionForm = ({
             },
             mode: 'payment',
             transactionId,
-            transactionPayload: transactionpayPayload,
-        })
+            transactionPayload: transactionPaymentPayload,
+        }
+        const isDirty =
+            referenceNumberForm.formState.dirtyFields.reference_number
+        console.log('isDirty', isDirty)
+        if (isDirty) {
+            handleResetTransaction()
+            creatTransactionDeposit({
+                ...finalPayload,
+                transactionId: undefined,
+            })
+        } else {
+            creatTransactionDeposit({
+                ...finalPayload,
+            })
+        }
     }
 
     const handleSubmit = form.handleSubmit(

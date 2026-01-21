@@ -80,7 +80,7 @@ export const useCreateTransactionStandalone = createMutationFactory<
     ],
 })
 
-type TPaymentTransactionProps = {
+export type TPaymentTransactionProps = {
     data: IPaymentRequest
     mode: TPaymentMode
     transactionId?: TEntityId

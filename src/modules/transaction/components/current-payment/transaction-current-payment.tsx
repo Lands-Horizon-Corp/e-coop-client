@@ -130,7 +130,10 @@ const TransactionCurrentPaymentEntry = ({
                                                             'reference_number',
                                                             paymentORResolver(
                                                                 userOrganization
-                                                            )
+                                                            ),
+                                                            {
+                                                                shouldDirty: true,
+                                                            }
                                                         )
                                                     }
                                                 }}
