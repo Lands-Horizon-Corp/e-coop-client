@@ -8,6 +8,10 @@ import {
     useDeleteById,
     useMoveAccountOrderIndex,
 } from '@/modules/account'
+import {
+    getCrudPermissionFromAuthStore,
+    hasPermissionFromAuth,
+} from '@/modules/authentication/authgentication.store'
 import { TEntryType } from '@/modules/general-ledger'
 import GeneralLedgerTable from '@/modules/general-ledger/components/tables/general-ledger-table'
 import useConfirmModalStore from '@/store/confirm-modal-store'
@@ -74,6 +78,11 @@ const useAccountActions = ({
     >()
     const { onOpen } = useConfirmModalStore()
 
+    const accountCrudPerms = getCrudPermissionFromAuthStore({
+        resourceType: 'Account',
+        resource: account,
+    })
+
     const { isPending: isDeletingAccount, mutate: deleteAccount } =
         useDeleteById({
             options: {
@@ -120,6 +129,7 @@ const useAccountActions = ({
 
     return {
         account,
+        accountCrudPerms,
         isDeletingAccount,
         moveAccountIndexMutation,
         handleEdit,
@@ -140,6 +150,7 @@ export const AccountAction = ({
 }: IAccountTableActionProps) => {
     const {
         account,
+        accountCrudPerms,
         isDeletingAccount,
         moveAccountIndexMutation,
         handleEdit,
@@ -154,18 +165,26 @@ export const AccountAction = ({
                 canSelect
                 onDelete={{
                     text: 'Delete',
-                    isAllowed: !isDeletingAccount,
+                    isAllowed:
+                        (accountCrudPerms.Delete ||
+                            accountCrudPerms.OwnDelete) &&
+                        !isDeletingAccount,
                     onClick: handleDelete,
                 }}
                 onEdit={{
                     text: 'Edit',
-                    isAllowed: true,
+                    isAllowed:
+                        accountCrudPerms.Update || accountCrudPerms.OwnUpdate,
                     onClick: handleEdit,
                 }}
                 otherActions={
                     <>
                         <DropdownMenuItem
-                            disabled={moveAccountIndexMutation.isPending}
+                            disabled={
+                                moveAccountIndexMutation.isPending ||
+                                !accountCrudPerms.Update ||
+                                !accountCrudPerms.OwnUpdate
+                            }
                             onClick={() =>
                                 toast.promise(
                                     moveAccountIndexMutation.mutateAsync({
@@ -179,7 +198,11 @@ export const AccountAction = ({
                             Move to Top
                         </DropdownMenuItem>
                         <DropdownMenuItem
-                            disabled={moveAccountIndexMutation.isPending}
+                            disabled={
+                                moveAccountIndexMutation.isPending ||
+                                !accountCrudPerms.Update ||
+                                !accountCrudPerms.OwnUpdate
+                            }
                             onClick={() =>
                                 toast.promise(
                                     moveAccountIndexMutation.mutateAsync({
@@ -193,13 +216,26 @@ export const AccountAction = ({
                             Move to Bottom
                         </DropdownMenuItem>
                         <DropdownMenuItem
+                            disabled={
+                                !hasPermissionFromAuth({
+                                    action: 'Read',
+                                    resourceType: 'AccountTransaction',
+                                })
+                            }
                             onClick={() => handleViewAccountingLedger()}
                         >
                             <BookOpenIcon className="mr-2" strokeWidth={1.5} />
                             View Accounting Ledger
                         </DropdownMenuItem>
                         <DropdownMenuSub>
-                            <DropdownMenuSubTrigger>
+                            <DropdownMenuSubTrigger
+                                disabled={
+                                    !hasPermissionFromAuth({
+                                        action: 'Read',
+                                        resourceType: 'GeneralLedger',
+                                    })
+                                }
+                            >
                                 <BookOpenIcon
                                     className="mr-2"
                                     strokeWidth={1.5}
@@ -360,6 +396,7 @@ export const AccountRowContext = ({
 }: IAccountRowContextProps) => {
     const {
         account,
+        accountCrudPerms,
         isDeletingAccount,
         moveAccountIndexMutation,
         handleEdit,
@@ -373,17 +410,27 @@ export const AccountRowContext = ({
             <DataTableRowContext
                 onDelete={{
                     text: 'Delete',
-                    isAllowed: !isDeletingAccount,
+                    isAllowed:
+                        !isDeletingAccount &&
+                        (accountCrudPerms.Delete || accountCrudPerms.OwnDelete),
                     onClick: handleDelete,
                 }}
                 onEdit={{
                     text: 'Edit',
-                    isAllowed: true,
+                    isAllowed:
+                        !isDeletingAccount &&
+                        (accountCrudPerms.Update || accountCrudPerms.OwnUpdate),
                     onClick: handleEdit,
                 }}
                 otherActions={
                     <>
                         <ContextMenuItem
+                            disabled={
+                                !hasPermissionFromAuth({
+                                    action: 'Read',
+                                    resourceType: 'GeneralLedger',
+                                })
+                            }
                             onClick={() => handleViewAccountingLedger()}
                         >
                             <BookOpenIcon className="mr-2" strokeWidth={1.5} />

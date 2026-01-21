@@ -49,7 +49,6 @@ export interface AccountsTableProps
         | 'globalSearchProps'
         | 'scrollableProps'
         | 'filterLogicProps'
-        | 'exportActionProps'
         | 'deleteActionProps'
     >
 }
@@ -203,6 +202,7 @@ const AccountsTable = ({
                                 deleteMany(selectedData.map((data) => data.id)),
                         }}
                         exportActionProps={{
+                            ...toolbarProps?.exportActionProps,
                             isLoading: isPending,
                             filters: exportfilter,
                             model: 'Account',

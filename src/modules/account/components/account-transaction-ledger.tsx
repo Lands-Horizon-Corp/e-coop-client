@@ -7,7 +7,7 @@ import {
     IAccountTransactionLedger,
     useGetAccountTransactionLedgers,
 } from '@/modules/account-transaction'
-import { currencyFormat } from '@/modules/currency'
+import { ICurrency, currencyFormat } from '@/modules/currency'
 
 import { BookOpenIcon, RefreshIcon } from '@/components/icons'
 import LoadingSpinner from '@/components/spinners/loading-spinner'
@@ -122,7 +122,7 @@ const ViewAccountTransactionLedger = ({ accountId }: Props) => {
                     </div>
                 </CardHeader>
                 <CardContent className="p-0">
-                    <AccountLedgerTable entries={entries} />
+                    <AccountLedgerTable entries={entries || []} />
                 </CardContent>
             </Card>
         </div>
@@ -133,8 +133,10 @@ interface AccountLedgerTableProps {
     entries: IAccountTransactionLedger[]
 }
 
-export const AccountLedgerTable = ({ entries }: AccountLedgerTableProps) => {
-    const parsedCurrency =
+export const AccountLedgerTable = ({
+    entries = [],
+}: AccountLedgerTableProps) => {
+    const parsedCurrency: ICurrency | undefined =
         entries[0]?.account_transaction_entry[0]?.account?.currency
 
     return (
@@ -281,17 +283,16 @@ export const AccountLedgerTable = ({ entries }: AccountLedgerTableProps) => {
                         )
                     })}
 
-                    {entries?.length === 0 ||
-                        (!entries && (
-                            <TableRow>
-                                <TableCell
-                                    className="text-center text-muted-foreground py-12"
-                                    colSpan={5}
-                                >
-                                    No entries found
-                                </TableCell>
-                            </TableRow>
-                        ))}
+                    {entries?.length === 0 && (
+                        <TableRow>
+                            <TableCell
+                                className="text-center text-muted-foreground py-12"
+                                colSpan={5}
+                            >
+                                No entries found
+                            </TableCell>
+                        </TableRow>
+                    )}
                 </TableBody>
             </Table>
         </div>

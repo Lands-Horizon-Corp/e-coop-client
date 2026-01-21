@@ -5,6 +5,7 @@ import {
     IAccountCategory,
     useDeleteById,
 } from '@/modules/account-category'
+import { getCrudPermissionFromAuthStore } from '@/modules/authentication/authgentication.store'
 import useConfirmModalStore from '@/store/confirm-modal-store'
 import { Row } from '@tanstack/react-table'
 
@@ -37,6 +38,12 @@ const useAccountCategoryActions = ({
     >()
     const { onOpen } = useConfirmModalStore()
 
+    // 🔐 Instance-level CRUD permissions
+    const accountCategoryCrudPerms = getCrudPermissionFromAuthStore({
+        resourceType: 'AccountCategory',
+        resource: accountCategory,
+    })
+
     const {
         mutate: deleteAccountCategory,
         isPending: isDeletingAccountCategory,
@@ -61,6 +68,7 @@ const useAccountCategoryActions = ({
 
     return {
         accountCategory,
+        accountCategoryCrudPerms,
         isDeletingAccountCategory,
         handleEdit,
         handleDelete,
@@ -77,27 +85,34 @@ export const AccountCategoryAction = ({
     row,
     onDeleteSuccess,
 }: IAccountCategoryActionProps) => {
-    const { isDeletingAccountCategory, handleEdit, handleDelete } =
-        useAccountCategoryActions({ row, onDeleteSuccess })
+    const {
+        accountCategoryCrudPerms,
+        isDeletingAccountCategory,
+        handleEdit,
+        handleDelete,
+    } = useAccountCategoryActions({ row, onDeleteSuccess })
 
     return (
-        <>
-            <RowActionsGroup
-                canSelect
-                onDelete={{
-                    text: 'Delete',
-                    isAllowed: !isDeletingAccountCategory,
-                    onClick: handleDelete,
-                }}
-                onEdit={{
-                    text: 'Edit',
-                    isAllowed: true,
-                    onClick: handleEdit,
-                }}
-                otherActions={<></>}
-                row={row}
-            />
-        </>
+        <RowActionsGroup
+            canSelect
+            onDelete={{
+                text: 'Delete',
+                isAllowed:
+                    !isDeletingAccountCategory &&
+                    (accountCategoryCrudPerms.Delete ||
+                        accountCategoryCrudPerms.OwnDelete),
+                onClick: handleDelete,
+            }}
+            onEdit={{
+                text: 'Edit',
+                isAllowed:
+                    accountCategoryCrudPerms.Update ||
+                    accountCategoryCrudPerms.OwnUpdate,
+                onClick: handleEdit,
+            }}
+            otherActions={<></>}
+            row={row}
+        />
     )
 }
 
@@ -112,27 +127,34 @@ export const AccountCategoryRowContext = ({
     children,
     onDeleteSuccess,
 }: IAccountCategoryRowContextProps) => {
-    const { isDeletingAccountCategory, handleEdit, handleDelete } =
-        useAccountCategoryActions({ row, onDeleteSuccess })
+    const {
+        accountCategoryCrudPerms,
+        isDeletingAccountCategory,
+        handleEdit,
+        handleDelete,
+    } = useAccountCategoryActions({ row, onDeleteSuccess })
 
     return (
-        <>
-            <DataTableRowContext
-                onDelete={{
-                    text: 'Delete',
-                    isAllowed: !isDeletingAccountCategory,
-                    onClick: handleDelete,
-                }}
-                onEdit={{
-                    text: 'Edit',
-                    isAllowed: true,
-                    onClick: handleEdit,
-                }}
-                row={row}
-            >
-                {children}
-            </DataTableRowContext>
-        </>
+        <DataTableRowContext
+            onDelete={{
+                text: 'Delete',
+                isAllowed:
+                    !isDeletingAccountCategory &&
+                    (accountCategoryCrudPerms.Delete ||
+                        accountCategoryCrudPerms.OwnDelete),
+                onClick: handleDelete,
+            }}
+            onEdit={{
+                text: 'Edit',
+                isAllowed:
+                    accountCategoryCrudPerms.Update ||
+                    accountCategoryCrudPerms.OwnUpdate,
+                onClick: handleEdit,
+            }}
+            row={row}
+        >
+            {children}
+        </DataTableRowContext>
     )
 }
 
