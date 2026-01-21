@@ -1,4 +1,5 @@
 import { cn } from '@/helpers'
+import { hasPermissionFromAuth } from '@/modules/authentication/authgentication.store'
 import BlotterRequestKanban from '@/modules/transaction-batch/components/approval-kanbans/blotter-request-kanban'
 
 import { IClassProps } from '@/types'
@@ -10,6 +11,15 @@ import UserJoinRequestKanban from './kanbans/user-join-request-kanban'
 interface Props extends IClassProps {}
 
 const Approval = ({ className }: Props) => {
+    const canApproveEndBatch = hasPermissionFromAuth({
+        action: 'Read',
+        resourceType: 'ApprovalsEndBatch',
+    })
+    const canApproveBlotterRequest = hasPermissionFromAuth({
+        action: 'Read',
+        resourceType: 'ApprovalsBlotterView',
+    })
+
     return (
         <div
             className={cn(
@@ -17,8 +27,8 @@ const Approval = ({ className }: Props) => {
                 className
             )}
         >
-            <EndedTransactionBatchKanban />
-            <BlotterRequestKanban />
+            {canApproveEndBatch && <EndedTransactionBatchKanban />}
+            {canApproveBlotterRequest && <BlotterRequestKanban />}
             <UserJoinRequestKanban />
             <NewMemberProfileKanban />
         </div>
