@@ -3,9 +3,13 @@ import { useMemo } from 'react'
 import { toast } from 'sonner'
 
 import { cn } from '@/helpers'
-import { toReadableDate, toReadableDateTime } from '@/helpers/date-utils'
+import {
+    dateAgo,
+    toReadableDate,
+    toReadableDateTime,
+} from '@/helpers/date-utils'
 import { AccountViewerModal } from '@/modules/account/components/account-viewer/account-viewer'
-import { currencyFormat } from '@/modules/currency'
+import { ICurrency, currencyFormat } from '@/modules/currency'
 import { GeneralLedgerViewSheet } from '@/modules/general-ledger/components/ledger-detail'
 import { useGetLoanGuide } from '@/modules/loan-transaction'
 
@@ -108,7 +112,13 @@ const statusConfig: Record<
     },
 }
 
-const LoanPaymentItem = ({ payment }: { payment: ILoanPayments }) => {
+const LoanPaymentItem = ({
+    payment,
+    currency,
+}: {
+    payment: ILoanPayments
+    currency?: ICurrency
+}) => {
     const viewLedgerEntryModal = useModalState()
 
     return (
@@ -144,7 +154,10 @@ const LoanPaymentItem = ({ payment }: { payment: ILoanPayments }) => {
                     </div>
                 </div>
                 <span className="font-semibold text-emerald-600 dark:text-emerald-400">
-                    {currencyFormat(payment.amount)}
+                    {currencyFormat(payment.amount, {
+                        currency,
+                        showSymbol: !!currency,
+                    })}
                 </span>
             </div>
         </>
@@ -153,9 +166,11 @@ const LoanPaymentItem = ({ payment }: { payment: ILoanPayments }) => {
 
 const PaymentScheduleDisplay = ({
     schedule,
+    currency,
     className,
 }: {
     className?: string
+    currency?: ICurrency
     schedule: ILoanPaymentSchedule | null
 }) => {
     if (!schedule) return null
@@ -195,11 +210,15 @@ const PaymentScheduleDisplay = ({
                     </Badge>
                     <span className="text-sm text-muted-foreground flex items-center gap-1.5">
                         <CalendarNumberIcon className="size-3.5" />
-                        {toReadableDate(schedule.payment_date)}
+                        {toReadableDate(schedule.payment_date)} -{' '}
+                        {dateAgo(schedule.payment_date)}
                     </span>
                 </div>
                 <p className="text-4xl font-bold tracking-tight">
-                    {currencyFormat(displayAmount)}
+                    {currencyFormat(displayAmount, {
+                        currency,
+                        showSymbol: !!currency,
+                    })}
                 </p>
                 {/* <p className="text-sm text-muted-foreground">{accountName}</p> */}
             </div>
@@ -218,7 +237,8 @@ const PaymentScheduleDisplay = ({
                                     </p>
                                     <p className="font-semibold">
                                         {currencyFormat(
-                                            schedule.principal_amount
+                                            schedule.principal_amount,
+                                            { currency, showSymbol: !!currency }
                                         )}
                                     </p>
                                 </div>
@@ -231,7 +251,8 @@ const PaymentScheduleDisplay = ({
                                     </p>
                                     <p className="font-semibold">
                                         {currencyFormat(
-                                            schedule.interest_amount
+                                            schedule.interest_amount,
+                                            { currency, showSymbol: !!currency }
                                         )}
                                     </p>
                                 </div>
@@ -246,7 +267,10 @@ const PaymentScheduleDisplay = ({
                                         Fines
                                     </p>
                                     <p className="font-semibold text-destructive">
-                                        {currencyFormat(schedule.fines_amount)}
+                                        {currencyFormat(schedule.fines_amount, {
+                                            currency,
+                                            showSymbol: !!currency,
+                                        })}
                                     </p>
                                 </div>
                             </div>
@@ -292,6 +316,7 @@ const PaymentScheduleDisplay = ({
                                         {schedule.loan_payments.map(
                                             (payment, idx) => (
                                                 <LoanPaymentItem
+                                                    currency={currency}
                                                     key={idx}
                                                     payment={payment}
                                                 />
@@ -308,7 +333,10 @@ const PaymentScheduleDisplay = ({
                                 Remaining Balance
                             </span>
                             <span className="font-semibold">
-                                {currencyFormat(schedule.balance)}
+                                {currencyFormat(schedule.balance, {
+                                    currency,
+                                    showSymbol: !!currency,
+                                })}
                             </span>
                         </div>
                     </div>
@@ -339,7 +367,10 @@ const PaymentScheduleDisplay = ({
                                         Balance
                                     </p>
                                     <p className="font-semibold">
-                                        {currencyFormat(schedule.balance)}
+                                        {currencyFormat(schedule.balance, {
+                                            currency,
+                                            showSymbol: !!currency,
+                                        })}
                                     </p>
                                 </div>
                             </div>
@@ -392,7 +423,9 @@ const EmptyState = () => {
 
 const PaymentCell = ({
     schedule,
+    currency,
 }: {
+    currency?: ICurrency
     schedule: ILoanPaymentSchedule | null
 }) => {
     const viewLoanPaymentScheduleModal = useModalState()
@@ -424,24 +457,41 @@ const PaymentCell = ({
                 >
                     <PaymentScheduleDisplay
                         className="p-0"
+                        currency={currency}
                         schedule={schedule}
                     />
                 </Modal>
             </div>
             <p className="gap-x-2 w-full gap-y-0.5 text-sm text-center">
                 {(schedule.type === 'paid' || schedule.type === 'advance') && (
-                    <>{currencyFormat(schedule.amount_paid)}</>
+                    <>
+                        {currencyFormat(schedule.amount_paid, {
+                            currency,
+                            showSymbol: !!currency,
+                        })}
+                    </>
                 )}
 
                 {(schedule.type === 'due' || schedule.type === 'overdue') && (
-                    <>{currencyFormat(schedule.amount_due)}</>
+                    <>
+                        {currencyFormat(schedule.amount_due, {
+                            currency,
+                            showSymbol: !!currency,
+                        })}
+                    </>
                 )}
 
                 {schedule.type === 'default' && (
-                    <>{currencyFormat(schedule.balance)}</>
+                    <>
+                        {currencyFormat(schedule.balance, {
+                            currency,
+                            showSymbol: !!currency,
+                        })}
+                    </>
                 )}
 
-                {schedule.type === 'skipped' && currencyFormat(0)}
+                {schedule.type === 'skipped' &&
+                    currencyFormat(0, { currency, showSymbol: !!currency })}
             </p>
         </div>
     )
@@ -654,6 +704,10 @@ const LoanGuide = ({
                                         key={account.loan_account.id}
                                     >
                                         <PaymentCell
+                                            currency={
+                                                account.loan_account.account
+                                                    .currency
+                                            }
                                             schedule={
                                                 row.schedules[
                                                     account.loan_account.id
