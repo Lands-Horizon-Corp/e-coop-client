@@ -1,51 +1,98 @@
-import { TEntityId } from '@/types'
+import { IAuditable, TEntityId } from '@/types'
 
 import { IUserOrganization } from '../user-organization'
+import { PERMISSION_BASE_ACTIONS } from './permission.constants'
 import {
     TPermission,
     TPermissionAction,
     TPermissionResource,
 } from './permission.types'
 
-export function hasPermission<TResourceData extends { id: TEntityId }>(
-    userOrg: IUserOrganization,
-    resourceType: TPermissionResource,
-    action: TPermissionAction,
+export interface IHasPermissionOpts<
+    TResourceData extends IAuditable = IAuditable,
+    TUser extends { user_id: TEntityId } = IUserOrganization,
+> {
+    userOrg?: TUser | null
+    resourceType: TPermissionResource
+    action: TPermissionAction
     resource?: TResourceData
-): boolean {
-    const generalPerm: TPermission = `${resourceType}:${action}` as TPermission
-    const ownPerm: TPermission = `${resourceType}:Own${action}` as TPermission
+}
 
-    if (userOrg.permissions.includes(generalPerm)) {
+export function hasPermission({
+    userOrg,
+    action,
+    resourceType,
+    resource,
+}: IHasPermissionOpts): boolean {
+    // NO user org, no permission by default
+    if (!userOrg) return false
+
+    // OWNER CAN DO ANYTHING
+    if (userOrg.user_type === 'owner') {
         return true
     }
 
+    // CHECKS IF IT OWNS THE RESOURCE(DATA), THIS CHECKS THE CREATEOR USER ID VS RESOURCE CREATED BY ID
+    if (action.startsWith('Own')) {
+        const ownPerm = `${resourceType}:${action}` as TPermission
+
+        if (resource && userOrg.permissions.includes(ownPerm)) {
+            return resource.created_by_id === userOrg.user_id
+        }
+    }
+
+    // CHECKS IF THE PERMISSION EXISTS ON USER PERMISSIONS LIST
+    const generalPerm: TPermission = `${resourceType}:${action}` as TPermission
     if (
-        resource &&
-        userOrg.permissions.includes(ownPerm) &&
-        resource.id === userOrg.id
+        userOrg.permissions.includes(generalPerm) &&
+        !action.startsWith('Own')
     ) {
         return true
     }
 
+    // RETURN FALSE BY DEFAULT
     return false
 }
 
-export const getCrudPermissions = <TResourceData extends { id: TEntityId }>(
-    userOrg: IUserOrganization,
-    resourceType: TPermissionResource,
+// Extract only CRUD PERMS and returned as object of actions
+export interface GetCrudPermissionOpts<
+    TResourceData extends IAuditable = IAuditable,
+    TUser extends { user_id: TEntityId } = IUserOrganization,
+> {
+    userOrg?: TUser | null
+    resourceType: TPermissionResource
     resource?: TResourceData
-) => {
-    return {
-        create: hasPermission(userOrg, resourceType, 'Create', resource),
-        read: hasPermission(userOrg, resourceType, 'Read', resource),
-        update: hasPermission(userOrg, resourceType, 'Update', resource),
-        edit: hasPermission(userOrg, resourceType, 'Update', resource),
-        delete: hasPermission(userOrg, resourceType, 'Delete', resource),
-        export: hasPermission(userOrg, resourceType, 'Export', resource),
-    }
 }
 
+export const getCrudPermissions = ({
+    userOrg,
+    resourceType,
+    resource,
+}: GetCrudPermissionOpts): Record<TPermissionAction, boolean> => {
+    const CONSTRUCTED_PERMS = PERMISSION_BASE_ACTIONS.reduce(
+        (acc, action) => {
+            if (!userOrg) {
+                acc[action] = false
+                return acc
+            }
+
+            acc[action] = hasPermission({
+                userOrg,
+                resourceType,
+                action,
+                resource,
+            })
+
+            return acc
+        },
+        {} as Record<TPermissionAction, boolean>
+    )
+
+    return CONSTRUCTED_PERMS
+}
+
+// FOR HELPERS FOR CONVERTING PERMISSION STRING FROM SERVER TO
+// ARRAY OR BACK TO PERMISSION STRING
 export const permissionArrayToMap = (perms: string[]) => {
     return perms.reduce(
         (acc, perm) => {
@@ -59,6 +106,7 @@ export const permissionArrayToMap = (perms: string[]) => {
     )
 }
 
+// CONVERT ROLES BACK TO ARRAY PERMISSION
 export const permissionMapToPermissionArray = (
     value: Record<string, TPermissionAction[]>
 ) => {

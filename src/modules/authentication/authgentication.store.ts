@@ -5,6 +5,13 @@ import { IUserBase } from '@/modules/user'
 import { IUserOrganization } from '@/modules/user-organization'
 import { create } from 'zustand'
 
+import {
+    GetCrudPermissionOpts,
+    IHasPermissionOpts,
+    getCrudPermissions,
+    hasPermission,
+} from '../permission/permission.utils'
+
 type TAuthStoreStatus = 'loading' | 'authorized' | 'unauthorized' | 'error'
 
 interface UserAuthStore {
@@ -49,6 +56,28 @@ export const useAuthStore = create<UserAuthStore>((set) => ({
         })
     },
 }))
+
+// permission helper function utils
+// Why this is here, we want permission utils pure without coupled to this store
+// Purpose : hasPermission requires user org, but this function auto place user org
+export const hasPermissionFromAuth = ({
+    userOrg = useAuthStore.getState().currentAuth?.user_organization,
+    ...opts
+}: Omit<IHasPermissionOpts, 'userOrg'> & {
+    userOrg?: IHasPermissionOpts['userOrg']
+}) => {
+    return hasPermission({ userOrg, ...opts })
+}
+
+// SAME AS ABOVE
+export const getCrudPermissionFromAuthStore = ({
+    userOrg = useAuthStore.getState().currentAuth?.user_organization,
+    ...opts
+}: Omit<GetCrudPermissionOpts, 'userOrg'> & {
+    userOrg?: GetCrudPermissionOpts['userOrg']
+}) => {
+    return getCrudPermissions({ userOrg, ...opts })
+}
 
 // USE only kapag sure ka na user ay existing
 // ideal usage is in onboarding, since we dont care if nag eexist ang branch or organization sa authContext

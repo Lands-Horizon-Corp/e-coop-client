@@ -1,5 +1,9 @@
 import { describe, expect, it } from 'vitest'
 
+import {
+    PERMISSION_BASE_ACTIONS,
+    generateBaseAction,
+} from './permission.constants'
 import { TPermissionAction } from './permission.types'
 import {
     permissionArrayToMap,
@@ -67,5 +71,19 @@ describe('roundtrip', () => {
         }
         const back = permissionArrayToMap(permissionMapToPermissionArray(map))
         expect(back).toEqual(map)
+    })
+})
+
+describe('generateBaseAction', () => {
+    it('Should exclude "Create"', () => {
+        const result = generateBaseAction({ excludeActions: ['Create'] })
+        expect(result).toEqual(
+            PERMISSION_BASE_ACTIONS.filter((action) => action !== 'Create')
+        )
+    })
+
+    it('Should not exclude anything', () => {
+        const result = generateBaseAction()
+        expect(result).toEqual(PERMISSION_BASE_ACTIONS)
     })
 })

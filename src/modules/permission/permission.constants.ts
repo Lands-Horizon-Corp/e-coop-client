@@ -1,3 +1,6 @@
+import { TPermissionAction } from './permission.types'
+
+// BASE PERMISSION ACTIONS
 export const PERMISSION_BASE_ACTIONS = [
     'Create',
     'Read',
@@ -64,31 +67,202 @@ export const PERMISSION_ALL_ACTIONS: {
     },
 ] as const
 
+// ALL MODULES MODULES / ENTITY / MODEL are listed here.
+// Similar to Report module constant? No, this have modules that are ghost.
+// You can add more here
 export const PERMISSION_BASE_RESOURCE = [
+    'Account',
+    'AccountCategory',
+    'AccountClassification',
+    'AccountHistory',
+    'AccountTag',
+    'AccountTransaction',
+    'AccountTransactionEntry',
+    'AdjustmentEntry',
+    'AdjustmentEntryTag',
+    'Approvals',
+    'Authentication',
+    'AutomaticLoanDeduction',
+    'Bank',
+    'BatchFunding',
+    'BillAndCoins',
+    'Branch',
+    'BranchSettings',
+    'BrowseExcludeIncludeAccounts',
+    'BrowseReference',
+    'Calculator',
+    'CancelledCashCheckVoucher',
+    'CashCheckVoucher',
+    'CashCheckVoucherEntry',
+    'CashCheckVoucherTag',
+    'CashCount',
+    'Category',
+    'ChargesRateByRangeOrMinimumAmount',
+    'ChargesRateByTerm',
+    'ChargesRateScheme',
+    'ChargesRateSchemeAccount',
+    'ChargesRateSchemeModeOfPayment',
+    'CheckRemittance',
+    'Collateral',
+    'CollectorsMemberAccountEntry',
+    'ComakerCollateral',
+    'ComakerMemberProfile',
+    'Company',
+    'ComputationSheet',
+    'ComputationType',
+    'ContactUs',
+    'Currency',
+    'Dashboard',
+    'Developer',
+    'Disbursement',
+    'DisbursementTransaction',
+    'Employee',
+    'Explore',
+    'Feedback',
+    'FinancialStatementAccountGrouping',
+    'FinancialStatementDefinition',
+    'FinesMaturity',
+    'Footstep',
+    'Funds',
+    'GeneralAccountGroupingNetSurplusNegative',
+    'GeneralAccountGroupingNetSurplusPositive',
+    'GeneralAccountingLedgerTag',
+    'GeneralLedger',
+    'GeneralLedgerAccountGrouping',
+    'GeneralLedgerAccountsGrouping',
+    'GeneralLedgerDefinition',
+    'GeneratedReport',
+    'GeneratedReportsDownloadUsers',
+    'GeneratedSavingsInterest',
+    'GeneratedSavingsInterestEntry',
+    'GlFs',
+    'GroceryComputationSheet',
+    'GroceryComputationSheetMonthly',
+    'Heartbeat',
+    'Holiday',
+    'Home',
+    'IncludeNegativeAccounts',
+    'InterestMaturity',
+    'InterestRateByAmount',
+    'InterestRateByDate',
+    'InterestRateByTerm',
+    'InterestRateByTermsHeader',
+    'InterestRateByYear',
+    'InterestRatePercentage',
+    'InterestRateScheme',
+    'InvitationCode',
+    'JournalVoucher',
+    'JournalVoucherEntry',
+    'JournalVoucherTag',
+    'LoanAccount',
+    'LoanApproval',
+    'LoanAmortizationSchedule',
+    'LoanClearanceAnalysis',
+    'LoanClearanceAnalysisInstitution',
+    'LoanGuaranteedFund',
+    'LoanGuaranteedFundPerMonth',
+    'LoanGuide',
+    'LoanLedger',
+    'LoanPayment',
+    'LoanPurpose',
+    'LoanStatus',
+    'LoanTag',
+    'LoanTermsAndConditionAmountReceipt',
+    'LoanTermsAndConditionSuggestedPayment',
+    'LoanTransaction',
+    'LoanTransactionEntry',
+    'Media',
+    'MemberAccountingLedger',
+    'MemberAccountLedger',
+    'MemberAddress',
+    'MemberAsset',
+    'MemberBankCard',
+    'MemberCenter',
+    'MemberCenterHistory',
+    'MemberClassification',
+    'MemberClassificationHistory',
+    'MemberClassificationInterestRate',
+    'MemberCloseRemark',
+    'MemberContactReference',
+    'MemberDamayanExtensionEntry',
+    'MemberDeductionEntry',
+    'MemberDepartment',
+    'MemberDepartmentHistory',
+    'MemberDescriptionSchema',
+    'MemberEducationalAttainment',
+    'MemberExpense',
+    'MemberGender',
+    'MemberGenderHistory',
+    'MemberGovernmentBenefit',
+    'MemberGroup',
+    'MemberGroupHistory',
+    'MemberIncome',
+    'MemberJointAccount',
+    'MemberMutualFundHistory',
+    'MemberOccupation',
+    'MemberOccupationHistory',
+    'MemberOtherInformationEntry',
+    'MemberProfile',
+    'MemberProfileArchive',
+    'MemberProfileMedia',
+    'MemberRecruits',
+    'MemberRelativeAccount',
+    'MemberType',
+    'MemberTypeHistory',
+    'MemberUserAccount',
+    'MemberVerification',
+    'MutualFund',
+    'MutualFundAdditionalMembers',
+    'MutualFundEntry',
+    'MutualFundTable',
+    'Notification',
+    'OnlineRemittance',
+    'Organization',
+    'OrganizationCategory',
+    'OrganizationDailyUsage',
+    'OrganizationMedia',
+    'OrgnaizationDailyUsage',
+    'PaymentType',
+    'Permission',
+    'PermissionTemplate',
+    'PostDatedCheck',
+    'QrCrypto',
+    'QuickTransfer',
+    'Settings',
+    'SubscriptionPlan',
+    'TagTemplate',
+    'TimeDepositComputation',
+    'TimeDepositComputationPreMature',
+    'TimeDepositType',
+    'Timesheet',
+    'Transaction',
+    'TransactionBatch',
+    'Transactions',
+    'TransactionTag',
+    'UnbalanceAccount',
     'User',
     'UserOrganization',
-    'MemberType',
-    'MemberGroup',
-    'MemberCenter',
-    'MemberGender',
-    'MemberOccupation',
-    'MemberClassification',
-    'MemberProfile',
-    'Banks',
-    'Holidays',
-    'BillsAndCoin',
-    'Loan',
-    'LoanStatus',
-    'LoanPurpose',
-    'TransactionBatch',
-    'InvitationCode',
-    'Timesheet',
-    'Footstep',
-    'Approvals',
+    'UserProfile',
+    'UserRating',
+    'VoucherPayTo',
+    'none',
 ] as const
 
+// DONT EXPORT THIS, THIS ONLY USED HERE, USE INSTEAD FROM TYPES > TPermissionAction
 type ActionType = (typeof PERMISSION_ALL_ACTIONS)[number]['action']
 
+export const generateBaseAction = ({
+    excludeActions = [],
+}: {
+    excludeActions?: TPermissionAction[]
+} = {}) => {
+    return PERMISSION_BASE_ACTIONS.filter(
+        (val) => !excludeActions?.includes(val)
+    )
+}
+
+// MAPPING OF ALL PERMISSION RESOURCE ACTIONS
+// YOU CAN ALSO FILTERED OUT ACTIONS FOR THE RESOURCE
 export const PERMISSION_ALL_RESOURCE_ACTION: {
     resource: (typeof PERMISSION_BASE_RESOURCE)[number]
     label: string
@@ -96,179 +270,117 @@ export const PERMISSION_ALL_RESOURCE_ACTION: {
     supportedActions: ActionType[]
 }[] = [
     {
-        resource: 'MemberType',
-        label: 'Member Type',
-        description: 'Classification type for members',
-        supportedActions: [
-            ...PERMISSION_BASE_ACTIONS.filter(
-                (val) => !['Approve'].includes(val)
-            ),
-        ],
+        resource: 'Account',
+        label: 'Account Module',
+        description: 'Accounts',
+        supportedActions: generateBaseAction({ excludeActions: ['Approve'] }),
     },
     {
-        resource: 'MemberGroup',
-        label: 'Member Group',
-        description: 'Groupings of members',
-        supportedActions: [
-            ...PERMISSION_BASE_ACTIONS.filter(
-                (val) => !['Approve'].includes(val)
-            ),
-        ],
+        resource: 'AccountCategory',
+        label: 'Account Category Module',
+        description: 'Manage Account Categories',
+        supportedActions: generateBaseAction({ excludeActions: ['Approve'] }),
     },
-    {
-        resource: 'MemberCenter',
-        label: 'Member Center',
-        description: 'Centers associated with members',
-        supportedActions: [
-            ...PERMISSION_BASE_ACTIONS.filter(
-                (val) => !['Approve'].includes(val)
-            ),
-        ],
-    },
-    {
-        resource: 'MemberGender',
-        label: 'Member Gender',
-        description: 'Gender classification for members',
-        supportedActions: [
-            ...PERMISSION_BASE_ACTIONS.filter(
-                (val) => !['Approve'].includes(val)
-            ),
-        ],
-    },
-    {
-        resource: 'MemberOccupation',
-        label: 'Member Occupation',
-        description: 'Occupational classification for members',
-        supportedActions: [
-            ...PERMISSION_BASE_ACTIONS.filter(
-                (val) => !['Approve'].includes(val)
-            ),
-        ],
-    },
-    {
-        resource: 'MemberClassification',
-        label: 'Member Classification',
-        description: 'General classification for members',
-        supportedActions: [
-            ...PERMISSION_BASE_ACTIONS.filter(
-                (val) => !['Approve'].includes(val)
-            ),
-        ],
-    },
-    {
-        resource: 'MemberProfile',
-        label: 'Member Profile',
-        description: 'Profile details of a member',
-        supportedActions: [
-            ...PERMISSION_BASE_ACTIONS.filter(
-                (val) => !['Approve'].includes(val)
-            ),
-        ],
-    },
-    {
-        resource: 'Approvals',
-        description: 'Approve requests',
-        label: 'Approval',
-        supportedActions: ['Read', 'Approve'],
-    },
-    {
-        resource: 'Banks',
-        label: 'Banks',
-        description: 'Bank-related resources',
-        supportedActions: [
-            ...PERMISSION_BASE_ACTIONS.filter(
-                (val) => !['Approve'].includes(val)
-            ),
-        ],
-    },
-    {
-        resource: 'Holidays',
-        label: 'Holidays',
-        description: 'Holiday schedules and information',
-        supportedActions: [
-            ...PERMISSION_BASE_ACTIONS.filter(
-                (val) => !['Approve'].includes(val)
-            ),
-        ],
-    },
-    {
-        resource: 'BillsAndCoin',
-        label: 'Bills And Coin',
-        description: 'Bills and coin denomination settings',
-        supportedActions: [
-            ...PERMISSION_BASE_ACTIONS.filter(
-                (val) => !['Approve'].includes(val)
-            ),
-        ],
-    },
-    {
-        resource: 'Loan',
-        label: 'Loan',
-        description: 'Loan details and management',
-        supportedActions: [
-            ...PERMISSION_BASE_ACTIONS.filter(
-                (val) => !['Approve'].includes(val)
-            ),
-        ],
-    },
-    {
-        resource: 'LoanStatus',
-        label: 'Loan Status',
-        description: 'Status information for loans',
-        supportedActions: [
-            ...PERMISSION_BASE_ACTIONS.filter(
-                (val) => !['Approve'].includes(val)
-            ),
-        ],
-    },
-    {
-        resource: 'LoanPurpose',
-        label: 'Loan Purpose',
-        description: 'Purpose classification for loans',
-        supportedActions: [
-            ...PERMISSION_BASE_ACTIONS.filter(
-                (val) => !['Approve'].includes(val)
-            ),
-        ],
-    },
-    {
-        resource: 'TransactionBatch',
-        label: 'Transaction Batch',
-        description: 'Batch processing for transactions',
-        supportedActions: [
-            ...PERMISSION_BASE_ACTIONS.filter(
-                (val) => !['Approve'].includes(val)
-            ),
-        ],
-    },
-    {
-        resource: 'InvitationCode',
-        label: 'Invitation Code',
-        description: 'Codes for inviting new members/users',
-        supportedActions: [
-            ...PERMISSION_BASE_ACTIONS.filter(
-                (val) => !['Approve'].includes(val)
-            ),
-        ],
-    },
-    {
-        resource: 'Timesheet',
-        label: 'Timesheet',
-        description: 'Timesheet entries (time in/out)',
-        supportedActions: [
-            ...PERMISSION_BASE_ACTIONS.filter(
-                (val) => !['Approve'].includes(val)
-            ),
-        ],
-    },
-    {
-        resource: 'Footstep',
-        label: 'Footstep',
-        description: 'Footstep tracking',
-        supportedActions: [
-            ...PERMISSION_BASE_ACTIONS.filter(
-                (val) => !['Approve'].includes(val)
-            ),
-        ],
-    },
+    // {
+    //     resource: 'MemberGroup',
+    //     label: 'Member Group',
+    //     description: 'Groupings of members',
+    //     supportedActions: generateBaseAction({ excludeActions: ['Approve'] }),
+    // },
+    // {
+    //     resource: 'MemberCenter',
+    //     label: 'Member Center',
+    //     description: 'Centers associated with members',
+    //     supportedActions: generateBaseAction({ excludeActions: ['Approve'] }),
+    // },
+    // {
+    //     resource: 'MemberGender',
+    //     label: 'Member Gender',
+    //     description: 'Gender classification for members',
+    //     supportedActions: generateBaseAction({ excludeActions: ['Approve'] }),
+    // },
+    // {
+    //     resource: 'MemberOccupation',
+    //     label: 'Member Occupation',
+    //     description: 'Occupational classification for members',
+    //     supportedActions: generateBaseAction({ excludeActions: ['Approve'] }),
+    // },
+    // {
+    //     resource: 'MemberClassification',
+    //     label: 'Member Classification',
+    //     description: 'General classification for members',
+    //     supportedActions: generateBaseAction({ excludeActions: ['Approve'] }),
+    // },
+    // {
+    //     resource: 'MemberProfile',
+    //     label: 'Member Profile',
+    //     description: 'Profile details of a member',
+    //     supportedActions: generateBaseAction({ excludeActions: ['Approve'] }),
+    // },
+    // {
+    //     resource: 'Approvals',
+    //     description: 'Approve requests',
+    //     label: 'Approval',
+    //     supportedActions: ['Read', 'Approve'],
+    // },
+    // {
+    //     resource: 'Bank',
+    //     label: 'Banks',
+    //     description: 'Bank-related resources',
+    //     supportedActions: generateBaseAction({ excludeActions: ['Approve'] }),
+    // },
+    // {
+    //     resource: 'Holiday',
+    //     label: 'Holidays',
+    //     description: 'Holiday schedules and information',
+    //     supportedActions: generateBaseAction({ excludeActions: ['Approve'] }),
+    // },
+    // {
+    //     resource: 'BillAndCoins',
+    //     label: 'Bills And Coin',
+    //     description: 'Bills and coin denomination settings',
+    //     supportedActions: generateBaseAction({ excludeActions: ['Approve'] }),
+    // },
+    // {
+    //     resource: 'LoanApproval',
+    //     label: 'Loan',
+    //     description: 'Loan details and management',
+    //     supportedActions: generateBaseAction(),
+    // },
+    // {
+    //     resource: 'LoanStatus',
+    //     label: 'Loan Status',
+    //     description: 'Status information for loans',
+    //     supportedActions: generateBaseAction({ excludeActions: ['Approve'] }),
+    // },
+    // {
+    //     resource: 'LoanPurpose',
+    //     label: 'Loan Purpose',
+    //     description: 'Purpose classification for loans',
+    //     supportedActions: generateBaseAction({ excludeActions: ['Approve'] }),
+    // },
+    // {
+    //     resource: 'TransactionBatch',
+    //     label: 'Transaction Batch',
+    //     description: 'Batch processing for transactions',
+    //     supportedActions: generateBaseAction({ excludeActions: ['Approve'] }),
+    // },
+    // {
+    //     resource: 'InvitationCode',
+    //     label: 'Invitation Code',
+    //     description: 'Codes for inviting new members/users',
+    //     supportedActions: generateBaseAction({ excludeActions: ['Approve'] }),
+    // },
+    // {
+    //     resource: 'Timesheet',
+    //     label: 'Timesheet',
+    //     description: 'Timesheet entries (time in/out)',
+    //     supportedActions: generateBaseAction({ excludeActions: ['Approve'] }),
+    // },
+    // {
+    //     resource: 'Footstep',
+    //     label: 'Footstep',
+    //     description: 'Footstep tracking',
+    //     supportedActions: generateBaseAction({ excludeActions: ['Approve'] }),
+    // },
 ]

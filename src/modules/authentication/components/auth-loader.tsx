@@ -42,6 +42,8 @@ const AuthLoader = () => {
         [resetAuth, setAuthStatus]
     )
 
+    // TODO: Add subscribe to current auth user user_organization update
+
     useQeueryHookCallback({
         data,
         error,
