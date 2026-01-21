@@ -36,8 +36,11 @@ jobs:
             - name: 📦 Install dependencies
               run: bun install
 
-            - name: 🔍🧹 Code Check
-              run: bun run dick
+            - name: 🔍 Run ESLint
+              run: bun run lint
+
+            - name: 🧹 Run Prettier Check
+              run: bun run fc
 
             - name: 🧪 Run Tests
               run: bun vitest run
