@@ -74,7 +74,7 @@ export const PERMISSION_BASE_RESOURCE = [
     'Account',
     'AccountCategory',
     'AccountClassification',
-    'AccountHistory',
+    // 'AccountHistory',
     'AccountTag',
     'AccountTransaction',
     'AccountTransactionEntry',
@@ -280,6 +280,21 @@ export const PERMISSION_ALL_RESOURCE_ACTION: {
         label: 'Account Category Module',
         description: 'Manage Account Categories',
         supportedActions: generateBaseAction({ excludeActions: ['Approve'] }),
+    },
+    {
+        resource: 'AccountTag',
+        label: 'Tag of Account',
+        description: 'Manage Account Tag',
+        supportedActions: generateBaseAction({
+            excludeActions: [
+                'Approve',
+                'OwnDelete',
+                'OwnRead',
+                'OwnExport',
+                'OwnDelete',
+                'OwnUpdate',
+            ],
+        }),
     },
     // {
     //     resource: 'MemberGroup',

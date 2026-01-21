@@ -15,7 +15,10 @@ import {
 } from '@/modules/account'
 import AccountHistorySheet from '@/modules/account-history/forms/account-history-sheet'
 import { AccountTagsManagerPopover } from '@/modules/account-tag/components/account-tag-management'
-import { useAuthUserWithOrgBranch } from '@/modules/authentication/authgentication.store'
+import {
+    hasPermissionFromAuth,
+    useAuthUserWithOrgBranch,
+} from '@/modules/authentication/authgentication.store'
 
 import { LoadingSpinnerIcon } from '@/components/icons'
 import Modal, { IModalProps } from '@/components/modals/modal'
@@ -145,6 +148,10 @@ const AccountCreateUpdateForm = ({
                             />
                             <AccountTagsManagerPopover
                                 accountId={accountId}
+                                readOnly={hasPermissionFromAuth({
+                                    action: 'Create',
+                                    resourceType: 'AccountTag',
+                                })}
                                 size="sm"
                             />
                         </>
