@@ -28,8 +28,7 @@ import { useFormHelper } from '@/hooks/use-form-helper'
 import { IClassProps, IForm, TEntityId } from '@/types'
 
 export interface IChargeFormProps
-    extends
-        IClassProps,
+    extends IClassProps,
         IForm<
             Partial<ILoanTransactionEntry>,
             ILoanTransactionEntry,

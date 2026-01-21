@@ -42,7 +42,8 @@ import CashCheckJournalVoucherAction, {
 } from './row-action-context'
 
 export interface CashCheckJournalVoucherTableProps
-    extends TableProps<ICashCheckVoucher>, ICashCheckVoucherTableColumnProps {
+    extends TableProps<ICashCheckVoucher>,
+        ICashCheckVoucherTableColumnProps {
     toolbarProps?: Omit<
         IDataTableToolbarProps<ICashCheckVoucher>,
         | 'table'

@@ -40,8 +40,7 @@ import {
 } from './row-action-context'
 
 export interface DisbursementTransactionTableProps
-    extends
-        TableProps<IDisbursementTransaction>,
+    extends TableProps<IDisbursementTransaction>,
         IDisbursementTransactionTableColumnProps {
     toolbarProps?: Omit<
         IDataTableToolbarProps<IDisbursementTransaction>,

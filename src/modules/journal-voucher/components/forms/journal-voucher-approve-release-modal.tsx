@@ -31,7 +31,8 @@ import {
     JournalVoucherReleaseNoTransactionBatchDisplay,
 } from '../modal-displays/journal-voucher-release-invalid'
 
-export interface IJournalVoucherApproveReleaseDisplayModalProps extends IClassProps {}
+export interface IJournalVoucherApproveReleaseDisplayModalProps
+    extends IClassProps {}
 
 export type TJournalVoucherApproveReleaseDisplayMode =
     | 'approve'

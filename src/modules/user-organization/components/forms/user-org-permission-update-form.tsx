@@ -34,8 +34,7 @@ import {
 } from '../../user-organization.validation'
 
 export interface IUserOrgPermissionUpdateFormProps
-    extends
-        IClassProps,
+    extends IClassProps,
         IForm<
             Partial<IUserOrganizationPermissionRequest>,
             IUserOrganizationPermissionRequest,

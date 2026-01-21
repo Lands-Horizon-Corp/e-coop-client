@@ -31,8 +31,7 @@ type ILoanTermsAndConditionSuggestedPaymentForForm = z.infer<
 >
 
 export interface ILoanTermsAndConditionSuggestedPaymentFormProps
-    extends
-        IClassProps,
+    extends IClassProps,
         IForm<
             Partial<TLoanTermsAndConditionSuggestedPaymentFormValues>,
             ILoanTermsAndConditionSuggestedPaymentForForm,

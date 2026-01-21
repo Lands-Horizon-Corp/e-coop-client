@@ -21,10 +21,8 @@ import {
 import { HOME_TYPES } from '../member-address.constants'
 import { THomeType } from '../member-address.types'
 
-interface Props extends Omit<
-    React.ComponentPropsWithoutRef<'button'>,
-    'onChange'
-> {
+interface Props
+    extends Omit<React.ComponentPropsWithoutRef<'button'>, 'onChange'> {
     value?: THomeType
     disabled?: boolean
     className?: string

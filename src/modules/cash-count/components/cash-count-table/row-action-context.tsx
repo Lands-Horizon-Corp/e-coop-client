@@ -47,7 +47,8 @@ const useCashCountActions = ({ row }: UseCashCountActionsProps) => {
     }
 }
 
-interface ICashCountTableActionProps extends ICashCountTableActionComponentProp {
+interface ICashCountTableActionProps
+    extends ICashCountTableActionComponentProp {
     onCashCountUpdate?: () => void
     onDeleteSuccess?: () => void
 }

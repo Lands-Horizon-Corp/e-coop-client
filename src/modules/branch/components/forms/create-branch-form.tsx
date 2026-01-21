@@ -50,8 +50,7 @@ import { branchSchema } from '../../branch.validation'
 export type TBranchSchema = z.infer<typeof branchSchema>
 
 export interface ICreateBranchFormProps
-    extends
-        IClassProps,
+    extends IClassProps,
         IForm<Partial<TBranchSchema>, IBranch, string>,
         IModalProps {
     branchId?: TEntityId

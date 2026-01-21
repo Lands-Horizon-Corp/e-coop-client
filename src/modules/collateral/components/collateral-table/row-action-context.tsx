@@ -67,7 +67,8 @@ const useCollateralActions = ({
     }
 }
 
-interface ICollateralTableActionProps extends ICollateralTableActionComponentProp {
+interface ICollateralTableActionProps
+    extends ICollateralTableActionComponentProp {
     onCollateralUpdate?: () => void
     onDeleteSuccess?: () => void
 }
@@ -101,7 +102,8 @@ export const CollateralAction = ({
     )
 }
 
-interface ICollateralRowContextProps extends ICollateralTableActionComponentProp {
+interface ICollateralRowContextProps
+    extends ICollateralTableActionComponentProp {
     children?: ReactNode
     onDeleteSuccess?: () => void
 }

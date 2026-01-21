@@ -39,8 +39,7 @@ import { GeneratedReportFilter } from '../filters/report-filter'
 type TBankFormValues = z.infer<typeof GeneratedReportSchema>
 
 export interface IGeneratedReportFormProps<TData>
-    extends
-        IClassProps,
+    extends IClassProps,
         IForm<
             Partial<IGeneratedReportRequest>,
             IGeneratedReport,

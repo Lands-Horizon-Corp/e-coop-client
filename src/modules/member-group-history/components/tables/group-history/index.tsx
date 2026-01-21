@@ -35,7 +35,8 @@ import memberGroupHistoryColumns, {
 } from './columns'
 
 export interface MemberGroupHistoryTableProps
-    extends TableProps<IMemberGroupHistory>, IMemberGroupHistoryColumnProps {
+    extends TableProps<IMemberGroupHistory>,
+        IMemberGroupHistoryColumnProps {
     toolbarProps?: Omit<
         IDataTableToolbarProps<IMemberGroupHistory>,
         | 'table'

@@ -17,7 +17,9 @@ export interface IGeneralLedgerTagRequest {
 }
 
 export interface IGeneralLedgerTag
-    extends ITimeStamps, IAuditable, IOrgBranchIdentity {
+    extends ITimeStamps,
+        IAuditable,
+        IOrgBranchIdentity {
     id: TEntityId
     general_ledger_id: TEntityId
     general_ledger?: IGeneralLedgerTag

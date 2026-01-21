@@ -11,7 +11,9 @@ export interface IGroceryComputationSheetRequest {
 }
 
 export interface IGroceryComputationSheet
-    extends ITimeStamps, IAuditable, IOrgBranchIdentity {
+    extends ITimeStamps,
+        IAuditable,
+        IOrgBranchIdentity {
     id: TEntityId
     scheme_number: number
     description: string

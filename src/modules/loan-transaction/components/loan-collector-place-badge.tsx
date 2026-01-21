@@ -49,9 +49,8 @@ const iconSizeVariants = cva('flex-shrink-0', {
     },
 })
 
-interface LoanCollectorPlaceBadgeProps extends VariantProps<
-    typeof loanCollectorPlaceVariants
-> {
+interface LoanCollectorPlaceBadgeProps
+    extends VariantProps<typeof loanCollectorPlaceVariants> {
     collectorPlace: TLoanCollectorPlace
     className?: string
     showIcon?: boolean

@@ -29,8 +29,7 @@ type TComakerCollateralFormValues = TComakerCollateralSchema & {
 type IComakerCollateralForForm = z.infer<typeof ComakerCollateralSchema>
 
 export interface IComakerCollateralFormProps
-    extends
-        IClassProps,
+    extends IClassProps,
         IForm<
             Partial<TComakerCollateralFormValues>,
             IComakerCollateralForForm,

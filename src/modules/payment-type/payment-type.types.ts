@@ -31,4 +31,5 @@ export interface IPaymentTypeRequest {
     branch_id?: TEntityId
 }
 
-export interface IPaymentTypePaginatedResource extends IPaginatedResult<IPaymentType> {}
+export interface IPaymentTypePaginatedResource
+    extends IPaginatedResult<IPaymentType> {}

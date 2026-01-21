@@ -45,8 +45,7 @@ import { EmployeeCreateSchema } from '../../employee.validation'
 type TEmployeeCreateSchema = z.infer<typeof EmployeeCreateSchema>
 
 export interface IEmployeeCreateFormProps
-    extends
-        IClassProps,
+    extends IClassProps,
         IForm<
             Partial<IEmployeeCreateRequest>,
             IUserOrganization,

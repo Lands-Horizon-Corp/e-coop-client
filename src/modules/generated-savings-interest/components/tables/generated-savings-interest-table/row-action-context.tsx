@@ -167,7 +167,8 @@ const useGeneratedSavingsInterestActions = ({
     }
 }
 
-interface IGeneratedSavingsInterestTableActionProps extends IGeneratedSavingsInterestTableActionComponentProp {
+interface IGeneratedSavingsInterestTableActionProps
+    extends IGeneratedSavingsInterestTableActionComponentProp {
     onGeneratedSavingsInterestUpdate?: () => void
     onDeleteSuccess?: () => void
 }
@@ -243,7 +244,8 @@ export const GeneratedSavingsInterestAction = ({
     )
 }
 
-interface IGeneratedSavingsInterestRowContextProps extends IGeneratedSavingsInterestTableActionComponentProp {
+interface IGeneratedSavingsInterestRowContextProps
+    extends IGeneratedSavingsInterestTableActionComponentProp {
     children?: ReactNode
     onDeleteSuccess?: () => void
 }

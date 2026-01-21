@@ -18,4 +18,5 @@ export interface IAccountHistory extends IAccount {
 
 export type IAccountHistoryRequest = z.infer<typeof AccountHistorySchema>
 
-export interface IAccountHistoryPaginated extends IPaginatedResult<IAccountHistory> {}
+export interface IAccountHistoryPaginated
+    extends IPaginatedResult<IAccountHistory> {}

@@ -33,8 +33,7 @@ import { IClassProps, IForm, TEntityId } from '@/types'
 type TCashCheckVoucherFormValues = z.infer<typeof CashCheckVoucherSchema>
 
 export interface ICashCheckVoucherCreateUpdateFormProps
-    extends
-        IClassProps,
+    extends IClassProps,
         IForm<
             ICashCheckVoucher,
             ICashCheckVoucherRequest,

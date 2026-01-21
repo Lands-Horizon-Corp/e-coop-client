@@ -55,9 +55,8 @@ const loanApplicationStatusLabels = {
     released: 'Released',
 } as const
 
-export interface LoanApplicationStatusBadgeProps extends VariantProps<
-    typeof loanApplicationStatusVariants
-> {
+export interface LoanApplicationStatusBadgeProps
+    extends VariantProps<typeof loanApplicationStatusVariants> {
     className?: string
     showIcon?: boolean
     status: TLoanStatusType

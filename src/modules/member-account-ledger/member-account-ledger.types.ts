@@ -26,7 +26,8 @@ export interface IMemberAccountingLedger extends IBaseEntityMeta {
     hold_out?: string
 }
 
-export interface IMemberAccountingLedgerPaginated extends IPaginatedResult<IMemberAccountingLedger> {}
+export interface IMemberAccountingLedgerPaginated
+    extends IPaginatedResult<IMemberAccountingLedger> {}
 
 export interface IMemberAccountingLedgerTotal {
     total_share_capital_plus_fixed_savings: number

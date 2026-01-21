@@ -27,8 +27,7 @@ import { BankSchema } from '../../bank.validation'
 type TBankFormValues = z.infer<typeof BankSchema>
 
 export interface IBankFormProps
-    extends
-        IClassProps,
+    extends IClassProps,
         IForm<Partial<IBankRequest>, IBank, Error, TBankFormValues> {
     bankId?: TEntityId
 }

@@ -19,10 +19,8 @@ import {
     PopoverTrigger,
 } from '@/components/ui/popover'
 
-interface Props extends Omit<
-    React.ComponentPropsWithoutRef<'button'>,
-    'onChange'
-> {
+interface Props
+    extends Omit<React.ComponentPropsWithoutRef<'button'>, 'onChange'> {
     value?: TSex
     disabled?: boolean
     className?: string

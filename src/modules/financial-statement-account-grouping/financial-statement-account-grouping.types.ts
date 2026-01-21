@@ -3,7 +3,8 @@ import { IAuditable, ITimeStamps, TEntityId } from '@/types'
 import { IFinancialStatementDefinition } from '../financial-statement-definition'
 
 export interface IFinancialStatementAccountGrouping
-    extends IAuditable, ITimeStamps {
+    extends IAuditable,
+        ITimeStamps {
     id: TEntityId
 
     organization_id: TEntityId

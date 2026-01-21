@@ -216,7 +216,8 @@ export interface IGeneratedReportRequest {
 export interface IPFGeneratedReport extends IGeneratedReport {}
 export interface IExcelGeneratedReport extends IGeneratedReport {}
 
-export interface IGeneratedReportPaginated extends IPaginatedResult<IGeneratedReport> {}
+export interface IGeneratedReportPaginated
+    extends IPaginatedResult<IGeneratedReport> {}
 
 export interface IGeneratedReportUpdateRequest {
     name: string

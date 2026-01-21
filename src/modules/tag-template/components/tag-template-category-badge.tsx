@@ -122,9 +122,8 @@ const iconSizeVariants = cva('flex-shrink-0', {
     },
 })
 
-interface TagTemplateCategoryBadgeProps extends VariantProps<
-    typeof tagTemplateBadgeVariants
-> {
+interface TagTemplateCategoryBadgeProps
+    extends VariantProps<typeof tagTemplateBadgeVariants> {
     tagCategory: TTagCategory
     className?: string
     showIcon?: boolean

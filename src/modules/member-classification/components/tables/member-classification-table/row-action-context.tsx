@@ -70,7 +70,8 @@ const useMemberClassificationActions = ({
     }
 }
 
-interface IMemberClassificationTableActionProps extends IMemberClassificationTableActionComponentProp {
+interface IMemberClassificationTableActionProps
+    extends IMemberClassificationTableActionComponentProp {
     onDeleteSuccess?: () => void
 }
 
@@ -102,7 +103,8 @@ export const MemberClassificationAction = ({
     )
 }
 
-interface IMemberClassificationRowContextProps extends IMemberClassificationTableActionComponentProp {
+interface IMemberClassificationRowContextProps
+    extends IMemberClassificationTableActionComponentProp {
     children?: ReactNode
     onDeleteSuccess?: () => void
 }

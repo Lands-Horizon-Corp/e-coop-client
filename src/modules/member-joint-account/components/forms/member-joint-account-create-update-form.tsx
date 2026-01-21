@@ -34,8 +34,7 @@ import { MemberJointAccountSchema } from '../../member-joint-account.validation'
 type TMemberJointAccountFormValues = z.infer<typeof MemberJointAccountSchema>
 
 export interface IMemberJointAccountFormProps
-    extends
-        IClassProps,
+    extends IClassProps,
         IForm<
             Partial<IMemberJointAccount>,
             IMemberJointAccount,

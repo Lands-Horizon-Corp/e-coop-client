@@ -1,5 +1,6 @@
 import { mmddyyyy } from '@/helpers/date-utils'
 
+import { IBranchSettings } from '../branch-settings'
 import { IUserOrganization } from '../user-organization'
 
 export const receiptPrefix = (num: number): string => {
@@ -14,7 +15,7 @@ export const receiptPrefix = (num: number): string => {
     return chars.reverse().join('')
 }
 
-export const paymentORBuilder = (userOrg: IUserOrganization): string => {
+export const paymentORResolver = (userOrg: IUserOrganization): string => {
     const {
         payment_or_current,
         payment_padding,
@@ -31,4 +32,33 @@ export const paymentORBuilder = (userOrg: IUserOrganization): string => {
         )
     }
     return `${payment_prefix || ''}${receiptPrefix(payment_or_iteration)}${payment_or_current.toString().padStart(payment_padding, '0') || ''}`
+}
+
+export const quickPaymentORResolver = ({
+    type,
+    branchSetting,
+}: {
+    type: 'widthdraw' | 'deposit'
+    branchSetting: IBranchSettings
+}): string => {
+    if (type === 'widthdraw') {
+        const {
+            // withdraw_allow_user_input,
+            withdraw_prefix,
+            withdraw_or_start,
+            withdraw_or_current,
+            withdraw_or_end,
+            withdraw_or_iteration,
+            withdraw_use_date_or,
+            withdraw_padding,
+            // withdraw_common_or,
+        } = branchSetting
+
+        if (withdraw_use_date_or) {
+            return (withdraw_prefix || '') + mmddyyyy(new Date())
+        }
+
+        return `${withdraw_or_start + withdraw_prefix || ''}${receiptPrefix(withdraw_or_iteration)}${withdraw_or_current.toString().padStart(withdraw_padding, '0') || ''}${withdraw_or_end}`
+    }
+    return ''
 }

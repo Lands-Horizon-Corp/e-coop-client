@@ -14,7 +14,9 @@ export interface IInterestRateByTermRequest {
 }
 
 export interface IInterestRateByTerm
-    extends ITimeStamps, IAuditable, IOrgBranchIdentity {
+    extends ITimeStamps,
+        IAuditable,
+        IOrgBranchIdentity {
     id: TEntityId
     name: string
     descrition: string

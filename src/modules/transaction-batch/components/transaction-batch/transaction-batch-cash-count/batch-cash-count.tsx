@@ -35,8 +35,7 @@ import { IClassProps, IForm, TEntityId } from '@/types'
 type TFormValues = CashCountBatchFormValues
 
 export interface IBatchCashCountFormProps
-    extends
-        IClassProps,
+    extends IClassProps,
         IForm<
             Partial<ICashCountBatchRequest>,
             ICashCount[],

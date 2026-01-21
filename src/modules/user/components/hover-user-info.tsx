@@ -25,7 +25,7 @@ const HoveruserInfo = ({ userId, defaultValue }: Props) => {
     })
 
     return (
-        <Card className="w-full max-w-sm rounded-2xl bg-popover text-white">
+        <Card className="w-full max-w-sm rounded-2xl bg-background text-white">
             <CardContent className="p-4">
                 {!user && isPending && <LoadingSpinner />}
 

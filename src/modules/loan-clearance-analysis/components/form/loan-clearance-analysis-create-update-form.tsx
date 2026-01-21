@@ -28,8 +28,7 @@ type TLoanClearanceAnalysisFormValues = TLoanClearanceAnalysisSchema & {
 type ILoanClearanceAnalysis = TLoanClearanceAnalysisFormValues
 
 export interface ILoanClearanceAnalysisFormProps
-    extends
-        IClassProps,
+    extends IClassProps,
         IForm<
             Partial<TLoanClearanceAnalysisFormValues>,
             ILoanClearanceAnalysis,

@@ -37,8 +37,7 @@ import {
 import IncludeNegativeAccountColumns from './columns'
 
 export interface Props
-    extends
-        TableProps<IIncludeNegativeAccounts>,
+    extends TableProps<IIncludeNegativeAccounts>,
         IIncludeNegativeAccountTableColumnProps {
     toolbarProps?: Omit<
         IDataTableToolbarProps<IIncludeNegativeAccounts>,

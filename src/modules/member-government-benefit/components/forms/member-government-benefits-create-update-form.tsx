@@ -40,8 +40,7 @@ type TMemberGovernmentBenefitFormValues = z.infer<
 >
 
 export interface IMemberGovernmentBenefitFormProps
-    extends
-        IClassProps,
+    extends IClassProps,
         IForm<
             Partial<IMemberGovernmentBenefit>,
             IMemberGovernmentBenefit,

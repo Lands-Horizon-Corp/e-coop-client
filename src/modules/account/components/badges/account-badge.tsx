@@ -26,9 +26,8 @@ const accountBadgeVariants = cva(
     }
 )
 
-export interface AccountBadgeProps extends VariantProps<
-    typeof accountBadgeVariants
-> {
+export interface AccountBadgeProps
+    extends VariantProps<typeof accountBadgeVariants> {
     className?: string
     icon: TIcon
     name: string

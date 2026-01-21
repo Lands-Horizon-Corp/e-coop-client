@@ -29,8 +29,7 @@ import { BillsAndCoinSchema } from '../bill-and-coins.validation'
 type TBillsAndCoinSchema = z.infer<typeof BillsAndCoinSchema>
 
 export interface IBillsAndCoinFormProps
-    extends
-        IClassProps,
+    extends IClassProps,
         IForm<
             Partial<IBillsAndCoinRequest>,
             IBillsAndCoin,

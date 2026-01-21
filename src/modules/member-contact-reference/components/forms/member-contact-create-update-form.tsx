@@ -32,8 +32,7 @@ type TMemberContactReferenceFormValues = z.infer<
 >
 
 export interface IMemberContactReferenceFormProps
-    extends
-        IClassProps,
+    extends IClassProps,
         IForm<
             Partial<IMemberContactReference>,
             IMemberContactReference,

@@ -4,10 +4,8 @@ import { IDetectedBarcode, IScannerProps } from '@yudiel/react-qr-scanner'
 export interface IQrScannerProps extends IScannerProps {}
 
 // Scanne component desu (with decoding support)
-export interface IQrCodeScannerProps<T, Err> extends Omit<
-    IQrScannerProps,
-    'onScan'
-> {
+export interface IQrCodeScannerProps<T, Err>
+    extends Omit<IQrScannerProps, 'onScan'> {
     disableDecode?: boolean
     pauseOnDecoding?: boolean
     onErrorDecode?: (error: Err) => void

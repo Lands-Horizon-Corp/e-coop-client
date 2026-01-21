@@ -21,7 +21,9 @@ export interface IMemberClassificationInterestRateRequest {
 }
 
 export interface IMemberClassificationInterestRate
-    extends ITimeStamps, IAuditable, IOrgBranchIdentity {
+    extends ITimeStamps,
+        IAuditable,
+        IOrgBranchIdentity {
     id: TEntityId
     name: string
     description: string

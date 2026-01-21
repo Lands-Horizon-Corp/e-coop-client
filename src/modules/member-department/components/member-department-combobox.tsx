@@ -35,15 +35,14 @@ import {
     TMemberDepartmentFormValues,
 } from './member-department-create-update-form'
 
-export interface IMemberDepartmentComboboxCreateProps extends Pick<
-    TMemberDepartmentFormValues,
-    'name' | 'description' | 'icon'
-> {}
+export interface IMemberDepartmentComboboxCreateProps
+    extends Pick<
+        TMemberDepartmentFormValues,
+        'name' | 'description' | 'icon'
+    > {}
 
-interface Props extends Omit<
-    React.ComponentPropsWithoutRef<'button'>,
-    'onChange'
-> {
+interface Props
+    extends Omit<React.ComponentPropsWithoutRef<'button'>, 'onChange'> {
     value?: TEntityId
     disabled?: boolean
     className?: string

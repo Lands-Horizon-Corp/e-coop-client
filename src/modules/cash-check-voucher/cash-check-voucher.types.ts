@@ -221,4 +221,5 @@ export type TCashCheckSignatureRequest = z.infer<
 export type TCashCheckVoucherPrintRequest = z.infer<
     typeof CashCheckVoucherPrintSchema
 >
-export interface ICashCheckVoucherPaginated extends IPaginatedResult<ICashCheckVoucher> {}
+export interface ICashCheckVoucherPaginated
+    extends IPaginatedResult<ICashCheckVoucher> {}

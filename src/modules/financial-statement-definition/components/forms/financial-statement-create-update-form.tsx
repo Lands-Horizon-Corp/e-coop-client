@@ -39,8 +39,7 @@ import { useFormHelper } from '@/hooks/use-form-helper'
 import { IClassProps, IForm, TEntityId } from '@/types'
 
 interface IFinancialStatementCreateUpdateFormProps
-    extends
-        IClassProps,
+    extends IClassProps,
         IForm<
             Partial<IFinancialStatementDefinitionRequest>,
             IFinancialStatementDefinition,

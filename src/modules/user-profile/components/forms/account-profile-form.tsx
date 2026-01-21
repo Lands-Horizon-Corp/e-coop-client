@@ -26,7 +26,8 @@ import { UserProfileSchema } from '../../user-profile.validation'
 type TAccountProfileFormValues = z.infer<typeof UserProfileSchema>
 
 export interface IAccountProfileFormProps
-    extends IClassProps, IForm<Partial<TAccountProfileFormValues>, IUserBase> {}
+    extends IClassProps,
+        IForm<Partial<TAccountProfileFormValues>, IUserBase> {}
 
 const AccountProfileForm = ({
     className,

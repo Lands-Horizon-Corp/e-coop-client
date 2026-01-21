@@ -33,9 +33,8 @@ const accountTypeBadgeVariants = cva(
     }
 )
 
-interface AccountTypeBadgeProps extends VariantProps<
-    typeof accountTypeBadgeVariants
-> {
+interface AccountTypeBadgeProps
+    extends VariantProps<typeof accountTypeBadgeVariants> {
     type: TAccountType
     className?: string
     description?: string

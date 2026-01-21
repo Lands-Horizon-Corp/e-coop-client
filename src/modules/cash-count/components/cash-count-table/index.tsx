@@ -35,7 +35,8 @@ import CashCountAction, {
 } from './row-action-context'
 
 export interface CashCountTableProps
-    extends TableProps<ICashCount>, ICashCountTableColumnProps {
+    extends TableProps<ICashCount>,
+        ICashCountTableColumnProps {
     toolbarProps?: Omit<
         IDataTableToolbarProps<ICashCount>,
         | 'table'

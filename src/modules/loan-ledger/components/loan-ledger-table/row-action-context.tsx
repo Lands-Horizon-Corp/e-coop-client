@@ -81,7 +81,8 @@ export const LoanLedgerAction = ({
     )
 }
 
-export interface ILoanLedgerRowContextProps extends ILoanLedgerTableActionComponentProp {}
+export interface ILoanLedgerRowContextProps
+    extends ILoanLedgerTableActionComponentProp {}
 
 export const LoanLedgerRowContext = ({
     row,

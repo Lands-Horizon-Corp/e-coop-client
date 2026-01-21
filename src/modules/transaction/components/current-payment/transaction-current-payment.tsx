@@ -24,7 +24,7 @@ import { useQeueryHookCallback } from '@/hooks/use-query-hook-cb'
 import { TEntityId } from '@/types'
 
 import { ITransaction, ReferenceNumberSchema } from '../..'
-import { paymentORBuilder } from '../../transaction.utils'
+import { paymentORResolver } from '../../transaction.utils'
 import TransactionHistory from '../history'
 import ReferenceNumber from '../input/transaction-reference-number-field'
 import TransactionCurrentPaymentItem from './transaction-current-payment-item'
@@ -128,7 +128,7 @@ const TransactionCurrentPaymentEntry = ({
                                                     if (value) {
                                                         form.setValue(
                                                             'reference_number',
-                                                            paymentORBuilder(
+                                                            paymentORResolver(
                                                                 userOrganization
                                                             )
                                                         )

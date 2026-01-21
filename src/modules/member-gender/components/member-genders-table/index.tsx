@@ -38,7 +38,8 @@ import MemberGenderAction, {
 } from './row-action-context'
 
 export interface MemberGenderTableProps
-    extends TableProps<IMemberGender>, IMemberGenderTableColumnProps {
+    extends TableProps<IMemberGender>,
+        IMemberGenderTableColumnProps {
     toolbarProps?: Omit<
         IDataTableToolbarProps<IMemberGender>,
         | 'table'

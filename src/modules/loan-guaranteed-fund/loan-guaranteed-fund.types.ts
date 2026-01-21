@@ -11,7 +11,9 @@ export interface ILoanGuaranteedFundRequest {
 }
 
 export interface ILoanGuaranteedFund
-    extends ITimeStamps, IAuditable, IOrgBranchIdentity {
+    extends ITimeStamps,
+        IAuditable,
+        IOrgBranchIdentity {
     id: TEntityId
     scheme_number: number
     increasing_rate: number

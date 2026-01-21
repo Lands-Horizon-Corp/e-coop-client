@@ -35,8 +35,7 @@ import {
 } from '../../account-tag.validation'
 
 export interface AccountTagFormProps
-    extends
-        IClassProps,
+    extends IClassProps,
         IForm<
             Partial<IAccounTagRequest>,
             IAccountTag,

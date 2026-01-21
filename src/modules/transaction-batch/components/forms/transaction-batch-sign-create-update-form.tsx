@@ -157,8 +157,7 @@ const Steps: Step[] = [
 ]
 
 export interface ITransactionBatchSignFormProps
-    extends
-        IClassProps,
+    extends IClassProps,
         IForm<
             Partial<ITransactionBatchSignatures>,
             ITransactionBatchSignatures,

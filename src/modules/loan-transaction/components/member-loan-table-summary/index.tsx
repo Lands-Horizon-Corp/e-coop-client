@@ -36,7 +36,8 @@ import {
 import MemberLoanTableSummaryColumns from './columns'
 
 export interface TMemberLoanTableSummaryProps
-    extends TableProps<ILoanTransaction>, IMemberLoanTableSummaryColumnProps {
+    extends TableProps<ILoanTransaction>,
+        IMemberLoanTableSummaryColumnProps {
     toolbarProps?: Omit<
         IDataTableToolbarProps<ILoanTransaction>,
         | 'table'

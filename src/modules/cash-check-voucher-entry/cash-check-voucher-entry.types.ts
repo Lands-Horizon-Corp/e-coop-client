@@ -29,4 +29,5 @@ export interface ICashCheckVoucherEntry extends IBaseEntityMeta {
 
 export type ICashCheckVoucherEntryRequest = TCashCheckVoucherEntrySchema
 
-export interface ICashCheckVoucherEntryPaginated extends IPaginatedResult<ICashCheckVoucherEntry> {}
+export interface ICashCheckVoucherEntryPaginated
+    extends IPaginatedResult<ICashCheckVoucherEntry> {}

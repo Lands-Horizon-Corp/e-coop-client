@@ -65,7 +65,8 @@ const useMemberGenderActions = ({
     }
 }
 
-interface IMemberGenderTableActionProps extends IMemberGenderTableActionComponentProp {
+interface IMemberGenderTableActionProps
+    extends IMemberGenderTableActionComponentProp {
     onDeleteSuccess?: () => void
 }
 
@@ -97,7 +98,8 @@ export const MemberGenderAction = ({
     )
 }
 
-interface IMemberGenderRowContextProps extends IMemberGenderTableActionComponentProp {
+interface IMemberGenderRowContextProps
+    extends IMemberGenderTableActionComponentProp {
     children?: ReactNode
     onDeleteSuccess?: () => void
 }

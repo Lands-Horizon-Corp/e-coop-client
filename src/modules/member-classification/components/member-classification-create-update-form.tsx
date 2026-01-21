@@ -28,8 +28,7 @@ import { MemberClassificationSchema } from '../member-classification.validation'
 type TMemberClassificationForm = z.infer<typeof MemberClassificationSchema>
 
 export interface IMemberClassificationCreateUpdateFormProps
-    extends
-        IClassProps,
+    extends IClassProps,
         IForm<Partial<IMemberClassificationRequest>, IMemberClassification> {
     memberClassificationId?: TEntityId
 }

@@ -16,7 +16,9 @@ export interface IGeneralAccountGroupingNetSurplusPositiveRequest {
 }
 
 export interface IGeneralAccountGroupingNetSurplusPositive
-    extends ITimeStamps, IAuditable, IOrgBranchIdentity {
+    extends ITimeStamps,
+        IAuditable,
+        IOrgBranchIdentity {
     id: TEntityId
     account_id: TEntityId
     account?: IAccount

@@ -38,7 +38,8 @@ import {
 } from './row-action-context'
 
 export interface MemberCenterTableProps
-    extends TableProps<IMemberCenter>, IMemberCenterTableColumnProps {
+    extends TableProps<IMemberCenter>,
+        IMemberCenterTableColumnProps {
     toolbarProps?: Omit<
         IDataTableToolbarProps<IMemberCenter>,
         | 'table'

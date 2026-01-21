@@ -37,8 +37,7 @@ import {
 } from '../permission-template.validation'
 
 export interface IPermissionTemplateFormProps
-    extends
-        IClassProps,
+    extends IClassProps,
         IForm<Partial<IPermissionTemplateRequest>, IPermissionTemplate, Error> {
     permissionTemplateId?: TEntityId
 }

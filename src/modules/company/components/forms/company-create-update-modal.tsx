@@ -27,8 +27,7 @@ import { CompanySchema } from '../../company.validation'
 type TCompanyFormValues = z.infer<typeof CompanySchema>
 
 export interface ICompanyFormProps
-    extends
-        IClassProps,
+    extends IClassProps,
         IForm<Partial<ICompanyRequest>, ICompany, Error, TCompanyFormValues> {
     companyId?: TEntityId
 }

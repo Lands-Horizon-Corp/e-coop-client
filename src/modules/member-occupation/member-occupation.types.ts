@@ -22,4 +22,5 @@ export interface IMemberOccupation extends ITimeStamps, IAuditable {
 
 export type IMemberOccupationRequest = z.infer<typeof MemberOccupationSchema>
 
-export interface IMemberOccupationPaginated extends IPaginatedResult<IMemberOccupation> {}
+export interface IMemberOccupationPaginated
+    extends IPaginatedResult<IMemberOccupation> {}

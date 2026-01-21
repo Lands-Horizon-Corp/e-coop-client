@@ -37,8 +37,7 @@ import { OnlineRemittanceSchema } from '../../online-remittance.validation'
 type TFormValues = z.infer<typeof OnlineRemittanceSchema>
 
 export interface IOnlineRemittanceFormProps
-    extends
-        IClassProps,
+    extends IClassProps,
         IForm<
             Partial<IOnlineRemittanceRequest>,
             IOnlineRemittance,

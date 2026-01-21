@@ -14,7 +14,9 @@ interface MapStoreActions {
 }
 
 interface MapStoreProps
-    extends MapStoreState, MapStoreActions, MapContainerProps {}
+    extends MapStoreState,
+        MapStoreActions,
+        MapContainerProps {}
 
 export const useMapStore = create<MapStoreProps>()((set) => ({
     setMarkerPosition: (nextPosition) =>

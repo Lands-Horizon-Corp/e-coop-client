@@ -47,4 +47,5 @@ export interface IInvitationCodeRequest {
     description: string
 }
 
-export interface IInvitationCodePaginated extends IPaginatedResult<IInvitationCode> {}
+export interface IInvitationCodePaginated
+    extends IPaginatedResult<IInvitationCode> {}

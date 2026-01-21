@@ -50,7 +50,8 @@ const useGeneralLedgerRunningActions = ({
     }
 }
 
-interface IGeneralLedgerTableActionProps extends IGeneralLedgerTableActionComponentProp {
+interface IGeneralLedgerTableActionProps
+    extends IGeneralLedgerTableActionComponentProp {
     onDeleteSuccess?: () => void
 }
 
@@ -79,7 +80,8 @@ export const GeneralLedgerRunningAction = ({
     )
 }
 
-interface IGeneralLedgerRowContextProps extends IGeneralLedgerTableActionComponentProp {
+interface IGeneralLedgerRowContextProps
+    extends IGeneralLedgerTableActionComponentProp {
     children?: ReactNode
     onDeleteSuccess?: () => void
 }

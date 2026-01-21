@@ -11,7 +11,9 @@ export interface ILoanGuaranteedFundPerMonthRequest {
 }
 
 export interface ILoanGuaranteedFundPerMonth
-    extends ITimeStamps, IAuditable, IOrgBranchIdentity {
+    extends ITimeStamps,
+        IAuditable,
+        IOrgBranchIdentity {
     id: TEntityId
     month: number
     loan_guaranteed_fund: number

@@ -16,4 +16,5 @@ export interface IMemberGroupHistory extends IBaseEntityMeta {
     member_group?: IMemberGroup
 }
 
-export interface IMemberGroupHistoryPaginated extends IPaginatedResult<IMemberGroupHistory> {}
+export interface IMemberGroupHistoryPaginated
+    extends IPaginatedResult<IMemberGroupHistory> {}

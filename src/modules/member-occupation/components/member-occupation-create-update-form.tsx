@@ -27,8 +27,7 @@ import { MemberOccupationSchema } from '../member-occupation.validation'
 type TMemberOccupationForm = z.infer<typeof MemberOccupationSchema>
 
 export interface IMemberOccupationCreateUpdateFormProps
-    extends
-        IClassProps,
+    extends IClassProps,
         IForm<Partial<IMemberOccupationRequest>, IMemberOccupation> {
     memberOccupationId?: TEntityId
 }

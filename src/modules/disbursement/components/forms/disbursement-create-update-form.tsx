@@ -30,8 +30,7 @@ import { DisbursementSchema } from '../../disbursement.validation'
 type TDisbursementSchema = z.infer<typeof DisbursementSchema>
 
 export interface IDisbursementFormProps
-    extends
-        IClassProps,
+    extends IClassProps,
         IForm<
             Partial<IDisbursementRequest>,
             IDisbursement,

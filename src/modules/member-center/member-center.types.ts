@@ -18,4 +18,5 @@ export interface IMemberCenter extends ITimeStamps, IAuditable {
     description: string
 }
 
-export interface IMemberCenterPaginated extends IPaginatedResult<IMemberCenter> {}
+export interface IMemberCenterPaginated
+    extends IPaginatedResult<IMemberCenter> {}

@@ -67,7 +67,8 @@ const useMemberOccupationActions = ({
     }
 }
 
-interface IMemberOccupationTableActionProps extends IMemberOccupationTableActionComponentProp {
+interface IMemberOccupationTableActionProps
+    extends IMemberOccupationTableActionComponentProp {
     onMemberOccupationUpdate?: () => void
     onDeleteSuccess?: () => void
 }
@@ -101,7 +102,8 @@ export const MemberOccupationAction = ({
     )
 }
 
-interface IMemberOccupationRowContextProps extends IMemberOccupationTableActionComponentProp {
+interface IMemberOccupationRowContextProps
+    extends IMemberOccupationTableActionComponentProp {
     children?: ReactNode
     onDeleteSuccess?: () => void
 }

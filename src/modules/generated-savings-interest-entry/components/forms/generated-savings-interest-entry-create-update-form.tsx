@@ -33,8 +33,7 @@ type TGeneratedSavingsInterestEntrySchema = z.infer<
 >
 
 export interface IGeneratedSavingsInterestEntryFormProps
-    extends
-        IClassProps,
+    extends IClassProps,
         IForm<
             Partial<IGeneratedSavingsInterestEntryRequest>,
             IGeneratedSavingsInterestEntry,

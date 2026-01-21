@@ -16,4 +16,5 @@ export interface IMemberGenderHistory extends IBaseEntityMeta {
     member_gender?: IMemberGender
 }
 
-export interface IMemberGenderHistoryPaginated extends IPaginatedResult<IMemberGenderHistory> {}
+export interface IMemberGenderHistoryPaginated
+    extends IPaginatedResult<IMemberGenderHistory> {}

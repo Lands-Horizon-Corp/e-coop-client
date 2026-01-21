@@ -15,7 +15,9 @@ export interface IMemberOccupationHistoryRequest {
 }
 
 export interface IMemberOccupationHistory
-    extends ITimeStamps, IAuditable, IOrgBranchIdentity {
+    extends ITimeStamps,
+        IAuditable,
+        IOrgBranchIdentity {
     id: TEntityId
     member_profile_id: TEntityId
     member_profile?: IMemberProfile
@@ -23,4 +25,5 @@ export interface IMemberOccupationHistory
     member_occupation?: IMemberOccupation
 }
 
-export interface IMemberOccupationHistoryPaginated extends IPaginatedResult<IMemberOccupationHistory> {}
+export interface IMemberOccupationHistoryPaginated
+    extends IPaginatedResult<IMemberOccupationHistory> {}

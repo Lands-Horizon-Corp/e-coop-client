@@ -24,8 +24,7 @@ import {
 } from '../../loan-transaction.validation'
 
 export interface ILoanSuggestedAmortizationFormProps
-    extends
-        IClassProps,
+    extends IClassProps,
         IForm<
             Partial<TLoanTransactionSuggestedSchema>,
             ILoanTransactionSuggested,

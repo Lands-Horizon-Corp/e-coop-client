@@ -40,8 +40,7 @@ import { ComputationSheetSchema } from '../../computation-sheet.validation'
 type TFormValues = z.infer<typeof ComputationSheetSchema>
 
 export interface IComputationSheetFormProps
-    extends
-        IClassProps,
+    extends IClassProps,
         IForm<Partial<IComputationSheetRequest>, IComputationSheet, Error> {
     computationSheetId?: TEntityId
 }

@@ -41,8 +41,7 @@ import { useModalState } from '@/hooks/use-modal-state'
 import { IClassProps, IForm, TEntityId } from '@/types'
 
 export interface InvitationCodeFormProps
-    extends
-        IClassProps,
+    extends IClassProps,
         IForm<
             Partial<TInvitationCodeFormValues>,
             IInvitationCode,

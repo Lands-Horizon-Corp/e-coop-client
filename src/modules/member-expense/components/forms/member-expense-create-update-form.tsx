@@ -29,8 +29,7 @@ import { MemberExpenseSchema } from '../../member-expense.validation'
 type TMemberExpenseFormValues = z.infer<typeof MemberExpenseSchema>
 
 export interface IMemberExpenseFormProps
-    extends
-        IClassProps,
+    extends IClassProps,
         IForm<
             Partial<TMemberExpenseFormValues>,
             IMemberExpense,

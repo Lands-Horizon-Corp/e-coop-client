@@ -40,7 +40,8 @@ import {
 } from './row-action-context'
 
 export interface FootstepTableProps
-    extends TableProps<IFootstep>, IFootstepTableColumnProps {
+    extends TableProps<IFootstep>,
+        IFootstepTableColumnProps {
     toolbarProps?: Omit<
         IDataTableToolbarProps<IFootstep>,
         | 'table'

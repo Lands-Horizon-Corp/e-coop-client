@@ -18,4 +18,5 @@ export interface IMemberDepartmentHistory extends IBaseEntityMeta {
     member_profile?: IMemberProfile
 }
 
-export interface IMemberDepartmentHistoryPaginated extends IPaginatedResult<IMemberDepartmentHistory> {}
+export interface IMemberDepartmentHistoryPaginated
+    extends IPaginatedResult<IMemberDepartmentHistory> {}

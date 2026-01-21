@@ -49,7 +49,8 @@ const useDisbursementTransactionActions = ({
     }
 }
 
-interface IDisbursementTransactionTableActionProps extends IDisbursementTransactionTableActionComponentProp {
+interface IDisbursementTransactionTableActionProps
+    extends IDisbursementTransactionTableActionComponentProp {
     onDisbursementTransactionUpdate?: () => void
     onDeleteSuccess?: () => void
 }
@@ -78,7 +79,8 @@ export const DisbursementTransactionAction = ({
     )
 }
 
-interface IDisbursementTransactionRowContextProps extends IDisbursementTransactionTableActionComponentProp {
+interface IDisbursementTransactionRowContextProps
+    extends IDisbursementTransactionTableActionComponentProp {
     children?: ReactNode
     onDeleteSuccess?: () => void
 }

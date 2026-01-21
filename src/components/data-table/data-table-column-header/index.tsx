@@ -11,10 +11,8 @@ import { Button } from '@/components/ui/button'
 
 import ColumnResizeHandle from './column-drag-resize'
 
-interface DataTableColumnHeaderProps<
-    TData,
-    TValue,
-> extends React.HTMLAttributes<HTMLDivElement> {
+interface DataTableColumnHeaderProps<TData, TValue>
+    extends React.HTMLAttributes<HTMLDivElement> {
     title: string
     table: Table<TData>
     disableSort?: boolean

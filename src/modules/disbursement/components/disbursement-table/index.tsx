@@ -41,7 +41,8 @@ import DisbursementAction, {
 } from './row-action-context'
 
 export interface DisbursementTableProps
-    extends TableProps<IDisbursement>, IDisbursementTableColumnProps {
+    extends TableProps<IDisbursement>,
+        IDisbursementTableColumnProps {
     toolbarProps?: Omit<
         IDataTableToolbarProps<IDisbursement>,
         | 'table'

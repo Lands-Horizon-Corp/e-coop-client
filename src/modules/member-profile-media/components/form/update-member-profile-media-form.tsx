@@ -34,8 +34,7 @@ type TMemberProfileMediaFormValues = z.infer<
 }
 
 export interface IMemberProfileMediaFormProps
-    extends
-        IClassProps,
+    extends IClassProps,
         IForm<
             Partial<IMemberProfileMediaRequest>,
             IMemberProfileMedia,

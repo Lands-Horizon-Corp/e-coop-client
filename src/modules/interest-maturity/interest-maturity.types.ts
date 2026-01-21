@@ -15,7 +15,9 @@ export interface IInterestMaturityRequest {
 }
 
 export interface IInterestMaturity
-    extends ITimeStamps, IAuditable, IOrgBranchIdentity {
+    extends ITimeStamps,
+        IAuditable,
+        IOrgBranchIdentity {
     id: TEntityId
     account_id?: TEntityId | null
     account?: IAccount

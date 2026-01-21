@@ -39,8 +39,7 @@ import AutomaticLoanDeductionAction, {
 } from './row-action-context'
 
 export interface Props
-    extends
-        TableProps<IAutomaticLoanDeduction>,
+    extends TableProps<IAutomaticLoanDeduction>,
         IAutomaticLoanDeductionTableColumnProps {
     toolbarProps?: Omit<
         IDataTableToolbarProps<IAutomaticLoanDeduction>,

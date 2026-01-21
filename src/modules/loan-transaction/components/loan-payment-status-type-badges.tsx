@@ -67,9 +67,8 @@ const iconSizeVariants = cva('flex-shrink-0', {
     },
 })
 
-interface LoanComakerTypeBadgeProps extends VariantProps<
-    typeof loanComakerTypeVariants
-> {
+interface LoanComakerTypeBadgeProps
+    extends VariantProps<typeof loanComakerTypeVariants> {
     comakerType: TLoanComakerType
     className?: string
     showIcon?: boolean
@@ -168,9 +167,8 @@ const loanPaymentStatusVariants = cva(
     }
 )
 
-interface LoanPaymentStatusBadgeProps extends VariantProps<
-    typeof loanPaymentStatusVariants
-> {
+interface LoanPaymentStatusBadgeProps
+    extends VariantProps<typeof loanPaymentStatusVariants> {
     status: TLoanPaymentStatus
     className?: string
     showIcon?: boolean
@@ -266,9 +264,8 @@ const loanOverallPaymentStatusVariants = cva(
     }
 )
 
-interface LoanOverallPaymentStatusBadgeProps extends VariantProps<
-    typeof loanOverallPaymentStatusVariants
-> {
+interface LoanOverallPaymentStatusBadgeProps
+    extends VariantProps<typeof loanOverallPaymentStatusVariants> {
     status: TLoanOverallPaymentStatus
     className?: string
     showIcon?: boolean

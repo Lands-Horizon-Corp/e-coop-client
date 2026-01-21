@@ -29,7 +29,8 @@ const generalStatusVariants = cva(
 )
 
 interface Props
-    extends IClassProps, VariantProps<typeof generalStatusVariants> {
+    extends IClassProps,
+        VariantProps<typeof generalStatusVariants> {
     generalStatus: TGeneralStatus | string
 }
 

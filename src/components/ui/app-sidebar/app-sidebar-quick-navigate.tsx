@@ -118,7 +118,7 @@ const AppSidebarQuickNavigate = ({ groups }: Props) => {
                 {sidebarOpen && (
                     <>
                         Quick Navigate
-                        <CommandShortcut className="rounded-md bg-secondary p-1">
+                        <CommandShortcut className="rounded-md bg-background/50 p-1">
                             <span className="text-xs">⌘</span>Q
                         </CommandShortcut>
                     </>

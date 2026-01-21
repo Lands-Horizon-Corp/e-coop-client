@@ -59,7 +59,8 @@ const useBrowseExcludeIncludeAccountActions = ({
     }
 }
 
-interface ActionProps extends IBrowseExcludeIncludeAccountTableActionComponentProp {
+interface ActionProps
+    extends IBrowseExcludeIncludeAccountTableActionComponentProp {
     onDeleteSuccess?: () => void
 }
 
@@ -98,7 +99,8 @@ const BrowseExcludeIncludeAccountAction = ({
     )
 }
 
-interface RowContextProps extends IBrowseExcludeIncludeAccountTableActionComponentProp {
+interface RowContextProps
+    extends IBrowseExcludeIncludeAccountTableActionComponentProp {
     children?: ReactNode
     onDeleteSuccess?: () => void
 }

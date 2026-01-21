@@ -41,7 +41,8 @@ import LoanStatusTableColumns, {
 import { LoanTransactionTableActionManager } from './row-action-context'
 
 export interface LoanTransactionTableProps
-    extends TableProps<ILoanTransaction>, ILoanTransactionTableColumnProps {
+    extends TableProps<ILoanTransaction>,
+        ILoanTransactionTableColumnProps {
     toolbarProps?: Omit<
         IDataTableToolbarProps<ILoanTransaction>,
         | 'table'

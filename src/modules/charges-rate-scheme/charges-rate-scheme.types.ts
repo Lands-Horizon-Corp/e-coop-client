@@ -88,7 +88,8 @@ export type ICharegesRateSchemeCreateRequest = TChargesRateCreateSchemeSchema
 
 export type IChargesRateSchemeRequest = TChargesRateSchemeSchema
 
-export interface IChargesRateSchemePaginated extends IPaginatedResult<IChargesRateScheme> {}
+export interface IChargesRateSchemePaginated
+    extends IPaginatedResult<IChargesRateScheme> {}
 
 // FOR SERVICE HOOKS
 

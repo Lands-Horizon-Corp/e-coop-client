@@ -51,8 +51,7 @@ type TCashCheckVoucherFormValues = z.infer<typeof CashCheckVoucherSchema>
 export type TCashCheckVoucherModalMode = 'create' | 'update' | 'readOnly'
 
 export interface ICashCheckVoucherCreateUpdateFormProps
-    extends
-        IClassProps,
+    extends IClassProps,
         IForm<
             Partial<ICashCheckVoucher>,
             ICashCheckVoucherRequest,

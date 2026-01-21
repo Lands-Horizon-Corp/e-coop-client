@@ -67,7 +67,8 @@ const usePermissionTemplateActions = ({
     }
 }
 
-interface IPermissionTemplateTableActionProps extends IPermissionTemplateTableActionComponentProp {
+interface IPermissionTemplateTableActionProps
+    extends IPermissionTemplateTableActionComponentProp {
     onPermissionTemplateUpdate?: () => void
     onDeleteSuccess?: () => void
 }
@@ -101,7 +102,8 @@ export const PermissionTemplateAction = ({
     )
 }
 
-interface IPermissionTemplateRowContextProps extends IPermissionTemplateTableActionComponentProp {
+interface IPermissionTemplateRowContextProps
+    extends IPermissionTemplateTableActionComponentProp {
     children?: ReactNode
     onDeleteSuccess?: () => void
 }

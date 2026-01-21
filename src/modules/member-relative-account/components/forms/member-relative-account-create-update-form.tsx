@@ -32,8 +32,7 @@ type TMemberRelativeAccountFormValues = z.infer<
 >
 
 export interface IMemberRelativeAccountFormProps
-    extends
-        IClassProps,
+    extends IClassProps,
         IForm<
             Partial<IMemberRelativeAccount>,
             IMemberRelativeAccount,

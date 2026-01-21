@@ -34,10 +34,8 @@ import {
     IDisbursementFormProps,
 } from './forms/disbursement-create-update-form'
 
-export interface IDisbursementComboboxCreateProps extends Pick<
-    IDisbursementFormProps,
-    'defaultValues' | 'disabledFields'
-> {}
+export interface IDisbursementComboboxCreateProps
+    extends Pick<IDisbursementFormProps, 'defaultValues' | 'disabledFields'> {}
 
 interface Props {
     value?: TEntityId

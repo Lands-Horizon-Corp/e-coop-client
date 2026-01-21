@@ -31,8 +31,7 @@ type TLoanTransactionAdjustmentFormValues = z.infer<
 >
 
 export interface ILoanTransactionAdjustmentFormProps
-    extends
-        IClassProps,
+    extends IClassProps,
         IForm<
             Partial<ILoanTransactionAdjustmentRequest>,
             void,

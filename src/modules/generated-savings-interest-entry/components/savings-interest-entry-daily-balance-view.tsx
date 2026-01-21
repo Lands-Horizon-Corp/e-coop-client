@@ -23,7 +23,8 @@ import {
     TBalanceMovement,
 } from '../generated-savings-interest-entry.types'
 
-export interface ISavingsInterestEntryDailyBalanceViewProps extends IClassProps {
+export interface ISavingsInterestEntryDailyBalanceViewProps
+    extends IClassProps {
     generatedSavingsInterestEntryId: TEntityId
     defaultValue?: IGeneratedSavingsInterestEntryDailyBalanceView
 }

@@ -42,7 +42,8 @@ import {
 } from './row-action-context'
 
 export interface PaymentTypeTableProps
-    extends TableProps<IPaymentType>, IPaymentTypeTableColumnProps {
+    extends TableProps<IPaymentType>,
+        IPaymentTypeTableColumnProps {
     toolbarProps?: Omit<
         IDataTableToolbarProps<IPaymentType>,
         | 'table'

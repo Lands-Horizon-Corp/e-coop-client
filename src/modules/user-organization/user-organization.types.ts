@@ -18,8 +18,7 @@ export type TUserOrganizationApplicationStatus =
     (typeof USER_ORG_APPLICATION_STATUS)[number]
 
 export interface IUserOrganization<TUser = IUserBase>
-    extends
-        IBaseEntityMeta,
+    extends IBaseEntityMeta,
         Omit<IUserOrganizationSettings, 'user_type' | 'description'> {
     id: TEntityId
 
@@ -137,8 +136,8 @@ export interface IUserOrganizationSettings {
     settings_payment_type_default_value_id?: TEntityId | null
 }
 
-export interface IUserOrganizationSettingsRequest extends IUserOrganizationSettings {}
+export interface IUserOrganizationSettingsRequest
+    extends IUserOrganizationSettings {}
 
-export interface IUserOrganizationPaginated<
-    TUser = IUserBase,
-> extends IPaginatedResult<IUserOrganization<TUser>> {}
+export interface IUserOrganizationPaginated<TUser = IUserBase>
+    extends IPaginatedResult<IUserOrganization<TUser>> {}

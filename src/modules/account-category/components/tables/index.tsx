@@ -43,7 +43,8 @@ import {
 } from './row-action-context'
 
 export interface AccountCategoryTableProps
-    extends TableProps<IAccountCategory>, IAccountCategoryTableColumnProps {
+    extends TableProps<IAccountCategory>,
+        IAccountCategoryTableColumnProps {
     toolbarProps?: Omit<
         IDataTableToolbarProps<IAccountCategory>,
         | 'table'

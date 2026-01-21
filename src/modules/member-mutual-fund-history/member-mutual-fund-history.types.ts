@@ -13,7 +13,8 @@ export interface IMemberMutualFundHistoryRequest {
 }
 
 export interface IMemberMutualFundHistoryResponse
-    extends ITimeStamps, IOrgBranchIdentity {
+    extends ITimeStamps,
+        IOrgBranchIdentity {
     id: TEntityId
     member_profile_id: TEntityId
     member_profile?: IMemberProfile

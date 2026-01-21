@@ -39,8 +39,7 @@ import {
 import { AccountTransactionSchema } from '../../account-transaction.validation'
 
 export interface AccountTransactionUpdateFormProps
-    extends
-        IClassProps,
+    extends IClassProps,
         IForm<
             Partial<IAccountTransactionRequest>,
             IAccountTransaction,

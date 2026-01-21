@@ -34,8 +34,7 @@ type TTransactionReverseRequestValues = z.infer<
 >
 
 export interface ITransactionBatchEndFormProps
-    extends
-        IClassProps,
+    extends IClassProps,
         IForm<
             Partial<IVerificationPasswordAdminRequest>,
             IVerification,

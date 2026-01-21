@@ -15,9 +15,8 @@ export type NotAllowedDisplayProps = {
     resourceName?: string
 } & IClassProps
 
-interface Props<
-    TResourceData extends IAuditable = IAuditable,
-> extends IBaseProps {
+interface Props<TResourceData extends IAuditable = IAuditable>
+    extends IBaseProps {
     userOrg?: IUserOrganization
     resourceType: TPermissionResource
     action: TPermissionAction

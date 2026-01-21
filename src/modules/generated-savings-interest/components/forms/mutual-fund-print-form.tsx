@@ -26,8 +26,7 @@ import {
 } from '../../generated-savings-interest.types'
 
 export interface IGeneratedSavingsInterestPrintFormProps
-    extends
-        IClassProps,
+    extends IClassProps,
         IForm<
             Partial<IGeneratedSavingsInterestPrintRequest>,
             IGeneratedSavingsInterest,

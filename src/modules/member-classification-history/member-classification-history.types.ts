@@ -17,7 +17,9 @@ export interface IMemberClassificationHistoryRequest {
 }
 
 export interface IMemberClassificationHistory
-    extends ITimeStamps, IAuditable, IOrgBranchIdentity {
+    extends ITimeStamps,
+        IAuditable,
+        IOrgBranchIdentity {
     id: TEntityId
     member_classification_id: TEntityId
     member_classification?: IMemberClassification
@@ -25,4 +27,5 @@ export interface IMemberClassificationHistory
     member_profile?: IMemberProfile
 }
 
-export interface IMemberClassificationHistoryPaginated extends IPaginatedResult<IMemberClassificationHistory> {}
+export interface IMemberClassificationHistoryPaginated
+    extends IPaginatedResult<IMemberClassificationHistory> {}

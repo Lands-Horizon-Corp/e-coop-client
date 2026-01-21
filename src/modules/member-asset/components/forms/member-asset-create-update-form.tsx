@@ -33,8 +33,7 @@ import { IMemberAsset } from '../../member-asset.types'
 type TMemberAssetFormValues = z.infer<typeof MemberAssetSchema>
 
 export interface IMemberAssetFormProps
-    extends
-        IClassProps,
+    extends IClassProps,
         IForm<
             Partial<IMemberAsset>,
             IMemberAsset,

@@ -23,4 +23,5 @@ export interface IMemberTypeHistory extends ITimeStamps, IAuditable {
     member_profile: IMemberProfile
 }
 
-export interface IMemberTypeHistoryPaginated extends IPaginatedResult<IMemberTypeHistory> {}
+export interface IMemberTypeHistoryPaginated
+    extends IPaginatedResult<IMemberTypeHistory> {}

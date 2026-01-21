@@ -40,8 +40,7 @@ import { AdjustmentEntrySchema } from '../../adjustment-entry.validation'
 type TAdjustmentEntryFormValues = z.infer<typeof AdjustmentEntrySchema>
 
 export interface IAdjustmentEntryFormProps
-    extends
-        IClassProps,
+    extends IClassProps,
         IForm<
             Partial<IAdjustmentEntryRequest>,
             IAdjustmentEntry,

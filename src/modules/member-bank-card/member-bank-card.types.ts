@@ -21,7 +21,9 @@ export interface IMemberBankCardRequest {
 }
 
 export interface IMemberBankCardResponse
-    extends ITimeStamps, IAuditable, IOrgBranchIdentity {
+    extends ITimeStamps,
+        IAuditable,
+        IOrgBranchIdentity {
     id: TEntityId
     bank_id?: TEntityId
     bank?: IBank

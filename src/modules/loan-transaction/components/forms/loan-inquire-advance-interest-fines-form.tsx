@@ -32,8 +32,7 @@ export type TLoanInquireAdvanceInterestFinesFormValues = z.infer<
 >
 
 export interface ILoanInquireAdvanceInterestFinesFormProps
-    extends
-        IClassProps,
+    extends IClassProps,
         IForm<
             Partial<TLoanInquireAdvanceInterestFinesFormValues>,
             any,

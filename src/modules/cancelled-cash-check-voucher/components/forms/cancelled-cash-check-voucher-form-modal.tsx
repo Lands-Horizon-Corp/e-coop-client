@@ -33,8 +33,7 @@ type TCancelledCashCheckVoucherFormValues = z.infer<
 >
 
 export interface ICancelledCashCheckVoucherFormProps
-    extends
-        IClassProps,
+    extends IClassProps,
         IForm<
             Partial<ICancelledCashCheckVoucherRequest>,
             ICancelledCashCheckVoucher,

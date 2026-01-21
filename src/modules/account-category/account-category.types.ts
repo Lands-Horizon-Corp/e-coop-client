@@ -23,4 +23,5 @@ export interface IAccountCategoryRequest {
     branch_id?: TEntityId
 }
 
-export interface IAccountCategoryPaginated extends IPaginatedResult<IAccountCategory> {}
+export interface IAccountCategoryPaginated
+    extends IPaginatedResult<IAccountCategory> {}

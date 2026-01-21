@@ -41,8 +41,7 @@ import PermissionTemplateAction, {
 } from './row-action-context'
 
 export interface PermissionTemplateTableProps
-    extends
-        TableProps<IPermissionTemplate>,
+    extends TableProps<IPermissionTemplate>,
         IPermissionTemplateTableColumnProps {
     toolbarProps?: Omit<
         IDataTableToolbarProps<IPermissionTemplate>,

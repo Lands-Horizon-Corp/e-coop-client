@@ -5,10 +5,8 @@ import { PlusIcon } from '@/components/icons'
 import LoadingSpinner from '@/components/spinners/loading-spinner'
 import { Button, ButtonProps } from '@/components/ui/button'
 
-export interface IDataTableCreateActionProps extends Omit<
-    ButtonProps,
-    'onClick'
-> {
+export interface IDataTableCreateActionProps
+    extends Omit<ButtonProps, 'onClick'> {
     label?: string
     isHidden?: boolean
     isLoading?: boolean

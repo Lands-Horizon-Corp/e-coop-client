@@ -35,7 +35,8 @@ import MemberGroupTableColumns, {
 import MemberGroupAction, { MemberGroupRowContext } from './row-action-context'
 
 export interface MemberGroupTableProps
-    extends TableProps<IMemberGroup>, IMemberGroupTableColumnProps {
+    extends TableProps<IMemberGroup>,
+        IMemberGroupTableColumnProps {
     toolbarProps?: Omit<
         IDataTableToolbarProps<IMemberGroup>,
         | 'table'

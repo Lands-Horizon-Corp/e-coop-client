@@ -41,7 +41,8 @@ import {
 } from './row-action-context'
 
 export interface GeneralLedgerRunningTableBaseProps
-    extends TableProps<IGeneralLedger>, IGeneralLedgerTableColumnProps {
+    extends TableProps<IGeneralLedger>,
+        IGeneralLedgerTableColumnProps {
     toolbarProps?: Omit<
         IDataTableToolbarProps<IGeneralLedger>,
         | 'table'

@@ -19,4 +19,5 @@ export type IChargesRateByRangeOrMinimumAmountRequest = z.infer<
     typeof ChargesRateByRangeOrMinimumAmountSchema
 >
 
-export interface IChargesRateByRangeOrMinimumAmountPaginated extends IPaginatedResult<IChargesRateByRangeOrMinimumAmount> {}
+export interface IChargesRateByRangeOrMinimumAmountPaginated
+    extends IPaginatedResult<IChargesRateByRangeOrMinimumAmount> {}

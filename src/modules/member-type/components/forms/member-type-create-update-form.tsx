@@ -26,7 +26,8 @@ import { IClassProps, IForm, TEntityId } from '@/types'
 export type TMemberTypeForm = z.infer<typeof MemberTypeSchema>
 
 export interface IMemberTypeCreateUpdateFormProps
-    extends IClassProps, IForm<Partial<TMemberTypeForm>, IMemberType> {
+    extends IClassProps,
+        IForm<Partial<TMemberTypeForm>, IMemberType> {
     memberTypeId?: TEntityId
 }
 

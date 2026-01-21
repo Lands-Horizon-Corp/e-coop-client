@@ -57,7 +57,8 @@ const useTagTemplateActions = ({
     }
 }
 
-interface ITagTemplateTableActionProps extends ITagTemplateTableActionComponentProp {
+interface ITagTemplateTableActionProps
+    extends ITagTemplateTableActionComponentProp {
     onTagTemplateUpdate?: () => void
     onDeleteSuccess?: () => void
 }
@@ -100,7 +101,8 @@ export const TagTemplateAction = ({
     )
 }
 
-interface ITagTemplateRowContextProps extends ITagTemplateTableActionComponentProp {
+interface ITagTemplateRowContextProps
+    extends ITagTemplateTableActionComponentProp {
     children?: ReactNode
     onDeleteSuccess?: () => void
 }

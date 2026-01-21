@@ -34,7 +34,9 @@ export interface IInterestRateByTermsHeaderRequest {
 }
 
 export interface IInterestRateByTermsHeaderResponse
-    extends ITimeStamps, IAuditable, IOrgBranchIdentity {
+    extends ITimeStamps,
+        IAuditable,
+        IOrgBranchIdentity {
     id: TEntityId
     member_classification_interest_rate_id: TEntityId
     member_classification_interest_rate?: IMemberClassificationInterestRate

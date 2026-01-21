@@ -95,8 +95,7 @@ import LoanEntriesEditor from './loan-entries-editor'
 import LoanTermsAndConditionReceiptSection from './loan-terms-and-condition-receipt'
 
 export interface ILoanTransactionFormProps
-    extends
-        IClassProps,
+    extends IClassProps,
         IForm<Partial<ILoanTransactionRequest>, ILoanTransaction, Error> {
     loanTransactionId?: TEntityId
 }

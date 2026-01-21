@@ -64,7 +64,8 @@ const useMemberCenterActions = ({
     }
 }
 
-interface IMemberCenterTableActionProps extends IMemberCenterTableActionComponentProp {
+interface IMemberCenterTableActionProps
+    extends IMemberCenterTableActionComponentProp {
     onMemberCenterUpdate?: () => void
     onDeleteSuccess?: () => void
 }
@@ -98,7 +99,8 @@ export const MemberCenterAction = ({
     )
 }
 
-interface IMemberCenterRowContextProps extends IMemberCenterTableActionComponentProp {
+interface IMemberCenterRowContextProps
+    extends IMemberCenterTableActionComponentProp {
     children?: ReactNode
     onDeleteSuccess?: () => void
 }

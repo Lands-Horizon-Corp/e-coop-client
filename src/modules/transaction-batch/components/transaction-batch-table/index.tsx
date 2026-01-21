@@ -44,7 +44,8 @@ import TransactionBatchAction, {
 } from './row-action-context'
 
 export interface TransactionBatchTableProps
-    extends TableProps<ITransactionBatch>, ITransactionBatchTableColumnProps {
+    extends TableProps<ITransactionBatch>,
+        ITransactionBatchTableColumnProps {
     toolbarProps?: Omit<
         IDataTableToolbarProps<ITransactionBatch>,
         | 'table'

@@ -39,7 +39,8 @@ import MemberDepartmentAction, {
 } from './row-action-context'
 
 export interface MemberDepartmentTableProps
-    extends TableProps<IMemberDepartment>, IMemberDepartmentTableColumnProps {
+    extends TableProps<IMemberDepartment>,
+        IMemberDepartmentTableColumnProps {
     toolbarProps?: Omit<
         IDataTableToolbarProps<IMemberDepartment>,
         | 'table'

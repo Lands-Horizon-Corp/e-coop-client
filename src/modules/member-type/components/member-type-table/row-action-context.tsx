@@ -86,7 +86,8 @@ const useMemberTypeActions = ({
     }
 }
 
-interface IMemberTypeTableActionProps extends IMemberTypeTableActionComponentProp {
+interface IMemberTypeTableActionProps
+    extends IMemberTypeTableActionComponentProp {
     onMemberTypeUpdate?: () => void
     onDeleteSuccess?: () => void
 }
@@ -131,7 +132,8 @@ export const MemberTypeAction = ({
     )
 }
 
-interface IMemberTypeRowContextProps extends IMemberTypeTableActionComponentProp {
+interface IMemberTypeRowContextProps
+    extends IMemberTypeTableActionComponentProp {
     children?: ReactNode
     onDeleteSuccess?: () => void
 }

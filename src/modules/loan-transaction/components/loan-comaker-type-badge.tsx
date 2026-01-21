@@ -58,9 +58,8 @@ const iconSizeVariants = cva('flex-shrink-0', {
     },
 })
 
-interface LoanComakerTypeBadgeProps extends VariantProps<
-    typeof loanComakerTypeVariants
-> {
+interface LoanComakerTypeBadgeProps
+    extends VariantProps<typeof loanComakerTypeVariants> {
     comakerType: TLoanComakerType
     className?: string
     showIcon?: boolean

@@ -34,7 +34,7 @@ import { TEntityId } from '@/types'
 import PaymentWithTransactionForm from '../components/forms/create-payment-with-transaction-form'
 import TransactionReverseRequestFormModal from '../components/modals/transaction-modal-request-reverse'
 import TransactionAccountMemberLedger from '../components/tables/transaction-account-member-ledger'
-import { paymentORBuilder } from '../transaction.utils'
+import { paymentORResolver } from '../transaction.utils'
 
 type TTransactionProps = {
     transactionId: TEntityId
@@ -66,7 +66,7 @@ const Transaction = ({ transactionId, fullPath }: TTransactionProps) => {
             referenceNumberForm.setValue('or_auto_generated', true)
             referenceNumberForm.setValue(
                 'reference_number',
-                paymentORBuilder(userOrganization)
+                paymentORResolver(userOrganization)
             )
         }
     }, [referenceNumberForm, payment_or_allow_user_input])

@@ -40,4 +40,5 @@ export interface IBrowseReference extends IBaseEntityMeta {
     interest_rates_by_amount: IInterestRateByAmount[]
 }
 
-export interface IBrowseReferencePaginated extends IPaginatedResult<IBrowseReference> {}
+export interface IBrowseReferencePaginated
+    extends IPaginatedResult<IBrowseReference> {}

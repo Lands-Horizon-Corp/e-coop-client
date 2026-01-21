@@ -41,7 +41,8 @@ import MemberOccupationAction, {
 } from './row-action-context'
 
 export interface MemberOccupationTableProps
-    extends TableProps<IMemberOccupation>, IMemberOccupationTableColumnProps {
+    extends TableProps<IMemberOccupation>,
+        IMemberOccupationTableColumnProps {
     toolbarProps?: Omit<
         IDataTableToolbarProps<IMemberOccupation>,
         | 'table'

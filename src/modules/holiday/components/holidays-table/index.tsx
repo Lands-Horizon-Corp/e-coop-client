@@ -32,7 +32,8 @@ import HolidayTableColumns, {
 import { HolidayRowContext } from './row-action-context'
 
 interface HolidayTableProps
-    extends TableProps<IHoliday>, IHolidayTableColumnProps {
+    extends TableProps<IHoliday>,
+        IHolidayTableColumnProps {
     toolbarProps?: Omit<
         IDataTableToolbarProps<IHoliday>,
         | 'table'

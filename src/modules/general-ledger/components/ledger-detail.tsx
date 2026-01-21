@@ -736,10 +736,8 @@ export const DetailRow = ({ label, value, className }: DetailRowProps) => {
 
 export default LedgerDetail
 
-interface GeneralLedgerSheetProps extends Pick<
-    IModalProps,
-    'open' | 'onOpenChange'
-> {
+interface GeneralLedgerSheetProps
+    extends Pick<IModalProps, 'open' | 'onOpenChange'> {
     ledgerId: TEntityId
     defaultLedgerValue?: IGeneralLedger
 }

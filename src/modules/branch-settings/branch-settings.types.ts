@@ -8,7 +8,7 @@ import { IMemberGender } from '../member-gender'
 import { IMemberType } from '../member-type'
 import { IUnbalanceAccount } from '../unbalance-account'
 import {
-    BranchSettingsSchema,
+    BranchSettingRequestSchema,
     TBranchSettingsCurrencySchema,
 } from './branch-settings.validation'
 
@@ -17,15 +17,6 @@ export interface IBranchSettings extends IBaseEntityMeta {
 
     currency_id: TEntityId
     currency: ICurrency
-
-    cash_on_hand_account_id?: TEntityId
-    cash_on_hand_account?: IAccount
-
-    paid_up_shared_capital_account_id?: TEntityId
-    paid_up_shared_capital_account?: IAccount
-
-    compassion_fund_account_id?: TEntityId
-    compassion_fund_account?: IAccount
 
     /** Withdraw OR Settings */
     withdraw_allow_user_input: boolean
@@ -93,24 +84,32 @@ export interface IBranchSettings extends IBaseEntityMeta {
     check_voucher_general_or_iteration: number
     check_voucher_general_padding: number
 
-    tax_interest: number // percentage
+    default_member_type_id?: TEntityId
+    default_member_type?: IMemberType
+    cash_on_hand_account_id?: TEntityId
+    cash_on_hand_account?: IAccount
+
+    paid_up_shared_capital_account_id?: TEntityId
+    paid_up_shared_capital_account?: IAccount
+
+    compassion_fund_account_id?: TEntityId
+    compassion_fund_account?: IAccount
+
+    unbalanced_accounts?: IUnbalanceAccount[]
+    annual_divisor: number
+    tax_interest: number
 
     default_member_gender_id?: TEntityId
     default_member_gender?: IMemberGender
 
-    default_member_type_id?: TEntityId
-    default_member_type?: IMemberType
-
-    /** Accounting */
-    annual_divisor: number
-
-    /** Unbalanced Accounts */
-    unbalanced_accounts?: IUnbalanceAccount[]
+    account_wallet_id?: TEntityId
+    account_wallet?: IAccount
 }
 
-export type IBranchSettingsRequest = z.infer<typeof BranchSettingsSchema>
+export type IBranchSettingsRequest = z.infer<typeof BranchSettingRequestSchema>
 
-export interface IBranchSettingsPaginated extends IPaginatedResult<IBranchSettings> {}
+export interface IBranchSettingsPaginated
+    extends IPaginatedResult<IBranchSettings> {}
 
 //  FOR BRANCH SETTINGS CURRENCY
 

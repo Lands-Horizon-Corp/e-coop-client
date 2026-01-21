@@ -51,20 +51,14 @@ export interface IQRMemberProfile {
     email: string
 }
 
-export interface IQrUserDecodedResult extends IQrScanResult<
-    IQrMemberIdData,
-    'user-qr'
-> {}
+export interface IQrUserDecodedResult
+    extends IQrScanResult<IQrMemberIdData, 'user-qr'> {}
 
-export interface IQrInvitationCodeDecodedResult extends IQrScanResult<
-    IQRInvitationCode,
-    'invitation-code-qr'
-> {}
+export interface IQrInvitationCodeDecodedResult
+    extends IQrScanResult<IQRInvitationCode, 'invitation-code-qr'> {}
 
-export interface IQRMemberProfileDecodedResult extends IQrScanResult<
-    IQRMemberProfile,
-    'member-qr'
-> {}
+export interface IQRMemberProfileDecodedResult
+    extends IQrScanResult<IQRMemberProfile, 'member-qr'> {}
 
 export interface IOperationCallbacks<
     TDataSuccess = unknown,

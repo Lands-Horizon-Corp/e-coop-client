@@ -13,4 +13,5 @@ export interface IMemberDepartment extends IBaseEntityMeta {
 
 export type IMemberDepartmentRequest = z.infer<typeof MemberDepartmentSchema>
 
-export interface IMemberDepartmentPaginated extends IPaginatedResult<IMemberDepartment> {}
+export interface IMemberDepartmentPaginated
+    extends IPaginatedResult<IMemberDepartment> {}

@@ -40,7 +40,8 @@ import EmployeesAction, {
 } from './row-action-context'
 
 export interface EmployeesTableProps
-    extends TableProps<IUserOrganization>, IEmployeesTableColumnProps {
+    extends TableProps<IUserOrganization>,
+        IEmployeesTableColumnProps {
     toolbarProps?: Omit<
         IDataTableToolbarProps<IUserOrganization>,
         | 'table'

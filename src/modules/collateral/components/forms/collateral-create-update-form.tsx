@@ -27,8 +27,7 @@ import {
 } from '../../collateral.validation'
 
 export interface ICollateralFormProps
-    extends
-        IClassProps,
+    extends IClassProps,
         IForm<
             Partial<ICollateralRequest>,
             ICollateral,

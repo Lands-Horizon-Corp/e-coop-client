@@ -45,8 +45,7 @@ import ByYearFormSection from './by-year-form-section'
 type TBrowseReferenceFormValues = z.infer<typeof BrowseReferenceSchema>
 
 export interface IBrowseReferenceFormProps
-    extends
-        IClassProps,
+    extends IClassProps,
         IForm<
             Partial<TBrowseReferenceFormValues>,
             IBrowseReference,

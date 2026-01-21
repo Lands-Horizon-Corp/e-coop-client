@@ -14,7 +14,9 @@ export interface IChargesRateSchemeAccountRequest {
 }
 
 export interface IChargesRateSchemeAccount
-    extends ITimeStamps, IAuditable, IOrgBranchIdentity {
+    extends ITimeStamps,
+        IAuditable,
+        IOrgBranchIdentity {
     id: TEntityId
     charges_rate_scheme_id: TEntityId
     charges_rate_scheme?: IChargesRateScheme

@@ -37,7 +37,8 @@ import BankAction, {
 } from './row-action-context'
 
 export interface BankTableProps
-    extends TableProps<IBank>, IBankTableColumnProps {
+    extends TableProps<IBank>,
+        IBankTableColumnProps {
     toolbarProps?: Omit<
         IDataTableToolbarProps<IBank>,
         | 'table'

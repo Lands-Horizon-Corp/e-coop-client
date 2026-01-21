@@ -24,7 +24,8 @@ import { MemberCenterSchema } from '../member-center.validation'
 type TMemberCenterForm = z.infer<typeof MemberCenterSchema>
 
 export interface IMemberCenterCreateUpdateFormProps
-    extends IClassProps, IForm<Partial<IMemberCenterRequest>, IMemberCenter> {
+    extends IClassProps,
+        IForm<Partial<IMemberCenterRequest>, IMemberCenter> {
     memberCenterId?: TEntityId
 }
 

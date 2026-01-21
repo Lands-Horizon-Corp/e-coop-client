@@ -22,8 +22,7 @@ export interface ISheetClassNames extends IClassProps {
 }
 
 export interface ISheetProps
-    extends
-        IBaseProps,
+    extends IBaseProps,
         React.ComponentProps<typeof SheetPrimitive.Root>,
         ISheetClassNames {
     title?: string | ReactNode

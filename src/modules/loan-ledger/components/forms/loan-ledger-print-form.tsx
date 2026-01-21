@@ -26,8 +26,7 @@ export const LoanLedgerPrintSchema = z.object({
 export type TLoanLedgerPrintSchema = z.infer<typeof LoanLedgerPrintSchema>
 
 export interface ILoanLedgerPrintFormProps
-    extends
-        IClassProps,
+    extends IClassProps,
         IForm<
             Partial<TLoanLedgerPrintSchema>,
             unknown,

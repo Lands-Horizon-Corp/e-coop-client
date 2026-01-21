@@ -40,8 +40,7 @@ import ConnectAccountSection from './connect-account-section'
 type TChargesRateSchemeFormValues = TChargesRateSchemeSchema
 
 export interface IChargesRateSchemeFormProps
-    extends
-        IClassProps,
+    extends IClassProps,
         IForm<
             Partial<IChargesRateSchemeRequest>,
             IChargesRateScheme,

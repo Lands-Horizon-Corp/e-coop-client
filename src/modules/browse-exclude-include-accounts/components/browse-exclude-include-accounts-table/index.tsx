@@ -39,8 +39,7 @@ import {
 import BrowseExcludeIncludeAccountColumns from './columns'
 
 export interface Props
-    extends
-        TableProps<IBrowseExcludeIncludeAccounts>,
+    extends TableProps<IBrowseExcludeIncludeAccounts>,
         IBrowseExcludeIncludeAccountTableColumnProps {
     toolbarProps?: Omit<
         IDataTableToolbarProps<IBrowseExcludeIncludeAccounts>,

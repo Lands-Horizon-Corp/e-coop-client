@@ -31,4 +31,5 @@ export interface IJournalVoucherEntry extends IBaseEntityMeta {
 
 export type IJournalVoucherEntryRequest = TJournalVoucherEntrySchema
 
-export interface IJournalVoucherEntryPaginated extends IPaginatedResult<IJournalVoucherEntry> {}
+export interface IJournalVoucherEntryPaginated
+    extends IPaginatedResult<IJournalVoucherEntry> {}

@@ -63,7 +63,8 @@ const useMemberGroupActions = ({
     }
 }
 
-interface IMemberGroupTableActionProps extends IMemberGroupTableActionComponentProp {
+interface IMemberGroupTableActionProps
+    extends IMemberGroupTableActionComponentProp {
     onDeleteSuccess?: () => void
 }
 
@@ -96,7 +97,8 @@ export const MemberGroupAction = ({
     )
 }
 
-interface IMemberGroupRowContextProps extends IMemberGroupTableActionComponentProp {
+interface IMemberGroupRowContextProps
+    extends IMemberGroupTableActionComponentProp {
     children?: ReactNode
     onDeleteSuccess?: () => void
 }

@@ -78,9 +78,8 @@ const loanModeOfPaymentVariants = cva(
     }
 )
 
-export interface LoanModeOfPaymentBadgeProps extends VariantProps<
-    typeof loanModeOfPaymentVariants
-> {
+export interface LoanModeOfPaymentBadgeProps
+    extends VariantProps<typeof loanModeOfPaymentVariants> {
     className?: string
     showIcon?: boolean
     mode: TLoanModeOfPayment

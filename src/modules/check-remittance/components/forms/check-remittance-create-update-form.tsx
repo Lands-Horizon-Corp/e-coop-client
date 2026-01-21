@@ -33,8 +33,7 @@ import { CheckRemittanceSchema } from '../../check-remittance.validation'
 type TFormValues = z.infer<typeof CheckRemittanceSchema>
 
 export interface ICheckRemittanceFormProps
-    extends
-        IClassProps,
+    extends IClassProps,
         IForm<
             Partial<ICheckRemittanceRequest>,
             ICheckRemittance,

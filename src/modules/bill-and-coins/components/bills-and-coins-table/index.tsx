@@ -40,7 +40,8 @@ import BillsAndCoinsAction, {
 } from './row-action-context'
 
 export interface BillsAndCoinsTableProps
-    extends TableProps<IBillsAndCoin>, IBillsAndCoinsTableColumnProps {
+    extends TableProps<IBillsAndCoin>,
+        IBillsAndCoinsTableColumnProps {
     toolbarProps?: Omit<
         IDataTableToolbarProps<IBillsAndCoin>,
         | 'table'

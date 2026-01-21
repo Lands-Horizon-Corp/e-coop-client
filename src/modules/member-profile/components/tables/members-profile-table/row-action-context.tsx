@@ -196,7 +196,8 @@ const useMemberProfileActions = ({
     }
 }
 
-interface IMemberProfileTableActionProps extends IMemberProfileTableActionComponentProp {
+interface IMemberProfileTableActionProps
+    extends IMemberProfileTableActionComponentProp {
     onMemberUpdate?: () => void
     onDeleteSuccess?: () => void
 }
@@ -424,7 +425,8 @@ export const MemberProfileAction = ({
     )
 }
 
-interface IMemberProfileRowContextProps extends IMemberProfileTableActionComponentProp {
+interface IMemberProfileRowContextProps
+    extends IMemberProfileTableActionComponentProp {
     children?: ReactNode
     onDeleteSuccess?: () => void
 }

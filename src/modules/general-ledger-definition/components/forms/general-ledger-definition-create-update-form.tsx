@@ -41,8 +41,7 @@ import { useFormHelper } from '@/hooks/use-form-helper'
 import { IClassProps, IForm, TEntityId } from '@/types'
 
 interface IGeneralLedgerDefinitionCreateUpdateFormProps
-    extends
-        IClassProps,
+    extends IClassProps,
         IForm<
             Partial<IGeneralLedgerDefinitionRequest>,
             IGeneralLedgerDefinition,

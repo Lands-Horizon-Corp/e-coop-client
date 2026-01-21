@@ -4,9 +4,8 @@ import * as ProgressPrimitive from '@radix-ui/react-progress'
 
 import { cn } from '@/helpers/tw-utils'
 
-interface IProgressProps extends React.ComponentPropsWithoutRef<
-    typeof ProgressPrimitive.Root
-> {
+interface IProgressProps
+    extends React.ComponentPropsWithoutRef<typeof ProgressPrimitive.Root> {
     indicatorClassName?: string
 }
 

@@ -28,7 +28,8 @@ export interface IComputationSheet extends IBaseEntityMeta {
 
 export type IComputationSheetRequest = z.infer<typeof ComputationSheetSchema>
 
-export interface IComputationSheetPaginated extends IPaginatedResult<IComputationSheet> {}
+export interface IComputationSheetPaginated
+    extends IPaginatedResult<IComputationSheet> {}
 
 // FOR CALCULATOR USE ONLY
 // Payload for computing amortization of a specific computation sheet

@@ -23,7 +23,8 @@ const useTimesheetActions = ({ row }: UseTimesheetActionsProps) => {
     }
 }
 
-interface ITimesheetTableActionProps extends ITimesheetTableActionComponentProp {
+interface ITimesheetTableActionProps
+    extends ITimesheetTableActionComponentProp {
     onTimesheetUpdate?: () => void
     onDeleteSuccess?: () => void
 }

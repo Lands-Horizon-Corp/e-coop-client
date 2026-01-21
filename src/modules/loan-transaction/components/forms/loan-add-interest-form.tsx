@@ -22,8 +22,7 @@ export const LoanAddInterestSchema = z.object({
 export type TLoanAddInterestSchema = z.infer<typeof LoanAddInterestSchema>
 
 export interface ILoanAddInterestFormProps
-    extends
-        IClassProps,
+    extends IClassProps,
         IForm<
             Partial<TLoanAddInterestSchema>,
             any,

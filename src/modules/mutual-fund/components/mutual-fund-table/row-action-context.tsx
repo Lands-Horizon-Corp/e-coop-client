@@ -163,7 +163,8 @@ const useMutualFundActions = ({
     }
 }
 
-interface IMutualFundTableActionProps extends IMutualFundTableActionComponentProp {
+interface IMutualFundTableActionProps
+    extends IMutualFundTableActionComponentProp {
     onMutualFundUpdate?: () => void
     onDeleteSuccess?: () => void
 }
@@ -235,7 +236,8 @@ export const MutualFundAction = ({
     )
 }
 
-interface IMutualFundRowContextProps extends IMutualFundTableActionComponentProp {
+interface IMutualFundRowContextProps
+    extends IMutualFundTableActionComponentProp {
     children?: ReactNode
     onDeleteSuccess?: () => void
 }

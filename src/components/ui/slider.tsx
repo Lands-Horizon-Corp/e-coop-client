@@ -4,9 +4,8 @@ import * as SliderPrimitive from '@radix-ui/react-slider'
 
 import { cn } from '@/helpers/tw-utils'
 
-interface SliderCustomProps extends React.ComponentPropsWithoutRef<
-    typeof SliderPrimitive.Root
-> {
+interface SliderCustomProps
+    extends React.ComponentPropsWithoutRef<typeof SliderPrimitive.Root> {
     trackClassName?: string
     rangeClassName?: string
     thumbClassName?: string

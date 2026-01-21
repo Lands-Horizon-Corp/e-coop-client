@@ -37,4 +37,5 @@ export interface ICheckRemittance extends IBaseEntityMeta {
 
 export type ICheckRemittanceRequest = z.infer<typeof CheckRemittanceSchema>
 
-export interface ICheckRemittancePaginated extends IPaginatedResult<ICheckRemittance> {}
+export interface ICheckRemittancePaginated
+    extends IPaginatedResult<ICheckRemittance> {}

@@ -1,5 +1,3 @@
-import { HoverCardContent } from '@radix-ui/react-hover-card'
-
 import { cn } from '@/helpers'
 import HoveruserInfo from '@/modules/user/components/hover-user-info'
 
@@ -15,7 +13,11 @@ import ImageDisplay from '@/components/image-display'
 import ImageNameDisplay from '@/components/image-name-display'
 import { Badge } from '@/components/ui/badge'
 import { Card, CardContent } from '@/components/ui/card'
-import { HoverCard, HoverCardTrigger } from '@/components/ui/hover-card'
+import {
+    HoverCard,
+    HoverCardContent,
+    HoverCardTrigger,
+} from '@/components/ui/hover-card'
 import { Skeleton } from '@/components/ui/skeleton'
 import CopyWrapper from '@/components/wrappers/copy-wrapper'
 import PreviewMediaWrapper from '@/components/wrappers/preview-media-wrapper'
@@ -115,7 +117,7 @@ const MemberProfileMiniInfoCard = ({ className, memberProfile }: Props) => {
                                                 }
                                             />
                                         </HoverCardTrigger>
-                                        <HoverCardContent>
+                                        <HoverCardContent className="p-0 border-0 bg-transparent">
                                             <HoveruserInfo
                                                 defaultValue={
                                                     memberProfile.user

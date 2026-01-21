@@ -72,9 +72,8 @@ const userOrganizationApplicationStatusIcons: Record<
     reported: NotAllowedIcon,
 }
 
-interface UserOrganizationApplicationStatusBadgeProps extends VariantProps<
-    typeof userOrganizationApplicationStatusVariants
-> {
+interface UserOrganizationApplicationStatusBadgeProps
+    extends VariantProps<typeof userOrganizationApplicationStatusVariants> {
     status: TUserOrganizationApplicationStatus
     className?: string
     showIcon?: boolean

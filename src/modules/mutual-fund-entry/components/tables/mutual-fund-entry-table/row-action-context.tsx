@@ -78,7 +78,8 @@ const useMutualFundEntryActions = ({
     }
 }
 
-interface IMutualFundEntryTableActionProps extends IMutualFundEntryTableActionComponentProp {
+interface IMutualFundEntryTableActionProps
+    extends IMutualFundEntryTableActionComponentProp {
     onDeleteSuccess?: () => void
 }
 
@@ -110,7 +111,8 @@ export const MutualFundEntryAction = ({
     )
 }
 
-interface IMutualFundEntryRowContextProps extends IMutualFundEntryTableActionComponentProp {
+interface IMutualFundEntryRowContextProps
+    extends IMutualFundEntryTableActionComponentProp {
     children?: ReactNode
     readOnly?: boolean
     onDeleteSuccess?: () => void
