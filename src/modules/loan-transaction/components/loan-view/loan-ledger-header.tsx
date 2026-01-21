@@ -9,6 +9,7 @@ import GeneralStatusBadge from '@/modules/authentication/components/general-stat
 import {
     CakeIcon,
     CalendarNumberIcon,
+    EyeIcon,
     IdCardIcon,
     PhoneIcon,
     RefreshIcon,
@@ -31,6 +32,7 @@ import {
     ILoanTransaction,
     ILoanTransactionSummary,
 } from '../../loan-transaction.types'
+import { LoanTransactionCreateUpdateFormModal } from '../forms/loan-transaction-create-update-form'
 import { LoanAmortizationModal } from '../loan-amortization'
 import { LoanDetails } from './loan-details'
 
@@ -243,6 +245,9 @@ const LoanLedgerHeader = ({
                             <AmortSection
                                 loanTransactionId={loanTransaction.id}
                             />
+                            <ViewOriginalLoan
+                                loanTransaction={loanTransaction}
+                            />
                         </div>
                     </div>
                 </div>
@@ -276,6 +281,35 @@ const AmortSection = ({
                 variant="outline"
             >
                 <CalendarNumberIcon className="inline size-3" /> View Amort.
+            </Button>
+        </>
+    )
+}
+
+const ViewOriginalLoan = ({
+    loanTransaction,
+}: {
+    loanTransaction: ILoanTransaction
+}) => {
+    const modalState = useModalState()
+
+    return (
+        <>
+            <LoanTransactionCreateUpdateFormModal
+                formProps={{
+                    loanTransactionId: loanTransaction.id,
+                    defaultValues: loanTransaction,
+                }}
+                {...modalState}
+            />
+            <Button
+                className="items-center"
+                hoverVariant="primary"
+                onClick={() => modalState.onOpenChange(true)}
+                size="icon"
+                variant="outline"
+            >
+                <EyeIcon className="inline size-3" />
             </Button>
         </>
     )
