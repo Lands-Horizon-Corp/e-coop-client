@@ -385,7 +385,7 @@ const PaymentCell = ({
             className={cn(
                 'group relative rounded border px-1.5 py-1 transition-all duration-150',
                 'hover:shadow-sm cursor-default',
-                config.className
+                config?.className
             )}
             onClick={() => viewLoanPaymentScheduleModal.onOpenChange(true)}
         >
