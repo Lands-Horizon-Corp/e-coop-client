@@ -1,4 +1,4 @@
-import { useMemo } from 'react'
+import { useMemo, useState } from 'react'
 
 import { toast } from 'sonner'
 
@@ -47,6 +47,7 @@ import { useModalState } from '@/hooks/use-modal-state'
 
 import { TEntityId } from '@/types'
 
+import { LOAN_SCHEDULE_STATUS } from '../loan-guide-constant'
 import {
     ILoanAccountSummary,
     ILoanGuide,
@@ -582,6 +583,7 @@ const LoanGuide = ({
     loanTransactionId: TEntityId
     initialData?: ILoanGuide
 }) => {
+    const [legend, setLegend] = useState([...LOAN_SCHEDULE_STATUS])
     const {
         data: loanGuide,
         isPending,
@@ -610,6 +612,14 @@ const LoanGuide = ({
         )
     }, [loanGuide])
 
+    const toggleLegend = (targetLegend: TLoanScheduleStatus) => {
+        if (legend.includes(targetLegend)) {
+            setLegend((prev) => prev.filter((targ) => targ !== targetLegend))
+        } else {
+            setLegend((prev) => [...prev, targetLegend])
+        }
+    }
+
     return (
         <div
             className={cn(
@@ -631,37 +641,143 @@ const LoanGuide = ({
                     <div className="flex flex-wrap items-center bg-primary/5 p-2 rounded-xl border gap-4 text-xs">
                         <p className="font-medium">Legends:</p>
 
-                        <div className="flex items-center gap-2">
-                            <div className="size-3 rounded-full bg-emerald-500" />
-                            <span className="text-muted-foreground">Paid</span>
+                        {/* Paid */}
+                        <div
+                            className="flex items-center gap-2 cursor-pointer"
+                            onClick={() => toggleLegend('paid')}
+                        >
+                            <div
+                                className={cn(
+                                    'size-3 rounded-full bg-emerald-500',
+                                    !legend.includes('paid') &&
+                                        'border-4 border-border'
+                                )}
+                            />
+                            <span
+                                className={cn(
+                                    'text-muted-foreground',
+                                    !legend.includes('paid') && 'line-through'
+                                )}
+                            >
+                                Paid
+                            </span>
                         </div>
 
-                        <div className="flex items-center gap-2">
-                            <div className="size-3 rounded-full bg-sky-500" />
-                            <span className="text-muted-foreground">
+                        {/* Advance */}
+                        <div
+                            className="flex items-center gap-2 cursor-pointer"
+                            onClick={() => toggleLegend('advance')}
+                        >
+                            <div
+                                className={cn(
+                                    'size-3 rounded-full bg-sky-500',
+                                    !legend.includes('advance') &&
+                                        'border-4 border-border'
+                                )}
+                            />
+                            <span
+                                className={cn(
+                                    'text-muted-foreground',
+                                    !legend.includes('advance') &&
+                                        'line-through'
+                                )}
+                            >
                                 Advance
                             </span>
                         </div>
 
-                        <div className="flex items-center gap-2">
-                            <div className="size-3 rounded-full bg-muted-foreground" />
-                            <span className="text-muted-foreground">Due</span>
+                        {/* Due */}
+                        <div
+                            className="flex items-center gap-2 cursor-pointer"
+                            onClick={() => toggleLegend('due')}
+                        >
+                            <div
+                                className={cn(
+                                    'size-3 rounded-full bg-muted-foreground',
+                                    !legend.includes('due') &&
+                                        'border-4 border-border'
+                                )}
+                            />
+                            <span
+                                className={cn(
+                                    'text-muted-foreground',
+                                    !legend.includes('due') && 'line-through'
+                                )}
+                            >
+                                Due
+                            </span>
                         </div>
 
-                        <div className="flex items-center gap-2">
-                            <div className="size-3 rounded-full bg-destructive" />
-                            <span className="text-muted-foreground">
+                        {/* Overdue */}
+                        <div
+                            className="flex items-center gap-2 cursor-pointer"
+                            onClick={() => toggleLegend('overdue')}
+                        >
+                            <div
+                                className={cn(
+                                    'size-3 rounded-full bg-destructive',
+                                    !legend.includes('overdue') &&
+                                        'border-4 border-border'
+                                )}
+                            />
+                            <span
+                                className={cn(
+                                    'text-muted-foreground',
+                                    !legend.includes('overdue') &&
+                                        'line-through'
+                                )}
+                            >
                                 Overdue
                             </span>
                         </div>
 
-                        <div className="flex items-center gap-2">
-                            <div className="size-3 rounded-full bg-orange-500" />
-                            <span className="text-muted-foreground">
+                        {/* Skipped */}
+                        <div
+                            className="flex items-center gap-2 cursor-pointer"
+                            onClick={() => toggleLegend('skipped')}
+                        >
+                            <div
+                                className={cn(
+                                    'size-3 rounded-full bg-orange-500',
+                                    !legend.includes('skipped') &&
+                                        'border-4 border-border'
+                                )}
+                            />
+                            <span
+                                className={cn(
+                                    'text-muted-foreground',
+                                    !legend.includes('skipped') &&
+                                        'line-through'
+                                )}
+                            >
                                 Skipped
                             </span>
                         </div>
+
+                        {/* Default */}
+                        <div
+                            className="flex items-center gap-2 cursor-pointer"
+                            onClick={() => toggleLegend('default')}
+                        >
+                            <div
+                                className={cn(
+                                    'size-3 rounded-full bg-border',
+                                    !legend.includes('default') &&
+                                        'border-4 border-border bg-transparent'
+                                )}
+                            />
+                            <span
+                                className={cn(
+                                    'text-muted-foreground',
+                                    !legend.includes('default') &&
+                                        'line-through'
+                                )}
+                            >
+                                Default
+                            </span>
+                        </div>
                     </div>
+
                     <Button
                         className="gap-2 rounded-xl"
                         disabled={isRefetching}
@@ -707,7 +823,18 @@ const LoanGuide = ({
 
                                 {accounts?.map((account) => (
                                     <TableCell
-                                        className="text-center min-w-[150px]"
+                                        className={cn(
+                                            'text-center min-w-[150px]',
+                                            !(
+                                                row.schedules !== null &&
+                                                legend.includes(
+                                                    row.schedules[
+                                                        account.loan_account
+                                                            .account_id
+                                                    ]?.type || 'default'
+                                                )
+                                            ) && 'opacity-50'
+                                        )}
                                         key={account.loan_account.id}
                                     >
                                         <PaymentCell
