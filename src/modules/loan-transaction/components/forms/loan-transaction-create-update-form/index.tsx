@@ -1,4 +1,4 @@
-import { useCallback, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 
 import { Path, UseFormReturn, useForm } from 'react-hook-form'
 import { toast } from 'sonner'
@@ -261,6 +261,7 @@ const LoanTransactionCreateUpdateForm = ({
 }: ILoanTransactionFormProps) => {
     const [tab, setTab] = useState<TLoanFormTabs>('entries')
     const [tab2, setTab2] = useState<TLoanFormTabs2>('loan-details')
+    const [mounted, setMounted] = useState(false)
     const [startScan, setStartScan] = useState(false)
     const [customLoading, setCustomLoading] = useState(false)
     const memberPickerModal = useModalState()
@@ -442,6 +443,24 @@ const LoanTransactionCreateUpdateForm = ({
     const isLoanAppliedEqualBalance =
         !!form.watch('comaker_deposit_member_accounting_ledger_id') &&
         loan_applied_equal_to_balance
+
+    const add_on = form.watch('is_add_on')
+
+    // Prevents add on click onsubmit calls on mount since form data/values is still initializing
+    useEffect(() => {
+        setMounted(true)
+    }, [])
+
+    useEffect(() => {
+        if (!form.getValues('id') || add_on === undefined || !mounted) return
+        onSubmit()
+
+        // Only listens to add_on change, no need to listen to id and onSubmit since they can
+        // change causing this use effect triggeres infinitely.
+        // this may be a bad appraoch, but the requirements need this for UX instead of
+        // making another endpoint for Add-On switch
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [add_on])
 
     return (
         <Form {...form}>
