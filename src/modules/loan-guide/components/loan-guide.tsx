@@ -617,7 +617,7 @@ const LoanGuide = ({
                                     {row.payment_date}
                                 </TableCell>
 
-                                {accounts.map((account) => (
+                                {accounts?.map((account) => (
                                     <TableCell
                                         className="text-center min-w-[150px]"
                                         key={account.loan_account.id}
