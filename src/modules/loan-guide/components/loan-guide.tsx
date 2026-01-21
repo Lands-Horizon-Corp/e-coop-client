@@ -268,7 +268,7 @@ const PaymentScheduleDisplay = ({
                             </span>
                         </div>
 
-                        {schedule.loan_payments.length > 0 && (
+                        {schedule.loan_payments?.length > 0 && (
                             <>
                                 <Separator />
                                 <div className="space-y-3">
