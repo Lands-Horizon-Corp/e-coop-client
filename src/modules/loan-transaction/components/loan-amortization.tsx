@@ -1,8 +1,10 @@
 import { cn } from '@/helpers'
 import AmortizationScheduleTable from '@/modules/loan-amortization-schedule/components/amortization-schedule-table'
 
-import { CalendarNumberIcon } from '@/components/icons'
+import { CalendarNumberIcon, RefreshIcon } from '@/components/icons'
 import Modal, { IModalProps } from '@/components/modals/modal'
+import LoadingSpinner from '@/components/spinners/loading-spinner'
+import { Button } from '@/components/ui/button'
 import { Skeleton } from '@/components/ui/skeleton'
 
 import { IClassProps, TEntityId } from '@/types'
@@ -14,7 +16,7 @@ interface Props extends IClassProps {
 }
 
 const LoanAmortization = ({ className, loanTransactionId }: Props) => {
-    const { data, isPending } = useGetLoanAmortization({
+    const { data, isPending, refetch, isRefetching } = useGetLoanAmortization({
         loanTransactionId,
         options: { enabled: loanTransactionId !== undefined },
     })
@@ -23,10 +25,24 @@ const LoanAmortization = ({ className, loanTransactionId }: Props) => {
         <div
             className={cn('rounded max-w-full min-w-0 p-2 gap-x-2', className)}
         >
-            <p className="p-1">
-                <CalendarNumberIcon className="inline text-muted-foreground/60" />{' '}
-                Amortization Schedule
-            </p>
+            <div className="flex items-center justify-between mb-2">
+                <p className="p-1">
+                    <CalendarNumberIcon className="inline text-muted-foreground/60" />{' '}
+                    Amortization Schedule
+                </p>
+                <Button
+                    disabled={isPending || isRefetching}
+                    onClick={() => refetch()}
+                    size="icon-sm"
+                    variant="secondary"
+                >
+                    {isPending || isRefetching ? (
+                        <LoadingSpinner />
+                    ) : (
+                        <RefreshIcon />
+                    )}
+                </Button>
+            </div>
             {isPending ? (
                 <div className="space-y-3 p-4">
                     <div className="flex gap-2 pb-2">
@@ -78,7 +94,7 @@ export const LoanAmortizationModal = ({
             titleClassName="sr-only"
         >
             <LoanAmortization
-                className="col-span-5 p-0"
+                className="col-span-5 p-2"
                 loanTransactionId={loanTransactionId}
             />
         </Modal>
