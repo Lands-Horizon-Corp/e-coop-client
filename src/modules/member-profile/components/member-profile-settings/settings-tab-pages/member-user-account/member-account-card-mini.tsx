@@ -25,12 +25,12 @@ const UserAccountCardMini = ({ user }: Props) => {
                         @{user.user_name}
                     </span>
                 </p>
-                <p className="text-xs text-muted-foreground">
+                <div className="text-xs text-muted-foreground">
                     <CopyWrapper>{user.email}</CopyWrapper>
-                </p>
-                <p className="!mt-2 text-xs text-muted-foreground/40">
+                </div>
+                <div className="!mt-2 text-xs text-muted-foreground/40">
                     <CopyWrapper>{user.id}</CopyWrapper>
-                </p>
+                </div>
             </div>
         </div>
     )

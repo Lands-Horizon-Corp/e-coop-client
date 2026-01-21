@@ -91,7 +91,7 @@ const LoanView = ({
 
     return (
         <div className={cn('space-y-4 p-4 w-full', className)}>
-            {errorMessage && (
+            {!!loanTransactionId && errorMessage && (
                 <FormErrorMessage
                     className="mx-auto"
                     errorMessage={errorMessage}

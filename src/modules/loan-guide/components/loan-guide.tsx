@@ -591,6 +591,7 @@ const LoanGuide = ({
         loanTransactionId,
         options: {
             initialData,
+            enabled: !!loanTransactionId,
         },
     })
 
