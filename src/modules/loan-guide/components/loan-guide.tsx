@@ -99,6 +99,13 @@ const statusConfig: Record<
         iconClassName: 'text-orange-600 dark:text-orange-400',
         bgGradient: 'from-orange-500/20 to-orange-600/5',
     },
+    default: {
+        icon: CalendarNumberIcon,
+        label: 'Default',
+        className: 'bg-muted border-muted/30 text-muted-foreground',
+        iconClassName: 'text-muted-foreground',
+        bgGradient: 'from-muted/20 to-muted/5',
+    },
 }
 
 const LoanPaymentItem = ({ payment }: { payment: ILoanPayments }) => {
@@ -164,9 +171,11 @@ const PaymentScheduleDisplay = ({
 
     const displayAmount = isPaidOrAdvance
         ? schedule.amount_paid
-        : isDueOrOverdue
-          ? schedule.amount_due
-          : 0
+        : schedule.type === 'default'
+          ? schedule.balance
+          : isDueOrOverdue
+            ? schedule.amount_due
+            : 0
 
     return (
         <div className={cn('p-0 ', className)}>
@@ -319,6 +328,24 @@ const PaymentScheduleDisplay = ({
                         </p>
                     </div>
                 )}
+
+                {schedule.type === 'default' && (
+                    <div className="space-y-4">
+                        <div className="grid grid-cols-2 gap-4">
+                            <div className="flex items-start gap-3 p-3 rounded-lg bg-muted/50">
+                                <CalendarNumberIcon className="size-5 text-primary mt-0.5" />
+                                <div>
+                                    <p className="text-xs text-muted-foreground">
+                                        Balance
+                                    </p>
+                                    <p className="font-semibold">
+                                        {currencyFormat(schedule.balance)}
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                )}
             </div>
         </div>
     )
@@ -408,6 +435,10 @@ const PaymentCell = ({
 
                 {(schedule.type === 'due' || schedule.type === 'overdue') && (
                     <>{currencyFormat(schedule.amount_due)}</>
+                )}
+
+                {schedule.type === 'default' && (
+                    <>{currencyFormat(schedule.balance)}</>
                 )}
 
                 {schedule.type === 'skipped' && currencyFormat(0)}
