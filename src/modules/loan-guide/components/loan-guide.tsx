@@ -8,6 +8,7 @@ import {
     toReadableDate,
     toReadableDateTime,
 } from '@/helpers/date-utils'
+import { sortAccountsByTypePriority } from '@/modules/account/account.utils'
 import { AccountViewerModal } from '@/modules/account/components/account-viewer/account-viewer'
 import { ICurrency, currencyFormat } from '@/modules/currency'
 import { GeneralLedgerViewSheet } from '@/modules/general-ledger/components/ledger-detail'
@@ -600,7 +601,12 @@ const LoanGuide = ({
 
     const accounts = useMemo(() => {
         if (!loanGuide) return []
-        return getLoanAccounts(loanGuide)
+        return getLoanAccounts(loanGuide).sort((a, b) =>
+            sortAccountsByTypePriority(
+                a.loan_account.account,
+                b.loan_account.account
+            )
+        )
     }, [loanGuide])
 
     return (
