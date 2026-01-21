@@ -614,7 +614,7 @@ const LoanGuide = ({
                         {timeline.map((row) => (
                             <TableRow key={row.payment_date}>
                                 <TableCell className="sticky left-0 z-10 bg-card font-medium whitespace-nowrap">
-                                    {row.payment_date}
+                                    {toReadableDate(row.payment_date)}
                                 </TableCell>
 
                                 {accounts?.map((account) => (
