@@ -1,3 +1,5 @@
+import { useEffect } from 'react'
+
 import { useForm } from 'react-hook-form'
 import z from 'zod'
 
@@ -87,6 +89,10 @@ const TransactionBatchCreateForm = ({
     }, handleFocusError)
 
     const error = serverRequestErrExtractor({ error: rawError })
+
+    useEffect(() => {
+        form.setFocus('amount')
+    }, [form])
 
     return (
         <Form {...form}>
@@ -293,7 +299,7 @@ const TransactionBatchCreateForm = ({
                                 className="border-b-0"
                                 value="more-options"
                             >
-                                <AccordionTrigger className="text-xs !p-2 !hover:underline-0 !rounded-xl !px-4">
+                                <AccordionTrigger className="text-xs p-2! !hover:underline-0 rounded-xl! px-4!">
                                     More Options
                                 </AccordionTrigger>
                                 <AccordionContent className="space-y-4 pt-2">
@@ -386,7 +392,7 @@ export const TransactionBatchCreateFormModal = ({
 }) => {
     return (
         <Modal
-            className={cn('!max-w-xl p-0 bg-transparent', className)}
+            className={cn('max-w-xl! p-0 bg-transparent', className)}
             description={description}
             descriptionClassName="hidden"
             title={title}
@@ -395,7 +401,7 @@ export const TransactionBatchCreateFormModal = ({
         >
             <TransactionBatchCreateForm
                 {...formProps}
-                className="p-4 max-w-full overflow-x-clip bg-gradient-to-t from-popover from-40% to-background dark:to-background/80 min-w-0"
+                className="p-4 max-w-full overflow-x-clip bg-linear-to-t from-popover from-40% to-background dark:to-background/80 min-w-0"
                 onSuccess={(createdData) => {
                     formProps?.onSuccess?.(createdData)
                     props.onOpenChange?.(false)

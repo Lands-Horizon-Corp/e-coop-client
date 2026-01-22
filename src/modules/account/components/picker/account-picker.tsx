@@ -225,7 +225,7 @@ const AccountPicker = ({
                                     )}
                                 </div>
                                 {value?.icon && value.icon.length > 0 && (
-                                    <span className="bg-muted border rounded-full p-0.5 flex-shrink-0">
+                                    <span className="bg-muted border rounded-full p-0.5 shrink-0">
                                         <RenderIcon
                                             icon={value.icon as TIcon}
                                         />
@@ -237,12 +237,12 @@ const AccountPicker = ({
                                     </span>
                                 ) : (
                                     <span className="inline-flex flex-1 min-w-0 gap-x-4 items-center">
-                                        <span className="font-medium truncate min-w-fit flex-shrink">
+                                        <span className="font-medium truncate min-w-fit shrink">
                                             {value.name ?? placeholder}
                                         </span>
 
                                         {!nameOnly && !hideDescription && (
-                                            <span className="text-xs text-foreground/70 truncate flex-shrink">
+                                            <span className="text-xs text-foreground/70 truncate shrink">
                                                 {value.description}
                                             </span>
                                         )}
@@ -276,18 +276,18 @@ const AccountPicker = ({
 
                             {/* Shortcut Command */}
                             {allowShorcutCommand && (
-                                <span className="ml-2 mr-1 text-sm text-foreground/40 flex-shrink-0">
+                                <span className="ml-2 mr-1 text-sm text-foreground/40 shrink-0">
                                     ⌘ ↵
                                 </span>
                             )}
                         </div>
 
                         {/* Chevron Icon */}
-                        <ChevronDownIcon className="flex-shrink-0 ml-1" />
+                        <ChevronDownIcon className="shrink-0 ml-1" />
                     </Button>
                     {allowClear && value && (
                         <Button
-                            className="cursor-pointer flex-shrink-0 rounded-full !p-0 !px-0"
+                            className="cursor-pointer shrink-0 rounded-full p-0! px-0!"
                             onClick={(e) => {
                                 e.preventDefault()
                                 e.stopPropagation()

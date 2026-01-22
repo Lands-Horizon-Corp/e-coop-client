@@ -162,7 +162,7 @@ const LoanMemberProfileScanner = ({
     })
 
     return (
-        <div className="flex flex-col flex-shrink-0 w-fit justify-center items-center">
+        <div className="flex flex-col shrink-0 w-fit justify-center items-center">
             <div className=" size-40">
                 {startScan ? (
                     <div className="aspect-square size-full rounded-xl overflow-hidden ">
@@ -541,7 +541,7 @@ const LoanTransactionCreateUpdateForm = ({
                                                 startScan={startScan}
                                             />
                                         )}
-                                        <div className="space-y-1 flex-1 bg-gradient-to-br flex flex-col items-center justify-center from-primary/10 to-background bg-popover rounded-xl">
+                                        <div className="space-y-1 flex-1 bg-linear-to-br flex flex-col items-center justify-center from-primary/10 to-background bg-popover rounded-xl">
                                             {memberProfile ? (
                                                 <>
                                                     <MemberProfileInfoViewLoanCard
@@ -1420,7 +1420,7 @@ const LoanPickerSection = ({
                         value={form.getValues('previous_loan')}
                     />
                     <Button
-                        className="size-fit !p-2.5 shrink-0"
+                        className="size-fit p-2.5! shrink-0"
                         onClick={() => {
                             field.onChange(undefined)
                             form.setValue('previous_loan', undefined)
@@ -1565,7 +1565,7 @@ export const LoanTransactionCreateUpdateFormModal = ({
 }) => {
     return (
         <Modal
-            className={cn('p-0 !max-w-5xl gap-y-0', className)}
+            className={cn('p-0 max-w-5xl! gap-y-0', className)}
             description=""
             descriptionClassName="sr-only"
             title=""

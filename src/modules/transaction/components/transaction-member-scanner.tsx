@@ -23,6 +23,7 @@ import QrCodeScanner from '@/components/qrcode-scanner'
 import LoadingSpinner from '@/components/spinners/loading-spinner'
 import { Button } from '@/components/ui/button'
 import FormErrorMessage from '@/components/ui/form-error-message'
+import { Kbd } from '@/components/ui/kbd'
 
 import { useQeueryHookCallback } from '@/hooks/use-query-hook-cb'
 
@@ -154,7 +155,7 @@ const TransactionMemberScanner = ({
                                         Start
                                     </Button>
                                     <p className="text-muted-foreground/70 text-xs">
-                                        Click start to scan member QR
+                                        Press <Kbd>S</Kbd> to start scan
                                     </p>
                                 </div>
                             )}
