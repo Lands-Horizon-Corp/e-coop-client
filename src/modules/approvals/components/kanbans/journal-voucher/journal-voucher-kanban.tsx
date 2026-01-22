@@ -77,6 +77,7 @@ const JournalVoucherKanban = ({ className }: { className?: string }) => {
                 icon: (
                     <BadgeCheckFillIcon className="mr-2 size-4 text-purple-500" />
                 ),
+                allowed: true,
             },
         ]
     }, [])

@@ -22,7 +22,6 @@ import {
 import ImageDisplay from '@/components/image-display'
 import LoadingSpinner from '@/components/spinners/loading-spinner'
 import { Button } from '@/components/ui/button'
-import { Separator } from '@/components/ui/separator'
 
 import { useModalState } from '@/hooks/use-modal-state'
 import { useSubscribe } from '@/hooks/use-pubsub'
@@ -65,7 +64,6 @@ const NewMemberProfileKanban = (_props: Props) => {
                     totalItems={data.length}
                 />
             </div>
-            <Separator />
             <KanbanItemsContainer>
                 {data.map((member) => (
                     <MemberProfileCard key={member.id} member={member} />

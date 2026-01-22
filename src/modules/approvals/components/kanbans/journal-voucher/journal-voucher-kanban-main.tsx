@@ -28,7 +28,6 @@ import InfoTooltip from '@/components/tooltips/info-tooltip'
 import { Accordion } from '@/components/ui/accordion'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
-import { Separator } from '@/components/ui/separator'
 
 import KanbanContainer from '../../kanban/kanban-container'
 import KanbanItemsContainer from '../../kanban/kanban-items-container'
@@ -198,8 +197,6 @@ export const JournalVoucherKanbanMain = ({
                     </div>
                 )}
             </div>
-
-            <Separator />
 
             <KanbanItemsContainer>
                 {filteredJournalVouchers.length > 0 ? (

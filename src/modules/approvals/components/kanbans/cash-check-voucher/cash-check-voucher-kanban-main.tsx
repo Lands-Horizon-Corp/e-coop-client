@@ -30,7 +30,6 @@ import {
 } from '@/components/ui/accordion'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
-import { Separator } from '@/components/ui/separator'
 
 import { JournalVoucherSkeletonCard } from '../../../../journal-voucher/components/journal-voucher-skeleton-card'
 import {
@@ -196,7 +195,6 @@ export const CashCheckVoucherKanbanMain = ({
                     </div>
                 )}
             </div>
-            <Separator />
 
             <KanbanItemsContainer>
                 {filteredCashCheckVouchers.length > 0 ? (
