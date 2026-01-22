@@ -65,13 +65,13 @@ const TransactionCurrentPaymentItem = ({
     }
 
     return (
-        <ScrollArea className="flex h-full flex-col !space-y-4 !gap-y-4 max-h-full overflow-x-auto">
+        <ScrollArea className="flex h-full flex-col space-y-4! gap-y-4! max-h-full overflow-x-auto">
             {isLoading ? (
                 <PaymentsEntryListSkeleton itemNumber={4} />
             ) : currentPayment.length > 0 ? (
                 currentPayment.map((payment, idx) => (
-                    <Card className="!bg-background/90 mb-1" key={idx}>
-                        <CardContent className={cn('w-full !p-0')}>
+                    <Card className="bg-background/90! mb-1" key={idx}>
+                        <CardContent className={cn('w-full p-0!')}>
                             <Accordion
                                 className="w-full"
                                 collapsible
@@ -83,7 +83,7 @@ const TransactionCurrentPaymentItem = ({
                                 >
                                     <AccordionTrigger
                                         className={cn(
-                                            'p-2 text-xs hover:!no-underline flex w-full gap-x-2'
+                                            'p-2 text-xs hover:no-underline! flex w-full gap-x-2'
                                         )}
                                     >
                                         <ActionTooltip

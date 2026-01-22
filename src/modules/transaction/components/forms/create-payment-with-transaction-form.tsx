@@ -90,6 +90,7 @@ const PaymentWithTransactionForm = ({
     handleResetTransaction,
 }: PaymentWithTransactionFormProps) => {
     const { focusTypePayment, openSuccessModal } = useTransactionStore()
+    const accountPickerModalState = useModalState()
     const loanPaymentGuideModal = useModalState()
     const queryClient = useQueryClient()
     const {
@@ -170,15 +171,6 @@ const PaymentWithTransactionForm = ({
         }
     }, [openSuccessModal, form])
 
-    useEffect(() => {
-        if (!transaction) return
-
-        transactionForm.setValue(
-            'reference_number',
-            transaction.reference_number
-        )
-    }, [transaction, transactionForm])
-
     const { data: paymentTypes } = useGetAll()
 
     const { onOpenReverseRequestAction } = useTransactionReverseSecurityStore()
@@ -225,8 +217,6 @@ const PaymentWithTransactionForm = ({
     const handleSubmit = form.handleSubmit(
         async (data: TPaymentWithTransactionFormValues, event) => {
             event?.preventDefault()
-            const trigger = await transactionForm.trigger()
-            if (!trigger) return
             if (data.amount < 0) {
                 onOpenReverseRequestAction({
                     onSuccess: () => {
@@ -269,6 +259,14 @@ const PaymentWithTransactionForm = ({
         (e) => {
             form.setFocus('amount')
             e.preventDefault()
+        },
+        { enableOnFormTags: true, keydown: true }
+    )
+    useHotkeys(
+        'Alt + S',
+        (e) => {
+            e.preventDefault()
+            accountPickerModalState.onOpenChange(true)
         },
         { enableOnFormTags: true, keydown: true }
     )
@@ -442,6 +440,7 @@ const PaymentWithTransactionForm = ({
                                                 currentTransactionBatch?.currency_id) as TEntityId
                                         }
                                         disabled={isDisabled('account_id')}
+                                        modalState={accountPickerModalState}
                                         mode={
                                             transaction ||
                                             currentTransactionBatch
@@ -536,7 +535,7 @@ const PaymentWithTransactionForm = ({
                             <FormErrorMessage errorMessage={errorMessage} />
                         </div>
                         <Accordion
-                            className="w-full hidden p-0! overflow-auto"
+                            className="w-full p-0! overflow-auto"
                             collapsible
                             type="single"
                         >

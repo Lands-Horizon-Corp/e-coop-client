@@ -58,7 +58,6 @@ const Transaction = ({ transactionId, fullPath }: TTransactionProps) => {
         setOpenSuccessModal,
         setSelectedAccountId,
         setTransactionFormSuccess,
-        setOpenPaymentWithTransactionModal,
         setOpenMemberPicker,
     } = useTransactionStore()
 
@@ -135,22 +134,24 @@ const Transaction = ({ transactionId, fullPath }: TTransactionProps) => {
     useSubscribe(`transaction.update.${transactionId}`)
 
     const handleOnSuccessPaymentCallBack = (transaction: IGeneralLedger) => {
+        if (!transaction) return
+
         setTransactionFormSuccess(transaction)
         setOpenSuccessModal(true)
-        setOpenPaymentWithTransactionModal(false)
-        transactionForm.setValue('member_profile', transaction.member_profile)
-        transactionForm.setValue(
-            'member_profile_id',
-            transaction.member_profile_id
-        )
-        transactionForm.setValue(
-            'reference_number',
-            transaction.reference_number,
+        setSelectedAccountId(undefined)
+
+        transactionForm.reset(
             {
-                shouldDirty: false,
+                ...transactionForm.getValues(),
+                member_profile: transaction.member_profile,
+                member_profile_id: transaction.member_profile_id,
+                reference_number: transaction.reference_number,
+            },
+            {
+                keepDirty: false,
+                keepTouched: false,
             }
         )
-        setSelectedAccountId(undefined)
     }
 
     const hasSelectedTransactionId = !!transactionId
@@ -196,10 +197,23 @@ const Transaction = ({ transactionId, fullPath }: TTransactionProps) => {
     )
 
     useHotkeys(
-        'alt + Q',
+        'alt + W',
         (e) => {
             e.preventDefault()
             transactionForm.setFocus('reference_number')
+        },
+        { enableOnFormTags: true },
+        []
+    )
+    useHotkeys(
+        'alt + E',
+        (e) => {
+            e.preventDefault()
+            transactionForm.setValue('or_auto_generated', true)
+            transactionForm.setValue(
+                'reference_number',
+                paymentORResolver(userOrganization)
+            )
         },
         { enableOnFormTags: true },
         []
