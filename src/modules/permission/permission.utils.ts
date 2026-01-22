@@ -94,8 +94,7 @@ export const getCrudPermissions = ({
 // FOR HELPERS FOR CONVERTING PERMISSION STRING FROM SERVER TO
 // ARRAY OR BACK TO PERMISSION STRING
 export const permissionArrayToMap = (perms: string[]) => {
-    console.time('perm-string-to-map')
-    const permMap = perms.reduce(
+    return perms.reduce(
         (acc, perm) => {
             const [key, action] = perm.split(':')
             if (!acc[key as TPermissionResource])
@@ -105,22 +104,13 @@ export const permissionArrayToMap = (perms: string[]) => {
         },
         {} as Record<TPermissionResource, TPermissionAction[]>
     )
-
-    console.timeEnd('perm-string-to-map')
-    return permMap
 }
 
 // CONVERT ROLES BACK TO ARRAY PERMISSION
 export const permissionMapToPermissionArray = (
     value: Record<string, TPermissionAction[]>
 ) => {
-    console.time('perm-map-to-perm-array')
-
-    const perms = Object.entries(value).flatMap(([key, actions]) =>
+    return Object.entries(value).flatMap(([key, actions]) =>
         actions.map((action) => `${key}:${action}`)
     )
-
-    console.timeEnd('perm-map-to-perm-array')
-
-    return perms
 }

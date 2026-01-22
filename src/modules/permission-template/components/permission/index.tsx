@@ -1,32 +1,25 @@
 import { TPermissionResource } from '@/modules/permission/permission.types'
-import { UserIcon } from 'lucide-react'
 import { IconType } from 'react-icons/lib'
 
-import {
-    BankIcon,
-    BillIcon,
-    CalendarDotsIcon,
-    HandWithdrawIcon,
-    Users3Icon,
-} from '@/components/icons'
+import { UserIcon } from '@/components/icons'
 
 export const PERMISSION_RESOURCE_ICON_MAP: Partial<
     Record<TPermissionResource, IconType>
 > = {
     User: UserIcon,
-    UserOrganization: Users3Icon,
-    MemberType: Users3Icon,
-    MemberGroup: Users3Icon,
-    MemberCenter: Users3Icon,
-    MemberGender: Users3Icon,
-    MemberOccupation: Users3Icon,
-    MemberClassification: Users3Icon,
+    // UserOrganization: Users3Icon,
+    // MemberType: Users3Icon,
+    // MemberGroup: Users3Icon,
+    // MemberCenter: Users3Icon,
+    // MemberGender: Users3Icon,
+    // MemberOccupation: Users3Icon,
+    // MemberClassification: Users3Icon,
     MemberProfile: UserIcon,
-    Bank: BankIcon,
-    Holiday: CalendarDotsIcon,
-    BillAndCoins: BillIcon,
-    LoanTransaction: HandWithdrawIcon,
-    TransactionBatch: BillIcon,
-    Timesheet: CalendarDotsIcon,
-    Footstep: CalendarDotsIcon,
+    // Bank: BankIcon,
+    // Holiday: CalendarDotsIcon,
+    // BillAndCoins: BillIcon,
+    // LoanTransaction: HandWithdrawIcon,
+    // TransactionBatch: BillIcon,
+    // Timesheet: CalendarDotsIcon,
+    // Footstep: CalendarDotsIcon,
 }
