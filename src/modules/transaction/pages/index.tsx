@@ -277,11 +277,11 @@ const Transaction = ({ transactionId, fullPath }: TTransactionProps) => {
                         isOpen={openSuccessModal}
                         onClose={handleCloseSuccessModal}
                         onOpenChange={(newState) => {
-                        if (!newState) {
-                            accountPickerModalState.onOpenChange(true)
-                        }
-                        setOpenSuccessModal(newState)
-                    }}
+                            if (!newState) {
+                                accountPickerModalState.onOpenChange(true)
+                            }
+                            setOpenSuccessModal(newState)
+                        }}
                         open={openSuccessModal}
                         transaction={transactionFormSuccess}
                     />
@@ -367,7 +367,7 @@ const Transaction = ({ transactionId, fullPath }: TTransactionProps) => {
                 {selectedMemberId && !isTransactionMismatchCurrentBatch && (
                     <PaymentWithTransactionForm
                         accountPickerModalState={accountPickerModalState}
-                    currentTransactionBatch={currentTransactionBatch}
+                        currentTransactionBatch={currentTransactionBatch}
                         handleResetTransaction={() => {
                             handleSetTransactionId({ fullPath })
                         }}
