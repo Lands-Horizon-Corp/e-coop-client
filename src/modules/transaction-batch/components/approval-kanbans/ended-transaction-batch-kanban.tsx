@@ -1,7 +1,10 @@
 import KanbanContainer from '@/modules/approvals/components/kanban/kanban-container'
 import KanbanItemsContainer from '@/modules/approvals/components/kanban/kanban-items-container'
 import KanbanTitle from '@/modules/approvals/components/kanban/kanban-title'
-import { useAuthUserWithOrgBranch } from '@/modules/authentication/authgentication.store'
+import {
+    hasPermissionFromAuth,
+    useAuthUserWithOrgBranch,
+} from '@/modules/authentication/authgentication.store'
 import { currencyFormat } from '@/modules/currency'
 import {
     ITransactionBatch,
@@ -109,6 +112,12 @@ const TransactionBatchCard = ({
                 <div className="flex items-center gap-x-1">
                     <Button
                         className="size-fit p-1"
+                        disabled={
+                            !hasPermissionFromAuth({
+                                action: 'Update',
+                                resourceType: 'ApprovalsEndBatch',
+                            })
+                        }
                         onClick={() => viewModalState.onOpenChange(true)}
                         size="icon"
                         variant="secondary"

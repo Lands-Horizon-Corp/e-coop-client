@@ -6,13 +6,17 @@ import {
     AccountClassificationFormModal,
     AccountClassificationTable,
 } from '@/modules/account-classification'
-import { useAuthUserWithOrgBranch } from '@/modules/authentication/authgentication.store'
+import {
+    hasPermissionFromAuth,
+    useAuthUserWithOrgBranch,
+} from '@/modules/authentication/authgentication.store'
 import PermissionGuard from '@/modules/permission/components/permission-guard'
-import { hasPermission } from '@/modules/permission/permission.utils'
 
 import PageContainer from '@/components/containers/page-container'
 
 import { useModalState } from '@/hooks/use-modal-state'
+
+import { AccountClassificationTableProps } from '../components/tables'
 
 export const AccountClassificationPage = () => {
     const { currentAuth } = useAuthUserWithOrgBranch()
@@ -69,18 +73,20 @@ export const AccountClassificationPage = () => {
                         toolbarProps={{
                             createActionProps: {
                                 onClick: () => createModal.onOpenChange(true),
-                                disabled: !hasPermission({
+                                disabled: !hasPermissionFromAuth({
                                     action: 'Create',
                                     resourceType: 'AccountClassification',
                                     userOrg: user_organization,
                                 }),
                             },
-                            // exportActionProps: {
-                            //     disabled: !hasPermissionFromAuth({
-                            //         action: 'Export',
-                            //         resourceType: 'AccountClassification',
-                            //     }),
-                            // },
+                            exportActionProps: {
+                                disabled: !hasPermissionFromAuth({
+                                    action: 'Export',
+                                    resourceType: 'Account',
+                                }),
+                            } as NonNullable<
+                                AccountClassificationTableProps['toolbarProps']
+                            >['exportActionProps'],
                         }}
                     />
                 </>

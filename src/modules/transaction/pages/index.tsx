@@ -9,6 +9,7 @@ import z from 'zod'
 import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
 
 import { IGeneralLedger } from '@/modules/general-ledger'
+import PermissionGuard from '@/modules/permission/components/permission-guard'
 import {
     ITransaction,
     TransactionCurrentPaymentEntry,
@@ -248,18 +249,23 @@ const Transaction = ({ transactionId, fullPath }: TTransactionProps) => {
     }, [])
     return (
         <div>
-            <TransactionReverseRequestFormModal
-                formProps={{
-                    onSuccess: () => {
-                        toast.success('success request verification')
-                        modalData?.onSuccess?.()
-                    },
-                }}
-                onOpenChange={onClose}
-                open={isOpen}
-                title={modalData?.title || 'Request Reverse Transaction'}
-            />
-            {/* {selectedMember && (
+            <PermissionGuard
+                action={['Read', 'Create', 'Update']}
+                conditionLogic="all"
+                resourceType="Transaction"
+            >
+                <TransactionReverseRequestFormModal
+                    formProps={{
+                        onSuccess: () => {
+                            toast.success('success request verification')
+                            modalData?.onSuccess?.()
+                        },
+                    }}
+                    onOpenChange={onClose}
+                    open={isOpen}
+                    title={modalData?.title || 'Request Reverse Transaction'}
+                />
+                {/* {selectedMember && (
                 <LoanPicker
                     memberProfileId={selectedMember.id}
                     modalState={loanPickerState}
@@ -267,141 +273,144 @@ const Transaction = ({ transactionId, fullPath }: TTransactionProps) => {
                     triggerClassName="hidden"
                 />
             )} */}
-            <PageContainer className="flex h-fit lg:h-[90vh] w-full overflow-hidden!">
-                <TransactionModalSuccessPayment
-                    isOpen={openSuccessModal}
-                    onClose={handleCloseSuccessModal}
-                    onOpenChange={(newState) => {
+                <PageContainer className="flex h-fit lg:h-[90vh] w-full overflow-hidden!">
+                    <TransactionModalSuccessPayment
+                        isOpen={openSuccessModal}
+                        onClose={handleCloseSuccessModal}
+                        onOpenChange={(newState) => {
                         if (!newState) {
                             accountPickerModalState.onOpenChange(true)
                         }
                         setOpenSuccessModal(newState)
                     }}
-                    open={openSuccessModal}
-                    transaction={transactionFormSuccess}
-                />
-                <div className="flex h-full flex-col lg:flex-row w-full gap-2 overflow-hidden">
-                    {/* Left Section (Payment) */}
-                    <div className="w-full lg:w-[40%] ecoop-scroll pr-px flex flex-col overflow-y-auto">
-                        <TransactionCurrentPaymentEntry
-                            form={transactionForm}
-                            fullPath={fullPath}
-                            totalAmount={transaction?.amount}
-                            transaction={transaction as ITransaction}
-                            transactionId={transactionId}
-                        />
-                        {hasSelectedTransactionId && (
-                            <Button
-                                className="w-full mb-2"
-                                onClick={(e) => {
-                                    e.preventDefault()
-                                    handleSetTransactionId({ fullPath })
-                                    queryClient.resetQueries({
-                                        queryKey: ['transaction'],
+                        open={openSuccessModal}
+                        transaction={transactionFormSuccess}
+                    />
+                    <div className="flex h-full flex-col lg:flex-row w-full gap-2 overflow-hidden">
+                        {/* Left Section (Payment) */}
+                        <div className="w-full lg:w-[40%] ecoop-scroll pr-px flex flex-col overflow-y-auto">
+                            <TransactionCurrentPaymentEntry
+                                form={transactionForm}
+                                fullPath={fullPath}
+                                totalAmount={transaction?.amount}
+                                transaction={transaction as ITransaction}
+                                transactionId={transactionId}
+                            />
+                            {hasSelectedTransactionId && (
+                                <Button
+                                    className="w-full mb-2"
+                                    onClick={(e) => {
+                                        e.preventDefault()
+                                        handleSetTransactionId({ fullPath })
+                                        queryClient.resetQueries({
+                                            queryKey: ['transaction'],
+                                        })
+                                    }}
+                                    size="sm"
+                                    variant="outline"
+                                >
+                                    <ResetIcon className="mr-2" />
+                                    reset current transaction
+                                </Button>
+                            )}
+                        </div>
+                        {/* Right Section (Ledger Table) */}
+                        <div className="flex-1 flex flex-col p-2 rounded-2xl bg-background ecoop-scroll overflow-y-auto">
+                            <TransactionMemberScanner
+                                className="p-2"
+                                form={transactionForm}
+                                fullPath={fullPath}
+                                handleRemoveMember={() => {
+                                    handleSetTransactionId({
+                                        transactionId: undefined,
+                                        fullPath,
                                     })
+                                    transactionForm.reset()
                                 }}
-                                size="sm"
-                                variant="outline"
-                            >
-                                <ResetIcon className="mr-2" />
-                                reset current transaction
-                            </Button>
-                        )}
-                    </div>
-                    {/* Right Section (Ledger Table) */}
-                    <div className="flex-1 flex flex-col p-2 rounded-2xl bg-background ecoop-scroll overflow-y-auto">
-                        <TransactionMemberScanner
-                            className="p-2"
-                            form={transactionForm}
-                            fullPath={fullPath}
-                            handleRemoveMember={() => {
-                                handleSetTransactionId({
-                                    transactionId: undefined,
-                                    fullPath,
-                                })
-                                transactionForm.reset()
-                            }}
-                            transactionId={transactionId}
-                        />
-                        <TransactionAccountMemberLedger
-                            memberProfileId={selectedMemberId as TEntityId}
-                            onRowClick={(data) => {
-                                if (!currentTransactionBatch) {
-                                    return toast.warning(
-                                        'You do not have an active transaction batch. Please create a transaction batch to proceed.'
+                                transactionId={transactionId}
+                            />
+                            <TransactionAccountMemberLedger
+                                memberProfileId={selectedMemberId as TEntityId}
+                                onRowClick={(data) => {
+                                    if (!currentTransactionBatch) {
+                                        return toast.warning(
+                                            'You do not have an active transaction batch. Please create a transaction batch to proceed.'
+                                        )
+                                    }
+
+                                    // if (data.original.account?.type === 'Loan') {
+                                    //     return loanPickerState.onOpenChange(true)
+                                    // }
+
+                                    if (
+                                        data.original.account.currency_id !==
+                                        currentTransactionBatch?.currency_id
+                                    ) {
+                                        return toast.warning(
+                                            'The account currency does not match the current transaction batch currency.'
+                                        )
+                                    }
+
+                                    transactionForm.setValue(
+                                        'account',
+                                        data.original.account
                                     )
-                                }
-
-                                // if (data.original.account?.type === 'Loan') {
-                                //     return loanPickerState.onOpenChange(true)
-                                // }
-
-                                if (
-                                    data.original.account.currency_id !==
-                                    currentTransactionBatch?.currency_id
-                                ) {
-                                    return toast.warning(
-                                        'The account currency does not match the current transaction batch currency.'
+                                    transactionForm.setValue(
+                                        'account_id',
+                                        data.original.account_id
                                     )
-                                }
-
-                                transactionForm.setValue(
-                                    'account',
-                                    data.original.account
-                                )
-                                transactionForm.setValue(
-                                    'account_id',
-                                    data.original.account_id
-                                )
-                            }}
-                        />
+                                }}
+                            />
+                        </div>
                     </div>
-                </div>
-                {/* bottom Section (transaction  Payment) */}
-            </PageContainer>
-            {selectedMemberId && !isTransactionMismatchCurrentBatch && (
-                <PaymentWithTransactionForm
-                    accountPickerModalState={accountPickerModalState}
+                    {/* bottom Section (transaction  Payment) */}
+                </PageContainer>
+                {selectedMemberId && !isTransactionMismatchCurrentBatch && (
+                    <PaymentWithTransactionForm
+                        accountPickerModalState={accountPickerModalState}
                     currentTransactionBatch={currentTransactionBatch}
-                    handleResetTransaction={() => {
-                        handleSetTransactionId({ fullPath })
-                    }}
-                    memberJointId={transactionForm.getValues('member_join_id')}
-                    memberProfileId={transactionForm.getValues(
-                        'member_profile_id'
-                    )}
-                    onSuccess={(transaction) => {
-                        queryClient.invalidateQueries({
-                            queryKey: [
-                                'member-accounting-ledger',
-                                'filtered-paginated',
-                                'member',
-                                selectedMemberId,
-                            ],
-                        })
-                        queryClient.invalidateQueries({
-                            queryKey: ['transaction'],
-                        })
-                        queryClient.invalidateQueries({
-                            queryKey: [
-                                'general-ledger',
-                                'filtered-paginated',
-                                'transaction',
-                            ],
-                            exact: false,
-                        })
-                        handleSetTransactionId({
-                            transactionId: transaction.transaction_id,
-                            fullPath,
-                        })
-                        handleOnSuccessPaymentCallBack(transaction)
-                    }}
-                    readOnly={!hasNoTransactionBatch}
-                    transaction={transaction}
-                    transactionForm={transactionForm}
-                    transactionId={transactionId}
-                />
-            )}
+                        handleResetTransaction={() => {
+                            handleSetTransactionId({ fullPath })
+                        }}
+                        memberJointId={transactionForm.getValues(
+                            'member_join_id'
+                        )}
+                        memberProfileId={transactionForm.getValues(
+                            'member_profile_id'
+                        )}
+                        onSuccess={(transaction) => {
+                            queryClient.invalidateQueries({
+                                queryKey: [
+                                    'member-accounting-ledger',
+                                    'filtered-paginated',
+                                    'member',
+                                    selectedMemberId,
+                                ],
+                            })
+                            queryClient.invalidateQueries({
+                                queryKey: ['transaction'],
+                            })
+                            queryClient.invalidateQueries({
+                                queryKey: [
+                                    'general-ledger',
+                                    'filtered-paginated',
+                                    'transaction',
+                                ],
+                                exact: false,
+                            })
+                            handleSetTransactionId({
+                                transactionId: transaction.transaction_id,
+                                fullPath,
+                            })
+                            handleOnSuccessPaymentCallBack(transaction)
+                        }}
+                        readOnly={!hasNoTransactionBatch}
+                        transaction={transaction}
+                        transactionForm={transactionForm}
+                        transactionId={transactionId}
+                    />
+                )}
+            </PermissionGuard>
         </div>
     )
 }

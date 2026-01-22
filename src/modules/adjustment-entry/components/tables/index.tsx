@@ -222,6 +222,7 @@ const AdjustmentEntryTable = ({
                         }}
                         // --- Export Action Props (Placeholder) ---
                         exportActionProps={{
+                            ...toolbarProps,
                             isLoading: isPending,
                             filters: exportfilter,
                             model: 'AdjustmentEntry',

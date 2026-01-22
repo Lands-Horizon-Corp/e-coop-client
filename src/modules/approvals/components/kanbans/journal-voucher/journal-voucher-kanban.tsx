@@ -77,7 +77,10 @@ const JournalVoucherKanban = ({ className }: { className?: string }) => {
                 icon: (
                     <BadgeCheckFillIcon className="mr-2 size-4 text-purple-500" />
                 ),
-                allowed: true,
+                allowed: hasPermissionFromAuth({
+                    action: 'Read',
+                    resourceType: 'ApprovalsJVReleased',
+                }),
             },
         ]
     }, [])
@@ -95,7 +98,7 @@ const JournalVoucherKanban = ({ className }: { className?: string }) => {
     return (
         <div className={cn('flex flex-col w-full border h-full', className)}>
             {/* Top Controls Section */}
-            <PermissionGuard action="Read" resourceType="ApprovalsJVApproved">
+            <PermissionGuard action="Read" resourceType="ApprovalsJV">
                 <SearchKanbanInput<TJournalVoucherMode>
                     kanbanType="journal-voucher"
                     menuItems={JournalVoucherMenu}
@@ -119,7 +122,6 @@ const JournalVoucherKanban = ({ className }: { className?: string }) => {
                         <div className="flex gap-4 p-4 w-full">
                             {JournalVoucherMenu.map((item) => {
                                 if (!item.allowed) return null
-
                                 return (
                                     <JournalVoucherKanbanMain
                                         enableSearch={false}

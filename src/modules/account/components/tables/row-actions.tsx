@@ -150,7 +150,6 @@ export const AccountAction = ({
 }: IAccountTableActionProps) => {
     const {
         account,
-        accountCrudPerms,
         isDeletingAccount,
         moveAccountIndexMutation,
         handleEdit,
@@ -166,15 +165,22 @@ export const AccountAction = ({
                 onDelete={{
                     text: 'Delete',
                     isAllowed:
-                        (accountCrudPerms.Delete ||
-                            accountCrudPerms.OwnDelete) &&
-                        !isDeletingAccount,
+                        hasPermissionFromAuth({
+                            action: ['Delete', 'OwnDelete'],
+                            resourceType: 'Account',
+                            conditionLogic: 'some',
+                            resource: account,
+                        }) && !isDeletingAccount,
                     onClick: handleDelete,
                 }}
                 onEdit={{
                     text: 'Edit',
-                    isAllowed:
-                        accountCrudPerms.Update || accountCrudPerms.OwnUpdate,
+                    isAllowed: hasPermissionFromAuth({
+                        action: ['Update', 'OwnUpdate'],
+                        resourceType: 'Account',
+                        conditionLogic: 'some',
+                        resource: account,
+                    }),
                     onClick: handleEdit,
                 }}
                 otherActions={
@@ -182,8 +188,12 @@ export const AccountAction = ({
                         <DropdownMenuItem
                             disabled={
                                 moveAccountIndexMutation.isPending ||
-                                !accountCrudPerms.Update ||
-                                !accountCrudPerms.OwnUpdate
+                                !hasPermissionFromAuth({
+                                    action: ['Update', 'OwnUpdate'],
+                                    resourceType: 'Account',
+                                    conditionLogic: 'some',
+                                    resource: account,
+                                })
                             }
                             onClick={() =>
                                 toast.promise(
@@ -200,8 +210,12 @@ export const AccountAction = ({
                         <DropdownMenuItem
                             disabled={
                                 moveAccountIndexMutation.isPending ||
-                                !accountCrudPerms.Update ||
-                                !accountCrudPerms.OwnUpdate
+                                !hasPermissionFromAuth({
+                                    action: ['Update', 'OwnUpdate'],
+                                    resourceType: 'Account',
+                                    conditionLogic: 'some',
+                                    resource: account,
+                                })
                             }
                             onClick={() =>
                                 toast.promise(
@@ -396,7 +410,6 @@ export const AccountRowContext = ({
 }: IAccountRowContextProps) => {
     const {
         account,
-        accountCrudPerms,
         isDeletingAccount,
         moveAccountIndexMutation,
         handleEdit,
@@ -412,14 +425,22 @@ export const AccountRowContext = ({
                     text: 'Delete',
                     isAllowed:
                         !isDeletingAccount &&
-                        (accountCrudPerms.Delete || accountCrudPerms.OwnDelete),
+                        hasPermissionFromAuth({
+                            action: ['Delete', 'OwnDelete'],
+                            resourceType: 'Account',
+                            resource: account,
+                        }),
                     onClick: handleDelete,
                 }}
                 onEdit={{
                     text: 'Edit',
                     isAllowed:
                         !isDeletingAccount &&
-                        (accountCrudPerms.Update || accountCrudPerms.OwnUpdate),
+                        hasPermissionFromAuth({
+                            action: ['Update', 'OwnUpdate'],
+                            resourceType: 'Account',
+                            resource: account,
+                        }),
                     onClick: handleEdit,
                 }}
                 otherActions={
@@ -439,8 +460,11 @@ export const AccountRowContext = ({
                         <ContextMenuItem
                             disabled={
                                 moveAccountIndexMutation.isPending ||
-                                !accountCrudPerms.Update ||
-                                !accountCrudPerms.OwnUpdate
+                                !hasPermissionFromAuth({
+                                    action: ['Update', 'OwnUpdate'],
+                                    resourceType: 'Account',
+                                    resource: account,
+                                })
                             }
                             onClick={() =>
                                 toast.promise(
@@ -457,8 +481,11 @@ export const AccountRowContext = ({
                         <ContextMenuItem
                             disabled={
                                 moveAccountIndexMutation.isPending ||
-                                !accountCrudPerms.Update ||
-                                !accountCrudPerms.OwnUpdate
+                                !hasPermissionFromAuth({
+                                    action: ['Update', 'OwnUpdate'],
+                                    resourceType: 'Account',
+                                    resource: account,
+                                })
                             }
                             onClick={() =>
                                 toast.promise(

@@ -175,7 +175,7 @@ export const JournalVoucherCardActions = ({
                     <DropdownMenu>
                         <DropdownMenuTrigger asChild>
                             <Button size={'icon'} variant="ghost">
-                                {<PencilFillIcon className="size-4" />}
+                                <PencilFillIcon className="size-4" />
                             </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent>

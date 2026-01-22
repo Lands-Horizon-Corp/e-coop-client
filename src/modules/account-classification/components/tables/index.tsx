@@ -53,7 +53,6 @@ export interface AccountClassificationTableProps
         | 'globalSearchProps'
         | 'scrollableProps'
         | 'filterLogicProps'
-        | 'exportActionProps'
         | 'deleteActionProps'
     >
 }
@@ -192,6 +191,7 @@ const AccountClassificationTable = ({
                                 deleteMany(selectedData.map((data) => data.id)),
                         }}
                         exportActionProps={{
+                            ...toolbarProps,
                             isLoading: isPending,
                             filters: exportfilter,
                             model: 'AccountClassification',

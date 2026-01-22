@@ -4,15 +4,15 @@ import { useQueryClient } from '@tanstack/react-query'
 import { toast } from 'sonner'
 
 import {
-    // hasPermissionFromAuth,
+    hasPermissionFromAuth,
     useAuthUserWithOrgBranch,
 } from '@/modules/authentication/authgentication.store'
 import PermissionGuard from '@/modules/permission/components/permission-guard'
-import { hasPermission } from '@/modules/permission/permission.utils'
 
 import PageContainer from '@/components/containers/page-container'
 
 import { AccountCategoryFormModal, AccountCategoryTable } from '..'
+import { AccountCategoryTableProps } from '../components/tables'
 import AccountCategoryAction from '../components/tables/row-action-context'
 
 export const AccountCategoryPage = () => {
@@ -75,18 +75,20 @@ export const AccountCategoryPage = () => {
                         toolbarProps={{
                             createActionProps: {
                                 onClick: () => setCreateModal(true),
-                                disabled: !hasPermission({
+                                disabled: !hasPermissionFromAuth({
                                     action: 'Create',
                                     resourceType: 'AccountCategory',
                                     userOrg: user_organization,
                                 }),
                             },
-                            // exportActionProps: {
-                            //     disabled: !hasPermissionFromAuth({
-                            //         action: 'Export',
-                            //         resourceType: 'AccountCategory',
-                            //     }),
-                            // },
+                            exportActionProps: {
+                                disabled: !hasPermissionFromAuth({
+                                    action: 'Export',
+                                    resourceType: 'Account',
+                                }),
+                            } as NonNullable<
+                                AccountCategoryTableProps['toolbarProps']
+                            >['exportActionProps'],
                         }}
                     />
                 </>

@@ -11,19 +11,19 @@ import UserJoinRequestKanban from './kanbans/user-join-request-kanban'
 interface Props extends IClassProps {}
 
 const Approval = ({ className }: Props) => {
-    const canApproveEndBatch = hasPermissionFromAuth({
+    const canSeeEndBatch = hasPermissionFromAuth({
         action: 'Read',
         resourceType: 'ApprovalsEndBatch',
     })
-    const canApproveBlotterRequest = hasPermissionFromAuth({
+    const canSeeBlotterViewRequest = hasPermissionFromAuth({
         action: 'Read',
         resourceType: 'ApprovalsBlotterView',
     })
-    const canApproveUserRequest = hasPermissionFromAuth({
+    const canSeeUserJoinRequest = hasPermissionFromAuth({
         action: 'Read',
         resourceType: 'ApprovalsUser',
     })
-    const canApproveMemberProfile = hasPermissionFromAuth({
+    const canSeeNewMemberApprovalRequest = hasPermissionFromAuth({
         action: 'Read',
         resourceType: 'ApprovalsMemberProfile',
     })
@@ -35,10 +35,10 @@ const Approval = ({ className }: Props) => {
                 className
             )}
         >
-            {canApproveEndBatch && <EndedTransactionBatchKanban />}
-            {canApproveBlotterRequest && <BlotterRequestKanban />}
-            {canApproveUserRequest && <UserJoinRequestKanban />}
-            {canApproveMemberProfile && <NewMemberProfileKanban />}
+            {canSeeEndBatch && <EndedTransactionBatchKanban />}
+            {canSeeBlotterViewRequest && <BlotterRequestKanban />}
+            {canSeeUserJoinRequest && <UserJoinRequestKanban />}
+            {canSeeNewMemberApprovalRequest && <NewMemberProfileKanban />}
         </div>
     )
 }

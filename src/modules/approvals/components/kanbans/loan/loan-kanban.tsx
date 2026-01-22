@@ -47,7 +47,7 @@ const LoanKanban = ({ className }: { className?: string }) => {
                 value: 'draft',
                 icon: <DraftIcon className="mr-2 size-4 text-primary" />,
                 isAllowed: hasPermissionFromAuth({
-                    action: 'Approve',
+                    action: 'Read',
                     resourceType: 'ApprovalsLoanDraft',
                 }),
             },
@@ -56,7 +56,7 @@ const LoanKanban = ({ className }: { className?: string }) => {
                 value: 'printed',
                 icon: <PrinterIcon className="mr-2 size-4 text-blue-500" />,
                 isAllowed: hasPermissionFromAuth({
-                    action: 'Approve',
+                    action: 'Read',
                     resourceType: 'ApprovalsLoanPrinted',
                 }),
             },
@@ -67,7 +67,7 @@ const LoanKanban = ({ className }: { className?: string }) => {
                     <CheckCircle2Icon className="mr-2 size-4 text-success-foreground" />
                 ),
                 isAllowed: hasPermissionFromAuth({
-                    action: 'Approve',
+                    action: 'Read',
                     resourceType: 'ApprovalsLoanApproved',
                 }),
             },
@@ -77,7 +77,10 @@ const LoanKanban = ({ className }: { className?: string }) => {
                 icon: (
                     <BadgeCheckFillIcon className="mr-2 size-4 text-purple-500" />
                 ),
-                isAllowed: true,
+                isAllowed: hasPermissionFromAuth({
+                    action: 'Read',
+                    resourceType: 'ApprovalsLoanReleased',
+                }),
             },
         ]
     }, [])

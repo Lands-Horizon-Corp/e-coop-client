@@ -2,7 +2,10 @@ import { useQueryClient } from '@tanstack/react-query'
 import { toast } from 'sonner'
 
 import { toReadableDate } from '@/helpers/date-utils'
-import { useAuthUserWithOrgBranch } from '@/modules/authentication/authgentication.store'
+import {
+    hasPermissionFromAuth,
+    useAuthUserWithOrgBranch,
+} from '@/modules/authentication/authgentication.store'
 import {
     IMemberProfile,
     useAllPendingMemberProfiles,
@@ -135,6 +138,12 @@ const MemberProfileCard = ({ member }: { member: IMemberProfile }) => {
             >
                 <Button
                     className="size-fit px-2 py-1"
+                    disabled={
+                        !hasPermissionFromAuth({
+                            action: 'Update',
+                            resourceType: 'ApprovalsMemberProfile',
+                        })
+                    }
                     onClick={() =>
                         onOpen({
                             title: 'Decline Member Profile',
@@ -154,6 +163,12 @@ const MemberProfileCard = ({ member }: { member: IMemberProfile }) => {
                 </Button>
                 <Button
                     className="size-fit px-2 py-1"
+                    disabled={
+                        !hasPermissionFromAuth({
+                            action: 'Update',
+                            resourceType: 'ApprovalsMemberProfile',
+                        })
+                    }
                     onClick={() =>
                         onOpen({
                             title: 'Approve Member Profile',

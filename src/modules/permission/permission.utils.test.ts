@@ -173,7 +173,7 @@ describe('hasPermission - core logic', () => {
                 userOrg: makeUserOrg({
                     permissions: ['Account:Read', 'Account:Update'],
                 }),
-                action: ['Read', 'Update', 'Approve'],
+                action: ['Read', 'Update', 'Delete'],
                 resourceType: 'Account',
                 conditionLogic: 'all',
             })

@@ -1,5 +1,6 @@
 import { toast } from 'sonner'
 
+import { hasPermissionFromAuth } from '@/modules/authentication/authgentication.store'
 import { TJournalActionMode, TPrintMode } from '@/modules/journal-voucher'
 import { Row } from '@tanstack/react-table'
 import {
@@ -118,13 +119,24 @@ const CashCheckVoucherOtherAction = ({
                 <PrinterIcon className="mr-2 h-4 w-4 text-muted-foreground" />
             ),
             onSelect: handlePrintAction,
-            isVisible: !isPrinted,
+            isVisible:
+                !isPrinted &&
+                hasPermissionFromAuth({
+                    action: 'Update',
+                    resourceType: 'ApprovalsCashVoucherPrinted',
+                }),
         },
         {
             label: 'Undo Print',
             icon: <Undo2Icon className="mr-2 h-4 w-4 text-muted-foreground" />,
             onSelect: handleMutatePrintAction('print-undo'),
-            isVisible: isPrinted && !isApproved,
+            isVisible:
+                isPrinted &&
+                !isApproved &&
+                hasPermissionFromAuth({
+                    action: 'Update',
+                    resourceType: 'ApprovalsCashVoucherPrinted',
+                }),
         },
         {
             label: 'Approve',
@@ -132,7 +144,12 @@ const CashCheckVoucherOtherAction = ({
                 <CheckCircle2Icon className="mr-2 h-4 w-4 text-muted-foreground" />
             ),
             onSelect: handleApproveAction,
-            isVisible: canApprove,
+            isVisible:
+                canApprove &&
+                hasPermissionFromAuth({
+                    action: 'Update',
+                    resourceType: 'ApprovalsCashVoucherApproved',
+                }),
         },
         {
             label: 'Undo Approve',
@@ -140,7 +157,13 @@ const CashCheckVoucherOtherAction = ({
                 <XCircleIcon className="mr-2 h-4 w-4 text-muted-foreground" />
             ),
             onSelect: handleCashCheckAction('approve-undo'),
-            isVisible: isApproved && !CashCheckVoucher.released_date,
+            isVisible:
+                isApproved &&
+                !CashCheckVoucher.released_date &&
+                hasPermissionFromAuth({
+                    action: 'Update',
+                    resourceType: 'ApprovalsCashVoucherApproved',
+                }),
         },
         {
             label: 'Release',
@@ -148,7 +171,12 @@ const CashCheckVoucherOtherAction = ({
                 <SendHorizonalIcon className="mr-2 h-4 w-4 text-muted-foreground" />
             ),
             onSelect: handleReleaseAction,
-            isVisible: showRelease,
+            isVisible:
+                showRelease &&
+                hasPermissionFromAuth({
+                    action: 'Update',
+                    resourceType: 'ApprovalsCashVoucherReleased',
+                }),
         },
         {
             label: 'Check Entry',

@@ -4,7 +4,6 @@ import {
     useAuthUserWithOrgBranch,
 } from '@/modules/authentication/authgentication.store'
 import PermissionGuard from '@/modules/permission/components/permission-guard'
-import { hasPermission } from '@/modules/permission/permission.utils'
 
 import PageContainer from '@/components/containers/page-container'
 
@@ -42,10 +41,9 @@ export const Account = () => {
                         toolbarProps={{
                             createActionProps: {
                                 onClick: () => createModal.onOpenChange(true),
-                                disabled: !hasPermission({
+                                disabled: !hasPermissionFromAuth({
                                     action: 'Create',
                                     resourceType: 'Account',
-                                    userOrg: user_organization,
                                 }),
                             },
                             exportActionProps: {

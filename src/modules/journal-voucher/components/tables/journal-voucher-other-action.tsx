@@ -1,5 +1,6 @@
 import { toast } from 'sonner'
 
+import { hasPermissionFromAuth } from '@/modules/authentication/authgentication.store'
 import {
     IJournalVoucher,
     TJournalActionMode,
@@ -111,13 +112,24 @@ const JournalVoucherOtherAction = ({
                 <PrinterIcon className="mr-2 h-4 w-4 text-muted-foreground" />
             ),
             onSelect: handlePrintAction,
-            isVisible: !isPrinted,
+            isVisible:
+                !isPrinted &&
+                hasPermissionFromAuth({
+                    action: ['Update'],
+                    resourceType: 'ApprovalsJVPrinted',
+                }),
         },
         {
             label: 'Undo Print',
             icon: <Undo2Icon className="mr-2 h-4 w-4 text-muted-foreground" />,
             onSelect: handleMutatePrintAction('print-undo'),
-            isVisible: isPrinted && !isApproved,
+            isVisible:
+                isPrinted &&
+                !isApproved &&
+                hasPermissionFromAuth({
+                    action: ['Update'],
+                    resourceType: 'ApprovalsJVPrinted',
+                }),
         },
         {
             label: 'Approve',
@@ -125,7 +137,12 @@ const JournalVoucherOtherAction = ({
                 <CheckCircle2Icon className="mr-2 h-4 w-4 text-muted-foreground" />
             ),
             onSelect: handleApproveAction,
-            isVisible: canApprove,
+            isVisible:
+                canApprove &&
+                hasPermissionFromAuth({
+                    action: ['Update'],
+                    resourceType: 'ApprovalsJVApproved',
+                }),
         },
         {
             label: 'Undo Approve',
@@ -133,7 +150,13 @@ const JournalVoucherOtherAction = ({
                 <XCircleIcon className="mr-2 h-4 w-4 text-muted-foreground" />
             ),
             onSelect: handleJournalAction('approve-undo'),
-            isVisible: isApproved && !journalVoucher.released_date,
+            isVisible:
+                isApproved &&
+                !journalVoucher.released_date &&
+                hasPermissionFromAuth({
+                    action: ['Update'],
+                    resourceType: 'ApprovalsJVApproved',
+                }),
         },
         {
             label: 'Release',
@@ -141,7 +164,12 @@ const JournalVoucherOtherAction = ({
                 <SendHorizonalIcon className="mr-2 h-4 w-4 text-muted-foreground" />
             ),
             onSelect: handleReleaseAction,
-            isVisible: showRelease,
+            isVisible:
+                showRelease &&
+                hasPermissionFromAuth({
+                    action: ['Update'],
+                    resourceType: 'ApprovalsJVReleased',
+                }),
         },
     ]
 

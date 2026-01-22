@@ -2,7 +2,10 @@ import { useQueryClient } from '@tanstack/react-query'
 
 import { cn } from '@/helpers'
 import { toReadableDate } from '@/helpers/date-utils'
-import { useAuthUserWithOrgBranch } from '@/modules/authentication/authgentication.store'
+import {
+    hasPermissionFromAuth,
+    useAuthUserWithOrgBranch,
+} from '@/modules/authentication/authgentication.store'
 import {
     IUserOrganization,
     useUserOrgAcceptJoinRequest,
@@ -159,6 +162,12 @@ const JoinRequestCard = ({ userOrg }: { userOrg: IUserOrganization }) => {
             >
                 <Button
                     className="size-fit px-2 py-1"
+                    disabled={
+                        !hasPermissionFromAuth({
+                            action: 'Update',
+                            resourceType: 'ApprovalsUser',
+                        })
+                    }
                     hoverVariant="destructive"
                     onClick={() =>
                         onOpen({
@@ -180,6 +189,12 @@ const JoinRequestCard = ({ userOrg }: { userOrg: IUserOrganization }) => {
                 </Button>
                 <Button
                     className="size-fit px-2 py-1"
+                    disabled={
+                        !hasPermissionFromAuth({
+                            action: 'Update',
+                            resourceType: 'ApprovalsUser',
+                        })
+                    }
                     onClick={() =>
                         onOpen({
                             title: 'Approve Join Request',

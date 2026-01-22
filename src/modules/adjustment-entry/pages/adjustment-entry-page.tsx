@@ -121,6 +121,10 @@ const AdjustmentEntryPage = () => {
                     mode={userOrganization ? 'currency-employee' : 'currency'}
                     toolbarProps={{
                         createActionProps: {
+                            disabled: !hasPermissionFromAuth({
+                                action: 'Create',
+                                resourceType: 'AdjustmentEntry',
+                            }),
                             className: buttonVariants({
                                 variant: !focusedTotal?.is_balanced
                                     ? 'alert'

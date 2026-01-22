@@ -5,7 +5,10 @@ import {
     IAccountCategory,
     useDeleteById,
 } from '@/modules/account-category'
-import { getCrudPermissionFromAuthStore } from '@/modules/authentication/authgentication.store'
+import {
+    getCrudPermissionFromAuthStore,
+    hasPermissionFromAuth,
+} from '@/modules/authentication/authgentication.store'
 import useConfirmModalStore from '@/store/confirm-modal-store'
 import { Row } from '@tanstack/react-table'
 
@@ -38,7 +41,6 @@ const useAccountCategoryActions = ({
     >()
     const { onOpen } = useConfirmModalStore()
 
-    // 🔐 Instance-level CRUD permissions
     const accountCategoryCrudPerms = getCrudPermissionFromAuthStore({
         resourceType: 'AccountCategory',
         resource: accountCategory,
@@ -85,7 +87,7 @@ export const AccountCategoryAction = ({
     onDeleteSuccess,
 }: IAccountCategoryActionProps) => {
     const {
-        accountCategoryCrudPerms,
+        accountCategory,
         isDeletingAccountCategory,
         handleEdit,
         handleDelete,
@@ -98,15 +100,20 @@ export const AccountCategoryAction = ({
                 text: 'Delete',
                 isAllowed:
                     !isDeletingAccountCategory &&
-                    (accountCategoryCrudPerms.Delete ||
-                        accountCategoryCrudPerms.OwnDelete),
+                    hasPermissionFromAuth({
+                        action: ['Delete', 'OwnDelete'],
+                        resourceType: 'AccountCategory',
+                        resource: accountCategory,
+                    }),
                 onClick: handleDelete,
             }}
             onEdit={{
                 text: 'Edit',
-                isAllowed:
-                    accountCategoryCrudPerms.Update ||
-                    accountCategoryCrudPerms.OwnUpdate,
+                isAllowed: hasPermissionFromAuth({
+                    action: ['Update', 'OwnUpdate'],
+                    resourceType: 'AccountCategory',
+                    resource: accountCategory,
+                }),
                 onClick: handleEdit,
             }}
             otherActions={<></>}
@@ -126,7 +133,7 @@ export const AccountCategoryRowContext = ({
     onDeleteSuccess,
 }: IAccountCategoryRowContextProps) => {
     const {
-        accountCategoryCrudPerms,
+        accountCategory,
         isDeletingAccountCategory,
         handleEdit,
         handleDelete,
@@ -138,15 +145,20 @@ export const AccountCategoryRowContext = ({
                 text: 'Delete',
                 isAllowed:
                     !isDeletingAccountCategory &&
-                    (accountCategoryCrudPerms.Delete ||
-                        accountCategoryCrudPerms.OwnDelete),
+                    hasPermissionFromAuth({
+                        action: ['Delete', 'OwnDelete'],
+                        resourceType: 'AccountCategory',
+                        resource: accountCategory,
+                    }),
                 onClick: handleDelete,
             }}
             onEdit={{
                 text: 'Edit',
-                isAllowed:
-                    accountCategoryCrudPerms.Update ||
-                    accountCategoryCrudPerms.OwnUpdate,
+                isAllowed: hasPermissionFromAuth({
+                    action: ['Update', 'OwnUpdate'],
+                    resourceType: 'AccountCategory',
+                    resource: accountCategory,
+                }),
                 onClick: handleEdit,
             }}
             row={row}

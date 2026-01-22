@@ -1,7 +1,10 @@
 import KanbanContainer from '@/modules/approvals/components/kanban/kanban-container'
 import KanbanItemsContainer from '@/modules/approvals/components/kanban/kanban-items-container'
 import KanbanTitle from '@/modules/approvals/components/kanban/kanban-title'
-import { useAuthUserWithOrgBranch } from '@/modules/authentication/authgentication.store'
+import {
+    hasPermissionFromAuth,
+    useAuthUserWithOrgBranch,
+} from '@/modules/authentication/authgentication.store'
 import { currencyFormat } from '@/modules/currency'
 import useConfirmModalStore from '@/store/confirm-modal-store'
 
@@ -109,6 +112,12 @@ const TransactionBatchCard = ({
                     </Button>
                     <Button
                         className="size-fit px-2 py-1"
+                        disabled={
+                            !hasPermissionFromAuth({
+                                action: 'Update',
+                                resourceType: 'ApprovalsBlotterView',
+                            })
+                        }
                         onClick={() =>
                             onOpen({
                                 title: 'Approve View',
