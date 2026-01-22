@@ -46,7 +46,7 @@ const Modal = ({
         <Dialog {...other}>
             <DialogContent
                 className={cn(
-                    'shadow-2 ecoop-scroll max-h-[95vh] max-w-xl overflow-y-auto !rounded-2xl border font-inter',
+                    'shadow-2 ecoop-scroll max-h-[95vh] max-w-xl overflow-y-auto rounded-2xl! border font-inter',
                     className
                 )}
                 closeButtonClassName={closeButtonClassName}

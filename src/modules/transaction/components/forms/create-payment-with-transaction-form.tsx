@@ -9,7 +9,6 @@ import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
 import { cn } from '@/helpers'
 import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
 import { AccountPicker, TAccountType } from '@/modules/account'
-import { useAuthUserWithOrg } from '@/modules/authentication/authgentication.store'
 import BankCombobox from '@/modules/bank/components/bank-combobox'
 import { CurrencyInput } from '@/modules/currency'
 import { IGeneralLedger } from '@/modules/general-ledger'
@@ -300,7 +299,7 @@ const PaymentWithTransactionForm = ({
         if (!account || !hasNoTransactionBatch || accountPickerModalState.open)
             return
         form.setFocus('amount')
-    }, [account, hasNoTransactionBatch, form, !accountPickerModalState.open])
+    }, [account, hasNoTransactionBatch, form, accountPickerModalState.open])
 
     return (
         <Card
