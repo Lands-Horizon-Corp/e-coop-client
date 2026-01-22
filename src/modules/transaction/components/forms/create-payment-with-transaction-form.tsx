@@ -58,8 +58,6 @@ import { useModalState } from '@/hooks/use-modal-state'
 
 import { IClassProps, IForm, TEntityId } from '@/types'
 
-import { paymentORResolver } from '../../transaction.utils'
-
 interface PaymentWithTransactionFormProps
     extends
         IClassProps,
@@ -142,10 +140,6 @@ const PaymentWithTransactionForm = ({
             onSuccess: (transaction) => {
                 formReset()
                 form.setFocus('amount')
-                transactionForm.resetField('reference_number', {
-                    keepDirty: false,
-                    defaultValue: paymentORResolver(userOrganization),
-                })
                 form.reset({
                     account: transaction.account,
                     account_id: transaction.account.id,
