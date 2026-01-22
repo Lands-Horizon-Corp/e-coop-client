@@ -96,7 +96,6 @@ const PaymentWithTransactionForm = ({
         settings_accounting_payment_default_value,
         settings_accounting_payment_default_value_id,
         settings_payment_type_default_value_id,
-        userOrganization,
     } = useGetUserSettings()
 
     const form = useForm<TPaymentWithTransactionFormValues>({

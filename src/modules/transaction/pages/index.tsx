@@ -174,6 +174,9 @@ const Transaction = ({ transactionId, fullPath }: TTransactionProps) => {
                 'or_auto_generated',
                 !payment_or_allow_user_input
             )
+            if (payment_or_allow_user_input) {
+                transactionForm.setValue('reference_number', ORWithPadding)
+            }
         },
         {
             enableOnFormTags: true,
