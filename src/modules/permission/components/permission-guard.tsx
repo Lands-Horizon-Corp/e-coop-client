@@ -1,27 +1,25 @@
 import { ReactNode } from 'react'
 
 import { useAuthStore } from '@/modules/authentication/authgentication.store'
-import { IUserOrganization } from '@/modules/user-organization'
 
-import { IAuditable, IBaseProps, IClassProps } from '@/types'
+import { IBaseProps, IClassProps } from '@/types'
 
 import { TPermissionAction, TPermissionResource } from '../permission.types'
-import { hasPermission } from '../permission.utils'
+import {
+    IHasPermissionOpts,
+    TPermissionLogic,
+    hasPermission,
+} from '../permission.utils'
 import PermissionNotAllowedDisplay from './permission-not-allowed-display'
 
 export type NotAllowedDisplayProps = {
     message: string
-    permissionName?: string
-    resourceName?: string
+    permissionName?: TPermissionAction | TPermissionAction[]
+    resourceType?: TPermissionResource
+    conditionLogic?: TPermissionLogic
 } & IClassProps
 
-interface Props<
-    TResourceData extends IAuditable = IAuditable,
-> extends IBaseProps {
-    userOrg?: IUserOrganization
-    resourceType: TPermissionResource
-    action: TPermissionAction
-    resource?: TResourceData
+interface Props extends IBaseProps, IHasPermissionOpts {
     NotAllowedComponent?: (props: NotAllowedDisplayProps) => ReactNode
     notAllowedComponentProps?: NotAllowedDisplayProps
 }
@@ -42,8 +40,9 @@ const PermissionGuard = ({
         return (
             <NotAllowedComponent
                 {...notAllowedComponentProps}
+                conditionLogic={rest.conditionLogic}
                 permissionName={rest.action}
-                resourceName={rest.resourceType}
+                resourceType={rest.resourceType}
             />
         )
 

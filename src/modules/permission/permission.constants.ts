@@ -7,7 +7,7 @@ export const PERMISSION_BASE_ACTIONS = [
     'Update',
     'Delete',
     'Export',
-    'Approve',
+    // 'Approve',
     'OwnRead',
     'OwnUpdate',
     'OwnDelete',
@@ -40,11 +40,11 @@ export const PERMISSION_ALL_ACTIONS: {
         label: 'Export',
         description: 'Allows exporting resources',
     },
-    {
-        action: 'Approve',
-        label: 'Approve',
-        description: 'Allows approving resources',
-    },
+    // {
+    //     action: 'Approve',
+    //     label: 'Approve',
+    //     description: 'Allows approving resources',
+    // },
     {
         action: 'OwnRead',
         label: 'Own Read',
@@ -95,23 +95,19 @@ export const PERMISSION_ALL_RESOURCE_ACTION = [
         resource: 'Account',
         label: 'Account Module',
         description: 'Accounts',
-        supportedActions: generateBaseAction({
-            excludeActions: ['Approve'],
-        }),
+        supportedActions: generateBaseAction(),
     },
     {
         resource: 'AccountClassification',
         label: 'Account Classification Module',
         description: 'Manage classifications of accounts',
-        supportedActions: generateBaseAction({
-            excludeActions: ['Approve'],
-        }),
+        supportedActions: generateBaseAction(),
     },
     {
         resource: 'AccountCategory',
         label: 'Account Category Module',
         description: 'Manage Account Categories',
-        supportedActions: generateBaseAction({ excludeActions: ['Approve'] }),
+        supportedActions: generateBaseAction(),
     },
     {
         resource: 'AccountTag',
@@ -131,108 +127,147 @@ export const PERMISSION_ALL_RESOURCE_ACTION = [
         description: 'View Adjustment Entry',
         supportedActions: ['Read', 'Create', 'Export'] as TPermissionAction[],
     },
+    // APPROVAL PAGE
     {
         resource: 'Approvals',
-        label: 'Approvals Module',
-        description: 'Access/Manage Approvals',
+        label: 'Approvals',
+        description: 'Access Approval Page/Module',
         supportedActions: ['Read'] as TPermissionAction[],
     },
+    // MAIN APPROVAL
     {
         resource: 'ApprovalsEndBatch',
         label: 'Approval Endbatch Access',
         description: 'Allow access to Approval > End Batch',
-        supportedActions: ['Read', 'Approve'] as TPermissionAction[],
+        supportedActions: ['Read', 'Update'] as TPermissionAction[],
     },
     {
         resource: 'ApprovalsBlotterView',
-        label: 'Approval Blotter View',
-        description: 'Allow Approval blotter view request approvals',
-        supportedActions: ['Read', 'Approve'] as TPermissionAction[],
+        label: 'Approval Blotter View Request',
+        description: 'Blotter view request in approvals',
+        supportedActions: ['Read', 'Update'] as TPermissionAction[],
     },
     {
         resource: 'ApprovalsUser',
         label: 'Approval Users View',
         description: 'Allow access for user join requests',
-        supportedActions: ['Read', 'Approve'] as TPermissionAction[],
+        supportedActions: ['Read', 'Update'] as TPermissionAction[],
     },
     {
         resource: 'ApprovalsMemberProfile',
         label: 'Approval Member View',
         description: 'Allow access for member profile requests',
-        supportedActions: ['Read', 'Approve'] as TPermissionAction[],
+        supportedActions: ['Read', 'Update'] as TPermissionAction[],
     },
+
+    // APPROVAL JV
     {
         resource: 'ApprovalsJV',
         label: 'Approval Journal Voucher',
-        description: 'Allow access for journal voucher approval',
-        supportedActions: ['Read', 'Approve'] as TPermissionAction[],
+        description: 'Allow read for Approval > Journal Voucher',
+        supportedActions: ['Read'] as TPermissionAction[],
     },
     {
         resource: 'ApprovalsJVDraft',
         label: 'Approval Journal Voucher Draft',
-        description: 'Allow access for JV Draft approval',
-        supportedActions: ['Read', 'Approve'] as TPermissionAction[],
+        description: 'Allow read for Approval > Journal Voucher > Draft',
+        supportedActions: ['Read'] as TPermissionAction[],
     },
     {
         resource: 'ApprovalsJVPrinted',
         label: 'Approval Journal Voucher Print',
-        description: 'Allow access for JV print approval',
-        supportedActions: ['Read', 'Approve'] as TPermissionAction[],
+        description: 'Allow read/action for Approval > Journal Voucher > Print',
+        supportedActions: ['Read', 'Update'] as TPermissionAction[],
     },
     {
         resource: 'ApprovalsJVApproved',
         label: 'Approval Journal Voucher Approved',
-        description: 'Allow access for JV Approved approval',
-        supportedActions: ['Read', 'Approve'] as TPermissionAction[],
+        description:
+            'Allow read/action for Approval > Journal Voucher > Approved',
+        supportedActions: ['Read', 'Update'] as TPermissionAction[],
     },
+    {
+        resource: 'ApprovalsJVReleased',
+        label: 'Approval JV Release ',
+        description:
+            'Allow read/action for Approval > Journal Voucher > Released',
+        supportedActions: ['Read', 'Update'] as TPermissionAction[],
+    },
+
+    // APPROVAL > CASH VOUCHER
     {
         resource: 'ApprovalsCashVoucher',
         label: 'Approval Cash Voucher',
-        description: 'Allow access for cash voucher approval',
-        supportedActions: ['Read', 'Approve'] as TPermissionAction[],
+        description: 'Allow read for Approval > Cash Voucher',
+        supportedActions: ['Read'] as TPermissionAction[],
     },
     {
         resource: 'ApprovalsCashVoucherDraft',
         label: 'Approval Cash Voucher Draft',
-        description: 'Allow access for Cash Voucher Draft approval',
-        supportedActions: ['Read', 'Approve'] as TPermissionAction[],
+        description: 'Allow read for Approval > Cash Voucher > Draft',
+        supportedActions: ['Read'] as TPermissionAction[],
     },
     {
         resource: 'ApprovalsCashVoucherPrinted',
         label: 'Approval Cash Voucher Print',
-        description: 'Allow access for Cash Voucher print approval',
-        supportedActions: ['Read', 'Approve'] as TPermissionAction[],
+        description: 'Allow read/action for Approval > Cash Voucher > Print',
+        supportedActions: ['Read', 'Update'] as TPermissionAction[],
     },
     {
         resource: 'ApprovalsCashVoucherApproved',
         label: 'Approval Cash Voucher Approved',
-        description: 'Allow access for Cash Voucher Approved approval',
-        supportedActions: ['Read', 'Approve'] as TPermissionAction[],
+        description: 'Allow read/action for Approval > Cash Voucher > Approved',
+        supportedActions: ['Read', 'Update'] as TPermissionAction[],
     },
+    {
+        resource: 'ApprovalsCashVoucherReleased',
+        label: 'Approval Cash Voucher Release',
+        description: 'Allow read/action for Approval > Cash Voucher > Released',
+        supportedActions: ['Read', 'Update'] as TPermissionAction[],
+    },
+
+    // APPROVAL > LOAN
     {
         resource: 'ApprovalsLoan',
         label: 'Approval Loan',
-        description: 'Allow access for loan approval',
-        supportedActions: ['Read', 'Approve'] as TPermissionAction[],
+        description: 'Allow read for Approval > Loan',
+        supportedActions: ['Read'] as TPermissionAction[],
     },
     {
         resource: 'ApprovalsLoanDraft',
         label: 'Approval Loan Draft',
-        description: 'Allow access for Loan Draft approval',
-        supportedActions: ['Read', 'Approve'] as TPermissionAction[],
+        description: 'Allow read for Approval > Loan > Draft',
+        supportedActions: ['Read'] as TPermissionAction[],
     },
     {
         resource: 'ApprovalsLoanPrinted',
         label: 'Approval Loan Print',
-        description: 'Allow access for Loan print approval',
-        supportedActions: ['Read', 'Approve'] as TPermissionAction[],
+        description: 'Allow read/action for Approval > Loan > Print',
+        supportedActions: ['Read', 'Update'] as TPermissionAction[],
     },
     {
         resource: 'ApprovalsLoanApproved',
         label: 'Approval Loan Approved',
-        description: 'Allow access for Loan Approved approval',
-        supportedActions: ['Read', 'Approve'] as TPermissionAction[],
+        description: 'Allow read/action for Approval > Loan > Approved',
+        supportedActions: ['Read', 'Update'] as TPermissionAction[],
     },
+    {
+        resource: 'ApprovalsLoanReleased',
+        label: 'Approval Loan Release',
+        description: 'Allow read/action for Approval > Loan > Released',
+        supportedActions: ['Read', 'Update'] as TPermissionAction[],
+    },
+
+    // FOR TRANSACTION/PAYMENT (DEPOSIT, WITHDRAW, PAYMENT)
+    {
+        resource: 'Transaction',
+        label: 'Transaction Module',
+        description:
+            'Allow access/action for transaction(payment, withdraw, deposit) module',
+        supportedActions: ['Read', 'Create', 'Update'] as TPermissionAction[],
+    },
+
+    //
     {
         resource: 'GeneralLedger',
         label: 'General Ledger',
@@ -243,12 +278,18 @@ export const PERMISSION_ALL_RESOURCE_ACTION = [
         resource: 'MemberProfile',
         label: 'Member Profile',
         description: 'Manage member',
-        supportedActions: generateBaseAction({ excludeActions: ['Approve'] }),
+        supportedActions: generateBaseAction(),
     },
     {
         resource: 'User',
         label: 'User',
         description: 'Manage any user related actions',
+        supportedActions: ['Read'] as TPermissionAction[],
+    },
+    {
+        resource: 'LoanScheme',
+        label: 'Loan Scheme',
+        description: 'Manage loan scheme',
         supportedActions: ['Read'] as TPermissionAction[],
     },
 ] as const satisfies PermissionResourceAction[]

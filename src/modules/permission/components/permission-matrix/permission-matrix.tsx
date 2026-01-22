@@ -4,6 +4,7 @@ import { cn } from '@/helpers'
 import { useVirtualizer } from '@tanstack/react-virtual'
 import { CheckSquare, Search, Shield } from 'lucide-react'
 
+import InfoTooltip from '@/components/tooltips/info-tooltip'
 import { Badge } from '@/components/ui/badge'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Input } from '@/components/ui/input'
@@ -37,7 +38,7 @@ const PermissionMatrix = forwardRef<
     const [selectedPermissions, setSelectedPermissions] = useInternalState<
         Record<string, TPermissionAction[]>
     >(defaultValues, controlledState?.value, controlledState?.onValueChange)
-    const [selectAll, setSelectAll] = useState(false)
+    // const [selectAll, setSelectAll] = useState(false)
     const [searchTerm, setSearchTerm] = useState('')
     const parentRef = useRef<HTMLDivElement>(null)
     const headerScrollRef = useRef<HTMLDivElement>(null)
@@ -64,7 +65,6 @@ const PermissionMatrix = forwardRef<
         overscan: 5,
     })
 
-    // Sync horizontal scroll between header and body
     const handleBodyScroll = useCallback(() => {
         if (parentRef.current && headerScrollRef.current) {
             headerScrollRef.current.scrollLeft = parentRef.current.scrollLeft
@@ -82,6 +82,7 @@ const PermissionMatrix = forwardRef<
                 if (checked) {
                     return { ...prev, [resource]: [...current, action] }
                 } else {
+                    // setSelectAll(false)
                     return {
                         ...prev,
                         [resource]: current.filter((p) => p !== action),
@@ -115,7 +116,7 @@ const PermissionMatrix = forwardRef<
 
     const handleSelectAll = useCallback(
         (checked: boolean) => {
-            setSelectAll(checked)
+            // setSelectAll(checked)
             if (checked) {
                 const allPermissions: Record<string, TPermissionAction[]> = {}
                 PERMISSION_ALL_RESOURCE_ACTION.forEach((resource) => {
@@ -152,6 +153,18 @@ const PermissionMatrix = forwardRef<
         [selectedPermissions]
     )
 
+    const isAllSelected = useMemo(() => {
+        if (!PERMISSION_ALL_RESOURCE_ACTION.length) return false
+
+        return PERMISSION_ALL_RESOURCE_ACTION.every((resource) => {
+            const selected = selectedPermissions[resource.resource] || []
+            return (
+                selected.length === resource.supportedActions.length &&
+                resource.supportedActions.length > 0
+            )
+        })
+    }, [selectedPermissions])
+
     return (
         <fieldset
             aria-readonly={readOnly}
@@ -162,7 +175,6 @@ const PermissionMatrix = forwardRef<
             disabled={readOnly}
             ref={ref}
         >
-            {/* Header */}
             <div className="p-4 border-b border-border bg-muted/30">
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                     <div className="flex items-center gap-3">
@@ -185,7 +197,7 @@ const PermissionMatrix = forwardRef<
                         </Badge>
                         <div className="flex items-center gap-2">
                             <Checkbox
-                                checked={selectAll}
+                                checked={isAllSelected}
                                 disabled={readOnly}
                                 id="select-all-virtualized"
                                 onCheckedChange={(checked) =>
@@ -213,13 +225,10 @@ const PermissionMatrix = forwardRef<
                 </div>
             </div>
 
-            {/* Table Header - Sticky with synchronized scroll */}
             <div className="bg-muted/50 border-b border-border sticky top-0 z-20 flex">
-                {/* Fixed Resource Column Header */}
                 <div className="min-w-[280px] w-[280px] flex-shrink-0 px-4 py-3 font-semibold text-sm text-foreground bg-muted/50 border-r border-border">
                     Resource
                 </div>
-                {/* Scrollable Actions Header */}
                 <div className="flex-1 overflow-hidden" ref={headerScrollRef}>
                     <div className="flex">
                         <div className="w-16 flex-shrink-0 px-2 py-3 text-center font-semibold text-sm text-foreground">
@@ -238,7 +247,6 @@ const PermissionMatrix = forwardRef<
                 </div>
             </div>
 
-            {/* Virtualized Body */}
             <div
                 className="flex-1 overflow-auto min-h-[400px] ecoop-scroll max-h-[500px]"
                 onScroll={handleBodyScroll}
@@ -272,19 +280,24 @@ const PermissionMatrix = forwardRef<
                                     transform: `translateY(${virtualRow.start}px)`,
                                 }}
                             >
-                                {/* Fixed Resource Name Column */}
-                                <div className="min-w-[280px] w-[280px] text-right flex-shrink-0 px-4 py-2 border-r border-border/50 bg-popover/90 backdrop-blur-sm sticky left-0 z-10">
-                                    <div className="font-medium text-sm text-foreground truncate">
-                                        {resource.label}
+                                <InfoTooltip
+                                    content={
+                                        <p className="max-w-2xl text-base wrap-normal text-pretty">
+                                            {resource.description}
+                                        </p>
+                                    }
+                                >
+                                    <div className="min-w-[280px] w-[280px] text-right flex-shrink-0 px-4 py-2 border-r border-border/50 bg-popover/90 backdrop-blur-sm sticky left-0 z-10">
+                                        <div className="font-medium text-sm text-foreground truncate">
+                                            {resource.label}
+                                        </div>
+                                        <div className="text-xs text-muted-foreground truncate">
+                                            {resource.description}
+                                        </div>
                                     </div>
-                                    <div className="text-xs text-muted-foreground truncate">
-                                        {resource.description}
-                                    </div>
-                                </div>
+                                </InfoTooltip>
 
-                                {/* Scrollable Actions */}
                                 <div className="flex">
-                                    {/* Select All for Row */}
                                     <div className="w-16 flex-shrink-0 px-2 flex items-center justify-center">
                                         <PermissionCheckbox
                                             checked={allCheckedState}
@@ -299,7 +312,6 @@ const PermissionMatrix = forwardRef<
                                         />
                                     </div>
 
-                                    {/* Permission Checkboxes */}
                                     {PERMISSION_ALL_ACTIONS.map((action) => {
                                         const isSupported =
                                             resource.supportedActions.includes(
@@ -336,10 +348,9 @@ const PermissionMatrix = forwardRef<
                 </div>
             </div>
 
-            {/* Empty State */}
             {filteredResources.length === 0 && searchTerm && (
                 <div className="text-center py-12 px-4">
-                    <Search className="h-12 w-12 mx-auto text-muted-foreground/50 mb-3" />
+                    <Search className="size-12 mx-auto text-muted-foreground/50 mb-3" />
                     <p className="text-muted-foreground text-sm">
                         No resources found matching "
                         <span className="font-medium">{searchTerm}</span>"
@@ -347,10 +358,9 @@ const PermissionMatrix = forwardRef<
                 </div>
             )}
 
-            {/* Footer */}
             <div className="flex justify-between items-center px-4 py-3 bg-muted/30 border-t border-border text-sm text-muted-foreground">
                 <span>
-                    {filteredResources.length} resources ×{' '}
+                    {filteredResources.length} resources{' '}
                     {PERMISSION_ALL_ACTIONS.length} actions
                 </span>
             </div>

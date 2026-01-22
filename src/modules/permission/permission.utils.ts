@@ -8,13 +8,16 @@ import {
     TPermissionResource,
 } from './permission.types'
 
+export type TPermissionLogic = 'all' | 'some'
+
 export interface IHasPermissionOpts<
     TResourceData extends IAuditable = IAuditable,
     TUser extends { user_id: TEntityId } = IUserOrganization,
 > {
     userOrg?: TUser | null
     resourceType: TPermissionResource
-    action: TPermissionAction
+    action: TPermissionAction | TPermissionAction[]
+    conditionLogic?: TPermissionLogic
     resource?: TResourceData
 }
 
@@ -23,46 +26,44 @@ export function hasPermission({
     action,
     resourceType,
     resource,
+    conditionLogic = 'some',
 }: IHasPermissionOpts): boolean {
-    // NO user org, no permission by default
     if (!userOrg) return false
 
     // OWNER CAN DO ANYTHING
-    if (userOrg.user_type === 'owner') {
-        return true
-    }
+    if (userOrg.user_type === 'owner') return true
 
-    // CHECKS IF IT OWNS THE RESOURCE(DATA), THIS CHECKS THE CREATEOR USER ID VS RESOURCE CREATED BY ID
-    if (action.startsWith('Own')) {
-        const ownPerm = `${resourceType}:${action}` as TPermission
+    const actions = Array.isArray(action) ? action : [action]
 
-        if (resource && userOrg.permissions.includes(ownPerm)) {
+    // THIS EVALUATE IF THE ACTION IS VALID
+    const evaluateAction = (act: TPermissionAction): boolean => {
+        // ACTION IS OWN PERMISSION
+        if (act.startsWith('Own')) {
+            const ownPerm = `${resourceType}:${act}` as TPermission
+
+            if (!resource || resource.created_by_id === undefined) return false
+            if (!userOrg.permissions.includes(ownPerm)) return false
+
             return resource.created_by_id === userOrg.user_id
         }
+
+        // GENERAL PERMISSION
+        const generalPerm = `${resourceType}:${act}` as TPermission
+        return userOrg.permissions.includes(generalPerm)
     }
 
-    // CHECKS IF THE PERMISSION EXISTS ON USER PERMISSIONS LIST
-    const generalPerm: TPermission = `${resourceType}:${action}` as TPermission
-    if (
-        userOrg.permissions.includes(generalPerm) &&
-        !action.startsWith('Own')
-    ) {
-        return true
-    }
-
-    // RETURN FALSE BY DEFAULT
-    return false
+    return conditionLogic === 'all'
+        ? actions.every(evaluateAction)
+        : actions.some(evaluateAction)
 }
-
 // Extract only CRUD PERMS and returned as object of actions
 export interface GetCrudPermissionOpts<
     TResourceData extends IAuditable = IAuditable,
     TUser extends { user_id: TEntityId } = IUserOrganization,
-> {
-    userOrg?: TUser | null
-    resourceType: TPermissionResource
-    resource?: TResourceData
-}
+> extends Omit<
+    IHasPermissionOpts<TResourceData, TUser>,
+    'action' | 'conditionLogic'
+> {}
 
 export const getCrudPermissions = ({
     userOrg,

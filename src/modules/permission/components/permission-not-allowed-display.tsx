@@ -7,9 +7,18 @@ import { NotAllowedDisplayProps } from './permission-guard'
 
 const PermissionNotAllowedDisplay = ({
     permissionName,
-    resourceName,
+    resourceType,
+    conditionLogic = 'some',
     className,
 }: NotAllowedDisplayProps) => {
+    const actions = permissionName
+        ? Array.isArray(permissionName)
+            ? permissionName
+            : [permissionName]
+        : []
+
+    const hasActions = actions.length > 0
+
     return (
         <div
             className={cn(
@@ -21,22 +30,30 @@ const PermissionNotAllowedDisplay = ({
                 <div className="mb-6 flex size-20 items-center justify-center rounded-full bg-destructive/10">
                     <ShieldExclamationIcon className="size-10 text-destructive" />
                 </div>
+
                 <h2 className="mb-3 text-xl font-semibold text-foreground">
                     Access Denied
                 </h2>
 
                 <p className="mb-4 text-muted-foreground">
-                    You don't have{' '}
-                    {permissionName && (
-                        <Badge
-                            className="mx-1 px-2.5 py-0.5 text-xs font-medium"
-                            variant="destructive"
-                        >
-                            {permissionName}
-                        </Badge>
+                    You don’t have{' '}
+                    {hasActions ? (
+                        <>
+                            {conditionLogic === 'all' ? 'all of' : 'any of'}{' '}
+                            {actions.map((action) => (
+                                <Badge
+                                    className="mx-1 px-2.5 py-0.5 text-xs font-medium"
+                                    key={action}
+                                    variant="destructive"
+                                >
+                                    {action}
+                                </Badge>
+                            ))}
+                        </>
+                    ) : (
+                        'the required permission'
                     )}
-                    {!permissionName && 'the required'} permission
-                    {resourceName && (
+                    {resourceType && (
                         <>
                             {' '}
                             for{' '}
@@ -44,7 +61,7 @@ const PermissionNotAllowedDisplay = ({
                                 className="mx-1 px-2.5 py-0.5 text-xs font-medium"
                                 variant="secondary"
                             >
-                                {resourceName}
+                                {resourceType}
                             </Badge>
                         </>
                     )}
