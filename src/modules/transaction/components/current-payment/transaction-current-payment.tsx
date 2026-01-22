@@ -24,7 +24,11 @@ import { useQeueryHookCallback } from '@/hooks/use-query-hook-cb'
 
 import { TEntityId } from '@/types'
 
-import { ITransaction, TransactionFromSchema } from '../..'
+import {
+    ITransaction,
+    TransactionFromSchema,
+    useGetTransactionById,
+} from '../..'
 import { paymentORResolver } from '../../transaction.utils'
 import TransactionHistory from '../history'
 import ReferenceNumber from '../input/transaction-reference-number-field'
@@ -78,9 +82,33 @@ const TransactionCurrentPaymentEntry = ({
         },
     })
 
+    const {
+        data: getTransaction,
+        isSuccess: isSuccessGetTransaction,
+        isError: isErrorGetTransaction,
+    } = useGetTransactionById({
+        id: transactionId,
+        options: {
+            enabled: !!transactionId,
+        },
+    })
+
+    console.log(getTransaction)
+
     const handleError = useCallback((error: Error) => {
         toast.error(error?.message || 'Something went wrong')
     }, [])
+
+    useQeueryHookCallback({
+        data: getTransaction,
+        error: handleError,
+        isError: isErrorGetTransaction,
+        isSuccess: isSuccessGetTransaction,
+        onSuccess: (data) => {
+            form.setValue('member_profile', data.member_profile)
+            form.setValue('member_profile_id', data.member_profile_id)
+        },
+    })
 
     useQeueryHookCallback({
         data: generalLedgerBasedTransaction,

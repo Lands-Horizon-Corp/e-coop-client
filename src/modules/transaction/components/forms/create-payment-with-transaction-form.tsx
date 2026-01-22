@@ -170,12 +170,6 @@ const PaymentWithTransactionForm = ({
         form.setFocus('account_id')
     }, [selectedAccount, form])
 
-    useEffect(() => {
-        if (!openSuccessModal) {
-            form.setFocus('amount')
-        }
-    }, [openSuccessModal, form])
-
     const { data: paymentTypes } = useGetAll()
 
     const { onOpenReverseRequestAction } = useTransactionReverseSecurityStore()
@@ -296,7 +290,12 @@ const PaymentWithTransactionForm = ({
     })
 
     useEffect(() => {
-        if (!account || !hasNoTransactionBatch || accountPickerModalState.open)
+        if (
+            !account ||
+            !hasNoTransactionBatch ||
+            accountPickerModalState.open ||
+            !openSuccessModal
+        )
             return
         form.setFocus('amount')
     }, [account, hasNoTransactionBatch, form, accountPickerModalState.open])
