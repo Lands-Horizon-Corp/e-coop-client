@@ -16,6 +16,7 @@ import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Form } from '@/components/ui/form'
 import FormFieldWrapper from '@/components/ui/form-field-wrapper'
+import { Kbd, KbdGroup } from '@/components/ui/kbd'
 import { Label } from '@/components/ui/label'
 import { Switch } from '@/components/ui/switch'
 
@@ -139,8 +140,16 @@ const TransactionCurrentPaymentEntry = ({
                                                 }}
                                                 thumbClassName="size-3"
                                             />
-                                            <Label className="text-xs font-medium text-muted-foreground">
+                                            <Label className="text-xs font-medium text-muted-foreground mr-1">
                                                 OR Auto Generated
+                                            </Label>
+                                            <Label className="text-xs font-medium text-muted-foreground">
+                                                Press Alt{' '}
+                                                <KbdGroup>
+                                                    <Kbd>Alt</Kbd>
+                                                    <span>+</span>
+                                                    <Kbd>E</Kbd>
+                                                </KbdGroup>
                                             </Label>
                                         </div>
                                     )}

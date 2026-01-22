@@ -9,6 +9,7 @@ import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
 import { cn } from '@/helpers'
 import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
 import { AccountPicker, TAccountType } from '@/modules/account'
+import { useAuthUserWithOrg } from '@/modules/authentication/authgentication.store'
 import BankCombobox from '@/modules/bank/components/bank-combobox'
 import { CurrencyInput } from '@/modules/currency'
 import { IGeneralLedger } from '@/modules/general-ledger'
@@ -51,6 +52,8 @@ import FormFieldWrapper from '@/components/ui/form-field-wrapper'
 import ImageField from '@/components/ui/image-field'
 import { Input } from '@/components/ui/input'
 import InputDate from '@/components/ui/input-date'
+import { Kbd, KbdGroup } from '@/components/ui/kbd'
+import { Label } from '@/components/ui/label'
 import SignatureField from '@/components/ui/signature-field'
 import { Textarea } from '@/components/ui/textarea'
 
@@ -74,6 +77,7 @@ interface PaymentWithTransactionFormProps
     memberJointId?: TEntityId
     transactionForm: UseFormReturn<z.infer<typeof TransactionFromSchema>>
     handleResetTransaction: () => void
+    accountPickerModalState: ReturnType<typeof useModalState>
 }
 
 const PaymentWithTransactionForm = ({
@@ -88,9 +92,11 @@ const PaymentWithTransactionForm = ({
     readOnly,
     transactionForm,
     handleResetTransaction,
+    accountPickerModalState,
 }: PaymentWithTransactionFormProps) => {
     const { focusTypePayment, openSuccessModal } = useTransactionStore()
-    const accountPickerModalState = useModalState()
+    const accountPaymentTypeState = useModalState()
+
     const loanPaymentGuideModal = useModalState()
     const queryClient = useQueryClient()
     const {
@@ -255,7 +261,17 @@ const PaymentWithTransactionForm = ({
     )
 
     useHotkeys(
-        'Alt + W',
+        'Alt + 1',
+        (e) => {
+            e.preventDefault()
+            accountPaymentTypeState.onOpenChange(!accountPaymentTypeState.open)
+        },
+        { enableOnFormTags: true, keydown: true },
+        [accountPaymentTypeState.open]
+    )
+
+    useHotkeys(
+        'Alt + 3',
         (e) => {
             form.setFocus('amount')
             e.preventDefault()
@@ -263,12 +279,13 @@ const PaymentWithTransactionForm = ({
         { enableOnFormTags: true, keydown: true }
     )
     useHotkeys(
-        'Alt + S',
+        'Alt + 2',
         (e) => {
             e.preventDefault()
-            accountPickerModalState.onOpenChange(true)
+            accountPickerModalState.onOpenChange(!accountPickerModalState.open)
         },
-        { enableOnFormTags: true, keydown: true }
+        { enableOnFormTags: true, keydown: true },
+        [accountPickerModalState.open]
     )
 
     const errorMessage = serverRequestErrExtractor({ error })
@@ -280,9 +297,10 @@ const PaymentWithTransactionForm = ({
     })
 
     useEffect(() => {
-        if (!account || !hasNoTransactionBatch) return
+        if (!account || !hasNoTransactionBatch || accountPickerModalState.open)
+            return
         form.setFocus('amount')
-    }, [account, hasNoTransactionBatch, form])
+    }, [account, hasNoTransactionBatch, form, !accountPickerModalState.open])
 
     return (
         <Card
@@ -407,94 +425,132 @@ const PaymentWithTransactionForm = ({
                                 </CardContent>
                             </Card>
                         )}
-                        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-2">
+                        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-2">
                             <FormFieldWrapper
                                 className="self-center"
                                 control={form.control}
-                                label="Payment Type"
-                                labelClassName="text-xs font-medium text-muted-foreground"
                                 name="payment_type_id"
                                 render={({ field }) => (
-                                    <PaymentTypeCombobox
-                                        {...field}
-                                        disabled={isDisabled('payment_type_id')}
-                                        onChange={(selectedPaymentType) => {
-                                            field.onChange(
-                                                selectedPaymentType?.id
-                                            )
-                                            if (isOnlinePayment) {
-                                                form.setValue(
-                                                    'entry_date',
-                                                    new Date().toISOString(),
-                                                    {
-                                                        shouldValidate: true,
-                                                    }
+                                    <>
+                                        <Label className="text-xs font-medium text-muted-foreground">
+                                            Payment Type{' '}
+                                            <span>
+                                                <KbdGroup>
+                                                    <Kbd>Alt</Kbd>
+                                                    <span>+</span>
+                                                    <Kbd>1</Kbd>
+                                                </KbdGroup>
+                                            </span>
+                                        </Label>
+                                        <PaymentTypeCombobox
+                                            {...field}
+                                            disabled={isDisabled(
+                                                'payment_type_id'
+                                            )}
+                                            modalState={accountPaymentTypeState}
+                                            onChange={(selectedPaymentType) => {
+                                                field.onChange(
+                                                    selectedPaymentType?.id
                                                 )
-                                            }
-                                        }}
-                                        placeholder="Select a payment type"
-                                        value={field.value ?? undefined}
-                                    />
+                                                if (isOnlinePayment) {
+                                                    form.setValue(
+                                                        'entry_date',
+                                                        new Date().toISOString(),
+                                                        {
+                                                            shouldValidate: true,
+                                                        }
+                                                    )
+                                                }
+                                            }}
+                                            placeholder="Select a payment type"
+                                            value={field.value ?? undefined}
+                                        />
+                                    </>
                                 )}
                             />
                             <FormFieldWrapper
                                 className="self-center"
                                 control={form.control}
-                                label="Account"
-                                labelClassName="text-xs font-medium text-muted-foreground"
                                 name="account_id"
                                 render={({ field }) => (
-                                    <AccountPicker
-                                        currencyId={
-                                            (transaction?.currency_id ||
-                                                currentTransactionBatch?.currency_id) as TEntityId
-                                        }
-                                        disabled={isDisabled('account_id')}
-                                        modalState={accountPickerModalState}
-                                        mode={
-                                            transaction ||
-                                            currentTransactionBatch
-                                                ? 'currency-payment'
-                                                : focusTypePayment
-                                        }
-                                        nameOnly
-                                        onSelect={(account) => {
-                                            field.onChange(account.id)
-                                            form.setValue('account', account, {
-                                                shouldDirty: true,
-                                            })
-                                        }}
-                                        placeholder="Select an account"
-                                        value={form.watch('account')}
-                                    />
+                                    <>
+                                        <Label className="text-xs font-medium text-muted-foreground">
+                                            Account{' '}
+                                            <span>
+                                                <KbdGroup>
+                                                    <Kbd>Alt</Kbd>
+                                                    <span>+</span>
+                                                    <Kbd>2</Kbd>
+                                                </KbdGroup>
+                                            </span>
+                                        </Label>
+                                        <AccountPicker
+                                            currencyId={
+                                                (transaction?.currency_id ||
+                                                    currentTransactionBatch?.currency_id) as TEntityId
+                                            }
+                                            disabled={isDisabled('account_id')}
+                                            modalState={accountPickerModalState}
+                                            mode={
+                                                transaction ||
+                                                currentTransactionBatch
+                                                    ? 'currency-payment'
+                                                    : focusTypePayment
+                                            }
+                                            nameOnly
+                                            onSelect={(account) => {
+                                                field.onChange(account.id)
+                                                form.setValue(
+                                                    'account',
+                                                    account,
+                                                    {
+                                                        shouldDirty: true,
+                                                    }
+                                                )
+                                            }}
+                                            placeholder="Select an account"
+                                            value={form.watch('account')}
+                                        />
+                                    </>
                                 )}
                             />
-                            <div className="flex md:col-span-2 space-x-2">
+                            <div className="flex space-x-2">
                                 <FormFieldWrapper
-                                    className="self-center min-w-[10rem]"
+                                    className="self-center relative flex-1 min-w-[12rem]"
                                     control={form.control}
-                                    label="Amount"
-                                    labelClassName="text-xs font-medium text-muted-foreground"
                                     name="amount"
                                     render={({
                                         field: { onChange, ...field },
                                     }) => (
-                                        <CurrencyInput
-                                            {...field}
-                                            currency={
-                                                form.watch('account')?.currency
-                                            }
-                                            disabled={isDisabled('amount')}
-                                            onValueChange={(newValue = '') =>
-                                                onChange(newValue)
-                                            }
-                                            placeholder="Amount"
-                                            showIcon
-                                        />
+                                        <>
+                                            <Label className="text-xs font-medium text-muted-foreground">
+                                                Amount{' '}
+                                                <span>
+                                                    <KbdGroup>
+                                                        <Kbd>Alt</Kbd>
+                                                        <span>+</span>
+                                                        <Kbd>3</Kbd>
+                                                    </KbdGroup>
+                                                </span>
+                                            </Label>
+                                            <CurrencyInput
+                                                {...field}
+                                                currency={
+                                                    form.watch('account')
+                                                        ?.currency
+                                                }
+                                                disabled={isDisabled('amount')}
+                                                onValueChange={(
+                                                    newValue = ''
+                                                ) => onChange(newValue)}
+                                                placeholder="Amount"
+                                                showIcon
+                                            />
+                                        </>
                                     )}
                                 />
                                 <Button
-                                    className="self-start px-8 mt-6 min-w-[15rem] "
+                                    className="self-start px-8 flex-0 mt-6 "
                                     disabled={isPending}
                                     tabIndex={-1}
                                     type="submit"

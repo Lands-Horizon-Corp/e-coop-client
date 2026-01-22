@@ -1,7 +1,6 @@
-import * as React from 'react'
-
 import { cn } from '@/helpers'
 import { IPaymentType, useGetAll } from '@/modules/payment-type'
+import { IPickerBaseProps } from '@/types/component-types/picker'
 import { Check } from 'lucide-react'
 
 import { ChevronDownIcon } from '@/components/icons'
@@ -21,9 +20,11 @@ import {
     PopoverTrigger,
 } from '@/components/ui/popover'
 
+import { useInternalState } from '@/hooks/use-internal-state'
+
 import { TEntityId } from '@/types'
 
-interface Props {
+interface Props extends IPickerBaseProps {
     value?: TEntityId
     disabled?: boolean
     className?: string
@@ -39,8 +40,13 @@ const PaymentTypeCombobox = ({
     undefinable = true,
     placeholder = 'Select Payment Type...',
     onChange,
+    modalState,
 }: Props) => {
-    const [open, setOpen] = React.useState(false)
+    const [state, setState] = useInternalState(
+        false,
+        modalState?.open,
+        modalState?.onOpenChange
+    )
 
     // Using the provided hook
     const { data: paymentTypes, isLoading } = useGetAll()
@@ -49,10 +55,10 @@ const PaymentTypeCombobox = ({
 
     return (
         <>
-            <Popover modal onOpenChange={setOpen} open={open}>
+            <Popover modal onOpenChange={setState} open={state}>
                 <PopoverTrigger asChild>
                     <Button
-                        aria-expanded={open}
+                        // aria-expanded={open}
                         className={cn('w-full justify-between px-3', className)}
                         disabled={disabled || isLoading}
                         role="combobox"
@@ -90,7 +96,7 @@ const PaymentTypeCombobox = ({
                                         <CommandItem
                                             className="justify-center text-muted-foreground"
                                             onSelect={() => {
-                                                setOpen(false)
+                                                setState(false)
                                                 onChange?.(undefined)
                                             }}
                                             value={undefined}
@@ -102,7 +108,7 @@ const PaymentTypeCombobox = ({
                                         <CommandItem
                                             key={option.id}
                                             onSelect={() => {
-                                                setOpen(false)
+                                                setState(false)
                                                 onChange?.(option)
                                             }}
                                             value={option.name}

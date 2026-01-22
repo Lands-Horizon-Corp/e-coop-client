@@ -106,9 +106,9 @@ export const useAuthUser = <TUser = IUserBase>() => {
 export const useAuthUserWithOrg = <TUser = IUserBase>() => {
     const { currentAuth, ...rest } = useAuthUser<TUser>()
 
-    // if (!currentAuth.organization) {
-    //     throw new Error('Authenticated user has no organization context.')
-    // }
+    if (!currentAuth.user_organization) {
+        throw new Error('Authenticated user has no organization context.')
+    }
 
     return {
         ...rest,

@@ -8,6 +8,7 @@ import z from 'zod'
 
 import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
 
+import { useAuthUserWithOrg } from '@/modules/authentication/authgentication.store'
 import { IGeneralLedger } from '@/modules/general-ledger'
 import {
     ITransaction,
@@ -27,6 +28,7 @@ import PageContainer from '@/components/containers/page-container'
 import { ResetIcon } from '@/components/icons'
 import { Button } from '@/components/ui/button'
 
+import { useModalState } from '@/hooks/use-modal-state'
 import { useSubscribe } from '@/hooks/use-pubsub'
 import { useQeueryHookCallback } from '@/hooks/use-query-hook-cb'
 
@@ -45,6 +47,8 @@ type TTransactionProps = {
 const Transaction = ({ transactionId, fullPath }: TTransactionProps) => {
     const queryClient = useQueryClient()
 
+    const accountPickerModalState = useModalState()
+
     const { hasNoTransactionBatch, data: currentTransactionBatch } =
         useTransactionBatchStore()
 
@@ -52,6 +56,7 @@ const Transaction = ({ transactionId, fullPath }: TTransactionProps) => {
 
     const { payment_or_allow_user_input, userOrganization, ORWithPadding } =
         useGetUserSettings()
+
     const {
         openSuccessModal,
         transactionFormSuccess,
@@ -116,6 +121,7 @@ const Transaction = ({ transactionId, fullPath }: TTransactionProps) => {
     const handleCloseSuccessModal = () => {
         setOpenSuccessModal(false)
         setTransactionFormSuccess(null)
+        accountPickerModalState.onOpenChange(true)
     }
 
     const selectedMember = transactionForm.getValues('member_profile')
@@ -145,7 +151,6 @@ const Transaction = ({ transactionId, fullPath }: TTransactionProps) => {
                 ...transactionForm.getValues(),
                 member_profile: transaction.member_profile,
                 member_profile_id: transaction.member_profile_id,
-                reference_number: transaction.reference_number,
             },
             {
                 keepDirty: false,
@@ -209,14 +214,21 @@ const Transaction = ({ transactionId, fullPath }: TTransactionProps) => {
         'alt + E',
         (e) => {
             e.preventDefault()
-            transactionForm.setValue('or_auto_generated', true)
-            transactionForm.setValue(
-                'reference_number',
-                paymentORResolver(userOrganization)
-            )
+            const isAuto = !transactionForm.getValues('or_auto_generated')
+            transactionForm.setValue('or_auto_generated', isAuto)
+            if (isAuto) {
+                console.log(paymentORResolver(userOrganization))
+                transactionForm.setValue(
+                    'reference_number',
+                    paymentORResolver(userOrganization),
+                    {
+                        shouldDirty: true,
+                    }
+                )
+            }
         },
         { enableOnFormTags: true },
-        []
+        [userOrganization]
     )
 
     const isTransactionMismatchCurrentBatch = !transaction
@@ -347,6 +359,7 @@ const Transaction = ({ transactionId, fullPath }: TTransactionProps) => {
             </PageContainer>
             {selectedMemberId && !isTransactionMismatchCurrentBatch && (
                 <PaymentWithTransactionForm
+                    accountPickerModalState={accountPickerModalState}
                     currentTransactionBatch={currentTransactionBatch}
                     handleResetTransaction={() => {
                         handleSetTransactionId({ fullPath })

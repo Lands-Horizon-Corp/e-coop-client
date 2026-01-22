@@ -33,6 +33,8 @@ interface Props extends IClassProps {}
 
 const TransactionBatchNavButton = (_props: Props) => {
     const modalState = useModalState()
+    const manageBatchModalState = useModalState(false)
+
     const {
         currentAuth: { user, user_organization },
     } = useAuthUserWithOrgBranch<IEmployee>()
@@ -42,7 +44,7 @@ const TransactionBatchNavButton = (_props: Props) => {
         setData,
         reset,
     } = useTransactionBatchStore()
-
+    const { hasNoTransactionBatch } = useTransactionBatchStore()
     const { data, error, isSuccess, isError } = useCurrentTransactionBatch()
 
     const handleSuccess = useCallback(
@@ -98,10 +100,15 @@ const TransactionBatchNavButton = (_props: Props) => {
         }
     )
 
-    useHotkeys('alt+s', (e) => {
-        modalState.onOpenChange(true)
-        e.preventDefault()
-    })
+    useHotkeys(
+        'ctrl + m',
+        (e) => {
+            e.preventDefault()
+            manageBatchModalState.onOpenChange(!manageBatchModalState.open)
+            if (!hasNoTransactionBatch) modalState.onOpenChange(true)
+        },
+        [manageBatchModalState.open, hasNoTransactionBatch]
+    )
 
     if (!transactionBatch)
         return (
@@ -136,7 +143,11 @@ const TransactionBatchNavButton = (_props: Props) => {
         )
 
     return (
-        <Popover modal>
+        <Popover
+            modal
+            onOpenChange={manageBatchModalState.onOpenChange}
+            open={manageBatchModalState.open}
+        >
             <PopoverTrigger asChild>
                 <Button
                     className="group rounded-lg border"
