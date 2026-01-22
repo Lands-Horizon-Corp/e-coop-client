@@ -10,6 +10,7 @@ import { TransactionBatchCreateFormModal } from '@/modules/transaction-batch/com
 import { useTransactionBatchStore } from '@/modules/transaction-batch/store/transaction-batch-store'
 import { IEmployee } from '@/modules/user'
 import { LayoutDashboard, PlusCircle } from 'lucide-react'
+import { useHotkeys } from 'react-hotkeys-hook'
 
 import { EmptyIcon } from '@/components/icons'
 import { Button } from '@/components/ui/button'
@@ -32,6 +33,12 @@ const TransactionNoFoundBatch = ({ mode }: TransactionNoFoundBatchProps) => {
         createBatchModalState.onOpenChange(false)
         return setData(newBatchData)
     }
+
+    useHotkeys('Enter', (e) => {
+        e.preventDefault()
+        if (hasNoTransactionBatch) return
+        createBatchModalState.onOpenChange(true)
+    })
 
     // Logic Check: Usually you'd return null if a batch EXISTS.
     // Assuming your store logic 'hasNoTransactionBatch' means "there is no batch currently active"

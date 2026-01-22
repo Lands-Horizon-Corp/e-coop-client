@@ -274,10 +274,15 @@ const PaymentWithTransactionForm = ({
     const errorMessage = serverRequestErrExtractor({ error })
     const { hasNoTransactionBatch } = useTransactionBatchStore()
 
+    const account = useWatch({
+        control: form.control,
+        name: 'account',
+    })
+
     useEffect(() => {
-        if (!form.watch('account')) return
+        if (!account || !hasNoTransactionBatch) return
         form.setFocus('amount')
-    }, [form.watch('account')])
+    }, [account, hasNoTransactionBatch, form])
 
     return (
         <Card
