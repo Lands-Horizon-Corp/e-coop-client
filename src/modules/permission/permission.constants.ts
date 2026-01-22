@@ -165,7 +165,7 @@ export const PERMISSION_ALL_RESOURCE_ACTION = [
         resource: 'ApprovalsJV',
         label: 'Approval Journal Voucher',
         description: 'Allow access for journal voucher approval',
-        supportedActions: ['Read'] as TPermissionAction[],
+        supportedActions: ['Read', 'Approve'] as TPermissionAction[],
     },
     {
         resource: 'ApprovalsJVDraft',
@@ -183,6 +183,54 @@ export const PERMISSION_ALL_RESOURCE_ACTION = [
         resource: 'ApprovalsJVApproved',
         label: 'Approval Journal Voucher Approved',
         description: 'Allow access for JV Approved approval',
+        supportedActions: ['Read', 'Approve'] as TPermissionAction[],
+    },
+    {
+        resource: 'ApprovalsCashVoucher',
+        label: 'Approval Cash Voucher',
+        description: 'Allow access for cash voucher approval',
+        supportedActions: ['Read', 'Approve'] as TPermissionAction[],
+    },
+    {
+        resource: 'ApprovalsCashVoucherDraft',
+        label: 'Approval Cash Voucher Draft',
+        description: 'Allow access for Cash Voucher Draft approval',
+        supportedActions: ['Read', 'Approve'] as TPermissionAction[],
+    },
+    {
+        resource: 'ApprovalsCashVoucherPrinted',
+        label: 'Approval Cash Voucher Print',
+        description: 'Allow access for Cash Voucher print approval',
+        supportedActions: ['Read', 'Approve'] as TPermissionAction[],
+    },
+    {
+        resource: 'ApprovalsCashVoucherApproved',
+        label: 'Approval Cash Voucher Approved',
+        description: 'Allow access for Cash Voucher Approved approval',
+        supportedActions: ['Read', 'Approve'] as TPermissionAction[],
+    },
+    {
+        resource: 'ApprovalsLoan',
+        label: 'Approval Loan',
+        description: 'Allow access for loan approval',
+        supportedActions: ['Read', 'Approve'] as TPermissionAction[],
+    },
+    {
+        resource: 'ApprovalsLoanDraft',
+        label: 'Approval Loan Draft',
+        description: 'Allow access for Loan Draft approval',
+        supportedActions: ['Read', 'Approve'] as TPermissionAction[],
+    },
+    {
+        resource: 'ApprovalsLoanPrinted',
+        label: 'Approval Loan Print',
+        description: 'Allow access for Loan print approval',
+        supportedActions: ['Read', 'Approve'] as TPermissionAction[],
+    },
+    {
+        resource: 'ApprovalsLoanApproved',
+        label: 'Approval Loan Approved',
+        description: 'Allow access for Loan Approved approval',
         supportedActions: ['Read', 'Approve'] as TPermissionAction[],
     },
     {

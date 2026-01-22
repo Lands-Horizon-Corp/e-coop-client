@@ -30,7 +30,7 @@ interface IPermissionMatrixProps {
 
 const ROW_HEIGHT = 56
 
-const PermissionMatrixVirtualized = forwardRef<
+const PermissionMatrix = forwardRef<
     HTMLFieldSetElement,
     IPermissionMatrixProps
 >(({ readOnly, className, controlledState, defaultValues = {} }, ref) => {
@@ -273,7 +273,7 @@ const PermissionMatrixVirtualized = forwardRef<
                                 }}
                             >
                                 {/* Fixed Resource Name Column */}
-                                <div className="min-w-[280px] w-[280px] flex-shrink-0 px-4 py-2 border-r border-border/50 bg-inherit sticky left-0 z-10">
+                                <div className="min-w-[280px] w-[280px] text-right flex-shrink-0 px-4 py-2 border-r border-border/50 bg-popover/90 backdrop-blur-sm sticky left-0 z-10">
                                     <div className="font-medium text-sm text-foreground truncate">
                                         {resource.label}
                                     </div>
@@ -358,6 +358,6 @@ const PermissionMatrixVirtualized = forwardRef<
     )
 })
 
-PermissionMatrixVirtualized.displayName = 'PermissionMatrixVirtualized'
+PermissionMatrix.displayName = 'PermissionMatrix'
 
-export default PermissionMatrixVirtualized
+export default PermissionMatrix

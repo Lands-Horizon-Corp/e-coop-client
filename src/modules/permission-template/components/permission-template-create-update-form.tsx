@@ -5,7 +5,7 @@ import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
 import { cn } from '@/helpers'
 import { withToastCallbacks } from '@/helpers/callback-helper'
 import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
-import PermissionMatrix from '@/modules/permission/components/permission-matrix'
+import PermissionMatrix from '@/modules/permission/components/permission-matrix/permission-matrix'
 import { TPermission } from '@/modules/permission/permission.types'
 import {
     permissionArrayToMap,
