@@ -23,7 +23,7 @@ export const Account = () => {
 
     return (
         <PageContainer>
-            <PermissionGuard action="Read" resourceType="AdjustmentEntry">
+            <PermissionGuard action="Read" resourceType="Account">
                 <div className="flex w-full flex-col  items-start gap-4">
                     <AccountCreateUpdateFormModal
                         className=" min-w-[80vw] max-w-[80vw]"

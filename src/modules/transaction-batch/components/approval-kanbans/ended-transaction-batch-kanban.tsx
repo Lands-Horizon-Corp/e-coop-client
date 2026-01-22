@@ -35,6 +35,7 @@ const EndedTransactionBatchKanban = (_props: Props) => {
             user_organization: { branch_id },
         },
     } = useAuthUserWithOrgBranch()
+
     const {
         data = [],
         isRefetching,

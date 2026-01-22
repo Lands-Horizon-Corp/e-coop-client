@@ -19,6 +19,14 @@ const Approval = ({ className }: Props) => {
         action: 'Read',
         resourceType: 'ApprovalsBlotterView',
     })
+    const canApproveUserRequest = hasPermissionFromAuth({
+        action: 'Read',
+        resourceType: 'ApprovalsUser',
+    })
+    const canApproveMemberProfile = hasPermissionFromAuth({
+        action: 'Read',
+        resourceType: 'ApprovalsMemberProfile',
+    })
 
     return (
         <div
@@ -29,8 +37,8 @@ const Approval = ({ className }: Props) => {
         >
             {canApproveEndBatch && <EndedTransactionBatchKanban />}
             {canApproveBlotterRequest && <BlotterRequestKanban />}
-            <UserJoinRequestKanban />
-            <NewMemberProfileKanban />
+            {canApproveUserRequest && <UserJoinRequestKanban />}
+            {canApproveMemberProfile && <NewMemberProfileKanban />}
         </div>
     )
 }

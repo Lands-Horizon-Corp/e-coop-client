@@ -147,12 +147,13 @@ const SearchInput = ({ onSearch }: { onSearch: (value: string) => void }) => {
     )
 }
 
-interface TableBodyProps {
+function TableBody({
+    table,
+    tableContainerRef,
+}: {
     table: Table<IGeneratedSavingsInterestEntry>
     tableContainerRef: RefObject<HTMLDivElement | null>
-}
-
-function TableBody({ table, tableContainerRef }: TableBodyProps) {
+}) {
     const { rows } = table.getRowModel()
 
     const rowVirtualizer = useVirtualizer<HTMLDivElement, HTMLTableRowElement>({
@@ -200,13 +201,15 @@ function TableBody({ table, tableContainerRef }: TableBodyProps) {
     )
 }
 
-interface TableBodyRowProps {
+function TableBodyRow({
+    row,
+    virtualRow,
+    rowVirtualizer,
+}: {
     row: Row<IGeneratedSavingsInterestEntry>
     virtualRow: VirtualItem
     rowVirtualizer: Virtualizer<HTMLDivElement, HTMLTableRowElement>
-}
-
-function TableBodyRow({ row, virtualRow, rowVirtualizer }: TableBodyRowProps) {
+}) {
     // Calculate total size for proportional widths
     const totalSize = row
         .getAllCells()

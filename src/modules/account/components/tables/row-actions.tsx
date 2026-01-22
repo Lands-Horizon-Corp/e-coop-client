@@ -428,7 +428,7 @@ export const AccountRowContext = ({
                             disabled={
                                 !hasPermissionFromAuth({
                                     action: 'Read',
-                                    resourceType: 'GeneralLedger',
+                                    resourceType: 'AccountTransaction',
                                 })
                             }
                             onClick={() => handleViewAccountingLedger()}
@@ -437,7 +437,11 @@ export const AccountRowContext = ({
                             View Accounting Ledger
                         </ContextMenuItem>
                         <ContextMenuItem
-                            disabled={moveAccountIndexMutation.isPending}
+                            disabled={
+                                moveAccountIndexMutation.isPending ||
+                                !accountCrudPerms.Update ||
+                                !accountCrudPerms.OwnUpdate
+                            }
                             onClick={() =>
                                 toast.promise(
                                     moveAccountIndexMutation.mutateAsync({
@@ -451,7 +455,11 @@ export const AccountRowContext = ({
                             Move to Top
                         </ContextMenuItem>
                         <ContextMenuItem
-                            disabled={moveAccountIndexMutation.isPending}
+                            disabled={
+                                moveAccountIndexMutation.isPending ||
+                                !accountCrudPerms.Update ||
+                                !accountCrudPerms.OwnUpdate
+                            }
                             onClick={() =>
                                 toast.promise(
                                     moveAccountIndexMutation.mutateAsync({
@@ -465,7 +473,14 @@ export const AccountRowContext = ({
                             Move to Bottom
                         </ContextMenuItem>
                         <ContextMenuSub>
-                            <ContextMenuSubTrigger>
+                            <ContextMenuSubTrigger
+                                disabled={
+                                    !hasPermissionFromAuth({
+                                        action: 'Read',
+                                        resourceType: 'GeneralLedger',
+                                    })
+                                }
+                            >
                                 <BookOpenIcon
                                     className="mr-2"
                                     strokeWidth={1.5}
