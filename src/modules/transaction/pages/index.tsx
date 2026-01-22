@@ -217,7 +217,6 @@ const Transaction = ({ transactionId, fullPath }: TTransactionProps) => {
             const isAuto = !transactionForm.getValues('or_auto_generated')
             transactionForm.setValue('or_auto_generated', isAuto)
             if (isAuto) {
-                console.log(paymentORResolver(userOrganization))
                 transactionForm.setValue(
                     'reference_number',
                     paymentORResolver(userOrganization),

@@ -298,7 +298,13 @@ const PaymentWithTransactionForm = ({
         )
             return
         form.setFocus('amount')
-    }, [account, hasNoTransactionBatch, form, accountPickerModalState.open])
+    }, [
+        account,
+        hasNoTransactionBatch,
+        form,
+        accountPickerModalState.open,
+        openSuccessModal,
+    ])
 
     return (
         <Card

@@ -88,12 +88,7 @@ const TransactionCurrentPaymentEntry = ({
         isError: isErrorGetTransaction,
     } = useGetTransactionById({
         id: transactionId,
-        options: {
-            enabled: !!transactionId,
-        },
     })
-
-    console.log(getTransaction)
 
     const handleError = useCallback((error: Error) => {
         toast.error(error?.message || 'Something went wrong')
