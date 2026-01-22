@@ -1067,7 +1067,7 @@ const BranchSettingsForm = ({
                             name="loan_applied_equal_to_balance"
                             render={({ field }) => (
                                 <Label
-                                    className="hover:bg-accent/40 ease-in-out duration-150 cursor-pointer flex items-start gap-3 rounded-lg border p-3 has-[[aria-checked=true]]:border-primary has-[[aria-checked=true]]:bg-primary/20"
+                                    className="hover:bg-accent/40 ease-in-out duration-150 cursor-pointer flex items-start gap-3 rounded-lg border p-3 has-aria-checked:border-primary has-aria-checked:bg-primary/20"
                                     htmlFor={field.name}
                                 >
                                     <Checkbox

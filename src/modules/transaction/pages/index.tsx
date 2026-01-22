@@ -12,6 +12,7 @@ import { IGeneralLedger } from '@/modules/general-ledger'
 import {
     ITransaction,
     TransactionCurrentPaymentEntry,
+    TransactionFromSchema,
     TransactionModalSuccessPayment,
     useGetTransactionById,
 } from '@/modules/transaction'
@@ -41,11 +42,6 @@ type TTransactionProps = {
     fullPath: string
 }
 
-export const ReferenceNumberSchema = z.object({
-    reference_number: z.string().min(1, 'Reference number is required'),
-    or_auto_generated: z.boolean().optional(),
-})
-
 const Transaction = ({ transactionId, fullPath }: TTransactionProps) => {
     const queryClient = useQueryClient()
 
@@ -58,22 +54,17 @@ const Transaction = ({ transactionId, fullPath }: TTransactionProps) => {
         useGetUserSettings()
 
     const {
-        selectedMember,
         openSuccessModal,
         transactionFormSuccess,
-        handleResetAll,
-        setSelectedMember,
         setOpenSuccessModal,
         setSelectedAccountId,
         setTransactionFormSuccess,
         setOpenPaymentWithTransactionModal,
-        setSelectedAccount,
-        selectedJointMember,
         setOpenMemberPicker,
     } = useTransactionStore()
 
-    const referenceNumberForm = useForm<z.infer<typeof ReferenceNumberSchema>>({
-        resolver: standardSchemaResolver(ReferenceNumberSchema),
+    const transactionForm = useForm<z.infer<typeof TransactionFromSchema>>({
+        resolver: standardSchemaResolver(TransactionFromSchema),
         defaultValues: {
             reference_number: paymentORResolver(userOrganization),
             or_auto_generated: false,
@@ -111,9 +102,9 @@ const Transaction = ({ transactionId, fullPath }: TTransactionProps) => {
 
     const handleGetTransactionByIdSuccess = useCallback(
         (data: ITransaction) => {
-            setSelectedMember(data?.member_profile)
+            transactionForm.setValue('member_profile', data?.member_profile)
         },
-        [setSelectedMember]
+        [transactionForm]
     )
 
     useQeueryHookCallback({
@@ -129,14 +120,17 @@ const Transaction = ({ transactionId, fullPath }: TTransactionProps) => {
         setTransactionFormSuccess(null)
     }
 
+    const selectedMember = transactionForm.getValues('member_profile')
+    const selectedMemberId = transactionForm.getValues('member_profile_id')
+
     useSubscribe(
-        `member_occupation_history.create.member_profile.${selectedMember?.id}`
+        `member_occupation_history.create.member_profile.${selectedMember}`
     )
     useSubscribe(
-        `member_occupation_history.update.member_profile.${selectedMember?.id}`
+        `member_occupation_history.update.member_profile.${selectedMember}`
     )
     useSubscribe(
-        `member_occupation_history.delete.member_profile.${selectedMember?.id}`
+        `member_occupation_history.delete.member_profile.${selectedMember}`
     )
     useSubscribe(`transaction.create.${transactionId}`)
     useSubscribe(`transaction.update.${transactionId}`)
@@ -145,34 +139,55 @@ const Transaction = ({ transactionId, fullPath }: TTransactionProps) => {
         setTransactionFormSuccess(transaction)
         setOpenSuccessModal(true)
         setOpenPaymentWithTransactionModal(false)
-        setSelectedMember(transaction.member_profile)
+        transactionForm.setValue('member_profile', transaction.member_profile)
+        transactionForm.setValue(
+            'member_profile_id',
+            transaction.member_profile_id
+        )
         setSelectedAccountId(undefined)
     }
 
     const hasSelectedTransactionId = !!transactionId
-
     useHotkeys(
         'Escape',
         (e) => {
             e.preventDefault()
             e.stopPropagation()
-            handleResetAll()
             handleSetTransactionId({ fullPath })
-            referenceNumberForm.setValue(
-                'reference_number',
-                paymentORResolver(userOrganization)
-            )
-            referenceNumberForm.clearErrors('reference_number')
+            transactionForm.reset({
+                reference_number: paymentORResolver(userOrganization),
+                member_join: undefined,
+                member_profile: undefined,
+                member_profile_id: undefined,
+            })
+            queryClient.invalidateQueries({ queryKey: ['auth', 'context'] })
         },
-        [referenceNumberForm]
+        {
+            enableOnFormTags: true,
+        },
+        [transactionForm, userOrganization]
     )
 
-    useHotkeys('Enter', (e) => {
-        e.preventDefault()
-        if (!selectedMember) {
+    useHotkeys(
+        'Enter',
+        (e) => {
+            e.preventDefault()
+            const hasMember = !!transactionForm.getValues('member_profile_id')
+            if (hasMember) return
             setOpenMemberPicker(true)
-        }
-    })
+        },
+        { enabled: !openSuccessModal, enableOnFormTags: false }
+    )
+
+    useHotkeys(
+        'alt + Q',
+        (e) => {
+            e.preventDefault()
+            transactionForm.setFocus('reference_number')
+        },
+        { enableOnFormTags: true },
+        []
+    )
 
     const isTransactionMismatchCurrentBatch = !transaction
         ? false
@@ -180,35 +195,13 @@ const Transaction = ({ transactionId, fullPath }: TTransactionProps) => {
 
     useEffect(() => {
         if (!payment_or_allow_user_input) {
-            referenceNumberForm.setValue('or_auto_generated', true)
-            referenceNumberForm.setValue(
+            transactionForm.setValue('or_auto_generated', true)
+            transactionForm.setValue(
                 'reference_number',
                 paymentORResolver(userOrganization)
             )
         }
-    }, [referenceNumberForm, payment_or_allow_user_input])
-
-    // useEffect(() => {
-
-    //     if (referenceNumber === resolvedOR) {
-    //         return
-    //     }
-
-    //     const timeoutId = setTimeout(() => {
-    //         onOpen({
-    //             title: 'Reference Number Changed',
-    //             description: 'Confirm to reset and create new Transaction.',
-    //             onConfirm: () => {
-    //                 handleResetAll()
-    //                 handleSetTransactionId({fullPath})
-    //             },
-    //         })
-    //     }, 1500)
-
-    //     return () => {
-    //         clearTimeout(timeoutId)
-    //     }
-    // }, [userOrganization, referenceNumberForm.watch('reference_number')])
+    }, [transactionForm, payment_or_allow_user_input, userOrganization])
 
     return (
         <div>
@@ -231,7 +224,7 @@ const Transaction = ({ transactionId, fullPath }: TTransactionProps) => {
                     triggerClassName="hidden"
                 />
             )} */}
-            <PageContainer className="flex h-fit lg:h-[90vh] w-full !overflow-hidden">
+            <PageContainer className="flex h-fit lg:h-[90vh] w-full overflow-hidden!">
                 <TransactionModalSuccessPayment
                     isOpen={openSuccessModal}
                     onClose={handleCloseSuccessModal}
@@ -242,9 +235,9 @@ const Transaction = ({ transactionId, fullPath }: TTransactionProps) => {
 
                 <div className="flex h-full flex-col lg:flex-row w-full gap-2 overflow-hidden">
                     {/* Left Section (Payment) */}
-                    <div className="w-full lg:w-[40%] ecoop-scroll pr-[1px] flex flex-col overflow-y-auto">
+                    <div className="w-full lg:w-[40%] ecoop-scroll pr-px flex flex-col overflow-y-auto">
                         <TransactionCurrentPaymentEntry
-                            form={referenceNumberForm}
+                            form={transactionForm}
                             fullPath={fullPath}
                             totalAmount={transaction?.amount}
                             transaction={transaction as ITransaction}
@@ -255,7 +248,6 @@ const Transaction = ({ transactionId, fullPath }: TTransactionProps) => {
                                 className="w-full mb-2"
                                 onClick={(e) => {
                                     e.preventDefault()
-                                    handleResetAll()
                                     handleSetTransactionId({ fullPath })
                                     queryClient.resetQueries({
                                         queryKey: ['transaction'],
@@ -270,20 +262,22 @@ const Transaction = ({ transactionId, fullPath }: TTransactionProps) => {
                         )}
                     </div>
                     {/* Right Section (Ledger Table) */}
-                    <div className="flex-1 w-full flex flex-col p-2 rounded-2xl bg-background ecoop-scroll overflow-y-auto">
+                    <div className="flex-1 flex flex-col p-2 rounded-2xl bg-background ecoop-scroll overflow-y-auto">
                         <TransactionMemberScanner
                             className="p-2"
+                            form={transactionForm}
                             fullPath={fullPath}
-                            handleRemoveMember={() =>
+                            handleRemoveMember={() => {
                                 handleSetTransactionId({
                                     transactionId: undefined,
                                     fullPath,
                                 })
-                            }
+                                transactionForm.reset()
+                            }}
                             transactionId={transactionId}
                         />
                         <TransactionAccountMemberLedger
-                            memberProfileId={selectedMember?.id as TEntityId}
+                            memberProfileId={selectedMemberId as TEntityId}
                             onRowClick={(data) => {
                                 if (!currentTransactionBatch) {
                                     return toast.warning(
@@ -304,29 +298,37 @@ const Transaction = ({ transactionId, fullPath }: TTransactionProps) => {
                                     )
                                 }
 
-                                setSelectedAccountId(data.original.account_id)
-                                setSelectedAccount(data.original.account)
+                                transactionForm.setValue(
+                                    'account',
+                                    data.original.account
+                                )
+                                transactionForm.setValue(
+                                    'account_id',
+                                    data.original.account_id
+                                )
                             }}
                         />
                     </div>
                 </div>
                 {/* bottom Section (transaction  Payment) */}
             </PageContainer>
-            {selectedMember && !isTransactionMismatchCurrentBatch && (
+            {selectedMemberId && !isTransactionMismatchCurrentBatch && (
                 <PaymentWithTransactionForm
                     currentTransactionBatch={currentTransactionBatch}
                     handleResetTransaction={() => {
                         handleSetTransactionId({ fullPath })
                     }}
-                    memberJointId={selectedJointMember?.id}
-                    memberProfileId={selectedMember?.id}
+                    memberJointId={transactionForm.getValues('member_join_id')}
+                    memberProfileId={transactionForm.getValues(
+                        'member_profile_id'
+                    )}
                     onSuccess={(transaction) => {
                         queryClient.invalidateQueries({
                             queryKey: [
                                 'member-accounting-ledger',
                                 'filtered-paginated',
                                 'member',
-                                selectedMember?.id,
+                                selectedMemberId,
                             ],
                         })
                         queryClient.invalidateQueries({
@@ -347,8 +349,8 @@ const Transaction = ({ transactionId, fullPath }: TTransactionProps) => {
                         handleOnSuccessPaymentCallBack(transaction)
                     }}
                     readOnly={!hasNoTransactionBatch}
-                    referenceNumberForm={referenceNumberForm}
                     transaction={transaction}
+                    transactionForm={transactionForm}
                     transactionId={transactionId}
                 />
             )}

@@ -23,7 +23,7 @@ import { useQeueryHookCallback } from '@/hooks/use-query-hook-cb'
 
 import { TEntityId } from '@/types'
 
-import { ITransaction, ReferenceNumberSchema } from '../..'
+import { ITransaction, TransactionFromSchema } from '../..'
 import { paymentORResolver } from '../../transaction.utils'
 import TransactionHistory from '../history'
 import ReferenceNumber from '../input/transaction-reference-number-field'
@@ -49,7 +49,7 @@ type CurrentPaymentsEntryListProps = {
     totalAmount?: number
     fullPath: string
 
-    form: UseFormReturn<z.infer<typeof ReferenceNumberSchema>>
+    form: UseFormReturn<z.infer<typeof TransactionFromSchema>>
 }
 const TransactionCurrentPaymentEntry = ({
     fullPath,
@@ -89,9 +89,9 @@ const TransactionCurrentPaymentEntry = ({
     })
 
     return (
-        <div className="flex min-h-[100%] h-fit flex-col gap-y-2 mb-2 p-4 overflow-hidden rounded-2xl bg-card/50">
+        <div className="flex min-h-full h-fit flex-col gap-y-2 mb-2 p-4 overflow-hidden rounded-2xl bg-card/50">
             <div className="flex space-x-2">
-                <div className="flex gap-1 bg-gradient-to-br from-primary/10 to-background border border-primary/10  rounded-lg p-2">
+                <div className="flex gap-1 bg-linear-to-br from-primary/10 to-background border border-primary/10  rounded-lg p-2">
                     <div>
                         <Form {...form}>
                             <div className="flex flex-wrap gap-3 items-start w-full">
@@ -162,7 +162,7 @@ const TransactionCurrentPaymentEntry = ({
                     </Button>
                     <TransactionHistory fullPath={fullPath} />
                 </div>
-                <div className="flex-1 flex py-5 flex-col min-w-[8rem] items-center justify-center bg-gradient-to-br from-primary/10 to-background/10 border border-primary/10 rounded-lg h-full w-full gap-x-1">
+                <div className="flex-1 flex py-5 flex-col min-w-[8rem] items-center justify-center bg-linear-to-br from-primary/10 to-background/10 border border-primary/10 rounded-lg h-full w-full gap-x-1">
                     <p className="text-xs font-bold uppercase text-muted-foreground">
                         Total Amount
                     </p>
@@ -206,7 +206,7 @@ export const PaymentsEntryItem = ({
     valueClassName,
 }: PaymentsEntryItemProps) => {
     return (
-        <div className={cn('my-1 flex w-full flex-grow', className)}>
+        <div className={cn('my-1 flex w-full grow', className)}>
             <div className="flex gap-x-2">
                 <span className="text-muted-foreground">{icon}</span>
                 <p

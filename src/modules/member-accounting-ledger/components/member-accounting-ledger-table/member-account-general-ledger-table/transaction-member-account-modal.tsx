@@ -25,7 +25,7 @@ const TransactionMemberAccountLedger = ({
     return (
         <Modal
             {...props}
-            className={cn('!max-w-[90vw] p-2')}
+            className={cn('max-w-[90vw]! p-2')}
             closeButtonClassName="md:hidden"
             descriptionClassName="hidden"
             titleClassName="hidden"

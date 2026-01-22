@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 
 import { useQueryClient } from '@tanstack/react-query'
-import { Path, UseFormReturn, useForm } from 'react-hook-form'
+import { Path, UseFormReturn, useForm, useWatch } from 'react-hook-form'
 import z from 'zod'
 
 import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
@@ -24,6 +24,7 @@ import {
     PaymentWithTransactionSchema,
     TPaymentTransactionProps,
     TPaymentWithTransactionFormValues,
+    TransactionFromSchema,
     TransactionNoFoundBatch,
     useCreateTransactionPaymentByMode,
 } from '@/modules/transaction'
@@ -57,7 +58,7 @@ import { useModalState } from '@/hooks/use-modal-state'
 
 import { IClassProps, IForm, TEntityId } from '@/types'
 
-import { ReferenceNumberSchema } from '../../pages/index'
+import { paymentORResolver } from '../../transaction.utils'
 
 interface PaymentWithTransactionFormProps
     extends
@@ -73,7 +74,7 @@ interface PaymentWithTransactionFormProps
     transactionId?: TEntityId
     memberProfileId?: TEntityId
     memberJointId?: TEntityId
-    referenceNumberForm: UseFormReturn<z.infer<typeof ReferenceNumberSchema>>
+    transactionForm: UseFormReturn<z.infer<typeof TransactionFromSchema>>
     handleResetTransaction: () => void
 }
 
@@ -87,16 +88,17 @@ const PaymentWithTransactionForm = ({
     disabledFields,
     currentTransactionBatch,
     readOnly,
-    referenceNumberForm,
+    transactionForm,
     handleResetTransaction,
 }: PaymentWithTransactionFormProps) => {
-    const { focusTypePayment, selectedAccount } = useTransactionStore()
+    const { focusTypePayment, openSuccessModal } = useTransactionStore()
     const loanPaymentGuideModal = useModalState()
     const queryClient = useQueryClient()
     const {
         settings_accounting_payment_default_value,
         settings_accounting_payment_default_value_id,
         settings_payment_type_default_value_id,
+        userOrganization,
     } = useGetUserSettings()
 
     const form = useForm<TPaymentWithTransactionFormValues>({
@@ -112,22 +114,6 @@ const PaymentWithTransactionForm = ({
             description: '',
         },
     })
-
-    useEffect(() => {
-        if (selectedAccount) {
-            form.reset({
-                account: selectedAccount,
-                account_id: selectedAccount?.id,
-            })
-        }
-        referenceNumberForm.setFocus('reference_number')
-        if (transaction) {
-            referenceNumberForm.setValue(
-                'reference_number',
-                transaction?.reference_number
-            )
-        }
-    }, [selectedAccount, form, transaction, referenceNumberForm])
 
     const formReset = () => {
         form.reset({
@@ -155,22 +141,50 @@ const PaymentWithTransactionForm = ({
         options: {
             onSuccess: (transaction) => {
                 formReset()
-                form.setValue('account', transaction.account || '')
-                form.setValue('account_id', transaction?.account?.id ?? '')
-                form.setValue(
-                    'payment_type_id',
-                    settings_payment_type_default_value_id || ''
-                )
                 form.setFocus('amount')
-                referenceNumberForm.resetField('reference_number', {
+                transactionForm.resetField('reference_number', {
                     keepDirty: false,
-                    defaultValue: transaction.reference_number,
+                    defaultValue: paymentORResolver(userOrganization),
+                })
+                form.reset({
+                    account: transaction.account,
+                    account_id: transaction.account.id,
+                    payment_type_id: transaction.payment_type_id,
                 })
                 queryClient.invalidateQueries({ queryKey: ['auth', 'context'] })
                 onSuccess?.(transaction)
             },
         },
     })
+
+    // watch account properly
+    const selectedAccount = useWatch({
+        control: transactionForm.control,
+        name: 'account',
+    })
+
+    useEffect(() => {
+        if (!selectedAccount) return
+
+        form.setValue('account', selectedAccount)
+        form.setValue('account_id', selectedAccount.id)
+        form.setFocus('account_id')
+    }, [selectedAccount, form])
+
+    useEffect(() => {
+        if (!openSuccessModal) {
+            form.setFocus('amount')
+        }
+    }, [openSuccessModal, form])
+
+    useEffect(() => {
+        if (!transaction) return
+
+        transactionForm.setValue(
+            'reference_number',
+            transaction.reference_number
+        )
+    }, [transaction, transactionForm])
 
     const { data: paymentTypes } = useGetAll()
 
@@ -186,9 +200,9 @@ const PaymentWithTransactionForm = ({
             member_profile_id: memberProfileId,
             member_joint_account_id: memberJointId,
             source: 'payment',
-            reference_number: referenceNumberForm.getValues('reference_number'),
+            reference_number: transactionForm.getValues('reference_number'),
             is_reference_number_checked:
-                referenceNumberForm.getValues('or_auto_generated'),
+                transactionForm.getValues('or_auto_generated'),
         }
 
         const finalPayload: TPaymentTransactionProps = {
@@ -202,8 +216,7 @@ const PaymentWithTransactionForm = ({
             transactionId,
             transactionPayload: transactionPaymentPayload,
         }
-        const isDirty =
-            referenceNumberForm.formState.dirtyFields.reference_number
+        const isDirty = transactionForm.formState.dirtyFields.reference_number
         if (isDirty) {
             handleResetTransaction()
             creatTransactionDeposit({
@@ -220,7 +233,7 @@ const PaymentWithTransactionForm = ({
     const handleSubmit = form.handleSubmit(
         async (data: TPaymentWithTransactionFormValues, event) => {
             event?.preventDefault()
-            const trigger = await referenceNumberForm.trigger()
+            const trigger = await transactionForm.trigger()
             if (!trigger) return
             if (data.amount < 0) {
                 onOpenReverseRequestAction({
@@ -255,18 +268,17 @@ const PaymentWithTransactionForm = ({
             handleSubmit()
         },
         {
-            enableOnFormTags: ['INPUT', 'SELECT', 'TEXTAREA'],
-            scopes: ['payment'],
+            enableOnFormTags: true,
         }
     )
 
     useHotkeys(
-        'A',
+        'Alt + W',
         (e) => {
             form.setFocus('amount')
             e.preventDefault()
         },
-        { scopes: ['payment'] }
+        { enableOnFormTags: true, keydown: true }
     )
 
     const errorMessage = serverRequestErrExtractor({ error })
@@ -275,11 +287,11 @@ const PaymentWithTransactionForm = ({
     return (
         <Card
             className={cn(
-                'sticky bottom-5 left-5 right-5 m-2 border-0 w-full md:w-fit !p-0 h-fit bg-sidebar/93',
-                !hasNoTransactionBatch ? 'xl:!py-5' : 'py-0'
+                'sticky bottom-5 z-50 left-5 right-5 m-2 border-0 w-full md:w-fit p-0! h-fit bg-sidebar/93',
+                !hasNoTransactionBatch ? 'xl:py-5!' : 'py-0'
             )}
         >
-            <CardContent className="!h-fit p-2 lg:!p-0 items-center w-full lg:!w-full">
+            <CardContent className="h-fit! p-2 lg:p-0! items-center w-full lg:w-full!">
                 <TransactionNoFoundBatch mode="payment" />
                 <Form {...form}>
                     <form
@@ -288,7 +300,7 @@ const PaymentWithTransactionForm = ({
                     >
                         {isOnlinePayment && (
                             <Card className="absolute bottom-[105%] bg-sidebar left-0 ">
-                                <CardContent className="grid w-full grid-cols-1 md:grid-cols-2 xl:grid-cols-4 !min-w-fit gap-5 p-0 py-2 px-2 ">
+                                <CardContent className="grid w-full grid-cols-1 md:grid-cols-2 xl:grid-cols-4 min-w-fit! gap-5 p-0 py-2 px-2 ">
                                     <FormFieldWrapper
                                         control={form.control}
                                         label="Bank"
@@ -357,7 +369,7 @@ const PaymentWithTransactionForm = ({
                                             return (
                                                 <ImageField
                                                     {...field}
-                                                    className="!max-h-10"
+                                                    className="max-h-10!"
                                                     disabled={isDisabled(
                                                         'proof_of_payment_media_id'
                                                     )}
@@ -395,7 +407,7 @@ const PaymentWithTransactionForm = ({
                                 </CardContent>
                             </Card>
                         )}
-                        <div className="grid md:grid-cols-2 xl:grid-cols-4 grid-flow-col-dense gap-2">
+                        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-2">
                             <FormFieldWrapper
                                 className="self-center"
                                 control={form.control}
@@ -456,9 +468,9 @@ const PaymentWithTransactionForm = ({
                                     />
                                 )}
                             />
-                            <div className="flex col-span-2 space-x-2">
+                            <div className="flex md:col-span-2 space-x-2">
                                 <FormFieldWrapper
-                                    className="mt-2.5 md:mt-0 self-center"
+                                    className="self-center min-w-[10rem]"
                                     control={form.control}
                                     label="Amount"
                                     labelClassName="text-xs font-medium text-muted-foreground"
@@ -483,6 +495,7 @@ const PaymentWithTransactionForm = ({
                                 <Button
                                     className="self-start px-8 mt-6 min-w-[15rem] "
                                     disabled={isPending}
+                                    tabIndex={-1}
                                     type="submit"
                                 >
                                     {isPending ? (
@@ -531,7 +544,7 @@ const PaymentWithTransactionForm = ({
                             <FormErrorMessage errorMessage={errorMessage} />
                         </div>
                         <Accordion
-                            className="w-full col-span-4 !p-0 overflow-auto"
+                            className="w-full hidden p-0! overflow-auto"
                             collapsible
                             type="single"
                         >
@@ -556,7 +569,7 @@ const PaymentWithTransactionForm = ({
                                             <Textarea
                                                 {...field}
                                                 autoComplete="off"
-                                                className="!h-12 !max-h-20 !border"
+                                                className="h-12! max-h-20! border!"
                                                 disabled={isDisabled(
                                                     'description'
                                                 )}
@@ -577,7 +590,7 @@ const PaymentWithTransactionForm = ({
                                             return (
                                                 <SignatureField
                                                     {...field}
-                                                    className="!max-h-15 min-h-15 "
+                                                    className="max-h-15! min-h-15 "
                                                     disabled={isDisabled(
                                                         'signature_media_id'
                                                     )}

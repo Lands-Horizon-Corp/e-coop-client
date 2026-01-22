@@ -56,6 +56,7 @@ const PaymentTypeCombobox = ({
                         className={cn('w-full justify-between px-3', className)}
                         disabled={disabled || isLoading}
                         role="combobox"
+                        tabIndex={0}
                         variant="outline"
                     >
                         {value ? (

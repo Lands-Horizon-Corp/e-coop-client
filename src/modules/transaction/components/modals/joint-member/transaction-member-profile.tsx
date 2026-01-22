@@ -53,27 +53,6 @@ const TransactionMemberProfile = ({
     })
     if (!memberInfo) return null
 
-    /*
-
-
-               
-
-  <div className="text-center sm:text-left">
-                                        <h3 className="mb-1 font-medium text-muted-foreground">
-                                            Contact Number
-                                        </h3>
-                                        <div className="flex items-center gap-2 justify-center sm:justify-start">
-                                            <PhoneIcon className="size-3" />
-                                            <span>
-                                                <CopyWrapper>
-                                                    {memberInfo.contact_number}
-                                                </CopyWrapper>
-                                            </span>
-                                        </div>
-                                    </div>
-
-            */
-
     return (
         <div className="ecoop-scroll flex flex-1 items-center gap-x-2">
             <MemberOverallInfoModal
@@ -84,14 +63,14 @@ const TransactionMemberProfile = ({
             />
 
             {/* MEMBER INFO VIEW */}
-            <div className="rounded-2xl flex-1 bg-gradient-to-br from-primary/10 to-background border-primary/90">
+            <div className="rounded-2xl flex-1 bg-linear-to-br from-primary/10 to-background border-primary/90">
                 <div
                     className={cn(
-                        'rounded-2xl flex-1 h-fit flex space-y-2 overscroll-contain bg-gradient-to-br from-primary/10 to-background border border-primary/40 p-3',
+                        'rounded-2xl flex-1 h-fit flex space-y-2 overscroll-contain bg-linear-to-br from-primary/10 to-background border border-primary/40 p-3',
                         className
                     )}
                 >
-                    <div className="flex-shrink-0 relative flex-1 flex items-center gap-2">
+                    <div className="shrink-0 relative flex-1 flex items-center gap-2">
                         <PreviewMediaWrapper media={memberInfo.media}>
                             <ImageDisplay
                                 className="size-16 ring-3 ring-primary"

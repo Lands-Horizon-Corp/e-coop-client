@@ -1,6 +1,5 @@
 import { toast } from 'sonner'
 
-import { SHORTCUT_SCOPES } from '@/constants'
 import { toReadableDate } from '@/helpers/date-utils'
 import { IGeneralLedger } from '@/modules/general-ledger'
 import { usePrintGeneralLedgerTransaction } from '@/modules/transaction'
@@ -47,19 +46,12 @@ const TransactionModalSuccessPayment = ({
         printGeneralLedgerTransaction({ id: generalLedgerId })
     }
 
-    useHotkeys(
-        'enter',
-        (e) => {
-            e.preventDefault()
-            if (!transaction || !isOpen) return
-            handlePrintGeneralLedgerTransaction(transaction.id)
-            onClose?.()
-        },
-        {
-            scopes: [SHORTCUT_SCOPES.MODAL],
-        },
-        [transaction, isOpen, onClose /*, setActiveScope*/]
-    )
+    useHotkeys('enter', (e) => {
+        e.preventDefault()
+        if (!transaction || !isOpen) return
+        handlePrintGeneralLedgerTransaction(transaction.id)
+        onClose?.()
+    })
 
     const paymentType =
         focusTypePayment === 'withdraw' ? 'Withdrawal' : focusTypePayment
