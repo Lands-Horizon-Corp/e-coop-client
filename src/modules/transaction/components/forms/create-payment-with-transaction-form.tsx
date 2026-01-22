@@ -274,6 +274,11 @@ const PaymentWithTransactionForm = ({
     const errorMessage = serverRequestErrExtractor({ error })
     const { hasNoTransactionBatch } = useTransactionBatchStore()
 
+    useEffect(() => {
+        if (!form.watch('account')) return
+        form.setFocus('amount')
+    }, [form.watch('account')])
+
     return (
         <Card
             className={cn(
