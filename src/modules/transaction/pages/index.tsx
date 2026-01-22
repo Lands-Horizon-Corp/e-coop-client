@@ -50,9 +50,8 @@ const Transaction = ({ transactionId, fullPath }: TTransactionProps) => {
 
     const { modalData, isOpen, onClose } = useTransactionReverseSecurityStore()
 
-    const { payment_or_allow_user_input, userOrganization } =
+    const { payment_or_allow_user_input, userOrganization, ORWithPadding } =
         useGetUserSettings()
-
     const {
         openSuccessModal,
         transactionFormSuccess,
@@ -144,6 +143,13 @@ const Transaction = ({ transactionId, fullPath }: TTransactionProps) => {
             'member_profile_id',
             transaction.member_profile_id
         )
+        transactionForm.setValue(
+            'reference_number',
+            transaction.reference_number,
+            {
+                shouldDirty: false,
+            }
+        )
         setSelectedAccountId(undefined)
     }
 
@@ -154,13 +160,20 @@ const Transaction = ({ transactionId, fullPath }: TTransactionProps) => {
             e.preventDefault()
             e.stopPropagation()
             handleSetTransactionId({ fullPath })
+
             transactionForm.reset({
-                reference_number: paymentORResolver(userOrganization),
                 member_join: undefined,
                 member_profile: undefined,
                 member_profile_id: undefined,
             })
-            queryClient.invalidateQueries({ queryKey: ['auth', 'context'] })
+            transactionForm.setValue(
+                'reference_number',
+                paymentORResolver(userOrganization)
+            )
+            transactionForm.setValue(
+                'or_auto_generated',
+                !payment_or_allow_user_input
+            )
         },
         {
             enableOnFormTags: true,
@@ -200,8 +213,11 @@ const Transaction = ({ transactionId, fullPath }: TTransactionProps) => {
                 'reference_number',
                 paymentORResolver(userOrganization)
             )
+        } else {
+            transactionForm.setValue('reference_number', ORWithPadding)
         }
-    }, [transactionForm, payment_or_allow_user_input, userOrganization])
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [])
 
     return (
         <div>

@@ -217,6 +217,7 @@ const PaymentWithTransactionForm = ({
             transactionPayload: transactionPaymentPayload,
         }
         const isDirty = transactionForm.formState.dirtyFields.reference_number
+        console.log('isDirty', isDirty)
         if (isDirty) {
             handleResetTransaction()
             creatTransactionDeposit({
@@ -229,7 +230,6 @@ const PaymentWithTransactionForm = ({
             })
         }
     }
-
     const handleSubmit = form.handleSubmit(
         async (data: TPaymentWithTransactionFormValues, event) => {
             event?.preventDefault()
