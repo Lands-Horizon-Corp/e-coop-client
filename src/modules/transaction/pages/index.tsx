@@ -247,7 +247,6 @@ const Transaction = ({ transactionId, fullPath }: TTransactionProps) => {
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
-
     return (
         <div>
             <TransactionReverseRequestFormModal
@@ -273,11 +272,15 @@ const Transaction = ({ transactionId, fullPath }: TTransactionProps) => {
                 <TransactionModalSuccessPayment
                     isOpen={openSuccessModal}
                     onClose={handleCloseSuccessModal}
-                    onOpenChange={setOpenSuccessModal}
+                    onOpenChange={(newState) => {
+                        if (!newState) {
+                            accountPickerModalState.onOpenChange(true)
+                        }
+                        setOpenSuccessModal(newState)
+                    }}
                     open={openSuccessModal}
                     transaction={transactionFormSuccess}
                 />
-
                 <div className="flex h-full flex-col lg:flex-row w-full gap-2 overflow-hidden">
                     {/* Left Section (Payment) */}
                     <div className="w-full lg:w-[40%] ecoop-scroll pr-px flex flex-col overflow-y-auto">
