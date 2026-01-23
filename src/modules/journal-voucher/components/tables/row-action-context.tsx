@@ -1,7 +1,10 @@
 import { ReactNode } from 'react'
 
 import { withToastCallbacks } from '@/helpers/callback-helper'
-import { hasPermissionFromAuth } from '@/modules/authentication/authgentication.store'
+import {
+    hasPermissionFromAuth,
+    useAuthStore,
+} from '@/modules/authentication/authgentication.store'
 import useConfirmModalStore from '@/store/confirm-modal-store'
 import { Row } from '@tanstack/react-table'
 
@@ -209,6 +212,10 @@ export const JournalVoucherTableActionManager = () => {
         JournalVoucherActionExtra
     >()
 
+    const {
+        currentAuth: { user_organization },
+    } = useAuthStore()
+
     if (!state || !state.defaultValues) return null
 
     const journalVoucher = state.defaultValues
@@ -234,6 +241,7 @@ export const JournalVoucherTableActionManager = () => {
                     formProps={{
                         defaultValues: journalVoucher,
                         journalVoucherId: journalVoucher.id,
+                        orSettings: user_organization?.branch?.branch_setting,
                     }}
                     onOpenChange={close}
                     open={state.isOpen}

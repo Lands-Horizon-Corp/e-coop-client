@@ -47,12 +47,24 @@ export interface ICashVoucherORSettings {
     cash_check_voucher_padding: number
 }
 
+export interface IJournalVoucherORSettings {
+    /** Journal Voucher */
+    journal_voucher_allow_user_input: boolean
+    journal_voucher_or_unique: boolean
+    journal_voucher_prefix: string
+    journal_voucher_or_start: number
+    journal_voucher_or_current: number
+    journal_voucher_or_iteration: number
+    journal_voucher_padding: number
+}
+
 export interface IBranchSettings
     extends
         IBaseEntityMeta,
         ICashCheckVoucherGeneralORSettings,
         ILoanVoucherORSettings,
-        ICashVoucherORSettings {
+        ICashVoucherORSettings,
+        IJournalVoucherORSettings {
     id: TEntityId
 
     currency_id: TEntityId
@@ -77,15 +89,6 @@ export interface IBranchSettings
     deposit_use_date_or: boolean
     deposit_padding: number
     deposit_common_or?: string
-
-    /** Journal Voucher */
-    journal_voucher_allow_user_input: boolean
-    journal_voucher_or_unique: boolean
-    journal_voucher_prefix: string
-    journal_voucher_or_start: number
-    journal_voucher_or_current: number
-    journal_voucher_or_iteration: number
-    journal_voucher_padding: number
 
     /** Adjustment Voucher */
     adjustment_voucher_allow_user_input: boolean

@@ -11,6 +11,7 @@ import { JournalVoucherEntrySchema } from '../journal-voucher-entry'
 export const JournalVoucherSchema = z.object({
     id: z.string().optional(),
     cash_voucher_number: z.coerce.string<string>().optional(),
+
     date: z.string().min(1, 'Date is required'),
     reference: z.coerce.string<string>().optional(),
     status: z
@@ -77,6 +78,7 @@ export const JournalVoucherSchema = z.object({
 
 export const JournalVoucherPrintSchema = z.object({
     cash_voucher_number: z.string().min(1, 'Voucher Number is required'),
+    or_auto_generated: z.boolean().default(false).optional(),
 })
 
 export type TJournalVoucherSchema = z.infer<typeof JournalVoucherSchema>
