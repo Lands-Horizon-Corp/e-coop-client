@@ -1,6 +1,7 @@
 import { ReactNode } from 'react'
 
 import { withToastCallbacks } from '@/helpers/callback-helper'
+import { hasPermissionFromAuth } from '@/modules/authentication/authgentication.store'
 import useConfirmModalStore from '@/store/confirm-modal-store'
 import { Row } from '@tanstack/react-table'
 
@@ -135,6 +136,7 @@ export const CashCheckJournalVoucherAction = ({
     onDeleteSuccess,
 }: ICashCheckVoucherRowContextProps) => {
     const {
+        cashCheckVoucher,
         handleEdit,
         handleOpenCheckEntry,
         handleOpenSignature,
@@ -149,7 +151,11 @@ export const CashCheckJournalVoucherAction = ({
                 canSelect
                 onEdit={{
                     text: 'Edit',
-                    isAllowed: true,
+                    isAllowed: hasPermissionFromAuth({
+                        action: ['Update', 'OwnUpdate'],
+                        resourceType: 'CashCheckVoucher',
+                        resource: cashCheckVoucher,
+                    }),
                     onClick: handleEdit,
                 }}
                 otherActions={
@@ -174,6 +180,7 @@ export const CashCheckVoucherRowContext = ({
     onDeleteSuccess,
 }: ICashCheckVoucherRowContextProps) => {
     const {
+        cashCheckVoucher,
         handleEdit,
         handleOpenCheckEntry,
         handleOpenSignature,
@@ -187,7 +194,11 @@ export const CashCheckVoucherRowContext = ({
             <DataTableRowContext
                 onEdit={{
                     text: 'Edit',
-                    isAllowed: true,
+                    isAllowed: hasPermissionFromAuth({
+                        action: ['Update', 'OwnUpdate'],
+                        resourceType: 'CashCheckVoucher',
+                        resource: cashCheckVoucher,
+                    }),
                     onClick: handleEdit,
                 }}
                 otherActions={

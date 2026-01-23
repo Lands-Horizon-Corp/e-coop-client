@@ -184,7 +184,11 @@ const CashCheckVoucherOtherAction = ({
                 <SendHorizonalIcon className="mr-2 h-4 w-4 text-muted-foreground" />
             ),
             onSelect: handleOpenCheckEntry,
-            isVisible: true,
+            isVisible: hasPermissionFromAuth({
+                action: ['Update', 'OwnUpdate'],
+                resourceType: 'CashCheckVoucher',
+                resource: CashCheckVoucher,
+            }),
         },
         {
             label: 'Signature',
