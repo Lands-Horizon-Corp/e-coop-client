@@ -1,3 +1,13 @@
+import { IconType } from 'react-icons/lib'
+
+import {
+    ExportIcon,
+    EyeIcon,
+    PencilOutlineIcon,
+    PlusIcon,
+    TrashIcon,
+} from '@/components/icons'
+
 import { TPermissionAction } from './permission.types'
 
 // BASE PERMISSION ACTIONS
@@ -7,7 +17,6 @@ export const PERMISSION_BASE_ACTIONS = [
     'Update',
     'Delete',
     'Export',
-    // 'Approve',
     'OwnRead',
     'OwnUpdate',
     'OwnDelete',
@@ -16,51 +25,60 @@ export const PERMISSION_BASE_ACTIONS = [
 
 export const PERMISSION_ALL_ACTIONS: {
     action: (typeof PERMISSION_BASE_ACTIONS)[number]
+    icon?: IconType
     label: string
     description: string
 }[] = [
     {
+        icon: PlusIcon,
         action: 'Create',
         label: 'Create',
         description: 'Allows creating resources',
     },
-    { action: 'Read', label: 'Read', description: 'Allows reading resources' },
     {
+        icon: EyeIcon,
+        action: 'Read',
+        label: 'Read',
+        description: 'Allows reading resources',
+    },
+    {
+        icon: PencilOutlineIcon,
         action: 'Update',
         label: 'Update',
         description: 'Allows updating resources',
     },
     {
+        icon: TrashIcon,
         action: 'Delete',
         label: 'Delete',
         description: 'Allows deleting resources',
     },
     {
+        icon: ExportIcon,
         action: 'Export',
         label: 'Export',
         description: 'Allows exporting resources',
     },
-    // {
-    //     action: 'Approve',
-    //     label: 'Approve',
-    //     description: 'Allows approving resources',
-    // },
     {
+        icon: EyeIcon,
         action: 'OwnRead',
         label: 'Own Read',
         description: 'Allows reading own resources',
     },
     {
+        icon: PencilOutlineIcon,
         action: 'OwnUpdate',
         label: 'Own Update',
         description: 'Allows updating own resources',
     },
     {
+        icon: TrashIcon,
         action: 'OwnDelete',
         label: 'Own Delete',
         description: 'Allows deleting own resources',
     },
     {
+        icon: ExportIcon,
         action: 'OwnExport',
         label: 'Own Export',
         description: 'Allows exporting own resources',
@@ -265,6 +283,36 @@ export const PERMISSION_ALL_RESOURCE_ACTION = [
         description:
             'Allow access/action for transaction(payment, withdraw, deposit) module',
         supportedActions: ['Read', 'Create', 'Update'] as TPermissionAction[],
+    },
+
+    // JOURNAL VOUCHER
+    {
+        resource: 'JournalVoucher',
+        label: 'Journal Voucher Module',
+        description: 'Allow access/action for Journal Voucher module',
+        supportedActions: generateBaseAction({
+            excludeActions: ['Delete', 'OwnDelete'],
+        }) as TPermissionAction[],
+    },
+
+    // LOAN TRANSACTION
+    {
+        resource: 'Loan',
+        label: 'Loan Module',
+        description: 'Allow access/action for Loan module',
+        supportedActions: generateBaseAction({
+            excludeActions: ['Delete', 'OwnDelete'],
+        }) as TPermissionAction[],
+    },
+
+    // CASH CHECK VOUCHER
+    {
+        resource: 'CashCheckVoucher',
+        label: 'Cash Check Voucher Module',
+        description: 'Allow access/action for Cash Check Voucher Module',
+        supportedActions: generateBaseAction({
+            excludeActions: ['Delete', 'OwnDelete', 'OwnRead'],
+        }) as TPermissionAction[],
     },
 
     //

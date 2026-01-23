@@ -1,7 +1,10 @@
 import { IAuditable, TEntityId } from '@/types'
 
 import { IUserOrganization } from '../user-organization'
-import { PERMISSION_BASE_ACTIONS } from './permission.constants'
+import {
+    PERMISSION_ALL_ACTIONS,
+    PERMISSION_BASE_ACTIONS,
+} from './permission.constants'
 import {
     TPermission,
     TPermissionAction,
@@ -64,6 +67,13 @@ export interface GetCrudPermissionOpts<
     IHasPermissionOpts<TResourceData, TUser>,
     'action' | 'conditionLogic'
 > {}
+
+// HELPER UTIL FUNC
+export const getActionDetails = (action: TPermissionAction) => {
+    return PERMISSION_ALL_ACTIONS.find(
+        (PERM_ACTION) => PERM_ACTION.action === action
+    )
+}
 
 export const getCrudPermissions = ({
     userOrg,
