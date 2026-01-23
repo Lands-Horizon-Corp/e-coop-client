@@ -300,9 +300,7 @@ export const PERMISSION_ALL_RESOURCE_ACTION = [
         resource: 'Loan',
         label: 'Loan Module',
         description: 'Allow access/action for Loan module',
-        supportedActions: generateBaseAction({
-            excludeActions: ['Delete', 'OwnDelete'],
-        }) as TPermissionAction[],
+        supportedActions: generateBaseAction() as TPermissionAction[],
     },
 
     // CASH CHECK VOUCHER
