@@ -20,6 +20,7 @@ interface InfoTooltipProps {
     delayDuration?: number
     sideOffset?: number
     alignOffset?: number
+    contentClassName?: string
 }
 
 const InfoTooltip = ({
@@ -31,6 +32,7 @@ const InfoTooltip = ({
     delayDuration = 300,
     sideOffset = 4,
     alignOffset = 0,
+    contentClassName,
 }: InfoTooltipProps) => {
     return (
         <Tooltip delayDuration={delayDuration}>
@@ -50,7 +52,10 @@ const InfoTooltip = ({
                 <TooltipContent
                     align={align}
                     alignOffset={alignOffset}
-                    className="text-xs px-1.5 rounded-lg border text-foreground bg-background"
+                    className={cn(
+                        'text-xs px-1.5 rounded-lg border text-foreground bg-background',
+                        contentClassName
+                    )}
                     side={side}
                     sideOffset={sideOffset}
                     style={{ zIndex: 99999 }}
