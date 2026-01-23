@@ -28,7 +28,7 @@ function SwitchFormField<T extends FieldValues>({
             control={form.control}
             name={name}
             render={({ field }) => (
-                <div className="shadow-xs bg-background/50 relative flex w-full items-start gap-2 rounded-lg border border-input p-4 outline-none duration-200 ease-out has-[:checked]:border-primary/30 has-[:checked]:bg-gradient-to-br has-[:checked]:from-primary/50 has-[:checked]:to-primary/10">
+                <div className="shadow-xs bg-background/50 relative flex w-full items-start gap-2 rounded-lg border border-input p-4 outline-none duration-200 ease-out has-checked:border-primary/30 has-checked:bg-linear-to-br has-checked:from-primary/50 has-checked:to-primary/10">
                     <Switch
                         aria-describedby={
                             description ? `${field.name}-desc` : undefined

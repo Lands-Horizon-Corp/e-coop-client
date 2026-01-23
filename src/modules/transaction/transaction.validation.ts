@@ -67,6 +67,7 @@ export const TransactionFromSchema = z.object({
     account: z.any(),
 })
 export type TTransactionSchema = z.infer<typeof TransactionSchema>
+export type TTransactionFormSchema = z.infer<typeof TransactionFromSchema>
 
 export type TPaymentWithTransactionFormValues = z.infer<
     typeof PaymentWithTransactionSchema

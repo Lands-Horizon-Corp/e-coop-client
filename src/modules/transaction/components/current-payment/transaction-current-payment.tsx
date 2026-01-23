@@ -1,8 +1,6 @@
 import { useCallback } from 'react'
 
-import { UseFormReturn } from 'react-hook-form'
 import { toast } from 'sonner'
-import z from 'zod'
 
 import { cn } from '@/helpers'
 import { currencyFormat } from '@/modules/currency'
@@ -22,13 +20,7 @@ import { Switch } from '@/components/ui/switch'
 
 import { useQeueryHookCallback } from '@/hooks/use-query-hook-cb'
 
-import { TEntityId } from '@/types'
-
-import {
-    ITransaction,
-    TransactionFromSchema,
-    useGetTransactionById,
-} from '../..'
+import { useTransactionContext } from '../../context/transaction-context'
 import { paymentORResolver } from '../../transaction.utils'
 import TransactionHistory from '../history'
 import ReferenceNumber from '../input/transaction-reference-number-field'
@@ -48,21 +40,10 @@ type itemgBadgeTypeProps = {
     className?: string
 }
 
-type CurrentPaymentsEntryListProps = {
-    transactionId: TEntityId
-    transaction: ITransaction
-    totalAmount?: number
-    fullPath: string
-
-    form: UseFormReturn<z.infer<typeof TransactionFromSchema>>
-}
-const TransactionCurrentPaymentEntry = ({
-    fullPath,
-    transactionId,
-    transaction,
-    totalAmount,
-    form,
-}: CurrentPaymentsEntryListProps) => {
+const TransactionCurrentPaymentEntry = () => {
+    const { transactionId, transaction, getTransaction, form, fullPath } =
+        useTransactionContext()
+    const totalAmount = getTransaction?.amount
     const { payment_or_allow_user_input, userOrganization } =
         useGetUserSettings()
 
@@ -82,28 +63,9 @@ const TransactionCurrentPaymentEntry = ({
         },
     })
 
-    const {
-        data: getTransaction,
-        isSuccess: isSuccessGetTransaction,
-        isError: isErrorGetTransaction,
-    } = useGetTransactionById({
-        id: transactionId,
-    })
-
     const handleError = useCallback((error: Error) => {
         toast.error(error?.message || 'Something went wrong')
     }, [])
-
-    useQeueryHookCallback({
-        data: getTransaction,
-        error: handleError,
-        isError: isErrorGetTransaction,
-        isSuccess: isSuccessGetTransaction,
-        onSuccess: (data) => {
-            form.setValue('member_profile', data.member_profile)
-            form.setValue('member_profile_id', data.member_profile_id)
-        },
-    })
 
     useQeueryHookCallback({
         data: generalLedgerBasedTransaction,
@@ -164,14 +126,20 @@ const TransactionCurrentPaymentEntry = ({
                                                 thumbClassName="size-3"
                                             />
                                             <Label className="text-xs font-medium text-muted-foreground mr-1">
-                                                OR Auto Generated
+                                                OR Auto Generated {' | '}
                                             </Label>
-                                            <Label className="text-xs font-medium text-muted-foreground">
-                                                Press Alt{' '}
+                                            <Label className="text-[10px] font-medium text-muted-foreground">
+                                                Press:{' '}
                                                 <KbdGroup>
-                                                    <Kbd>Alt</Kbd>
-                                                    <span>+</span>
-                                                    <Kbd>E</Kbd>
+                                                    <Kbd className="text-[10px]">
+                                                        Alt
+                                                    </Kbd>
+                                                    <span className="text-[10px]">
+                                                        +
+                                                    </span>
+                                                    <Kbd className="text-[10px]">
+                                                        E
+                                                    </Kbd>
                                                 </KbdGroup>
                                             </Label>
                                         </div>

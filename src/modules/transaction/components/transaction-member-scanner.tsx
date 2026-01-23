@@ -1,25 +1,19 @@
 import { useCallback, useState } from 'react'
 
-import { UseFormReturn } from 'react-hook-form'
 import { toast } from 'sonner'
-import z from 'zod'
 
-// import { SHORTCUT_SCOPES } from '@/constants'
 import { cn } from '@/helpers'
 import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
 import { IQRMemberProfileDecodedResult } from '@/modules/qr-crypto'
 import {
-    TransactionFromSchema,
     TransactionMemberProfile,
     TransactionViewNoMemberSelected,
 } from '@/modules/transaction'
-import { useTransactionStore } from '@/store/transaction/transaction-store'
 import { ScanLineIcon } from 'lucide-react'
 import { useHotkeys } from 'react-hotkeys-hook'
 
 import { EyeIcon } from '@/components/icons'
 import QrCodeScanner from '@/components/qrcode-scanner'
-// import { useShortcutContext } from '@/components/shorcuts/general-shortcuts-wrapper'
 import LoadingSpinner from '@/components/spinners/loading-spinner'
 import { Button } from '@/components/ui/button'
 import FormErrorMessage from '@/components/ui/form-error-message'
@@ -27,28 +21,24 @@ import { Kbd } from '@/components/ui/kbd'
 
 import { useQeueryHookCallback } from '@/hooks/use-query-hook-cb'
 
-import { IBaseProps, TEntityId } from '@/types'
+import { IBaseProps } from '@/types'
 
 import { IMemberProfile } from '../../member-profile'
 import MemberPicker from '../../member-profile/components/member-picker'
 import { useGetMemberProfileById } from '../../member-profile/member-profile.service'
+import { useTransactionContext } from '../context/transaction-context'
 
-interface MemberQrScannerProps extends IBaseProps {
-    transactionId: TEntityId
-    fullPath: string
-    handleRemoveMember?: () => void
-    form: UseFormReturn<z.infer<typeof TransactionFromSchema>>
-}
+interface MemberQrScannerProps extends IBaseProps {}
 
-const TransactionMemberScanner = ({
-    className,
-    transactionId,
-    handleRemoveMember,
-    form,
-}: MemberQrScannerProps) => {
+const TransactionMemberScanner = ({ className }: MemberQrScannerProps) => {
     const [startScan, setStartScan] = useState(false)
 
-    const { setOpenMemberPicker, openMemberPicker } = useTransactionStore()
+    const {
+        transactionId,
+        modals,
+        form,
+        handleRemoveMember,
+    } = useTransactionContext()
 
     const focusedId = form.watch('decoded_member_profile_id') ?? ''
     const {
@@ -91,19 +81,17 @@ const TransactionMemberScanner = ({
 
     const selectedMemberId = form.getValues('member_profile_id')
     const hasSelectedMember = !!form.getValues('member_profile_id')
+
     return (
         <div
             className={cn(
                 'flex flex-col xl:flex-row w-full xl:h-fit h-full ecoop-scroll rounded-2xl',
-                hasSelectedMember ? 'h-fit!' : '',
+                hasSelectedMember ? 'h-fit! pb-2' : 'p-2',
                 className
             )}
         >
             <MemberPicker
-                modalState={{
-                    open: openMemberPicker,
-                    onOpenChange: setOpenMemberPicker,
-                }}
+                modalState={modals.memberScanner}
                 onSelect={(selectedMember) => {
                     form.setValue('member_profile', selectedMember)
                     form.setValue('member_profile_id', selectedMember.id)
@@ -169,12 +157,9 @@ const TransactionMemberScanner = ({
                     disabledSelectTrigger={!!transactionId}
                     onClick={(e) => {
                         e.preventDefault()
-                        setOpenMemberPicker(true)
+                        modals.memberScanner.onOpenChange(true)
                     }}
                 />
-                // <div className='min-h-54'>
-                //     hello
-                // </div>
             )}
 
             {/* Right: Content Column */}

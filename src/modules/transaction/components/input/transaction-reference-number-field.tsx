@@ -18,7 +18,7 @@ const TransactionReferenceNumber = forwardRef<
             <Input
                 {...rest}
                 className={cn(
-                    'border !border-primary/20',
+                    'border border-primary/20!',
                     isDefault
                         ? ''
                         : 'text-lg font-bold text-primary placeholder:text-sm placeholder:font-normal placeholder:text-foreground/40',

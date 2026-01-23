@@ -1,31 +1,21 @@
 import { toast } from 'sonner'
 
 import { toReadableDate } from '@/helpers/date-utils'
-import { IGeneralLedger } from '@/modules/general-ledger'
 import { usePrintGeneralLedgerTransaction } from '@/modules/transaction'
 import { useTransactionStore } from '@/store/transaction/transaction-store'
 import { useHotkeys } from 'react-hotkeys-hook'
 
 import { CheckFillIcon, DoorExitFillIcon } from '@/components/icons'
-import Modal, { IModalProps } from '@/components/modals/modal'
-// import { useShortcutContext } from '@/components/shorcuts/general-shortcuts-wrapper';
+import Modal from '@/components/modals/modal'
 import { Button } from '@/components/ui/button'
 
 import { TEntityId } from '@/types'
 
-interface PaymentSuccessModalProps extends IModalProps {
-    transaction: IGeneralLedger | null
-    onClose?: () => void
-    isOpen?: boolean
-}
+import { useTransactionContext } from '../../context/transaction-context'
 
-const TransactionModalSuccessPayment = ({
-    transaction,
-    onClose,
-    isOpen,
-    ...props
-}: PaymentSuccessModalProps) => {
-    // const { setActiveScope } = useShortcutContext()
+const TransactionModalSuccessPayment = () => {
+    const { transaction, onClose, isOpen, modalOpenSuccessPayment } =
+        useTransactionContext()
 
     const { mutate: printGeneralLedgerTransaction } =
         usePrintGeneralLedgerTransaction({
@@ -62,7 +52,7 @@ const TransactionModalSuccessPayment = ({
 
     return (
         <Modal
-            {...props}
+            {...modalOpenSuccessPayment}
             footer={
                 <div className="flex items-center justify-end w-full space-x-2">
                     <Button

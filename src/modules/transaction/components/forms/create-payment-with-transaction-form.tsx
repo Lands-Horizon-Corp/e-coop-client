@@ -35,16 +35,18 @@ import { useTransactionReverseSecurityStore } from '@/store/transaction-reverse-
 import { useTransactionStore } from '@/store/transaction/transaction-store'
 import { useHotkeys } from 'react-hotkeys-hook'
 
-import { CalendarNumberIcon } from '@/components/icons'
-import LoadingSpinner from '@/components/spinners/loading-spinner'
 import {
-    Accordion,
-    AccordionContent,
-    AccordionItem,
-    AccordionTrigger,
-} from '@/components/ui/accordion'
+    CalendarNumberIcon,
+    ChevronDownIcon,
+} from '@/components/icons'
+import LoadingSpinner from '@/components/spinners/loading-spinner'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
+import {
+    Collapsible,
+    CollapsibleContent,
+    CollapsibleTrigger,
+} from '@/components/ui/collapsible'
 import { Form } from '@/components/ui/form'
 import FormErrorMessage from '@/components/ui/form-error-message'
 import FormFieldWrapper from '@/components/ui/form-field-wrapper'
@@ -95,9 +97,10 @@ const PaymentWithTransactionForm = ({
 }: PaymentWithTransactionFormProps) => {
     const { focusTypePayment, openSuccessModal } = useTransactionStore()
     const accountPaymentTypeState = useModalState()
-
     const loanPaymentGuideModal = useModalState()
+    const othersAccordionState = useModalState()
     const queryClient = useQueryClient()
+    
     const {
         settings_accounting_payment_default_value,
         settings_accounting_payment_default_value_id,
@@ -152,6 +155,7 @@ const PaymentWithTransactionForm = ({
                 })
                 queryClient.invalidateQueries({ queryKey: ['auth', 'context'] })
                 onSuccess?.(transaction)
+                othersAccordionState.onOpenChange(false)
             },
         },
     })
@@ -257,10 +261,11 @@ const PaymentWithTransactionForm = ({
         'Alt + 1',
         (e) => {
             e.preventDefault()
+            if (accountPickerModalState.open) return
             accountPaymentTypeState.onOpenChange(!accountPaymentTypeState.open)
         },
         { enableOnFormTags: true, keydown: true },
-        [accountPaymentTypeState.open]
+        [accountPaymentTypeState.open, accountPickerModalState.open]
     )
 
     useHotkeys(
@@ -275,10 +280,11 @@ const PaymentWithTransactionForm = ({
         'Alt + 2',
         (e) => {
             e.preventDefault()
+            if (accountPaymentTypeState.open) return
             accountPickerModalState.onOpenChange(!accountPickerModalState.open)
         },
         { enableOnFormTags: true, keydown: true },
-        [accountPickerModalState.open]
+        [accountPickerModalState.open, accountPaymentTypeState.open]
     )
 
     const errorMessage = serverRequestErrExtractor({ error })
@@ -604,91 +610,92 @@ const PaymentWithTransactionForm = ({
 
                             <FormErrorMessage errorMessage={errorMessage} />
                         </div>
-                        <Accordion
-                            className="w-full p-0! overflow-auto"
-                            collapsible
-                            type="single"
+                        <Collapsible
+                            {...othersAccordionState}
+                            className="w-full p-0! justify-end  overflow-auto"
                         >
-                            <AccordionItem
-                                className=" w-full border-0"
-                                value="item-1"
+                            <CollapsibleTrigger
+                                className={cn(
+                                    'p-1 text-sm justify-end w-full flex text-primary gap-x-2'
+                                )}
                             >
-                                <AccordionTrigger
-                                    className={cn(
-                                        'p-1 text-sm justify-end text-primary flex w-full gap-x-2'
-                                    )}
-                                >
-                                    others
-                                </AccordionTrigger>
-                                <AccordionContent className="overflow-x-auto ecoop-scroll flex gap-x-2 ">
-                                    <FormFieldWrapper
-                                        className="h-full col-span-2"
-                                        control={form.control}
-                                        label="Description"
-                                        name="description"
-                                        render={({ field }) => (
-                                            <Textarea
-                                                {...field}
-                                                autoComplete="off"
-                                                className="h-12! max-h-20! border!"
-                                                disabled={isDisabled(
-                                                    'description'
-                                                )}
-                                                id={field.name}
-                                                placeholder="a short description..."
-                                                value={field.value}
-                                            />
+                                <span className="flex items-center space-x-2">
+                                    <span>others</span>
+
+                                    <ChevronDownIcon
+                                        className={cn(
+                                            'ml-auto ease-in-out duration-200',
+                                            !othersAccordionState.open &&
+                                                ' rotate-180'
                                         )}
                                     />
-                                    <FormFieldWrapper
-                                        className="h-15"
-                                        control={form.control}
-                                        label="Signature"
-                                        name="signature_media_id"
-                                        render={({ field }) => {
-                                            const value =
-                                                form.watch('signature')
-                                            return (
-                                                <SignatureField
-                                                    {...field}
-                                                    className="max-h-15! min-h-15 "
-                                                    disabled={isDisabled(
-                                                        'signature_media_id'
-                                                    )}
-                                                    hideIcon
-                                                    onChange={(newImage) => {
-                                                        if (newImage) {
-                                                            field.onChange(
-                                                                newImage.id
-                                                            )
-                                                            form.setValue(
-                                                                'signature',
-                                                                newImage as IMedia
-                                                            )
-                                                        } else {
-                                                            field.onChange(
-                                                                undefined
-                                                            )
-                                                            form.setValue(
-                                                                'signature',
-                                                                undefined
-                                                            )
-                                                        }
-                                                    }}
-                                                    placeholder="Signature"
-                                                    value={
-                                                        value
-                                                            ? (value as IMedia)
-                                                                  .download_url
-                                                            : value
+                                </span>
+                            </CollapsibleTrigger>
+                            <CollapsibleContent className="overflow-x-auto w-full ecoop-scroll flex gap-x-2 ">
+                                <FormFieldWrapper
+                                    className="h-full col-span-2"
+                                    control={form.control}
+                                    label="Description"
+                                    name="description"
+                                    render={({ field }) => (
+                                        <Textarea
+                                            {...field}
+                                            autoComplete="off"
+                                            className="h-12! max-h-20! border!"
+                                            disabled={isDisabled('description')}
+                                            id={field.name}
+                                            placeholder="a short description..."
+                                            value={field.value}
+                                        />
+                                    )}
+                                />
+                                <FormFieldWrapper
+                                    className="h-15"
+                                    control={form.control}
+                                    label="Signature"
+                                    name="signature_media_id"
+                                    render={({ field }) => {
+                                        const value = form.watch('signature')
+                                        return (
+                                            <SignatureField
+                                                {...field}
+                                                className="max-h-15! min-h-15 "
+                                                disabled={isDisabled(
+                                                    'signature_media_id'
+                                                )}
+                                                hideIcon
+                                                onChange={(newImage) => {
+                                                    if (newImage) {
+                                                        field.onChange(
+                                                            newImage.id
+                                                        )
+                                                        form.setValue(
+                                                            'signature',
+                                                            newImage as IMedia
+                                                        )
+                                                    } else {
+                                                        field.onChange(
+                                                            undefined
+                                                        )
+                                                        form.setValue(
+                                                            'signature',
+                                                            undefined
+                                                        )
                                                     }
-                                                />
-                                            )
-                                        }}
-                                    />
-                                </AccordionContent>
-                            </AccordionItem>
-                        </Accordion>
+                                                }}
+                                                placeholder="Signature"
+                                                value={
+                                                    value
+                                                        ? (value as IMedia)
+                                                              .download_url
+                                                        : value
+                                                }
+                                            />
+                                        )
+                                    }}
+                                />
+                            </CollapsibleContent>
+                        </Collapsible>
                         <div className="flex items-center w-fit mb-2 justify-end">
                             {form.watch('loan_transaction_id') && (
                                 <>
