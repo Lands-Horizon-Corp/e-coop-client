@@ -1,6 +1,6 @@
 import { ReactNode } from 'react'
 
-import { toReadableDateTime } from '@/helpers/date-utils'
+import { dateAgo, toReadableDate } from '@/helpers/date-utils'
 import { currencyFormat } from '@/modules/currency'
 import { ColumnDef, Row } from '@tanstack/react-table'
 
@@ -252,7 +252,7 @@ const LoanTransactionTableColumns = (
                     original: { applied_1, account },
                 },
             }) => (
-                <p className="!text-wrap font-mono text-lg text-right text-muted-foreground">
+                <p className="!text-wrap font-mono text-right text-muted-foreground">
                     {currencyFormat(applied_1, {
                         currency: account?.currency,
                         showSymbol: !!account?.currency,
@@ -580,9 +580,17 @@ const LoanTransactionTableColumns = (
                     original: { printed_date },
                 },
             }) => (
-                <p className="!text-wrap text-muted-foreground">
-                    {printed_date && toReadableDateTime(printed_date)}
-                </p>
+                <div>
+                    <p>{printed_date ? toReadableDate(printed_date) : ''} </p>
+                    {printed_date ? (
+                        <p className="text-xs text-muted-foreground/60">
+                            {toReadableDate(printed_date, 'h:mm a -')}{' '}
+                            {dateAgo(printed_date)}
+                        </p>
+                    ) : (
+                        ''
+                    )}
+                </div>
             ),
             enableMultiSort: true,
             enableSorting: true,
@@ -610,9 +618,17 @@ const LoanTransactionTableColumns = (
                     original: { approved_date },
                 },
             }) => (
-                <p className="!text-wrap text-muted-foreground">
-                    {approved_date && toReadableDateTime(approved_date)}
-                </p>
+                <div>
+                    <p>{approved_date ? toReadableDate(approved_date) : ''} </p>
+                    {approved_date ? (
+                        <p className="text-xs text-muted-foreground/60">
+                            {toReadableDate(approved_date, 'h:mm a -')}{' '}
+                            {dateAgo(approved_date)}
+                        </p>
+                    ) : (
+                        ''
+                    )}
+                </div>
             ),
             enableMultiSort: true,
             enableSorting: true,
@@ -640,9 +656,17 @@ const LoanTransactionTableColumns = (
                     original: { released_date },
                 },
             }) => (
-                <p className="!text-wrap text-muted-foreground">
-                    {released_date && toReadableDateTime(released_date)}
-                </p>
+                <div>
+                    <p>{released_date ? toReadableDate(released_date) : ''} </p>
+                    {released_date ? (
+                        <p className="text-xs text-muted-foreground/60">
+                            {toReadableDate(released_date, 'h:mm a -')}{' '}
+                            {dateAgo(released_date)}
+                        </p>
+                    ) : (
+                        ''
+                    )}
+                </div>
             ),
             enableMultiSort: true,
             enableSorting: true,
