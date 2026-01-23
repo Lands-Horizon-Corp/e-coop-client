@@ -139,6 +139,8 @@ export const PERMISSION_ALL_RESOURCE_ACTION = [
         description: 'View Transactions of an account',
         supportedActions: ['Read', 'Create'] as TPermissionAction[],
     },
+
+    // ADJUSTMENT
     {
         resource: 'AdjustmentEntry',
         label: 'Adjustment Entry',

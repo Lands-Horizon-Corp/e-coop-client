@@ -97,14 +97,15 @@ export const AdjustmentEntryAction = ({
     row,
     onDeleteSuccess,
 }: IAdjustmentEntryTableActionProps) => {
-    const { handleOnView } = useAdjustmentEntryActions({
+    const { adjustmentEntry, handleOnView } = useAdjustmentEntryActions({
         row,
         onDeleteSuccess,
     })
 
     const canView = hasPermissionFromAuth({
-        action: 'Read',
+        action: ['Read', 'OwnRead'],
         resourceType: 'AdjustmentEntry',
+        resource: adjustmentEntry,
     })
 
     return (
@@ -132,14 +133,15 @@ export const AdjustmentEntryRowContext = ({
     children,
     onDeleteSuccess,
 }: IAdjustmentEntryRowContextProps) => {
-    const { handleOnView } = useAdjustmentEntryActions({
+    const { adjustmentEntry, handleOnView } = useAdjustmentEntryActions({
         row,
         onDeleteSuccess,
     })
 
     const canView = hasPermissionFromAuth({
-        action: 'Read',
+        action: ['Read', 'OwnRead'],
         resourceType: 'AdjustmentEntry',
+        resource: adjustmentEntry,
     })
 
     return (
