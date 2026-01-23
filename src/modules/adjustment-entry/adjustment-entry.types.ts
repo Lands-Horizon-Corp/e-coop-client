@@ -2,6 +2,7 @@ import { IBaseEntityMeta, IPaginatedResult, TEntityId } from '@/types'
 
 import { IAccount } from '../account'
 import { IAdjustmentEntryTag } from '../adjustment-entry-tag'
+import { IAdjustmentVoucherSettings } from '../branch-settings'
 import { IMemberProfile } from '../member-profile'
 import { IPaymentType } from '../payment-type'
 import { IUser } from '../user'
@@ -62,3 +63,8 @@ export interface IAdjustmentEntryTotal {
 export interface IAdjustmentEntryPaginated extends IPaginatedResult<IAdjustmentEntry> {}
 
 export type TAdjustmentEntryHookMode = 'all' | 'currency' | 'currency-employee'
+
+export type TORAdjustmentVoucherSettings = Omit<
+    IAdjustmentVoucherSettings,
+    'adjustment_voucher_or_unique'
+>

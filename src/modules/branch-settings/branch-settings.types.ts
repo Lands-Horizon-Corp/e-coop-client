@@ -58,12 +58,24 @@ export interface IJournalVoucherORSettings {
     journal_voucher_padding: number
 }
 
+export interface IAdjustmentVoucherSettings {
+    /** Adjustment Voucher */
+    adjustment_voucher_allow_user_input: boolean
+    adjustment_voucher_or_unique: boolean
+    adjustment_voucher_prefix: string
+    adjustment_voucher_or_start: number
+    adjustment_voucher_or_current: number
+    adjustment_voucher_or_iteration: number
+    adjustment_voucher_padding: number
+}
+
 export interface IBranchSettings
     extends
         IBaseEntityMeta,
         ICashCheckVoucherGeneralORSettings,
         ILoanVoucherORSettings,
         ICashVoucherORSettings,
+        IAdjustmentVoucherSettings,
         IJournalVoucherORSettings {
     id: TEntityId
 
@@ -89,15 +101,6 @@ export interface IBranchSettings
     deposit_use_date_or: boolean
     deposit_padding: number
     deposit_common_or?: string
-
-    /** Adjustment Voucher */
-    adjustment_voucher_allow_user_input: boolean
-    adjustment_voucher_or_unique: boolean
-    adjustment_voucher_prefix: string
-    adjustment_voucher_or_start: number
-    adjustment_voucher_or_current: number
-    adjustment_voucher_or_iteration: number
-    adjustment_voucher_padding: number
 
     default_member_type_id?: TEntityId
     default_member_type?: IMemberType

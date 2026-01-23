@@ -64,6 +64,7 @@ const AdjustmentEntryPage = () => {
                         defaultValues: {
                             entry_date: userOrganization?.time_machine_time,
                         },
+                        orSettings: user_organization?.branch?.branch_setting,
                         baseCurrency: currency,
                         onSuccess: () => {
                             queryClient.invalidateQueries({
