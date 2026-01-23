@@ -50,7 +50,7 @@ import { useModalState } from '@/hooks/use-modal-state'
 
 import { IClassProps, IForm, TEntityId } from '@/types'
 
-import { buildCashCheckOR } from '../../cash-check-voucer.utils'
+import { buildCashCheckOR } from '../../cash-check-voucher.utils'
 import CashCheckVoucherStatusIndicator from '../cash-check-status-indicator'
 import { CashCheckJournalEntryTable } from './cash-check-voucher-entry-table'
 

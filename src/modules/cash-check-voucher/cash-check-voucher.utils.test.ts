@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 
-import { buildCashCheckOR } from './cash-check-voucer.utils'
+import { buildCashCheckOR } from './cash-check-voucher.utils'
 
 describe('buildCashCheckOR', () => {
     const baseSettings = {

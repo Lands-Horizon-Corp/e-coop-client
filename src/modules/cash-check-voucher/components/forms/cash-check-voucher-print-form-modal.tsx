@@ -32,7 +32,7 @@ import { IClassProps, IForm, TEntityId } from '@/types'
 import {
     buildCashCheckOR,
     isAllowedInputCashCheckOR,
-} from '../../cash-check-voucer.utils'
+} from '../../cash-check-voucher.utils'
 
 export interface ICashCheckVoucherPrintFormProps
     extends
