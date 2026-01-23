@@ -14,8 +14,11 @@ import { useAuthUserWithOrgBranch } from '@/modules/authentication/authgenticati
 import { CurrencyInput } from '@/modules/currency'
 import LoanPurposeCombobox from '@/modules/loan-purpose/components/loan-purpose-combobox'
 import LoanStatusCombobox from '@/modules/loan-status/components/loan-status-combobox'
+import {
+    buildLoanVoucherOR,
+    resolveLoanDatesToStatus,
+} from '@/modules/loan-transaction/loan-transaction.utils'
 import { LOAN_MODE_OF_PAYMENT } from '@/modules/loan-transaction/loan.constants'
-import { resolveLoanDatesToStatus } from '@/modules/loan-transaction/loan.utils'
 import {
     IMemberProfile,
     useGetMemberProfileById,
@@ -77,6 +80,7 @@ import {
 import {
     ILoanTransaction,
     ILoanTransactionRequest,
+    TORLoanVoucherSettings,
 } from '../../../loan-transaction.types'
 import {
     LoanTransactionSchema,
@@ -99,6 +103,7 @@ export interface ILoanTransactionFormProps
         IClassProps,
         IForm<Partial<ILoanTransactionRequest>, ILoanTransaction, Error> {
     loanTransactionId?: TEntityId
+    orSettings?: TORLoanVoucherSettings
 }
 
 const LoanMemberProfileScanner = ({
@@ -257,6 +262,7 @@ const LoanTransactionCreateUpdateForm = ({
     className,
     loanTransactionId: defaultLoanId,
     readOnly,
+    orSettings,
     ...formProps
 }: ILoanTransactionFormProps) => {
     const [tab, setTab] = useState<TLoanFormTabs>('entries')
@@ -658,55 +664,10 @@ const LoanTransactionCreateUpdateForm = ({
                                         </p>
                                     </div>
                                     <div className="flex items-start gap-3">
-                                        <FormFieldWrapper
-                                            className="col-span-1 max-w-72"
-                                            control={form.control}
-                                            label={
-                                                <span className="flex items-center justify-between pb-1">
-                                                    <span>
-                                                        OR{' '}
-                                                        <HashIcon className="inline text-muted-foreground" />
-                                                    </span>
-                                                    <button
-                                                        className="text-xs disabled:pointer-events-none text-muted-foreground duration-150 cursor-pointer hover:text-foreground underline-offset-4 underline"
-                                                        disabled={isDisabled(
-                                                            'official_receipt_number'
-                                                        )}
-                                                        onClick={() => {
-                                                            // const constructedOR =
-                                                            //     user_setting_used_or
-                                                            //         .toString()
-                                                            //         .padStart(
-                                                            //             user_setting_number_padding,
-                                                            //             '0'
-                                                            //         )
-                                                            // form.setValue(
-                                                            //     'official_receipt_number',
-                                                            //     constructedOR,
-                                                            //     {
-                                                            //         shouldDirty: true,
-                                                            //     }
-                                                            // )
-                                                            // toast.info(
-                                                            //     `Set or to ${constructedOR}`
-                                                            // )
-                                                        }}
-                                                        type="button"
-                                                    >
-                                                        Auto OR{' '}
-                                                        <WandSparkleIcon className="inline" />
-                                                    </button>
-                                                </span>
-                                            }
-                                            name="official_receipt_number"
-                                            render={({ field }) => (
-                                                <Input
-                                                    {...field}
-                                                    disabled={isDisabled(
-                                                        field.name
-                                                    )}
-                                                />
-                                            )}
+                                        <OrField
+                                            disabled={isDisabled('voucher')}
+                                            form={form}
+                                            orSettings={orSettings}
                                         />
                                         <FormFieldWrapper
                                             className="w-fit"
@@ -1579,6 +1540,54 @@ export const LoanTransactionCreateUpdateFormModal = ({
                 }}
             />
         </Modal>
+    )
+}
+
+const OrField = ({
+    form,
+    orSettings,
+    disabled,
+}: {
+    disabled?: boolean
+    orSettings?: TORLoanVoucherSettings
+    form: UseFormReturn<TLoanTransactionSchema>
+}) => {
+    return (
+        <FormFieldWrapper
+            className="col-span-1 max-w-[400px]"
+            control={form.control}
+            label={
+                <span className="flex items-center justify-between pb-0.5">
+                    <span className="inline-flex gap-x-1 items-center">
+                        OR <HashIcon className="inline text-muted-foreground" />
+                    </span>
+                    <button
+                        className="text-xs disabled:pointer-events-none text-muted-foreground duration-150 cursor-pointer hover:text-foreground underline-offset-4 underline"
+                        onClick={() => {
+                            if (!orSettings)
+                                return toast.warning(
+                                    'OR Generate Failed - could not load settings'
+                                )
+
+                            const constructedCV = buildLoanVoucherOR(orSettings)
+
+                            form.setValue('voucher', constructedCV, {
+                                shouldDirty: true,
+                            })
+                            toast.info(
+                                `Set Check Voucher Number to ${constructedCV}`
+                            )
+                        }}
+                        type="button"
+                    >
+                        Generate Voucher
+                        <WandSparkleIcon className="inline ml-1" />
+                    </button>
+                </span>
+            }
+            name="voucher"
+            render={({ field }) => <Input {...field} disabled={disabled} />}
+        />
     )
 }
 

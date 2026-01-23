@@ -4,7 +4,10 @@ import { toast } from 'sonner'
 
 import { withToastCallbacks } from '@/helpers/callback-helper'
 import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
-import { hasPermissionFromAuth } from '@/modules/authentication/authgentication.store'
+import {
+    hasPermissionFromAuth,
+    useAuthStore,
+} from '@/modules/authentication/authgentication.store'
 import useConfirmModalStore from '@/store/confirm-modal-store'
 import { Row } from '@tanstack/react-table'
 
@@ -30,7 +33,7 @@ import {
     useUndoPrintLoanTransaction,
 } from '../../loan-transaction.service'
 import { ILoanTransaction } from '../../loan-transaction.types'
-import { resolveLoanDatesToStatus } from '../../loan.utils'
+import { resolveLoanDatesToStatus } from '../../loan-transaction.utils'
 import { LoanEditFormModal } from '../forms/loan-edit-form'
 import { LoanTransactionPrintFormModal } from '../forms/loan-print-form'
 import { LoanTransactionCreateUpdateFormModal } from '../forms/loan-transaction-create-update-form'
@@ -648,6 +651,10 @@ export const LoanTransactionTableActionManager = () => {
     const loanTransaction = state.defaultValues
     const approveReleaseMode = state.extra?.approveReleaseMode ?? 'approve'
 
+    const {
+        currentAuth: { user_organization },
+    } = useAuthStore()
+
     const handleConfirmEdit = () => {
         close()
         // Open the actual edit modal after confirmation
@@ -677,6 +684,7 @@ export const LoanTransactionTableActionManager = () => {
                     formProps={{
                         loanTransactionId: loanTransaction.id,
                         defaultValues: loanTransaction,
+                        orSettings: user_organization?.branch.branch_setting,
                     }}
                     onOpenChange={close}
                     open={state.isOpen}
@@ -699,6 +707,7 @@ export const LoanTransactionTableActionManager = () => {
                     formProps={{
                         defaultValues: loanTransaction,
                         loanTransactionId: loanTransaction.id,
+                        orSettings: user_organization?.branch.branch_setting,
                     }}
                     onOpenChange={close}
                     open={state.isOpen}

@@ -27,7 +27,10 @@ const LoansPage = () => {
 
     const {
         currentAuth: {
-            user_organization: { branch_id },
+            user_organization: {
+                branch_id,
+                branch: { branch_setting },
+            },
         },
     } = useAuthUserWithOrgBranch()
 
@@ -40,7 +43,12 @@ const LoansPage = () => {
     return (
         <PageContainer>
             <PermissionGuard action="Read" resourceType="Loan">
-                <LoanTransactionCreateUpdateFormModal {...createModal} />
+                <LoanTransactionCreateUpdateFormModal
+                    {...createModal}
+                    formProps={{
+                        orSettings: branch_setting,
+                    }}
+                />
                 <LoanTransactionTable
                     actionComponent={LoanTransactionAction}
                     className="max-h-[90vh] min-h-[90vh] w-full"

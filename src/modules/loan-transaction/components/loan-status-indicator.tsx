@@ -28,7 +28,7 @@ import {
 import { IClassProps } from '@/types'
 
 import { ILoanTransactionStatusDates } from '../loan-transaction.types'
-import { resolveLoanDatesToStatus } from '../loan.utils'
+import { resolveLoanDatesToStatus } from '../loan-transaction.utils'
 import LoanStatusBadge from './loan-status-badge'
 
 interface Props extends IClassProps {

@@ -4,6 +4,10 @@ import { IBaseEntityMeta, IPaginatedResult, TEntityId } from '@/types'
 
 import { IAccount } from '../account'
 import { IAccountHistory } from '../account-history'
+import {
+    ICashCheckVoucherGeneralORSettings,
+    ILoanVoucherORSettings,
+} from '../branch-settings'
 import { IComakerCollateral } from '../comaker-collateral'
 import { IComakerMemberProfile } from '../comaker-member-profile'
 import { ICurrency } from '../currency'
@@ -449,3 +453,9 @@ export interface IAllMembersLoanSummaryResponse {
     branch_id: TEntityId
     generated_at: string
 }
+
+export type TORLoanVoucherSettings = Omit<
+    ILoanVoucherORSettings,
+    'loan_voucher_or_unique'
+> &
+    Omit<ICashCheckVoucherGeneralORSettings, 'check_voucher_general_or_unique'>
