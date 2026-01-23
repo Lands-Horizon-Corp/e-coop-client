@@ -1,6 +1,7 @@
 import { ReactNode } from 'react'
 
 import { withToastCallbacks } from '@/helpers/callback-helper'
+import { hasPermissionFromAuth } from '@/modules/authentication/authgentication.store'
 import useConfirmModalStore from '@/store/confirm-modal-store'
 import { Row } from '@tanstack/react-table'
 
@@ -119,6 +120,7 @@ export const JournalVoucherAction = ({
     onDeleteSuccess,
 }: IJournalVoucherTableActionProps) => {
     const {
+        journalVoucher,
         handleEdit,
         handleOpenPrintModal,
         handleApproveModal,
@@ -132,7 +134,11 @@ export const JournalVoucherAction = ({
                 canSelect
                 onEdit={{
                     text: 'Edit',
-                    isAllowed: true,
+                    isAllowed: hasPermissionFromAuth({
+                        action: ['Update', 'OwnUpdate'],
+                        resourceType: 'JournalVoucher',
+                        resource: journalVoucher,
+                    }),
                     onClick: handleEdit,
                 }}
                 otherActions={
@@ -160,6 +166,7 @@ export const JournalVoucherRowContext = ({
     onDeleteSuccess,
 }: IJournalVoucherRowContextProps) => {
     const {
+        journalVoucher,
         handleEdit,
         handleApproveModal,
         handleReleaseModal,
@@ -171,7 +178,11 @@ export const JournalVoucherRowContext = ({
             <DataTableRowContext
                 onEdit={{
                     text: 'Edit',
-                    isAllowed: true,
+                    isAllowed: hasPermissionFromAuth({
+                        action: ['Update', 'OwnUpdate'],
+                        resourceType: 'JournalVoucher',
+                        resource: journalVoucher,
+                    }),
                     onClick: handleEdit,
                 }}
                 otherActions={
