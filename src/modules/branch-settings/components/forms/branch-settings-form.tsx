@@ -578,98 +578,6 @@ const BranchSettingsForm = ({
                     </div>
 
                     <Separator />
-                    <div className="space-y-4 p-4 bg-secondary/60 dark:bg-popover rounded-xl">
-                        <div className="flex items-center gap-3">
-                            <div className="size-fit rounded-full bg-purple-100 p-2 dark:bg-purple-900/20">
-                                <ReceiptIcon className="h-5 w-5 text-purple-600 dark:text-purple-400" />
-                            </div>
-                            <div>
-                                <h3 className="font-semibold">
-                                    Check Voucher OR Settings
-                                </h3>
-                                <p className="text-xs text-muted-foreground">
-                                    Configure official receipt settings for
-                                    check vouchers
-                                </p>
-                            </div>
-                        </div>
-
-                        <div className="grid gap-x-4 gap-y-3 md:grid-cols-4">
-                            <FormFieldWrapper
-                                control={form.control}
-                                label="Start OR"
-                                name="cash_check_voucher_or_start"
-                                render={({ field }) => (
-                                    <Input
-                                        {...field}
-                                        disabled={isDisabled(field.name)}
-                                        min="0"
-                                        placeholder="Start OR"
-                                        type="text"
-                                    />
-                                )}
-                            />
-
-                            <FormFieldWrapper
-                                control={form.control}
-                                label="Current OR"
-                                name="cash_check_voucher_or_current"
-                                render={({ field }) => (
-                                    <Input
-                                        {...field}
-                                        disabled={isDisabled(field.name)}
-                                        min="0"
-                                        placeholder="Current OR"
-                                        type="text"
-                                    />
-                                )}
-                            />
-                            <FormFieldWrapper
-                                control={form.control}
-                                label="OR Padding"
-                                name="cash_check_voucher_padding"
-                                render={({ field }) => (
-                                    <Input
-                                        {...field}
-                                        disabled={isDisabled(field.name)}
-                                        min="0"
-                                        placeholder="OR Iteration"
-                                        type="text"
-                                    />
-                                )}
-                            />
-                            <FormFieldWrapper
-                                className="col-span-full"
-                                control={form.control}
-                                label="OR Prefix"
-                                name="cash_check_voucher_prefix"
-                                render={({ field }) => (
-                                    <Input
-                                        {...field}
-                                        disabled={isDisabled(field.name)}
-                                        placeholder="Enter prefix (optional)"
-                                        type="text"
-                                    />
-                                )}
-                            />
-                        </div>
-                        <SwitchFormField
-                            description="Allow the users to input OR"
-                            form={form}
-                            isDisabled={isDisabled}
-                            label="Allow user to input"
-                            name="cash_check_voucher_allow_user_input"
-                        />
-                        <SwitchFormField
-                            description="Allow the users to enable unique"
-                            form={form}
-                            isDisabled={isDisabled}
-                            label="Allow to use unique in OR"
-                            name="cash_check_voucher_or_unique"
-                        />
-                    </div>
-
-                    <Separator />
 
                     <div className="space-y-4 p-4 bg-secondary/60 dark:bg-popover rounded-xl">
                         <div className="flex items-center gap-3">
@@ -753,10 +661,10 @@ const BranchSettingsForm = ({
                                 name="journal_voucher_allow_user_input"
                             />
                             <SwitchFormField
-                                description="Allow users to enable unique OR"
+                                description="Make OR Unique (NO DUPLICATES) if this is enabled"
                                 form={form}
                                 isDisabled={isDisabled}
-                                label="Allow unique OR"
+                                label="Use unique OR"
                                 name="journal_voucher_or_unique"
                             />
                         </div>
@@ -845,10 +753,10 @@ const BranchSettingsForm = ({
                                 name="adjustment_voucher_allow_user_input"
                             />
                             <SwitchFormField
-                                description="Allow users to enable unique OR"
+                                description="Make OR Unique (NO DUPLICATES) if this is enabled"
                                 form={form}
                                 isDisabled={isDisabled}
-                                label="Allow unique OR"
+                                label="Use unique OR"
                                 name="adjustment_voucher_or_unique"
                             />
                         </div>
@@ -937,13 +845,105 @@ const BranchSettingsForm = ({
                                 name="loan_voucher_allow_user_input"
                             />
                             <SwitchFormField
-                                description="Allow users to enable unique OR"
+                                description="Make OR Unique (NO DUPLICATES) if this is enabled"
                                 form={form}
                                 isDisabled={isDisabled}
-                                label="Allow unique OR"
+                                label="Use unique OR"
                                 name="loan_voucher_or_unique"
                             />
                         </div>
+                    </div>
+
+                    <Separator />
+                    <div className="space-y-4 p-4 bg-secondary/60 dark:bg-popover rounded-xl">
+                        <div className="flex items-center gap-3">
+                            <div className="size-fit rounded-full bg-purple-100 p-2 dark:bg-purple-900/20">
+                                <ReceiptIcon className="h-5 w-5 text-purple-600 dark:text-purple-400" />
+                            </div>
+                            <div>
+                                <h3 className="font-semibold">
+                                    Check Voucher OR Settings
+                                </h3>
+                                <p className="text-xs text-muted-foreground">
+                                    Configure official receipt settings for
+                                    check vouchers
+                                </p>
+                            </div>
+                        </div>
+
+                        <div className="grid gap-x-4 gap-y-3 md:grid-cols-4">
+                            <FormFieldWrapper
+                                control={form.control}
+                                label="Start OR"
+                                name="cash_check_voucher_or_start"
+                                render={({ field }) => (
+                                    <Input
+                                        {...field}
+                                        disabled={isDisabled(field.name)}
+                                        min="0"
+                                        placeholder="Start OR"
+                                        type="text"
+                                    />
+                                )}
+                            />
+
+                            <FormFieldWrapper
+                                control={form.control}
+                                label="Current OR"
+                                name="cash_check_voucher_or_current"
+                                render={({ field }) => (
+                                    <Input
+                                        {...field}
+                                        disabled={isDisabled(field.name)}
+                                        min="0"
+                                        placeholder="Current OR"
+                                        type="text"
+                                    />
+                                )}
+                            />
+                            <FormFieldWrapper
+                                control={form.control}
+                                label="OR Padding"
+                                name="cash_check_voucher_padding"
+                                render={({ field }) => (
+                                    <Input
+                                        {...field}
+                                        disabled={isDisabled(field.name)}
+                                        min="0"
+                                        placeholder="OR Iteration"
+                                        type="text"
+                                    />
+                                )}
+                            />
+                            <FormFieldWrapper
+                                className="col-span-full"
+                                control={form.control}
+                                label="OR Prefix"
+                                name="cash_check_voucher_prefix"
+                                render={({ field }) => (
+                                    <Input
+                                        {...field}
+                                        disabled={isDisabled(field.name)}
+                                        placeholder="Enter prefix (optional)"
+                                        type="text"
+                                    />
+                                )}
+                            />
+                        </div>
+                        <SwitchFormField
+                            description="Allow the users to input OR"
+                            form={form}
+                            isDisabled={isDisabled}
+                            label="Allow user to input"
+                            name="cash_check_voucher_allow_user_input"
+                        />
+                        <SwitchFormField
+                            description="Make OR Unique (NO DUPLICATES) if this is enabled"
+                            form={form}
+                            isDisabled={isDisabled}
+                            label="Use Unique OR"
+                            name="cash_check_voucher_or_unique"
+                        />
                     </div>
 
                     {/* Check Voucher General Settings */}
@@ -1039,10 +1039,10 @@ const BranchSettingsForm = ({
                                 name="check_voucher_general_allow_user_input"
                             />
                             <SwitchFormField
-                                description="Allow users to enable unique OR"
+                                description="Make OR Unique (NO DUPLICATES) if this is enabled"
                                 form={form}
                                 isDisabled={isDisabled}
-                                label="Allow unique OR"
+                                label="Use unique OR"
                                 name="check_voucher_general_or_unique"
                             />
                         </div>

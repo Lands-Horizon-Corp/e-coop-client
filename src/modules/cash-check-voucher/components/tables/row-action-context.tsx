@@ -1,7 +1,10 @@
 import { ReactNode } from 'react'
 
 import { withToastCallbacks } from '@/helpers/callback-helper'
-import { hasPermissionFromAuth } from '@/modules/authentication/authgentication.store'
+import {
+    hasPermissionFromAuth,
+    useAuthStore,
+} from '@/modules/authentication/authgentication.store'
 import useConfirmModalStore from '@/store/confirm-modal-store'
 import { Row } from '@tanstack/react-table'
 
@@ -229,6 +232,10 @@ export const CashCheckVoucherTableActionManager = () => {
 
     const isPrinted = !!state.defaultValues?.printed_date
 
+    const {
+        currentAuth: { user_organization },
+    } = useAuthStore()
+
     return (
         <>
             {state.action === 'edit' && state.defaultValues && (
@@ -238,6 +245,7 @@ export const CashCheckVoucherTableActionManager = () => {
                         defaultValues: state.defaultValues,
                         mode: 'update',
                         readOnly: isPrinted,
+                        orSettings: user_organization?.branch?.branch_setting,
                     }}
                     onOpenChange={close}
                     open={state.isOpen}
@@ -248,6 +256,11 @@ export const CashCheckVoucherTableActionManager = () => {
                     className="!min-w-[600px]"
                     formProps={{
                         cashCheckVoucherId: state.defaultValues.id,
+                        defaultValues: {
+                            cash_voucher_number:
+                                state.defaultValues?.cash_voucher_number,
+                        },
+                        orSettings: user_organization?.branch?.branch_setting,
                     }}
                     onOpenChange={close}
                     open={state.isOpen}

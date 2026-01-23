@@ -4,6 +4,10 @@ import { IBaseEntityMeta, IPaginatedResult, TEntityId } from '@/types'
 
 import { IAccount } from '../account'
 import {
+    ICashCheckVoucherGeneralORSettings,
+    ICashVoucherORSettings,
+} from '../branch-settings'
+import {
     ICashCheckVoucherEntry,
     ICashCheckVoucherEntryRequest,
 } from '../cash-check-voucher-entry'
@@ -141,7 +145,10 @@ export interface ICashCheckVoucherRequest {
     pay_to?: string
     status?: CashCheckVoucherStatus
     description?: string
+
     cash_voucher_number?: string
+    or_auto_generated?: boolean
+
     total_debit?: number
     total_credit?: number
     print_count?: number
@@ -222,3 +229,9 @@ export type TCashCheckVoucherPrintRequest = z.infer<
     typeof CashCheckVoucherPrintSchema
 >
 export interface ICashCheckVoucherPaginated extends IPaginatedResult<ICashCheckVoucher> {}
+
+export type TORCashCheckSettings = Omit<
+    ICashCheckVoucherGeneralORSettings,
+    'check_voucher_general_or_unique'
+> &
+    Omit<ICashVoucherORSettings, 'check_voucher_general_or_unique'>

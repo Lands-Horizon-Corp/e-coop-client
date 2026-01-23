@@ -29,7 +29,7 @@ const CashCheckJournalVoucherPage = () => {
             user_organization: {
                 branch_id,
                 branch: {
-                    branch_setting: { currency },
+                    branch_setting: { currency, ...otherBranchSettings },
                 },
             },
         },
@@ -81,6 +81,7 @@ const CashCheckJournalVoucherPage = () => {
                             currency,
                             currency_id: currency.id,
                         },
+                        orSettings: otherBranchSettings,
                     }}
                 />
                 <CashCheckJournalVoucherTable
