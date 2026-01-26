@@ -155,12 +155,12 @@ export const generateSidebarGroups = (
                     shortDescription: 'Configure available payment types',
                 },
                 {
-                    title: 'Disbursement',
+                    title: 'Disbursement Type',
                     url: `${baseUrl}/transaction/disbursement`,
                     type: 'item',
                     icon: HandCoinsIcon,
                     userType: ['employee', 'owner'],
-                    shortDescription: 'Manage disbursement transactions',
+                    shortDescription: 'Manage disbursement type transactions',
                 },
                 {
                     icon: MaintenanceIcon,

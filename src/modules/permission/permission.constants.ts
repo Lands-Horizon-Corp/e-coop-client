@@ -322,6 +322,20 @@ export const PERMISSION_ALL_RESOURCE_ACTION = [
         }) as TPermissionAction[],
     },
 
+    {
+        resource: 'DisburesmentType',
+        label: 'Disbursement Type Module',
+        description: 'Allow access/action for Disbursement Type Module',
+        supportedActions: generateBaseAction() as TPermissionAction[],
+    },
+
+        {
+        resource: 'CashCount',
+        label: 'Cash Count Module',
+        description: 'Allow access/action for Cash count Module',
+        supportedActions: generateBaseAction() as TPermissionAction[],
+    },
+
     //
     {
         resource: 'GeneralLedger',
