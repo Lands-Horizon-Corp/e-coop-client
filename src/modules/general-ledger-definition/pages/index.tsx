@@ -1,44 +1,74 @@
 import { useState } from 'react'
+
 import { toast } from 'sonner'
 
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion'
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuShortcut, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
-import PageContainer from '@/components/containers/page-container'
-import { EditPencilIcon, SettingsIcon, SigiBookIcon, ViewIcon } from '@/components/icons'
-
-import { useShortcut } from '@/hooks/use-shorcuts'
-import PermissionGuard from '@/modules/permission/components/permission-guard'
-import { hasPermissionFromAuth } from '@/modules/authentication/authgentication.store'
-
 import { payment_bg } from '@/assets/transactions'
+import { hasPermissionFromAuth } from '@/modules/authentication/authgentication.store'
 import FinancialStatementSkeleton from '@/modules/financial-statement-definition/pages/components/financial-statement-skeleton'
-
 import { useGetAll } from '@/modules/general-ledger-account-grouping'
 import { IGeneralLedgerAccountGrouping } from '@/modules/general-ledger-account-grouping'
 import { GLAccountsGroupingUpdateFormModal } from '@/modules/general-ledger-account-grouping'
 import { GENERAL_LEDGER_TYPE } from '@/modules/general-ledger/general-ledger.constants'
+import PermissionGuard from '@/modules/permission/components/permission-guard'
 import { useGeneralLedgerAccountsGroupingStore } from '@/store/general-ledger-accounts-groupings-store'
+
+import PageContainer from '@/components/containers/page-container'
+import {
+    EditPencilIcon,
+    SettingsIcon,
+    SigiBookIcon,
+    ViewIcon,
+} from '@/components/icons'
+import {
+    Accordion,
+    AccordionContent,
+    AccordionItem,
+    AccordionTrigger,
+} from '@/components/ui/accordion'
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuShortcut,
+    DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu'
+
+import { useShortcut } from '@/hooks/use-shorcuts'
 
 import { GeneralLedgerDefinitionTreeViewer } from './components'
 
 const GeneralLedgerDefinition = () => {
     const [onOpenEditGLGrouping, setOnOpenEditGLGrouping] = useState(false)
-    const [financialStatementGrouping, setFinancialStatementGrouping] = useState(false)
-    const [grouping, setGrouping] = useState<IGeneralLedgerAccountGrouping | null>(null)
+    const [financialStatementGrouping, setFinancialStatementGrouping] =
+        useState(false)
+    const [grouping, setGrouping] =
+        useState<IGeneralLedgerAccountGrouping | null>(null)
 
-    const { data: generalLedgerGropings, refetch: refetchGeneralLedgerAccountsGrouping, isRefetching: isRefetchingGeneralLedgerAccountsGrouping, isLoading: isLoadingGeneralLedgerAccountsGrouping } = useGetAll()
-    const { setGeneralLedgerAccountsGroupingId, setGeneralLedgerType } = useGeneralLedgerAccountsGroupingStore()
+    const {
+        data: generalLedgerGropings,
+        refetch: refetchGeneralLedgerAccountsGrouping,
+        isRefetching: isRefetchingGeneralLedgerAccountsGrouping,
+        isLoading: isLoadingGeneralLedgerAccountsGrouping,
+    } = useGetAll()
+    const { setGeneralLedgerAccountsGroupingId, setGeneralLedgerType } =
+        useGeneralLedgerAccountsGroupingStore()
 
     const refetch = () => refetchGeneralLedgerAccountsGrouping()
-    const hasGeneralLedgerGropings = generalLedgerGropings && generalLedgerGropings.length > 0
+    const hasGeneralLedgerGropings =
+        generalLedgerGropings && generalLedgerGropings.length > 0
 
     const handleAccountTrigger = (grouping: IGeneralLedgerAccountGrouping) => {
         setGeneralLedgerAccountsGroupingId(grouping.id)
-        const matchedType = GENERAL_LEDGER_TYPE.find((type) => type === grouping.name)
+        const matchedType = GENERAL_LEDGER_TYPE.find(
+            (type) => type === grouping.name
+        )
         setGeneralLedgerType?.(matchedType ?? null)
     }
 
-    const handleEditGLGrouping = (grouping: IGeneralLedgerAccountGrouping, financialStatementGrouping: boolean = false) => {
+    const handleEditGLGrouping = (
+        grouping: IGeneralLedgerAccountGrouping,
+        financialStatementGrouping: boolean = false
+    ) => {
         setGrouping(grouping)
         setFinancialStatementGrouping(financialStatementGrouping)
         setOnOpenEditGLGrouping(true)
@@ -46,7 +76,10 @@ const GeneralLedgerDefinition = () => {
         setGeneralLedgerType?.(null)
     }
 
-    const handleViewGLGrouping = (grouping: IGeneralLedgerAccountGrouping, financialStatementGrouping: boolean = true) => {
+    const handleViewGLGrouping = (
+        grouping: IGeneralLedgerAccountGrouping,
+        financialStatementGrouping: boolean = true
+    ) => {
         setGrouping(grouping)
         setFinancialStatementGrouping(financialStatementGrouping)
         setOnOpenEditGLGrouping(true)
@@ -59,7 +92,14 @@ const GeneralLedgerDefinition = () => {
         'e',
         (event) => {
             event?.preventDefault()
-            if (grouping && hasPermissionFromAuth({ action: ['Update', 'OwnUpdate'], resourceType: 'GLDefinition', resource: grouping })) {
+            if (
+                grouping &&
+                hasPermissionFromAuth({
+                    action: ['Update', 'OwnUpdate'],
+                    resourceType: 'GLDefinition',
+                    resource: grouping,
+                })
+            ) {
                 handleEditGLGrouping(grouping, false)
             }
         },
@@ -70,7 +110,14 @@ const GeneralLedgerDefinition = () => {
         'v',
         (event) => {
             event?.preventDefault()
-            if (grouping && hasPermissionFromAuth({ action: 'Read', resourceType: 'GLDefinition', resource: grouping })) {
+            if (
+                grouping &&
+                hasPermissionFromAuth({
+                    action: 'Read',
+                    resourceType: 'GLDefinition',
+                    resource: grouping,
+                })
+            ) {
                 handleViewGLGrouping(grouping, true)
             }
         },
@@ -91,7 +138,9 @@ const GeneralLedgerDefinition = () => {
                         groupingId: grouping.id,
                         onSuccess: (data) => {
                             setOnOpenEditGLGrouping(false)
-                            toast.success(`Successfully updated the ${data.name} grouping.`)
+                            toast.success(
+                                `Successfully updated the ${data.name} grouping.`
+                            )
                             refetch()
                         },
                         readOnly: financialStatementGrouping,
@@ -100,9 +149,19 @@ const GeneralLedgerDefinition = () => {
                     open={onOpenEditGLGrouping}
                     title={
                         <p>
-                            {financialStatementGrouping ? '' : 'Edit General Ledger Account Grouping'}{' '}
-                            <span className="font-bold italic">{financialStatementGrouping ? grouping.name : ''}</span>
-                            <span className="text-xs text-secondary-foreground/80">{financialStatementGrouping ? ' (View Only)' : ''}</span>
+                            {financialStatementGrouping
+                                ? ''
+                                : 'Edit General Ledger Account Grouping'}{' '}
+                            <span className="font-bold italic">
+                                {financialStatementGrouping
+                                    ? grouping.name
+                                    : ''}
+                            </span>
+                            <span className="text-xs text-secondary-foreground/80">
+                                {financialStatementGrouping
+                                    ? ' (View Only)'
+                                    : ''}
+                            </span>
                         </p>
                     }
                 />
@@ -135,43 +194,88 @@ const GeneralLedgerDefinition = () => {
                     ))}
                 </div>
             ) : (
-                <Accordion className="w-full space-y-2" collapsible defaultValue="item-1" type="single">
+                <Accordion
+                    className="w-full space-y-2"
+                    collapsible
+                    defaultValue="item-1"
+                    type="single"
+                >
                     {generalLedgerGropings?.map((grouping) => (
-                        <AccordionItem className="shadow-md w-full bg-sidebar/50 p-5 rounded-xl" key={grouping.id} value={grouping.id}>
+                        <AccordionItem
+                            className="shadow-md w-full bg-sidebar/50 p-5 rounded-xl"
+                            key={grouping.id}
+                            value={grouping.id}
+                        >
                             <div className="flex items-center justify-between">
-                                <AccordionTrigger className="flex-1 hover:no-underline text-left" onClick={() => handleAccountTrigger(grouping)}>
+                                <AccordionTrigger
+                                    className="flex-1 hover:no-underline text-left"
+                                    onClick={() =>
+                                        handleAccountTrigger(grouping)
+                                    }
+                                >
                                     <div className="flex flex-col">
-                                        <h1 className="font-bold text-2xl">{grouping.name}</h1>
-                                        <p className="text-sm">{grouping.description}</p>
+                                        <h1 className="font-bold text-2xl">
+                                            {grouping.name}
+                                        </h1>
+                                        <p className="text-sm">
+                                            {grouping.description}
+                                        </p>
                                     </div>
                                 </AccordionTrigger>
 
                                 <DropdownMenu>
                                     <DropdownMenuTrigger>
-                                        <SettingsIcon className="hover:cursor-pointer" size={30} />
+                                        <SettingsIcon
+                                            className="hover:cursor-pointer"
+                                            size={30}
+                                        />
                                     </DropdownMenuTrigger>
                                     <DropdownMenuContent>
                                         <DropdownMenuItem
                                             className="flex items-center gap-2"
-                                            disabled={!hasPermissionFromAuth({ action: ['Update', 'OwnUpdate'], resourceType: 'GLDefinition', resource: grouping })}
+                                            disabled={
+                                                !hasPermissionFromAuth({
+                                                    action: [
+                                                        'Update',
+                                                        'OwnUpdate',
+                                                    ],
+                                                    resourceType:
+                                                        'GLDefinition',
+                                                    resource: grouping,
+                                                })
+                                            }
                                             onClick={(e) => {
                                                 e.preventDefault()
                                                 handleEditGLGrouping(grouping)
                                             }}
                                         >
                                             <EditPencilIcon /> Edit
-                                            <DropdownMenuShortcut>e</DropdownMenuShortcut>
+                                            <DropdownMenuShortcut>
+                                                e
+                                            </DropdownMenuShortcut>
                                         </DropdownMenuItem>
                                         <DropdownMenuItem
                                             className="flex items-center gap-2"
-                                            disabled={!hasPermissionFromAuth({ action: 'Read', resourceType: 'GLDefinition', resource: grouping })}
+                                            disabled={
+                                                !hasPermissionFromAuth({
+                                                    action: 'Read',
+                                                    resourceType:
+                                                        'GLDefinition',
+                                                    resource: grouping,
+                                                })
+                                            }
                                             onClick={(e) => {
                                                 e.preventDefault()
-                                                handleViewGLGrouping(grouping, true)
+                                                handleViewGLGrouping(
+                                                    grouping,
+                                                    true
+                                                )
                                             }}
                                         >
                                             <ViewIcon /> View
-                                            <DropdownMenuShortcut>v</DropdownMenuShortcut>
+                                            <DropdownMenuShortcut>
+                                                v
+                                            </DropdownMenuShortcut>
                                         </DropdownMenuItem>
                                     </DropdownMenuContent>
                                 </DropdownMenu>
@@ -180,9 +284,13 @@ const GeneralLedgerDefinition = () => {
                             <AccordionContent className="w-full shadow-none">
                                 {hasGeneralLedgerGropings && (
                                     <GeneralLedgerDefinitionTreeViewer
-                                        isRefetchingGeneralLedgerAccountsGrouping={isRefetchingGeneralLedgerAccountsGrouping}
+                                        isRefetchingGeneralLedgerAccountsGrouping={
+                                            isRefetchingGeneralLedgerAccountsGrouping
+                                        }
                                         refetch={refetch}
-                                        treeData={grouping.general_ledger_definition}
+                                        treeData={
+                                            grouping.general_ledger_definition
+                                        }
                                     />
                                 )}
                             </AccordionContent>

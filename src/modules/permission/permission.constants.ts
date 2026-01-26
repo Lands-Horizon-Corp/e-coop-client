@@ -365,12 +365,21 @@ export const PERMISSION_ALL_RESOURCE_ACTION = [
         description: 'Allow reading general ledger',
         supportedActions: ['Read'] as TPermissionAction[],
     },
+
+    // FOR MEMBERS
+    {
+        resource: 'MemberGender',
+        label: 'MemberGender',
+        description: 'Allow access/action for Member Gender Module',
+        supportedActions: generateBaseAction() as TPermissionAction[],
+    },
     {
         resource: 'MemberProfile',
         label: 'Member Profile',
         description: 'Manage member',
         supportedActions: generateBaseAction(),
     },
+
     {
         resource: 'User',
         label: 'User',
