@@ -281,10 +281,17 @@ export const PERMISSION_ALL_RESOURCE_ACTION = [
     // FOR TRANSACTION/PAYMENT (DEPOSIT, WITHDRAW, PAYMENT)
     {
         resource: 'Transaction',
-        label: 'Transaction Module',
+        label: 'Transaction/Payment Module',
         description:
             'Allow access/action for transaction(payment, withdraw, deposit) module',
         supportedActions: ['Read', 'Create', 'Update'] as TPermissionAction[],
+    },
+
+    {
+        resource: 'PaymentType',
+        label: 'Payment Type Module',
+        description: 'Allow access/action for payment type module',
+        supportedActions: generateBaseAction() as TPermissionAction[],
     },
 
     // JOURNAL VOUCHER
