@@ -1,6 +1,7 @@
 import { useQueryClient } from '@tanstack/react-query'
 
 import { useAuthUserWithOrgBranch } from '@/modules/authentication/authgentication.store'
+import PermissionGuard from '@/modules/permission/components/permission-guard'
 
 import PageContainer from '@/components/containers/page-container'
 
@@ -37,7 +38,9 @@ const CashCountPage = () => {
 
     return (
         <PageContainer>
-            <CashCountTable className="max-h-[90vh] min-h-[90vh] w-full" />
+            <PermissionGuard action="Read" resourceType="CashCount">
+                <CashCountTable className="max-h-[90vh] min-h-[90vh] w-full" />
+            </PermissionGuard>
         </PageContainer>
     )
 }

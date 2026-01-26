@@ -99,6 +99,12 @@ export const generateBaseAction = ({
     ) as TPermissionAction[]
 }
 
+export const generateOwnActions = () => {
+    return PERMISSION_ALL_ACTIONS.filter((action) =>
+        action.action.startsWith('Own')
+    )
+}
+
 // MAPPING OF ALL PERMISSION RESOURCE ACTIONS
 // YOU CAN ALSO FILTERED OUT ACTIONS FOR THE RESOURCE
 type PermissionResourceAction = {
@@ -329,12 +335,14 @@ export const PERMISSION_ALL_RESOURCE_ACTION = [
         supportedActions: generateBaseAction() as TPermissionAction[],
     },
 
-        {
+    {
         resource: 'CashCount',
         label: 'Cash Count Module',
         description: 'Allow access/action for Cash count Module',
-        supportedActions: generateBaseAction() as TPermissionAction[],
+        supportedActions: ['Read'] as TPermissionAction[],
     },
+
+    
 
     //
     {
