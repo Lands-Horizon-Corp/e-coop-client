@@ -100,9 +100,7 @@ export const generateBaseAction = ({
 }
 
 export const generateOwnActions = () => {
-    return PERMISSION_ALL_ACTIONS.filter((action) =>
-        action.action.startsWith('Own')
-    )
+    return PERMISSION_BASE_ACTIONS.filter((action) => action.startsWith('Own'))
 }
 
 // MAPPING OF ALL PERMISSION RESOURCE ACTIONS
@@ -342,7 +340,23 @@ export const PERMISSION_ALL_RESOURCE_ACTION = [
         supportedActions: ['Read'] as TPermissionAction[],
     },
 
-    
+    {
+        resource: 'FSDefinition',
+        label: 'Financial Statement Definition',
+        description: 'Allow access/action for Financial Definition Module',
+        supportedActions: generateBaseAction({
+            excludeActions: generateOwnActions(),
+        }) as TPermissionAction[],
+    },
+
+    {
+        resource: 'GLDefinition',
+        label: 'General Ledger Definition',
+        description: 'Allow access/action for General Ledger Module',
+        supportedActions: generateBaseAction({
+            excludeActions: generateOwnActions(),
+        }) as TPermissionAction[],
+    },
 
     //
     {
