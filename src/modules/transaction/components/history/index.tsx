@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import { PAGINATION_INITIAL_INDEX } from '@/constants'
 import {
@@ -57,6 +57,11 @@ export const TransactionHistory = ({ className }: IClassProps) => {
     const isNoCurrentTransaction =
         !CurrentTransaction || CurrentTransaction.data.length === 0
 
+    useEffect(() => {
+        if (!transactionId) return
+        refetchTransaction()
+    }, [transactionId])
+
     return (
         <>
             <Button
@@ -98,9 +103,6 @@ export const TransactionHistory = ({ className }: IClassProps) => {
                                             onClick={() => {
                                                 navigate.open(transaction.id)
                                                 history.onOpenChange(false)
-                                                if (!transactionId) {
-                                                    refetchTransaction()
-                                                }
                                             }}
                                         />
                                     </div>
