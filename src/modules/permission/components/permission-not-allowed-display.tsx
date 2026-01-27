@@ -39,7 +39,7 @@ const PermissionNotAllowedDisplay = ({
                     You don’t have{' '}
                     {hasActions ? (
                         <>
-                            {conditionLogic === 'all' ? 'all of' : 'any of'}{' '}
+                            {conditionLogic === 'all' ? 'all of' : 'permission'}{' '}
                             {actions.map((action) => (
                                 <Badge
                                     className="mx-1 px-2.5 py-0.5 text-xs font-medium"

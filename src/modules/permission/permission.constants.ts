@@ -390,12 +390,59 @@ export const PERMISSION_ALL_RESOURCE_ACTION = [
         supportedActions: ['Create'] as TPermissionAction[],
     },
     {
+        resource: 'MemberProfileFileMediaUpload',
+        label: 'Member Media/File Upload Module',
+        description: 'Allow access/actions for Member Files',
+        supportedActions: generateBaseAction() as TPermissionAction[],
+    },
+    {
+        resource: 'MemberProfileFileArchives',
+        label: 'Member File Archives Module',
+        description: 'Allow access/actions for Member File Archives',
+        supportedActions: generateBaseAction() as TPermissionAction[],
+    },
+    {
         resource: 'MemberAccountingLedger',
         label: 'Member Accounting Ledger',
         description: 'Allow user to close a member profile',
         supportedActions: ['Read'] as TPermissionAction[],
     },
-
+    {
+        resource: 'MemberType',
+        label: 'Member Type Module',
+        description: 'Allow access/actions for Member Type Module',
+        supportedActions: generateBaseAction() as TPermissionAction[],
+    },
+    {
+        resource: 'MemberGroup',
+        label: 'Member Group Module',
+        description: 'Allow access/actions for Member Group Module',
+        supportedActions: generateBaseAction() as TPermissionAction[],
+    },
+    {
+        resource: 'MemberOccupation',
+        label: 'Member Occupation Module',
+        description: 'Allow access/actions for Member Occupation Module',
+        supportedActions: generateBaseAction() as TPermissionAction[],
+    },
+    {
+        resource: 'MemberClassification',
+        label: 'Member Classification Module',
+        description: 'Allow access/actions for Member Classification Module',
+        supportedActions: generateBaseAction() as TPermissionAction[],
+    },
+    {
+        resource: 'MemberCenter',
+        label: 'Member Center Module',
+        description: 'Allow access/actions for Member Center Module',
+        supportedActions: generateBaseAction() as TPermissionAction[],
+    },
+    {
+        resource: 'MemberDepartment',
+        label: 'Member Department Module',
+        description: 'Allow access/actions for Member Department Module',
+        supportedActions: generateBaseAction() as TPermissionAction[],
+    },
 
     {
         resource: 'User',
