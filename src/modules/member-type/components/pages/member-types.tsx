@@ -1,8 +1,14 @@
 import { useQueryClient } from '@tanstack/react-query'
 
-import { useAuthUserWithOrgBranch } from '@/modules/authentication/authgentication.store'
+import {
+    hasPermissionFromAuth,
+    useAuthUserWithOrgBranch,
+} from '@/modules/authentication/authgentication.store'
 import { MemberTypeCreateUpdateFormModal } from '@/modules/member-type/components/forms/member-type-create-update-form'
-import MemberTypeTable from '@/modules/member-type/components/member-type-table'
+import MemberTypeTable, {
+    MemberTypeTableProps,
+} from '@/modules/member-type/components/member-type-table'
+import PermissionGuard from '@/modules/permission/components/permission-guard'
 
 import PageContainer from '@/components/containers/page-container'
 
@@ -38,15 +44,29 @@ const MemberTypePage = () => {
 
     return (
         <PageContainer>
-            <MemberTypeCreateUpdateFormModal {...createModal} />
-            <MemberTypeTable
-                className="max-h-[90vh] min-h-[90vh] w-full"
-                toolbarProps={{
-                    createActionProps: {
-                        onClick: () => createModal.onOpenChange(true),
-                    },
-                }}
-            />
+            <PermissionGuard action="Read" resourceType="MemberType">
+                <MemberTypeCreateUpdateFormModal {...createModal} />
+                <MemberTypeTable
+                    className="max-h-[90vh] min-h-[90vh] w-full"
+                    toolbarProps={{
+                        createActionProps: {
+                            onClick: () => createModal.onOpenChange(true),
+                            disabled: !hasPermissionFromAuth({
+                                action: 'Create',
+                                resourceType: 'MemberProfile',
+                            }),
+                        },
+                        exportActionProps: {
+                            disabled: !hasPermissionFromAuth({
+                                action: 'Export',
+                                resourceType: 'MemberProfile',
+                            }),
+                        } as NonNullable<
+                            MemberTypeTableProps['toolbarProps']
+                        >['exportActionProps'],
+                    }}
+                />
+            </PermissionGuard>
         </PageContainer>
     )
 }

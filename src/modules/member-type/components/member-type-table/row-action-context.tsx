@@ -2,6 +2,7 @@ import { ReactNode } from 'react'
 
 import { useRouter } from '@tanstack/react-router'
 
+import { hasPermissionFromAuth } from '@/modules/authentication/authgentication.store'
 import { BrowseReferenceCreateUpdateFormModal } from '@/modules/browse-reference/components/forms/browse-reference-create-update-form'
 import useConfirmModalStore from '@/store/confirm-modal-store'
 import { Row } from '@tanstack/react-table'
@@ -96,6 +97,7 @@ export const MemberTypeAction = ({
     onDeleteSuccess,
 }: IMemberTypeTableActionProps) => {
     const {
+        memberType,
         isDeletingMemberType,
         handleEdit,
         handleDelete,
@@ -109,12 +111,22 @@ export const MemberTypeAction = ({
                 canSelect
                 onDelete={{
                     text: 'Delete',
-                    isAllowed: !isDeletingMemberType,
+                    isAllowed:
+                        !isDeletingMemberType &&
+                        hasPermissionFromAuth({
+                            action: ['Delete', 'OwnDelete'],
+                            resourceType: 'MemberType',
+                            resource: memberType,
+                        }),
                     onClick: handleDelete,
                 }}
                 onEdit={{
                     text: 'Edit',
-                    isAllowed: true,
+                    isAllowed: hasPermissionFromAuth({
+                        action: ['Update', 'OwnUpdate'],
+                        resourceType: 'MemberType',
+                        resource: memberType,
+                    }),
                     onClick: handleEdit,
                 }}
                 otherActions={
@@ -142,6 +154,7 @@ export const MemberTypeRowContext = ({
     onDeleteSuccess,
 }: IMemberTypeRowContextProps) => {
     const {
+        memberType,
         isDeletingMemberType,
         handleEdit,
         handleDelete,
@@ -153,7 +166,13 @@ export const MemberTypeRowContext = ({
             <DataTableRowContext
                 onDelete={{
                     text: 'Delete',
-                    isAllowed: !isDeletingMemberType,
+                    isAllowed:
+                        !isDeletingMemberType &&
+                        hasPermissionFromAuth({
+                            action: ['Delete', 'OwnDelete'],
+                            resourceType: 'MemberType',
+                            resource: memberType,
+                        }),
                     onClick: handleDelete,
                 }}
                 onEdit={{
