@@ -670,7 +670,7 @@ const LoanPayablesForm = ({
                                                     return (
                                                         <ImageField
                                                             {...field}
-                                                            className="!max-h-10"
+                                                            className="max-h-10!"
                                                             disabled={isDisabled(
                                                                 `payables`
                                                             )}
@@ -719,16 +719,17 @@ const LoanPayablesForm = ({
                 />
             </form>
 
-            <TransactionModalSuccessPayment
-                isOpen={showSuccessModal}
-                onClose={() => {
-                    setShowSuccessModal(false)
-                    setSuccessTransaction(null)
-                }}
-                onOpenChange={setShowSuccessModal}
-                open={showSuccessModal}
-                transaction={successTransaction}
-            />
+            {successTransaction && (
+                <TransactionModalSuccessPayment
+                    generalLedger={successTransaction}
+                    onClose={() => {
+                        setShowSuccessModal(false)
+                        setSuccessTransaction(null)
+                    }}
+                    onOpenChange={setShowSuccessModal}
+                    open={showSuccessModal}
+                />
+            )}
         </Form>
     )
 }

@@ -1,7 +1,5 @@
 import { useState } from 'react'
 
-import { useNavigate } from '@tanstack/react-router'
-
 import { PAGINATION_INITIAL_INDEX } from '@/constants'
 import {
     PaymentsEntryListSkeleton,
@@ -20,16 +18,13 @@ import { Button } from '@/components/ui/button'
 
 import useDatableFilterState from '@/hooks/use-filter-state'
 
-import { IClassProps, TEntityId } from '@/types'
+import { IClassProps } from '@/types'
 
+import { useTransactionContext } from '../../context/transaction-context'
 import TransactionNoFound from './transaction-no-found'
 
-export const TransactionHistory = ({
-    fullPath,
-    className,
-}: { fullPath: string } & IClassProps) => {
-    const navigate = useNavigate()
-    const [onOpen, setOnOpen] = useState(false)
+export const TransactionHistory = ({ className }: IClassProps) => {
+    const { navigate, history, refetchTransaction } = useTransactionContext()
     const [pagination, setPagination] = useState<PaginationState>({
         pageIndex: PAGINATION_INITIAL_INDEX,
         pageSize: 10,
@@ -58,21 +53,6 @@ export const TransactionHistory = ({
         refetchCurrentTransaction()
     })
 
-    const handleNavigate = (transactionId: TEntityId, fullPath: string) => {
-        navigate({
-            to: fullPath,
-            search: {
-                transactionId: transactionId,
-            },
-        })
-        setOnOpen(false)
-    }
-
-    useHotkeys('h', (e) => {
-        e.preventDefault()
-        setOnOpen(true)
-    })
-
     const isNoCurrentTransaction =
         !CurrentTransaction || CurrentTransaction.data.length === 0
 
@@ -82,7 +62,7 @@ export const TransactionHistory = ({
                 className={className}
                 onClick={(e) => {
                     e.preventDefault()
-                    setOnOpen(true)
+                    history.onOpenChange(true)
                 }}
                 size="sm"
                 variant="outline"
@@ -92,8 +72,7 @@ export const TransactionHistory = ({
             </Button>
             <SheetModal
                 className="min-w-full h-full max-w-[500px] p-5 md:min-w-[600px] overflow-hidden"
-                onOpenChange={setOnOpen}
-                open={onOpen}
+                {...history}
             >
                 <h1 className="text-lg font-bold ">
                     Transaction History
@@ -115,12 +94,11 @@ export const TransactionHistory = ({
                                     <div key={transaction.id}>
                                         <TransactionDetails
                                             item={transaction}
-                                            onClick={() =>
-                                                handleNavigate(
-                                                    transaction.id,
-                                                    fullPath
-                                                )
-                                            }
+                                            onClick={() => {
+                                                navigate.open(transaction.id)
+                                                history.onOpenChange(false)
+                                                refetchTransaction()
+                                            }}
                                         />
                                     </div>
                                 ))

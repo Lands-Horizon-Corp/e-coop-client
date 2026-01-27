@@ -635,7 +635,7 @@ const JointAccountItem = ({ joint }: { joint: IMemberJointAccount }) => {
                     <p>Signature</p>
                     <PreviewMediaWrapper media={joint?.signature_media}>
                         <ImageDisplay
-                            className="w-full h-[200px] !rounded-md"
+                            className="w-full h-[200px] rounded-md!"
                             fallbackClassName="!rounded-md"
                             src={joint?.signature_media?.download_url}
                         />

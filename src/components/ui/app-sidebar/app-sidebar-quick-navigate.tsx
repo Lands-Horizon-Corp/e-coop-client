@@ -104,6 +104,7 @@ const AppSidebarQuickNavigate = ({ groups }: Props) => {
         },
         {
             keydown: true,
+            enableOnFormTags: true,
         }
     )
 

@@ -1,38 +1,43 @@
+import { IMemberAccountingLedger } from '@/modules/member-account-ledger'
 import { TransactionMemberAccountLedger } from '@/modules/member-accounting-ledger'
 import { MemberAccountGeneralLedgerAction } from '@/modules/member-accounting-ledger'
 import MemberAccountingLedgerTable from '@/modules/member-accounting-ledger/components/member-accounting-ledger-table'
-import { IMemberProfile } from '@/modules/member-profile'
 
-import { useTransactionContext } from '../../context/transaction-context'
+import { TEntityId } from '@/types'
 
-const TransactionAccountMemberLedger = () => {
-    const {
-        modals: { ledger },
-        handlers: { handleMemberOnClick },
-        selectedMember,
-    } = useTransactionContext()
+import { TTransactionModals } from '../../hooks/use-transaction-modals'
+
+interface TransactionAccountMemberLedgerProps {
+    memberProfileId?: TEntityId
+    onRowClick?: (member: IMemberAccountingLedger) => void
+    generalLedger?: TTransactionModals['ledger']
+}
+
+const TransactionAccountMemberLedger = ({
+    memberProfileId,
+    onRowClick,
+    generalLedger,
+}: TransactionAccountMemberLedgerProps) => {
     return (
         <>
-            <TransactionMemberAccountLedger {...ledger} />
+            <TransactionMemberAccountLedger {...generalLedger} />
             <MemberAccountingLedgerTable
                 actionComponent={(props) => (
                     <>
                         <MemberAccountGeneralLedgerAction
                             memberAccountLedger={props.row.original}
                             onOpen={() => {
-                                ledger.onOpenChange(true)
+                                generalLedger?.onOpenChange(true)
                             }}
                         />
                     </>
                 )}
                 className="w-full min-h-[40vh] h-full"
                 hideToolbar
-                memberProfileId={selectedMember?.id}
+                memberProfileId={memberProfileId ?? ''}
                 mode="member"
-                onRowClick={(member) => {
-                    handleMemberOnClick(
-                        member.original.member_profile as IMemberProfile
-                    )
+                onRowClick={({ original }) => {
+                    onRowClick?.(original)
                 }}
                 persistKey={['general-ledger', 'transaction']}
             />

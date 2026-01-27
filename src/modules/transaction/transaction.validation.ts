@@ -65,6 +65,9 @@ export const TransactionFromSchema = z.object({
 
     account_id: entityIdSchema.optional(),
     account: z.any(),
+    //for printing
+    general_ledger_id: entityIdSchema.optional(),
+    general_ledger: z.any(),
 })
 export type TTransactionSchema = z.infer<typeof TransactionSchema>
 export type TTransactionFormSchema = z.infer<typeof TransactionFromSchema>

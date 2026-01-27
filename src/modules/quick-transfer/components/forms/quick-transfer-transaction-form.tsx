@@ -565,7 +565,7 @@ export const QuickTransferTransactionForm = ({
                             return (
                                 <SignatureField
                                     {...field}
-                                    className="!max-h-25 h-25"
+                                    className="max-h-25! h-25"
                                     disabled={isDisabled('signature_media_id')}
                                     onChange={(newImage) => {
                                         if (isDisabled('signature_media_id'))

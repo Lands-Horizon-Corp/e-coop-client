@@ -16,6 +16,7 @@ import {
 import { TEntityId } from '@/types'
 
 import { IGeneralLedger, generalLedgerBaseKey } from '../general-ledger'
+import { memberAccountLedgerBaseKey } from '../member-account-ledger/member-account-ledger.service'
 import {
     IPaymentQuickRequest,
     IPaymentRequest,
@@ -29,11 +30,14 @@ import {
     TUpdateReferenceNumberProps,
 } from './transaction.types'
 
-export const { apiCrudHooks, apiCrudService, baseQueryKey } =
-    createDataLayerFactory<ITransaction, ITransactionRequest>({
-        url: '/api/v1/transaction',
-        baseKey: 'transaction',
-    })
+export const {
+    apiCrudHooks,
+    apiCrudService,
+    baseQueryKey: transactionBaseQueryKey,
+} = createDataLayerFactory<ITransaction, ITransactionRequest>({
+    url: '/api/v1/transaction',
+    baseKey: 'transaction',
+})
 
 export const {
     useGetById: useGetTransactionById,
@@ -75,8 +79,8 @@ export const useCreateTransactionStandalone = createMutationFactory<
         return response.data
     },
     defaultInvalidates: [
-        [baseQueryKey, 'paginated'],
-        [baseQueryKey, 'all'],
+        [transactionBaseQueryKey, 'paginated'],
+        [transactionBaseQueryKey, 'all'],
     ],
 })
 
@@ -124,11 +128,18 @@ export const useCreateTransactionPaymentByMode = createMutationFactory<
             })
         }
     },
-    invalidationFn: (args) => {
-        createMutationInvalidateFn('general-ledger', args)
-        args.queryClient.invalidateQueries({
-            queryKey: [generalLedgerBaseKey, 'all'],
+    invalidationFn: ({ queryClient }) => {
+        queryClient.invalidateQueries({
+            queryKey: [generalLedgerBaseKey, 'all', 'transaction'],
         })
+        queryClient.invalidateQueries({
+            queryKey: [
+                memberAccountLedgerBaseKey,
+                'filtered-paginated',
+                'member',
+            ],
+        })
+        queryClient.invalidateQueries({ queryKey: ['auth', 'context'] })
     },
 })
 
@@ -212,7 +223,9 @@ export const useSingleReverseTransaction = createMutationFactory<
         ).data,
     invalidationFn: (args) => {
         args.queryClient.invalidateQueries({ queryKey: [generalLedgerBaseKey] })
-        args.queryClient.invalidateQueries({ queryKey: [baseQueryKey] })
+        args.queryClient.invalidateQueries({
+            queryKey: [transactionBaseQueryKey],
+        })
         createMutationInvalidateFn('single-reverse-transaction', args)
     },
 })

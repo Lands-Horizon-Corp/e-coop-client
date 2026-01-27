@@ -14,7 +14,6 @@ import { useDepositWithdrawStore } from '@/store/transaction/deposit-withdraw-st
 
 import PageContainer from '@/components/containers/page-container'
 import { HandDepositIcon, HandWithdrawIcon } from '@/components/icons'
-// import { useShortcutContext } from '@/components/shorcuts/general-shortcuts-wrapper'
 import {
     ResizableHandle,
     ResizablePanel,
@@ -26,11 +25,9 @@ import { TEntityId } from '@/types'
 const QuickDepositWithdraw = ({ mode }: { mode: TPaymentMode }) => {
     const { selectedMember, setSelectedAccount } = useDepositWithdrawStore()
     const { hasNoTransactionBatch } = useTransactionBatchStore()
-    // const { setActiveScope } = useShortcutContext()
     return (
-        // <div onMouseOver={() => setActiveScope(SHORTCUT_SCOPES.QUICK_TRANSFER)}>
         <div>
-            <PageContainer className="flex w-full !overflow-hidden">
+            <PageContainer className="flex w-full overflow-hidden!">
                 <PermissionGuard action={'Read'} resourceType="Transaction">
                     <div className="flex w-full flex-col space-y-1">
                         <div className="flex justify-start items-center space-x-2 w-full px-5">
@@ -56,11 +53,11 @@ const QuickDepositWithdraw = ({ mode }: { mode: TPaymentMode }) => {
                         />
                     </div>
                     <ResizablePanelGroup
-                        className="!h-[80vh]"
+                        className="h-[80vh]!"
                         direction="horizontal"
                     >
                         <ResizablePanel
-                            className=" !overflow-auto p-5 ecoop-scroll  "
+                            className=" overflow-auto! p-5 ecoop-scroll  "
                             defaultSize={35}
                             maxSize={40}
                             minSize={0}
@@ -77,7 +74,7 @@ const QuickDepositWithdraw = ({ mode }: { mode: TPaymentMode }) => {
                         </ResizablePanel>
                         <ResizableHandle withHandle />
                         <ResizablePanel
-                            className="!overflow-y-auto px-5 ecoop-scroll !relative"
+                            className="overflow-y-auto! px-5 ecoop-scroll relative!"
                             defaultSize={65}
                         >
                             <div className="w-full flex items-center justify-end">
@@ -87,7 +84,7 @@ const QuickDepositWithdraw = ({ mode }: { mode: TPaymentMode }) => {
                             </div>
                             <div className="sticky top-0 z-50">
                                 <TransactionMemberProfile
-                                    className="!bg-sidebar"
+                                    className="bg-sidebar!"
                                     memberInfo={selectedMember}
                                     viewOnly
                                 />
@@ -97,7 +94,7 @@ const QuickDepositWithdraw = ({ mode }: { mode: TPaymentMode }) => {
                                     selectedMember?.id as TEntityId
                                 }
                                 onRowClick={(data) => {
-                                    setSelectedAccount(data.original.account)
+                                    setSelectedAccount(data.account)
                                 }}
                             />
                         </ResizablePanel>

@@ -33,12 +33,7 @@ interface MemberQrScannerProps extends IBaseProps {}
 const TransactionMemberScanner = ({ className }: MemberQrScannerProps) => {
     const [startScan, setStartScan] = useState(false)
 
-    const {
-        transactionId,
-        modals,
-        form,
-        handleRemoveMember,
-    } = useTransactionContext()
+    const { transactionId, form, memberScanner } = useTransactionContext()
 
     const focusedId = form.watch('decoded_member_profile_id') ?? ''
     const {
@@ -91,7 +86,7 @@ const TransactionMemberScanner = ({ className }: MemberQrScannerProps) => {
             )}
         >
             <MemberPicker
-                modalState={modals.memberScanner}
+                modalState={memberScanner}
                 onSelect={(selectedMember) => {
                     form.setValue('member_profile', selectedMember)
                     form.setValue('member_profile_id', selectedMember.id)
@@ -157,7 +152,7 @@ const TransactionMemberScanner = ({ className }: MemberQrScannerProps) => {
                     disabledSelectTrigger={!!transactionId}
                     onClick={(e) => {
                         e.preventDefault()
-                        modals.memberScanner.onOpenChange(true)
+                        memberScanner.onOpenChange(true)
                     }}
                 />
             )}
@@ -178,7 +173,10 @@ const TransactionMemberScanner = ({ className }: MemberQrScannerProps) => {
                             className="h-full"
                             hasTransaction={false}
                             memberInfo={form.getValues('member_profile')}
-                            onRemove={handleRemoveMember}
+                            onRemove={() => {
+                                form.setValue('member_profile', undefined)
+                                form.setValue('member_profile_id', undefined)
+                            }}
                             onSelectedJointMember={(selectedMember) => {
                                 if (selectedMember) {
                                     form.setValue(

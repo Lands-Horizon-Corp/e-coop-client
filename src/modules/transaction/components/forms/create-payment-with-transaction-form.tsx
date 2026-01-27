@@ -1,8 +1,6 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 
-import { useQueryClient } from '@tanstack/react-query'
-import { Path, UseFormReturn, useForm, useWatch } from 'react-hook-form'
-import z from 'zod'
+import { Path, useForm, useWatch } from 'react-hook-form'
 
 import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
 
@@ -16,29 +14,22 @@ import { LoanGuideModal } from '@/modules/loan-guide/components/loan-guide'
 import LoanTransactionCombobox from '@/modules/loan-transaction/components/loan-combobox'
 import { IMedia } from '@/modules/media'
 import { useGetAll } from '@/modules/payment-type'
-import { IPaymentRequest } from '@/modules/quick-transfer'
+import { IPaymentRequest, TPaymentMode } from '@/modules/quick-transfer'
 import {
-    ITransaction,
     ITransactionRequest,
     PaymentTypeCombobox,
     PaymentWithTransactionSchema,
     TPaymentTransactionProps,
     TPaymentWithTransactionFormValues,
-    TransactionFromSchema,
     TransactionNoFoundBatch,
     useCreateTransactionPaymentByMode,
 } from '@/modules/transaction'
-import { TTransactionBatchFullorMin } from '@/modules/transaction-batch'
 import { useTransactionBatchStore } from '@/modules/transaction-batch/store/transaction-batch-store'
 import { useGetUserSettings } from '@/modules/user-profile'
 import { useTransactionReverseSecurityStore } from '@/store/transaction-reverse-security-store'
-import { useTransactionStore } from '@/store/transaction/transaction-store'
 import { useHotkeys } from 'react-hotkeys-hook'
 
-import {
-    CalendarNumberIcon,
-    ChevronDownIcon,
-} from '@/components/icons'
+import { CalendarNumberIcon, ChevronDownIcon } from '@/components/icons'
 import LoadingSpinner from '@/components/spinners/loading-spinner'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
@@ -62,6 +53,8 @@ import { useModalState } from '@/hooks/use-modal-state'
 
 import { IClassProps, IForm, TEntityId } from '@/types'
 
+import { useTransactionContext } from '../../context/transaction-context'
+
 interface PaymentWithTransactionFormProps
     extends
         IClassProps,
@@ -70,42 +63,40 @@ interface PaymentWithTransactionFormProps
             IGeneralLedger,
             string,
             TPaymentWithTransactionFormValues
-        > {
-    currentTransactionBatch?: TTransactionBatchFullorMin | null
-    transaction?: ITransaction
-    transactionId?: TEntityId
-    memberProfileId?: TEntityId
-    memberJointId?: TEntityId
-    transactionForm: UseFormReturn<z.infer<typeof TransactionFromSchema>>
-    handleResetTransaction: () => void
-    accountPickerModalState: ReturnType<typeof useModalState>
-}
+        > {}
 
 const PaymentWithTransactionForm = ({
     defaultValues,
-    onSuccess,
-    transaction,
-    transactionId,
-    memberProfileId,
-    memberJointId,
     disabledFields,
-    currentTransactionBatch,
     readOnly,
-    transactionForm,
-    handleResetTransaction,
-    accountPickerModalState,
 }: PaymentWithTransactionFormProps) => {
-    const { focusTypePayment, openSuccessModal } = useTransactionStore()
-    const accountPaymentTypeState = useModalState()
-    const loanPaymentGuideModal = useModalState()
-    const othersAccordionState = useModalState()
-    const queryClient = useQueryClient()
-    
+    const {
+        accountPicker,
+        accountPayment,
+        transactionId,
+        transaction,
+        form: transactionForm,
+        navigate,
+        paymentSuccess,
+        history,
+    } = useTransactionContext()
+
+    const [focusTypePayment, _] = useState<TPaymentMode>('payment')
+
+    const { data: currentTransactionBatch } = useTransactionBatchStore()
+    const { onOpenReverseRequestAction } = useTransactionReverseSecurityStore()
+
     const {
         settings_accounting_payment_default_value,
         settings_accounting_payment_default_value_id,
         settings_payment_type_default_value_id,
     } = useGetUserSettings()
+
+    const memberProfileId = transactionForm.getValues('member_profile_id')
+    const memberJointId = transactionForm.getValues('member_join_id')
+    const selectedAccountFromTable = transactionForm.getValues('account_id')
+    const loanPaymentGuideModal = useModalState()
+    const othersAccordionState = useModalState()
 
     const form = useForm<TPaymentWithTransactionFormValues>({
         resolver: standardSchemaResolver(PaymentWithTransactionSchema),
@@ -138,29 +129,34 @@ const PaymentWithTransactionForm = ({
                 settings_payment_type_default_value_id || undefined,
         })
     }
-
     const {
         mutate: creatTransactionDeposit,
         isPending,
         error,
     } = useCreateTransactionPaymentByMode({
         options: {
-            onSuccess: (transaction) => {
+            onSuccess: (generalLedger) => {
+                navigate.open(generalLedger.transaction_id)
                 formReset()
-                form.setFocus('amount')
-                form.reset({
-                    account: transaction.account,
-                    account_id: transaction.account.id,
-                    payment_type_id: transaction.payment_type_id,
-                })
-                queryClient.invalidateQueries({ queryKey: ['auth', 'context'] })
-                onSuccess?.(transaction)
+                paymentSuccess.onOpenChange(true)
                 othersAccordionState.onOpenChange(false)
+                transactionForm.reset(
+                    {
+                        general_ledger_id: generalLedger.id,
+                        reference_number: generalLedger.reference_number,
+                        general_ledger: generalLedger,
+                    },
+                    {
+                        keepDirtyValues: false,
+                    }
+                )
+                form.setFocus('amount')
+                // handlers.onPaymentSuccess()
+                // onSuccess?.(generalLedger)
             },
         },
     })
 
-    // watch account properly
     const selectedAccount = useWatch({
         control: transactionForm.control,
         name: 'account',
@@ -176,15 +172,15 @@ const PaymentWithTransactionForm = ({
 
     const { data: paymentTypes } = useGetAll()
 
-    const { onOpenReverseRequestAction } = useTransactionReverseSecurityStore()
-
     const handleSubmitForm = async (
         data: TPaymentWithTransactionFormValues
     ) => {
+        const currencyId = (transaction?.currency_id ||
+            currentTransactionBatch?.currency_id) as TEntityId
+
         const transactionPaymentPayload: ITransactionRequest = {
             ...data,
-            currency_id: (transaction?.currency_id ||
-                currentTransactionBatch?.currency_id) as TEntityId,
+            currency_id: currencyId,
             member_profile_id: memberProfileId,
             member_joint_account_id: memberJointId,
             source: 'payment',
@@ -196,26 +192,19 @@ const PaymentWithTransactionForm = ({
         const finalPayload: TPaymentTransactionProps = {
             data: {
                 ...data,
-                currency_id:
-                    transaction?.currency_id ||
-                    currentTransactionBatch?.currency_id,
+                currency_id: currencyId,
             },
             mode: 'payment',
             transactionId,
             transactionPayload: transactionPaymentPayload,
         }
-        const isDirty = transactionForm.formState.dirtyFields.reference_number
-        if (isDirty) {
-            handleResetTransaction()
-            creatTransactionDeposit({
-                ...finalPayload,
-                transactionId: undefined,
-            })
-        } else {
-            creatTransactionDeposit({
-                ...finalPayload,
-            })
-        }
+
+        const isORDirty = transactionForm.formState.dirtyFields.reference_number
+        const submissionPayload = isORDirty
+            ? { ...finalPayload, transactionId: undefined }
+            : finalPayload
+
+        creatTransactionDeposit(submissionPayload)
     }
     const handleSubmit = form.handleSubmit(
         async (data: TPaymentWithTransactionFormValues, event) => {
@@ -261,11 +250,11 @@ const PaymentWithTransactionForm = ({
         'Alt + 1',
         (e) => {
             e.preventDefault()
-            if (accountPickerModalState.open) return
-            accountPaymentTypeState.onOpenChange(!accountPaymentTypeState.open)
+            if (accountPicker.open) return
+            accountPayment.onOpenChange(!accountPayment.open)
         },
         { enableOnFormTags: true, keydown: true },
-        [accountPaymentTypeState.open, accountPickerModalState.open]
+        [accountPayment.open, accountPicker.open]
     )
 
     useHotkeys(
@@ -276,46 +265,40 @@ const PaymentWithTransactionForm = ({
         },
         { enableOnFormTags: true, keydown: true }
     )
+
     useHotkeys(
         'Alt + 2',
         (e) => {
             e.preventDefault()
-            if (accountPaymentTypeState.open) return
-            accountPickerModalState.onOpenChange(!accountPickerModalState.open)
+            if (accountPayment.open) return
+            accountPicker.onOpenChange(!accountPicker.open)
         },
         { enableOnFormTags: true, keydown: true },
-        [accountPickerModalState.open, accountPaymentTypeState.open]
+        [accountPicker.open, accountPayment.open]
     )
 
     const errorMessage = serverRequestErrExtractor({ error })
     const { hasNoTransactionBatch } = useTransactionBatchStore()
 
-    const account = useWatch({
-        control: form.control,
-        name: 'account',
-    })
-
     useEffect(() => {
-        if (
-            !account ||
-            !hasNoTransactionBatch ||
-            accountPickerModalState.open ||
-            !openSuccessModal
-        )
-            return
-        form.setFocus('amount')
+        if (memberProfileId || selectedAccountFromTable) {
+            form.setFocus('amount')
+        }
     }, [
-        account,
-        hasNoTransactionBatch,
+        memberProfileId,
+        accountPicker.open,
+        accountPayment.open,
         form,
-        accountPickerModalState.open,
-        openSuccessModal,
+        selectedAccountFromTable,
+        history.open,
     ])
+
+    if (!memberProfileId) return
 
     return (
         <Card
             className={cn(
-                'sticky bottom-5 z-50 left-5 right-5 m-2 border-0 w-full md:w-fit p-0! h-fit bg-sidebar/93',
+                'sticky bottom-5 z-50 left-5  right-5 m-2 border-0 w-full md:w-fit p-0! h-fit bg-background',
                 !hasNoTransactionBatch ? 'xl:py-5!' : 'py-0'
             )}
         >
@@ -457,7 +440,7 @@ const PaymentWithTransactionForm = ({
                                             disabled={isDisabled(
                                                 'payment_type_id'
                                             )}
-                                            modalState={accountPaymentTypeState}
+                                            modalState={accountPayment}
                                             onChange={(selectedPaymentType) => {
                                                 field.onChange(
                                                     selectedPaymentType?.id
@@ -500,7 +483,7 @@ const PaymentWithTransactionForm = ({
                                                     currentTransactionBatch?.currency_id) as TEntityId
                                             }
                                             disabled={isDisabled('account_id')}
-                                            modalState={accountPickerModalState}
+                                            modalState={accountPicker}
                                             mode={
                                                 transaction ||
                                                 currentTransactionBatch
