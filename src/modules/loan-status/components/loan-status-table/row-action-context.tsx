@@ -1,6 +1,7 @@
 import { ReactNode } from 'react'
 
 import { withToastCallbacks } from '@/helpers/callback-helper'
+import { hasPermissionFromAuth } from '@/modules/authentication/authgentication.store'
 import useConfirmModalStore from '@/store/confirm-modal-store'
 import { Row } from '@tanstack/react-table'
 
@@ -77,7 +78,7 @@ export const LoanStatusAction = ({
     row,
     onDeleteSuccess,
 }: ILoanStatusTableActionProps) => {
-    const { isDeletingLoanStatus, handleEdit, handleDelete } =
+    const { loanStatus, isDeletingLoanStatus, handleEdit, handleDelete } =
         useLoanStatusActions({ row, onDeleteSuccess })
 
     return (
@@ -87,12 +88,22 @@ export const LoanStatusAction = ({
                 canSelect
                 onDelete={{
                     text: 'Delete',
-                    isAllowed: !isDeletingLoanStatus,
+                    isAllowed:
+                        !isDeletingLoanStatus &&
+                        hasPermissionFromAuth({
+                            action: ['Delete', 'OwnDelete'],
+                            resourceType: 'LoanStatus',
+                            resource: loanStatus,
+                        }),
                     onClick: handleDelete,
                 }}
                 onEdit={{
                     text: 'Edit',
-                    isAllowed: true,
+                    isAllowed: hasPermissionFromAuth({
+                        action: ['Update', 'OwnUpdate'],
+                        resourceType: 'LoanStatus',
+                        resource: loanStatus,
+                    }),
                     onClick: handleEdit,
                 }}
                 otherActions={<>{/* Additional actions can be added here */}</>}
