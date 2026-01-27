@@ -308,11 +308,17 @@ export const PERMISSION_ALL_RESOURCE_ACTION = [
         }) as TPermissionAction[],
     },
 
-    // LOAN TRANSACTION
+    // LOAN 
     {
         resource: 'Loan',
         label: 'Loan Module',
         description: 'Allow access/action for Loan module',
+        supportedActions: generateBaseAction() as TPermissionAction[],
+    },
+    {
+        resource: 'LoanStatus',
+        label: 'Loan Status Module',
+        description: 'Allow access/action for Loan Status module',
         supportedActions: generateBaseAction() as TPermissionAction[],
     },
 
