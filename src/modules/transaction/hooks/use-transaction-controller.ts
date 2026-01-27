@@ -72,9 +72,11 @@ export const useTransactionController = ({
         isError,
         isSuccess,
         refetch: refetchTransaction,
+        isLoading:isLoadingTransaction
     } = useGetTransactionById({
         id: transactionId,
-        options: { enabled: !!transactionId, refetchInterval: 50 },
+
+        options: { retry: 1, enabled: !!transactionId, retryDelay: 50 },
     })
 
     const handleError = useCallback((error: Error) => {
@@ -137,6 +139,7 @@ export const useTransactionController = ({
         selectedMemberId: form.getValues('member_profile_id'),
         refetchTransaction,
         generalLedger: form.getValues('general_ledger') as IGeneralLedger,
+        isLoadingTransaction
     }
 }
 
