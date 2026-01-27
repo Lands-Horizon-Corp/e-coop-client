@@ -373,12 +373,29 @@ export const PERMISSION_ALL_RESOURCE_ACTION = [
         description: 'Allow access/action for Member Gender Module',
         supportedActions: generateBaseAction() as TPermissionAction[],
     },
+
+    // MEMBER PROFILE
     {
         resource: 'MemberProfile',
         label: 'Member Profile',
         description: 'Manage member',
-        supportedActions: generateBaseAction(),
+        supportedActions: generateBaseAction({
+            excludeActions: ['Delete', 'OwnDelete', 'OwnRead'],
+        }) as TPermissionAction[],
     },
+    {
+        resource: 'MemberProfileClose',
+        label: 'Member Profile Close',
+        description: 'Allow user to close a member profile',
+        supportedActions: ['Create'] as TPermissionAction[],
+    },
+    {
+        resource: 'MemberAccountingLedger',
+        label: 'Member Accounting Ledger',
+        description: 'Allow user to close a member profile',
+        supportedActions: ['Read'] as TPermissionAction[],
+    },
+
 
     {
         resource: 'User',
