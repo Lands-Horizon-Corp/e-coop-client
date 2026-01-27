@@ -10,6 +10,7 @@ import {
     useGetAllMemberProfileMediaByMemberProfile,
     useMemberProfileMediaBulk,
 } from '@/modules/member-profile-media'
+import PermissionGuard from '@/modules/permission/components/permission-guard'
 
 import {
     FolderFillIcon,
@@ -212,12 +213,7 @@ const MemberFileMediaDisplay = ({
 }
 
 const MemberMediasInfo = forwardRef<HTMLDivElement, Props>(
-    ({ profileId, className, defaultData }, ref) => {
-        const { data } = useGetMemberProfileById({
-            id: profileId,
-            options: { initialData: defaultData },
-        })
-
+    ({ className, ...rest }, ref) => {
         return (
             <div
                 className={cn(
@@ -226,17 +222,38 @@ const MemberMediasInfo = forwardRef<HTMLDivElement, Props>(
                 )}
                 ref={ref}
             >
-                <SectionCard
-                    icon={<FolderFillIcon className="h-5 w-5" />}
-                    subtitle="View all files this member have. Also you can add files for this member"
-                    title="Member Files/Media's"
+                <PermissionGuard
+                    action="Read"
+                    resourceType="MemberProfileFileMediaUpload"
                 >
-                    <MemberFileMediaDisplay memberProfileId={data?.id} />
-                </SectionCard>
+                    <Content {...rest} />
+                </PermissionGuard>
             </div>
         )
     }
 )
+
+const Content = ({
+    profileId,
+    defaultData,
+}: {
+    profileId: TEntityId
+    defaultData?: IMemberProfile
+}) => {
+    const { data } = useGetMemberProfileById({
+        id: profileId,
+        options: { initialData: defaultData },
+    })
+    return (
+        <SectionCard
+            icon={<FolderFillIcon className="h-5 w-5" />}
+            subtitle="View all files this member have. Also you can add files for this member"
+            title="Member Files/Media's"
+        >
+            <MemberFileMediaDisplay memberProfileId={data?.id} />
+        </SectionCard>
+    )
+}
 
 MemberMediasInfo.displayName = 'MemberMediasInfo'
 
