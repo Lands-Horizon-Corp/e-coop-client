@@ -49,7 +49,6 @@ export interface MemberOccupationTableProps
         | 'globalSearchProps'
         | 'scrollableProps'
         | 'filterLogicProps'
-        | 'exportActionProps'
         | 'deleteActionProps'
     >
 }
@@ -183,6 +182,7 @@ const MemberOccupationTable = ({
                                 }),
                         }}
                         exportActionProps={{
+                            ...toolbarProps?.exportActionProps,
                             isLoading: isPending,
                             filters: exportfilter,
                             model: 'MemberOccupation',
