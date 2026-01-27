@@ -57,7 +57,6 @@ export interface MemberProfileTableProps
         | 'globalSearchProps'
         | 'scrollableProps'
         | 'filterLogicProps'
-        | 'exportActionProps'
         | 'deleteActionProps'
     >
 }
@@ -198,6 +197,7 @@ const MemberProfileTable = ({
                         //         }),
                         // }}
                         exportActionProps={{
+                            ...toolbarProps?.exportActionProps,
                             isLoading: isPending,
                             filters: exportfilter,
                             model: 'MemberProfile',

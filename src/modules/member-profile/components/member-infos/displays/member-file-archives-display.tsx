@@ -5,6 +5,7 @@ import { toast } from 'sonner'
 
 import { cn } from '@/helpers'
 import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
+import { hasPermissionFromAuth } from '@/modules/authentication/authgentication.store'
 import { FileItemProps } from '@/modules/media/components/media-uploader'
 import {
     IMemberProfileArchive,
@@ -15,6 +16,7 @@ import {
 import { UpdateMemberProfileArchiveFormModal } from '@/modules/member-profile-archive/components/form/update-member-profile-archive-form'
 import { MemberProfileArchiveUploadFormModal } from '@/modules/member-profile-archive/components/form/updatemember-profile-archive-upload-form'
 import MemberArchiveItem from '@/modules/member-profile-archive/components/member-archive-item'
+import PermissionGuard from '@/modules/permission/components/permission-guard'
 import { stringNormalizer } from '@/modules/timesheet/components/worktimer/utils'
 
 import {
@@ -60,7 +62,8 @@ interface Props extends IClassProps {
 }
 
 type TSortBy = 'upload_date' | 'name' | 'category'
-const MemberFileArchiveDisplay = ({ profileId, className }: Props) => {
+
+const MemberFileArchiveContent = ({ profileId, className }: Props) => {
     const [searchQuery, setSearchQuery] = useState('')
     const [sortBy, setSortBy] = useState<TSortBy>('upload_date')
     const [selectedCategories, setSelectedCategories] = useState<string[]>([])
@@ -205,6 +208,12 @@ const MemberFileArchiveDisplay = ({ profileId, className }: Props) => {
                             )}
                         </Button>
                         <Button
+                            disabled={
+                                !hasPermissionFromAuth({
+                                    action: 'Create',
+                                    resourceType: 'MemberProfileFileArchives',
+                                })
+                            }
                             onClick={() =>
                                 uploaderModalState.onOpenChange(true)
                             }
@@ -341,6 +350,14 @@ const MemberFileArchiveDisplay = ({ profileId, className }: Props) => {
     )
 }
 
+const MemberFileArchiveDisplay = (props: Props) => {
+    return (
+        <PermissionGuard action="Read" resourceType="MemberProfileFileArchives">
+            <MemberFileArchiveContent {...props} />
+        </PermissionGuard>
+    )
+}
+
 type MemberArchiveFileItemProps = FileItemProps & {
     id: TEntityId
     memberArchive: IMemberProfileArchive
@@ -376,11 +393,26 @@ const MemberArchiveFileItem = ({
             <MemberArchiveItem
                 {...props}
                 memberArchive={memberArchive}
-                onRemove={handleDelete}
+                onRemove={
+                    hasPermissionFromAuth({
+                        action: ['Delete', 'OwnDelete'],
+                        resourceType: 'MemberProfileFileArchives',
+                        resource: memberArchive,
+                    })
+                        ? handleDelete
+                        : undefined
+                }
                 otherAction={
                     <ActionTooltip side="bottom" tooltipContent="Edit archive">
                         <Button
                             className="size-fit rounded-md p-1 hover:text-destructive-foreground"
+                            disabled={
+                                !hasPermissionFromAuth({
+                                    action: ['OwnUpdate', 'Update'],
+                                    resourceType: 'MemberProfileFileArchives',
+                                    resource: memberArchive,
+                                })
+                            }
                             hoverVariant="destructive"
                             onClick={() => editMemberArchive.onOpenChange(true)}
                             size="icon"

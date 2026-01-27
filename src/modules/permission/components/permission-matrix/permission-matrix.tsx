@@ -282,10 +282,11 @@ const PermissionMatrix = forwardRef<
                             >
                                 <InfoTooltip
                                     content={
-                                        <p className="max-w-2xl text-base wrap-normal text-pretty">
+                                        <div className="max-w-2xl text-sm wrap-normal text-pretty">
                                             {resource.description}
-                                        </p>
+                                        </div>
                                     }
+                                    contentClassName="rounded-2xl p-4"
                                 >
                                     <div className="min-w-[280px] w-[280px] text-right flex-shrink-0 px-4 py-2 border-r border-border/50 bg-popover/90 backdrop-blur-sm sticky left-0 z-10">
                                         <div className="font-medium text-sm text-foreground truncate">
@@ -323,6 +324,7 @@ const PermissionMatrix = forwardRef<
                                                 key={action.action}
                                             >
                                                 <PermissionCheckbox
+                                                    action={action.action}
                                                     checked={isPermissionChecked(
                                                         resource.resource,
                                                         action.action

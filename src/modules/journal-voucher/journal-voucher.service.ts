@@ -184,6 +184,7 @@ export const usePrintJournalVoucherTransaction = createMutationFactory<
     { journalVoucherId: TEntityId; payload: IJournalVoucherPrintRequest }
 >({
     mutationFn: (data) => printJournalVoucher(data),
+    defaultInvalidates: [['auth', 'context']],
     invalidationFn: (args) =>
         updateMutationInvalidationFn(journalVoucherBaseKey, args),
 })

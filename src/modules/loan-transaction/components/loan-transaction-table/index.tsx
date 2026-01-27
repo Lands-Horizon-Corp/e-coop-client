@@ -49,7 +49,6 @@ export interface LoanTransactionTableProps
         | 'globalSearchProps'
         | 'scrollableProps'
         | 'filterLogicProps'
-        | 'exportActionProps'
         | 'deleteActionProps'
     >
 
@@ -186,6 +185,7 @@ const LoanTransactionTable = ({
                                 }),
                         }}
                         exportActionProps={{
+                            ...toolbarProps?.exportActionProps,
                             isLoading: isPending,
                             filters: exportfilter,
                             model: 'LoanTransaction',

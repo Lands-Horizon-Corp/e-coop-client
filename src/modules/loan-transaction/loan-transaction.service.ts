@@ -263,6 +263,7 @@ export const usePrintLoanTransaction = createMutationFactory<
     { loanTransactionId: TEntityId; payload: ILoanTransactionPrintRequest }
 >({
     mutationFn: (data) => printLoanTransaction(data),
+    defaultInvalidates: [['auth', 'context']],
     invalidationFn: (args) =>
         updateMutationInvalidationFn(loanTransactionBaseKey, args),
 })

@@ -50,7 +50,6 @@ export interface CashCheckJournalVoucherTableProps
         | 'globalSearchProps'
         | 'scrollableProps'
         | 'filterLogicProps'
-        | 'exportActionProps'
         | 'deleteActionProps'
     >
 }
@@ -178,6 +177,7 @@ const CashCheckJournalVoucherTable = ({
                                 }),
                         }}
                         exportActionProps={{
+                            ...toolbarProps?.exportActionProps,
                             isLoading: isPending,
                             filters: exportfilter,
                             model: 'CashCheckVoucher',

@@ -50,7 +50,6 @@ export interface JournalVoucherTableProps
         | 'globalSearchProps'
         | 'scrollableProps'
         | 'filterLogicProps'
-        | 'exportActionProps'
         | 'deleteActionProps'
     >
 }
@@ -165,6 +164,7 @@ const JournalVoucherTable = ({
                 >
                     <DataTableToolbar
                         deleteActionProps={{
+                            disabled: true,
                             onDeleteSuccess: () =>
                                 queryClient.invalidateQueries({
                                     queryKey: [
@@ -178,6 +178,7 @@ const JournalVoucherTable = ({
                                 }),
                         }}
                         exportActionProps={{
+                            ...toolbarProps?.exportActionProps,
                             isLoading: isPending,
                             filters: exportfilter,
                             model: 'JournalVoucher',

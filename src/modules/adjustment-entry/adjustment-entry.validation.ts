@@ -19,6 +19,8 @@ export const AdjustmentEntrySchema = z.object({
         .string()
         .min(1, 'Reference number is required')
         .max(255),
+    or_auto_generated: z.boolean().default(false).optional(),
+
     entry_date: z.string().refine((date) => !isNaN(Date.parse(date)), {
         message: 'Invalid date format',
     }),

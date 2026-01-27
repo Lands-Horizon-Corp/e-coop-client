@@ -13,7 +13,7 @@ const AuthLoader = () => {
 
     const { error, isError, data, isSuccess } = useAuthContext({
         options: {
-            refetchOnWindowFocus: false,
+            // refetchOnWindowFocus: false,
             retry: 0,
         },
     })

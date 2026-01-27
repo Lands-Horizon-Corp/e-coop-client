@@ -271,8 +271,18 @@ const Transaction = ({ transactionId, fullPath }: TTransactionProps) => {
                 fullPath={fullPath}
             >
                 <PageContainer className="flex h-fit lg:h-[90vh] w-full overflow-hidden!">
-                    <TransactionModalSuccessPayment />
-
+                    <TransactionModalSuccessPayment
+                        isOpen={openSuccessModal}
+                        onClose={handleCloseSuccessModal}
+                        onOpenChange={(newState) => {
+                        if (!newState) {
+                            accountPickerModalState.onOpenChange(true)
+                        }
+                        setOpenSuccessModal(newState)
+                    }}
+                        open={openSuccessModal}
+                        transaction={transactionFormSuccess}
+                    />
                     <div className="flex h-full flex-col lg:flex-row w-full gap-2 overflow-hidden">
                         <aside className="w-full ecoop-scroll lg:w-[40%] flex flex-col overflow-y-auto">
                             <TransactionCurrentPaymentEntry />
@@ -286,10 +296,53 @@ const Transaction = ({ transactionId, fullPath }: TTransactionProps) => {
                         </main>
                     </div>
                 </PageContainer>
-
-                {/* <PaymentWithTransactionFormWrapper /> */}
-            </TransactionProvider>
-        </PermissionGuard>
+                {selectedMemberId && !isTransactionMismatchCurrentBatch && (
+                    <PaymentWithTransactionForm
+                        accountPickerModalState={accountPickerModalState}
+                    currentTransactionBatch={currentTransactionBatch}
+                        handleResetTransaction={() => {
+                            handleSetTransactionId({ fullPath })
+                        }}
+                        memberJointId={transactionForm.getValues(
+                            'member_join_id'
+                        )}
+                        memberProfileId={transactionForm.getValues(
+                            'member_profile_id'
+                        )}
+                        onSuccess={(transaction) => {
+                            queryClient.invalidateQueries({
+                                queryKey: [
+                                    'member-accounting-ledger',
+                                    'filtered-paginated',
+                                    'member',
+                                    selectedMemberId,
+                                ],
+                            })
+                            queryClient.invalidateQueries({
+                                queryKey: ['transaction'],
+                            })
+                            queryClient.invalidateQueries({
+                                queryKey: [
+                                    'general-ledger',
+                                    'filtered-paginated',
+                                    'transaction',
+                                ],
+                                exact: false,
+                            })
+                            handleSetTransactionId({
+                                transactionId: transaction.transaction_id,
+                                fullPath,
+                            })
+                            handleOnSuccessPaymentCallBack(transaction)
+                        }}
+                        readOnly={!hasNoTransactionBatch}
+                        transaction={transaction}
+                        transactionForm={transactionForm}
+                        transactionId={transactionId}
+                    />
+                )}
+            </PermissionGuard>
+        </div>
     )
 }
 

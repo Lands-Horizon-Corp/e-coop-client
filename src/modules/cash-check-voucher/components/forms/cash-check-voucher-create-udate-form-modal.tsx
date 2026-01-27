@@ -2,6 +2,7 @@ import { useState } from 'react'
 
 import { useQueryClient } from '@tanstack/react-query'
 import { useForm } from 'react-hook-form'
+import { toast } from 'sonner'
 import z from 'zod'
 
 import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
@@ -14,6 +15,7 @@ import {
     CashCheckVoucherSchema,
     ICashCheckVoucher,
     ICashCheckVoucherRequest,
+    TORCashCheckSettings,
     cashCheckVoucherBaseKey,
     useCreateCashCheckVoucher,
     useUpdateCashCheckVoucherById,
@@ -29,7 +31,12 @@ import { useMemberPickerStore } from '@/store/member-picker-store'
 import { useHotkeys } from 'react-hotkeys-hook'
 
 import FormFooterResetSubmit from '@/components/form-components/form-footer-reset-submit'
-import { MoneyCheck2Icon, XIcon } from '@/components/icons'
+import {
+    HashIcon,
+    MoneyCheck2Icon,
+    WandSparkleIcon,
+    XIcon,
+} from '@/components/icons'
 import Modal, { IModalProps } from '@/components/modals/modal'
 import { Button } from '@/components/ui/button'
 import { CommandShortcut } from '@/components/ui/command'
@@ -43,6 +50,7 @@ import { useModalState } from '@/hooks/use-modal-state'
 
 import { IClassProps, IForm, TEntityId } from '@/types'
 
+import { buildCashCheckOR } from '../../cash-check-voucher.utils'
 import CashCheckVoucherStatusIndicator from '../cash-check-status-indicator'
 import { CashCheckJournalEntryTable } from './cash-check-voucher-entry-table'
 
@@ -61,6 +69,7 @@ export interface ICashCheckVoucherCreateUpdateFormProps
         > {
     cashCheckVoucherId?: TEntityId
     mode?: TCashCheckVoucherModalMode
+    orSettings?: TORCashCheckSettings
 }
 
 const CashCheckVoucherCreateUpdateForm = ({
@@ -68,6 +77,7 @@ const CashCheckVoucherCreateUpdateForm = ({
     cashCheckVoucherId,
     defaultValues,
     mode = 'create',
+    orSettings,
     ...formProps
 }: ICashCheckVoucherCreateUpdateFormProps) => {
     const queryClient = useQueryClient()
@@ -350,16 +360,50 @@ const CashCheckVoucherCreateUpdateForm = ({
                         </div>
                     </div>
                     <FormFieldWrapper
-                        className="col-span-1"
+                        className="col-span-1 max-w-72"
                         control={form.control}
-                        label="CV Number"
+                        label={
+                            <span className="flex items-center justify-between pb-2">
+                                <span className="inline-flex gap-x-1 items-center">
+                                    OR{' '}
+                                    <HashIcon className="inline text-muted-foreground" />
+                                </span>
+                                <button
+                                    className="text-xs disabled:pointer-events-none text-muted-foreground duration-150 cursor-pointer hover:text-foreground underline-offset-4 underline"
+                                    onClick={() => {
+                                        if (!orSettings)
+                                            return toast.warning(
+                                                'OR Generate Failed - could not load settings'
+                                            )
+
+                                        const constructedCV =
+                                            buildCashCheckOR(orSettings)
+
+                                        form.setValue(
+                                            'cash_voucher_number',
+                                            constructedCV,
+                                            {
+                                                shouldDirty: true,
+                                            }
+                                        )
+                                        toast.info(
+                                            `Set Check Voucher Number to ${constructedCV}`
+                                        )
+                                    }}
+                                    type="button"
+                                >
+                                    {form.watch('cash_voucher_number')
+                                        ? 'Re-generate Voucher'
+                                        : 'Generate Voucher'}
+                                    <WandSparkleIcon className="inline ml-1" />
+                                </button>
+                            </span>
+                        }
                         name="cash_voucher_number"
                         render={({ field }) => (
                             <Input
                                 {...field}
                                 disabled={isDisabled(field.name)}
-                                id={field.name}
-                                placeholder="Enter CV number"
                             />
                         )}
                     />

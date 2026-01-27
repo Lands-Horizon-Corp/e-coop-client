@@ -139,6 +139,7 @@ export const useEditPrintCashCheckVoucher = createMutationFactory<
         )
         return response.data
     },
+    defaultInvalidates: [['auth', 'context']],
     invalidationFn: (args) =>
         updateMutationInvalidationFn(cashCheckVoucherBaseKey, args),
 })
@@ -184,6 +185,7 @@ export const usePrintCashCheckVoucherTransaction = createMutationFactory<
     { cashCheckVoucherId: TEntityId; payload: TCashCheckVoucherPrintRequest }
 >({
     mutationFn: (data) => printCashCheckVoucher(data),
+    defaultInvalidates: [['auth', 'context']],
     invalidationFn: (args) =>
         updateMutationInvalidationFn(cashCheckVoucherBaseKey, args),
 })

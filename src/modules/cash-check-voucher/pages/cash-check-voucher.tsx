@@ -1,8 +1,12 @@
 import { useQueryClient } from '@tanstack/react-query'
 import { toast } from 'sonner'
 
-import { useAuthUserWithOrgBranch } from '@/modules/authentication/authgentication.store'
+import {
+    hasPermissionFromAuth,
+    useAuthUserWithOrgBranch,
+} from '@/modules/authentication/authgentication.store'
 import CancelledCashCheckVoucherButton from '@/modules/cancelled-cash-check-voucher/components/cancelled-button'
+import PermissionGuard from '@/modules/permission/components/permission-guard'
 import { useTransactionBatchStore } from '@/modules/transaction-batch/store/transaction-batch-store'
 
 import PageContainer from '@/components/containers/page-container'
@@ -11,7 +15,9 @@ import { useModalState } from '@/hooks/use-modal-state'
 import { useSubscribe } from '@/hooks/use-pubsub'
 
 import CashCheckVoucherCreateUpdateFormModal from '../components/forms/cash-check-voucher-create-udate-form-modal'
-import CashCheckJournalVoucherTable from '../components/tables'
+import CashCheckJournalVoucherTable, {
+    CashCheckJournalVoucherTableProps,
+} from '../components/tables'
 
 const CashCheckJournalVoucherPage = () => {
     const queryClient = useQueryClient()
@@ -23,7 +29,7 @@ const CashCheckJournalVoucherPage = () => {
             user_organization: {
                 branch_id,
                 branch: {
-                    branch_setting: { currency },
+                    branch_setting: { currency, ...otherBranchSettings },
                 },
             },
         },
@@ -67,31 +73,46 @@ const CashCheckJournalVoucherPage = () => {
 
     return (
         <PageContainer>
-            <CashCheckVoucherCreateUpdateFormModal
-                {...createModal}
-                formProps={{
-                    defaultValues: {
-                        currency,
-                        currency_id: currency.id,
-                    },
-                }}
-            />
-            <CashCheckJournalVoucherTable
-                className="max-h-[90vh] min-h-[90vh] w-full"
-                toolbarProps={{
-                    createActionProps: {
-                        onClick: () => {
-                            if (!hasNoTransactionBatch) {
-                                return toast.warning(
-                                    'Please create transaction batch first before making any cash/check voucher.'
-                                )
-                            }
-                            createModal.onOpenChange(true)
+            <PermissionGuard action="Read" resourceType="CashCheckVoucher">
+                <CashCheckVoucherCreateUpdateFormModal
+                    {...createModal}
+                    formProps={{
+                        defaultValues: {
+                            currency,
+                            currency_id: currency.id,
                         },
-                    },
-                    otherActionLeft: <CancelledCashCheckVoucherButton />,
-                }}
-            />
+                        orSettings: otherBranchSettings,
+                    }}
+                />
+                <CashCheckJournalVoucherTable
+                    className="max-h-[90vh] min-h-[90vh] w-full"
+                    toolbarProps={{
+                        createActionProps: {
+                            disabled: !hasPermissionFromAuth({
+                                action: 'Create',
+                                resourceType: 'CashCheckVoucher',
+                            }),
+                            onClick: () => {
+                                if (!hasNoTransactionBatch) {
+                                    return toast.warning(
+                                        'Please create transaction batch first before making any cash/check voucher.'
+                                    )
+                                }
+                                createModal.onOpenChange(true)
+                            },
+                        },
+                        exportActionProps: {
+                            disabled: !hasPermissionFromAuth({
+                                action: 'Export',
+                                resourceType: 'CashCheckVoucher',
+                            }),
+                        } as NonNullable<
+                            CashCheckJournalVoucherTableProps['toolbarProps']
+                        >['exportActionProps'],
+                        otherActionLeft: <CancelledCashCheckVoucherButton />,
+                    }}
+                />
+            </PermissionGuard>
         </PageContainer>
     )
 }

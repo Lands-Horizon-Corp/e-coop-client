@@ -1,5 +1,6 @@
 import { ReactNode } from 'react'
 
+import { hasPermissionFromAuth } from '@/modules/authentication/authgentication.store'
 import useConfirmModalStore from '@/store/confirm-modal-store'
 import { Row } from '@tanstack/react-table'
 
@@ -73,7 +74,7 @@ export const MemberGenderAction = ({
     row,
     onDeleteSuccess,
 }: IMemberGenderTableActionProps) => {
-    const { isDeletingGender, handleEdit, handleDelete } =
+    const { gender, isDeletingGender, handleEdit, handleDelete } =
         useMemberGenderActions({ row, onDeleteSuccess })
 
     return (
@@ -83,12 +84,24 @@ export const MemberGenderAction = ({
                 canSelect
                 onDelete={{
                     text: 'Delete',
-                    isAllowed: !isDeletingGender,
+                    isAllowed:
+                        !isDeletingGender &&
+                        hasPermissionFromAuth({
+                            action: ['Delete', 'OwnDelete'],
+                            resourceType: 'MemberGender',
+                            conditionLogic: 'some',
+                            resource: gender,
+                        }),
                     onClick: handleDelete,
                 }}
                 onEdit={{
                     text: 'Edit',
-                    isAllowed: true,
+                    isAllowed: hasPermissionFromAuth({
+                        action: ['Update', 'OwnUpdate'],
+                        resourceType: 'MemberGender',
+                        conditionLogic: 'some',
+                        resource: gender,
+                    }),
                     onClick: handleEdit,
                 }}
                 row={row}
@@ -107,19 +120,31 @@ export const MemberGenderRowContext = ({
     children,
     onDeleteSuccess,
 }: IMemberGenderRowContextProps) => {
-    const { isDeletingGender, handleEdit, handleDelete } =
+    const { gender, isDeletingGender, handleEdit, handleDelete } =
         useMemberGenderActions({ row, onDeleteSuccess })
 
     return (
         <DataTableRowContext
             onDelete={{
                 text: 'Delete',
-                isAllowed: !isDeletingGender,
+                isAllowed:
+                    !isDeletingGender &&
+                    hasPermissionFromAuth({
+                        action: ['Delete', 'OwnDelete'],
+                        resourceType: 'MemberGender',
+                        conditionLogic: 'some',
+                        resource: gender,
+                    }),
                 onClick: handleDelete,
             }}
             onEdit={{
                 text: 'Edit',
-                isAllowed: true,
+                isAllowed: hasPermissionFromAuth({
+                    action: ['Update', 'OwnUpdate'],
+                    resourceType: 'MemberGender',
+                    conditionLogic: 'some',
+                    resource: gender,
+                }),
                 onClick: handleEdit,
             }}
             row={row}
@@ -159,4 +184,11 @@ export const MemberGenderTableActionManager = () => {
     )
 }
 
-export default MemberGenderAction
+const MemberGenderTableAction = ({
+    row,
+    onDeleteSuccess,
+}: IMemberGenderTableActionProps) => {
+    return <MemberGenderAction onDeleteSuccess={onDeleteSuccess} row={row} />
+}
+
+export default MemberGenderTableAction

@@ -1,3 +1,13 @@
+import { IconType } from 'react-icons/lib'
+
+import {
+    ExportIcon,
+    EyeIcon,
+    PencilOutlineIcon,
+    PlusIcon,
+    TrashIcon,
+} from '@/components/icons'
+
 import { TPermissionAction } from './permission.types'
 
 // BASE PERMISSION ACTIONS
@@ -7,7 +17,6 @@ export const PERMISSION_BASE_ACTIONS = [
     'Update',
     'Delete',
     'Export',
-    // 'Approve',
     'OwnRead',
     'OwnUpdate',
     'OwnDelete',
@@ -16,51 +25,60 @@ export const PERMISSION_BASE_ACTIONS = [
 
 export const PERMISSION_ALL_ACTIONS: {
     action: (typeof PERMISSION_BASE_ACTIONS)[number]
+    icon?: IconType
     label: string
     description: string
 }[] = [
     {
+        icon: PlusIcon,
         action: 'Create',
         label: 'Create',
         description: 'Allows creating resources',
     },
-    { action: 'Read', label: 'Read', description: 'Allows reading resources' },
     {
+        icon: EyeIcon,
+        action: 'Read',
+        label: 'Read',
+        description: 'Allows reading resources',
+    },
+    {
+        icon: PencilOutlineIcon,
         action: 'Update',
         label: 'Update',
         description: 'Allows updating resources',
     },
     {
+        icon: TrashIcon,
         action: 'Delete',
         label: 'Delete',
         description: 'Allows deleting resources',
     },
     {
+        icon: ExportIcon,
         action: 'Export',
         label: 'Export',
         description: 'Allows exporting resources',
     },
-    // {
-    //     action: 'Approve',
-    //     label: 'Approve',
-    //     description: 'Allows approving resources',
-    // },
     {
+        icon: EyeIcon,
         action: 'OwnRead',
         label: 'Own Read',
         description: 'Allows reading own resources',
     },
     {
+        icon: PencilOutlineIcon,
         action: 'OwnUpdate',
         label: 'Own Update',
         description: 'Allows updating own resources',
     },
     {
+        icon: TrashIcon,
         action: 'OwnDelete',
         label: 'Own Delete',
         description: 'Allows deleting own resources',
     },
     {
+        icon: ExportIcon,
         action: 'OwnExport',
         label: 'Own Export',
         description: 'Allows exporting own resources',
@@ -79,6 +97,10 @@ export const generateBaseAction = ({
     return PERMISSION_BASE_ACTIONS.filter(
         (val) => !excludeActions?.includes(val)
     ) as TPermissionAction[]
+}
+
+export const generateOwnActions = () => {
+    return PERMISSION_BASE_ACTIONS.filter((action) => action.startsWith('Own'))
 }
 
 // MAPPING OF ALL PERMISSION RESOURCE ACTIONS
@@ -121,6 +143,8 @@ export const PERMISSION_ALL_RESOURCE_ACTION = [
         description: 'View Transactions of an account',
         supportedActions: ['Read', 'Create'] as TPermissionAction[],
     },
+
+    // ADJUSTMENT
     {
         resource: 'AdjustmentEntry',
         label: 'Adjustment Entry',
@@ -261,10 +285,89 @@ export const PERMISSION_ALL_RESOURCE_ACTION = [
     // FOR TRANSACTION/PAYMENT (DEPOSIT, WITHDRAW, PAYMENT)
     {
         resource: 'Transaction',
-        label: 'Transaction Module',
+        label: 'Transaction/Payment Module',
         description:
             'Allow access/action for transaction(payment, withdraw, deposit) module',
         supportedActions: ['Read', 'Create', 'Update'] as TPermissionAction[],
+    },
+
+    {
+        resource: 'PaymentType',
+        label: 'Payment Type Module',
+        description: 'Allow access/action for payment type module',
+        supportedActions: generateBaseAction() as TPermissionAction[],
+    },
+
+    // JOURNAL VOUCHER
+    {
+        resource: 'JournalVoucher',
+        label: 'Journal Voucher Module',
+        description: 'Allow access/action for Journal Voucher module',
+        supportedActions: generateBaseAction({
+            excludeActions: ['Delete', 'OwnDelete'],
+        }) as TPermissionAction[],
+    },
+
+    // LOAN
+    {
+        resource: 'Loan',
+        label: 'Loan Module',
+        description: 'Allow access/action for Loan module',
+        supportedActions: generateBaseAction() as TPermissionAction[],
+    },
+    {
+        resource: 'LoanStatus',
+        label: 'Loan Status Module',
+        description: 'Allow access/action for Loan Status module',
+        supportedActions: generateBaseAction() as TPermissionAction[],
+    },
+    {
+        resource: 'LoanPurpose',
+        label: 'Loan Purpose Module',
+        description: 'Allow access/action for Loan Purpose module',
+        supportedActions: generateBaseAction() as TPermissionAction[],
+    },
+
+    // CASH CHECK VOUCHER
+    {
+        resource: 'CashCheckVoucher',
+        label: 'Cash Check Voucher Module',
+        description: 'Allow access/action for Cash Check Voucher Module',
+        supportedActions: generateBaseAction({
+            excludeActions: ['Delete', 'OwnDelete', 'OwnRead'],
+        }) as TPermissionAction[],
+    },
+
+    {
+        resource: 'DisburesmentType',
+        label: 'Disbursement Type Module',
+        description: 'Allow access/action for Disbursement Type Module',
+        supportedActions: generateBaseAction() as TPermissionAction[],
+    },
+
+    {
+        resource: 'CashCount',
+        label: 'Cash Count Module',
+        description: 'Allow access/action for Cash count Module',
+        supportedActions: ['Read'] as TPermissionAction[],
+    },
+
+    {
+        resource: 'FSDefinition',
+        label: 'Financial Statement Definition',
+        description: 'Allow access/action for Financial Definition Module',
+        supportedActions: generateBaseAction({
+            excludeActions: generateOwnActions(),
+        }) as TPermissionAction[],
+    },
+
+    {
+        resource: 'GLDefinition',
+        label: 'General Ledger Definition',
+        description: 'Allow access/action for General Ledger Module',
+        supportedActions: generateBaseAction({
+            excludeActions: generateOwnActions(),
+        }) as TPermissionAction[],
     },
 
     //
@@ -274,12 +377,85 @@ export const PERMISSION_ALL_RESOURCE_ACTION = [
         description: 'Allow reading general ledger',
         supportedActions: ['Read'] as TPermissionAction[],
     },
+
+    // FOR MEMBERS
+    {
+        resource: 'MemberGender',
+        label: 'MemberGender',
+        description: 'Allow access/action for Member Gender Module',
+        supportedActions: generateBaseAction() as TPermissionAction[],
+    },
+
+    // MEMBER PROFILE
     {
         resource: 'MemberProfile',
         label: 'Member Profile',
         description: 'Manage member',
-        supportedActions: generateBaseAction(),
+        supportedActions: generateBaseAction({
+            excludeActions: ['Delete', 'OwnDelete', 'OwnRead'],
+        }) as TPermissionAction[],
     },
+    {
+        resource: 'MemberProfileClose',
+        label: 'Member Profile Close',
+        description: 'Allow user to close a member profile',
+        supportedActions: ['Create'] as TPermissionAction[],
+    },
+    {
+        resource: 'MemberProfileFileMediaUpload',
+        label: 'Member Media/File Upload Module',
+        description: 'Allow access/actions for Member Files',
+        supportedActions: generateBaseAction() as TPermissionAction[],
+    },
+    {
+        resource: 'MemberProfileFileArchives',
+        label: 'Member File Archives Module',
+        description: 'Allow access/actions for Member File Archives',
+        supportedActions: generateBaseAction() as TPermissionAction[],
+    },
+    {
+        resource: 'MemberAccountingLedger',
+        label: 'Member Accounting Ledger',
+        description: 'Allow user to close a member profile',
+        supportedActions: ['Read'] as TPermissionAction[],
+    },
+    {
+        resource: 'MemberType',
+        label: 'Member Type Module',
+        description: 'Allow access/actions for Member Type Module',
+        supportedActions: generateBaseAction() as TPermissionAction[],
+    },
+    {
+        resource: 'MemberGroup',
+        label: 'Member Group Module',
+        description: 'Allow access/actions for Member Group Module',
+        supportedActions: generateBaseAction() as TPermissionAction[],
+    },
+    {
+        resource: 'MemberOccupation',
+        label: 'Member Occupation Module',
+        description: 'Allow access/actions for Member Occupation Module',
+        supportedActions: generateBaseAction() as TPermissionAction[],
+    },
+    {
+        resource: 'MemberClassification',
+        label: 'Member Classification Module',
+        description: 'Allow access/actions for Member Classification Module',
+        supportedActions: generateBaseAction() as TPermissionAction[],
+    },
+    {
+        resource: 'MemberCenter',
+        label: 'Member Center Module',
+        description: 'Allow access/actions for Member Center Module',
+        supportedActions: generateBaseAction() as TPermissionAction[],
+    },
+    {
+        resource: 'MemberDepartment',
+        label: 'Member Department Module',
+        description: 'Allow access/actions for Member Department Module',
+        supportedActions: generateBaseAction() as TPermissionAction[],
+    },
+
     {
         resource: 'User',
         label: 'User',
