@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 
 import { PAGINATION_INITIAL_INDEX } from '@/constants'
 import {
@@ -24,8 +24,7 @@ import { useTransactionContext } from '../../context/transaction-context'
 import TransactionNoFound from './transaction-no-found'
 
 export const TransactionHistory = ({ className }: IClassProps) => {
-    const { navigate, history, refetchTransaction, transactionId } =
-        useTransactionContext()
+    const { navigate, history } = useTransactionContext()
     const [pagination, setPagination] = useState<PaginationState>({
         pageIndex: PAGINATION_INITIAL_INDEX,
         pageSize: 10,
@@ -56,11 +55,6 @@ export const TransactionHistory = ({ className }: IClassProps) => {
 
     const isNoCurrentTransaction =
         !CurrentTransaction || CurrentTransaction.data.length === 0
-
-    useEffect(() => {
-        if (!transactionId) return
-        refetchTransaction()
-    }, [transactionId])
 
     return (
         <>
