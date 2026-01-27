@@ -72,7 +72,7 @@ export const useTransactionController = ({
         isError,
         isSuccess,
         refetch: refetchTransaction,
-        isLoading:isLoadingTransaction
+        isLoading: isLoadingTransaction,
     } = useGetTransactionById({
         id: transactionId,
 
@@ -139,7 +139,7 @@ export const useTransactionController = ({
         selectedMemberId: form.getValues('member_profile_id'),
         refetchTransaction,
         generalLedger: form.getValues('general_ledger') as IGeneralLedger,
-        isLoadingTransaction
+        isLoadingTransaction,
     }
 }
 

@@ -24,7 +24,8 @@ import { useTransactionContext } from '../../context/transaction-context'
 import TransactionNoFound from './transaction-no-found'
 
 export const TransactionHistory = ({ className }: IClassProps) => {
-    const { navigate, history, refetchTransaction } = useTransactionContext()
+    const { navigate, history, refetchTransaction, transactionId } =
+        useTransactionContext()
     const [pagination, setPagination] = useState<PaginationState>({
         pageIndex: PAGINATION_INITIAL_INDEX,
         pageSize: 10,
@@ -97,7 +98,9 @@ export const TransactionHistory = ({ className }: IClassProps) => {
                                             onClick={() => {
                                                 navigate.open(transaction.id)
                                                 history.onOpenChange(false)
-                                                refetchTransaction()
+                                                if (!transactionId) {
+                                                    refetchTransaction()
+                                                }
                                             }}
                                         />
                                     </div>
