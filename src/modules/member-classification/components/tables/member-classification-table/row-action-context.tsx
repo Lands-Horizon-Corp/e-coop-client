@@ -1,5 +1,6 @@
 import { ReactNode } from 'react'
 
+import { hasPermissionFromAuth } from '@/modules/authentication/authgentication.store'
 import {
     IMemberClassification,
     useDeleteById,
@@ -78,8 +79,12 @@ export const MemberClassificationAction = ({
     row,
     onDeleteSuccess,
 }: IMemberClassificationTableActionProps) => {
-    const { isDeletingMemberClassification, handleEdit, handleDelete } =
-        useMemberClassificationActions({ row, onDeleteSuccess })
+    const {
+        memberClassification,
+        isDeletingMemberClassification,
+        handleEdit,
+        handleDelete,
+    } = useMemberClassificationActions({ row, onDeleteSuccess })
 
     return (
         <>
@@ -88,13 +93,23 @@ export const MemberClassificationAction = ({
                 canSelect
                 onDelete={{
                     text: 'Delete',
-                    isAllowed: !isDeletingMemberClassification,
+                    isAllowed:
+                        !isDeletingMemberClassification &&
+                        hasPermissionFromAuth({
+                            action: ['Delete', 'OwnDelete'],
+                            resourceType: 'MemberClassification',
+                            resource: memberClassification,
+                        }),
                     onClick: handleDelete,
                 }}
                 onEdit={{
                     text: 'Edit',
-                    isAllowed: true,
                     onClick: handleEdit,
+                    isAllowed: hasPermissionFromAuth({
+                        action: ['Delete', 'OwnDelete'],
+                        resourceType: 'MemberClassification',
+                        resource: memberClassification,
+                    }),
                 }}
                 row={row}
             />
@@ -112,19 +127,33 @@ export const MemberClassificationRowContext = ({
     children,
     onDeleteSuccess,
 }: IMemberClassificationRowContextProps) => {
-    const { isDeletingMemberClassification, handleEdit, handleDelete } =
-        useMemberClassificationActions({ row, onDeleteSuccess })
+    const {
+        memberClassification,
+        isDeletingMemberClassification,
+        handleEdit,
+        handleDelete,
+    } = useMemberClassificationActions({ row, onDeleteSuccess })
 
     return (
         <DataTableRowContext
             onDelete={{
                 text: 'Delete',
-                isAllowed: !isDeletingMemberClassification,
+                isAllowed:
+                    !isDeletingMemberClassification &&
+                    hasPermissionFromAuth({
+                        action: ['Delete', 'OwnDelete'],
+                        resourceType: 'MemberClassification',
+                        resource: memberClassification,
+                    }),
                 onClick: handleDelete,
             }}
             onEdit={{
                 text: 'Edit',
-                isAllowed: true,
+                isAllowed: hasPermissionFromAuth({
+                    action: ['Delete', 'OwnDelete'],
+                    resourceType: 'MemberClassification',
+                    resource: memberClassification,
+                }),
                 onClick: handleEdit,
             }}
             row={row}
