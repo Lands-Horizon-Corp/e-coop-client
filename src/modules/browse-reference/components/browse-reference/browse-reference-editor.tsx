@@ -13,6 +13,7 @@ import {
 import { MemberOverallInfoModal } from '@/modules/member-profile/components/member-infos/view-member-info'
 import MemberPicker from '@/modules/member-profile/components/member-picker'
 import { IMemberProfile } from '@/modules/member-profile/member-profile.types'
+import PermissionGuard from '@/modules/permission/components/permission-guard'
 import { PaginationState } from '@tanstack/react-table'
 import { PiIdentificationBadgeFill } from 'react-icons/pi'
 
@@ -76,58 +77,73 @@ const BrowseReferenceSchemeEditor = ({
                 className
             )}
         >
-            <BrowseReferenceSidebar
-                className="sticky top-0"
-                defaultExpandedMemberTypeId={defaultExpandedMemberTypeId}
-                onDeleteReference={(referenceId) => {
-                    if (selectedReferenceId === referenceId)
-                        setSelectedReferenceId(undefined)
-                }}
-                onSelectReference={(referenceId) =>
-                    setSelectedReferenceId(referenceId)
-                }
-                selectedReferenceId={selectedReferenceId}
-            />
+            <PermissionGuard
+                action="Read"
+                resourceType="MemberTypeBrowseReference"
+            >
+                <BrowseReferenceSidebar
+                    className="sticky top-0"
+                    defaultExpandedMemberTypeId={defaultExpandedMemberTypeId}
+                    onDeleteReference={(referenceId) => {
+                        if (selectedReferenceId === referenceId)
+                            setSelectedReferenceId(undefined)
+                    }}
+                    onSelectReference={(referenceId) =>
+                        setSelectedReferenceId(referenceId)
+                    }
+                    selectedReferenceId={selectedReferenceId}
+                />
 
-            {selectedReferenceId === undefined ? (
-                <div className="flex-1 min-h-full flex items-center justify-center">
-                    <Empty className="from-muted/50 to-background h-full bg-gradient-to-b from-30%">
-                        <EmptyHeader>
-                            <EmptyMedia variant="icon">
-                                <PiIdentificationBadgeFill />
-                            </EmptyMedia>
-                            <EmptyTitle>No Member Type Reference</EmptyTitle>
-                            <EmptyDescription>
-                                No member type reference selected, please select
-                                or create.
-                            </EmptyDescription>
-                        </EmptyHeader>
-                    </Empty>
-                </div>
-            ) : isLoading ? (
-                <div className="flex-1 min-h-full flex items-center justify-center">
-                    <div className="text-muted-foreground">Loading...</div>
-                </div>
-            ) : error || !data ? (
-                <div className="flex-1 min-h-full flex items-center justify-center">
-                    <Empty className="from-muted/50 to-background h-full bg-gradient-to-b from-30%">
-                        <EmptyHeader>
-                            <EmptyTitle>Error</EmptyTitle>
-                            <EmptyDescription>{error}</EmptyDescription>
-                        </EmptyHeader>
-                    </Empty>
-                </div>
-            ) : (
-                <>
-                    <BrowseReferenceUpdateForm
-                        className="flex-1 p-4 rounded-xl bg-popover/70"
-                        defaultValues={data}
-                        key={selectedReferenceId}
-                        memberTypeReferenceId={selectedReferenceId!}
-                    />
-                    <ConnectedAccountBar memberTypeId={data?.member_type_id} />
-                </>
-            )}
+                {selectedReferenceId === undefined ? (
+                    <div className="flex-1 min-h-full flex items-center justify-center">
+                        <Empty className="from-muted/50 to-background h-full bg-gradient-to-b from-30%">
+                            <EmptyHeader>
+                                <EmptyMedia variant="icon">
+                                    <PiIdentificationBadgeFill />
+                                </EmptyMedia>
+                                <EmptyTitle>
+                                    No Member Type Reference
+                                </EmptyTitle>
+                                <EmptyDescription>
+                                    No member type reference selected, please
+                                    select or create.
+                                </EmptyDescription>
+                            </EmptyHeader>
+                        </Empty>
+                    </div>
+                ) : isLoading ? (
+                    <div className="flex-1 min-h-full flex items-center justify-center">
+                        <div className="text-muted-foreground">Loading...</div>
+                    </div>
+                ) : error || !data ? (
+                    <div className="flex-1 min-h-full flex items-center justify-center">
+                        <Empty className="from-muted/50 to-background h-full bg-gradient-to-b from-30%">
+                            <EmptyHeader>
+                                <EmptyTitle>Error</EmptyTitle>
+                                <EmptyDescription>{error}</EmptyDescription>
+                            </EmptyHeader>
+                        </Empty>
+                    </div>
+                ) : (
+                    <>
+                        <PermissionGuard
+                            action={['Update', 'OwnUpdate']}
+                            resource={data}
+                            resourceType="MemberTypeBrowseReference"
+                        >
+                            <BrowseReferenceUpdateForm
+                                className="flex-1 p-4 rounded-xl bg-popover/70"
+                                defaultValues={data}
+                                key={selectedReferenceId}
+                                memberTypeReferenceId={selectedReferenceId!}
+                            />
+                            <ConnectedAccountBar
+                                memberTypeId={data?.member_type_id}
+                            />
+                        </PermissionGuard>
+                    </>
+                )}
+            </PermissionGuard>
         </div>
     )
 }
@@ -275,7 +291,6 @@ const ConnectedAccountBar = ({
                 triggerClassName="hidden"
             />
             <div className="bg-popover border border-border rounded-xl p-3.5 space-y-4">
-                {/* Header */}
                 <div className="space-y-1 flex justify-between">
                     <h3 className="font-semibold text-sm flex items-center gap-x-2">
                         <Users3Icon className="size-4" />
