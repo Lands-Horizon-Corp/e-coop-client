@@ -2,6 +2,7 @@ import { useState } from 'react'
 
 import { cn } from '@/helpers'
 import { useAuthUserWithOrgBranch } from '@/modules/authentication/authgentication.store'
+import PermissionGuard from '@/modules/permission/components/permission-guard'
 // import ChargesRateSchemeCreateUpdateForm from '@/modules/charges-rate-scheme/components/forms/charges-rate-scheme-update-form'
 import { RefreshCcwIcon } from 'lucide-react'
 import { PiIdentificationBadgeFill } from 'react-icons/pi'
@@ -46,45 +47,53 @@ const TimeDepositSchemeEditor = ({ className }: Props) => {
                 className
             )}
         >
-            <TimeDepositTypesSidebar
-                className="sticky top-0"
-                defaultCurrency={currency}
-                onDeletedType={(selectedTimeDepositType) => {
-                    if (timeDepositType?.id === selectedTimeDepositType.id)
-                        setTimeDepositType(undefined)
-                }}
-                onSelect={(selectedTimeDepositType) =>
-                    setTimeDepositType(selectedTimeDepositType)
-                }
-                selectedId={timeDepositType?.id}
-            />
-            {timeDepositType === undefined ? (
-                <div className="flex-1 min-h-full flex items-center justify-center">
-                    <Empty className="from-muted/50 to-background h-full bg-gradient-to-b from-30%">
-                        <EmptyHeader>
-                            <EmptyMedia variant="icon">
-                                <PiIdentificationBadgeFill />
-                            </EmptyMedia>
-                            <EmptyTitle>No Time Deposit Type</EmptyTitle>
-                            <EmptyDescription>
-                                No time deposit type yet, please select or
-                                create.
-                            </EmptyDescription>
-                        </EmptyHeader>
-                        <EmptyContent>
-                            <Button size="sm" variant="outline">
-                                <RefreshCcwIcon />
-                                Refresh
-                            </Button>
-                        </EmptyContent>
-                    </Empty>
-                </div>
-            ) : (
-                <TimeDepositTypeUpdateForm
-                    defaultValues={timeDepositType}
-                    timeDepositTypeId={timeDepositType.id}
+            <PermissionGuard action="Read" resourceType="TimeDepositScheme">
+                <TimeDepositTypesSidebar
+                    className="sticky top-0"
+                    defaultCurrency={currency}
+                    onDeletedType={(selectedTimeDepositType) => {
+                        if (timeDepositType?.id === selectedTimeDepositType.id)
+                            setTimeDepositType(undefined)
+                    }}
+                    onSelect={(selectedTimeDepositType) =>
+                        setTimeDepositType(selectedTimeDepositType)
+                    }
+                    selectedId={timeDepositType?.id}
                 />
-            )}
+                {timeDepositType === undefined ? (
+                    <div className="flex-1 min-h-full flex items-center justify-center">
+                        <Empty className="from-muted/50 to-background h-full bg-gradient-to-b from-30%">
+                            <EmptyHeader>
+                                <EmptyMedia variant="icon">
+                                    <PiIdentificationBadgeFill />
+                                </EmptyMedia>
+                                <EmptyTitle>No Time Deposit Type</EmptyTitle>
+                                <EmptyDescription>
+                                    No time deposit type yet, please select or
+                                    create.
+                                </EmptyDescription>
+                            </EmptyHeader>
+                            <EmptyContent>
+                                <Button size="sm" variant="outline">
+                                    <RefreshCcwIcon />
+                                    Refresh
+                                </Button>
+                            </EmptyContent>
+                        </Empty>
+                    </div>
+                ) : (
+                    <PermissionGuard
+                        action={['Update', 'OwnUpdate']}
+                        resource={timeDepositType}
+                        resourceType="TimeDepositScheme"
+                    >
+                        <TimeDepositTypeUpdateForm
+                            defaultValues={timeDepositType}
+                            timeDepositTypeId={timeDepositType.id}
+                        />
+                    </PermissionGuard>
+                )}
+            </PermissionGuard>
         </div>
     )
 }
