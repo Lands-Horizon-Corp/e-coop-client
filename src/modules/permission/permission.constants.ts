@@ -327,6 +327,12 @@ export const PERMISSION_ALL_RESOURCE_ACTION = [
         description: 'Allow access/action for Loan Purpose module',
         supportedActions: generateBaseAction() as TPermissionAction[],
     },
+    {
+        resource: 'LoanTag',
+        label: 'Loan Tags',
+        description: 'Allow access/action for Loan Tags',
+        supportedActions: generateBaseAction() as TPermissionAction[],
+    },
 
     // CASH CHECK VOUCHER
     {
@@ -456,16 +462,172 @@ export const PERMISSION_ALL_RESOURCE_ACTION = [
         supportedActions: generateBaseAction() as TPermissionAction[],
     },
 
+    // SCHEME > LOAN SCHEME
+    {
+        resource: 'LoanScheme',
+        label: 'Loan Scheme',
+        description: 'Allow access/actions for Loan Scheme Module.',
+        supportedActions: generateBaseAction() as TPermissionAction[],
+    },
+    {
+        resource: 'LoanSchemeAutomaticLoanDeduction',
+        label: 'Loan Scheme > Automatic Loan Deduction',
+        description:
+            'Allow access/actions for Loan Scheme Automatic Loan Deduction.',
+        supportedActions: generateBaseAction() as TPermissionAction[],
+    },
+    {
+        resource: 'LoanSchemeIncludeNegativeAccounts',
+        label: 'Loan Scheme > Include Negative Accounts',
+        description:
+            'Allow access/actions for Loan Scheme Include Negative Accounts.',
+        supportedActions: generateBaseAction() as TPermissionAction[],
+    },
+    {
+        resource: 'LoanSchemeBrowseExcludedIncludedAccounts',
+        label: 'Loan Scheme > Browse Excluded/Included Accounts',
+        description:
+            'Allow access/actions for Loan Scheme Browse Excluded/Included Accounts.',
+        supportedActions: generateBaseAction() as TPermissionAction[],
+    },
+
+    // SCHEME > Charges Rate Scheme
+    {
+        resource: 'LoanChargeScheme',
+        label: 'Loan Charge Scheme',
+        description: 'Allow access/actions for Loan Charge Scheme.',
+        supportedActions: generateBaseAction() as TPermissionAction[],
+    },
+    // SCHEME > Time Deposit Scheme
+    {
+        resource: 'TimeDepositScheme',
+        label: 'Loan Charge Scheme',
+        description: 'Allow access/actions for Loan Charge Scheme.',
+        supportedActions: generateBaseAction() as TPermissionAction[],
+    },
+    // SCHEME >  Member Type
+    {
+        resource: 'MemberType',
+        label: 'Member Type Module',
+        description: 'Allow access/action for Member Type',
+        supportedActions: generateBaseAction() as TPermissionAction[],
+    },
+    {
+        resource: 'MemberTypeBrowseReference',
+        label: 'Member Type Browse Reference',
+        description: 'Allow access/action for Member Type Browse Reference',
+        supportedActions: generateBaseAction() as TPermissionAction[],
+    },
+
+    // Transaction Batch
+    {
+        resource: 'TransactionBatch',
+        label: 'Transaction Batch Module',
+        description: 'Allow access/action for transaction batch',
+        supportedActions: generateBaseAction() as TPermissionAction[],
+    },
+    {
+        resource: 'TransactionBatchHistory',
+        label: 'Transaction Batch History',
+        description: 'Allow read accesss for transaction batch history',
+        supportedActions: ['Read'] as TPermissionAction[],
+    },
+
+    {
+        resource: 'CheckRemittance',
+        label: 'Check Remittance',
+        description: 'Allow access/actions for Check Remittance',
+        supportedActions: generateBaseAction() as TPermissionAction[],
+    },
+    {
+        resource: 'OnlineRemittance',
+        label: 'Online Remittance',
+        description: 'Allow access/actions for Online Remittance',
+        supportedActions: generateBaseAction() as TPermissionAction[],
+    },
+    {
+        resource: 'DisbursementTransaction',
+        label: 'Disbursement Transaction',
+        description: 'Allow access/action for Disbursement Transaction Module',
+        supportedActions: ['Create'] as TPermissionAction[],
+    },
+
+    {
+        resource: 'Transactions',
+        label: 'Transactions Modules',
+        description: 'Allow access for Transactions Module',
+        supportedActions: ['Read'] as TPermissionAction[],
+    },
+
+    // EMPLOYEE
+    {
+        resource: 'Employee',
+        label: 'Employee Modules',
+        description: 'Allow access/action for Employee Module',
+        supportedActions: generateBaseAction() as TPermissionAction[],
+    },
+    {
+        resource: 'EmployeePermission',
+        label: 'Employee Modules',
+        description: 'Allow access/action for Employee Module',
+        supportedActions: ['Update', 'OwnUpdate'] as TPermissionAction[],
+    },
+    {
+        resource: 'EmployeeFootstep',
+        label: 'Employee Footstep Modules',
+        description: 'Allow access/action for Employee Footstep Module',
+        supportedActions: ['Read'] as TPermissionAction[],
+    },
+    {
+        resource: 'EmployeeDisbursements',
+        label: 'Employee Disbursements Modules',
+        description: 'Allow access/action for Employee Disbursements Module',
+        supportedActions: ['Read'] as TPermissionAction[],
+    },
+    {
+        resource: 'EmployeeSettings',
+        label: 'Employee Settings Modules',
+        description: 'Allow access/action for Employee Settings Module',
+        supportedActions: ['Read'] as TPermissionAction[],
+    },
+
+    {
+        resource: 'PermissionTemplate',
+        label: 'Permission Template Modules',
+        description: 'Allow access/action for Permission Template Module',
+        supportedActions: ['Read'] as TPermissionAction[],
+    },
+    {
+        resource: 'EmployeeFootstep',
+        label: 'Employee Footstep Modules',
+        description: 'Allow access/action for Employee Footstep Module',
+        supportedActions: ['Read'] as TPermissionAction[],
+    },
+
+    {
+        resource: 'Timesheet',
+        label: 'Timesheet Modules',
+        description: 'Allow access/action for Timesheet Module',
+        supportedActions: ['Read'] as TPermissionAction[],
+    },
+    {
+        resource: 'Footstep',
+        label: 'Footstep Modules',
+        description: 'Allow access/action for Footstep Module',
+        supportedActions: ['Read'] as TPermissionAction[],
+    },
+
+    {
+        resource: 'BillsAndCoins',
+        label: 'Bills and Coins Modules',
+        description: 'Allow access/action for Bills and Coins Module',
+        supportedActions: ['Read'] as TPermissionAction[],
+    },
+
     {
         resource: 'User',
         label: 'User',
         description: 'Manage any user related actions',
-        supportedActions: ['Read'] as TPermissionAction[],
-    },
-    {
-        resource: 'LoanScheme',
-        label: 'Loan Scheme',
-        description: 'Manage loan scheme',
         supportedActions: ['Read'] as TPermissionAction[],
     },
 ] as const satisfies PermissionResourceAction[]
