@@ -4,6 +4,7 @@ import { useQueryClient } from '@tanstack/react-query'
 
 import { cn } from '@/helpers'
 import { useAuthUserWithOrgBranch } from '@/modules/authentication/authgentication.store'
+import PermissionGuard from '@/modules/permission/components/permission-guard'
 
 import { GridFillIcon } from '@/components/icons'
 import {
@@ -45,50 +46,63 @@ const ChargesRateSchemeEditor = ({ className }: Props) => {
                 className
             )}
         >
-            <ChargesRateSchemesSidebar
-                className="sticky top-0"
-                defaultCurrencyId={currency_id}
-                onDeletedScheme={(scheme) => {
-                    if (chargesRateScheme?.id === scheme.id)
-                        setChargesRateScheme(undefined)
-                    queryClient.invalidateQueries({
-                        queryKey: ['charges-rate-scheme', 'all'],
-                    })
-                }}
-                onSelect={(selectedScheme) =>
-                    setChargesRateScheme(selectedScheme)
-                }
-                selectedId={chargesRateScheme?.id}
-            />
-            {chargesRateScheme === undefined ? (
-                <Empty className="from-muted/50 to-background h-full bg-gradient-to-b from-30%">
-                    <EmptyHeader>
-                        <EmptyMedia variant="icon">
-                            <GridFillIcon />
-                        </EmptyMedia>
-                        <EmptyTitle>No Charges Rate Scheme Selected</EmptyTitle>
-                        <EmptyDescription>
-                            Select or Create a Charges Rate Scheme to view or
-                            edit
-                        </EmptyDescription>
-                    </EmptyHeader>
-                </Empty>
-            ) : (
-                <>
-                    <ChargesRateSchemeUpdateForm
-                        chargesRateSchemeId={chargesRateScheme.id}
-                        className="flex-1 p-4 rounded-xl bg-popover/70"
-                        defaultValues={chargesRateScheme}
-                        key={chargesRateScheme.id}
-                        onSuccess={() => {
-                            queryClient.invalidateQueries({
-                                queryKey: ['charges-rate-scheme', 'all'],
-                            })
-                        }}
-                    />
-                    <div></div>
-                </>
-            )}
+            <PermissionGuard action="Read" resourceType="LoanChargeScheme">
+                <ChargesRateSchemesSidebar
+                    className="sticky top-0"
+                    defaultCurrencyId={currency_id}
+                    onDeletedScheme={(scheme) => {
+                        if (chargesRateScheme?.id === scheme.id)
+                            setChargesRateScheme(undefined)
+                        queryClient.invalidateQueries({
+                            queryKey: ['charges-rate-scheme', 'all'],
+                        })
+                    }}
+                    onSelect={(selectedScheme) =>
+                        setChargesRateScheme(selectedScheme)
+                    }
+                    selectedId={chargesRateScheme?.id}
+                />
+                {chargesRateScheme === undefined ? (
+                    <Empty className="from-muted/50 to-background h-full bg-gradient-to-b from-30%">
+                        <EmptyHeader>
+                            <EmptyMedia variant="icon">
+                                <GridFillIcon />
+                            </EmptyMedia>
+                            <EmptyTitle>
+                                No Charges Rate Scheme Selected
+                            </EmptyTitle>
+                            <EmptyDescription>
+                                Select or Create a Charges Rate Scheme to view
+                                or edit
+                            </EmptyDescription>
+                        </EmptyHeader>
+                    </Empty>
+                ) : (
+                    <>
+                        <PermissionGuard
+                            action={['Update', 'OwnUpdate']}
+                            resource={chargesRateScheme}
+                            resourceType="LoanChargeScheme"
+                        >
+                            <ChargesRateSchemeUpdateForm
+                                chargesRateSchemeId={chargesRateScheme.id}
+                                className="flex-1 p-4 rounded-xl bg-popover/70"
+                                defaultValues={chargesRateScheme}
+                                key={chargesRateScheme.id}
+                                onSuccess={() => {
+                                    queryClient.invalidateQueries({
+                                        queryKey: [
+                                            'charges-rate-scheme',
+                                            'all',
+                                        ],
+                                    })
+                                }}
+                            />
+                        </PermissionGuard>
+                        <div></div>
+                    </>
+                )}
+            </PermissionGuard>
         </div>
     )
 }

@@ -4,6 +4,7 @@ import Fuse from 'fuse.js'
 
 import { cn } from '@/helpers'
 import { withToastCallbacks } from '@/helpers/callback-helper'
+import { hasPermissionFromAuth } from '@/modules/authentication/authgentication.store'
 import { CurrencyBadge } from '@/modules/currency/components/currency-badge'
 import useConfirmModalStore from '@/store/confirm-modal-store'
 
@@ -115,6 +116,12 @@ const ChargesRateSchemesSidebar = ({
                 />
                 <Button
                     className="flex-1"
+                    disabled={
+                        !hasPermissionFromAuth({
+                            action: 'Create',
+                            resourceType: 'LoanChargeScheme',
+                        })
+                    }
                     onClick={() => createModal.onOpenChange(true)}
                     size="sm"
                     variant="secondary"
@@ -228,7 +235,14 @@ const ChargesRateScheme = ({
                             <DropdownMenuSeparator />
                             <DropdownMenuItem
                                 className="bg-destructive/05 text-destructive focus:bg-destructive focus:text-destructive-foreground"
-                                disabled={isDeleting}
+                                disabled={
+                                    isDeleting ||
+                                    !hasPermissionFromAuth({
+                                        action: ['Delete', 'OwnDelete'],
+                                        resourceType: 'LoanChargeScheme',
+                                        resource: scheme,
+                                    })
+                                }
                                 onClick={(e) => {
                                     e.stopPropagation()
                                     e.preventDefault()
@@ -256,7 +270,14 @@ const ChargesRateScheme = ({
                 <ContextMenuSeparator />
                 <ContextMenuItem
                     className="bg-destructive/05 text-destructive focus:bg-destructive focus:text-destructive-foreground"
-                    disabled={isDeleting}
+                    disabled={
+                        isDeleting ||
+                        !hasPermissionFromAuth({
+                            action: ['Delete', 'OwnDelete'],
+                            resourceType: 'LoanChargeScheme',
+                            resource: scheme,
+                        })
+                    }
                     onClick={(e) => {
                         e.stopPropagation()
                         e.preventDefault()
