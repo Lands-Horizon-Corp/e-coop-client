@@ -16,7 +16,7 @@ export interface ITransactionFeatureContext extends TTransactionControllerReturn
 
 type TTransactipnProviderProps = {
     children: React.ReactNode
-    transactionId: TEntityId
+    transactionId?: TEntityId
     fullPath: string
 }
 

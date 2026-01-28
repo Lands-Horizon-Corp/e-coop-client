@@ -8,13 +8,14 @@ export const useHotkeysTransaction = () => {
     const { userOrganization } = useGetUserSettings()
 
     const {
-        navigate,
         form: transactionForm,
         memberScanner,
         selectedMemberId,
         history,
         accountPayment,
         accountPicker,
+        handlers,
+        navigate,
     } = useTransactionContext()
 
     useHotkeys(
@@ -24,7 +25,7 @@ export const useHotkeysTransaction = () => {
             navigate.clear()
         },
         { enableOnFormTags: true },
-        [navigate.clear]
+        [handlers]
     )
 
     useHotkeys(

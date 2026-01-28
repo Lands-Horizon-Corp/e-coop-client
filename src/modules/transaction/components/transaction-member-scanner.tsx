@@ -33,9 +33,16 @@ interface MemberQrScannerProps extends IBaseProps {}
 const TransactionMemberScanner = ({ className }: MemberQrScannerProps) => {
     const [startScan, setStartScan] = useState(false)
 
-    const { transactionId, form, memberScanner } = useTransactionContext()
+    const {
+        transactionId,
+        form,
+        memberScanner,
+        selectedMember,
+        selectedMemberId,
+        hasSelectedMember,
+    } = useTransactionContext()
 
-    const focusedId = form.watch('decoded_member_profile_id') ?? ''
+    const focusedId = form.getValues('decoded_member_profile_id') ?? ''
     const {
         data,
         isPending,
@@ -73,9 +80,6 @@ const TransactionMemberScanner = ({ className }: MemberQrScannerProps) => {
             setStartScan((start) => !start)
         }
     })
-
-    const selectedMemberId = form.getValues('member_profile_id')
-    const hasSelectedMember = !!form.getValues('member_profile_id')
 
     return (
         <div
@@ -166,13 +170,13 @@ const TransactionMemberScanner = ({ className }: MemberQrScannerProps) => {
                     </p>
                 )}
                 {error && <FormErrorMessage errorMessage={error} />}
-                {selectedMemberId && (
+                {selectedMember && selectedMemberId && (
                     <div className="h-full">
                         <TransactionMemberProfile
                             allowRemoveButton
                             className="h-full"
                             hasTransaction={false}
-                            memberInfo={form.getValues('member_profile')}
+                            memberInfo={selectedMember}
                             onRemove={() => {
                                 form.setValue('member_profile', undefined)
                                 form.setValue('member_profile_id', undefined)

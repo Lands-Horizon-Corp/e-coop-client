@@ -5,16 +5,18 @@ import Transaction from '@/modules/transaction/pages'
 import { TEntityId } from '@/types'
 
 type TransactionSearch = {
-    transactionId: TEntityId
+    transactionId?: TEntityId
 }
 
 export const Route = createFileRoute(
     '/org/$orgname/branch/$branchname/(employee)/transaction/'
 )({
     component: RouteComponent,
-    validateSearch: (search: Record<string, unknown>): TransactionSearch => {
+    validateSearch: (search): TransactionSearch => {
+        const id = search.transactionId
         return {
-            transactionId: String(search?.transactionId ?? ''),
+            transactionId:
+                typeof id === 'string' && id.length > 0 ? id : undefined,
         }
     },
 })

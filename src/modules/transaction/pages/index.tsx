@@ -6,7 +6,7 @@ import { TransactionProvider } from '../context/transaction-context'
 import PaymentTransactionWrapper from './payment-transaction-wrapper'
 
 type TTransactionProps = {
-    transactionId: TEntityId
+    transactionId?: TEntityId
     fullPath: string
 }
 

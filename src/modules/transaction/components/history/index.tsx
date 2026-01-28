@@ -25,6 +25,7 @@ import TransactionNoFound from './transaction-no-found'
 
 export const TransactionHistory = ({ className }: IClassProps) => {
     const { navigate, history } = useTransactionContext()
+
     const [pagination, setPagination] = useState<PaginationState>({
         pageIndex: PAGINATION_INITIAL_INDEX,
         pageSize: 10,
