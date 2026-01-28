@@ -1,6 +1,7 @@
 import { ReactNode } from 'react'
 
 import { dateAgo, toReadableDate } from '@/helpers/date-utils'
+import { hasPermissionFromAuth } from '@/modules/authentication/authgentication.store'
 import { currencyFormat } from '@/modules/currency'
 import { ColumnDef, Row } from '@tanstack/react-table'
 
@@ -392,6 +393,12 @@ const LoanTransactionTableColumns = (
                     {loan_tags.length > 3 && (
                         <LoanTagsManagerPopover
                             defaultLoanTags={loan_tags}
+                            disabled={
+                                !hasPermissionFromAuth({
+                                    action: 'Create',
+                                    resourceType: 'LoanTag',
+                                })
+                            }
                             loanTransactionId={''}
                             readOnly
                         >

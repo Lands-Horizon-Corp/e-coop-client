@@ -10,7 +10,10 @@ import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
 import { AccountPicker } from '@/modules/account'
 import { AccountViewerModal } from '@/modules/account/components/account-viewer/account-viewer'
 import { LoanConnectedAccountsConnected } from '@/modules/account/components/account-viewer/loan-content'
-import { useAuthUserWithOrgBranch } from '@/modules/authentication/authgentication.store'
+import {
+    hasPermissionFromAuth,
+    useAuthUserWithOrgBranch,
+} from '@/modules/authentication/authgentication.store'
 import { CurrencyInput } from '@/modules/currency'
 import LoanPurposeCombobox from '@/modules/loan-purpose/components/loan-purpose-combobox'
 import LoanStatusCombobox from '@/modules/loan-status/components/loan-status-combobox'
@@ -492,6 +495,12 @@ const LoanTransactionCreateUpdateForm = ({
                             <div className="flex items-center gap-x-1">
                                 {loanTransactionId && (
                                     <LoanTagsManagerPopover
+                                        disabled={
+                                            !hasPermissionFromAuth({
+                                                action: 'Create',
+                                                resourceType: 'LoanTag',
+                                            })
+                                        }
                                         loanTransactionId={loanTransactionId}
                                         size="sm"
                                     />

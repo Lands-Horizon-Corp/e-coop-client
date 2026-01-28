@@ -5,6 +5,7 @@ import { toast } from 'sonner'
 import { cn } from '@/helpers'
 import { dateAgo, toReadableDateTime } from '@/helpers/date-utils'
 import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
+import { hasPermissionFromAuth } from '@/modules/authentication/authgentication.store'
 import {
     ILoanTag,
     useCreateLoanTag,
@@ -37,7 +38,9 @@ export const LoanTagsManagerPopover = ({
     readOnly,
     className,
     children,
+    disabled,
 }: {
+    disabled?: boolean
     loanTransactionId: TEntityId
     defaultLoanTags?: ILoanTag[]
     size?: LoanTagManagerSize
@@ -49,7 +52,7 @@ export const LoanTagsManagerPopover = ({
         options: {
             initialData: defaultLoanTags,
             retry: 0,
-            enabled: !!loanTransactionId,
+            enabled: !!loanTransactionId && !disabled,
         },
     })
 
@@ -66,6 +69,7 @@ export const LoanTagsManagerPopover = ({
                             'size-fit !p-0 border-accent rounded-full !py-0.5 !px-1.5',
                             className
                         )}
+                        disabled={disabled}
                         size="sm"
                         type="button"
                         variant="outline"
@@ -155,6 +159,12 @@ export function LoanTagsManager({
                 {!readOnly && (
                     <Button
                         className="border-dashed rounded !size-fit py-1 !px-1 text-xs"
+                        disabled={
+                            !hasPermissionFromAuth({
+                                action: 'Create',
+                                resourceType: 'LoanTag',
+                            })
+                        }
                         onClick={() => tagPickerModal.onOpenChange(true)}
                         type="button"
                         variant="outline"
@@ -238,6 +248,13 @@ export const LoanTagChip = ({
                 {onRemove && (
                     <Button
                         className="size-fit cursor-pointer text-xs hover:text-red-600 disabled:opacity-50"
+                        disabled={
+                            !hasPermissionFromAuth({
+                                action: ['Delete', 'OwnDelete'],
+                                resourceType: 'LoanTag',
+                                resource: tag,
+                            })
+                        }
                         onClick={() =>
                             onOpen({
                                 title: 'Remove Tag',
