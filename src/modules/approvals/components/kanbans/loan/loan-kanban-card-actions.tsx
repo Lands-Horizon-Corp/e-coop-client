@@ -1,6 +1,7 @@
 import { toast } from 'sonner'
 
 import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
+import { hasPermissionFromAuth } from '@/modules/authentication/authgentication.store'
 import PrintReportFormModal from '@/modules/generated-report/components/forms/print-modal-config'
 import { useGenerateReport } from '@/modules/generated-report/components/generate-report-hooks/use-report-generate'
 import {
@@ -223,11 +224,23 @@ export const LoanTransactionCardActions = ({
             })}
             <div className="w-full flex items-center space-x-1 justify-start flex-shrink-0">
                 <LoanTagsManagerPopover
+                    disabled={
+                        !hasPermissionFromAuth({
+                            action: 'Create',
+                            resourceType: 'LoanTag',
+                        })
+                    }
                     loanTransactionId={loanTransaction.id}
                     size="sm"
                 />
                 <Button
                     aria-label="View Loan Transaction"
+                    disabled={
+                        !hasPermissionFromAuth({
+                            action: 'Create',
+                            resourceType: 'LoanTag',
+                        })
+                    }
                     onClick={handleOpenViewModal}
                     size={'icon'}
                     variant="ghost"
