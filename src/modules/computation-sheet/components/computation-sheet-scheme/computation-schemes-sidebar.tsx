@@ -4,6 +4,7 @@ import Fuse from 'fuse.js'
 
 import { cn } from '@/helpers'
 import { withToastCallbacks } from '@/helpers/callback-helper'
+import { hasPermissionFromAuth } from '@/modules/authentication/authgentication.store'
 import { CurrencyBadge } from '@/modules/currency/components/currency-badge'
 import useConfirmModalStore from '@/store/confirm-modal-store'
 
@@ -117,6 +118,12 @@ const ComputationSchemesSidebar = ({
                 />
                 <Button
                     className="flex-1"
+                    disabled={
+                        !hasPermissionFromAuth({
+                            action: 'Create',
+                            resourceType: 'LoanScheme',
+                        })
+                    }
                     onClick={() => createModal.onOpenChange(true)}
                     size="sm"
                     variant="secondary"
@@ -246,6 +253,13 @@ const LoanComputationSheet = ({
                                 </DropdownMenuLabel>
                                 <DropdownMenuSeparator />
                                 <DropdownMenuItem
+                                    disabled={
+                                        !hasPermissionFromAuth({
+                                            action: ['Update', 'OwnUpdate'],
+                                            resourceType: 'LoanScheme',
+                                            resource: scheme,
+                                        })
+                                    }
                                     onClick={() => editModal.onOpenChange(true)}
                                 >
                                     <PencilFillIcon className="opacity-60 mr-1" />
@@ -253,7 +267,14 @@ const LoanComputationSheet = ({
                                 </DropdownMenuItem>
                                 <DropdownMenuItem
                                     className="bg-destructive/05 text-destructive focus:bg-destructive focus:text-destructive-foreground"
-                                    disabled={isDeleting}
+                                    disabled={
+                                        isDeleting ||
+                                        !hasPermissionFromAuth({
+                                            action: ['Delete', 'OwnDelete'],
+                                            resourceType: 'LoanScheme',
+                                            resource: scheme,
+                                        })
+                                    }
                                     onClick={(e) => {
                                         e.stopPropagation()
                                         e.preventDefault()
@@ -280,13 +301,29 @@ const LoanComputationSheet = ({
                     Action
                 </ContextMenuLabel>
                 <ContextMenuSeparator />
-                <ContextMenuItem onClick={() => editModal.onOpenChange(true)}>
+                <ContextMenuItem
+                    disabled={
+                        !hasPermissionFromAuth({
+                            action: ['Update', 'OwnUpdate'],
+                            resourceType: 'LoanScheme',
+                            resource: scheme,
+                        })
+                    }
+                    onClick={() => editModal.onOpenChange(true)}
+                >
                     <PencilFillIcon className="opacity-60 mr-1" />
                     Edit
                 </ContextMenuItem>
                 <ContextMenuItem
                     className="bg-destructive/05 text-destructive focus:bg-destructive focus:text-destructive-foreground"
-                    disabled={isDeleting}
+                    disabled={
+                        isDeleting ||
+                        !hasPermissionFromAuth({
+                            action: ['Delete', 'OwnDelete'],
+                            resourceType: 'LoanScheme',
+                            resource: scheme,
+                        })
+                    }
                     onClick={(e) => {
                         e.stopPropagation()
                         e.preventDefault()

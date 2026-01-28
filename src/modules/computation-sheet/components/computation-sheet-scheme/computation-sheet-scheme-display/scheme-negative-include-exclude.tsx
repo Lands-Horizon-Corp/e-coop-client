@@ -1,7 +1,10 @@
 import { forwardRef } from 'react'
 
 import { cn } from '@/helpers'
-import BrowseExcludeIncludeAccountTable from '@/modules/browse-exclude-include-accounts/components/browse-exclude-include-accounts-table'
+import { hasPermissionFromAuth } from '@/modules/authentication/authgentication.store'
+import BrowseExcludeIncludeAccountTable, {
+    BrowseExcludeIncludeAccountTableProps,
+} from '@/modules/browse-exclude-include-accounts/components/browse-exclude-include-accounts-table'
 import { BrowseExcludeIncludeAccountsCreateUpdateFormModal } from '@/modules/browse-exclude-include-accounts/components/forms/browse-exclude-include-account-create-update-form'
 import { IncludeNegativeAccountCreateUpdateFormModal } from '@/modules/include-negative-accounts/components/forms/include-negative-account-create-update-form'
 import IncludeNegativeAccountTable from '@/modules/include-negative-accounts/components/include-negative-accounts-table'
@@ -40,6 +43,11 @@ const NegativeIncludeExclude = forwardRef<HTMLDivElement, Props>(
                                     includeNegativeAccountCreateModal.onOpenChange(
                                         true
                                     ),
+                                disabled: !hasPermissionFromAuth({
+                                    action: 'Create',
+                                    resourceType:
+                                        'LoanSchemeIncludeNegativeAccounts',
+                                }),
                             },
                         }}
                     />
@@ -63,7 +71,21 @@ const NegativeIncludeExclude = forwardRef<HTMLDivElement, Props>(
                                     browseExcludeIncludeAccountsCreateModal.onOpenChange(
                                         true
                                     ),
+                                disabled: !hasPermissionFromAuth({
+                                    action: 'Create',
+                                    resourceType:
+                                        'LoanSchemeBrowseExcludedIncludedAccounts',
+                                }),
                             },
+                            exportActionProps: {
+                                disabled: !hasPermissionFromAuth({
+                                    action: 'Export',
+                                    resourceType:
+                                        'LoanSchemeBrowseExcludedIncludedAccounts',
+                                }),
+                            } as NonNullable<
+                                BrowseExcludeIncludeAccountTableProps['toolbarProps']
+                            >['exportActionProps'],
                         }}
                     />
                 </div>

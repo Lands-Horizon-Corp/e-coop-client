@@ -1,5 +1,6 @@
 import { useState } from 'react'
 
+import { hasPermissionFromAuth } from '@/modules/authentication/authgentication.store'
 import { TMockCloanInputSchema } from '@/modules/calculator'
 
 import YesNoBadge from '@/components/badges/yes-no-badge'
@@ -63,7 +64,7 @@ const ComputationSheetSchemeCard = ({ computationSheet }: Props) => {
                         )}
                     </CardTitle>
 
-                    <div className="space-x-2">
+                    <div className="space-x-2 flex items-center">
                         <Sheet {...calculatorModal}>
                             <SheetTrigger asChild>
                                 <Button
@@ -93,6 +94,13 @@ const ComputationSheetSchemeCard = ({ computationSheet }: Props) => {
                         {computationSheet?.id && (
                             <Button
                                 className="size-fit p-2 rounded-xl text-muted-foreground/70 hober:text-foreground"
+                                disabled={
+                                    !hasPermissionFromAuth({
+                                        action: ['Update', 'OwnUpdate'],
+                                        resourceType: 'LoanScheme',
+                                        resource: computationSheet,
+                                    })
+                                }
                                 onClick={() => editModal.onOpenChange(true)}
                                 variant="outline"
                             >
