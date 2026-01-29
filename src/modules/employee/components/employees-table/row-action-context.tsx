@@ -1,5 +1,9 @@
 import { ReactNode, useState } from 'react'
 
+import {
+    hasPermissionFromAuth,
+    useAuthStore,
+} from '@/modules/authentication/authgentication.store'
 import DisbursementTransactionTable from '@/modules/disbursement-transaction/components/disbursement-transaction-table'
 import FootstepTable from '@/modules/footstep/components/footsteps-table'
 import { TEntryType } from '@/modules/general-ledger'
@@ -76,6 +80,9 @@ const useEmployeeActions = ({
 }: UseEmployeeActionsProps) => {
     const employee = row.original
     const [entryType, setEntryType] = useState<TEntryType>('')
+    const {
+        currentAuth: { user: currentUser },
+    } = useAuthStore()
 
     const { open } = useTableRowActionStore<
         IUserOrganization,
@@ -105,31 +112,13 @@ const useEmployeeActions = ({
         open('ledger', { defaultValues: employee, extra: { entryType: type } })
     }
 
-    const getLedgerTitle = () => {
-        const map: Record<TEntryType, string> = {
-            '': 'General Ledger',
-            'check-entry': 'Check Entry',
-            'online-entry': 'Online Entry',
-            'cash-entry': 'Cash Entry',
-            'payment-entry': 'Payment Entry',
-            'withdraw-entry': 'Withdraw Entry',
-            'deposit-entry': 'Deposit Entry',
-            'journal-entry': 'Journal Entry',
-            'adjustment-entry': 'Adjustment Entry',
-            'journal-voucher': 'Journal Voucher',
-            'check-voucher': 'Check Voucher',
-        }
-
-        return map[entryType] || 'General Ledger'
-    }
-
     return {
+        currentUser,
         employee,
         entryType,
         isDeletingEmployee,
         handleDelete,
         openLedger,
-        getLedgerTitle,
         open,
     }
 }
@@ -142,163 +131,213 @@ export const EmployeesAction = ({
     row,
     onDeleteSuccess,
 }: IEmployeesTableActionProps) => {
-    const { employee, isDeletingEmployee, handleDelete, openLedger, open } =
-        useEmployeeActions({ row, onDeleteSuccess })
+    const {
+        employee,
+        currentUser,
+        isDeletingEmployee,
+        handleDelete,
+        openLedger,
+        open,
+    } = useEmployeeActions({ row, onDeleteSuccess })
 
     return (
-        <>
-            <div onClick={(e) => e.stopPropagation()} />
-            <RowActionsGroup
-                canSelect
-                onDelete={{
-                    text: 'Delete',
-                    isAllowed: !isDeletingEmployee,
-                    onClick: handleDelete,
-                }}
-                otherActions={
-                    <>
-                        <DropdownMenuItem
-                            onClick={() =>
-                                open('permissions', {
-                                    defaultValues: employee,
+        <RowActionsGroup
+            canSelect
+            onDelete={{
+                text: 'Delete',
+                isAllowed:
+                    !isDeletingEmployee &&
+                    hasPermissionFromAuth({
+                        action: ['Delete', 'OwnDelete'],
+                        resourceType: 'Employee',
+                        resource: employee,
+                    }),
+                onClick: handleDelete,
+            }}
+            otherActions={
+                <>
+                    <DropdownMenuItem
+                        disabled={
+                            !hasPermissionFromAuth({
+                                action: ['Update', 'OwnUpdate'],
+                                resourceType: 'EmployeePermission',
+                                resource: employee,
+                            }) ||
+                            currentUser?.id === employee.user_id ||
+                            employee.user_type === 'owner'
+                        }
+                        onClick={() =>
+                            open('permissions', {
+                                defaultValues: employee,
+                            })
+                        }
+                    >
+                        <UserShieldIcon className="mr-2" strokeWidth={1.5} />
+                        Edit permission
+                    </DropdownMenuItem>
+
+                    <DropdownMenuItem
+                        disabled={
+                            !hasPermissionFromAuth({
+                                action: ['Read'],
+                                resourceType: 'TransactionBatch',
+                                resource: employee,
+                            })
+                        }
+                        onClick={() =>
+                            open('transaction-batch', {
+                                defaultValues: employee,
+                            })
+                        }
+                    >
+                        <LayersIcon className="mr-2" strokeWidth={1.5} />
+                        View Transaction Batch
+                    </DropdownMenuItem>
+
+                    <DropdownMenuItem
+                        disabled={
+                            !hasPermissionFromAuth({
+                                action: ['Read'],
+                                resourceType: 'Transactions',
+                            })
+                        }
+                        onClick={() =>
+                            open('transactions', {
+                                defaultValues: employee,
+                            })
+                        }
+                    >
+                        <ReceiptIcon className="mr-2" strokeWidth={1.5} />
+                        View Transactions
+                    </DropdownMenuItem>
+
+                    <DropdownMenuItem
+                        disabled={
+                            !hasPermissionFromAuth({
+                                action: ['Read'],
+                                resourceType: 'Timesheet',
+                            })
+                        }
+                        onClick={() =>
+                            open('timesheets', {
+                                defaultValues: employee,
+                            })
+                        }
+                    >
+                        <BriefCaseClockIcon
+                            className="mr-2"
+                            strokeWidth={1.5}
+                        />
+                        View Timesheets
+                    </DropdownMenuItem>
+
+                    <DropdownMenuItem
+                        disabled={
+                            !hasPermissionFromAuth({
+                                action: ['Read'],
+                                resourceType: 'EmployeeFootstep',
+                            })
+                        }
+                        onClick={() =>
+                            open('footsteps', {
+                                defaultValues: employee,
+                            })
+                        }
+                    >
+                        <FootstepsIcon className="mr-2" strokeWidth={1.5} />
+                        View Footsteps
+                    </DropdownMenuItem>
+
+                    <DropdownMenuItem
+                        disabled={
+                            !hasPermissionFromAuth({
+                                action: ['Read'],
+                                resourceType: 'EmployeeDisbursements',
+                            })
+                        }
+                        onClick={() =>
+                            open('disbursement-transactions', {
+                                defaultValues: employee,
+                            })
+                        }
+                    >
+                        <HandDropCoinsIcon className="mr-2" strokeWidth={1.5} />
+                        Disbursement Transactions
+                    </DropdownMenuItem>
+
+                    <DropdownMenuSub>
+                        <DropdownMenuSubTrigger
+                            disabled={
+                                !hasPermissionFromAuth({
+                                    action: 'Read',
+                                    resourceType: 'GeneralLedger',
                                 })
                             }
                         >
-                            <UserShieldIcon
-                                className="mr-2"
-                                strokeWidth={1.5}
-                            />
-                            Edit permission
-                        </DropdownMenuItem>
+                            <BookOpenIcon className="mr-2" strokeWidth={1.5} />
+                            GL Entries
+                        </DropdownMenuSubTrigger>
+                        <DropdownMenuPortal>
+                            <DropdownMenuSubContent>
+                                <DropdownMenuItem
+                                    onClick={() => openLedger('')}
+                                >
+                                    <BookThickIcon
+                                        className="mr-2"
+                                        strokeWidth={1.5}
+                                    />
+                                    General Ledger
+                                </DropdownMenuItem>
+                                <DropdownMenuItem
+                                    onClick={() => openLedger('check-entry')}
+                                >
+                                    <MoneyCheckIcon
+                                        className="mr-2"
+                                        strokeWidth={1.5}
+                                    />
+                                    Check Entry
+                                </DropdownMenuItem>
+                                <DropdownMenuItem
+                                    onClick={() => openLedger('online-entry')}
+                                >
+                                    <BillIcon
+                                        className="mr-2"
+                                        strokeWidth={1.5}
+                                    />
+                                    Online Entry
+                                </DropdownMenuItem>
+                                <DropdownMenuItem
+                                    onClick={() => openLedger('cash-entry')}
+                                >
+                                    <HandCoinsIcon
+                                        className="mr-2"
+                                        strokeWidth={1.5}
+                                    />
+                                    Cash Entry
+                                </DropdownMenuItem>
+                            </DropdownMenuSubContent>
+                        </DropdownMenuPortal>
+                    </DropdownMenuSub>
 
-                        <DropdownMenuItem
-                            onClick={() =>
-                                open('transaction-batch', {
-                                    defaultValues: employee,
-                                })
-                            }
-                        >
-                            <LayersIcon className="mr-2" strokeWidth={1.5} />
-                            View Transaction Batch
-                        </DropdownMenuItem>
-
-                        <DropdownMenuItem
-                            onClick={() =>
-                                open('transactions', {
-                                    defaultValues: employee,
-                                })
-                            }
-                        >
-                            <ReceiptIcon className="mr-2" strokeWidth={1.5} />
-                            View Transactions
-                        </DropdownMenuItem>
-
-                        <DropdownMenuItem
-                            onClick={() =>
-                                open('timesheets', {
-                                    defaultValues: employee,
-                                })
-                            }
-                        >
-                            <BriefCaseClockIcon
-                                className="mr-2"
-                                strokeWidth={1.5}
-                            />
-                            View Timesheets
-                        </DropdownMenuItem>
-
-                        <DropdownMenuItem
-                            onClick={() =>
-                                open('footsteps', {
-                                    defaultValues: employee,
-                                })
-                            }
-                        >
-                            <FootstepsIcon className="mr-2" strokeWidth={1.5} />
-                            View Footsteps
-                        </DropdownMenuItem>
-
-                        <DropdownMenuItem
-                            onClick={() =>
-                                open('disbursement-transactions', {
-                                    defaultValues: employee,
-                                })
-                            }
-                        >
-                            <HandDropCoinsIcon
-                                className="mr-2"
-                                strokeWidth={1.5}
-                            />
-                            Disbursement Transactions
-                        </DropdownMenuItem>
-
-                        <DropdownMenuSub>
-                            <DropdownMenuSubTrigger>
-                                <BookOpenIcon
-                                    className="mr-2"
-                                    strokeWidth={1.5}
-                                />
-                                GL Entries
-                            </DropdownMenuSubTrigger>
-                            <DropdownMenuPortal>
-                                <DropdownMenuSubContent>
-                                    <DropdownMenuItem
-                                        onClick={() => openLedger('')}
-                                    >
-                                        <BookThickIcon
-                                            className="mr-2"
-                                            strokeWidth={1.5}
-                                        />
-                                        General Ledger
-                                    </DropdownMenuItem>
-                                    <DropdownMenuItem
-                                        onClick={() =>
-                                            openLedger('check-entry')
-                                        }
-                                    >
-                                        <MoneyCheckIcon
-                                            className="mr-2"
-                                            strokeWidth={1.5}
-                                        />
-                                        Check Entry
-                                    </DropdownMenuItem>
-                                    <DropdownMenuItem
-                                        onClick={() =>
-                                            openLedger('online-entry')
-                                        }
-                                    >
-                                        <BillIcon
-                                            className="mr-2"
-                                            strokeWidth={1.5}
-                                        />
-                                        Online Entry
-                                    </DropdownMenuItem>
-                                    <DropdownMenuItem
-                                        onClick={() => openLedger('cash-entry')}
-                                    >
-                                        <HandCoinsIcon
-                                            className="mr-2"
-                                            strokeWidth={1.5}
-                                        />
-                                        Cash Entry
-                                    </DropdownMenuItem>
-                                </DropdownMenuSubContent>
-                            </DropdownMenuPortal>
-                        </DropdownMenuSub>
-
-                        <DropdownMenuItem
-                            onClick={() =>
-                                open('settings', { defaultValues: employee })
-                            }
-                        >
-                            <GearIcon className="mr-2" strokeWidth={1.5} />
-                            Settings
-                        </DropdownMenuItem>
-                    </>
-                }
-                row={row}
-            />
-        </>
+                    <DropdownMenuItem
+                        disabled={
+                            !hasPermissionFromAuth({
+                                action: ['Update', 'OwnUpdate'],
+                                resourceType: 'EmployeeSettings',
+                                resource: employee,
+                            })
+                        }
+                        onClick={() =>
+                            open('settings', { defaultValues: employee })
+                        }
+                    >
+                        <GearIcon className="mr-2" strokeWidth={1.5} />
+                        Settings
+                    </DropdownMenuItem>
+                </>
+            }
+            row={row}
+        />
     )
 }
 
@@ -312,29 +351,56 @@ export const EmployeesRowContext = ({
     children,
     onDeleteSuccess,
 }: IEmployeesRowContextProps) => {
-    const { employee, isDeletingEmployee, handleDelete, openLedger, open } =
-        useEmployeeActions({ row, onDeleteSuccess })
+    const {
+        currentUser,
+        employee,
+        isDeletingEmployee,
+        handleDelete,
+        openLedger,
+        open,
+    } = useEmployeeActions({ row, onDeleteSuccess })
 
     return (
         <DataTableRowContext
             onDelete={{
                 text: 'Delete',
-                isAllowed: !isDeletingEmployee,
+                isAllowed:
+                    !isDeletingEmployee &&
+                    hasPermissionFromAuth({
+                        action: ['Delete', 'OwnDelete'],
+                        resourceType: 'Employee',
+                        resource: employee,
+                    }),
                 onClick: handleDelete,
             }}
             otherActions={
                 <>
                     <ContextMenuItem
+                        disabled={
+                            !hasPermissionFromAuth({
+                                action: ['Update', 'OwnUpdate'],
+                                resourceType: 'EmployeePermission',
+                                resource: employee,
+                            }) ||
+                            currentUser?.id === employee.user_id ||
+                            employee.user_type === 'owner'
+                        }
                         onClick={() =>
-                            open('permissions', {
-                                defaultValues: employee,
-                            })
+                            open('permissions', { defaultValues: employee })
                         }
                     >
                         <UserShieldIcon className="mr-2" strokeWidth={1.5} />
                         Edit permission
                     </ContextMenuItem>
+
                     <ContextMenuItem
+                        disabled={
+                            !hasPermissionFromAuth({
+                                action: ['Read'],
+                                resourceType: 'TransactionBatch',
+                                resource: employee,
+                            })
+                        }
                         onClick={() =>
                             open('transaction-batch', {
                                 defaultValues: employee,
@@ -344,7 +410,14 @@ export const EmployeesRowContext = ({
                         <LayersIcon className="mr-2" strokeWidth={1.5} />
                         View Transaction Batch
                     </ContextMenuItem>
+
                     <ContextMenuItem
+                        disabled={
+                            !hasPermissionFromAuth({
+                                action: ['Read'],
+                                resourceType: 'Transactions',
+                            })
+                        }
                         onClick={() =>
                             open('transactions', {
                                 defaultValues: employee,
@@ -354,7 +427,14 @@ export const EmployeesRowContext = ({
                         <ReceiptIcon className="mr-2" strokeWidth={1.5} />
                         View Transactions
                     </ContextMenuItem>
+
                     <ContextMenuItem
+                        disabled={
+                            !hasPermissionFromAuth({
+                                action: ['Read'],
+                                resourceType: 'Timesheet',
+                            })
+                        }
                         onClick={() =>
                             open('timesheets', {
                                 defaultValues: employee,
@@ -367,7 +447,14 @@ export const EmployeesRowContext = ({
                         />
                         View Timesheets
                     </ContextMenuItem>
+
                     <ContextMenuItem
+                        disabled={
+                            !hasPermissionFromAuth({
+                                action: ['Read'],
+                                resourceType: 'EmployeeFootstep',
+                            })
+                        }
                         onClick={() =>
                             open('footsteps', {
                                 defaultValues: employee,
@@ -377,7 +464,14 @@ export const EmployeesRowContext = ({
                         <FootstepsIcon className="mr-2" strokeWidth={1.5} />
                         View Footsteps
                     </ContextMenuItem>
+
                     <ContextMenuItem
+                        disabled={
+                            !hasPermissionFromAuth({
+                                action: ['Read'],
+                                resourceType: 'EmployeeDisbursements',
+                            })
+                        }
                         onClick={() =>
                             open('disbursement-transactions', {
                                 defaultValues: employee,
@@ -387,8 +481,16 @@ export const EmployeesRowContext = ({
                         <HandDropCoinsIcon className="mr-2" strokeWidth={1.5} />
                         Disbursement Transactions
                     </ContextMenuItem>
+
                     <ContextMenuSub>
-                        <ContextMenuSubTrigger>
+                        <ContextMenuSubTrigger
+                            disabled={
+                                !hasPermissionFromAuth({
+                                    action: 'Read',
+                                    resourceType: 'GeneralLedger',
+                                })
+                            }
+                        >
                             <BookOpenIcon className="mr-2" strokeWidth={1.5} />
                             GL Entries
                         </ContextMenuSubTrigger>
@@ -410,10 +512,36 @@ export const EmployeesRowContext = ({
                                     />
                                     Check Entry
                                 </ContextMenuItem>
+                                <ContextMenuItem
+                                    onClick={() => openLedger('online-entry')}
+                                >
+                                    <BillIcon
+                                        className="mr-2"
+                                        strokeWidth={1.5}
+                                    />
+                                    Online Entry
+                                </ContextMenuItem>
+                                <ContextMenuItem
+                                    onClick={() => openLedger('cash-entry')}
+                                >
+                                    <HandCoinsIcon
+                                        className="mr-2"
+                                        strokeWidth={1.5}
+                                    />
+                                    Cash Entry
+                                </ContextMenuItem>
                             </ContextMenuSubContent>
                         </ContextMenuPortal>
                     </ContextMenuSub>
+
                     <ContextMenuItem
+                        disabled={
+                            !hasPermissionFromAuth({
+                                action: ['Update', 'OwnUpdate'],
+                                resourceType: 'EmployeeSettings',
+                                resource: employee,
+                            })
+                        }
                         onClick={() =>
                             open('settings', {
                                 defaultValues: employee,
