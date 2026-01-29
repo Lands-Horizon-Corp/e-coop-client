@@ -15,6 +15,7 @@ import DataTablePagination from '@/components/data-table/data-table-pagination'
 import DataTableToolbar, {
     IDataTableToolbarProps,
 } from '@/components/data-table/data-table-toolbar'
+import { TableRowActionStoreProvider } from '@/components/data-table/store/data-table-action-store'
 import { TableProps } from '@/components/data-table/table.type'
 import { useDataTableSorting } from '@/components/data-table/use-datatable-sorting'
 import useDataTableState from '@/components/data-table/use-datatable-state'
@@ -31,7 +32,10 @@ import TagTemplateTableColumns, {
     ITagTemplateTableColumnProps,
     tagTemplateGlobalSearchTargets,
 } from './columns'
-import { TagTemplateRowContext } from './row-action-context'
+import {
+    TagTemplateRowContext,
+    TagTemplateTableActionManager,
+} from './row-action-context'
 
 export interface TagTemplateTableProps
     extends TableProps<ITagTemplate>, ITagTemplateTableColumnProps {
@@ -138,55 +142,58 @@ const TagTemplateTable = ({
     })
 
     return (
-        <FilterContext.Provider value={filterState}>
-            <div
-                className={cn(
-                    'flex h-full flex-col gap-y-2',
-                    className,
-                    !isScrollable && 'h-fit !max-h-none'
-                )}
-            >
-                <DataTableToolbar
-                    deleteActionProps={{
-                        onDeleteSuccess: () =>
-                            queryClient.invalidateQueries({
-                                queryKey: ['tag-template', 'paginated'],
-                            }),
-                        onDelete: (selectedData) =>
-                            deleteManyTagTemplate({
-                                ids: selectedData.map((data) => data.id),
-                            }),
-                    }}
-                    filterLogicProps={{
-                        filterLogic: filterState.filterLogic,
-                        setFilterLogic: filterState.setFilterLogic,
-                    }}
-                    globalSearchProps={{
-                        defaultMode: 'contains',
-                        targets: tagTemplateGlobalSearchTargets,
-                    }}
-                    refreshActionProps={{
-                        onClick: () => refetch(),
-                        isLoading: isPending || isRefetching,
-                    }}
-                    scrollableProps={{ isScrollable, setIsScrollable }}
-                    table={table}
-                    {...toolbarProps}
-                />
-                <DataTable
-                    className="mb-2"
-                    isScrollable={isScrollable}
-                    isStickyFooter
-                    isStickyHeader
-                    onDoubleClick={onDoubleClick}
-                    onRowClick={onRowClick}
-                    RowContextComponent={RowContextComponent}
-                    setColumnOrder={setColumnOrder}
-                    table={table}
-                />
-                <DataTablePagination table={table} totalSize={totalSize} />
-            </div>
-        </FilterContext.Provider>
+        <TableRowActionStoreProvider>
+            <FilterContext.Provider value={filterState}>
+                <div
+                    className={cn(
+                        'flex h-full flex-col gap-y-2',
+                        className,
+                        !isScrollable && 'h-fit !max-h-none'
+                    )}
+                >
+                    <DataTableToolbar
+                        deleteActionProps={{
+                            onDeleteSuccess: () =>
+                                queryClient.invalidateQueries({
+                                    queryKey: ['tag-template', 'paginated'],
+                                }),
+                            onDelete: (selectedData) =>
+                                deleteManyTagTemplate({
+                                    ids: selectedData.map((data) => data.id),
+                                }),
+                        }}
+                        filterLogicProps={{
+                            filterLogic: filterState.filterLogic,
+                            setFilterLogic: filterState.setFilterLogic,
+                        }}
+                        globalSearchProps={{
+                            defaultMode: 'contains',
+                            targets: tagTemplateGlobalSearchTargets,
+                        }}
+                        refreshActionProps={{
+                            onClick: () => refetch(),
+                            isLoading: isPending || isRefetching,
+                        }}
+                        scrollableProps={{ isScrollable, setIsScrollable }}
+                        table={table}
+                        {...toolbarProps}
+                    />
+                    <DataTable
+                        className="mb-2"
+                        isScrollable={isScrollable}
+                        isStickyFooter
+                        isStickyHeader
+                        onDoubleClick={onDoubleClick}
+                        onRowClick={onRowClick}
+                        RowContextComponent={RowContextComponent}
+                        setColumnOrder={setColumnOrder}
+                        table={table}
+                    />
+                    <DataTablePagination table={table} totalSize={totalSize} />
+                </div>
+                <TagTemplateTableActionManager />
+            </FilterContext.Provider>
+        </TableRowActionStoreProvider>
     )
 }
 
