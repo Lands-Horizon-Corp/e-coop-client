@@ -1,5 +1,6 @@
 import { useQueryClient } from '@tanstack/react-query'
 
+import { hasPermissionFromAuth } from '@/modules/authentication/authgentication.store'
 import {
     ICheckRemittance,
     useCurrentBatchCheckRemittances,
@@ -124,6 +125,12 @@ const BatchCheckRemitance = ({
                 </div>
                 <Button
                     className="size-fit p-1"
+                    disabled={
+                        !hasPermissionFromAuth({
+                            action: 'Create',
+                            resourceType: 'CheckRemittance',
+                        })
+                    }
                     onClick={() => modalState.onOpenChange(true)}
                     size="icon"
                 >
@@ -223,7 +230,13 @@ const RemittanceListRow = ({
                     <div className="flex justify-end gap-1">
                         <Button
                             className="!size-fit px-1.5 py-1.5 text-muted-foreground/40"
-                            disabled={isDeleting}
+                            disabled={
+                                isDeleting ||
+                                !hasPermissionFromAuth({
+                                    action: ['Update', 'OwnUpdate'],
+                                    resourceType: 'CheckRemittance',
+                                })
+                            }
                             onClick={() => modalState.onOpenChange(true)}
                             size="icon"
                             variant="ghost"
@@ -232,7 +245,13 @@ const RemittanceListRow = ({
                         </Button>
                         <Button
                             className="!size-fit px-1.5 py-1.5 text-muted-foreground/40"
-                            disabled={isDeleting}
+                            disabled={
+                                isDeleting ||
+                                !hasPermissionFromAuth({
+                                    action: ['Delete', 'OwnDelete'],
+                                    resourceType: 'CheckRemittance',
+                                })
+                            }
                             hoverVariant="destructive"
                             onClick={() =>
                                 onOpen({

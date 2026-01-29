@@ -1,6 +1,9 @@
 import { ReactNode } from 'react'
 
-import { useAuthUser } from '@/modules/authentication/authgentication.store'
+import {
+    hasPermissionFromAuth,
+    useAuthUser,
+} from '@/modules/authentication/authgentication.store'
 import DisbursementTransactionTable from '@/modules/disbursement-transaction/components/disbursement-transaction-table'
 import { TEntryType } from '@/modules/general-ledger'
 import GeneralLedgerTable from '@/modules/general-ledger/components/tables/general-ledger-table'
@@ -206,7 +209,13 @@ export const TransactionBatchAction = ({
                 canSelect
                 onDelete={{
                     text: 'Delete',
-                    isAllowed: !isDeletingBatch,
+                    isAllowed:
+                        !isDeletingBatch ||
+                        !hasPermissionFromAuth({
+                            action: ['Delete', 'OwnDelete'],
+                            resourceType: 'TransactionBatch',
+                            resource: batch,
+                        }),
                     onClick: handleDelete,
                 }}
                 otherActions={
@@ -221,12 +230,29 @@ export const TransactionBatchAction = ({
                             <EyeIcon className="mr-2" strokeWidth={1.5} />
                             View Quick Summary
                         </DropdownMenuItem>
-                        <DropdownMenuItem onClick={handleViewHistory}>
+                        <DropdownMenuItem
+                            disabled={
+                                !hasPermissionFromAuth({
+                                    action: 'Read',
+                                    resourceType: 'TransactionBatchHistory',
+                                    resource: batch,
+                                })
+                            }
+                            onClick={handleViewHistory}
+                        >
                             <ClockIcon className="mr-2" strokeWidth={1.5} />
                             View Histories
                         </DropdownMenuItem>
 
-                        <DropdownMenuItem onClick={handleViewDisbursements}>
+                        <DropdownMenuItem
+                            disabled={
+                                !hasPermissionFromAuth({
+                                    action: 'Read',
+                                    resourceType: 'DisbursementTransaction',
+                                })
+                            }
+                            onClick={handleViewDisbursements}
+                        >
                             <HandDropCoinsIcon
                                 className="mr-2"
                                 strokeWidth={1.5}
@@ -235,7 +261,14 @@ export const TransactionBatchAction = ({
                         </DropdownMenuItem>
 
                         <DropdownMenuSub>
-                            <DropdownMenuSubTrigger>
+                            <DropdownMenuSubTrigger
+                                disabled={
+                                    !hasPermissionFromAuth({
+                                        action: 'Read',
+                                        resourceType: 'GeneralLedger',
+                                    })
+                                }
+                            >
                                 <BookOpenIcon
                                     className="mr-2"
                                     strokeWidth={1.5}
@@ -380,7 +413,13 @@ export const TransactionBatchAction = ({
                         <DropdownMenuLabel>Advance</DropdownMenuLabel>
                         <DropdownMenuSeparator />
                         <DropdownMenuItem
-                            disabled={batch.can_view}
+                            disabled={
+                                batch.can_view ||
+                                !hasPermissionFromAuth({
+                                    action: 'Update',
+                                    resourceType: 'ApprovalsBlotterView',
+                                })
+                            }
                             onClick={handleApproveView}
                         >
                             <EyeIcon className="mr-2" strokeWidth={1.5} />
@@ -438,12 +477,28 @@ export const TransactionBatchRowContext = ({
                             <EyeIcon className="mr-2" strokeWidth={1.5} />
                             View Quick Summary
                         </ContextMenuItem>
-                        <ContextMenuItem onClick={handleViewHistory}>
+                        <ContextMenuItem
+                            disabled={
+                                !hasPermissionFromAuth({
+                                    action: 'Read',
+                                    resourceType: 'TransactionBatchHistory',
+                                })
+                            }
+                            onClick={handleViewHistory}
+                        >
                             <ClockIcon className="mr-2" strokeWidth={1.5} />
                             View Histories
                         </ContextMenuItem>
 
-                        <ContextMenuItem onClick={handleViewDisbursements}>
+                        <ContextMenuItem
+                            disabled={
+                                !hasPermissionFromAuth({
+                                    action: 'Read',
+                                    resourceType: 'DisbursementTransaction',
+                                })
+                            }
+                            onClick={handleViewDisbursements}
+                        >
                             <HandDropCoinsIcon
                                 className="mr-2"
                                 strokeWidth={1.5}
@@ -452,7 +507,14 @@ export const TransactionBatchRowContext = ({
                         </ContextMenuItem>
 
                         <ContextMenuSub>
-                            <ContextMenuSubTrigger>
+                            <ContextMenuSubTrigger
+                                disabled={
+                                    !hasPermissionFromAuth({
+                                        action: 'Read',
+                                        resourceType: 'GeneralLedger',
+                                    })
+                                }
+                            >
                                 <BookOpenIcon
                                     className="mr-2"
                                     strokeWidth={1.5}
@@ -597,7 +659,13 @@ export const TransactionBatchRowContext = ({
                         <ContextMenuLabel>Advance</ContextMenuLabel>
                         <ContextMenuSeparator />
                         <ContextMenuItem
-                            disabled={batch.can_view}
+                            disabled={
+                                batch.can_view ||
+                                !hasPermissionFromAuth({
+                                    action: 'Update',
+                                    resourceType: 'ApprovalsBlotterView',
+                                })
+                            }
                             onClick={handleApproveView}
                         >
                             <EyeIcon className="mr-2" strokeWidth={1.5} />

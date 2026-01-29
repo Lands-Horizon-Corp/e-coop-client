@@ -1,5 +1,6 @@
 import { useQueryClient } from '@tanstack/react-query'
 
+import { hasPermissionFromAuth } from '@/modules/authentication/authgentication.store'
 import { ICurrency, currencyFormat } from '@/modules/currency'
 import {
     IDisbursementTransaction,
@@ -86,6 +87,12 @@ const TransactionBatchDisbursementTransaction = ({
                 </div>
                 <Button
                     className="size-fit p-1"
+                    disabled={
+                        !hasPermissionFromAuth({
+                            action: 'Create',
+                            resourceType: 'DisbursementTransaction',
+                        })
+                    }
                     onClick={() => modalState.onOpenChange(true)}
                     size="icon"
                 >

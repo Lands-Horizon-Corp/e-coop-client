@@ -3,7 +3,10 @@ import { useCallback } from 'react'
 import { toast } from 'sonner'
 
 import { toReadableDate } from '@/helpers/date-utils'
-import { useAuthUserWithOrgBranch } from '@/modules/authentication/authgentication.store'
+import {
+    hasPermissionFromAuth,
+    useAuthUserWithOrgBranch,
+} from '@/modules/authentication/authgentication.store'
 import {
     TTransactionBatchFullorMin,
     useCurrentTransactionBatch,
@@ -115,6 +118,12 @@ const TransactionBatchNavButton = (_props: Props) => {
             <>
                 <Button
                     className="group rounded-lg border"
+                    disabled={
+                        !hasPermissionFromAuth({
+                            action: 'Create',
+                            resourceType: 'TransactionBatch',
+                        })
+                    }
                     hoverVariant="primary"
                     onClick={() => modalState.onOpenChange((prev) => !prev)}
                     shadow="none"
@@ -151,6 +160,17 @@ const TransactionBatchNavButton = (_props: Props) => {
             <PopoverTrigger asChild>
                 <Button
                     className="group rounded-lg border"
+                    disabled={
+                        !hasPermissionFromAuth({
+                            action: ['Create'],
+                            resourceType: 'TransactionBatch',
+                        }) &&
+                        !hasPermissionFromAuth({
+                            action: ['Update', 'OwnUpdate'],
+                            resourceType: 'TransactionBatch',
+                            resource: transactionBatch,
+                        })
+                    }
                     hoverVariant="primary"
                     shadow="none"
                     size="xs"

@@ -2,7 +2,10 @@ import { useQueryClient } from '@tanstack/react-query'
 
 import { cn } from '@/helpers'
 import { toReadableDate } from '@/helpers/date-utils'
-import { useAuthUserWithOrg } from '@/modules/authentication/authgentication.store'
+import {
+    hasPermissionFromAuth,
+    useAuthUserWithOrg,
+} from '@/modules/authentication/authgentication.store'
 import { ICurrency } from '@/modules/currency'
 import { CurrencyBadge } from '@/modules/currency/components/currency-badge'
 
@@ -109,6 +112,12 @@ const TransactionBatch = ({
                 </div>
                 <Button
                     className="h-fit py-1"
+                    disabled={
+                        !hasPermissionFromAuth({
+                            action: 'Read',
+                            resourceType: 'TransactionBatchHistory',
+                        })
+                    }
                     hoverVariant="primary"
                     onClick={() => historyModal.onOpenChange(true)}
                     size="sm"
@@ -169,6 +178,13 @@ const TransactionBatch = ({
             </div>
             <Button
                 className="shrink-0 sticky bottom-0 rounded-xl dark:bg-secondary dark:text-secondary-foreground"
+                disabled={
+                    !hasPermissionFromAuth({
+                        action: ['Update', 'OwnUpdate'],
+                        resourceType: 'TransactionBatch',
+                        resource: transactionBatch,
+                    })
+                }
                 hoverVariant="primary"
                 onClick={() => endModal.onOpenChange(true)}
                 size="sm"

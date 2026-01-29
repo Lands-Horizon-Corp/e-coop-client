@@ -52,7 +52,6 @@ export interface TransactionBatchTableProps
         | 'globalSearchProps'
         | 'scrollableProps'
         | 'filterLogicProps'
-        | 'exportActionProps'
         | 'deleteActionProps'
     >
     mode: TTransactionBatchHookMode
@@ -206,6 +205,7 @@ const TransactionBatchTable = ({
                                 }),
                         }}
                         exportActionProps={{
+                            ...toolbarProps?.exportActionProps,
                             isLoading: isPending,
                             filters: exportfilter,
                             model: 'TransactionBatch',
