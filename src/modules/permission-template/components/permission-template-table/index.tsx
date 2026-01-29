@@ -51,7 +51,6 @@ export interface PermissionTemplateTableProps
         | 'globalSearchProps'
         | 'scrollableProps'
         | 'filterLogicProps'
-        | 'exportActionProps'
         | 'deleteActionProps'
     >
 }
@@ -188,6 +187,7 @@ const PermissionTemplateTable = ({
                                 }),
                         }}
                         exportActionProps={{
+                            ...toolbarProps?.exportActionProps,
                             isLoading: isPending,
                             filters: exportfilter,
                             model: 'PermissionTemplate',
