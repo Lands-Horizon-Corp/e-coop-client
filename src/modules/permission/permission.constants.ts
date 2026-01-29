@@ -554,7 +554,7 @@ export const PERMISSION_ALL_RESOURCE_ACTION = [
 
     {
         resource: 'Transactions',
-        label: 'Transactions Modules',
+        label: 'Transactions Module',
         description: 'Allow access for Transactions Module',
         supportedActions: ['Read'] as TPermissionAction[],
     },
@@ -562,65 +562,127 @@ export const PERMISSION_ALL_RESOURCE_ACTION = [
     // EMPLOYEE
     {
         resource: 'Employee',
-        label: 'Employee Modules',
+        label: 'Employee Module',
         description: 'Allow access/action for Employee Module',
         supportedActions: generateBaseAction() as TPermissionAction[],
     },
     {
         resource: 'EmployeePermission',
-        label: 'Employee Modules',
+        label: 'Employee Module',
         description: 'Allow access/action for Employee Module',
         supportedActions: ['Update', 'OwnUpdate'] as TPermissionAction[],
     },
     {
         resource: 'EmployeeFootstep',
-        label: 'Employee Footstep Modules',
+        label: 'Employee Footstep Module',
         description: 'Allow access/action for Employee Footstep Module',
         supportedActions: ['Read'] as TPermissionAction[],
     },
     {
         resource: 'EmployeeDisbursements',
-        label: 'Employee Disbursements Modules',
+        label: 'Employee Disbursements Module',
         description: 'Allow access/action for Employee Disbursements Module',
         supportedActions: ['Read'] as TPermissionAction[],
     },
     {
         resource: 'EmployeeSettings',
-        label: 'Employee Settings Modules',
+        label: 'Employee Settings Module',
         description: 'Allow access/action for Employee Settings Module',
         supportedActions: ['Read'] as TPermissionAction[],
     },
 
     {
         resource: 'PermissionTemplate',
-        label: 'Permission Template Modules',
+        label: 'Permission Template Module',
         description: 'Allow access/action for Permission Template Module',
         supportedActions: ['Read'] as TPermissionAction[],
     },
     {
         resource: 'EmployeeFootstep',
-        label: 'Employee Footstep Modules',
+        label: 'Employee Footstep Module',
         description: 'Allow access/action for Employee Footstep Module',
         supportedActions: ['Read'] as TPermissionAction[],
     },
 
     {
         resource: 'Timesheet',
-        label: 'Timesheet Modules',
+        label: 'Timesheet Module',
         description: 'Allow access/action for Timesheet Module',
         supportedActions: ['Read'] as TPermissionAction[],
     },
     {
+        resource: 'TimeInOut',
+        label: 'Time In Out Module',
+        description:
+            'Allow employee access/action to Time In or Time Out Module',
+        supportedActions: [
+            'Read',
+            'Create',
+            'Update',
+            'OwnUpdate',
+        ] as TPermissionAction[],
+    },
+
+    {
         resource: 'Footstep',
-        label: 'Footstep Modules',
+        label: 'Footstep Module',
         description: 'Allow access/action for Footstep Module',
         supportedActions: ['Read'] as TPermissionAction[],
     },
 
     {
         resource: 'BillsAndCoins',
-        label: 'Bills and Coins Modules',
+        label: 'Bills and Coins Module',
         description: 'Allow access/action for Bills and Coins Module',
+        supportedActions: generateBaseAction() as TPermissionAction[],
+    },
+    {
+        resource: 'TagTemplate',
+        label: 'Tag Template Module',
+        description: 'Allow access/action for Tag Template Module',
+        supportedActions: generateBaseAction() as TPermissionAction[],
+    },
+    {
+        resource: 'Collateral',
+        label: 'Collateral Module',
+        description: 'Allow access/action for Collateral Module',
+        supportedActions: generateBaseAction() as TPermissionAction[],
+    },
+    {
+        resource: 'Bank',
+        label: 'Bank Module',
+        description: 'Allow access/action for Bank Module',
+        supportedActions: generateBaseAction() as TPermissionAction[],
+    },
+    {
+        resource: 'Holiday',
+        label: 'Holiday Module',
+        description: 'Allow access/action for Holiday Module',
+        supportedActions: generateBaseAction() as TPermissionAction[],
+    },
+    {
+        resource: 'InvitationCode',
+        label: 'Invitation Code Module',
+        description: 'Allow access/action for Invitation Code Module',
+        supportedActions: generateBaseAction() as TPermissionAction[],
+    },
+    {
+        resource: 'Company',
+        label: 'Company Module',
+        description: 'Allow access/action for Company Module',
+        supportedActions: generateBaseAction() as TPermissionAction[],
+    },
+
+    {
+        resource: 'MyTimesheet',
+        label: 'My Timesheet Module',
+        description: 'Allow access for Own Timesheet Module',
+        supportedActions: ['Read'] as TPermissionAction[],
+    },
+    {
+        resource: 'MyGeneralLedger',
+        label: 'My General Ledger Entries Module',
+        description: 'Allow user to access Own General Ledger Entries Module',
         supportedActions: ['Read'] as TPermissionAction[],
     },
 
