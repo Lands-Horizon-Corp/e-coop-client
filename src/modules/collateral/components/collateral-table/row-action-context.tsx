@@ -1,6 +1,7 @@
 import { ReactNode } from 'react'
 
 import { withToastCallbacks } from '@/helpers/callback-helper'
+import { hasPermissionFromAuth } from '@/modules/authentication/authgentication.store'
 import useConfirmModalStore from '@/store/confirm-modal-store'
 import { Row } from '@tanstack/react-table'
 
@@ -12,7 +13,7 @@ import { ICollateral, useDeleteCollateralById } from '../..'
 import { CollateralCreateUpdateFormModal } from '../forms/collateral-create-update-form'
 import { ICollateralTableActionComponentProp } from './columns'
 
-export type CollateralActionType = 'edit' | 'delete'
+export type CollateralActionType = 'edit'
 
 export type CollateralActionExtra = Record<string, never>
 
@@ -26,6 +27,7 @@ const useCollateralActions = ({
     onDeleteSuccess,
 }: UseCollateralActionsProps) => {
     const collateral = row.original
+
     const { open } = useTableRowActionStore<
         ICollateral,
         CollateralActionType,
@@ -68,7 +70,6 @@ const useCollateralActions = ({
 }
 
 interface ICollateralTableActionProps extends ICollateralTableActionComponentProp {
-    onCollateralUpdate?: () => void
     onDeleteSuccess?: () => void
 }
 
@@ -76,25 +77,34 @@ export const CollateralAction = ({
     row,
     onDeleteSuccess,
 }: ICollateralTableActionProps) => {
-    const { isDeletingCollateral, handleEdit, handleDelete } =
+    const { collateral, isDeletingCollateral, handleEdit, handleDelete } =
         useCollateralActions({ row, onDeleteSuccess })
 
     return (
         <>
-            <div onClick={(e) => e.stopPropagation()}></div>
+            <div onClick={(e) => e.stopPropagation()} />
             <RowActionsGroup
                 canSelect
                 onDelete={{
                     text: 'Delete',
-                    isAllowed: !isDeletingCollateral,
+                    isAllowed:
+                        !isDeletingCollateral &&
+                        hasPermissionFromAuth({
+                            action: ['Delete', 'OwnDelete'],
+                            resourceType: 'Collateral',
+                            resource: collateral,
+                        }),
                     onClick: handleDelete,
                 }}
                 onEdit={{
                     text: 'Edit',
-                    isAllowed: true,
+                    isAllowed: hasPermissionFromAuth({
+                        action: ['Update', 'OwnUpdate'],
+                        resourceType: 'Collateral',
+                        resource: collateral,
+                    }),
                     onClick: handleEdit,
                 }}
-                otherActions={<></>}
                 row={row}
             />
         </>
@@ -111,27 +121,35 @@ export const CollateralRowContext = ({
     children,
     onDeleteSuccess,
 }: ICollateralRowContextProps) => {
-    const { isDeletingCollateral, handleEdit, handleDelete } =
+    const { collateral, isDeletingCollateral, handleEdit, handleDelete } =
         useCollateralActions({ row, onDeleteSuccess })
 
     return (
-        <>
-            <DataTableRowContext
-                onDelete={{
-                    text: 'Delete',
-                    isAllowed: !isDeletingCollateral,
-                    onClick: handleDelete,
-                }}
-                onEdit={{
-                    text: 'Edit',
-                    isAllowed: true,
-                    onClick: handleEdit,
-                }}
-                row={row}
-            >
-                {children}
-            </DataTableRowContext>
-        </>
+        <DataTableRowContext
+            onDelete={{
+                text: 'Delete',
+                isAllowed:
+                    !isDeletingCollateral &&
+                    hasPermissionFromAuth({
+                        action: ['Delete', 'OwnDelete'],
+                        resourceType: 'Collateral',
+                        resource: collateral,
+                    }),
+                onClick: handleDelete,
+            }}
+            onEdit={{
+                text: 'Edit',
+                isAllowed: hasPermissionFromAuth({
+                    action: ['Update', 'OwnUpdate'],
+                    resourceType: 'Collateral',
+                    resource: collateral,
+                }),
+                onClick: handleEdit,
+            }}
+            row={row}
+        >
+            {children}
+        </DataTableRowContext>
     )
 }
 
@@ -144,13 +162,15 @@ export const CollateralTableActionManager = () => {
 
     if (!state || !state.defaultValues) return null
 
+    const collateral = state.defaultValues
+
     return (
         <>
             {state.action === 'edit' && (
                 <CollateralCreateUpdateFormModal
                     formProps={{
-                        collateralId: state.defaultValues.id,
-                        defaultValues: state.defaultValues,
+                        collateralId: collateral.id,
+                        defaultValues: collateral,
                         onSuccess: close,
                     }}
                     onOpenChange={close}

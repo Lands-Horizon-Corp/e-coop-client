@@ -1,6 +1,7 @@
 import { useQueryClient } from '@tanstack/react-query'
 
 import { useAuthUserWithOrgBranch } from '@/modules/authentication/authgentication.store'
+import PermissionGuard from '@/modules/permission/components/permission-guard'
 
 import PageContainer from '@/components/containers/page-container'
 
@@ -39,20 +40,22 @@ const CollateralPage = () => {
 
     return (
         <PageContainer>
-            <CollateralCreateUpdateFormModal
-                {...createModal}
-                formProps={{
-                    onSuccess: () => {},
-                }}
-            />
-            <CollateralTable
-                className="max-h-[90vh] min-h-[90vh] w-full"
-                toolbarProps={{
-                    createActionProps: {
-                        onClick: () => createModal.onOpenChange(true),
-                    },
-                }}
-            />
+            <PermissionGuard action="Read" resourceType="Collateral">
+                <CollateralCreateUpdateFormModal
+                    {...createModal}
+                    formProps={{
+                        onSuccess: () => {},
+                    }}
+                />
+                <CollateralTable
+                    className="max-h-[90vh] min-h-[90vh] w-full"
+                    toolbarProps={{
+                        createActionProps: {
+                            onClick: () => createModal.onOpenChange(true),
+                        },
+                    }}
+                />
+            </PermissionGuard>
         </PageContainer>
     )
 }
