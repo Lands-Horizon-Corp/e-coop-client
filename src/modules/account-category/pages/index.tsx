@@ -27,7 +27,7 @@ export const AccountCategoryPage = () => {
 
     return (
         <PageContainer>
-            <PermissionGuard action="Read" resourceType="AdjustmentEntry">
+            <PermissionGuard action="Read" resourceType="AccountCategory">
                 <>
                     <AccountCategoryFormModal
                         branchId={branchId}
