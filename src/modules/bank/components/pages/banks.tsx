@@ -1,14 +1,18 @@
 import { useQueryClient } from '@tanstack/react-query'
 
-import { useAuthUserWithOrgBranch } from '@/modules/authentication/authgentication.store'
+import {
+    hasPermissionFromAuth,
+    useAuthUserWithOrgBranch,
+} from '@/modules/authentication/authgentication.store'
 import { BankCreateUpdateFormModal } from '@/modules/bank/components/forms/bank-create-update-form'
+import PermissionGuard from '@/modules/permission/components/permission-guard'
 
 import PageContainer from '@/components/containers/page-container'
 
 import { useModalState } from '@/hooks/use-modal-state'
 import { useSubscribe } from '@/hooks/use-pubsub'
 
-import BankTable from '../bank-table'
+import BankTable, { BankTableProps } from '../bank-table'
 
 const BankPage = () => {
     const queryClient = useQueryClient()
@@ -39,15 +43,29 @@ const BankPage = () => {
 
     return (
         <PageContainer>
-            <BankCreateUpdateFormModal {...createModal} />
-            <BankTable
-                className="max-h-[90vh] min-h-[90vh] w-full"
-                toolbarProps={{
-                    createActionProps: {
-                        onClick: () => createModal.onOpenChange(true),
-                    },
-                }}
-            />
+            <PermissionGuard action="Read" resourceType="Bank">
+                <BankCreateUpdateFormModal {...createModal} />
+                <BankTable
+                    className="max-h-[90vh] min-h-[90vh] w-full"
+                    toolbarProps={{
+                        createActionProps: {
+                            onClick: () => createModal.onOpenChange(true),
+                            disabled: !hasPermissionFromAuth({
+                                action: 'Create',
+                                resourceType: 'Bank',
+                            }),
+                        },
+                        exportActionProps: {
+                            disabled: !hasPermissionFromAuth({
+                                action: 'Export',
+                                resourceType: 'Account',
+                            }),
+                        } as NonNullable<
+                            BankTableProps['toolbarProps']
+                        >['exportActionProps'],
+                    }}
+                />
+            </PermissionGuard>
         </PageContainer>
     )
 }

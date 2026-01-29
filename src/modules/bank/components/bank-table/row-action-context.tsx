@@ -1,6 +1,6 @@
 import { ReactNode } from 'react'
 
-import { withToastCallbacks } from '@/helpers/callback-helper'
+import { hasPermissionFromAuth } from '@/modules/authentication/authgentication.store'
 import useConfirmModalStore from '@/store/confirm-modal-store'
 import { Row } from '@tanstack/react-table'
 
@@ -12,8 +12,7 @@ import { IBank, useDeleteBankById } from '../..'
 import { BankCreateUpdateFormModal } from '../forms/bank-create-update-form'
 import { IBankTableActionComponentProp } from './columns'
 
-// ===== TYPE DEFINITIONS =====
-export type BankActionType = 'edit' | 'delete'
+export type BankActionType = 'edit'
 
 export interface BankActionExtra {
     onDeleteSuccess?: () => void
@@ -26,20 +25,19 @@ interface UseBankActionsProps {
 
 const useBankActions = ({ row, onDeleteSuccess }: UseBankActionsProps) => {
     const bank = row.original
+
     const { open } = useTableRowActionStore<
         IBank,
         BankActionType,
         BankActionExtra
     >()
+
     const { onOpen } = useConfirmModalStore()
 
     const { isPending: isDeletingBank, mutate: deleteBank } = useDeleteBankById(
         {
             options: {
-                ...withToastCallbacks({
-                    textSuccess: 'Deleted bank',
-                    onSuccess: onDeleteSuccess,
-                }),
+                onSuccess: onDeleteSuccess,
             },
         }
     )
@@ -69,12 +67,11 @@ const useBankActions = ({ row, onDeleteSuccess }: UseBankActionsProps) => {
 }
 
 interface IBankTableActionProps extends IBankTableActionComponentProp {
-    onBankUpdate?: () => void
     onDeleteSuccess?: () => void
 }
 
 export const BankAction = ({ row, onDeleteSuccess }: IBankTableActionProps) => {
-    const { isDeletingBank, handleEdit, handleDelete } = useBankActions({
+    const { bank, isDeletingBank, handleEdit, handleDelete } = useBankActions({
         row,
         onDeleteSuccess,
     })
@@ -84,15 +81,24 @@ export const BankAction = ({ row, onDeleteSuccess }: IBankTableActionProps) => {
             canSelect
             onDelete={{
                 text: 'Delete',
-                isAllowed: !isDeletingBank,
+                isAllowed:
+                    !isDeletingBank &&
+                    hasPermissionFromAuth({
+                        action: ['Delete', 'OwnDelete'],
+                        resourceType: 'Bank',
+                        resource: bank,
+                    }),
                 onClick: handleDelete,
             }}
             onEdit={{
                 text: 'Edit',
-                isAllowed: true,
+                isAllowed: hasPermissionFromAuth({
+                    action: ['Update', 'OwnUpdate'],
+                    resourceType: 'Bank',
+                    resource: bank,
+                }),
                 onClick: handleEdit,
             }}
-            otherActions={<>{/* Additional actions can be added here */}</>}
             row={row}
         />
     )
@@ -108,7 +114,7 @@ export const BankRowContext = ({
     children,
     onDeleteSuccess,
 }: IBankRowContextProps) => {
-    const { isDeletingBank, handleEdit, handleDelete } = useBankActions({
+    const { bank, isDeletingBank, handleEdit, handleDelete } = useBankActions({
         row,
         onDeleteSuccess,
     })
@@ -117,12 +123,22 @@ export const BankRowContext = ({
         <DataTableRowContext
             onDelete={{
                 text: 'Delete',
-                isAllowed: !isDeletingBank,
+                isAllowed:
+                    !isDeletingBank &&
+                    hasPermissionFromAuth({
+                        action: ['Delete', 'OwnDelete'],
+                        resourceType: 'Bank',
+                        resource: bank,
+                    }),
                 onClick: handleDelete,
             }}
             onEdit={{
                 text: 'Edit',
-                isAllowed: true,
+                isAllowed: hasPermissionFromAuth({
+                    action: ['Update', 'OwnUpdate'],
+                    resourceType: 'Bank',
+                    resource: bank,
+                }),
                 onClick: handleEdit,
             }}
             row={row}
@@ -146,7 +162,7 @@ export const BankTableActionManager = () => {
                     formProps={{
                         bankId: state.id,
                         defaultValues: state.defaultValues,
-                        onSuccess: () => close(),
+                        onSuccess: close,
                     }}
                     onOpenChange={close}
                     open={state.isOpen}
@@ -156,5 +172,4 @@ export const BankTableActionManager = () => {
     )
 }
 
-// Default export for backward compatibility
 export default BankAction
