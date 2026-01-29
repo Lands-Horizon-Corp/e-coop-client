@@ -1,3 +1,5 @@
+import PermissionGuard from '@/modules/permission/components/permission-guard'
+
 import PageContainer from '@/components/containers/page-container'
 
 import HolidayEditor from '../holiday-editor'
@@ -5,7 +7,9 @@ import HolidayEditor from '../holiday-editor'
 const HolidayPage = () => {
     return (
         <PageContainer>
-            <HolidayEditor className="w-full max-w-2xl" />
+            <PermissionGuard action="Read" resourceType="Holiday">
+                <HolidayEditor className="w-full max-w-2xl" />
+            </PermissionGuard>
         </PageContainer>
     )
 }

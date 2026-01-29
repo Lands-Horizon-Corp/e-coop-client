@@ -7,7 +7,10 @@ import { toast } from 'sonner'
 import { cn } from '@/helpers'
 import { dateAgo, toReadableDate } from '@/helpers/date-utils'
 import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
-import { useAuthUserWithOrgBranch } from '@/modules/authentication/authgentication.store'
+import {
+    hasPermissionFromAuth,
+    useAuthUserWithOrgBranch,
+} from '@/modules/authentication/authgentication.store'
 import { CurrencyCombobox, isPast, isToday } from '@/modules/currency'
 import { CurrencyBadge } from '@/modules/currency/components/currency-badge'
 import useConfirmModalStore from '@/store/confirm-modal-store'
@@ -239,6 +242,12 @@ const HolidayEditor = ({ className }: Props) => {
             <div className="flex items-center gap-x-2">
                 <Button
                     className="w-fit shrink-0"
+                    disabled={
+                        !hasPermissionFromAuth({
+                            action: 'Create',
+                            resourceType: 'Holiday',
+                        })
+                    }
                     onClick={() => createModal.onOpenChange(true)}
                 >
                     <PlusIcon /> Add
@@ -275,6 +284,12 @@ const HolidayEditor = ({ className }: Props) => {
                                         year === availableYear.year &&
                                             'border-primary border-2'
                                     )}
+                                    disabled={
+                                        !hasPermissionFromAuth({
+                                            action: 'Create',
+                                            resourceType: 'Holiday',
+                                        })
+                                    }
                                     onClick={() => setYear(availableYear.year)}
                                     size="sm"
                                     variant={
@@ -498,6 +513,13 @@ const HolidayItem = ({
                                 <>
                                     <Button
                                         className="size-fit p-2 "
+                                        disabled={
+                                            !hasPermissionFromAuth({
+                                                action: ['Update', 'OwnUpdate'],
+                                                resourceType: 'Holiday',
+                                                resource: holiday,
+                                            })
+                                        }
                                         onClick={() =>
                                             editModalState.onOpenChange(true)
                                         }
@@ -509,7 +531,12 @@ const HolidayItem = ({
                                     <Button
                                         className="size-fit p-2 "
                                         disabled={
-                                            deleteHolidayMutation.isPending
+                                            deleteHolidayMutation.isPending ||
+                                            !hasPermissionFromAuth({
+                                                action: ['Delete', 'OwnDelete'],
+                                                resourceType: 'Holiday',
+                                                resource: holiday,
+                                            })
                                         }
                                         onClick={() => handleDelete()}
                                         size="icon"
