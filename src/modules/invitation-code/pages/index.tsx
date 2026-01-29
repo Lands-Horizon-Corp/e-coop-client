@@ -5,6 +5,7 @@ import { toast } from 'sonner'
 
 import { useAuthUserWithOrgBranch } from '@/modules/authentication/authgentication.store'
 import { InvitationCodeCreateUpdateFormModal } from '@/modules/invitation-code'
+import PermissionGuard from '@/modules/permission/components/permission-guard'
 
 import PageContainer from '@/components/containers/page-container'
 
@@ -48,37 +49,39 @@ const InvitationCode = () => {
 
     return (
         <PageContainer>
-            <InvitationCodeCreateUpdateFormModal
-                className="min-w-[400px] sm:min-w-[500px] md:min-w-[600px] lg:min-w-[700px] xl:min-w-[800px]"
-                formProps={{
-                    defaultValues: {},
-                    onSuccess: () => {
-                        toast.success('Invitation code created')
-                    },
-                }}
-                onOpenChange={setCreateModal}
-                open={createModal}
-                titleClassName="font-bold"
-            />
-            <InvitationCodeTable
-                actionComponent={(props) => (
-                    <InvitationCodeAction
-                        onDeleteSuccess={() => {
-                            queryClient.invalidateQueries({
-                                queryKey: ['invitation-code'],
-                            })
-                            toast.success('Invitation code deleted')
-                        }}
-                        {...props}
-                    />
-                )}
-                className="max-h-[90vh] min-h-[90vh] w-full"
-                toolbarProps={{
-                    createActionProps: {
-                        onClick: () => setCreateModal(true),
-                    },
-                }}
-            />
+            <PermissionGuard action="Read" resourceType="InvitationCode">
+                <InvitationCodeCreateUpdateFormModal
+                    className="min-w-[400px] sm:min-w-[500px] md:min-w-[600px] lg:min-w-[700px] xl:min-w-[800px]"
+                    formProps={{
+                        defaultValues: {},
+                        onSuccess: () => {
+                            toast.success('Invitation code created')
+                        },
+                    }}
+                    onOpenChange={setCreateModal}
+                    open={createModal}
+                    titleClassName="font-bold"
+                />
+                <InvitationCodeTable
+                    actionComponent={(props) => (
+                        <InvitationCodeAction
+                            onDeleteSuccess={() => {
+                                queryClient.invalidateQueries({
+                                    queryKey: ['invitation-code'],
+                                })
+                                toast.success('Invitation code deleted')
+                            }}
+                            {...props}
+                        />
+                    )}
+                    className="max-h-[90vh] min-h-[90vh] w-full"
+                    toolbarProps={{
+                        createActionProps: {
+                            onClick: () => setCreateModal(true),
+                        },
+                    }}
+                />
+            </PermissionGuard>
         </PageContainer>
     )
 }

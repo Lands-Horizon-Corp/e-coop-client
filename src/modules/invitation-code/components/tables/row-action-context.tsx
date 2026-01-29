@@ -2,6 +2,7 @@ import { ReactNode } from 'react'
 
 import { toast } from 'sonner'
 
+import { hasPermissionFromAuth } from '@/modules/authentication/authgentication.store'
 import {
     IInvitationCode,
     InvitationCodeCreateUpdateFormModal,
@@ -36,6 +37,7 @@ const useInvitationCodeActions = ({
     onDeleteSuccess,
 }: UseInvitationCodeActionsProps) => {
     const invitationCode = row.original
+
     const { open } = useTableRowActionStore<
         IInvitationCode,
         InvitationCodeActionType,
@@ -46,7 +48,7 @@ const useInvitationCodeActions = ({
     const { onOpen: openInfoModal } = useInfoModalStore()
 
     const {
-        mutate: deleteInvitationCodeMutation,
+        mutate: deleteInvitationCode,
         isPending: isDeletingInvitationCode,
     } = useDeleteById({
         options: {
@@ -72,7 +74,7 @@ const useInvitationCodeActions = ({
             title: 'Delete Invitation Code',
             description:
                 'Are you sure you want to delete this Invitation Code?',
-            onConfirm: () => deleteInvitationCodeMutation(invitationCode.id),
+            onConfirm: () => deleteInvitationCode(invitationCode.id),
         })
     }
 
@@ -121,8 +123,8 @@ const useInvitationCodeActions = ({
 
     return {
         invitationCode,
-        isDeletingInvitationCode,
         invitationUrl,
+        isDeletingInvitationCode,
         handleEdit,
         handleDelete,
         handleShowQR,
@@ -132,7 +134,6 @@ const useInvitationCodeActions = ({
 }
 
 interface IInvitationCodeTableActionProps extends IInvitationTableActionComponentProp {
-    onInvitationUpdate?: () => void
     onDeleteSuccess?: () => void
 }
 
@@ -141,6 +142,7 @@ export const InvitationCodeAction = ({
     onDeleteSuccess,
 }: IInvitationCodeTableActionProps) => {
     const {
+        invitationCode,
         isDeletingInvitationCode,
         handleEdit,
         handleDelete,
@@ -150,39 +152,46 @@ export const InvitationCodeAction = ({
     } = useInvitationCodeActions({ row, onDeleteSuccess })
 
     return (
-        <>
-            <div onClick={(e) => e.stopPropagation()}></div>
-            <RowActionsGroup
-                canSelect
-                onDelete={{
-                    text: 'Delete',
-                    isAllowed: !isDeletingInvitationCode,
-                    onClick: handleDelete,
-                }}
-                onEdit={{
-                    text: 'Edit',
-                    isAllowed: true,
-                    onClick: handleEdit,
-                }}
-                otherActions={
-                    <>
-                        <DropdownMenuItem onClick={handleShowQR}>
-                            <QrCodeIcon className="mr-2" />
-                            Show QR
-                        </DropdownMenuItem>
-                        <DropdownMenuItem onClick={handleCopyCode}>
-                            <KeySharpIcon className="mr-2" />
-                            Copy Code
-                        </DropdownMenuItem>
-                        <DropdownMenuItem onClick={handleCopyURL}>
-                            <LinkIcon className="mr-2" />
-                            Copy URL
-                        </DropdownMenuItem>
-                    </>
-                }
-                row={row}
-            />
-        </>
+        <RowActionsGroup
+            canSelect
+            onDelete={{
+                text: 'Delete',
+                isAllowed:
+                    !isDeletingInvitationCode &&
+                    hasPermissionFromAuth({
+                        action: ['Delete', 'OwnDelete'],
+                        resourceType: 'InvitationCode',
+                        resource: invitationCode,
+                    }),
+                onClick: handleDelete,
+            }}
+            onEdit={{
+                text: 'Edit',
+                isAllowed: hasPermissionFromAuth({
+                    action: ['Update', 'OwnUpdate'],
+                    resourceType: 'InvitationCode',
+                    resource: invitationCode,
+                }),
+                onClick: handleEdit,
+            }}
+            otherActions={
+                <>
+                    <DropdownMenuItem onClick={handleShowQR}>
+                        <QrCodeIcon className="mr-2" />
+                        Show QR
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={handleCopyCode}>
+                        <KeySharpIcon className="mr-2" />
+                        Copy Code
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={handleCopyURL}>
+                        <LinkIcon className="mr-2" />
+                        Copy URL
+                    </DropdownMenuItem>
+                </>
+            }
+            row={row}
+        />
     )
 }
 
@@ -197,6 +206,7 @@ export const InvitationCodeRowContext = ({
     onDeleteSuccess,
 }: IInvitationCodeRowContextProps) => {
     const {
+        invitationCode,
         isDeletingInvitationCode,
         handleEdit,
         handleDelete,
@@ -206,39 +216,47 @@ export const InvitationCodeRowContext = ({
     } = useInvitationCodeActions({ row, onDeleteSuccess })
 
     return (
-        <>
-            <DataTableRowContext
-                onDelete={{
-                    text: 'Delete Invitation Code',
-                    isAllowed: !isDeletingInvitationCode,
-                    onClick: handleDelete,
-                }}
-                onEdit={{
-                    text: 'Edit Invitation Code',
-                    isAllowed: true,
-                    onClick: handleEdit,
-                }}
-                otherActions={
-                    <>
-                        <ContextMenuItem onClick={handleShowQR}>
-                            <QrCodeIcon className="mr-2" />
-                            Show QR
-                        </ContextMenuItem>
-                        <ContextMenuItem onClick={handleCopyCode}>
-                            <KeySharpIcon className="mr-2" />
-                            Copy Code
-                        </ContextMenuItem>
-                        <ContextMenuItem onClick={handleCopyURL}>
-                            <LinkIcon className="mr-2" />
-                            Copy URL
-                        </ContextMenuItem>
-                    </>
-                }
-                row={row}
-            >
-                {children}
-            </DataTableRowContext>
-        </>
+        <DataTableRowContext
+            onDelete={{
+                text: 'Delete Invitation Code',
+                isAllowed:
+                    !isDeletingInvitationCode &&
+                    hasPermissionFromAuth({
+                        action: ['Delete', 'OwnDelete'],
+                        resourceType: 'InvitationCode',
+                        resource: invitationCode,
+                    }),
+                onClick: handleDelete,
+            }}
+            onEdit={{
+                text: 'Edit Invitation Code',
+                isAllowed: hasPermissionFromAuth({
+                    action: ['Update', 'OwnUpdate'],
+                    resourceType: 'InvitationCode',
+                    resource: invitationCode,
+                }),
+                onClick: handleEdit,
+            }}
+            otherActions={
+                <>
+                    <ContextMenuItem onClick={handleShowQR}>
+                        <QrCodeIcon className="mr-2" />
+                        Show QR
+                    </ContextMenuItem>
+                    <ContextMenuItem onClick={handleCopyCode}>
+                        <KeySharpIcon className="mr-2" />
+                        Copy Code
+                    </ContextMenuItem>
+                    <ContextMenuItem onClick={handleCopyURL}>
+                        <LinkIcon className="mr-2" />
+                        Copy URL
+                    </ContextMenuItem>
+                </>
+            }
+            row={row}
+        >
+            {children}
+        </DataTableRowContext>
     )
 }
 
