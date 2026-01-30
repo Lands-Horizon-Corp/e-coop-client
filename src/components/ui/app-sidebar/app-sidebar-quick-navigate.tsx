@@ -15,9 +15,9 @@ import {
     CommandItem,
     CommandList,
     CommandSeparator,
-    CommandShortcut,
 } from '@/components/ui/command'
 
+import { Kbd } from '../kbd'
 import { useSidebar } from '../sidebar'
 import { TQuickSearchGroup } from './types'
 
@@ -119,9 +119,7 @@ const AppSidebarQuickNavigate = ({ groups }: Props) => {
                 {sidebarOpen && (
                     <>
                         Quick Navigate
-                        <CommandShortcut className="rounded-md bg-background/50 p-1">
-                            <span className="text-xs">⌘</span>Q
-                        </CommandShortcut>
+                        <Kbd className="ml-auto">⌘ + Q</Kbd>
                     </>
                 )}
             </Button>

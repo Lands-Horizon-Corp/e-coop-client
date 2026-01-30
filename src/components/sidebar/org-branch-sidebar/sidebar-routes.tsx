@@ -1,3 +1,4 @@
+import { hasPermissionFromAuth } from '@/modules/authentication/authgentication.store'
 import { TUserType } from '@/modules/user'
 
 import {
@@ -57,7 +58,12 @@ const filterNavItemsByUserType = (
     userType: TUserType
 ): INavItem[] => {
     return items
-        .filter((item) => item.userType.includes(userType))
+        .filter((item) =>
+            /* item.userType.includes(userType) && */ item.canAccess !==
+            undefined
+                ? item.canAccess
+                : true
+        )
         .map((item) => {
             if (item.type === 'dropdown') {
                 const filteredSubItems = filterNavItemsByUserType(
@@ -81,7 +87,7 @@ export const generateSidebarGroups = (
     const sidebarGroups: INavGroupItem[] = [
         {
             title: 'Home',
-            userType: ['employee', 'member'],
+            // userType: ['employee', 'member'],
             navItems: [
                 {
                     type: 'item',
@@ -89,41 +95,53 @@ export const generateSidebarGroups = (
                     url: `${baseUrl}/dashboard`,
                     shortDescription: 'Monitor your data',
                     icon: DashboardIcon,
-                    userType: ['employee', 'member'],
+                    canAccess: hasPermissionFromAuth({
+                        action: 'Read',
+                        resourceType: 'Dashboard',
+                    }),
+                    // userType: ['employee', 'member'],
                 },
                 {
                     title: 'Approvals',
                     url: `${baseUrl}/approvals`,
                     icon: ChecksGridIcon,
                     type: 'item',
-                    userType: ['employee', 'owner'],
+                    // userType: ['employee', 'owner'],
+                    canAccess: hasPermissionFromAuth({
+                        action: 'Read',
+                        resourceType: 'Approvals',
+                    }),
                     shortDescription: 'Approve or review pending requests',
                 },
             ],
         },
         {
             title: 'Transaction',
-            userType: ['employee', 'owner'],
+            // userType: ['employee', 'owner'],
             navItems: [
                 {
                     type: 'item',
                     icon: HandCoinsIcon,
                     title: 'Payment',
                     url: `${baseUrl}/transaction/`,
-                    userType: ['employee', 'owner'],
+                    // userType: ['employee', 'owner'],
+                    canAccess: hasPermissionFromAuth({
+                        action: 'Read',
+                        resourceType: 'Transaction',
+                    }),
                     shortDescription: 'Manage fund transfers and movements',
                 },
-                {
-                    type: 'item',
-                    icon: HandCoinsIcon,
-                    title: 'Loan Payment',
-                    url: `${baseUrl}/transaction/loan-payment`,
-                    userType: ['employee', 'owner'],
-                    shortDescription: 'Pay Loan',
-                },
+                // {
+                //     type: 'item',
+                //     icon: HandCoinsIcon,
+                //     title: 'Loan Payment',
+                //     url: `${baseUrl}/transaction/loan-payment`,
+                // userType: ['employee', 'owner'],
+                //     shortDescription: 'Pay Loan',
+                // },
                 {
                     title: 'Quick Payment',
-                    userType: ['employee', 'owner'],
+                    // userType: ['employee', 'owner'],
                     url: `${baseUrl}/transaction/quick-transfer`,
                     type: 'dropdown',
                     icon: BankIcon,
@@ -133,7 +151,11 @@ export const generateSidebarGroups = (
                             icon: HandWithdrawIcon,
                             title: 'Withdraw',
                             url: `/withdraw`,
-                            userType: ['employee', 'owner'],
+                            // userType: ['employee', 'owner'],
+                            canAccess: hasPermissionFromAuth({
+                                action: 'Read',
+                                resourceType: 'QuickWithdraw',
+                            }),
                             shortDescription: 'quickly withdraw funds',
                         },
                         {
@@ -141,7 +163,11 @@ export const generateSidebarGroups = (
                             icon: HandDepositIcon,
                             title: 'Deposit',
                             url: `/deposit`,
-                            userType: ['employee', 'owner'],
+                            // userType: ['employee', 'owner'],
+                            canAccess: hasPermissionFromAuth({
+                                action: 'Read',
+                                resourceType: 'QuickDeposit',
+                            }),
                             shortDescription: 'quickly deposit funds',
                         },
                     ],
@@ -151,7 +177,11 @@ export const generateSidebarGroups = (
                     icon: BillIcon,
                     title: 'Payment Types',
                     url: `${baseUrl}/transaction/payment-type`,
-                    userType: ['employee', 'owner'],
+                    // userType: ['employee', 'owner'],
+                    canAccess: hasPermissionFromAuth({
+                        action: 'Read',
+                        resourceType: 'PaymentType',
+                    }),
                     shortDescription: 'Configure available payment types',
                 },
                 {
@@ -159,7 +189,11 @@ export const generateSidebarGroups = (
                     url: `${baseUrl}/transaction/disbursement`,
                     type: 'item',
                     icon: HandCoinsIcon,
-                    userType: ['employee', 'owner'],
+                    // userType: ['employee', 'owner'],
+                    canAccess: hasPermissionFromAuth({
+                        action: 'Read',
+                        resourceType: 'DisburesmentType',
+                    }),
                     shortDescription: 'Manage disbursement type transactions',
                 },
                 {
@@ -167,14 +201,19 @@ export const generateSidebarGroups = (
                     title: 'Maintenance',
                     url: `${baseUrl}/transaction/maintenance`,
                     type: 'dropdown',
-                    userType: ['employee', 'owner'],
+                    // userType: ['employee', 'owner'],
                     items: [
                         {
                             title: 'Cash Count',
                             url: `/cash-count`,
                             type: 'item',
                             icon: HandCoinsIcon,
-                            userType: ['employee', 'owner'],
+                            // userType: ['employee', 'owner'],
+
+                            canAccess: hasPermissionFromAuth({
+                                action: 'Read',
+                                resourceType: 'CashCount',
+                            }),
                             shortDescription: 'Record and review cash counts',
                         },
 
@@ -183,7 +222,12 @@ export const generateSidebarGroups = (
                             url: `/financial-statement-definition`,
                             type: 'item',
                             icon: BillIcon,
-                            userType: ['employee', 'owner'],
+                            // userType: ['employee', 'owner'],
+
+                            canAccess: hasPermissionFromAuth({
+                                action: 'Read',
+                                resourceType: 'FSDefinition',
+                            }),
                             shortDescription: 'View financial statements',
                         },
                         {
@@ -191,7 +235,12 @@ export const generateSidebarGroups = (
                             url: `/general-ledger-definition`,
                             type: 'item',
                             icon: BillIcon,
-                            userType: ['employee', 'owner'],
+                            // userType: ['employee', 'owner'],
+
+                            canAccess: hasPermissionFromAuth({
+                                action: 'Read',
+                                resourceType: 'GLDefinition',
+                            }),
                             shortDescription: 'Access general ledger records',
                         },
                     ],
@@ -201,14 +250,19 @@ export const generateSidebarGroups = (
 
         {
             title: 'Members',
-            userType: ['employee', 'owner'],
+            // userType: ['employee', 'owner'],
             navItems: [
                 {
                     title: 'Members',
                     url: `${baseUrl}/view-members`,
                     type: 'item',
                     icon: UserListIcon,
-                    userType: ['employee', 'owner'],
+                    // userType: ['employee', 'owner'],
+
+                    canAccess: hasPermissionFromAuth({
+                        action: 'Read',
+                        resourceType: 'MemberProfile',
+                    }),
                     shortDescription: 'Browse all members/member profile',
                 },
                 {
@@ -216,7 +270,12 @@ export const generateSidebarGroups = (
                     url: `${baseUrl}/member-accounting-ledger`,
                     type: 'item',
                     icon: UserListIcon,
-                    userType: ['employee', 'owner'],
+                    // userType: ['employee', 'owner'],
+
+                    canAccess: hasPermissionFromAuth({
+                        action: 'Read',
+                        resourceType: 'MemberAccountingLedger',
+                    }),
                     shortDescription: 'Browse overall member accounting ledger',
                 },
                 {
@@ -224,14 +283,19 @@ export const generateSidebarGroups = (
                     url: `${baseUrl}/members`,
                     icon: MaintenanceIcon,
                     type: 'dropdown',
-                    userType: ['employee', 'owner'],
+                    // userType: ['employee', 'owner'],
                     items: [
                         {
                             title: 'Member Types',
                             url: `/member-types`,
                             type: 'item',
                             icon: UserCogIcon,
-                            userType: ['employee', 'owner'],
+                            // userType: ['employee', 'owner'],
+
+                            canAccess: hasPermissionFromAuth({
+                                action: 'Read',
+                                resourceType: 'MemberType',
+                            }),
                             shortDescription: 'Manage member types',
                         },
                         {
@@ -239,7 +303,12 @@ export const generateSidebarGroups = (
                             url: `/member-group`,
                             type: 'item',
                             icon: Users3Icon,
-                            userType: ['employee', 'owner'],
+                            // userType: ['employee', 'owner'],
+
+                            canAccess: hasPermissionFromAuth({
+                                action: 'Read',
+                                resourceType: 'MemberGroup',
+                            }),
                             shortDescription: 'Manage member groups',
                         },
                         {
@@ -247,7 +316,12 @@ export const generateSidebarGroups = (
                             url: `/member-center`,
                             type: 'item',
                             icon: UserCogIcon,
-                            userType: ['employee', 'owner'],
+                            // userType: ['employee', 'owner'],
+
+                            canAccess: hasPermissionFromAuth({
+                                action: 'Read',
+                                resourceType: 'MemberGender',
+                            }),
                             shortDescription: 'Manage member centers',
                         },
                         {
@@ -255,7 +329,12 @@ export const generateSidebarGroups = (
                             url: `/member-classification`,
                             type: 'item',
                             icon: UserTagIcon,
-                            userType: ['employee', 'owner'],
+                            // userType: ['employee', 'owner'],
+
+                            canAccess: hasPermissionFromAuth({
+                                action: 'Read',
+                                resourceType: 'MemberClassification',
+                            }),
                             shortDescription: 'Manage member classifications',
                         },
                         {
@@ -263,7 +342,12 @@ export const generateSidebarGroups = (
                             url: `/member-occupation`,
                             type: 'item',
                             icon: BriefCaseIcon,
-                            userType: ['employee', 'owner'],
+                            // userType: ['employee', 'owner'],
+
+                            canAccess: hasPermissionFromAuth({
+                                action: 'Read',
+                                resourceType: 'MemberOccupation',
+                            }),
                             shortDescription: 'Manage member occupations',
                         },
                         {
@@ -271,7 +355,12 @@ export const generateSidebarGroups = (
                             icon: GendersIcon,
                             type: 'item',
                             url: `/member-gender`,
-                            userType: ['employee', 'owner'],
+                            // userType: ['employee', 'owner'],
+
+                            canAccess: hasPermissionFromAuth({
+                                action: 'Read',
+                                resourceType: 'MemberGender',
+                            }),
                             shortDescription: 'Manage member genders',
                         },
                         {
@@ -279,7 +368,12 @@ export const generateSidebarGroups = (
                             url: `/member-department`,
                             type: 'item',
                             icon: Users3LineIcon,
-                            userType: ['employee', 'owner'],
+                            // userType: ['employee', 'owner'],
+
+                            canAccess: hasPermissionFromAuth({
+                                action: 'Read',
+                                resourceType: 'MemberDepartment',
+                            }),
                             shortDescription: 'Manage member departments',
                         },
                     ],
@@ -289,14 +383,19 @@ export const generateSidebarGroups = (
 
         {
             title: 'Accounting',
-            userType: ['employee', 'owner'],
+            // userType: ['employee', 'owner'],
             navItems: [
                 {
                     type: 'item',
                     icon: BankIcon,
                     title: 'Accounts',
                     url: `${baseUrl}/accounting/accounts`,
-                    userType: ['employee', 'owner'],
+                    // userType: ['employee', 'owner'],
+
+                    canAccess: hasPermissionFromAuth({
+                        action: 'Read',
+                        resourceType: 'Account',
+                    }),
                     shortDescription: 'View and manage accounts',
                 },
                 // {
@@ -304,7 +403,7 @@ export const generateSidebarGroups = (
                 //     icon: CalculatorIcon,
                 //     title: 'Computation Type',
                 //     url: `${baseUrl}/accounting/computation-type`,
-                //     userType: ['employee', 'owner'],
+                // userType: ['employee', 'owner'],
                 //     shortDescription: 'Configure computation types',
                 // },
                 {
@@ -312,7 +411,12 @@ export const generateSidebarGroups = (
                     icon: BookIcon,
                     title: 'Journal Voucher',
                     url: `${baseUrl}/accounting/journal-voucher`,
-                    userType: ['employee', 'owner'],
+                    // userType: ['employee', 'owner'],
+
+                    canAccess: hasPermissionFromAuth({
+                        action: 'Read',
+                        resourceType: 'JournalVoucher',
+                    }),
                     shortDescription: 'Manage journal vouchers',
                 },
                 {
@@ -320,7 +424,12 @@ export const generateSidebarGroups = (
                     icon: MoneyIcon,
                     title: 'Cash Check Voucher',
                     url: `${baseUrl}/accounting/cash-check-journal-voucher`,
-                    userType: ['employee', 'owner'],
+                    // userType: ['employee', 'owner'],
+
+                    canAccess: hasPermissionFromAuth({
+                        action: 'Read',
+                        resourceType: 'CashCheckVoucher',
+                    }),
                     shortDescription: 'Manage cash check vouchers',
                 },
                 {
@@ -328,7 +437,12 @@ export const generateSidebarGroups = (
                     icon: WrenchIcon,
                     title: 'Adjustment Entry',
                     url: `${baseUrl}/accounting/adjustment-entry`,
-                    userType: ['employee', 'owner'],
+                    // userType: ['employee', 'owner'],
+
+                    canAccess: hasPermissionFromAuth({
+                        action: 'Read',
+                        resourceType: 'AdjustmentEntry',
+                    }),
                     shortDescription: 'Manage cash adjustment entry',
                 },
             ],
@@ -336,7 +450,7 @@ export const generateSidebarGroups = (
 
         {
             title: 'Loan',
-            userType: ['employee'],
+            // userType: ['employee'],
             navItems: [
                 // {
                 //     type: 'item',
@@ -351,7 +465,12 @@ export const generateSidebarGroups = (
                     icon: MoneyCheckIcon,
                     title: 'Loans',
                     url: `${baseUrl}/loan/loans`,
-                    userType: ['employee', 'owner'],
+                    // userType: ['employee', 'owner'],
+
+                    canAccess: hasPermissionFromAuth({
+                        action: 'Read',
+                        resourceType: 'Loan',
+                    }),
                     shortDescription: 'Manage Loans / apply loan',
                 },
                 {
@@ -359,7 +478,12 @@ export const generateSidebarGroups = (
                     icon: PriceTagIcon,
                     title: 'Loan Status',
                     url: `${baseUrl}/loan/loan-status`,
-                    userType: ['employee', 'owner'],
+                    // userType: ['employee', 'owner'],
+
+                    canAccess: hasPermissionFromAuth({
+                        action: 'Read',
+                        resourceType: 'LoanStatus',
+                    }),
                     shortDescription: 'Manage Loan Status',
                 },
                 {
@@ -367,7 +491,12 @@ export const generateSidebarGroups = (
                     icon: TargetArrowIcon,
                     title: 'Loan Purpose',
                     url: `${baseUrl}/loan/loan-purpose`,
-                    userType: ['employee', 'owner'],
+                    // userType: ['employee', 'owner'],
+
+                    canAccess: hasPermissionFromAuth({
+                        action: 'Read',
+                        resourceType: 'LoanPurpose',
+                    }),
                     shortDescription: 'Manage Loan Purpose',
                 },
             ],
@@ -375,14 +504,19 @@ export const generateSidebarGroups = (
 
         {
             title: 'Schemes',
-            userType: ['employee'],
+            // userType: ['employee'],
             navItems: [
                 {
                     type: 'item',
                     icon: BookStackIcon,
                     title: 'Computation Scheme',
                     url: `${baseUrl}/schemes?tab=computation-sheet-scheme`,
-                    userType: ['employee', 'owner'],
+                    // userType: ['employee', 'owner'],
+
+                    canAccess: hasPermissionFromAuth({
+                        action: 'Read',
+                        resourceType: 'LoanScheme',
+                    }),
                     shortDescription: 'Manage Loan Computation Sheet Scheme',
                 },
                 {
@@ -390,7 +524,12 @@ export const generateSidebarGroups = (
                     icon: GridFillIcon,
                     title: 'Loan Charge Scheme',
                     url: `${baseUrl}/schemes?tab=loan-charges-scheme`,
-                    userType: ['employee', 'owner'],
+                    // userType: ['employee', 'owner'],
+
+                    canAccess: hasPermissionFromAuth({
+                        action: 'Read',
+                        resourceType: 'LoanChargeScheme',
+                    }),
                     shortDescription: 'Manage Loan Charges',
                 },
                 {
@@ -398,7 +537,12 @@ export const generateSidebarGroups = (
                     icon: CashClockIcon,
                     title: 'Time Deposit Scheme',
                     url: `${baseUrl}/schemes?tab=time-deposit-scheme`,
-                    userType: ['employee', 'owner'],
+                    // userType: ['employee', 'owner'],
+
+                    canAccess: hasPermissionFromAuth({
+                        action: 'Read',
+                        resourceType: 'TimeDepositScheme',
+                    }),
                     shortDescription: 'Manage Time Deposit Schemes',
                 },
                 {
@@ -406,7 +550,12 @@ export const generateSidebarGroups = (
                     icon: UserIcon,
                     title: 'Browse Reference',
                     url: `${baseUrl}/schemes?tab=browse-reference`,
-                    userType: ['employee', 'owner'],
+                    // userType: ['employee', 'owner'],
+
+                    canAccess: hasPermissionFromAuth({
+                        action: 'Read',
+                        resourceType: 'MemberTypeBrowseReference',
+                    }),
                     shortDescription: 'Browse Reference Data',
                 },
             ],
@@ -414,14 +563,19 @@ export const generateSidebarGroups = (
 
         {
             title: 'Transaction Batch & Entries',
-            userType: ['employee', 'owner'],
+            // userType: ['employee', 'owner'],
             navItems: [
                 {
                     type: 'item',
                     icon: LayersIcon,
                     title: 'Transaction Batch',
                     url: `${baseUrl}/transaction/transaction-batch`,
-                    userType: ['employee', 'owner'],
+                    // userType: ['employee', 'owner'],
+
+                    canAccess: hasPermissionFromAuth({
+                        action: 'Read',
+                        resourceType: 'TransactionBatch',
+                    }),
                     shortDescription: 'View transaction batches',
                 },
                 {
@@ -429,7 +583,12 @@ export const generateSidebarGroups = (
                     icon: LayersIcon,
                     title: 'Transactions',
                     url: `${baseUrl}/transaction/transactions`,
-                    userType: ['employee', 'owner'],
+                    // userType: ['employee', 'owner'],
+
+                    canAccess: hasPermissionFromAuth({
+                        action: 'Read',
+                        resourceType: 'Transactions',
+                    }),
                     shortDescription: 'View transactions',
                 },
                 {
@@ -437,7 +596,12 @@ export const generateSidebarGroups = (
                     icon: HandDropCoinsIcon,
                     title: 'Disbursement Transaction',
                     url: `${baseUrl}/transaction/disbursement-transaction`,
-                    userType: ['employee', 'owner'],
+                    // userType: ['employee', 'owner'],
+
+                    canAccess: hasPermissionFromAuth({
+                        action: 'Read',
+                        resourceType: 'DisbursementTransaction',
+                    }),
                     shortDescription: 'View Disbursement transactions',
                 },
                 {
@@ -446,7 +610,12 @@ export const generateSidebarGroups = (
                     // icon: LayersIcon,
                     title: 'General Ledger Entries',
                     url: `${baseUrl}/general-ledger`,
-                    userType: ['employee', 'owner'],
+                    // userType: ['employee', 'owner'],
+
+                    canAccess: hasPermissionFromAuth({
+                        action: 'Read',
+                        resourceType: 'GeneralLedger',
+                    }),
                     shortDescription: 'View general ledger',
                 },
             ],
@@ -454,14 +623,19 @@ export const generateSidebarGroups = (
 
         {
             title: 'Employee',
-            userType: ['employee', 'owner'],
+            // userType: ['employee', 'owner'],
             navItems: [
                 {
                     title: 'Employees',
                     url: `${baseUrl}/employees/view-employees`,
                     icon: UserListIcon,
                     type: 'item',
-                    userType: ['employee', 'owner'],
+                    // userType: ['employee', 'owner'],
+
+                    canAccess: hasPermissionFromAuth({
+                        action: 'Read',
+                        resourceType: 'Employee',
+                    }),
                     shortDescription: 'Browse/view all employees',
                 },
                 {
@@ -469,7 +643,12 @@ export const generateSidebarGroups = (
                     icon: ShieldIcon,
                     type: 'item',
                     url: `${baseUrl}/permission-template`,
-                    userType: ['employee', 'owner'],
+                    // userType: ['employee', 'owner'],
+
+                    canAccess: hasPermissionFromAuth({
+                        action: 'Read',
+                        resourceType: 'PermissionTemplate',
+                    }),
                     shortDescription: 'Manage role template permissions',
                 },
                 {
@@ -477,7 +656,12 @@ export const generateSidebarGroups = (
                     title: 'Employee Footsteps',
                     icon: FootstepsIcon,
                     url: `${baseUrl}/employee-footsteps`,
-                    userType: ['owner', 'employee'],
+                    // userType: ['owner', 'employee'],
+
+                    canAccess: hasPermissionFromAuth({
+                        action: 'Read',
+                        resourceType: 'EmployeeFootstep',
+                    }),
                     shortDescription: 'Track all employee footsteps',
                 },
             ],
@@ -485,14 +669,19 @@ export const generateSidebarGroups = (
 
         {
             title: 'Maintenance',
-            userType: ['employee'],
+            // userType: ['employee'],
             navItems: [
                 {
                     type: 'item',
                     icon: BillIcon,
                     title: 'Bills & Coins',
                     url: `${baseUrl}/maintenance/bills-and-coins`,
-                    userType: ['employee'],
+                    // userType: ['employee'],
+
+                    canAccess: hasPermissionFromAuth({
+                        action: 'Read',
+                        resourceType: 'BillsAndCoins',
+                    }),
                     shortDescription: 'Manage bills and coins',
                 },
                 {
@@ -500,7 +689,12 @@ export const generateSidebarGroups = (
                     icon: TagIcon,
                     title: 'Tag Templates',
                     url: `${baseUrl}/maintenance/tag-template`,
-                    userType: ['employee', 'owner'],
+                    // userType: ['employee', 'owner'],
+
+                    canAccess: hasPermissionFromAuth({
+                        action: 'Read',
+                        resourceType: 'TagTemplate',
+                    }),
                     shortDescription: 'Manage Tag Templates',
                 },
                 {
@@ -508,7 +702,12 @@ export const generateSidebarGroups = (
                     icon: HouseLockIcon,
                     title: 'Collateral',
                     url: `${baseUrl}/maintenance/collateral`,
-                    userType: ['employee', 'owner'],
+                    // userType: ['employee', 'owner'],
+
+                    canAccess: hasPermissionFromAuth({
+                        action: 'Read',
+                        resourceType: 'Collateral',
+                    }),
                     shortDescription: 'Manage common collaterals for loans',
                 },
                 {
@@ -516,7 +715,12 @@ export const generateSidebarGroups = (
                     icon: BankDuoToneIcon,
                     title: 'Banks',
                     url: `${baseUrl}/maintenance/banks`,
-                    userType: ['employee', 'owner'],
+                    // userType: ['employee', 'owner'],
+
+                    canAccess: hasPermissionFromAuth({
+                        action: 'Read',
+                        resourceType: 'Bank',
+                    }),
                     shortDescription: 'Manage bank records',
                 },
                 {
@@ -524,7 +728,12 @@ export const generateSidebarGroups = (
                     icon: CalendarDotsIcon,
                     title: 'Holidays',
                     url: `${baseUrl}/maintenance/holidays`,
-                    userType: ['employee', 'owner'],
+                    // userType: ['employee', 'owner'],
+
+                    canAccess: hasPermissionFromAuth({
+                        action: 'Read',
+                        resourceType: 'Holiday',
+                    }),
                     shortDescription: 'Manage holiday schedules',
                 },
                 {
@@ -532,14 +741,19 @@ export const generateSidebarGroups = (
                     icon: UserLockIcon,
                     type: 'dropdown',
                     url: `${baseUrl}/maintenance/`,
-                    userType: ['employee', 'owner'],
+                    // userType: ['employee', 'owner'],
                     items: [
                         {
                             type: 'item',
                             icon: QrCodeIcon,
                             title: 'invitation Code',
                             url: `/invitation-code`,
-                            userType: ['employee', 'owner'],
+                            // userType: ['employee', 'owner'],
+
+                            canAccess: hasPermissionFromAuth({
+                                action: 'Read',
+                                resourceType: 'InvitationCode',
+                            }),
                             shortDescription: 'Manage invitation codes',
                         },
                     ],
@@ -549,20 +763,30 @@ export const generateSidebarGroups = (
                     icon: AccountSetupIcon,
                     type: 'dropdown',
                     url: `${baseUrl}/maintenance/`,
-                    userType: ['employee', 'owner'],
+                    // userType: ['employee', 'owner'],
                     items: [
                         {
                             type: 'item',
                             title: 'Account Classification',
                             url: `/account-classification`,
-                            userType: ['employee', 'owner'],
+                            // userType: ['employee', 'owner'],
+
+                            canAccess: hasPermissionFromAuth({
+                                action: 'Read',
+                                resourceType: 'AccountClassification',
+                            }),
                             shortDescription: 'Manage account classifications',
                         },
                         {
                             type: 'item',
                             title: 'Account Category',
                             url: `/account-category`,
-                            userType: ['employee', 'owner'],
+                            // userType: ['employee', 'owner'],
+
+                            canAccess: hasPermissionFromAuth({
+                                action: 'Read',
+                                resourceType: 'AccountCategory',
+                            }),
                             shortDescription: 'Manage account categories',
                         },
                     ],
@@ -572,21 +796,31 @@ export const generateSidebarGroups = (
                     icon: PeopleGroupIcon,
                     title: 'Company',
                     url: `${baseUrl}/maintenance/company`,
-                    userType: ['employee', 'owner'],
+                    // userType: ['employee', 'owner'],
+
+                    canAccess: hasPermissionFromAuth({
+                        action: 'Read',
+                        resourceType: 'Company',
+                    }),
                     shortDescription: 'Manage company settings',
                 },
             ],
         },
         {
             title: 'Timesheet',
-            userType: ['employee', 'member'],
+            // userType: ['employee', 'member'],
             navItems: [
                 {
                     type: 'item',
                     title: 'Timesheets',
                     icon: CalendarDotsIcon,
                     url: `${baseUrl}/timesheets`,
-                    userType: ['owner', 'employee'],
+                    // userType: ['owner', 'employee'],
+
+                    canAccess: hasPermissionFromAuth({
+                        action: 'Read',
+                        resourceType: 'Timesheet',
+                    }),
                     shortDescription: 'View all timesheet records',
                 },
                 {
@@ -594,7 +828,12 @@ export const generateSidebarGroups = (
                     title: 'My Timesheet',
                     icon: CalendarDotsIcon,
                     url: `${baseUrl}/my-timesheet`,
-                    userType: ['employee', 'member'],
+                    // userType: ['employee', 'member'],
+
+                    canAccess: hasPermissionFromAuth({
+                        action: 'Read',
+                        resourceType: 'MyTimesheet',
+                    }),
                     shortDescription: 'View your personal timesheet',
                 },
             ],
@@ -602,13 +841,18 @@ export const generateSidebarGroups = (
 
         {
             title: 'Me',
-            userType: ['employee', 'member'],
+            // userType: ['employee', 'member'],
             navItems: [
                 {
                     type: 'item',
                     icon: BookOpenIcon,
-                    userType: ['employee', 'owner'],
+                    // userType: ['employee', 'owner'],
                     title: 'My GL Entries',
+
+                    canAccess: hasPermissionFromAuth({
+                        action: 'Read',
+                        resourceType: 'MyGeneralLedger',
+                    }),
                     url: `${baseUrl}/my-general-ledger-entries`,
                 },
                 {
@@ -616,7 +860,12 @@ export const generateSidebarGroups = (
                     icon: HandDropCoinsIcon,
                     title: 'My Disbursement Transaction',
                     url: `${baseUrl}/transaction/disbursement-transaction`,
-                    userType: ['employee', 'owner'],
+                    // userType: ['employee', 'owner'],
+
+                    canAccess: hasPermissionFromAuth({
+                        action: 'Read',
+                        resourceType: 'MyDisbursements',
+                    }),
                     shortDescription: 'View Disbursement transactions',
                 },
                 {
@@ -624,7 +873,12 @@ export const generateSidebarGroups = (
                     title: 'My Branch Footsteps',
                     icon: FootstepsIcon,
                     url: `${baseUrl}/my-branch-footsteps`,
-                    userType: ['employee', 'member', 'owner'],
+                    // userType: ['employee', 'member', 'owner'],
+
+                    canAccess: hasPermissionFromAuth({
+                        action: 'Read',
+                        resourceType: 'MyBranchFootsteps',
+                    }),
                     shortDescription: 'Track your own footsteps',
                 },
                 {
@@ -632,7 +886,12 @@ export const generateSidebarGroups = (
                     title: 'All My Footsteps',
                     icon: FootstepsIcon,
                     url: `${baseUrl}/my-all-footsteps`,
-                    userType: ['employee', 'member', 'owner'],
+                    // userType: ['employee', 'member', 'owner'],
+
+                    canAccess: hasPermissionFromAuth({
+                        action: 'Read',
+                        resourceType: 'AllMyFootsteps',
+                    }),
                     shortDescription:
                         'Track your all footsteps from all branch and orgs',
                 },
@@ -641,7 +900,16 @@ export const generateSidebarGroups = (
                     title: 'Settings',
                     icon: SettingsIcon,
                     url: `${baseUrl}/settings`,
-                    userType: ['employee', 'member', 'owner'],
+                    // userType: ['employee', 'member', 'owner'],
+                    canAccess:
+                        hasPermissionFromAuth({
+                            action: 'Read',
+                            resourceType: 'BranchSettings',
+                        }) ||
+                        hasPermissionFromAuth({
+                            action: 'Read',
+                            resourceType: 'MySettings',
+                        }),
                     shortDescription:
                         'Application settings and preferences for your settings or branch settings',
                 },
@@ -650,27 +918,39 @@ export const generateSidebarGroups = (
 
         {
             title: 'System',
-            userType: ['employee', 'member'],
+            // userType: ['employee', 'member'],
             navItems: [
                 {
                     type: 'item',
                     icon: PercentIcon,
-                    userType: ['employee', 'owner'],
+                    // userType: ['employee', 'owner'],
                     title: 'Generate Savings Interest',
+                    canAccess: hasPermissionFromAuth({
+                        action: 'Read',
+                        resourceType: 'GenerateSavingsInterest',
+                    }),
                     url: `${baseUrl}/generate-savings-interest`,
                 },
                 {
                     type: 'item',
                     icon: HandHeartIcon,
-                    userType: ['employee', 'owner'],
+                    // userType: ['employee', 'owner'],
                     title: 'Generate Mutual Fund/Aid',
+                    canAccess: hasPermissionFromAuth({
+                        action: 'Read',
+                        resourceType: 'GenerateMutualFundAid',
+                    }),
                     url: `${baseUrl}/generate-mutual-aid`,
                 },
                 {
                     type: 'item',
                     icon: BookIcon,
-                    userType: ['employee', 'owner'],
+                    // userType: ['employee', 'owner'],
                     title: 'Account Transaction',
+                    canAccess: hasPermissionFromAuth({
+                        action: 'Read',
+                        resourceType: 'AccountTransaction',
+                    }),
                     url: `${baseUrl}/account-transaction`,
                 },
             ],
@@ -678,14 +958,18 @@ export const generateSidebarGroups = (
 
         {
             title: 'Developers',
-            userType: ['employee'],
+            // userType: ['employee'],
             navItems: [
                 {
                     type: 'item',
                     icon: CurlyBracketIcon,
                     title: 'API Documentation',
                     url: `${baseUrl}/dev/documentation`,
-                    userType: ['employee', 'owner'],
+                    // userType: ['employee', 'owner'],
+                    canAccess: hasPermissionFromAuth({
+                        action: 'Read',
+                        resourceType: 'ApiDoc',
+                    }),
                     shortDescription: 'View developer api documentation',
                 },
             ],
@@ -694,7 +978,7 @@ export const generateSidebarGroups = (
 
     return sidebarGroups
         .map((group) => {
-            if (!group.userType.includes(userType)) return null
+            // if (!group.userType.includes(userType)) return null
 
             const filteredNavItems = filterNavItemsByUserType(
                 group.navItems,
