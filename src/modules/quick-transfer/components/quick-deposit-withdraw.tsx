@@ -28,7 +28,12 @@ const QuickDepositWithdraw = ({ mode }: { mode: TPaymentMode }) => {
     return (
         <div>
             <PageContainer className="flex w-full overflow-hidden!">
-                <PermissionGuard action={'Read'} resourceType="Transaction">
+                <PermissionGuard
+                    action={'Read'}
+                    resourceType={
+                        mode === 'deposit' ? 'QuickDeposit' : 'QuickWithdraw'
+                    }
+                >
                     <div className="flex w-full flex-col space-y-1">
                         <div className="flex justify-start items-center space-x-2 w-full px-5">
                             {mode === 'deposit' ? (

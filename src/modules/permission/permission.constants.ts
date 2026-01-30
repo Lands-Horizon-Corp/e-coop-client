@@ -114,6 +114,13 @@ type PermissionResourceAction = {
 
 export const PERMISSION_ALL_RESOURCE_ACTION = [
     {
+        resource: 'Dashboard',
+        label: 'Dashboard Module',
+        description: 'Allow access to Dashboard module',
+        supportedActions: generateBaseAction(),
+    },
+
+    {
         resource: 'Account',
         label: 'Account Module',
         description: 'Accounts',
@@ -288,6 +295,18 @@ export const PERMISSION_ALL_RESOURCE_ACTION = [
         label: 'Transaction/Payment Module',
         description:
             'Allow access/action for transaction(payment, withdraw, deposit) module',
+        supportedActions: ['Read', 'Create', 'Update'] as TPermissionAction[],
+    },
+    {
+        resource: 'QuickWithdraw',
+        label: 'Quick Withdraw Module',
+        description: 'Allow access/action for Quick Withdraw module',
+        supportedActions: ['Read', 'Create', 'Update'] as TPermissionAction[],
+    },
+    {
+        resource: 'QuickDeposit',
+        label: 'Quick Deposit Module',
+        description: 'Allow access/action for Quick Deposit module',
         supportedActions: ['Read', 'Create', 'Update'] as TPermissionAction[],
     },
 
@@ -684,6 +703,70 @@ export const PERMISSION_ALL_RESOURCE_ACTION = [
         label: 'My General Ledger Entries Module',
         description: 'Allow user to access Own General Ledger Entries Module',
         supportedActions: ['Read'] as TPermissionAction[],
+    },
+    {
+        resource: 'MyDisbursements',
+        label: 'My Disbursements',
+        description:
+            'Allow Employee employee to access their own Disbursements',
+        supportedActions: ['Read'] as TPermissionAction[],
+    },
+    {
+        resource: 'AllMyFootsteps',
+        label: 'My All Footsteps',
+        description:
+            'Allow Employee employee to access all of their own Footsteps',
+        supportedActions: ['Read'] as TPermissionAction[],
+    },
+    {
+        resource: 'MyBranchFootsteps',
+        label: 'My Branch Footsteps Module',
+        description: 'Allow access to their current branch footsteps',
+        supportedActions: ['Read'] as TPermissionAction[],
+    },
+    {
+        resource: 'BranchSettings',
+        label: 'Branch Settings Module',
+        description: 'Allow access to branch settings',
+        supportedActions: generateBaseAction({
+            excludeActions: generateOwnActions(),
+        }) as TPermissionAction[],
+    },
+    {
+        resource: 'MySettings',
+        label: 'My Settings Module',
+        description: 'Allow access to their own settings module',
+        supportedActions: generateBaseAction({
+            excludeActions: ['Export', 'OwnExport'],
+        }) as TPermissionAction[],
+    },
+
+    {
+        resource: 'GenerateSavingsInterest',
+        label: 'Generate Savings Interest',
+        description: 'Allow access/action for generate savings interest module',
+        supportedActions: generateBaseAction() as TPermissionAction[],
+    },
+    {
+        resource: 'GenerateMutualFundAid',
+        label: 'Generate Mutual Fund/Aid',
+        description:
+            'Allow access/action for generating Mutual Fund/Aid module',
+        supportedActions: generateBaseAction({
+            excludeActions: ['Export', 'OwnExport'],
+        }) as TPermissionAction[],
+    },
+    {
+        resource: 'ApiDoc',
+        label: 'API Documentation',
+        description: 'Allow access/action for API Documentation module',
+        supportedActions: ['Read'] as TPermissionAction[],
+    },
+    {
+        resource: 'ApiKeyGen',
+        label: 'API Key Generation',
+        description: 'Allow generate of API Key',
+        supportedActions: ['Create'] as TPermissionAction[],
     },
 
     {
