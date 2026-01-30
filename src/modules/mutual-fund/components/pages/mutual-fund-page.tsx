@@ -1,6 +1,10 @@
 import { useQueryClient } from '@tanstack/react-query'
 
-import { useAuthUserWithOrgBranch } from '@/modules/authentication/authgentication.store'
+import {
+    hasPermissionFromAuth,
+    useAuthUserWithOrgBranch,
+} from '@/modules/authentication/authgentication.store'
+import PermissionGuard from '@/modules/permission/components/permission-guard'
 
 import PageContainer from '@/components/containers/page-container'
 
@@ -47,24 +51,33 @@ const MutualFundPage = () => {
 
     return (
         <PageContainer>
-            <MutualFundCreateUpdateFormModal
-                formProps={{
-                    defaultValues: {
-                        account: compassion_fund_account,
-                        account_id: compassion_fund_account_id,
-                    },
-                    onSuccess: () => createModal.onOpenChange(false),
-                }}
-                {...createModal}
-            />
-            <MutualFundTable
-                className="max-h-[90vh] min-h-[90vh] w-full"
-                toolbarProps={{
-                    createActionProps: {
-                        onClick: () => createModal.onOpenChange(true),
-                    },
-                }}
-            />
+            <PermissionGuard
+                action="Read"
+                resourceType="GenerateSavingsInterest"
+            >
+                <MutualFundCreateUpdateFormModal
+                    formProps={{
+                        defaultValues: {
+                            account: compassion_fund_account,
+                            account_id: compassion_fund_account_id,
+                        },
+                        onSuccess: () => createModal.onOpenChange(false),
+                    }}
+                    {...createModal}
+                />
+                <MutualFundTable
+                    className="max-h-[90vh] min-h-[90vh] w-full"
+                    toolbarProps={{
+                        createActionProps: {
+                            onClick: () => createModal.onOpenChange(true),
+                            disabled: !hasPermissionFromAuth({
+                                action: 'Create',
+                                resourceType: 'GenerateMutualFundAid',
+                            }),
+                        },
+                    }}
+                />
+            </PermissionGuard>
         </PageContainer>
     )
 }
