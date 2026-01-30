@@ -1,6 +1,7 @@
 import { useQueryClient } from '@tanstack/react-query'
 
 import { useAuthUserWithOrgBranch } from '@/modules/authentication/authgentication.store'
+import PermissionGuard from '@/modules/permission/components/permission-guard'
 
 import PageContainer from '@/components/containers/page-container'
 
@@ -38,11 +39,13 @@ const BranchTimesheetPage = () => {
 
     return (
         <PageContainer>
-            <TimesheetTable
-                actionComponent={TimesheetAction}
-                className="max-h-[90vh] min-h-[90vh] w-full"
-                mode="all"
-            />
+            <PermissionGuard action="Read" resourceType="Timesheet">
+                <TimesheetTable
+                    actionComponent={TimesheetAction}
+                    className="max-h-[90vh] min-h-[90vh] w-full"
+                    mode="all"
+                />
+            </PermissionGuard>
         </PageContainer>
     )
 }

@@ -7,6 +7,7 @@ import ARTWORK_TIME_IN_OUT from '@/assets/artworks/artwork-time-in-out.svg'
 import ARTWORK_TIMED_IN from '@/assets/artworks/artwork-timed-in.svg'
 import { toReadableDateTime } from '@/helpers/date-utils'
 import { cn } from '@/helpers/tw-utils'
+import { hasPermissionFromAuth } from '@/modules/authentication/authgentication.store'
 import { ITimesheet, useCurrentTimesheet } from '@/modules/timesheet'
 import useActionSecurityStore from '@/store/action-security-store'
 
@@ -119,7 +120,26 @@ const WorkTimer = ({ className }: Props) => {
             ) : (
                 <Button
                     className="gap-x-2"
-                    disabled={timesheet && !canTimeOut}
+                    disabled={
+                        // component fresh mount, check first server kung meron existing timed in time sheet
+                        // for current user
+                        (isPending && !timesheet) ||
+                        // timesheet exists → and not loading then check time out
+                        (timesheet &&
+                            (!canTimeOut ||
+                                !hasPermissionFromAuth({
+                                    action: 'OwnUpdate',
+                                    resourceType: 'TimeInOut',
+                                    resource: timesheet,
+                                }))) ||
+                        // no timesheet, not loading → and check if can create timesheet
+                        (!timesheet &&
+                            !isPending &&
+                            !hasPermissionFromAuth({
+                                action: 'Create',
+                                resourceType: 'TimeInOut',
+                            }))
+                    }
                     onClick={() =>
                         onOpenSecurityAction({
                             title: 'Time In / Time Out',

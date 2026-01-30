@@ -1,4 +1,5 @@
 import { cn } from '@/helpers/tw-utils'
+import { hasPermissionFromAuth } from '@/modules/authentication/authgentication.store'
 import { useCurrentTimesheet } from '@/modules/timesheet'
 import WorkTimer from '@/modules/timesheet/components/worktimer'
 
@@ -22,7 +23,13 @@ const NavTimeInBar = () => {
                         className={cn(
                             'group relative border gap-x-2 rounded-lg'
                         )}
-                        disabled={isLoading && !timesheet}
+                        disabled={
+                            (isLoading && !timesheet) ||
+                            !hasPermissionFromAuth({
+                                action: ['Create', 'Read', 'Update'],
+                                resourceType: 'TimeInOut',
+                            })
+                        }
                         hoverVariant="primary"
                         size="icon-sm"
                         variant="outline-ghost"
@@ -38,7 +45,6 @@ const NavTimeInBar = () => {
                         ) : (
                             <ClockIcon />
                         )}
-                        {/* Work Time */}
                     </Button>
                 </PopoverTrigger>
                 <PopoverContent
