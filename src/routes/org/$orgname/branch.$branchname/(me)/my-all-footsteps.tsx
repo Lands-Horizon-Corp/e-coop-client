@@ -4,6 +4,7 @@ import { createFileRoute } from '@tanstack/react-router'
 import { useAuthUser } from '@/modules/authentication/authgentication.store'
 import FootstepTable from '@/modules/footstep/components/footsteps-table'
 import FootstepAction from '@/modules/footstep/components/footsteps-table/row-action-context'
+import PermissionGuard from '@/modules/permission/components/permission-guard'
 
 import PageContainer from '@/components/containers/page-container'
 
@@ -41,11 +42,13 @@ function RouteComponent() {
 
     return (
         <PageContainer>
-            <FootstepTable
-                actionComponent={FootstepAction}
-                className="max-h-[90vh] min-h-[90vh] w-full"
-                mode="me"
-            />
+            <PermissionGuard action="Read" resourceType="AllMyFootsteps">
+                <FootstepTable
+                    actionComponent={FootstepAction}
+                    className="max-h-[90vh] min-h-[90vh] w-full"
+                    mode="me"
+                />
+            </PermissionGuard>
         </PageContainer>
     )
 }
