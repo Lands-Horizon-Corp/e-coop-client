@@ -1,5 +1,7 @@
 import { useState } from 'react'
 
+import PermissionGuard from '@/modules/permission/components/permission-guard'
+
 import PageContainer from '@/components/containers/page-container'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 
@@ -29,47 +31,49 @@ const GeneralLedgerPage = () => {
 
     return (
         <PageContainer>
-            <Tabs
-                className="flex-row min-w-0 max-w-full"
-                defaultValue="explore"
-                onValueChange={(selectedValue) =>
-                    setSelectedTabs(selectedValue)
-                }
-                value={selectedTabs}
-            >
-                <TabsList className="bg-background shrink-0 h-full flex-col rounded-none p-0">
+            <PermissionGuard action="Read" resourceType="GeneralLedger">
+                <Tabs
+                    className="flex-row min-w-0 max-w-full"
+                    defaultValue="explore"
+                    onValueChange={(selectedValue) =>
+                        setSelectedTabs(selectedValue)
+                    }
+                    value={selectedTabs}
+                >
+                    <TabsList className="bg-background shrink-0 h-full flex-col rounded-none p-0">
+                        {tabs.map((tab) => (
+                            <TabsTrigger
+                                className="bg-background data-[state=active]:border-primary dark:data-[state=active]:border-primary h-full w-full justify-start rounded-none border-0 border-l-2 border-transparent data-[state=active]:shadow-none"
+                                key={tab.value}
+                                value={tab.value}
+                            >
+                                {tab.name}
+                            </TabsTrigger>
+                        ))}
+                    </TabsList>
+
                     {tabs.map((tab) => (
-                        <TabsTrigger
-                            className="bg-background data-[state=active]:border-primary dark:data-[state=active]:border-primary h-full w-full justify-start rounded-none border-0 border-l-2 border-transparent data-[state=active]:shadow-none"
+                        <TabsContent
+                            className="flex-1 min-w-0"
                             key={tab.value}
                             value={tab.value}
                         >
-                            {tab.name}
-                        </TabsTrigger>
+                            <GeneralLedgerTable
+                                actionComponent={GeneralLedgerAction}
+                                className="max-h-[90vh] min-h-[90vh] min-w-0 max-w-full "
+                                entryType={
+                                    (tab.value === ''
+                                        ? undefined
+                                        : tab.value) as TEntryType
+                                }
+                                excludeColumnIds={['balance']}
+                                mode="branch"
+                                RowContextComponent={GeneralLedgerRowContext}
+                            />
+                        </TabsContent>
                     ))}
-                </TabsList>
-
-                {tabs.map((tab) => (
-                    <TabsContent
-                        className="flex-1 min-w-0"
-                        key={tab.value}
-                        value={tab.value}
-                    >
-                        <GeneralLedgerTable
-                            actionComponent={GeneralLedgerAction}
-                            className="max-h-[90vh] min-h-[90vh] min-w-0 max-w-full "
-                            entryType={
-                                (tab.value === ''
-                                    ? undefined
-                                    : tab.value) as TEntryType
-                            }
-                            excludeColumnIds={['balance']}
-                            mode="branch"
-                            RowContextComponent={GeneralLedgerRowContext}
-                        />
-                    </TabsContent>
-                ))}
-            </Tabs>
+                </Tabs>
+            </PermissionGuard>
         </PageContainer>
     )
 }
