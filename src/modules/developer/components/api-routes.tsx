@@ -5,6 +5,7 @@ import Fuse from 'fuse.js'
 
 import { API_URL, APP_VERSION } from '@/constants'
 import { cn, formatNumber } from '@/helpers'
+import { hasPermissionFromAuth } from '@/modules/authentication/authgentication.store'
 import APIRequestMethodBadge, {
     REQUEST_METHOD,
 } from '@/modules/developer/components/api-request-method-badge'
@@ -656,6 +657,12 @@ const APIRoutes = ({ className }: Props) => {
                             />
                         </div>
                         <Button
+                            disabled={
+                                !hasPermissionFromAuth({
+                                    action: 'Create',
+                                    resourceType: 'ApiKeyGen',
+                                })
+                            }
                             onClick={() => apiKeyGenModal.onOpenChange(true)}
                             variant="secondary"
                         >
