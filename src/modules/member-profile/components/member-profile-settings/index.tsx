@@ -89,8 +89,8 @@ const SettingsTabs: {
         Component: (props) => <MemberAccountRelationship {...props} />,
     },
     {
-        value: 'user-account',
-        title: 'User Account',
+        value: 'member-portal-account',
+        title: 'Member Portal Account',
         Icon: UserIcon,
         Component: (props) => <MemberUserAccount {...props} />,
     },
