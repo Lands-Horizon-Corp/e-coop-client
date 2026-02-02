@@ -251,7 +251,10 @@ const UserOrgSettingsForm = ({
                                 render={({ field }) => {
                                     const localValue = field.value
                                         ? new Date(field.value)
-                                              .toISOString()
+                                              .toLocaleString('sv-SE', {
+                                                  hour12: false,
+                                              })
+                                              .replace(' ', 'T')
                                               .slice(0, 16)
                                         : ''
 
