@@ -15,6 +15,7 @@ import {
     CreditCardIcon,
     DollarIcon,
     HandCoinsIcon,
+    IdCardIcon,
     InfoIcon,
     MoneyCheckIcon,
     PercentIcon,
@@ -125,6 +126,14 @@ const BranchSettingsForm = ({
             check_voucher_general_or_start: 0,
             check_voucher_general_or_current: 0,
             check_voucher_general_padding: 0,
+
+            // MEMBER PB GENERATOR
+            member_profile_passbook_allow_user_input: false,
+            member_profile_passbook_or_unique: false,
+            member_profile_passbook_prefix: '',
+            member_profile_passbook_or_start: 0,
+            member_profile_passbook_or_current: 0,
+            member_profile_passbook_padding: 0,
 
             // Others
             loan_applied_equal_to_balance: true,
@@ -255,6 +264,105 @@ const BranchSettingsForm = ({
                             )}
                         />
                     </div>
+                    <Separator />
+
+                    {/* Member Passbook Number Settings */}
+                    <div className="space-y-4 p-4 bg-secondary/60 dark:bg-popover rounded-xl">
+                        <div className="flex items-center gap-3">
+                            <div className="size-fit rounded-full bg-primary/40 p-2 dark:bg-primary/40/20">
+                                <IdCardIcon className="h-5 w-5 text-primary dark:text-primary" />
+                            </div>
+                            <div>
+                                <h3 className="text-lg font-semibold">
+                                    Member Passbook Number Settings
+                                </h3>
+                                <p className="text-sm text-muted-foreground">
+                                    Configure passbook number generation and
+                                    assignment rules
+                                </p>
+                            </div>
+                        </div>
+
+                        <div className="grid gap-x-4 gap-y-3 md:grid-cols-4">
+                            <FormFieldWrapper
+                                control={form.control}
+                                label="Start Number"
+                                name="member_profile_passbook_or_start"
+                                render={({ field }) => (
+                                    <Input
+                                        {...field}
+                                        disabled={isDisabled(field.name)}
+                                        min="0"
+                                        placeholder="Start number"
+                                        type="text"
+                                    />
+                                )}
+                            />
+
+                            <FormFieldWrapper
+                                control={form.control}
+                                label="Current Number"
+                                name="member_profile_passbook_or_current"
+                                render={({ field }) => (
+                                    <Input
+                                        {...field}
+                                        disabled={isDisabled(field.name)}
+                                        min="0"
+                                        placeholder="Current number"
+                                        type="text"
+                                    />
+                                )}
+                            />
+
+                            <FormFieldWrapper
+                                control={form.control}
+                                label="Number Padding"
+                                name="member_profile_passbook_padding"
+                                render={({ field }) => (
+                                    <Input
+                                        {...field}
+                                        disabled={isDisabled(field.name)}
+                                        min="0"
+                                        placeholder="Padding length"
+                                        type="text"
+                                    />
+                                )}
+                            />
+
+                            <FormFieldWrapper
+                                control={form.control}
+                                label="Prefix"
+                                name="member_profile_passbook_prefix"
+                                render={({ field }) => (
+                                    <Input
+                                        {...field}
+                                        disabled={isDisabled(field.name)}
+                                        placeholder="Prefix (optional)"
+                                        type="text"
+                                    />
+                                )}
+                            />
+                        </div>
+
+                        <div className="space-y-3">
+                            <SwitchFormField
+                                description="Allow users to manually assign passbook numbers"
+                                form={form}
+                                isDisabled={isDisabled}
+                                label="Allow Manual Input"
+                                name="member_profile_passbook_allow_user_input"
+                            />
+
+                            <SwitchFormField
+                                description="Ensure generated passbook numbers are unique"
+                                form={form}
+                                isDisabled={isDisabled}
+                                label="Enforce Unique Numbers"
+                                name="member_profile_passbook_or_unique"
+                            />
+                        </div>
+                    </div>
+
                     <Separator />
 
                     <div className="space-y-4 p-4 bg-secondary/60 dark:bg-popover rounded-xl">

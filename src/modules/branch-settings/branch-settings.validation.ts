@@ -59,9 +59,18 @@ export const BranchSettingRequestSchema = z.object({
     check_voucher_general_or_current: z.coerce.number(),
     check_voucher_general_padding: z.coerce.number(),
 
+    // FOR MEMBER DEFAULT CREATIONS
     default_member_gender_id: entityIdSchema.optional(),
     default_member_type_id: entityIdSchema.optional(),
     default_member_type: z.any(),
+
+    // FOR MEMBER PB GENERATION
+    member_profile_passbook_allow_user_input: z.boolean(),
+    member_profile_passbook_or_unique: z.boolean(),
+    member_profile_passbook_prefix: z.string().optional().or(z.literal('')),
+    member_profile_passbook_or_start: z.coerce.number(),
+    member_profile_passbook_or_current: z.coerce.number(),
+    member_profile_passbook_padding: z.coerce.number(),
 
     loan_applied_equal_to_balance: z.boolean(),
     annual_divisor: z.coerce.number(),
