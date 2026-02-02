@@ -113,7 +113,7 @@ export const QuickCreateMemberProfileSchema = z
             )
             .transform((val) => new Date(val).toISOString()),
         sex: SexSchema,
-        member_gender_id: entityIdSchema.optional(),
+        // member_gender_id: entityIdSchema.optional(),
 
         civil_status: civilStatusSchema,
         occupation_id: entityIdSchema.optional(),

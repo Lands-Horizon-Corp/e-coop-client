@@ -131,7 +131,10 @@ const MemberMembershipForm = ({
                                     <Input
                                         {...field}
                                         className="bg-background"
-                                        disabled={isDisabled(field.name)}
+                                        disabled={
+                                            isDisabled(field.name) ||
+                                            form.watch('status') === 'verified'
+                                        }
                                         id={field.name}
                                         placeholder="Passbook"
                                     />

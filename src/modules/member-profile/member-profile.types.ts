@@ -11,6 +11,7 @@ import {
 
 import { IAccount } from '../account'
 import { IBranch } from '../branch'
+import { IMemberPassbookSettings } from '../branch-settings'
 import { IMedia } from '../media/media.types'
 import {
     IMemberAddress,
@@ -276,3 +277,9 @@ export interface IMemberProfileMediasRequest {
     media_id?: TEntityId
     signature_media_id?: TEntityId
 }
+
+export type TMemberPassbookGenerateSettings = Omit<
+    IMemberPassbookSettings,
+    'check_voucher_general_or_unique'
+> &
+    Omit<IMemberPassbookSettings, 'member_profile_passbook_or_unique'>
