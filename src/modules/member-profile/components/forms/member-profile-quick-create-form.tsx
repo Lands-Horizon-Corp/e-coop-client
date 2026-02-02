@@ -10,7 +10,7 @@ import {
     ChecklistTemplate,
     ValueChecklistMeter,
 } from '@/modules/authentication/components/value-checklist-indicator'
-import MemberGenderCombobox from '@/modules/member-gender/components/member-gender-combobox'
+// import MemberGenderCombobox from '@/modules/member-gender/components/member-gender-combobox'
 import MemberTypeCombobox from '@/modules/member-type/components/member-type-combobox'
 import { HandCoinsIcon, PieChartIcon } from 'lucide-react'
 
@@ -273,7 +273,7 @@ const MemberProfileQuickCreateForm = ({
                                     />
                                 )}
                             />
-                            <FormFieldWrapper
+                            {/* <FormFieldWrapper
                                 control={form.control}
                                 label="Gender"
                                 name="member_gender_id"
@@ -287,7 +287,7 @@ const MemberProfileQuickCreateForm = ({
                                         placeholder="Select Gender"
                                     />
                                 )}
-                            />
+                            /> */}
                             <FormFieldWrapper
                                 className="relative"
                                 control={form.control}
@@ -299,19 +299,6 @@ const MemberProfileQuickCreateForm = ({
                                     <InputDate
                                         {...field}
                                         value={field.value ?? ''}
-                                    />
-                                )}
-                            />
-                            <FormFieldWrapper
-                                className="col-span-1"
-                                control={form.control}
-                                label="Sex *"
-                                name="sex"
-                                render={({ field }) => (
-                                    <SexCombobox
-                                        {...field}
-                                        disabled={isDisabled(field.name)}
-                                        placeholder="Sex"
                                     />
                                 )}
                             />
@@ -337,6 +324,19 @@ const MemberProfileQuickCreateForm = ({
                                             defaultCountry="PH"
                                         />
                                     </div>
+                                )}
+                            />
+                            <FormFieldWrapper
+                                className="col-span-1"
+                                control={form.control}
+                                label="Sex *"
+                                name="sex"
+                                render={({ field }) => (
+                                    <SexCombobox
+                                        {...field}
+                                        disabled={isDisabled(field.name)}
+                                        placeholder="Sex"
+                                    />
                                 )}
                             />
                             <FormFieldWrapper
