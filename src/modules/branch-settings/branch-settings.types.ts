@@ -69,6 +69,16 @@ export interface IAdjustmentVoucherSettings {
     adjustment_voucher_padding: number
 }
 
+export interface IMemberPassbookSettings {
+    /**  FOR MEMBMER PB GENERATOR/ROTATION */
+    member_profile_passbook_allow_user_input: boolean
+    member_profile_passbook_or_unique: boolean
+    member_profile_passbook_prefix: string
+    member_profile_passbook_or_start: number
+    member_profile_passbook_or_current: number
+    member_profile_passbook_padding: number
+}
+
 export interface IBranchSettings
     extends
         IBaseEntityMeta,
@@ -119,14 +129,6 @@ export interface IBranchSettings
 
     default_member_gender_id?: TEntityId
     default_member_gender?: IMemberGender
-
-    //  FOR MEMBMER PB GENERATOR/ROTATION
-    member_profile_passbook_allow_user_input: boolean
-    member_profile_passbook_or_unique: boolean
-    member_profile_passbook_prefix: string
-    member_profile_passbook_or_start: number
-    member_profile_passbook_or_current: number
-    member_profile_passbook_padding: number
 
     account_wallet_id?: TEntityId
     account_wallet?: IAccount
