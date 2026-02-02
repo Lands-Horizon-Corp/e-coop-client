@@ -1,7 +1,9 @@
 import { cn } from '@/helpers'
+import { toReadableDate } from '@/helpers/date-utils'
 import HoveruserInfo from '@/modules/user/components/hover-user-info'
 
 import {
+    CalendarNumberIcon,
     CheckIcon,
     ClockIcon,
     IdCardIcon,
@@ -143,7 +145,7 @@ const MemberProfileMiniInfoCard = ({ className, memberProfile }: Props) => {
                                 )}
                             </div>
                         </div>
-                        <div className="grid grid-cols-2 gap-x-12 gap-y-4 text-xs lg:grid-cols-4">
+                        <div className="grid grid-cols-2 gap-x-12 gap-y-4 text-xs lg:grid-cols-5">
                             <div>
                                 <h3 className="mb-1 font-medium text-muted-foreground">
                                     Member Profile ID
@@ -195,6 +197,20 @@ const MemberProfileMiniInfoCard = ({ className, memberProfile }: Props) => {
                                         <CopyWrapper>
                                             {memberProfile.member_type?.name}
                                         </CopyWrapper>
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div>
+                                <h3 className="mb-1 font-medium text-muted-foreground">
+                                    Membership Date
+                                </h3>
+                                <div className="flex items-center gap-2">
+                                    <CalendarNumberIcon className="size-3" />
+                                    <span>
+                                        {toReadableDate(
+                                            memberProfile.created_at
+                                        )}
                                     </span>
                                 </div>
                             </div>
