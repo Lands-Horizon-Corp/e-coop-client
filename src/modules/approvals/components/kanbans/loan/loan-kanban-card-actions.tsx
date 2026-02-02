@@ -1,7 +1,10 @@
 import { toast } from 'sonner'
 
 import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
-import { hasPermissionFromAuth } from '@/modules/authentication/authgentication.store'
+import {
+    hasPermissionFromAuth,
+    useAuthStore,
+} from '@/modules/authentication/authgentication.store'
 import PrintReportFormModal from '@/modules/generated-report/components/forms/print-modal-config'
 import { useGenerateReport } from '@/modules/generated-report/components/generate-report-hooks/use-report-generate'
 import {
@@ -156,6 +159,10 @@ export const LoanTransactionCardActions = ({
         },
     })
 
+    const {
+        currentAuth: { user_organization },
+    } = useAuthStore()
+
     return (
         <>
             <LoanTransactionCreateUpdateFormModal
@@ -189,6 +196,7 @@ export const LoanTransactionCardActions = ({
                 {...printModal}
                 className=""
                 formProps={{
+                    orSettings: user_organization?.branch.branch_setting,
                     defaultValues: { ...loanTransaction },
                     loanTransactionId: loanTransaction.id,
                     onSuccess: () => {

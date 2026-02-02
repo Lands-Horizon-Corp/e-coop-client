@@ -1,3 +1,4 @@
+import { useAuthStore } from '@/modules/authentication/authgentication.store'
 import { ICashCheckVoucher } from '@/modules/cash-check-voucher'
 import { CashCheckVoucherTagsManagerPopover } from '@/modules/cash-check-voucher-tag/components/cash-check-voucher-tag-manager'
 import CashCheckVoucherTransactionSignatureUpdateFormModal from '@/modules/cash-check-voucher/components/forms/cash-check-signature-form-modal'
@@ -119,6 +120,10 @@ export const CashCheckVoucherCardActions = ({
         },
     })
 
+    const {
+        currentAuth: { user_organization },
+    } = useAuthStore()
+
     return (
         <>
             <CashCheckVoucherCreateUpdateFormModal
@@ -132,6 +137,7 @@ export const CashCheckVoucherCardActions = ({
                 {...printModal}
                 className="!min-w-[600px]"
                 formProps={{
+                    orSettings: user_organization?.branch.branch_setting,
                     cashCheckVoucherId: cashCheckVoucher.id,
                     onSuccess: () => {
                         refetch()
