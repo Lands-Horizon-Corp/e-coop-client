@@ -119,15 +119,14 @@ const MemberEducationalAttainmentCreateUpdateForm = ({
                     <fieldset className="space-y-3">
                         <FormFieldWrapper
                             control={form.control}
-                            label="School Name"
-                            name="school_name"
+                            label="Educational Attainment"
+                            name="educational_attainment"
                             render={({ field }) => (
-                                <Input
+                                <EducationalAttainmentCombobox
                                     {...field}
-                                    autoComplete="organization"
                                     disabled={isDisabled(field.name)}
                                     id={field.name}
-                                    placeholder="School Name"
+                                    placeholder="Program / Course"
                                 />
                             )}
                         />
@@ -151,20 +150,7 @@ const MemberEducationalAttainmentCreateUpdateForm = ({
                         />
                         <FormFieldWrapper
                             control={form.control}
-                            label="Educational Attainment"
-                            name="educational_attainment"
-                            render={({ field }) => (
-                                <EducationalAttainmentCombobox
-                                    {...field}
-                                    disabled={isDisabled(field.name)}
-                                    id={field.name}
-                                    placeholder="Program / Course"
-                                />
-                            )}
-                        />
-                        <FormFieldWrapper
-                            control={form.control}
-                            label="Program / Course *"
+                            label="Program / Course (Optional)"
                             name="program_course"
                             render={({ field }) => (
                                 <Input
@@ -173,6 +159,20 @@ const MemberEducationalAttainmentCreateUpdateForm = ({
                                     disabled={isDisabled(field.name)}
                                     id={field.name}
                                     placeholder="Program / Course"
+                                />
+                            )}
+                        />
+                        <FormFieldWrapper
+                            control={form.control}
+                            label="School Name (Optional)"
+                            name="school_name"
+                            render={({ field }) => (
+                                <Input
+                                    {...field}
+                                    autoComplete="organization"
+                                    disabled={isDisabled(field.name)}
+                                    id={field.name}
+                                    placeholder="School Name"
                                 />
                             )}
                         />
