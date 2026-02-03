@@ -2,6 +2,7 @@ import z from 'zod'
 
 import { IBaseEntityMeta, TEntityId } from '@/types/common'
 
+import { IArea } from '../area'
 import { IMemberProfile } from '../member-profile/member-profile.types'
 import { HOME_TYPES } from './member-address.constants'
 import { MemberAddressSchema } from './member-address.validation'
@@ -20,6 +21,9 @@ export interface IMemberAddress extends IBaseEntityMeta {
     province_state?: string
     barangay?: string
     landmark?: string
+
+    aareaId?: TEntityId
+    area?: IArea
 
     longitude?: number
     latitude?: number

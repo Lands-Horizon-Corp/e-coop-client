@@ -20,6 +20,8 @@ import {
 } from '@/validation'
 import { isBefore, startOfDay } from 'date-fns'
 
+import { MemberAddressSchema } from '../member-address/member-address.validation'
+
 export const BaseMemberAccountSchema = z.object({
     id: entityIdSchema.optional(),
     email: emailSchema,
@@ -164,6 +166,9 @@ export const MemberProfilePersonalInfoSchema = z.object({
     media: z.any(), // JUST FOR SHOWING MEDIA IMAGE IN FORM
     signature_media_id: entityIdSchema.optional(),
     signature_media: z.any(), // JUST FOR SHOWING MEDIA IMAGE IN FORM
+
+    member_addresses: z.array(MemberAddressSchema),
+    member_addresses_deleted_id: z.array(entityIdSchema),
 })
 
 // 🏛️ Membership Info

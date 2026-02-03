@@ -77,8 +77,8 @@ const SettingsTabs: {
         Component: (props) => <MemberFinancial {...props} />,
     },
     {
-        value: 'addresses-contacts',
-        title: 'Addresses & Contacts',
+        value: 'contacts',
+        title: 'Member Contacts',
         Icon: MapMarkedIcon,
         Component: (props) => <MemberAddressContact {...props} />,
     },
