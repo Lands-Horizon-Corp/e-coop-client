@@ -26,6 +26,7 @@ import {
     HouseLockIcon,
     LayersIcon,
     MaintenanceIcon,
+    MapMarkedIcon,
     MoneyCheckIcon,
     MoneyIcon,
     PeopleGroupIcon,
@@ -722,6 +723,19 @@ export const generateSidebarGroups = (
                         resourceType: 'Bank',
                     }),
                     shortDescription: 'Manage bank records',
+                },
+                {
+                    type: 'item',
+                    icon: MapMarkedIcon,
+                    title: 'Area',
+                    url: `${baseUrl}/maintenance/area`,
+                    // userType: ['employee', 'owner'],
+
+                    canAccess: hasPermissionFromAuth({
+                        action: 'Read',
+                        resourceType: 'Area',
+                    }),
+                    shortDescription: 'Manage Area',
                 },
                 {
                     type: 'item',

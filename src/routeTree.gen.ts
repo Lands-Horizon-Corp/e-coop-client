@@ -82,6 +82,7 @@ import { Route as OrgOrgnameBranchBranchnamemaintenanceMaintenanceCompanyRouteIm
 import { Route as OrgOrgnameBranchBranchnamemaintenanceMaintenanceCollateralRouteImport } from './routes/org/$orgname/branch.$branchname/(maintenance)/maintenance/collateral'
 import { Route as OrgOrgnameBranchBranchnamemaintenanceMaintenanceBillsAndCoinsRouteImport } from './routes/org/$orgname/branch.$branchname/(maintenance)/maintenance/bills-and-coins'
 import { Route as OrgOrgnameBranchBranchnamemaintenanceMaintenanceBanksRouteImport } from './routes/org/$orgname/branch.$branchname/(maintenance)/maintenance/banks'
+import { Route as OrgOrgnameBranchBranchnamemaintenanceMaintenanceAreaRouteImport } from './routes/org/$orgname/branch.$branchname/(maintenance)/maintenance/area'
 import { Route as OrgOrgnameBranchBranchnamemaintenancemembersViewMembersRouteImport } from './routes/org/$orgname/branch.$branchname/(maintenance)/(members)/view-members'
 import { Route as OrgOrgnameBranchBranchnamemaintenancemembersMemberAccountingLedgerRouteImport } from './routes/org/$orgname/branch.$branchname/(maintenance)/(members)/member-accounting-ledger'
 import { Route as OrgOrgnameBranchBranchnamemaintenanceemployeesPermissionTemplateRouteImport } from './routes/org/$orgname/branch.$branchname/(maintenance)/(employees)/permission-template'
@@ -532,6 +533,12 @@ const OrgOrgnameBranchBranchnamemaintenanceMaintenanceBanksRoute =
     path: '/maintenance/banks',
     getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
   } as any)
+const OrgOrgnameBranchBranchnamemaintenanceMaintenanceAreaRoute =
+  OrgOrgnameBranchBranchnamemaintenanceMaintenanceAreaRouteImport.update({
+    id: '/(maintenance)/maintenance/area',
+    path: '/maintenance/area',
+    getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
+  } as any)
 const OrgOrgnameBranchBranchnamemaintenancemembersViewMembersRoute =
   OrgOrgnameBranchBranchnamemaintenancemembersViewMembersRouteImport.update({
     id: '/(maintenance)/(members)/view-members',
@@ -854,6 +861,7 @@ export interface FileRoutesByFullPath {
   '/org/$orgname/branch/$branchname/permission-template': typeof OrgOrgnameBranchBranchnamemaintenanceemployeesPermissionTemplateRoute
   '/org/$orgname/branch/$branchname/member-accounting-ledger': typeof OrgOrgnameBranchBranchnamemaintenancemembersMemberAccountingLedgerRoute
   '/org/$orgname/branch/$branchname/view-members': typeof OrgOrgnameBranchBranchnamemaintenancemembersViewMembersRoute
+  '/org/$orgname/branch/$branchname/maintenance/area': typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceAreaRoute
   '/org/$orgname/branch/$branchname/maintenance/banks': typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceBanksRoute
   '/org/$orgname/branch/$branchname/maintenance/bills-and-coins': typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceBillsAndCoinsRoute
   '/org/$orgname/branch/$branchname/maintenance/collateral': typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceCollateralRoute
@@ -956,6 +964,7 @@ export interface FileRoutesByTo {
   '/org/$orgname/branch/$branchname/permission-template': typeof OrgOrgnameBranchBranchnamemaintenanceemployeesPermissionTemplateRoute
   '/org/$orgname/branch/$branchname/member-accounting-ledger': typeof OrgOrgnameBranchBranchnamemaintenancemembersMemberAccountingLedgerRoute
   '/org/$orgname/branch/$branchname/view-members': typeof OrgOrgnameBranchBranchnamemaintenancemembersViewMembersRoute
+  '/org/$orgname/branch/$branchname/maintenance/area': typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceAreaRoute
   '/org/$orgname/branch/$branchname/maintenance/banks': typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceBanksRoute
   '/org/$orgname/branch/$branchname/maintenance/bills-and-coins': typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceBillsAndCoinsRoute
   '/org/$orgname/branch/$branchname/maintenance/collateral': typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceCollateralRoute
@@ -1064,6 +1073,7 @@ export interface FileRoutesById {
   '/org/$orgname/branch/$branchname/(maintenance)/(employees)/permission-template': typeof OrgOrgnameBranchBranchnamemaintenanceemployeesPermissionTemplateRoute
   '/org/$orgname/branch/$branchname/(maintenance)/(members)/member-accounting-ledger': typeof OrgOrgnameBranchBranchnamemaintenancemembersMemberAccountingLedgerRoute
   '/org/$orgname/branch/$branchname/(maintenance)/(members)/view-members': typeof OrgOrgnameBranchBranchnamemaintenancemembersViewMembersRoute
+  '/org/$orgname/branch/$branchname/(maintenance)/maintenance/area': typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceAreaRoute
   '/org/$orgname/branch/$branchname/(maintenance)/maintenance/banks': typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceBanksRoute
   '/org/$orgname/branch/$branchname/(maintenance)/maintenance/bills-and-coins': typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceBillsAndCoinsRoute
   '/org/$orgname/branch/$branchname/(maintenance)/maintenance/collateral': typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceCollateralRoute
@@ -1172,6 +1182,7 @@ export interface FileRouteTypes {
     | '/org/$orgname/branch/$branchname/permission-template'
     | '/org/$orgname/branch/$branchname/member-accounting-ledger'
     | '/org/$orgname/branch/$branchname/view-members'
+    | '/org/$orgname/branch/$branchname/maintenance/area'
     | '/org/$orgname/branch/$branchname/maintenance/banks'
     | '/org/$orgname/branch/$branchname/maintenance/bills-and-coins'
     | '/org/$orgname/branch/$branchname/maintenance/collateral'
@@ -1274,6 +1285,7 @@ export interface FileRouteTypes {
     | '/org/$orgname/branch/$branchname/permission-template'
     | '/org/$orgname/branch/$branchname/member-accounting-ledger'
     | '/org/$orgname/branch/$branchname/view-members'
+    | '/org/$orgname/branch/$branchname/maintenance/area'
     | '/org/$orgname/branch/$branchname/maintenance/banks'
     | '/org/$orgname/branch/$branchname/maintenance/bills-and-coins'
     | '/org/$orgname/branch/$branchname/maintenance/collateral'
@@ -1381,6 +1393,7 @@ export interface FileRouteTypes {
     | '/org/$orgname/branch/$branchname/(maintenance)/(employees)/permission-template'
     | '/org/$orgname/branch/$branchname/(maintenance)/(members)/member-accounting-ledger'
     | '/org/$orgname/branch/$branchname/(maintenance)/(members)/view-members'
+    | '/org/$orgname/branch/$branchname/(maintenance)/maintenance/area'
     | '/org/$orgname/branch/$branchname/(maintenance)/maintenance/banks'
     | '/org/$orgname/branch/$branchname/(maintenance)/maintenance/bills-and-coins'
     | '/org/$orgname/branch/$branchname/(maintenance)/maintenance/collateral'
@@ -1924,6 +1937,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceBanksRouteImport
       parentRoute: typeof OrgOrgnameBranchBranchnameRouteRoute
     }
+    '/org/$orgname/branch/$branchname/(maintenance)/maintenance/area': {
+      id: '/org/$orgname/branch/$branchname/(maintenance)/maintenance/area'
+      path: '/maintenance/area'
+      fullPath: '/org/$orgname/branch/$branchname/maintenance/area'
+      preLoaderRoute: typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceAreaRouteImport
+      parentRoute: typeof OrgOrgnameBranchBranchnameRouteRoute
+    }
     '/org/$orgname/branch/$branchname/(maintenance)/(members)/view-members': {
       id: '/org/$orgname/branch/$branchname/(maintenance)/(members)/view-members'
       path: '/view-members'
@@ -2346,6 +2366,7 @@ interface OrgOrgnameBranchBranchnameRouteRouteChildren {
   OrgOrgnameBranchBranchnamemaintenanceemployeesPermissionTemplateRoute: typeof OrgOrgnameBranchBranchnamemaintenanceemployeesPermissionTemplateRoute
   OrgOrgnameBranchBranchnamemaintenancemembersMemberAccountingLedgerRoute: typeof OrgOrgnameBranchBranchnamemaintenancemembersMemberAccountingLedgerRoute
   OrgOrgnameBranchBranchnamemaintenancemembersViewMembersRoute: typeof OrgOrgnameBranchBranchnamemaintenancemembersViewMembersRoute
+  OrgOrgnameBranchBranchnamemaintenanceMaintenanceAreaRoute: typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceAreaRoute
   OrgOrgnameBranchBranchnamemaintenanceMaintenanceBanksRoute: typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceBanksRoute
   OrgOrgnameBranchBranchnamemaintenanceMaintenanceBillsAndCoinsRoute: typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceBillsAndCoinsRoute
   OrgOrgnameBranchBranchnamemaintenanceMaintenanceCollateralRoute: typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceCollateralRoute
@@ -2441,6 +2462,8 @@ const OrgOrgnameBranchBranchnameRouteRouteChildren: OrgOrgnameBranchBranchnameRo
       OrgOrgnameBranchBranchnamemaintenancemembersMemberAccountingLedgerRoute,
     OrgOrgnameBranchBranchnamemaintenancemembersViewMembersRoute:
       OrgOrgnameBranchBranchnamemaintenancemembersViewMembersRoute,
+    OrgOrgnameBranchBranchnamemaintenanceMaintenanceAreaRoute:
+      OrgOrgnameBranchBranchnamemaintenanceMaintenanceAreaRoute,
     OrgOrgnameBranchBranchnamemaintenanceMaintenanceBanksRoute:
       OrgOrgnameBranchBranchnamemaintenanceMaintenanceBanksRoute,
     OrgOrgnameBranchBranchnamemaintenanceMaintenanceBillsAndCoinsRoute:

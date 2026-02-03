@@ -58,6 +58,7 @@ export const ACCOUNT_MODEL_NAMES = [
     'GroceryComputationSheet',
     'GroceryComputationSheetMonthly',
     'Holiday',
+    'Area',
     'IncludeNegativeAccount',
     'InterestMaturity',
     'InterestRateByTerm',

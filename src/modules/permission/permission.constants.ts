@@ -775,6 +775,13 @@ export const PERMISSION_ALL_RESOURCE_ACTION = [
         description: 'Manage any user related actions',
         supportedActions: ['Read'] as TPermissionAction[],
     },
+
+    {
+        resource: 'Area',
+        label: 'Area',
+        description: 'Allow action/access for Area module',
+        supportedActions: generateBaseAction() as TPermissionAction[],
+    },
 ] as const satisfies PermissionResourceAction[]
 
 export const PERMISSION_BASE_RESOURCE = PERMISSION_ALL_RESOURCE_ACTION.map(
