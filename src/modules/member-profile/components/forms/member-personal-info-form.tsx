@@ -579,8 +579,7 @@ const MemberAddressesSection = ({
                             key={index}
                             onRemove={(index, data) => {
                                 remove(index)
-                                if (data.id)
-                                    removeMemberAddress(data.id)
+                                if (data.id) removeMemberAddress(data.id)
                             }}
                             readOnly={readOnly}
                         />

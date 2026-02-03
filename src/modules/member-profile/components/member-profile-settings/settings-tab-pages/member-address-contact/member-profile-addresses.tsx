@@ -52,8 +52,8 @@ const MemberAddressCard = ({ address }: { address: IMemberAddress }) => {
             <MemberAddressCreateUpdateFormModal
                 description="Modify / Update this educational attainment information."
                 formProps={{
-                    memberProfileId: address.member_profile_id,
-                    memberAddressId: address.id,
+                    // memberProfileId: address.member_profile_id,
+                    // memberAddressId: address.id,
                     defaultValues: address,
                 }}
                 onOpenChange={setEdit}
@@ -233,7 +233,7 @@ const MemberProfileAddress = ({ memberProfile }: Props) => {
             <MemberAddressCreateUpdateFormModal
                 description="Add new address information."
                 formProps={{
-                    memberProfileId: memberProfile.id,
+                    // memberProfileId: memberProfile.id,
                     defaultValues: { member_profile_id: memberProfile.id },
                 }}
                 onOpenChange={setCreate}

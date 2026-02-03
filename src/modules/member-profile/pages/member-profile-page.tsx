@@ -28,7 +28,7 @@ function ViewMemberProfilePage() {
                     branch_setting: {
                         default_member_type_id,
                         currency,
-                        default_member_gender_id,
+                        // default_member_gender_id,
                     },
                 },
             },
@@ -65,7 +65,7 @@ function ViewMemberProfilePage() {
                             member_type_id: default_member_type_id,
                             birth_place:
                                 currency.iso_3166_alpha3?.toUpperCase(),
-                            member_gender_id: default_member_gender_id,
+                            // member_gender_id: default_member_gender_id,
                         },
                         onSuccess: () => {},
                     }}
