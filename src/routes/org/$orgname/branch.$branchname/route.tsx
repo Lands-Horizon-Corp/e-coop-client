@@ -13,6 +13,7 @@ import OrgBranchSidebar from '@/components/sidebar/org-branch-sidebar'
 import { SidebarInset, SidebarProvider } from '@/components/ui/sidebar'
 import AuthGuard from '@/components/wrappers/auth-guard'
 import OrgBranchUrlGuard from '@/components/wrappers/org-branch-guard'
+import GlobalHotkeysProvider from '@/providers/global-hotkeys-provider'
 
 export const Route = createFileRoute('/org/$orgname/branch/$branchname')({
     component: RouteComponent,
@@ -25,6 +26,7 @@ function RouteComponent() {
             <OrgBranchUrlGuard>
                 <SidebarProvider>
                     <OrgBranchSidebar />
+                    <GlobalHotkeysProvider />
                     <SidebarInset className="ecoop-scroll min-h-screen max-h-[100vh] w-full overflow-y-auto">
                         <UserNav className="sticky top-0 z-50 bg-background" />
                         <main className="flex-1">

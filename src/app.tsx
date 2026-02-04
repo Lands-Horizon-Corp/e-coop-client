@@ -24,7 +24,7 @@ import { APP_ENV } from './constants';
 import { useIncognitoDetector } from './hooks/use-incognito-detector';
 import { routeTree } from './routeTree.gen';
 
-const router = createRouter({ routeTree });
+export const router = createRouter({ routeTree });
 
 declare module '@tanstack/react-router' {
     interface Register {
