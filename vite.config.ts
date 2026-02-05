@@ -173,4 +173,7 @@ export default defineConfig({
       }
     }
   },
+  server : {
+    allowedHosts : ['e-coop-client-development.up.railway.app']
+  }
 });
