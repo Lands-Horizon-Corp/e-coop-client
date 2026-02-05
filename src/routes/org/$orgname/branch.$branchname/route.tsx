@@ -4,6 +4,7 @@ import { Outlet, createFileRoute } from '@tanstack/react-router'
 
 import { useAuthUserWithOrgBranch } from '@/modules/authentication/authgentication.store'
 import TimeMachineTimeStatusBar from '@/modules/user-organization/components/time-machine-time-status-bar'
+import GlobalHotkeysProvider from '@/providers/global-hotkeys-provider'
 import { motion } from 'framer-motion'
 
 import { CursorFillIcon } from '@/components/icons'
@@ -13,7 +14,6 @@ import OrgBranchSidebar from '@/components/sidebar/org-branch-sidebar'
 import { SidebarInset, SidebarProvider } from '@/components/ui/sidebar'
 import AuthGuard from '@/components/wrappers/auth-guard'
 import OrgBranchUrlGuard from '@/components/wrappers/org-branch-guard'
-import GlobalHotkeysProvider from '@/providers/global-hotkeys-provider'
 
 export const Route = createFileRoute('/org/$orgname/branch/$branchname')({
     component: RouteComponent,
