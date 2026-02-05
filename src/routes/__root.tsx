@@ -2,7 +2,6 @@ import { Outlet, createRootRoute } from '@tanstack/react-router'
 import { DndProvider } from 'react-dnd'
 import { HTML5Backend } from 'react-dnd-html5-backend'
 
-import { NATS_PASS, NATS_USER } from '@/constants'
 import AuthLoader from '@/modules/authentication/components/auth-loader'
 import UserProfileInactivityPrompter from '@/modules/user-profile/components/user-profile-inactivity-prompter'
 import { ActionSecurityProvider } from '@/providers/action-security-provider'
@@ -21,7 +20,7 @@ import InfoModal from '@/components/modals/info-modal'
 import LoadingSpinner from '@/components/spinners/loading-spinner'
 import { Toaster } from '@/components/ui/sonner'
 
-import { useNatsConnect } from '@/hooks/use-pubsub'
+// import { usePusherConnect } from '@/hooks/use-pubsub'
 
 import ErrorPage from './-common-pages/error-page'
 import NotFoundPage from './-common-pages/not-found-page'
@@ -33,7 +32,7 @@ export const Route = createRootRoute({
 })
 
 function RootLayout() {
-    useNatsConnect({ user: NATS_USER, pass: NATS_PASS })
+    // usePusherConnect()
 
     return (
         <div className="relative">

@@ -116,6 +116,7 @@
         "motion": "^12.23.24",
         "nats.ws": "^1.30.3",
         "postcss-loader": "^8.2.0",
+        "pusher-js": "^8.4.0",
         "qrcode.react": "^4.2.0",
         "query-string": "^9.3.1",
         "radix-ui": "^1.4.3",
