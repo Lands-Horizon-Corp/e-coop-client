@@ -9,6 +9,7 @@ import { IBaseProps } from '@/types'
 import { SadFaceIcon } from '../icons'
 import { useMap } from './map.provider'
 import { constructGoogleMapsViewUrl } from './map.utils'
+import { GOOGLE_MAPS_MAP_ID } from '@/constants'
 
 export interface MapLocation {
     lat: number
@@ -253,7 +254,7 @@ export const MapView: React.FC<MapViewProps> = ({
                             gestureHandling: 'cooperative' as const,
                             clickableIcons: false,
                             colorScheme: resolvedTheme.toUpperCase(),
-                            mapId: '7315fed6ff6d5145e4c926ff',
+                            mapId: GOOGLE_MAPS_MAP_ID,
                             ...mapOptions,
                         }}
                         zoom={zoom}
