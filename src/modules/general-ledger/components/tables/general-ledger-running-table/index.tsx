@@ -174,7 +174,7 @@ const GeneralLedgerRunningTable = ({
                 className={cn(
                     'flex h-full flex-col gap-y-2',
                     className,
-                    !tableState.isScrollable && 'h-fit !max-h-none'
+                    !tableState.isScrollable && 'h-fit max-h-none!'
                 )}
             >
                 <DataTableToolbar

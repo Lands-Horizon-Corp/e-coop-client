@@ -1,5 +1,5 @@
 import { cn } from '@/helpers'
-import { IPaymentType, useGetAll } from '@/modules/payment-type'
+import { IPaymentType, useGetAllPaymentType } from '@/modules/payment-type'
 import { IPickerBaseProps } from '@/types/component-types/picker'
 import { Check } from 'lucide-react'
 
@@ -49,7 +49,7 @@ const PaymentTypeCombobox = ({
     )
 
     // Using the provided hook
-    const { data: paymentTypes, isLoading } = useGetAll()
+    const { data: paymentTypes, isLoading } = useGetAllPaymentType()
 
     const selected = paymentTypes?.find((option) => option.id === value)
 

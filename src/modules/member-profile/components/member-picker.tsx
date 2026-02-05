@@ -108,6 +108,9 @@ const MemberPicker = forwardRef<HTMLButtonElement, Props>(
                     setState(true)
                 }
             },
+            {
+                enableOnFormTags: true,
+            },
             [
                 value,
                 disabled,
@@ -244,7 +247,7 @@ const MemberPicker = forwardRef<HTMLButtonElement, Props>(
                         >
                             <span className="flex flex-1 min-w-0 items-center justify-between text-sm text-foreground/90">
                                 <span className="inline-flex flex-1 min-w-0 items-center gap-x-2">
-                                    <div className="flex-shrink-0">
+                                    <div className="shrink-0">
                                         {isFetching ? (
                                             <LoadingSpinner className="size-6" />
                                         ) : (
@@ -268,11 +271,11 @@ const MemberPicker = forwardRef<HTMLButtonElement, Props>(
                                         </span>
                                     ) : (
                                         <span className="inline-flex flex-1 w-0 max-w-fit items-center gap-x-4">
-                                            <span className="truncate font-medium flex-shrink min-w-0">
+                                            <span className="truncate font-medium shrink min-w-0">
                                                 {value.full_name}
                                             </span>
                                             {showPBNo && (
-                                                <span className="flex-shrink-0 font-mono text-sm text-muted-foreground ml-auto">
+                                                <span className="shrink-0 font-mono text-sm text-muted-foreground ml-auto">
                                                     {value?.passbook || ''}
                                                 </span>
                                             )}
@@ -281,18 +284,18 @@ const MemberPicker = forwardRef<HTMLButtonElement, Props>(
                                 </span>
 
                                 {allowShorcutCommand && (
-                                    <span className="ml-2 text-sm flex-shrink-0 text-muted-foreground">
+                                    <span className="ml-2 text-sm shrink-0 text-muted-foreground">
                                         ⌘ ↵
                                     </span>
                                 )}
                             </span>
 
-                            <ChevronDownIcon className="flex-shrink-0 ml-2 h-4 w-4 text-muted-foreground" />
+                            <ChevronDownIcon className="shrink-0 ml-2 h-4 w-4 text-muted-foreground" />
                         </Button>
 
                         {allowClear && value && (
                             <Button
-                                className="cursor-pointer rounded-full !p-0 !px-0 flex-shrink-0"
+                                className="cursor-pointer rounded-full p-0! !px-0! shrink-0"
                                 onClick={(e) => {
                                     e.preventDefault()
                                     e.stopPropagation()

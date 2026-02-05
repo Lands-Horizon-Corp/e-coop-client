@@ -103,8 +103,9 @@ export interface IBranchSettings
     withdraw_use_date_or: boolean
     withdraw_padding: number
     withdraw_common_or?: string
+}
 
-    /** Deposit OR Settings */
+export interface IDepositSetting {
     deposit_or_start: number
     deposit_or_current: number
     deposit_or_end: number
@@ -112,6 +113,20 @@ export interface IBranchSettings
     deposit_use_date_or: boolean
     deposit_padding: number
     deposit_common_or?: string
+}
+export interface IBranchSettings
+    extends
+        IBaseEntityMeta,
+        ICashCheckVoucherGeneralORSettings,
+        ILoanVoucherORSettings,
+        ICashVoucherORSettings,
+        IAdjustmentVoucherSettings,
+        IJournalVoucherORSettings,
+        IDepositSetting {
+    id: TEntityId
+
+    currency_id: TEntityId
+    currency: ICurrency
 
     default_member_type_id?: TEntityId
     default_member_type?: IMemberType

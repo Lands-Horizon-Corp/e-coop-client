@@ -49,6 +49,8 @@ export const useTransactionController = ({
     const navigate = useTransactionNavigation(fullPath)
     const modals = useTransactionModals()
     const [selectedMember, setSelectedMember] = useState<IMemberProfile>()
+    const modalTransactionReverseState = useTransactionReverseSecurityStore()
+
     const { hasNoTransactionBatch, data: currentTransactionBatch } =
         useTransactionBatchStore()
 
@@ -148,6 +150,7 @@ export const useTransactionController = ({
         selectedMember: form.getValues('member_profile'),
         selectedMemberId: form.getValues('member_profile_id'),
         hasSelectedMember: !!form.getValues('member_profile'),
+        modalTransactionReverseState,
     }
 }
 

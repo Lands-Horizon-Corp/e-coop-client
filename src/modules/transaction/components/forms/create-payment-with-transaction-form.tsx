@@ -13,7 +13,7 @@ import { IGeneralLedger } from '@/modules/general-ledger'
 import { LoanGuideModal } from '@/modules/loan-guide/components/loan-guide'
 import LoanTransactionCombobox from '@/modules/loan-transaction/components/loan-combobox'
 import { IMedia } from '@/modules/media'
-import { useGetAll } from '@/modules/payment-type'
+import { useGetAllPaymentType } from '@/modules/payment-type'
 import { IPaymentRequest, TPaymentMode } from '@/modules/quick-transfer'
 import {
     ITransactionRequest,
@@ -26,7 +26,6 @@ import {
 } from '@/modules/transaction'
 import { useTransactionBatchStore } from '@/modules/transaction-batch/store/transaction-batch-store'
 import { useGetUserSettings } from '@/modules/user-profile'
-import { useTransactionReverseSecurityStore } from '@/store/transaction-reverse-security-store'
 import { useHotkeys } from 'react-hotkeys-hook'
 
 import { CalendarNumberIcon, ChevronDownIcon } from '@/components/icons'
@@ -79,17 +78,20 @@ const PaymentWithTransactionForm = ({
         navigate,
         paymentSuccess,
         history,
+        modalTransactionReverseState,
     } = useTransactionContext()
+
+    const { onOpenReverseRequestAction } = modalTransactionReverseState
 
     const [focusTypePayment, _] = useState<TPaymentMode>('payment')
 
     const { data: currentTransactionBatch } = useTransactionBatchStore()
-    const { onOpenReverseRequestAction } = useTransactionReverseSecurityStore()
 
     const {
         settings_accounting_payment_default_value,
         settings_accounting_payment_default_value_id,
         settings_payment_type_default_value_id,
+        allow_withdraw_negative_balance,
     } = useGetUserSettings()
 
     const memberProfileId = transactionForm.getValues('member_profile_id')
@@ -170,7 +172,7 @@ const PaymentWithTransactionForm = ({
         form.setFocus('account_id')
     }, [selectedAccount, form])
 
-    const { data: paymentTypes } = useGetAll()
+    const { data: paymentTypes } = useGetAllPaymentType()
 
     const handleSubmitForm = async (
         data: TPaymentWithTransactionFormValues
@@ -209,7 +211,7 @@ const PaymentWithTransactionForm = ({
     const handleSubmit = form.handleSubmit(
         async (data: TPaymentWithTransactionFormValues, event) => {
             event?.preventDefault()
-            if (data.amount < 0) {
+            if (data.amount < 0 || !allow_withdraw_negative_balance) {
                 onOpenReverseRequestAction({
                     onSuccess: () => {
                         handleSubmitForm(data)

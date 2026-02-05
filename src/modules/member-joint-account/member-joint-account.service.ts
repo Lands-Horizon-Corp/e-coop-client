@@ -59,7 +59,7 @@ export const {
     useDeleteById,
     useDeleteMany,
     useGetAll,
-    useGetById,
+    useGetById: useGetMemberJointByMemberId,
     useGetPaginated,
     useUpdateById,
 } = apiCrudHooks

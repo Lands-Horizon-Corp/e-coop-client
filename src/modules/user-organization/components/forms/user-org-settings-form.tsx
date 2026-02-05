@@ -17,7 +17,6 @@ import {
     InfoIcon,
     ReceiptIcon,
     ShieldCheckIcon,
-    WeightScaleIcon,
     XIcon,
 } from '@/components/icons'
 import Modal, { IModalProps } from '@/components/modals/modal'
@@ -401,7 +400,7 @@ const UserOrgSettingsForm = ({
                             control={form.control}
                             name="payment_or_use_date_or"
                             render={({ field }) => (
-                                <div className="shadow-xs bg-background/50 relative flex w-full items-start gap-2 rounded-lg border border-input p-4 outline-none duration-200 ease-out has-[:checked]:border-primary/30 has-[:checked]:bg-gradient-to-br has-[:checked]:from-primary/50 has-[:checked]:to-primary/10">
+                                <div className="shadow-xs bg-background/50 relative flex w-full items-start gap-2 rounded-lg border border-input p-4 outline-none duration-200 ease-out has-checked:border-primary/30 has-checked:bg-linear-to-br has-checked:from-primary/50 has-checked:to-primary/10">
                                     <Switch
                                         aria-describedby={`${field.name}`}
                                         checked={field.value}
@@ -434,7 +433,7 @@ const UserOrgSettingsForm = ({
                             control={form.control}
                             name="payment_or_unique"
                             render={({ field }) => (
-                                <div className="shadow-xs bg-background/50 relative flex w-full items-start gap-2 rounded-lg border border-input p-4 outline-none duration-200 ease-out has-[:checked]:border-primary/30 has-[:checked]:bg-gradient-to-br has-[:checked]:from-primary/50 has-[:checked]:to-primary/10">
+                                <div className="shadow-xs bg-background/50 relative flex w-full items-start gap-2 rounded-lg border border-input p-4 outline-none duration-200 ease-out has-checked:border-primary/30 has-checked:bg-linear-to-br has-checked:from-primary/50 has-checked:to-primary/10">
                                     <Switch
                                         aria-describedby={`${field.name}`}
                                         checked={field.value}
@@ -467,7 +466,7 @@ const UserOrgSettingsForm = ({
                             control={form.control}
                             name="payment_or_allow_user_input"
                             render={({ field }) => (
-                                <div className="shadow-xs bg-background/50 relative flex w-full items-start gap-2 rounded-lg border border-input p-4 outline-none duration-200 ease-out has-[:checked]:border-primary/30 has-[:checked]:bg-gradient-to-br has-[:checked]:from-primary/50 has-[:checked]:to-primary/10">
+                                <div className="shadow-xs bg-background/50 relative flex w-full items-start gap-2 rounded-lg border border-input p-4 outline-none duration-200 ease-out has-checked:border-primary/30 has-checked:bg-linear-to-br has-checked:from-primary/50 has-checked:to-primary/10">
                                     <Switch
                                         aria-describedby={`${field.name}`}
                                         checked={field.value}
@@ -522,7 +521,7 @@ const UserOrgSettingsForm = ({
                             control={form.control}
                             name="allow_withdraw_negative_balance"
                             render={({ field }) => (
-                                <div className="shadow-xs bg-background/50 relative flex w-full items-start gap-2 rounded-lg border border-input p-4 outline-none duration-200 ease-out has-[:checked]:border-primary/30 has-[:checked]:bg-gradient-to-br has-[:checked]:from-primary/50 has-[:checked]:to-primary/10">
+                                <div className="shadow-xs bg-background/50 relative flex w-full items-start gap-2 rounded-lg border border-input p-4 outline-none duration-200 ease-out has-checked:border-primary/30 has-checked:bg-linear-to-br has-checked:from-primary/50 has-checked:to-primary/10">
                                     <Switch
                                         aria-describedby={`${field.name}`}
                                         checked={field.value}
@@ -552,47 +551,11 @@ const UserOrgSettingsForm = ({
                                 </div>
                             )}
                         />
-
-                        <FormFieldWrapper
-                            control={form.control}
-                            name="allow_withdraw_exact_balance"
-                            render={({ field }) => (
-                                <div className="shadow-xs bg-background/50 relative flex w-full items-start gap-2 rounded-lg border border-input p-4 outline-none duration-200 ease-out has-[:checked]:border-primary/30 has-[:checked]:bg-gradient-to-br has-[:checked]:from-primary/50 has-[:checked]:to-primary/10">
-                                    <Switch
-                                        aria-describedby={`${field.name}`}
-                                        checked={field.value}
-                                        className="order-1 after:absolute after:inset-0"
-                                        disabled={isDisabled(field.name)}
-                                        id={field.name}
-                                        onCheckedChange={field.onChange}
-                                    />
-                                    <div className="flex grow items-center gap-3">
-                                        <div className="size-fit rounded-full bg-secondary p-2">
-                                            <WeightScaleIcon />
-                                        </div>
-                                        <div className="grid gap-2">
-                                            <Label htmlFor={field.name}>
-                                                Allow Withdraw Exact Balance
-                                            </Label>
-                                            <p
-                                                className="text-xs text-muted-foreground"
-                                                id={`${field.name}`}
-                                            >
-                                                Allow withdrawal of exact
-                                                balance amount for this user
-                                                organization.
-                                            </p>
-                                        </div>
-                                    </div>
-                                </div>
-                            )}
-                        />
-
                         <FormFieldWrapper
                             control={form.control}
                             name="maintaining_balance"
                             render={({ field }) => (
-                                <div className="shadow-xs bg-background/50 relative flex w-full items-start gap-2 rounded-lg border border-input p-4 outline-none duration-200 ease-out has-[:checked]:border-primary/30 has-[:checked]:bg-gradient-to-br has-[:checked]:from-primary/50 has-[:checked]:to-primary/10">
+                                <div className="shadow-xs bg-background/50 relative flex w-full items-start gap-2 rounded-lg border border-input p-4 outline-none duration-200 ease-out has-checked:border-primary/30 has-checked:bg-linear-to-br has-checked:from-primary/50 has-checked:to-primary/10">
                                     <Switch
                                         aria-describedby={`${field.name}`}
                                         checked={field.value}

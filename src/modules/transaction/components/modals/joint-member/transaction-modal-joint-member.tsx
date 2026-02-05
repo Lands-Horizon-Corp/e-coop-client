@@ -62,7 +62,7 @@ const TransactionModalJointMember = ({
                 open={openPicker}
                 title="Joint Accounts"
                 {...rest}
-                className="!max-w-7xl"
+                className="max-w-7xl!"
             >
                 <div className="grid grid-cols-2 gap-4">
                     {hasSelectedMember && (

@@ -22,13 +22,14 @@ import MiniPaginationBar from '@/components/pagination-bars/mini-pagination-bar'
 import SheetModal from '@/components/sheet/sheet'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
+import { Kbd, KbdGroup } from '@/components/ui/kbd'
 import { Separator } from '@/components/ui/separator'
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import PreviewMediaWrapper from '@/components/wrappers/preview-media-wrapper'
 
 import useFilterState from '@/hooks/use-filter-state'
-import { useShortcut } from '@/hooks/use-shorcuts'
+import { useModalState } from '@/hooks/use-modal-state'
 
 import { TPaymentMode } from '../../quick-transfer.types'
 
@@ -92,7 +93,7 @@ export const TransactionDetailsCard = ({
                                 {description}
                             </p>
                         </div>
-                        <p className="font-semibold text-primary flex-shrink-0">
+                        <p className="font-semibold text-primary shrink-0">
                             {currencyFormat(balance, {
                                 currency,
                                 showSymbol: !!currency,
@@ -270,7 +271,7 @@ const CurrentTransactionWithdrawHistoryData = ({
 }: CurrentTransactionWithdrawHistoryDataProps) => {
     const [pagination, setPagination] = useState<PaginationState>({
         pageIndex: PAGINATION_INITIAL_INDEX,
-        pageSize: 10,
+        pageSize: 50,
     })
 
     const { finalFilterPayloadBase64 } = useFilterState({
@@ -354,34 +355,37 @@ type CurrentTransactionWithdrawHistoryProps = {
 const CurrentTransactionWithdrawHistory = ({
     mode,
 }: CurrentTransactionWithdrawHistoryProps) => {
-    const [onOpen, setOnOpen] = useState(false)
+    const historyModalState = useModalState()
     const [modeState, setModeState] = useState<'branch' | 'current'>('current')
 
-    useShortcut(
-        'h',
-        () => {
-            setOnOpen(true)
+    useHotkeys(
+        'f12',
+        (e) => {
+            e.preventDefault()
+            historyModalState.onOpenChange(!historyModalState.open)
         },
         {
-            disableTextInputs: true,
-        }
+            enableOnFormTags: true,
+        },
+        [historyModalState]
     )
 
     return (
         <div>
             <Button
-                className=""
-                onClick={() => setOnOpen(true)}
+                onClick={() => historyModalState.onOpenChange(true)}
                 size="sm"
-                variant="ghost"
+                variant="secondary"
             >
                 <HistoryIcon className="mr-2" />
                 History
+                <KbdGroup>
+                    <Kbd>F12</Kbd>
+                </KbdGroup>
             </Button>
             <SheetModal
                 className=" max-w-[500px] md:min-w-[600px] "
-                onOpenChange={setOnOpen}
-                open={onOpen}
+                {...historyModalState}
             >
                 <div className="">
                     <div className="overflow-y-auto min-w-0 ecoop-scroll w-full p-5">
@@ -404,7 +408,7 @@ const CurrentTransactionWithdrawHistory = ({
                                     </TabsTrigger>
                                 </TabsList>
                             </div>
-                            <TabsContent className="!min-w-0" value={modeState}>
+                            <TabsContent className="min-w-0!" value={modeState}>
                                 <CurrentTransactionWithdrawHistoryData
                                     mode={mode}
                                     modeState={modeState}

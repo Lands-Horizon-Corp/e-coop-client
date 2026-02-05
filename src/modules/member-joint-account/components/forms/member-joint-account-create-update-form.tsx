@@ -348,7 +348,7 @@ export const MemberJointAccountCreateUpdateFormModal = ({
 }) => {
     return (
         <Modal
-            className={cn('w-full !max-w-2xl', className)}
+            className={cn('w-full max-w-2xl!', className)}
             description={description}
             title={title}
             {...props}

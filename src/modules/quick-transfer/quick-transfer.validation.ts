@@ -10,7 +10,7 @@ export const QuickWithdrawSchema = PaymentWithTransactionSchema.extend({
     reference_number: z
         .string({ error: 'Reference number is required' })
         .min(1),
-    or_auto_generated: z.boolean().default(false).optional(),
+    is_reference_number_checked: z.boolean().default(false).optional(),
 
     member_joint_account: z.any().optional(),
 })

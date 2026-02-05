@@ -30,7 +30,6 @@ import { Button } from '@/components/ui/button'
 import useFilterState from '@/hooks/use-filter-state'
 import { useInternalState } from '@/hooks/use-internal-state'
 import { useModalState } from '@/hooks/use-modal-state'
-import { useShortcut } from '@/hooks/use-shorcuts'
 
 import { TEntityId } from '@/types'
 
@@ -129,25 +128,6 @@ const AccountPicker = ({
         },
     })
     const { data = [], totalPage = 0, totalSize = 0 } = AccountData || {}
-
-    useShortcut(
-        'Enter',
-        (event) => {
-            event?.preventDefault()
-            if (
-                !value &&
-                !disabled &&
-                !isPending &&
-                !isLoading &&
-                !isFetching &&
-                allowShorcutCommand
-            ) {
-                setState((prev) => !prev)
-            }
-        },
-        { disableTextInputs: true }
-    )
-
     return (
         <>
             <GenericPicker

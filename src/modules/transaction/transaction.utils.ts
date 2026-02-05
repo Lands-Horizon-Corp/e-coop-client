@@ -1,6 +1,11 @@
 import { mmddyyyy } from '@/helpers/date-utils'
 
-import { IBranchSettings } from '../branch-settings'
+import { buildOR } from '../or-builder'
+import { TPaymentMode } from '../quick-transfer'
+import {
+    QuickTransferOR,
+    toORBuilderOptions,
+} from '../quick-transfer/quick-transfer.utils'
 import { IUserOrganization } from '../user-organization'
 
 export const receiptPrefix = (num: number): string => {
@@ -34,31 +39,40 @@ export const paymentORResolver = (userOrg: IUserOrganization): string => {
     return `${payment_prefix || ''}${receiptPrefix(payment_or_iteration)}${payment_or_current.toString().padStart(payment_padding, '0') || ''}`
 }
 
+const resolveDateOR = (useDateOR: boolean, date: Date, prefix = '') => {
+    if (!useDateOR) return null
+    return prefix + mmddyyyy(date)
+}
+
+interface QuickPaymentORResolverArgs {
+    type: Omit<TPaymentMode, 'payment'>
+    userOrg: IUserOrganization
+}
+
 export const quickPaymentORResolver = ({
     type,
-    branchSetting,
-}: {
-    type: 'widthdraw' | 'deposit'
-    branchSetting: IBranchSettings
-}): string => {
-    if (type === 'widthdraw') {
-        const {
-            // withdraw_allow_user_input,
-            withdraw_prefix,
-            withdraw_or_start,
-            withdraw_or_current,
-            withdraw_or_end,
-            withdraw_or_iteration,
-            withdraw_use_date_or,
-            withdraw_padding,
-            // withdraw_common_or,
-        } = branchSetting
+    userOrg,
+}: QuickPaymentORResolverArgs): string => {
+    const {
+        branch: { branch_setting },
+    } = userOrg
 
-        if (withdraw_use_date_or) {
-            return (withdraw_prefix || '') + mmddyyyy(new Date())
-        }
+    const orSetting = buildOR(
+        toORBuilderOptions(QuickTransferOR(branch_setting, type))
+    )
 
-        return `${withdraw_or_start + withdraw_prefix || ''}${receiptPrefix(withdraw_or_iteration)}${withdraw_or_current.toString().padStart(withdraw_padding, '0') || ''}${withdraw_or_end}`
+    const now = new Date(userOrg.time_machine_time ?? Date.now())
+
+    if (type === 'withdraw') {
+        const { withdraw_use_date_or, withdraw_prefix } = branch_setting
+
+        return (
+            resolveDateOR(withdraw_use_date_or, now, withdraw_prefix ?? '') ??
+            orSetting
+        )
     }
-    return ''
+
+    const { deposit_use_date_or } = branch_setting
+
+    return resolveDateOR(deposit_use_date_or, now) ?? orSetting
 }

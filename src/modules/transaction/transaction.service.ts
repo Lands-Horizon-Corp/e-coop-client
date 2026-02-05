@@ -16,7 +16,6 @@ import {
 import { TEntityId } from '@/types'
 
 import { IGeneralLedger, generalLedgerBaseKey } from '../general-ledger'
-import { memberAccountLedgerBaseKey } from '../member-account-ledger/member-account-ledger.service'
 import {
     IPaymentQuickRequest,
     IPaymentRequest,
@@ -128,17 +127,14 @@ export const useCreateTransactionPaymentByMode = createMutationFactory<
             })
         }
     },
-    invalidationFn: ({ queryClient }) => {
+    invalidationFn: ({ queryClient, variables }) => {
         queryClient.invalidateQueries({
             queryKey: [generalLedgerBaseKey, 'all', 'transaction'],
         })
         queryClient.invalidateQueries({
-            queryKey: [
-                memberAccountLedgerBaseKey,
-                'filtered-paginated',
-                'member',
-            ],
+            queryKey: [transactionBaseQueryKey, variables.transactionId],
         })
+
         queryClient.invalidateQueries({ queryKey: ['auth', 'context'] })
     },
 })
@@ -155,8 +151,19 @@ export const useCreateQuickTransactionPayment = createMutationFactory<
                 data
             )
         ).data,
-    invalidationFn: (args) =>
-        createMutationInvalidateFn('general-ledger', args),
+    invalidationFn: ({ queryClient, variables }) => {
+        queryClient.invalidateQueries({
+            queryKey: [
+                'member-accounting-ledger',
+                'filtered-paginated',
+                'member',
+                variables.data.member_profile_id,
+            ],
+        })
+        queryClient.invalidateQueries({
+            queryKey: ['auth', 'context'],
+        })
+    },
 })
 
 export const usePrintGeneralLedgerTransaction = createMutationFactory<
