@@ -961,6 +961,8 @@ export const generateSidebarGroups = (
                     icon: BookIcon,
                     // userType: ['employee', 'owner'],
                     title: 'Account Transaction',
+                    shortDescription:
+                        'Automates daily recording and posting of collections, disbursements, and journal entries, keeping accurate ledgers and balances for each branch.',
                     canAccess: hasPermissionFromAuth({
                         action: 'Read',
                         resourceType: 'AccountTransaction',
