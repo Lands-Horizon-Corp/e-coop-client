@@ -13,7 +13,7 @@
         "testw": "vitest",
         "lint": "eslint .",
         "lf": "eslint .",
-        "preview": "vite preview --port 4173 --host",
+        "preview": "vite preview --port $PORT --host",
         "pwa-test": "bun run build && bun run preview",
         "fc": "prettier . -c",
         "fcf": "prettier -c",
