@@ -157,4 +157,30 @@ export interface ITransactionBatchEndRequest {
     employee_by_position: string
 }
 
+export interface ITransactionBatchHistoryTotal {
+    batch_funding_total: number
+    disbursement_transaction_total: number
+
+    general_ledger_debit_total: number
+    general_ledger_credit_total: number
+
+    check_entry_debit_total: number
+    check_entry_credit_total: number
+
+    online_entry_debit_total: number
+    online_entry_credit_total: number
+
+    cash_entry_debit_total: number
+    cash_entry_credit_total: number
+
+    payment_entry_debit_total: number
+    payment_entry_credit_total: number
+
+    withdraw_entry_debit_total: number
+    withdraw_entry_credit_total: number
+
+    deposit_entry_debit_total: number
+    deposit_entry_credit_total: number
+}
+
 export interface ITransactionBatchPaginated extends IPaginatedResult<ITransactionBatch> {}
