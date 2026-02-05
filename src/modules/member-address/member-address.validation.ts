@@ -8,7 +8,9 @@ export const HomeTypeSchema = z.enum(HOME_TYPES, 'Invalid home type')
 
 export const MemberAddressSchema = z.object({
     id: z.string().optional(),
-    member_profile_id: entityIdSchema.optional(),
+
+    // member_profile_id: entityIdSchema.optional(),
+
     label: HomeTypeSchema,
     country_code: z.string().min(1, 'Country code is required'),
     address: z.string().min(1, 'Address is required'),

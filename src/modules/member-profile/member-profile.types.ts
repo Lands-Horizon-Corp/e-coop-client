@@ -108,7 +108,7 @@ export interface IMemberProfileRequest {
 
     memberIncome?: IMemberIncomeRequest[]
     memberAssets?: IMemberAssetRequest[]
-    member_addresses: IMemberAddressRequest[]
+    member_address: IMemberAddressRequest[]
     memberExpenses?: IMemberExpenseRequest[]
     memberDescriptions?: IMemberDescriptionRequest[]
     memberCloseRemarks?: IMemberCloseRemarkRequest[]
@@ -206,7 +206,7 @@ export interface IMemberProfile extends ITimeStamps, IAuditable {
     member_assets?: IMemberAsset[]
     member_incomes?: IMemberIncome[]
     // memberWallets?: IMemberWallet[] // ano to desu
-    member_addresses?: IMemberAddress[]
+    member_address?: IMemberAddress[]
     member_expenses?: IMemberExpense[]
     // memberDescriptions?: IMemberDescription[]
     member_close_remarks?: IMemberCloseRemark[]
@@ -261,7 +261,7 @@ export interface IMemberProfilePersonalInfoRequest {
     business_address?: string
     business_contact?: string
 
-    member_addresses?: IMemberAddress[]
+    member_address?: IMemberAddressRequest[]
 
     notes?: string
     description?: string

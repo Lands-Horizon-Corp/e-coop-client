@@ -3,14 +3,15 @@ import z from 'zod'
 import { IBaseEntityMeta, TEntityId } from '@/types/common'
 
 import { IArea } from '../area'
-import { IMemberProfile } from '../member-profile/member-profile.types'
+// import { IMemberProfile } from '../member-profile/member-profile.types'
 import { HOME_TYPES } from './member-address.constants'
 import { MemberAddressSchema } from './member-address.validation'
 
 export interface IMemberAddress extends IBaseEntityMeta {
     id: TEntityId
-    member_profile_id: TEntityId
-    member_profile: IMemberProfile
+
+    // member_profile_id: TEntityId
+    // member_profile: IMemberProfile
 
     label: THomeType
     address: string
