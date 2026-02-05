@@ -86,7 +86,8 @@ export interface IBranchSettings
         ILoanVoucherORSettings,
         ICashVoucherORSettings,
         IAdjustmentVoucherSettings,
-        IJournalVoucherORSettings {
+        IJournalVoucherORSettings,
+        IMemberPassbookSettings {
     id: TEntityId
 
     currency_id: TEntityId

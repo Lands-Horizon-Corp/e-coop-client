@@ -261,6 +261,8 @@ export interface IMemberProfilePersonalInfoRequest {
     business_address?: string
     business_contact?: string
 
+    member_addresses?: IMemberAddress[]
+
     notes?: string
     description?: string
 }

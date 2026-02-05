@@ -1,4 +1,7 @@
+import { useCallback } from 'react'
+
 import { useForm } from 'react-hook-form'
+import { toast } from 'sonner'
 import z from 'zod'
 
 import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
@@ -10,9 +13,11 @@ import {
     ChecklistTemplate,
     ValueChecklistMeter,
 } from '@/modules/authentication/components/value-checklist-indicator'
+import { IMemberPassbookSettings } from '@/modules/branch-settings'
 // import MemberGenderCombobox from '@/modules/member-gender/components/member-gender-combobox'
 import MemberTypeCombobox from '@/modules/member-type/components/member-type-combobox'
 import { HandCoinsIcon, PieChartIcon } from 'lucide-react'
+import { useHotkeys } from 'react-hotkeys-hook'
 
 import CivilStatusCombobox from '@/components/comboboxes/civil-status-combobox'
 import { CountryCombobox } from '@/components/comboboxes/country-combobox'
@@ -26,6 +31,7 @@ import { Form, FormItem } from '@/components/ui/form'
 import FormFieldWrapper from '@/components/ui/form-field-wrapper'
 import { Input } from '@/components/ui/input'
 import InputDate from '@/components/ui/input-date'
+import { Kbd, KbdGroup } from '@/components/ui/kbd'
 import { Label } from '@/components/ui/label'
 import PasswordInput from '@/components/ui/password-input'
 import { PhoneInput } from '@/components/ui/phone-input'
@@ -38,6 +44,7 @@ import { IClassProps, IForm } from '@/types'
 
 import { IMemberProfile } from '../..'
 import { useQuickCreateMemberProfile } from '../../member-profile.service'
+import { buildMemberProfilePB } from '../../member-profile.utils'
 import { QuickCreateMemberProfileSchema } from '../../member-profile.validation'
 
 type TMemberProfileQuickFormValues = z.infer<
@@ -47,10 +54,13 @@ type TMemberProfileQuickFormValues = z.infer<
 export interface IMemberProfileQuickCreateFormProps
     extends
         IClassProps,
-        IForm<Partial<TMemberProfileQuickFormValues>, IMemberProfile> {}
+        IForm<Partial<TMemberProfileQuickFormValues>, IMemberProfile> {
+    pbSettings?: IMemberPassbookSettings
+}
 
 const MemberProfileQuickCreateForm = ({
     className,
+    pbSettings,
     ...formProps
 }: IMemberProfileQuickCreateFormProps) => {
     const form = useForm<TMemberProfileQuickFormValues>({
@@ -60,7 +70,6 @@ const MemberProfileQuickCreateForm = ({
         defaultValues: {
             first_name: '',
             last_name: '',
-            passbook: '',
             sex: 'female',
             status: 'for review',
             civil_status: 'single',
@@ -112,6 +121,33 @@ const MemberProfileQuickCreateForm = ({
 
     const createNewUser = form.watch('create_new_user')
 
+    const handleAutoGeneratePB = useCallback(
+        (isAuto?: boolean) => {
+            form.setValue('pb_auto_generated', isAuto)
+
+            if (!pbSettings)
+                return toast.warning(
+                    'Failed to generate PB, could not retrieve settings'
+                )
+
+            if (isAuto) {
+                form.setValue('passbook', buildMemberProfilePB(pbSettings))
+            }
+        },
+        [pbSettings, form]
+    )
+
+    useHotkeys(
+        'alt + E',
+        (e) => {
+            e.preventDefault()
+            if (form.getValues('status') === 'verified') return
+            handleAutoGeneratePB(!form.getValues('pb_auto_generated'))
+        },
+        { enableOnFormTags: true },
+        [pbSettings, form, handleAutoGeneratePB]
+    )
+
     return (
         <Form {...form}>
             <form
@@ -157,19 +193,49 @@ const MemberProfileQuickCreateForm = ({
                                     />
                                 )}
                             />
+
                             <FormFieldWrapper
                                 className="col-span-1"
                                 control={form.control}
                                 label="Passbook"
                                 name="passbook"
                                 render={({ field }) => (
-                                    <Input
-                                        {...field}
-                                        autoComplete="off"
-                                        disabled={isDisabled(field.name)}
-                                        id={field.name}
-                                        placeholder="Passbook"
-                                    />
+                                    <div>
+                                        <Input
+                                            {...field}
+                                            autoComplete="off"
+                                            disabled={isDisabled(field.name)}
+                                            id={field.name}
+                                            placeholder="Passbook"
+                                        />
+                                        <div className="flex items-center">
+                                            <Switch
+                                                checked={form.watch(
+                                                    'pb_auto_generated'
+                                                )}
+                                                className="mr-2 max-h-4 max-w-9"
+                                                disabled={
+                                                    formProps.defaultValues
+                                                        ?.status !== 'pending'
+                                                }
+                                                onCheckedChange={(value) => {
+                                                    handleAutoGeneratePB(value)
+                                                }}
+                                                thumbClassName="size-3"
+                                            />
+                                            <Label className="text-xs font-medium text-muted-foreground mr-1">
+                                                PB Auto Generated
+                                            </Label>
+                                            <Label className="text-xs font-medium text-muted-foreground">
+                                                Press Alt{' '}
+                                                <KbdGroup>
+                                                    <Kbd>Alt</Kbd>
+                                                    <span>+</span>
+                                                    <Kbd>E</Kbd>
+                                                </KbdGroup>
+                                            </Label>
+                                        </div>
+                                    </div>
                                 )}
                             />
                             <FormFieldWrapper

@@ -28,6 +28,7 @@ function ViewMemberProfilePage() {
                     branch_setting: {
                         default_member_type_id,
                         currency,
+                        ...rest
                         // default_member_gender_id,
                     },
                 },
@@ -67,6 +68,7 @@ function ViewMemberProfilePage() {
                                 currency.iso_3166_alpha3?.toUpperCase(),
                             // member_gender_id: default_member_gender_id,
                         },
+                        pbSettings: rest,
                         onSuccess: () => {},
                     }}
                 />

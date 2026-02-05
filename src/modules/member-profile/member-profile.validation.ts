@@ -90,6 +90,7 @@ export const QuickCreateMemberProfileSchema = z
         passbook: z.coerce
             .string<string>('Passbook is required')
             .min(3, 'Minimum 3 Characters'),
+        pb_auto_generated: z.boolean().default(false).optional(),
 
         organization_id: entityIdSchema.optional(),
         branch_id: entityIdSchema.optional(),
@@ -174,6 +175,8 @@ export const MemberProfilePersonalInfoSchema = z.object({
 // 🏛️ Membership Info
 export const MemberProfileMembershipInfoSchema = z.object({
     passbook: z.string().optional(),
+    pb_auto_generated: z.boolean().default(false).optional(),
+
     old_reference_id: z.string().optional(),
 
     status: generalStatusSchema.optional(),
