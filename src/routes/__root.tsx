@@ -20,7 +20,7 @@ import InfoModal from '@/components/modals/info-modal'
 import LoadingSpinner from '@/components/spinners/loading-spinner'
 import { Toaster } from '@/components/ui/sonner'
 
-// import { usePusherConnect } from '@/hooks/use-pubsub'
+import { usePusherConnect } from '@/hooks/use-pubsub'
 
 import ErrorPage from './-common-pages/error-page'
 import NotFoundPage from './-common-pages/not-found-page'
@@ -32,7 +32,7 @@ export const Route = createRootRoute({
 })
 
 function RootLayout() {
-    // usePusherConnect()
+    usePusherConnect()
 
     return (
         <div className="relative">
