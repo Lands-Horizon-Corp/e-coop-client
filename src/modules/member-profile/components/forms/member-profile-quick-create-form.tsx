@@ -214,10 +214,6 @@ const MemberProfileQuickCreateForm = ({
                                                     'pb_auto_generated'
                                                 )}
                                                 className="mr-2 max-h-4 max-w-9"
-                                                disabled={
-                                                    formProps.defaultValues
-                                                        ?.status !== 'pending'
-                                                }
                                                 onCheckedChange={(value) => {
                                                     handleAutoGeneratePB(value)
                                                 }}
