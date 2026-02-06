@@ -211,7 +211,7 @@ const PaymentWithTransactionForm = ({
     const handleSubmit = form.handleSubmit(
         async (data: TPaymentWithTransactionFormValues, event) => {
             event?.preventDefault()
-            if (data.amount < 0 || !allow_withdraw_negative_balance) {
+            if (data.amount < 0 && !allow_withdraw_negative_balance) {
                 onOpenReverseRequestAction({
                     onSuccess: () => {
                         handleSubmitForm(data)

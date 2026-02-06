@@ -152,7 +152,7 @@ export const QuickTransferTransactionForm = ({
     const handleSubmit = form.handleSubmit(
         (data: TQuickWithdrawSchemaFormValues, event) => {
             event?.preventDefault()
-            if (data.amount < 0 || !allow_withdraw_negative_balance) {
+            if (data.amount < 0 && !allow_withdraw_negative_balance) {
                 onOpenReverseRequestAction({
                     onSuccess: () => {
                         handleSubmitForm(data)
@@ -221,12 +221,7 @@ export const QuickTransferTransactionForm = ({
         if (selectedMember) {
             form.setFocus('amount')
         }
-    }, [
-        isSuccess,
-        selectedMember,
-        accountPickerModalState.open,
-        form,
-    ])
+    }, [isSuccess, selectedMember, accountPickerModalState.open, form])
 
     return (
         <>
@@ -554,7 +549,7 @@ export const QuickTransferTransactionForm = ({
                                                 triggerContentMode="full"
                                                 triggerProps={{
                                                     disabled:
-                                                        form.watch(
+                                                        form.getValues(
                                                             'member_profile_id'
                                                         ) === '' ||
                                                         isDisabled(

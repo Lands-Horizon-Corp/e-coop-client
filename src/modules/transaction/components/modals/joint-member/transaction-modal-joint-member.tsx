@@ -8,6 +8,9 @@ import ImageDisplay from '@/components/image-display'
 import Modal, { IModalProps } from '@/components/modals/modal'
 import { Button } from '@/components/ui/button'
 
+import { useInternalState } from '@/hooks/use-internal-state'
+import { useModalState } from '@/hooks/use-modal-state'
+
 import { TEntityId } from '@/types'
 
 import JointAccountCardView from '../../view/transaction-joint-member-card'
@@ -25,6 +28,7 @@ interface JointMemberModalProps extends IModalProps {
     triggerClassName?: string
     triggerProps?: React.ButtonHTMLAttributes<HTMLButtonElement>
     triggerContentMode?: 'icon' | 'full'
+    modalState?: ReturnType<typeof useModalState>
 }
 
 const TransactionModalJointMember = ({
@@ -34,10 +38,14 @@ const TransactionModalJointMember = ({
     triggerProps,
     value,
     triggerContentMode = 'icon',
+    modalState,
     ...rest
 }: JointMemberModalProps) => {
-    const [openPicker, setOpenPicker] = useState(false)
-
+    const [state, setState] = useInternalState(
+        false,
+        modalState?.open,
+        modalState?.onOpenChange
+    )
     const selectedJointMember =
         memberJointProfile.find(
             (joint) => joint.id === value || joint.id === value
@@ -46,7 +54,7 @@ const TransactionModalJointMember = ({
     const handleSelected = (jointMember: IMemberJointAccount) => {
         if (onSelect) {
             onSelect(jointMember)
-            setOpenPicker(false)
+            setState(false)
         }
     }
 
@@ -58,8 +66,8 @@ const TransactionModalJointMember = ({
         <>
             <Modal
                 description="Co-owners of this account that have the access and share financial responsibility of this account (Select a one joint member)"
-                onOpenChange={setOpenPicker}
-                open={openPicker}
+                onOpenChange={setState}
+                open={state}
                 title="Joint Accounts"
                 {...rest}
                 className="max-w-7xl!"
@@ -70,7 +78,7 @@ const TransactionModalJointMember = ({
                             className="p-2 rounded-md text-xl text-muted-foreground h-full flex flex-col gap-y-2 justify-center items-center"
                             disabled={!hasSelectedMember}
                             onClick={() => {
-                                setOpenPicker(false)
+                                setState(false)
                                 onSelect?.(undefined)
                             }}
                             variant={'outline'}
@@ -106,7 +114,7 @@ const TransactionModalJointMember = ({
                 )}
                 onClick={(e) => {
                     e.preventDefault()
-                    setOpenPicker(true)
+                    setState(true)
                 }}
                 size={triggerContentMode === 'icon' ? 'icon' : 'default'}
                 variant={'outline'}
