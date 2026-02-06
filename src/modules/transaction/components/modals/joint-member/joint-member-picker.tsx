@@ -37,7 +37,7 @@ const JointMemberPicker = forwardRef<HTMLButtonElement, JointMemberPickerProps>(
             placeholder = 'Select joint member',
             triggerContentMode,
             triggerProps,
-            shortcutKeyTrigger = 'Enter',
+            shortcutKeyTrigger = '',
             ...rest
         },
         ref
