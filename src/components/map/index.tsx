@@ -1,5 +1,6 @@
 import React, { forwardRef, useCallback, useEffect, useRef } from 'react'
 
+import { GOOGLE_MAPS_MAP_ID } from '@/constants'
 import { cn } from '@/helpers/tw-utils'
 import { useTheme } from '@/modules/settings/provider/theme-provider'
 import { GoogleMap, type GoogleMapProps } from '@react-google-maps/api'
@@ -9,7 +10,6 @@ import { IBaseProps } from '@/types'
 import { SadFaceIcon } from '../icons'
 import { useMap } from './map.provider'
 import { constructGoogleMapsViewUrl } from './map.utils'
-import { GOOGLE_MAPS_MAP_ID } from '@/constants'
 
 export interface MapLocation {
     lat: number

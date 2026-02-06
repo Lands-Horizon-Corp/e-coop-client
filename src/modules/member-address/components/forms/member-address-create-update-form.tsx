@@ -1,18 +1,21 @@
-import { useForm } from 'react-hook-form'
+import { UseFormReturn, useForm } from 'react-hook-form'
 import z from 'zod'
 
 import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
 
 import { cn } from '@/helpers'
 import AreaCombobox from '@/modules/area/components/area-combobox'
+import BarangayCombobox from '@/modules/location/components/barangay-combobox'
 
 // import { withToastCallbacks } from '@/helpers/callback-helper'
 // import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
 
 import { CountryCombobox } from '@/components/comboboxes/country-combobox'
 import FormFooterResetSubmit from '@/components/form-components/form-footer-reset-submit'
+import { ChevronDownIcon } from '@/components/icons'
 import MapPicker from '@/components/map/map-picker'
 import Modal, { IModalProps } from '@/components/modals/modal'
+import { Button } from '@/components/ui/button'
 import { Form } from '@/components/ui/form'
 import FormFieldWrapper from '@/components/ui/form-field-wrapper'
 import { Input } from '@/components/ui/input'
@@ -26,7 +29,10 @@ import { IClassProps, IForm } from '@/types'
 //     useCreateMemberProfileAddress,
 //     useUpdateMemberProfileAddress,
 // } from '../../member-address.service'
-import { IMemberAddress } from '../../member-address.types'
+import {
+    IMemberAddress,
+    IMemberAddressRequest,
+} from '../../member-address.types'
 import { MemberAddressSchema } from '../../member-address.validation'
 import HomeTypeCombobox from '../home-type-combobox'
 
@@ -59,7 +65,7 @@ const MemberAddressCreateUpdateForm = ({
         defaultValues: {
             label: 'House',
             city: '',
-            country_code: '',
+            country_code: 'PH',
             postal_code: '',
             province_state: '',
             barangay: '',
@@ -90,11 +96,10 @@ const MemberAddressCreateUpdateForm = ({
     //     },
     // })
 
-    const { formRef, handleFocusError, isDisabled } =
-        useFormHelper<TMemberAddressFormValues>({
-            form,
-            ...formProps,
-        })
+    const { handleFocusError } = useFormHelper<TMemberAddressFormValues>({
+        form,
+        ...formProps,
+    })
 
     const onSubmit = form.handleSubmit((formData, e) => {
         e?.stopPropagation()
@@ -124,14 +129,11 @@ const MemberAddressCreateUpdateForm = ({
 
     // const error = serverRequestErrExtractor({ error: rawError })
 
-    const countryCode = form.watch('country_code')
-
     return (
         <Form {...form}>
             <form
                 className={cn('flex w-full flex-col gap-y-4', className)}
                 onSubmit={onSubmit}
-                ref={formRef}
             >
                 <fieldset
                     className="grid gap-x-6 gap-y-4 sm:gap-y-3"
@@ -146,7 +148,7 @@ const MemberAddressCreateUpdateForm = ({
                                 <HomeTypeCombobox
                                     {...field}
                                     className="bg-popover"
-                                    disabled={isDisabled(field.name)}
+                                    // disabled={isDisabled(field.name)}
                                     id={field.name}
                                     placeholder="Label"
                                 />
@@ -161,7 +163,7 @@ const MemberAddressCreateUpdateForm = ({
                                     {...field}
                                     customTriggerClassName="bg-popover"
                                     defaultValue={field.value}
-                                    disabled={isDisabled(field.name)}
+                                    // disabled={isDisabled(field.name)}
                                     onChange={(country) =>
                                         field.onChange(country.alpha2)
                                     }
@@ -177,7 +179,7 @@ const MemberAddressCreateUpdateForm = ({
                                 <Textarea
                                     {...field}
                                     className="bg-popover"
-                                    disabled={isDisabled(field.name)}
+                                    // disabled={isDisabled(field.name)}
                                     id={field.name}
                                     placeholder="Type complete address here"
                                 />
@@ -191,7 +193,7 @@ const MemberAddressCreateUpdateForm = ({
                                 <Input
                                     {...field}
                                     className="bg-popover"
-                                    disabled={isDisabled(field.name)}
+                                    // disabled={isDisabled(field.name)}
                                     id={field.name}
                                     placeholder="City"
                                 />
@@ -206,7 +208,7 @@ const MemberAddressCreateUpdateForm = ({
                                     <Input
                                         {...field}
                                         className="bg-popover"
-                                        disabled={isDisabled(field.name)}
+                                        // disabled={isDisabled(field.name)}
                                         id={field.name}
                                         placeholder="Postal Code"
                                     />
@@ -220,29 +222,14 @@ const MemberAddressCreateUpdateForm = ({
                                     <Input
                                         {...field}
                                         className="bg-popover"
-                                        disabled={isDisabled(field.name)}
+                                        // disabled={isDisabled(field.name)}
                                         id={field.name}
                                         placeholder="Province/State"
                                     />
                                 )}
                             />
                         </div>
-                        {countryCode === 'PH' && (
-                            <FormFieldWrapper
-                                control={form.control}
-                                label="Barangay"
-                                name="barangay"
-                                render={({ field }) => (
-                                    <Input
-                                        {...field}
-                                        className="bg-popover"
-                                        disabled={isDisabled(field.name)}
-                                        id={field.name}
-                                        placeholder="Barangay"
-                                    />
-                                )}
-                            />
-                        )}
+                        <BarangayField form={form} />
 
                         <FormFieldWrapper
                             control={form.control}
@@ -253,7 +240,7 @@ const MemberAddressCreateUpdateForm = ({
                             render={({ field }) => (
                                 <AreaCombobox
                                     {...field}
-                                    disabled={isDisabled(field.name)}
+                                    // disabled={isDisabled(field.name)}
                                     id={field.name}
                                     placeholder="Area Collection"
                                 />
@@ -267,7 +254,7 @@ const MemberAddressCreateUpdateForm = ({
                                 <Textarea
                                     {...field}
                                     className="bg-popover"
-                                    disabled={isDisabled(field.name)}
+                                    // disabled={isDisabled(field.name)}
                                     id={field.name}
                                     placeholder="Landmark"
                                 />
@@ -319,6 +306,51 @@ const MemberAddressCreateUpdateForm = ({
                 />
             </form>
         </Form>
+    )
+}
+
+const BarangayField = ({
+    form,
+}: {
+    form: UseFormReturn<IMemberAddressRequest>
+}) => {
+    const countryCode = form.watch('country_code')
+
+    if (countryCode !== 'PH') return null
+
+    return (
+        <FormFieldWrapper
+            control={form.control}
+            label="Barangay"
+            name="barangay"
+            render={({ field }) => (
+                <div className="flex gap-x-1">
+                    <Input
+                        {...field}
+                        className="bg-popover"
+                        id={field.name}
+                        placeholder="Barangay"
+                    />
+                    <BarangayCombobox
+                        city={form.watch('city')}
+                        defaultValue={field.value}
+                        onChange={(barangay) => {
+                            field.onChange(barangay.name)
+                        }}
+                        trigger={
+                            <Button
+                                className="justify-between px-3"
+                                role="combobox"
+                                variant="outline"
+                            >
+                                <ChevronDownIcon className="opacity-50" />
+                            </Button>
+                        }
+                        value={field.value}
+                    />
+                </div>
+            )}
+        />
     )
 }
 

@@ -22,7 +22,7 @@ import LoadingSpinner from './components/spinners/loading-spinner';
 import MouseTrailEffect from './components/ui/mouse-trail-effect';
 import { APP_ENV } from './constants';
 import { useIncognitoDetector } from './hooks/use-incognito-detector';
-// import { initializeBarangays } from './modules/location';
+import { initializeBarangayMapping } from './modules/location';
 import { routeTree } from './routeTree.gen';
 
 export const router = createRouter({ routeTree });
@@ -33,7 +33,7 @@ declare module '@tanstack/react-router' {
     }
 }
 
-// initializeBarangays();
+initializeBarangayMapping();
 
 const AppContent = () => {
     const { mouseTrailEnabled } = useTheme();
