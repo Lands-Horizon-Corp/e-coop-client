@@ -57,6 +57,7 @@ export const useQuickTransferController = ({
         paymentTypeModalState,
         othersState,
         modalTransactionReverseState,
+        branchSetting: user_organization.branch.branch_setting,
     }
 }
 

@@ -3,14 +3,14 @@ import { IMemberJointAccount } from '@/modules/member-joint-account'
 
 import { CalendarIcon, Users3Icon, WoodSignsIcon } from '@/components/icons'
 import ImageDisplay from '@/components/image-display'
+import { Button, ButtonProps } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
 import { PlainTextEditor } from '@/components/ui/text-editor'
 import PreviewMediaWrapper from '@/components/wrappers/preview-media-wrapper'
 
-interface JoinAccountCardViewProps {
+interface JoinAccountCardViewProps extends ButtonProps {
     jointAccounts: IMemberJointAccount
     className?: string
-    onClick?: (e: React.MouseEvent<HTMLDivElement>) => void
 }
 
 const TransactionJointMemberCard = ({
@@ -19,8 +19,9 @@ const TransactionJointMemberCard = ({
     onClick,
 }: JoinAccountCardViewProps) => {
     return (
-        <div
-            className={`flex flex-col gap-y-1 rounded-xl border bg-background p-4 ${className}`}
+        <Button
+            className={`flex flex-col justify-start gap-y-1 rounded-xl border bg-background p-4 h-fit ${className}`}
+            hoverVariant={'secondary'}
             onClick={onClick}
         >
             <div className="flex justify-between">
@@ -29,7 +30,7 @@ const TransactionJointMemberCard = ({
                     <p className="font-bold">{jointAccounts.full_name}</p>
                 </div>
             </div>
-            <Separator className="!my-2" />
+            <Separator className="my-2" />
             <div className="mb-4 grid grid-cols-4 gap-4">
                 <div className="col-span-full flex flex-1 flex-col items-center sm:col-span-2">
                     <PreviewMediaWrapper media={jointAccounts.picture_media}>
@@ -97,7 +98,7 @@ const TransactionJointMemberCard = ({
                     <p>{jointAccounts.family_relationship}</p>
                 </div>
             </div>
-            <div className="col-span-full !mt-4 space-y-2">
+            <div className="col-span-full mt-4! space-y-2">
                 <p className="text-muted-foreground/70">Description</p>
                 {jointAccounts?.description ? (
                     <PlainTextEditor
@@ -109,7 +110,7 @@ const TransactionJointMemberCard = ({
                     </p>
                 )}
             </div>
-        </div>
+        </Button>
     )
 }
 

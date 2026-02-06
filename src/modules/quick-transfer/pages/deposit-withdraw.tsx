@@ -62,12 +62,9 @@ interface DepositWithdrawProps {
 const DepositWithdrawWrapper = ({ mode }: DepositWithdrawProps) => {
     const { hasNoTransactionBatch } = useTransactionBatchStore()
 
-    const {
-        selectedMember,
-        setSelectedAccount,
-        user_organization,
-        modalTransactionReverseState,
-    } = useQuickTransferContext()
+    const { selectedMember, setSelectedAccount, modalTransactionReverseState } =
+        useQuickTransferContext()
+
     const { modalData, isOpen, onClose } = modalTransactionReverseState
 
     return (
@@ -97,7 +94,6 @@ const DepositWithdrawWrapper = ({ mode }: DepositWithdrawProps) => {
                         onSuccess={() => {
                             toast.success('Transaction completed successfully')
                         }}
-                        orSettings={user_organization.branch.branch_setting}
                         readOnly={!hasNoTransactionBatch}
                     />
                 </ResizablePanel>

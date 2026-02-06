@@ -79,21 +79,7 @@ export interface IMemberPassbookSettings {
     member_profile_passbook_padding: number
 }
 
-export interface IBranchSettings
-    extends
-        IBaseEntityMeta,
-        ICashCheckVoucherGeneralORSettings,
-        ILoanVoucherORSettings,
-        ICashVoucherORSettings,
-        IAdjustmentVoucherSettings,
-        IJournalVoucherORSettings,
-        IMemberPassbookSettings {
-    id: TEntityId
-
-    currency_id: TEntityId
-    currency: ICurrency
-
-    /** Withdraw OR Settings */
+export interface IWithdrawSetting {
     withdraw_allow_user_input: boolean
     withdraw_prefix: string
     withdraw_or_start: number
@@ -122,6 +108,8 @@ export interface IBranchSettings
         ICashVoucherORSettings,
         IAdjustmentVoucherSettings,
         IJournalVoucherORSettings,
+        IWithdrawSetting,
+        IMemberPassbookSettings,
         IDepositSetting {
     id: TEntityId
 

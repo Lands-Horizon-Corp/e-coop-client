@@ -2,7 +2,6 @@ import { UseFormReturn } from 'react-hook-form'
 
 import { useHotkeys } from 'react-hotkeys-hook'
 
-import { useTransactionBatchStore } from '../../transaction-batch/store/transaction-batch-store'
 import { useQuickTransferContext } from '../context/quick-transfer-context'
 import { TQuickWithdrawSchemaFormValues } from '../quick-transfer.validation'
 
@@ -27,11 +26,11 @@ export const useQuickTransferHotKeys = ({
         othersState,
         accountPickerModalState,
         paymentTypeModalState,
-        memberJointModalState,
         finalOR,
         setSelectedMember,
+        selectedMember,
+        openMemberPicker,
     } = useQuickTransferContext()
-    const { hasNoTransactionBatch } = useTransactionBatchStore()
     // CTRL + 1 — Toggle Others modal
     useHotkeys(
         'f1',
@@ -51,12 +50,20 @@ export const useQuickTransferHotKeys = ({
         'ctrl + Enter',
         (e) => {
             e.preventDefault()
+            if (
+                readOnly ||
+                isQuickTransactionPending ||
+                !isFormIsDirty ||
+                !selectedMember ||
+                openMemberPicker.open
+            )
+                return
             handleSubmit()
         },
         {
-            enableOnFormTags: true,
-            enabled: !readOnly || !isQuickTransactionPending || isFormIsDirty,
-        }
+            enableOnFormTags: ['INPUT'],
+        },
+        [readOnly, isFormIsDirty, selectedMember]
     )
 
     // ALT + 1 — Focus OR
@@ -110,21 +117,6 @@ export const useQuickTransferHotKeys = ({
         },
         [paymentTypeModalState]
     )
-
-    // ALT + 5 — Member joint modal
-    useHotkeys(
-        'Alt + 5',
-        (e) => {
-            e.preventDefault()
-            memberJointModalState.onOpenChange(!memberJointModalState.open)
-        },
-        {
-            enableOnFormTags: true,
-            enabled: hasNoTransactionBatch,
-        },
-        [memberJointModalState, hasNoTransactionBatch]
-    )
-
     // ALT + E — Toggle auto OR
     useHotkeys(
         'Alt + E',

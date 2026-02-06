@@ -3,12 +3,7 @@ import { useEffect } from 'react'
 
 import { createFileRoute } from '@tanstack/react-router'
 
-import {
-    IS_STAGING,
-    SOKETI_HOST,
-    SOKETI_KEY,
-    SOKETI_PORT,
-} from '@/constants'
+import { IS_STAGING, SOKETI_HOST, SOKETI_KEY, SOKETI_PORT } from '@/constants'
 import Pusher from 'pusher-js'
 
 export const Route = createFileRoute('/playground')({
@@ -34,9 +29,9 @@ function RouteComponent() {
             console.log('Subscribed to horizon, now binding to events...')
 
             // Bind to the Go appClient name
-            channel.bind('ecoop', (data) => {
-                console.log('Live tick:', data)
-            })
+            // channel.bind('ecoop', (data) => {
+            //     console.log('Live tick:', data)
+            // })
         })
 
         // Cleanup

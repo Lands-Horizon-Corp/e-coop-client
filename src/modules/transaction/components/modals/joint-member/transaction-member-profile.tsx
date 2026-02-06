@@ -20,7 +20,7 @@ import { useModalState } from '@/hooks/use-modal-state'
 
 import { TEntityId } from '@/types'
 
-import TransactionModalJointMember from './transaction-modal-joint-member'
+import JointMemberPicker from './joint-member-picker'
 
 export type MemberProfileTransactionViewProps = {
     memberInfo: IMemberProfile | null
@@ -122,8 +122,8 @@ const TransactionMemberProfile = ({
                             onClick={(e) => e.stopPropagation()}
                         >
                             {!viewOnly && (
-                                <TransactionModalJointMember
-                                    memberJointProfile={
+                                <JointMemberPicker
+                                    jointMembers={
                                         memberInfo.member_joint_accounts ?? []
                                     }
                                     onSelect={(jointMember) =>
@@ -131,13 +131,10 @@ const TransactionMemberProfile = ({
                                             jointMember || null
                                         )
                                     }
-                                    selectedMemberJointId={
-                                        selectedJointMember?.id
-                                    }
                                     triggerProps={{
                                         disabled: hasTransaction,
                                     }}
-                                    value={selectedJointMember?.id}
+                                    value={selectedJointMember}
                                 />
                             )}
                             {memberInfo && (

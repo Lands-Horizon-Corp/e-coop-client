@@ -7,7 +7,6 @@ import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
 import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
 import { AccountPicker } from '@/modules/account'
 import BankCombobox from '@/modules/bank/components/bank-combobox'
-import { IBranchSettings } from '@/modules/branch-settings'
 import { CurrencyInput } from '@/modules/currency'
 import { IGeneralLedger } from '@/modules/general-ledger'
 import { IMedia } from '@/modules/media'
@@ -62,7 +61,6 @@ interface TransactionEntryFormProps
             TQuickWithdrawSchemaFormValues
         > {
     mode: TPaymentMode
-    orSettings: IBranchSettings
 }
 
 export const QuickTransferTransactionForm = ({
@@ -71,7 +69,6 @@ export const QuickTransferTransactionForm = ({
     onSuccess,
     defaultValues,
     disabledFields,
-    orSettings,
 }: TransactionEntryFormProps) => {
     const {
         settings_accounting_withdraw_default_value,
@@ -86,12 +83,12 @@ export const QuickTransferTransactionForm = ({
         selectedAccount,
         selectedMember,
         openMemberPicker,
-        memberJointModalState,
         accountPickerModalState,
         paymentType,
         paymentTypeModalState,
         othersState,
         modalTransactionReverseState: { onOpenReverseRequestAction },
+        branchSetting,
     } = useQuickTransferContext()
 
     const defaultAccount =
@@ -183,25 +180,7 @@ export const QuickTransferTransactionForm = ({
     const handleResetAll = () => {
         form.reset()
         setSelectedMember(null)
-        form.reset({
-            reference_number: '',
-            description: '',
-            amount: undefined,
-            bank_id: undefined,
-            entry_date: undefined,
-            bank_reference_number: '',
-            proof_of_payment_media_id: undefined,
-            signature_media_id: undefined,
-            signature: undefined,
-            payment_type_id:
-                settings_payment_type_default_value_id || undefined,
-
-            // transaction-specific fields
-            member: null,
-            member_profile_id: '',
-            account: defaultAccount,
-            account_id: defaultAccount?.id || undefined,
-        })
+        othersState.onOpenChange(false)
     }
 
     const errorMessage = serverRequestErrExtractor({
@@ -316,7 +295,7 @@ export const QuickTransferTransactionForm = ({
                                         {...field}
                                         className="col-span-2 w-full"
                                         disabled={
-                                            !orSettings.withdraw_allow_user_input ||
+                                            !branchSetting.withdraw_allow_user_input ||
                                             isDisabled('reference_number')
                                         }
                                         value={field.value ?? ''}
@@ -525,8 +504,7 @@ export const QuickTransferTransactionForm = ({
                                                 </span>
                                             </Label>
                                             <TransactionModalJointMember
-                                                {...memberJointModalState}
-                                                memberJointProfile={
+                                                jointMembers={
                                                     selectedMember?.member_joint_accounts ??
                                                     []
                                                 }
@@ -545,6 +523,7 @@ export const QuickTransferTransactionForm = ({
                                                         jointMember
                                                     )
                                                 }}
+                                                shortcutKeyTrigger="Alt + 5"
                                                 triggerClassName="hover:bg-secondary/40 block"
                                                 triggerContentMode="full"
                                                 triggerProps={{
@@ -557,7 +536,7 @@ export const QuickTransferTransactionForm = ({
                                                         ),
                                                 }}
                                                 value={form.getValues(
-                                                    'member_joint_account_id'
+                                                    'member_joint_account'
                                                 )}
                                             />
                                         </>

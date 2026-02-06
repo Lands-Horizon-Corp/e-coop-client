@@ -11,7 +11,7 @@ import { IAccount } from '../account'
 
 export const PaymentWithTransactionSchema = z
     .object({
-            amount: z.coerce
+        amount: z.coerce
             .number({ error: 'Amount is required' })
             .refine((val) => val !== 0, '0 Amount is not allowed'),
         signature_media_id: entityIdSchema.optional(),
