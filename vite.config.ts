@@ -43,7 +43,7 @@ export default defineConfig({
         skipWaiting: true,
         clientsClaim: true,
         // Reduce warnings in development
-        globIgnores: ['**/node_modules/**/*', 'sw.js', 'workbox-*.js'],
+        globIgnores: ['**/node_modules/**/*', 'sw.js', 'workbox-*.js', '**/assets/index-*.js'],
         runtimeCaching: [
           {
             urlPattern: /^https:\/\/fonts\.googleapis\.com\/.*/i,
@@ -132,6 +132,7 @@ export default defineConfig({
           }
         ]
       }
+      
     }),
   ],
   resolve: {
