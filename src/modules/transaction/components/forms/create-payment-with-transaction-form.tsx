@@ -25,7 +25,6 @@ import {
     useCreateTransactionPaymentByMode,
 } from '@/modules/transaction'
 import { useTransactionBatchStore } from '@/modules/transaction-batch/store/transaction-batch-store'
-import { useGetUserSettings } from '@/modules/user-profile'
 import { useHotkeys } from 'react-hotkeys-hook'
 
 import { CalendarNumberIcon, ChevronDownIcon } from '@/components/icons'
@@ -53,6 +52,7 @@ import { useModalState } from '@/hooks/use-modal-state'
 import { IClassProps, IForm, TEntityId } from '@/types'
 
 import { useTransactionContext } from '../../context/transaction-context'
+import { usePaymentOnSuccessStore } from '../../hooks/use-transaction-payment-success'
 
 interface PaymentWithTransactionFormProps
     extends
@@ -79,6 +79,10 @@ const PaymentWithTransactionForm = ({
         paymentSuccess,
         history,
         modalTransactionReverseState,
+        settings_accounting_payment_default_value,
+        settings_accounting_payment_default_value_id,
+        settings_payment_type_default_value_id,
+        allow_withdraw_negative_balance,
     } = useTransactionContext()
 
     const { onOpenReverseRequestAction } = modalTransactionReverseState
@@ -86,13 +90,6 @@ const PaymentWithTransactionForm = ({
     const [focusTypePayment, _] = useState<TPaymentMode>('payment')
 
     const { data: currentTransactionBatch } = useTransactionBatchStore()
-
-    const {
-        settings_accounting_payment_default_value,
-        settings_accounting_payment_default_value_id,
-        settings_payment_type_default_value_id,
-        allow_withdraw_negative_balance,
-    } = useGetUserSettings()
 
     const memberProfileId = transactionForm.getValues('member_profile_id')
     const memberJointId = transactionForm.getValues('member_join_id')
@@ -131,6 +128,9 @@ const PaymentWithTransactionForm = ({
                 settings_payment_type_default_value_id || undefined,
         })
     }
+
+    const { onOpen } = usePaymentOnSuccessStore()
+
     const {
         mutate: creatTransactionDeposit,
         isPending,
@@ -141,6 +141,10 @@ const PaymentWithTransactionForm = ({
                 navigate.open(generalLedger.transaction_id)
                 formReset()
                 paymentSuccess.onOpenChange(true)
+                onOpen({
+                    generalLedger,
+                    mode: 'payment',
+                })
                 othersAccordionState.onOpenChange(false)
                 transactionForm.reset(
                     {
@@ -153,8 +157,6 @@ const PaymentWithTransactionForm = ({
                     }
                 )
                 form.setFocus('amount')
-                // handlers.onPaymentSuccess()
-                // onSuccess?.(generalLedger)
             },
         },
     })

@@ -1,69 +1,73 @@
 import { toast } from 'sonner'
 
 import { toReadableDate } from '@/helpers/date-utils'
-import { IGeneralLedger } from '@/modules/general-ledger'
 import { usePrintGeneralLedgerTransaction } from '@/modules/transaction'
 import { useTransactionStore } from '@/store/transaction/transaction-store'
 import { useHotkeys } from 'react-hotkeys-hook'
 
 import { CheckFillIcon, DoorExitFillIcon } from '@/components/icons'
-import Modal, { IModalProps } from '@/components/modals/modal'
+import Modal from '@/components/modals/modal'
+import LoadingSpinner from '@/components/spinners/loading-spinner'
 import { Button } from '@/components/ui/button'
 
-import { useInternalState } from '@/hooks/use-internal-state'
+import { usePaymentOnSuccessStore } from '../../hooks/use-transaction-payment-success'
 
-import { TEntityId } from '@/types'
-
-import { useTransactionContext } from '../../context/transaction-context'
-
-interface TransactionModalSuccessProps extends IModalProps {
-    onClose?: () => void
-    generalLedger?: IGeneralLedger
+interface TransactionModalSuccessProps {
+    onOpenPicker?: () => void
 }
-
 const TransactionModalSuccessPayment = ({
-    onClose,
-    generalLedger,
-    onOpenChange,
-    open,
+    onOpenPicker,
 }: TransactionModalSuccessProps) => {
-    const [state, setState] = useInternalState(false, open, onOpenChange)
+    const {
+        open,
+        generalLedgerId,
+        onClear,
+        generalLedger,
+        onOpenChange,
+        mode,
+    } = usePaymentOnSuccessStore()
 
-    const { accountPicker } = useTransactionContext()
-
-    const generalLedgerId = generalLedger?.id
-
-    const { mutate: printGeneralLedgerTransaction } =
+    const { mutateAsync: printGeneralLedgerTransaction, isPending } =
         usePrintGeneralLedgerTransaction({
             options: {
                 onSuccess: () => {
-                    toast.success('Printing generalLedger...')
+                    toast.success('Printing general ledger...')
                 },
             },
         })
-
     const { focusTypePayment } = useTransactionStore()
+
+    const handlePrint = async () => {
+        if (!generalLedgerId) {
+            return
+        }
+
+        try {
+            await printGeneralLedgerTransaction({
+                id: generalLedgerId,
+            })
+            onOpenPicker?.()
+            onClear()
+        } catch {
+            toast.error('Failed to print general ledger')
+        }
+    }
+
+    useHotkeys(
+        'enter',
+        async (e) => {
+            e.preventDefault()
+            if (!generalLedgerId || isPending) return
+            await handlePrint()
+        },
+        [isPending, generalLedgerId]
+    )
 
     const memberName = generalLedger?.member_profile?.full_name
 
-    const handlePrintGeneralLedgerTransaction = (
-        generalLedgerId: TEntityId
-    ) => {
-        printGeneralLedgerTransaction({ id: generalLedgerId })
-    }
+    const paymentType = mode === 'withdraw' ? 'Withdrawal' : mode
 
-    useHotkeys('enter', (e) => {
-        e.preventDefault()
-        if (!generalLedger || !state) return
-        accountPicker.onOpenChange(true)
-        handlePrintGeneralLedgerTransaction(generalLedger.id)
-        setState(false)
-    })
-
-    const paymentType =
-        focusTypePayment === 'withdraw' ? 'Withdrawal' : focusTypePayment
-
-    if (!generalLedger) {
+    if (!generalLedger || !generalLedgerId) {
         return null
     }
 
@@ -73,8 +77,8 @@ const TransactionModalSuccessPayment = ({
                 <div className="flex items-center justify-end w-full space-x-2">
                     <Button
                         onClick={() => {
-                            accountPicker.onOpenChange(true)
-                            setState(false)
+                            onOpenPicker?.()
+                            onClear()
                         }}
                         tabIndex={-1}
                         type="submit"
@@ -84,19 +88,12 @@ const TransactionModalSuccessPayment = ({
                         <DoorExitFillIcon className="ml-2" size={20} />
                     </Button>
                     <Button
-                        onClick={() => {
-                            if (generalLedgerId) {
-                                handlePrintGeneralLedgerTransaction(
-                                    generalLedgerId
-                                )
-                                accountPicker.onOpenChange(true)
-                                setState(false)
-                            } else {
-                                toast.error('General Ledger not Found!')
-                            }
+                        disabled={isPending}
+                        onClick={async () => {
+                            await handlePrint()
                         }}
                     >
-                        Print
+                        {isPending ? <LoadingSpinner /> : 'Print'}
                         <span className="text-lg ml-2 translate-y-[2px]">
                             ↵
                         </span>
@@ -105,12 +102,12 @@ const TransactionModalSuccessPayment = ({
             }
             onOpenChange={(newState) => {
                 if (!newState) {
-                    accountPicker.onOpenChange(true)
-                    onClose?.()
+                    onOpenPicker?.()
+                    onClear()
                 }
-                return setState(newState)
+                onOpenChange(newState)
             }}
-            open={state}
+            open={open}
         >
             <div className="flex items-center justify-center w-full h-full">
                 <div className="flex flex-col items-center justify-center gap-2">

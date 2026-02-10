@@ -1,7 +1,6 @@
 import { toast } from 'sonner'
 
 import PermissionGuard from '@/modules/permission/components/permission-guard'
-// import { SHORTCUT_SCOPES } from '@/constants';
 import {
     CurrentTransactionWithdrawHistory,
     QuickTransferTransactionForm,

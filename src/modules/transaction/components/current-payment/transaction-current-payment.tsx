@@ -36,15 +36,10 @@ type itemgBadgeTypeProps = {
 }
 
 const TransactionCurrentPaymentEntry = () => {
-    const {
-        transaction,
-        transactionId,
-        getTransaction,
-        generalLedger,
-        paymentSuccess,
-    } = useTransactionContext()
+    const { transaction, transactionId, accountPicker } =
+        useTransactionContext()
 
-    const totalAmount = getTransaction?.amount
+    const totalAmount = transaction?.amount
 
     useHotkeysTransaction()
 
@@ -77,8 +72,9 @@ const TransactionCurrentPaymentEntry = () => {
     return (
         <div className="flex min-h-full h-fit flex-col gap-y-2 mb-2 p-4 overflow-hidden rounded-2xl bg-card/50">
             <TransactionModalSuccessPayment
-                {...paymentSuccess}
-                generalLedger={generalLedger}
+                onOpenPicker={() => {
+                    accountPicker.onOpenChange(true)
+                }}
             />
 
             <div className="flex space-x-2">

@@ -3,14 +3,14 @@ import { TransactionMemberAccountLedger } from '@/modules/member-accounting-ledg
 import { MemberAccountGeneralLedgerAction } from '@/modules/member-accounting-ledger'
 import MemberAccountingLedgerTable from '@/modules/member-accounting-ledger/components/member-accounting-ledger-table'
 
-import { TEntityId } from '@/types'
+import { useModalState } from '@/hooks/use-modal-state'
 
-import { TTransactionModals } from '../../hooks/use-transaction-modals'
+import { TEntityId } from '@/types'
 
 interface TransactionAccountMemberLedgerProps {
     memberProfileId?: TEntityId
     onRowClick?: (member: IMemberAccountingLedger) => void
-    generalLedger?: TTransactionModals['ledger']
+    generalLedger?: ReturnType<typeof useModalState>
 }
 
 const TransactionAccountMemberLedger = ({

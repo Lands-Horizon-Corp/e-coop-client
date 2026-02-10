@@ -22,10 +22,19 @@ export const useQuickTransferController = ({
         currentAuth: { user_organization },
     } = useAuthUserWithOrgBranch()
 
-    const memberJointModalState = useModalState(false)
-    const accountPickerModalState = useModalState(false)
-    const paymentTypeModalState = useModalState(false)
-    const othersState = useModalState(false)
+    const {
+        settings_accounting_withdraw_default_value,
+        settings_accounting_deposit_default_value,
+        settings_payment_type_default_value_id,
+        allow_withdraw_negative_balance,
+    } = user_organization
+
+    const modals = {
+        memberJointState: useModalState(false),
+        accountPickerState: useModalState(false),
+        othersState: useModalState(false),
+        paymentTypeModalState: useModalState(false),
+    }
 
     const modalTransactionReverseState = useTransactionReverseSecurityStore()
 
@@ -43,6 +52,14 @@ export const useQuickTransferController = ({
         userOrg: user_organization,
     })
 
+    const isAllowUserReferenceNumberInput =
+        user_organization.branch.branch_setting.withdraw_allow_user_input
+
+    const defaultAccount =
+        mode === 'withdraw'
+            ? settings_accounting_withdraw_default_value
+            : settings_accounting_deposit_default_value
+
     return {
         selectedMember,
         setSelectedMember,
@@ -51,13 +68,19 @@ export const useQuickTransferController = ({
         selectedAccount,
         user_organization,
         finalOR,
-        memberJointModalState,
-        accountPickerModalState,
+        ...modals,
         paymentType,
-        paymentTypeModalState,
-        othersState,
         modalTransactionReverseState,
         branchSetting: user_organization.branch.branch_setting,
+        settings_accounting_withdraw_default_value,
+        settings_accounting_deposit_default_value,
+        settings_payment_type_default_value_id,
+        allow_withdraw_negative_balance,
+        allowUserInputreferenceNumber: isAllowUserReferenceNumberInput,
+        defaultReferenceNumber: isAllowUserReferenceNumberInput
+            ? '000000'
+            : finalOR,
+        defaultAccount,
     }
 }
 

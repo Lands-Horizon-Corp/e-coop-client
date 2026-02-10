@@ -31,6 +31,7 @@ import {
     useCreateMultiTransactionPayment,
     useCreateTransactionStandalone,
 } from '@/modules/transaction'
+import { usePaymentOnSuccessStore } from '@/modules/transaction/hooks/use-transaction-payment-success'
 
 import FormFooterResetSubmit from '@/components/form-components/form-footer-reset-submit'
 import {
@@ -89,7 +90,6 @@ const LoanPayablesForm = ({
     const [transaction, setTransaction] = useState<ITransaction>()
     const [successTransaction, setSuccessTransaction] =
         useState<IGeneralLedger | null>(null)
-    const [showSuccessModal, setShowSuccessModal] = useState(false)
 
     const {
         currentAuth: {
@@ -99,6 +99,8 @@ const LoanPayablesForm = ({
             },
         },
     } = useAuthUserWithOrgBranch()
+
+    const { onOpen } = usePaymentOnSuccessStore()
 
     const form = useForm<TLoanPayablePaymentSchema>({
         mode: 'onChange',
@@ -206,7 +208,10 @@ const LoanPayablesForm = ({
                 // Show success modal with the payment transaction
                 if (result) {
                     setSuccessTransaction(result)
-                    setShowSuccessModal(true)
+                    onOpen({
+                        generalLedger: result,
+                        mode: 'payment',
+                    })
                 }
 
                 formProps.onSuccess?.(focusedTransaction)
@@ -719,17 +724,7 @@ const LoanPayablesForm = ({
                 />
             </form>
 
-            {successTransaction && (
-                <TransactionModalSuccessPayment
-                    generalLedger={successTransaction}
-                    onClose={() => {
-                        setShowSuccessModal(false)
-                        setSuccessTransaction(null)
-                    }}
-                    onOpenChange={setShowSuccessModal}
-                    open={showSuccessModal}
-                />
-            )}
+            {successTransaction && <TransactionModalSuccessPayment />}
         </Form>
     )
 }

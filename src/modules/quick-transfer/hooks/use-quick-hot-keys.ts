@@ -1,4 +1,5 @@
 import { UseFormReturn } from 'react-hook-form'
+import { toast } from 'sonner'
 
 import { useHotkeys } from 'react-hotkeys-hook'
 
@@ -24,7 +25,7 @@ export const useQuickTransferHotKeys = ({
 }: QuickTransferHotkeyProps) => {
     const {
         othersState,
-        accountPickerModalState,
+        accountPickerState,
         paymentTypeModalState,
         finalOR,
         setSelectedMember,
@@ -32,6 +33,7 @@ export const useQuickTransferHotKeys = ({
         openMemberPicker,
     } = useQuickTransferContext()
     // CTRL + 1 — Toggle Others modal
+
     useHotkeys(
         'f1',
         (e) => {
@@ -50,6 +52,10 @@ export const useQuickTransferHotKeys = ({
         'ctrl + Enter',
         (e) => {
             e.preventDefault()
+            if (!selectedMember) {
+                toast.warning('Please select a member before submitting.')
+                return
+            }
             if (
                 readOnly ||
                 isQuickTransactionPending ||
@@ -63,7 +69,14 @@ export const useQuickTransferHotKeys = ({
         {
             enableOnFormTags: ['INPUT'],
         },
-        [readOnly, isFormIsDirty, selectedMember]
+        [
+            readOnly,
+            isFormIsDirty,
+            selectedMember,
+            openMemberPicker.open,
+            isQuickTransactionPending,
+            handleSubmit,
+        ]
     )
 
     // ALT + 1 — Focus OR
@@ -84,12 +97,12 @@ export const useQuickTransferHotKeys = ({
         'Alt + 2',
         (e) => {
             e.preventDefault()
-            accountPickerModalState.onOpenChange(!accountPickerModalState.open)
+            accountPickerState.onOpenChange(!accountPickerState.open)
         },
         {
             enableOnFormTags: true,
         },
-        [accountPickerModalState]
+        [accountPickerState]
     )
 
     // ALT + 3 — Focus amount

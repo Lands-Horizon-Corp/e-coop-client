@@ -20,11 +20,12 @@ import {
 import {
     PaymentTypeCombobox,
     TransactionModalJointMember,
+    TransactionModalSuccessPayment,
     TransactionNoFoundBatch,
     TransactionReferenceNumber,
     useCreateQuickTransactionPayment,
 } from '@/modules/transaction'
-import { useGetUserSettings } from '@/modules/user-profile'
+import { usePaymentOnSuccessStore } from '@/modules/transaction/hooks/use-transaction-payment-success'
 
 import FormFooterResetSubmit from '@/components/form-components/form-footer-reset-submit'
 import { ChevronDownIcon } from '@/components/icons'
@@ -71,30 +72,24 @@ export const QuickTransferTransactionForm = ({
     disabledFields,
 }: TransactionEntryFormProps) => {
     const {
-        settings_accounting_withdraw_default_value,
-        settings_accounting_deposit_default_value,
-        settings_payment_type_default_value_id,
-        allow_withdraw_negative_balance,
-    } = useGetUserSettings()
-
-    const {
         finalOR,
         setSelectedMember,
         selectedAccount,
         selectedMember,
         openMemberPicker,
-        accountPickerModalState,
+        accountPickerState,
         paymentType,
         paymentTypeModalState,
         othersState,
         modalTransactionReverseState: { onOpenReverseRequestAction },
         branchSetting,
+        settings_payment_type_default_value_id,
+        allow_withdraw_negative_balance,
+        allowUserInputreferenceNumber,
+        defaultReferenceNumber,
+        defaultAccount,
     } = useQuickTransferContext()
-
-    const defaultAccount =
-        mode === 'withdraw'
-            ? settings_accounting_withdraw_default_value
-            : settings_accounting_deposit_default_value
+    const { onOpen } = usePaymentOnSuccessStore()
 
     const form = useForm<TQuickWithdrawSchemaFormValues>({
         resolver: standardSchemaResolver(QuickWithdrawSchema),
@@ -102,11 +97,13 @@ export const QuickTransferTransactionForm = ({
             ...defaultValues,
             account: defaultAccount,
             account_id: defaultAccount?.id || undefined,
-            reference_number: '00000',
+            reference_number: defaultReferenceNumber,
+            is_reference_number_checked: !allowUserInputreferenceNumber,
             payment_type_id:
                 settings_payment_type_default_value_id || undefined,
         },
     })
+
     const {
         mutate: createQuickTransaction,
         isPending: isQuickTransactionPending,
@@ -129,6 +126,10 @@ export const QuickTransferTransactionForm = ({
                     { keepDefaultValues: true }
                 )
                 othersState.onOpenChange(false)
+                onOpen({
+                    generalLedger: transaction,
+                    mode: mode,
+                })
             },
         },
     })
@@ -178,7 +179,14 @@ export const QuickTransferTransactionForm = ({
     const isFormIsDirty = form.formState.isDirty
 
     const handleResetAll = () => {
-        form.reset()
+        form.reset({
+            reference_number: finalOR,
+            is_reference_number_checked: !allowUserInputreferenceNumber,
+            account: defaultAccount,
+            account_id: defaultAccount?.id || undefined,
+            payment_type_id:
+                settings_payment_type_default_value_id || undefined,
+        })
         setSelectedMember(null)
         othersState.onOpenChange(false)
     }
@@ -200,10 +208,15 @@ export const QuickTransferTransactionForm = ({
         if (selectedMember) {
             form.setFocus('amount')
         }
-    }, [isSuccess, selectedMember, accountPickerModalState.open, form])
+    }, [isSuccess, selectedMember, accountPickerState.open, form])
 
     return (
         <>
+            <TransactionModalSuccessPayment
+                onOpenPicker={() => {
+                    accountPickerState.onOpenChange(true)
+                }}
+            />
             <TransactionNoFoundBatch mode="deposit-withdrawal" />
             <Form {...form}>
                 <form
@@ -374,7 +387,7 @@ export const QuickTransferTransactionForm = ({
                                     </Label>{' '}
                                     <AccountPicker
                                         disabled={isDisabled('account_id')}
-                                        modalState={accountPickerModalState}
+                                        modalState={accountPickerState}
                                         mode="all"
                                         nameOnly
                                         onSelect={(account) => {

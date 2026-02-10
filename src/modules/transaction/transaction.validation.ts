@@ -29,8 +29,6 @@ export const PaymentWithTransactionSchema = z
             .string<string>({ error: 'Description is must be a string' })
             .transform(descriptionTransformerSanitizer)
             .optional(),
-        or_auto_generated: z.boolean().optional(),
-
         //for viewing
         signature: z.any().optional(),
         proof_of_payment_media: z.any().optional(),
