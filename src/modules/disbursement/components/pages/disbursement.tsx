@@ -11,7 +11,7 @@ import { useSubscribe } from '@/hooks/use-pubsub'
 import DisbursementTable from '../disbursement-table'
 import { DisbursementCreateUpdateFormModal } from '../forms/disbursement-create-update-form'
 
-const DisbursementPage = () => {
+const DisbursementTypePage = () => {
     const createModal = useModalState()
     const queryClient = useQueryClient()
     const {
@@ -70,4 +70,4 @@ const DisbursementPage = () => {
     )
 }
 
-export default DisbursementPage
+export default DisbursementTypePage

@@ -27,7 +27,7 @@ function RouteComponent() {
                 <SidebarProvider>
                     <OrgBranchSidebar />
                     <GlobalHotkeysProvider />
-                    <SidebarInset className="ecoop-scroll min-h-screen max-h-[100vh] w-full overflow-y-auto">
+                    <SidebarInset className="ecoop-scroll min-h-screen max-h-screen w-full overflow-y-auto">
                         <UserNav className="sticky top-0 z-50 bg-background" />
                         <main className="flex-1">
                             <Outlet />
@@ -61,7 +61,7 @@ export const CursorFollow = () => {
                 x: mousePosition.x - 12,
                 y: mousePosition.y - 12,
             }}
-            className="fixed pointer-events-none z-[9999] size-2 translate-y-full translate-x-full mix-blend-difference"
+            className="fixed pointer-events-none z-9999 size-2 translate-y-full translate-x-full mix-blend-difference"
             transition={{
                 type: 'spring',
                 stiffness: 500,
@@ -69,7 +69,7 @@ export const CursorFollow = () => {
                 mass: 0.5,
             }}
         >
-            <CursorFillIcon className=" -rotate-[80deg]" />
+            <CursorFillIcon className=" -rotate-80" />
         </motion.div>
     )
 }
@@ -85,7 +85,7 @@ const TimeMachineTimeStatBar = () => {
 
     return (
         <div className="sticky bottom-0 left-0 w-full">
-            <div className="absolute pointer-events-none w-full top-0.5 z-5 h-16 from-40% -translate-y-full bg-gradient-to-t from-primary/10 to-transparent" />
+            <div className="absolute pointer-events-none w-full top-0.5 z-5 h-16 from-40% -translate-y-full bg-linear-to-t from-primary/10 to-transparent" />
             <TimeMachineTimeStatusBar
                 className="z-10"
                 timeMachineTime={time_machine_time}

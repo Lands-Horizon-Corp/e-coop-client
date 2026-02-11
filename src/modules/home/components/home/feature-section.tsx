@@ -42,8 +42,8 @@ export default function FeatureSection() {
                         members, finances, and integrations.
                     </p>
 
-                    <div className="grid grid-cols-[repeat(auto-fit,_320px)] gap-8 justify-center">
-                        <div className="w-[320px] rounded-3xl overflow-hidden backdrop-blur-2xl bg-background/70">
+                    <div className="grid grid-cols-[repeat(auto-fit,320px)] gap-8 justify-center">
+                        <div className="w-xs rounded-3xl overflow-hidden backdrop-blur-2xl bg-background/70">
                             <CreditCard />
                             <div className="py-5 px-3 space-y-6">
                                 {/* Header */}
@@ -64,7 +64,7 @@ export default function FeatureSection() {
                                 <div className="space-y-4">
                                     <div className="space-y-3">
                                         <div className="flex items-center gap-3">
-                                            <div className="flex-shrink-0 w-8 h-8 bg-primary/10 rounded-lg flex items-center justify-center">
+                                            <div className="shrink-0 w-8 h-8 bg-primary/10 rounded-lg flex items-center justify-center">
                                                 <GitGraphIcon className="h-4 w-4 text-primary" />
                                             </div>
                                             <div className="text-sm">
@@ -79,7 +79,7 @@ export default function FeatureSection() {
                                         </div>
 
                                         <div className="flex items-center gap-3">
-                                            <div className="flex-shrink-0 w-8 h-8 bg-primary/10 rounded-lg flex items-center justify-center">
+                                            <div className="shrink-0 w-8 h-8 bg-primary/10 rounded-lg flex items-center justify-center">
                                                 <WifiIcon className="h-4 w-4 text-primary" />
                                             </div>
                                             <div className="text-sm">
@@ -94,7 +94,7 @@ export default function FeatureSection() {
                                         </div>
 
                                         <div className="flex items-center gap-3">
-                                            <div className="flex-shrink-0 w-8 h-8 bg-primary/10 rounded-lg flex items-center justify-center">
+                                            <div className="shrink-0 w-8 h-8 bg-primary/10 rounded-lg flex items-center justify-center">
                                                 <MonitorIcon className="h-4 w-4 text-primary" />
                                             </div>
                                             <div className="text-sm">
@@ -111,7 +111,7 @@ export default function FeatureSection() {
                                 </div>
                             </div>
                         </div>
-                        <div className="w-[320px] rounded-3xl overflow-hidden backdrop-blur-2xl bg-background/70">
+                        <div className="w-xs rounded-3xl overflow-hidden backdrop-blur-2xl bg-background/70">
                             <Banking />
                             <div className="p-4">
                                 <h3 className="text-foreground mb-2 min-h-[28px] font-bold md:mb-4">
@@ -128,7 +128,7 @@ export default function FeatureSection() {
                             <div className="space-y-4 py-5 px-3">
                                 <div className="space-y-3">
                                     <div className="flex items-center gap-3">
-                                        <div className="flex-shrink-0 w-8 h-8 bg-primary/10 rounded-lg flex items-center justify-center">
+                                        <div className="shrink-0 w-8 h-8 bg-primary/10 rounded-lg flex items-center justify-center">
                                             <MoneyIcon className="h-4 w-4 text-primary" />
                                         </div>
                                         <div className="text-sm">
@@ -143,7 +143,7 @@ export default function FeatureSection() {
                                     </div>
 
                                     <div className="flex items-center gap-3">
-                                        <div className="flex-shrink-0 w-8 h-8 bg-primary/10 rounded-lg flex items-center justify-center">
+                                        <div className="shrink-0 w-8 h-8 bg-primary/10 rounded-lg flex items-center justify-center">
                                             <UserIcon className="h-4 w-4 text-primary" />
                                         </div>
                                         <div className="text-sm">
@@ -158,7 +158,7 @@ export default function FeatureSection() {
                                     </div>
 
                                     <div className="flex items-center gap-3">
-                                        <div className="flex-shrink-0 w-8 h-8 bg-primary/10 rounded-lg flex items-center justify-center">
+                                        <div className="shrink-0 w-8 h-8 bg-primary/10 rounded-lg flex items-center justify-center">
                                             <HistoryIcon className="h-4 w-4 text-primary" />
                                         </div>
                                         <div className="text-sm">
@@ -173,7 +173,7 @@ export default function FeatureSection() {
                                     </div>
 
                                     <div className="flex items-center gap-3">
-                                        <div className="flex-shrink-0 w-8 h-8 bg-primary/10 rounded-lg flex items-center justify-center">
+                                        <div className="shrink-0 w-8 h-8 bg-primary/10 rounded-lg flex items-center justify-center">
                                             <FinanceReportsIcon className="h-4 w-4 text-primary" />
                                         </div>
                                         <div className="text-sm">
@@ -189,7 +189,7 @@ export default function FeatureSection() {
                                 </div>
                             </div>
                         </div>
-                        <div className="w-[320px] rounded-3xl overflow-hidden backdrop-blur-2xl bg-background/70">
+                        <div className="w-xs rounded-3xl overflow-hidden backdrop-blur-2xl bg-background/70">
                             <MemberPortal />
                             <div className="py-5 px-3 space-y-6">
                                 {/* Header */}
@@ -211,7 +211,7 @@ export default function FeatureSection() {
                                 <div className="space-y-4">
                                     <div className="space-y-3">
                                         <div className="flex items-center gap-3">
-                                            <div className="flex-shrink-0 w-8 h-8 bg-primary/10 rounded-lg flex items-center justify-center">
+                                            <div className="shrink-0 w-8 h-8 bg-primary/10 rounded-lg flex items-center justify-center">
                                                 <VoteIcon className="h-4 w-4 text-primary" />
                                             </div>
                                             <div className="text-sm">
@@ -226,7 +226,7 @@ export default function FeatureSection() {
                                         </div>
 
                                         <div className="flex items-center gap-3">
-                                            <div className="flex-shrink-0 w-8 h-8 bg-primary/10 rounded-lg flex items-center justify-center">
+                                            <div className="shrink-0 w-8 h-8 bg-primary/10 rounded-lg flex items-center justify-center">
                                                 <UserPlusIcon className="h-4 w-4 text-primary" />
                                             </div>
                                             <div className="text-sm">
@@ -241,7 +241,7 @@ export default function FeatureSection() {
                                         </div>
 
                                         <div className="flex items-center gap-3">
-                                            <div className="flex-shrink-0 w-8 h-8 bg-primary/10 rounded-lg flex items-center justify-center">
+                                            <div className="shrink-0 w-8 h-8 bg-primary/10 rounded-lg flex items-center justify-center">
                                                 <ArrowRightToLineIcon className="h-4 w-4 text-primary" />
                                             </div>
                                             <div className="text-sm">
@@ -256,7 +256,7 @@ export default function FeatureSection() {
                                         </div>
 
                                         <div className="flex items-center gap-3">
-                                            <div className="flex-shrink-0 w-8 h-8 bg-primary/10 rounded-lg flex items-center justify-center">
+                                            <div className="shrink-0 w-8 h-8 bg-primary/10 rounded-lg flex items-center justify-center">
                                                 <UserIcon className="h-4 w-4 text-primary" />
                                             </div>
                                             <div className="text-sm">

@@ -57,65 +57,63 @@ import { Route as landingPolicyAmlCtfPolicyRouteImport } from './routes/(landing
 import { Route as landingExploreOrganization_idRouteImport } from './routes/(landing)/explore/$organization_id'
 import { Route as OrgOrgnameBranchBranchnameRouteRouteImport } from './routes/org/$orgname/branch.$branchname/route'
 import { Route as OrgOrgnameBranchBranchnameIndexRouteImport } from './routes/org/$orgname/branch.$branchname/index'
+import { Route as OrgOrgnameBranchBranchnameSystemGenerateSavingsInterestRouteImport } from './routes/org/$orgname/branch.$branchname/system/generate-savings-interest'
+import { Route as OrgOrgnameBranchBranchnameSystemGenerateMutualAidRouteImport } from './routes/org/$orgname/branch.$branchname/system/generate-mutual-aid'
+import { Route as OrgOrgnameBranchBranchnameSystemAccountTransactionRouteImport } from './routes/org/$orgname/branch.$branchname/system/account-transaction'
+import { Route as OrgOrgnameBranchBranchnameMaintenanceTagTemplateRouteImport } from './routes/org/$orgname/branch.$branchname/maintenance/tag-template'
+import { Route as OrgOrgnameBranchBranchnameMaintenanceHolidaysRouteImport } from './routes/org/$orgname/branch.$branchname/maintenance/holidays'
+import { Route as OrgOrgnameBranchBranchnameMaintenanceCompanyRouteImport } from './routes/org/$orgname/branch.$branchname/maintenance/company'
+import { Route as OrgOrgnameBranchBranchnameMaintenanceBillsAndCoinsRouteImport } from './routes/org/$orgname/branch.$branchname/maintenance/bills-and-coins'
+import { Route as OrgOrgnameBranchBranchnameMaintenanceBanksRouteImport } from './routes/org/$orgname/branch.$branchname/maintenance/banks'
+import { Route as OrgOrgnameBranchBranchnameMaintenanceAreaRouteImport } from './routes/org/$orgname/branch.$branchname/maintenance/area'
 import { Route as OrgOrgnameBranchBranchnameDevDocumentationRouteImport } from './routes/org/$orgname/branch.$branchname/dev/documentation'
-import { Route as OrgOrgnameBranchBranchnameAccountingJournalVoucherRouteImport } from './routes/org/$orgname/branch.$branchname/accounting/journal-voucher'
-import { Route as OrgOrgnameBranchBranchnameAccountingCashCheckJournalVoucherRouteImport } from './routes/org/$orgname/branch.$branchname/accounting/cash-check-journal-voucher'
-import { Route as OrgOrgnameBranchBranchnameAccountingAdjustmentEntryRouteImport } from './routes/org/$orgname/branch.$branchname/accounting/adjustment-entry'
-import { Route as OrgOrgnameBranchBranchnameAccountingAccountsRouteImport } from './routes/org/$orgname/branch.$branchname/accounting/accounts'
-import { Route as OrgOrgnameBranchBranchnamemeMyTimesheetRouteImport } from './routes/org/$orgname/branch.$branchname/(me)/my-timesheet'
-import { Route as OrgOrgnameBranchBranchnamemeMyDisbursementTransactionRouteImport } from './routes/org/$orgname/branch.$branchname/(me)/my-disbursement-transaction'
-import { Route as OrgOrgnameBranchBranchnamemeMyBranchFootstepsRouteImport } from './routes/org/$orgname/branch.$branchname/(me)/my-branch-footsteps'
-import { Route as OrgOrgnameBranchBranchnamemeMyAllFootstepsRouteImport } from './routes/org/$orgname/branch.$branchname/(me)/my-all-footsteps'
-import { Route as OrgOrgnameBranchBranchnameemployeeTimesheetsRouteImport } from './routes/org/$orgname/branch.$branchname/(employee)/timesheets'
-import { Route as OrgOrgnameBranchBranchnameemployeeGenerateSavingsInterestRouteImport } from './routes/org/$orgname/branch.$branchname/(employee)/generate-savings-interest'
-import { Route as OrgOrgnameBranchBranchnameemployeeGenerateMutualAidRouteImport } from './routes/org/$orgname/branch.$branchname/(employee)/generate-mutual-aid'
-import { Route as OrgOrgnameBranchBranchnameemployeeAccountTransactionRouteImport } from './routes/org/$orgname/branch.$branchname/(employee)/account-transaction'
+import { Route as OrgOrgnameBranchBranchnametransactionsWithdrawRouteImport } from './routes/org/$orgname/branch.$branchname/(transactions)/withdraw'
+import { Route as OrgOrgnameBranchBranchnametransactionsTransactionsRouteImport } from './routes/org/$orgname/branch.$branchname/(transactions)/transactions'
+import { Route as OrgOrgnameBranchBranchnametransactionsPaymentRouteImport } from './routes/org/$orgname/branch.$branchname/(transactions)/payment'
+import { Route as OrgOrgnameBranchBranchnametransactionsLoanPaymentRouteImport } from './routes/org/$orgname/branch.$branchname/(transactions)/loan-payment'
+import { Route as OrgOrgnameBranchBranchnametransactionsLoanRouteImport } from './routes/org/$orgname/branch.$branchname/(transactions)/loan'
+import { Route as OrgOrgnameBranchBranchnametransactionsJournalVoucherRouteImport } from './routes/org/$orgname/branch.$branchname/(transactions)/journal-voucher'
+import { Route as OrgOrgnameBranchBranchnametransactionsDisbursementTransactionRouteImport } from './routes/org/$orgname/branch.$branchname/(transactions)/disbursement-transaction'
+import { Route as OrgOrgnameBranchBranchnametransactionsDepositRouteImport } from './routes/org/$orgname/branch.$branchname/(transactions)/deposit'
+import { Route as OrgOrgnameBranchBranchnametransactionsCashCheckJournalVoucherRouteImport } from './routes/org/$orgname/branch.$branchname/(transactions)/cash-check-journal-voucher'
+import { Route as OrgOrgnameBranchBranchnametransactionsAdjustmentEntryRouteImport } from './routes/org/$orgname/branch.$branchname/(transactions)/adjustment-entry'
+import { Route as OrgOrgnameBranchBranchnamemembersViewMembersRouteImport } from './routes/org/$orgname/branch.$branchname/(members)/view-members'
+import { Route as OrgOrgnameBranchBranchnamemembersMemberAccountingLedgerRouteImport } from './routes/org/$orgname/branch.$branchname/(members)/member-accounting-ledger'
+import { Route as OrgOrgnameBranchBranchnameemployeesViewEmployeesRouteImport } from './routes/org/$orgname/branch.$branchname/(employees)/view-employees'
+import { Route as OrgOrgnameBranchBranchnameemployeesTimesheetsRouteImport } from './routes/org/$orgname/branch.$branchname/(employees)/timesheets'
+import { Route as OrgOrgnameBranchBranchnameemployeesPermissionTemplateRouteImport } from './routes/org/$orgname/branch.$branchname/(employees)/permission-template'
+import { Route as OrgOrgnameBranchBranchnameemployeesInvitationCodeRouteImport } from './routes/org/$orgname/branch.$branchname/(employees)/invitation-code'
+import { Route as OrgOrgnameBranchBranchnameemployeesEmployeeFootstepsRouteImport } from './routes/org/$orgname/branch.$branchname/(employees)/employee-footsteps'
 import { Route as OrgOrgnameBranchBranchnamecommonDashboardRouteImport } from './routes/org/$orgname/branch.$branchname/(common)/dashboard'
-import { Route as OrgOrgnameBranchBranchnamemeMyGeneralLedgerEntriesRouteRouteImport } from './routes/org/$orgname/branch.$branchname/(me)/my-general-ledger-entries/route'
-import { Route as OrgOrgnameBranchBranchnameemployeeGeneralLedgerRouteRouteImport } from './routes/org/$orgname/branch.$branchname/(employee)/general-ledger/route'
-import { Route as OrgOrgnameBranchBranchnameemployeeTransactionIndexRouteImport } from './routes/org/$orgname/branch.$branchname/(employee)/transaction/index'
-import { Route as OrgOrgnameBranchBranchnameemployeeSchemesIndexRouteImport } from './routes/org/$orgname/branch.$branchname/(employee)/schemes/index'
-import { Route as OrgOrgnameBranchBranchnameemployeeApprovalsIndexRouteImport } from './routes/org/$orgname/branch.$branchname/(employee)/approvals/index'
-import { Route as OrgOrgnameBranchBranchnamemaintenanceMaintenanceTagTemplateRouteImport } from './routes/org/$orgname/branch.$branchname/(maintenance)/maintenance/tag-template'
-import { Route as OrgOrgnameBranchBranchnamemaintenanceMaintenanceHolidaysRouteImport } from './routes/org/$orgname/branch.$branchname/(maintenance)/maintenance/holidays'
-import { Route as OrgOrgnameBranchBranchnamemaintenanceMaintenanceCompanyRouteImport } from './routes/org/$orgname/branch.$branchname/(maintenance)/maintenance/company'
-import { Route as OrgOrgnameBranchBranchnamemaintenanceMaintenanceCollateralRouteImport } from './routes/org/$orgname/branch.$branchname/(maintenance)/maintenance/collateral'
-import { Route as OrgOrgnameBranchBranchnamemaintenanceMaintenanceBillsAndCoinsRouteImport } from './routes/org/$orgname/branch.$branchname/(maintenance)/maintenance/bills-and-coins'
-import { Route as OrgOrgnameBranchBranchnamemaintenanceMaintenanceBanksRouteImport } from './routes/org/$orgname/branch.$branchname/(maintenance)/maintenance/banks'
-import { Route as OrgOrgnameBranchBranchnamemaintenanceMaintenanceAreaRouteImport } from './routes/org/$orgname/branch.$branchname/(maintenance)/maintenance/area'
-import { Route as OrgOrgnameBranchBranchnamemaintenancemembersViewMembersRouteImport } from './routes/org/$orgname/branch.$branchname/(maintenance)/(members)/view-members'
-import { Route as OrgOrgnameBranchBranchnamemaintenancemembersMemberAccountingLedgerRouteImport } from './routes/org/$orgname/branch.$branchname/(maintenance)/(members)/member-accounting-ledger'
-import { Route as OrgOrgnameBranchBranchnamemaintenanceemployeesPermissionTemplateRouteImport } from './routes/org/$orgname/branch.$branchname/(maintenance)/(employees)/permission-template'
-import { Route as OrgOrgnameBranchBranchnamemaintenanceemployeesEmployeeFootstepsRouteImport } from './routes/org/$orgname/branch.$branchname/(maintenance)/(employees)/employee-footsteps'
-import { Route as OrgOrgnameBranchBranchnameemployeeTransactionTransactionsRouteImport } from './routes/org/$orgname/branch.$branchname/(employee)/transaction/transactions'
-import { Route as OrgOrgnameBranchBranchnameemployeeTransactionTransactionBatchRouteImport } from './routes/org/$orgname/branch.$branchname/(employee)/transaction/transaction-batch'
-import { Route as OrgOrgnameBranchBranchnameemployeeTransactionTestRouteImport } from './routes/org/$orgname/branch.$branchname/(employee)/transaction/test'
-import { Route as OrgOrgnameBranchBranchnameemployeeTransactionPaymentTypeRouteImport } from './routes/org/$orgname/branch.$branchname/(employee)/transaction/payment-type'
-import { Route as OrgOrgnameBranchBranchnameemployeeTransactionLoanPaymentRouteImport } from './routes/org/$orgname/branch.$branchname/(employee)/transaction/loan-payment'
-import { Route as OrgOrgnameBranchBranchnameemployeeTransactionDisbursementTransactionRouteImport } from './routes/org/$orgname/branch.$branchname/(employee)/transaction/disbursement-transaction'
-import { Route as OrgOrgnameBranchBranchnameemployeeTransactionDisbursementRouteImport } from './routes/org/$orgname/branch.$branchname/(employee)/transaction/disbursement'
-import { Route as OrgOrgnameBranchBranchnameemployeeLoanLoansRouteImport } from './routes/org/$orgname/branch.$branchname/(employee)/loan/loans'
-import { Route as OrgOrgnameBranchBranchnameemployeeLoanLoanStatusRouteImport } from './routes/org/$orgname/branch.$branchname/(employee)/loan/loan-status'
-import { Route as OrgOrgnameBranchBranchnameemployeeLoanLoanPurposeRouteImport } from './routes/org/$orgname/branch.$branchname/(employee)/loan/loan-purpose'
-import { Route as OrgOrgnameBranchBranchnameemployeeLoanLoanApplicationRouteImport } from './routes/org/$orgname/branch.$branchname/(employee)/loan/loan-application'
+import { Route as OrgOrgnameBranchBranchnameblotterTransactionBatchRouteImport } from './routes/org/$orgname/branch.$branchname/(blotter)/transaction-batch'
+import { Route as OrgOrgnameBranchBranchnameblotterGeneralLedgerDefinitionRouteImport } from './routes/org/$orgname/branch.$branchname/(blotter)/general-ledger-definition'
+import { Route as OrgOrgnameBranchBranchnameblotterCashCountRouteImport } from './routes/org/$orgname/branch.$branchname/(blotter)/cash-count'
+import { Route as OrgOrgnameBranchBranchnameapprovalsApprovalsRouteImport } from './routes/org/$orgname/branch.$branchname/(approvals)/approvals'
+import { Route as OrgOrgnameBranchBranchnameaccountingFinancialStatementDefinitionRouteImport } from './routes/org/$orgname/branch.$branchname/(accounting)/financial-statement-definition'
+import { Route as OrgOrgnameBranchBranchnameaccountingAccountsRouteImport } from './routes/org/$orgname/branch.$branchname/(accounting)/accounts'
+import { Route as OrgOrgnameBranchBranchnameschemesSchemesIndexRouteImport } from './routes/org/$orgname/branch.$branchname/(schemes)/schemes/index'
+import { Route as OrgOrgnameBranchBranchnameMaintenanceLoansLoanStatusRouteImport } from './routes/org/$orgname/branch.$branchname/maintenance/loans/loan-status'
+import { Route as OrgOrgnameBranchBranchnameMaintenanceLoansLoanPurposeRouteImport } from './routes/org/$orgname/branch.$branchname/maintenance/loans/loan-purpose'
+import { Route as OrgOrgnameBranchBranchnameMaintenanceLoansLoanApplicationRouteImport } from './routes/org/$orgname/branch.$branchname/maintenance/loans/loan-application'
+import { Route as OrgOrgnameBranchBranchnameMaintenanceLoansCollateralRouteImport } from './routes/org/$orgname/branch.$branchname/maintenance/loans/collateral'
+import { Route as OrgOrgnameBranchBranchnameMaintenanceAccountsPaymentTypeRouteImport } from './routes/org/$orgname/branch.$branchname/maintenance/accounts/payment-type'
+import { Route as OrgOrgnameBranchBranchnameMaintenanceAccountsDisbursementTypeRouteImport } from './routes/org/$orgname/branch.$branchname/maintenance/accounts/disbursement-type'
+import { Route as OrgOrgnameBranchBranchnameMaintenanceAccountsAccountClassificationRouteImport } from './routes/org/$orgname/branch.$branchname/maintenance/accounts/account-classification'
+import { Route as OrgOrgnameBranchBranchnameMaintenanceAccountsAccountCategoryRouteImport } from './routes/org/$orgname/branch.$branchname/maintenance/accounts/account-category'
+import { Route as OrgOrgnameBranchBranchnamesettingsMySettingsMyTimesheetRouteImport } from './routes/org/$orgname/branch.$branchname/(settings)/my-settings/my-timesheet'
+import { Route as OrgOrgnameBranchBranchnamesettingsMySettingsMyGeneralLedgerEntriesRouteImport } from './routes/org/$orgname/branch.$branchname/(settings)/my-settings/my-general-ledger-entries'
+import { Route as OrgOrgnameBranchBranchnamesettingsMySettingsMyDisbursementTransactionRouteImport } from './routes/org/$orgname/branch.$branchname/(settings)/my-settings/my-disbursement-transaction'
+import { Route as OrgOrgnameBranchBranchnamesettingsMySettingsMyBranchFootstepsRouteImport } from './routes/org/$orgname/branch.$branchname/(settings)/my-settings/my-branch-footsteps'
+import { Route as OrgOrgnameBranchBranchnamesettingsMySettingsMyAllFootstepsRouteImport } from './routes/org/$orgname/branch.$branchname/(settings)/my-settings/my-all-footsteps'
+import { Route as OrgOrgnameBranchBranchnamemembersMemberSettingsMemberTypesRouteImport } from './routes/org/$orgname/branch.$branchname/(members)/member-settings/member-types'
+import { Route as OrgOrgnameBranchBranchnamemembersMemberSettingsMemberOccupationRouteImport } from './routes/org/$orgname/branch.$branchname/(members)/member-settings/member-occupation'
+import { Route as OrgOrgnameBranchBranchnamemembersMemberSettingsMemberGroupRouteImport } from './routes/org/$orgname/branch.$branchname/(members)/member-settings/member-group'
+import { Route as OrgOrgnameBranchBranchnamemembersMemberSettingsMemberGenderRouteImport } from './routes/org/$orgname/branch.$branchname/(members)/member-settings/member-gender'
+import { Route as OrgOrgnameBranchBranchnamemembersMemberSettingsMemberDepartmentRouteImport } from './routes/org/$orgname/branch.$branchname/(members)/member-settings/member-department'
+import { Route as OrgOrgnameBranchBranchnamemembersMemberSettingsMemberClassificationRouteImport } from './routes/org/$orgname/branch.$branchname/(members)/member-settings/member-classification'
+import { Route as OrgOrgnameBranchBranchnamemembersMemberSettingsMemberCenterRouteImport } from './routes/org/$orgname/branch.$branchname/(members)/member-settings/member-center'
 import { Route as OrgOrgnameBranchBranchnamecommonsettingsSettingsRouteImport } from './routes/org/$orgname/branch.$branchname/(common)/(settings)/settings'
-import { Route as OrgOrgnameBranchBranchnamemaintenanceMaintenanceaccountSetupAccountClassificationRouteImport } from './routes/org/$orgname/branch.$branchname/(maintenance)/maintenance/(account-setup)/account-classification'
-import { Route as OrgOrgnameBranchBranchnamemaintenanceMaintenanceaccountSetupAccountCategoryRouteImport } from './routes/org/$orgname/branch.$branchname/(maintenance)/maintenance/(account-setup)/account-category'
-import { Route as OrgOrgnameBranchBranchnamemaintenanceMaintenanceaccessAndOnboardingInvitationCodeRouteImport } from './routes/org/$orgname/branch.$branchname/(maintenance)/maintenance/(access-and-onboarding)/invitation-code'
-import { Route as OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberTypesRouteImport } from './routes/org/$orgname/branch.$branchname/(maintenance)/(members)/members/member-types'
-import { Route as OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberOccupationRouteImport } from './routes/org/$orgname/branch.$branchname/(maintenance)/(members)/members/member-occupation'
-import { Route as OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberGroupRouteImport } from './routes/org/$orgname/branch.$branchname/(maintenance)/(members)/members/member-group'
-import { Route as OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberGenderRouteImport } from './routes/org/$orgname/branch.$branchname/(maintenance)/(members)/members/member-gender'
-import { Route as OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberDepartmentRouteImport } from './routes/org/$orgname/branch.$branchname/(maintenance)/(members)/members/member-department'
-import { Route as OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberClassificationRouteImport } from './routes/org/$orgname/branch.$branchname/(maintenance)/(members)/members/member-classification'
-import { Route as OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberCenterRouteImport } from './routes/org/$orgname/branch.$branchname/(maintenance)/(members)/members/member-center'
-import { Route as OrgOrgnameBranchBranchnamemaintenanceemployeesEmployeesViewEmployeesRouteImport } from './routes/org/$orgname/branch.$branchname/(maintenance)/(employees)/employees/view-employees'
-import { Route as OrgOrgnameBranchBranchnameemployeeTransactionQuickTransferWithdrawRouteImport } from './routes/org/$orgname/branch.$branchname/(employee)/transaction/quick-transfer/withdraw'
-import { Route as OrgOrgnameBranchBranchnameemployeeTransactionQuickTransferDepositRouteImport } from './routes/org/$orgname/branch.$branchname/(employee)/transaction/quick-transfer/deposit'
-import { Route as OrgOrgnameBranchBranchnameemployeeTransactionMaintenanceGeneralLedgerDefinitionRouteImport } from './routes/org/$orgname/branch.$branchname/(employee)/transaction/maintenance/general-ledger-definition'
-import { Route as OrgOrgnameBranchBranchnameemployeeTransactionMaintenanceFinancialStatementDefinitionRouteImport } from './routes/org/$orgname/branch.$branchname/(employee)/transaction/maintenance/financial-statement-definition'
-import { Route as OrgOrgnameBranchBranchnameemployeeTransactionMaintenanceCashCountRouteImport } from './routes/org/$orgname/branch.$branchname/(employee)/transaction/maintenance/cash-count'
-import { Route as OrgOrgnameBranchBranchnamemaintenancemembersMemberProfileMemberIdSettingsIndexRouteImport } from './routes/org/$orgname/branch.$branchname/(maintenance)/(members)/member-profile.$memberId.$settings/index'
+import { Route as OrgOrgnameBranchBranchnamemembersMemberProfileMemberIdSettingsIndexRouteImport } from './routes/org/$orgname/branch.$branchname/(members)/member-profile.$memberId.$settings/index'
 
 const AuthSignUpLazyRouteImport = createFileRoute('/auth/sign-up')()
 
@@ -377,84 +375,170 @@ const OrgOrgnameBranchBranchnameIndexRoute =
     path: '/',
     getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
   } as any)
+const OrgOrgnameBranchBranchnameSystemGenerateSavingsInterestRoute =
+  OrgOrgnameBranchBranchnameSystemGenerateSavingsInterestRouteImport.update({
+    id: '/system/generate-savings-interest',
+    path: '/system/generate-savings-interest',
+    getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
+  } as any)
+const OrgOrgnameBranchBranchnameSystemGenerateMutualAidRoute =
+  OrgOrgnameBranchBranchnameSystemGenerateMutualAidRouteImport.update({
+    id: '/system/generate-mutual-aid',
+    path: '/system/generate-mutual-aid',
+    getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
+  } as any)
+const OrgOrgnameBranchBranchnameSystemAccountTransactionRoute =
+  OrgOrgnameBranchBranchnameSystemAccountTransactionRouteImport.update({
+    id: '/system/account-transaction',
+    path: '/system/account-transaction',
+    getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
+  } as any)
+const OrgOrgnameBranchBranchnameMaintenanceTagTemplateRoute =
+  OrgOrgnameBranchBranchnameMaintenanceTagTemplateRouteImport.update({
+    id: '/maintenance/tag-template',
+    path: '/maintenance/tag-template',
+    getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
+  } as any)
+const OrgOrgnameBranchBranchnameMaintenanceHolidaysRoute =
+  OrgOrgnameBranchBranchnameMaintenanceHolidaysRouteImport.update({
+    id: '/maintenance/holidays',
+    path: '/maintenance/holidays',
+    getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
+  } as any)
+const OrgOrgnameBranchBranchnameMaintenanceCompanyRoute =
+  OrgOrgnameBranchBranchnameMaintenanceCompanyRouteImport.update({
+    id: '/maintenance/company',
+    path: '/maintenance/company',
+    getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
+  } as any)
+const OrgOrgnameBranchBranchnameMaintenanceBillsAndCoinsRoute =
+  OrgOrgnameBranchBranchnameMaintenanceBillsAndCoinsRouteImport.update({
+    id: '/maintenance/bills-and-coins',
+    path: '/maintenance/bills-and-coins',
+    getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
+  } as any)
+const OrgOrgnameBranchBranchnameMaintenanceBanksRoute =
+  OrgOrgnameBranchBranchnameMaintenanceBanksRouteImport.update({
+    id: '/maintenance/banks',
+    path: '/maintenance/banks',
+    getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
+  } as any)
+const OrgOrgnameBranchBranchnameMaintenanceAreaRoute =
+  OrgOrgnameBranchBranchnameMaintenanceAreaRouteImport.update({
+    id: '/maintenance/area',
+    path: '/maintenance/area',
+    getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
+  } as any)
 const OrgOrgnameBranchBranchnameDevDocumentationRoute =
   OrgOrgnameBranchBranchnameDevDocumentationRouteImport.update({
     id: '/dev/documentation',
     path: '/dev/documentation',
     getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
   } as any)
-const OrgOrgnameBranchBranchnameAccountingJournalVoucherRoute =
-  OrgOrgnameBranchBranchnameAccountingJournalVoucherRouteImport.update({
-    id: '/accounting/journal-voucher',
-    path: '/accounting/journal-voucher',
+const OrgOrgnameBranchBranchnametransactionsWithdrawRoute =
+  OrgOrgnameBranchBranchnametransactionsWithdrawRouteImport.update({
+    id: '/(transactions)/withdraw',
+    path: '/withdraw',
     getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
   } as any)
-const OrgOrgnameBranchBranchnameAccountingCashCheckJournalVoucherRoute =
-  OrgOrgnameBranchBranchnameAccountingCashCheckJournalVoucherRouteImport.update(
+const OrgOrgnameBranchBranchnametransactionsTransactionsRoute =
+  OrgOrgnameBranchBranchnametransactionsTransactionsRouteImport.update({
+    id: '/(transactions)/transactions',
+    path: '/transactions',
+    getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
+  } as any)
+const OrgOrgnameBranchBranchnametransactionsPaymentRoute =
+  OrgOrgnameBranchBranchnametransactionsPaymentRouteImport.update({
+    id: '/(transactions)/payment',
+    path: '/payment',
+    getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
+  } as any)
+const OrgOrgnameBranchBranchnametransactionsLoanPaymentRoute =
+  OrgOrgnameBranchBranchnametransactionsLoanPaymentRouteImport.update({
+    id: '/(transactions)/loan-payment',
+    path: '/loan-payment',
+    getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
+  } as any)
+const OrgOrgnameBranchBranchnametransactionsLoanRoute =
+  OrgOrgnameBranchBranchnametransactionsLoanRouteImport.update({
+    id: '/(transactions)/loan',
+    path: '/loan',
+    getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
+  } as any)
+const OrgOrgnameBranchBranchnametransactionsJournalVoucherRoute =
+  OrgOrgnameBranchBranchnametransactionsJournalVoucherRouteImport.update({
+    id: '/(transactions)/journal-voucher',
+    path: '/journal-voucher',
+    getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
+  } as any)
+const OrgOrgnameBranchBranchnametransactionsDisbursementTransactionRoute =
+  OrgOrgnameBranchBranchnametransactionsDisbursementTransactionRouteImport.update(
     {
-      id: '/accounting/cash-check-journal-voucher',
-      path: '/accounting/cash-check-journal-voucher',
+      id: '/(transactions)/disbursement-transaction',
+      path: '/disbursement-transaction',
       getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
     } as any,
   )
-const OrgOrgnameBranchBranchnameAccountingAdjustmentEntryRoute =
-  OrgOrgnameBranchBranchnameAccountingAdjustmentEntryRouteImport.update({
-    id: '/accounting/adjustment-entry',
-    path: '/accounting/adjustment-entry',
+const OrgOrgnameBranchBranchnametransactionsDepositRoute =
+  OrgOrgnameBranchBranchnametransactionsDepositRouteImport.update({
+    id: '/(transactions)/deposit',
+    path: '/deposit',
     getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
   } as any)
-const OrgOrgnameBranchBranchnameAccountingAccountsRoute =
-  OrgOrgnameBranchBranchnameAccountingAccountsRouteImport.update({
-    id: '/accounting/accounts',
-    path: '/accounting/accounts',
+const OrgOrgnameBranchBranchnametransactionsCashCheckJournalVoucherRoute =
+  OrgOrgnameBranchBranchnametransactionsCashCheckJournalVoucherRouteImport.update(
+    {
+      id: '/(transactions)/cash-check-journal-voucher',
+      path: '/cash-check-journal-voucher',
+      getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
+    } as any,
+  )
+const OrgOrgnameBranchBranchnametransactionsAdjustmentEntryRoute =
+  OrgOrgnameBranchBranchnametransactionsAdjustmentEntryRouteImport.update({
+    id: '/(transactions)/adjustment-entry',
+    path: '/adjustment-entry',
     getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
   } as any)
-const OrgOrgnameBranchBranchnamemeMyTimesheetRoute =
-  OrgOrgnameBranchBranchnamemeMyTimesheetRouteImport.update({
-    id: '/(me)/my-timesheet',
-    path: '/my-timesheet',
+const OrgOrgnameBranchBranchnamemembersViewMembersRoute =
+  OrgOrgnameBranchBranchnamemembersViewMembersRouteImport.update({
+    id: '/(members)/view-members',
+    path: '/view-members',
     getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
   } as any)
-const OrgOrgnameBranchBranchnamemeMyDisbursementTransactionRoute =
-  OrgOrgnameBranchBranchnamemeMyDisbursementTransactionRouteImport.update({
-    id: '/(me)/my-disbursement-transaction',
-    path: '/my-disbursement-transaction',
+const OrgOrgnameBranchBranchnamemembersMemberAccountingLedgerRoute =
+  OrgOrgnameBranchBranchnamemembersMemberAccountingLedgerRouteImport.update({
+    id: '/(members)/member-accounting-ledger',
+    path: '/member-accounting-ledger',
     getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
   } as any)
-const OrgOrgnameBranchBranchnamemeMyBranchFootstepsRoute =
-  OrgOrgnameBranchBranchnamemeMyBranchFootstepsRouteImport.update({
-    id: '/(me)/my-branch-footsteps',
-    path: '/my-branch-footsteps',
+const OrgOrgnameBranchBranchnameemployeesViewEmployeesRoute =
+  OrgOrgnameBranchBranchnameemployeesViewEmployeesRouteImport.update({
+    id: '/(employees)/view-employees',
+    path: '/view-employees',
     getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
   } as any)
-const OrgOrgnameBranchBranchnamemeMyAllFootstepsRoute =
-  OrgOrgnameBranchBranchnamemeMyAllFootstepsRouteImport.update({
-    id: '/(me)/my-all-footsteps',
-    path: '/my-all-footsteps',
-    getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
-  } as any)
-const OrgOrgnameBranchBranchnameemployeeTimesheetsRoute =
-  OrgOrgnameBranchBranchnameemployeeTimesheetsRouteImport.update({
-    id: '/(employee)/timesheets',
+const OrgOrgnameBranchBranchnameemployeesTimesheetsRoute =
+  OrgOrgnameBranchBranchnameemployeesTimesheetsRouteImport.update({
+    id: '/(employees)/timesheets',
     path: '/timesheets',
     getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
   } as any)
-const OrgOrgnameBranchBranchnameemployeeGenerateSavingsInterestRoute =
-  OrgOrgnameBranchBranchnameemployeeGenerateSavingsInterestRouteImport.update({
-    id: '/(employee)/generate-savings-interest',
-    path: '/generate-savings-interest',
+const OrgOrgnameBranchBranchnameemployeesPermissionTemplateRoute =
+  OrgOrgnameBranchBranchnameemployeesPermissionTemplateRouteImport.update({
+    id: '/(employees)/permission-template',
+    path: '/permission-template',
     getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
   } as any)
-const OrgOrgnameBranchBranchnameemployeeGenerateMutualAidRoute =
-  OrgOrgnameBranchBranchnameemployeeGenerateMutualAidRouteImport.update({
-    id: '/(employee)/generate-mutual-aid',
-    path: '/generate-mutual-aid',
+const OrgOrgnameBranchBranchnameemployeesInvitationCodeRoute =
+  OrgOrgnameBranchBranchnameemployeesInvitationCodeRouteImport.update({
+    id: '/(employees)/invitation-code',
+    path: '/invitation-code',
     getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
   } as any)
-const OrgOrgnameBranchBranchnameemployeeAccountTransactionRoute =
-  OrgOrgnameBranchBranchnameemployeeAccountTransactionRouteImport.update({
-    id: '/(employee)/account-transaction',
-    path: '/account-transaction',
+const OrgOrgnameBranchBranchnameemployeesEmployeeFootstepsRoute =
+  OrgOrgnameBranchBranchnameemployeesEmployeeFootstepsRouteImport.update({
+    id: '/(employees)/employee-footsteps',
+    path: '/employee-footsteps',
     getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
   } as any)
 const OrgOrgnameBranchBranchnamecommonDashboardRoute =
@@ -463,320 +547,202 @@ const OrgOrgnameBranchBranchnamecommonDashboardRoute =
     path: '/dashboard',
     getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
   } as any)
-const OrgOrgnameBranchBranchnamemeMyGeneralLedgerEntriesRouteRoute =
-  OrgOrgnameBranchBranchnamemeMyGeneralLedgerEntriesRouteRouteImport.update({
-    id: '/(me)/my-general-ledger-entries',
-    path: '/my-general-ledger-entries',
+const OrgOrgnameBranchBranchnameblotterTransactionBatchRoute =
+  OrgOrgnameBranchBranchnameblotterTransactionBatchRouteImport.update({
+    id: '/(blotter)/transaction-batch',
+    path: '/transaction-batch',
     getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
   } as any)
-const OrgOrgnameBranchBranchnameemployeeGeneralLedgerRouteRoute =
-  OrgOrgnameBranchBranchnameemployeeGeneralLedgerRouteRouteImport.update({
-    id: '/(employee)/general-ledger',
-    path: '/general-ledger',
+const OrgOrgnameBranchBranchnameblotterGeneralLedgerDefinitionRoute =
+  OrgOrgnameBranchBranchnameblotterGeneralLedgerDefinitionRouteImport.update({
+    id: '/(blotter)/general-ledger-definition',
+    path: '/general-ledger-definition',
     getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
   } as any)
-const OrgOrgnameBranchBranchnameemployeeTransactionIndexRoute =
-  OrgOrgnameBranchBranchnameemployeeTransactionIndexRouteImport.update({
-    id: '/(employee)/transaction/',
-    path: '/transaction/',
+const OrgOrgnameBranchBranchnameblotterCashCountRoute =
+  OrgOrgnameBranchBranchnameblotterCashCountRouteImport.update({
+    id: '/(blotter)/cash-count',
+    path: '/cash-count',
     getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
   } as any)
-const OrgOrgnameBranchBranchnameemployeeSchemesIndexRoute =
-  OrgOrgnameBranchBranchnameemployeeSchemesIndexRouteImport.update({
-    id: '/(employee)/schemes/',
+const OrgOrgnameBranchBranchnameapprovalsApprovalsRoute =
+  OrgOrgnameBranchBranchnameapprovalsApprovalsRouteImport.update({
+    id: '/(approvals)/approvals',
+    path: '/approvals',
+    getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
+  } as any)
+const OrgOrgnameBranchBranchnameaccountingFinancialStatementDefinitionRoute =
+  OrgOrgnameBranchBranchnameaccountingFinancialStatementDefinitionRouteImport.update(
+    {
+      id: '/(accounting)/financial-statement-definition',
+      path: '/financial-statement-definition',
+      getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
+    } as any,
+  )
+const OrgOrgnameBranchBranchnameaccountingAccountsRoute =
+  OrgOrgnameBranchBranchnameaccountingAccountsRouteImport.update({
+    id: '/(accounting)/accounts',
+    path: '/accounts',
+    getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
+  } as any)
+const OrgOrgnameBranchBranchnameschemesSchemesIndexRoute =
+  OrgOrgnameBranchBranchnameschemesSchemesIndexRouteImport.update({
+    id: '/(schemes)/schemes/',
     path: '/schemes/',
     getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
   } as any)
-const OrgOrgnameBranchBranchnameemployeeApprovalsIndexRoute =
-  OrgOrgnameBranchBranchnameemployeeApprovalsIndexRouteImport.update({
-    id: '/(employee)/approvals/',
-    path: '/approvals/',
+const OrgOrgnameBranchBranchnameMaintenanceLoansLoanStatusRoute =
+  OrgOrgnameBranchBranchnameMaintenanceLoansLoanStatusRouteImport.update({
+    id: '/maintenance/loans/loan-status',
+    path: '/maintenance/loans/loan-status',
     getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
   } as any)
-const OrgOrgnameBranchBranchnamemaintenanceMaintenanceTagTemplateRoute =
-  OrgOrgnameBranchBranchnamemaintenanceMaintenanceTagTemplateRouteImport.update(
+const OrgOrgnameBranchBranchnameMaintenanceLoansLoanPurposeRoute =
+  OrgOrgnameBranchBranchnameMaintenanceLoansLoanPurposeRouteImport.update({
+    id: '/maintenance/loans/loan-purpose',
+    path: '/maintenance/loans/loan-purpose',
+    getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
+  } as any)
+const OrgOrgnameBranchBranchnameMaintenanceLoansLoanApplicationRoute =
+  OrgOrgnameBranchBranchnameMaintenanceLoansLoanApplicationRouteImport.update({
+    id: '/maintenance/loans/loan-application',
+    path: '/maintenance/loans/loan-application',
+    getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
+  } as any)
+const OrgOrgnameBranchBranchnameMaintenanceLoansCollateralRoute =
+  OrgOrgnameBranchBranchnameMaintenanceLoansCollateralRouteImport.update({
+    id: '/maintenance/loans/collateral',
+    path: '/maintenance/loans/collateral',
+    getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
+  } as any)
+const OrgOrgnameBranchBranchnameMaintenanceAccountsPaymentTypeRoute =
+  OrgOrgnameBranchBranchnameMaintenanceAccountsPaymentTypeRouteImport.update({
+    id: '/maintenance/accounts/payment-type',
+    path: '/maintenance/accounts/payment-type',
+    getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
+  } as any)
+const OrgOrgnameBranchBranchnameMaintenanceAccountsDisbursementTypeRoute =
+  OrgOrgnameBranchBranchnameMaintenanceAccountsDisbursementTypeRouteImport.update(
     {
-      id: '/(maintenance)/maintenance/tag-template',
-      path: '/maintenance/tag-template',
+      id: '/maintenance/accounts/disbursement-type',
+      path: '/maintenance/accounts/disbursement-type',
       getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
     } as any,
   )
-const OrgOrgnameBranchBranchnamemaintenanceMaintenanceHolidaysRoute =
-  OrgOrgnameBranchBranchnamemaintenanceMaintenanceHolidaysRouteImport.update({
-    id: '/(maintenance)/maintenance/holidays',
-    path: '/maintenance/holidays',
-    getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
-  } as any)
-const OrgOrgnameBranchBranchnamemaintenanceMaintenanceCompanyRoute =
-  OrgOrgnameBranchBranchnamemaintenanceMaintenanceCompanyRouteImport.update({
-    id: '/(maintenance)/maintenance/company',
-    path: '/maintenance/company',
-    getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
-  } as any)
-const OrgOrgnameBranchBranchnamemaintenanceMaintenanceCollateralRoute =
-  OrgOrgnameBranchBranchnamemaintenanceMaintenanceCollateralRouteImport.update({
-    id: '/(maintenance)/maintenance/collateral',
-    path: '/maintenance/collateral',
-    getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
-  } as any)
-const OrgOrgnameBranchBranchnamemaintenanceMaintenanceBillsAndCoinsRoute =
-  OrgOrgnameBranchBranchnamemaintenanceMaintenanceBillsAndCoinsRouteImport.update(
+const OrgOrgnameBranchBranchnameMaintenanceAccountsAccountClassificationRoute =
+  OrgOrgnameBranchBranchnameMaintenanceAccountsAccountClassificationRouteImport.update(
     {
-      id: '/(maintenance)/maintenance/bills-and-coins',
-      path: '/maintenance/bills-and-coins',
+      id: '/maintenance/accounts/account-classification',
+      path: '/maintenance/accounts/account-classification',
       getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
     } as any,
   )
-const OrgOrgnameBranchBranchnamemaintenanceMaintenanceBanksRoute =
-  OrgOrgnameBranchBranchnamemaintenanceMaintenanceBanksRouteImport.update({
-    id: '/(maintenance)/maintenance/banks',
-    path: '/maintenance/banks',
-    getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
-  } as any)
-const OrgOrgnameBranchBranchnamemaintenanceMaintenanceAreaRoute =
-  OrgOrgnameBranchBranchnamemaintenanceMaintenanceAreaRouteImport.update({
-    id: '/(maintenance)/maintenance/area',
-    path: '/maintenance/area',
-    getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
-  } as any)
-const OrgOrgnameBranchBranchnamemaintenancemembersViewMembersRoute =
-  OrgOrgnameBranchBranchnamemaintenancemembersViewMembersRouteImport.update({
-    id: '/(maintenance)/(members)/view-members',
-    path: '/view-members',
-    getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
-  } as any)
-const OrgOrgnameBranchBranchnamemaintenancemembersMemberAccountingLedgerRoute =
-  OrgOrgnameBranchBranchnamemaintenancemembersMemberAccountingLedgerRouteImport.update(
+const OrgOrgnameBranchBranchnameMaintenanceAccountsAccountCategoryRoute =
+  OrgOrgnameBranchBranchnameMaintenanceAccountsAccountCategoryRouteImport.update(
     {
-      id: '/(maintenance)/(members)/member-accounting-ledger',
-      path: '/member-accounting-ledger',
+      id: '/maintenance/accounts/account-category',
+      path: '/maintenance/accounts/account-category',
       getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
     } as any,
   )
-const OrgOrgnameBranchBranchnamemaintenanceemployeesPermissionTemplateRoute =
-  OrgOrgnameBranchBranchnamemaintenanceemployeesPermissionTemplateRouteImport.update(
+const OrgOrgnameBranchBranchnamesettingsMySettingsMyTimesheetRoute =
+  OrgOrgnameBranchBranchnamesettingsMySettingsMyTimesheetRouteImport.update({
+    id: '/(settings)/my-settings/my-timesheet',
+    path: '/my-settings/my-timesheet',
+    getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
+  } as any)
+const OrgOrgnameBranchBranchnamesettingsMySettingsMyGeneralLedgerEntriesRoute =
+  OrgOrgnameBranchBranchnamesettingsMySettingsMyGeneralLedgerEntriesRouteImport.update(
     {
-      id: '/(maintenance)/(employees)/permission-template',
-      path: '/permission-template',
+      id: '/(settings)/my-settings/my-general-ledger-entries',
+      path: '/my-settings/my-general-ledger-entries',
       getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
     } as any,
   )
-const OrgOrgnameBranchBranchnamemaintenanceemployeesEmployeeFootstepsRoute =
-  OrgOrgnameBranchBranchnamemaintenanceemployeesEmployeeFootstepsRouteImport.update(
+const OrgOrgnameBranchBranchnamesettingsMySettingsMyDisbursementTransactionRoute =
+  OrgOrgnameBranchBranchnamesettingsMySettingsMyDisbursementTransactionRouteImport.update(
     {
-      id: '/(maintenance)/(employees)/employee-footsteps',
-      path: '/employee-footsteps',
+      id: '/(settings)/my-settings/my-disbursement-transaction',
+      path: '/my-settings/my-disbursement-transaction',
       getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
     } as any,
   )
-const OrgOrgnameBranchBranchnameemployeeTransactionTransactionsRoute =
-  OrgOrgnameBranchBranchnameemployeeTransactionTransactionsRouteImport.update({
-    id: '/(employee)/transaction/transactions',
-    path: '/transaction/transactions',
-    getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
-  } as any)
-const OrgOrgnameBranchBranchnameemployeeTransactionTransactionBatchRoute =
-  OrgOrgnameBranchBranchnameemployeeTransactionTransactionBatchRouteImport.update(
+const OrgOrgnameBranchBranchnamesettingsMySettingsMyBranchFootstepsRoute =
+  OrgOrgnameBranchBranchnamesettingsMySettingsMyBranchFootstepsRouteImport.update(
     {
-      id: '/(employee)/transaction/transaction-batch',
-      path: '/transaction/transaction-batch',
+      id: '/(settings)/my-settings/my-branch-footsteps',
+      path: '/my-settings/my-branch-footsteps',
       getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
     } as any,
   )
-const OrgOrgnameBranchBranchnameemployeeTransactionTestRoute =
-  OrgOrgnameBranchBranchnameemployeeTransactionTestRouteImport.update({
-    id: '/(employee)/transaction/test',
-    path: '/transaction/test',
+const OrgOrgnameBranchBranchnamesettingsMySettingsMyAllFootstepsRoute =
+  OrgOrgnameBranchBranchnamesettingsMySettingsMyAllFootstepsRouteImport.update({
+    id: '/(settings)/my-settings/my-all-footsteps',
+    path: '/my-settings/my-all-footsteps',
     getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
   } as any)
-const OrgOrgnameBranchBranchnameemployeeTransactionPaymentTypeRoute =
-  OrgOrgnameBranchBranchnameemployeeTransactionPaymentTypeRouteImport.update({
-    id: '/(employee)/transaction/payment-type',
-    path: '/transaction/payment-type',
+const OrgOrgnameBranchBranchnamemembersMemberSettingsMemberTypesRoute =
+  OrgOrgnameBranchBranchnamemembersMemberSettingsMemberTypesRouteImport.update({
+    id: '/(members)/member-settings/member-types',
+    path: '/member-settings/member-types',
     getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
   } as any)
-const OrgOrgnameBranchBranchnameemployeeTransactionLoanPaymentRoute =
-  OrgOrgnameBranchBranchnameemployeeTransactionLoanPaymentRouteImport.update({
-    id: '/(employee)/transaction/loan-payment',
-    path: '/transaction/loan-payment',
-    getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
-  } as any)
-const OrgOrgnameBranchBranchnameemployeeTransactionDisbursementTransactionRoute =
-  OrgOrgnameBranchBranchnameemployeeTransactionDisbursementTransactionRouteImport.update(
+const OrgOrgnameBranchBranchnamemembersMemberSettingsMemberOccupationRoute =
+  OrgOrgnameBranchBranchnamemembersMemberSettingsMemberOccupationRouteImport.update(
     {
-      id: '/(employee)/transaction/disbursement-transaction',
-      path: '/transaction/disbursement-transaction',
+      id: '/(members)/member-settings/member-occupation',
+      path: '/member-settings/member-occupation',
       getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
     } as any,
   )
-const OrgOrgnameBranchBranchnameemployeeTransactionDisbursementRoute =
-  OrgOrgnameBranchBranchnameemployeeTransactionDisbursementRouteImport.update({
-    id: '/(employee)/transaction/disbursement',
-    path: '/transaction/disbursement',
+const OrgOrgnameBranchBranchnamemembersMemberSettingsMemberGroupRoute =
+  OrgOrgnameBranchBranchnamemembersMemberSettingsMemberGroupRouteImport.update({
+    id: '/(members)/member-settings/member-group',
+    path: '/member-settings/member-group',
     getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
   } as any)
-const OrgOrgnameBranchBranchnameemployeeLoanLoansRoute =
-  OrgOrgnameBranchBranchnameemployeeLoanLoansRouteImport.update({
-    id: '/(employee)/loan/loans',
-    path: '/loan/loans',
-    getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
-  } as any)
-const OrgOrgnameBranchBranchnameemployeeLoanLoanStatusRoute =
-  OrgOrgnameBranchBranchnameemployeeLoanLoanStatusRouteImport.update({
-    id: '/(employee)/loan/loan-status',
-    path: '/loan/loan-status',
-    getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
-  } as any)
-const OrgOrgnameBranchBranchnameemployeeLoanLoanPurposeRoute =
-  OrgOrgnameBranchBranchnameemployeeLoanLoanPurposeRouteImport.update({
-    id: '/(employee)/loan/loan-purpose',
-    path: '/loan/loan-purpose',
-    getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
-  } as any)
-const OrgOrgnameBranchBranchnameemployeeLoanLoanApplicationRoute =
-  OrgOrgnameBranchBranchnameemployeeLoanLoanApplicationRouteImport.update({
-    id: '/(employee)/loan/loan-application',
-    path: '/loan/loan-application',
-    getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
-  } as any)
+const OrgOrgnameBranchBranchnamemembersMemberSettingsMemberGenderRoute =
+  OrgOrgnameBranchBranchnamemembersMemberSettingsMemberGenderRouteImport.update(
+    {
+      id: '/(members)/member-settings/member-gender',
+      path: '/member-settings/member-gender',
+      getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
+    } as any,
+  )
+const OrgOrgnameBranchBranchnamemembersMemberSettingsMemberDepartmentRoute =
+  OrgOrgnameBranchBranchnamemembersMemberSettingsMemberDepartmentRouteImport.update(
+    {
+      id: '/(members)/member-settings/member-department',
+      path: '/member-settings/member-department',
+      getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
+    } as any,
+  )
+const OrgOrgnameBranchBranchnamemembersMemberSettingsMemberClassificationRoute =
+  OrgOrgnameBranchBranchnamemembersMemberSettingsMemberClassificationRouteImport.update(
+    {
+      id: '/(members)/member-settings/member-classification',
+      path: '/member-settings/member-classification',
+      getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
+    } as any,
+  )
+const OrgOrgnameBranchBranchnamemembersMemberSettingsMemberCenterRoute =
+  OrgOrgnameBranchBranchnamemembersMemberSettingsMemberCenterRouteImport.update(
+    {
+      id: '/(members)/member-settings/member-center',
+      path: '/member-settings/member-center',
+      getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
+    } as any,
+  )
 const OrgOrgnameBranchBranchnamecommonsettingsSettingsRoute =
   OrgOrgnameBranchBranchnamecommonsettingsSettingsRouteImport.update({
     id: '/(common)/(settings)/settings',
     path: '/settings',
     getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
   } as any)
-const OrgOrgnameBranchBranchnamemaintenanceMaintenanceaccountSetupAccountClassificationRoute =
-  OrgOrgnameBranchBranchnamemaintenanceMaintenanceaccountSetupAccountClassificationRouteImport.update(
+const OrgOrgnameBranchBranchnamemembersMemberProfileMemberIdSettingsIndexRoute =
+  OrgOrgnameBranchBranchnamemembersMemberProfileMemberIdSettingsIndexRouteImport.update(
     {
-      id: '/(maintenance)/maintenance/(account-setup)/account-classification',
-      path: '/maintenance/account-classification',
-      getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
-    } as any,
-  )
-const OrgOrgnameBranchBranchnamemaintenanceMaintenanceaccountSetupAccountCategoryRoute =
-  OrgOrgnameBranchBranchnamemaintenanceMaintenanceaccountSetupAccountCategoryRouteImport.update(
-    {
-      id: '/(maintenance)/maintenance/(account-setup)/account-category',
-      path: '/maintenance/account-category',
-      getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
-    } as any,
-  )
-const OrgOrgnameBranchBranchnamemaintenanceMaintenanceaccessAndOnboardingInvitationCodeRoute =
-  OrgOrgnameBranchBranchnamemaintenanceMaintenanceaccessAndOnboardingInvitationCodeRouteImport.update(
-    {
-      id: '/(maintenance)/maintenance/(access-and-onboarding)/invitation-code',
-      path: '/maintenance/invitation-code',
-      getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
-    } as any,
-  )
-const OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberTypesRoute =
-  OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberTypesRouteImport.update(
-    {
-      id: '/(maintenance)/(members)/members/member-types',
-      path: '/members/member-types',
-      getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
-    } as any,
-  )
-const OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberOccupationRoute =
-  OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberOccupationRouteImport.update(
-    {
-      id: '/(maintenance)/(members)/members/member-occupation',
-      path: '/members/member-occupation',
-      getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
-    } as any,
-  )
-const OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberGroupRoute =
-  OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberGroupRouteImport.update(
-    {
-      id: '/(maintenance)/(members)/members/member-group',
-      path: '/members/member-group',
-      getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
-    } as any,
-  )
-const OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberGenderRoute =
-  OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberGenderRouteImport.update(
-    {
-      id: '/(maintenance)/(members)/members/member-gender',
-      path: '/members/member-gender',
-      getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
-    } as any,
-  )
-const OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberDepartmentRoute =
-  OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberDepartmentRouteImport.update(
-    {
-      id: '/(maintenance)/(members)/members/member-department',
-      path: '/members/member-department',
-      getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
-    } as any,
-  )
-const OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberClassificationRoute =
-  OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberClassificationRouteImport.update(
-    {
-      id: '/(maintenance)/(members)/members/member-classification',
-      path: '/members/member-classification',
-      getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
-    } as any,
-  )
-const OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberCenterRoute =
-  OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberCenterRouteImport.update(
-    {
-      id: '/(maintenance)/(members)/members/member-center',
-      path: '/members/member-center',
-      getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
-    } as any,
-  )
-const OrgOrgnameBranchBranchnamemaintenanceemployeesEmployeesViewEmployeesRoute =
-  OrgOrgnameBranchBranchnamemaintenanceemployeesEmployeesViewEmployeesRouteImport.update(
-    {
-      id: '/(maintenance)/(employees)/employees/view-employees',
-      path: '/employees/view-employees',
-      getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
-    } as any,
-  )
-const OrgOrgnameBranchBranchnameemployeeTransactionQuickTransferWithdrawRoute =
-  OrgOrgnameBranchBranchnameemployeeTransactionQuickTransferWithdrawRouteImport.update(
-    {
-      id: '/(employee)/transaction/quick-transfer/withdraw',
-      path: '/transaction/quick-transfer/withdraw',
-      getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
-    } as any,
-  )
-const OrgOrgnameBranchBranchnameemployeeTransactionQuickTransferDepositRoute =
-  OrgOrgnameBranchBranchnameemployeeTransactionQuickTransferDepositRouteImport.update(
-    {
-      id: '/(employee)/transaction/quick-transfer/deposit',
-      path: '/transaction/quick-transfer/deposit',
-      getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
-    } as any,
-  )
-const OrgOrgnameBranchBranchnameemployeeTransactionMaintenanceGeneralLedgerDefinitionRoute =
-  OrgOrgnameBranchBranchnameemployeeTransactionMaintenanceGeneralLedgerDefinitionRouteImport.update(
-    {
-      id: '/(employee)/transaction/maintenance/general-ledger-definition',
-      path: '/transaction/maintenance/general-ledger-definition',
-      getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
-    } as any,
-  )
-const OrgOrgnameBranchBranchnameemployeeTransactionMaintenanceFinancialStatementDefinitionRoute =
-  OrgOrgnameBranchBranchnameemployeeTransactionMaintenanceFinancialStatementDefinitionRouteImport.update(
-    {
-      id: '/(employee)/transaction/maintenance/financial-statement-definition',
-      path: '/transaction/maintenance/financial-statement-definition',
-      getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
-    } as any,
-  )
-const OrgOrgnameBranchBranchnameemployeeTransactionMaintenanceCashCountRoute =
-  OrgOrgnameBranchBranchnameemployeeTransactionMaintenanceCashCountRouteImport.update(
-    {
-      id: '/(employee)/transaction/maintenance/cash-count',
-      path: '/transaction/maintenance/cash-count',
-      getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
-    } as any,
-  )
-const OrgOrgnameBranchBranchnamemaintenancemembersMemberProfileMemberIdSettingsIndexRoute =
-  OrgOrgnameBranchBranchnamemaintenancemembersMemberProfileMemberIdSettingsIndexRouteImport.update(
-    {
-      id: '/(maintenance)/(members)/member-profile/$memberId/$settings/',
+      id: '/(members)/member-profile/$memberId/$settings/',
       path: '/member-profile/$memberId/$settings/',
       getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
     } as any,
@@ -829,65 +795,63 @@ export interface FileRoutesByFullPath {
   '/onboarding/organization/': typeof OnboardingOrganizationIndexRoute
   '/org/$orgname/branch/$branchname': typeof OrgOrgnameBranchBranchnameRouteRouteWithChildren
   '/org/$orgname/branch/$branchname/': typeof OrgOrgnameBranchBranchnameIndexRoute
-  '/org/$orgname/branch/$branchname/general-ledger': typeof OrgOrgnameBranchBranchnameemployeeGeneralLedgerRouteRoute
-  '/org/$orgname/branch/$branchname/my-general-ledger-entries': typeof OrgOrgnameBranchBranchnamemeMyGeneralLedgerEntriesRouteRoute
+  '/org/$orgname/branch/$branchname/accounts': typeof OrgOrgnameBranchBranchnameaccountingAccountsRoute
+  '/org/$orgname/branch/$branchname/financial-statement-definition': typeof OrgOrgnameBranchBranchnameaccountingFinancialStatementDefinitionRoute
+  '/org/$orgname/branch/$branchname/approvals': typeof OrgOrgnameBranchBranchnameapprovalsApprovalsRoute
+  '/org/$orgname/branch/$branchname/cash-count': typeof OrgOrgnameBranchBranchnameblotterCashCountRoute
+  '/org/$orgname/branch/$branchname/general-ledger-definition': typeof OrgOrgnameBranchBranchnameblotterGeneralLedgerDefinitionRoute
+  '/org/$orgname/branch/$branchname/transaction-batch': typeof OrgOrgnameBranchBranchnameblotterTransactionBatchRoute
   '/org/$orgname/branch/$branchname/dashboard': typeof OrgOrgnameBranchBranchnamecommonDashboardRoute
-  '/org/$orgname/branch/$branchname/account-transaction': typeof OrgOrgnameBranchBranchnameemployeeAccountTransactionRoute
-  '/org/$orgname/branch/$branchname/generate-mutual-aid': typeof OrgOrgnameBranchBranchnameemployeeGenerateMutualAidRoute
-  '/org/$orgname/branch/$branchname/generate-savings-interest': typeof OrgOrgnameBranchBranchnameemployeeGenerateSavingsInterestRoute
-  '/org/$orgname/branch/$branchname/timesheets': typeof OrgOrgnameBranchBranchnameemployeeTimesheetsRoute
-  '/org/$orgname/branch/$branchname/my-all-footsteps': typeof OrgOrgnameBranchBranchnamemeMyAllFootstepsRoute
-  '/org/$orgname/branch/$branchname/my-branch-footsteps': typeof OrgOrgnameBranchBranchnamemeMyBranchFootstepsRoute
-  '/org/$orgname/branch/$branchname/my-disbursement-transaction': typeof OrgOrgnameBranchBranchnamemeMyDisbursementTransactionRoute
-  '/org/$orgname/branch/$branchname/my-timesheet': typeof OrgOrgnameBranchBranchnamemeMyTimesheetRoute
-  '/org/$orgname/branch/$branchname/accounting/accounts': typeof OrgOrgnameBranchBranchnameAccountingAccountsRoute
-  '/org/$orgname/branch/$branchname/accounting/adjustment-entry': typeof OrgOrgnameBranchBranchnameAccountingAdjustmentEntryRoute
-  '/org/$orgname/branch/$branchname/accounting/cash-check-journal-voucher': typeof OrgOrgnameBranchBranchnameAccountingCashCheckJournalVoucherRoute
-  '/org/$orgname/branch/$branchname/accounting/journal-voucher': typeof OrgOrgnameBranchBranchnameAccountingJournalVoucherRoute
+  '/org/$orgname/branch/$branchname/employee-footsteps': typeof OrgOrgnameBranchBranchnameemployeesEmployeeFootstepsRoute
+  '/org/$orgname/branch/$branchname/invitation-code': typeof OrgOrgnameBranchBranchnameemployeesInvitationCodeRoute
+  '/org/$orgname/branch/$branchname/permission-template': typeof OrgOrgnameBranchBranchnameemployeesPermissionTemplateRoute
+  '/org/$orgname/branch/$branchname/timesheets': typeof OrgOrgnameBranchBranchnameemployeesTimesheetsRoute
+  '/org/$orgname/branch/$branchname/view-employees': typeof OrgOrgnameBranchBranchnameemployeesViewEmployeesRoute
+  '/org/$orgname/branch/$branchname/member-accounting-ledger': typeof OrgOrgnameBranchBranchnamemembersMemberAccountingLedgerRoute
+  '/org/$orgname/branch/$branchname/view-members': typeof OrgOrgnameBranchBranchnamemembersViewMembersRoute
+  '/org/$orgname/branch/$branchname/adjustment-entry': typeof OrgOrgnameBranchBranchnametransactionsAdjustmentEntryRoute
+  '/org/$orgname/branch/$branchname/cash-check-journal-voucher': typeof OrgOrgnameBranchBranchnametransactionsCashCheckJournalVoucherRoute
+  '/org/$orgname/branch/$branchname/deposit': typeof OrgOrgnameBranchBranchnametransactionsDepositRoute
+  '/org/$orgname/branch/$branchname/disbursement-transaction': typeof OrgOrgnameBranchBranchnametransactionsDisbursementTransactionRoute
+  '/org/$orgname/branch/$branchname/journal-voucher': typeof OrgOrgnameBranchBranchnametransactionsJournalVoucherRoute
+  '/org/$orgname/branch/$branchname/loan': typeof OrgOrgnameBranchBranchnametransactionsLoanRoute
+  '/org/$orgname/branch/$branchname/loan-payment': typeof OrgOrgnameBranchBranchnametransactionsLoanPaymentRoute
+  '/org/$orgname/branch/$branchname/payment': typeof OrgOrgnameBranchBranchnametransactionsPaymentRoute
+  '/org/$orgname/branch/$branchname/transactions': typeof OrgOrgnameBranchBranchnametransactionsTransactionsRoute
+  '/org/$orgname/branch/$branchname/withdraw': typeof OrgOrgnameBranchBranchnametransactionsWithdrawRoute
   '/org/$orgname/branch/$branchname/dev/documentation': typeof OrgOrgnameBranchBranchnameDevDocumentationRoute
+  '/org/$orgname/branch/$branchname/maintenance/area': typeof OrgOrgnameBranchBranchnameMaintenanceAreaRoute
+  '/org/$orgname/branch/$branchname/maintenance/banks': typeof OrgOrgnameBranchBranchnameMaintenanceBanksRoute
+  '/org/$orgname/branch/$branchname/maintenance/bills-and-coins': typeof OrgOrgnameBranchBranchnameMaintenanceBillsAndCoinsRoute
+  '/org/$orgname/branch/$branchname/maintenance/company': typeof OrgOrgnameBranchBranchnameMaintenanceCompanyRoute
+  '/org/$orgname/branch/$branchname/maintenance/holidays': typeof OrgOrgnameBranchBranchnameMaintenanceHolidaysRoute
+  '/org/$orgname/branch/$branchname/maintenance/tag-template': typeof OrgOrgnameBranchBranchnameMaintenanceTagTemplateRoute
+  '/org/$orgname/branch/$branchname/system/account-transaction': typeof OrgOrgnameBranchBranchnameSystemAccountTransactionRoute
+  '/org/$orgname/branch/$branchname/system/generate-mutual-aid': typeof OrgOrgnameBranchBranchnameSystemGenerateMutualAidRoute
+  '/org/$orgname/branch/$branchname/system/generate-savings-interest': typeof OrgOrgnameBranchBranchnameSystemGenerateSavingsInterestRoute
   '/org/$orgname/branch/$branchname/settings': typeof OrgOrgnameBranchBranchnamecommonsettingsSettingsRoute
-  '/org/$orgname/branch/$branchname/loan/loan-application': typeof OrgOrgnameBranchBranchnameemployeeLoanLoanApplicationRoute
-  '/org/$orgname/branch/$branchname/loan/loan-purpose': typeof OrgOrgnameBranchBranchnameemployeeLoanLoanPurposeRoute
-  '/org/$orgname/branch/$branchname/loan/loan-status': typeof OrgOrgnameBranchBranchnameemployeeLoanLoanStatusRoute
-  '/org/$orgname/branch/$branchname/loan/loans': typeof OrgOrgnameBranchBranchnameemployeeLoanLoansRoute
-  '/org/$orgname/branch/$branchname/transaction/disbursement': typeof OrgOrgnameBranchBranchnameemployeeTransactionDisbursementRoute
-  '/org/$orgname/branch/$branchname/transaction/disbursement-transaction': typeof OrgOrgnameBranchBranchnameemployeeTransactionDisbursementTransactionRoute
-  '/org/$orgname/branch/$branchname/transaction/loan-payment': typeof OrgOrgnameBranchBranchnameemployeeTransactionLoanPaymentRoute
-  '/org/$orgname/branch/$branchname/transaction/payment-type': typeof OrgOrgnameBranchBranchnameemployeeTransactionPaymentTypeRoute
-  '/org/$orgname/branch/$branchname/transaction/test': typeof OrgOrgnameBranchBranchnameemployeeTransactionTestRoute
-  '/org/$orgname/branch/$branchname/transaction/transaction-batch': typeof OrgOrgnameBranchBranchnameemployeeTransactionTransactionBatchRoute
-  '/org/$orgname/branch/$branchname/transaction/transactions': typeof OrgOrgnameBranchBranchnameemployeeTransactionTransactionsRoute
-  '/org/$orgname/branch/$branchname/employee-footsteps': typeof OrgOrgnameBranchBranchnamemaintenanceemployeesEmployeeFootstepsRoute
-  '/org/$orgname/branch/$branchname/permission-template': typeof OrgOrgnameBranchBranchnamemaintenanceemployeesPermissionTemplateRoute
-  '/org/$orgname/branch/$branchname/member-accounting-ledger': typeof OrgOrgnameBranchBranchnamemaintenancemembersMemberAccountingLedgerRoute
-  '/org/$orgname/branch/$branchname/view-members': typeof OrgOrgnameBranchBranchnamemaintenancemembersViewMembersRoute
-  '/org/$orgname/branch/$branchname/maintenance/area': typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceAreaRoute
-  '/org/$orgname/branch/$branchname/maintenance/banks': typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceBanksRoute
-  '/org/$orgname/branch/$branchname/maintenance/bills-and-coins': typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceBillsAndCoinsRoute
-  '/org/$orgname/branch/$branchname/maintenance/collateral': typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceCollateralRoute
-  '/org/$orgname/branch/$branchname/maintenance/company': typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceCompanyRoute
-  '/org/$orgname/branch/$branchname/maintenance/holidays': typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceHolidaysRoute
-  '/org/$orgname/branch/$branchname/maintenance/tag-template': typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceTagTemplateRoute
-  '/org/$orgname/branch/$branchname/approvals': typeof OrgOrgnameBranchBranchnameemployeeApprovalsIndexRoute
-  '/org/$orgname/branch/$branchname/schemes': typeof OrgOrgnameBranchBranchnameemployeeSchemesIndexRoute
-  '/org/$orgname/branch/$branchname/transaction': typeof OrgOrgnameBranchBranchnameemployeeTransactionIndexRoute
-  '/org/$orgname/branch/$branchname/transaction/maintenance/cash-count': typeof OrgOrgnameBranchBranchnameemployeeTransactionMaintenanceCashCountRoute
-  '/org/$orgname/branch/$branchname/transaction/maintenance/financial-statement-definition': typeof OrgOrgnameBranchBranchnameemployeeTransactionMaintenanceFinancialStatementDefinitionRoute
-  '/org/$orgname/branch/$branchname/transaction/maintenance/general-ledger-definition': typeof OrgOrgnameBranchBranchnameemployeeTransactionMaintenanceGeneralLedgerDefinitionRoute
-  '/org/$orgname/branch/$branchname/transaction/quick-transfer/deposit': typeof OrgOrgnameBranchBranchnameemployeeTransactionQuickTransferDepositRoute
-  '/org/$orgname/branch/$branchname/transaction/quick-transfer/withdraw': typeof OrgOrgnameBranchBranchnameemployeeTransactionQuickTransferWithdrawRoute
-  '/org/$orgname/branch/$branchname/employees/view-employees': typeof OrgOrgnameBranchBranchnamemaintenanceemployeesEmployeesViewEmployeesRoute
-  '/org/$orgname/branch/$branchname/members/member-center': typeof OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberCenterRoute
-  '/org/$orgname/branch/$branchname/members/member-classification': typeof OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberClassificationRoute
-  '/org/$orgname/branch/$branchname/members/member-department': typeof OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberDepartmentRoute
-  '/org/$orgname/branch/$branchname/members/member-gender': typeof OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberGenderRoute
-  '/org/$orgname/branch/$branchname/members/member-group': typeof OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberGroupRoute
-  '/org/$orgname/branch/$branchname/members/member-occupation': typeof OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberOccupationRoute
-  '/org/$orgname/branch/$branchname/members/member-types': typeof OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberTypesRoute
-  '/org/$orgname/branch/$branchname/maintenance/invitation-code': typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceaccessAndOnboardingInvitationCodeRoute
-  '/org/$orgname/branch/$branchname/maintenance/account-category': typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceaccountSetupAccountCategoryRoute
-  '/org/$orgname/branch/$branchname/maintenance/account-classification': typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceaccountSetupAccountClassificationRoute
-  '/org/$orgname/branch/$branchname/member-profile/$memberId/$settings': typeof OrgOrgnameBranchBranchnamemaintenancemembersMemberProfileMemberIdSettingsIndexRoute
+  '/org/$orgname/branch/$branchname/member-settings/member-center': typeof OrgOrgnameBranchBranchnamemembersMemberSettingsMemberCenterRoute
+  '/org/$orgname/branch/$branchname/member-settings/member-classification': typeof OrgOrgnameBranchBranchnamemembersMemberSettingsMemberClassificationRoute
+  '/org/$orgname/branch/$branchname/member-settings/member-department': typeof OrgOrgnameBranchBranchnamemembersMemberSettingsMemberDepartmentRoute
+  '/org/$orgname/branch/$branchname/member-settings/member-gender': typeof OrgOrgnameBranchBranchnamemembersMemberSettingsMemberGenderRoute
+  '/org/$orgname/branch/$branchname/member-settings/member-group': typeof OrgOrgnameBranchBranchnamemembersMemberSettingsMemberGroupRoute
+  '/org/$orgname/branch/$branchname/member-settings/member-occupation': typeof OrgOrgnameBranchBranchnamemembersMemberSettingsMemberOccupationRoute
+  '/org/$orgname/branch/$branchname/member-settings/member-types': typeof OrgOrgnameBranchBranchnamemembersMemberSettingsMemberTypesRoute
+  '/org/$orgname/branch/$branchname/my-settings/my-all-footsteps': typeof OrgOrgnameBranchBranchnamesettingsMySettingsMyAllFootstepsRoute
+  '/org/$orgname/branch/$branchname/my-settings/my-branch-footsteps': typeof OrgOrgnameBranchBranchnamesettingsMySettingsMyBranchFootstepsRoute
+  '/org/$orgname/branch/$branchname/my-settings/my-disbursement-transaction': typeof OrgOrgnameBranchBranchnamesettingsMySettingsMyDisbursementTransactionRoute
+  '/org/$orgname/branch/$branchname/my-settings/my-general-ledger-entries': typeof OrgOrgnameBranchBranchnamesettingsMySettingsMyGeneralLedgerEntriesRoute
+  '/org/$orgname/branch/$branchname/my-settings/my-timesheet': typeof OrgOrgnameBranchBranchnamesettingsMySettingsMyTimesheetRoute
+  '/org/$orgname/branch/$branchname/maintenance/accounts/account-category': typeof OrgOrgnameBranchBranchnameMaintenanceAccountsAccountCategoryRoute
+  '/org/$orgname/branch/$branchname/maintenance/accounts/account-classification': typeof OrgOrgnameBranchBranchnameMaintenanceAccountsAccountClassificationRoute
+  '/org/$orgname/branch/$branchname/maintenance/accounts/disbursement-type': typeof OrgOrgnameBranchBranchnameMaintenanceAccountsDisbursementTypeRoute
+  '/org/$orgname/branch/$branchname/maintenance/accounts/payment-type': typeof OrgOrgnameBranchBranchnameMaintenanceAccountsPaymentTypeRoute
+  '/org/$orgname/branch/$branchname/maintenance/loans/collateral': typeof OrgOrgnameBranchBranchnameMaintenanceLoansCollateralRoute
+  '/org/$orgname/branch/$branchname/maintenance/loans/loan-application': typeof OrgOrgnameBranchBranchnameMaintenanceLoansLoanApplicationRoute
+  '/org/$orgname/branch/$branchname/maintenance/loans/loan-purpose': typeof OrgOrgnameBranchBranchnameMaintenanceLoansLoanPurposeRoute
+  '/org/$orgname/branch/$branchname/maintenance/loans/loan-status': typeof OrgOrgnameBranchBranchnameMaintenanceLoansLoanStatusRoute
+  '/org/$orgname/branch/$branchname/schemes': typeof OrgOrgnameBranchBranchnameschemesSchemesIndexRoute
+  '/org/$orgname/branch/$branchname/member-profile/$memberId/$settings': typeof OrgOrgnameBranchBranchnamemembersMemberProfileMemberIdSettingsIndexRoute
 }
 export interface FileRoutesByTo {
   '/auth': typeof AuthRouteRouteWithChildren
@@ -932,65 +896,63 @@ export interface FileRoutesByTo {
   '/onboarding/organization/$organization_id': typeof OnboardingOrganizationOrganization_idRoute
   '/onboarding/organization': typeof OnboardingOrganizationIndexRoute
   '/org/$orgname/branch/$branchname': typeof OrgOrgnameBranchBranchnameIndexRoute
-  '/org/$orgname/branch/$branchname/general-ledger': typeof OrgOrgnameBranchBranchnameemployeeGeneralLedgerRouteRoute
-  '/org/$orgname/branch/$branchname/my-general-ledger-entries': typeof OrgOrgnameBranchBranchnamemeMyGeneralLedgerEntriesRouteRoute
+  '/org/$orgname/branch/$branchname/accounts': typeof OrgOrgnameBranchBranchnameaccountingAccountsRoute
+  '/org/$orgname/branch/$branchname/financial-statement-definition': typeof OrgOrgnameBranchBranchnameaccountingFinancialStatementDefinitionRoute
+  '/org/$orgname/branch/$branchname/approvals': typeof OrgOrgnameBranchBranchnameapprovalsApprovalsRoute
+  '/org/$orgname/branch/$branchname/cash-count': typeof OrgOrgnameBranchBranchnameblotterCashCountRoute
+  '/org/$orgname/branch/$branchname/general-ledger-definition': typeof OrgOrgnameBranchBranchnameblotterGeneralLedgerDefinitionRoute
+  '/org/$orgname/branch/$branchname/transaction-batch': typeof OrgOrgnameBranchBranchnameblotterTransactionBatchRoute
   '/org/$orgname/branch/$branchname/dashboard': typeof OrgOrgnameBranchBranchnamecommonDashboardRoute
-  '/org/$orgname/branch/$branchname/account-transaction': typeof OrgOrgnameBranchBranchnameemployeeAccountTransactionRoute
-  '/org/$orgname/branch/$branchname/generate-mutual-aid': typeof OrgOrgnameBranchBranchnameemployeeGenerateMutualAidRoute
-  '/org/$orgname/branch/$branchname/generate-savings-interest': typeof OrgOrgnameBranchBranchnameemployeeGenerateSavingsInterestRoute
-  '/org/$orgname/branch/$branchname/timesheets': typeof OrgOrgnameBranchBranchnameemployeeTimesheetsRoute
-  '/org/$orgname/branch/$branchname/my-all-footsteps': typeof OrgOrgnameBranchBranchnamemeMyAllFootstepsRoute
-  '/org/$orgname/branch/$branchname/my-branch-footsteps': typeof OrgOrgnameBranchBranchnamemeMyBranchFootstepsRoute
-  '/org/$orgname/branch/$branchname/my-disbursement-transaction': typeof OrgOrgnameBranchBranchnamemeMyDisbursementTransactionRoute
-  '/org/$orgname/branch/$branchname/my-timesheet': typeof OrgOrgnameBranchBranchnamemeMyTimesheetRoute
-  '/org/$orgname/branch/$branchname/accounting/accounts': typeof OrgOrgnameBranchBranchnameAccountingAccountsRoute
-  '/org/$orgname/branch/$branchname/accounting/adjustment-entry': typeof OrgOrgnameBranchBranchnameAccountingAdjustmentEntryRoute
-  '/org/$orgname/branch/$branchname/accounting/cash-check-journal-voucher': typeof OrgOrgnameBranchBranchnameAccountingCashCheckJournalVoucherRoute
-  '/org/$orgname/branch/$branchname/accounting/journal-voucher': typeof OrgOrgnameBranchBranchnameAccountingJournalVoucherRoute
+  '/org/$orgname/branch/$branchname/employee-footsteps': typeof OrgOrgnameBranchBranchnameemployeesEmployeeFootstepsRoute
+  '/org/$orgname/branch/$branchname/invitation-code': typeof OrgOrgnameBranchBranchnameemployeesInvitationCodeRoute
+  '/org/$orgname/branch/$branchname/permission-template': typeof OrgOrgnameBranchBranchnameemployeesPermissionTemplateRoute
+  '/org/$orgname/branch/$branchname/timesheets': typeof OrgOrgnameBranchBranchnameemployeesTimesheetsRoute
+  '/org/$orgname/branch/$branchname/view-employees': typeof OrgOrgnameBranchBranchnameemployeesViewEmployeesRoute
+  '/org/$orgname/branch/$branchname/member-accounting-ledger': typeof OrgOrgnameBranchBranchnamemembersMemberAccountingLedgerRoute
+  '/org/$orgname/branch/$branchname/view-members': typeof OrgOrgnameBranchBranchnamemembersViewMembersRoute
+  '/org/$orgname/branch/$branchname/adjustment-entry': typeof OrgOrgnameBranchBranchnametransactionsAdjustmentEntryRoute
+  '/org/$orgname/branch/$branchname/cash-check-journal-voucher': typeof OrgOrgnameBranchBranchnametransactionsCashCheckJournalVoucherRoute
+  '/org/$orgname/branch/$branchname/deposit': typeof OrgOrgnameBranchBranchnametransactionsDepositRoute
+  '/org/$orgname/branch/$branchname/disbursement-transaction': typeof OrgOrgnameBranchBranchnametransactionsDisbursementTransactionRoute
+  '/org/$orgname/branch/$branchname/journal-voucher': typeof OrgOrgnameBranchBranchnametransactionsJournalVoucherRoute
+  '/org/$orgname/branch/$branchname/loan': typeof OrgOrgnameBranchBranchnametransactionsLoanRoute
+  '/org/$orgname/branch/$branchname/loan-payment': typeof OrgOrgnameBranchBranchnametransactionsLoanPaymentRoute
+  '/org/$orgname/branch/$branchname/payment': typeof OrgOrgnameBranchBranchnametransactionsPaymentRoute
+  '/org/$orgname/branch/$branchname/transactions': typeof OrgOrgnameBranchBranchnametransactionsTransactionsRoute
+  '/org/$orgname/branch/$branchname/withdraw': typeof OrgOrgnameBranchBranchnametransactionsWithdrawRoute
   '/org/$orgname/branch/$branchname/dev/documentation': typeof OrgOrgnameBranchBranchnameDevDocumentationRoute
+  '/org/$orgname/branch/$branchname/maintenance/area': typeof OrgOrgnameBranchBranchnameMaintenanceAreaRoute
+  '/org/$orgname/branch/$branchname/maintenance/banks': typeof OrgOrgnameBranchBranchnameMaintenanceBanksRoute
+  '/org/$orgname/branch/$branchname/maintenance/bills-and-coins': typeof OrgOrgnameBranchBranchnameMaintenanceBillsAndCoinsRoute
+  '/org/$orgname/branch/$branchname/maintenance/company': typeof OrgOrgnameBranchBranchnameMaintenanceCompanyRoute
+  '/org/$orgname/branch/$branchname/maintenance/holidays': typeof OrgOrgnameBranchBranchnameMaintenanceHolidaysRoute
+  '/org/$orgname/branch/$branchname/maintenance/tag-template': typeof OrgOrgnameBranchBranchnameMaintenanceTagTemplateRoute
+  '/org/$orgname/branch/$branchname/system/account-transaction': typeof OrgOrgnameBranchBranchnameSystemAccountTransactionRoute
+  '/org/$orgname/branch/$branchname/system/generate-mutual-aid': typeof OrgOrgnameBranchBranchnameSystemGenerateMutualAidRoute
+  '/org/$orgname/branch/$branchname/system/generate-savings-interest': typeof OrgOrgnameBranchBranchnameSystemGenerateSavingsInterestRoute
   '/org/$orgname/branch/$branchname/settings': typeof OrgOrgnameBranchBranchnamecommonsettingsSettingsRoute
-  '/org/$orgname/branch/$branchname/loan/loan-application': typeof OrgOrgnameBranchBranchnameemployeeLoanLoanApplicationRoute
-  '/org/$orgname/branch/$branchname/loan/loan-purpose': typeof OrgOrgnameBranchBranchnameemployeeLoanLoanPurposeRoute
-  '/org/$orgname/branch/$branchname/loan/loan-status': typeof OrgOrgnameBranchBranchnameemployeeLoanLoanStatusRoute
-  '/org/$orgname/branch/$branchname/loan/loans': typeof OrgOrgnameBranchBranchnameemployeeLoanLoansRoute
-  '/org/$orgname/branch/$branchname/transaction/disbursement': typeof OrgOrgnameBranchBranchnameemployeeTransactionDisbursementRoute
-  '/org/$orgname/branch/$branchname/transaction/disbursement-transaction': typeof OrgOrgnameBranchBranchnameemployeeTransactionDisbursementTransactionRoute
-  '/org/$orgname/branch/$branchname/transaction/loan-payment': typeof OrgOrgnameBranchBranchnameemployeeTransactionLoanPaymentRoute
-  '/org/$orgname/branch/$branchname/transaction/payment-type': typeof OrgOrgnameBranchBranchnameemployeeTransactionPaymentTypeRoute
-  '/org/$orgname/branch/$branchname/transaction/test': typeof OrgOrgnameBranchBranchnameemployeeTransactionTestRoute
-  '/org/$orgname/branch/$branchname/transaction/transaction-batch': typeof OrgOrgnameBranchBranchnameemployeeTransactionTransactionBatchRoute
-  '/org/$orgname/branch/$branchname/transaction/transactions': typeof OrgOrgnameBranchBranchnameemployeeTransactionTransactionsRoute
-  '/org/$orgname/branch/$branchname/employee-footsteps': typeof OrgOrgnameBranchBranchnamemaintenanceemployeesEmployeeFootstepsRoute
-  '/org/$orgname/branch/$branchname/permission-template': typeof OrgOrgnameBranchBranchnamemaintenanceemployeesPermissionTemplateRoute
-  '/org/$orgname/branch/$branchname/member-accounting-ledger': typeof OrgOrgnameBranchBranchnamemaintenancemembersMemberAccountingLedgerRoute
-  '/org/$orgname/branch/$branchname/view-members': typeof OrgOrgnameBranchBranchnamemaintenancemembersViewMembersRoute
-  '/org/$orgname/branch/$branchname/maintenance/area': typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceAreaRoute
-  '/org/$orgname/branch/$branchname/maintenance/banks': typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceBanksRoute
-  '/org/$orgname/branch/$branchname/maintenance/bills-and-coins': typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceBillsAndCoinsRoute
-  '/org/$orgname/branch/$branchname/maintenance/collateral': typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceCollateralRoute
-  '/org/$orgname/branch/$branchname/maintenance/company': typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceCompanyRoute
-  '/org/$orgname/branch/$branchname/maintenance/holidays': typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceHolidaysRoute
-  '/org/$orgname/branch/$branchname/maintenance/tag-template': typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceTagTemplateRoute
-  '/org/$orgname/branch/$branchname/approvals': typeof OrgOrgnameBranchBranchnameemployeeApprovalsIndexRoute
-  '/org/$orgname/branch/$branchname/schemes': typeof OrgOrgnameBranchBranchnameemployeeSchemesIndexRoute
-  '/org/$orgname/branch/$branchname/transaction': typeof OrgOrgnameBranchBranchnameemployeeTransactionIndexRoute
-  '/org/$orgname/branch/$branchname/transaction/maintenance/cash-count': typeof OrgOrgnameBranchBranchnameemployeeTransactionMaintenanceCashCountRoute
-  '/org/$orgname/branch/$branchname/transaction/maintenance/financial-statement-definition': typeof OrgOrgnameBranchBranchnameemployeeTransactionMaintenanceFinancialStatementDefinitionRoute
-  '/org/$orgname/branch/$branchname/transaction/maintenance/general-ledger-definition': typeof OrgOrgnameBranchBranchnameemployeeTransactionMaintenanceGeneralLedgerDefinitionRoute
-  '/org/$orgname/branch/$branchname/transaction/quick-transfer/deposit': typeof OrgOrgnameBranchBranchnameemployeeTransactionQuickTransferDepositRoute
-  '/org/$orgname/branch/$branchname/transaction/quick-transfer/withdraw': typeof OrgOrgnameBranchBranchnameemployeeTransactionQuickTransferWithdrawRoute
-  '/org/$orgname/branch/$branchname/employees/view-employees': typeof OrgOrgnameBranchBranchnamemaintenanceemployeesEmployeesViewEmployeesRoute
-  '/org/$orgname/branch/$branchname/members/member-center': typeof OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberCenterRoute
-  '/org/$orgname/branch/$branchname/members/member-classification': typeof OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberClassificationRoute
-  '/org/$orgname/branch/$branchname/members/member-department': typeof OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberDepartmentRoute
-  '/org/$orgname/branch/$branchname/members/member-gender': typeof OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberGenderRoute
-  '/org/$orgname/branch/$branchname/members/member-group': typeof OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberGroupRoute
-  '/org/$orgname/branch/$branchname/members/member-occupation': typeof OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberOccupationRoute
-  '/org/$orgname/branch/$branchname/members/member-types': typeof OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberTypesRoute
-  '/org/$orgname/branch/$branchname/maintenance/invitation-code': typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceaccessAndOnboardingInvitationCodeRoute
-  '/org/$orgname/branch/$branchname/maintenance/account-category': typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceaccountSetupAccountCategoryRoute
-  '/org/$orgname/branch/$branchname/maintenance/account-classification': typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceaccountSetupAccountClassificationRoute
-  '/org/$orgname/branch/$branchname/member-profile/$memberId/$settings': typeof OrgOrgnameBranchBranchnamemaintenancemembersMemberProfileMemberIdSettingsIndexRoute
+  '/org/$orgname/branch/$branchname/member-settings/member-center': typeof OrgOrgnameBranchBranchnamemembersMemberSettingsMemberCenterRoute
+  '/org/$orgname/branch/$branchname/member-settings/member-classification': typeof OrgOrgnameBranchBranchnamemembersMemberSettingsMemberClassificationRoute
+  '/org/$orgname/branch/$branchname/member-settings/member-department': typeof OrgOrgnameBranchBranchnamemembersMemberSettingsMemberDepartmentRoute
+  '/org/$orgname/branch/$branchname/member-settings/member-gender': typeof OrgOrgnameBranchBranchnamemembersMemberSettingsMemberGenderRoute
+  '/org/$orgname/branch/$branchname/member-settings/member-group': typeof OrgOrgnameBranchBranchnamemembersMemberSettingsMemberGroupRoute
+  '/org/$orgname/branch/$branchname/member-settings/member-occupation': typeof OrgOrgnameBranchBranchnamemembersMemberSettingsMemberOccupationRoute
+  '/org/$orgname/branch/$branchname/member-settings/member-types': typeof OrgOrgnameBranchBranchnamemembersMemberSettingsMemberTypesRoute
+  '/org/$orgname/branch/$branchname/my-settings/my-all-footsteps': typeof OrgOrgnameBranchBranchnamesettingsMySettingsMyAllFootstepsRoute
+  '/org/$orgname/branch/$branchname/my-settings/my-branch-footsteps': typeof OrgOrgnameBranchBranchnamesettingsMySettingsMyBranchFootstepsRoute
+  '/org/$orgname/branch/$branchname/my-settings/my-disbursement-transaction': typeof OrgOrgnameBranchBranchnamesettingsMySettingsMyDisbursementTransactionRoute
+  '/org/$orgname/branch/$branchname/my-settings/my-general-ledger-entries': typeof OrgOrgnameBranchBranchnamesettingsMySettingsMyGeneralLedgerEntriesRoute
+  '/org/$orgname/branch/$branchname/my-settings/my-timesheet': typeof OrgOrgnameBranchBranchnamesettingsMySettingsMyTimesheetRoute
+  '/org/$orgname/branch/$branchname/maintenance/accounts/account-category': typeof OrgOrgnameBranchBranchnameMaintenanceAccountsAccountCategoryRoute
+  '/org/$orgname/branch/$branchname/maintenance/accounts/account-classification': typeof OrgOrgnameBranchBranchnameMaintenanceAccountsAccountClassificationRoute
+  '/org/$orgname/branch/$branchname/maintenance/accounts/disbursement-type': typeof OrgOrgnameBranchBranchnameMaintenanceAccountsDisbursementTypeRoute
+  '/org/$orgname/branch/$branchname/maintenance/accounts/payment-type': typeof OrgOrgnameBranchBranchnameMaintenanceAccountsPaymentTypeRoute
+  '/org/$orgname/branch/$branchname/maintenance/loans/collateral': typeof OrgOrgnameBranchBranchnameMaintenanceLoansCollateralRoute
+  '/org/$orgname/branch/$branchname/maintenance/loans/loan-application': typeof OrgOrgnameBranchBranchnameMaintenanceLoansLoanApplicationRoute
+  '/org/$orgname/branch/$branchname/maintenance/loans/loan-purpose': typeof OrgOrgnameBranchBranchnameMaintenanceLoansLoanPurposeRoute
+  '/org/$orgname/branch/$branchname/maintenance/loans/loan-status': typeof OrgOrgnameBranchBranchnameMaintenanceLoansLoanStatusRoute
+  '/org/$orgname/branch/$branchname/schemes': typeof OrgOrgnameBranchBranchnameschemesSchemesIndexRoute
+  '/org/$orgname/branch/$branchname/member-profile/$memberId/$settings': typeof OrgOrgnameBranchBranchnamemembersMemberProfileMemberIdSettingsIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -1041,65 +1003,63 @@ export interface FileRoutesById {
   '/onboarding/organization/': typeof OnboardingOrganizationIndexRoute
   '/org/$orgname/branch/$branchname': typeof OrgOrgnameBranchBranchnameRouteRouteWithChildren
   '/org/$orgname/branch/$branchname/': typeof OrgOrgnameBranchBranchnameIndexRoute
-  '/org/$orgname/branch/$branchname/(employee)/general-ledger': typeof OrgOrgnameBranchBranchnameemployeeGeneralLedgerRouteRoute
-  '/org/$orgname/branch/$branchname/(me)/my-general-ledger-entries': typeof OrgOrgnameBranchBranchnamemeMyGeneralLedgerEntriesRouteRoute
+  '/org/$orgname/branch/$branchname/(accounting)/accounts': typeof OrgOrgnameBranchBranchnameaccountingAccountsRoute
+  '/org/$orgname/branch/$branchname/(accounting)/financial-statement-definition': typeof OrgOrgnameBranchBranchnameaccountingFinancialStatementDefinitionRoute
+  '/org/$orgname/branch/$branchname/(approvals)/approvals': typeof OrgOrgnameBranchBranchnameapprovalsApprovalsRoute
+  '/org/$orgname/branch/$branchname/(blotter)/cash-count': typeof OrgOrgnameBranchBranchnameblotterCashCountRoute
+  '/org/$orgname/branch/$branchname/(blotter)/general-ledger-definition': typeof OrgOrgnameBranchBranchnameblotterGeneralLedgerDefinitionRoute
+  '/org/$orgname/branch/$branchname/(blotter)/transaction-batch': typeof OrgOrgnameBranchBranchnameblotterTransactionBatchRoute
   '/org/$orgname/branch/$branchname/(common)/dashboard': typeof OrgOrgnameBranchBranchnamecommonDashboardRoute
-  '/org/$orgname/branch/$branchname/(employee)/account-transaction': typeof OrgOrgnameBranchBranchnameemployeeAccountTransactionRoute
-  '/org/$orgname/branch/$branchname/(employee)/generate-mutual-aid': typeof OrgOrgnameBranchBranchnameemployeeGenerateMutualAidRoute
-  '/org/$orgname/branch/$branchname/(employee)/generate-savings-interest': typeof OrgOrgnameBranchBranchnameemployeeGenerateSavingsInterestRoute
-  '/org/$orgname/branch/$branchname/(employee)/timesheets': typeof OrgOrgnameBranchBranchnameemployeeTimesheetsRoute
-  '/org/$orgname/branch/$branchname/(me)/my-all-footsteps': typeof OrgOrgnameBranchBranchnamemeMyAllFootstepsRoute
-  '/org/$orgname/branch/$branchname/(me)/my-branch-footsteps': typeof OrgOrgnameBranchBranchnamemeMyBranchFootstepsRoute
-  '/org/$orgname/branch/$branchname/(me)/my-disbursement-transaction': typeof OrgOrgnameBranchBranchnamemeMyDisbursementTransactionRoute
-  '/org/$orgname/branch/$branchname/(me)/my-timesheet': typeof OrgOrgnameBranchBranchnamemeMyTimesheetRoute
-  '/org/$orgname/branch/$branchname/accounting/accounts': typeof OrgOrgnameBranchBranchnameAccountingAccountsRoute
-  '/org/$orgname/branch/$branchname/accounting/adjustment-entry': typeof OrgOrgnameBranchBranchnameAccountingAdjustmentEntryRoute
-  '/org/$orgname/branch/$branchname/accounting/cash-check-journal-voucher': typeof OrgOrgnameBranchBranchnameAccountingCashCheckJournalVoucherRoute
-  '/org/$orgname/branch/$branchname/accounting/journal-voucher': typeof OrgOrgnameBranchBranchnameAccountingJournalVoucherRoute
+  '/org/$orgname/branch/$branchname/(employees)/employee-footsteps': typeof OrgOrgnameBranchBranchnameemployeesEmployeeFootstepsRoute
+  '/org/$orgname/branch/$branchname/(employees)/invitation-code': typeof OrgOrgnameBranchBranchnameemployeesInvitationCodeRoute
+  '/org/$orgname/branch/$branchname/(employees)/permission-template': typeof OrgOrgnameBranchBranchnameemployeesPermissionTemplateRoute
+  '/org/$orgname/branch/$branchname/(employees)/timesheets': typeof OrgOrgnameBranchBranchnameemployeesTimesheetsRoute
+  '/org/$orgname/branch/$branchname/(employees)/view-employees': typeof OrgOrgnameBranchBranchnameemployeesViewEmployeesRoute
+  '/org/$orgname/branch/$branchname/(members)/member-accounting-ledger': typeof OrgOrgnameBranchBranchnamemembersMemberAccountingLedgerRoute
+  '/org/$orgname/branch/$branchname/(members)/view-members': typeof OrgOrgnameBranchBranchnamemembersViewMembersRoute
+  '/org/$orgname/branch/$branchname/(transactions)/adjustment-entry': typeof OrgOrgnameBranchBranchnametransactionsAdjustmentEntryRoute
+  '/org/$orgname/branch/$branchname/(transactions)/cash-check-journal-voucher': typeof OrgOrgnameBranchBranchnametransactionsCashCheckJournalVoucherRoute
+  '/org/$orgname/branch/$branchname/(transactions)/deposit': typeof OrgOrgnameBranchBranchnametransactionsDepositRoute
+  '/org/$orgname/branch/$branchname/(transactions)/disbursement-transaction': typeof OrgOrgnameBranchBranchnametransactionsDisbursementTransactionRoute
+  '/org/$orgname/branch/$branchname/(transactions)/journal-voucher': typeof OrgOrgnameBranchBranchnametransactionsJournalVoucherRoute
+  '/org/$orgname/branch/$branchname/(transactions)/loan': typeof OrgOrgnameBranchBranchnametransactionsLoanRoute
+  '/org/$orgname/branch/$branchname/(transactions)/loan-payment': typeof OrgOrgnameBranchBranchnametransactionsLoanPaymentRoute
+  '/org/$orgname/branch/$branchname/(transactions)/payment': typeof OrgOrgnameBranchBranchnametransactionsPaymentRoute
+  '/org/$orgname/branch/$branchname/(transactions)/transactions': typeof OrgOrgnameBranchBranchnametransactionsTransactionsRoute
+  '/org/$orgname/branch/$branchname/(transactions)/withdraw': typeof OrgOrgnameBranchBranchnametransactionsWithdrawRoute
   '/org/$orgname/branch/$branchname/dev/documentation': typeof OrgOrgnameBranchBranchnameDevDocumentationRoute
+  '/org/$orgname/branch/$branchname/maintenance/area': typeof OrgOrgnameBranchBranchnameMaintenanceAreaRoute
+  '/org/$orgname/branch/$branchname/maintenance/banks': typeof OrgOrgnameBranchBranchnameMaintenanceBanksRoute
+  '/org/$orgname/branch/$branchname/maintenance/bills-and-coins': typeof OrgOrgnameBranchBranchnameMaintenanceBillsAndCoinsRoute
+  '/org/$orgname/branch/$branchname/maintenance/company': typeof OrgOrgnameBranchBranchnameMaintenanceCompanyRoute
+  '/org/$orgname/branch/$branchname/maintenance/holidays': typeof OrgOrgnameBranchBranchnameMaintenanceHolidaysRoute
+  '/org/$orgname/branch/$branchname/maintenance/tag-template': typeof OrgOrgnameBranchBranchnameMaintenanceTagTemplateRoute
+  '/org/$orgname/branch/$branchname/system/account-transaction': typeof OrgOrgnameBranchBranchnameSystemAccountTransactionRoute
+  '/org/$orgname/branch/$branchname/system/generate-mutual-aid': typeof OrgOrgnameBranchBranchnameSystemGenerateMutualAidRoute
+  '/org/$orgname/branch/$branchname/system/generate-savings-interest': typeof OrgOrgnameBranchBranchnameSystemGenerateSavingsInterestRoute
   '/org/$orgname/branch/$branchname/(common)/(settings)/settings': typeof OrgOrgnameBranchBranchnamecommonsettingsSettingsRoute
-  '/org/$orgname/branch/$branchname/(employee)/loan/loan-application': typeof OrgOrgnameBranchBranchnameemployeeLoanLoanApplicationRoute
-  '/org/$orgname/branch/$branchname/(employee)/loan/loan-purpose': typeof OrgOrgnameBranchBranchnameemployeeLoanLoanPurposeRoute
-  '/org/$orgname/branch/$branchname/(employee)/loan/loan-status': typeof OrgOrgnameBranchBranchnameemployeeLoanLoanStatusRoute
-  '/org/$orgname/branch/$branchname/(employee)/loan/loans': typeof OrgOrgnameBranchBranchnameemployeeLoanLoansRoute
-  '/org/$orgname/branch/$branchname/(employee)/transaction/disbursement': typeof OrgOrgnameBranchBranchnameemployeeTransactionDisbursementRoute
-  '/org/$orgname/branch/$branchname/(employee)/transaction/disbursement-transaction': typeof OrgOrgnameBranchBranchnameemployeeTransactionDisbursementTransactionRoute
-  '/org/$orgname/branch/$branchname/(employee)/transaction/loan-payment': typeof OrgOrgnameBranchBranchnameemployeeTransactionLoanPaymentRoute
-  '/org/$orgname/branch/$branchname/(employee)/transaction/payment-type': typeof OrgOrgnameBranchBranchnameemployeeTransactionPaymentTypeRoute
-  '/org/$orgname/branch/$branchname/(employee)/transaction/test': typeof OrgOrgnameBranchBranchnameemployeeTransactionTestRoute
-  '/org/$orgname/branch/$branchname/(employee)/transaction/transaction-batch': typeof OrgOrgnameBranchBranchnameemployeeTransactionTransactionBatchRoute
-  '/org/$orgname/branch/$branchname/(employee)/transaction/transactions': typeof OrgOrgnameBranchBranchnameemployeeTransactionTransactionsRoute
-  '/org/$orgname/branch/$branchname/(maintenance)/(employees)/employee-footsteps': typeof OrgOrgnameBranchBranchnamemaintenanceemployeesEmployeeFootstepsRoute
-  '/org/$orgname/branch/$branchname/(maintenance)/(employees)/permission-template': typeof OrgOrgnameBranchBranchnamemaintenanceemployeesPermissionTemplateRoute
-  '/org/$orgname/branch/$branchname/(maintenance)/(members)/member-accounting-ledger': typeof OrgOrgnameBranchBranchnamemaintenancemembersMemberAccountingLedgerRoute
-  '/org/$orgname/branch/$branchname/(maintenance)/(members)/view-members': typeof OrgOrgnameBranchBranchnamemaintenancemembersViewMembersRoute
-  '/org/$orgname/branch/$branchname/(maintenance)/maintenance/area': typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceAreaRoute
-  '/org/$orgname/branch/$branchname/(maintenance)/maintenance/banks': typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceBanksRoute
-  '/org/$orgname/branch/$branchname/(maintenance)/maintenance/bills-and-coins': typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceBillsAndCoinsRoute
-  '/org/$orgname/branch/$branchname/(maintenance)/maintenance/collateral': typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceCollateralRoute
-  '/org/$orgname/branch/$branchname/(maintenance)/maintenance/company': typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceCompanyRoute
-  '/org/$orgname/branch/$branchname/(maintenance)/maintenance/holidays': typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceHolidaysRoute
-  '/org/$orgname/branch/$branchname/(maintenance)/maintenance/tag-template': typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceTagTemplateRoute
-  '/org/$orgname/branch/$branchname/(employee)/approvals/': typeof OrgOrgnameBranchBranchnameemployeeApprovalsIndexRoute
-  '/org/$orgname/branch/$branchname/(employee)/schemes/': typeof OrgOrgnameBranchBranchnameemployeeSchemesIndexRoute
-  '/org/$orgname/branch/$branchname/(employee)/transaction/': typeof OrgOrgnameBranchBranchnameemployeeTransactionIndexRoute
-  '/org/$orgname/branch/$branchname/(employee)/transaction/maintenance/cash-count': typeof OrgOrgnameBranchBranchnameemployeeTransactionMaintenanceCashCountRoute
-  '/org/$orgname/branch/$branchname/(employee)/transaction/maintenance/financial-statement-definition': typeof OrgOrgnameBranchBranchnameemployeeTransactionMaintenanceFinancialStatementDefinitionRoute
-  '/org/$orgname/branch/$branchname/(employee)/transaction/maintenance/general-ledger-definition': typeof OrgOrgnameBranchBranchnameemployeeTransactionMaintenanceGeneralLedgerDefinitionRoute
-  '/org/$orgname/branch/$branchname/(employee)/transaction/quick-transfer/deposit': typeof OrgOrgnameBranchBranchnameemployeeTransactionQuickTransferDepositRoute
-  '/org/$orgname/branch/$branchname/(employee)/transaction/quick-transfer/withdraw': typeof OrgOrgnameBranchBranchnameemployeeTransactionQuickTransferWithdrawRoute
-  '/org/$orgname/branch/$branchname/(maintenance)/(employees)/employees/view-employees': typeof OrgOrgnameBranchBranchnamemaintenanceemployeesEmployeesViewEmployeesRoute
-  '/org/$orgname/branch/$branchname/(maintenance)/(members)/members/member-center': typeof OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberCenterRoute
-  '/org/$orgname/branch/$branchname/(maintenance)/(members)/members/member-classification': typeof OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberClassificationRoute
-  '/org/$orgname/branch/$branchname/(maintenance)/(members)/members/member-department': typeof OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberDepartmentRoute
-  '/org/$orgname/branch/$branchname/(maintenance)/(members)/members/member-gender': typeof OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberGenderRoute
-  '/org/$orgname/branch/$branchname/(maintenance)/(members)/members/member-group': typeof OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberGroupRoute
-  '/org/$orgname/branch/$branchname/(maintenance)/(members)/members/member-occupation': typeof OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberOccupationRoute
-  '/org/$orgname/branch/$branchname/(maintenance)/(members)/members/member-types': typeof OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberTypesRoute
-  '/org/$orgname/branch/$branchname/(maintenance)/maintenance/(access-and-onboarding)/invitation-code': typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceaccessAndOnboardingInvitationCodeRoute
-  '/org/$orgname/branch/$branchname/(maintenance)/maintenance/(account-setup)/account-category': typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceaccountSetupAccountCategoryRoute
-  '/org/$orgname/branch/$branchname/(maintenance)/maintenance/(account-setup)/account-classification': typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceaccountSetupAccountClassificationRoute
-  '/org/$orgname/branch/$branchname/(maintenance)/(members)/member-profile/$memberId/$settings/': typeof OrgOrgnameBranchBranchnamemaintenancemembersMemberProfileMemberIdSettingsIndexRoute
+  '/org/$orgname/branch/$branchname/(members)/member-settings/member-center': typeof OrgOrgnameBranchBranchnamemembersMemberSettingsMemberCenterRoute
+  '/org/$orgname/branch/$branchname/(members)/member-settings/member-classification': typeof OrgOrgnameBranchBranchnamemembersMemberSettingsMemberClassificationRoute
+  '/org/$orgname/branch/$branchname/(members)/member-settings/member-department': typeof OrgOrgnameBranchBranchnamemembersMemberSettingsMemberDepartmentRoute
+  '/org/$orgname/branch/$branchname/(members)/member-settings/member-gender': typeof OrgOrgnameBranchBranchnamemembersMemberSettingsMemberGenderRoute
+  '/org/$orgname/branch/$branchname/(members)/member-settings/member-group': typeof OrgOrgnameBranchBranchnamemembersMemberSettingsMemberGroupRoute
+  '/org/$orgname/branch/$branchname/(members)/member-settings/member-occupation': typeof OrgOrgnameBranchBranchnamemembersMemberSettingsMemberOccupationRoute
+  '/org/$orgname/branch/$branchname/(members)/member-settings/member-types': typeof OrgOrgnameBranchBranchnamemembersMemberSettingsMemberTypesRoute
+  '/org/$orgname/branch/$branchname/(settings)/my-settings/my-all-footsteps': typeof OrgOrgnameBranchBranchnamesettingsMySettingsMyAllFootstepsRoute
+  '/org/$orgname/branch/$branchname/(settings)/my-settings/my-branch-footsteps': typeof OrgOrgnameBranchBranchnamesettingsMySettingsMyBranchFootstepsRoute
+  '/org/$orgname/branch/$branchname/(settings)/my-settings/my-disbursement-transaction': typeof OrgOrgnameBranchBranchnamesettingsMySettingsMyDisbursementTransactionRoute
+  '/org/$orgname/branch/$branchname/(settings)/my-settings/my-general-ledger-entries': typeof OrgOrgnameBranchBranchnamesettingsMySettingsMyGeneralLedgerEntriesRoute
+  '/org/$orgname/branch/$branchname/(settings)/my-settings/my-timesheet': typeof OrgOrgnameBranchBranchnamesettingsMySettingsMyTimesheetRoute
+  '/org/$orgname/branch/$branchname/maintenance/accounts/account-category': typeof OrgOrgnameBranchBranchnameMaintenanceAccountsAccountCategoryRoute
+  '/org/$orgname/branch/$branchname/maintenance/accounts/account-classification': typeof OrgOrgnameBranchBranchnameMaintenanceAccountsAccountClassificationRoute
+  '/org/$orgname/branch/$branchname/maintenance/accounts/disbursement-type': typeof OrgOrgnameBranchBranchnameMaintenanceAccountsDisbursementTypeRoute
+  '/org/$orgname/branch/$branchname/maintenance/accounts/payment-type': typeof OrgOrgnameBranchBranchnameMaintenanceAccountsPaymentTypeRoute
+  '/org/$orgname/branch/$branchname/maintenance/loans/collateral': typeof OrgOrgnameBranchBranchnameMaintenanceLoansCollateralRoute
+  '/org/$orgname/branch/$branchname/maintenance/loans/loan-application': typeof OrgOrgnameBranchBranchnameMaintenanceLoansLoanApplicationRoute
+  '/org/$orgname/branch/$branchname/maintenance/loans/loan-purpose': typeof OrgOrgnameBranchBranchnameMaintenanceLoansLoanPurposeRoute
+  '/org/$orgname/branch/$branchname/maintenance/loans/loan-status': typeof OrgOrgnameBranchBranchnameMaintenanceLoansLoanStatusRoute
+  '/org/$orgname/branch/$branchname/(schemes)/schemes/': typeof OrgOrgnameBranchBranchnameschemesSchemesIndexRoute
+  '/org/$orgname/branch/$branchname/(members)/member-profile/$memberId/$settings/': typeof OrgOrgnameBranchBranchnamemembersMemberProfileMemberIdSettingsIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -1150,64 +1110,62 @@ export interface FileRouteTypes {
     | '/onboarding/organization/'
     | '/org/$orgname/branch/$branchname'
     | '/org/$orgname/branch/$branchname/'
-    | '/org/$orgname/branch/$branchname/general-ledger'
-    | '/org/$orgname/branch/$branchname/my-general-ledger-entries'
+    | '/org/$orgname/branch/$branchname/accounts'
+    | '/org/$orgname/branch/$branchname/financial-statement-definition'
+    | '/org/$orgname/branch/$branchname/approvals'
+    | '/org/$orgname/branch/$branchname/cash-count'
+    | '/org/$orgname/branch/$branchname/general-ledger-definition'
+    | '/org/$orgname/branch/$branchname/transaction-batch'
     | '/org/$orgname/branch/$branchname/dashboard'
-    | '/org/$orgname/branch/$branchname/account-transaction'
-    | '/org/$orgname/branch/$branchname/generate-mutual-aid'
-    | '/org/$orgname/branch/$branchname/generate-savings-interest'
-    | '/org/$orgname/branch/$branchname/timesheets'
-    | '/org/$orgname/branch/$branchname/my-all-footsteps'
-    | '/org/$orgname/branch/$branchname/my-branch-footsteps'
-    | '/org/$orgname/branch/$branchname/my-disbursement-transaction'
-    | '/org/$orgname/branch/$branchname/my-timesheet'
-    | '/org/$orgname/branch/$branchname/accounting/accounts'
-    | '/org/$orgname/branch/$branchname/accounting/adjustment-entry'
-    | '/org/$orgname/branch/$branchname/accounting/cash-check-journal-voucher'
-    | '/org/$orgname/branch/$branchname/accounting/journal-voucher'
-    | '/org/$orgname/branch/$branchname/dev/documentation'
-    | '/org/$orgname/branch/$branchname/settings'
-    | '/org/$orgname/branch/$branchname/loan/loan-application'
-    | '/org/$orgname/branch/$branchname/loan/loan-purpose'
-    | '/org/$orgname/branch/$branchname/loan/loan-status'
-    | '/org/$orgname/branch/$branchname/loan/loans'
-    | '/org/$orgname/branch/$branchname/transaction/disbursement'
-    | '/org/$orgname/branch/$branchname/transaction/disbursement-transaction'
-    | '/org/$orgname/branch/$branchname/transaction/loan-payment'
-    | '/org/$orgname/branch/$branchname/transaction/payment-type'
-    | '/org/$orgname/branch/$branchname/transaction/test'
-    | '/org/$orgname/branch/$branchname/transaction/transaction-batch'
-    | '/org/$orgname/branch/$branchname/transaction/transactions'
     | '/org/$orgname/branch/$branchname/employee-footsteps'
+    | '/org/$orgname/branch/$branchname/invitation-code'
     | '/org/$orgname/branch/$branchname/permission-template'
+    | '/org/$orgname/branch/$branchname/timesheets'
+    | '/org/$orgname/branch/$branchname/view-employees'
     | '/org/$orgname/branch/$branchname/member-accounting-ledger'
     | '/org/$orgname/branch/$branchname/view-members'
+    | '/org/$orgname/branch/$branchname/adjustment-entry'
+    | '/org/$orgname/branch/$branchname/cash-check-journal-voucher'
+    | '/org/$orgname/branch/$branchname/deposit'
+    | '/org/$orgname/branch/$branchname/disbursement-transaction'
+    | '/org/$orgname/branch/$branchname/journal-voucher'
+    | '/org/$orgname/branch/$branchname/loan'
+    | '/org/$orgname/branch/$branchname/loan-payment'
+    | '/org/$orgname/branch/$branchname/payment'
+    | '/org/$orgname/branch/$branchname/transactions'
+    | '/org/$orgname/branch/$branchname/withdraw'
+    | '/org/$orgname/branch/$branchname/dev/documentation'
     | '/org/$orgname/branch/$branchname/maintenance/area'
     | '/org/$orgname/branch/$branchname/maintenance/banks'
     | '/org/$orgname/branch/$branchname/maintenance/bills-and-coins'
-    | '/org/$orgname/branch/$branchname/maintenance/collateral'
     | '/org/$orgname/branch/$branchname/maintenance/company'
     | '/org/$orgname/branch/$branchname/maintenance/holidays'
     | '/org/$orgname/branch/$branchname/maintenance/tag-template'
-    | '/org/$orgname/branch/$branchname/approvals'
+    | '/org/$orgname/branch/$branchname/system/account-transaction'
+    | '/org/$orgname/branch/$branchname/system/generate-mutual-aid'
+    | '/org/$orgname/branch/$branchname/system/generate-savings-interest'
+    | '/org/$orgname/branch/$branchname/settings'
+    | '/org/$orgname/branch/$branchname/member-settings/member-center'
+    | '/org/$orgname/branch/$branchname/member-settings/member-classification'
+    | '/org/$orgname/branch/$branchname/member-settings/member-department'
+    | '/org/$orgname/branch/$branchname/member-settings/member-gender'
+    | '/org/$orgname/branch/$branchname/member-settings/member-group'
+    | '/org/$orgname/branch/$branchname/member-settings/member-occupation'
+    | '/org/$orgname/branch/$branchname/member-settings/member-types'
+    | '/org/$orgname/branch/$branchname/my-settings/my-all-footsteps'
+    | '/org/$orgname/branch/$branchname/my-settings/my-branch-footsteps'
+    | '/org/$orgname/branch/$branchname/my-settings/my-disbursement-transaction'
+    | '/org/$orgname/branch/$branchname/my-settings/my-general-ledger-entries'
+    | '/org/$orgname/branch/$branchname/my-settings/my-timesheet'
+    | '/org/$orgname/branch/$branchname/maintenance/accounts/account-category'
+    | '/org/$orgname/branch/$branchname/maintenance/accounts/account-classification'
+    | '/org/$orgname/branch/$branchname/maintenance/accounts/disbursement-type'
+    | '/org/$orgname/branch/$branchname/maintenance/accounts/payment-type'
+    | '/org/$orgname/branch/$branchname/maintenance/loans/collateral'
+    | '/org/$orgname/branch/$branchname/maintenance/loans/loan-application'
+    | '/org/$orgname/branch/$branchname/maintenance/loans/loan-purpose'
+    | '/org/$orgname/branch/$branchname/maintenance/loans/loan-status'
     | '/org/$orgname/branch/$branchname/schemes'
-    | '/org/$orgname/branch/$branchname/transaction'
-    | '/org/$orgname/branch/$branchname/transaction/maintenance/cash-count'
-    | '/org/$orgname/branch/$branchname/transaction/maintenance/financial-statement-definition'
-    | '/org/$orgname/branch/$branchname/transaction/maintenance/general-ledger-definition'
-    | '/org/$orgname/branch/$branchname/transaction/quick-transfer/deposit'
-    | '/org/$orgname/branch/$branchname/transaction/quick-transfer/withdraw'
-    | '/org/$orgname/branch/$branchname/employees/view-employees'
-    | '/org/$orgname/branch/$branchname/members/member-center'
-    | '/org/$orgname/branch/$branchname/members/member-classification'
-    | '/org/$orgname/branch/$branchname/members/member-department'
-    | '/org/$orgname/branch/$branchname/members/member-gender'
-    | '/org/$orgname/branch/$branchname/members/member-group'
-    | '/org/$orgname/branch/$branchname/members/member-occupation'
-    | '/org/$orgname/branch/$branchname/members/member-types'
-    | '/org/$orgname/branch/$branchname/maintenance/invitation-code'
-    | '/org/$orgname/branch/$branchname/maintenance/account-category'
-    | '/org/$orgname/branch/$branchname/maintenance/account-classification'
     | '/org/$orgname/branch/$branchname/member-profile/$memberId/$settings'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -1253,64 +1211,62 @@ export interface FileRouteTypes {
     | '/onboarding/organization/$organization_id'
     | '/onboarding/organization'
     | '/org/$orgname/branch/$branchname'
-    | '/org/$orgname/branch/$branchname/general-ledger'
-    | '/org/$orgname/branch/$branchname/my-general-ledger-entries'
+    | '/org/$orgname/branch/$branchname/accounts'
+    | '/org/$orgname/branch/$branchname/financial-statement-definition'
+    | '/org/$orgname/branch/$branchname/approvals'
+    | '/org/$orgname/branch/$branchname/cash-count'
+    | '/org/$orgname/branch/$branchname/general-ledger-definition'
+    | '/org/$orgname/branch/$branchname/transaction-batch'
     | '/org/$orgname/branch/$branchname/dashboard'
-    | '/org/$orgname/branch/$branchname/account-transaction'
-    | '/org/$orgname/branch/$branchname/generate-mutual-aid'
-    | '/org/$orgname/branch/$branchname/generate-savings-interest'
-    | '/org/$orgname/branch/$branchname/timesheets'
-    | '/org/$orgname/branch/$branchname/my-all-footsteps'
-    | '/org/$orgname/branch/$branchname/my-branch-footsteps'
-    | '/org/$orgname/branch/$branchname/my-disbursement-transaction'
-    | '/org/$orgname/branch/$branchname/my-timesheet'
-    | '/org/$orgname/branch/$branchname/accounting/accounts'
-    | '/org/$orgname/branch/$branchname/accounting/adjustment-entry'
-    | '/org/$orgname/branch/$branchname/accounting/cash-check-journal-voucher'
-    | '/org/$orgname/branch/$branchname/accounting/journal-voucher'
-    | '/org/$orgname/branch/$branchname/dev/documentation'
-    | '/org/$orgname/branch/$branchname/settings'
-    | '/org/$orgname/branch/$branchname/loan/loan-application'
-    | '/org/$orgname/branch/$branchname/loan/loan-purpose'
-    | '/org/$orgname/branch/$branchname/loan/loan-status'
-    | '/org/$orgname/branch/$branchname/loan/loans'
-    | '/org/$orgname/branch/$branchname/transaction/disbursement'
-    | '/org/$orgname/branch/$branchname/transaction/disbursement-transaction'
-    | '/org/$orgname/branch/$branchname/transaction/loan-payment'
-    | '/org/$orgname/branch/$branchname/transaction/payment-type'
-    | '/org/$orgname/branch/$branchname/transaction/test'
-    | '/org/$orgname/branch/$branchname/transaction/transaction-batch'
-    | '/org/$orgname/branch/$branchname/transaction/transactions'
     | '/org/$orgname/branch/$branchname/employee-footsteps'
+    | '/org/$orgname/branch/$branchname/invitation-code'
     | '/org/$orgname/branch/$branchname/permission-template'
+    | '/org/$orgname/branch/$branchname/timesheets'
+    | '/org/$orgname/branch/$branchname/view-employees'
     | '/org/$orgname/branch/$branchname/member-accounting-ledger'
     | '/org/$orgname/branch/$branchname/view-members'
+    | '/org/$orgname/branch/$branchname/adjustment-entry'
+    | '/org/$orgname/branch/$branchname/cash-check-journal-voucher'
+    | '/org/$orgname/branch/$branchname/deposit'
+    | '/org/$orgname/branch/$branchname/disbursement-transaction'
+    | '/org/$orgname/branch/$branchname/journal-voucher'
+    | '/org/$orgname/branch/$branchname/loan'
+    | '/org/$orgname/branch/$branchname/loan-payment'
+    | '/org/$orgname/branch/$branchname/payment'
+    | '/org/$orgname/branch/$branchname/transactions'
+    | '/org/$orgname/branch/$branchname/withdraw'
+    | '/org/$orgname/branch/$branchname/dev/documentation'
     | '/org/$orgname/branch/$branchname/maintenance/area'
     | '/org/$orgname/branch/$branchname/maintenance/banks'
     | '/org/$orgname/branch/$branchname/maintenance/bills-and-coins'
-    | '/org/$orgname/branch/$branchname/maintenance/collateral'
     | '/org/$orgname/branch/$branchname/maintenance/company'
     | '/org/$orgname/branch/$branchname/maintenance/holidays'
     | '/org/$orgname/branch/$branchname/maintenance/tag-template'
-    | '/org/$orgname/branch/$branchname/approvals'
+    | '/org/$orgname/branch/$branchname/system/account-transaction'
+    | '/org/$orgname/branch/$branchname/system/generate-mutual-aid'
+    | '/org/$orgname/branch/$branchname/system/generate-savings-interest'
+    | '/org/$orgname/branch/$branchname/settings'
+    | '/org/$orgname/branch/$branchname/member-settings/member-center'
+    | '/org/$orgname/branch/$branchname/member-settings/member-classification'
+    | '/org/$orgname/branch/$branchname/member-settings/member-department'
+    | '/org/$orgname/branch/$branchname/member-settings/member-gender'
+    | '/org/$orgname/branch/$branchname/member-settings/member-group'
+    | '/org/$orgname/branch/$branchname/member-settings/member-occupation'
+    | '/org/$orgname/branch/$branchname/member-settings/member-types'
+    | '/org/$orgname/branch/$branchname/my-settings/my-all-footsteps'
+    | '/org/$orgname/branch/$branchname/my-settings/my-branch-footsteps'
+    | '/org/$orgname/branch/$branchname/my-settings/my-disbursement-transaction'
+    | '/org/$orgname/branch/$branchname/my-settings/my-general-ledger-entries'
+    | '/org/$orgname/branch/$branchname/my-settings/my-timesheet'
+    | '/org/$orgname/branch/$branchname/maintenance/accounts/account-category'
+    | '/org/$orgname/branch/$branchname/maintenance/accounts/account-classification'
+    | '/org/$orgname/branch/$branchname/maintenance/accounts/disbursement-type'
+    | '/org/$orgname/branch/$branchname/maintenance/accounts/payment-type'
+    | '/org/$orgname/branch/$branchname/maintenance/loans/collateral'
+    | '/org/$orgname/branch/$branchname/maintenance/loans/loan-application'
+    | '/org/$orgname/branch/$branchname/maintenance/loans/loan-purpose'
+    | '/org/$orgname/branch/$branchname/maintenance/loans/loan-status'
     | '/org/$orgname/branch/$branchname/schemes'
-    | '/org/$orgname/branch/$branchname/transaction'
-    | '/org/$orgname/branch/$branchname/transaction/maintenance/cash-count'
-    | '/org/$orgname/branch/$branchname/transaction/maintenance/financial-statement-definition'
-    | '/org/$orgname/branch/$branchname/transaction/maintenance/general-ledger-definition'
-    | '/org/$orgname/branch/$branchname/transaction/quick-transfer/deposit'
-    | '/org/$orgname/branch/$branchname/transaction/quick-transfer/withdraw'
-    | '/org/$orgname/branch/$branchname/employees/view-employees'
-    | '/org/$orgname/branch/$branchname/members/member-center'
-    | '/org/$orgname/branch/$branchname/members/member-classification'
-    | '/org/$orgname/branch/$branchname/members/member-department'
-    | '/org/$orgname/branch/$branchname/members/member-gender'
-    | '/org/$orgname/branch/$branchname/members/member-group'
-    | '/org/$orgname/branch/$branchname/members/member-occupation'
-    | '/org/$orgname/branch/$branchname/members/member-types'
-    | '/org/$orgname/branch/$branchname/maintenance/invitation-code'
-    | '/org/$orgname/branch/$branchname/maintenance/account-category'
-    | '/org/$orgname/branch/$branchname/maintenance/account-classification'
     | '/org/$orgname/branch/$branchname/member-profile/$memberId/$settings'
   id:
     | '__root__'
@@ -1361,65 +1317,63 @@ export interface FileRouteTypes {
     | '/onboarding/organization/'
     | '/org/$orgname/branch/$branchname'
     | '/org/$orgname/branch/$branchname/'
-    | '/org/$orgname/branch/$branchname/(employee)/general-ledger'
-    | '/org/$orgname/branch/$branchname/(me)/my-general-ledger-entries'
+    | '/org/$orgname/branch/$branchname/(accounting)/accounts'
+    | '/org/$orgname/branch/$branchname/(accounting)/financial-statement-definition'
+    | '/org/$orgname/branch/$branchname/(approvals)/approvals'
+    | '/org/$orgname/branch/$branchname/(blotter)/cash-count'
+    | '/org/$orgname/branch/$branchname/(blotter)/general-ledger-definition'
+    | '/org/$orgname/branch/$branchname/(blotter)/transaction-batch'
     | '/org/$orgname/branch/$branchname/(common)/dashboard'
-    | '/org/$orgname/branch/$branchname/(employee)/account-transaction'
-    | '/org/$orgname/branch/$branchname/(employee)/generate-mutual-aid'
-    | '/org/$orgname/branch/$branchname/(employee)/generate-savings-interest'
-    | '/org/$orgname/branch/$branchname/(employee)/timesheets'
-    | '/org/$orgname/branch/$branchname/(me)/my-all-footsteps'
-    | '/org/$orgname/branch/$branchname/(me)/my-branch-footsteps'
-    | '/org/$orgname/branch/$branchname/(me)/my-disbursement-transaction'
-    | '/org/$orgname/branch/$branchname/(me)/my-timesheet'
-    | '/org/$orgname/branch/$branchname/accounting/accounts'
-    | '/org/$orgname/branch/$branchname/accounting/adjustment-entry'
-    | '/org/$orgname/branch/$branchname/accounting/cash-check-journal-voucher'
-    | '/org/$orgname/branch/$branchname/accounting/journal-voucher'
+    | '/org/$orgname/branch/$branchname/(employees)/employee-footsteps'
+    | '/org/$orgname/branch/$branchname/(employees)/invitation-code'
+    | '/org/$orgname/branch/$branchname/(employees)/permission-template'
+    | '/org/$orgname/branch/$branchname/(employees)/timesheets'
+    | '/org/$orgname/branch/$branchname/(employees)/view-employees'
+    | '/org/$orgname/branch/$branchname/(members)/member-accounting-ledger'
+    | '/org/$orgname/branch/$branchname/(members)/view-members'
+    | '/org/$orgname/branch/$branchname/(transactions)/adjustment-entry'
+    | '/org/$orgname/branch/$branchname/(transactions)/cash-check-journal-voucher'
+    | '/org/$orgname/branch/$branchname/(transactions)/deposit'
+    | '/org/$orgname/branch/$branchname/(transactions)/disbursement-transaction'
+    | '/org/$orgname/branch/$branchname/(transactions)/journal-voucher'
+    | '/org/$orgname/branch/$branchname/(transactions)/loan'
+    | '/org/$orgname/branch/$branchname/(transactions)/loan-payment'
+    | '/org/$orgname/branch/$branchname/(transactions)/payment'
+    | '/org/$orgname/branch/$branchname/(transactions)/transactions'
+    | '/org/$orgname/branch/$branchname/(transactions)/withdraw'
     | '/org/$orgname/branch/$branchname/dev/documentation'
+    | '/org/$orgname/branch/$branchname/maintenance/area'
+    | '/org/$orgname/branch/$branchname/maintenance/banks'
+    | '/org/$orgname/branch/$branchname/maintenance/bills-and-coins'
+    | '/org/$orgname/branch/$branchname/maintenance/company'
+    | '/org/$orgname/branch/$branchname/maintenance/holidays'
+    | '/org/$orgname/branch/$branchname/maintenance/tag-template'
+    | '/org/$orgname/branch/$branchname/system/account-transaction'
+    | '/org/$orgname/branch/$branchname/system/generate-mutual-aid'
+    | '/org/$orgname/branch/$branchname/system/generate-savings-interest'
     | '/org/$orgname/branch/$branchname/(common)/(settings)/settings'
-    | '/org/$orgname/branch/$branchname/(employee)/loan/loan-application'
-    | '/org/$orgname/branch/$branchname/(employee)/loan/loan-purpose'
-    | '/org/$orgname/branch/$branchname/(employee)/loan/loan-status'
-    | '/org/$orgname/branch/$branchname/(employee)/loan/loans'
-    | '/org/$orgname/branch/$branchname/(employee)/transaction/disbursement'
-    | '/org/$orgname/branch/$branchname/(employee)/transaction/disbursement-transaction'
-    | '/org/$orgname/branch/$branchname/(employee)/transaction/loan-payment'
-    | '/org/$orgname/branch/$branchname/(employee)/transaction/payment-type'
-    | '/org/$orgname/branch/$branchname/(employee)/transaction/test'
-    | '/org/$orgname/branch/$branchname/(employee)/transaction/transaction-batch'
-    | '/org/$orgname/branch/$branchname/(employee)/transaction/transactions'
-    | '/org/$orgname/branch/$branchname/(maintenance)/(employees)/employee-footsteps'
-    | '/org/$orgname/branch/$branchname/(maintenance)/(employees)/permission-template'
-    | '/org/$orgname/branch/$branchname/(maintenance)/(members)/member-accounting-ledger'
-    | '/org/$orgname/branch/$branchname/(maintenance)/(members)/view-members'
-    | '/org/$orgname/branch/$branchname/(maintenance)/maintenance/area'
-    | '/org/$orgname/branch/$branchname/(maintenance)/maintenance/banks'
-    | '/org/$orgname/branch/$branchname/(maintenance)/maintenance/bills-and-coins'
-    | '/org/$orgname/branch/$branchname/(maintenance)/maintenance/collateral'
-    | '/org/$orgname/branch/$branchname/(maintenance)/maintenance/company'
-    | '/org/$orgname/branch/$branchname/(maintenance)/maintenance/holidays'
-    | '/org/$orgname/branch/$branchname/(maintenance)/maintenance/tag-template'
-    | '/org/$orgname/branch/$branchname/(employee)/approvals/'
-    | '/org/$orgname/branch/$branchname/(employee)/schemes/'
-    | '/org/$orgname/branch/$branchname/(employee)/transaction/'
-    | '/org/$orgname/branch/$branchname/(employee)/transaction/maintenance/cash-count'
-    | '/org/$orgname/branch/$branchname/(employee)/transaction/maintenance/financial-statement-definition'
-    | '/org/$orgname/branch/$branchname/(employee)/transaction/maintenance/general-ledger-definition'
-    | '/org/$orgname/branch/$branchname/(employee)/transaction/quick-transfer/deposit'
-    | '/org/$orgname/branch/$branchname/(employee)/transaction/quick-transfer/withdraw'
-    | '/org/$orgname/branch/$branchname/(maintenance)/(employees)/employees/view-employees'
-    | '/org/$orgname/branch/$branchname/(maintenance)/(members)/members/member-center'
-    | '/org/$orgname/branch/$branchname/(maintenance)/(members)/members/member-classification'
-    | '/org/$orgname/branch/$branchname/(maintenance)/(members)/members/member-department'
-    | '/org/$orgname/branch/$branchname/(maintenance)/(members)/members/member-gender'
-    | '/org/$orgname/branch/$branchname/(maintenance)/(members)/members/member-group'
-    | '/org/$orgname/branch/$branchname/(maintenance)/(members)/members/member-occupation'
-    | '/org/$orgname/branch/$branchname/(maintenance)/(members)/members/member-types'
-    | '/org/$orgname/branch/$branchname/(maintenance)/maintenance/(access-and-onboarding)/invitation-code'
-    | '/org/$orgname/branch/$branchname/(maintenance)/maintenance/(account-setup)/account-category'
-    | '/org/$orgname/branch/$branchname/(maintenance)/maintenance/(account-setup)/account-classification'
-    | '/org/$orgname/branch/$branchname/(maintenance)/(members)/member-profile/$memberId/$settings/'
+    | '/org/$orgname/branch/$branchname/(members)/member-settings/member-center'
+    | '/org/$orgname/branch/$branchname/(members)/member-settings/member-classification'
+    | '/org/$orgname/branch/$branchname/(members)/member-settings/member-department'
+    | '/org/$orgname/branch/$branchname/(members)/member-settings/member-gender'
+    | '/org/$orgname/branch/$branchname/(members)/member-settings/member-group'
+    | '/org/$orgname/branch/$branchname/(members)/member-settings/member-occupation'
+    | '/org/$orgname/branch/$branchname/(members)/member-settings/member-types'
+    | '/org/$orgname/branch/$branchname/(settings)/my-settings/my-all-footsteps'
+    | '/org/$orgname/branch/$branchname/(settings)/my-settings/my-branch-footsteps'
+    | '/org/$orgname/branch/$branchname/(settings)/my-settings/my-disbursement-transaction'
+    | '/org/$orgname/branch/$branchname/(settings)/my-settings/my-general-ledger-entries'
+    | '/org/$orgname/branch/$branchname/(settings)/my-settings/my-timesheet'
+    | '/org/$orgname/branch/$branchname/maintenance/accounts/account-category'
+    | '/org/$orgname/branch/$branchname/maintenance/accounts/account-classification'
+    | '/org/$orgname/branch/$branchname/maintenance/accounts/disbursement-type'
+    | '/org/$orgname/branch/$branchname/maintenance/accounts/payment-type'
+    | '/org/$orgname/branch/$branchname/maintenance/loans/collateral'
+    | '/org/$orgname/branch/$branchname/maintenance/loans/loan-application'
+    | '/org/$orgname/branch/$branchname/maintenance/loans/loan-purpose'
+    | '/org/$orgname/branch/$branchname/maintenance/loans/loan-status'
+    | '/org/$orgname/branch/$branchname/(schemes)/schemes/'
+    | '/org/$orgname/branch/$branchname/(members)/member-profile/$memberId/$settings/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -1762,6 +1716,69 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof OrgOrgnameBranchBranchnameIndexRouteImport
       parentRoute: typeof OrgOrgnameBranchBranchnameRouteRoute
     }
+    '/org/$orgname/branch/$branchname/system/generate-savings-interest': {
+      id: '/org/$orgname/branch/$branchname/system/generate-savings-interest'
+      path: '/system/generate-savings-interest'
+      fullPath: '/org/$orgname/branch/$branchname/system/generate-savings-interest'
+      preLoaderRoute: typeof OrgOrgnameBranchBranchnameSystemGenerateSavingsInterestRouteImport
+      parentRoute: typeof OrgOrgnameBranchBranchnameRouteRoute
+    }
+    '/org/$orgname/branch/$branchname/system/generate-mutual-aid': {
+      id: '/org/$orgname/branch/$branchname/system/generate-mutual-aid'
+      path: '/system/generate-mutual-aid'
+      fullPath: '/org/$orgname/branch/$branchname/system/generate-mutual-aid'
+      preLoaderRoute: typeof OrgOrgnameBranchBranchnameSystemGenerateMutualAidRouteImport
+      parentRoute: typeof OrgOrgnameBranchBranchnameRouteRoute
+    }
+    '/org/$orgname/branch/$branchname/system/account-transaction': {
+      id: '/org/$orgname/branch/$branchname/system/account-transaction'
+      path: '/system/account-transaction'
+      fullPath: '/org/$orgname/branch/$branchname/system/account-transaction'
+      preLoaderRoute: typeof OrgOrgnameBranchBranchnameSystemAccountTransactionRouteImport
+      parentRoute: typeof OrgOrgnameBranchBranchnameRouteRoute
+    }
+    '/org/$orgname/branch/$branchname/maintenance/tag-template': {
+      id: '/org/$orgname/branch/$branchname/maintenance/tag-template'
+      path: '/maintenance/tag-template'
+      fullPath: '/org/$orgname/branch/$branchname/maintenance/tag-template'
+      preLoaderRoute: typeof OrgOrgnameBranchBranchnameMaintenanceTagTemplateRouteImport
+      parentRoute: typeof OrgOrgnameBranchBranchnameRouteRoute
+    }
+    '/org/$orgname/branch/$branchname/maintenance/holidays': {
+      id: '/org/$orgname/branch/$branchname/maintenance/holidays'
+      path: '/maintenance/holidays'
+      fullPath: '/org/$orgname/branch/$branchname/maintenance/holidays'
+      preLoaderRoute: typeof OrgOrgnameBranchBranchnameMaintenanceHolidaysRouteImport
+      parentRoute: typeof OrgOrgnameBranchBranchnameRouteRoute
+    }
+    '/org/$orgname/branch/$branchname/maintenance/company': {
+      id: '/org/$orgname/branch/$branchname/maintenance/company'
+      path: '/maintenance/company'
+      fullPath: '/org/$orgname/branch/$branchname/maintenance/company'
+      preLoaderRoute: typeof OrgOrgnameBranchBranchnameMaintenanceCompanyRouteImport
+      parentRoute: typeof OrgOrgnameBranchBranchnameRouteRoute
+    }
+    '/org/$orgname/branch/$branchname/maintenance/bills-and-coins': {
+      id: '/org/$orgname/branch/$branchname/maintenance/bills-and-coins'
+      path: '/maintenance/bills-and-coins'
+      fullPath: '/org/$orgname/branch/$branchname/maintenance/bills-and-coins'
+      preLoaderRoute: typeof OrgOrgnameBranchBranchnameMaintenanceBillsAndCoinsRouteImport
+      parentRoute: typeof OrgOrgnameBranchBranchnameRouteRoute
+    }
+    '/org/$orgname/branch/$branchname/maintenance/banks': {
+      id: '/org/$orgname/branch/$branchname/maintenance/banks'
+      path: '/maintenance/banks'
+      fullPath: '/org/$orgname/branch/$branchname/maintenance/banks'
+      preLoaderRoute: typeof OrgOrgnameBranchBranchnameMaintenanceBanksRouteImport
+      parentRoute: typeof OrgOrgnameBranchBranchnameRouteRoute
+    }
+    '/org/$orgname/branch/$branchname/maintenance/area': {
+      id: '/org/$orgname/branch/$branchname/maintenance/area'
+      path: '/maintenance/area'
+      fullPath: '/org/$orgname/branch/$branchname/maintenance/area'
+      preLoaderRoute: typeof OrgOrgnameBranchBranchnameMaintenanceAreaRouteImport
+      parentRoute: typeof OrgOrgnameBranchBranchnameRouteRoute
+    }
     '/org/$orgname/branch/$branchname/dev/documentation': {
       id: '/org/$orgname/branch/$branchname/dev/documentation'
       path: '/dev/documentation'
@@ -1769,88 +1786,123 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof OrgOrgnameBranchBranchnameDevDocumentationRouteImport
       parentRoute: typeof OrgOrgnameBranchBranchnameRouteRoute
     }
-    '/org/$orgname/branch/$branchname/accounting/journal-voucher': {
-      id: '/org/$orgname/branch/$branchname/accounting/journal-voucher'
-      path: '/accounting/journal-voucher'
-      fullPath: '/org/$orgname/branch/$branchname/accounting/journal-voucher'
-      preLoaderRoute: typeof OrgOrgnameBranchBranchnameAccountingJournalVoucherRouteImport
+    '/org/$orgname/branch/$branchname/(transactions)/withdraw': {
+      id: '/org/$orgname/branch/$branchname/(transactions)/withdraw'
+      path: '/withdraw'
+      fullPath: '/org/$orgname/branch/$branchname/withdraw'
+      preLoaderRoute: typeof OrgOrgnameBranchBranchnametransactionsWithdrawRouteImport
       parentRoute: typeof OrgOrgnameBranchBranchnameRouteRoute
     }
-    '/org/$orgname/branch/$branchname/accounting/cash-check-journal-voucher': {
-      id: '/org/$orgname/branch/$branchname/accounting/cash-check-journal-voucher'
-      path: '/accounting/cash-check-journal-voucher'
-      fullPath: '/org/$orgname/branch/$branchname/accounting/cash-check-journal-voucher'
-      preLoaderRoute: typeof OrgOrgnameBranchBranchnameAccountingCashCheckJournalVoucherRouteImport
+    '/org/$orgname/branch/$branchname/(transactions)/transactions': {
+      id: '/org/$orgname/branch/$branchname/(transactions)/transactions'
+      path: '/transactions'
+      fullPath: '/org/$orgname/branch/$branchname/transactions'
+      preLoaderRoute: typeof OrgOrgnameBranchBranchnametransactionsTransactionsRouteImport
       parentRoute: typeof OrgOrgnameBranchBranchnameRouteRoute
     }
-    '/org/$orgname/branch/$branchname/accounting/adjustment-entry': {
-      id: '/org/$orgname/branch/$branchname/accounting/adjustment-entry'
-      path: '/accounting/adjustment-entry'
-      fullPath: '/org/$orgname/branch/$branchname/accounting/adjustment-entry'
-      preLoaderRoute: typeof OrgOrgnameBranchBranchnameAccountingAdjustmentEntryRouteImport
+    '/org/$orgname/branch/$branchname/(transactions)/payment': {
+      id: '/org/$orgname/branch/$branchname/(transactions)/payment'
+      path: '/payment'
+      fullPath: '/org/$orgname/branch/$branchname/payment'
+      preLoaderRoute: typeof OrgOrgnameBranchBranchnametransactionsPaymentRouteImport
       parentRoute: typeof OrgOrgnameBranchBranchnameRouteRoute
     }
-    '/org/$orgname/branch/$branchname/accounting/accounts': {
-      id: '/org/$orgname/branch/$branchname/accounting/accounts'
-      path: '/accounting/accounts'
-      fullPath: '/org/$orgname/branch/$branchname/accounting/accounts'
-      preLoaderRoute: typeof OrgOrgnameBranchBranchnameAccountingAccountsRouteImport
+    '/org/$orgname/branch/$branchname/(transactions)/loan-payment': {
+      id: '/org/$orgname/branch/$branchname/(transactions)/loan-payment'
+      path: '/loan-payment'
+      fullPath: '/org/$orgname/branch/$branchname/loan-payment'
+      preLoaderRoute: typeof OrgOrgnameBranchBranchnametransactionsLoanPaymentRouteImport
       parentRoute: typeof OrgOrgnameBranchBranchnameRouteRoute
     }
-    '/org/$orgname/branch/$branchname/(me)/my-timesheet': {
-      id: '/org/$orgname/branch/$branchname/(me)/my-timesheet'
-      path: '/my-timesheet'
-      fullPath: '/org/$orgname/branch/$branchname/my-timesheet'
-      preLoaderRoute: typeof OrgOrgnameBranchBranchnamemeMyTimesheetRouteImport
+    '/org/$orgname/branch/$branchname/(transactions)/loan': {
+      id: '/org/$orgname/branch/$branchname/(transactions)/loan'
+      path: '/loan'
+      fullPath: '/org/$orgname/branch/$branchname/loan'
+      preLoaderRoute: typeof OrgOrgnameBranchBranchnametransactionsLoanRouteImport
       parentRoute: typeof OrgOrgnameBranchBranchnameRouteRoute
     }
-    '/org/$orgname/branch/$branchname/(me)/my-disbursement-transaction': {
-      id: '/org/$orgname/branch/$branchname/(me)/my-disbursement-transaction'
-      path: '/my-disbursement-transaction'
-      fullPath: '/org/$orgname/branch/$branchname/my-disbursement-transaction'
-      preLoaderRoute: typeof OrgOrgnameBranchBranchnamemeMyDisbursementTransactionRouteImport
+    '/org/$orgname/branch/$branchname/(transactions)/journal-voucher': {
+      id: '/org/$orgname/branch/$branchname/(transactions)/journal-voucher'
+      path: '/journal-voucher'
+      fullPath: '/org/$orgname/branch/$branchname/journal-voucher'
+      preLoaderRoute: typeof OrgOrgnameBranchBranchnametransactionsJournalVoucherRouteImport
       parentRoute: typeof OrgOrgnameBranchBranchnameRouteRoute
     }
-    '/org/$orgname/branch/$branchname/(me)/my-branch-footsteps': {
-      id: '/org/$orgname/branch/$branchname/(me)/my-branch-footsteps'
-      path: '/my-branch-footsteps'
-      fullPath: '/org/$orgname/branch/$branchname/my-branch-footsteps'
-      preLoaderRoute: typeof OrgOrgnameBranchBranchnamemeMyBranchFootstepsRouteImport
+    '/org/$orgname/branch/$branchname/(transactions)/disbursement-transaction': {
+      id: '/org/$orgname/branch/$branchname/(transactions)/disbursement-transaction'
+      path: '/disbursement-transaction'
+      fullPath: '/org/$orgname/branch/$branchname/disbursement-transaction'
+      preLoaderRoute: typeof OrgOrgnameBranchBranchnametransactionsDisbursementTransactionRouteImport
       parentRoute: typeof OrgOrgnameBranchBranchnameRouteRoute
     }
-    '/org/$orgname/branch/$branchname/(me)/my-all-footsteps': {
-      id: '/org/$orgname/branch/$branchname/(me)/my-all-footsteps'
-      path: '/my-all-footsteps'
-      fullPath: '/org/$orgname/branch/$branchname/my-all-footsteps'
-      preLoaderRoute: typeof OrgOrgnameBranchBranchnamemeMyAllFootstepsRouteImport
+    '/org/$orgname/branch/$branchname/(transactions)/deposit': {
+      id: '/org/$orgname/branch/$branchname/(transactions)/deposit'
+      path: '/deposit'
+      fullPath: '/org/$orgname/branch/$branchname/deposit'
+      preLoaderRoute: typeof OrgOrgnameBranchBranchnametransactionsDepositRouteImport
       parentRoute: typeof OrgOrgnameBranchBranchnameRouteRoute
     }
-    '/org/$orgname/branch/$branchname/(employee)/timesheets': {
-      id: '/org/$orgname/branch/$branchname/(employee)/timesheets'
+    '/org/$orgname/branch/$branchname/(transactions)/cash-check-journal-voucher': {
+      id: '/org/$orgname/branch/$branchname/(transactions)/cash-check-journal-voucher'
+      path: '/cash-check-journal-voucher'
+      fullPath: '/org/$orgname/branch/$branchname/cash-check-journal-voucher'
+      preLoaderRoute: typeof OrgOrgnameBranchBranchnametransactionsCashCheckJournalVoucherRouteImport
+      parentRoute: typeof OrgOrgnameBranchBranchnameRouteRoute
+    }
+    '/org/$orgname/branch/$branchname/(transactions)/adjustment-entry': {
+      id: '/org/$orgname/branch/$branchname/(transactions)/adjustment-entry'
+      path: '/adjustment-entry'
+      fullPath: '/org/$orgname/branch/$branchname/adjustment-entry'
+      preLoaderRoute: typeof OrgOrgnameBranchBranchnametransactionsAdjustmentEntryRouteImport
+      parentRoute: typeof OrgOrgnameBranchBranchnameRouteRoute
+    }
+    '/org/$orgname/branch/$branchname/(members)/view-members': {
+      id: '/org/$orgname/branch/$branchname/(members)/view-members'
+      path: '/view-members'
+      fullPath: '/org/$orgname/branch/$branchname/view-members'
+      preLoaderRoute: typeof OrgOrgnameBranchBranchnamemembersViewMembersRouteImport
+      parentRoute: typeof OrgOrgnameBranchBranchnameRouteRoute
+    }
+    '/org/$orgname/branch/$branchname/(members)/member-accounting-ledger': {
+      id: '/org/$orgname/branch/$branchname/(members)/member-accounting-ledger'
+      path: '/member-accounting-ledger'
+      fullPath: '/org/$orgname/branch/$branchname/member-accounting-ledger'
+      preLoaderRoute: typeof OrgOrgnameBranchBranchnamemembersMemberAccountingLedgerRouteImport
+      parentRoute: typeof OrgOrgnameBranchBranchnameRouteRoute
+    }
+    '/org/$orgname/branch/$branchname/(employees)/view-employees': {
+      id: '/org/$orgname/branch/$branchname/(employees)/view-employees'
+      path: '/view-employees'
+      fullPath: '/org/$orgname/branch/$branchname/view-employees'
+      preLoaderRoute: typeof OrgOrgnameBranchBranchnameemployeesViewEmployeesRouteImport
+      parentRoute: typeof OrgOrgnameBranchBranchnameRouteRoute
+    }
+    '/org/$orgname/branch/$branchname/(employees)/timesheets': {
+      id: '/org/$orgname/branch/$branchname/(employees)/timesheets'
       path: '/timesheets'
       fullPath: '/org/$orgname/branch/$branchname/timesheets'
-      preLoaderRoute: typeof OrgOrgnameBranchBranchnameemployeeTimesheetsRouteImport
+      preLoaderRoute: typeof OrgOrgnameBranchBranchnameemployeesTimesheetsRouteImport
       parentRoute: typeof OrgOrgnameBranchBranchnameRouteRoute
     }
-    '/org/$orgname/branch/$branchname/(employee)/generate-savings-interest': {
-      id: '/org/$orgname/branch/$branchname/(employee)/generate-savings-interest'
-      path: '/generate-savings-interest'
-      fullPath: '/org/$orgname/branch/$branchname/generate-savings-interest'
-      preLoaderRoute: typeof OrgOrgnameBranchBranchnameemployeeGenerateSavingsInterestRouteImport
+    '/org/$orgname/branch/$branchname/(employees)/permission-template': {
+      id: '/org/$orgname/branch/$branchname/(employees)/permission-template'
+      path: '/permission-template'
+      fullPath: '/org/$orgname/branch/$branchname/permission-template'
+      preLoaderRoute: typeof OrgOrgnameBranchBranchnameemployeesPermissionTemplateRouteImport
       parentRoute: typeof OrgOrgnameBranchBranchnameRouteRoute
     }
-    '/org/$orgname/branch/$branchname/(employee)/generate-mutual-aid': {
-      id: '/org/$orgname/branch/$branchname/(employee)/generate-mutual-aid'
-      path: '/generate-mutual-aid'
-      fullPath: '/org/$orgname/branch/$branchname/generate-mutual-aid'
-      preLoaderRoute: typeof OrgOrgnameBranchBranchnameemployeeGenerateMutualAidRouteImport
+    '/org/$orgname/branch/$branchname/(employees)/invitation-code': {
+      id: '/org/$orgname/branch/$branchname/(employees)/invitation-code'
+      path: '/invitation-code'
+      fullPath: '/org/$orgname/branch/$branchname/invitation-code'
+      preLoaderRoute: typeof OrgOrgnameBranchBranchnameemployeesInvitationCodeRouteImport
       parentRoute: typeof OrgOrgnameBranchBranchnameRouteRoute
     }
-    '/org/$orgname/branch/$branchname/(employee)/account-transaction': {
-      id: '/org/$orgname/branch/$branchname/(employee)/account-transaction'
-      path: '/account-transaction'
-      fullPath: '/org/$orgname/branch/$branchname/account-transaction'
-      preLoaderRoute: typeof OrgOrgnameBranchBranchnameemployeeAccountTransactionRouteImport
+    '/org/$orgname/branch/$branchname/(employees)/employee-footsteps': {
+      id: '/org/$orgname/branch/$branchname/(employees)/employee-footsteps'
+      path: '/employee-footsteps'
+      fullPath: '/org/$orgname/branch/$branchname/employee-footsteps'
+      preLoaderRoute: typeof OrgOrgnameBranchBranchnameemployeesEmployeeFootstepsRouteImport
       parentRoute: typeof OrgOrgnameBranchBranchnameRouteRoute
     }
     '/org/$orgname/branch/$branchname/(common)/dashboard': {
@@ -1860,193 +1912,193 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof OrgOrgnameBranchBranchnamecommonDashboardRouteImport
       parentRoute: typeof OrgOrgnameBranchBranchnameRouteRoute
     }
-    '/org/$orgname/branch/$branchname/(me)/my-general-ledger-entries': {
-      id: '/org/$orgname/branch/$branchname/(me)/my-general-ledger-entries'
-      path: '/my-general-ledger-entries'
-      fullPath: '/org/$orgname/branch/$branchname/my-general-ledger-entries'
-      preLoaderRoute: typeof OrgOrgnameBranchBranchnamemeMyGeneralLedgerEntriesRouteRouteImport
+    '/org/$orgname/branch/$branchname/(blotter)/transaction-batch': {
+      id: '/org/$orgname/branch/$branchname/(blotter)/transaction-batch'
+      path: '/transaction-batch'
+      fullPath: '/org/$orgname/branch/$branchname/transaction-batch'
+      preLoaderRoute: typeof OrgOrgnameBranchBranchnameblotterTransactionBatchRouteImport
       parentRoute: typeof OrgOrgnameBranchBranchnameRouteRoute
     }
-    '/org/$orgname/branch/$branchname/(employee)/general-ledger': {
-      id: '/org/$orgname/branch/$branchname/(employee)/general-ledger'
-      path: '/general-ledger'
-      fullPath: '/org/$orgname/branch/$branchname/general-ledger'
-      preLoaderRoute: typeof OrgOrgnameBranchBranchnameemployeeGeneralLedgerRouteRouteImport
+    '/org/$orgname/branch/$branchname/(blotter)/general-ledger-definition': {
+      id: '/org/$orgname/branch/$branchname/(blotter)/general-ledger-definition'
+      path: '/general-ledger-definition'
+      fullPath: '/org/$orgname/branch/$branchname/general-ledger-definition'
+      preLoaderRoute: typeof OrgOrgnameBranchBranchnameblotterGeneralLedgerDefinitionRouteImport
       parentRoute: typeof OrgOrgnameBranchBranchnameRouteRoute
     }
-    '/org/$orgname/branch/$branchname/(employee)/transaction/': {
-      id: '/org/$orgname/branch/$branchname/(employee)/transaction/'
-      path: '/transaction'
-      fullPath: '/org/$orgname/branch/$branchname/transaction'
-      preLoaderRoute: typeof OrgOrgnameBranchBranchnameemployeeTransactionIndexRouteImport
+    '/org/$orgname/branch/$branchname/(blotter)/cash-count': {
+      id: '/org/$orgname/branch/$branchname/(blotter)/cash-count'
+      path: '/cash-count'
+      fullPath: '/org/$orgname/branch/$branchname/cash-count'
+      preLoaderRoute: typeof OrgOrgnameBranchBranchnameblotterCashCountRouteImport
       parentRoute: typeof OrgOrgnameBranchBranchnameRouteRoute
     }
-    '/org/$orgname/branch/$branchname/(employee)/schemes/': {
-      id: '/org/$orgname/branch/$branchname/(employee)/schemes/'
-      path: '/schemes'
-      fullPath: '/org/$orgname/branch/$branchname/schemes'
-      preLoaderRoute: typeof OrgOrgnameBranchBranchnameemployeeSchemesIndexRouteImport
-      parentRoute: typeof OrgOrgnameBranchBranchnameRouteRoute
-    }
-    '/org/$orgname/branch/$branchname/(employee)/approvals/': {
-      id: '/org/$orgname/branch/$branchname/(employee)/approvals/'
+    '/org/$orgname/branch/$branchname/(approvals)/approvals': {
+      id: '/org/$orgname/branch/$branchname/(approvals)/approvals'
       path: '/approvals'
       fullPath: '/org/$orgname/branch/$branchname/approvals'
-      preLoaderRoute: typeof OrgOrgnameBranchBranchnameemployeeApprovalsIndexRouteImport
+      preLoaderRoute: typeof OrgOrgnameBranchBranchnameapprovalsApprovalsRouteImport
       parentRoute: typeof OrgOrgnameBranchBranchnameRouteRoute
     }
-    '/org/$orgname/branch/$branchname/(maintenance)/maintenance/tag-template': {
-      id: '/org/$orgname/branch/$branchname/(maintenance)/maintenance/tag-template'
-      path: '/maintenance/tag-template'
-      fullPath: '/org/$orgname/branch/$branchname/maintenance/tag-template'
-      preLoaderRoute: typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceTagTemplateRouteImport
+    '/org/$orgname/branch/$branchname/(accounting)/financial-statement-definition': {
+      id: '/org/$orgname/branch/$branchname/(accounting)/financial-statement-definition'
+      path: '/financial-statement-definition'
+      fullPath: '/org/$orgname/branch/$branchname/financial-statement-definition'
+      preLoaderRoute: typeof OrgOrgnameBranchBranchnameaccountingFinancialStatementDefinitionRouteImport
       parentRoute: typeof OrgOrgnameBranchBranchnameRouteRoute
     }
-    '/org/$orgname/branch/$branchname/(maintenance)/maintenance/holidays': {
-      id: '/org/$orgname/branch/$branchname/(maintenance)/maintenance/holidays'
-      path: '/maintenance/holidays'
-      fullPath: '/org/$orgname/branch/$branchname/maintenance/holidays'
-      preLoaderRoute: typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceHolidaysRouteImport
+    '/org/$orgname/branch/$branchname/(accounting)/accounts': {
+      id: '/org/$orgname/branch/$branchname/(accounting)/accounts'
+      path: '/accounts'
+      fullPath: '/org/$orgname/branch/$branchname/accounts'
+      preLoaderRoute: typeof OrgOrgnameBranchBranchnameaccountingAccountsRouteImport
       parentRoute: typeof OrgOrgnameBranchBranchnameRouteRoute
     }
-    '/org/$orgname/branch/$branchname/(maintenance)/maintenance/company': {
-      id: '/org/$orgname/branch/$branchname/(maintenance)/maintenance/company'
-      path: '/maintenance/company'
-      fullPath: '/org/$orgname/branch/$branchname/maintenance/company'
-      preLoaderRoute: typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceCompanyRouteImport
+    '/org/$orgname/branch/$branchname/(schemes)/schemes/': {
+      id: '/org/$orgname/branch/$branchname/(schemes)/schemes/'
+      path: '/schemes'
+      fullPath: '/org/$orgname/branch/$branchname/schemes'
+      preLoaderRoute: typeof OrgOrgnameBranchBranchnameschemesSchemesIndexRouteImport
       parentRoute: typeof OrgOrgnameBranchBranchnameRouteRoute
     }
-    '/org/$orgname/branch/$branchname/(maintenance)/maintenance/collateral': {
-      id: '/org/$orgname/branch/$branchname/(maintenance)/maintenance/collateral'
-      path: '/maintenance/collateral'
-      fullPath: '/org/$orgname/branch/$branchname/maintenance/collateral'
-      preLoaderRoute: typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceCollateralRouteImport
+    '/org/$orgname/branch/$branchname/maintenance/loans/loan-status': {
+      id: '/org/$orgname/branch/$branchname/maintenance/loans/loan-status'
+      path: '/maintenance/loans/loan-status'
+      fullPath: '/org/$orgname/branch/$branchname/maintenance/loans/loan-status'
+      preLoaderRoute: typeof OrgOrgnameBranchBranchnameMaintenanceLoansLoanStatusRouteImport
       parentRoute: typeof OrgOrgnameBranchBranchnameRouteRoute
     }
-    '/org/$orgname/branch/$branchname/(maintenance)/maintenance/bills-and-coins': {
-      id: '/org/$orgname/branch/$branchname/(maintenance)/maintenance/bills-and-coins'
-      path: '/maintenance/bills-and-coins'
-      fullPath: '/org/$orgname/branch/$branchname/maintenance/bills-and-coins'
-      preLoaderRoute: typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceBillsAndCoinsRouteImport
+    '/org/$orgname/branch/$branchname/maintenance/loans/loan-purpose': {
+      id: '/org/$orgname/branch/$branchname/maintenance/loans/loan-purpose'
+      path: '/maintenance/loans/loan-purpose'
+      fullPath: '/org/$orgname/branch/$branchname/maintenance/loans/loan-purpose'
+      preLoaderRoute: typeof OrgOrgnameBranchBranchnameMaintenanceLoansLoanPurposeRouteImport
       parentRoute: typeof OrgOrgnameBranchBranchnameRouteRoute
     }
-    '/org/$orgname/branch/$branchname/(maintenance)/maintenance/banks': {
-      id: '/org/$orgname/branch/$branchname/(maintenance)/maintenance/banks'
-      path: '/maintenance/banks'
-      fullPath: '/org/$orgname/branch/$branchname/maintenance/banks'
-      preLoaderRoute: typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceBanksRouteImport
+    '/org/$orgname/branch/$branchname/maintenance/loans/loan-application': {
+      id: '/org/$orgname/branch/$branchname/maintenance/loans/loan-application'
+      path: '/maintenance/loans/loan-application'
+      fullPath: '/org/$orgname/branch/$branchname/maintenance/loans/loan-application'
+      preLoaderRoute: typeof OrgOrgnameBranchBranchnameMaintenanceLoansLoanApplicationRouteImport
       parentRoute: typeof OrgOrgnameBranchBranchnameRouteRoute
     }
-    '/org/$orgname/branch/$branchname/(maintenance)/maintenance/area': {
-      id: '/org/$orgname/branch/$branchname/(maintenance)/maintenance/area'
-      path: '/maintenance/area'
-      fullPath: '/org/$orgname/branch/$branchname/maintenance/area'
-      preLoaderRoute: typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceAreaRouteImport
+    '/org/$orgname/branch/$branchname/maintenance/loans/collateral': {
+      id: '/org/$orgname/branch/$branchname/maintenance/loans/collateral'
+      path: '/maintenance/loans/collateral'
+      fullPath: '/org/$orgname/branch/$branchname/maintenance/loans/collateral'
+      preLoaderRoute: typeof OrgOrgnameBranchBranchnameMaintenanceLoansCollateralRouteImport
       parentRoute: typeof OrgOrgnameBranchBranchnameRouteRoute
     }
-    '/org/$orgname/branch/$branchname/(maintenance)/(members)/view-members': {
-      id: '/org/$orgname/branch/$branchname/(maintenance)/(members)/view-members'
-      path: '/view-members'
-      fullPath: '/org/$orgname/branch/$branchname/view-members'
-      preLoaderRoute: typeof OrgOrgnameBranchBranchnamemaintenancemembersViewMembersRouteImport
+    '/org/$orgname/branch/$branchname/maintenance/accounts/payment-type': {
+      id: '/org/$orgname/branch/$branchname/maintenance/accounts/payment-type'
+      path: '/maintenance/accounts/payment-type'
+      fullPath: '/org/$orgname/branch/$branchname/maintenance/accounts/payment-type'
+      preLoaderRoute: typeof OrgOrgnameBranchBranchnameMaintenanceAccountsPaymentTypeRouteImport
       parentRoute: typeof OrgOrgnameBranchBranchnameRouteRoute
     }
-    '/org/$orgname/branch/$branchname/(maintenance)/(members)/member-accounting-ledger': {
-      id: '/org/$orgname/branch/$branchname/(maintenance)/(members)/member-accounting-ledger'
-      path: '/member-accounting-ledger'
-      fullPath: '/org/$orgname/branch/$branchname/member-accounting-ledger'
-      preLoaderRoute: typeof OrgOrgnameBranchBranchnamemaintenancemembersMemberAccountingLedgerRouteImport
+    '/org/$orgname/branch/$branchname/maintenance/accounts/disbursement-type': {
+      id: '/org/$orgname/branch/$branchname/maintenance/accounts/disbursement-type'
+      path: '/maintenance/accounts/disbursement-type'
+      fullPath: '/org/$orgname/branch/$branchname/maintenance/accounts/disbursement-type'
+      preLoaderRoute: typeof OrgOrgnameBranchBranchnameMaintenanceAccountsDisbursementTypeRouteImport
       parentRoute: typeof OrgOrgnameBranchBranchnameRouteRoute
     }
-    '/org/$orgname/branch/$branchname/(maintenance)/(employees)/permission-template': {
-      id: '/org/$orgname/branch/$branchname/(maintenance)/(employees)/permission-template'
-      path: '/permission-template'
-      fullPath: '/org/$orgname/branch/$branchname/permission-template'
-      preLoaderRoute: typeof OrgOrgnameBranchBranchnamemaintenanceemployeesPermissionTemplateRouteImport
+    '/org/$orgname/branch/$branchname/maintenance/accounts/account-classification': {
+      id: '/org/$orgname/branch/$branchname/maintenance/accounts/account-classification'
+      path: '/maintenance/accounts/account-classification'
+      fullPath: '/org/$orgname/branch/$branchname/maintenance/accounts/account-classification'
+      preLoaderRoute: typeof OrgOrgnameBranchBranchnameMaintenanceAccountsAccountClassificationRouteImport
       parentRoute: typeof OrgOrgnameBranchBranchnameRouteRoute
     }
-    '/org/$orgname/branch/$branchname/(maintenance)/(employees)/employee-footsteps': {
-      id: '/org/$orgname/branch/$branchname/(maintenance)/(employees)/employee-footsteps'
-      path: '/employee-footsteps'
-      fullPath: '/org/$orgname/branch/$branchname/employee-footsteps'
-      preLoaderRoute: typeof OrgOrgnameBranchBranchnamemaintenanceemployeesEmployeeFootstepsRouteImport
+    '/org/$orgname/branch/$branchname/maintenance/accounts/account-category': {
+      id: '/org/$orgname/branch/$branchname/maintenance/accounts/account-category'
+      path: '/maintenance/accounts/account-category'
+      fullPath: '/org/$orgname/branch/$branchname/maintenance/accounts/account-category'
+      preLoaderRoute: typeof OrgOrgnameBranchBranchnameMaintenanceAccountsAccountCategoryRouteImport
       parentRoute: typeof OrgOrgnameBranchBranchnameRouteRoute
     }
-    '/org/$orgname/branch/$branchname/(employee)/transaction/transactions': {
-      id: '/org/$orgname/branch/$branchname/(employee)/transaction/transactions'
-      path: '/transaction/transactions'
-      fullPath: '/org/$orgname/branch/$branchname/transaction/transactions'
-      preLoaderRoute: typeof OrgOrgnameBranchBranchnameemployeeTransactionTransactionsRouteImport
+    '/org/$orgname/branch/$branchname/(settings)/my-settings/my-timesheet': {
+      id: '/org/$orgname/branch/$branchname/(settings)/my-settings/my-timesheet'
+      path: '/my-settings/my-timesheet'
+      fullPath: '/org/$orgname/branch/$branchname/my-settings/my-timesheet'
+      preLoaderRoute: typeof OrgOrgnameBranchBranchnamesettingsMySettingsMyTimesheetRouteImport
       parentRoute: typeof OrgOrgnameBranchBranchnameRouteRoute
     }
-    '/org/$orgname/branch/$branchname/(employee)/transaction/transaction-batch': {
-      id: '/org/$orgname/branch/$branchname/(employee)/transaction/transaction-batch'
-      path: '/transaction/transaction-batch'
-      fullPath: '/org/$orgname/branch/$branchname/transaction/transaction-batch'
-      preLoaderRoute: typeof OrgOrgnameBranchBranchnameemployeeTransactionTransactionBatchRouteImport
+    '/org/$orgname/branch/$branchname/(settings)/my-settings/my-general-ledger-entries': {
+      id: '/org/$orgname/branch/$branchname/(settings)/my-settings/my-general-ledger-entries'
+      path: '/my-settings/my-general-ledger-entries'
+      fullPath: '/org/$orgname/branch/$branchname/my-settings/my-general-ledger-entries'
+      preLoaderRoute: typeof OrgOrgnameBranchBranchnamesettingsMySettingsMyGeneralLedgerEntriesRouteImport
       parentRoute: typeof OrgOrgnameBranchBranchnameRouteRoute
     }
-    '/org/$orgname/branch/$branchname/(employee)/transaction/test': {
-      id: '/org/$orgname/branch/$branchname/(employee)/transaction/test'
-      path: '/transaction/test'
-      fullPath: '/org/$orgname/branch/$branchname/transaction/test'
-      preLoaderRoute: typeof OrgOrgnameBranchBranchnameemployeeTransactionTestRouteImport
+    '/org/$orgname/branch/$branchname/(settings)/my-settings/my-disbursement-transaction': {
+      id: '/org/$orgname/branch/$branchname/(settings)/my-settings/my-disbursement-transaction'
+      path: '/my-settings/my-disbursement-transaction'
+      fullPath: '/org/$orgname/branch/$branchname/my-settings/my-disbursement-transaction'
+      preLoaderRoute: typeof OrgOrgnameBranchBranchnamesettingsMySettingsMyDisbursementTransactionRouteImport
       parentRoute: typeof OrgOrgnameBranchBranchnameRouteRoute
     }
-    '/org/$orgname/branch/$branchname/(employee)/transaction/payment-type': {
-      id: '/org/$orgname/branch/$branchname/(employee)/transaction/payment-type'
-      path: '/transaction/payment-type'
-      fullPath: '/org/$orgname/branch/$branchname/transaction/payment-type'
-      preLoaderRoute: typeof OrgOrgnameBranchBranchnameemployeeTransactionPaymentTypeRouteImport
+    '/org/$orgname/branch/$branchname/(settings)/my-settings/my-branch-footsteps': {
+      id: '/org/$orgname/branch/$branchname/(settings)/my-settings/my-branch-footsteps'
+      path: '/my-settings/my-branch-footsteps'
+      fullPath: '/org/$orgname/branch/$branchname/my-settings/my-branch-footsteps'
+      preLoaderRoute: typeof OrgOrgnameBranchBranchnamesettingsMySettingsMyBranchFootstepsRouteImport
       parentRoute: typeof OrgOrgnameBranchBranchnameRouteRoute
     }
-    '/org/$orgname/branch/$branchname/(employee)/transaction/loan-payment': {
-      id: '/org/$orgname/branch/$branchname/(employee)/transaction/loan-payment'
-      path: '/transaction/loan-payment'
-      fullPath: '/org/$orgname/branch/$branchname/transaction/loan-payment'
-      preLoaderRoute: typeof OrgOrgnameBranchBranchnameemployeeTransactionLoanPaymentRouteImport
+    '/org/$orgname/branch/$branchname/(settings)/my-settings/my-all-footsteps': {
+      id: '/org/$orgname/branch/$branchname/(settings)/my-settings/my-all-footsteps'
+      path: '/my-settings/my-all-footsteps'
+      fullPath: '/org/$orgname/branch/$branchname/my-settings/my-all-footsteps'
+      preLoaderRoute: typeof OrgOrgnameBranchBranchnamesettingsMySettingsMyAllFootstepsRouteImport
       parentRoute: typeof OrgOrgnameBranchBranchnameRouteRoute
     }
-    '/org/$orgname/branch/$branchname/(employee)/transaction/disbursement-transaction': {
-      id: '/org/$orgname/branch/$branchname/(employee)/transaction/disbursement-transaction'
-      path: '/transaction/disbursement-transaction'
-      fullPath: '/org/$orgname/branch/$branchname/transaction/disbursement-transaction'
-      preLoaderRoute: typeof OrgOrgnameBranchBranchnameemployeeTransactionDisbursementTransactionRouteImport
+    '/org/$orgname/branch/$branchname/(members)/member-settings/member-types': {
+      id: '/org/$orgname/branch/$branchname/(members)/member-settings/member-types'
+      path: '/member-settings/member-types'
+      fullPath: '/org/$orgname/branch/$branchname/member-settings/member-types'
+      preLoaderRoute: typeof OrgOrgnameBranchBranchnamemembersMemberSettingsMemberTypesRouteImport
       parentRoute: typeof OrgOrgnameBranchBranchnameRouteRoute
     }
-    '/org/$orgname/branch/$branchname/(employee)/transaction/disbursement': {
-      id: '/org/$orgname/branch/$branchname/(employee)/transaction/disbursement'
-      path: '/transaction/disbursement'
-      fullPath: '/org/$orgname/branch/$branchname/transaction/disbursement'
-      preLoaderRoute: typeof OrgOrgnameBranchBranchnameemployeeTransactionDisbursementRouteImport
+    '/org/$orgname/branch/$branchname/(members)/member-settings/member-occupation': {
+      id: '/org/$orgname/branch/$branchname/(members)/member-settings/member-occupation'
+      path: '/member-settings/member-occupation'
+      fullPath: '/org/$orgname/branch/$branchname/member-settings/member-occupation'
+      preLoaderRoute: typeof OrgOrgnameBranchBranchnamemembersMemberSettingsMemberOccupationRouteImport
       parentRoute: typeof OrgOrgnameBranchBranchnameRouteRoute
     }
-    '/org/$orgname/branch/$branchname/(employee)/loan/loans': {
-      id: '/org/$orgname/branch/$branchname/(employee)/loan/loans'
-      path: '/loan/loans'
-      fullPath: '/org/$orgname/branch/$branchname/loan/loans'
-      preLoaderRoute: typeof OrgOrgnameBranchBranchnameemployeeLoanLoansRouteImport
+    '/org/$orgname/branch/$branchname/(members)/member-settings/member-group': {
+      id: '/org/$orgname/branch/$branchname/(members)/member-settings/member-group'
+      path: '/member-settings/member-group'
+      fullPath: '/org/$orgname/branch/$branchname/member-settings/member-group'
+      preLoaderRoute: typeof OrgOrgnameBranchBranchnamemembersMemberSettingsMemberGroupRouteImport
       parentRoute: typeof OrgOrgnameBranchBranchnameRouteRoute
     }
-    '/org/$orgname/branch/$branchname/(employee)/loan/loan-status': {
-      id: '/org/$orgname/branch/$branchname/(employee)/loan/loan-status'
-      path: '/loan/loan-status'
-      fullPath: '/org/$orgname/branch/$branchname/loan/loan-status'
-      preLoaderRoute: typeof OrgOrgnameBranchBranchnameemployeeLoanLoanStatusRouteImport
+    '/org/$orgname/branch/$branchname/(members)/member-settings/member-gender': {
+      id: '/org/$orgname/branch/$branchname/(members)/member-settings/member-gender'
+      path: '/member-settings/member-gender'
+      fullPath: '/org/$orgname/branch/$branchname/member-settings/member-gender'
+      preLoaderRoute: typeof OrgOrgnameBranchBranchnamemembersMemberSettingsMemberGenderRouteImport
       parentRoute: typeof OrgOrgnameBranchBranchnameRouteRoute
     }
-    '/org/$orgname/branch/$branchname/(employee)/loan/loan-purpose': {
-      id: '/org/$orgname/branch/$branchname/(employee)/loan/loan-purpose'
-      path: '/loan/loan-purpose'
-      fullPath: '/org/$orgname/branch/$branchname/loan/loan-purpose'
-      preLoaderRoute: typeof OrgOrgnameBranchBranchnameemployeeLoanLoanPurposeRouteImport
+    '/org/$orgname/branch/$branchname/(members)/member-settings/member-department': {
+      id: '/org/$orgname/branch/$branchname/(members)/member-settings/member-department'
+      path: '/member-settings/member-department'
+      fullPath: '/org/$orgname/branch/$branchname/member-settings/member-department'
+      preLoaderRoute: typeof OrgOrgnameBranchBranchnamemembersMemberSettingsMemberDepartmentRouteImport
       parentRoute: typeof OrgOrgnameBranchBranchnameRouteRoute
     }
-    '/org/$orgname/branch/$branchname/(employee)/loan/loan-application': {
-      id: '/org/$orgname/branch/$branchname/(employee)/loan/loan-application'
-      path: '/loan/loan-application'
-      fullPath: '/org/$orgname/branch/$branchname/loan/loan-application'
-      preLoaderRoute: typeof OrgOrgnameBranchBranchnameemployeeLoanLoanApplicationRouteImport
+    '/org/$orgname/branch/$branchname/(members)/member-settings/member-classification': {
+      id: '/org/$orgname/branch/$branchname/(members)/member-settings/member-classification'
+      path: '/member-settings/member-classification'
+      fullPath: '/org/$orgname/branch/$branchname/member-settings/member-classification'
+      preLoaderRoute: typeof OrgOrgnameBranchBranchnamemembersMemberSettingsMemberClassificationRouteImport
+      parentRoute: typeof OrgOrgnameBranchBranchnameRouteRoute
+    }
+    '/org/$orgname/branch/$branchname/(members)/member-settings/member-center': {
+      id: '/org/$orgname/branch/$branchname/(members)/member-settings/member-center'
+      path: '/member-settings/member-center'
+      fullPath: '/org/$orgname/branch/$branchname/member-settings/member-center'
+      preLoaderRoute: typeof OrgOrgnameBranchBranchnamemembersMemberSettingsMemberCenterRouteImport
       parentRoute: typeof OrgOrgnameBranchBranchnameRouteRoute
     }
     '/org/$orgname/branch/$branchname/(common)/(settings)/settings': {
@@ -2056,123 +2108,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof OrgOrgnameBranchBranchnamecommonsettingsSettingsRouteImport
       parentRoute: typeof OrgOrgnameBranchBranchnameRouteRoute
     }
-    '/org/$orgname/branch/$branchname/(maintenance)/maintenance/(account-setup)/account-classification': {
-      id: '/org/$orgname/branch/$branchname/(maintenance)/maintenance/(account-setup)/account-classification'
-      path: '/maintenance/account-classification'
-      fullPath: '/org/$orgname/branch/$branchname/maintenance/account-classification'
-      preLoaderRoute: typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceaccountSetupAccountClassificationRouteImport
-      parentRoute: typeof OrgOrgnameBranchBranchnameRouteRoute
-    }
-    '/org/$orgname/branch/$branchname/(maintenance)/maintenance/(account-setup)/account-category': {
-      id: '/org/$orgname/branch/$branchname/(maintenance)/maintenance/(account-setup)/account-category'
-      path: '/maintenance/account-category'
-      fullPath: '/org/$orgname/branch/$branchname/maintenance/account-category'
-      preLoaderRoute: typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceaccountSetupAccountCategoryRouteImport
-      parentRoute: typeof OrgOrgnameBranchBranchnameRouteRoute
-    }
-    '/org/$orgname/branch/$branchname/(maintenance)/maintenance/(access-and-onboarding)/invitation-code': {
-      id: '/org/$orgname/branch/$branchname/(maintenance)/maintenance/(access-and-onboarding)/invitation-code'
-      path: '/maintenance/invitation-code'
-      fullPath: '/org/$orgname/branch/$branchname/maintenance/invitation-code'
-      preLoaderRoute: typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceaccessAndOnboardingInvitationCodeRouteImport
-      parentRoute: typeof OrgOrgnameBranchBranchnameRouteRoute
-    }
-    '/org/$orgname/branch/$branchname/(maintenance)/(members)/members/member-types': {
-      id: '/org/$orgname/branch/$branchname/(maintenance)/(members)/members/member-types'
-      path: '/members/member-types'
-      fullPath: '/org/$orgname/branch/$branchname/members/member-types'
-      preLoaderRoute: typeof OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberTypesRouteImport
-      parentRoute: typeof OrgOrgnameBranchBranchnameRouteRoute
-    }
-    '/org/$orgname/branch/$branchname/(maintenance)/(members)/members/member-occupation': {
-      id: '/org/$orgname/branch/$branchname/(maintenance)/(members)/members/member-occupation'
-      path: '/members/member-occupation'
-      fullPath: '/org/$orgname/branch/$branchname/members/member-occupation'
-      preLoaderRoute: typeof OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberOccupationRouteImport
-      parentRoute: typeof OrgOrgnameBranchBranchnameRouteRoute
-    }
-    '/org/$orgname/branch/$branchname/(maintenance)/(members)/members/member-group': {
-      id: '/org/$orgname/branch/$branchname/(maintenance)/(members)/members/member-group'
-      path: '/members/member-group'
-      fullPath: '/org/$orgname/branch/$branchname/members/member-group'
-      preLoaderRoute: typeof OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberGroupRouteImport
-      parentRoute: typeof OrgOrgnameBranchBranchnameRouteRoute
-    }
-    '/org/$orgname/branch/$branchname/(maintenance)/(members)/members/member-gender': {
-      id: '/org/$orgname/branch/$branchname/(maintenance)/(members)/members/member-gender'
-      path: '/members/member-gender'
-      fullPath: '/org/$orgname/branch/$branchname/members/member-gender'
-      preLoaderRoute: typeof OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberGenderRouteImport
-      parentRoute: typeof OrgOrgnameBranchBranchnameRouteRoute
-    }
-    '/org/$orgname/branch/$branchname/(maintenance)/(members)/members/member-department': {
-      id: '/org/$orgname/branch/$branchname/(maintenance)/(members)/members/member-department'
-      path: '/members/member-department'
-      fullPath: '/org/$orgname/branch/$branchname/members/member-department'
-      preLoaderRoute: typeof OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberDepartmentRouteImport
-      parentRoute: typeof OrgOrgnameBranchBranchnameRouteRoute
-    }
-    '/org/$orgname/branch/$branchname/(maintenance)/(members)/members/member-classification': {
-      id: '/org/$orgname/branch/$branchname/(maintenance)/(members)/members/member-classification'
-      path: '/members/member-classification'
-      fullPath: '/org/$orgname/branch/$branchname/members/member-classification'
-      preLoaderRoute: typeof OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberClassificationRouteImport
-      parentRoute: typeof OrgOrgnameBranchBranchnameRouteRoute
-    }
-    '/org/$orgname/branch/$branchname/(maintenance)/(members)/members/member-center': {
-      id: '/org/$orgname/branch/$branchname/(maintenance)/(members)/members/member-center'
-      path: '/members/member-center'
-      fullPath: '/org/$orgname/branch/$branchname/members/member-center'
-      preLoaderRoute: typeof OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberCenterRouteImport
-      parentRoute: typeof OrgOrgnameBranchBranchnameRouteRoute
-    }
-    '/org/$orgname/branch/$branchname/(maintenance)/(employees)/employees/view-employees': {
-      id: '/org/$orgname/branch/$branchname/(maintenance)/(employees)/employees/view-employees'
-      path: '/employees/view-employees'
-      fullPath: '/org/$orgname/branch/$branchname/employees/view-employees'
-      preLoaderRoute: typeof OrgOrgnameBranchBranchnamemaintenanceemployeesEmployeesViewEmployeesRouteImport
-      parentRoute: typeof OrgOrgnameBranchBranchnameRouteRoute
-    }
-    '/org/$orgname/branch/$branchname/(employee)/transaction/quick-transfer/withdraw': {
-      id: '/org/$orgname/branch/$branchname/(employee)/transaction/quick-transfer/withdraw'
-      path: '/transaction/quick-transfer/withdraw'
-      fullPath: '/org/$orgname/branch/$branchname/transaction/quick-transfer/withdraw'
-      preLoaderRoute: typeof OrgOrgnameBranchBranchnameemployeeTransactionQuickTransferWithdrawRouteImport
-      parentRoute: typeof OrgOrgnameBranchBranchnameRouteRoute
-    }
-    '/org/$orgname/branch/$branchname/(employee)/transaction/quick-transfer/deposit': {
-      id: '/org/$orgname/branch/$branchname/(employee)/transaction/quick-transfer/deposit'
-      path: '/transaction/quick-transfer/deposit'
-      fullPath: '/org/$orgname/branch/$branchname/transaction/quick-transfer/deposit'
-      preLoaderRoute: typeof OrgOrgnameBranchBranchnameemployeeTransactionQuickTransferDepositRouteImport
-      parentRoute: typeof OrgOrgnameBranchBranchnameRouteRoute
-    }
-    '/org/$orgname/branch/$branchname/(employee)/transaction/maintenance/general-ledger-definition': {
-      id: '/org/$orgname/branch/$branchname/(employee)/transaction/maintenance/general-ledger-definition'
-      path: '/transaction/maintenance/general-ledger-definition'
-      fullPath: '/org/$orgname/branch/$branchname/transaction/maintenance/general-ledger-definition'
-      preLoaderRoute: typeof OrgOrgnameBranchBranchnameemployeeTransactionMaintenanceGeneralLedgerDefinitionRouteImport
-      parentRoute: typeof OrgOrgnameBranchBranchnameRouteRoute
-    }
-    '/org/$orgname/branch/$branchname/(employee)/transaction/maintenance/financial-statement-definition': {
-      id: '/org/$orgname/branch/$branchname/(employee)/transaction/maintenance/financial-statement-definition'
-      path: '/transaction/maintenance/financial-statement-definition'
-      fullPath: '/org/$orgname/branch/$branchname/transaction/maintenance/financial-statement-definition'
-      preLoaderRoute: typeof OrgOrgnameBranchBranchnameemployeeTransactionMaintenanceFinancialStatementDefinitionRouteImport
-      parentRoute: typeof OrgOrgnameBranchBranchnameRouteRoute
-    }
-    '/org/$orgname/branch/$branchname/(employee)/transaction/maintenance/cash-count': {
-      id: '/org/$orgname/branch/$branchname/(employee)/transaction/maintenance/cash-count'
-      path: '/transaction/maintenance/cash-count'
-      fullPath: '/org/$orgname/branch/$branchname/transaction/maintenance/cash-count'
-      preLoaderRoute: typeof OrgOrgnameBranchBranchnameemployeeTransactionMaintenanceCashCountRouteImport
-      parentRoute: typeof OrgOrgnameBranchBranchnameRouteRoute
-    }
-    '/org/$orgname/branch/$branchname/(maintenance)/(members)/member-profile/$memberId/$settings/': {
-      id: '/org/$orgname/branch/$branchname/(maintenance)/(members)/member-profile/$memberId/$settings/'
+    '/org/$orgname/branch/$branchname/(members)/member-profile/$memberId/$settings/': {
+      id: '/org/$orgname/branch/$branchname/(members)/member-profile/$memberId/$settings/'
       path: '/member-profile/$memberId/$settings'
       fullPath: '/org/$orgname/branch/$branchname/member-profile/$memberId/$settings'
-      preLoaderRoute: typeof OrgOrgnameBranchBranchnamemaintenancemembersMemberProfileMemberIdSettingsIndexRouteImport
+      preLoaderRoute: typeof OrgOrgnameBranchBranchnamemembersMemberProfileMemberIdSettingsIndexRouteImport
       parentRoute: typeof OrgOrgnameBranchBranchnameRouteRoute
     }
   }
@@ -2334,188 +2274,182 @@ const OnboardingRouteRouteWithChildren = OnboardingRouteRoute._addFileChildren(
 
 interface OrgOrgnameBranchBranchnameRouteRouteChildren {
   OrgOrgnameBranchBranchnameIndexRoute: typeof OrgOrgnameBranchBranchnameIndexRoute
-  OrgOrgnameBranchBranchnameemployeeGeneralLedgerRouteRoute: typeof OrgOrgnameBranchBranchnameemployeeGeneralLedgerRouteRoute
-  OrgOrgnameBranchBranchnamemeMyGeneralLedgerEntriesRouteRoute: typeof OrgOrgnameBranchBranchnamemeMyGeneralLedgerEntriesRouteRoute
+  OrgOrgnameBranchBranchnameaccountingAccountsRoute: typeof OrgOrgnameBranchBranchnameaccountingAccountsRoute
+  OrgOrgnameBranchBranchnameaccountingFinancialStatementDefinitionRoute: typeof OrgOrgnameBranchBranchnameaccountingFinancialStatementDefinitionRoute
+  OrgOrgnameBranchBranchnameapprovalsApprovalsRoute: typeof OrgOrgnameBranchBranchnameapprovalsApprovalsRoute
+  OrgOrgnameBranchBranchnameblotterCashCountRoute: typeof OrgOrgnameBranchBranchnameblotterCashCountRoute
+  OrgOrgnameBranchBranchnameblotterGeneralLedgerDefinitionRoute: typeof OrgOrgnameBranchBranchnameblotterGeneralLedgerDefinitionRoute
+  OrgOrgnameBranchBranchnameblotterTransactionBatchRoute: typeof OrgOrgnameBranchBranchnameblotterTransactionBatchRoute
   OrgOrgnameBranchBranchnamecommonDashboardRoute: typeof OrgOrgnameBranchBranchnamecommonDashboardRoute
-  OrgOrgnameBranchBranchnameemployeeAccountTransactionRoute: typeof OrgOrgnameBranchBranchnameemployeeAccountTransactionRoute
-  OrgOrgnameBranchBranchnameemployeeGenerateMutualAidRoute: typeof OrgOrgnameBranchBranchnameemployeeGenerateMutualAidRoute
-  OrgOrgnameBranchBranchnameemployeeGenerateSavingsInterestRoute: typeof OrgOrgnameBranchBranchnameemployeeGenerateSavingsInterestRoute
-  OrgOrgnameBranchBranchnameemployeeTimesheetsRoute: typeof OrgOrgnameBranchBranchnameemployeeTimesheetsRoute
-  OrgOrgnameBranchBranchnamemeMyAllFootstepsRoute: typeof OrgOrgnameBranchBranchnamemeMyAllFootstepsRoute
-  OrgOrgnameBranchBranchnamemeMyBranchFootstepsRoute: typeof OrgOrgnameBranchBranchnamemeMyBranchFootstepsRoute
-  OrgOrgnameBranchBranchnamemeMyDisbursementTransactionRoute: typeof OrgOrgnameBranchBranchnamemeMyDisbursementTransactionRoute
-  OrgOrgnameBranchBranchnamemeMyTimesheetRoute: typeof OrgOrgnameBranchBranchnamemeMyTimesheetRoute
-  OrgOrgnameBranchBranchnameAccountingAccountsRoute: typeof OrgOrgnameBranchBranchnameAccountingAccountsRoute
-  OrgOrgnameBranchBranchnameAccountingAdjustmentEntryRoute: typeof OrgOrgnameBranchBranchnameAccountingAdjustmentEntryRoute
-  OrgOrgnameBranchBranchnameAccountingCashCheckJournalVoucherRoute: typeof OrgOrgnameBranchBranchnameAccountingCashCheckJournalVoucherRoute
-  OrgOrgnameBranchBranchnameAccountingJournalVoucherRoute: typeof OrgOrgnameBranchBranchnameAccountingJournalVoucherRoute
+  OrgOrgnameBranchBranchnameemployeesEmployeeFootstepsRoute: typeof OrgOrgnameBranchBranchnameemployeesEmployeeFootstepsRoute
+  OrgOrgnameBranchBranchnameemployeesInvitationCodeRoute: typeof OrgOrgnameBranchBranchnameemployeesInvitationCodeRoute
+  OrgOrgnameBranchBranchnameemployeesPermissionTemplateRoute: typeof OrgOrgnameBranchBranchnameemployeesPermissionTemplateRoute
+  OrgOrgnameBranchBranchnameemployeesTimesheetsRoute: typeof OrgOrgnameBranchBranchnameemployeesTimesheetsRoute
+  OrgOrgnameBranchBranchnameemployeesViewEmployeesRoute: typeof OrgOrgnameBranchBranchnameemployeesViewEmployeesRoute
+  OrgOrgnameBranchBranchnamemembersMemberAccountingLedgerRoute: typeof OrgOrgnameBranchBranchnamemembersMemberAccountingLedgerRoute
+  OrgOrgnameBranchBranchnamemembersViewMembersRoute: typeof OrgOrgnameBranchBranchnamemembersViewMembersRoute
+  OrgOrgnameBranchBranchnametransactionsAdjustmentEntryRoute: typeof OrgOrgnameBranchBranchnametransactionsAdjustmentEntryRoute
+  OrgOrgnameBranchBranchnametransactionsCashCheckJournalVoucherRoute: typeof OrgOrgnameBranchBranchnametransactionsCashCheckJournalVoucherRoute
+  OrgOrgnameBranchBranchnametransactionsDepositRoute: typeof OrgOrgnameBranchBranchnametransactionsDepositRoute
+  OrgOrgnameBranchBranchnametransactionsDisbursementTransactionRoute: typeof OrgOrgnameBranchBranchnametransactionsDisbursementTransactionRoute
+  OrgOrgnameBranchBranchnametransactionsJournalVoucherRoute: typeof OrgOrgnameBranchBranchnametransactionsJournalVoucherRoute
+  OrgOrgnameBranchBranchnametransactionsLoanRoute: typeof OrgOrgnameBranchBranchnametransactionsLoanRoute
+  OrgOrgnameBranchBranchnametransactionsLoanPaymentRoute: typeof OrgOrgnameBranchBranchnametransactionsLoanPaymentRoute
+  OrgOrgnameBranchBranchnametransactionsPaymentRoute: typeof OrgOrgnameBranchBranchnametransactionsPaymentRoute
+  OrgOrgnameBranchBranchnametransactionsTransactionsRoute: typeof OrgOrgnameBranchBranchnametransactionsTransactionsRoute
+  OrgOrgnameBranchBranchnametransactionsWithdrawRoute: typeof OrgOrgnameBranchBranchnametransactionsWithdrawRoute
   OrgOrgnameBranchBranchnameDevDocumentationRoute: typeof OrgOrgnameBranchBranchnameDevDocumentationRoute
+  OrgOrgnameBranchBranchnameMaintenanceAreaRoute: typeof OrgOrgnameBranchBranchnameMaintenanceAreaRoute
+  OrgOrgnameBranchBranchnameMaintenanceBanksRoute: typeof OrgOrgnameBranchBranchnameMaintenanceBanksRoute
+  OrgOrgnameBranchBranchnameMaintenanceBillsAndCoinsRoute: typeof OrgOrgnameBranchBranchnameMaintenanceBillsAndCoinsRoute
+  OrgOrgnameBranchBranchnameMaintenanceCompanyRoute: typeof OrgOrgnameBranchBranchnameMaintenanceCompanyRoute
+  OrgOrgnameBranchBranchnameMaintenanceHolidaysRoute: typeof OrgOrgnameBranchBranchnameMaintenanceHolidaysRoute
+  OrgOrgnameBranchBranchnameMaintenanceTagTemplateRoute: typeof OrgOrgnameBranchBranchnameMaintenanceTagTemplateRoute
+  OrgOrgnameBranchBranchnameSystemAccountTransactionRoute: typeof OrgOrgnameBranchBranchnameSystemAccountTransactionRoute
+  OrgOrgnameBranchBranchnameSystemGenerateMutualAidRoute: typeof OrgOrgnameBranchBranchnameSystemGenerateMutualAidRoute
+  OrgOrgnameBranchBranchnameSystemGenerateSavingsInterestRoute: typeof OrgOrgnameBranchBranchnameSystemGenerateSavingsInterestRoute
   OrgOrgnameBranchBranchnamecommonsettingsSettingsRoute: typeof OrgOrgnameBranchBranchnamecommonsettingsSettingsRoute
-  OrgOrgnameBranchBranchnameemployeeLoanLoanApplicationRoute: typeof OrgOrgnameBranchBranchnameemployeeLoanLoanApplicationRoute
-  OrgOrgnameBranchBranchnameemployeeLoanLoanPurposeRoute: typeof OrgOrgnameBranchBranchnameemployeeLoanLoanPurposeRoute
-  OrgOrgnameBranchBranchnameemployeeLoanLoanStatusRoute: typeof OrgOrgnameBranchBranchnameemployeeLoanLoanStatusRoute
-  OrgOrgnameBranchBranchnameemployeeLoanLoansRoute: typeof OrgOrgnameBranchBranchnameemployeeLoanLoansRoute
-  OrgOrgnameBranchBranchnameemployeeTransactionDisbursementRoute: typeof OrgOrgnameBranchBranchnameemployeeTransactionDisbursementRoute
-  OrgOrgnameBranchBranchnameemployeeTransactionDisbursementTransactionRoute: typeof OrgOrgnameBranchBranchnameemployeeTransactionDisbursementTransactionRoute
-  OrgOrgnameBranchBranchnameemployeeTransactionLoanPaymentRoute: typeof OrgOrgnameBranchBranchnameemployeeTransactionLoanPaymentRoute
-  OrgOrgnameBranchBranchnameemployeeTransactionPaymentTypeRoute: typeof OrgOrgnameBranchBranchnameemployeeTransactionPaymentTypeRoute
-  OrgOrgnameBranchBranchnameemployeeTransactionTestRoute: typeof OrgOrgnameBranchBranchnameemployeeTransactionTestRoute
-  OrgOrgnameBranchBranchnameemployeeTransactionTransactionBatchRoute: typeof OrgOrgnameBranchBranchnameemployeeTransactionTransactionBatchRoute
-  OrgOrgnameBranchBranchnameemployeeTransactionTransactionsRoute: typeof OrgOrgnameBranchBranchnameemployeeTransactionTransactionsRoute
-  OrgOrgnameBranchBranchnamemaintenanceemployeesEmployeeFootstepsRoute: typeof OrgOrgnameBranchBranchnamemaintenanceemployeesEmployeeFootstepsRoute
-  OrgOrgnameBranchBranchnamemaintenanceemployeesPermissionTemplateRoute: typeof OrgOrgnameBranchBranchnamemaintenanceemployeesPermissionTemplateRoute
-  OrgOrgnameBranchBranchnamemaintenancemembersMemberAccountingLedgerRoute: typeof OrgOrgnameBranchBranchnamemaintenancemembersMemberAccountingLedgerRoute
-  OrgOrgnameBranchBranchnamemaintenancemembersViewMembersRoute: typeof OrgOrgnameBranchBranchnamemaintenancemembersViewMembersRoute
-  OrgOrgnameBranchBranchnamemaintenanceMaintenanceAreaRoute: typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceAreaRoute
-  OrgOrgnameBranchBranchnamemaintenanceMaintenanceBanksRoute: typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceBanksRoute
-  OrgOrgnameBranchBranchnamemaintenanceMaintenanceBillsAndCoinsRoute: typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceBillsAndCoinsRoute
-  OrgOrgnameBranchBranchnamemaintenanceMaintenanceCollateralRoute: typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceCollateralRoute
-  OrgOrgnameBranchBranchnamemaintenanceMaintenanceCompanyRoute: typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceCompanyRoute
-  OrgOrgnameBranchBranchnamemaintenanceMaintenanceHolidaysRoute: typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceHolidaysRoute
-  OrgOrgnameBranchBranchnamemaintenanceMaintenanceTagTemplateRoute: typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceTagTemplateRoute
-  OrgOrgnameBranchBranchnameemployeeApprovalsIndexRoute: typeof OrgOrgnameBranchBranchnameemployeeApprovalsIndexRoute
-  OrgOrgnameBranchBranchnameemployeeSchemesIndexRoute: typeof OrgOrgnameBranchBranchnameemployeeSchemesIndexRoute
-  OrgOrgnameBranchBranchnameemployeeTransactionIndexRoute: typeof OrgOrgnameBranchBranchnameemployeeTransactionIndexRoute
-  OrgOrgnameBranchBranchnameemployeeTransactionMaintenanceCashCountRoute: typeof OrgOrgnameBranchBranchnameemployeeTransactionMaintenanceCashCountRoute
-  OrgOrgnameBranchBranchnameemployeeTransactionMaintenanceFinancialStatementDefinitionRoute: typeof OrgOrgnameBranchBranchnameemployeeTransactionMaintenanceFinancialStatementDefinitionRoute
-  OrgOrgnameBranchBranchnameemployeeTransactionMaintenanceGeneralLedgerDefinitionRoute: typeof OrgOrgnameBranchBranchnameemployeeTransactionMaintenanceGeneralLedgerDefinitionRoute
-  OrgOrgnameBranchBranchnameemployeeTransactionQuickTransferDepositRoute: typeof OrgOrgnameBranchBranchnameemployeeTransactionQuickTransferDepositRoute
-  OrgOrgnameBranchBranchnameemployeeTransactionQuickTransferWithdrawRoute: typeof OrgOrgnameBranchBranchnameemployeeTransactionQuickTransferWithdrawRoute
-  OrgOrgnameBranchBranchnamemaintenanceemployeesEmployeesViewEmployeesRoute: typeof OrgOrgnameBranchBranchnamemaintenanceemployeesEmployeesViewEmployeesRoute
-  OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberCenterRoute: typeof OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberCenterRoute
-  OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberClassificationRoute: typeof OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberClassificationRoute
-  OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberDepartmentRoute: typeof OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberDepartmentRoute
-  OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberGenderRoute: typeof OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberGenderRoute
-  OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberGroupRoute: typeof OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberGroupRoute
-  OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberOccupationRoute: typeof OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberOccupationRoute
-  OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberTypesRoute: typeof OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberTypesRoute
-  OrgOrgnameBranchBranchnamemaintenanceMaintenanceaccessAndOnboardingInvitationCodeRoute: typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceaccessAndOnboardingInvitationCodeRoute
-  OrgOrgnameBranchBranchnamemaintenanceMaintenanceaccountSetupAccountCategoryRoute: typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceaccountSetupAccountCategoryRoute
-  OrgOrgnameBranchBranchnamemaintenanceMaintenanceaccountSetupAccountClassificationRoute: typeof OrgOrgnameBranchBranchnamemaintenanceMaintenanceaccountSetupAccountClassificationRoute
-  OrgOrgnameBranchBranchnamemaintenancemembersMemberProfileMemberIdSettingsIndexRoute: typeof OrgOrgnameBranchBranchnamemaintenancemembersMemberProfileMemberIdSettingsIndexRoute
+  OrgOrgnameBranchBranchnamemembersMemberSettingsMemberCenterRoute: typeof OrgOrgnameBranchBranchnamemembersMemberSettingsMemberCenterRoute
+  OrgOrgnameBranchBranchnamemembersMemberSettingsMemberClassificationRoute: typeof OrgOrgnameBranchBranchnamemembersMemberSettingsMemberClassificationRoute
+  OrgOrgnameBranchBranchnamemembersMemberSettingsMemberDepartmentRoute: typeof OrgOrgnameBranchBranchnamemembersMemberSettingsMemberDepartmentRoute
+  OrgOrgnameBranchBranchnamemembersMemberSettingsMemberGenderRoute: typeof OrgOrgnameBranchBranchnamemembersMemberSettingsMemberGenderRoute
+  OrgOrgnameBranchBranchnamemembersMemberSettingsMemberGroupRoute: typeof OrgOrgnameBranchBranchnamemembersMemberSettingsMemberGroupRoute
+  OrgOrgnameBranchBranchnamemembersMemberSettingsMemberOccupationRoute: typeof OrgOrgnameBranchBranchnamemembersMemberSettingsMemberOccupationRoute
+  OrgOrgnameBranchBranchnamemembersMemberSettingsMemberTypesRoute: typeof OrgOrgnameBranchBranchnamemembersMemberSettingsMemberTypesRoute
+  OrgOrgnameBranchBranchnamesettingsMySettingsMyAllFootstepsRoute: typeof OrgOrgnameBranchBranchnamesettingsMySettingsMyAllFootstepsRoute
+  OrgOrgnameBranchBranchnamesettingsMySettingsMyBranchFootstepsRoute: typeof OrgOrgnameBranchBranchnamesettingsMySettingsMyBranchFootstepsRoute
+  OrgOrgnameBranchBranchnamesettingsMySettingsMyDisbursementTransactionRoute: typeof OrgOrgnameBranchBranchnamesettingsMySettingsMyDisbursementTransactionRoute
+  OrgOrgnameBranchBranchnamesettingsMySettingsMyGeneralLedgerEntriesRoute: typeof OrgOrgnameBranchBranchnamesettingsMySettingsMyGeneralLedgerEntriesRoute
+  OrgOrgnameBranchBranchnamesettingsMySettingsMyTimesheetRoute: typeof OrgOrgnameBranchBranchnamesettingsMySettingsMyTimesheetRoute
+  OrgOrgnameBranchBranchnameMaintenanceAccountsAccountCategoryRoute: typeof OrgOrgnameBranchBranchnameMaintenanceAccountsAccountCategoryRoute
+  OrgOrgnameBranchBranchnameMaintenanceAccountsAccountClassificationRoute: typeof OrgOrgnameBranchBranchnameMaintenanceAccountsAccountClassificationRoute
+  OrgOrgnameBranchBranchnameMaintenanceAccountsDisbursementTypeRoute: typeof OrgOrgnameBranchBranchnameMaintenanceAccountsDisbursementTypeRoute
+  OrgOrgnameBranchBranchnameMaintenanceAccountsPaymentTypeRoute: typeof OrgOrgnameBranchBranchnameMaintenanceAccountsPaymentTypeRoute
+  OrgOrgnameBranchBranchnameMaintenanceLoansCollateralRoute: typeof OrgOrgnameBranchBranchnameMaintenanceLoansCollateralRoute
+  OrgOrgnameBranchBranchnameMaintenanceLoansLoanApplicationRoute: typeof OrgOrgnameBranchBranchnameMaintenanceLoansLoanApplicationRoute
+  OrgOrgnameBranchBranchnameMaintenanceLoansLoanPurposeRoute: typeof OrgOrgnameBranchBranchnameMaintenanceLoansLoanPurposeRoute
+  OrgOrgnameBranchBranchnameMaintenanceLoansLoanStatusRoute: typeof OrgOrgnameBranchBranchnameMaintenanceLoansLoanStatusRoute
+  OrgOrgnameBranchBranchnameschemesSchemesIndexRoute: typeof OrgOrgnameBranchBranchnameschemesSchemesIndexRoute
+  OrgOrgnameBranchBranchnamemembersMemberProfileMemberIdSettingsIndexRoute: typeof OrgOrgnameBranchBranchnamemembersMemberProfileMemberIdSettingsIndexRoute
 }
 
 const OrgOrgnameBranchBranchnameRouteRouteChildren: OrgOrgnameBranchBranchnameRouteRouteChildren =
   {
     OrgOrgnameBranchBranchnameIndexRoute: OrgOrgnameBranchBranchnameIndexRoute,
-    OrgOrgnameBranchBranchnameemployeeGeneralLedgerRouteRoute:
-      OrgOrgnameBranchBranchnameemployeeGeneralLedgerRouteRoute,
-    OrgOrgnameBranchBranchnamemeMyGeneralLedgerEntriesRouteRoute:
-      OrgOrgnameBranchBranchnamemeMyGeneralLedgerEntriesRouteRoute,
+    OrgOrgnameBranchBranchnameaccountingAccountsRoute:
+      OrgOrgnameBranchBranchnameaccountingAccountsRoute,
+    OrgOrgnameBranchBranchnameaccountingFinancialStatementDefinitionRoute:
+      OrgOrgnameBranchBranchnameaccountingFinancialStatementDefinitionRoute,
+    OrgOrgnameBranchBranchnameapprovalsApprovalsRoute:
+      OrgOrgnameBranchBranchnameapprovalsApprovalsRoute,
+    OrgOrgnameBranchBranchnameblotterCashCountRoute:
+      OrgOrgnameBranchBranchnameblotterCashCountRoute,
+    OrgOrgnameBranchBranchnameblotterGeneralLedgerDefinitionRoute:
+      OrgOrgnameBranchBranchnameblotterGeneralLedgerDefinitionRoute,
+    OrgOrgnameBranchBranchnameblotterTransactionBatchRoute:
+      OrgOrgnameBranchBranchnameblotterTransactionBatchRoute,
     OrgOrgnameBranchBranchnamecommonDashboardRoute:
       OrgOrgnameBranchBranchnamecommonDashboardRoute,
-    OrgOrgnameBranchBranchnameemployeeAccountTransactionRoute:
-      OrgOrgnameBranchBranchnameemployeeAccountTransactionRoute,
-    OrgOrgnameBranchBranchnameemployeeGenerateMutualAidRoute:
-      OrgOrgnameBranchBranchnameemployeeGenerateMutualAidRoute,
-    OrgOrgnameBranchBranchnameemployeeGenerateSavingsInterestRoute:
-      OrgOrgnameBranchBranchnameemployeeGenerateSavingsInterestRoute,
-    OrgOrgnameBranchBranchnameemployeeTimesheetsRoute:
-      OrgOrgnameBranchBranchnameemployeeTimesheetsRoute,
-    OrgOrgnameBranchBranchnamemeMyAllFootstepsRoute:
-      OrgOrgnameBranchBranchnamemeMyAllFootstepsRoute,
-    OrgOrgnameBranchBranchnamemeMyBranchFootstepsRoute:
-      OrgOrgnameBranchBranchnamemeMyBranchFootstepsRoute,
-    OrgOrgnameBranchBranchnamemeMyDisbursementTransactionRoute:
-      OrgOrgnameBranchBranchnamemeMyDisbursementTransactionRoute,
-    OrgOrgnameBranchBranchnamemeMyTimesheetRoute:
-      OrgOrgnameBranchBranchnamemeMyTimesheetRoute,
-    OrgOrgnameBranchBranchnameAccountingAccountsRoute:
-      OrgOrgnameBranchBranchnameAccountingAccountsRoute,
-    OrgOrgnameBranchBranchnameAccountingAdjustmentEntryRoute:
-      OrgOrgnameBranchBranchnameAccountingAdjustmentEntryRoute,
-    OrgOrgnameBranchBranchnameAccountingCashCheckJournalVoucherRoute:
-      OrgOrgnameBranchBranchnameAccountingCashCheckJournalVoucherRoute,
-    OrgOrgnameBranchBranchnameAccountingJournalVoucherRoute:
-      OrgOrgnameBranchBranchnameAccountingJournalVoucherRoute,
+    OrgOrgnameBranchBranchnameemployeesEmployeeFootstepsRoute:
+      OrgOrgnameBranchBranchnameemployeesEmployeeFootstepsRoute,
+    OrgOrgnameBranchBranchnameemployeesInvitationCodeRoute:
+      OrgOrgnameBranchBranchnameemployeesInvitationCodeRoute,
+    OrgOrgnameBranchBranchnameemployeesPermissionTemplateRoute:
+      OrgOrgnameBranchBranchnameemployeesPermissionTemplateRoute,
+    OrgOrgnameBranchBranchnameemployeesTimesheetsRoute:
+      OrgOrgnameBranchBranchnameemployeesTimesheetsRoute,
+    OrgOrgnameBranchBranchnameemployeesViewEmployeesRoute:
+      OrgOrgnameBranchBranchnameemployeesViewEmployeesRoute,
+    OrgOrgnameBranchBranchnamemembersMemberAccountingLedgerRoute:
+      OrgOrgnameBranchBranchnamemembersMemberAccountingLedgerRoute,
+    OrgOrgnameBranchBranchnamemembersViewMembersRoute:
+      OrgOrgnameBranchBranchnamemembersViewMembersRoute,
+    OrgOrgnameBranchBranchnametransactionsAdjustmentEntryRoute:
+      OrgOrgnameBranchBranchnametransactionsAdjustmentEntryRoute,
+    OrgOrgnameBranchBranchnametransactionsCashCheckJournalVoucherRoute:
+      OrgOrgnameBranchBranchnametransactionsCashCheckJournalVoucherRoute,
+    OrgOrgnameBranchBranchnametransactionsDepositRoute:
+      OrgOrgnameBranchBranchnametransactionsDepositRoute,
+    OrgOrgnameBranchBranchnametransactionsDisbursementTransactionRoute:
+      OrgOrgnameBranchBranchnametransactionsDisbursementTransactionRoute,
+    OrgOrgnameBranchBranchnametransactionsJournalVoucherRoute:
+      OrgOrgnameBranchBranchnametransactionsJournalVoucherRoute,
+    OrgOrgnameBranchBranchnametransactionsLoanRoute:
+      OrgOrgnameBranchBranchnametransactionsLoanRoute,
+    OrgOrgnameBranchBranchnametransactionsLoanPaymentRoute:
+      OrgOrgnameBranchBranchnametransactionsLoanPaymentRoute,
+    OrgOrgnameBranchBranchnametransactionsPaymentRoute:
+      OrgOrgnameBranchBranchnametransactionsPaymentRoute,
+    OrgOrgnameBranchBranchnametransactionsTransactionsRoute:
+      OrgOrgnameBranchBranchnametransactionsTransactionsRoute,
+    OrgOrgnameBranchBranchnametransactionsWithdrawRoute:
+      OrgOrgnameBranchBranchnametransactionsWithdrawRoute,
     OrgOrgnameBranchBranchnameDevDocumentationRoute:
       OrgOrgnameBranchBranchnameDevDocumentationRoute,
+    OrgOrgnameBranchBranchnameMaintenanceAreaRoute:
+      OrgOrgnameBranchBranchnameMaintenanceAreaRoute,
+    OrgOrgnameBranchBranchnameMaintenanceBanksRoute:
+      OrgOrgnameBranchBranchnameMaintenanceBanksRoute,
+    OrgOrgnameBranchBranchnameMaintenanceBillsAndCoinsRoute:
+      OrgOrgnameBranchBranchnameMaintenanceBillsAndCoinsRoute,
+    OrgOrgnameBranchBranchnameMaintenanceCompanyRoute:
+      OrgOrgnameBranchBranchnameMaintenanceCompanyRoute,
+    OrgOrgnameBranchBranchnameMaintenanceHolidaysRoute:
+      OrgOrgnameBranchBranchnameMaintenanceHolidaysRoute,
+    OrgOrgnameBranchBranchnameMaintenanceTagTemplateRoute:
+      OrgOrgnameBranchBranchnameMaintenanceTagTemplateRoute,
+    OrgOrgnameBranchBranchnameSystemAccountTransactionRoute:
+      OrgOrgnameBranchBranchnameSystemAccountTransactionRoute,
+    OrgOrgnameBranchBranchnameSystemGenerateMutualAidRoute:
+      OrgOrgnameBranchBranchnameSystemGenerateMutualAidRoute,
+    OrgOrgnameBranchBranchnameSystemGenerateSavingsInterestRoute:
+      OrgOrgnameBranchBranchnameSystemGenerateSavingsInterestRoute,
     OrgOrgnameBranchBranchnamecommonsettingsSettingsRoute:
       OrgOrgnameBranchBranchnamecommonsettingsSettingsRoute,
-    OrgOrgnameBranchBranchnameemployeeLoanLoanApplicationRoute:
-      OrgOrgnameBranchBranchnameemployeeLoanLoanApplicationRoute,
-    OrgOrgnameBranchBranchnameemployeeLoanLoanPurposeRoute:
-      OrgOrgnameBranchBranchnameemployeeLoanLoanPurposeRoute,
-    OrgOrgnameBranchBranchnameemployeeLoanLoanStatusRoute:
-      OrgOrgnameBranchBranchnameemployeeLoanLoanStatusRoute,
-    OrgOrgnameBranchBranchnameemployeeLoanLoansRoute:
-      OrgOrgnameBranchBranchnameemployeeLoanLoansRoute,
-    OrgOrgnameBranchBranchnameemployeeTransactionDisbursementRoute:
-      OrgOrgnameBranchBranchnameemployeeTransactionDisbursementRoute,
-    OrgOrgnameBranchBranchnameemployeeTransactionDisbursementTransactionRoute:
-      OrgOrgnameBranchBranchnameemployeeTransactionDisbursementTransactionRoute,
-    OrgOrgnameBranchBranchnameemployeeTransactionLoanPaymentRoute:
-      OrgOrgnameBranchBranchnameemployeeTransactionLoanPaymentRoute,
-    OrgOrgnameBranchBranchnameemployeeTransactionPaymentTypeRoute:
-      OrgOrgnameBranchBranchnameemployeeTransactionPaymentTypeRoute,
-    OrgOrgnameBranchBranchnameemployeeTransactionTestRoute:
-      OrgOrgnameBranchBranchnameemployeeTransactionTestRoute,
-    OrgOrgnameBranchBranchnameemployeeTransactionTransactionBatchRoute:
-      OrgOrgnameBranchBranchnameemployeeTransactionTransactionBatchRoute,
-    OrgOrgnameBranchBranchnameemployeeTransactionTransactionsRoute:
-      OrgOrgnameBranchBranchnameemployeeTransactionTransactionsRoute,
-    OrgOrgnameBranchBranchnamemaintenanceemployeesEmployeeFootstepsRoute:
-      OrgOrgnameBranchBranchnamemaintenanceemployeesEmployeeFootstepsRoute,
-    OrgOrgnameBranchBranchnamemaintenanceemployeesPermissionTemplateRoute:
-      OrgOrgnameBranchBranchnamemaintenanceemployeesPermissionTemplateRoute,
-    OrgOrgnameBranchBranchnamemaintenancemembersMemberAccountingLedgerRoute:
-      OrgOrgnameBranchBranchnamemaintenancemembersMemberAccountingLedgerRoute,
-    OrgOrgnameBranchBranchnamemaintenancemembersViewMembersRoute:
-      OrgOrgnameBranchBranchnamemaintenancemembersViewMembersRoute,
-    OrgOrgnameBranchBranchnamemaintenanceMaintenanceAreaRoute:
-      OrgOrgnameBranchBranchnamemaintenanceMaintenanceAreaRoute,
-    OrgOrgnameBranchBranchnamemaintenanceMaintenanceBanksRoute:
-      OrgOrgnameBranchBranchnamemaintenanceMaintenanceBanksRoute,
-    OrgOrgnameBranchBranchnamemaintenanceMaintenanceBillsAndCoinsRoute:
-      OrgOrgnameBranchBranchnamemaintenanceMaintenanceBillsAndCoinsRoute,
-    OrgOrgnameBranchBranchnamemaintenanceMaintenanceCollateralRoute:
-      OrgOrgnameBranchBranchnamemaintenanceMaintenanceCollateralRoute,
-    OrgOrgnameBranchBranchnamemaintenanceMaintenanceCompanyRoute:
-      OrgOrgnameBranchBranchnamemaintenanceMaintenanceCompanyRoute,
-    OrgOrgnameBranchBranchnamemaintenanceMaintenanceHolidaysRoute:
-      OrgOrgnameBranchBranchnamemaintenanceMaintenanceHolidaysRoute,
-    OrgOrgnameBranchBranchnamemaintenanceMaintenanceTagTemplateRoute:
-      OrgOrgnameBranchBranchnamemaintenanceMaintenanceTagTemplateRoute,
-    OrgOrgnameBranchBranchnameemployeeApprovalsIndexRoute:
-      OrgOrgnameBranchBranchnameemployeeApprovalsIndexRoute,
-    OrgOrgnameBranchBranchnameemployeeSchemesIndexRoute:
-      OrgOrgnameBranchBranchnameemployeeSchemesIndexRoute,
-    OrgOrgnameBranchBranchnameemployeeTransactionIndexRoute:
-      OrgOrgnameBranchBranchnameemployeeTransactionIndexRoute,
-    OrgOrgnameBranchBranchnameemployeeTransactionMaintenanceCashCountRoute:
-      OrgOrgnameBranchBranchnameemployeeTransactionMaintenanceCashCountRoute,
-    OrgOrgnameBranchBranchnameemployeeTransactionMaintenanceFinancialStatementDefinitionRoute:
-      OrgOrgnameBranchBranchnameemployeeTransactionMaintenanceFinancialStatementDefinitionRoute,
-    OrgOrgnameBranchBranchnameemployeeTransactionMaintenanceGeneralLedgerDefinitionRoute:
-      OrgOrgnameBranchBranchnameemployeeTransactionMaintenanceGeneralLedgerDefinitionRoute,
-    OrgOrgnameBranchBranchnameemployeeTransactionQuickTransferDepositRoute:
-      OrgOrgnameBranchBranchnameemployeeTransactionQuickTransferDepositRoute,
-    OrgOrgnameBranchBranchnameemployeeTransactionQuickTransferWithdrawRoute:
-      OrgOrgnameBranchBranchnameemployeeTransactionQuickTransferWithdrawRoute,
-    OrgOrgnameBranchBranchnamemaintenanceemployeesEmployeesViewEmployeesRoute:
-      OrgOrgnameBranchBranchnamemaintenanceemployeesEmployeesViewEmployeesRoute,
-    OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberCenterRoute:
-      OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberCenterRoute,
-    OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberClassificationRoute:
-      OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberClassificationRoute,
-    OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberDepartmentRoute:
-      OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberDepartmentRoute,
-    OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberGenderRoute:
-      OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberGenderRoute,
-    OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberGroupRoute:
-      OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberGroupRoute,
-    OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberOccupationRoute:
-      OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberOccupationRoute,
-    OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberTypesRoute:
-      OrgOrgnameBranchBranchnamemaintenancemembersMembersMemberTypesRoute,
-    OrgOrgnameBranchBranchnamemaintenanceMaintenanceaccessAndOnboardingInvitationCodeRoute:
-      OrgOrgnameBranchBranchnamemaintenanceMaintenanceaccessAndOnboardingInvitationCodeRoute,
-    OrgOrgnameBranchBranchnamemaintenanceMaintenanceaccountSetupAccountCategoryRoute:
-      OrgOrgnameBranchBranchnamemaintenanceMaintenanceaccountSetupAccountCategoryRoute,
-    OrgOrgnameBranchBranchnamemaintenanceMaintenanceaccountSetupAccountClassificationRoute:
-      OrgOrgnameBranchBranchnamemaintenanceMaintenanceaccountSetupAccountClassificationRoute,
-    OrgOrgnameBranchBranchnamemaintenancemembersMemberProfileMemberIdSettingsIndexRoute:
-      OrgOrgnameBranchBranchnamemaintenancemembersMemberProfileMemberIdSettingsIndexRoute,
+    OrgOrgnameBranchBranchnamemembersMemberSettingsMemberCenterRoute:
+      OrgOrgnameBranchBranchnamemembersMemberSettingsMemberCenterRoute,
+    OrgOrgnameBranchBranchnamemembersMemberSettingsMemberClassificationRoute:
+      OrgOrgnameBranchBranchnamemembersMemberSettingsMemberClassificationRoute,
+    OrgOrgnameBranchBranchnamemembersMemberSettingsMemberDepartmentRoute:
+      OrgOrgnameBranchBranchnamemembersMemberSettingsMemberDepartmentRoute,
+    OrgOrgnameBranchBranchnamemembersMemberSettingsMemberGenderRoute:
+      OrgOrgnameBranchBranchnamemembersMemberSettingsMemberGenderRoute,
+    OrgOrgnameBranchBranchnamemembersMemberSettingsMemberGroupRoute:
+      OrgOrgnameBranchBranchnamemembersMemberSettingsMemberGroupRoute,
+    OrgOrgnameBranchBranchnamemembersMemberSettingsMemberOccupationRoute:
+      OrgOrgnameBranchBranchnamemembersMemberSettingsMemberOccupationRoute,
+    OrgOrgnameBranchBranchnamemembersMemberSettingsMemberTypesRoute:
+      OrgOrgnameBranchBranchnamemembersMemberSettingsMemberTypesRoute,
+    OrgOrgnameBranchBranchnamesettingsMySettingsMyAllFootstepsRoute:
+      OrgOrgnameBranchBranchnamesettingsMySettingsMyAllFootstepsRoute,
+    OrgOrgnameBranchBranchnamesettingsMySettingsMyBranchFootstepsRoute:
+      OrgOrgnameBranchBranchnamesettingsMySettingsMyBranchFootstepsRoute,
+    OrgOrgnameBranchBranchnamesettingsMySettingsMyDisbursementTransactionRoute:
+      OrgOrgnameBranchBranchnamesettingsMySettingsMyDisbursementTransactionRoute,
+    OrgOrgnameBranchBranchnamesettingsMySettingsMyGeneralLedgerEntriesRoute:
+      OrgOrgnameBranchBranchnamesettingsMySettingsMyGeneralLedgerEntriesRoute,
+    OrgOrgnameBranchBranchnamesettingsMySettingsMyTimesheetRoute:
+      OrgOrgnameBranchBranchnamesettingsMySettingsMyTimesheetRoute,
+    OrgOrgnameBranchBranchnameMaintenanceAccountsAccountCategoryRoute:
+      OrgOrgnameBranchBranchnameMaintenanceAccountsAccountCategoryRoute,
+    OrgOrgnameBranchBranchnameMaintenanceAccountsAccountClassificationRoute:
+      OrgOrgnameBranchBranchnameMaintenanceAccountsAccountClassificationRoute,
+    OrgOrgnameBranchBranchnameMaintenanceAccountsDisbursementTypeRoute:
+      OrgOrgnameBranchBranchnameMaintenanceAccountsDisbursementTypeRoute,
+    OrgOrgnameBranchBranchnameMaintenanceAccountsPaymentTypeRoute:
+      OrgOrgnameBranchBranchnameMaintenanceAccountsPaymentTypeRoute,
+    OrgOrgnameBranchBranchnameMaintenanceLoansCollateralRoute:
+      OrgOrgnameBranchBranchnameMaintenanceLoansCollateralRoute,
+    OrgOrgnameBranchBranchnameMaintenanceLoansLoanApplicationRoute:
+      OrgOrgnameBranchBranchnameMaintenanceLoansLoanApplicationRoute,
+    OrgOrgnameBranchBranchnameMaintenanceLoansLoanPurposeRoute:
+      OrgOrgnameBranchBranchnameMaintenanceLoansLoanPurposeRoute,
+    OrgOrgnameBranchBranchnameMaintenanceLoansLoanStatusRoute:
+      OrgOrgnameBranchBranchnameMaintenanceLoansLoanStatusRoute,
+    OrgOrgnameBranchBranchnameschemesSchemesIndexRoute:
+      OrgOrgnameBranchBranchnameschemesSchemesIndexRoute,
+    OrgOrgnameBranchBranchnamemembersMemberProfileMemberIdSettingsIndexRoute:
+      OrgOrgnameBranchBranchnamemembersMemberProfileMemberIdSettingsIndexRoute,
   }
 
 const OrgOrgnameBranchBranchnameRouteRouteWithChildren =

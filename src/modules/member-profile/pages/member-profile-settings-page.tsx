@@ -12,7 +12,7 @@ import { useGetMemberProfileById } from '../member-profile.service'
 function MemberProfileSettingsPage() {
     const { navigate, history } = useRouter()
     const { memberId, settings: tab } = useParams({
-        from: '/org/$orgname/branch/$branchname/(maintenance)/(members)/member-profile/$memberId/$settings/',
+        from: '/org/$orgname/branch/$branchname/(members)/member-profile/$memberId/$settings/',
     })
 
     useHotkeys('escape', () => history.back())

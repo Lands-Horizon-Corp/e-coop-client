@@ -28,7 +28,7 @@ export const TransactionHistory = ({ className }: IClassProps) => {
 
     const [pagination, setPagination] = useState<PaginationState>({
         pageIndex: PAGINATION_INITIAL_INDEX,
-        pageSize: 10,
+        pageSize: 50,
     })
     const { sortingStateBase64 } = useDataTableSorting()
 
