@@ -23,6 +23,7 @@ import {
     BsRocketTakeoffFill as RocketIcon,
     BsLayoutSidebarInset as SidebarIcon,
     BsLayoutSidebarInsetReverse as SidebarRightIcon,
+    BsThreeDotsVertical as ThreeDotIcon,
 } from 'react-icons/bs'
 import {
     BsFillPatchCheckFill as BadgeCheckFillIcon,
@@ -888,6 +889,7 @@ export {
     GridIcon,
     FilterVintageIcon,
     SortIcon,
+    ThreeDotIcon,
 }
 
 export const IconMap = {
@@ -1298,6 +1300,7 @@ export const IconMap = {
     'Receive Money': ReceiveMoneyIcon,
     'Report Search Icon': ReportsSearchIcon,
     'Sort Icon': SortIcon,
+    'Three Dot ICons': ThreeDotIcon,
 }
 
 export type TIcon = (typeof ICONS)[number]

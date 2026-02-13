@@ -701,7 +701,7 @@ export const AccountTableActionManager = () => {
             )}
             {state.action === 'view-ledger' && state.defaultValues && (
                 <Modal
-                    className="!max-w-[95vw]"
+                    className="max-w-[95vw]!"
                     description={`You are viewing account (${state.defaultValues.name}) ${getModalTitle(state.extra?.entryType).toLowerCase()}`}
                     onOpenChange={close}
                     open={state.isOpen}
@@ -709,7 +709,7 @@ export const AccountTableActionManager = () => {
                 >
                     <GeneralLedgerTable
                         accountId={state.defaultValues.id}
-                        className="min-h-[90vh] !max-w-[90vw] min-w-0 max-h-[90vh]"
+                        className="min-h-[90vh] max-w-[90vw]! min-w-0 max-h-[90vh]"
                         entryType={state.extra?.entryType || ''}
                         mode="account"
                     />
@@ -718,7 +718,7 @@ export const AccountTableActionManager = () => {
             {state.action === 'view-accounting-ledger-transaction' &&
                 state.defaultValues && (
                     <Modal
-                        className="!max-w-6xl w-full"
+                        className="max-w-6xl! w-full"
                         description={`You are viewing account (${state.defaultValues.name}) accounting transaction`}
                         onOpenChange={close}
                         open={state.isOpen}

@@ -263,6 +263,26 @@ export const useAccountComputationDisconnect = createMutationFactory<
     },
 })
 
+export const useReorderAccounts = createMutationFactory<
+    void,
+    Error,
+    { ids: string[] }
+>({
+    mutationFn: async (ids) => {
+        return (
+            await API.put<{ ids: string[] }, void>(
+                `${accountAPIRoute}/live/order`,
+                ids
+            )
+        ).data
+    },
+    invalidationFn: (args) => {
+        args.queryClient.invalidateQueries({
+            queryKey: ['account', 'all'],
+        })
+    },
+})
+
 export const useAccountLoanConnect = createMutationFactory<
     IAccount,
     Error,
