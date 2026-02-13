@@ -21,7 +21,7 @@ import {
     useUpdateCashCheckVoucherById,
 } from '@/modules/cash-check-voucher'
 import { CashCheckVoucherTagsManagerPopover } from '@/modules/cash-check-voucher-tag/components/cash-check-voucher-tag-manager'
-import CompanyCombobox from '@/modules/company/components/combobox'
+import CompanyCombobox from '@/modules/company/components/company-combobox'
 import { CurrencyCombobox, currencyFormat } from '@/modules/currency'
 import { IMemberProfile } from '@/modules/member-profile'
 import MemberPicker from '@/modules/member-profile/components/member-picker'

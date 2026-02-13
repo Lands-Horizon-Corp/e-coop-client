@@ -22,4 +22,7 @@ export interface IPickerBaseProps<T = unknown> {
         | 'destructive'
         | null
         | undefined
+
+    allowShortcutHotKey?: boolean
+    shortcutHotkey?: string
 }

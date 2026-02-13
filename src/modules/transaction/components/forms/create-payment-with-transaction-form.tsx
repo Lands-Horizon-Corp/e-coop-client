@@ -521,12 +521,12 @@ const PaymentWithTransactionForm = ({
                                     }) => (
                                         <>
                                             <Label className="text-xs font-medium text-muted-foreground">
-                                                Amount{' '}
+                                                Name{' '}
                                                 <span>
                                                     <KbdGroup>
                                                         <Kbd>Alt</Kbd>
                                                         <span>+</span>
-                                                        <Kbd>3</Kbd>
+                                                        <Kbd>1</Kbd>
                                                     </KbdGroup>
                                                 </span>
                                             </Label>

@@ -157,7 +157,7 @@ const columns: ColumnDef<IJournalVoucherEntryRequest>[] = [
 
             return (
                 <CurrencyInput
-                    className="text-left !w-full !min-w-0"
+                    className="text-left w-full! min-w-0!"
                     currency={props.row.original.account?.currency}
                     onValueChange={(newValue) => {
                         const numValue =
@@ -190,7 +190,7 @@ const columns: ColumnDef<IJournalVoucherEntryRequest>[] = [
 
             return (
                 <CurrencyInput
-                    className="text-left !w-full !min-w-0"
+                    className="text-left w-full! min-w-0!"
                     currency={props.row.original.account?.currency}
                     onValueChange={(newValue) => {
                         const numValue =
@@ -218,7 +218,7 @@ const columns: ColumnDef<IJournalVoucherEntryRequest>[] = [
             const meta = row.table.options.meta as JournalEntryTableMeta
             return (
                 <Button
-                    className="w-full hover:bg-primary/10 !p-0 text-destructive"
+                    className="w-full hover:bg-primary/10 p-0! text-destructive"
                     onClick={(e) => {
                         e.preventDefault()
                         meta.handleDeleteRow(row.row.index)
@@ -268,7 +268,6 @@ export const JournalEntryTable = ({
     const isReadOnlyMode = mode === 'readOnly'
 
     const watchedJournalEntries = form.watch('journal_voucher_entries')
-
     const { append: addEntry, remove: removeEntry } = useFieldArray({
         name: 'journal_voucher_entries',
         control: form.control,
@@ -286,7 +285,6 @@ export const JournalEntryTable = ({
             const entryId = form.getValues(
                 `journal_voucher_entries.${index}.id`
             )
-
             if (entryId && isUpdateMode) {
                 removeEntry(index)
                 addRemoveId(entryId)
@@ -382,12 +380,13 @@ export const JournalEntryTable = ({
                                 <TableHead
                                     className={cn(
                                         'h-10 bg-sidebar',
-                                        'first:!rounded-tl-2xl',
-                                        'last:!rounded-tr-2xl'
+                                        'first:rounded-tl-2xl!',
+                                        'last:rounded-tr-2xl!'
                                     )}
                                     colSpan={header.colSpan}
                                     key={header.id}
                                     style={{ width: header.getSize() }}
+                                    tabIndex={-1}
                                 >
                                     {!header.isPlaceholder &&
                                         flexRender(
@@ -413,12 +412,12 @@ export const JournalEntryTable = ({
                         table.getRowModel().rows.map((row) => (
                             <TableRow
                                 className={cn(
-                                    'hover:bg-background !border-b-[0.5px] border-b-primary/20'
+                                    'hover:bg-background border-b-[0.5px]! border-b-primary/20'
                                 )}
                                 key={row.id}
                             >
                                 {row.getVisibleCells().map((cell) => (
-                                    <TableCell className="!p-1" key={cell.id}>
+                                    <TableCell className="p-1!" key={cell.id}>
                                         {flexRender(
                                             cell.column.columnDef.cell,
                                             cell.getContext()

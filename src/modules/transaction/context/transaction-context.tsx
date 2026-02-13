@@ -12,8 +12,6 @@ import {
 } from '../hooks/use-transaction-controller'
 import { paymentORResolver } from '../transaction.utils'
 
-export interface ITransactionFeatureContext extends TTransactionControllerReturn {}
-
 type TTransactipnProviderProps = {
     children: React.ReactNode
     transactionId?: TEntityId
@@ -48,7 +46,7 @@ export const TransactionProvider = ({
 }
 
 const TransactionFeatureContext =
-    createContext<ITransactionFeatureContext | null>(null)
+    createContext<TTransactionControllerReturn | null>(null)
 
 export const useTransactionContext = () => {
     const context = useContext(TransactionFeatureContext)

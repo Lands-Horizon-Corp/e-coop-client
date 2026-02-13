@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 
 import { useQueryClient } from '@tanstack/react-query'
 import { useForm } from 'react-hook-form'
@@ -10,7 +10,7 @@ import { cn } from '@/helpers'
 import { withToastCallbacks } from '@/helpers/callback-helper'
 import { toInputDateString } from '@/helpers/date-utils'
 import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
-import CompanyCombobox from '@/modules/company/components/combobox'
+import CompanyCombobox from '@/modules/company/components/company-combobox'
 import { CurrencyCombobox, currencyFormat } from '@/modules/currency'
 import {
     IJournalVoucher,
@@ -29,17 +29,26 @@ import { useMemberPickerStore } from '@/store/member-picker-store'
 import { useHotkeys } from 'react-hotkeys-hook'
 
 import FormFooterResetSubmit from '@/components/form-components/form-footer-reset-submit'
-import { BookIcon, XIcon } from '@/components/icons'
+import { BookIcon, ChevronDownIcon, XIcon } from '@/components/icons'
 import Modal, { IModalProps } from '@/components/modals/modal'
 import { Button } from '@/components/ui/button'
+import {
+    Collapsible,
+    CollapsibleContent,
+    CollapsibleTrigger,
+} from '@/components/ui/collapsible'
 import { CommandShortcut } from '@/components/ui/command'
 import { Form } from '@/components/ui/form'
 import FormFieldWrapper from '@/components/ui/form-field-wrapper'
 import { Input } from '@/components/ui/input'
 import InputDate from '@/components/ui/input-date'
+import { Kbd, KbdGroup } from '@/components/ui/kbd'
+import { Label } from '@/components/ui/label'
+import { Separator } from '@/components/ui/separator'
 import { Textarea } from '@/components/ui/textarea'
 
 import { useFormHelper } from '@/hooks/use-form-helper'
+import { useModalState } from '@/hooks/use-modal-state'
 
 import { IClassProps, IForm, TEntityId } from '@/types'
 
@@ -70,6 +79,9 @@ const JournalVoucherCreateUpdateForm = ({
 }: IJournalVoucherCreateUpdateFormProps) => {
     const queryClient = useQueryClient()
 
+    const othersAccordionState = useModalState(false)
+    const companyState = useModalState(false)
+
     const { data } = useTransactionBatchStore()
     const [defaultMode, setDefaultMode] = useState<
         'create' | 'update' | 'readOnly'
@@ -98,6 +110,15 @@ const JournalVoucherCreateUpdateForm = ({
         },
     })
 
+    useEffect(() => {
+        if (editJournalId) return
+        form.setValue('journal_voucher_entries', [
+            {
+                account_id: '',
+            },
+        ])
+    }, [defaultMode, form])
+
     const {
         mutate: createJournalVoucher,
         isPending: isCreating,
@@ -112,6 +133,7 @@ const JournalVoucherCreateUpdateForm = ({
                     formProps.onSuccess?.(data)
                     setEditJournalId(data.id)
                     setDefaultMode('update')
+                    form.reset(data)
                 },
                 onError: formProps.onError,
             }),
@@ -183,25 +205,87 @@ const JournalVoucherCreateUpdateForm = ({
         handleClearMember()
     })
 
-    useHotkeys('ctrl + enter', (e) => {
-        e.preventDefault()
-        if (defaultMode !== 'readOnly') {
-            onSubmit()
-        }
-    })
+    useHotkeys(
+        'ctrl + enter',
+        (e) => {
+            e.preventDefault()
+            if (defaultMode !== 'readOnly') {
+                onSubmit()
+            }
+        },
+        { enableOnFormTags: true },
+        []
+    )
 
     const isPrinted = !!defaultValues?.printed_date
+
+    useHotkeys(
+        'alt + 1',
+        (e) => {
+            e.preventDefault()
+            form.setFocus('name')
+        },
+        { enableOnFormTags: true },
+        [form]
+    )
+
+    useHotkeys(
+        'alt + 2',
+        (e) => {
+            e.preventDefault()
+            form.setFocus('description')
+        },
+        { enableOnFormTags: true },
+        [form]
+    )
+    useHotkeys(
+        'alt + 4',
+        (e) => {
+            e.preventDefault()
+            companyState.onOpenChange(!companyState.open)
+        },
+        { enableOnFormTags: true },
+        [companyState]
+    )
+    useHotkeys(
+        'alt + 5',
+        (e) => {
+            e.preventDefault()
+            form.setFocus('date')
+        },
+        { enableOnFormTags: true },
+        [form]
+    )
+    useHotkeys(
+        'alt + 6',
+        (e) => {
+            e.preventDefault()
+            form.setFocus('reference')
+        },
+        { enableOnFormTags: true },
+        [form]
+    )
+
+    useHotkeys(
+        'alt + w',
+        (e) => {
+            e.preventDefault()
+            othersAccordionState.onOpenChange(!othersAccordionState.open)
+        },
+        { enableOnFormTags: true },
+        [othersAccordionState]
+    )
 
     return (
         <Form {...form}>
             <form
-                className={cn('!w-full flex flex-col space-y-4', className)}
+                className={cn('w-full! flex flex-col space-y-4', className)}
                 onSubmit={onSubmit}
                 ref={formRef}
             >
                 <div className="w-full flex items-center gap-2 justify-end"></div>
                 <fieldset
-                    className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4 sm:gap-y-4"
+                    className=""
                     disabled={isPending || formProps.readOnly}
                 >
                     <div className="absolute top-4 right-10 z-10 flex gap-2">
@@ -236,23 +320,34 @@ const JournalVoucherCreateUpdateForm = ({
                             </CommandShortcut>
                         </div>
                     </div>
-                    <div className="col-span-1 md:col-span-4 gap-2 grid grid-cols-2">
+                    <div className="gap-2 w-full flex flex-col">
                         <FormFieldWrapper
-                            className="w-full"
+                            className="col-span-4"
                             control={form.control}
-                            label="Name *"
+                            label={
+                                <Label className="text-xs font-medium text-muted-foreground">
+                                    Amount{' '}
+                                    <span>
+                                        <KbdGroup>
+                                            <Kbd>Alt</Kbd>
+                                            <span>+</span>
+                                            <Kbd>1</Kbd>
+                                        </KbdGroup>
+                                    </span>
+                                </Label>
+                            }
                             name="name"
                             render={({ field }) => {
                                 return (
                                     <div className="relative w-full">
                                         <Input
-                                            className="!text-md pr-12 font-semibold"
+                                            className="text-md! pr-12 font-semibold"
                                             {...field}
                                             id={field.name}
                                             value={field.value || ''}
                                         />
                                         <Button
-                                            className="absolute m-auto top-0 bottom-0 right-1 hover:!bg-primary/20"
+                                            className="absolute m-auto top-0 bottom-0 right-1 hover:bg-primary/20!"
                                             onClick={(e) => {
                                                 e.preventDefault()
                                                 form.reset({
@@ -272,178 +367,267 @@ const JournalVoucherCreateUpdateForm = ({
                             }}
                         />
                         <FormFieldWrapper
-                            control={form.control}
-                            label="Currency *"
-                            name="currency_id"
-                            render={({ field }) => (
-                                <CurrencyCombobox
-                                    {...field}
-                                    disabled={
-                                        isDisabled(field.name) ||
-                                        (!!editJournalId &&
-                                            !!form.watch('currency_id'))
-                                    }
-                                    onChange={(currency) => {
-                                        field.onChange(currency?.id)
-                                        form.setValue('currency', currency)
-                                    }}
-                                    value={field.value}
-                                />
-                            )}
-                        />
-                        <FormFieldWrapper
                             className="col-span-2"
                             control={form.control}
-                            label="Particulars / Description *"
+                            label={
+                                <Label className="text-xs font-medium text-muted-foreground">
+                                    Particulars/Description{' '}
+                                    <span>
+                                        <KbdGroup>
+                                            <Kbd>Alt</Kbd>
+                                            <span>+</span>
+                                            <Kbd>2</Kbd>
+                                        </KbdGroup>
+                                    </span>
+                                </Label>
+                            }
                             name="description"
                             render={({ field }) => {
                                 return (
                                     <div className="relative w-full">
                                         <Textarea
-                                            className="!text-md pr-12 font-semibold"
+                                            className="text-md! pr-12 font-semibold"
                                             {...field}
                                         />
                                     </div>
                                 )
                             }}
                         />
-                    </div>
-                    <div className="col-span-4 relative grid grid-cols-2 gap-2">
-                        <FormFieldWrapper
-                            className="relative"
-                            control={form.control}
-                            label="Member Profile"
-                            name="member_id"
-                            render={({ field }) => {
-                                return (
-                                    <>
-                                        <MemberPicker
-                                            allowShorcutCommand
-                                            disabled={isDisabled(field.name)}
-                                            onSelect={(selectedMember) => {
-                                                field.onChange(
-                                                    selectedMember?.id
-                                                )
-                                                form.setValue(
-                                                    'member_profile',
-                                                    selectedMember
-                                                )
-                                                form.setValue(
-                                                    'name',
-                                                    selectedMember?.full_name
-                                                )
-                                                form.setValue(
-                                                    'company_id',
-                                                    undefined
-                                                )
-                                                setDefaultMemberProfile(
-                                                    selectedMember
-                                                )
-                                            }}
-                                            placeholder="Relative Member Profile"
-                                            value={form.getValues(
-                                                'member_profile'
-                                            )}
-                                        />
-                                    </>
-                                )
-                            }}
-                        />
-                        <FormFieldWrapper
-                            control={form.control}
-                            label="Company"
-                            name="company_id"
-                            render={({ field }) => (
-                                <CompanyCombobox
-                                    {...field}
-                                    disabled={isDisabled(field.name)}
-                                    onChange={(selectedCompany) => {
-                                        field.onChange(selectedCompany.id)
-                                        form.setValue(
-                                            'name',
-                                            selectedCompany.name
-                                        )
-                                        form.setValue('member_id', undefined)
-                                        form.setValue(
-                                            'member_profile',
-                                            undefined
-                                        )
-                                    }}
-                                    placeholder="Select a company"
-                                    value={field.value}
-                                />
-                            )}
-                        />
-
-                        <FormFieldWrapper
-                            className="relative"
-                            control={form.control}
-                            description="mm/dd/yyyy"
-                            descriptionClassName="absolute top-0 right-0"
-                            label="Date"
-                            name="date"
-                            render={({ field }) => (
-                                <InputDate
-                                    {...field}
-                                    value={field.value ?? ''}
-                                />
-                            )}
-                        />
-                        <FormFieldWrapper
-                            control={form.control}
-                            label="Reference"
-                            name="reference"
-                            render={({ field }) => (
-                                <Input
-                                    {...field}
-                                    disabled={isDisabled(field.name)}
-                                    id={field.name}
-                                    placeholder="Enter reference"
-                                />
-                            )}
-                        />
-                    </div>
-                    {/* <FormFieldWrapper
-                        control={form.control}
-                        label="CV Number"
-                        name="cash_voucher_number"
-                        render={({ field }) => (
-                            <Input
-                                {...field}
-                                disabled={isDisabled(field.name)}
-                                id={field.name}
-                                placeholder="Enter CV number"
-                                value={field.value || ''}
-                            />
-                        )}
-                    /> */}
-
-                    {defaultMode !== 'create' && (
-                        <>
+                        <div className="grid grid-cols-2 gap-2">
                             <FormFieldWrapper
-                                className="col-span-1 md:col-span-4 !max-h-xs"
+                                className="relative"
                                 control={form.control}
-                                label="Particulars"
-                                name="journal_voucher_entries"
+                                label={
+                                    <Label className="text-xs font-medium text-muted-foreground">
+                                        Member Profile{' '}
+                                        <span>
+                                            <KbdGroup>
+                                                <Kbd>Alt</Kbd>
+                                                <span>+</span>
+                                                <Kbd>3</Kbd>
+                                            </KbdGroup>
+                                        </span>
+                                    </Label>
+                                }
+                                name="member_id"
+                                render={({ field }) => {
+                                    return (
+                                        <>
+                                            <MemberPicker
+                                                allowShorcutCommand
+                                                disabled={isDisabled(
+                                                    field.name
+                                                )}
+                                                onSelect={(selectedMember) => {
+                                                    field.onChange(
+                                                        selectedMember?.id
+                                                    )
+                                                    form.setValue(
+                                                        'member_profile',
+                                                        selectedMember
+                                                    )
+                                                    form.setValue(
+                                                        'name',
+                                                        selectedMember?.full_name
+                                                    )
+                                                    form.setValue(
+                                                        'company_id',
+                                                        undefined
+                                                    )
+                                                    setDefaultMemberProfile(
+                                                        selectedMember
+                                                    )
+                                                }}
+                                                placeholder="Relative Member Profile"
+                                                shorcutHotKey="Alt + 3"
+                                                value={form.getValues(
+                                                    'member_profile'
+                                                )}
+                                            />
+                                        </>
+                                    )
+                                }}
+                            />
+                            <FormFieldWrapper
+                                control={form.control}
+                                label={
+                                    <Label className="text-xs font-medium text-muted-foreground">
+                                        Company{' '}
+                                        <span>
+                                            <KbdGroup>
+                                                <Kbd>Alt</Kbd>
+                                                <span>+</span>
+                                                <Kbd>4</Kbd>
+                                            </KbdGroup>
+                                        </span>
+                                    </Label>
+                                }
+                                name="company_id"
                                 render={({ field }) => (
-                                    <JournalEntryTable
-                                        className="col-span-1 md:col-span-4"
-                                        currency={form.watch('currency')}
-                                        defaultMemberProfile={
-                                            defaultMemberProfile
-                                        }
-                                        form={form}
-                                        journalVoucherId={
-                                            journalVoucherId ?? ''
-                                        }
-                                        mode={defaultMode}
-                                        ref={field.ref}
-                                        transactionBatchId={data?.id}
+                                    <CompanyCombobox
+                                        {...field}
+                                        {...companyState}
+                                        allowShortcutHotKey
+                                        disabled={isDisabled(field.name)}
+                                        onChange={(selectedCompany) => {
+                                            field.onChange(selectedCompany.id)
+                                            form.setValue(
+                                                'name',
+                                                selectedCompany.name
+                                            )
+                                            form.setValue(
+                                                'member_id',
+                                                undefined
+                                            )
+                                            form.setValue(
+                                                'member_profile',
+                                                undefined
+                                            )
+                                        }}
+                                        placeholder="Select a company"
+                                        shortcutHotkey="alt + 4"
+                                        value={field.value}
                                     />
                                 )}
                             />
-                        </>
-                    )}
+                            <FormFieldWrapper
+                                className="relative"
+                                control={form.control}
+                                description="mm/dd/yyyy"
+                                descriptionClassName="absolute top-0 right-0"
+                                label={
+                                    <Label className="text-xs font-medium text-muted-foreground">
+                                        Date{' '}
+                                        <span>
+                                            <KbdGroup>
+                                                <Kbd>Alt</Kbd>
+                                                <span>+</span>
+                                                <Kbd>5</Kbd>
+                                            </KbdGroup>
+                                        </span>
+                                    </Label>
+                                }
+                                name="date"
+                                render={({ field }) => (
+                                    <InputDate
+                                        {...field}
+                                        value={field.value ?? ''}
+                                    />
+                                )}
+                            />
+                            <FormFieldWrapper
+                                control={form.control}
+                                label={
+                                    <Label className="text-xs font-medium text-muted-foreground">
+                                        Reference{' '}
+                                        <span>
+                                            <KbdGroup>
+                                                <Kbd>Alt</Kbd>
+                                                <span>+</span>
+                                                <Kbd>6</Kbd>
+                                            </KbdGroup>
+                                        </span>
+                                    </Label>
+                                }
+                                name="reference"
+                                render={({ field }) => (
+                                    <Input
+                                        {...field}
+                                        disabled={isDisabled(field.name)}
+                                        id={field.name}
+                                        placeholder="Enter reference"
+                                    />
+                                )}
+                            />
+                        </div>
+                        <Collapsible
+                            {...othersAccordionState}
+                            className="w-full col-span-4 justify-end mb-1"
+                        >
+                            <CollapsibleTrigger
+                                className={cn(
+                                    'text-sm justify-start w-full flex text-primary gap-x-2'
+                                )}
+                            >
+                                <div className="flex items-center flex-col justify-between w-full">
+                                    <div className="w-full inline-flex py-2">
+                                        <span className="ml-1 text-xs font-medium text-muted-foreground">
+                                            others
+                                            <KbdGroup>
+                                                <Kbd>Alt</Kbd>
+                                                <span>+</span>
+                                                <Kbd>w</Kbd>
+                                            </KbdGroup>
+                                        </span>
+                                        <ChevronDownIcon
+                                            className={cn(
+                                                'ml-auto ease-in-out duration-200',
+                                                !othersAccordionState.open &&
+                                                    ' rotate-180'
+                                            )}
+                                        />
+                                    </div>
+                                    <Separator />
+                                </div>
+                            </CollapsibleTrigger>
+                            <CollapsibleContent className="w-full py-1 ecoop-scroll flex flex-col gap-x-2 ">
+                                <FormFieldWrapper
+                                    className="mt-2"
+                                    control={form.control}
+                                    label={
+                                        <Label className="text-xs font-medium text-muted-foreground">
+                                            Currency *{' '}
+                                            <span>
+                                                <KbdGroup>
+                                                    <Kbd>Alt</Kbd>
+                                                    <span>+</span>
+                                                    <Kbd>E</Kbd>
+                                                </KbdGroup>
+                                            </span>
+                                        </Label>
+                                    }
+                                    name="currency_id"
+                                    render={({ field }) => (
+                                        <CurrencyCombobox
+                                            {...field}
+                                            allowShortcutHotKey
+                                            disabled={isDisabled(field.name)}
+                                            onChange={(currency) => {
+                                                field.onChange(currency?.id)
+                                                form.setValue(
+                                                    'currency',
+                                                    currency
+                                                )
+                                            }}
+                                            shortcutHotkey="alt + e"
+                                            value={field.value}
+                                        />
+                                    )}
+                                />
+                            </CollapsibleContent>
+                        </Collapsible>
+                    </div>
+
+                    <>
+                        <FormFieldWrapper
+                            className="col-span-1 md:col-span-4 max-h-xs!"
+                            control={form.control}
+                            label="Particulars"
+                            name="journal_voucher_entries"
+                            render={({ field }) => (
+                                <JournalEntryTable
+                                    className="col-span-1 md:col-span-4"
+                                    currency={form.watch('currency')}
+                                    defaultMemberProfile={defaultMemberProfile}
+                                    form={form}
+                                    journalVoucherId={journalVoucherId ?? ''}
+                                    mode={defaultMode}
+                                    ref={field.ref}
+                                    transactionBatchId={data?.id}
+                                />
+                            )}
+                        />
+                    </>
                 </fieldset>
                 <div className="w-full flex justify-end gap-4">
                     <div className="max-w-[130px] flex-col flex justify-end">
@@ -505,7 +689,7 @@ export const JournalVoucherCreateUpdateFormModal = ({
 
     return (
         <Modal
-            className={cn('!min-w-2xl !max-w-5xl', className)}
+            className={cn('min-w-2xl! max-w-5xl!', className)}
             title={
                 <div>
                     <p className="font-medium">

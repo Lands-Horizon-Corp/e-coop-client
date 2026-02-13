@@ -31,10 +31,11 @@ import { IMemberProfile, useGetPaginatedMemberProfiles } from '..'
 
 interface Props extends IPickerBaseProps<IMemberProfile> {
     defaultFilter?: TFilterObject
-    allowShorcutCommand?: boolean
     showPBNo?: boolean
     allowClear?: boolean
     mainTriggerClassName?: string
+    allowShorcutCommand?: boolean
+    shorcutHotKey?: string
 }
 
 const MemberPicker = forwardRef<HTMLButtonElement, Props>(
@@ -51,6 +52,7 @@ const MemberPicker = forwardRef<HTMLButtonElement, Props>(
             showPBNo = true,
             allowClear = false,
             mainTriggerClassName,
+            shorcutHotKey = 'Enter',
         },
         ref
     ) => {
@@ -94,7 +96,7 @@ const MemberPicker = forwardRef<HTMLButtonElement, Props>(
         })
 
         useHotkeys(
-            'Enter',
+            shorcutHotKey,
             (event) => {
                 event?.preventDefault()
                 if (
@@ -105,7 +107,7 @@ const MemberPicker = forwardRef<HTMLButtonElement, Props>(
                     !isFetching &&
                     allowShorcutCommand
                 ) {
-                    setState(true)
+                    setState(!state)
                 }
             },
             {
@@ -118,6 +120,7 @@ const MemberPicker = forwardRef<HTMLButtonElement, Props>(
                 isLoading,
                 isFetching,
                 allowShorcutCommand,
+                state,
             ]
         )
 

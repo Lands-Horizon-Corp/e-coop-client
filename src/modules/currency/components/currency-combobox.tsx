@@ -6,7 +6,9 @@ import {
     TCurrencyHookMode,
     useGetAllCurrency,
 } from '@/modules/currency'
+import { IPickerBaseProps } from '@/types/component-types/picker'
 import { CircleFlag } from 'react-circle-flags'
+import { useHotkeys } from 'react-hotkeys-hook'
 
 import { findCountry } from '@/components/comboboxes/country-combobox'
 import { CheckIcon, ChevronDownIcon } from '@/components/icons'
@@ -26,6 +28,8 @@ import {
     PopoverTrigger,
 } from '@/components/ui/popover'
 
+import { useInternalState } from '@/hooks/use-internal-state'
+
 import { TEntityId } from '@/types'
 
 type TFormatDisplay =
@@ -37,13 +41,14 @@ type TFormatDisplay =
     | 'country-code' // Philippines (PHP)
     | 'country-symbol' // Philippines (₱)
 
-interface Props {
-    value?: TEntityId
-    disabled?: boolean
+interface Props extends Omit<
+    IPickerBaseProps<ICurrency>,
+    'onSelect' | 'value'
+> {
     className?: string
-    placeholder?: string
     mode?: TCurrencyHookMode
     formatDisplay?: TFormatDisplay
+    value?: TEntityId
     onChange?: (selected: ICurrency) => void
 }
 
@@ -54,9 +59,16 @@ const CurrencyCombobox = ({
     disabled = false,
     placeholder = 'Select Currency...',
     formatDisplay = 'emoji-name-code',
+    modalState,
+    allowShortcutHotKey,
+    shortcutHotkey = 'alt + u',
     onChange,
 }: Props) => {
-    const [open, setOpen] = React.useState(false)
+    const [open, setOpen] = useInternalState(
+        false,
+        modalState?.open,
+        modalState?.onOpenChange
+    )
 
     const { data, isLoading } = useGetAllCurrency({
         mode,
@@ -168,6 +180,20 @@ const CurrencyCombobox = ({
         }
     }
 
+    useHotkeys(
+        shortcutHotkey,
+        (event) => {
+            event?.preventDefault()
+            if (!disabled && !isLoading && allowShortcutHotKey) {
+                setOpen(!open)
+            }
+        },
+        {
+            enableOnFormTags: true,
+        },
+        [value, disabled, isLoading, allowShortcutHotKey, open]
+    )
+
     return (
         <>
             <Popover modal onOpenChange={setOpen} open={open}>
@@ -251,7 +277,7 @@ const CurrencyCombobox = ({
                                             </div>
                                             <CheckIcon
                                                 className={cn(
-                                                    'ml-auto flex-shrink-0',
+                                                    'ml-auto shrink-0',
                                                     value === option.id
                                                         ? 'opacity-100'
                                                         : 'opacity-0'

@@ -2,6 +2,8 @@ import * as React from 'react'
 
 import { cn } from '@/helpers/tw-utils'
 import { ICompany, useGetAllCompany } from '@/modules/company'
+import { IPickerBaseProps } from '@/types/component-types/picker'
+import { useHotkeys } from 'react-hotkeys-hook'
 
 import { CheckIcon, ChevronDownIcon } from '@/components/icons'
 import ImageDisplay from '@/components/image-display'
@@ -22,6 +24,8 @@ import {
 } from '@/components/ui/popover'
 import PreviewMediaWrapper from '@/components/wrappers/preview-media-wrapper'
 
+import { useInternalState } from '@/hooks/use-internal-state'
+
 import { TEntityId } from '@/types'
 
 import {
@@ -33,12 +37,9 @@ export interface ICompanyComboboxCreateProps extends Pick<
     ICompanyFormProps,
     'defaultValues' | 'disabledFields' | 'hiddenFields'
 > {}
-
-interface Props {
+interface Props extends Omit<IPickerBaseProps, 'onSelect' | 'value'> {
     value?: TEntityId
-    disabled?: boolean
     className?: string
-    placeholder?: string
     companyComboboxCreateProps?: ICompanyComboboxCreateProps
     onChange?: (selected: ICompany) => void
 }
@@ -50,8 +51,15 @@ const CompanyCombobox = ({
     companyComboboxCreateProps,
     placeholder = 'Select Company...',
     onChange,
+    modalState,
+    shortcutHotkey = 'alt + C',
+    allowShortcutHotKey = false,
 }: Props) => {
-    const [open, setOpen] = React.useState(false)
+    const [open, setOpen] = useInternalState(
+        false,
+        modalState?.open,
+        modalState?.onOpenChange
+    )
     const [createModal, setCreateModal] = React.useState(false)
     const { data, isLoading } = useGetAllCompany({
         options: {
@@ -62,6 +70,19 @@ const CompanyCombobox = ({
     const selectedCompany = React.useMemo(
         () => data?.find((company) => company.id === value),
         [data, value]
+    )
+
+    useHotkeys(
+        shortcutHotkey,
+        (event) => {
+            event?.preventDefault()
+            setOpen(!open)
+        },
+        {
+            enableOnFormTags: true,
+            enabled: allowShortcutHotKey && !disabled && !isLoading,
+        },
+        [value, disabled, isLoading, allowShortcutHotKey, open]
     )
 
     return (
@@ -92,7 +113,7 @@ const CompanyCombobox = ({
                                     media={selectedCompany.media}
                                 >
                                     <ImageDisplay
-                                        className="size-4 rounded-full border bg-muted object-cover flex-shrink-0"
+                                        className="size-4 rounded-full border bg-muted object-cover shrink-0"
                                         src={
                                             selectedCompany.media?.download_url
                                         }
@@ -107,7 +128,7 @@ const CompanyCombobox = ({
                                 {placeholder}
                             </span>
                         )}
-                        <ChevronDownIcon className="opacity-50 flex-shrink-0" />
+                        <ChevronDownIcon className="opacity-50 shrink-0" />
                     </Button>
                 </PopoverTrigger>
                 <PopoverContent className="max-h-[--radix-popover-content-available-height] w-[--radix-popover-trigger-width] p-0">
@@ -155,7 +176,7 @@ const CompanyCombobox = ({
                                                     media={option.media}
                                                 >
                                                     <ImageDisplay
-                                                        className="h-5 w-5 rounded-full border bg-muted object-cover flex-shrink-0"
+                                                        className="h-5 w-5 rounded-full border bg-muted object-cover shrink-0"
                                                         src={
                                                             option.media
                                                                 ?.download_url
@@ -168,7 +189,7 @@ const CompanyCombobox = ({
                                             </div>
                                             <CheckIcon
                                                 className={cn(
-                                                    'ml-auto flex-shrink-0',
+                                                    'ml-auto shrink-0',
                                                     value === option.id
                                                         ? 'opacity-100'
                                                         : 'opacity-0'
