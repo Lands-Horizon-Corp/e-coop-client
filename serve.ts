@@ -5,18 +5,24 @@ const server = Bun.serve({
     async fetch(req) {
         const url = new URL(req.url)
         const path = url.pathname
-        if (path === '/') {
-            return new Response(Bun.file('./dist/index.html'))
-        }
-        const filePath = `./dist${path}`
+        const filePath = path === '/' ? './dist/index.html' : `./dist${path}`
         const file = Bun.file(filePath)
-
         if (await file.exists()) {
-            return new Response(file)
+            return new Response(file, {
+                headers: {
+                    'Content-Type': file.type,
+                    'Cache-Control': path.includes('/assets/')
+                        ? 'public, max-age=31536000, immutable'
+                        : 'no-cache',
+                },
+            })
         }
         if (!path.includes('.')) {
-            return new Response(Bun.file('./dist/index.html'))
+            return new Response(Bun.file('./dist/index.html'), {
+                headers: { 'Content-Type': 'text/html' },
+            })
         }
+
         return new Response('Not Found', { status: 404 })
     },
 })
