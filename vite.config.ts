@@ -84,7 +84,7 @@ export default defineConfig({
             }
           },
           {
-            urlPattern: ({ url }) => url.origin === self.location.origin && !url.pathname.includes('.'),
+            urlPattern: ({ url }) => !url.pathname.includes('.'),
             handler: 'NetworkFirst',
             options: {
               cacheName: 'pages-cache',
