@@ -1,15 +1,24 @@
 /// <reference types="bun-types" />
 
 const server = Bun.serve({
-    port: process.env.PORT || 8080,
-    fetch(req) {
+    port: process.env.PORT || 3000,
+    async fetch(req) {
         const url = new URL(req.url)
-        const path = url.pathname
-        let file = Bun.file(`./dist${path}`)
-        if (path === '/' || !file.size) {
-            file = Bun.file('./dist/index.html')
+        let path = url.pathname
+        if (path === '/') {
+            return new Response(Bun.file('./dist/index.html'))
         }
-        return new Response(file)
+        const filePath = `./dist${path}`
+        const file = Bun.file(filePath)
+
+        if (await file.exists()) {
+            return new Response(file)
+        }
+        if (!path.includes('.')) {
+            return new Response(Bun.file('./dist/index.html'))
+        }
+        return new Response('Not Found', { status: 404 })
     },
 })
-console.log(`🚀 E-Coop Server started on port: ${server.port}`)
+
+console.log(`🚀 E-Coop Server live at ${server.url}`)
