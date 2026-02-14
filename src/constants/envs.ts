@@ -8,10 +8,10 @@ export const API_URL =
     import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000'
 
 // WS
-export const SOKETI_KEY = import.meta.env.VITE_SOKETI_KEY
+export const SOKETI_KEY = import.meta.env.VITE_SOKETI_KEY || ''
 export const SOKETI_HOST = import.meta.env.VITE_SOKETI_HOST || 'localhost'
-export const SOKETI_PORT = import.meta.env.VITE_SOKETI_PORT || 6001
-export const SOKETI_CLIENT = import.meta.env.VITE_SOKETI_CLIENT
+export const SOKETI_PORT = parseInt(import.meta.env.VITE_SOKETI_PORT || '6001')
+export const SOKETI_CLIENT = import.meta.env.VITE_SOKETI_CLIENT || 'horizon'
 
 // TURNSTILE CAPTCHA
 export const TURNSTILE_CAPTCHA_SITE_KEY =
