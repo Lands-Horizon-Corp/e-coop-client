@@ -4,7 +4,7 @@ const server = Bun.serve({
     port: process.env.PORT || 3000,
     async fetch(req) {
         const url = new URL(req.url)
-        let path = url.pathname
+        const path = url.pathname
         if (path === '/') {
             return new Response(Bun.file('./dist/index.html'))
         }

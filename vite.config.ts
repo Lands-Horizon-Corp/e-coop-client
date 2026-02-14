@@ -66,13 +66,28 @@ export default defineConfig({
       workbox: {
         globPatterns: ['**/*.{js,css,html,ico,png,svg,jpg,jpeg,webp,mp4,woff2}'],
         maximumFileSizeToCacheInBytes: 50 * 1024 * 1024,
-        runtimeCaching: [
+        runtimeCaching:  [
           {
-            urlPattern: ({ url }) => url.origin === url.origin,
-            handler: 'StaleWhileRevalidate',
+            urlPattern: /\.(?:js|css)$/i,
+            handler: 'CacheFirst',
             options: {
-              cacheName: 'local-assets',
-              expiration: { maxEntries: 200, maxAgeSeconds: 60 * 60 * 24 * 30 }
+              cacheName: 'static-chunks',
+              expiration: { maxEntries: 100, maxAgeSeconds: 60 * 60 * 24 * 30 }
+            }
+          },
+          {
+            urlPattern: /\.(?:png|jpg|jpeg|svg|webp|mp4|woff2)$/i,
+            handler: 'CacheFirst',
+            options: {
+              cacheName: 'media-assets',
+              expiration: { maxEntries: 150, maxAgeSeconds: 60 * 60 * 24 * 60 }
+            }
+          },
+          {
+            urlPattern: ({ url }) => url.origin === self.location.origin && !url.pathname.includes('.'),
+            handler: 'NetworkFirst',
+            options: {
+              cacheName: 'pages-cache',
             }
           }
         ]
