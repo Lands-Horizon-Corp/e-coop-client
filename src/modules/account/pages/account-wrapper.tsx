@@ -41,14 +41,14 @@ const AccountWrapper = () => {
                 {...createModal}
             />
             <AccountList />
-            <div className="fixed bottom-20 right-6 flex flex-col gap-2 z-50">
+            <div className="fixed bottom-6 right-6 flex flex-col gap-2 z-50">
                 <Button
                     className="rounded-full shadow-lg border border-border h-10 w-10"
                     onClick={() => scrollTo('up')}
                     size="icon"
                     variant="secondary"
                 >
-                    <ChevronDownIcon className="h-5 w-5 rote-180" />
+                    <ChevronDownIcon className="h-5 w-5 rotate-180" />
                 </Button>
                 <Button
                     className="rounded-full shadow-lg border border-border h-10 w-10"

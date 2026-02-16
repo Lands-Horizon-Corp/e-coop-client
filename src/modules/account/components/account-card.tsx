@@ -140,7 +140,7 @@ export const AccountCard = ({
                             <TooltipTrigger asChild>
                                 <div
                                     className={cn(
-                                        `group relative flex items-center gap-3 rounded-lg border border-border bg-card p-4 transition-all duration-300 hover:border-primary/50`,
+                                        `group relative border-l-0 rounded-l-none! flex items-center gap-3 rounded-lg border border-border bg-card p-4 transition-all duration-300 hover:border-primary/50`,
                                         glTypeStyleMap[
                                             account.general_ledger_type
                                         ].hoverGradient,
