@@ -40,6 +40,8 @@ export const AccountCard = ({
     )
     const createModal = useModalState(false)
 
+    const isSearching = searchTerm !== ''
+
     const {
         attributes,
         listeners,
@@ -85,13 +87,16 @@ export const AccountCard = ({
                     style={style}
                 >
                     {/* Drag handle */}
-                    <button
+                    <Button
                         {...attributes}
                         {...listeners}
-                        className="cursor-grab rounded p-1 text-muted-foreground hover:text-foreground active:cursor-grabbing"
+                        className="cursor-grab rounded p-1 hover:bg-transparent! text-muted-foreground hover:text-foreground active:cursor-grabbing"
+                        disabled={isSearching}
+                        size={'xs'}
+                        variant={'ghost'}
                     >
-                        <GripVertical className="h-5 w-5" />
-                    </button>
+                        <GripVertical />
+                    </Button>
 
                     {/* Icon */}
                     <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-md border border-border bg-secondary">
@@ -140,9 +145,10 @@ export const AccountCard = ({
                 align="center"
                 className="flex flex-col p-0 bg-transparent "
                 side="top"
+                sideOffset={0}
             >
                 <Button
-                    className="z-9999  absolute bottom-0 hover:scale-105"
+                    className="z-9999 absolute -right-16 bottom-0 hover:scale-105"
                     onClick={() => {
                         createModal.onOpenChange(true)
                         setSelectedAccount(account)
@@ -155,10 +161,11 @@ export const AccountCard = ({
                     size={'xs'}
                 >
                     <PlusIcon />
+                    create account
                 </Button>
                 <Button
                     className={cn(
-                        'z-9999  absolute hover:scale-105',
+                        'z-9999 -right-16  absolute hover:scale-105',
                         !account.description ? 'top-17' : 'top-19'
                     )}
                     onClick={() => {
@@ -168,7 +175,7 @@ export const AccountCard = ({
                     }}
                     size={'xs'}
                 >
-                    <PlusIcon />
+                    <PlusIcon /> create account
                 </Button>
             </TooltipContent>
         </Tooltip>

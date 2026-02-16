@@ -1,7 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 
 import Fuse from 'fuse.js'
-import { toast } from 'sonner'
 
 import {
     DndContext,
@@ -21,7 +20,6 @@ import {
 import { ArrowUpDown, Plus, Search, SearchX } from 'lucide-react'
 
 import RefreshButton from '@/components/buttons/refresh-button'
-import { LoadingCircleIcon } from '@/components/icons'
 import { Button } from '@/components/ui/button'
 import {
     Empty,
@@ -32,8 +30,7 @@ import {
     EmptyTitle,
 } from '@/components/ui/empty'
 import { Input } from '@/components/ui/input'
-
-import { useModalState } from '@/hooks/use-modal-state'
+import { Skeleton } from '@/components/ui/skeleton'
 
 import { useReorderAccounts } from '../account.service'
 import { IAccount } from '../account.types'
@@ -41,19 +38,16 @@ import { useAccountContext } from '../context/account-provider'
 import { AccountCard } from './account-card'
 
 export const AccountList = () => {
-    const createModal = useModalState()
-    const { accountsQuery } = useAccountContext()
+    const { accountsQuery, createModal } = useAccountContext()
     const [accounts, setAccounts] = useState<IAccount[]>([])
 
-    const { mutate: reorderAccounts, isPending: isPendingReorder } =
-        useReorderAccounts({
-            options: {
-                onSuccess: (data) => {
-                    console.log(data)
-                    toast.success('Accounts Re-order successfully')
-                },
+    const { mutate: reorderAccounts } = useReorderAccounts({
+        options: {
+            onSuccess: (data) => {
+                console.log(data)
             },
-        })
+        },
+    })
 
     useEffect(() => {
         if (!accountsQuery || !accountsQuery.data) return
@@ -77,6 +71,11 @@ export const AccountList = () => {
             setAccounts((items) => {
                 const oldIndex = items.findIndex((i) => i.id === active.id)
                 const newIndex = items.findIndex((i) => i.id === over.id)
+                reorderAccounts({
+                    ids: arrayMove(items, oldIndex, newIndex).map(
+                        (item) => item.id
+                    ),
+                })
                 return arrayMove(items, oldIndex, newIndex)
             })
         }
@@ -148,76 +147,76 @@ export const AccountList = () => {
                 <div className="flex items-center gap-2 text-sm text-muted-foreground">
                     <ArrowUpDown className="h-3.5 w-3.5" />
                     <span>Drag to reorder</span>
-                    <Button
-                        disabled={isPendingReorder}
-                        onClick={() => {
-                            reorderAccounts({
-                                ids: filtered.map((account) => account.id),
-                            })
-                        }}
-                        variant="ghost"
-                    >
-                        {isPendingReorder ? (
-                            <LoadingCircleIcon className="animate-spin" />
-                        ) : (
-                            'Save'
-                        )}
-                    </Button>
                     <span className="ml-auto">{filtered.length} accounts</span>
                 </div>
             </div>
             {/* List */}
-            {(accountsQuery.isLoading ||
-                accountsQuery.isPending ||
-                accountsQuery.isFetching) && (
-                <Empty>
-                    <LoadingCircleIcon className=" animate-spin" />
-                </Empty>
-            )}
-            <DndContext
-                collisionDetection={closestCenter}
-                onDragEnd={handleDragEnd}
-                sensors={sensors}
-            >
-                <SortableContext
-                    items={filtered.map((a) => a.id)}
-                    strategy={verticalListSortingStrategy}
-                >
-                    <div className="space-y-2">
-                        {filtered.map((account) => (
-                            <AccountCard
-                                account={account}
-                                key={account.id}
-                                searchTerm={search}
-                            />
-                        ))}
-                    </div>
-                </SortableContext>
-            </DndContext>
-            {filtered.length === 0 && (
-                <Empty className="rounded-lg border border-dashed border-border text-center text-muted-foreground">
-                    <EmptyHeader>
-                        <EmptyMedia variant="icon">
-                            <SearchX className="size-6" />
-                        </EmptyMedia>
-
-                        <EmptyTitle>No Accounts Found</EmptyTitle>
-
-                        <EmptyDescription>
-                            We couldn’t find any accounts matching your current
-                            filters. Try adjusting your search criteria.
-                        </EmptyDescription>
-                    </EmptyHeader>
-
-                    <EmptyContent className="flex-row justify-center gap-2">
-                        <Button
-                            onClick={() => accountsQuery.refetch()}
-                            variant="outline"
+            {accountsQuery.isLoading || accountsQuery.isRefetching ? (
+                <div className="p-2 w-full flex flex-col space-y-2">
+                    {Array.from({ length: 5 }).map((_, idx) => {
+                        return (
+                            <div
+                                className=" p-2 flex gap-x-2 w-full "
+                                key={idx}
+                            >
+                                <Skeleton className="w-1/16 " />
+                                <div className="flex flex-col grow space-y-2">
+                                    <Skeleton className=" h-5 w-full " />
+                                    <Skeleton className=" h-5 w-1/2" />
+                                </div>
+                            </div>
+                        )
+                    })}
+                </div>
+            ) : (
+                <>
+                    <DndContext
+                        collisionDetection={closestCenter}
+                        onDragEnd={handleDragEnd}
+                        sensors={sensors}
+                    >
+                        <SortableContext
+                            items={filtered.map((a) => a.id)}
+                            strategy={verticalListSortingStrategy}
                         >
-                            Refresh Accounts
-                        </Button>
-                    </EmptyContent>
-                </Empty>
+                            <div className="space-y-2">
+                                {filtered.map((account) => (
+                                    <AccountCard
+                                        account={account}
+                                        key={account.id}
+                                        searchTerm={search}
+                                    />
+                                ))}
+                            </div>
+                        </SortableContext>
+                    </DndContext>
+                    {filtered.length === 0 && (
+                        <Empty className="rounded-lg border border-dashed border-border text-center text-muted-foreground">
+                            <EmptyHeader>
+                                <EmptyMedia variant="icon">
+                                    <SearchX className="size-6" />
+                                </EmptyMedia>
+
+                                <EmptyTitle>No Accounts Found</EmptyTitle>
+
+                                <EmptyDescription>
+                                    We couldn’t find any accounts matching your
+                                    current filters. Try adjusting your search
+                                    criteria.
+                                </EmptyDescription>
+                            </EmptyHeader>
+
+                            <EmptyContent className="flex-row justify-center gap-2">
+                                <Button
+                                    onClick={() => accountsQuery.refetch()}
+                                    variant="outline"
+                                >
+                                    Refresh Accounts
+                                </Button>
+                            </EmptyContent>
+                        </Empty>
+                    )}
+                </>
             )}
         </div>
     )
