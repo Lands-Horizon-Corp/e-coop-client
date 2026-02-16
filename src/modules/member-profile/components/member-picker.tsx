@@ -20,7 +20,7 @@ import ImageDisplay from '@/components/image-display'
 import MiniPaginationBar from '@/components/pagination-bars/mini-pagination-bar'
 import GenericPicker from '@/components/pickers/generic-picker'
 import LoadingSpinner from '@/components/spinners/loading-spinner'
-import { Button } from '@/components/ui/button'
+import { Button, ButtonProps } from '@/components/ui/button'
 import PreviewMediaWrapper from '@/components/wrappers/preview-media-wrapper'
 
 import useFilterState from '@/hooks/use-filter-state'
@@ -34,6 +34,7 @@ interface Props extends IPickerBaseProps<IMemberProfile> {
     showPBNo?: boolean
     allowClear?: boolean
     mainTriggerClassName?: string
+    mainTriggerProps?: ButtonProps
     allowShorcutCommand?: boolean
     shorcutHotKey?: string
 }
@@ -51,6 +52,7 @@ const MemberPicker = forwardRef<HTMLButtonElement, Props>(
             triggerVariant = 'secondary',
             showPBNo = true,
             allowClear = false,
+            mainTriggerProps,
             mainTriggerClassName,
             shorcutHotKey = 'Enter',
         },
@@ -238,6 +240,7 @@ const MemberPicker = forwardRef<HTMLButtonElement, Props>(
                         )}
                     >
                         <Button
+                            {...mainTriggerProps}
                             className={cn(
                                 'flex-1 items-center justify-between rounded-md border p-0 px-2 h-10',
                                 triggerClassName

@@ -13,7 +13,7 @@ import { useHotkeys } from 'react-hotkeys-hook'
 import { findCountry } from '@/components/comboboxes/country-combobox'
 import { CheckIcon, ChevronDownIcon } from '@/components/icons'
 import LoadingSpinner from '@/components/spinners/loading-spinner'
-import { Button } from '@/components/ui/button'
+import { Button, ButtonProps } from '@/components/ui/button'
 import {
     Command,
     CommandEmpty,
@@ -50,6 +50,7 @@ interface Props extends Omit<
     formatDisplay?: TFormatDisplay
     value?: TEntityId
     onChange?: (selected: ICurrency) => void
+    mainTriggerProps?: ButtonProps
 }
 
 const CurrencyCombobox = ({
@@ -63,6 +64,7 @@ const CurrencyCombobox = ({
     allowShortcutHotKey,
     shortcutHotkey = 'alt + u',
     onChange,
+    mainTriggerProps,
 }: Props) => {
     const [open, setOpen] = useInternalState(
         false,
@@ -112,7 +114,7 @@ const CurrencyCombobox = ({
                 return (
                     <div className="flex flex-1 items-center max-w-full gap-2 min-w-0">
                         {currency.symbol && (
-                            <span className="text-lg flex-shrink-0">
+                            <span className="text-lg shrink-0">
                                 {currency.symbol}
                             </span>
                         )}
@@ -199,6 +201,7 @@ const CurrencyCombobox = ({
             <Popover modal onOpenChange={setOpen} open={open}>
                 <PopoverTrigger asChild>
                     <Button
+                        {...mainTriggerProps}
                         aria-expanded={open}
                         className={cn(
                             'w-full flex items-center px-3',

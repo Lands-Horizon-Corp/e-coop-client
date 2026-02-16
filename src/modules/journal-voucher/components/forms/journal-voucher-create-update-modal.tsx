@@ -283,11 +283,7 @@ const JournalVoucherCreateUpdateForm = ({
                 onSubmit={onSubmit}
                 ref={formRef}
             >
-                <div className="w-full flex items-center gap-2 justify-end"></div>
-                <fieldset
-                    className=""
-                    disabled={isPending || formProps.readOnly}
-                >
+                <fieldset disabled={isPending || formProps.readOnly}>
                     <div className="absolute top-4 right-10 z-10 flex gap-2">
                         {isUpdate && (
                             <JournalVoucherTagsManagerPopover
@@ -297,7 +293,7 @@ const JournalVoucherCreateUpdateForm = ({
                             />
                         )}
                         {editJournalId && defaultValues && (
-                            <div className="">
+                            <div>
                                 <JournalVoucherStatusIndicator
                                     journalVoucher={
                                         defaultValues as IJournalVoucher
@@ -309,7 +305,7 @@ const JournalVoucherCreateUpdateForm = ({
                             <Button
                                 className="size-fit px-2 py-0.5 mr-1 text-xs"
                                 size="sm"
-                                tabIndex={0}
+                                tabIndex={-1}
                                 type="button"
                                 variant={'ghost'}
                             >
@@ -342,6 +338,7 @@ const JournalVoucherCreateUpdateForm = ({
                                     <div className="relative w-full">
                                         <Input
                                             className="text-md! pr-12 font-semibold"
+                                            tabIndex={-1}
                                             {...field}
                                             id={field.name}
                                             value={field.value || ''}
@@ -358,6 +355,7 @@ const JournalVoucherCreateUpdateForm = ({
                                                 })
                                             }}
                                             size={'sm'}
+                                            tabIndex={-1}
                                             variant="ghost"
                                         >
                                             <XIcon />
@@ -387,6 +385,7 @@ const JournalVoucherCreateUpdateForm = ({
                                     <div className="relative w-full">
                                         <Textarea
                                             className="text-md! pr-12 font-semibold"
+                                            tabIndex={-1}
                                             {...field}
                                         />
                                     </div>
@@ -399,14 +398,7 @@ const JournalVoucherCreateUpdateForm = ({
                                 control={form.control}
                                 label={
                                     <Label className="text-xs font-medium text-muted-foreground">
-                                        Member Profile{' '}
-                                        <span>
-                                            <KbdGroup>
-                                                <Kbd>Alt</Kbd>
-                                                <span>+</span>
-                                                <Kbd>3</Kbd>
-                                            </KbdGroup>
-                                        </span>
+                                        Member Profile <Kbd>Enter</Kbd>
                                     </Label>
                                 }
                                 name="member_id"
@@ -418,6 +410,9 @@ const JournalVoucherCreateUpdateForm = ({
                                                 disabled={isDisabled(
                                                     field.name
                                                 )}
+                                                mainTriggerProps={{
+                                                    tabIndex: -1,
+                                                }}
                                                 onSelect={(selectedMember) => {
                                                     field.onChange(
                                                         selectedMember?.id
@@ -439,7 +434,7 @@ const JournalVoucherCreateUpdateForm = ({
                                                     )
                                                 }}
                                                 placeholder="Relative Member Profile"
-                                                shorcutHotKey="Alt + 3"
+                                                // shorcutHotKey="Alt + 3"
                                                 value={form.getValues(
                                                     'member_profile'
                                                 )}
@@ -469,6 +464,9 @@ const JournalVoucherCreateUpdateForm = ({
                                         {...companyState}
                                         allowShortcutHotKey
                                         disabled={isDisabled(field.name)}
+                                        mainTriggerProps={{
+                                            tabIndex: -1,
+                                        }}
                                         onChange={(selectedCompany) => {
                                             field.onChange(selectedCompany.id)
                                             form.setValue(
@@ -510,6 +508,7 @@ const JournalVoucherCreateUpdateForm = ({
                                 name="date"
                                 render={({ field }) => (
                                     <InputDate
+                                        tabIndex={-1}
                                         {...field}
                                         value={field.value ?? ''}
                                     />
@@ -536,6 +535,7 @@ const JournalVoucherCreateUpdateForm = ({
                                         disabled={isDisabled(field.name)}
                                         id={field.name}
                                         placeholder="Enter reference"
+                                        tabIndex={-1}
                                     />
                                 )}
                             />
@@ -548,6 +548,7 @@ const JournalVoucherCreateUpdateForm = ({
                                 className={cn(
                                     'text-sm justify-start w-full flex text-primary gap-x-2'
                                 )}
+                                tabIndex={-1}
                             >
                                 <div className="flex items-center flex-col justify-between w-full">
                                     <div className="w-full inline-flex py-2">
@@ -592,6 +593,9 @@ const JournalVoucherCreateUpdateForm = ({
                                             {...field}
                                             allowShortcutHotKey
                                             disabled={isDisabled(field.name)}
+                                            mainTriggerProps={{
+                                                tabIndex: -1,
+                                            }}
                                             onChange={(currency) => {
                                                 field.onChange(currency?.id)
                                                 form.setValue(

@@ -21,6 +21,7 @@ import { useHotkeys } from 'react-hotkeys-hook'
 import { PlusIcon, TrashIcon } from '@/components/icons'
 import { Button } from '@/components/ui/button'
 import { CommandShortcut } from '@/components/ui/command'
+import { Kbd } from '@/components/ui/kbd'
 import {
     Table,
     TableBody,
@@ -45,7 +46,7 @@ const columns: ColumnDef<IJournalVoucherEntryRequest>[] = [
             const meta = props.table.options.meta as JournalEntryTableMeta
             const form = meta.form
             const rowIndex = props.row.index
-
+            console.log(props.table.options)
             return (
                 <AccountPicker
                     allowClear
@@ -113,7 +114,6 @@ const columns: ColumnDef<IJournalVoucherEntryRequest>[] = [
 
             const original = props.row.original
             const account: IAccount | undefined = original.account
-
             return (
                 <LoanPicker
                     disabled={
@@ -344,7 +344,10 @@ export const JournalEntryTable = ({
     return (
         <div className={cn('', className)}>
             <div className="w-full flex justify-between">
-                <h1 className="text-lg font-semibold">Journal Entries</h1>
+                <h1 className="text-lg font-semibold">
+                    Journal Entries
+                    <Kbd className="ml-1">Tab</Kbd>
+                </h1>
                 <div className="flex py-2 items-center space-x-2">
                     <Button
                         aria-label="Add new journal entry"
@@ -417,7 +420,10 @@ export const JournalEntryTable = ({
                                 key={row.id}
                             >
                                 {row.getVisibleCells().map((cell) => (
-                                    <TableCell className="p-1!" key={cell.id}>
+                                    <TableCell
+                                        className="p-1! via-10%"
+                                        key={cell.id}
+                                    >
                                         {flexRender(
                                             cell.column.columnDef.cell,
                                             cell.getContext()

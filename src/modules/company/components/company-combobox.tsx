@@ -8,7 +8,7 @@ import { useHotkeys } from 'react-hotkeys-hook'
 import { CheckIcon, ChevronDownIcon } from '@/components/icons'
 import ImageDisplay from '@/components/image-display'
 import LoadingSpinner from '@/components/spinners/loading-spinner'
-import { Button } from '@/components/ui/button'
+import { Button, ButtonProps } from '@/components/ui/button'
 import {
     Command,
     CommandEmpty,
@@ -42,6 +42,7 @@ interface Props extends Omit<IPickerBaseProps, 'onSelect' | 'value'> {
     className?: string
     companyComboboxCreateProps?: ICompanyComboboxCreateProps
     onChange?: (selected: ICompany) => void
+    mainTriggerProps?: ButtonProps
 }
 
 const CompanyCombobox = ({
@@ -54,6 +55,7 @@ const CompanyCombobox = ({
     modalState,
     shortcutHotkey = 'alt + C',
     allowShortcutHotKey = false,
+    mainTriggerProps,
 }: Props) => {
     const [open, setOpen] = useInternalState(
         false,
@@ -101,6 +103,7 @@ const CompanyCombobox = ({
             <Popover modal onOpenChange={setOpen} open={open}>
                 <PopoverTrigger asChild>
                     <Button
+                        {...mainTriggerProps}
                         aria-expanded={open}
                         className={cn('w-full justify-between px-3', className)}
                         disabled={disabled || isLoading}
