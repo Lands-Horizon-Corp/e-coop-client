@@ -24,22 +24,16 @@ import {
     BookOpenIcon,
     BookStackIcon,
     BookThickIcon,
+    ChevronRightIcon,
     HandCoinsIcon,
     MoneyCheckIcon,
     PencilFillIcon,
-    SettingsIcon,
-    ThreeDotIcon,
     TrashIcon,
 } from '@/components/icons'
 import { Button } from '@/components/ui/button'
-import {
-    DropdownMenu,
-    DropdownMenuItem,
-    DropdownMenuPortal,
-    DropdownMenuSub,
-    DropdownMenuSubContent,
-    DropdownMenuSubTrigger,
-} from '@/components/ui/dropdown-menu'
+import { DropdownMenu, DropdownMenuItem } from '@/components/ui/dropdown-menu'
+import { PopoverContent } from '@/components/ui/popover'
+import { Separator } from '@/components/ui/separator'
 
 export type AccountActionType =
     | 'edit'
@@ -57,7 +51,7 @@ interface UseAccountActionsProps {
     onDeleteSuccess?: () => void
 }
 
-const useAccountActions = ({
+export const useAccountActions = ({
     account,
     onDeleteSuccess,
 }: UseAccountActionsProps) => {
@@ -133,13 +127,10 @@ const useAccountActions = ({
     }
 }
 
-interface AccountActionProps {
-    accountData: IAccount
-    onDeleteSuccess?: () => void
-}
+interface AccountActionProps extends UseAccountActionsProps {}
 
 export const AccountActions = ({
-    accountData,
+    account,
     onDeleteSuccess,
 }: AccountActionProps) => {
     const {
@@ -150,26 +141,32 @@ export const AccountActions = ({
         handleDelete,
         openLedgerModal,
         handleViewAccountingLedger,
-    } = useAccountActions({ account: accountData, onDeleteSuccess })
+    } = useAccountActions({ account, onDeleteSuccess })
 
     return (
-        <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-                <Button size="xs" variant={'ghost'}>
-                    {' '}
-                    <ThreeDotIcon className="h-3.5 w-3.5" />
-                </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent className="bg-background p-2 rounded-2xl">
-                <DropdownMenuItem onClick={handleEdit}>
-                    <PencilFillIcon className="mr-2" />
-                    edit
-                </DropdownMenuItem>
-                <DropdownMenuItem onClick={handleDelete}>
-                    <TrashIcon className="mr-2" />
-                    delete
-                </DropdownMenuItem>
-                <DropdownMenuItem
+        <PopoverContent className="w-64 p-2 rounded-2xl bg-background">
+            <div className="flex flex-col gap-1">
+                {/* Edit */}
+                <button
+                    className="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-muted transition"
+                    onClick={handleEdit}
+                >
+                    <PencilFillIcon className="h-4 w-4" />
+                    Edit
+                </button>
+
+                {/* Delete */}
+                <button
+                    className="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-muted transition"
+                    onClick={handleDelete}
+                >
+                    <TrashIcon className="h-4 w-4" />
+                    Delete
+                </button>
+
+                {/* View Accounting Ledger */}
+                <button
+                    className="flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-muted disabled:opacity-50 disabled:pointer-events-none transition"
                     disabled={
                         !hasPermissionFromAuth({
                             action: 'Read',
@@ -178,123 +175,154 @@ export const AccountActions = ({
                     }
                     onClick={() => handleViewAccountingLedger()}
                 >
-                    <BookOpenIcon className="mr-2" strokeWidth={1.5} />
+                    <BookOpenIcon className="h-4 w-4" strokeWidth={1.5} />
                     View Accounting Ledger
-                </DropdownMenuItem>
-                <DropdownMenuSub>
-                    <DropdownMenuSubTrigger
-                        disabled={
-                            !hasPermissionFromAuth({
-                                action: 'Read',
-                                resourceType: 'GeneralLedger',
-                            })
-                        }
+                </button>
+
+                {/* Divider */}
+                <Separator className="my-2 " />
+
+                {/* GL Entries Label */}
+                <p className="px-3 text-xs font-medium text-muted-foreground">
+                    GL Entries
+                </p>
+                <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                        <Button
+                            className="popover-item justify-between w-full"
+                            disabled={
+                                !hasPermissionFromAuth({
+                                    action: 'Read',
+                                    resourceType: 'GeneralLedger',
+                                })
+                            }
+                        >
+                            <div className="flex items-center gap-2">
+                                <BookOpenIcon
+                                    className="h-4 w-4"
+                                    strokeWidth={1.5}
+                                />
+                                GL Entries
+                            </div>
+                            <ChevronRightIcon className="h-4 w-4 opacity-60" />
+                        </Button>
+                    </DropdownMenuTrigger>
+
+                    <DropdownMenuContent
+                        align="start"
+                        className="rounded-2xl bg-background p-2"
+                        side="right"
                     >
-                        <BookOpenIcon className="mr-2" strokeWidth={1.5} />
-                        GL Entries
-                    </DropdownMenuSubTrigger>
-                    <DropdownMenuPortal>
-                        <DropdownMenuSubContent>
-                            <DropdownMenuItem
-                                onClick={() => openLedgerModal('')}
-                            >
-                                <BookThickIcon
-                                    className="mr-2"
-                                    strokeWidth={1.5}
-                                />
-                                General Ledger
-                            </DropdownMenuItem>
-                            <DropdownMenuItem
-                                onClick={() => openLedgerModal('check-entry')}
-                            >
-                                <MoneyCheckIcon
-                                    className="mr-2"
-                                    strokeWidth={1.5}
-                                />
-                                Check Entry
-                            </DropdownMenuItem>
-                            <DropdownMenuItem
-                                onClick={() => openLedgerModal('online-entry')}
-                            >
-                                <BillIcon className="mr-2" strokeWidth={1.5} />
-                                Online Entry
-                            </DropdownMenuItem>
-                            <DropdownMenuItem
-                                onClick={() => openLedgerModal('cash-entry')}
-                            >
-                                <HandCoinsIcon
-                                    className="mr-2"
-                                    strokeWidth={1.5}
-                                />
-                                Cash Entry
-                            </DropdownMenuItem>
-                            <DropdownMenuItem
-                                onClick={() => openLedgerModal('payment-entry')}
-                            >
-                                <BillIcon className="mr-2" strokeWidth={1.5} />
-                                Payment Entry
-                            </DropdownMenuItem>
-                            <DropdownMenuItem
-                                onClick={() =>
-                                    openLedgerModal('withdraw-entry')
-                                }
-                            >
-                                <HandCoinsIcon
-                                    className="mr-2"
-                                    strokeWidth={1.5}
-                                />
-                                Withdraw Entry
-                            </DropdownMenuItem>
-                            <DropdownMenuItem
-                                onClick={() => openLedgerModal('deposit-entry')}
-                            >
-                                <HandCoinsIcon
-                                    className="mr-2"
-                                    strokeWidth={1.5}
-                                />
-                                Deposit Entry
-                            </DropdownMenuItem>
-                            <DropdownMenuItem
-                                onClick={() => openLedgerModal('journal-entry')}
-                            >
-                                <BookStackIcon
-                                    className="mr-2"
-                                    strokeWidth={1.5}
-                                />
-                                Journal Entry
-                            </DropdownMenuItem>
-                            <DropdownMenuItem
-                                onClick={() =>
-                                    openLedgerModal('adjustment-entry')
-                                }
-                            >
-                                <SettingsIcon
-                                    className="mr-2"
-                                    strokeWidth={1.5}
-                                />
-                                Adjustment Entry
-                            </DropdownMenuItem>
-                            <DropdownMenuItem
-                                onClick={() =>
-                                    openLedgerModal('journal-voucher')
-                                }
-                            >
-                                <BillIcon className="mr-2" strokeWidth={1.5} />
-                                Journal Voucher
-                            </DropdownMenuItem>
-                            <DropdownMenuItem
-                                onClick={() => openLedgerModal('check-voucher')}
-                            >
-                                <MoneyCheckIcon
-                                    className="mr-2"
-                                    strokeWidth={1.5}
-                                />
-                                Check Voucher
-                            </DropdownMenuItem>
-                        </DropdownMenuSubContent>
-                    </DropdownMenuPortal>
-                </DropdownMenuSub>
-            </DropdownMenuContent>
-        </DropdownMenu>
+                        <DropdownMenuItem onClick={() => openLedgerModal('')}>
+                            <BookThickIcon
+                                className="mr-2 h-4 w-4"
+                                strokeWidth={1.5}
+                            />
+                            General Ledger
+                        </DropdownMenuItem>
+
+                        <DropdownMenuItem
+                            onClick={() => openLedgerModal('check-entry')}
+                        >
+                            <MoneyCheckIcon
+                                className="mr-2 h-4 w-4"
+                                strokeWidth={1.5}
+                            />
+                            Check Entry
+                        </DropdownMenuItem>
+
+                        <DropdownMenuItem
+                            onClick={() => openLedgerModal('online-entry')}
+                        >
+                            <BillIcon
+                                className="mr-2 h-4 w-4"
+                                strokeWidth={1.5}
+                            />
+                            Online Entry
+                        </DropdownMenuItem>
+
+                        <DropdownMenuItem
+                            onClick={() => openLedgerModal('cash-entry')}
+                        >
+                            <HandCoinsIcon
+                                className="mr-2 h-4 w-4"
+                                strokeWidth={1.5}
+                            />
+                            Cash Entry
+                        </DropdownMenuItem>
+
+                        <DropdownMenuItem
+                            onClick={() => openLedgerModal('payment-entry')}
+                        >
+                            <BillIcon
+                                className="mr-2 h-4 w-4"
+                                strokeWidth={1.5}
+                            />
+                            Payment Entry
+                        </DropdownMenuItem>
+
+                        <DropdownMenuItem
+                            onClick={() => openLedgerModal('withdraw-entry')}
+                        >
+                            <HandCoinsIcon
+                                className="mr-2 h-4 w-4"
+                                strokeWidth={1.5}
+                            />
+                            Withdraw Entry
+                        </DropdownMenuItem>
+
+                        <DropdownMenuItem
+                            onClick={() => openLedgerModal('deposit-entry')}
+                        >
+                            <HandCoinsIcon
+                                className="mr-2 h-4 w-4"
+                                strokeWidth={1.5}
+                            />
+                            Deposit Entry
+                        </DropdownMenuItem>
+
+                        <DropdownMenuItem
+                            onClick={() => openLedgerModal('journal-entry')}
+                        >
+                            <BookStackIcon
+                                className="mr-2 h-4 w-4"
+                                strokeWidth={1.5}
+                            />
+                            Journal Entry
+                        </DropdownMenuItem>
+
+                        <DropdownMenuItem
+                            onClick={() => openLedgerModal('adjustment-entry')}
+                        >
+                            <BookStackIcon
+                                className="mr-2 h-4 w-4"
+                                strokeWidth={1.5}
+                            />
+                            Adjustment Entry
+                        </DropdownMenuItem>
+
+                        <DropdownMenuItem
+                            onClick={() => openLedgerModal('journal-voucher')}
+                        >
+                            <BillIcon
+                                className="mr-2 h-4 w-4"
+                                strokeWidth={1.5}
+                            />
+                            Journal Voucher
+                        </DropdownMenuItem>
+
+                        <DropdownMenuItem
+                            onClick={() => openLedgerModal('check-voucher')}
+                        >
+                            <MoneyCheckIcon
+                                className="mr-2 h-4 w-4"
+                                strokeWidth={1.5}
+                            />
+                            Check Voucher
+                        </DropdownMenuItem>
+                    </DropdownMenuContent>
+                </DropdownMenu>
+            </div>
+        </PopoverContent>
     )
 }
