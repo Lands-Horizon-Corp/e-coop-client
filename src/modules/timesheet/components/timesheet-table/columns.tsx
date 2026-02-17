@@ -272,7 +272,7 @@ const DurationBadge = ({
     variant = 'default',
     className,
 }: DurationBadgeProps) => {
-    const formattedTime = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`
+    const formattedTime = `${hours.toString().padStart(1, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`
 
     return (
         <Badge

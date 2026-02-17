@@ -84,7 +84,7 @@ export const LiveWorkTimeDurationDisplayMini = ({
 }) => {
     const values = useLiveTimeTicker({ timeIn, pollingInterval, onTick })
 
-    const hour = `${values?.hours}`.padStart(2, '0')
+    const hour = `${values?.hours}`.padStart(1, '0')
     const mins = `${values?.minutes}`.padStart(2, '0')
     const secs = `${values?.seconds}`.padStart(2, '0')
 
