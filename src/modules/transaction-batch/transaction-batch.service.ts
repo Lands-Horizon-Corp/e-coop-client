@@ -364,7 +364,7 @@ export const useTransactionBatchHistoryTotal = ({
         ],
         queryFn: async () => {
             const response = await API.get<ITransactionBatchHistoryTotal>(
-                `${transactionBatchAPIRoute}/transaction-batch/${transactionBatchId}/history/total`
+                `${transactionBatchAPIRoute}/${transactionBatchId}/history/total`
             )
 
             return response.data
