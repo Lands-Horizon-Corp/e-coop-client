@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { memo } from 'react'
 
 import { cn } from '@/helpers'
 import { TGeneralLedgerType } from '@/modules/general-ledger'
@@ -19,14 +19,13 @@ import {
 import { useModalState } from '@/hooks/use-modal-state'
 
 import { IAccount } from '../account.types'
-import { useAccountContext } from '../context/account-provider'
 import { AccountActions } from './account-actions'
-import AccountCreateUpdateFormModal from './forms/account-create-update-form'
 
 interface AccountCardProps {
     account: IAccount
     onEdit?: (account: IAccount) => void
     searchTerm: string
+    isSearching?: boolean
 }
 const glTypeStyleMap: Record<
     TGeneralLedgerType,
@@ -74,226 +73,203 @@ const glTypeStyleMap: Record<
     },
 }
 
-export const AccountCard = ({
-    account,
-    // onEdit,
-    searchTerm,
-}: AccountCardProps) => {
-    const { settings_payment_type_default_value, accountsQuery } =
-        useAccountContext()
-    const [index, setIndex] = useState<number>()
-    const [selectedAccount, setSelectedAccount] = useState<IAccount | null>(
-        null
-    )
-    const createModal = useModalState(false)
+export const AccountCard = memo(
+    ({ account, isSearching, searchTerm }: AccountCardProps) => {
+        const createModal = useModalState(false)
 
-    const isSearching = searchTerm !== ''
+        const {
+            attributes,
+            listeners,
+            setNodeRef,
+            transform,
+            transition,
+            isDragging,
+        } = useSortable({ id: account.id })
 
-    const {
-        attributes,
-        listeners,
-        setNodeRef,
-        transform,
-        transition,
-        isDragging,
-    } = useSortable({ id: account.id })
+        const style = {
+            transform: CSS.Transform.toString(transform),
+            transition,
+        }
+        const actionsModal = useModalState(false)
 
-    const style = {
-        transform: CSS.Transform.toString(transform),
-        transition,
-    }
-    const actionsModal = useModalState(false)
-
-    return (
-        <Popover {...actionsModal}>
-            <AccountCreateUpdateFormModal
-                className=" min-w-[80vw] max-w-[80vw]"
-                formProps={{
-                    defaultValues: {
-                        index: index,
-                        general_ledger_type:
-                            selectedAccount?.general_ledger_type,
-                        default_payment_type_id:
-                            settings_payment_type_default_value?.id,
-                        default_payment_type:
-                            settings_payment_type_default_value,
-                    },
-                    onSuccess: () => {
-                        createModal.onOpenChange(false)
-                        accountsQuery.refetch()
-                    },
-                }}
-                {...createModal}
-            />
-            <div
-                className={cn(
-                    glTypeStyleMap[account.general_ledger_type].border,
-                    isDragging ? 'opacity-50 shadow-lg shadow-primary/10' : ''
-                )}
-                onClick={() => {
-                    actionsModal.onOpenChange(true)
-                }}
-            >
-                <PopoverTrigger asChild>
-                    <div>
-                        <Tooltip delayDuration={200}>
-                            <TooltipTrigger asChild>
-                                <div
-                                    className={cn(
-                                        `group relative border-l-0 rounded-l-none! flex items-center gap-3 rounded-lg border border-border bg-card p-4 transition-all duration-300 hover:border-primary/50`,
-                                        glTypeStyleMap[
-                                            account.general_ledger_type
-                                        ].hoverGradient,
-                                        isDragging &&
-                                            'opacity-50 shadow-lg shadow-primary/10'
-                                    )}
-                                    ref={setNodeRef}
-                                    style={style}
-                                >
-                                    <Button
-                                        {...attributes}
-                                        {...listeners}
-                                        className="cursor-grab rounded p-1 hover:bg-transparent! text-muted-foreground hover:text-foreground active:cursor-grabbing"
-                                        disabled={isSearching}
-                                        size="xs"
-                                        variant="ghost"
-                                    >
-                                        <GripVertical />
-                                    </Button>
-
+        return (
+            <Popover {...actionsModal}>
+                <div
+                    className={cn(
+                        isDragging
+                            ? 'opacity-50 shadow-lg shadow-primary/10'
+                            : ''
+                    )}
+                    onClick={() => {
+                        actionsModal.onOpenChange(true)
+                    }}
+                >
+                    <PopoverTrigger asChild>
+                        <div>
+                            <Tooltip delayDuration={200}>
+                                <TooltipTrigger asChild>
                                     <div
                                         className={cn(
-                                            'flex h-9 w-9 shrink-0 items-center justify-center rounded-md transition-all duration-300',
+                                            `group relative border-l-0 rounded-l-none! flex items-center gap-3 rounded-lg  bg-card p-4 transition-all duration-300`,
                                             glTypeStyleMap[
                                                 account.general_ledger_type
-                                            ].iconBg
+                                            ].border,
+                                            glTypeStyleMap[
+                                                account.general_ledger_type
+                                            ].hoverGradient,
+                                            isDragging &&
+                                                'opacity-50 shadow-lg shadow-primary/10'
                                         )}
+                                        ref={setNodeRef}
+                                        style={style}
                                     >
-                                        {account.icon && (
-                                            <RenderIcon
+                                        <Button
+                                            {...attributes}
+                                            {...listeners}
+                                            className="cursor-grab rounded p-1 hover:bg-transparent! text-muted-foreground hover:text-foreground active:cursor-grabbing"
+                                            disabled={isSearching}
+                                            size="xs"
+                                            variant="ghost"
+                                        >
+                                            <GripVertical />
+                                        </Button>
+
+                                        <div
+                                            className={cn(
+                                                'flex h-9 w-9 shrink-0 items-center justify-center rounded-md transition-all duration-300',
+                                                glTypeStyleMap[
+                                                    account.general_ledger_type
+                                                ].iconBg
+                                            )}
+                                        >
+                                            {account.icon && (
+                                                <RenderIcon
+                                                    className={cn(
+                                                        'transition-colors duration-300',
+                                                        glTypeStyleMap[
+                                                            account
+                                                                .general_ledger_type
+                                                        ].iconText
+                                                    )}
+                                                    icon={account.icon as TIcon}
+                                                />
+                                            )}
+                                        </div>
+
+                                        <div className="flex-1 min-w-0">
+                                            <p className="font-semibold text-foreground truncate">
+                                                {searchTerm
+                                                    ? highlightMatch(
+                                                          account.name,
+                                                          searchTerm
+                                                      )
+                                                    : account.name}
+                                            </p>
+
+                                            <p
                                                 className={cn(
-                                                    'transition-colors duration-300',
+                                                    'text-sm text-muted-foreground truncate transition-all duration-300',
+                                                    'opacity-0 max-h-0 translate-y-1',
+                                                    'group-hover:opacity-100 group-hover:max-h-10 group-hover:translate-y-0'
+                                                )}
+                                            >
+                                                {searchTerm
+                                                    ? highlightMatch(
+                                                          account.description ??
+                                                              '',
+                                                          searchTerm
+                                                      )
+                                                    : account.description}
+                                            </p>
+                                        </div>
+
+                                        <div
+                                            className={cn(
+                                                'hidden sm:flex items-center gap-2 transition-all duration-300',
+                                                'opacity-0 translate-y-2',
+                                                'group-hover:opacity-100 group-hover:translate-y-0'
+                                            )}
+                                        >
+                                            <span
+                                                className={cn(
+                                                    'g-badge-red/15 px-3 py-1 text-xs font-medium text-badge-red border border-badge-red/30'
+                                                )}
+                                            >
+                                                {searchTerm
+                                                    ? highlightMatch(
+                                                          account.type,
+                                                          searchTerm
+                                                      )
+                                                    : account.type}
+                                            </span>
+
+                                            <span
+                                                className={cn(
+                                                    'rounded-full bg-badge-blue/15 px-3 py-1 text-xs font-medium text-badge-blue border border-badge-blue/30',
                                                     glTypeStyleMap[
                                                         account
                                                             .general_ledger_type
                                                     ].iconText
                                                 )}
-                                                icon={account.icon as TIcon}
-                                            />
-                                        )}
+                                            >
+                                                {searchTerm
+                                                    ? highlightMatch(
+                                                          account.general_ledger_type,
+                                                          searchTerm
+                                                      )
+                                                    : account.general_ledger_type}
+                                            </span>
+                                        </div>
                                     </div>
+                                </TooltipTrigger>
 
-                                    <div className="flex-1 min-w-0">
-                                        <p className="font-semibold text-foreground truncate">
-                                            {searchTerm
-                                                ? highlightMatch(
-                                                      account.name,
-                                                      searchTerm
-                                                  )
-                                                : account.name}
-                                        </p>
-
-                                        <p
-                                            className={cn(
-                                                'text-sm text-muted-foreground truncate transition-all duration-300',
-                                                'opacity-0 max-h-0 translate-y-1',
-                                                'group-hover:opacity-100 group-hover:max-h-10 group-hover:translate-y-0'
-                                            )}
-                                        >
-                                            {searchTerm
-                                                ? highlightMatch(
-                                                      account.description ?? '',
-                                                      searchTerm
-                                                  )
-                                                : account.description}
-                                        </p>
-                                    </div>
-
-                                    <div
-                                        className={cn(
-                                            'hidden sm:flex items-center gap-2 transition-all duration-300',
-                                            'opacity-0 translate-y-2',
-                                            'group-hover:opacity-100 group-hover:translate-y-0'
-                                        )}
+                                <TooltipContent
+                                    align="center"
+                                    className="flex flex-col p-0 bg-transparent"
+                                    side="top"
+                                    sideOffset={0}
+                                >
+                                    <Button
+                                        className="z-9999 absolute -right-16 bottom-0 hover:scale-105"
+                                        onClick={() => {
+                                            createModal.onOpenChange(true)
+                                            // setSelectedAccount(account)
+                                            // setIndex(
+                                            //     account.index === 0
+                                            //         ? 0
+                                            //         : account.index - 1
+                                            // )
+                                        }}
+                                        size="xs"
                                     >
-                                        <span
-                                            className={cn(
-                                                'g-badge-red/15 px-3 py-1 text-xs font-medium text-badge-red border border-badge-red/30'
-                                            )}
-                                        >
-                                            {searchTerm
-                                                ? highlightMatch(
-                                                      account.type,
-                                                      searchTerm
-                                                  )
-                                                : account.type}
-                                        </span>
+                                        <PlusIcon />
+                                        create account
+                                    </Button>
 
-                                        <span
-                                            className={cn(
-                                                'rounded-full bg-badge-blue/15 px-3 py-1 text-xs font-medium text-badge-blue border border-badge-blue/30',
-                                                glTypeStyleMap[
-                                                    account.general_ledger_type
-                                                ].iconText
-                                            )}
-                                        >
-                                            {searchTerm
-                                                ? highlightMatch(
-                                                      account.general_ledger_type,
-                                                      searchTerm
-                                                  )
-                                                : account.general_ledger_type}
-                                        </span>
-                                    </div>
-                                </div>
-                            </TooltipTrigger>
-
-                            <TooltipContent
-                                align="center"
-                                className="flex flex-col p-0 bg-transparent"
-                                side="top"
-                                sideOffset={0}
-                            >
-                                <Button
-                                    className="z-9999 absolute -right-16 bottom-0 hover:scale-105"
-                                    onClick={() => {
-                                        createModal.onOpenChange(true)
-                                        setSelectedAccount(account)
-                                        setIndex(
-                                            account.index === 0
-                                                ? 0
-                                                : account.index - 1
-                                        )
-                                    }}
-                                    size="xs"
-                                >
-                                    <PlusIcon />
-                                    create account
-                                </Button>
-
-                                <Button
-                                    className={cn(
-                                        'z-9999 absolute -right-16 hover:scale-105',
-                                        !account.description
-                                            ? 'top-17'
-                                            : 'top-19'
-                                    )}
-                                    onClick={() => {
-                                        createModal.onOpenChange(true)
-                                        setSelectedAccount(account)
-                                        setIndex(account.index - 1)
-                                    }}
-                                    size="xs"
-                                >
-                                    <PlusIcon />
-                                    create account
-                                </Button>
-                            </TooltipContent>
-                        </Tooltip>
-                    </div>
-                </PopoverTrigger>
-            </div>
-            <AccountActions account={account} />
-        </Popover>
-    )
-}
+                                    <Button
+                                        className={cn(
+                                            'z-9999 absolute -right-16 hover:scale-105',
+                                            !account.description
+                                                ? 'top-17'
+                                                : 'top-19'
+                                        )}
+                                        onClick={() => {
+                                            createModal.onOpenChange(true)
+                                            // setSelectedAccount(account)
+                                            // setIndex(account.index - 1)
+                                        }}
+                                        size="xs"
+                                    >
+                                        <PlusIcon />
+                                        create account
+                                    </Button>
+                                </TooltipContent>
+                            </Tooltip>
+                        </div>
+                    </PopoverTrigger>
+                </div>
+                <AccountActions account={account} />
+            </Popover>
+        )
+    }
+)

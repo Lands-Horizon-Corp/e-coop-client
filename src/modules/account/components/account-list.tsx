@@ -17,18 +17,10 @@ import {
     sortableKeyboardCoordinates,
     verticalListSortingStrategy,
 } from '@dnd-kit/sortable'
-import { ArrowUpDown, Plus, Search, SearchX } from 'lucide-react'
+import { ArrowUpDown, Plus, Search } from 'lucide-react'
 
 import RefreshButton from '@/components/buttons/refresh-button'
 import { Button } from '@/components/ui/button'
-import {
-    Empty,
-    EmptyContent,
-    EmptyDescription,
-    EmptyHeader,
-    EmptyMedia,
-    EmptyTitle,
-} from '@/components/ui/empty'
 import { Input } from '@/components/ui/input'
 import { Skeleton } from '@/components/ui/skeleton'
 
@@ -67,18 +59,20 @@ export const AccountList = () => {
 
     const handleDragEnd = (event: DragEndEvent) => {
         const { active, over } = event
-        if (over && active.id !== over.id) {
-            setAccounts((items) => {
-                const oldIndex = items.findIndex((i) => i.id === active.id)
-                const newIndex = items.findIndex((i) => i.id === over.id)
-                reorderAccounts({
-                    ids: arrayMove(items, oldIndex, newIndex).map(
-                        (item) => item.id
-                    ),
-                })
-                return arrayMove(items, oldIndex, newIndex)
+
+        if (!over || active.id === over.id) return
+
+        setAccounts((items) => {
+            const oldIndex = items.findIndex((i) => i.id === active.id)
+            const newIndex = items.findIndex((i) => i.id === over.id)
+
+            if (oldIndex === -1 || newIndex === -1) return items
+            const newItems = arrayMove(items, oldIndex, newIndex)
+            reorderAccounts({
+                ids: newItems.map((item) => item.id),
             })
-        }
+            return newItems
+        })
     }
 
     const fuse = useMemo(
@@ -106,6 +100,8 @@ export const AccountList = () => {
 
         return fuse.search(search).map((result) => result.item)
     }, [search, fuse, accounts])
+
+    const isSearching = !!search.trim()
 
     return (
         <div className="mx-auto w-full max-w-3xl space-y-4 p-6">
@@ -153,70 +149,48 @@ export const AccountList = () => {
             {/* List */}
             {accountsQuery.isLoading || accountsQuery.isRefetching ? (
                 <div className="p-2 w-full flex flex-col space-y-2">
-                    {Array.from({ length: 5 }).map((_, idx) => {
-                        return (
-                            <div
-                                className=" p-2 flex gap-x-2 w-full "
-                                key={idx}
-                            >
-                                <Skeleton className="w-1/16 " />
-                                <div className="flex flex-col grow space-y-2">
-                                    <Skeleton className=" h-5 w-full " />
-                                    <Skeleton className=" h-5 w-1/2" />
-                                </div>
+                    {Array.from({ length: 5 }).map((_, idx) => (
+                        <div className="p-2 flex gap-x-2 w-full" key={idx}>
+                            <Skeleton className="w-1/16" />
+                            <div className="flex flex-col grow space-y-2">
+                                <Skeleton className="h-5 w-full" />
+                                <Skeleton className="h-5 w-1/2" />
                             </div>
-                        )
-                    })}
+                        </div>
+                    ))}
+                </div>
+            ) : isSearching ? (
+                <div className="space-y-2">
+                    {filtered.map((account) => (
+                        <AccountCard
+                            account={account}
+                            isSearching={true}
+                            key={account.id}
+                            searchTerm={search}
+                        />
+                    ))}
                 </div>
             ) : (
-                <>
-                    <DndContext
-                        collisionDetection={closestCenter}
-                        onDragEnd={handleDragEnd}
-                        sensors={sensors}
+                <DndContext
+                    collisionDetection={closestCenter}
+                    onDragEnd={handleDragEnd}
+                    sensors={sensors}
+                >
+                    <SortableContext
+                        items={accounts.map((a) => a.id)}
+                        strategy={verticalListSortingStrategy}
                     >
-                        <SortableContext
-                            items={filtered.map((a) => a.id)}
-                            strategy={verticalListSortingStrategy}
-                        >
-                            <div className="space-y-2">
-                                {filtered.map((account) => (
-                                    <AccountCard
-                                        account={account}
-                                        key={account.id}
-                                        searchTerm={search}
-                                    />
-                                ))}
-                            </div>
-                        </SortableContext>
-                    </DndContext>
-                    {filtered.length === 0 && (
-                        <Empty className="rounded-lg border border-dashed border-border text-center text-muted-foreground">
-                            <EmptyHeader>
-                                <EmptyMedia variant="icon">
-                                    <SearchX className="size-6" />
-                                </EmptyMedia>
-
-                                <EmptyTitle>No Accounts Found</EmptyTitle>
-
-                                <EmptyDescription>
-                                    We couldn’t find any accounts matching your
-                                    current filters. Try adjusting your search
-                                    criteria.
-                                </EmptyDescription>
-                            </EmptyHeader>
-
-                            <EmptyContent className="flex-row justify-center gap-2">
-                                <Button
-                                    onClick={() => accountsQuery.refetch()}
-                                    variant="outline"
-                                >
-                                    Refresh Accounts
-                                </Button>
-                            </EmptyContent>
-                        </Empty>
-                    )}
-                </>
+                        <div className="space-y-2">
+                            {accounts.map((account) => (
+                                <AccountCard
+                                    account={account}
+                                    key={account.id}
+                                    searchTerm=""
+                                />
+                            ))}
+                        </div>
+                    </SortableContext>
+                </DndContext>
             )}
         </div>
     )
