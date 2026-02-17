@@ -44,16 +44,19 @@ export type AccountActionType =
 export interface AccountActionExtra {
     onDeleteSuccess?: () => void
     entryType?: TEntryType
+    onEditSuccess?: () => void
 }
 
 interface UseAccountActionsProps {
     account: IAccount
     onDeleteSuccess?: () => void
+    onEditSuccess?: () => void
 }
 
 export const useAccountActions = ({
     account,
     onDeleteSuccess,
+    onEditSuccess,
 }: UseAccountActionsProps) => {
     const { open } = useTableRowActionStore<
         IAccount,
@@ -87,7 +90,6 @@ export const useAccountActions = ({
         open('view-accounting-ledger-transaction', {
             id: account.id,
             defaultValues: account,
-            extra: {},
         })
     }
 
@@ -95,7 +97,7 @@ export const useAccountActions = ({
         open('edit', {
             id: account.id,
             defaultValues: account,
-            extra: { onDeleteSuccess },
+            extra: { onEditSuccess },
         })
     }
 
@@ -132,6 +134,7 @@ interface AccountActionProps extends UseAccountActionsProps {}
 export const AccountActions = ({
     account,
     onDeleteSuccess,
+    onEditSuccess,
 }: AccountActionProps) => {
     const {
         // account,
@@ -141,10 +144,14 @@ export const AccountActions = ({
         handleDelete,
         openLedgerModal,
         handleViewAccountingLedger,
-    } = useAccountActions({ account, onDeleteSuccess })
+    } = useAccountActions({
+        account,
+        onDeleteSuccess,
+        onEditSuccess,
+    })
 
     return (
-        <PopoverContent className="w-64 p-2 rounded-2xl bg-background">
+        <PopoverContent className="w-64 p-2 rounded-2xl bg-background/80">
             <div className="flex flex-col gap-1">
                 {/* Edit */}
                 <button

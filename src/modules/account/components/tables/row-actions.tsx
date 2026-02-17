@@ -658,7 +658,7 @@ export const AccountRowContext = ({
     )
 }
 
-const getModalTitle = (entryType?: TEntryType) => {
+export const getModalTitle = (entryType?: TEntryType) => {
     if (!entryType) return 'General Ledger'
 
     const entryTypeNames: Record<TEntryType, string> = {

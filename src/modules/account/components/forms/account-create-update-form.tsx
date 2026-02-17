@@ -41,12 +41,14 @@ export interface IAccountCreateUpdateFormProps
         IClassProps,
         IForm<Partial<IAccountRequest>, IAccount, string, TAccountFormValues> {
     accountId?: TEntityId
+    onEditSuccess?: (account: IAccount) => void
 }
 
 const AccountCreateUpdateForm = ({
     className,
     accountId,
     autoSave = false,
+    onEditSuccess,
     ...formProps
 }: IAccountCreateUpdateFormProps) => {
     const { currentAuth } = useAuthUserWithOrgBranch()
@@ -83,10 +85,7 @@ const AccountCreateUpdateForm = ({
 
     const updateMutation = useUpdateById({
         options: {
-            onSuccess: (newData) => {
-                formProps.onSuccess?.(newData)
-                form.reset(newData as unknown as IAccountRequest)
-            },
+            onSuccess: formProps.onSuccess,
         },
     })
 
@@ -105,7 +104,12 @@ const AccountCreateUpdateForm = ({
         }
         if (accountId) {
             toast.promise(
-                updateMutation.mutateAsync({ id: accountId, payload: request }),
+                updateMutation
+                    .mutateAsync({ id: accountId, payload: request })
+                    .then((res) => {
+                        onEditSuccess?.(res)
+                        form.reset(res as unknown as IAccountRequest)
+                    }),
                 {
                     loading: 'Updating account...',
                     success: 'Account updated successfully!',
@@ -172,7 +176,7 @@ const AccountCreateUpdateForm = ({
                 <div className="flex gap-x-2">
                     <AccountContentForm form={form} isDisabled={isDisabled} />
                     <LoanConnectAccountSection
-                        className="my-2 w-[320px] shrink-0 max-w-[320px]"
+                        className="my-2 w-xs shrink-0 max-w-xs"
                         form={form}
                     />
                 </div>
@@ -227,7 +231,7 @@ export const AccountCreateUpdateFormModal = ({
 }) => {
     return (
         <Modal
-            className={cn('!max-w-[99vw] bg-popover', className)}
+            className={cn('max-w-[99vw]! bg-popover', className)}
             description={description}
             title={title}
             {...props}

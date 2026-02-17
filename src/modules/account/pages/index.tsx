@@ -3,8 +3,8 @@ import PermissionGuard from '@/modules/permission/components/permission-guard'
 import PageContainer from '@/components/containers/page-container'
 import { TableRowActionStoreProvider } from '@/components/data-table/store/data-table-action-store'
 
-import { AccountTableActionManager } from '../components/tables/row-actions'
 import { AccountProvider } from '../context/account-provider'
+import { AccountTableActionManager } from './account-table-manager'
 import AccountWrapper from './account-wrapper'
 
 export const Account = () => {

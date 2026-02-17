@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useMemo, useState } from 'react'
 
 import Fuse from 'fuse.js'
 
@@ -27,26 +27,27 @@ import { Skeleton } from '@/components/ui/skeleton'
 import { useReorderAccounts } from '../account.service'
 import { IAccount } from '../account.types'
 import { useAccountContext } from '../context/account-provider'
-import { AccountCard } from './account-card'
+import { AccountCard, TAccountModalState } from './account-card'
+import AccountCreateUpdateFormModal from './forms/account-create-update-form'
 
 export const AccountList = () => {
-    const { accountsQuery, createModal } = useAccountContext()
-    const [accounts, setAccounts] = useState<IAccount[]>([])
+    const {
+        accountsQuery,
+        createModal,
+        setAccounts,
+        accounts,
+        settings_payment_type_default_value,
+    } = useAccountContext()
 
-    const { mutate: reorderAccounts } = useReorderAccounts({
-        options: {
-            onSuccess: (data) => {
-                console.log(data)
-            },
-        },
+    const { mutate: reorderAccounts } = useReorderAccounts()
+
+    const [modalState, setModalState] = useState<{
+        account: IAccount | null
+        index: number
+    }>({
+        account: null,
+        index: 0,
     })
-
-    useEffect(() => {
-        if (!accountsQuery || !accountsQuery.data) return
-        if (accountsQuery.data) {
-            setAccounts(accountsQuery.data)
-        }
-    }, [accountsQuery.data, setAccounts])
 
     const [search, setSearch] = useState('')
 
@@ -103,8 +104,45 @@ export const AccountList = () => {
 
     const isSearching = !!search.trim()
 
+    const handleModalState = (modalState: TAccountModalState) => {
+        const { account, type } = modalState
+        const currentIndex = account.index
+        const lastIndex = accounts.length - 1
+
+        let newIndex = currentIndex
+
+        if (type === 'positive') {
+            newIndex = currentIndex + 1
+        } else if (type === 'negative') {
+            newIndex = currentIndex - 1
+        }
+
+        // Clamp index within bounds
+        newIndex = Math.max(0, Math.min(newIndex, lastIndex))
+
+        setModalState({
+            account,
+            index: newIndex,
+        })
+    }
+
     return (
         <div className="mx-auto w-full max-w-3xl space-y-4 p-6">
+            <AccountCreateUpdateFormModal
+                className=" min-w-[80vw] max-w-[80vw]"
+                formProps={{
+                    defaultValues: {
+                        index: modalState.index,
+                        general_ledger_type:
+                            modalState.account?.general_ledger_type,
+                        default_payment_type_id:
+                            settings_payment_type_default_value?.id,
+                        default_payment_type:
+                            settings_payment_type_default_value,
+                    },
+                }}
+                {...createModal}
+            />
             <div className="sticky top-0 z-40 bg-background pb-4 space-y-4">
                 {/* Header */}
                 <div className="flex items-center justify-between">
@@ -147,7 +185,7 @@ export const AccountList = () => {
                 </div>
             </div>
             {/* List */}
-            {accountsQuery.isLoading || accountsQuery.isRefetching ? (
+            {accountsQuery.isLoading ? (
                 <div className="p-2 w-full flex flex-col space-y-2">
                     {Array.from({ length: 5 }).map((_, idx) => (
                         <div className="p-2 flex gap-x-2 w-full" key={idx}>
@@ -167,6 +205,7 @@ export const AccountList = () => {
                             isSearching={true}
                             key={account.id}
                             searchTerm={search}
+                            setModalState={handleModalState}
                         />
                     ))}
                 </div>
@@ -186,6 +225,7 @@ export const AccountList = () => {
                                     account={account}
                                     key={account.id}
                                     searchTerm=""
+                                    setModalState={handleModalState}
                                 />
                             ))}
                         </div>

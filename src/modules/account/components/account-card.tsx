@@ -19,13 +19,19 @@ import {
 import { useModalState } from '@/hooks/use-modal-state'
 
 import { IAccount } from '../account.types'
+import { useAccountContext } from '../context/account-provider'
 import { AccountActions } from './account-actions'
 
+export type TAccountModalState = {
+    account: IAccount
+    type: 'positive' | 'negative'
+}
 interface AccountCardProps {
     account: IAccount
     onEdit?: (account: IAccount) => void
     searchTerm: string
     isSearching?: boolean
+    setModalState: (data: TAccountModalState) => void
 }
 const glTypeStyleMap: Record<
     TGeneralLedgerType,
@@ -74,8 +80,8 @@ const glTypeStyleMap: Record<
 }
 
 export const AccountCard = memo(
-    ({ account, isSearching, searchTerm }: AccountCardProps) => {
-        const createModal = useModalState(false)
+    ({ account, isSearching, searchTerm, setModalState }: AccountCardProps) => {
+        const { createModal } = useAccountContext()
 
         const {
             attributes,
@@ -158,6 +164,7 @@ export const AccountCard = memo(
 
                                         <div className="flex-1 min-w-0">
                                             <p className="font-semibold text-foreground truncate">
+                                                {/* {account.index} */}
                                                 {searchTerm
                                                     ? highlightMatch(
                                                           account.name,
@@ -233,12 +240,10 @@ export const AccountCard = memo(
                                         className="z-9999 absolute -right-16 bottom-0 hover:scale-105"
                                         onClick={() => {
                                             createModal.onOpenChange(true)
-                                            // setSelectedAccount(account)
-                                            // setIndex(
-                                            //     account.index === 0
-                                            //         ? 0
-                                            //         : account.index - 1
-                                            // )
+                                            setModalState({
+                                                account: account,
+                                                type: 'negative',
+                                            })
                                         }}
                                         size="xs"
                                     >
@@ -255,8 +260,10 @@ export const AccountCard = memo(
                                         )}
                                         onClick={() => {
                                             createModal.onOpenChange(true)
-                                            // setSelectedAccount(account)
-                                            // setIndex(account.index - 1)
+                                            setModalState({
+                                                account: account,
+                                                type: 'positive',
+                                            })
                                         }}
                                         size="xs"
                                     >

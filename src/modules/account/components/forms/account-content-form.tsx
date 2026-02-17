@@ -102,11 +102,11 @@ const AccountContentForm = ({
                                 key={type}
                             >
                                 <div
-                                    className="shadow-xs  relative min-w-fit flex w-full h-10 items-center  gap-2 rounded-lg border  px-2 outline-none duration-200 ease-out has-[:checked]:border-primary/30 has-[:checked]:bg-primary/40"
+                                    className="shadow-xs  relative min-w-fit flex w-full h-10 items-center  gap-2 rounded-lg border  px-2 outline-none duration-200 ease-out has-checked:border-primary/30 has-checked:bg-primary/40"
                                     key={type}
                                 >
                                     <RadioGroupItem
-                                        className="order-1 has-[:checked]:text-primary after:absolute after:inset-0"
+                                        className="order-1 has-checked:text-primary after:absolute after:inset-0"
                                         id={`other-info-${type}`}
                                         value={type}
                                     />
@@ -229,7 +229,7 @@ const AccountContentForm = ({
                                                             key={type}
                                                         >
                                                             <div
-                                                                className="shadow-xs relative flex w-full h-full items-center gap-2 rounded-2xl border border-input p-3 outline-none duration-200 ease-out has-[:checked]:border-primary/30 has-[:checked]:bg-primary/40"
+                                                                className="shadow-xs relative flex w-full h-full items-center gap-2 rounded-2xl border border-input p-3 outline-none duration-200 ease-out has-checked:border-primary/30 has-checked:bg-primary/40"
                                                                 key={type}
                                                             >
                                                                 <RadioGroupItem

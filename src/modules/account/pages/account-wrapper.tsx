@@ -1,12 +1,9 @@
 import { useRef } from 'react'
 
-import { AccountCreateUpdateFormModal } from '@/modules/account'
-
 import { ChevronDownIcon } from '@/components/icons'
 import { Button } from '@/components/ui/button'
 
 import { AccountList } from '../components/account-list'
-import { useAccountContext } from '../context/account-provider'
 
 const AccountWrapper = () => {
     const accountListRef = useRef<HTMLDivElement | null>(null)
@@ -20,26 +17,12 @@ const AccountWrapper = () => {
             behavior: 'smooth',
         })
     }
-    const { settings_payment_type_default_value, createModal } =
-        useAccountContext()
 
     return (
         <div
             className="flex w-full flex-col ecoop-scroll h-screen overflow-y-auto items-start gap-4"
             ref={accountListRef}
         >
-            <AccountCreateUpdateFormModal
-                className=" min-w-[80vw] max-w-[80vw]"
-                formProps={{
-                    defaultValues: {
-                        default_payment_type_id:
-                            settings_payment_type_default_value?.id,
-                        default_payment_type:
-                            settings_payment_type_default_value,
-                    },
-                }}
-                {...createModal}
-            />
             <AccountList />
             <div className="fixed bottom-6 right-6 flex flex-col gap-2 z-50">
                 <Button

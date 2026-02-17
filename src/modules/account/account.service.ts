@@ -276,6 +276,11 @@ export const useReorderAccounts = createMutationFactory<
             )
         ).data
     },
+    invalidationFn: (args) => {
+        args.queryClient.invalidateQueries({
+            queryKey: ['account', 'all', 'all'],
+        })
+    },
 })
 
 export const useAccountLoanConnect = createMutationFactory<
