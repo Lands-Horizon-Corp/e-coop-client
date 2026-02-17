@@ -168,9 +168,13 @@ export const MemberProfilePersonalInfoSchema = z.object({
     signature_media_id: entityIdSchema.optional(),
     signature_media: z.any(), // JUST FOR SHOWING MEDIA IMAGE IN FORM
 
-    member_address: z.array(MemberAddressSchema),
-    member_address_deleted_id: z.array(entityIdSchema),
+    member_address: z.array(MemberAddressSchema).nullable().optional(),
+    member_address_deleted_id: z.array(entityIdSchema).nullable().optional(),
 })
+
+export type TMemberProfilePersonalInfoSchema = z.infer<
+    typeof MemberProfilePersonalInfoSchema
+>
 
 // 🏛️ Membership Info
 export const MemberProfileMembershipInfoSchema = z.object({

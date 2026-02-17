@@ -61,6 +61,7 @@ import { IQrScanResult } from '../qr-crypto'
 import { IUserBase } from '../user/user.types'
 import {
     TMemberProfileMembershipInfoSchema,
+    TMemberProfilePersonalInfoSchema,
     TQuickCreateMemberProfileSchema,
 } from './member-profile.validation'
 
@@ -241,31 +242,33 @@ export interface IMemberIncomeRequest {
 
 // THIS IS ONLY USE FOR MEMBER PROFILE UPDATE
 // 📌 Identity & Personal Info
-export interface IMemberProfilePersonalInfoRequest {
-    first_name: string
-    middle_name?: string
-    last_name: string
-    full_name?: string
-    suffix?: string
-    member_gender_id?: TEntityId
-    birthdate?: string
-    contact_number?: string
-    business_contact_number?: string
+// export interface IMemberProfilePersonalInfoRequest {
+//     first_name: string
+//     middle_name?: string
+//     last_name: string
+//     full_name?: string
+//     suffix?: string
+//     member_gender_id?: TEntityId
+//     birthdate?: string
+//     contact_number?: string
+//     business_contact_number?: string
 
-    birth_place?: string // ISO ALPHA-3
+//     birth_place?: string // ISO ALPHA-3
 
-    civil_status: TCivilStatus
+//     civil_status: TCivilStatus
 
-    occupation_id?: TEntityId
+//     occupation_id?: TEntityId
 
-    business_address?: string
-    business_contact?: string
+//     business_address?: string
+//     business_contact?: string
 
-    member_address?: IMemberAddressRequest[]
+//     member_address?: IMemberAddressRequest[]
 
-    notes?: string
-    description?: string
-}
+//     notes?: string
+//     description?: string
+// }
+
+export type IMemberProfilePersonalInfoRequest = TMemberProfilePersonalInfoSchema
 
 // 🏛️ Membership Info
 export type IMemberProfileMembershipInfoRequest =

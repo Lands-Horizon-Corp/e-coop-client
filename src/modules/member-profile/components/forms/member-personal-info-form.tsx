@@ -419,14 +419,24 @@ const MemberPersonalInfoForm = ({
                                 hiddenFields={hiddenFields}
                                 label="Business Contact"
                                 name="business_contact_number"
-                                render={({ field }) => (
-                                    <Input
-                                        {...field}
-                                        className="bg-background"
-                                        disabled={isDisabled(field.name)}
-                                        id={field.name}
-                                        placeholder="Business Contact"
-                                    />
+                                render={({
+                                    field,
+                                    fieldState: { invalid },
+                                }) => (
+                                    <div className="relative flex flex-1 items-center gap-x-2">
+                                        <VerifiedPatchIcon
+                                            className={cn(
+                                                'absolute right-2 top-1/2 z-0 size-4 -translate-y-1/2 text-primary delay-300 duration-300 ease-in-out',
+                                                (invalid || error) &&
+                                                    'text-destructive'
+                                            )}
+                                        />
+                                        <PhoneInput
+                                            {...field}
+                                            className="w-full"
+                                            defaultCountry="PH"
+                                        />
+                                    </div>
                                 )}
                             />
                             <FormFieldWrapper
