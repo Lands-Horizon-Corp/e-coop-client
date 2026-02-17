@@ -35,7 +35,7 @@ const WorkTimeDurationDisplay = ({ hours, minutes, seconds }: Props) => {
     )
 }
 
-export const LiveWorkTimeDurationDisplay = ({
+const useLiveTimeTicker = ({
     timeIn,
     pollingInterval = 1_000,
     onTick,
@@ -56,7 +56,43 @@ export const LiveWorkTimeDurationDisplay = ({
         return () => clearInterval(interval)
     }, [onTick, pollingInterval, timeIn])
 
+    return values
+}
+
+export const LiveWorkTimeDurationDisplay = ({
+    timeIn,
+    pollingInterval = 1_000,
+    onTick,
+}: {
+    timeIn: Date | string
+    pollingInterval?: number
+    onTick?: (timeValue: Props) => void
+}) => {
+    const values = useLiveTimeTicker({ timeIn, pollingInterval, onTick })
+
     return <WorkTimeDurationDisplay {...values} />
+}
+
+export const LiveWorkTimeDurationDisplayMini = ({
+    timeIn,
+    pollingInterval = 1_000,
+    onTick,
+}: {
+    timeIn: Date | string
+    pollingInterval?: number
+    onTick?: (timeValue: Props) => void
+}) => {
+    const values = useLiveTimeTicker({ timeIn, pollingInterval, onTick })
+
+    const hour = `${values?.hours}`.padStart(2, '0')
+    const mins = `${values?.minutes}`.padStart(2, '0')
+    const secs = `${values?.seconds}`.padStart(2, '0')
+
+    return (
+        <div className="inline-flex items-center text-xs justify-center gap-x-2 rounded-sm px-2">
+            <p className="text-center">{`${hour}:${mins}:${secs}`}</p>
+        </div>
+    )
 }
 
 export default WorkTimeDurationDisplay
