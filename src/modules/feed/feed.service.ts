@@ -18,7 +18,7 @@ const {
 
 // ⚙️🛠️ API SERVICE HERE
 export const {
-    API, // rarely used, for raw calls
+    API: FeedAPI, // rarely used, for raw calls
     route: feedAPIRoute, // matches url above
 
     create: createFeed,
@@ -56,7 +56,7 @@ export const useLikeFeed = createMutationFactory<
     { feedId: TEntityId }
 >({
     mutationFn: async ({ feedId }) => {
-        const response = await API.put<void, void>(
+        const response = await FeedAPI.put<void, void>(
             `${feedAPIRoute}/${feedId}/like`
         )
         return response.data
@@ -77,9 +77,10 @@ export const useFeedCreateComment = createMutationFactory<
     Error,
     { feedId: TEntityId; payload: IFeedCommentRequest }
 >({
-    mutationFn: async ({ feedId }) => {
-        const response = await API.put<IFeedCommentRequest, IFeedComment>(
-            `${feedAPIRoute}/${feedId}/comment`
+    mutationFn: async ({ feedId, payload }) => {
+        const response = await FeedAPI.put<IFeedCommentRequest, IFeedComment>(
+            `${feedAPIRoute}/${feedId}/comment`,
+            payload
         )
         return response.data
     },

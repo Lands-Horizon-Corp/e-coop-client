@@ -7,7 +7,7 @@ export const abbreviateUUID = (uuid: string, abbrevLength = 7) => {
     return cleanedUUID.substring(0, abbrevLength)
 }
 
-export const imageCompressed = async (file: File): Promise<File> => {
+export const compressImage = async (file: File): Promise<File> => {
     let processedFile = file
     const imageTypes = ['image/jpeg', 'image/png', 'image/jpg', 'image/webp']
     const isImage =

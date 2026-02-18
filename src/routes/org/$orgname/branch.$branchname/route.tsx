@@ -1,10 +1,11 @@
-import { useEffect, useState } from 'react'
+import { RefObject, useEffect, useRef, useState } from 'react'
 
 import { Outlet, createFileRoute } from '@tanstack/react-router'
 
 import { useAuthUserWithOrgBranch } from '@/modules/authentication/authgentication.store'
 import TimeMachineTimeStatusBar from '@/modules/user-organization/components/time-machine-time-status-bar'
 import GlobalHotkeysProvider from '@/providers/global-hotkeys-provider'
+import { ScrollContext } from '@/providers/scroll-parent-provider'
 import { motion } from 'framer-motion'
 
 import { CursorFillIcon } from '@/components/icons'
@@ -20,6 +21,8 @@ export const Route = createFileRoute('/org/$orgname/branch/$branchname')({
 })
 
 function RouteComponent() {
+    const scrollRef = useRef<HTMLDivElement>(null)
+
     return (
         <AuthGuard>
             {/* <CursorFollow /> */}
@@ -27,13 +30,23 @@ function RouteComponent() {
                 <SidebarProvider>
                     <OrgBranchSidebar />
                     <GlobalHotkeysProvider />
-                    <SidebarInset className="ecoop-scroll min-h-screen max-h-screen w-full overflow-y-auto">
-                        <UserNav className="sticky top-0 z-50 bg-background" />
-                        <main className="flex-1">
-                            <Outlet />
-                        </main>
-                        <TimeMachineTimeStatBar />
-                    </SidebarInset>
+
+                    <ScrollContext.Provider
+                        value={
+                            scrollRef as unknown as RefObject<HTMLDivElement>
+                        }
+                    >
+                        <SidebarInset
+                            className="ecoop-scroll min-h-screen max-h-screen w-full overflow-y-auto"
+                            ref={scrollRef}
+                        >
+                            <UserNav className="sticky top-0 z-50 bg-background" />
+                            <main className="flex-1">
+                                <Outlet />
+                            </main>
+                            <TimeMachineTimeStatBar />
+                        </SidebarInset>
+                    </ScrollContext.Provider>
                 </SidebarProvider>
             </OrgBranchUrlGuard>
         </AuthGuard>

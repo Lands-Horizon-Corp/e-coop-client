@@ -80,6 +80,7 @@ export const createDataLayerFactory = <
     const useCreate = createMutationFactory<TResponse, Error, TRequest>({
         mutationFn: (payload) => baseAPI.create({ payload }),
         defaultInvalidates: [
+            [baseKey, 'infinite'],
             [baseKey, 'paginated'],
             [baseKey, 'all'],
         ],

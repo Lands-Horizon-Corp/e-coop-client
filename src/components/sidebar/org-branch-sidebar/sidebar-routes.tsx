@@ -22,6 +22,7 @@ import {
     HandDropCoinsIcon,
     HandHeartIcon,
     HandWithdrawIcon,
+    HomeFillIcon,
     HouseLockIcon,
     LayersIcon,
     MaintenanceIcon,
@@ -97,6 +98,18 @@ export const generateSidebarGroups = (
                     canAccess: hasPermissionFromAuth({
                         action: 'Read',
                         resourceType: 'Dashboard',
+                    }),
+                    // userType: ['employee', 'member'],
+                },
+                {
+                    type: 'item',
+                    title: 'Feed',
+                    url: `${baseUrl}/feed`,
+                    shortDescription: 'Access Feed page',
+                    icon: HomeFillIcon,
+                    canAccess: hasPermissionFromAuth({
+                        action: 'Read',
+                        resourceType: 'Feed',
                     }),
                     // userType: ['employee', 'member'],
                 },

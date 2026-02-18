@@ -22,6 +22,8 @@ interface IFormResetSubmitFooterProps extends IClassProps {
     showConfirmOnReset?: boolean
 
     submitText?: React.ReactNode | string
+    submitClassName?: string
+
     resetText?: string
 
     error?: string
@@ -31,6 +33,8 @@ interface IFormResetSubmitFooterProps extends IClassProps {
 
     // additional children between buttons
     midChildren?: React.ReactNode
+
+    buttonContainerClassName?: string
 
     onReset?: () => void
     onSubmit?: (e: MouseEvent<HTMLButtonElement>) => void
@@ -51,6 +55,9 @@ const FormFooterResetSubmit = ({
 
     resetButtonType = 'button',
     submitButtonType = 'submit',
+    submitClassName,
+
+    buttonContainerClassName,
 
     onSubmit,
     onReset,
@@ -60,7 +67,12 @@ const FormFooterResetSubmit = ({
         <div className={cn('space-y-2 py-1 px-0', className)}>
             <FormErrorMessage errorMessage={error} />
             {showSeparator && <Separator className="my-2 sm:my-4" />}
-            <div className="flex items-center justify-end gap-x-2">
+            <div
+                className={cn(
+                    'flex items-center justify-end gap-x-2',
+                    buttonContainerClassName
+                )}
+            >
                 {!hideReset && (
                     <Button
                         className="w-full self-end px-8 sm:w-fit"
@@ -89,7 +101,10 @@ const FormFooterResetSubmit = ({
                     </Button>
                 )}
                 <Button
-                    className="w-full self-end px-8 sm:w-fit"
+                    className={cn(
+                        'w-full self-end px-8 sm:w-fit',
+                        submitClassName
+                    )}
                     disabled={isLoading || readOnly || disableSubmit}
                     onClick={onSubmit}
                     size="sm"
