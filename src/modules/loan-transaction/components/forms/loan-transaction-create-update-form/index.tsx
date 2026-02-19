@@ -1483,7 +1483,11 @@ const AccountPickerField = ({
                                 {accountId && (
                                     <Popover>
                                         <PopoverTrigger asChild>
-                                            <Button className="ml-auto" size="xs" variant="outline">
+                                            <Button
+                                                className="ml-auto"
+                                                size="xs"
+                                                variant="outline"
+                                            >
                                                 Loan Account Connections
                                             </Button>
                                         </PopoverTrigger>
