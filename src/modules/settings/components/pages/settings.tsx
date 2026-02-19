@@ -30,7 +30,7 @@ const settingsNavItems: SettingsNavItem[] = [
     },
     {
         id: 'BranchSettings',
-        label: 'Branch Settings',
+        label: 'Global Settings',
         icon: BuildingGearIcon,
         component: BranchSettings,
         requiredUserTypes: ['employee', 'admin', 'owner'],

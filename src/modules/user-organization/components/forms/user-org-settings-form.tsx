@@ -315,14 +315,14 @@ const UserOrgSettingsForm = ({
                         <div className="grid gap-x-4 gap-y-3 md:grid-cols-3">
                             <FormFieldWrapper
                                 control={form.control}
-                                label="Start OR"
+                                label="Start"
                                 name="payment_or_start"
                                 render={({ field }) => (
                                     <Input
                                         {...field}
                                         disabled={isDisabled(field.name)}
                                         min="0"
-                                        placeholder="Start OR"
+                                        placeholder="Start"
                                     />
                                 )}
                             />

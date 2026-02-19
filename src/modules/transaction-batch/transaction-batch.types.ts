@@ -47,6 +47,7 @@ export interface ITransactionBatch
     // FOR LESS
     petty_cash: number
     loan_releases: number
+    cash_check_voucher_total: number
     time_deposit_withdrawal: number
     savings_withdrawal: number
 

@@ -39,7 +39,7 @@ export const UserOrganizationSettingsSchema = z.object({
 
     payment_or_start: z.coerce
         .number()
-        .min(1, 'Start OR must be at least 1')
+        .min(1, 'Start must be at least 1')
         .optional(),
 
     payment_or_end: z.coerce

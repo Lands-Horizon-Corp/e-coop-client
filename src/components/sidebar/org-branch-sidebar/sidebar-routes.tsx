@@ -166,14 +166,14 @@ export const generateSidebarGroups = (
                 },
                 {
                     type: 'item',
-                    icon: BookIcon,
-                    title: 'Journal Voucher',
-                    url: `${baseUrl}/journal-voucher`,
+                    icon: MoneyCheckIcon,
+                    title: 'Loans',
+                    url: `${baseUrl}/loan`,
                     canAccess: hasPermissionFromAuth({
                         action: 'Read',
-                        resourceType: 'JournalVoucher',
+                        resourceType: 'Loan',
                     }),
-                    shortDescription: 'Manage journal vouchers',
+                    shortDescription: 'Manage loans / apply loan',
                 },
                 {
                     type: 'item',
@@ -188,6 +188,17 @@ export const generateSidebarGroups = (
                 },
                 {
                     type: 'item',
+                    icon: BookIcon,
+                    title: 'Journal Voucher',
+                    url: `${baseUrl}/journal-voucher`,
+                    canAccess: hasPermissionFromAuth({
+                        action: 'Read',
+                        resourceType: 'JournalVoucher',
+                    }),
+                    shortDescription: 'Manage journal vouchers',
+                },
+                {
+                    type: 'item',
                     icon: WrenchIcon,
                     title: 'Adjustment Entry',
                     url: `${baseUrl}/adjustment-entry`,
@@ -196,17 +207,6 @@ export const generateSidebarGroups = (
                         resourceType: 'AdjustmentEntry',
                     }),
                     shortDescription: 'Manage cash adjustment entries',
-                },
-                {
-                    type: 'item',
-                    icon: MoneyCheckIcon,
-                    title: 'Loans',
-                    url: `${baseUrl}/loan`,
-                    canAccess: hasPermissionFromAuth({
-                        action: 'Read',
-                        resourceType: 'Loan',
-                    }),
-                    shortDescription: 'Manage loans / apply loan',
                 },
             ],
         },

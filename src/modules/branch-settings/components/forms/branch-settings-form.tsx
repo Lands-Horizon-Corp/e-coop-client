@@ -434,7 +434,7 @@ const BranchSettingsForm = ({
                     </div>
                     <Separator />
 
-                    {/* Withdraw OR Settings */}
+                    {/* Withdraw Reference Number Settings */}
                     <div className="space-y-4 p-4 bg-secondary/60 dark:bg-popover rounded-xl">
                         <div className="flex items-center gap-3">
                             <div className="size-fit rounded-full bg-destructive/40 p-2 dark:bg-destructive/40/20">
@@ -442,11 +442,11 @@ const BranchSettingsForm = ({
                             </div>
                             <div>
                                 <h3 className="text-lg font-semibold">
-                                    Withdraw OR Settings
+                                    Withdraw Reference Number Settings
                                 </h3>
                                 <p className="text-sm text-muted-foreground">
-                                    Configure official receipt settings for
-                                    withdrawals
+                                    Configure reference number settings for
+                                    withdrawals reference number
                                 </p>
                             </div>
                         </div>
@@ -454,49 +454,49 @@ const BranchSettingsForm = ({
                         <div className="grid gap-x-4 gap-y-3 md:grid-cols-4">
                             <FormFieldWrapper
                                 control={form.control}
-                                label="Start OR"
+                                label="Start"
                                 name="withdraw_or_start"
                                 render={({ field }) => (
                                     <Input
                                         {...field}
                                         disabled={isDisabled(field.name)}
                                         min="0"
-                                        placeholder="Start OR"
+                                        placeholder="Start"
                                         type="text"
                                     />
                                 )}
                             />
                             <FormFieldWrapper
                                 control={form.control}
-                                label="Current OR"
+                                label="Current"
                                 name="withdraw_or_current"
                                 render={({ field }) => (
                                     <Input
                                         {...field}
                                         disabled={isDisabled(field.name)}
                                         min="0"
-                                        placeholder="Current OR"
+                                        placeholder="Current"
                                         type="text"
                                     />
                                 )}
                             />
                             <FormFieldWrapper
                                 control={form.control}
-                                label="End OR"
+                                label="End"
                                 name="withdraw_or_end"
                                 render={({ field }) => (
                                     <Input
                                         {...field}
                                         disabled={isDisabled(field.name)}
                                         min="0"
-                                        placeholder="End OR"
+                                        placeholder="End"
                                         type="text"
                                     />
                                 )}
                             />
                             <FormFieldWrapper
                                 control={form.control}
-                                label="OR padding"
+                                label="padding"
                                 name="withdraw_padding"
                                 render={({ field }) => (
                                     <Input
@@ -509,34 +509,34 @@ const BranchSettingsForm = ({
                             />
                             <FormFieldWrapper
                                 control={form.control}
-                                label="Common OR"
+                                label="Common Reference Number"
                                 name="withdraw_common_or"
                                 render={({ field }) => (
                                     <Input
                                         {...field}
                                         disabled={isDisabled(field.name)}
-                                        placeholder="Enter common OR"
+                                        placeholder="Enter common"
                                         type="text"
                                     />
                                 )}
                             />
                             <FormFieldWrapper
                                 control={form.control}
-                                label="OR Iteration"
+                                label="Iteration"
                                 name="withdraw_or_iteration"
                                 render={({ field }) => (
                                     <Input
                                         {...field}
                                         disabled={isDisabled(field.name)}
                                         min="0"
-                                        placeholder="OR Iteration"
+                                        placeholder="Iteration"
                                         type="text"
                                     />
                                 )}
                             />
                             <FormFieldWrapper
                                 control={form.control}
-                                label="OR Prefix"
+                                label="Prefix"
                                 name="withdraw_prefix"
                                 render={({ field }) => (
                                     <Input
@@ -551,17 +551,17 @@ const BranchSettingsForm = ({
 
                         <div className="space-y-3">
                             <SwitchFormField
-                                description="Allow users to manually input OR numbers form withdrawals"
+                                description="Allow users to manually input reference number numbers form withdrawals"
                                 form={form}
                                 isDisabled={isDisabled}
                                 label="Allow user Input"
                                 name="withdraw_allow_user_input"
                             />
                             <SwitchFormField
-                                description="Allow users to use the date as additional tol OR"
+                                description="Allow users to use the date as additional to Reference Number"
                                 form={form}
                                 isDisabled={isDisabled}
-                                label="Allow use date to OR"
+                                label="Allow use date to reference number"
                                 name="withdraw_use_date_or"
                             />
                         </div>
@@ -569,7 +569,7 @@ const BranchSettingsForm = ({
 
                     <Separator />
 
-                    {/* Deposit OR Settings */}
+                    {/* Deposit Settings */}
                     <div className="space-y-4 p-4 bg-secondary/60 dark:bg-popover rounded-xl">
                         <div className="flex items-center gap-3">
                             <div className="size-fit rounded-full bg-primary/10 p-2 dark:bg-primary/10/20">
@@ -577,10 +577,10 @@ const BranchSettingsForm = ({
                             </div>
                             <div>
                                 <h3 className="text font-semibold">
-                                    Deposit OR Settings
+                                    Deposit Reference Number Settings
                                 </h3>
                                 <p className="text-xs text-muted-foreground">
-                                    Configure official receipt settings for
+                                    Configure reference number settings for
                                     deposits
                                 </p>
                             </div>
@@ -589,14 +589,14 @@ const BranchSettingsForm = ({
                         <div className="grid gap-x-4 gap-y-3 md:grid-cols-4">
                             <FormFieldWrapper
                                 control={form.control}
-                                label="Start OR"
+                                label="Start"
                                 name="deposit_or_start"
                                 render={({ field }) => (
                                     <Input
                                         {...field}
                                         disabled={isDisabled(field.name)}
                                         min="0"
-                                        placeholder="Start OR"
+                                        placeholder="Start"
                                         type="text"
                                     />
                                 )}
@@ -604,14 +604,14 @@ const BranchSettingsForm = ({
 
                             <FormFieldWrapper
                                 control={form.control}
-                                label="Current OR"
+                                label="Current"
                                 name="deposit_or_current"
                                 render={({ field }) => (
                                     <Input
                                         {...field}
                                         disabled={isDisabled(field.name)}
                                         min="0"
-                                        placeholder="Current OR"
+                                        placeholder="Current"
                                         type="text"
                                     />
                                 )}
@@ -619,28 +619,28 @@ const BranchSettingsForm = ({
 
                             <FormFieldWrapper
                                 control={form.control}
-                                label="End OR"
+                                label="End"
                                 name="deposit_or_end"
                                 render={({ field }) => (
                                     <Input
                                         {...field}
                                         disabled={isDisabled(field.name)}
                                         min="0"
-                                        placeholder="End OR"
+                                        placeholder="End"
                                         type="text"
                                     />
                                 )}
                             />
                             <FormFieldWrapper
                                 control={form.control}
-                                label="OR Iteration"
+                                label="Iteration"
                                 name="deposit_or_iteration"
                                 render={({ field }) => (
                                     <Input
                                         {...field}
                                         disabled={isDisabled(field.name)}
                                         min="0"
-                                        placeholder="OR Iteration"
+                                        placeholder="Iteration"
                                         type="text"
                                     />
                                 )}
@@ -648,13 +648,13 @@ const BranchSettingsForm = ({
                             <FormFieldWrapper
                                 className="col-span-2"
                                 control={form.control}
-                                label="OR padding"
+                                label="Padding"
                                 name="deposit_padding"
                                 render={({ field }) => (
                                     <Input
                                         {...field}
                                         disabled={isDisabled(field.name)}
-                                        placeholder="Enter OR padding"
+                                        placeholder="Enter padding"
                                         type="text"
                                     />
                                 )}
@@ -662,13 +662,13 @@ const BranchSettingsForm = ({
                             <FormFieldWrapper
                                 className="col-span-2"
                                 control={form.control}
-                                label="Common OR"
+                                label="Common Reference Number"
                                 name="withdraw_common_or"
                                 render={({ field }) => (
                                     <Input
                                         {...field}
                                         disabled={isDisabled(field.name)}
-                                        placeholder="Enter common OR"
+                                        placeholder="Enter common"
                                         type="text"
                                     />
                                 )}
@@ -676,10 +676,10 @@ const BranchSettingsForm = ({
                         </div>
                         <div className="space-y-3">
                             <SwitchFormField
-                                description="Include date formatting in deposit OR numbers"
+                                description="Include date formatting in deposit reference number numbers"
                                 form={form}
                                 isDisabled={isDisabled}
-                                label="Use Date in OR"
+                                label="Use Date in Reference Number"
                                 name="deposit_use_date_or"
                             />
                         </div>
@@ -694,10 +694,10 @@ const BranchSettingsForm = ({
                             </div>
                             <div>
                                 <h3 className="text-lg font-semibold">
-                                    Journal Voucher Settings
+                                    Journal Voucher Reference Number Settings
                                 </h3>
                                 <p className="text-sm text-muted-foreground">
-                                    Configure official receipt settings for
+                                    Configure reference number settings for
                                     journal vouchers
                                 </p>
                             </div>
@@ -706,35 +706,35 @@ const BranchSettingsForm = ({
                         <div className="grid gap-x-4 gap-y-3 md:grid-cols-4">
                             <FormFieldWrapper
                                 control={form.control}
-                                label="Start OR"
+                                label="Start"
                                 name="journal_voucher_or_start"
                                 render={({ field }) => (
                                     <Input
                                         {...field}
                                         disabled={isDisabled(field.name)}
                                         min="0"
-                                        placeholder="Start OR"
+                                        placeholder="Start"
                                         type="text"
                                     />
                                 )}
                             />
                             <FormFieldWrapper
                                 control={form.control}
-                                label="Current OR"
+                                label="Current"
                                 name="journal_voucher_or_current"
                                 render={({ field }) => (
                                     <Input
                                         {...field}
                                         disabled={isDisabled(field.name)}
                                         min="0"
-                                        placeholder="Current OR"
+                                        placeholder="Current"
                                         type="text"
                                     />
                                 )}
                             />
                             <FormFieldWrapper
                                 control={form.control}
-                                label="OR padding"
+                                label="padding"
                                 name="journal_voucher_padding"
                                 render={({ field }) => (
                                     <Input
@@ -747,7 +747,7 @@ const BranchSettingsForm = ({
                             />
                             <FormFieldWrapper
                                 control={form.control}
-                                label="OR Prefix"
+                                label="Prefix"
                                 name="journal_voucher_prefix"
                                 render={({ field }) => (
                                     <Input
@@ -762,17 +762,17 @@ const BranchSettingsForm = ({
 
                         <div className="space-y-3">
                             <SwitchFormField
-                                description="Allow users to manually input OR numbers"
+                                description="Allow users to manually input reference number numbers"
                                 form={form}
                                 isDisabled={isDisabled}
                                 label="Allow user Input"
                                 name="journal_voucher_allow_user_input"
                             />
                             <SwitchFormField
-                                description="Make OR Unique (NO DUPLICATES) if this is enabled"
+                                description="Make reference number Unique (NO DUPLICATES) if this is enabled"
                                 form={form}
                                 isDisabled={isDisabled}
-                                label="Use unique OR"
+                                label="Use unique reference number"
                                 name="journal_voucher_or_unique"
                             />
                         </div>
@@ -786,10 +786,10 @@ const BranchSettingsForm = ({
                             </div>
                             <div>
                                 <h3 className="text-lg font-semibold">
-                                    Adjustment Voucher Settings
+                                    Adjustment Voucher Reference Number Settings
                                 </h3>
                                 <p className="text-sm text-muted-foreground">
-                                    Configure official receipt settings for
+                                    Configure reference number settings for
                                     adjustment vouchers
                                 </p>
                             </div>
@@ -798,35 +798,35 @@ const BranchSettingsForm = ({
                         <div className="grid gap-x-4 gap-y-3 md:grid-cols-4">
                             <FormFieldWrapper
                                 control={form.control}
-                                label="Start OR"
+                                label="Start"
                                 name="adjustment_voucher_or_start"
                                 render={({ field }) => (
                                     <Input
                                         {...field}
                                         disabled={isDisabled(field.name)}
                                         min="0"
-                                        placeholder="Start OR"
+                                        placeholder="Start"
                                         type="text"
                                     />
                                 )}
                             />
                             <FormFieldWrapper
                                 control={form.control}
-                                label="Current OR"
+                                label="Current"
                                 name="adjustment_voucher_or_current"
                                 render={({ field }) => (
                                     <Input
                                         {...field}
                                         disabled={isDisabled(field.name)}
                                         min="0"
-                                        placeholder="Current OR"
+                                        placeholder="Current"
                                         type="text"
                                     />
                                 )}
                             />
                             <FormFieldWrapper
                                 control={form.control}
-                                label="OR padding"
+                                label="padding"
                                 name="adjustment_voucher_padding"
                                 render={({ field }) => (
                                     <Input
@@ -839,7 +839,7 @@ const BranchSettingsForm = ({
                             />
                             <FormFieldWrapper
                                 control={form.control}
-                                label="OR Prefix"
+                                label="Prefix"
                                 name="adjustment_voucher_prefix"
                                 render={({ field }) => (
                                     <Input
@@ -854,17 +854,17 @@ const BranchSettingsForm = ({
 
                         <div className="space-y-3">
                             <SwitchFormField
-                                description="Allow users to manually input OR numbers"
+                                description="Allow users to manually input reference number numbers"
                                 form={form}
                                 isDisabled={isDisabled}
                                 label="Allow user Input"
                                 name="adjustment_voucher_allow_user_input"
                             />
                             <SwitchFormField
-                                description="Make OR Unique (NO DUPLICATES) if this is enabled"
+                                description="Make reference number Unique (NO DUPLICATES) if this is enabled"
                                 form={form}
                                 isDisabled={isDisabled}
-                                label="Use unique OR"
+                                label="Use unique reference number"
                                 name="adjustment_voucher_or_unique"
                             />
                         </div>
@@ -878,10 +878,10 @@ const BranchSettingsForm = ({
                             </div>
                             <div>
                                 <h3 className="text-lg font-semibold">
-                                    Loan Voucher Settings
+                                    Loan Voucher Reference Number Settings
                                 </h3>
                                 <p className="text-sm text-muted-foreground">
-                                    Configure official receipt settings for loan
+                                    Configure reference number settings for loan
                                     vouchers
                                 </p>
                             </div>
@@ -890,35 +890,35 @@ const BranchSettingsForm = ({
                         <div className="grid gap-x-4 gap-y-3 md:grid-cols-4">
                             <FormFieldWrapper
                                 control={form.control}
-                                label="Start OR"
+                                label="Start"
                                 name="loan_voucher_or_start"
                                 render={({ field }) => (
                                     <Input
                                         {...field}
                                         disabled={isDisabled(field.name)}
                                         min="0"
-                                        placeholder="Start OR"
+                                        placeholder="Start"
                                         type="text"
                                     />
                                 )}
                             />
                             <FormFieldWrapper
                                 control={form.control}
-                                label="Current OR"
+                                label="Current"
                                 name="loan_voucher_or_current"
                                 render={({ field }) => (
                                     <Input
                                         {...field}
                                         disabled={isDisabled(field.name)}
                                         min="0"
-                                        placeholder="Current OR"
+                                        placeholder="Current"
                                         type="text"
                                     />
                                 )}
                             />
                             <FormFieldWrapper
                                 control={form.control}
-                                label="OR padding"
+                                label="padding"
                                 name="loan_voucher_padding"
                                 render={({ field }) => (
                                     <Input
@@ -931,7 +931,7 @@ const BranchSettingsForm = ({
                             />
                             <FormFieldWrapper
                                 control={form.control}
-                                label="OR Prefix"
+                                label="Prefix"
                                 name="loan_voucher_prefix"
                                 render={({ field }) => (
                                     <Input
@@ -946,17 +946,17 @@ const BranchSettingsForm = ({
 
                         <div className="space-y-3">
                             <SwitchFormField
-                                description="Allow users to manually input OR numbers"
+                                description="Allow users to manually input reference number numbers"
                                 form={form}
                                 isDisabled={isDisabled}
                                 label="Allow user Input"
                                 name="loan_voucher_allow_user_input"
                             />
                             <SwitchFormField
-                                description="Make OR Unique (NO DUPLICATES) if this is enabled"
+                                description="Make reference number Unique (NO DUPLICATES) if this is enabled"
                                 form={form}
                                 isDisabled={isDisabled}
-                                label="Use unique OR"
+                                label="Use unique reference number"
                                 name="loan_voucher_or_unique"
                             />
                         </div>
@@ -970,10 +970,10 @@ const BranchSettingsForm = ({
                             </div>
                             <div>
                                 <h3 className="font-semibold">
-                                    Check Voucher OR Settings
+                                    Check Voucher Reference Number Settings
                                 </h3>
                                 <p className="text-xs text-muted-foreground">
-                                    Configure official receipt settings for
+                                    Configure reference number settings for
                                     check vouchers
                                 </p>
                             </div>
@@ -982,14 +982,14 @@ const BranchSettingsForm = ({
                         <div className="grid gap-x-4 gap-y-3 md:grid-cols-4">
                             <FormFieldWrapper
                                 control={form.control}
-                                label="Start OR"
+                                label="Start"
                                 name="cash_check_voucher_or_start"
                                 render={({ field }) => (
                                     <Input
                                         {...field}
                                         disabled={isDisabled(field.name)}
                                         min="0"
-                                        placeholder="Start OR"
+                                        placeholder="Start"
                                         type="text"
                                     />
                                 )}
@@ -997,28 +997,28 @@ const BranchSettingsForm = ({
 
                             <FormFieldWrapper
                                 control={form.control}
-                                label="Current OR"
+                                label="Current"
                                 name="cash_check_voucher_or_current"
                                 render={({ field }) => (
                                     <Input
                                         {...field}
                                         disabled={isDisabled(field.name)}
                                         min="0"
-                                        placeholder="Current OR"
+                                        placeholder="Current"
                                         type="text"
                                     />
                                 )}
                             />
                             <FormFieldWrapper
                                 control={form.control}
-                                label="OR Padding"
+                                label="Padding"
                                 name="cash_check_voucher_padding"
                                 render={({ field }) => (
                                     <Input
                                         {...field}
                                         disabled={isDisabled(field.name)}
                                         min="0"
-                                        placeholder="OR Iteration"
+                                        placeholder="Iteration"
                                         type="text"
                                     />
                                 )}
@@ -1026,7 +1026,7 @@ const BranchSettingsForm = ({
                             <FormFieldWrapper
                                 className="col-span-full"
                                 control={form.control}
-                                label="OR Prefix"
+                                label="Prefix"
                                 name="cash_check_voucher_prefix"
                                 render={({ field }) => (
                                     <Input
@@ -1039,17 +1039,17 @@ const BranchSettingsForm = ({
                             />
                         </div>
                         <SwitchFormField
-                            description="Allow the users to input OR"
+                            description="Allow the users to input reference number"
                             form={form}
                             isDisabled={isDisabled}
                             label="Allow user to input"
                             name="cash_check_voucher_allow_user_input"
                         />
                         <SwitchFormField
-                            description="Make OR Unique (NO DUPLICATES) if this is enabled"
+                            description="Make reference number Unique (NO DUPLICATES) if this is enabled"
                             form={form}
                             isDisabled={isDisabled}
-                            label="Use Unique OR"
+                            label="Use Unique"
                             name="cash_check_voucher_or_unique"
                         />
                     </div>
@@ -1065,7 +1065,7 @@ const BranchSettingsForm = ({
                                     Check Voucher General Settings
                                 </h3>
                                 <p className="text-sm text-muted-foreground">
-                                    Configure official receipt settings for
+                                    Configure reference number settings for
                                     general check vouchers
                                 </p>
                             </div>
@@ -1084,35 +1084,35 @@ const BranchSettingsForm = ({
                         <div className="grid gap-x-4 gap-y-3 md:grid-cols-4">
                             <FormFieldWrapper
                                 control={form.control}
-                                label="Start OR"
+                                label="Start"
                                 name="check_voucher_general_or_start"
                                 render={({ field }) => (
                                     <Input
                                         {...field}
                                         disabled={isDisabled(field.name)}
                                         min="0"
-                                        placeholder="Start OR"
+                                        placeholder="Start"
                                         type="text"
                                     />
                                 )}
                             />
                             <FormFieldWrapper
                                 control={form.control}
-                                label="Current OR"
+                                label="Current"
                                 name="check_voucher_general_or_current"
                                 render={({ field }) => (
                                     <Input
                                         {...field}
                                         disabled={isDisabled(field.name)}
                                         min="0"
-                                        placeholder="Current OR"
+                                        placeholder="Current"
                                         type="text"
                                     />
                                 )}
                             />
                             <FormFieldWrapper
                                 control={form.control}
-                                label="OR padding"
+                                label="padding"
                                 name="check_voucher_general_padding"
                                 render={({ field }) => (
                                     <Input
@@ -1125,7 +1125,7 @@ const BranchSettingsForm = ({
                             />
                             <FormFieldWrapper
                                 control={form.control}
-                                label="OR Prefix"
+                                label="Prefix"
                                 name="check_voucher_general_prefix"
                                 render={({ field }) => (
                                     <Input
@@ -1140,17 +1140,17 @@ const BranchSettingsForm = ({
 
                         <div className="space-y-3">
                             <SwitchFormField
-                                description="Allow users to manually input OR numbers"
+                                description="Allow users to manually input reference number numbers"
                                 form={form}
                                 isDisabled={isDisabled}
                                 label="Allow user Input"
                                 name="check_voucher_general_allow_user_input"
                             />
                             <SwitchFormField
-                                description="Make OR Unique (NO DUPLICATES) if this is enabled"
+                                description="Make reference number Unique (NO DUPLICATES) if this is enabled"
                                 form={form}
                                 isDisabled={isDisabled}
-                                label="Use unique OR"
+                                label="Use unique reference number"
                                 name="check_voucher_general_or_unique"
                             />
                         </div>
@@ -1225,7 +1225,7 @@ const BranchSettingsForm = ({
 
 export const BranchSettingsFormModal = ({
     title = 'Branch Settings',
-    description = 'Update branch official receipt settings.',
+    description = 'Update branch reference number settings.',
     className,
     formProps,
     ...props
