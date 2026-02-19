@@ -192,6 +192,8 @@ const CashCheckVoucherCreateUpdateForm = ({
         modalState.onOpenChange(true)
     })
 
+    console.log(form.getValues('cash_voucher_number'))
+
     return (
         <Form {...form}>
             <form
@@ -365,7 +367,7 @@ const CashCheckVoucherCreateUpdateForm = ({
                         label={
                             <span className="flex items-center justify-between pb-2">
                                 <span className="inline-flex gap-x-1 items-center">
-                                    OR{' '}
+                                    Reference Number{' '}
                                     <HashIcon className="inline text-muted-foreground" />
                                 </span>
                                 <button
