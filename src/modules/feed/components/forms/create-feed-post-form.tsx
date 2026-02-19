@@ -1,4 +1,4 @@
-import { useCallback } from 'react'
+import { useCallback, useState } from 'react'
 
 import { UseFormReturn, useFieldArray, useForm } from 'react-hook-form'
 import { toast } from 'sonner'
@@ -89,49 +89,39 @@ const CreateFeedPostForm = ({
         useFormHelper<TFeedSchema>({ form, ...formProps })
 
     const uploadMediaMutation = useUploadMedia()
+    const [isUploading, setIsUploading] = useState(false)
 
     const onSubmit = form.handleSubmit(async (payload) => {
+        createMutation.reset()
+        updateMutation.reset()
         try {
-            const mediaArray = payload.media || []
+            let mediaArray = payload.media || []
 
-            const filesToUpload = mediaArray.filter((m) => !m.media_id)
+            const filesToUpload: ((typeof mediaArray)[number] & {
+                originalIndex: number
+            })[] = []
 
-            await Promise.all(
-                filesToUpload.map(async (m, i) => {
+            mediaArray.forEach((media, index) => {
+                if (!media.media_id) {
+                    filesToUpload.push({
+                        originalIndex: index,
+                        ...media,
+                    })
+                }
+            })
+            setIsUploading(true)
+
+            const uploadResults = await Promise.all(
+                filesToUpload.map(async (m) => {
                     try {
                         if (!m.file) return
 
                         const compressedFile = await compressImage(m.file!)
+                        const uploaded = await uploadMediaMutation.mutateAsync({
+                            file: compressedFile,
+                        })
 
-                        const uploaded = await uploadMediaMutation.mutateAsync(
-                            {
-                                file: compressedFile,
-                            },
-                            {
-                                onSuccess(data) {
-                                    form.setValue(`media.${i}.media`, data)
-                                    form.setValue(
-                                        `media.${i}.media_id`,
-                                        data.id
-                                    )
-                                    const previewObject = form.getValues(
-                                        `media.${i}.file_preview`
-                                    )
-
-                                    if (previewObject)
-                                        URL.revokeObjectURL(previewObject)
-
-                                    form.setValue(
-                                        `media.${i}.file_preview`,
-                                        undefined
-                                    )
-                                    form.setValue(`media.${i}.file`, undefined)
-                                },
-                            }
-                        )
-
-                        m.media = uploaded
-                        m.media_id = uploaded.id
+                        return { ...uploaded, originalIndex: m.originalIndex }
                     } catch (err) {
                         toast.error(
                             `Failed to upload file "${m.file?.name}". Please try again.`
@@ -140,8 +130,31 @@ const CreateFeedPostForm = ({
                     }
                 })
             )
+            setIsUploading(false)
 
-            const media_ids = (payload.media || [])
+            uploadResults.forEach((result) => {
+                if (result?.originalIndex === undefined) return
+                form.setValue(`media.${result?.originalIndex}.file`, undefined)
+                const urlObject = form.getValues(
+                    `media.${result?.originalIndex}.file_preview`
+                )
+                if (urlObject) URL.revokeObjectURL(urlObject)
+
+                form.setValue(
+                    `media.${result?.originalIndex}.file_preview`,
+                    undefined
+                )
+
+                form.setValue(
+                    `media.${result?.originalIndex}.media_id`,
+                    result.id
+                )
+                form.setValue(`media.${result?.originalIndex}.media`, result)
+            })
+
+            mediaArray = form.getValues('media') || []
+
+            const media_ids = (mediaArray || [])
                 .map((m) => m.media?.id)
                 .filter(Boolean) as TEntityId[]
 
@@ -161,9 +174,12 @@ const CreateFeedPostForm = ({
         }
     }, handleFocusError)
 
-    const { error: rawError, isPending } = feedId
+    const { error: rawError, isPending: createUpdatePending } = feedId
         ? updateMutation
         : createMutation
+
+    const isPending =
+        uploadMediaMutation.isPending || createUpdatePending || isUploading
 
     const error = serverRequestErrExtractor({ error: rawError })
 
@@ -212,7 +228,6 @@ const CreateFeedPostForm = ({
                     />
                     <MediaSection form={form} />
                 </fieldset>
-
                 <div className="flex items-center gap-x-2">
                     <TextLimitIndicatorProgfress
                         limit={255}
