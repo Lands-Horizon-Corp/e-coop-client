@@ -137,7 +137,7 @@ const MemberAccountingLedger = ({ memberProfileId, className }: Props) => {
                                 Account: {focused.account?.name}
                             </h3>
                             <p className="text-sm text-muted-foreground">
-                                Member Account General Ledger Entries
+                                Member Account Ledger Entries
                             </p>
                         </div>
 
@@ -156,7 +156,7 @@ const MemberAccountingLedger = ({ memberProfileId, className }: Props) => {
                                             className="-ms-0.5 me-1.5 opacity-60"
                                             size={16}
                                         />
-                                        General Ledger
+                                        Ledger
                                     </TabsTrigger>
 
                                     <TabsTrigger

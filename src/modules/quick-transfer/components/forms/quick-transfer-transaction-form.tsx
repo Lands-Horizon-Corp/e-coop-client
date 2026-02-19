@@ -388,7 +388,7 @@ export const QuickTransferTransactionForm = ({
                                     <AccountPicker
                                         disabled={isDisabled('account_id')}
                                         modalState={accountPickerState}
-                                        mode="all"
+                                        mode="deposit"
                                         nameOnly
                                         onSelect={(account) => {
                                             if (isDisabled('account_id')) return

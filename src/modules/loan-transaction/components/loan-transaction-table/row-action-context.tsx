@@ -22,7 +22,6 @@ import {
     ThumbsUpIcon,
     UndoIcon,
 } from '@/components/icons'
-import { ActionNameConfirmModal } from '@/components/modals/ action-name-confirm-modal'
 import LoadingSpinner from '@/components/spinners/loading-spinner'
 import { ContextMenuItem } from '@/components/ui/context-menu'
 import { DropdownMenuItem } from '@/components/ui/dropdown-menu'
@@ -47,7 +46,6 @@ import { ILoanTransactionTableActionComponentProp } from './columns'
 export type LoanTransactionActionType =
     | 'edit'
     | 'loan-edit'
-    | 'edit-confirm'
     | 'signature'
     | 'print'
     | 'approve-release'
@@ -93,7 +91,7 @@ const useLoanTransactionActions = ({
     const loanApplicationStatus = resolveLoanDatesToStatus(loanTransaction)
 
     const handleEdit = () => {
-        open('edit-confirm', {
+        open('edit', {
             id: loanTransaction.id,
             defaultValues: loanTransaction,
             extra: { onDeleteSuccess },
@@ -211,7 +209,10 @@ export const LoanTransactionAction = ({
                 onClick: handleDelete,
             }}
             onEdit={{
-                text: 'Edit',
+                text:
+                    loanTransaction.printed_date !== undefined
+                        ? 'View Loan'
+                        : 'Edit Loan',
                 isAllowed:
                     !!loanTransaction?.released_date &&
                     hasPermissionFromAuth({
@@ -447,7 +448,10 @@ export const LoanTransactionRowContext = ({
                 onClick: handleDelete,
             }}
             onEdit={{
-                text: 'Edit',
+                text:
+                    loanTransaction.printed_date !== undefined
+                        ? 'View Loan'
+                        : 'Edit Loan',
                 isAllowed:
                     !loanTransaction.released_by &&
                     hasPermissionFromAuth({
@@ -642,7 +646,7 @@ export const LoanTransactionRowContext = ({
 }
 
 export const LoanTransactionTableActionManager = () => {
-    const { state, close, open } = useTableRowActionStore<
+    const { state, close } = useTableRowActionStore<
         ILoanTransaction,
         LoanTransactionActionType,
         LoanTransactionActionExtra
@@ -655,30 +659,8 @@ export const LoanTransactionTableActionManager = () => {
         currentAuth: { user_organization },
     } = useAuthStore()
 
-    const handleConfirmEdit = () => {
-        close()
-        // Open the actual edit modal after confirmation
-        if (loanTransaction) {
-            open('edit', {
-                id: loanTransaction.id,
-                defaultValues: loanTransaction,
-                extra: state.extra,
-            })
-        }
-    }
-
     return (
         <>
-            {state.action === 'edit-confirm' && loanTransaction && (
-                <ActionNameConfirmModal
-                    name={loanTransaction.account?.name || 'confirm'}
-                    onCancel={close}
-                    onConfirm={handleConfirmEdit}
-                    onOpenChange={close}
-                    open={state.isOpen}
-                />
-            )}
-
             {state.action === 'edit' && loanTransaction && (
                 <LoanTransactionCreateUpdateFormModal
                     formProps={{

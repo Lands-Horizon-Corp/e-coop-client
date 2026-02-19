@@ -36,7 +36,7 @@ const TransactionMemberAccountLedger = ({
                         Account: {focusedLedger.account?.name}
                     </h3>
                     <p className="text-sm text-muted-foreground">
-                        Member Account General Ledger Entries
+                        Member Account Ledger Entries
                     </p>
                 </div>
                 <Tabs
