@@ -5,7 +5,7 @@ import { descriptionTransformerSanitizer, entityIdSchema } from '@/validation'
 // just for form file UI
 const FeedMediaSchema = z.object({
     file: z.instanceof(File).optional(),
-    filePreview: z.base64().optional(),
+    file_preview: z.string().optional(),
     media_id: entityIdSchema.optional(),
     media: z.any().optional(), // IMedia if already uploaded
 })

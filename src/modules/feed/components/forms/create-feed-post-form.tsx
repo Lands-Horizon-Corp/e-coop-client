@@ -114,6 +114,18 @@ const CreateFeedPostForm = ({
                                         `media.${i}.media_id`,
                                         data.id
                                     )
+                                    const previewObject = form.getValues(
+                                        `media.${i}.file_preview`
+                                    )
+
+                                    if (previewObject)
+                                        URL.revokeObjectURL(previewObject)
+
+                                    form.setValue(
+                                        `media.${i}.file_preview`,
+                                        undefined
+                                    )
+                                    form.setValue(`media.${i}.file`, undefined)
                                 },
                             }
                         )
@@ -255,7 +267,12 @@ const MediaSection = ({ form, readOnly }: MediaSectionProps) => {
 
             const filesToAdd = acceptedFiles.slice(0, remainingSlots)
 
-            append(filesToAdd.map((file) => ({ file })))
+            append(
+                filesToAdd.map((file) => ({
+                    file,
+                    file_preview: URL.createObjectURL(file),
+                }))
+            )
         },
         [append, media.length]
     )
@@ -303,8 +320,8 @@ const MediaSection = ({ form, readOnly }: MediaSectionProps) => {
                     <div className="grid grid-cols-2 gap-2">
                         {media.map((item, i) => {
                             const previewSrc = item.file
-                                ? URL.createObjectURL(item.file)
-                                : item.media?.url
+                                ? item.file_preview
+                                : item.media?.download_url
 
                             return (
                                 <div className="relative group" key={i}>
@@ -316,7 +333,16 @@ const MediaSection = ({ form, readOnly }: MediaSectionProps) => {
                                     {!readOnly && (
                                         <Button
                                             className="absolute cursor-pointer top-1 right-1 h-6 w-6 bg-black/60 text-white rounded-full"
-                                            onClick={() => remove(i)}
+                                            onClick={() => {
+                                                const toRemoveImage =
+                                                    form.getValues(`media.${i}`)
+
+                                                if (toRemoveImage.file_preview)
+                                                    URL.revokeObjectURL(
+                                                        toRemoveImage.file_preview
+                                                    )
+                                                remove(i)
+                                            }}
                                             size="icon"
                                             type="button"
                                             variant="ghost"

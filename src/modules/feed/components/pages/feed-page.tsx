@@ -6,14 +6,10 @@ import FeedCreatePostHeader from '../feed-create-post-header'
 import Feeds from '../feeds'
 
 const FeedPage = () => {
-    // const parentRef = useRef(null)
     return (
-        <PageContainer
-        // className="!max-h-[94vh] overflow-y-scroll grid"
-        // ref={parentRef}
-        >
+        <PageContainer className="bg-muted dark:bg-background">
             <PermissionGuard action="Read" resourceType="Feed">
-                <div className="max-w-xl w-full mx-auto pt-8 pb-16">
+                <div className="max-w-xl w-full mx-auto pt-8 pb-0">
                     <FeedCreatePostHeader />
                     <Feeds />
                 </div>

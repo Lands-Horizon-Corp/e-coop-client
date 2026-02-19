@@ -46,9 +46,9 @@ export const FeedCommentForm = ({
     feedId,
     className,
     defaultValues,
+    readOnly,
     onSuccess,
     onError,
-    readOnly,
 }: IFeedCommentFormProps) => {
     const {
         currentAuth: { user },
@@ -151,14 +151,14 @@ export const FeedCommentForm = ({
                 className={cn('flex flex-col gap-2 p-2', className)}
                 onSubmit={handleSubmit}
             >
-                <div className="flex items-start gap-2">
+                <div className="flex items-start gap-3">
                     <ImageDisplay
-                        className="size-8"
+                        className="size-8 ring"
                         src={user?.media?.download_url}
                     />
 
                     {!createCommentMutation.isPending ? (
-                        <div className="max-w-full w-full px-4 pt-4 pb-2 space-y-1 bg-input/40 rounded-xl">
+                        <div className="max-w-full w-full px-4 pt-4 pb-2 space-y-1 bg-muted/75 dark:bg-input/5 rounded-xl">
                             <FormFieldWrapper
                                 className="space-y-0 flex-1 max-w-full"
                                 control={form.control}
