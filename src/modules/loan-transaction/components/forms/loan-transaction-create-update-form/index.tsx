@@ -63,6 +63,11 @@ import FormErrorMessage from '@/components/ui/form-error-message'
 import FormFieldWrapper from '@/components/ui/form-field-wrapper'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import {
+    Popover,
+    PopoverContent,
+    PopoverTrigger,
+} from '@/components/ui/popover'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area'
 import { Separator } from '@/components/ui/separator'
@@ -302,6 +307,8 @@ const LoanTransactionCreateUpdateForm = ({
 
             comaker_type: 'none',
             mode_of_payment: 'monthly',
+
+            collector_place: 'office',
 
             comaker_member_profiles: [],
             comaker_member_profiles_deleted: [],
@@ -772,28 +779,28 @@ const LoanTransactionCreateUpdateForm = ({
                                                     }
                                                     value={field.value ?? ''}
                                                 >
-                                                    <FormItem className="border-input has-data-[state=checked]:border-primary/50 has-data-[state=checked]:bg-primary/20 hover:bg-accent/60 hover:border-primary ease-in-out duration-200 relative flex w-full items-start gap-2 rounded-md border p-2.5 shadow-xs outline-none">
+                                                    <FormItem className="border-input has-data-[state=checked]:border-primary/50 has-data-[state=checked]:bg-primary/20 hover:bg-accent/60 hover:border-primary ease-in-out duration-200 relative flex w-full items-start gap-2 rounded-md border p-1.5 shadow-xs outline-none">
                                                         <RadioGroupItem
                                                             aria-describedby="collector-field-description"
                                                             className="order-1 after:absolute after:inset-0"
                                                             id="collector-field"
                                                             value="field"
                                                         />
-                                                        <div className="flex grow items-start gap-3">
+                                                        <div className="flex grow items-center gap-3">
                                                             <PinLocationIcon
                                                                 aria-hidden="true"
-                                                                className="shrink-0 size-4 opacity-60"
+                                                                className="shrink-0 size-3 opacity-60"
                                                             />
                                                             <div>
                                                                 <label
-                                                                    className="text-foreground text-sm font-medium cursor-pointer"
+                                                                    className="text-foreground text-xs font-medium cursor-pointer"
                                                                     htmlFor="collector-field"
                                                                 >
                                                                     Field
                                                                     Collection
                                                                 </label>
                                                                 <p
-                                                                    className="text-muted-foreground text-xs"
+                                                                    className="text-muted-foreground text-xs hidden"
                                                                     id="collector-field-description"
                                                                 >
                                                                     visits
@@ -803,28 +810,28 @@ const LoanTransactionCreateUpdateForm = ({
                                                             </div>
                                                         </div>
                                                     </FormItem>
-                                                    <FormItem className="border-input has-data-[state=checked]:border-primary/50 has-data-[state=checked]:bg-primary/20 hover:bg-accent/60 hover:border-primary ease-in-out duration-200 relative flex w-full items-start gap-2 rounded-md border p-2.5 shadow-xs outline-none">
+                                                    <FormItem className="border-input has-data-[state=checked]:border-primary/50 has-data-[state=checked]:bg-primary/20 hover:bg-accent/60 hover:border-primary ease-in-out duration-200 relative flex w-full items-start gap-2 rounded-md border p-1 shadow-xs outline-none">
                                                         <RadioGroupItem
                                                             aria-describedby="collector-office-description"
                                                             className="order-1 after:absolute after:inset-0"
                                                             id="collector-office"
                                                             value="office"
                                                         />
-                                                        <div className="flex grow items-start gap-3">
+                                                        <div className="flex grow items-center gap-3">
                                                             <BuildingBranchIcon
                                                                 aria-hidden="true"
-                                                                className="shrink-0 size-4 opacity-60"
+                                                                className="shrink-0 size-3 opacity-60"
                                                             />
                                                             <div>
                                                                 <label
-                                                                    className="text-foreground text-sm font-medium cursor-pointer"
+                                                                    className="text-foreground text-xs font-medium cursor-pointer"
                                                                     htmlFor="collector-office"
                                                                 >
                                                                     Office
                                                                     Collection
                                                                 </label>
                                                                 <p
-                                                                    className="text-muted-foreground text-xs"
+                                                                    className="text-muted-foreground text-xs hidden"
                                                                     id="collector-office-description"
                                                                 >
                                                                     payments at
@@ -1009,7 +1016,7 @@ const LoanTransactionCreateUpdateForm = ({
                                                                         }
                                                                     >
                                                                         <label
-                                                                            className="border-accent/50 hover:bg-accent/40 ease-in-out duration-100 bg-muted has-data-[state=checked]:text-primary-foreground has-data-[state=checked]:border-primary/50 has-data-[state=checked]:bg-primary has-focus-visible:border-ring has-focus-visible:ring-ring/50 relative flex cursor-pointer items-center gap-1 rounded-md border py-2.5 px-3 text-center shadow-xs outline-none has-focus-visible:ring-[3px] has-data-disabled:cursor-not-allowed has-data-disabled:opacity-50"
+                                                                            className="border-accent/50 hover:bg-accent/40 text-xs ease-in-out duration-100 bg-muted has-data-[state=checked]:text-primary-foreground has-data-[state=checked]:border-primary/50 has-data-[state=checked]:bg-primary has-focus-visible:border-ring has-focus-visible:ring-ring/50 relative flex cursor-pointer items-center gap-1 rounded-md border py-1.5 px-2 text-center shadow-xs outline-none has-focus-visible:ring-[3px] has-data-disabled:cursor-not-allowed has-data-disabled:opacity-50"
                                                                             key={`mop-${mop}`}
                                                                         >
                                                                             <RadioGroupItem
@@ -1054,7 +1061,7 @@ const LoanTransactionCreateUpdateForm = ({
                                                                 aria-controls={
                                                                     field.name
                                                                 }
-                                                                className="group-data-[state=checked]:text-muted-foreground/70 flex-1 text-nowrap cursor-pointer text-right text-sm font-medium"
+                                                                className="group-data-[state=checked]:text-muted-foreground/70 flex-1 text-nowrap cursor-pointer text-right text-xs font-medium"
                                                                 id={`${field.name}-off`}
                                                                 onClick={() =>
                                                                     field.onChange(
@@ -1069,7 +1076,7 @@ const LoanTransactionCreateUpdateForm = ({
                                                                 checked={
                                                                     field.value
                                                                 }
-                                                                className="ease-in-out duration-200"
+                                                                className="peer inline-flex shrink-0 cursor-pointer items-center rounded-full border-2 border-transparent transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:cursor-not-allowed disabled:opacity-50 data-[state=checked]:bg-primary data-[state=unchecked]:bg-input h-4 w-6 [&_span]:size-3 data-[state=checked]:[&_span]:translate-x-2 data-[state=checked]:[&_span]:rtl:-translate-x-2"
                                                                 id={field.name}
                                                                 onCheckedChange={(
                                                                     switchValue
@@ -1083,7 +1090,7 @@ const LoanTransactionCreateUpdateForm = ({
                                                                 aria-controls={
                                                                     field.name
                                                                 }
-                                                                className="group-data-[state=unchecked]:text-muted-foreground/70 flex-1 cursor-pointer text-left text-sm font-medium"
+                                                                className="group-data-[state=unchecked]:text-muted-foreground/70 flex-1 cursor-pointer text-left text-xs font-medium"
                                                                 id={`${field.name}-on`}
                                                                 onClick={() =>
                                                                     field.onChange(
@@ -1473,6 +1480,37 @@ const AccountPickerField = ({
                                         defaultValue: account,
                                     }}
                                 />
+                                {accountId && (
+                                    <Popover>
+                                        <PopoverTrigger asChild>
+                                            <Button className="ml-auto" size="xs" variant="outline">
+                                                Loan Account Connections
+                                            </Button>
+                                        </PopoverTrigger>
+                                        <PopoverContent className="w-full max-w-5xl">
+                                            <div className="space-y-3 w-full">
+                                                <div>
+                                                    <p className="font-medium text-sm">
+                                                        <LinkIcon className="inline" />{' '}
+                                                        Loan Account Connection
+                                                    </p>
+                                                    <p className="text-sm text-muted-foreground mt-1">
+                                                        These accounts that are
+                                                        connected may affect how
+                                                        interest, fines, and
+                                                        other charges are
+                                                        computed for this loan
+                                                        account.
+                                                    </p>
+                                                </div>
+                                                <LoanConnectedAccountsConnected
+                                                    accountId={account.id}
+                                                    className="md:grid-cols-3"
+                                                />
+                                            </div>
+                                        </PopoverContent>
+                                    </Popover>
+                                )}
                                 <Button
                                     className="size-fit p-1"
                                     onClick={() =>
@@ -1503,25 +1541,6 @@ const AccountPickerField = ({
                     />
                 )}
             />
-            {accountId && (
-                <div className="space-y-3">
-                    <div>
-                        <p className="font-medium text-sm">
-                            <LinkIcon className="inline" /> Loan Account
-                            Connection
-                        </p>
-                        <p className="text-sm text-muted-foreground mt-1">
-                            These accounts that are connected may affect how
-                            interest, fines, and other charges are computed for
-                            this loan account.
-                        </p>
-                    </div>
-                    <LoanConnectedAccountsConnected
-                        accountId={account.id}
-                        className="md:grid-cols-3"
-                    />
-                </div>
-            )}
         </>
     )
 }
