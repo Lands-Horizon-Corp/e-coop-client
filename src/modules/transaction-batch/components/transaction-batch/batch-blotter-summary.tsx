@@ -147,15 +147,6 @@ export const BatchBlotterSummaryView = ({
                             })}
                         </p>
                     </div>
-                    <div className="flex items-center justify-between border-b border-b-muted-foreground/5 px-4 py-2 last:border-b-0">
-                        <p className="text-muted-foreground">Petty Cash</p>
-                        <p>
-                            {currencyFormat(transBatch.petty_cash, {
-                                currency,
-                                showSymbol: !!currency,
-                            })}
-                        </p>
-                    </div>
                     {/*
                             <div className="flex items-center justify-between border-b border-b-muted-foreground/5 px-4 py-2 last:border-b-0">
                                 <p className="text-muted-foreground">
