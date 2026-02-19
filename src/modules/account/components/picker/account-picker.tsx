@@ -297,9 +297,9 @@ const AccountItem = ({ account }: { account: IAccount }) => {
                     </span>
                 )}
                 <span className="text-ellipsis text-left text-foreground/80">
-                    {account.currency?.emoji
+                    {/* {account.currency?.emoji
                         ? `${account.currency?.emoji} `
-                        : '🏳️ '}
+                        : '🏳️ '} */}
                     {account.name}
                     <br />
                     <span className="text-xs text-muted-foreground/70">
