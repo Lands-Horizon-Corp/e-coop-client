@@ -78,7 +78,7 @@ export const useFeedCreateComment = createMutationFactory<
     { feedId: TEntityId; payload: IFeedCommentRequest }
 >({
     mutationFn: async ({ feedId, payload }) => {
-        const response = await FeedAPI.put<IFeedCommentRequest, IFeedComment>(
+        const response = await FeedAPI.post<IFeedCommentRequest, IFeedComment>(
             `${feedAPIRoute}/${feedId}/comment`,
             payload
         )

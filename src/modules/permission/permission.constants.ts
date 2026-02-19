@@ -789,6 +789,16 @@ export const PERMISSION_ALL_RESOURCE_ACTION = [
         description: 'Allow action/access for Feed module',
         supportedActions: generateBaseAction() as TPermissionAction[],
     },
+    {
+        resource: 'FeedComment',
+        label: 'Feed Comment',
+        description: 'Allow delete action for Feed comment',
+        supportedActions: [
+            'Create',
+            'OwnDelete',
+            'Delete',
+        ] as TPermissionAction[],
+    },
 ] as const satisfies PermissionResourceAction[]
 
 export const PERMISSION_BASE_RESOURCE = PERMISSION_ALL_RESOURCE_ACTION.map(

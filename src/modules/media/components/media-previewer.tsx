@@ -10,19 +10,14 @@ import {
     CarouselContent,
     CarouselItem,
 } from '@/components/ui/carousel'
-import { Dialog, DialogContent } from '@/components/ui/dialog'
+import {
+    Dialog,
+    DialogContent,
+    DialogHeader,
+    DialogTitle,
+} from '@/components/ui/dialog'
 
-export interface IMedia {
-    id: string | number
-    file_name: string
-    file_size: number
-    file_type: string
-    storage_key: string
-    bucket_name: string
-    download_url: string
-    description?: string
-    progress?: number
-}
+import { IMedia } from '..'
 
 type ImageSource = IMedia | string
 
@@ -124,6 +119,11 @@ export function ImagePreviewCarousel({
                 closeButtonClassName="hidden"
                 overlayClassName="p-0 backdrop-blur-sm"
             >
+                <DialogHeader className="sr-only hidden">
+                    <DialogTitle className="sr-only hidden">
+                        Image Previewer
+                    </DialogTitle>
+                </DialogHeader>
                 <div className="flex-shrink-0 flex items-center justify-between px-4 py-3 bg-gradient-to-b from-30% from-black/60 to-transparent">
                     <span className="text-sm text-white/80 font-medium select-none truncate max-w-xs">
                         {getAlt(currentImage as ImageSource, currentIndex)}

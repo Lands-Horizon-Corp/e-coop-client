@@ -4,10 +4,13 @@ import { descriptionTransformerSanitizer, entityIdSchema } from '@/validation'
 
 // just for form file UI
 const FeedMediaSchema = z.object({
-    file: z.instanceof(File).optional(),
-    file_preview: z.string().optional(),
+    id: entityIdSchema.optional(),
+
+    // FOR UI ONLY
     media_id: entityIdSchema.optional(),
     media: z.any().optional(), // IMedia if already uploaded
+    file: z.instanceof(File).optional(),
+    file_preview: z.string().optional(),
 })
 
 export const FeedSchema = z.object({
@@ -17,9 +20,7 @@ export const FeedSchema = z.object({
         .max(255, 'Max 255 characters')
         .optional()
         .transform(descriptionTransformerSanitizer),
-    media_ids: z.array(entityIdSchema).optional(),
-
-    media: z.array(FeedMediaSchema).optional(),
+    feed_medias: z.array(FeedMediaSchema).optional(),
     /*
 
     { 

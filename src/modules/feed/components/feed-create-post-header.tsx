@@ -6,7 +6,7 @@ import { Separator } from '@/components/ui/separator'
 
 import { useModalState } from '@/hooks/use-modal-state'
 
-import { CreateFeedPostFormModal } from './forms/create-feed-post-form'
+import { CreateFeedPostFormModal } from './forms/create-update-feed-post-form'
 
 const FeedCreatePostHeader = () => {
     const createModalState = useModalState()

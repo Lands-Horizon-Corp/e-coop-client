@@ -59,8 +59,7 @@ const CreateFeedPostForm = ({
         reValidateMode: 'onChange',
         defaultValues: {
             description: '',
-            media_ids: [],
-            media: [],
+            feed_medias: [],
             ...formProps.defaultValues,
         },
     })
@@ -95,7 +94,7 @@ const CreateFeedPostForm = ({
         createMutation.reset()
         updateMutation.reset()
         try {
-            let mediaArray = payload.media || []
+            let mediaArray = payload.feed_medias || []
 
             const filesToUpload: ((typeof mediaArray)[number] & {
                 originalIndex: number
@@ -134,33 +133,41 @@ const CreateFeedPostForm = ({
 
             uploadResults.forEach((result) => {
                 if (result?.originalIndex === undefined) return
-                form.setValue(`media.${result?.originalIndex}.file`, undefined)
+                form.setValue(
+                    `feed_medias.${result?.originalIndex}.file`,
+                    undefined
+                )
                 const urlObject = form.getValues(
-                    `media.${result?.originalIndex}.file_preview`
+                    `feed_medias.${result?.originalIndex}.file_preview`
                 )
                 if (urlObject) URL.revokeObjectURL(urlObject)
 
                 form.setValue(
-                    `media.${result?.originalIndex}.file_preview`,
+                    `feed_medias.${result?.originalIndex}.file_preview`,
                     undefined
                 )
 
                 form.setValue(
-                    `media.${result?.originalIndex}.media_id`,
+                    `feed_medias.${result?.originalIndex}.media_id`,
                     result.id
                 )
-                form.setValue(`media.${result?.originalIndex}.media`, result)
+                form.setValue(
+                    `feed_medias.${result?.originalIndex}.media`,
+                    result
+                )
             })
 
-            mediaArray = form.getValues('media') || []
+            mediaArray = form.getValues('feed_medias') || []
 
-            const media_ids = (mediaArray || [])
-                .map((m) => m.media?.id)
-                .filter(Boolean) as TEntityId[]
+            const feed_medias = (mediaArray || [])
+                .map((m) => {
+                    return { ...m }
+                })
+                .filter(Boolean)
 
             const finalPayload: IFeedRequest = {
                 description: payload.description,
-                media_ids,
+                feed_medias,
             }
 
             if (feedId) {
@@ -260,14 +267,14 @@ const MAX_SIZE = 3 * 1024 * 1024 // 3MB
 const MediaSection = ({ form, readOnly }: MediaSectionProps) => {
     const { append, remove } = useFieldArray({
         control: form.control,
-        name: 'media',
+        name: 'feed_medias',
     })
 
-    const media = form.watch('media') || []
+    const feed_medias = form.watch('feed_medias') || []
 
     const onDrop = useCallback(
         (acceptedFiles: File[]) => {
-            const remainingSlots = MAX_IMAGES - media.length
+            const remainingSlots = MAX_IMAGES - feed_medias.length
 
             if (remainingSlots <= 0) {
                 toast.warning(`Maximum of ${MAX_IMAGES} images allowed`)
@@ -289,7 +296,7 @@ const MediaSection = ({ form, readOnly }: MediaSectionProps) => {
                 }))
             )
         },
-        [append, media.length]
+        [append, feed_medias.length]
     )
 
     const onDropRejected = useCallback((rejections: FileRejection[]) => {
@@ -330,10 +337,10 @@ const MediaSection = ({ form, readOnly }: MediaSectionProps) => {
 
     return (
         <>
-            {media.length > 0 && (
+            {feed_medias.length > 0 && (
                 <div>
                     <div className="grid grid-cols-2 gap-2">
-                        {media.map((item, i) => {
+                        {feed_medias.map((item, i) => {
                             const previewSrc = item.file
                                 ? item.file_preview
                                 : item.media?.download_url
@@ -350,7 +357,9 @@ const MediaSection = ({ form, readOnly }: MediaSectionProps) => {
                                             className="absolute cursor-pointer top-1 right-1 h-6 w-6 bg-black/60 text-white rounded-full"
                                             onClick={() => {
                                                 const toRemoveImage =
-                                                    form.getValues(`media.${i}`)
+                                                    form.getValues(
+                                                        `feed_medias.${i}`
+                                                    )
 
                                                 if (toRemoveImage.file_preview)
                                                     URL.revokeObjectURL(
@@ -414,7 +423,7 @@ const MediaSection = ({ form, readOnly }: MediaSectionProps) => {
                     {/* ADD PHOTOS BUTTON */}
                     <Button
                         className="ml-auto p-2 text-muted-foreground/40"
-                        disabled={MAX_IMAGES === media.length}
+                        disabled={MAX_IMAGES === feed_medias.length}
                         onClick={handleOpenFileDialog}
                         size="icon-sm"
                         type="button"
