@@ -9,7 +9,7 @@ import { FeedCommentSchema } from './feed-comment.validation'
 export interface IFeedComment extends IBaseEntityMeta {
     feed_id: TEntityId
     user_id: TEntityId
-    user?: IUser
+    user: IUser
     comment: string
     media_id?: TEntityId
     media?: IMedia

@@ -134,6 +134,10 @@ export const updateMutationInvalidationFn = <
     queryClient.invalidateQueries({
         queryKey: [rootKey, 'paginated'],
     })
+
+    queryClient.invalidateQueries({
+        queryKey: [rootKey, 'infinite'],
+    })
 }
 
 // pang delete mutations only
@@ -169,5 +173,9 @@ export const deleteMutationInvalidationFn = <
     // Invalidate resource-query to ensure consistency
     queryClient.invalidateQueries({
         queryKey: [rootKey, 'paginated'],
+    })
+
+    queryClient.invalidateQueries({
+        queryKey: [rootKey, 'infinite'],
     })
 }

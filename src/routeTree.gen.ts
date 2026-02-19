@@ -84,6 +84,7 @@ import { Route as OrgOrgnameBranchBranchnameemployeesTimesheetsRouteImport } fro
 import { Route as OrgOrgnameBranchBranchnameemployeesPermissionTemplateRouteImport } from './routes/org/$orgname/branch.$branchname/(employees)/permission-template'
 import { Route as OrgOrgnameBranchBranchnameemployeesInvitationCodeRouteImport } from './routes/org/$orgname/branch.$branchname/(employees)/invitation-code'
 import { Route as OrgOrgnameBranchBranchnameemployeesEmployeeFootstepsRouteImport } from './routes/org/$orgname/branch.$branchname/(employees)/employee-footsteps'
+import { Route as OrgOrgnameBranchBranchnamecommonFeedRouteImport } from './routes/org/$orgname/branch.$branchname/(common)/feed'
 import { Route as OrgOrgnameBranchBranchnamecommonDashboardRouteImport } from './routes/org/$orgname/branch.$branchname/(common)/dashboard'
 import { Route as OrgOrgnameBranchBranchnameblotterTransactionBatchRouteImport } from './routes/org/$orgname/branch.$branchname/(blotter)/transaction-batch'
 import { Route as OrgOrgnameBranchBranchnameblotterGeneralLedgerDefinitionRouteImport } from './routes/org/$orgname/branch.$branchname/(blotter)/general-ledger-definition'
@@ -541,6 +542,12 @@ const OrgOrgnameBranchBranchnameemployeesEmployeeFootstepsRoute =
     path: '/employee-footsteps',
     getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
   } as any)
+const OrgOrgnameBranchBranchnamecommonFeedRoute =
+  OrgOrgnameBranchBranchnamecommonFeedRouteImport.update({
+    id: '/(common)/feed',
+    path: '/feed',
+    getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
+  } as any)
 const OrgOrgnameBranchBranchnamecommonDashboardRoute =
   OrgOrgnameBranchBranchnamecommonDashboardRouteImport.update({
     id: '/(common)/dashboard',
@@ -802,6 +809,7 @@ export interface FileRoutesByFullPath {
   '/org/$orgname/branch/$branchname/general-ledger-definition': typeof OrgOrgnameBranchBranchnameblotterGeneralLedgerDefinitionRoute
   '/org/$orgname/branch/$branchname/transaction-batch': typeof OrgOrgnameBranchBranchnameblotterTransactionBatchRoute
   '/org/$orgname/branch/$branchname/dashboard': typeof OrgOrgnameBranchBranchnamecommonDashboardRoute
+  '/org/$orgname/branch/$branchname/feed': typeof OrgOrgnameBranchBranchnamecommonFeedRoute
   '/org/$orgname/branch/$branchname/employee-footsteps': typeof OrgOrgnameBranchBranchnameemployeesEmployeeFootstepsRoute
   '/org/$orgname/branch/$branchname/invitation-code': typeof OrgOrgnameBranchBranchnameemployeesInvitationCodeRoute
   '/org/$orgname/branch/$branchname/permission-template': typeof OrgOrgnameBranchBranchnameemployeesPermissionTemplateRoute
@@ -903,6 +911,7 @@ export interface FileRoutesByTo {
   '/org/$orgname/branch/$branchname/general-ledger-definition': typeof OrgOrgnameBranchBranchnameblotterGeneralLedgerDefinitionRoute
   '/org/$orgname/branch/$branchname/transaction-batch': typeof OrgOrgnameBranchBranchnameblotterTransactionBatchRoute
   '/org/$orgname/branch/$branchname/dashboard': typeof OrgOrgnameBranchBranchnamecommonDashboardRoute
+  '/org/$orgname/branch/$branchname/feed': typeof OrgOrgnameBranchBranchnamecommonFeedRoute
   '/org/$orgname/branch/$branchname/employee-footsteps': typeof OrgOrgnameBranchBranchnameemployeesEmployeeFootstepsRoute
   '/org/$orgname/branch/$branchname/invitation-code': typeof OrgOrgnameBranchBranchnameemployeesInvitationCodeRoute
   '/org/$orgname/branch/$branchname/permission-template': typeof OrgOrgnameBranchBranchnameemployeesPermissionTemplateRoute
@@ -1010,6 +1019,7 @@ export interface FileRoutesById {
   '/org/$orgname/branch/$branchname/(blotter)/general-ledger-definition': typeof OrgOrgnameBranchBranchnameblotterGeneralLedgerDefinitionRoute
   '/org/$orgname/branch/$branchname/(blotter)/transaction-batch': typeof OrgOrgnameBranchBranchnameblotterTransactionBatchRoute
   '/org/$orgname/branch/$branchname/(common)/dashboard': typeof OrgOrgnameBranchBranchnamecommonDashboardRoute
+  '/org/$orgname/branch/$branchname/(common)/feed': typeof OrgOrgnameBranchBranchnamecommonFeedRoute
   '/org/$orgname/branch/$branchname/(employees)/employee-footsteps': typeof OrgOrgnameBranchBranchnameemployeesEmployeeFootstepsRoute
   '/org/$orgname/branch/$branchname/(employees)/invitation-code': typeof OrgOrgnameBranchBranchnameemployeesInvitationCodeRoute
   '/org/$orgname/branch/$branchname/(employees)/permission-template': typeof OrgOrgnameBranchBranchnameemployeesPermissionTemplateRoute
@@ -1117,6 +1127,7 @@ export interface FileRouteTypes {
     | '/org/$orgname/branch/$branchname/general-ledger-definition'
     | '/org/$orgname/branch/$branchname/transaction-batch'
     | '/org/$orgname/branch/$branchname/dashboard'
+    | '/org/$orgname/branch/$branchname/feed'
     | '/org/$orgname/branch/$branchname/employee-footsteps'
     | '/org/$orgname/branch/$branchname/invitation-code'
     | '/org/$orgname/branch/$branchname/permission-template'
@@ -1218,6 +1229,7 @@ export interface FileRouteTypes {
     | '/org/$orgname/branch/$branchname/general-ledger-definition'
     | '/org/$orgname/branch/$branchname/transaction-batch'
     | '/org/$orgname/branch/$branchname/dashboard'
+    | '/org/$orgname/branch/$branchname/feed'
     | '/org/$orgname/branch/$branchname/employee-footsteps'
     | '/org/$orgname/branch/$branchname/invitation-code'
     | '/org/$orgname/branch/$branchname/permission-template'
@@ -1324,6 +1336,7 @@ export interface FileRouteTypes {
     | '/org/$orgname/branch/$branchname/(blotter)/general-ledger-definition'
     | '/org/$orgname/branch/$branchname/(blotter)/transaction-batch'
     | '/org/$orgname/branch/$branchname/(common)/dashboard'
+    | '/org/$orgname/branch/$branchname/(common)/feed'
     | '/org/$orgname/branch/$branchname/(employees)/employee-footsteps'
     | '/org/$orgname/branch/$branchname/(employees)/invitation-code'
     | '/org/$orgname/branch/$branchname/(employees)/permission-template'
@@ -1905,6 +1918,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof OrgOrgnameBranchBranchnameemployeesEmployeeFootstepsRouteImport
       parentRoute: typeof OrgOrgnameBranchBranchnameRouteRoute
     }
+    '/org/$orgname/branch/$branchname/(common)/feed': {
+      id: '/org/$orgname/branch/$branchname/(common)/feed'
+      path: '/feed'
+      fullPath: '/org/$orgname/branch/$branchname/feed'
+      preLoaderRoute: typeof OrgOrgnameBranchBranchnamecommonFeedRouteImport
+      parentRoute: typeof OrgOrgnameBranchBranchnameRouteRoute
+    }
     '/org/$orgname/branch/$branchname/(common)/dashboard': {
       id: '/org/$orgname/branch/$branchname/(common)/dashboard'
       path: '/dashboard'
@@ -2281,6 +2301,7 @@ interface OrgOrgnameBranchBranchnameRouteRouteChildren {
   OrgOrgnameBranchBranchnameblotterGeneralLedgerDefinitionRoute: typeof OrgOrgnameBranchBranchnameblotterGeneralLedgerDefinitionRoute
   OrgOrgnameBranchBranchnameblotterTransactionBatchRoute: typeof OrgOrgnameBranchBranchnameblotterTransactionBatchRoute
   OrgOrgnameBranchBranchnamecommonDashboardRoute: typeof OrgOrgnameBranchBranchnamecommonDashboardRoute
+  OrgOrgnameBranchBranchnamecommonFeedRoute: typeof OrgOrgnameBranchBranchnamecommonFeedRoute
   OrgOrgnameBranchBranchnameemployeesEmployeeFootstepsRoute: typeof OrgOrgnameBranchBranchnameemployeesEmployeeFootstepsRoute
   OrgOrgnameBranchBranchnameemployeesInvitationCodeRoute: typeof OrgOrgnameBranchBranchnameemployeesInvitationCodeRoute
   OrgOrgnameBranchBranchnameemployeesPermissionTemplateRoute: typeof OrgOrgnameBranchBranchnameemployeesPermissionTemplateRoute
@@ -2350,6 +2371,8 @@ const OrgOrgnameBranchBranchnameRouteRouteChildren: OrgOrgnameBranchBranchnameRo
       OrgOrgnameBranchBranchnameblotterTransactionBatchRoute,
     OrgOrgnameBranchBranchnamecommonDashboardRoute:
       OrgOrgnameBranchBranchnamecommonDashboardRoute,
+    OrgOrgnameBranchBranchnamecommonFeedRoute:
+      OrgOrgnameBranchBranchnamecommonFeedRoute,
     OrgOrgnameBranchBranchnameemployeesEmployeeFootstepsRoute:
       OrgOrgnameBranchBranchnameemployeesEmployeeFootstepsRoute,
     OrgOrgnameBranchBranchnameemployeesInvitationCodeRoute:

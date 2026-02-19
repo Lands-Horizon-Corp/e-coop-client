@@ -40,7 +40,7 @@ function RouteComponent() {
             queryKey: ['footstep', 'infinite', 'me-branch'],
             initialPageParam: {
                 pageIndex: 0,
-                pageSize: 10,
+                pageSize: 2,
             },
             retry: 0,
             queryFn: async ({ pageParam: { pageIndex, pageSize } }) => {
@@ -74,6 +74,7 @@ function RouteComponent() {
 
     const { ref } = useElementInView<HTMLDivElement>({
         onEnterView() {
+            console.log('in view')
             if (hasNextPage) {
                 fetchNextPage()
             }
