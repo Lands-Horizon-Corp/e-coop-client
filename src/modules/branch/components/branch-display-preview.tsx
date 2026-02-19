@@ -1,6 +1,7 @@
 import { useQueryClient } from '@tanstack/react-query'
 
 import { cn } from '@/helpers/tw-utils'
+import { hasPermissionFromAuth } from '@/modules/authentication/authgentication.store'
 
 import {
     BadgeCheckFillIcon,
@@ -183,6 +184,12 @@ const BranchPreviewDisplay = ({
                                 <div className="flex flex-col sm:flex-row gap-3">
                                     <Button
                                         className="flex-1 sm:flex-initial shadow-sm"
+                                        disabled={
+                                            !hasPermissionFromAuth({
+                                                action: 'Update',
+                                                resourceType: 'Branch',
+                                            })
+                                        }
                                         onClick={() =>
                                             updateModal.onOpenChange(true)
                                         }

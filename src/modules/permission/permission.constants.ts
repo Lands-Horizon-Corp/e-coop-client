@@ -719,6 +719,12 @@ export const PERMISSION_ALL_RESOURCE_ACTION = [
         supportedActions: ['Read'] as TPermissionAction[],
     },
     {
+        resource: 'Branch',
+        label: 'Branch  Module',
+        description: 'Allow access/actions branch',
+        supportedActions: generateBaseAction() as TPermissionAction[],
+    },
+    {
         resource: 'MyBranchFootsteps',
         label: 'My Branch Footsteps Module',
         description: 'Allow access to their current branch footsteps',

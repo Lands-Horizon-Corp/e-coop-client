@@ -1,5 +1,6 @@
 import { useCallback } from 'react'
 
+import { useQueryClient } from '@tanstack/react-query'
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 import z from 'zod'
@@ -63,6 +64,8 @@ const MemberProfileQuickCreateForm = ({
     pbSettings,
     ...formProps
 }: IMemberProfileQuickCreateFormProps) => {
+    const queryClient = useQueryClient()
+
     const form = useForm<TMemberProfileQuickFormValues>({
         resolver: standardSchemaResolver(QuickCreateMemberProfileSchema),
         reValidateMode: 'onChange',
@@ -123,6 +126,10 @@ const MemberProfileQuickCreateForm = ({
 
     const handleAutoGeneratePB = useCallback(
         (isAuto?: boolean) => {
+            if (isAuto)
+                queryClient.invalidateQueries({
+                    queryKey: ['auth'],
+                })
             form.setValue('pb_auto_generated', isAuto)
 
             if (!pbSettings)
@@ -134,7 +141,7 @@ const MemberProfileQuickCreateForm = ({
                 form.setValue('passbook', buildMemberProfilePB(pbSettings))
             }
         },
-        [pbSettings, form]
+        [pbSettings, form, queryClient]
     )
 
     useHotkeys(

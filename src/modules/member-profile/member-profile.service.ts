@@ -126,8 +126,12 @@ export const useQuickCreateMemberProfile = createMutationFactory<
             payload: data,
         })
     },
-    invalidationFn: (args) =>
-        createMutationInvalidateFn(memberProfileBaseKey, args),
+    invalidationFn: (args) => {
+        args.queryClient.invalidateQueries({
+            queryKey: ['auth'],
+        })
+        createMutationInvalidateFn(memberProfileBaseKey, args)
+    },
 })
 
 // 🪝 Custom Hook for Updating Membership Info

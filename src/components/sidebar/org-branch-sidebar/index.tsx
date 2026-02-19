@@ -1,14 +1,15 @@
 import { useMemo } from 'react'
 
-import { Link, useParams, useRouter } from '@tanstack/react-router'
+import { useParams, useRouter } from '@tanstack/react-router'
 
 import { useAuthUserWithOrgBranch } from '@/modules/authentication/authgentication.store'
+import BranchModalDisplay from '@/modules/branch/components/modal/branch-modal-display'
 import { TUserType } from '@/modules/user'
 
 // import { useHotkeys } from 'react-hotkeys-hook'
 
 import EcoopLogo from '@/components/ecoop-logo'
-import { UserLockIcon } from '@/components/icons'
+import { BuildingIcon, UserLockIcon } from '@/components/icons'
 import ActionTooltip from '@/components/tooltips/action-tooltip'
 import AppSidebarItem from '@/components/ui/app-sidebar/app-sidebar-item'
 import AppSidebarQuickNavigate from '@/components/ui/app-sidebar/app-sidebar-quick-navigate'
@@ -30,6 +31,8 @@ import {
     SidebarRail,
     // useSidebar,
 } from '@/components/ui/sidebar'
+
+import { useModalState } from '@/hooks/use-modal-state'
 
 import { IBaseProps } from '@/types'
 
@@ -79,15 +82,25 @@ const OrgBranchSidebar = (props: IBaseProps) => {
     // })
 
     const orgLogo = user_organization.organization.media?.download_url
+    const viewBranchInfoModal = useModalState()
 
     return (
         // <Sidebar collapsible='icon' variant="inset" {...props}>
         <Sidebar collapsible="icon" {...props}>
             <SidebarHeader>
                 <SidebarMenu>
+                    <BranchModalDisplay
+                        branchId={user_organization.branch.id}
+                        className="!rounded-2xl"
+                        {...viewBranchInfoModal}
+                    />
                     <SidebarMenuItem>
                         <SidebarMenuButton asChild size="lg">
-                            <Link to={baseUrl}>
+                            <div
+                                onClick={() =>
+                                    viewBranchInfoModal.onOpenChange(true)
+                                }
+                            >
                                 <EcoopLogo
                                     className="size-9 rounded-md"
                                     darkUrl={orgLogo}
@@ -116,7 +129,8 @@ const OrgBranchSidebar = (props: IBaseProps) => {
                                         }
                                     >
                                         <span className="truncate text-xs text-muted-foreground/80">
-                                            <span>
+                                            <span className="font-bold">
+                                                <BuildingIcon className="inline mr-1" />
                                                 {
                                                     user_organization.branch
                                                         .name
@@ -131,7 +145,7 @@ const OrgBranchSidebar = (props: IBaseProps) => {
                                         </span>
                                     </ActionTooltip>
                                 </div>
-                            </Link>
+                            </div>
                         </SidebarMenuButton>
                     </SidebarMenuItem>
                 </SidebarMenu>
