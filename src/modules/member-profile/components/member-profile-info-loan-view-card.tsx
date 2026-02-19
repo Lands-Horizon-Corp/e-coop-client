@@ -32,8 +32,8 @@ const MemberProfileInfoViewLoanCard = ({ className, memberProfile }: Props) => {
     if (!memberProfile) return null
 
     return (
-        <div className={cn('rounded ring-2 p-4 ring-primary/40', className)}>
-            <div className="flex items-center gap-x-2">
+        <div className={cn('rounded ring-2 p-4 ring-primary/40 max-w-full', className)}>
+            <div className="flex items-center gap-x-2 max-w-full">
                 <div className="shrink-0 gap-x-2 items-center flex">
                     <PreviewMediaWrapper media={memberProfile.media}>
                         <ImageDisplay
@@ -49,10 +49,10 @@ const MemberProfileInfoViewLoanCard = ({ className, memberProfile }: Props) => {
                         />
                     </PreviewMediaWrapper>
                 </div>
-                <div className="flex-1">
-                    <div className="flex items-center justify-between">
-                        <div className="w-full flex items-center gap-x-2 justify-between">
-                            <div className="flex w-fit items-center gap-x-2">
+                <div className="flex-1 min-w-0 max-w-full">
+                    <div className="flex items-center  min-w-0 justify-between max-w-full">
+                        <div className="w-full min-w-0 flex items-center gap-x-2 justify-between max-w-full">
+                            <div className="flex w-fit max-w-full items-center gap-x-2">
                                 <h2 className="truncate font-bold">
                                     {memberProfile.full_name}
                                 </h2>

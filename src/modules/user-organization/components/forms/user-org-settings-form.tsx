@@ -17,6 +17,7 @@ import {
     InfoIcon,
     ReceiptIcon,
     ShieldCheckIcon,
+    UserCogIcon,
     XIcon,
 } from '@/components/icons'
 import Modal, { IModalProps } from '@/components/modals/modal'
@@ -87,6 +88,15 @@ const UserOrgSettingsForm = ({
             allow_withdraw_negative_balance: false,
             allow_withdraw_exact_balance: false,
             maintaining_balance: false,
+
+            check_voucher_general_auto_increment: false,
+            loan_voucher_auto_increment: false,
+            adjustment_entry_auto_increment: false,
+            journal_voucher_auto_increment: false,
+            cash_check_voucher_auto_increment: false,
+            deposit_auto_increment: false,
+            withdraw_auto_increment: false,
+            payment_auto_increment: false,
             ...defaultValues,
         },
     })
@@ -716,7 +726,299 @@ const UserOrgSettingsForm = ({
                             )}
                         />
                     </div>
+
+                    <div className="space-y-4 p-4 bg-popover rounded-xl">
+                        <div className="flex items-center gap-3">
+                            <div className="size-fit rounded-full bg-purple-100 p-2 dark:bg-purple-900/20">
+                                <UserCogIcon className="h-5 w-5 text-purple-600 dark:text-purple-400" />
+                            </div>
+                            <div>
+                                <h3 className="font-semibold">
+                                    Autogenerate Options
+                                </h3>
+                                <p className="text-xs text-muted-foreground">
+                                    Configure auto increment settings
+                                </p>
+                            </div>
+                        </div>
+
+                        <FormFieldWrapper
+                            control={form.control}
+                            name="check_voucher_general_auto_increment"
+                            render={({ field }) => (
+                                <div className="shadow-xs bg-background/50 relative flex w-full items-start gap-2 rounded-lg border border-input p-4 outline-none duration-200 ease-out has-checked:border-primary/30 has-checked:bg-linear-to-br has-checked:from-primary/50 has-checked:to-primary/10">
+                                    <Switch
+                                        aria-describedby={`${field.name}`}
+                                        checked={field.value}
+                                        className="order-1 after:absolute after:inset-0"
+                                        // className="order-1 after:absolute after:inset-0 peer inline-flex shrink-0 cursor-pointer items-center rounded-full border-2 border-transparent transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:cursor-not-allowed disabled:opacity-50 data-[state=checked]:bg-primary data-[state=unchecked]:bg-input h-4 w-6 [&_span]:size-3 data-[state=checked]:[&_span]:translate-x-2 data-[state=checked]:[&_span]:rtl:-translate-x-2"
+                                        disabled={isDisabled(field.name)}
+                                        id={field.name}
+                                        onCheckedChange={field.onChange}
+                                    />
+                                    <div className="flex grow items-center gap-3">
+                                        <div className="size-fit rounded-full bg-secondary p-2">
+                                            <BillIcon />
+                                        </div>
+                                        <div className="grid gap-2">
+                                            <Label htmlFor={field.name}>
+                                                Check Voucher General Auto
+                                                Increment
+                                            </Label>
+                                            <p
+                                                className="text-xs text-muted-foreground"
+                                                id={`${field.name}`}
+                                            >
+                                                Enable automatic incrementing of
+                                                general check voucher numbers.
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
+                        />
+
+                        <FormFieldWrapper
+                            control={form.control}
+                            name="loan_voucher_auto_increment"
+                            render={({ field }) => (
+                                <div className="shadow-xs bg-background/50 relative flex w-full items-start gap-2 rounded-lg border border-input p-4 outline-none duration-200 ease-out has-checked:border-primary/30 has-checked:bg-linear-to-br has-checked:from-primary/50 has-checked:to-primary/10">
+                                    <Switch
+                                        aria-describedby={`${field.name}`}
+                                        checked={field.value}
+                                        className="order-1 after:absolute after:inset-0"
+                                        disabled={isDisabled(field.name)}
+                                        id={field.name}
+                                        onCheckedChange={field.onChange}
+                                    />
+                                    <div className="flex grow items-center gap-3">
+                                        <div className="size-fit rounded-full bg-secondary p-2">
+                                            <BillIcon />
+                                        </div>
+                                        <div className="grid gap-2">
+                                            <Label htmlFor={field.name}>
+                                                Loan Voucher Auto Increment
+                                            </Label>
+                                            <p
+                                                className="text-xs text-muted-foreground"
+                                                id={`${field.name}`}
+                                            >
+                                                Enable automatic incrementing of
+                                                loan voucher numbers.
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
+                        />
+
+                        <FormFieldWrapper
+                            control={form.control}
+                            name="adjustment_entry_auto_increment"
+                            render={({ field }) => (
+                                <div className="shadow-xs bg-background/50 relative flex w-full items-start gap-2 rounded-lg border border-input p-4 outline-none duration-200 ease-out has-checked:border-primary/30 has-checked:bg-linear-to-br has-checked:from-primary/50 has-checked:to-primary/10">
+                                    <Switch
+                                        aria-describedby={`${field.name}`}
+                                        checked={field.value}
+                                        className="order-1 after:absolute after:inset-0"
+                                        disabled={isDisabled(field.name)}
+                                        id={field.name}
+                                        onCheckedChange={field.onChange}
+                                    />
+                                    <div className="flex grow items-center gap-3">
+                                        <div className="size-fit rounded-full bg-secondary p-2">
+                                            <BillIcon />
+                                        </div>
+                                        <div className="grid gap-2">
+                                            <Label htmlFor={field.name}>
+                                                Adjustment Entry Auto Increment
+                                            </Label>
+                                            <p
+                                                className="text-xs text-muted-foreground"
+                                                id={`${field.name}`}
+                                            >
+                                                Enable automatic incrementing of
+                                                adjustment entry numbers.
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
+                        />
+
+                        <FormFieldWrapper
+                            control={form.control}
+                            name="journal_voucher_auto_increment"
+                            render={({ field }) => (
+                                <div className="shadow-xs bg-background/50 relative flex w-full items-start gap-2 rounded-lg border border-input p-4 outline-none duration-200 ease-out has-checked:border-primary/30 has-checked:bg-linear-to-br has-checked:from-primary/50 has-checked:to-primary/10">
+                                    <Switch
+                                        aria-describedby={`${field.name}`}
+                                        checked={field.value}
+                                        className="order-1 after:absolute after:inset-0"
+                                        disabled={isDisabled(field.name)}
+                                        id={field.name}
+                                        onCheckedChange={field.onChange}
+                                    />
+                                    <div className="flex grow items-center gap-3">
+                                        <div className="size-fit rounded-full bg-secondary p-2">
+                                            <BillIcon />
+                                        </div>
+                                        <div className="grid gap-2">
+                                            <Label htmlFor={field.name}>
+                                                Journal Voucher Auto Increment
+                                            </Label>
+                                            <p
+                                                className="text-xs text-muted-foreground"
+                                                id={`${field.name}`}
+                                            >
+                                                Enable automatic incrementing of
+                                                journal voucher numbers.
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
+                        />
+
+                        <FormFieldWrapper
+                            control={form.control}
+                            name="cash_check_voucher_auto_increment"
+                            render={({ field }) => (
+                                <div className="shadow-xs bg-background/50 relative flex w-full items-start gap-2 rounded-lg border border-input p-4 outline-none duration-200 ease-out has-checked:border-primary/30 has-checked:bg-linear-to-br has-checked:from-primary/50 has-checked:to-primary/10">
+                                    <Switch
+                                        aria-describedby={`${field.name}`}
+                                        checked={field.value}
+                                        className="order-1 after:absolute after:inset-0"
+                                        disabled={isDisabled(field.name)}
+                                        id={field.name}
+                                        onCheckedChange={field.onChange}
+                                    />
+                                    <div className="flex grow items-center gap-3">
+                                        <div className="size-fit rounded-full bg-secondary p-2">
+                                            <BillIcon />
+                                        </div>
+                                        <div className="grid gap-2">
+                                            <Label htmlFor={field.name}>
+                                                Cash Check Voucher Auto
+                                                Increment
+                                            </Label>
+                                            <p
+                                                className="text-xs text-muted-foreground"
+                                                id={`${field.name}`}
+                                            >
+                                                Enable automatic incrementing of
+                                                cash check voucher numbers.
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
+                        />
+
+                        <FormFieldWrapper
+                            control={form.control}
+                            name="deposit_auto_increment"
+                            render={({ field }) => (
+                                <div className="shadow-xs bg-background/50 relative flex w-full items-start gap-2 rounded-lg border border-input p-4 outline-none duration-200 ease-out has-checked:border-primary/30 has-checked:bg-linear-to-br has-checked:from-primary/50 has-checked:to-primary/10">
+                                    <Switch
+                                        aria-describedby={`${field.name}`}
+                                        checked={field.value}
+                                        className="order-1 after:absolute after:inset-0"
+                                        disabled={isDisabled(field.name)}
+                                        id={field.name}
+                                        onCheckedChange={field.onChange}
+                                    />
+                                    <div className="flex grow items-center gap-3">
+                                        <div className="size-fit rounded-full bg-secondary p-2">
+                                            <BillIcon />
+                                        </div>
+                                        <div className="grid gap-2">
+                                            <Label htmlFor={field.name}>
+                                                Deposit Auto Increment
+                                            </Label>
+                                            <p
+                                                className="text-xs text-muted-foreground"
+                                                id={`${field.name}`}
+                                            >
+                                                Enable automatic incrementing of
+                                                deposit transaction numbers.
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
+                        />
+
+                        <FormFieldWrapper
+                            control={form.control}
+                            name="withdraw_auto_increment"
+                            render={({ field }) => (
+                                <div className="shadow-xs bg-background/50 relative flex w-full items-start gap-2 rounded-lg border border-input p-4 outline-none duration-200 ease-out has-checked:border-primary/30 has-checked:bg-linear-to-br has-checked:from-primary/50 has-checked:to-primary/10">
+                                    <Switch
+                                        aria-describedby={`${field.name}`}
+                                        checked={field.value}
+                                        className="order-1 after:absolute after:inset-0"
+                                        disabled={isDisabled(field.name)}
+                                        id={field.name}
+                                        onCheckedChange={field.onChange}
+                                    />
+                                    <div className="flex grow items-center gap-3">
+                                        <div className="size-fit rounded-full bg-secondary p-2">
+                                            <BillIcon />
+                                        </div>
+                                        <div className="grid gap-2">
+                                            <Label htmlFor={field.name}>
+                                                Withdraw Auto Increment
+                                            </Label>
+                                            <p
+                                                className="text-xs text-muted-foreground"
+                                                id={`${field.name}`}
+                                            >
+                                                Enable automatic incrementing of
+                                                withdrawal transaction numbers.
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
+                        />
+
+                        <FormFieldWrapper
+                            control={form.control}
+                            name="payment_auto_increment"
+                            render={({ field }) => (
+                                <div className="shadow-xs bg-background/50 relative flex w-full items-start gap-2 rounded-lg border border-input p-4 outline-none duration-200 ease-out has-checked:border-primary/30 has-checked:bg-linear-to-br has-checked:from-primary/50 has-checked:to-primary/10">
+                                    <Switch
+                                        aria-describedby={`${field.name}`}
+                                        checked={field.value}
+                                        className="order-1 after:absolute after:inset-0"
+                                        disabled={isDisabled(field.name)}
+                                        id={field.name}
+                                        onCheckedChange={field.onChange}
+                                    />
+                                    <div className="flex grow items-center gap-3">
+                                        <div className="size-fit rounded-full bg-secondary p-2">
+                                            <BillIcon />
+                                        </div>
+                                        <div className="grid gap-2">
+                                            <Label htmlFor={field.name}>
+                                                Payment Auto Increment
+                                            </Label>
+                                            <p
+                                                className="text-xs text-muted-foreground"
+                                                id={`${field.name}`}
+                                            >
+                                                Enable automatic incrementing of
+                                                payment transaction numbers.
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
+                        />
+                    </div>
                 </fieldset>
+
                 <FormFooterResetSubmit
                     className="sticky bottom-0 bg-popover rounded-xl p-4"
                     disableSubmit={!form.formState.isDirty || isPending}

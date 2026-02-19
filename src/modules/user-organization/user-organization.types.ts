@@ -80,6 +80,16 @@ export interface IUserOrganization<TUser = IUserBase>
 
     settings_payment_type_default_value_id?: TEntityId
     settings_payment_type_default_value?: IPaymentType
+
+    // AUTO INCREMENTS
+    check_voucher_general_auto_increment: boolean
+    loan_voucher_auto_increment: boolean
+    adjustment_entry_auto_increment: boolean
+    journal_voucher_auto_increment: boolean
+    cash_check_voucher_auto_increment: boolean
+    deposit_auto_increment: boolean
+    withdraw_auto_increment: boolean
+    payment_auto_increment: boolean
 }
 
 export interface IUserOrganizationResponse {

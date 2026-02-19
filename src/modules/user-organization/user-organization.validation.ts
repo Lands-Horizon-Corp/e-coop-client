@@ -95,6 +95,16 @@ export const UserOrganizationSettingsSchema = z.object({
     settings_accounting_payment_default_value: z.any(),
     settings_accounting_deposit_default_value: z.any(),
     settings_accounting_withdraw_default_value: z.any(),
+
+    // AUTO INCREMENTS
+    check_voucher_general_auto_increment: z.boolean().optional().default(false),
+    loan_voucher_auto_increment: z.boolean().optional().default(false),
+    adjustment_entry_auto_increment: z.boolean().optional().default(false),
+    journal_voucher_auto_increment: z.boolean().optional().default(false),
+    cash_check_voucher_auto_increment: z.boolean().optional().default(false),
+    deposit_auto_increment: z.boolean().optional().default(false),
+    withdraw_auto_increment: z.boolean().optional().default(false),
+    payment_auto_increment: z.boolean().optional().default(false),
 })
 
 export type TUserOrganizationSettingsSchema = z.infer<
