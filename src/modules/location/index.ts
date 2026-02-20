@@ -48,6 +48,9 @@ export const initializeBarangayMapping = () => {
         list.sort((a, b) => a.name.localeCompare(b.name))
     }
 
+    // console.log(barangaysByMunicipalityName)
+    console.log([...municipalityCodeToName.values()].join(','))
+
     initialized = true
 }
 
