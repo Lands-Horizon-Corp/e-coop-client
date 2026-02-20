@@ -184,7 +184,7 @@ const MemberPersonalInfo = forwardRef<HTMLDivElement, Props>(
                     title="Addresses"
                 >
                     <div className="space-y-4">
-                        {memberData?.member_address?.map((addr) => (
+                        {memberData?.member_addresses?.map((addr) => (
                             <div
                                 className="rounded-lg relative border border-border"
                                 key={addr.id}
