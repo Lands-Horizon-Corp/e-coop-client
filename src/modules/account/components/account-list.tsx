@@ -1,4 +1,5 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
+import { useRef } from 'react'
 
 import Fuse from 'fuse.js'
 
@@ -11,15 +12,19 @@ import {
     useSensor,
     useSensors,
 } from '@dnd-kit/core'
+import { restrictToVerticalAxis } from '@dnd-kit/modifiers'
 import {
     SortableContext,
     arrayMove,
     sortableKeyboardCoordinates,
     verticalListSortingStrategy,
 } from '@dnd-kit/sortable'
+import { useVirtualizer } from '@tanstack/react-virtual'
+import debounce from 'lodash-es/debounce'
 import { ArrowUpDown, Plus, Search } from 'lucide-react'
 
 import RefreshButton from '@/components/buttons/refresh-button'
+import { ChevronDownIcon } from '@/components/icons'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Skeleton } from '@/components/ui/skeleton'
@@ -38,7 +43,19 @@ export const AccountList = () => {
         accounts,
         settings_payment_type_default_value,
     } = useAccountContext()
+    const [canScrollUp, setCanScrollUp] = useState(false)
+    const [_, setCanScrollDown] = useState(false)
 
+    const parentRef = useRef<HTMLDivElement>(null)
+
+    const accountIds = useMemo(() => accounts.map((a) => a.id), [accounts])
+
+    const rowVirtualizer = useVirtualizer({
+        count: accounts.length,
+        getScrollElement: () => parentRef.current,
+        estimateSize: () => 75, // Card Spacing Height Sheesh
+        overscan: 5,
+    })
     const { mutate: reorderAccounts } = useReorderAccounts()
 
     const [modalState, setModalState] = useState<{
@@ -52,12 +69,23 @@ export const AccountList = () => {
     const [search, setSearch] = useState('')
 
     const sensors = useSensors(
-        useSensor(PointerSensor),
+        useSensor(PointerSensor, {
+            activationConstraint: {
+                distance: 5,
+            },
+        }),
         useSensor(KeyboardSensor, {
             coordinateGetter: sortableKeyboardCoordinates,
         })
     )
 
+    const debouncedReorder = useMemo(
+        () =>
+            debounce((ids: string[]) => {
+                reorderAccounts({ ids })
+            }, 400),
+        [reorderAccounts]
+    )
     const handleDragEnd = (event: DragEndEvent) => {
         const { active, over } = event
 
@@ -69,6 +97,7 @@ export const AccountList = () => {
 
             if (oldIndex === -1 || newIndex === -1) return items
             const newItems = arrayMove(items, oldIndex, newIndex)
+
             reorderAccounts({
                 ids: newItems.map((item) => item.id),
             })
@@ -125,6 +154,36 @@ export const AccountList = () => {
             index: newIndex,
         })
     }
+
+    const scrollTo = (direction: 'up' | 'down') => {
+        const container = parentRef.current
+        if (!container) return
+
+        container.scrollTo({
+            top: direction === 'up' ? 0 : container.scrollHeight,
+            behavior: 'smooth',
+        })
+    }
+
+    useEffect(() => {
+        const container = parentRef.current
+        if (!container) return
+
+        const handleScroll = () => {
+            setCanScrollUp(container.scrollTop > 0)
+            setCanScrollDown(
+                container.scrollTop + container.clientHeight <
+                    container.scrollHeight
+            )
+        }
+
+        handleScroll()
+        container.addEventListener('scroll', handleScroll)
+
+        return () => {
+            container.removeEventListener('scroll', handleScroll)
+        }
+    }, [])
 
     return (
         <div className="mx-auto w-full max-w-3xl space-y-4 p-6">
@@ -212,22 +271,72 @@ export const AccountList = () => {
             ) : (
                 <DndContext
                     collisionDetection={closestCenter}
+                    modifiers={[restrictToVerticalAxis]}
                     onDragEnd={handleDragEnd}
                     sensors={sensors}
                 >
                     <SortableContext
-                        items={accounts.map((a) => a.id)}
+                        items={accountIds}
                         strategy={verticalListSortingStrategy}
                     >
-                        <div className="space-y-2">
-                            {accounts.map((account) => (
-                                <AccountCard
-                                    account={account}
-                                    key={account.id}
-                                    searchTerm=""
-                                    setModalState={handleModalState}
-                                />
-                            ))}
+                        <div
+                            className="h-screen overflow-auto ecoop-scroll"
+                            ref={parentRef}
+                        >
+                            <div
+                                style={{
+                                    height: `${rowVirtualizer.getTotalSize()}px`,
+                                    position: 'relative',
+                                }}
+                            >
+                                {rowVirtualizer
+                                    .getVirtualItems()
+                                    .map((virtualRow) => {
+                                        const account =
+                                            accounts[virtualRow.index]
+
+                                        return (
+                                            <div
+                                                key={account.id}
+                                                style={{
+                                                    position: 'absolute',
+                                                    top: 0,
+                                                    left: 0,
+                                                    width: '99.5%',
+                                                    transform: `translateY(${virtualRow.start}px)`,
+                                                }}
+                                            >
+                                                <AccountCard
+                                                    account={account}
+                                                    setModalState={
+                                                        handleModalState
+                                                    }
+                                                />
+                                            </div>
+                                        )
+                                    })}
+                            </div>
+                            <div className="fixed bottom-6 right-6 flex flex-col gap-2 z-50">
+                                {canScrollUp ? (
+                                    <Button
+                                        className="rounded-full shadow-lg border border-border h-10 w-10"
+                                        onClick={() => scrollTo('up')}
+                                        size="icon"
+                                        variant={'secondary'}
+                                    >
+                                        <ChevronDownIcon className="h-5 w-5 rotate-180" />
+                                    </Button>
+                                ) : (
+                                    <Button
+                                        className="rounded-full shadow-lg border border-border h-10 w-10"
+                                        onClick={() => scrollTo('down')}
+                                        size="icon"
+                                        variant={'secondary'}
+                                    >
+                                        <ChevronDownIcon className="h-5 w-5" />
+                                    </Button>
+                                )}
+                            </div>
                         </div>
                     </SortableContext>
                 </DndContext>

@@ -29,7 +29,7 @@ export type TAccountModalState = {
 interface AccountCardProps {
     account: IAccount
     onEdit?: (account: IAccount) => void
-    searchTerm: string
+    searchTerm?: string
     isSearching?: boolean
     setModalState: (data: TAccountModalState) => void
 }
@@ -175,7 +175,7 @@ export const AccountCard = memo(
 
                                             <p
                                                 className={cn(
-                                                    'text-sm text-muted-foreground truncate transition-all duration-300',
+                                                    'text-xs text-muted-foreground truncate  transition-all duration-300',
                                                     'opacity-0 max-h-0 translate-y-1',
                                                     'group-hover:opacity-100 group-hover:max-h-10 group-hover:translate-y-0'
                                                 )}

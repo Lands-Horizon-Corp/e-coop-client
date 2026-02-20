@@ -3,9 +3,9 @@ import PermissionGuard from '@/modules/permission/components/permission-guard'
 import PageContainer from '@/components/containers/page-container'
 import { TableRowActionStoreProvider } from '@/components/data-table/store/data-table-action-store'
 
+import { AccountList } from '../components/account-list'
 import { AccountProvider } from '../context/account-provider'
 import { AccountTableActionManager } from './account-table-manager'
-import AccountWrapper from './account-wrapper'
 
 export const Account = () => {
     return (
@@ -13,7 +13,7 @@ export const Account = () => {
             <PermissionGuard action="Read" resourceType="Account">
                 <TableRowActionStoreProvider>
                     <AccountProvider>
-                        <AccountWrapper />
+                        <AccountList />
                     </AccountProvider>
                     <AccountTableActionManager />
                 </TableRowActionStoreProvider>

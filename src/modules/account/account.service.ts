@@ -1,3 +1,4 @@
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useQuery } from '@tanstack/react-query'
 import qs from 'query-string'
 
@@ -263,25 +264,60 @@ export const useAccountComputationDisconnect = createMutationFactory<
     },
 })
 
-export const useReorderAccounts = createMutationFactory<
-    void,
-    Error,
-    { ids: string[] }
->({
-    mutationFn: async (ids) => {
-        return (
-            await API.put<{ ids: string[] }, void>(
-                `${accountAPIRoute}/live/order`,
-                ids
+export const useReorderAccounts = () => {
+    const queryClient = useQueryClient()
+
+    return useMutation({
+        mutationFn: async (variables: { ids: string[] }) => {
+            await API.put(`${accountAPIRoute}/live/order`, variables)
+        },
+
+        // 🔥 Optimistic Desu Sheesh
+        onMutate: async (variables) => {
+            await queryClient.cancelQueries({
+                queryKey: ['account', 'all', 'all'],
+            })
+
+            const previousAccounts = queryClient.getQueryData<IAccount[]>([
+                'account',
+                'all',
+                'all',
+            ])
+
+            queryClient.setQueryData<IAccount[]>(
+                ['account', 'all', 'all'],
+                (old) => {
+                    if (!old) return old
+
+                    const reordered = variables.ids
+                        .map((id) => old.find((a) => a.id === id))
+                        .filter(Boolean)
+
+                    return reordered as IAccount[]
+                }
             )
-        ).data
-    },
-    invalidationFn: (args) => {
-        args.queryClient.invalidateQueries({
-            queryKey: ['account', 'all', 'all'],
-        })
-    },
-})
+
+            return { previousAccounts }
+        },
+
+        onError: (_err, _variables, context) => {
+            if (context?.previousAccounts) {
+                queryClient.setQueryData(
+                    ['account', 'all', 'all'],
+                    context.previousAccounts
+                )
+            }
+        },
+
+        onSettled: () => {
+            setTimeout(() => {
+                queryClient.invalidateQueries({
+                    queryKey: ['account', 'all', 'all'],
+                })
+            }, 2000)
+        },
+    })
+}
 
 export const useAccountLoanConnect = createMutationFactory<
     IAccount,

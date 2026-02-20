@@ -72,7 +72,7 @@
         "@tanstack/react-router": "^1.131.48",
         "@tanstack/react-router-devtools": "^1.131.48",
         "@tanstack/react-table": "^8.21.3",
-        "@tanstack/react-virtual": "^3.13.12",
+        "@tanstack/react-virtual": "^3.13.18",
         "@tanstack/router-zod-adapter": "^1.81.5",
         "@tanstack/zod-adapter": "^1.131.48",
         "@tiptap/extension-placeholder": "^3.4.4",
