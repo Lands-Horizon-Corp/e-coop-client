@@ -242,6 +242,7 @@ const MemberAddressCreateUpdateForm = ({
                                     {...field}
                                     // disabled={isDisabled(field.name)}
                                     id={field.name}
+                                    onChange={(area) => field.onChange(area.id)}
                                     placeholder="Area Collection"
                                 />
                             )}
