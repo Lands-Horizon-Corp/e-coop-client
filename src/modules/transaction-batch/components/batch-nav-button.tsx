@@ -1,7 +1,8 @@
-import { useCallback } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 
 import { toast } from 'sonner'
 
+import { cn } from '@/helpers'
 import { toReadableDate } from '@/helpers/date-utils'
 import {
     hasPermissionFromAuth,
@@ -13,6 +14,7 @@ import {
 } from '@/modules/transaction-batch'
 import { useTransactionBatchStore } from '@/modules/transaction-batch/store/transaction-batch-store'
 import { IEmployee } from '@/modules/user'
+import { useInfoModalStore } from '@/store/info-modal-store'
 import { useHotkeys } from 'react-hotkeys-hook'
 
 import { LayersIcon, LayersSharpDotIcon } from '@/components/icons'
@@ -31,6 +33,7 @@ import { IClassProps } from '@/types'
 
 import { TransactionBatchCreateFormModal } from './forms/transaction-batch-create-form'
 import TransactionBatch from './transaction-batch'
+import TransactionBatchDayMismatchDisplay from './transaction-batch-date-mismatch-display'
 
 interface Props extends IClassProps {}
 
@@ -49,6 +52,7 @@ const TransactionBatchNavButton = (_props: Props) => {
     } = useTransactionBatchStore()
     const { hasNoTransactionBatch } = useTransactionBatchStore()
     const { data, error, isSuccess, isError } = useCurrentTransactionBatch()
+    const { onOpen } = useInfoModalStore()
 
     const handleSuccess = useCallback(
         (data: TTransactionBatchFullorMin) => {
@@ -113,6 +117,28 @@ const TransactionBatchNavButton = (_props: Props) => {
         [manageBatchModalState.open, hasNoTransactionBatch]
     )
 
+    const [mounted, setMounted] = useState(false)
+
+    useEffect(() => {
+        if (!transactionBatch || mounted) return
+
+        onOpen({
+            hideSeparator: true,
+            classNames: {
+                footerActionClassName: 'justify-center',
+                closeButtonClassName: 'w-full',
+            },
+            component: (
+                <TransactionBatchDayMismatchDisplay
+                    batchId={transactionBatch.id}
+                    transactionBatchDate={transactionBatch.created_at}
+                />
+            ),
+        })
+
+        setMounted(true)
+    }, [onOpen, transactionBatch, mounted])
+
     if (!transactionBatch)
         return (
             <>
@@ -159,7 +185,11 @@ const TransactionBatchNavButton = (_props: Props) => {
         >
             <PopoverTrigger asChild>
                 <Button
-                    className="group rounded-lg border"
+                    className={cn(
+                        'group rounded-lg border relative',
+                        !transactionBatch.is_today &&
+                            'animate-pulse border border-destructive'
+                    )}
                     disabled={
                         !hasPermissionFromAuth({
                             action: ['Create'],
@@ -171,13 +201,20 @@ const TransactionBatchNavButton = (_props: Props) => {
                             resource: transactionBatch,
                         })
                     }
-                    hoverVariant="primary"
+                    hoverVariant={
+                        transactionBatch.is_today ? 'default' : 'destructive'
+                    }
                     shadow="none"
                     size="xs"
-                    variant="default"
+                    variant={
+                        transactionBatch.is_today ? 'default' : 'destructive'
+                    }
                 >
                     <LayersSharpDotIcon className="duration-300 group-hover:text-inherit" />
-                    Manage Batch
+                    {transactionBatch.is_today
+                        ? 'Manage Batch'
+                        : 'Batch Overdue'}
+                    <div className="size-2 absolute top-0 left-0 -translate-y-1/2 -translate-x-1/2 bg-destructive animate-ping rounded-full ml-auto" />
                 </Button>
             </PopoverTrigger>
             <PopoverContent

@@ -70,6 +70,8 @@ export interface ITransactionBatch
     ended_at?: string
     total_batch_time?: string
 
+    is_today: boolean
+
     currency_id: TEntityId
     currency: ICurrency
 }
