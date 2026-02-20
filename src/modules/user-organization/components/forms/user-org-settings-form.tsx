@@ -89,7 +89,7 @@ const UserOrgSettingsForm = ({
             allow_withdraw_exact_balance: false,
             maintaining_balance: false,
 
-            check_voucher_general_auto_increment: false,
+            // check_voucher_general_auto_increment: false,
             loan_voucher_auto_increment: false,
             adjustment_entry_auto_increment: false,
             journal_voucher_auto_increment: false,
@@ -742,7 +742,7 @@ const UserOrgSettingsForm = ({
                             </div>
                         </div>
 
-                        <FormFieldWrapper
+                        {/* <FormFieldWrapper
                             control={form.control}
                             name="check_voucher_general_auto_increment"
                             render={({ field }) => (
@@ -776,7 +776,7 @@ const UserOrgSettingsForm = ({
                                     </div>
                                 </div>
                             )}
-                        />
+                        /> */}
 
                         <FormFieldWrapper
                             control={form.control}

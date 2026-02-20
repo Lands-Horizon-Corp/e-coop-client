@@ -23,7 +23,10 @@ import { useModalState } from '@/hooks/use-modal-state'
 
 import { TEntityId } from '@/types'
 
-import { IAdjustmentEntryTotal } from '../adjustment-entry.types'
+import {
+    IAdjustmentEntryTotal,
+    TORAdjustmentVoucherSettings,
+} from '../adjustment-entry.types'
 import { AdjustmentEntryTotal } from '../components/adjustment-entry-total'
 import { AdjustmentEntryCreateUpdateFormModal } from '../components/forms/adjustment-entry-form-modal'
 import AdjustmentEntryTable, {
@@ -48,6 +51,15 @@ const AdjustmentEntryPage = () => {
         user_organization?.branch?.branch_setting?.currency
     )
 
+    const resolvedOrSettings: TORAdjustmentVoucherSettings | undefined =
+        user_organization
+            ? {
+                  ...user_organization.branch.branch_setting,
+                  adjustment_entry_auto_increment:
+                      user_organization.adjustment_entry_auto_increment,
+              }
+            : undefined
+
     return (
         <PageContainer>
             <PermissionGuard action="Read" resourceType="AdjustmentEntry">
@@ -64,7 +76,7 @@ const AdjustmentEntryPage = () => {
                         defaultValues: {
                             entry_date: userOrganization?.time_machine_time,
                         },
-                        orSettings: user_organization?.branch?.branch_setting,
+                        orSettings: resolvedOrSettings,
                         baseCurrency: currency,
                         onSuccess: () => {
                             queryClient.invalidateQueries({

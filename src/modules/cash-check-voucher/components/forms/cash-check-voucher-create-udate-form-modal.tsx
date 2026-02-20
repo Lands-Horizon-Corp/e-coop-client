@@ -192,8 +192,6 @@ const CashCheckVoucherCreateUpdateForm = ({
         modalState.onOpenChange(true)
     })
 
-    console.log(form.getValues('cash_voucher_number'))
-
     return (
         <Form {...form}>
             <form

@@ -46,7 +46,6 @@ const columns: ColumnDef<IJournalVoucherEntryRequest>[] = [
             const meta = props.table.options.meta as JournalEntryTableMeta
             const form = meta.form
             const rowIndex = props.row.index
-            console.log(props.table.options)
             return (
                 <AccountPicker
                     allowClear

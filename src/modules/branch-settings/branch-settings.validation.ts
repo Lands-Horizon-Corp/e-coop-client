@@ -22,6 +22,7 @@ export const BranchSettingRequestSchema = z.object({
     deposit_use_date_or: z.boolean(),
     deposit_padding: z.coerce.number(),
     deposit_common_or: z.string().optional().or(z.literal('')),
+    deposit_allow_user_input: z.boolean(),
 
     cash_check_voucher_allow_user_input: z.boolean(),
     cash_check_voucher_or_unique: z.boolean(),

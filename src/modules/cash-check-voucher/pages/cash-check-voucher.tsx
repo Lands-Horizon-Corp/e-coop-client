@@ -14,6 +14,7 @@ import PageContainer from '@/components/containers/page-container'
 import { useModalState } from '@/hooks/use-modal-state'
 import { useSubscribe } from '@/hooks/use-pubsub'
 
+import { TORCashCheckSettings } from '../cash-check-voucher.types'
 import CashCheckVoucherCreateUpdateFormModal from '../components/forms/cash-check-voucher-create-udate-form-modal'
 import CashCheckJournalVoucherTable, {
     CashCheckJournalVoucherTableProps,
@@ -31,6 +32,7 @@ const CashCheckJournalVoucherPage = () => {
                 branch: {
                     branch_setting: { currency, ...otherBranchSettings },
                 },
+                ...otherUserOrganization
             },
         },
     } = useAuthUserWithOrgBranch()
@@ -71,6 +73,15 @@ const CashCheckJournalVoucherPage = () => {
         })
     )
 
+    const resolvedOrSettings: TORCashCheckSettings | undefined =
+        otherUserOrganization
+            ? {
+                  ...otherBranchSettings,
+                  cash_check_voucher_auto_increment:
+                      otherUserOrganization.cash_check_voucher_auto_increment,
+              }
+            : undefined
+
     return (
         <PageContainer>
             <PermissionGuard action="Read" resourceType="CashCheckVoucher">
@@ -81,7 +92,7 @@ const CashCheckJournalVoucherPage = () => {
                             currency,
                             currency_id: currency.id,
                         },
-                        orSettings: otherBranchSettings,
+                        orSettings: resolvedOrSettings,
                     }}
                 />
                 <CashCheckJournalVoucherTable

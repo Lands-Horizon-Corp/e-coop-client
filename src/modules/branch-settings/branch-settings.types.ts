@@ -92,6 +92,7 @@ export interface IWithdrawSetting {
 }
 
 export interface IDepositSetting {
+    deposit_allow_user_input: boolean
     deposit_or_start: number
     deposit_or_current: number
     deposit_or_end: number

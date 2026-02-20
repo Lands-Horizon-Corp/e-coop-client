@@ -125,11 +125,12 @@ const JournalVoucherPrintForm = ({
     )
 
     useEffect(() => {
-        if (
-            isAllowedInputJournalVoucherOR(orSettings) ||
-            !!form.getValues('cash_voucher_number')
-        )
-            return undefined
+        const shouldGenerate =
+            !form.getValues('cash_voucher_number') &&
+            (!orSettings?.journal_voucher_allow_user_input ||
+                orSettings?.journal_voucher_auto_increment)
+
+        if (!shouldGenerate) return
 
         handleAutoGenerateOR(true)
     }, [orSettings, form, handleAutoGenerateOR])

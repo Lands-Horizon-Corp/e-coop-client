@@ -66,7 +66,6 @@ export const UserOrganizationSettingsSchema = z.object({
 
     time_machine_time: z.coerce
         .string()
-        .optional()
         .transform((val) => {
             if (!val || val === '') return undefined
 
@@ -74,7 +73,8 @@ export const UserOrganizationSettingsSchema = z.object({
             if (isNaN(date.getTime())) return undefined
 
             return date.toISOString()
-        }),
+        })
+        .optional(),
 
     settings_accounting_payment_default_value_id: entityIdSchema
         .optional()
@@ -92,12 +92,12 @@ export const UserOrganizationSettingsSchema = z.object({
         .optional()
         .nullable(),
 
-    settings_accounting_payment_default_value: z.any(),
-    settings_accounting_deposit_default_value: z.any(),
-    settings_accounting_withdraw_default_value: z.any(),
+    settings_accounting_payment_default_value: z.any().optional(),
+    settings_accounting_deposit_default_value: z.any().optional(),
+    settings_accounting_withdraw_default_value: z.any().optional(),
 
     // AUTO INCREMENTS
-    check_voucher_general_auto_increment: z.boolean().optional().default(false),
+    // check_voucher_general_auto_increment: z.boolean().optional().default(false),
     loan_voucher_auto_increment: z.boolean().optional().default(false),
     adjustment_entry_auto_increment: z.boolean().optional().default(false),
     journal_voucher_auto_increment: z.boolean().optional().default(false),

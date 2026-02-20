@@ -6,6 +6,7 @@ import { IAdjustmentVoucherSettings } from '../branch-settings'
 import { IMemberProfile } from '../member-profile'
 import { IPaymentType } from '../payment-type'
 import { IUser } from '../user'
+import { IUserOrganizationSettings } from '../user-organization'
 
 export interface IAdjustmentEntry extends IBaseEntityMeta {
     //add here
@@ -67,4 +68,5 @@ export type TAdjustmentEntryHookMode = 'all' | 'currency' | 'currency-employee'
 export type TORAdjustmentVoucherSettings = Omit<
     IAdjustmentVoucherSettings,
     'adjustment_voucher_or_unique'
->
+> &
+    Pick<IUserOrganizationSettings, 'adjustment_entry_auto_increment'>

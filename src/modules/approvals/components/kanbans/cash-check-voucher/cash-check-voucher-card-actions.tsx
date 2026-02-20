@@ -124,6 +124,14 @@ export const CashCheckVoucherCardActions = ({
         currentAuth: { user_organization },
     } = useAuthStore()
 
+    const resolvedOrSettings = user_organization
+        ? {
+              ...user_organization.branch.branch_setting,
+              check_voucher_general_auto_increment:
+                  user_organization.cash_check_voucher_auto_increment,
+          }
+        : undefined
+
     return (
         <>
             <CashCheckVoucherCreateUpdateFormModal
@@ -137,7 +145,7 @@ export const CashCheckVoucherCardActions = ({
                 {...printModal}
                 className="!min-w-[600px]"
                 formProps={{
-                    orSettings: user_organization?.branch.branch_setting,
+                    orSettings: resolvedOrSettings,
                     cashCheckVoucherId: cashCheckVoucher.id,
                     onSuccess: () => {
                         refetch()

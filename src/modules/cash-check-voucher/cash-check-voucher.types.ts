@@ -17,6 +17,7 @@ import { IMedia } from '../media'
 import { IMemberProfile } from '../member-profile'
 import { ITransactionBatch } from '../transaction-batch'
 import { IUser } from '../user'
+import { IUserOrganizationSettings } from '../user-organization'
 import {
     CashCheckSignatureSchema,
     CashCheckVoucherPrintSchema,
@@ -234,4 +235,5 @@ export type TORCashCheckSettings = Omit<
     ICashCheckVoucherGeneralORSettings,
     'check_voucher_general_or_unique'
 > &
-    Omit<ICashVoucherORSettings, 'check_voucher_general_or_unique'>
+    Omit<ICashVoucherORSettings, 'check_voucher_general_or_unique'> &
+    Pick<IUserOrganizationSettings, 'cash_check_voucher_auto_increment'>

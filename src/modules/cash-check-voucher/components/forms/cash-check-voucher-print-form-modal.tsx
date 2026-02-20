@@ -125,11 +125,12 @@ const CashCheckVoucherPrintForm = ({
     )
 
     useEffect(() => {
-        if (
-            isAllowedInputCashCheckOR(orSettings) ||
-            !!form.getValues('cash_voucher_number')
-        )
-            return undefined
+        const shouldGenerate =
+            !form.getValues('cash_voucher_number') &&
+            (!orSettings?.cash_check_voucher_allow_user_input ||
+                orSettings?.cash_check_voucher_auto_increment)
+
+        if (!shouldGenerate) return
 
         handleAutoGenerateOR(true)
     }, [orSettings, form, handleAutoGenerateOR])

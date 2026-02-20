@@ -12,7 +12,11 @@ import RowActionsGroup from '@/components/data-table/data-table-row-actions'
 import DataTableRowContext from '@/components/data-table/data-table-row-context'
 import { useTableRowActionStore } from '@/components/data-table/store/data-table-action-store'
 
-import { IJournalVoucher, useDeleteJournalVoucherById } from '../..'
+import {
+    IJournalVoucher,
+    TORJournalVoucherSettings,
+    useDeleteJournalVoucherById,
+} from '../..'
 import JournalVoucherApproveReleaseDisplayModal, {
     TJournalVoucherApproveReleaseDisplayMode,
 } from '../forms/journal-voucher-approve-release-modal'
@@ -222,6 +226,15 @@ export const JournalVoucherTableActionManager = () => {
     const isPrinted = !!journalVoucher.printed_date
     const approveReleaseMode = state.extra?.approveReleaseMode ?? 'approve'
 
+    const resolvedOrSettings: TORJournalVoucherSettings | undefined =
+        user_organization
+            ? {
+                  ...user_organization.branch.branch_setting,
+                  journal_voucher_auto_increment:
+                      user_organization.journal_voucher_auto_increment,
+              }
+            : undefined
+
     return (
         <>
             {state.action === 'edit' && (
@@ -236,12 +249,13 @@ export const JournalVoucherTableActionManager = () => {
                     open={state.isOpen}
                 />
             )}
+
             {state.action === 'print' && (
                 <JournalVoucherPrintFormModal
                     formProps={{
                         defaultValues: journalVoucher,
                         journalVoucherId: journalVoucher.id,
-                        orSettings: user_organization?.branch?.branch_setting,
+                        orSettings: resolvedOrSettings,
                     }}
                     onOpenChange={close}
                     open={state.isOpen}

@@ -9,7 +9,9 @@ export const isAllowedInputCashCheckOR = (orOptions?: TORCashCheckSettings) => {
         : orOptions.cash_check_voucher_allow_user_input
 }
 
-export const buildCashCheckOR = (orOptions: TORCashCheckSettings) => {
+export const buildCashCheckOR = (
+    orOptions: Omit<TORCashCheckSettings, 'cash_check_voucher_auto_increment'>
+) => {
     const shouldUseGeneral = orOptions.check_voucher_general
 
     const padding = shouldUseGeneral

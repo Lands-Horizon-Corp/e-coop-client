@@ -10,7 +10,10 @@ export const isAllowedInputAdjustmentVoucherOR = (
 }
 
 export const buildAdjustmentVoucherOR = (
-    orOptions: TORAdjustmentVoucherSettings
+    orOptions: Omit<
+        TORAdjustmentVoucherSettings,
+        'adjustment_entry_auto_increment'
+    >
 ) => {
     const padding = orOptions.adjustment_voucher_padding
     const currentOr = orOptions.adjustment_voucher_or_current

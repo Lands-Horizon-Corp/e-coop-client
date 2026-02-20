@@ -31,7 +31,10 @@ import {
     useReprintLoanTransaction,
     useUndoPrintLoanTransaction,
 } from '../../loan-transaction.service'
-import { ILoanTransaction } from '../../loan-transaction.types'
+import {
+    ILoanTransaction,
+    TORLoanVoucherSettings,
+} from '../../loan-transaction.types'
 import { resolveLoanDatesToStatus } from '../../loan-transaction.utils'
 import { LoanEditFormModal } from '../forms/loan-edit-form'
 import { LoanTransactionPrintFormModal } from '../forms/loan-print-form'
@@ -659,6 +662,15 @@ export const LoanTransactionTableActionManager = () => {
         currentAuth: { user_organization },
     } = useAuthStore()
 
+    const resolvedOrSettings: TORLoanVoucherSettings | undefined =
+        user_organization
+            ? {
+                  ...user_organization.branch.branch_setting,
+                  loan_voucher_auto_increment:
+                      user_organization.loan_voucher_auto_increment,
+              }
+            : undefined
+
     return (
         <>
             {state.action === 'edit' && loanTransaction && (
@@ -666,7 +678,7 @@ export const LoanTransactionTableActionManager = () => {
                     formProps={{
                         loanTransactionId: loanTransaction.id,
                         defaultValues: loanTransaction,
-                        orSettings: user_organization?.branch.branch_setting,
+                        orSettings: resolvedOrSettings,
                     }}
                     onOpenChange={close}
                     open={state.isOpen}
@@ -689,7 +701,7 @@ export const LoanTransactionTableActionManager = () => {
                     formProps={{
                         defaultValues: loanTransaction,
                         loanTransactionId: loanTransaction.id,
-                        orSettings: user_organization?.branch.branch_setting,
+                        orSettings: resolvedOrSettings,
                     }}
                     onOpenChange={close}
                     open={state.isOpen}

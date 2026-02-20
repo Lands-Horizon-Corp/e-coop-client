@@ -7,6 +7,7 @@ import { IOrganization } from '../organization'
 import { IPaymentType } from '../payment-type/payment-type.types'
 import { TPermission } from '../permission'
 import { IUserBase, TUserType } from '../user/user.types'
+import { TUserOrganizationSettingsSchema } from './user-organization.validation'
 
 export interface IUserOrganizationContext<
     TUserOrganization = IUserOrganization | undefined,
@@ -82,7 +83,7 @@ export interface IUserOrganization<TUser = IUserBase>
     settings_payment_type_default_value?: IPaymentType
 
     // AUTO INCREMENTS
-    check_voucher_general_auto_increment: boolean
+    // check_voucher_general_auto_increment: boolean
     loan_voucher_auto_increment: boolean
     adjustment_entry_auto_increment: boolean
     journal_voucher_auto_increment: boolean
@@ -116,38 +117,7 @@ export interface IUserOrganizationPermissionRequest {
     permissions: TPermission[]
 }
 
-export interface IUserOrganizationSettings {
-    user_type?: TUserType
-    description?: string
-
-    application_description?: string
-    application_status?: TUserOrganizationApplicationStatus
-
-    user_setting_description?: string
-
-    payment_or_unique?: boolean
-    payment_or_allow_user_input?: boolean
-    payment_or_current?: number
-    payment_or_end?: number
-    payment_or_start?: number
-    payment_or_iteration?: number
-    payment_or_use_date_or?: boolean
-    payment_prefix?: string
-    payment_padding?: number
-
-    allow_withdraw_negative_balance?: boolean
-    allow_withdraw_exact_balance?: boolean
-    maintaining_balance?: boolean
-
-    time_machine_time?: string
-
-    settings_accounting_payment_default_value_id?: TEntityId | null
-    settings_accounting_deposit_default_value_id?: TEntityId | null
-    settings_accounting_withdraw_default_value_id?: TEntityId | null
-    settings_payment_type_default_value_id?: TEntityId | null
-}
-
-export interface IUserOrganizationSettingsRequest extends IUserOrganizationSettings {}
+export type IUserOrganizationSettings = TUserOrganizationSettingsSchema
 
 export interface IUserOrganizationPaginated<
     TUser = IUserBase,

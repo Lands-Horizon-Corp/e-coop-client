@@ -129,11 +129,12 @@ const LoanTransactionPrintForm = ({
     )
 
     useEffect(() => {
-        if (
-            isAllowedInputLoanTransactionOR(orSettings) ||
-            !!form.getValues('voucher')
-        )
-            return undefined
+        const shouldGenerate =
+            !form.getValues('voucher') &&
+            (!orSettings?.loan_voucher_allow_user_input ||
+                orSettings?.loan_voucher_auto_increment)
+
+        if (!shouldGenerate) return
 
         handleAutoGenerateOR(true)
     }, [orSettings, form, handleAutoGenerateOR])

@@ -12,7 +12,11 @@ import RowActionsGroup from '@/components/data-table/data-table-row-actions'
 import DataTableRowContext from '@/components/data-table/data-table-row-context'
 import { useTableRowActionStore } from '@/components/data-table/store/data-table-action-store'
 
-import { ICashCheckVoucher, useDeleteCashCheckVoucherById } from '../..'
+import {
+    ICashCheckVoucher,
+    TORCashCheckSettings,
+    useDeleteCashCheckVoucherById,
+} from '../..'
 import CashCheckEntryUpdateFormModal from '../forms/cash-check-entry-form-modal'
 import CashCheckVoucherTransactionSignatureUpdateFormModal from '../forms/cash-check-signature-form-modal'
 import CashCheckVoucherApproveReleaseDisplayModal from '../forms/cash-check-voucher-approve-release-display-modal'
@@ -236,6 +240,15 @@ export const CashCheckVoucherTableActionManager = () => {
         currentAuth: { user_organization },
     } = useAuthStore()
 
+    const resolvedOrSettings: TORCashCheckSettings | undefined =
+        user_organization
+            ? {
+                  ...user_organization.branch.branch_setting,
+                  cash_check_voucher_auto_increment:
+                      user_organization.cash_check_voucher_auto_increment,
+              }
+            : undefined
+
     return (
         <>
             {state.action === 'edit' && state.defaultValues && (
@@ -245,7 +258,7 @@ export const CashCheckVoucherTableActionManager = () => {
                         defaultValues: state.defaultValues,
                         mode: 'update',
                         readOnly: isPrinted,
-                        orSettings: user_organization?.branch?.branch_setting,
+                        orSettings: resolvedOrSettings,
                     }}
                     onOpenChange={close}
                     open={state.isOpen}
@@ -260,7 +273,7 @@ export const CashCheckVoucherTableActionManager = () => {
                             cash_voucher_number:
                                 state.defaultValues?.cash_voucher_number,
                         },
-                        orSettings: user_organization?.branch?.branch_setting,
+                        orSettings: resolvedOrSettings,
                     }}
                     onOpenChange={close}
                     open={state.isOpen}

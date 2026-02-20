@@ -25,7 +25,7 @@ import {
     IUserOrganization,
     IUserOrganizationPaginated,
     IUserOrganizationPermissionRequest,
-    IUserOrganizationSettingsRequest,
+    IUserOrganizationSettings,
 } from './user-organization.types'
 
 export const { apiCrudHooks, apiCrudService, baseQueryKey } =
@@ -168,10 +168,10 @@ export const updateUserOrganizationSettings = async ({
 }: {
     id?: TEntityId
     url?: string
-    data: IUserOrganizationSettingsRequest
+    data: IUserOrganizationSettings
 }) => {
     const response = await API.put<
-        IUserOrganizationSettingsRequest,
+        IUserOrganizationSettings,
         IUserOrganization
     >(
         url ??
@@ -446,7 +446,7 @@ export const useCancelTimeMachineTime = createMutationFactory<
 export const useUpdateUserOrganizationSettings = createMutationFactory<
     IUserOrganization,
     Error,
-    { id?: TEntityId; url?: string; data: IUserOrganizationSettingsRequest }
+    { id?: TEntityId; url?: string; data: IUserOrganizationSettings }
 >({
     mutationFn: (args) => updateUserOrganizationSettings(args),
     invalidationFn: (args) => {

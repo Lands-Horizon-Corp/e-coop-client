@@ -43,10 +43,7 @@ import {
     IAdjustmentEntryRequest,
     TORAdjustmentVoucherSettings,
 } from '../../adjustment-entry.types'
-import {
-    buildAdjustmentVoucherOR,
-    isAllowedInputAdjustmentVoucherOR,
-} from '../../adjustment-entry.utils'
+import { buildAdjustmentVoucherOR } from '../../adjustment-entry.utils'
 import { AdjustmentEntrySchema } from '../../adjustment-entry.validation'
 
 type TAdjustmentEntryFormValues = z.infer<typeof AdjustmentEntrySchema>
@@ -182,11 +179,12 @@ const AdjustmentEntryCreateUpdateForm = ({
     )
 
     useEffect(() => {
-        if (
-            isAllowedInputAdjustmentVoucherOR(orSettings) ||
-            !!form.getValues('reference_number')
-        )
-            return undefined
+        const shouldGenerate =
+            !form.getValues('reference_number') &&
+            (!orSettings?.adjustment_voucher_allow_user_input ||
+                orSettings?.adjustment_entry_auto_increment)
+
+        if (!shouldGenerate) return
 
         handleAutoGenerateOR(true)
     }, [orSettings, form, handleAutoGenerateOR])

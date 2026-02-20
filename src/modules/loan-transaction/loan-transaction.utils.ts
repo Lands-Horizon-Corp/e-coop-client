@@ -15,7 +15,7 @@ export const resolveLoanDatesToStatus = (
 }
 
 export const isAllowedInputLoanTransactionOR = (
-    orOptions?: TORLoanVoucherSettings
+    orOptions?: Omit<TORLoanVoucherSettings, 'loan_voucher_auto_increment'>
 ) => {
     if (!orOptions) return true
 

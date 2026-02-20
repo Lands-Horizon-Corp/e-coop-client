@@ -85,6 +85,7 @@ const BranchSettingsForm = ({
             deposit_use_date_or: false,
             deposit_padding: 0,
             deposit_common_or: '',
+            deposit_allow_user_input: false,
 
             // Cash Check Voucher
             cash_check_voucher_allow_user_input: false,
@@ -675,6 +676,13 @@ const BranchSettingsForm = ({
                             />
                         </div>
                         <div className="space-y-3">
+                            <SwitchFormField
+                                description="Allow users to manually input reference number numbers"
+                                form={form}
+                                isDisabled={isDisabled}
+                                label="Allow user Input"
+                                name="deposit_allow_user_input"
+                            />
                             <SwitchFormField
                                 description="Include date formatting in deposit reference number numbers"
                                 form={form}

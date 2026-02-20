@@ -27,6 +27,7 @@ import { IMemberAccountingLedger } from '../member-account-ledger'
 import { IMemberProfile } from '../member-profile'
 import { ITransactionBatch } from '../transaction-batch'
 import { IUser } from '../user'
+import { IUserOrganizationSettings } from '../user-organization'
 import {
     LoanEditTransactionSchema,
     LoanTransactionPrintSchema,
@@ -458,4 +459,8 @@ export type TORLoanVoucherSettings = Omit<
     ILoanVoucherORSettings,
     'loan_voucher_or_unique'
 > &
-    Omit<ICashCheckVoucherGeneralORSettings, 'check_voucher_general_or_unique'>
+    Omit<
+        ICashCheckVoucherGeneralORSettings,
+        'check_voucher_general_or_unique'
+    > &
+    Pick<IUserOrganizationSettings, 'loan_voucher_auto_increment'>
