@@ -62,8 +62,12 @@ interface DepositWithdrawProps {
 const DepositWithdrawWrapper = ({ mode }: DepositWithdrawProps) => {
     const { hasNoTransactionBatch } = useTransactionBatchStore()
 
-    const { selectedMember, setSelectedAccount, modalTransactionReverseState } =
-        useQuickTransferContext()
+    const {
+        selectedMember,
+        setSelectedAccount,
+        modalTransactionReverseState,
+        ledger,
+    } = useQuickTransferContext()
 
     const { modalData, isOpen, onClose } = modalTransactionReverseState
 
@@ -110,6 +114,7 @@ const DepositWithdrawWrapper = ({ mode }: DepositWithdrawProps) => {
                         />
                     </div>
                     <TransactionAccountMemberLedger
+                        generalLedger={ledger}
                         memberProfileId={selectedMember?.id as TEntityId}
                         onRowClick={(data) => {
                             setSelectedAccount(data.account)

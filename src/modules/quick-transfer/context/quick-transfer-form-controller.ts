@@ -33,6 +33,7 @@ export const useQuickTransferController = ({
         accountPickerState: useModalState(false),
         othersState: useModalState(false),
         paymentTypeModalState: useModalState(false),
+        ledger: useModalState(false),
     }
 
     const modalTransactionReverseState = useTransactionReverseSecurityStore()

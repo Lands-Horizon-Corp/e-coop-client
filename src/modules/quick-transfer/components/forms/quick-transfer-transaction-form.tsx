@@ -100,7 +100,6 @@ export const QuickTransferTransactionForm = ({
             account: defaultAccount,
             account_id: defaultAccount?.id || undefined,
             reference_number: '',
-            // is_reference_number_checked: !allowUserInputreferenceNumber,
             payment_type_id:
                 settings_payment_type_default_value_id || undefined,
         },
