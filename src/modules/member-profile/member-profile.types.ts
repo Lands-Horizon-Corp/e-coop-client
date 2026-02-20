@@ -207,7 +207,7 @@ export interface IMemberProfile extends ITimeStamps, IAuditable {
     member_assets?: IMemberAsset[]
     member_incomes?: IMemberIncome[]
     // memberWallets?: IMemberWallet[] // ano to desu
-    member_address?: IMemberAddress[]
+    member_addresses?: IMemberAddress[]
     member_expenses?: IMemberExpense[]
     // memberDescriptions?: IMemberDescription[]
     member_close_remarks?: IMemberCloseRemark[]

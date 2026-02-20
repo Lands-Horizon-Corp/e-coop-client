@@ -537,7 +537,7 @@ const MemberAddressesSection = ({
         name: 'member_address_deleted_id',
     })
 
-    const addresses = watch('member_address') ?? []
+    const addresses = watch('member_addresses') ?? []
 
     const addAddressModalState = useModalState()
 
@@ -611,7 +611,7 @@ const MemberAddressCard = ({
     readOnly?: boolean
     onRemove: (index: number, data: IMemberAddressRequest) => void
 }) => {
-    const address = form.watch(`member_address.${index}`)
+    const address = form.watch(`member_addresses.${index}`)
     const memberAddressModalState = useModalState()
 
     if (!address) return null
@@ -627,7 +627,7 @@ const MemberAddressCard = ({
                 {...memberAddressModalState}
                 formProps={{
                     onSuccess(data) {
-                        form.setValue(`member_address.${index}`, data)
+                        form.setValue(`member_addresses.${index}`, data)
                         memberAddressModalState.onOpenChange(false)
                     },
                 }}
