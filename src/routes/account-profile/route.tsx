@@ -1,3 +1,5 @@
+import { RefObject, useRef } from 'react'
+
 import { Outlet, createFileRoute } from '@tanstack/react-router'
 import { useRouter } from '@tanstack/react-router'
 import { Link } from '@tanstack/react-router'
@@ -7,6 +9,7 @@ import { cn } from '@/helpers'
 import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
 import { logger, useSignOut } from '@/modules/authentication'
 import { useAuthUser } from '@/modules/authentication/authgentication.store'
+import { ScrollContext } from '@/providers/scroll-parent-provider'
 import useConfirmModalStore from '@/store/confirm-modal-store'
 
 import {
@@ -63,6 +66,9 @@ export const Route = createFileRoute('/account-profile')({
 
 function RouteComponent() {
     const { handleGetStarted } = useGetIntoBranch()
+
+    const scrollRef = useRef<HTMLDivElement>(null)
+
     return (
         <AuthGuard>
             <SidebarProvider>
@@ -388,23 +394,27 @@ function RouteComponent() {
                         <NavUser user={data.user} />
                     </SidebarFooter> */}
                 </Sidebar>
-                <SidebarInset className="ecoop-scroll max-h-[98vh] w-full overflow-y-auto">
-                    <UserProfileNav className="sticky top-0 z-50 bg-background/90 mx-0 lg:px-5" />
-                    <div className="mx-auto max-w-4xl w-4xl flex justify-end px-2">
-                        <Button
-                            className=""
-                            onClick={handleGetStarted}
-                            size={'sm'}
-                            variant={'ghost'}
-                        >
-                            <BackIcon className="" size={20} />
-                            Go Back
-                        </Button>
-                    </div>
-                    <main>
-                        <Outlet />
-                    </main>
-                </SidebarInset>
+                <ScrollContext.Provider
+                    value={scrollRef as unknown as RefObject<HTMLDivElement>}
+                >
+                    <SidebarInset className="ecoop-scroll max-h-[98vh] w-full overflow-y-auto">
+                        <UserProfileNav className="sticky top-0 z-50 bg-background/90 mx-0 lg:px-5" />
+                        <div className="mx-auto max-w-4xl w-4xl flex justify-end px-2">
+                            <Button
+                                className=""
+                                onClick={handleGetStarted}
+                                size={'sm'}
+                                variant={'ghost'}
+                            >
+                                <BackIcon className="" size={20} />
+                                Go Back
+                            </Button>
+                        </div>
+                        <main>
+                            <Outlet />
+                        </main>
+                    </SidebarInset>
+                </ScrollContext.Provider>
             </SidebarProvider>
             {/* <div className="flex">
                 <main className="flex w-full flex-1 items-center">

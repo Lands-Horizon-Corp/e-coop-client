@@ -1,3 +1,5 @@
+import { RefObject } from 'react'
+
 import { useInfiniteQuery } from '@tanstack/react-query'
 import { createFileRoute } from '@tanstack/react-router'
 import { toast } from 'sonner'
@@ -8,6 +10,7 @@ import { withCatchAsync } from '@/helpers/function-utils'
 import { cn } from '@/helpers/tw-utils'
 import { FootstepAPI, IFootstep } from '@/modules/footstep'
 import FootstepDetail from '@/modules/footstep/components/footstep-detail'
+import { useScrollContainer } from '@/providers/scroll-parent-provider'
 
 import PageContainer from '@/components/containers/page-container'
 import { FootstepsIcon, RefreshIcon } from '@/components/icons'
@@ -35,44 +38,55 @@ export const Route = createFileRoute('/account-profile/activity-logs')({
 })
 
 function RouteComponent() {
-    const { data, isPending, isFetching, fetchNextPage, refetch, hasNextPage } =
-        useInfiniteQuery({
-            queryKey: ['footstep', 'infinite', 'me-branch'],
-            initialPageParam: {
-                pageIndex: 0,
-                pageSize: 2,
-            },
-            retry: 0,
-            queryFn: async ({ pageParam: { pageIndex, pageSize } }) => {
-                const [error, result] = await withCatchAsync(
-                    FootstepAPI.getPaginated<IFootstep>({
-                        query: { pageIndex, pageSize },
-                        url: `${FootstepAPI.route}/me/search`,
-                    })
-                )
+    const scrollParent = useScrollContainer()
 
-                if (error) {
-                    const errorMessage = serverRequestErrExtractor({ error })
-                    toast.error('Failed to load data, ' + errorMessage)
-                    throw errorMessage
-                }
+    const {
+        data,
+        isPending,
+        isFetching,
+        fetchNextPage,
+        isFetchingNextPage,
+        refetch,
+        hasNextPage,
+    } = useInfiniteQuery({
+        queryKey: ['footstep', 'infinite', 'me-branch'],
+        initialPageParam: {
+            pageIndex: 0,
+            pageSize: 10,
+        },
+        retry: 0,
+        queryFn: async ({ pageParam: { pageIndex, pageSize } }) => {
+            const [error, result] = await withCatchAsync(
+                FootstepAPI.getPaginated<IFootstep>({
+                    query: { pageIndex, pageSize },
+                    url: `${FootstepAPI.route}/me/search`,
+                })
+            )
 
-                return result
-            },
-            getNextPageParam: (lastResponseDatas, _all, lastPage) => {
-                if (lastResponseDatas.data.length < lastPage.pageSize)
-                    return undefined
-                return { ...lastPage, pageIndex: lastPage.pageIndex + 1 }
-            },
-            getPreviousPageParam: (_firstResponseDatas, _all, firstPage) => {
-                if (firstPage.pageIndex <= 0) return undefined
-                return { ...firstPage, pageIndex: firstPage.pageIndex - 1 }
-            },
-        })
+            if (error) {
+                const errorMessage = serverRequestErrExtractor({ error })
+                toast.error('Failed to load data, ' + errorMessage)
+                throw errorMessage
+            }
+
+            return result
+        },
+        getNextPageParam: (lastResponseDatas, _all, lastPage) => {
+            if (lastResponseDatas.data.length < lastPage.pageSize)
+                return undefined
+            return { ...lastPage, pageIndex: lastPage.pageIndex + 1 }
+        },
+        getPreviousPageParam: (_firstResponseDatas, _all, firstPage) => {
+            if (firstPage.pageIndex <= 0) return undefined
+            return { ...firstPage, pageIndex: firstPage.pageIndex - 1 }
+        },
+    })
 
     const ActivityLogs = data?.pages.flatMap((page) => page.data) ?? []
 
     const { ref } = useElementInView<HTMLDivElement>({
+        scrollParent:
+            scrollParent.current as unknown as RefObject<HTMLDivElement>,
         onEnterView() {
             if (hasNextPage) {
                 fetchNextPage()
@@ -103,7 +117,7 @@ function RouteComponent() {
                     )}
                 </Button>
             </div>
-            {isPending && <LoadingSpinner className="mx-auto" />}
+
             {ActivityLogs.length === 0 && !isPending && (
                 <Empty className="from-muted/50 w-full to-background h-full bg-gradient-to-b from-30%">
                     <EmptyHeader>
@@ -142,12 +156,7 @@ function RouteComponent() {
                             key={footstep.id}
                         />
                     ))}
-                    {!hasNextPage && !isFetching && (
-                        <p className="text-center text-xs last:border-b-0 border-0 text-muted-foreground/70 py-4">
-                            no more to load
-                        </p>
-                    )}
-                    {isFetching && (
+                    {isFetchingNextPage && (
                         <div className="rounded-none p-4 w-full flex items-center justify-between">
                             <div className="space-y-2">
                                 <Skeleton className="w-56 h-6" />
@@ -160,7 +169,12 @@ function RouteComponent() {
                             <Skeleton className="w-16 h-4" />
                         </div>
                     )}
-                    {!isFetching && <span ref={ref} />}
+                    <div className="h-0 w-full" ref={ref} />
+                    {!hasNextPage && ActivityLogs.length > 0 && (
+                        <p className="text-center text-xs text-muted-foreground py-6">
+                            You're all caught up! 🎉
+                        </p>
+                    )}
                 </div>
             )}
         </PageContainer>
