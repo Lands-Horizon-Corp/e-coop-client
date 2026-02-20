@@ -214,7 +214,9 @@ const TransactionBatchNavButton = (_props: Props) => {
                     {transactionBatch.is_today
                         ? 'Manage Batch'
                         : 'Batch Overdue'}
-                    <div className="size-2 absolute top-0 left-0 -translate-y-1/2 -translate-x-1/2 bg-destructive animate-ping rounded-full ml-auto" />
+                    {!transactionBatch.is_today && (
+                        <div className="size-2 absolute top-0 left-0 -translate-y-1/2 -translate-x-1/2 bg-destructive animate-ping rounded-full ml-auto" />
+                    )}
                 </Button>
             </PopoverTrigger>
             <PopoverContent
