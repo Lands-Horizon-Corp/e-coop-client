@@ -1,6 +1,5 @@
 import { cn } from '@/helpers'
 import { toReadableDate } from '@/helpers/date-utils'
-import HoveruserInfo from '@/modules/user/components/hover-user-info'
 
 import {
     CalendarNumberIcon,
@@ -12,14 +11,8 @@ import {
     XIcon,
 } from '@/components/icons'
 import ImageDisplay from '@/components/image-display'
-import ImageNameDisplay from '@/components/image-name-display'
 import { Badge } from '@/components/ui/badge'
 import { Card, CardContent } from '@/components/ui/card'
-import {
-    HoverCard,
-    HoverCardContent,
-    HoverCardTrigger,
-} from '@/components/ui/hover-card'
 import { Skeleton } from '@/components/ui/skeleton'
 import CopyWrapper from '@/components/wrappers/copy-wrapper'
 import PreviewMediaWrapper from '@/components/wrappers/preview-media-wrapper'
@@ -106,7 +99,7 @@ const MemberProfileMiniInfoCard = ({ className, memberProfile }: Props) => {
                                 {memberProfile.full_name}
                             </h2>
                             <div className="flex items-center gap-x-2">
-                                {memberProfile.user && (
+                                {/* {memberProfile.user && (
                                     <HoverCard>
                                         <HoverCardTrigger>
                                             <ImageNameDisplay
@@ -128,6 +121,31 @@ const MemberProfileMiniInfoCard = ({ className, memberProfile }: Props) => {
                                             />
                                         </HoverCardContent>
                                     </HoverCard>
+                                )} */}
+                                {memberProfile.branch && (
+                                    <div
+                                        className={cn(
+                                            'flex items-center gap-x-2 max-w-full bg-primary text-primary-foreground text-sm rounded-full px-2 py-1 min-w-0',
+                                            className
+                                        )}
+                                    >
+                                        <ImageDisplay
+                                            className="size-4"
+                                            src={
+                                                memberProfile.branch.media
+                                                    .download_url
+                                            }
+                                        />
+                                        <p
+                                            className={cn(
+                                                'truncate min-w-0 max-w-full',
+                                                !memberProfile.branch.name &&
+                                                    'text-muted-foreground/70'
+                                            )}
+                                        >
+                                            {memberProfile.branch.name || 'N/A'}
+                                        </p>
+                                    </div>
                                 )}
                                 <Badge variant="outline">
                                     {memberProfile.member_type?.name || (

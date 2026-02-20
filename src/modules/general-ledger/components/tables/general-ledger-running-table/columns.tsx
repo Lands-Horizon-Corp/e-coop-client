@@ -235,37 +235,37 @@ const GeneralLedgerRunningTableColumns = (
             size: 120,
             minSize: 100,
         },
-        {
-            id: 'member_profile',
-            accessorKey: 'member_profile.full_name',
-            header: (props) => (
-                <DataTableColumnHeader {...props} title="Member">
-                    <ColumnActions {...props} />
-                </DataTableColumnHeader>
-            ),
-            cell: ({
-                row: {
-                    original: { member_profile },
-                },
-            }) => (
-                <span>
-                    {member_profile ? (
-                        <ImageNameDisplay
-                            name={member_profile.full_name}
-                            src={member_profile.media?.download_url}
-                        />
-                    ) : (
-                        <span className="text-muted-foreground">-</span>
-                    )}
-                </span>
-            ),
-            enableMultiSort: true,
-            enableSorting: true,
-            enableResizing: true,
-            enableHiding: true,
-            size: 160,
-            minSize: 120,
-        },
+        // {
+        //     id: 'member_profile',
+        //     accessorKey: 'member_profile.full_name',
+        //     header: (props) => (
+        //         <DataTableColumnHeader {...props} title="Member">
+        //             <ColumnActions {...props} />
+        //         </DataTableColumnHeader>
+        //     ),
+        //     cell: ({
+        //         row: {
+        //             original: { member_profile },
+        //         },
+        //     }) => (
+        //         <span>
+        //             {member_profile ? (
+        //                 <ImageNameDisplay
+        //                     name={member_profile.full_name}
+        //                     src={member_profile.media?.download_url}
+        //                 />
+        //             ) : (
+        //                 <span className="text-muted-foreground">-</span>
+        //             )}
+        //         </span>
+        //     ),
+        //     enableMultiSort: true,
+        //     enableSorting: true,
+        //     enableResizing: true,
+        //     enableHiding: true,
+        //     size: 160,
+        //     minSize: 120,
+        // },
         {
             id: 'employee_user',
             accessorKey: 'employee_user',

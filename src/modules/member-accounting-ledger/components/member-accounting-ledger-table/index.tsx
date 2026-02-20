@@ -85,7 +85,7 @@ const MemberAccountingLedgerTable = ({
         () =>
             MemberAccountingLedgerTableColumns({
                 actionComponent,
-            }),
+            }).filter(col => col.id),
         [actionComponent]
     )
 
