@@ -1,5 +1,8 @@
 import { useAuthStore } from '@/modules/authentication/authgentication.store'
-import { ICashCheckVoucher } from '@/modules/cash-check-voucher'
+import {
+    ICashCheckVoucher,
+    TORCashCheckSettings,
+} from '@/modules/cash-check-voucher'
 import { CashCheckVoucherTagsManagerPopover } from '@/modules/cash-check-voucher-tag/components/cash-check-voucher-tag-manager'
 import CashCheckVoucherTransactionSignatureUpdateFormModal from '@/modules/cash-check-voucher/components/forms/cash-check-signature-form-modal'
 import CashCheckVoucherApproveReleaseDisplayModal from '@/modules/cash-check-voucher/components/forms/cash-check-voucher-approve-release-display-modal'
@@ -124,13 +127,14 @@ export const CashCheckVoucherCardActions = ({
         currentAuth: { user_organization },
     } = useAuthStore()
 
-    const resolvedOrSettings = user_organization
-        ? {
-              ...user_organization.branch.branch_setting,
-              check_voucher_general_auto_increment:
-                  user_organization.cash_check_voucher_auto_increment,
-          }
-        : undefined
+    const resolvedOrSettings: TORCashCheckSettings | undefined =
+        user_organization
+            ? {
+                  ...user_organization.branch.branch_setting,
+                  cash_check_voucher_auto_increment:
+                      user_organization.cash_check_voucher_auto_increment,
+              }
+            : undefined
 
     return (
         <>

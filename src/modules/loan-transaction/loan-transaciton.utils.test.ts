@@ -1,10 +1,9 @@
 import { describe, expect, it } from 'vitest'
 
-import { TORLoanVoucherSettings } from './loan-transaction.types'
 import { buildLoanVoucherOR } from './loan-transaction.utils'
 
 describe('buildLoanVoucherOR', () => {
-    const baseSettings: TORLoanVoucherSettings = {
+    const baseSettings = {
         /** General */
         check_voucher_general: true,
         check_voucher_general_allow_user_input: false,

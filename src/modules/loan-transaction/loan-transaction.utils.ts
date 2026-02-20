@@ -24,7 +24,9 @@ export const isAllowedInputLoanTransactionOR = (
         : orOptions.loan_voucher_allow_user_input
 }
 
-export const buildLoanVoucherOR = (orOptions: TORLoanVoucherSettings) => {
+export const buildLoanVoucherOR = (
+    orOptions: Omit<TORLoanVoucherSettings, 'loan_voucher_auto_increment'>
+) => {
     const shouldUseGeneral = orOptions.check_voucher_general
 
     const padding = shouldUseGeneral

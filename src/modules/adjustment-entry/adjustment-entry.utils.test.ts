@@ -1,10 +1,9 @@
 import { describe, expect, it } from 'vitest'
 
-import { TORAdjustmentVoucherSettings } from '.'
 import { buildAdjustmentVoucherOR } from './adjustment-entry.utils'
 
 describe('buildAdjustmentVoucherOR', () => {
-    const baseSettings: TORAdjustmentVoucherSettings = {
+    const baseSettings = {
         adjustment_voucher_allow_user_input: false,
         adjustment_voucher_prefix: 'ADJ-',
         adjustment_voucher_or_start: 1,

@@ -9,6 +9,7 @@ import PrintReportFormModal from '@/modules/generated-report/components/forms/pr
 import { useGenerateReport } from '@/modules/generated-report/components/generate-report-hooks/use-report-generate'
 import {
     ILoanTransaction,
+    TORLoanVoucherSettings,
     useUndoPrintLoanTransaction,
 } from '@/modules/loan-transaction'
 import { LoanTransactionPrintFormModal } from '@/modules/loan-transaction/components/forms/loan-print-form'
@@ -163,6 +164,15 @@ export const LoanTransactionCardActions = ({
         currentAuth: { user_organization },
     } = useAuthStore()
 
+    const resolvedOrSettings: TORLoanVoucherSettings | undefined =
+        user_organization
+            ? {
+                  ...user_organization.branch.branch_setting,
+                  loan_voucher_auto_increment:
+                      user_organization.loan_voucher_auto_increment,
+              }
+            : undefined
+
     return (
         <>
             <LoanTransactionCreateUpdateFormModal
@@ -196,7 +206,7 @@ export const LoanTransactionCardActions = ({
                 {...printModal}
                 className=""
                 formProps={{
-                    orSettings: user_organization?.branch.branch_setting,
+                    orSettings: resolvedOrSettings,
                     defaultValues: { ...loanTransaction },
                     loanTransactionId: loanTransaction.id,
                     onSuccess: () => {

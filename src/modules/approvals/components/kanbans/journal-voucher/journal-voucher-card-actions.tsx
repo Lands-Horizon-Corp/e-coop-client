@@ -1,7 +1,10 @@
 import { useAuthStore } from '@/modules/authentication/authgentication.store'
 import PrintReportFormModal from '@/modules/generated-report/components/forms/print-modal-config'
 import { useGenerateReport } from '@/modules/generated-report/components/generate-report-hooks/use-report-generate'
-import { IJournalVoucher } from '@/modules/journal-voucher'
+import {
+    IJournalVoucher,
+    TORJournalVoucherSettings,
+} from '@/modules/journal-voucher'
 import { JournalVoucherTagsManagerPopover } from '@/modules/journal-voucher-tag/components/journal-voucher-tag-management'
 import JournalVoucherApproveReleaseDisplayModal, {
     TJournalVoucherApproveReleaseDisplayMode,
@@ -102,6 +105,15 @@ export const JournalVoucherCardActions = ({
         currentAuth: { user_organization },
     } = useAuthStore()
 
+    const resolvedOrSettings: TORJournalVoucherSettings | undefined =
+        user_organization
+            ? {
+                  ...user_organization.branch.branch_setting,
+                  journal_voucher_auto_increment:
+                      user_organization.journal_voucher_auto_increment,
+              }
+            : undefined
+
     return (
         <>
             <JournalVoucherCreateUpdateFormModal
@@ -115,7 +127,7 @@ export const JournalVoucherCardActions = ({
                 {...printModal}
                 formProps={{
                     defaultValues: { ...journalVoucher },
-                    orSettings: user_organization?.branch.branch_setting,
+                    orSettings: resolvedOrSettings,
                     journalVoucherId: journalVoucher.id,
                     onSuccess: () => {
                         refetch?.()

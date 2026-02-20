@@ -13,6 +13,7 @@ import PageContainer from '@/components/containers/page-container'
 import { useModalState } from '@/hooks/use-modal-state'
 import { useSubscribe } from '@/hooks/use-pubsub'
 
+import { TORLoanVoucherSettings } from '../../loan-transaction.types'
 import { LoanTransactionCreateUpdateFormModal } from '../forms/loan-transaction-create-update-form'
 import LoanTransactionTable, {
     LoanTransactionTableProps,
@@ -30,6 +31,7 @@ const LoansPage = () => {
             user_organization: {
                 branch_id,
                 branch: { branch_setting },
+                ...user_organization
             },
         },
     } = useAuthUserWithOrgBranch()
@@ -40,13 +42,22 @@ const LoansPage = () => {
         queryClient.invalidateQueries({ queryKey: ['loan-transaction'] })
     })
 
+    const resolvedOrSettings: TORLoanVoucherSettings | undefined =
+        user_organization
+            ? {
+                  ...branch_setting,
+                  loan_voucher_auto_increment:
+                      user_organization.loan_voucher_auto_increment,
+              }
+            : undefined
+
     return (
         <PageContainer>
             <PermissionGuard action="Read" resourceType="Loan">
                 <LoanTransactionCreateUpdateFormModal
                     {...createModal}
                     formProps={{
-                        orSettings: branch_setting,
+                        orSettings: resolvedOrSettings,
                     }}
                 />
                 <LoanTransactionTable
