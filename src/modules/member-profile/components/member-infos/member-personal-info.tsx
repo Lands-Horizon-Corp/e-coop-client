@@ -92,7 +92,7 @@ const MemberPersonalInfo = forwardRef<HTMLDivElement, Props>(
                                 media={memberData?.signature_media}
                             >
                                 <ImageDisplay
-                                    className="h-96 w-full rounded-md"
+                                    className="h-96 w-full rounded-md bg-background dark:bg-foreground"
                                     fallbackClassName="h-96 w-full rounded-md"
                                     src={
                                         memberData?.signature_media
