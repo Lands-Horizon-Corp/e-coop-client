@@ -20,13 +20,16 @@ const MemberTypePieChart = ({ isLoading }: MemberTypePieChartProps) => {
     const canvasRef = useRef<HTMLCanvasElement | null>(null)
     const chartRef = useRef<Chart | null>(null)
 
-    const chartData =
-        MOCK_MEMBER_PROFILE_DASHBOARD_SUMMARY.member_type_counts?.map(
-            (item) => ({
-                name: item.member_type.name || 'No Member Type Data',
-                value: item.count,
-            })
-        ) ?? []
+    const chartData = useMemo(() => {
+        return (
+            MOCK_MEMBER_PROFILE_DASHBOARD_SUMMARY.member_type_counts?.map(
+                (item) => ({
+                    name: item.member_type?.name || 'No Member Type Data',
+                    value: item.count,
+                })
+            ) ?? []
+        )
+    }, [])
 
     const theme = useMemo(() => {
         if (typeof window === 'undefined') return null

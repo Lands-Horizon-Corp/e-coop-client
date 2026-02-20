@@ -25,7 +25,7 @@ export const useAccountController = () => {
         if (getAllAccounts.data) {
             setAccounts(getAllAccounts.data)
         }
-    }, [getAllAccounts.data, setAccounts])
+    }, [getAllAccounts, setAccounts])
 
     const modals = {
         createModal: useModalState(false),

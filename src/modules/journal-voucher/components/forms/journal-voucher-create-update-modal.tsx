@@ -117,7 +117,7 @@ const JournalVoucherCreateUpdateForm = ({
                 account_id: '',
             },
         ])
-    }, [defaultMode, form])
+    }, [editJournalId, defaultMode, form])
 
     const {
         mutate: createJournalVoucher,
