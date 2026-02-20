@@ -236,7 +236,7 @@ const MemberAddressCreateUpdateForm = ({
                             description="Specifies the area this address belongs to, used for collector assignment."
                             descriptionClassName="text-xs"
                             label="Area"
-                            name="area"
+                            name="area_id"
                             render={({ field }) => (
                                 <AreaCombobox
                                     {...field}

@@ -20,7 +20,7 @@ export const MemberAddressSchema = z.object({
     barangay: z.string().optional(),
     landmark: z.string().optional(),
 
-    areaId: entityIdSchema.optional(),
+    area_id: entityIdSchema.optional(),
     area: z.any().optional(),
 
     longitude: z.number().optional(),

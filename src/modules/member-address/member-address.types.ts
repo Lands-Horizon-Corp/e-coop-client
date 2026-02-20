@@ -23,7 +23,7 @@ export interface IMemberAddress extends IBaseEntityMeta {
     barangay?: string
     landmark?: string
 
-    areaId?: TEntityId
+    area_id?: TEntityId
     area?: IArea
 
     longitude?: number
