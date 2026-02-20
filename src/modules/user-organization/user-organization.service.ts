@@ -434,7 +434,6 @@ export const useCancelTimeMachineTime = createMutationFactory<
         args.queryClient.invalidateQueries({
             queryKey: ['auth', 'context'],
         })
-
         args.queryClient.invalidateQueries({
             queryKey: ['transaction-batch'],
         })
