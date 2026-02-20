@@ -160,8 +160,14 @@ export const useCashCheckVoucherActions = createMutationFactory<
         >(`${cashCheckVoucherAPIRoute}/${cash_check_voucher_id}/${mode}`)
         return response.data
     },
-    invalidationFn: (args) =>
-        updateMutationInvalidationFn(cashCheckVoucherBaseKey, args),
+    invalidationFn: (args) => {
+        if (args.variables.mode === 'release') {
+            args.queryClient.invalidateQueries({
+                queryKey: ['transaction-batch'],
+            })
+        }
+        updateMutationInvalidationFn(cashCheckVoucherBaseKey, args)
+    },
 })
 
 // PRINT CASH CHECK VOUCHER

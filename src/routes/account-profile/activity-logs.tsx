@@ -74,7 +74,6 @@ function RouteComponent() {
 
     const { ref } = useElementInView<HTMLDivElement>({
         onEnterView() {
-            console.log('in view')
             if (hasNextPage) {
                 fetchNextPage()
             }

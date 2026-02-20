@@ -75,7 +75,6 @@ export const useTransactionController = ({
             reference_number: '',
         },
     })
-    console.log(form.getValues())
 
     const handleAutoGenerateOR = useCallback(
         (isAuto?: boolean) => {

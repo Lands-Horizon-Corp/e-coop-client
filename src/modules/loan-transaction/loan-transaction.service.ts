@@ -344,8 +344,12 @@ export const useReleaseLoanTransaction = createMutationFactory<
         )
         return response.data
     },
-    invalidationFn: (args) =>
-        updateMutationInvalidationFn(loanTransactionBaseKey, args),
+    invalidationFn: (args) => {
+        args.queryClient.invalidateQueries({
+            queryKey: ['transaction-batch'],
+        })
+        updateMutationInvalidationFn(loanTransactionBaseKey, args)
+    },
 })
 
 // Change Cash Account

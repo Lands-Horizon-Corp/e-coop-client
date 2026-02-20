@@ -259,7 +259,6 @@ export const QuickTransferTransactionForm = ({
         }
         return branchSetting.withdraw_allow_user_input
     }
-    console.log(handleAllowToInput(mode))
 
     return (
         <>

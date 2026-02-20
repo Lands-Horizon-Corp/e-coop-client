@@ -26,11 +26,8 @@ function RouteComponent() {
 
         // 2️⃣ Bind to the event name (your Go appClient)
         channel.bind('pusher:subscription_succeeded', () => {
-            console.log('Subscribed to horizon, now binding to events...')
-
             // Bind to the Go appClient name
             // channel.bind('ecoop', (data) => {
-            //     console.log('Live tick:', data)
             // })
         })
 

@@ -120,7 +120,7 @@ const TransactionBatchNavButton = (_props: Props) => {
     const [mounted, setMounted] = useState(false)
 
     useEffect(() => {
-        if (!transactionBatch || mounted) return
+        if (!transactionBatch || transactionBatch.is_today || mounted) return
 
         onOpen({
             hideSeparator: true,

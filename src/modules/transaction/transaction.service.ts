@@ -151,6 +151,7 @@ export const useCreateQuickTransactionPayment = createMutationFactory<
                 data
             )
         ).data,
+    defaultInvalidates: [['transaction-batch']],
     invalidationFn: ({ queryClient, variables }) => {
         queryClient.invalidateQueries({
             queryKey: [

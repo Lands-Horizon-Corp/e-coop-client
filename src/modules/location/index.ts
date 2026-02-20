@@ -52,15 +52,6 @@ export const initializeBarangayMapping = () => {
 }
 
 export const getBarangaysByMunicipalityName = (municipalityName: string) => {
-    console.log(
-        'Finding munic brgy ',
-        municipalityName,
-        'Normed',
-        normalizeLocation(municipalityName),
-        'Found',
-        barangaysByMunicipalityName.get(normalizeLocation(municipalityName))
-    )
-
     return (
         barangaysByMunicipalityName.get(normalizeLocation(municipalityName)) ??
         []

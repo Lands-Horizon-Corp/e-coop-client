@@ -69,6 +69,7 @@ export const useCreateAdjustmentEntry = createMutationFactory<
         ['auth', 'context'],
         [adjustmentEntryBaseKey, 'paginated'],
         [adjustmentEntryBaseKey, 'all'],
+        ['transaction-batch'],
     ],
 })
 

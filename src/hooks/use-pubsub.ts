@@ -34,7 +34,6 @@ export const useSubscribe = <T = unknown>(
         }
 
         connection.bind(subject, (data: T) => {
-            console.log('yes')
             onReceive?.(data)
         })
 

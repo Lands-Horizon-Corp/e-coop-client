@@ -19,6 +19,7 @@ import {
 import { TAPIQueryOptions, TEntityId } from '@/types'
 
 import { IBranch, getBranchesByOrganizationId } from '../branch'
+import { employeeBaseKey } from '../employee'
 import { IUserBase } from '../user/user.types'
 import {
     IOrgUserOrganizationGroup,
@@ -433,6 +434,10 @@ export const useCancelTimeMachineTime = createMutationFactory<
         args.queryClient.invalidateQueries({
             queryKey: ['auth', 'context'],
         })
+
+        args.queryClient.invalidateQueries({
+            queryKey: ['transaction-batch'],
+        })
         args.queryClient.invalidateQueries({
             queryKey: ['employee', 'paginated'],
         })
@@ -451,10 +456,16 @@ export const useUpdateUserOrganizationSettings = createMutationFactory<
     mutationFn: (args) => updateUserOrganizationSettings(args),
     invalidationFn: (args) => {
         args.queryClient.invalidateQueries({
-            queryKey: ['employee', 'paginated'],
+            queryKey: [employeeBaseKey, 'paginated'],
+        })
+        args.queryClient.invalidateQueries({
+            queryKey: ['transaction-batch'],
         })
         args.queryClient.invalidateQueries({
             queryKey: ['user-organization', args.resultData.id],
+        })
+        args.queryClient.invalidateQueries({
+            queryKey: ['auth', 'context'],
         })
         updateMutationInvalidationFn('user-organization', args)
     },
