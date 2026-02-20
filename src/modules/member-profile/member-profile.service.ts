@@ -16,6 +16,7 @@ import { TAPIQueryOptions, TEntityId } from '@/types'
 
 import type {
     IMemberProfile,
+    IMemberProfileDashboardSummaryResponse,
     IMemberProfileMembershipInfoRequest,
     IMemberProfilePaginated,
     IMemberProfilePersonalInfoRequest,
@@ -84,8 +85,33 @@ export const declineMemberProfile = async (id: TEntityId) => {
     )
     return response.data
 }
+export const getMemberProfileDashboardSummary = async () => {
+    return (
+        await API.get<IMemberProfileDashboardSummaryResponse>(
+            `${memberProfileAPIRoute}/summary`
+        )
+    ).data
+}
+export const useGetPendingMemberProfiles = ({
+    query,
+    options,
+}: {
+    query?: TAPIQueryOptions
+    options?: HookQueryOptions<IMemberProfile[], Error>
+} = {}) => {
+    return useQuery<IMemberProfile[], Error>({
+        queryKey: [memberProfileBaseKey, 'pending', query].filter(Boolean),
 
-// 🪝 HOOK STARTS HERE
+        queryFn: () =>
+            getAllPendingMemberProfile({
+                query,
+            }),
+
+        staleTime: 1000 * 60, // 1 minute cache
+        ...options,
+    })
+}
+
 export const {
     useCreate: useCreateMemberProfile,
     useDeleteById: useDeleteMemberProfileById,
@@ -230,6 +256,18 @@ export const useGetPaginatedMemberProfileByMemberType = ({
                 url: `${memberProfileAPIRoute}/member-type/${memberTypeId}/search`,
                 query,
             }),
+    })
+}
+
+export const useGetMemberDashboardSummary = ({
+    options,
+}: {
+    options: HookQueryOptions<IMemberProfileDashboardSummaryResponse, Error>
+}) => {
+    return useQuery<IMemberProfileDashboardSummaryResponse, Error>({
+        queryKey: [memberProfileBaseKey, 'member-profile-summary'],
+        queryFn: getMemberProfileDashboardSummary,
+        ...options,
     })
 }
 

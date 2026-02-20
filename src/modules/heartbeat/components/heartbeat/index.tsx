@@ -5,17 +5,13 @@ import { useAuthUserWithOrgBranch } from '@/modules/authentication/authgenticati
 import { MemberQrScannerModal } from '@/modules/member-profile/components/member-qr-scanner'
 
 import {
-    BuildingIcon,
     MessagesIcon,
-    PulseIcon,
     RefreshIcon,
     ScanQrIcon,
     SettingsIcon,
-    UserIcon,
     Users3Icon,
 } from '@/components/icons'
 import Modal from '@/components/modals/modal'
-import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 
@@ -56,10 +52,10 @@ const Heartbeat = () => {
         )
 
     return (
-        <div className="space-y-6 p-6 bg-background">
+        <div className="space-y-6 p-0 bg-background">
             {/* Header */}
             <MemberQrScannerModal
-                className="!w-fit !min-w-fit"
+                className="w-fit! !min-w-fit!"
                 {...qrScannerModal}
                 scannerProps={{
                     hideButton: true,
@@ -70,7 +66,7 @@ const Heartbeat = () => {
                     },
                 }}
             />
-            <div className="flex items-center justify-between">
+            {/* <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
                     <div className="p-2 bg-primary/10 rounded-lg">
                         <PulseIcon className="h-6 w-6 text-primary" />
@@ -97,12 +93,12 @@ const Heartbeat = () => {
                         <RefreshIcon className="h-4 w-4" />
                     </Button>
                 </div>
-            </div>
+            </div> */}
 
             {data && (
                 <>
                     {/* Stats Cards */}
-                    <div className="grid gap-4 md:grid-cols-3">
+                    {/* <div className="grid gap-4 md:grid-cols-3">
                         <Card className="border-0 shadow-sm bg-card hover:shadow-md transition-shadow">
                             <CardContent className="p-6">
                                 <div className="flex items-center justify-between">
@@ -170,7 +166,7 @@ const Heartbeat = () => {
                                 </div>
                             </CardContent>
                         </Card>
-                    </div>
+                    </div> */}
 
                     {/* Quick Actions */}
                     <Card className="border-0 shadow-sm bg-card hover:shadow-md transition-shadow">

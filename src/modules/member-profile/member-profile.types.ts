@@ -283,6 +283,24 @@ export interface IMemberProfileMediasRequest {
     signature_media_id?: TEntityId
 }
 
+export type IMemberTypeMock = {
+    id: string
+    prefix: string
+    name: string
+    description: string
+}
+export interface IMemberTypeCountResponse {
+    member_type_id: TEntityId
+    member_type: IMemberTypeMock
+    count: number
+}
+export interface IMemberProfileDashboardSummaryResponse {
+    total_members: number
+    total_male_members: number
+    total_female_members: number
+    member_type_counts: IMemberTypeCountResponse[]
+}
+
 export type TMemberPassbookGenerateSettings = Omit<
     IMemberPassbookSettings,
     'check_voucher_general_or_unique'

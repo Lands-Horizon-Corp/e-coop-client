@@ -14,14 +14,14 @@ import { MemberTypeSchema } from './member-type.validation'
 export interface IMemberType extends ITimeStamps, IAuditable {
     id: TEntityId
 
-    branch_id: TEntityId
-    branch: IBranch
+    branch_id?: TEntityId
+    branch?: IBranch
 
     name: string
     prefix: string
     description: string
 
-    browse_references: IBrowseReference[]
+    browse_references?: IBrowseReference[]
 }
 
 export type IMemberTypeRequest = z.infer<typeof MemberTypeSchema>

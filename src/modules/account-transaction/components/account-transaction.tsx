@@ -14,6 +14,7 @@ import {
     CalendarIcon,
     ChevronLeftIcon,
     ChevronRightIcon,
+    PlusIcon,
     ReceiptIcon,
     RefreshIcon,
     TextFileFillIcon,
@@ -508,8 +509,8 @@ const GenerateAccountTransaction = () => {
             <Button
                 disabled={!canGenerate}
                 onClick={() => modalState.onOpenChange(true)}
-                variant="secondary"
             >
+                <PlusIcon className="mr-1" />
                 Generate
             </Button>
         </>

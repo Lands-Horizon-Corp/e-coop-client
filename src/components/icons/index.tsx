@@ -275,6 +275,7 @@ import {
     IoLogOut as DoorExitFillIcon,
     IoLogOutOutline as DoorExitIcon,
     IoPencilOutline as EditPencilIcon,
+    IoFemale as FemaleIcon,
     IoFootstepsOutline as FootstepsIcon,
     IoFunnelOutline as FunnelIcon,
     IoKeySharp as KeySharpIcon,
@@ -283,6 +284,7 @@ import {
     IoLink as LinkIcon,
     IoLogoLinkedin as LinkedInIcon,
     IoLocationSharp as LocationPinIcon,
+    IoMale as MaleIcon,
     IoLocation as PinLocationIcon,
     IoPricetag as PriceTagIcon,
     IoPrintOutline as PrinterIcon,
@@ -890,6 +892,8 @@ export {
     FilterVintageIcon,
     SortIcon,
     ThreeDotIcon,
+    MaleIcon,
+    FemaleIcon,
 }
 
 export const IconMap = {
@@ -1301,6 +1305,8 @@ export const IconMap = {
     'Report Search Icon': ReportsSearchIcon,
     'Sort Icon': SortIcon,
     'Three Dot ICons': ThreeDotIcon,
+    Male: MaleIcon,
+    Female: FemaleIcon,
 }
 
 export type TIcon = (typeof ICONS)[number]
