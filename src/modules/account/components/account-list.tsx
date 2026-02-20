@@ -83,9 +83,10 @@ export const AccountList = () => {
         () =>
             debounce((ids: string[]) => {
                 reorderAccounts({ ids })
-            }, 400),
+            }, 0),
         [reorderAccounts]
     )
+
     const handleDragEnd = (event: DragEndEvent) => {
         const { active, over } = event
 
@@ -98,9 +99,8 @@ export const AccountList = () => {
             if (oldIndex === -1 || newIndex === -1) return items
             const newItems = arrayMove(items, oldIndex, newIndex)
 
-            reorderAccounts({
-                ids: newItems.map((item) => item.id),
-            })
+            debouncedReorder(newItems.map((item) => item.id))
+
             return newItems
         })
     }
