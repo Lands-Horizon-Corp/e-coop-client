@@ -142,7 +142,6 @@ const BillsAndCoinsTableColumns = (
         size: 120,
         minSize: 100,
     },
-
     ...createUpdateColumns<IBillsAndCoin>(),
 ]
 
