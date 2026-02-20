@@ -1,7 +1,9 @@
-import { useEffect, useMemo, useRef } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 
 import Chart from 'chart.js/auto'
 
+import { Button } from '@/components/ui/button'
+import { ButtonGroup, ButtonGroupSeparator } from '@/components/ui/button-group'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 
 const data = [
@@ -25,11 +27,18 @@ const IncomeExpenseChart = () => {
     const canvasRef = useRef<HTMLCanvasElement | null>(null)
     const chartRef = useRef<Chart | null>(null)
 
+    const [range, setRange] = useState<'3m' | '30d' | '7d'>('7d')
+
+    // Filter data based on range
+    const filteredData = useMemo(() => {
+        if (range === '3m') return data.slice(-3)
+        if (range === '30d') return data.slice(-6)
+        return data.slice(-3) // simulate 7d
+    }, [range])
+
     const theme = useMemo(() => {
         if (typeof window === 'undefined') return null
-
         const style = getComputedStyle(document.documentElement)
-
         return {
             primary: style.getPropertyValue('--primary').trim(),
             secondary: style.getPropertyValue('--secondary').trim(),
@@ -52,35 +61,30 @@ const IncomeExpenseChart = () => {
         chartRef.current = new Chart(canvasRef.current, {
             type: 'line',
             data: {
-                labels: data.map((item) => item.month),
+                labels: filteredData.map((item) => item.month),
                 datasets: [
                     {
                         label: 'Income',
-                        data: data.map((item) => item.income),
+                        data: filteredData.map((item) => item.income),
                         borderColor: theme.primary,
-                        backgroundColor: 'transparent',
                         borderWidth: 2,
                         pointRadius: 0,
-                        tension: 0,
+                        tension: 0.3,
                     },
                     {
                         label: 'Expense',
-                        data: data.map((item) => item.expense),
+                        data: filteredData.map((item) => item.expense),
                         borderColor: theme.secondary,
-                        backgroundColor: 'transparent',
                         borderWidth: 2,
                         pointRadius: 0,
-                        tension: 0,
+                        tension: 0.3,
                     },
                 ],
             },
             options: {
                 responsive: true,
                 maintainAspectRatio: false,
-                interaction: {
-                    mode: 'index',
-                    intersect: false,
-                },
+                interaction: { mode: 'index', intersect: false },
                 plugins: {
                     legend: {
                         position: 'top',
@@ -90,41 +94,16 @@ const IncomeExpenseChart = () => {
                             boxWidth: 12,
                         },
                     },
-                    tooltip: {
-                        backgroundColor: theme.card,
-                        borderColor: theme.border,
-                        borderWidth: 1,
-                        callbacks: {
-                            label: (context) => {
-                                const label = context.dataset.label
-                                const value = context.raw as number
-                                return `${label}: ₱${value.toLocaleString()}`
-                            },
-                        },
-                    },
                 },
                 scales: {
                     x: {
-                        grid: {
-                            display: false,
-                        },
-                        ticks: {
-                            color: theme.mutedForeground,
-                            font: {
-                                size: 12,
-                            },
-                        },
+                        grid: { display: false },
+                        ticks: { color: theme.mutedForeground },
                     },
                     y: {
-                        grid: {
-                            color: theme.muted,
-                            // borderDash: [3, 3],
-                        },
+                        grid: { color: theme.muted },
                         ticks: {
                             color: theme.mutedForeground,
-                            font: {
-                                size: 12,
-                            },
                             callback: (value) => formatCurrency(Number(value)),
                         },
                     },
@@ -132,32 +111,45 @@ const IncomeExpenseChart = () => {
             },
         })
 
-        return () => {
-            chartRef.current?.destroy()
-        }
-    }, [theme])
+        return () => chartRef.current?.destroy()
+    }, [theme, filteredData])
 
     return (
         <Card className="bg-card shadow-sm w-full">
-            <CardHeader className="pb-2 flex flex-row items-center justify-between space-y-0">
+            <CardHeader className="pb-2 flex flex-row items-center justify-between">
                 <CardTitle className="text-base font-semibold text-muted-foreground">
                     Income vs Expense
                 </CardTitle>
 
-                {/* Filter Buttons */}
-                <div className="flex items-center gap-2 bg-muted rounded-md p-1">
-                    <button className="px-3 py-1 text-xs rounded-md hover:bg-background transition">
+                <ButtonGroup>
+                    <Button
+                        onClick={() => setRange('3m')}
+                        size="sm"
+                        variant={range === '3m' ? 'default' : 'ghost'}
+                    >
                         Last 3 months
-                    </button>
+                    </Button>
 
-                    <button className="px-3 py-1 text-xs rounded-md hover:bg-background transition">
+                    <ButtonGroupSeparator />
+
+                    <Button
+                        onClick={() => setRange('30d')}
+                        size="sm"
+                        variant={range === '30d' ? 'default' : 'ghost'}
+                    >
                         Last 30 days
-                    </button>
+                    </Button>
 
-                    <button className="px-3 py-1 text-xs rounded-md bg-background shadow-sm">
+                    <ButtonGroupSeparator />
+
+                    <Button
+                        onClick={() => setRange('7d')}
+                        size="sm"
+                        variant={range === '7d' ? 'default' : 'ghost'}
+                    >
                         Last 7 days
-                    </button>
-                </div>
+                    </Button>
+                </ButtonGroup>
             </CardHeader>
 
             <CardContent className="pt-0">

@@ -7,8 +7,6 @@ import {
 
 import {
     BankIcon,
-    // FemaleIcon,
-    MaleIcon,
     PeopleGroupIcon,
     PulseIcon,
     RefreshIcon,
@@ -59,6 +57,14 @@ const Dashboard = () => {
 
     const isLoading = getMemberIsLoading
     const isLoadingNew = getNewMember.isLoading
+
+    const totalMembers = 1245
+    const totalMale = 720
+    const totalFemale = 525
+
+    const malePercentage = ((totalMale / totalMembers) * 100).toFixed(1)
+    const femalePercentage = ((totalFemale / totalMembers) * 100).toFixed(1)
+
     return (
         <div className="px-4 sm:px-6 lg:px-8 py-8">
             {/* Header */}
@@ -135,14 +141,27 @@ const Dashboard = () => {
                         />
 
                         <KpiCard
-                            description="Steady performance increase"
-                            icon={<MaleIcon className="size-4 text-primary" />}
-                            label="Growth Rate"
-                            subDescription="Meets growth projections"
-                            trend={
-                                <span className="text-emerald-500">+4.5%</span>
+                            description="Active registered members"
+                            icon={
+                                <PeopleGroupIcon className="size-4 text-primary" />
                             }
-                            value="4.5%"
+                            label="Total Members"
+                            subDescription="Gender distribution overview"
+                            trend={
+                                <span className="text-emerald-500">+3.2%</span>
+                            }
+                            value={
+                                <div className="flex flex-col">
+                                    <span className="text-3xl font-bold">
+                                        {totalMembers.toLocaleString()}
+                                    </span>
+
+                                    <span className="text-xs tracking-wide text-muted-foreground">
+                                        Male {malePercentage}% • Female{' '}
+                                        {femalePercentage}%
+                                    </span>
+                                </div>
+                            }
                         />
                     </section>
                     {/* Charts Row */}

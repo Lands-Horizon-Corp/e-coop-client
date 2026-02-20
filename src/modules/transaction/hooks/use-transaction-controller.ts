@@ -88,7 +88,7 @@ export const useTransactionController = ({
                 form.setValue('reference_number', finalPaymentOR)
             }
         },
-        [user_organization, form]
+        [user_organization, form, finalPaymentOR]
     )
 
     useEffect(() => {
