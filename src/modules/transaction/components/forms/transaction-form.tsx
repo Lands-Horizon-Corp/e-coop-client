@@ -1,5 +1,3 @@
-import { useGetUserSettings } from '@/modules/user-profile'
-
 import { Form } from '@/components/ui/form'
 import FormFieldWrapper from '@/components/ui/form-field-wrapper'
 import { Kbd, KbdGroup } from '@/components/ui/kbd'
@@ -11,9 +9,8 @@ import { paymentORResolver } from '../../transaction.utils'
 import ReferenceNumber from '../input/transaction-reference-number-field'
 
 const TransactionForm = () => {
-    const { payment_or_allow_user_input, userOrganization } =
-        useGetUserSettings()
-    const { form } = useTransactionContext()
+    const { form, user_organization: userOrganization } =
+        useTransactionContext()
 
     return (
         <div>
@@ -26,7 +23,9 @@ const TransactionForm = () => {
                         render={({ field }) => (
                             <ReferenceNumber
                                 {...field}
-                                disabled={!payment_or_allow_user_input}
+                                disabled={
+                                    !userOrganization.payment_or_allow_user_input
+                                }
                                 id={field.name}
                                 onChange={field.onChange}
                                 placeholder="Reference Number"

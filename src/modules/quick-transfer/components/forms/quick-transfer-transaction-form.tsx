@@ -1,6 +1,7 @@
-import { useEffect } from 'react'
+import { useCallback, useEffect } from 'react'
 
 import { Path, useForm } from 'react-hook-form'
+import { toast } from 'sonner'
 
 import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
 
@@ -85,9 +86,10 @@ export const QuickTransferTransactionForm = ({
         branchSetting,
         settings_payment_type_default_value_id,
         allow_withdraw_negative_balance,
-        allowUserInputreferenceNumber,
-        defaultReferenceNumber,
+        // allowUserInputreferenceNumber,
+        // defaultReferenceNumber,
         defaultAccount,
+        user_organization,
     } = useQuickTransferContext()
     const { onOpen } = usePaymentOnSuccessStore()
 
@@ -97,12 +99,46 @@ export const QuickTransferTransactionForm = ({
             ...defaultValues,
             account: defaultAccount,
             account_id: defaultAccount?.id || undefined,
-            reference_number: defaultReferenceNumber,
-            is_reference_number_checked: !allowUserInputreferenceNumber,
+            reference_number: '',
+            // is_reference_number_checked: !allowUserInputreferenceNumber,
             payment_type_id:
                 settings_payment_type_default_value_id || undefined,
         },
     })
+
+    const handleAutoGenerateOR = useCallback(
+        (isAuto?: boolean) => {
+            form.setValue('is_reference_number_checked', isAuto)
+            if (!finalOR)
+                return toast.warning(
+                    'Failed to generate quick transfer OR, could not retrieve settings'
+                )
+
+            if (isAuto) {
+                form.setValue('reference_number', finalOR)
+            }
+        },
+        [finalOR, form]
+    )
+
+    useEffect(() => {
+        if (mode === 'deposit') {
+            const shouldGenerate =
+                !form.getValues('reference_number') &&
+                (!branchSetting.deposit_allow_user_input ||
+                    user_organization?.deposit_auto_increment)
+
+            if (!shouldGenerate) return
+        }
+        if (mode === 'withdraw') {
+            const shouldGenerate =
+                !form.getValues('reference_number') &&
+                (!branchSetting?.withdraw_allow_user_input ||
+                    user_organization?.withdraw_auto_increment)
+            if (!shouldGenerate) return
+        }
+        handleAutoGenerateOR(true)
+    }, [user_organization, branchSetting, form, mode, handleAutoGenerateOR])
 
     const {
         mutate: createQuickTransaction,
@@ -179,9 +215,16 @@ export const QuickTransferTransactionForm = ({
     const isFormIsDirty = form.formState.isDirty
 
     const handleResetAll = () => {
+        const isReferenceNumber =
+            mode === 'deposit'
+                ? !branchSetting.deposit_allow_user_input ||
+                  user_organization?.deposit_auto_increment
+                : !branchSetting?.withdraw_allow_user_input ||
+                  user_organization?.withdraw_auto_increment
+
         form.reset({
             reference_number: finalOR,
-            is_reference_number_checked: !allowUserInputreferenceNumber,
+            is_reference_number_checked: isReferenceNumber,
             account: defaultAccount,
             account_id: defaultAccount?.id || undefined,
             payment_type_id:
@@ -209,6 +252,14 @@ export const QuickTransferTransactionForm = ({
             form.setFocus('amount')
         }
     }, [isSuccess, selectedMember, accountPickerState.open, form])
+
+    const handleAllowToInput = (mode: TPaymentMode) => {
+        if (mode === 'deposit') {
+            return branchSetting.deposit_allow_user_input
+        }
+        return branchSetting.withdraw_allow_user_input
+    }
+    console.log(handleAllowToInput(mode))
 
     return (
         <>
@@ -308,7 +359,7 @@ export const QuickTransferTransactionForm = ({
                                         {...field}
                                         className="col-span-2 w-full"
                                         disabled={
-                                            !branchSetting.withdraw_allow_user_input ||
+                                            !handleAllowToInput(mode) ||
                                             isDisabled('reference_number')
                                         }
                                         value={field.value ?? ''}

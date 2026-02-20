@@ -21,7 +21,7 @@ export const useQuickTransferController = ({
     const {
         currentAuth: { user_organization },
     } = useAuthUserWithOrgBranch()
-
+    console.log(user_organization)
     const {
         settings_accounting_withdraw_default_value,
         settings_accounting_deposit_default_value,
