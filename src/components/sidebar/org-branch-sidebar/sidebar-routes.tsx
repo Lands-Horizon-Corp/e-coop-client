@@ -211,44 +211,6 @@ export const generateSidebarGroups = (
             ],
         },
         {
-            title: 'Accounting',
-            navItems: [
-                {
-                    type: 'item',
-                    icon: BankIcon,
-                    title: 'Accounts',
-                    url: `${baseUrl}/accounts`,
-                    canAccess: hasPermissionFromAuth({
-                        action: 'Read',
-                        resourceType: 'Account',
-                    }),
-                    shortDescription: 'View and manage accounts',
-                },
-                {
-                    type: 'item',
-                    icon: BookOpenIcon,
-                    title: 'General Ledger',
-                    url: `${baseUrl}/general-ledger-definition`,
-                    // canAccess: hasPermissionFromAuth({
-                    //     action: 'Read',
-                    //     resourceType: 'GeneralLedger',
-                    // }),
-                    shortDescription: 'View general ledger',
-                },
-                {
-                    type: 'item',
-                    icon: BillIcon,
-                    title: 'Financial Statement',
-                    url: `${baseUrl}/financial-statement-definition`,
-                    canAccess: hasPermissionFromAuth({
-                        action: 'Read',
-                        resourceType: 'FSDefinition',
-                    }),
-                    shortDescription: 'View financial statements',
-                },
-            ],
-        },
-        {
             title: 'Members',
             navItems: [
                 {
@@ -357,6 +319,44 @@ export const generateSidebarGroups = (
                             shortDescription: 'Manage member departments',
                         },
                     ],
+                },
+            ],
+        },
+        {
+            title: 'Accounting',
+            navItems: [
+                {
+                    type: 'item',
+                    icon: BankIcon,
+                    title: 'Accounts',
+                    url: `${baseUrl}/accounts`,
+                    canAccess: hasPermissionFromAuth({
+                        action: 'Read',
+                        resourceType: 'Account',
+                    }),
+                    shortDescription: 'View and manage accounts',
+                },
+                {
+                    type: 'item',
+                    icon: BookOpenIcon,
+                    title: 'General Ledger',
+                    url: `${baseUrl}/general-ledger-definition`,
+                    // canAccess: hasPermissionFromAuth({
+                    //     action: 'Read',
+                    //     resourceType: 'GeneralLedger',
+                    // }),
+                    shortDescription: 'View general ledger',
+                },
+                {
+                    type: 'item',
+                    icon: BillIcon,
+                    title: 'Financial Statement',
+                    url: `${baseUrl}/financial-statement-definition`,
+                    canAccess: hasPermissionFromAuth({
+                        action: 'Read',
+                        resourceType: 'FSDefinition',
+                    }),
+                    shortDescription: 'View financial statements',
                 },
             ],
         },
