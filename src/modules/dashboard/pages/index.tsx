@@ -28,7 +28,7 @@ const Dashboard = () => {
 
     const {
         currentAuth: {
-            user_organization: { branch_id },
+            // user_organization: { branch_id },
         },
     } = useAuthUserWithOrgBranch()
 

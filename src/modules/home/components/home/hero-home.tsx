@@ -32,7 +32,7 @@ const HeroHome = () => {
                                 LANDS HORIZON CORP.
                             </div>
 
-                            <h1 className="text-foreground text-4xl font-bold tracking-tight sm:text-5xl lg:text-6xl">
+                            <h1 className="text-foreground text-1xl font-bold tracking-tight sm:text-5xl lg:text-5xl">
                                 Empowering Communities Through{' '}
                                 <GradientText
                                     animate="shimmer"
@@ -43,7 +43,9 @@ const HeroHome = () => {
                                     }}
                                     variant="primary"
                                 >
-                                    <h1>E-cooperative Suite</h1>
+                                    <h1>
+                                        SMART CLOUD SOLUTIONS IN ONE PLATFORM
+                                    </h1>
                                 </GradientText>
                             </h1>
 
