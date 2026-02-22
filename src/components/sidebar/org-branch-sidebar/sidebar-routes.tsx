@@ -412,56 +412,6 @@ export const generateSidebarGroups = (
         },
 
         {
-            title: 'Schemes',
-            navItems: [
-                {
-                    type: 'item',
-                    icon: BookStackIcon,
-                    title: 'Computation Scheme',
-                    url: `${baseUrl}/schemes?tab=computation-sheet-scheme`,
-                    canAccess: hasPermissionFromAuth({
-                        action: 'Read',
-                        resourceType: 'LoanScheme',
-                    }),
-                    shortDescription: 'Manage loan computation schemes',
-                },
-                {
-                    type: 'item',
-                    icon: GridFillIcon,
-                    title: 'Loan Charge Scheme',
-                    url: `${baseUrl}/schemes?tab=loan-charges-scheme`,
-                    canAccess: hasPermissionFromAuth({
-                        action: 'Read',
-                        resourceType: 'LoanChargeScheme',
-                    }),
-                    shortDescription: 'Manage loan charges',
-                },
-                {
-                    type: 'item',
-                    icon: CashClockIcon,
-                    title: 'Time Deposit Scheme',
-                    url: `${baseUrl}/schemes?tab=time-deposit-scheme`,
-                    canAccess: hasPermissionFromAuth({
-                        action: 'Read',
-                        resourceType: 'TimeDepositScheme',
-                    }),
-                    shortDescription: 'Manage time deposit schemes',
-                },
-                {
-                    type: 'item',
-                    icon: UserIcon,
-                    title: 'Browse Reference',
-                    url: `${baseUrl}/schemes?tab=browse-reference`,
-                    canAccess: hasPermissionFromAuth({
-                        action: 'Read',
-                        resourceType: 'MemberTypeBrowseReference',
-                    }),
-                    shortDescription: 'Browse reference data',
-                },
-            ],
-        },
-
-        {
             title: 'System',
             navItems: [
                 {
@@ -733,7 +683,55 @@ export const generateSidebarGroups = (
                 },
             ],
         },
-
+        {
+            title: 'Schemes',
+            navItems: [
+                {
+                    type: 'item',
+                    icon: BookStackIcon,
+                    title: 'Computation Scheme',
+                    url: `${baseUrl}/schemes?tab=computation-sheet-scheme`,
+                    canAccess: hasPermissionFromAuth({
+                        action: 'Read',
+                        resourceType: 'LoanScheme',
+                    }),
+                    shortDescription: 'Manage loan computation schemes',
+                },
+                {
+                    type: 'item',
+                    icon: GridFillIcon,
+                    title: 'Loan Charge Scheme',
+                    url: `${baseUrl}/schemes?tab=loan-charges-scheme`,
+                    canAccess: hasPermissionFromAuth({
+                        action: 'Read',
+                        resourceType: 'LoanChargeScheme',
+                    }),
+                    shortDescription: 'Manage loan charges',
+                },
+                {
+                    type: 'item',
+                    icon: CashClockIcon,
+                    title: 'Time Deposit Scheme',
+                    url: `${baseUrl}/schemes?tab=time-deposit-scheme`,
+                    canAccess: hasPermissionFromAuth({
+                        action: 'Read',
+                        resourceType: 'TimeDepositScheme',
+                    }),
+                    shortDescription: 'Manage time deposit schemes',
+                },
+                {
+                    type: 'item',
+                    icon: UserIcon,
+                    title: 'Browse Reference',
+                    url: `${baseUrl}/schemes?tab=browse-reference`,
+                    canAccess: hasPermissionFromAuth({
+                        action: 'Read',
+                        resourceType: 'MemberTypeBrowseReference',
+                    }),
+                    shortDescription: 'Browse reference data',
+                },
+            ],
+        },
         {
             title: 'Settings',
             navItems: [
