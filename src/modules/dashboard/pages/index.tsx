@@ -42,7 +42,7 @@ const Dashboard = () => {
     })
     const getNewMember = useGetPendingMemberProfiles({})
 
-    useSubscribe(`user_organization.status.branch.${branch_id}`, refetch)
+    useSubscribe(`user_organization.status.branch.₱{branch_id}`, refetch)
 
     // const totalMembers = getMemberDashboardSummary?.total_members ?? 0
     // const totalMale = getMemberDashboardSummary?.total_male_members ?? 0
@@ -111,11 +111,11 @@ const Dashboard = () => {
                             description="Trending up this month"
                             icon={<UserIcon className="size-4 text-primary" />}
                             label="Total Revenue"
-                            subDescription="Visitors for the last 6 months"
+                            subDescription="Income as for to date"
                             trend={
                                 <span className="text-emerald-500">+12.5%</span>
                             }
-                            value="$1,250.00"
+                            value="₱1,250.00"
                         />
 
                         <KpiCard
@@ -123,9 +123,9 @@ const Dashboard = () => {
                             icon={
                                 <PeopleGroupIcon className="size-4 text-primary" />
                             }
-                            label="New Customers"
-                            subDescription="Acquisition needs attention"
-                            trend={<span className="text-red-500">-20%</span>}
+                            label="New Members"
+                            subDescription="Number of members achieves"
+                            trend={<span className="text-red-500">20%</span>}
                             value="1,234"
                         />
 
