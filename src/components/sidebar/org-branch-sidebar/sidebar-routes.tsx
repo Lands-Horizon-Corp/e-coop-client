@@ -358,6 +358,17 @@ export const generateSidebarGroups = (
                     }),
                     shortDescription: 'View financial statements',
                 },
+                {
+                    type: 'item',
+                    icon: BookIcon,
+                    title: 'Account Transaction System',
+                    url: `${baseUrl}/system/account-transaction`,
+                    canAccess: hasPermissionFromAuth({
+                        action: 'Read',
+                        resourceType: 'AccountTransaction',
+                    }),
+                    shortDescription: 'Automates daily accounting processes',
+                },
             ],
         },
 
@@ -433,17 +444,6 @@ export const generateSidebarGroups = (
                         action: 'Read',
                         resourceType: 'GenerateMutualFundAid',
                     }),
-                },
-                {
-                    type: 'item',
-                    icon: BookIcon,
-                    title: 'Account Transaction System',
-                    url: `${baseUrl}/system/account-transaction`,
-                    canAccess: hasPermissionFromAuth({
-                        action: 'Read',
-                        resourceType: 'AccountTransaction',
-                    }),
-                    shortDescription: 'Automates daily accounting processes',
                 },
             ],
         },
