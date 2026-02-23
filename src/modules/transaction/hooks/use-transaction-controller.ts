@@ -90,17 +90,6 @@ export const useTransactionController = ({
         [user_organization, form, finalPaymentOR]
     )
 
-    useEffect(() => {
-        const shouldGenerate =
-            !form.getValues('reference_number') &&
-            (!user_organization?.payment_or_allow_user_input ||
-                user_organization?.payment_auto_increment)
-
-        if (!shouldGenerate) return
-
-        handleAutoGenerateOR(true)
-    }, [user_organization, form, handleAutoGenerateOR])
-
     const selectedMember = form.getValues('member_profile')
     const selectedMemberId = form.getValues('member_profile_id')
 
@@ -138,13 +127,28 @@ export const useTransactionController = ({
         error: handleError,
         isError,
         isSuccess,
-        onSuccess: (tx) => {
-            if (!tx.member_profile) return
-
-            form.setValue('member_profile', tx.member_profile)
-            form.setValue('member_profile_id', tx.member_profile_id)
-        },
     })
+
+    useEffect(() => {
+        const shouldGenerate =
+            !form.getValues('reference_number') &&
+            (!user_organization?.payment_or_allow_user_input ||
+                user_organization?.payment_auto_increment)
+
+        if (!shouldGenerate) return
+
+        handleAutoGenerateOR(true)
+    }, [user_organization, form, handleAutoGenerateOR])
+
+    useEffect(() => {
+        if (!transaction) return
+
+        form.reset({
+            ...form.getValues(),
+            member_profile: transaction.member_profile,
+            member_profile_id: transaction.member_profile_id,
+        })
+    }, [transaction, form])
 
     //    Subscriptions (safe)
     useSubscribe(

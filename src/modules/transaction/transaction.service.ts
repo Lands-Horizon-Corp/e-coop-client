@@ -128,11 +128,18 @@ export const useCreateTransactionPaymentByMode = createMutationFactory<
         }
     },
     invalidationFn: ({ queryClient, variables }) => {
+        console.log(variables)
         queryClient.invalidateQueries({
-            queryKey: [generalLedgerBaseKey, 'all', 'transaction'],
+            queryKey: ['transaction'],
         })
+
         queryClient.invalidateQueries({
-            queryKey: [transactionBaseQueryKey, variables.transactionId],
+            queryKey: [
+                'member-accounting-ledger',
+                'filtered-paginated',
+                'member',
+                variables.transactionPayload?.member_profile_id,
+            ],
         })
 
         queryClient.invalidateQueries({ queryKey: ['auth', 'context'] })
