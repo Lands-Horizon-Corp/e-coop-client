@@ -47,7 +47,7 @@ export const useHotkeysTransaction = () => {
         { enableOnFormTags: true },
         [transactionForm]
     )
-      useHotkeys(
+    useHotkeys(
         'Alt +  E',
         (e) => {
             e.preventDefault()

@@ -1,4 +1,3 @@
-import { useAuthUserWithOrgBranch } from '@/modules/authentication/authgentication.store'
 import { useGetHeartbeat } from '@/modules/heartbeat/heartbeat.service'
 import {
     useGetMemberDashboardSummary,
@@ -25,12 +24,6 @@ import NewMember from '../components/new-member'
 
 const Dashboard = () => {
     const { data, refetch } = useGetHeartbeat()
-
-    const {
-        currentAuth: {
-            // user_organization: { branch_id },
-        },
-    } = useAuthUserWithOrgBranch()
 
     const {
         data: getMemberDashboardSummary,
