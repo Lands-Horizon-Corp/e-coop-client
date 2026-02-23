@@ -195,7 +195,7 @@ const CashCheckVoucherCreateUpdateForm = ({
     )
 
     useHotkeys(
-        'alt+2',
+        'alt+7',
         (e) => {
             e.preventDefault()
             form.setFocus('description')

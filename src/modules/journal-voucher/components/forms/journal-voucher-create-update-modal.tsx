@@ -203,7 +203,7 @@ const JournalVoucherCreateUpdateForm = ({
     )
 
     useHotkeys(
-        'alt + 7',
+        'alt + 2',
         (e) => {
             e.preventDefault()
             form.setFocus('description')
