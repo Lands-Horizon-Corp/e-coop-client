@@ -40,6 +40,7 @@ const TransactionMemberScanner = ({ className }: MemberQrScannerProps) => {
         selectedMember,
         selectedMemberId,
         hasSelectedMember,
+        handlers: { resetTransaction },
     } = useTransactionContext()
 
     const focusedId = form.getValues('decoded_member_profile_id') ?? ''
@@ -177,10 +178,7 @@ const TransactionMemberScanner = ({ className }: MemberQrScannerProps) => {
                             className="h-full"
                             hasTransaction={false}
                             memberInfo={selectedMember}
-                            onRemove={() => {
-                                form.setValue('member_profile', undefined)
-                                form.setValue('member_profile_id', undefined)
-                            }}
+                            onRemove={resetTransaction}
                             onSelectedJointMember={(selectedMember) => {
                                 if (selectedMember) {
                                     form.setValue(
