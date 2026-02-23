@@ -139,16 +139,16 @@ const MemberPicker = forwardRef<HTMLButtonElement, Props>(
                                 [
                                     {
                                         displayText: 'full name',
-                                        field: 'fullName',
+                                        field: 'full_name',
                                     },
                                     {
                                         displayText: 'PB',
-                                        field: 'memberProfile.passbookNumber',
+                                        field: 'passbook',
                                     },
                                 ],
                                 {
                                     displayText: '',
-                                    mode: 'equal',
+                                    mode: 'contains',
                                     dataType: 'text',
                                     value: searchValue,
                                 }
