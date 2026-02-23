@@ -8,11 +8,7 @@ import {
 
 import { TAPIQueryOptions, TEntityId } from '@/types'
 
-import type {
-    IBatchFunding,
-    IBatchFundingPaginated,
-    IBatchFundingRequest,
-} from './batch-funding.types'
+import type { IBatchFunding, IBatchFundingRequest } from './batch-funding.types'
 
 const { apiCrudHooks, apiCrudService, baseQueryKey } = createDataLayerFactory<
     IBatchFunding,
@@ -50,22 +46,28 @@ export const {
     useUpdateById: useUpdateBatchFundingById,
 } = apiCrudHooks
 
-export const useGetPaginatedBatchFunding = ({
+export const useGetAllTransactionBatchBatchFunding = ({
     transactionBatchId,
     query,
     options,
 }: {
     transactionBatchId: TEntityId
     query?: TAPIQueryOptions
-    options?: HookQueryOptions<IBatchFundingPaginated, Error>
+    options?: HookQueryOptions<IBatchFunding[], Error>
 }) => {
-    return useQuery<IBatchFundingPaginated, Error>({
+    return useQuery<IBatchFunding[], Error>({
         ...options,
-        queryKey: [baseQueryKey, 'paginated', transactionBatchId, query],
+        queryKey: [
+            baseQueryKey,
+            'all',
+            'transaction-batch',
+            transactionBatchId,
+            query,
+        ].filter(Boolean),
         queryFn: async () =>
-            getPaginatedBatchFundings({
+            getAllBatchFundings({
                 query,
-                url: `${batchFundingAPIRoute}/transaction-batch/${transactionBatchId}/search`,
+                url: `${batchFundingAPIRoute}/transaction-batch/${transactionBatchId}`,
             }),
     })
 }

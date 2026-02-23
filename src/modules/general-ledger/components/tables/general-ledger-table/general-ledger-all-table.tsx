@@ -3,7 +3,6 @@ import { useMemo } from 'react'
 import { cn } from '@/helpers'
 import {
     TGeneralLedgerEndpointMode,
-    // useFilteredPaginatedGeneralLedger,
     useGetAllGeneralLedger,
 } from '@/modules/general-ledger/general-ledger.service'
 import {
@@ -31,16 +30,15 @@ import { usePagination } from '@/hooks/use-pagination'
 
 import { TEntityId } from '@/types'
 
-import GeneralLedgerTableColumns, {
-    IGeneralLedgerTableColumnProps,
-    // generalLedgerGlobalSearchTargets,
-} from './columns'
 import {
     GeneralLedgerRunningRowContext,
     GeneralLedgerRunningTableActionManager,
-} from './row-action-context'
+} from '../general-ledger-running-table/row-action-context'
+import GeneralLedgerTableColumns, {
+    IGeneralLedgerTableColumnProps,
+} from './columns'
 
-export interface GeneralLedgerRunningTableBaseProps
+export interface GeneralLedgerAllTableBaseProps
     extends TableProps<IGeneralLedger>, IGeneralLedgerTableColumnProps {
     toolbarProps?: Omit<
         IDataTableToolbarProps<IGeneralLedger>,
@@ -56,28 +54,60 @@ export interface GeneralLedgerRunningTableBaseProps
     entryType?: TEntryType
 }
 
-export type TGeneralLedgerRunningTableProps =
-    | (GeneralLedgerRunningTableBaseProps & {
+export type TGeneralLedgerAllTableProps =
+    | (GeneralLedgerAllTableBaseProps & {
           mode: 'all'
       })
-    | (GeneralLedgerRunningTableBaseProps & {
-          mode: 'loan-transaction'
-          loanTransactionId: TEntityId
+    | (GeneralLedgerAllTableBaseProps & {
+          mode: 'branch'
       })
-    | (GeneralLedgerRunningTableBaseProps & {
+    | (GeneralLedgerAllTableBaseProps & {
+          mode: 'current'
+      })
+    | (GeneralLedgerAllTableBaseProps & {
+          mode: 'employee'
+          userOrganizationId: string
+      })
+    | (GeneralLedgerAllTableBaseProps & {
+          mode: 'member'
+          memberProfileId: string
+      })
+    | (GeneralLedgerAllTableBaseProps & {
+          mode: 'member-account'
+          memberProfileId: string
+          accountId: string
+      })
+    | (GeneralLedgerAllTableBaseProps & {
+          mode: 'transaction-batch'
+          transactionBatchId: string
+      })
+    | (GeneralLedgerAllTableBaseProps & {
           mode: 'transaction'
-          transactionId: TEntityId
+          transactionId: string
       })
-    | (GeneralLedgerRunningTableBaseProps & {
+    | (GeneralLedgerAllTableBaseProps & {
+          mode: 'loan-transaction'
+          loanTransactionId: string
+      })
+    | (GeneralLedgerAllTableBaseProps & {
           mode: 'member-accounting-ledger'
-          memberAccountingLedgerId: TEntityId
+          memberAccountingLedgerId: string
+      })
+    | (GeneralLedgerAllTableBaseProps & {
+          mode: 'account'
+          accountId: string
       })
 
-const GeneralLedgerRunningTable = ({
-    persistKey = ['general-ledger-running'],
+const GeneralLedgerAllTable = ({
+    persistKey = ['general-ledger-all'],
     mode,
     className,
     entryType,
+    accountId,
+    transactionId,
+    memberProfileId,
+    userOrganizationId,
+    transactionBatchId,
     toolbarProps,
     excludeColumnIds,
     onRowClick = () => {},
@@ -85,13 +115,10 @@ const GeneralLedgerRunningTable = ({
         row.toggleSelected()
     },
     onSelectData,
-    // actionComponent,
     RowContextComponent = GeneralLedgerRunningRowContext,
-    ...modeProps
-}: TGeneralLedgerRunningTableProps & {
+}: TGeneralLedgerAllTableProps & {
     userOrganizationId?: TEntityId
     memberProfileId?: TEntityId
-    memberAccountingLedgerId?: TEntityId
     accountId?: TEntityId
     transactionBatchId?: TEntityId
     transactionId?: TEntityId
@@ -103,7 +130,7 @@ const GeneralLedgerRunningTable = ({
     const columns = useMemo(() => {
         const allColumns = GeneralLedgerTableColumns()
 
-        if (excludeColumnIds && excludeColumnIds.length > 0) {
+        if (excludeColumnIds?.length) {
             return allColumns.filter(
                 (column) => !excludeColumnIds.includes(column.id as string)
             )
@@ -132,8 +159,12 @@ const GeneralLedgerRunningTable = ({
         refetch,
     } = useGetAllGeneralLedger({
         mode,
-        memberAccountingLedgerId: modeProps.memberAccountingLedgerId,
-        // entryType,
+        entryType,
+        accountId,
+        transactionId,
+        memberProfileId,
+        userOrganizationId,
+        transactionBatchId,
         query: {
             ...pagination,
             sort: sortingStateBase64,
@@ -165,7 +196,6 @@ const GeneralLedgerRunningTable = ({
         onColumnOrderChange: tableState.setColumnOrder,
         getSortedRowModel: getSortedRowModel(),
         onColumnVisibilityChange: tableState.setColumnVisibility,
-        // onRowSelectionChange: handleRowSelectionChange,
     })
 
     return (
@@ -178,10 +208,6 @@ const GeneralLedgerRunningTable = ({
                 )}
             >
                 <DataTableToolbar
-                    // globalSearchProps={{
-                    //     defaultMode: 'contains',
-                    //     targets: generalLedgerGlobalSearchTargets,
-                    // }}
                     refreshActionProps={{
                         onClick: () => refetch(),
                         isLoading: isPending || isRefetching,
@@ -210,4 +236,4 @@ const GeneralLedgerRunningTable = ({
     )
 }
 
-export default GeneralLedgerRunningTable
+export default GeneralLedgerAllTable

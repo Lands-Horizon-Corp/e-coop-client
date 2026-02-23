@@ -60,101 +60,191 @@ export const getMemberAccountGeneralLedgerTotal = async ({
     return response.data
 }
 
-export type TGetAllGeneralLedgerMode =
-    | 'all'
-    | 'loan-transaction'
-    | 'transaction'
-    | 'member-accounting-ledger'
-
-export const getAllGeneralLedger = async ({
-    mode,
-    transactionId,
-    loanTransactionId,
-    memberAccountingLedgerId,
-}: {
-    mode?: TGetAllGeneralLedgerMode
-    loanTransactionId?: TEntityId
-    transactionId?: TEntityId
-    memberProfileId?: TEntityId
-    memberAccountingLedgerId?: TEntityId
-    accountId?: TEntityId
-}) => {
-    let url = `${generalLedgerAPIRoute}`
-
-    if (mode === 'loan-transaction' && loanTransactionId) {
-        url = `${generalLedgerAPIRoute}/loan-transaction/${loanTransactionId}`
-    } else if (mode === 'transaction' && transactionId) {
-        url = `${generalLedgerAPIRoute}/transaction/${transactionId}`
-    } else if (
-        mode === 'member-accounting-ledger' &&
-        memberAccountingLedgerId !== undefined
-    ) {
-        url = `${generalLedgerAPIRoute}/member-accounting-ledger/${memberAccountingLedgerId}/`
-    }
-
-    const response = await getAllGeneralLedgers({ url })
-    return response
-}
-
 // 🪝 HOOK START HERE
 
 export const { useGetById: useGetGeneralLedgerById } = apiCrudHooks
 
-export const useGetAllGeneralLedger = ({
-    mode = 'all',
-    query,
-    options,
-    accountId,
-    transactionId,
-    memberProfileId,
-    loanTransactionId,
-    memberAccountingLedgerId,
-}: {
-    mode?: TGetAllGeneralLedgerMode
-    query?: TAPIQueryOptions
-    options?: HookQueryOptions<IGeneralLedger[], Error>
-
-    memberAccountingLedgerId?: TEntityId
-    loanTransactionId?: TEntityId
-    transactionId?: TEntityId
-    memberProfileId?: TEntityId
-    accountId?: TEntityId
-}) => {
-    return useQuery<IGeneralLedger[], Error>({
-        ...options,
-        queryKey: [
-            generalLedgerBaseKey,
-            'all',
-            mode,
-            query,
-            accountId,
-            transactionId,
-            memberProfileId,
-            loanTransactionId,
-            memberAccountingLedgerId,
-        ].filter(Boolean),
-        queryFn: async () =>
-            getAllGeneralLedger({
-                mode,
-                accountId,
-                transactionId,
-                memberProfileId,
-                loanTransactionId,
-                memberAccountingLedgerId,
-            }),
-    })
-}
-
-// Exported mode for reuse
-export type TGeneralLedgerMode =
+export type TGeneralLedgerEndpointMode =
+    | 'all'
+    | 'loan-transaction'
+    | 'transaction'
+    | 'member-accounting-ledger'
     | 'branch'
     | 'current'
     | 'employee'
     | 'member'
     | 'member-account'
     | 'transaction-batch'
-    | 'transaction'
     | 'account'
+
+type TGeneralLedgerIdProps = {
+    userOrganizationId?: TEntityId
+    memberProfileId?: TEntityId
+    accountId?: TEntityId
+    transactionBatchId?: TEntityId
+    transactionId?: TEntityId
+    loanTransactionId?: TEntityId
+    memberAccountingLedgerId?: TEntityId
+}
+
+type TBuildGeneralLedgerEndpointParams = {
+    mode?: TGeneralLedgerEndpointMode
+    query?: TAPIQueryOptions
+
+    paginated?: boolean
+    entryType?: TEntryType
+} & TGeneralLedgerIdProps
+
+export const buildGeneralLedgerEndpoint = ({
+    mode = 'all',
+    paginated = false,
+    entryType,
+
+    userOrganizationId,
+    memberProfileId,
+    accountId,
+    transactionBatchId,
+    transactionId,
+    loanTransactionId,
+    memberAccountingLedgerId,
+}: TBuildGeneralLedgerEndpointParams): string => {
+    const base = generalLedgerAPIRoute
+    let path = ''
+
+    const withSearch = (url: string) => (paginated ? `${url}/search` : url)
+
+    const withEntryType = (url: string) =>
+        entryType ? `${url}/${entryType}` : url
+
+    switch (mode) {
+        case 'all':
+            return base
+
+        case 'loan-transaction':
+            if (!loanTransactionId)
+                throw new Error('loanTransactionId is required')
+            path = `/loan-transaction/${loanTransactionId}`
+            break
+
+        case 'transaction':
+            if (!transactionId) throw new Error('transactionId is required')
+            path = `/transaction/${transactionId}`
+            break
+
+        case 'member-accounting-ledger':
+            if (!memberAccountingLedgerId)
+                throw new Error('memberAccountingLedgerId is required')
+            path = `/member-accounting-ledger/${memberAccountingLedgerId}`
+            break
+
+        case 'branch':
+            path = `/branch`
+            break
+
+        case 'current':
+            path = `/current`
+            break
+
+        case 'employee':
+            if (!userOrganizationId)
+                throw new Error('userOrganizationId is required')
+            path = `/employee/${userOrganizationId}`
+            break
+
+        case 'member':
+            if (!memberProfileId) throw new Error('memberProfileId is required')
+            path = `/member-profile/${memberProfileId}`
+            break
+
+        case 'member-account':
+            if (!memberProfileId) throw new Error('memberProfileId is required')
+            if (!accountId) throw new Error('accountId is required')
+            path = `/member-profile/${memberProfileId}/account/${accountId}`
+            break
+
+        case 'transaction-batch':
+            if (!transactionBatchId)
+                throw new Error('transactionBatchId is required')
+            path = `/transaction-batch/${transactionBatchId}`
+            break
+
+        case 'account':
+            if (!accountId) throw new Error('accountId is required')
+            path = `/account/${accountId}`
+            break
+
+        default:
+            throw new Error(`Unsupported mode: ${mode}`)
+    }
+
+    let url = `${base}${path}`
+
+    if (entryType) {
+        url = withEntryType(url)
+    }
+
+    return withSearch(url)
+}
+
+export const useGetAllGeneralLedger = ({
+    mode = 'all',
+    entryType,
+    query,
+    options,
+    accountId,
+    transactionId,
+    memberProfileId,
+    loanTransactionId,
+    transactionBatchId,
+    memberAccountingLedgerId,
+}: {
+    mode?: TGeneralLedgerEndpointMode
+    query?: TAPIQueryOptions
+    options?: HookQueryOptions<IGeneralLedger[], Error>
+    entryType?: TEntryType
+} & TGeneralLedgerIdProps) => {
+    return useQuery<IGeneralLedger[], Error>({
+        ...options,
+        queryKey: [
+            generalLedgerBaseKey,
+            'all',
+            mode,
+            accountId,
+            transactionId,
+            memberProfileId,
+            loanTransactionId,
+            transactionBatchId,
+            memberAccountingLedgerId,
+            entryType,
+            query,
+        ].filter(Boolean),
+
+        queryFn: async () => {
+            const buildedURL = buildGeneralLedgerEndpoint({
+                mode,
+                query,
+                entryType,
+                accountId,
+                transactionId,
+                memberProfileId,
+                loanTransactionId,
+                transactionBatchId,
+                memberAccountingLedgerId,
+            })
+
+            const url = qs.stringifyUrl(
+                {
+                    url: buildedURL,
+                    query,
+                },
+                { skipNull: true }
+            )
+
+            const response = await getAllGeneralLedgers({ url })
+            return response
+        },
+    })
+}
 
 export const useFilteredPaginatedGeneralLedger = ({
     mode = 'branch', // Default mode is 'branch'
@@ -167,16 +257,11 @@ export const useFilteredPaginatedGeneralLedger = ({
     query,
     options,
 }: {
-    mode?: TGeneralLedgerMode
+    mode?: TGeneralLedgerEndpointMode
     entryType?: TEntryType
-    userOrganizationId?: TEntityId
-    memberProfileId?: TEntityId
-    accountId?: TEntityId
-    transactionBatchId?: TEntityId
-    transactionId?: TEntityId
     query?: TAPIQueryOptions
     options?: HookQueryOptions<IGeneralLedgerPaginated, Error>
-}) => {
+} & TGeneralLedgerIdProps) => {
     return useQuery<IGeneralLedgerPaginated, Error>({
         ...options,
         queryKey: [
@@ -192,106 +277,27 @@ export const useFilteredPaginatedGeneralLedger = ({
             query,
         ].filter(Boolean),
         queryFn: async () => {
-            let url: string = `${generalLedgerAPIRoute}/branch/search`
+            const buildedURL = buildGeneralLedgerEndpoint({
+                mode,
+                paginated: true,
+                userOrganizationId,
+                memberProfileId,
+                accountId,
+                transactionBatchId,
+                transactionId,
+                entryType,
+            })
 
-            switch (mode) {
-                case 'branch':
-                    url = entryType
-                        ? `${generalLedgerAPIRoute}/branch/${entryType}/search`
-                        : `${generalLedgerAPIRoute}/branch/search`
-                    break
-
-                case 'current':
-                    url = entryType
-                        ? `${generalLedgerAPIRoute}/current/${entryType}/search`
-                        : `${generalLedgerAPIRoute}/current/search`
-                    break
-
-                case 'employee':
-                    if (!userOrganizationId) {
-                        throw new Error(
-                            'userOrganizationId is required for employee mode'
-                        )
-                    }
-                    url = entryType
-                        ? `${generalLedgerAPIRoute}/employee/${userOrganizationId}/${entryType}/search`
-                        : `${generalLedgerAPIRoute}/employee/${userOrganizationId}/search`
-                    break
-
-                case 'member':
-                    if (!memberProfileId) {
-                        throw new Error(
-                            'memberProfileId is required for member mode'
-                        )
-                    }
-                    url = entryType
-                        ? `${generalLedgerAPIRoute}/member-profile/${memberProfileId}/${entryType}/search`
-                        : `${generalLedgerAPIRoute}/member-profile/${memberProfileId}/search`
-                    break
-
-                case 'member-account':
-                    if (!memberProfileId) {
-                        throw new Error(
-                            'memberProfileId is required for member-account mode'
-                        )
-                    }
-                    if (!accountId) {
-                        throw new Error(
-                            'accountId is required for member-account mode'
-                        )
-                    }
-                    url = entryType
-                        ? `${generalLedgerAPIRoute}/member-profile/${memberProfileId}/account/${accountId}/${entryType}/search`
-                        : `${generalLedgerAPIRoute}/member-profile/${memberProfileId}/account/${accountId}/search`
-                    break
-
-                case 'transaction-batch':
-                    if (!transactionBatchId) {
-                        throw new Error(
-                            'transactionBatchId is required for transaction-batch mode'
-                        )
-                    }
-                    url = entryType
-                        ? `${generalLedgerAPIRoute}/transaction-batch/${transactionBatchId}/${entryType}/search`
-                        : `${generalLedgerAPIRoute}/transaction-batch/${transactionBatchId}/search`
-                    break
-
-                case 'transaction':
-                    if (!transactionId) {
-                        throw new Error(
-                            'transactionId is required for transaction mode'
-                        )
-                    }
-                    url = entryType
-                        ? `${generalLedgerAPIRoute}/transaction/${transactionId}/${entryType}/search`
-                        : `${generalLedgerAPIRoute}/transaction/${transactionId}/search`
-                    break
-
-                case 'account':
-                    if (!accountId) {
-                        throw new Error(
-                            'accountId is required for account mode'
-                        )
-                    }
-                    url = entryType
-                        ? `${generalLedgerAPIRoute}/account/${accountId}/${entryType}/search`
-                        : `${generalLedgerAPIRoute}/account/${accountId}/search`
-                    break
-
-                default:
-                    throw new Error(`Unsupported mode: ${mode}`)
-            }
-
-            const finalUrl = qs.stringifyUrl(
+            const url = qs.stringifyUrl(
                 {
-                    url,
+                    url: buildedURL,
                     query,
                 },
                 { skipNull: true }
             )
 
             return await getPaginatedGeneralLedger<IGeneralLedger>({
-                url: finalUrl,
+                url,
                 query,
             })
         },

@@ -2,8 +2,8 @@ import { ReactNode } from 'react'
 
 import { cn } from '@/helpers'
 import { currencyFormat } from '@/modules/currency'
-import DisbursementTransactionTable from '@/modules/disbursement-transaction/components/disbursement-transaction-table'
-import GeneralLedgerTable from '@/modules/general-ledger/components/tables/general-ledger-table'
+import DisbursementAllTransactionTable from '@/modules/disbursement-transaction/components/disbursement-transaction-table/disbursement-transaction-all-table'
+import GeneralLedgerAllTable from '@/modules/general-ledger/components/tables/general-ledger-table/general-ledger-all-table'
 import { useTransactionBatchHistoryTotal } from '@/modules/transaction-batch'
 import { IconType } from 'react-icons/lib'
 
@@ -53,7 +53,7 @@ const HistoryTabs: {
         title: 'Disbursement Transaction',
         Icon: HandDropCoinsIcon,
         Component: ({ transactionBatchId }) => (
-            <DisbursementTransactionTable
+            <DisbursementAllTransactionTable
                 className="grow p-0"
                 mode="transaction-batch"
                 transactionBatchId={transactionBatchId}
@@ -65,7 +65,7 @@ const HistoryTabs: {
         title: 'General Ledger',
         Icon: BookOpenIcon,
         Component: ({ transactionBatchId }) => (
-            <GeneralLedgerTable
+            <GeneralLedgerAllTable
                 className="grow p-0"
                 entryType=""
                 mode="transaction-batch"
@@ -78,7 +78,7 @@ const HistoryTabs: {
         title: 'Check Entry',
         Icon: MoneyCheckIcon,
         Component: ({ transactionBatchId }) => (
-            <GeneralLedgerTable
+            <GeneralLedgerAllTable
                 className="grow p-0"
                 entryType="check-entry"
                 mode="transaction-batch"
@@ -91,7 +91,7 @@ const HistoryTabs: {
         title: 'Online Entry',
         Icon: BillIcon,
         Component: ({ transactionBatchId }) => (
-            <GeneralLedgerTable
+            <GeneralLedgerAllTable
                 className="grow p-0"
                 entryType="online-entry"
                 mode="transaction-batch"
@@ -104,7 +104,7 @@ const HistoryTabs: {
         title: 'Cash Entry',
         Icon: HandCoinsIcon,
         Component: ({ transactionBatchId }) => (
-            <GeneralLedgerTable
+            <GeneralLedgerAllTable
                 className="grow p-0"
                 entryType="cash-entry"
                 mode="transaction-batch"
@@ -117,7 +117,7 @@ const HistoryTabs: {
         title: 'Payment Entry',
         Icon: BillIcon,
         Component: ({ transactionBatchId }) => (
-            <GeneralLedgerTable
+            <GeneralLedgerAllTable
                 className="grow p-0"
                 entryType="payment-entry"
                 mode="transaction-batch"
@@ -130,7 +130,7 @@ const HistoryTabs: {
         title: 'Withdraw Entry',
         Icon: HandCoinsIcon,
         Component: ({ transactionBatchId }) => (
-            <GeneralLedgerTable
+            <GeneralLedgerAllTable
                 className="grow p-0"
                 entryType="withdraw-entry"
                 mode="transaction-batch"
@@ -143,7 +143,7 @@ const HistoryTabs: {
         title: 'Deposit Entry',
         Icon: HandCoinsIcon,
         Component: ({ transactionBatchId }) => (
-            <GeneralLedgerTable
+            <GeneralLedgerAllTable
                 className="grow p-0"
                 entryType="deposit-entry"
                 mode="transaction-batch"

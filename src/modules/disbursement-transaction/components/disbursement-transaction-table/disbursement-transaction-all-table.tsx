@@ -3,27 +3,19 @@ import { useMemo } from 'react'
 import FilterContext from '@/contexts/filter-context/filter-context'
 import { cn } from '@/helpers'
 import {
-    TGeneralLedgerEndpointMode,
-    useFilteredPaginatedGeneralLedger,
-} from '@/modules/general-ledger/general-ledger.service'
-import {
-    IGeneralLedger,
-    TEntryType,
-} from '@/modules/general-ledger/general-ledger.types'
-import {
     getCoreRowModel,
     getSortedRowModel,
     useReactTable,
 } from '@tanstack/react-table'
 
 import DataTable from '@/components/data-table'
-import DataTablePagination from '@/components/data-table/data-table-pagination'
+// import DataTablePagination from '@/components/data-table/data-table-pagination'
 import DataTableToolbar, {
     IDataTableToolbarProps,
 } from '@/components/data-table/data-table-toolbar'
 import { TableRowActionStoreProvider } from '@/components/data-table/store/data-table-action-store'
 import { TableProps } from '@/components/data-table/table.type'
-import { useDataTableSorting } from '@/components/data-table/use-datatable-sorting'
+// import { useDataTableSorting } from '@/components/data-table/use-datatable-sorting'
 import useDataTableState, {
     useResolvedColumnOrder,
 } from '@/components/data-table/use-datatable-state'
@@ -33,19 +25,26 @@ import { usePagination } from '@/hooks/use-pagination'
 
 import { TEntityId } from '@/types'
 
-import GeneralLedgerTableColumns, {
-    IGeneralLedgerTableColumnProps,
-    generalLedgerGlobalSearchTargets,
+import {
+    TDisbursementTransactionHookMode,
+    useGetDisbursementTransaction,
+} from '../../disbursement-transaction.service'
+import { IDisbursementTransaction } from '../../disbursement-transaction.types'
+import DisbursementTransactionTableColumns, {
+    IDisbursementTransactionTableColumnProps,
+    disbursementTransactionGlobalSearchTargets,
 } from './columns'
 import {
-    GeneralLedgerRowContext,
-    GeneralLedgerTableActionManager,
+    DisbursementTransactionRowContext,
+    DisbursementTransactionTableActionManager,
 } from './row-action-context'
 
-export interface GeneralLedgerTableProps
-    extends TableProps<IGeneralLedger>, IGeneralLedgerTableColumnProps {
+export interface DisbursementTransactionTableProps
+    extends
+        TableProps<IDisbursementTransaction>,
+        IDisbursementTransactionTableColumnProps {
     toolbarProps?: Omit<
-        IDataTableToolbarProps<IGeneralLedger>,
+        IDataTableToolbarProps<IDisbursementTransaction>,
         | 'table'
         | 'refreshActionProps'
         | 'globalSearchProps'
@@ -54,102 +53,61 @@ export interface GeneralLedgerTableProps
         | 'exportActionProps'
         | 'deleteActionProps'
     >
-    mode: TGeneralLedgerEndpointMode
-    entryType?: TEntryType
+    mode: TDisbursementTransactionHookMode
 }
 
-export type TGeneralLedgerTableProps =
-    | (GeneralLedgerTableProps & {
-          mode: 'all'
-      })
-    | (GeneralLedgerTableProps & {
-          mode: 'branch'
-      })
-    | (GeneralLedgerTableProps & {
-          mode: 'current'
-      })
-    | (GeneralLedgerTableProps & {
-          mode: 'employee'
-          userOrganizationId: TEntityId
-      })
-    | (GeneralLedgerTableProps & {
-          mode: 'member'
-          memberProfileId: TEntityId
-      })
-    | (GeneralLedgerTableProps & {
-          mode: 'member-account'
-          memberProfileId: TEntityId
-          accountId: TEntityId
-      })
-    | (GeneralLedgerTableProps & {
-          mode: 'transaction-batch'
-          transactionBatchId: TEntityId
-      })
-    | (GeneralLedgerTableProps & {
-          mode: 'transaction'
-          transactionId: TEntityId
-      })
-    | (GeneralLedgerTableProps & {
-          mode: 'loan-transaction'
-          loanTransactionId: TEntityId
-      })
-    | (GeneralLedgerTableProps & {
-          mode: 'member-accounting-ledger'
-          memberAccountingLedgerId: TEntityId
-      })
-    | (GeneralLedgerTableProps & {
-          mode: 'account'
-          accountId: TEntityId
-      })
+export type TDisbursementTransactionTableProps =
+    DisbursementTransactionTableProps &
+        (
+            | { mode: 'branch' }
+            | { mode: 'current' }
+            | {
+                  mode: 'employee'
+                  userOrganizationId: TEntityId
+              }
+            | {
+                  mode: 'transaction-batch'
+                  transactionBatchId: TEntityId
+              }
+        )
 
-const GeneralLedgerTable = ({
-    persistKey = ['general-ledger'],
+const DisbursementAllTransactionTable = ({
+    persistKey = ['disbursement-transaction'],
     mode,
     className,
-    entryType,
     toolbarProps,
     defaultFilter,
-    excludeColumnIds,
-    onRowClick = () => {},
+    onRowClick,
     onDoubleClick = (row) => {
         row.toggleSelected()
     },
     onSelectData,
     actionComponent,
-    RowContextComponent = GeneralLedgerRowContext,
+    RowContextComponent = DisbursementTransactionRowContext,
     ...modeProps
-}: TGeneralLedgerTableProps & {
+}: TDisbursementTransactionTableProps & {
     userOrganizationId?: TEntityId
-    memberProfileId?: TEntityId
-    accountId?: TEntityId
     transactionBatchId?: TEntityId
-    transactionId?: TEntityId
 }) => {
     const { pagination, setPagination } = usePagination()
-    const { sortingStateBase64, tableSorting, setTableSorting } =
-        useDataTableSorting()
+    // const { sortingStateBase64, tableSorting, setTableSorting } =
+    //     useDataTableSorting()
 
-    const columns = useMemo(() => {
-        const allColumns = GeneralLedgerTableColumns({
-            actionComponent,
-        })
-
-        if (excludeColumnIds && excludeColumnIds.length > 0) {
-            return allColumns.filter(
-                (column) => !excludeColumnIds.includes(column.id as string)
-            )
-        }
-
-        return allColumns
-    }, [actionComponent, excludeColumnIds])
+    const columns = useMemo(
+        () =>
+            DisbursementTransactionTableColumns({
+                actionComponent,
+            }),
+        [actionComponent]
+    )
 
     const { resolvedColumnOrder, resolvedColumnVisibility, finalKeys } =
         useResolvedColumnOrder({
             columns,
-            persistKey: [...persistKey, mode, entryType],
+            persistKey,
         })
 
-    const tableState = useDataTableState<IGeneralLedger>({
+    const tableState = useDataTableState<IDisbursementTransaction>({
         key: finalKeys,
         defaultColumnVisibility: resolvedColumnVisibility,
         defaultColumnOrder: resolvedColumnOrder,
@@ -164,21 +122,17 @@ const GeneralLedgerTable = ({
     const {
         isPending,
         isRefetching,
-        data: { data = [], totalPage = 1, pageSize = 10, totalSize = 0 } = {},
+        data = [],
         refetch,
-    } = useFilteredPaginatedGeneralLedger({
+    } = useGetDisbursementTransaction({
         mode,
-        entryType,
-        query: {
-            ...pagination,
-            sort: sortingStateBase64,
-            filter: filterState.finalFilterPayloadBase64,
-        },
         userOrganizationId: modeProps.userOrganizationId,
-        memberProfileId: modeProps.memberProfileId,
-        accountId: modeProps.accountId,
         transactionBatchId: modeProps.transactionBatchId,
-        transactionId: modeProps.transactionId,
+        // query: {
+        //     ...pagination,
+        //     sort: sortingStateBase64,
+        //     filter: filterState.finalFilterPayloadBase64,
+        // },
     })
 
     const handleRowSelectionChange =
@@ -191,32 +145,33 @@ const GeneralLedgerTable = ({
             columnPinning: { left: ['select'] },
         },
         state: {
-            sorting: tableSorting,
+            // sorting: tableSorting,
             pagination,
             columnOrder: tableState.columnOrder,
             rowSelection: tableState.rowSelectionState.rowSelection,
             columnVisibility: tableState.columnVisibility,
         },
-        rowCount: pageSize,
+        // rowCount: pageSize,
         manualSorting: true,
-        pageCount: totalPage,
+        // pageCount: totalPage,
         enableMultiSort: false,
         manualFiltering: true,
         manualPagination: true,
         columnResizeMode: 'onChange',
         getRowId: tableState.getRowIdFn,
-        onSortingChange: setTableSorting,
+        // onSortingChange: setTableSorting,
         onPaginationChange: setPagination,
         getCoreRowModel: getCoreRowModel(),
         onColumnOrderChange: tableState.setColumnOrder,
         getSortedRowModel: getSortedRowModel(),
         onColumnVisibilityChange: tableState.setColumnVisibility,
         onRowSelectionChange: handleRowSelectionChange,
+        defaultColumn: { minSize: 100, size: 150, maxSize: 800 },
     })
 
     return (
-        <TableRowActionStoreProvider>
-            <FilterContext.Provider value={filterState}>
+        <FilterContext.Provider value={filterState}>
+            <TableRowActionStoreProvider>
                 <div
                     className={cn(
                         'flex h-full flex-col gap-y-2',
@@ -231,7 +186,7 @@ const GeneralLedgerTable = ({
                         }}
                         globalSearchProps={{
                             defaultMode: 'contains',
-                            targets: generalLedgerGlobalSearchTargets,
+                            targets: disbursementTransactionGlobalSearchTargets,
                         }}
                         refreshActionProps={{
                             onClick: () => refetch(),
@@ -255,12 +210,12 @@ const GeneralLedgerTable = ({
                         setColumnOrder={tableState.setColumnOrder}
                         table={table}
                     />
-                    <DataTablePagination table={table} totalSize={totalSize} />
+                    {/* <DataTablePagination table={table} totalSize={totalSize} /> */}
+                    <DisbursementTransactionTableActionManager />
                 </div>
-                <GeneralLedgerTableActionManager />
-            </FilterContext.Provider>
-        </TableRowActionStoreProvider>
+            </TableRowActionStoreProvider>
+        </FilterContext.Provider>
     )
 }
 
-export default GeneralLedgerTable
+export default DisbursementAllTransactionTable

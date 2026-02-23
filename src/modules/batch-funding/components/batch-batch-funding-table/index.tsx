@@ -9,22 +9,22 @@ import {
 } from '@tanstack/react-table'
 
 import DataTable from '@/components/data-table'
-import DataTablePagination from '@/components/data-table/data-table-pagination'
+// import DataTablePagination from '@/components/data-table/data-table-pagination'
 import DataTableToolbar, {
     IDataTableToolbarProps,
 } from '@/components/data-table/data-table-toolbar'
 import { TableProps } from '@/components/data-table/table.type'
-import { useDataTableSorting } from '@/components/data-table/use-datatable-sorting'
+// import { useDataTableSorting } from '@/components/data-table/use-datatable-sorting'
 import useDataTableState from '@/components/data-table/use-datatable-state'
 
 import useDatableFilterState from '@/hooks/use-filter-state'
 import { usePagination } from '@/hooks/use-pagination'
 
-import { useGetPaginatedBatchFunding } from '../../batch-funding.service'
+import { useGetAllTransactionBatchBatchFunding } from '../../batch-funding.service'
 import { IBatchFunding } from '../../batch-funding.types'
 import BatchFundingTableColumns, {
     IBatchFundingTableColumnProps,
-    batchFundingGlobalSearchTargets,
+    // batchFundingGlobalSearchTargets,
 } from './columns'
 import { BatchFundingRowContext } from './row-action-context'
 
@@ -57,8 +57,8 @@ const BatchBatchFundingTable = ({
     transactionBatchId,
 }: BatchFundingTableProps) => {
     const { pagination, setPagination } = usePagination()
-    const { sortingStateBase64, tableSorting, setTableSorting } =
-        useDataTableSorting()
+    // const { sortingStateBase64, tableSorting, setTableSorting } =
+    //     useDataTableSorting()
 
     const columns = useMemo(
         () =>
@@ -89,17 +89,17 @@ const BatchBatchFundingTable = ({
     })
 
     const {
+        data = [],
         isPending,
         isRefetching,
-        data: { data = [], totalPage = 1, pageSize = 10, totalSize = 0 } = {},
         refetch,
-    } = useGetPaginatedBatchFunding({
+    } = useGetAllTransactionBatchBatchFunding({
         transactionBatchId,
-        query: {
-            ...pagination,
-            sort: sortingStateBase64,
-            filter: filterState.finalFilterPayloadBase64,
-        },
+        // query: {
+        //     ...pagination,
+        //     sort: sortingStateBase64,
+        //     filter: filterState.finalFilterPayloadBase64,
+        // },
     })
 
     const handleRowSelectionChange = createHandleRowSelectionChange(data)
@@ -111,21 +111,21 @@ const BatchBatchFundingTable = ({
             columnPinning: { left: ['select'] },
         },
         state: {
-            sorting: tableSorting,
+            // sorting: tableSorting,
             pagination,
             columnOrder,
             // rowSelection: rowSelectionState.rowSelection,
             columnVisibility,
         },
-        rowCount: pageSize,
+        // rowCount: pageSize,
         manualSorting: true,
-        pageCount: totalPage,
+        // pageCount: totalPage,
         enableMultiSort: false,
         manualFiltering: true,
         manualPagination: true,
         columnResizeMode: 'onChange',
         getRowId: getRowIdFn,
-        onSortingChange: setTableSorting,
+        // onSortingChange: setTableSorting,
         onPaginationChange: setPagination,
         getCoreRowModel: getCoreRowModel(),
         onColumnOrderChange: setColumnOrder,
@@ -148,10 +148,10 @@ const BatchBatchFundingTable = ({
                         filterLogic: filterState.filterLogic,
                         setFilterLogic: filterState.setFilterLogic,
                     }}
-                    globalSearchProps={{
-                        defaultMode: 'contains',
-                        targets: batchFundingGlobalSearchTargets,
-                    }}
+                    // globalSearchProps={{
+                    //     defaultMode: 'contains',
+                    //     targets: batchFundingGlobalSearchTargets,
+                    // }}
                     refreshActionProps={{
                         onClick: () => refetch(),
                         isLoading: isPending || isRefetching,
@@ -171,7 +171,7 @@ const BatchBatchFundingTable = ({
                     setColumnOrder={setColumnOrder}
                     table={table}
                 />
-                <DataTablePagination table={table} totalSize={totalSize} />
+                {/* <DataTablePagination table={table} totalSize={totalSize} /> */}
             </div>
         </FilterContext.Provider>
     )

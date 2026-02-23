@@ -41,7 +41,7 @@ export const AccountList = () => {
         createModal,
         setAccounts,
         accounts,
-        settings_payment_type_default_value,
+        // settings_payment_type_default_value,
     } = useAccountContext()
     const [canScrollUp, setCanScrollUp] = useState(false)
     const [_, setCanScrollDown] = useState(false)
@@ -194,10 +194,10 @@ export const AccountList = () => {
                         index: modalState.index,
                         general_ledger_type:
                             modalState.account?.general_ledger_type,
-                        default_payment_type_id:
-                            settings_payment_type_default_value?.id,
-                        default_payment_type:
-                            settings_payment_type_default_value,
+                        // default_payment_type_id:
+                        //     settings_payment_type_default_value?.id,
+                        // default_payment_type:
+                        //     settings_payment_type_default_value,
                     },
                 }}
                 {...createModal}
