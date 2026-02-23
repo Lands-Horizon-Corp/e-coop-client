@@ -5,7 +5,6 @@ import { AccountClassificationComboBox } from '@/modules/account-classification'
 import { CurrencyCombobox } from '@/modules/currency'
 import { GENERAL_LEDGER_TYPE } from '@/modules/general-ledger/general-ledger.constants'
 import MemberTypeCombobox from '@/modules/member-type/components/member-type-combobox'
-import { PaymentTypeCombobox } from '@/modules/transaction'
 import { EyeIcon } from 'lucide-react'
 
 import IconCombobox from '@/components/comboboxes/icon-combobox'
@@ -261,6 +260,7 @@ const AccountHeaderForm = ({
                         )
                     }}
                 />
+                {/* 
                 <FormFieldWrapper
                     className="col-span-1 self-end"
                     control={form.control}
@@ -282,7 +282,7 @@ const AccountHeaderForm = ({
                             />
                         )
                     }}
-                />
+                /> */}
             </div>
         </div>
     )

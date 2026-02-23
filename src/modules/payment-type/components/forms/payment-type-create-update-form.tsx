@@ -4,12 +4,12 @@ import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
 
 import { cn } from '@/helpers'
 import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
-import { useAuthUserWithOrg } from '@/modules/authentication/authgentication.store'
+import { AccountPicker } from '@/modules/account'
 import {
     IPaymentType,
     IPaymentTypeRequest,
-    PaymentTypeFormValues,
     PaymentTypeSchema,
+    TPaymentTypeSchema,
     useCreate,
     useUpdateById,
 } from '@/modules/payment-type'
@@ -43,7 +43,7 @@ export interface PaymentTypeFormProps
             Partial<IPaymentTypeRequest>,
             IPaymentType,
             string,
-            PaymentTypeFormValues
+            TPaymentTypeSchema
         > {
     paymentTypeId?: TEntityId
 }
@@ -54,11 +54,7 @@ const PaymentTypeCreateUpdateForm = ({
     onSuccess,
     ...formProps
 }: PaymentTypeFormProps) => {
-    const { currentAuth: user } = useAuthUserWithOrg()
-    const branchId = user.user_organization.branch_id
-    const organizationId = user.user_organization.organization_id
-
-    const form = useForm<PaymentTypeFormValues>({
+    const form = useForm<TPaymentTypeSchema>({
         resolver: standardSchemaResolver(PaymentTypeSchema),
         reValidateMode: 'onChange',
         mode: 'onSubmit',
@@ -85,7 +81,7 @@ const PaymentTypeCreateUpdateForm = ({
     } = useUpdateById({ options: { onSuccess } })
 
     const { formRef, handleFocusError, isDisabled } =
-        useFormHelper<PaymentTypeFormValues>({
+        useFormHelper<TPaymentTypeSchema>({
             form,
             ...formProps,
         })
@@ -97,12 +93,7 @@ const PaymentTypeCreateUpdateForm = ({
                 payload: formData,
             })
         } else {
-            const requestData: IPaymentTypeRequest = {
-                ...formData,
-                organization_id: organizationId,
-                branch_id: branchId,
-            }
-            createPaymentTypeMutate(requestData)
+            createPaymentTypeMutate(formData)
         }
     }, handleFocusError)
 
@@ -122,18 +113,21 @@ const PaymentTypeCreateUpdateForm = ({
     return (
         <Form {...form}>
             <form
-                className={cn('flex w-full flex-col gap-y-4', className)}
+                className={cn(
+                    'flex w-full max-w-full flex-col gap-y-4',
+                    className
+                )}
                 onSubmit={onSubmit}
                 ref={formRef}
             >
                 <fieldset
-                    className="grid gap-x-6 gap-y-4 sm:gap-y-3"
+                    className="grid gap-x-6 min-w-0 max-w-full gap-y-4 sm:gap-y-3"
                     disabled={isPending || formProps.readOnly}
                 >
-                    <fieldset className="space-y-3">
+                    <fieldset className="space-y-3 min-w-0 max-w-full">
                         <FormFieldWrapper
                             control={form.control}
-                            label="Payment Type Name"
+                            label="Payment Type Name *"
                             name="name"
                             render={({ field }) => (
                                 <Input
@@ -144,8 +138,28 @@ const PaymentTypeCreateUpdateForm = ({
                             )}
                         />
                         <FormFieldWrapper
+                            className="md:col-span-3"
                             control={form.control}
-                            label="Payment Method Type"
+                            label="Account (Optional)"
+                            name="account_id"
+                            render={({ field }) => (
+                                <AccountPicker
+                                    disabled={isDisabled(field.name)}
+                                    mode="all"
+                                    onSelect={(account) => {
+                                        field.onChange(account.id)
+                                        form.setValue('account', account, {
+                                            shouldDirty: true,
+                                        })
+                                    }}
+                                    placeholder="Select an account"
+                                    value={form.getValues('account')}
+                                />
+                            )}
+                        />
+                        <FormFieldWrapper
+                            control={form.control}
+                            label="Payment Method Type *"
                             name="type"
                             render={({ field }) => (
                                 <Select
@@ -194,10 +208,9 @@ const PaymentTypeCreateUpdateForm = ({
                                 />
                             )}
                         />
-
                         <FormFieldWrapper
                             control={form.control}
-                            label="Description"
+                            label="Description (Optional)"
                             name="description"
                             render={({ field }) => (
                                 <Textarea
@@ -261,7 +274,7 @@ export const PaymentTypeCreateUpdateFormModal = ({
 }) => {
     return (
         <Modal
-            className={cn('', className)}
+            className={cn('!max-w-xl', className)}
             description={description}
             title={title}
             {...props}

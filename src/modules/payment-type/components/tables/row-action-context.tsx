@@ -181,12 +181,7 @@ export const PaymentTypeTableActionManager = () => {
                     description="Update details for this payment type."
                     formProps={{
                         paymentTypeId: paymentType.id,
-                        defaultValues: {
-                            name: paymentType.name,
-                            description: paymentType.description,
-                            number_of_days: paymentType.number_of_days,
-                            type: paymentType.type,
-                        },
+                        defaultValues: paymentType,
                         onSuccess: () => {
                             toast.success('Payment type updated successfully')
                             close()
