@@ -8,7 +8,6 @@ import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet'
 
 import { TEntityId } from '@/types'
 
-import { currentTransactionBatch } from '../../transaction-batch/transaction-batch.service'
 import { TransactionCardItem } from './transaction-card-item'
 
 type TransactionCardListItemProps = {

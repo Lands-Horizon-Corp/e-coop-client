@@ -26,7 +26,7 @@ import TransactionNoFound from './transaction-no-found'
 
 export const TransactionHistory = ({ className }: IClassProps) => {
     const { navigate, history } = useTransactionContext()
-    
+
     const { data } = useTransactionBatchStore()
 
     const [pagination, setPagination] = useState<PaginationState>({
@@ -58,7 +58,6 @@ export const TransactionHistory = ({ className }: IClassProps) => {
 
     const isNoCurrentTransaction =
         !CurrentTransaction || CurrentTransaction.data.length === 0
-
 
     return (
         <>
@@ -97,8 +96,8 @@ export const TransactionHistory = ({ className }: IClassProps) => {
                                 CurrentTransaction?.data.map((transaction) => (
                                     <div key={transaction.id}>
                                         <TransactionDetails
-                                            item={transaction}
                                             currentTransactionBatchId={data?.id}
+                                            item={transaction}
                                             onClick={() => {
                                                 navigate.open(transaction.id)
                                                 history.onOpenChange(false)
