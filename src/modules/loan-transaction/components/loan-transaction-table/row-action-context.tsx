@@ -196,7 +196,6 @@ export const LoanTransactionAction = ({
         openApprovalModal,
     } = useLoanTransactionActions({ row, onDeleteSuccess })
 
-
     return (
         <RowActionsGroup
             canSelect
