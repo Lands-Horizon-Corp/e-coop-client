@@ -28,14 +28,9 @@ import { useMemberPickerStore } from '@/store/member-picker-store'
 import { useHotkeys } from 'react-hotkeys-hook'
 
 import FormFooterResetSubmit from '@/components/form-components/form-footer-reset-submit'
-import { BookIcon, ChevronDownIcon, XIcon } from '@/components/icons'
+import { BookIcon, GearIcon, XIcon } from '@/components/icons'
 import Modal, { IModalProps } from '@/components/modals/modal'
 import { Button } from '@/components/ui/button'
-import {
-    Collapsible,
-    CollapsibleContent,
-    CollapsibleTrigger,
-} from '@/components/ui/collapsible'
 import { CommandShortcut } from '@/components/ui/command'
 import { Form } from '@/components/ui/form'
 import FormFieldWrapper from '@/components/ui/form-field-wrapper'
@@ -43,7 +38,11 @@ import { Input } from '@/components/ui/input'
 import InputDate from '@/components/ui/input-date'
 import { Kbd, KbdGroup } from '@/components/ui/kbd'
 import { Label } from '@/components/ui/label'
-import { Separator } from '@/components/ui/separator'
+import {
+    Popover,
+    PopoverContent,
+    PopoverTrigger,
+} from '@/components/ui/popover'
 import { Textarea } from '@/components/ui/textarea'
 
 import { useFormHelper } from '@/hooks/use-form-helper'
@@ -275,7 +274,7 @@ const JournalVoucherCreateUpdateForm = ({
                                 />
                             </div>
                         )}
-                        <div className=" bg-muted p-1 rounded-sm -top-1 right-0 z-10 flex items-center">
+                        <div className="bg-muted p-1 rounded-sm -top-1 right-0 z-10 flex items-center">
                             <Button
                                 className="size-fit px-2 py-0.5 mr-1 text-xs"
                                 size="sm"
@@ -291,51 +290,259 @@ const JournalVoucherCreateUpdateForm = ({
                         </div>
                     </div>
                     <div className="gap-2 w-full flex flex-col">
-                        <FormFieldWrapper
-                            className="col-span-4"
-                            control={form.control}
-                            label={
-                                <Label className="text-xs font-medium text-muted-foreground">
-                                    Name{' '}
-                                    <span>
-                                        <KbdGroup>
-                                            <Kbd>Alt + 1</Kbd>
-                                        </KbdGroup>
-                                    </span>
-                                </Label>
-                            }
-                            name="name"
-                            render={({ field }) => {
-                                return (
-                                    <div className="relative w-full">
-                                        <Input
-                                            className="text-md! pr-12 font-semibold"
+                        <div className="col-span-2 inline-flex gap-2 w-full">
+                            <div className=" flex justify-end items-end">
+                                <Popover>
+                                    <PopoverTrigger asChild>
+                                        <Button className="">
+                                            <GearIcon className="size-4" />
+                                        </Button>
+                                    </PopoverTrigger>
+                                    <PopoverContent className="bg-card w-fit">
+                                        <FormFieldWrapper
+                                            className="relative"
+                                            control={form.control}
+                                            label={
+                                                <Label className="text-xs font-medium text-muted-foreground">
+                                                    Member Profile{' '}
+                                                    <Kbd>Enter</Kbd>
+                                                </Label>
+                                            }
+                                            name="member_id"
+                                            render={({ field }) => {
+                                                return (
+                                                    <>
+                                                        <MemberPicker
+                                                            allowShorcutCommand
+                                                            disabled={isDisabled(
+                                                                field.name
+                                                            )}
+                                                            mainTriggerProps={{
+                                                                tabIndex: -1,
+                                                            }}
+                                                            onSelect={(
+                                                                selectedMember
+                                                            ) => {
+                                                                field.onChange(
+                                                                    selectedMember?.id
+                                                                )
+                                                                form.setValue(
+                                                                    'member_profile',
+                                                                    selectedMember
+                                                                )
+                                                                form.setValue(
+                                                                    'name',
+                                                                    selectedMember?.full_name
+                                                                )
+                                                                form.setValue(
+                                                                    'company_id',
+                                                                    undefined
+                                                                )
+                                                                setDefaultMemberProfile(
+                                                                    selectedMember
+                                                                )
+                                                            }}
+                                                            placeholder="Relative Member Profile"
+                                                            // shorcutHotKey="Alt + 3"
+                                                            value={form.getValues(
+                                                                'member_profile'
+                                                            )}
+                                                        />
+                                                    </>
+                                                )
+                                            }}
+                                        />
+                                        <FormFieldWrapper
+                                            control={form.control}
+                                            label={
+                                                <Label className="text-xs font-medium text-muted-foreground">
+                                                    Currency *{' '}
+                                                    <span>
+                                                        <KbdGroup>
+                                                            <Kbd>Alt + E</Kbd>
+                                                        </KbdGroup>
+                                                    </span>
+                                                </Label>
+                                            }
+                                            name="currency_id"
+                                            render={({ field }) => (
+                                                <CurrencyCombobox
+                                                    {...field}
+                                                    allowShortcutHotKey
+                                                    disabled={isDisabled(
+                                                        field.name
+                                                    )}
+                                                    mainTriggerProps={{
+                                                        tabIndex: -1,
+                                                    }}
+                                                    onChange={(currency) => {
+                                                        field.onChange(
+                                                            currency?.id
+                                                        )
+                                                        form.setValue(
+                                                            'currency',
+                                                            currency
+                                                        )
+                                                    }}
+                                                    shortcutHotkey="alt + e"
+                                                    value={field.value}
+                                                />
+                                            )}
+                                        />
+                                        <FormFieldWrapper
+                                            control={form.control}
+                                            label={
+                                                <Label className="text-xs font-medium text-muted-foreground">
+                                                    Company{' '}
+                                                    <span>
+                                                        <KbdGroup>
+                                                            <Kbd>Alt + 4</Kbd>
+                                                        </KbdGroup>
+                                                    </span>
+                                                </Label>
+                                            }
+                                            name="company_id"
+                                            render={({ field }) => (
+                                                <CompanyCombobox
+                                                    {...field}
+                                                    {...companyState}
+                                                    allowShortcutHotKey
+                                                    disabled={isDisabled(
+                                                        field.name
+                                                    )}
+                                                    mainTriggerProps={{
+                                                        tabIndex: -1,
+                                                    }}
+                                                    onChange={(
+                                                        selectedCompany
+                                                    ) => {
+                                                        field.onChange(
+                                                            selectedCompany.id
+                                                        )
+                                                        form.setValue(
+                                                            'name',
+                                                            selectedCompany.name
+                                                        )
+                                                        form.setValue(
+                                                            'member_id',
+                                                            undefined
+                                                        )
+                                                        form.setValue(
+                                                            'member_profile',
+                                                            undefined
+                                                        )
+                                                    }}
+                                                    placeholder="Select a company"
+                                                    shortcutHotkey="alt + 4"
+                                                    value={field.value}
+                                                />
+                                            )}
+                                        />
+                                        <FormFieldWrapper
+                                            control={form.control}
+                                            label={
+                                                <Label className="text-xs font-medium text-muted-foreground">
+                                                    Reference{' '}
+                                                    <span>
+                                                        <KbdGroup>
+                                                            <Kbd>Alt + 6</Kbd>
+                                                        </KbdGroup>
+                                                    </span>
+                                                </Label>
+                                            }
+                                            name="reference"
+                                            render={({ field }) => (
+                                                <Input
+                                                    {...field}
+                                                    disabled={isDisabled(
+                                                        field.name
+                                                    )}
+                                                    id={field.name}
+                                                    placeholder="Enter reference"
+                                                    tabIndex={-1}
+                                                />
+                                            )}
+                                        />
+                                    </PopoverContent>
+                                </Popover>
+                            </div>
+                            <div className="flex space-x-2 w-full">
+                                <FormFieldWrapper
+                                    control={form.control}
+                                    label={
+                                        <Label className="text-xs font-medium text-muted-foreground">
+                                            Name{' '}
+                                            <span>
+                                                <KbdGroup>
+                                                    <Kbd>Alt + 1</Kbd>
+                                                </KbdGroup>
+                                            </span>
+                                        </Label>
+                                    }
+                                    name="name"
+                                    render={({ field }) => {
+                                        return (
+                                            <div className="relative w-full">
+                                                <Input
+                                                    className="text-md! pr-12 font-semibold"
+                                                    tabIndex={-1}
+                                                    {...field}
+                                                    id={field.name}
+                                                    value={field.value || ''}
+                                                />
+                                                <Button
+                                                    className="absolute m-auto top-0 bottom-0 right-1 hover:bg-primary/20!"
+                                                    onClick={(e) => {
+                                                        e.preventDefault()
+                                                        form.reset({
+                                                            company_id:
+                                                                undefined,
+                                                            member_profile:
+                                                                undefined,
+                                                            member_id:
+                                                                undefined,
+                                                            name: '',
+                                                        })
+                                                    }}
+                                                    size={'sm'}
+                                                    tabIndex={-1}
+                                                    variant="ghost"
+                                                >
+                                                    <XIcon />
+                                                </Button>
+                                            </div>
+                                        )
+                                    }}
+                                />{' '}
+                                <FormFieldWrapper
+                                    className="relative"
+                                    control={form.control}
+                                    description="mm/dd/yyyy"
+                                    descriptionClassName="absolute top-0 right-0"
+                                    label={
+                                        <Label className="text-xs font-medium text-muted-foreground">
+                                            Date{' '}
+                                            <span>
+                                                <KbdGroup>
+                                                    <Kbd>Alt</Kbd>
+                                                    <span>+</span>
+                                                    <Kbd>5</Kbd>
+                                                </KbdGroup>
+                                            </span>
+                                        </Label>
+                                    }
+                                    name="date"
+                                    render={({ field }) => (
+                                        <InputDate
                                             tabIndex={-1}
                                             {...field}
-                                            id={field.name}
-                                            value={field.value || ''}
+                                            value={field.value ?? ''}
                                         />
-                                        <Button
-                                            className="absolute m-auto top-0 bottom-0 right-1 hover:bg-primary/20!"
-                                            onClick={(e) => {
-                                                e.preventDefault()
-                                                form.reset({
-                                                    company_id: undefined,
-                                                    member_profile: undefined,
-                                                    member_id: undefined,
-                                                    name: '',
-                                                })
-                                            }}
-                                            size={'sm'}
-                                            tabIndex={-1}
-                                            variant="ghost"
-                                        >
-                                            <XIcon />
-                                        </Button>
-                                    </div>
-                                )
-                            }}
-                        />
+                                    )}
+                                />
+                            </div>
+                        </div>
+
                         <FormFieldWrapper
                             className="col-span-2"
                             control={form.control}
@@ -362,216 +569,7 @@ const JournalVoucherCreateUpdateForm = ({
                                 )
                             }}
                         />
-                        <div className="grid grid-cols-2 gap-2">
-                            <FormFieldWrapper
-                                className="relative"
-                                control={form.control}
-                                label={
-                                    <Label className="text-xs font-medium text-muted-foreground">
-                                        Member Profile <Kbd>Enter</Kbd>
-                                    </Label>
-                                }
-                                name="member_id"
-                                render={({ field }) => {
-                                    return (
-                                        <>
-                                            <MemberPicker
-                                                allowShorcutCommand
-                                                disabled={isDisabled(
-                                                    field.name
-                                                )}
-                                                mainTriggerProps={{
-                                                    tabIndex: -1,
-                                                }}
-                                                onSelect={(selectedMember) => {
-                                                    field.onChange(
-                                                        selectedMember?.id
-                                                    )
-                                                    form.setValue(
-                                                        'member_profile',
-                                                        selectedMember
-                                                    )
-                                                    form.setValue(
-                                                        'name',
-                                                        selectedMember?.full_name
-                                                    )
-                                                    form.setValue(
-                                                        'company_id',
-                                                        undefined
-                                                    )
-                                                    setDefaultMemberProfile(
-                                                        selectedMember
-                                                    )
-                                                }}
-                                                placeholder="Relative Member Profile"
-                                                // shorcutHotKey="Alt + 3"
-                                                value={form.getValues(
-                                                    'member_profile'
-                                                )}
-                                            />
-                                        </>
-                                    )
-                                }}
-                            />
-                            <FormFieldWrapper
-                                control={form.control}
-                                label={
-                                    <Label className="text-xs font-medium text-muted-foreground">
-                                        Company{' '}
-                                        <span>
-                                            <KbdGroup>
-                                                <Kbd>Alt + 4</Kbd>
-                                            </KbdGroup>
-                                        </span>
-                                    </Label>
-                                }
-                                name="company_id"
-                                render={({ field }) => (
-                                    <CompanyCombobox
-                                        {...field}
-                                        {...companyState}
-                                        allowShortcutHotKey
-                                        disabled={isDisabled(field.name)}
-                                        mainTriggerProps={{
-                                            tabIndex: -1,
-                                        }}
-                                        onChange={(selectedCompany) => {
-                                            field.onChange(selectedCompany.id)
-                                            form.setValue(
-                                                'name',
-                                                selectedCompany.name
-                                            )
-                                            form.setValue(
-                                                'member_id',
-                                                undefined
-                                            )
-                                            form.setValue(
-                                                'member_profile',
-                                                undefined
-                                            )
-                                        }}
-                                        placeholder="Select a company"
-                                        shortcutHotkey="alt + 4"
-                                        value={field.value}
-                                    />
-                                )}
-                            />
-                            <FormFieldWrapper
-                                className="relative"
-                                control={form.control}
-                                description="mm/dd/yyyy"
-                                descriptionClassName="absolute top-0 right-0"
-                                label={
-                                    <Label className="text-xs font-medium text-muted-foreground">
-                                        Date{' '}
-                                        <span>
-                                            <KbdGroup>
-                                                <Kbd>Alt</Kbd>
-                                                <span>+</span>
-                                                <Kbd>5</Kbd>
-                                            </KbdGroup>
-                                        </span>
-                                    </Label>
-                                }
-                                name="date"
-                                render={({ field }) => (
-                                    <InputDate
-                                        tabIndex={-1}
-                                        {...field}
-                                        value={field.value ?? ''}
-                                    />
-                                )}
-                            />
-                            <FormFieldWrapper
-                                control={form.control}
-                                label={
-                                    <Label className="text-xs font-medium text-muted-foreground">
-                                        Reference{' '}
-                                        <span>
-                                            <KbdGroup>
-                                                <Kbd>Alt + 5</Kbd>
-                                            </KbdGroup>
-                                        </span>
-                                    </Label>
-                                }
-                                name="reference"
-                                render={({ field }) => (
-                                    <Input
-                                        {...field}
-                                        disabled={isDisabled(field.name)}
-                                        id={field.name}
-                                        placeholder="Enter reference"
-                                        tabIndex={-1}
-                                    />
-                                )}
-                            />
-                        </div>
-                        <Collapsible
-                            {...othersAccordionState}
-                            className="w-full col-span-4 justify-end mb-1"
-                        >
-                            <CollapsibleTrigger
-                                className={cn(
-                                    'text-sm justify-start w-full flex text-primary gap-x-2'
-                                )}
-                                tabIndex={-1}
-                            >
-                                <div className="flex items-center flex-col justify-between w-full">
-                                    <div className="w-full inline-flex py-2">
-                                        <span className="ml-1 text-xs font-medium text-muted-foreground">
-                                            others
-                                            <KbdGroup>
-                                                <Kbd>Alt + W</Kbd>
-                                            </KbdGroup>
-                                        </span>
-                                        <ChevronDownIcon
-                                            className={cn(
-                                                'ml-auto ease-in-out duration-200',
-                                                !othersAccordionState.open &&
-                                                    ' rotate-180'
-                                            )}
-                                        />
-                                    </div>
-                                    <Separator />
-                                </div>
-                            </CollapsibleTrigger>
-                            <CollapsibleContent className="w-full py-1 ecoop-scroll flex flex-col gap-x-2 ">
-                                <FormFieldWrapper
-                                    className="mt-2"
-                                    control={form.control}
-                                    label={
-                                        <Label className="text-xs font-medium text-muted-foreground">
-                                            Currency *{' '}
-                                            <span>
-                                                <KbdGroup>
-                                                    <Kbd>Alt + E</Kbd>
-                                                </KbdGroup>
-                                            </span>
-                                        </Label>
-                                    }
-                                    name="currency_id"
-                                    render={({ field }) => (
-                                        <CurrencyCombobox
-                                            {...field}
-                                            allowShortcutHotKey
-                                            disabled={isDisabled(field.name)}
-                                            mainTriggerProps={{
-                                                tabIndex: -1,
-                                            }}
-                                            onChange={(currency) => {
-                                                field.onChange(currency?.id)
-                                                form.setValue(
-                                                    'currency',
-                                                    currency
-                                                )
-                                            }}
-                                            shortcutHotkey="alt + e"
-                                            value={field.value}
-                                        />
-                                    )}
-                                />
-                            </CollapsibleContent>
-                        </Collapsible>
+                        <div className="grid grid-cols-2 gap-2"></div>
                     </div>
 
                     <>

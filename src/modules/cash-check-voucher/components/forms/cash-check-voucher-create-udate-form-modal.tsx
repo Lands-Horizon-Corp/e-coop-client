@@ -7,11 +7,6 @@ import z from 'zod'
 
 import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
 
-import {
-    CollapsibleContent,
-    CollapsibleTrigger,
-} from '@radix-ui/react-collapsible'
-
 import { cn } from '@/helpers'
 import { withToastCallbacks } from '@/helpers/callback-helper'
 import { toInputDateString } from '@/helpers/date-utils'
@@ -36,7 +31,7 @@ import { useHotkeys } from 'react-hotkeys-hook'
 
 import FormFooterResetSubmit from '@/components/form-components/form-footer-reset-submit'
 import {
-    ChevronDownIcon,
+    GearIcon,
     HashIcon,
     MoneyCheck2Icon,
     WandSparkleIcon,
@@ -44,14 +39,17 @@ import {
 } from '@/components/icons'
 import Modal, { IModalProps } from '@/components/modals/modal'
 import { Button } from '@/components/ui/button'
-import { Collapsible } from '@/components/ui/collapsible'
 import { CommandShortcut } from '@/components/ui/command'
 import { Form } from '@/components/ui/form'
 import FormFieldWrapper from '@/components/ui/form-field-wrapper'
 import { Input } from '@/components/ui/input'
 import { Kbd, KbdGroup } from '@/components/ui/kbd'
 import { Label } from '@/components/ui/label'
-import { Separator } from '@/components/ui/separator'
+import {
+    Popover,
+    PopoverContent,
+    PopoverTrigger,
+} from '@/components/ui/popover'
 import { Textarea } from '@/components/ui/textarea'
 
 import { useFormHelper } from '@/hooks/use-form-helper'
@@ -338,158 +336,229 @@ const CashCheckVoucherCreateUpdateForm = ({
                     disabled={isPending || formProps.readOnly}
                 >
                     {/* ================= NAME ================= */}
-                    <FormFieldWrapper
-                        className="col-span-2"
-                        control={form.control}
-                        label={
-                            <Label className="text-xs font-medium text-muted-foreground">
-                                Name *{' '}
-                                <KbdGroup>
-                                    <Kbd>Alt + 1</Kbd>
-                                </KbdGroup>
-                            </Label>
-                        }
-                        name="name"
-                        render={({ field }) => (
-                            <div className="relative w-full">
-                                <Input
-                                    className="text-md! font-semibold pr-10"
-                                    tabIndex={-1}
-                                    {...field}
-                                    id={field.name}
-                                    value={field.value || ''}
-                                />
-                                <Button
-                                    className="absolute m-auto top-0 bottom-0 right-1 hover:bg-primary/20!"
-                                    onClick={(e) => {
-                                        e.preventDefault()
-                                        form.reset({
-                                            company_id: undefined,
-                                            member_profile: undefined,
-                                            member_profile_id: undefined,
-                                            name: '',
-                                        })
-                                    }}
-                                    size="sm"
-                                    tabIndex={-1}
-                                    variant="ghost"
-                                >
-                                    <XIcon />
-                                </Button>
-                            </div>
-                        )}
-                    />
-
-                    {/* ================= MEMBER ================= */}
-                    <FormFieldWrapper
-                        className="col-span-2"
-                        control={form.control}
-                        label={
-                            <Label className="text-xs font-medium text-muted-foreground">
-                                Member Profile <Kbd>Alt + 2</Kbd>
-                            </Label>
-                        }
-                        name="member_profile_id"
-                        render={({ field }) => (
-                            <MemberPicker
-                                allowShorcutCommand
-                                allowShortcutHotKey
-                                disabled={isDisabled(field.name)}
-                                mainTriggerProps={{
-                                    tabIndex: -1,
-                                }}
-                                onSelect={(selectedMember) => {
-                                    field.onChange(selectedMember?.id)
-                                    form.setValue(
-                                        'member_profile',
-                                        selectedMember
-                                    )
-                                    form.setValue(
-                                        'name',
-                                        selectedMember?.full_name
-                                    )
-                                    form.setValue('company_id', undefined)
-                                    setDefaultMember(
-                                        selectedMember ?? undefined
-                                    )
-                                }}
-                                placeholder="Relative Member Profile"
-                                shorcutHotKey="alt + 2"
-                                value={form.getValues('member_profile')}
-                            />
-                        )}
-                    />
-
-                    {/* ================= COMPANY ================= */}
-                    <FormFieldWrapper
-                        control={form.control}
-                        label={
-                            <Label className="text-xs font-medium text-muted-foreground">
-                                Company{' '}
-                                <KbdGroup>
-                                    <Kbd>Alt + 3</Kbd>
-                                </KbdGroup>
-                            </Label>
-                        }
-                        name="company_id"
-                        render={({ field }) => (
-                            <CompanyCombobox
-                                {...field}
-                                allowShortcutHotKey
-                                disabled={isDisabled(field.name)}
-                                mainTriggerProps={{
-                                    tabIndex: -1,
-                                }}
-                                onChange={(selectedCompany) => {
-                                    field.onChange(selectedCompany.id)
-                                    form.setValue('name', selectedCompany.name)
-                                    form.setValue(
-                                        'member_profile_id',
-                                        undefined
-                                    )
-                                    form.setValue('member_profile', undefined)
-                                }}
-                                placeholder="Select a company"
-                                shortcutHotkey="alt + 3"
-                                value={field.value}
-                            />
-                        )}
-                    />
-
-                    {/* ================= REFERENCE ================= */}
-                    <FormFieldWrapper
-                        control={form.control}
-                        label={
-                            <span className="flex items-center justify-between pb-2">
-                                <span className="inline-flex gap-x-1 items-center">
-                                    Reference Number{' '}
-                                    <HashIcon className="inline text-muted-foreground" />
-                                </span>
-                                <button
-                                    className="text-xs disabled:pointer-events-none text-muted-foreground duration-150 cursor-pointer hover:text-foreground underline-offset-4 underline"
-                                    onClick={handleGenerateVoucherNumber}
-                                    tabIndex={-1}
-                                    type="button"
-                                >
-                                    <span className="text-xs font-medium text-muted-foreground mr-2">
-                                        <Kbd>Alt + 4</Kbd>
-                                    </span>
-                                    {form.watch('cash_voucher_number')
-                                        ? 'Re-generate Voucher'
-                                        : 'Generate Voucher'}
-                                    <WandSparkleIcon className="inline ml-1" />
-                                </button>
-                            </span>
-                        }
-                        name="cash_voucher_number"
-                        render={({ field }) => (
-                            <Input
-                                {...field}
-                                disabled={isDisabled(field.name)}
-                                tabIndex={-1}
-                            />
-                        )}
-                    />
+                    <div className="col-span-2 inline-flex gap-x-2">
+                        <div className="flex items-end justify-end">
+                            <Popover>
+                                <PopoverTrigger asChild className="">
+                                    <Button>
+                                        <GearIcon className="inline  text-muted-foreground" />
+                                    </Button>
+                                </PopoverTrigger>
+                                <PopoverContent className="w-full">
+                                    {/* ================= MEMBER ================= */}
+                                    <FormFieldWrapper
+                                        className="col-span-2"
+                                        control={form.control}
+                                        label={
+                                            <Label className="text-xs font-medium text-muted-foreground">
+                                                Member Profile{' '}
+                                                <Kbd>Alt + 2</Kbd>
+                                            </Label>
+                                        }
+                                        name="member_profile_id"
+                                        render={({ field }) => (
+                                            <MemberPicker
+                                                allowShorcutCommand
+                                                allowShortcutHotKey
+                                                disabled={isDisabled(
+                                                    field.name
+                                                )}
+                                                mainTriggerProps={{
+                                                    tabIndex: -1,
+                                                }}
+                                                onSelect={(selectedMember) => {
+                                                    field.onChange(
+                                                        selectedMember?.id
+                                                    )
+                                                    form.setValue(
+                                                        'member_profile',
+                                                        selectedMember
+                                                    )
+                                                    form.setValue(
+                                                        'name',
+                                                        selectedMember?.full_name
+                                                    )
+                                                    form.setValue(
+                                                        'company_id',
+                                                        undefined
+                                                    )
+                                                    setDefaultMember(
+                                                        selectedMember ??
+                                                            undefined
+                                                    )
+                                                }}
+                                                placeholder="Relative Member Profile"
+                                                shorcutHotKey="alt + 2"
+                                                value={form.getValues(
+                                                    'member_profile'
+                                                )}
+                                            />
+                                        )}
+                                    />
+                                    {/* ================= COMPANY ================= */}
+                                    <FormFieldWrapper
+                                        control={form.control}
+                                        label={
+                                            <Label className="text-xs font-medium text-muted-foreground">
+                                                Company{' '}
+                                                <KbdGroup>
+                                                    <Kbd>Alt + 3</Kbd>
+                                                </KbdGroup>
+                                            </Label>
+                                        }
+                                        name="company_id"
+                                        render={({ field }) => (
+                                            <CompanyCombobox
+                                                {...field}
+                                                allowShortcutHotKey
+                                                disabled={isDisabled(
+                                                    field.name
+                                                )}
+                                                mainTriggerProps={{
+                                                    tabIndex: -1,
+                                                }}
+                                                onChange={(selectedCompany) => {
+                                                    field.onChange(
+                                                        selectedCompany.id
+                                                    )
+                                                    form.setValue(
+                                                        'name',
+                                                        selectedCompany.name
+                                                    )
+                                                    form.setValue(
+                                                        'member_profile_id',
+                                                        undefined
+                                                    )
+                                                    form.setValue(
+                                                        'member_profile',
+                                                        undefined
+                                                    )
+                                                }}
+                                                placeholder="Select a company"
+                                                shortcutHotkey="alt + 3"
+                                                value={field.value}
+                                            />
+                                        )}
+                                    />
+                                    {/* ================= REFERENCE ================= */}
+                                    <FormFieldWrapper
+                                        control={form.control}
+                                        label={
+                                            <span className="flex items-center justify-between pb-2">
+                                                <span className="inline-flex gap-x-1 items-center">
+                                                    Reference Number{' '}
+                                                    <HashIcon className="inline text-muted-foreground" />
+                                                </span>
+                                                <button
+                                                    className="text-xs disabled:pointer-events-none text-muted-foreground duration-150 cursor-pointer hover:text-foreground underline-offset-4 underline"
+                                                    onClick={
+                                                        handleGenerateVoucherNumber
+                                                    }
+                                                    tabIndex={-1}
+                                                    type="button"
+                                                >
+                                                    <span className="text-xs font-medium text-muted-foreground mr-2">
+                                                        <Kbd>Alt + 4</Kbd>
+                                                    </span>
+                                                    {form.watch(
+                                                        'cash_voucher_number'
+                                                    )
+                                                        ? 'Re-generate Voucher'
+                                                        : 'Generate Voucher'}
+                                                    <WandSparkleIcon className="inline ml-1" />
+                                                </button>
+                                            </span>
+                                        }
+                                        name="cash_voucher_number"
+                                        render={({ field }) => (
+                                            <Input
+                                                {...field}
+                                                disabled={isDisabled(
+                                                    field.name
+                                                )}
+                                                tabIndex={-1}
+                                            />
+                                        )}
+                                    />
+                                    <FormFieldWrapper
+                                        className="mt-2"
+                                        control={form.control}
+                                        label={
+                                            <Label className="text-xs font-medium text-muted-foreground">
+                                                Currency *{' '}
+                                                <KbdGroup>
+                                                    <Kbd>Alt + E</Kbd>
+                                                </KbdGroup>
+                                            </Label>
+                                        }
+                                        name="currency_id"
+                                        render={({ field }) => (
+                                            <CurrencyCombobox
+                                                {...field}
+                                                allowShortcutHotKey
+                                                disabled={isDisabled(
+                                                    field.name
+                                                )}
+                                                mainTriggerProps={{
+                                                    tabIndex: -1,
+                                                }}
+                                                onChange={(currency) => {
+                                                    field.onChange(currency?.id)
+                                                    form.setValue(
+                                                        'currency',
+                                                        currency
+                                                    )
+                                                }}
+                                                shortcutHotkey="alt + e"
+                                                value={field.value}
+                                            />
+                                        )}
+                                    />
+                                </PopoverContent>
+                            </Popover>
+                        </div>
+                        <FormFieldWrapper
+                            className="col-span-2"
+                            control={form.control}
+                            label={
+                                <Label className="text-xs font-medium text-muted-foreground">
+                                    Name *{' '}
+                                    <KbdGroup>
+                                        <Kbd>Alt + 1</Kbd>
+                                    </KbdGroup>
+                                </Label>
+                            }
+                            name="name"
+                            render={({ field }) => (
+                                <div className="relative w-full">
+                                    <Input
+                                        className="text-md! font-semibold pr-10"
+                                        tabIndex={-1}
+                                        {...field}
+                                        id={field.name}
+                                        value={field.value || ''}
+                                    />
+                                    <Button
+                                        className="absolute m-auto top-0 bottom-0 right-1 hover:bg-primary/20!"
+                                        onClick={(e) => {
+                                            e.preventDefault()
+                                            form.reset({
+                                                company_id: undefined,
+                                                member_profile: undefined,
+                                                member_profile_id: undefined,
+                                                name: '',
+                                            })
+                                        }}
+                                        size="sm"
+                                        tabIndex={-1}
+                                        variant="ghost"
+                                    >
+                                        <XIcon />
+                                    </Button>
+                                </div>
+                            )}
+                        />
+                    </div>
 
                     {/* ================= PAY TO ================= */}
                     <FormFieldWrapper
@@ -566,64 +635,6 @@ const CashCheckVoucherCreateUpdateForm = ({
                             />
                         )}
                     />
-                    <Collapsible
-                        {...othersAccordionState}
-                        className="w-full col-span-2 justify-end mb-1"
-                    >
-                        <CollapsibleTrigger
-                            className="text-sm justify-start w-full flex text-primary gap-x-2"
-                            tabIndex={-1}
-                        >
-                            <div className="flex items-center flex-col justify-between w-full">
-                                <div className="w-full inline-flex py-2">
-                                    <span className="ml-1 text-xs font-medium text-muted-foreground">
-                                        others
-                                        <KbdGroup>
-                                            <Kbd>Alt + W</Kbd>
-                                        </KbdGroup>
-                                    </span>
-                                    <ChevronDownIcon
-                                        className={cn(
-                                            'ml-auto ease-in-out duration-200',
-                                            !othersAccordionState.open &&
-                                                'rotate-180'
-                                        )}
-                                    />
-                                </div>
-                                <Separator />
-                            </div>
-                        </CollapsibleTrigger>
-
-                        <CollapsibleContent className="w-full py-1 flex flex-col gap-x-2">
-                            <FormFieldWrapper
-                                className="mt-2"
-                                control={form.control}
-                                label={
-                                    <Label className="text-xs font-medium text-muted-foreground">
-                                        Currency *{' '}
-                                        <KbdGroup>
-                                            <Kbd>Alt + E</Kbd>
-                                        </KbdGroup>
-                                    </Label>
-                                }
-                                name="currency_id"
-                                render={({ field }) => (
-                                    <CurrencyCombobox
-                                        {...field}
-                                        allowShortcutHotKey
-                                        disabled={isDisabled(field.name)}
-                                        mainTriggerProps={{ tabIndex: -1 }}
-                                        onChange={(currency) => {
-                                            field.onChange(currency?.id)
-                                            form.setValue('currency', currency)
-                                        }}
-                                        shortcutHotkey="alt + e"
-                                        value={field.value}
-                                    />
-                                )}
-                            />
-                        </CollapsibleContent>
-                    </Collapsible>
                     {/* ================= ENTRIES ================= */}
                     <FormFieldWrapper
                         className="col-span-1 md:col-span-2 max-h-xs!"
