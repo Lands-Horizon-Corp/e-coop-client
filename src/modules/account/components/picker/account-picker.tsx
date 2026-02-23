@@ -173,7 +173,7 @@ const AccountPicker = ({
             {!modalOnly && (
                 <div
                     className={cn(
-                        'flex items-center',
+                        'flex items-center flex-1',
                         allowClear ? 'space-x-2' : ''
                     )}
                 >

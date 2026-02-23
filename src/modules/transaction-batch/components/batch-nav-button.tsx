@@ -225,6 +225,9 @@ const TransactionBatchNavButton = (_props: Props) => {
                 onEscapeKeyDown={(e) => {
                     e.stopPropagation()
                 }}
+                onKeyDown={(e) => {
+                    e.stopPropagation()
+                }}
             >
                 <TransactionBatch
                     onBatchEnded={() => setData(null)}

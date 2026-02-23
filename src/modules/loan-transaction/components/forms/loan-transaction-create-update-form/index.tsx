@@ -1468,9 +1468,23 @@ const AccountPickerField = ({
         <>
             <FormFieldWrapper
                 control={form.control}
-                label={
-                    <>
-                        Loan Account
+                label={<>Loan Account</>}
+                labelClassName="flex justify-between items-end"
+                name="account_id"
+                render={({ field }) => (
+                    <div className="flex items-center gap-x-2">
+                        <AccountPicker
+                            disabled={disabled}
+                            hideDescription
+                            mode="loan"
+                            onSelect={(account) => {
+                                field.onChange(account?.id)
+                                form.setValue('account', account)
+                            }}
+                            placeholder="Select Loan Account"
+                            triggerClassName="flex-1"
+                            value={form.getValues('account')}
+                        />{' '}
                         {accountId && (
                             <>
                                 <AccountViewerModal
@@ -1485,10 +1499,10 @@ const AccountPickerField = ({
                                         <PopoverTrigger asChild>
                                             <Button
                                                 className="ml-auto"
-                                                size="xs"
-                                                variant="outline"
+                                                size="sm"
+                                                variant="secondary"
                                             >
-                                                Loan Account Connections
+                                                <LinkIcon /> Account Connections
                                             </Button>
                                         </PopoverTrigger>
                                         <PopoverContent className="w-full max-w-5xl">
@@ -1516,33 +1530,18 @@ const AccountPickerField = ({
                                     </Popover>
                                 )}
                                 <Button
-                                    className="size-fit p-1"
                                     onClick={() =>
                                         accountViewerModal.onOpenChange(true)
                                     }
-                                    // size="icon"
+                                    size="sm"
                                     type="button"
-                                    variant="ghost"
+                                    variant="secondary"
                                 >
                                     <EyeIcon /> View Account
                                 </Button>
                             </>
                         )}
-                    </>
-                }
-                labelClassName="flex justify-between items-end"
-                name="account_id"
-                render={({ field }) => (
-                    <AccountPicker
-                        disabled={disabled}
-                        mode="loan"
-                        onSelect={(account) => {
-                            field.onChange(account?.id)
-                            form.setValue('account', account)
-                        }}
-                        placeholder="Select Loan Account"
-                        value={form.getValues('account')}
-                    />
+                    </div>
                 )}
             />
         </>
