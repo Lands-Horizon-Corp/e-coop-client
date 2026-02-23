@@ -51,9 +51,12 @@ export const useHotkeysTransaction = () => {
         'Alt +  E',
         (e) => {
             e.preventDefault()
-            const current = transactionForm.getValues('or_auto_generated')
-            transactionForm.setValue('or_auto_generated', !current)
-            if (current && user_organization) {
+            // const current = transactionForm.getValues('or_auto_generated')
+            if (user_organization) {
+                transactionForm.setValue(
+                    'or_auto_generated',
+                    !transactionForm.getValues('or_auto_generated')
+                )
                 transactionForm.setValue('reference_number', finalPaymentOR, {
                     shouldDirty: true,
                 })
