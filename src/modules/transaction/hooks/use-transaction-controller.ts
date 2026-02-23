@@ -145,6 +145,7 @@ export const useTransactionController = ({
 
         form.reset({
             ...form.getValues(),
+            reference_number: transaction.reference_number,
             member_profile: transaction.member_profile,
             member_profile_id: transaction.member_profile_id,
         })
