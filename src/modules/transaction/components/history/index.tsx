@@ -5,6 +5,7 @@ import {
     PaymentsEntryListSkeleton,
     TransactionDetails,
 } from '@/modules/transaction'
+import { useTransactionBatchStore } from '@/modules/transaction-batch/store/transaction-batch-store'
 import { useFilteredPaginatedTransaction } from '@/modules/transactions'
 import { PaginationState } from '@tanstack/react-table'
 import { useHotkeys } from 'react-hotkeys-hook'
@@ -25,6 +26,8 @@ import TransactionNoFound from './transaction-no-found'
 
 export const TransactionHistory = ({ className }: IClassProps) => {
     const { navigate, history } = useTransactionContext()
+    
+    const { data } = useTransactionBatchStore()
 
     const [pagination, setPagination] = useState<PaginationState>({
         pageIndex: PAGINATION_INITIAL_INDEX,
@@ -49,13 +52,13 @@ export const TransactionHistory = ({ className }: IClassProps) => {
             filter: filterState.finalFilterPayloadBase64,
         },
     })
-
     useHotkeys('Alt + R', () => {
         refetchCurrentTransaction()
     })
 
     const isNoCurrentTransaction =
         !CurrentTransaction || CurrentTransaction.data.length === 0
+
 
     return (
         <>
@@ -95,6 +98,7 @@ export const TransactionHistory = ({ className }: IClassProps) => {
                                     <div key={transaction.id}>
                                         <TransactionDetails
                                             item={transaction}
+                                            currentTransactionBatchId={data?.id}
                                             onClick={() => {
                                                 navigate.open(transaction.id)
                                                 history.onOpenChange(false)

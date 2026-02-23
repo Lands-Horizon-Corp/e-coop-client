@@ -6,16 +6,21 @@ import { ITransaction } from '@/modules/transaction'
 import ImageDisplay from '@/components/image-display'
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet'
 
+import { TEntityId } from '@/types'
+
+import { currentTransactionBatch } from '../../transaction-batch/transaction-batch.service'
 import { TransactionCardItem } from './transaction-card-item'
 
 type TransactionCardListItemProps = {
     item: ITransaction
     onClick?: () => void
+    currentTransactionBatchId?: TEntityId
 }
 
 const TransactionDetails = ({
     item,
     onClick,
+    currentTransactionBatchId,
 }: TransactionCardListItemProps) => {
     return (
         <div
@@ -53,7 +58,13 @@ const TransactionDetails = ({
                 </div>
 
                 <p className="text-[11px] text-muted-foreground">
-                    {toReadableDateTime(item.created_at)}
+                    {toReadableDateTime(item.created_at)}{' '}
+                    {currentTransactionBatchId ===
+                        item.transaction_batch_id && (
+                        <span className=" text-green-400 ">
+                            current batch •{' '}
+                        </span>
+                    )}
                 </p>
             </div>
 
