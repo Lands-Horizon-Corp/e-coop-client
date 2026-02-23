@@ -114,7 +114,8 @@ const MemberAccountingLedgerTable = ({
         },
         options: {
             enabled:
-                mode === 'branch' || modeProps.memberProfileId !== undefined,
+                mode === 'branch' ||
+                (mode === 'member' && !!modeProps.memberProfileId),
         },
     })
 

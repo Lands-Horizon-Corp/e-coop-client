@@ -243,9 +243,9 @@ const LoanEntriesEditor = forwardRef<
                     onSelect={handleChangeCashEntryAccount}
                     triggerClassName="sr-only"
                 />
-                <div className="flex items-center justify-between mb-4">
+                <div className="flex items-center justify-between mb-2">
                     <div>
-                        <p className="font-medium">
+                        <p className="font-medium text-sm">
                             Loan Entries
                             <span
                                 className={`text-xs px-2 py-1 ml-2 rounded-sm ${
@@ -589,7 +589,7 @@ const LoanEntryRow = memo(
                     >
                         <TableCell className="py-2 h-fit">
                             <div className="flex flex-col">
-                                <span className="font-medium flex gap-x-1 items-center">
+                                <span className="font-medium flex gap-x-1 text-xs items-center">
                                     {entry.account?.icon && (
                                         <RenderIcon
                                             icon={entry.account.icon as TIcon}
