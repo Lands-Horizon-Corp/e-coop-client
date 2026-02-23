@@ -196,6 +196,7 @@ export const LoanTransactionAction = ({
         openApprovalModal,
     } = useLoanTransactionActions({ row, onDeleteSuccess })
 
+
     return (
         <RowActionsGroup
             canSelect
@@ -217,7 +218,7 @@ export const LoanTransactionAction = ({
                         ? 'View Loan'
                         : 'Edit Loan',
                 isAllowed:
-                    !!loanTransaction?.released_date &&
+                    !loanTransaction.released_by &&
                     hasPermissionFromAuth({
                         action: ['Update', 'OwnUpdate'],
                         resourceType: 'Loan',
