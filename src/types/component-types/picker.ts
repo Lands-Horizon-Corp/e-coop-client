@@ -24,5 +24,5 @@ export interface IPickerBaseProps<T = unknown> {
         | undefined
 
     allowShortcutHotKey?: boolean
-    shortcutHotkey?: string
+    shortcutHotKey?: string
 }

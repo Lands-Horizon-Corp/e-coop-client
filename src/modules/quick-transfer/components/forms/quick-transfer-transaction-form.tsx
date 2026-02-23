@@ -305,7 +305,7 @@ export const QuickTransferTransactionForm = ({
                                     </Label>
                                     <MemberPicker
                                         {...openMemberPicker}
-                                        allowShorcutCommand
+                                        allowShortcutHotKey
                                         disabled={isDisabled(
                                             'member_profile_id'
                                         )}

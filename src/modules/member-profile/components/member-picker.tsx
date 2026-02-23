@@ -35,8 +35,6 @@ interface Props extends IPickerBaseProps<IMemberProfile> {
     allowClear?: boolean
     mainTriggerClassName?: string
     mainTriggerProps?: ButtonProps
-    allowShorcutCommand?: boolean
-    shorcutHotKey?: string
 }
 
 const MemberPicker = forwardRef<HTMLButtonElement, Props>(
@@ -46,7 +44,6 @@ const MemberPicker = forwardRef<HTMLButtonElement, Props>(
             disabled,
             modalState,
             placeholder,
-            allowShorcutCommand = false,
             triggerClassName,
             onSelect,
             triggerVariant = 'secondary',
@@ -54,7 +51,8 @@ const MemberPicker = forwardRef<HTMLButtonElement, Props>(
             allowClear = false,
             mainTriggerProps,
             mainTriggerClassName,
-            shorcutHotKey = 'Enter',
+            shortcutHotKey = 'Enter',
+            allowShortcutHotKey = false,
         },
         ref
     ) => {
@@ -98,7 +96,7 @@ const MemberPicker = forwardRef<HTMLButtonElement, Props>(
         })
 
         useHotkeys(
-            shorcutHotKey,
+            shortcutHotKey,
             (event) => {
                 event?.preventDefault()
                 if (
@@ -107,7 +105,7 @@ const MemberPicker = forwardRef<HTMLButtonElement, Props>(
                     !isPending &&
                     !isLoading &&
                     !isFetching &&
-                    allowShorcutCommand
+                    allowShortcutHotKey
                 ) {
                     setState(!state)
                 }
@@ -121,7 +119,7 @@ const MemberPicker = forwardRef<HTMLButtonElement, Props>(
                 isPending,
                 isLoading,
                 isFetching,
-                allowShorcutCommand,
+                allowShortcutHotKey,
                 state,
             ]
         )
@@ -289,7 +287,7 @@ const MemberPicker = forwardRef<HTMLButtonElement, Props>(
                                     )}
                                 </span>
 
-                                {allowShorcutCommand && (
+                                {allowShortcutHotKey && (
                                     <span className="ml-2 text-sm shrink-0 text-muted-foreground">
                                         ⌘ ↵
                                     </span>

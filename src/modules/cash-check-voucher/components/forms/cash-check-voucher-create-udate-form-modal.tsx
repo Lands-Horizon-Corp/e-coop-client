@@ -90,7 +90,7 @@ const CashCheckVoucherCreateUpdateForm = ({
     const queryClient = useQueryClient()
     const modalState = useModalState()
     const { data } = useTransactionBatchStore()
-    const othersAccordionState = useModalState()
+    const popOverState = useModalState()
     const [defaultMember, setDefaultMember] = useState<
         IMemberProfile | undefined
     >(defaultValues?.member_profile)
@@ -193,48 +193,8 @@ const CashCheckVoucherCreateUpdateForm = ({
         { enableOnFormTags: true },
         [form]
     )
-
     useHotkeys(
-        'alt+7',
-        (e) => {
-            e.preventDefault()
-            form.setFocus('description')
-        },
-        { enableOnFormTags: true },
-        [form]
-    )
-
-    useHotkeys(
-        'alt+3',
-        (e) => {
-            e.preventDefault()
-            form.setFocus('cash_voucher_number')
-        },
-        { enableOnFormTags: true },
-        [form]
-    )
-
-    useHotkeys(
-        'alt+4',
-        (e) => {
-            e.preventDefault()
-        },
-        { enableOnFormTags: true },
-        [form]
-    )
-
-    useHotkeys(
-        'alt+w',
-        (e) => {
-            e.preventDefault()
-            othersAccordionState.onOpenChange(!othersAccordionState.open)
-        },
-        { enableOnFormTags: true },
-        [othersAccordionState]
-    )
-
-    useHotkeys(
-        'alt+5',
+        'alt+2',
         (e) => {
             e.preventDefault()
             form.setFocus('pay_to')
@@ -242,9 +202,8 @@ const CashCheckVoucherCreateUpdateForm = ({
         { enableOnFormTags: true },
         [form]
     )
-
     useHotkeys(
-        'alt+6',
+        'alt+3',
         (e) => {
             e.preventDefault()
             form.setFocus('print_count')
@@ -253,10 +212,20 @@ const CashCheckVoucherCreateUpdateForm = ({
         [form]
     )
     useHotkeys(
-        'alt+7',
+        'alt+4',
         (e) => {
             e.preventDefault()
             form.setFocus('description')
+        },
+        { enableOnFormTags: true },
+        [form]
+    )
+
+    useHotkeys(
+        'shift+3',
+        (e) => {
+            e.preventDefault()
+            form.setFocus('cash_voucher_number')
         },
         { enableOnFormTags: true },
         [form]
@@ -275,13 +244,24 @@ const CashCheckVoucherCreateUpdateForm = ({
     }
 
     useHotkeys(
-        'alt+4',
+        'alt+r',
         (e) => {
             e.preventDefault()
             handleGenerateVoucherNumber()
         },
         { enableOnFormTags: true },
         [handleGenerateVoucherNumber]
+    )
+    useHotkeys(
+        'alt+semicolon',
+        (e) => {
+            e.preventDefault()
+            popOverState.onOpenChange(!popOverState.open)
+        },
+        {
+            enableOnFormTags: true,
+        },
+        [popOverState]
     )
     useEffect(() => {
         if (isUpdate) return
@@ -324,10 +304,10 @@ const CashCheckVoucherCreateUpdateForm = ({
                             type="button"
                             variant={'ghost'}
                         >
-                            Select or Add Member{' '}
+                            Submit{' '}
                         </Button>
                         <CommandShortcut className="bg-accent text-xs min-w-fit size-fit px-2 py-0.5 rounded-sm text-primary">
-                            Enter
+                            Ctrl + Enter
                         </CommandShortcut>
                     </div>
                 </div>
@@ -338,11 +318,17 @@ const CashCheckVoucherCreateUpdateForm = ({
                     {/* ================= NAME ================= */}
                     <div className="col-span-2 inline-flex gap-x-2">
                         <div className="flex items-end justify-end">
-                            <Popover>
+                            <Popover {...popOverState}>
                                 <PopoverTrigger asChild className="">
-                                    <Button>
-                                        <GearIcon className="inline  text-muted-foreground" />
-                                    </Button>
+                                    <div className="flex flex-col w-fit!">
+                                        <Kbd className="block">alt + ;</Kbd>
+                                        <Button
+                                            className="px-1"
+                                            variant="secondary"
+                                        >
+                                            <GearIcon className="size-4" />
+                                        </Button>
+                                    </div>
                                 </PopoverTrigger>
                                 <PopoverContent className="w-full">
                                     {/* ================= MEMBER ================= */}
@@ -352,13 +338,12 @@ const CashCheckVoucherCreateUpdateForm = ({
                                         label={
                                             <Label className="text-xs font-medium text-muted-foreground">
                                                 Member Profile{' '}
-                                                <Kbd>Alt + 2</Kbd>
+                                                <Kbd>Alt + M</Kbd>
                                             </Label>
                                         }
                                         name="member_profile_id"
                                         render={({ field }) => (
                                             <MemberPicker
-                                                allowShorcutCommand
                                                 allowShortcutHotKey
                                                 disabled={isDisabled(
                                                     field.name
@@ -388,7 +373,7 @@ const CashCheckVoucherCreateUpdateForm = ({
                                                     )
                                                 }}
                                                 placeholder="Relative Member Profile"
-                                                shorcutHotKey="alt + 2"
+                                                shortcutHotKey="alt + 7"
                                                 value={form.getValues(
                                                     'member_profile'
                                                 )}
@@ -435,7 +420,7 @@ const CashCheckVoucherCreateUpdateForm = ({
                                                     )
                                                 }}
                                                 placeholder="Select a company"
-                                                shortcutHotkey="alt + 3"
+                                                shortcutHotKey="alt + 3"
                                                 value={field.value}
                                             />
                                         )}
@@ -509,7 +494,7 @@ const CashCheckVoucherCreateUpdateForm = ({
                                                         currency
                                                     )
                                                 }}
-                                                shortcutHotkey="alt + e"
+                                                shortcutHotKey="alt + e"
                                                 value={field.value}
                                             />
                                         )}
@@ -567,7 +552,7 @@ const CashCheckVoucherCreateUpdateForm = ({
                             <Label className="text-xs font-medium text-muted-foreground">
                                 Pay To{' '}
                                 <KbdGroup>
-                                    <Kbd>Alt + 5</Kbd>
+                                    <Kbd>Alt + 2</Kbd>
                                 </KbdGroup>
                             </Label>
                         }
@@ -590,7 +575,7 @@ const CashCheckVoucherCreateUpdateForm = ({
                             <Label className="text-xs font-medium text-muted-foreground">
                                 Print Count{' '}
                                 <KbdGroup>
-                                    <Kbd>Alt + 6</Kbd>
+                                    <Kbd>Alt + 3</Kbd>
                                 </KbdGroup>
                             </Label>
                         }
@@ -619,7 +604,7 @@ const CashCheckVoucherCreateUpdateForm = ({
                             <Label className="text-xs font-medium text-muted-foreground">
                                 Particulars{' '}
                                 <KbdGroup>
-                                    <Kbd>Alt + 7</Kbd>
+                                    <Kbd>Alt + 4</Kbd>
                                 </KbdGroup>
                             </Label>
                         }
@@ -680,11 +665,10 @@ const CashCheckVoucherCreateUpdateForm = ({
                             form.reset({
                                 ...defaultValues,
                             })
-                            // resetUpdate()
                         } else {
                             form.reset()
-                            resetCreate()
                         }
+                        resetCreate()
                         setSelectedMember(null)
                         queryClient.invalidateQueries({
                             queryKey: [cashCheckVoucherBaseKey, 'paginated'],

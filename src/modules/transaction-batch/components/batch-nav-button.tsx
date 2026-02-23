@@ -108,7 +108,7 @@ const TransactionBatchNavButton = (_props: Props) => {
     )
 
     useHotkeys(
-        'ctrl + m',
+        'ctrl+alt+k',
         (e) => {
             e.preventDefault()
             manageBatchModalState.onOpenChange(!manageBatchModalState.open)

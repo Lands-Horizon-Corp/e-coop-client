@@ -62,7 +62,7 @@ const CurrencyCombobox = ({
     formatDisplay = 'emoji-name-code',
     modalState,
     allowShortcutHotKey,
-    shortcutHotkey = 'alt + u',
+    shortcutHotKey = 'alt + u',
     onChange,
     mainTriggerProps,
 }: Props) => {
@@ -183,7 +183,7 @@ const CurrencyCombobox = ({
     }
 
     useHotkeys(
-        shortcutHotkey,
+        shortcutHotKey,
         (event) => {
             event?.preventDefault()
             if (!disabled && !isLoading && allowShortcutHotKey) {

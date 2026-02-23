@@ -53,7 +53,7 @@ const CompanyCombobox = ({
     placeholder = 'Select Company...',
     onChange,
     modalState,
-    shortcutHotkey = 'alt + C',
+    shortcutHotKey = 'alt + C',
     allowShortcutHotKey = false,
     mainTriggerProps,
 }: Props) => {
@@ -75,7 +75,7 @@ const CompanyCombobox = ({
     )
 
     useHotkeys(
-        shortcutHotkey,
+        shortcutHotKey,
         (event) => {
             event?.preventDefault()
             setOpen(!open)

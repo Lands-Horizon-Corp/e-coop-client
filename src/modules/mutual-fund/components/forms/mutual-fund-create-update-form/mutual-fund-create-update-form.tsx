@@ -197,7 +197,7 @@ const MutualFundCreateUpdateForm = ({
                             name="member_profile_id"
                             render={({ field }) => (
                                 <MemberPicker
-                                    allowShorcutCommand
+                                    allowShortcutHotKey
                                     disabled={isDisabled(field.name)}
                                     onSelect={(selectedMember) => {
                                         field.onChange(selectedMember?.id)

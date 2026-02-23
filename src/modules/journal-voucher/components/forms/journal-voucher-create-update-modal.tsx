@@ -77,7 +77,7 @@ const JournalVoucherCreateUpdateForm = ({
 }: IJournalVoucherCreateUpdateFormProps) => {
     const queryClient = useQueryClient()
 
-    const othersAccordionState = useModalState(false)
+    const popOverState = useModalState(false)
     const companyState = useModalState(false)
 
     const { data } = useTransactionBatchStore()
@@ -206,11 +206,22 @@ const JournalVoucherCreateUpdateForm = ({
         'alt + 2',
         (e) => {
             e.preventDefault()
+            form.setFocus('date')
+        },
+        { enableOnFormTags: true },
+        [form]
+    )
+
+    useHotkeys(
+        'alt + 3',
+        (e) => {
+            e.preventDefault()
             form.setFocus('description')
         },
         { enableOnFormTags: true },
         [form]
     )
+
     useHotkeys(
         'alt + 4',
         (e) => {
@@ -230,7 +241,7 @@ const JournalVoucherCreateUpdateForm = ({
         [form]
     )
     useHotkeys(
-        'alt + 6',
+        'alt + slash',
         (e) => {
             e.preventDefault()
             form.setFocus('reference')
@@ -240,13 +251,13 @@ const JournalVoucherCreateUpdateForm = ({
     )
 
     useHotkeys(
-        'alt + w',
+        'alt + semicolon',
         (e) => {
             e.preventDefault()
-            othersAccordionState.onOpenChange(!othersAccordionState.open)
+            popOverState.onOpenChange(!popOverState.open)
         },
         { enableOnFormTags: true },
-        [othersAccordionState]
+        [popOverState]
     )
 
     return (
@@ -282,21 +293,27 @@ const JournalVoucherCreateUpdateForm = ({
                                 type="button"
                                 variant={'ghost'}
                             >
-                                Select or Add Member{' '}
+                                Submit{' '}
                             </Button>
                             <CommandShortcut className="bg-accent text-xs min-w-fit size-fit px-2 py-0.5 rounded-sm text-primary">
-                                Enter
+                                Ctrl + Enter
                             </CommandShortcut>
                         </div>
                     </div>
                     <div className="gap-2 w-full flex flex-col">
                         <div className="col-span-2 inline-flex gap-2 w-full">
                             <div className=" flex justify-end items-end">
-                                <Popover>
+                                <Popover {...popOverState}>
                                     <PopoverTrigger asChild>
-                                        <Button className="">
-                                            <GearIcon className="size-4" />
-                                        </Button>
+                                        <div className="flex flex-col w-fit!">
+                                            <Kbd className="block">alt + ;</Kbd>
+                                            <Button
+                                                className="px-1"
+                                                variant="secondary"
+                                            >
+                                                <GearIcon className="size-4" />
+                                            </Button>
+                                        </div>
                                     </PopoverTrigger>
                                     <PopoverContent className="bg-card w-fit">
                                         <FormFieldWrapper
@@ -305,7 +322,7 @@ const JournalVoucherCreateUpdateForm = ({
                                             label={
                                                 <Label className="text-xs font-medium text-muted-foreground">
                                                     Member Profile{' '}
-                                                    <Kbd>Enter</Kbd>
+                                                    <Kbd>alt + m</Kbd>
                                                 </Label>
                                             }
                                             name="member_id"
@@ -313,7 +330,8 @@ const JournalVoucherCreateUpdateForm = ({
                                                 return (
                                                     <>
                                                         <MemberPicker
-                                                            allowShorcutCommand
+                                                            allowClear
+                                                            allowShortcutHotKey
                                                             disabled={isDisabled(
                                                                 field.name
                                                             )}
@@ -343,7 +361,7 @@ const JournalVoucherCreateUpdateForm = ({
                                                                 )
                                                             }}
                                                             placeholder="Relative Member Profile"
-                                                            // shorcutHotKey="Alt + 3"
+                                                            shortcutHotKey="alt + m"
                                                             value={form.getValues(
                                                                 'member_profile'
                                                             )}
@@ -359,7 +377,7 @@ const JournalVoucherCreateUpdateForm = ({
                                                     Currency *{' '}
                                                     <span>
                                                         <KbdGroup>
-                                                            <Kbd>Alt + E</Kbd>
+                                                            <Kbd>Alt + ,</Kbd>
                                                         </KbdGroup>
                                                     </span>
                                                 </Label>
@@ -384,7 +402,7 @@ const JournalVoucherCreateUpdateForm = ({
                                                             currency
                                                         )
                                                     }}
-                                                    shortcutHotkey="alt + e"
+                                                    shortcutHotKey="alt + period"
                                                     value={field.value}
                                                 />
                                             )}
@@ -396,7 +414,7 @@ const JournalVoucherCreateUpdateForm = ({
                                                     Company{' '}
                                                     <span>
                                                         <KbdGroup>
-                                                            <Kbd>Alt + 4</Kbd>
+                                                            <Kbd>Alt + .</Kbd>
                                                         </KbdGroup>
                                                     </span>
                                                 </Label>
@@ -433,7 +451,7 @@ const JournalVoucherCreateUpdateForm = ({
                                                         )
                                                     }}
                                                     placeholder="Select a company"
-                                                    shortcutHotkey="alt + 4"
+                                                    shortcutHotKey="alt + comma"
                                                     value={field.value}
                                                 />
                                             )}
@@ -445,7 +463,7 @@ const JournalVoucherCreateUpdateForm = ({
                                                     Reference{' '}
                                                     <span>
                                                         <KbdGroup>
-                                                            <Kbd>Alt + 6</Kbd>
+                                                            <Kbd>Alt + /</Kbd>
                                                         </KbdGroup>
                                                     </span>
                                                 </Label>
@@ -524,9 +542,7 @@ const JournalVoucherCreateUpdateForm = ({
                                             Date{' '}
                                             <span>
                                                 <KbdGroup>
-                                                    <Kbd>Alt</Kbd>
-                                                    <span>+</span>
-                                                    <Kbd>5</Kbd>
+                                                    <Kbd>Alt + 2</Kbd>
                                                 </KbdGroup>
                                             </span>
                                         </Label>
@@ -551,7 +567,7 @@ const JournalVoucherCreateUpdateForm = ({
                                     Particulars/Description{' '}
                                     <span>
                                         <KbdGroup>
-                                            <Kbd>Alt + 2</Kbd>
+                                            <Kbd>Alt + 3</Kbd>
                                         </KbdGroup>
                                     </span>
                                 </Label>
@@ -622,11 +638,10 @@ const JournalVoucherCreateUpdateForm = ({
                                     ? new Date(defaultValues.date).toISOString()
                                     : undefined,
                             })
-                            // resetUpdate()
                         } else {
                             form.reset()
-                            resetCreate()
                         }
+                        resetCreate()
                         setSelectedMember(null)
                         queryClient.invalidateQueries({
                             queryKey: [journalVoucherBaseKey, 'paginated'],

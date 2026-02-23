@@ -208,7 +208,7 @@ const AdjustmentEntryCreateUpdateForm = ({
                         render={({ field }) => {
                             return (
                                 <MemberPicker
-                                    allowShorcutCommand
+                                    allowShortcutHotKey
                                     disabled={isDisabled(field.name)}
                                     onSelect={(selectedMember) => {
                                         field.onChange(selectedMember?.id)
