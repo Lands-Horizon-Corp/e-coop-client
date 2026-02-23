@@ -37,8 +37,7 @@ import BankAction, {
 } from './row-action-context'
 
 export interface BankTableProps
-    extends TableProps<IBank>,
-        IBankTableColumnProps {
+    extends TableProps<IBank>, IBankTableColumnProps {
     toolbarProps?: Omit<
         IDataTableToolbarProps<IBank>,
         | 'table'
@@ -46,7 +45,6 @@ export interface BankTableProps
         | 'globalSearchProps'
         | 'scrollableProps'
         | 'filterLogicProps'
-        | 'exportActionProps'
         | 'deleteActionProps'
     >
 }
@@ -158,7 +156,7 @@ const BankTable = ({
                     className={cn(
                         'flex h-full flex-col gap-y-2',
                         className,
-                        !tableState.isScrollable && 'h-fit !max-h-none'
+                        !tableState.isScrollable && 'h-fit max-h-none!'
                     )}
                 >
                     <DataTableToolbar
@@ -173,6 +171,7 @@ const BankTable = ({
                                 }),
                         }}
                         exportActionProps={{
+                            ...toolbarProps?.exportActionProps,
                             isLoading: isPending,
                             filters: filter,
                             disabled: isPending || isRefetching,

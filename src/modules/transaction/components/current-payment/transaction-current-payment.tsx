@@ -14,10 +14,11 @@ import { Button } from '@/components/ui/button'
 
 import { useQeueryHookCallback } from '@/hooks/use-query-hook-cb'
 
-import { TEntityId } from '@/types'
-
-import { ITransaction } from '../..'
+import { useTransactionContext } from '../../context/transaction-context'
+import { useHotkeysTransaction } from '../../hooks/use-transaction-hot-keys'
+import TransactionForm from '../forms/transaction-form'
 import TransactionHistory from '../history'
+import TransactionModalSuccessPayment from '../modals/transaction-modal-success-payment'
 import TransactionCurrentPaymentItem from './transaction-current-payment-item'
 
 type itemgBadgeTypeProps = {
@@ -34,18 +35,14 @@ type itemgBadgeTypeProps = {
     className?: string
 }
 
-type CurrentPaymentsEntryListProps = {
-    transactionId: TEntityId
-    transaction: ITransaction
-    totalAmount?: number
-    fullPath: string
-}
-const TransactionCurrentPaymentEntry = ({
-    fullPath,
-    transactionId,
-    transaction,
-    totalAmount,
-}: CurrentPaymentsEntryListProps) => {
+const TransactionCurrentPaymentEntry = () => {
+    const { transaction, transactionId, accountPicker } =
+        useTransactionContext()
+
+    const totalAmount = transaction?.amount
+
+    useHotkeysTransaction()
+
     const {
         data: generalLedgerBasedTransaction,
         isLoading,
@@ -57,7 +54,6 @@ const TransactionCurrentPaymentEntry = ({
         transactionId,
         mode: 'transaction',
         options: {
-            retry: 0,
             enabled: !!transactionId,
         },
     })
@@ -74,37 +70,39 @@ const TransactionCurrentPaymentEntry = ({
     })
 
     return (
-        <div className="flex min-h-[100%] h-fit flex-col gap-y-2 mb-2 p-4 overflow-hidden  rounded-2xl bg-card">
-            <div className="flex items-center gap-x-2">
-                <div className=" flex-grow rounded-xl py-2">
-                    <div className="flex items-center justify-between gap-x-2">
-                        <div className="flex items-center gap-x-2">
-                            <TransactionHistory fullPath={fullPath} />
-                            <p className="text-sm font-bold uppercase text-muted-foreground">
-                                Total Amount
-                            </p>
-                        </div>
-                        <div className="flex items-center gap-x-1">
-                            <p className="text-lg font-bold text-primary dark:text-primary">
-                                {currencyFormat(totalAmount || 0, {
-                                    currency: transaction?.currency,
-                                    showSymbol: !!transaction?.currency,
-                                })}
-                            </p>
-                            <Button
-                                disabled={isRefetching}
-                                onClick={() => refetchGeneralLedger()}
-                                size="icon-sm"
-                                variant="ghost"
-                            >
-                                {isRefetching ? (
-                                    <LoadingSpinner />
-                                ) : (
-                                    <RefreshIcon />
-                                )}
-                            </Button>
-                        </div>
-                    </div>
+        <div className="flex min-h-full h-fit flex-col gap-y-2 mb-2 p-4 overflow-hidden rounded-2xl bg-card/50">
+            <TransactionModalSuccessPayment
+                onOpenPicker={() => {
+                    accountPicker.onOpenChange(true)
+                }}
+            />
+
+            <div className="flex space-x-2">
+                <div className="flex gap-1 bg-linear-to-br from-primary/10 to-background border border-primary/10  rounded-lg p-2">
+                    <TransactionForm />
+                    <Button
+                        disabled={isRefetching}
+                        onClick={(e) => {
+                            e.preventDefault()
+                            refetchGeneralLedger()
+                        }}
+                        size="icon-sm"
+                        variant="ghost"
+                    >
+                        {isRefetching ? <LoadingSpinner /> : <RefreshIcon />}
+                    </Button>
+                    <TransactionHistory />
+                </div>
+                <div className="flex-1 flex py-5 flex-col min-w-[8rem] items-center justify-center bg-linear-to-br from-primary/10 to-background/10 border border-primary/10 rounded-lg h-full w-full gap-x-1">
+                    <p className="text-xs font-bold uppercase text-muted-foreground">
+                        Total Amount
+                    </p>
+                    <p className="text-lg font-bold text-primary dark:text-primary">
+                        {currencyFormat(totalAmount || 0, {
+                            currency: transaction?.currency,
+                            showSymbol: !!transaction?.currency,
+                        })}
+                    </p>
                 </div>
             </div>
             {/* <Separator /> */}
@@ -139,7 +137,7 @@ export const PaymentsEntryItem = ({
     valueClassName,
 }: PaymentsEntryItemProps) => {
     return (
-        <div className={cn('my-1 flex w-full flex-grow', className)}>
+        <div className={cn('my-1 flex w-full grow', className)}>
             <div className="flex gap-x-2">
                 <span className="text-muted-foreground">{icon}</span>
                 <p

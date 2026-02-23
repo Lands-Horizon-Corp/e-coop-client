@@ -8,7 +8,12 @@ import { useTableRowActionStore } from '@/components/data-table/store/data-table
 import { EyeIcon } from '@/components/icons'
 import { ContextMenuItem } from '@/components/ui/context-menu'
 import { DropdownMenuItem } from '@/components/ui/dropdown-menu'
-import { Sheet, SheetContent } from '@/components/ui/sheet'
+import {
+    Sheet,
+    SheetContent,
+    SheetDescription,
+    SheetTitle,
+} from '@/components/ui/sheet'
 
 import { IFootstep } from '../../footstep.types'
 import FootstepDetail from '../footstep-detail'
@@ -129,6 +134,12 @@ export const FootstepTableActionManager = () => {
                         className="!max-w-lg bg-transparent p-2 focus:outline-none border-none"
                         side="right"
                     >
+                        <SheetTitle className="sr-only hidden">
+                            Footstep View
+                        </SheetTitle>
+                        <SheetDescription className="sr-only hidden">
+                            Viewing the footstep detail
+                        </SheetDescription>
                         <div className="rounded-xl bg-popover p-6 ecoop-scroll relative h-full overflow-y-auto">
                             <FootstepDetail footstep={footstep} />
                         </div>

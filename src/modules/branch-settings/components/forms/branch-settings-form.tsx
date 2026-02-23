@@ -5,22 +5,26 @@ import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
 import { cn } from '@/helpers'
 import { withToastCallbacks } from '@/helpers/callback-helper'
 import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
+import MemberGenderCombobox from '@/modules/member-gender/components/member-gender-combobox'
 import MemberTypeCombobox from '@/modules/member-type/components/member-type-combobox'
 import { DivideIcon } from 'lucide-react'
 
 import FormFooterResetSubmit from '@/components/form-components/form-footer-reset-submit'
 import {
-    CalendarIcon,
-    CheckIcon,
+    BookOpenIcon,
     CreditCardIcon,
+    DollarIcon,
     HandCoinsIcon,
+    IdCardIcon,
     InfoIcon,
     MoneyCheckIcon,
     PercentIcon,
     ReceiptIcon,
     UserIcon,
+    WrenchIcon,
 } from '@/components/icons'
 import Modal, { IModalProps } from '@/components/modals/modal'
+import SwitchFormField from '@/components/switch-form-field'
 import InfoTooltip from '@/components/tooltips/info-tooltip'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Form } from '@/components/ui/form'
@@ -34,7 +38,6 @@ import {
 } from '@/components/ui/input-group'
 import { Label } from '@/components/ui/label'
 import { Separator } from '@/components/ui/separator'
-import { Switch } from '@/components/ui/switch'
 
 import { useFormHelper } from '@/hooks/use-form-helper'
 
@@ -43,14 +46,15 @@ import { IClassProps, IForm } from '@/types'
 import { useUpdateCurrentBranchSettings } from '../../branch-settings.service'
 import { IBranchSettings } from '../../branch-settings.types'
 import {
-    BranchSettingsSchema,
-    TBranchSettingsSchema,
+    BranchSettingRequestSchema,
+    TBranchSettingsRequestSchema,
 } from '../../branch-settings.validation'
 
-export type TBranchSettingsFormValues = TBranchSettingsSchema
+export type TBranchSettingsFormValues = TBranchSettingsRequestSchema
 
 export interface IBranchSettingsFormProps
-    extends IClassProps,
+    extends
+        IClassProps,
         IForm<Partial<TBranchSettingsFormValues>, IBranchSettings, Error> {}
 
 const BranchSettingsForm = ({
@@ -58,51 +62,85 @@ const BranchSettingsForm = ({
     ...formProps
 }: IBranchSettingsFormProps) => {
     const form = useForm<TBranchSettingsFormValues>({
-        resolver: standardSchemaResolver(BranchSettingsSchema),
+        resolver: standardSchemaResolver(BranchSettingRequestSchema),
         reValidateMode: 'onChange',
         mode: 'onSubmit',
         defaultValues: {
-            // Withdraw settings
+            // Withdraw
             withdraw_allow_user_input: false,
             withdraw_prefix: '',
             withdraw_or_start: 0,
             withdraw_or_current: 0,
             withdraw_or_end: 0,
             withdraw_or_iteration: 0,
-            withdraw_or_unique: false,
             withdraw_use_date_or: false,
+            withdraw_padding: 0,
+            withdraw_common_or: '',
 
-            // Deposit settings
-            deposit_allow_user_input: false,
-            deposit_prefix: '',
+            // Deposit
             deposit_or_start: 0,
             deposit_or_current: 0,
             deposit_or_end: 0,
             deposit_or_iteration: 0,
-            deposit_or_unique: false,
             deposit_use_date_or: false,
+            deposit_padding: 0,
+            deposit_common_or: '',
+            deposit_allow_user_input: false,
 
-            // Loan settings
-            loan_allow_user_input: false,
-            loan_prefix: '',
-            loan_or_start: 0,
-            loan_or_current: 0,
-            loan_or_end: 0,
-            loan_or_iteration: 0,
-            loan_or_unique: false,
-            loan_use_date_or: false,
+            // Cash Check Voucher
+            cash_check_voucher_allow_user_input: false,
+            cash_check_voucher_or_unique: false,
+            cash_check_voucher_prefix: '',
+            cash_check_voucher_or_start: 0,
+            cash_check_voucher_or_current: 0,
+            cash_check_voucher_padding: 0,
 
-            // Check Voucher settings
-            check_voucher_allow_user_input: false,
-            check_voucher_prefix: '',
-            check_voucher_or_start: 0,
-            check_voucher_or_current: 0,
-            check_voucher_or_end: 0,
-            check_voucher_or_iteration: 0,
-            check_voucher_or_unique: false,
-            check_voucher_use_date_or: false,
+            // Journal Voucher
+            journal_voucher_allow_user_input: false,
+            journal_voucher_or_unique: false,
+            journal_voucher_prefix: '',
+            journal_voucher_or_start: 0,
+            journal_voucher_or_current: 0,
+            journal_voucher_padding: 0,
 
+            // Adjustment Voucher
+            adjustment_voucher_allow_user_input: false,
+            adjustment_voucher_or_unique: false,
+            adjustment_voucher_prefix: '',
+            adjustment_voucher_or_start: 0,
+            adjustment_voucher_or_current: 0,
+            adjustment_voucher_padding: 0,
+
+            // Loan Voucher
+            loan_voucher_allow_user_input: false,
+            loan_voucher_or_unique: false,
+            loan_voucher_prefix: '',
+            loan_voucher_or_start: 0,
+            loan_voucher_or_current: 0,
+            loan_voucher_padding: 0,
+
+            // Check Voucher (General)
+            check_voucher_general: false,
+            check_voucher_general_allow_user_input: false,
+            check_voucher_general_or_unique: false,
+            check_voucher_general_prefix: '',
+            check_voucher_general_or_start: 0,
+            check_voucher_general_or_current: 0,
+            check_voucher_general_padding: 0,
+
+            // MEMBER PB GENERATOR
+            member_profile_passbook_allow_user_input: false,
+            member_profile_passbook_or_unique: false,
+            member_profile_passbook_prefix: '',
+            member_profile_passbook_or_start: 0,
+            member_profile_passbook_or_current: 0,
+            member_profile_passbook_padding: 0,
+
+            // Others
             loan_applied_equal_to_balance: true,
+            annual_divisor: 0,
+            tax_interest: 0,
+
             ...formProps.defaultValues,
         },
     })
@@ -201,13 +239,131 @@ const BranchSettingsForm = ({
                                     disabled={isDisabled(field.name)}
                                     onChange={(selectedType) => {
                                         field.onChange(selectedType?.id)
+                                        form.setValue(
+                                            'default_member_type',
+                                            selectedType
+                                        )
                                     }}
                                     placeholder="Select default member type"
                                     value={field.value}
                                 />
                             )}
                         />
+                        <FormFieldWrapper
+                            control={form.control}
+                            label="Default Gender *"
+                            name="default_member_gender_id"
+                            render={({ field }) => (
+                                <MemberGenderCombobox
+                                    {...field}
+                                    disabled={isDisabled(field.name)}
+                                    onChange={(selected) =>
+                                        field.onChange(selected.id)
+                                    }
+                                    placeholder="Select Gender"
+                                />
+                            )}
+                        />
                     </div>
+                    <Separator />
+
+                    {/* Member Passbook Number Settings */}
+                    <div className="space-y-4 p-4 bg-secondary/60 dark:bg-popover rounded-xl">
+                        <div className="flex items-center gap-3">
+                            <div className="size-fit rounded-full bg-primary/40 p-2 dark:bg-primary/40/20">
+                                <IdCardIcon className="h-5 w-5 text-primary dark:text-primary" />
+                            </div>
+                            <div>
+                                <h3 className="text-lg font-semibold">
+                                    Member Passbook Number Settings
+                                </h3>
+                                <p className="text-sm text-muted-foreground">
+                                    Configure passbook number generation and
+                                    assignment rules
+                                </p>
+                            </div>
+                        </div>
+
+                        <div className="grid gap-x-4 gap-y-3 md:grid-cols-4">
+                            <FormFieldWrapper
+                                control={form.control}
+                                label="Start Number"
+                                name="member_profile_passbook_or_start"
+                                render={({ field }) => (
+                                    <Input
+                                        {...field}
+                                        disabled={isDisabled(field.name)}
+                                        min="0"
+                                        placeholder="Start number"
+                                        type="text"
+                                    />
+                                )}
+                            />
+
+                            <FormFieldWrapper
+                                control={form.control}
+                                label="Current Number"
+                                name="member_profile_passbook_or_current"
+                                render={({ field }) => (
+                                    <Input
+                                        {...field}
+                                        disabled={isDisabled(field.name)}
+                                        min="0"
+                                        placeholder="Current number"
+                                        type="text"
+                                    />
+                                )}
+                            />
+
+                            <FormFieldWrapper
+                                control={form.control}
+                                label="Number Padding"
+                                name="member_profile_passbook_padding"
+                                render={({ field }) => (
+                                    <Input
+                                        {...field}
+                                        disabled={isDisabled(field.name)}
+                                        min="0"
+                                        placeholder="Padding length"
+                                        type="text"
+                                    />
+                                )}
+                            />
+
+                            <FormFieldWrapper
+                                control={form.control}
+                                label="Prefix"
+                                name="member_profile_passbook_prefix"
+                                render={({ field }) => (
+                                    <Input
+                                        {...field}
+                                        disabled={isDisabled(field.name)}
+                                        placeholder="Prefix (optional)"
+                                        type="text"
+                                    />
+                                )}
+                            />
+                        </div>
+
+                        <div className="space-y-3">
+                            <SwitchFormField
+                                description="Allow users to manually assign passbook numbers"
+                                form={form}
+                                isDisabled={isDisabled}
+                                label="Allow Manual Input"
+                                name="member_profile_passbook_allow_user_input"
+                            />
+
+                            <SwitchFormField
+                                description="Ensure generated passbook numbers are unique"
+                                form={form}
+                                isDisabled={isDisabled}
+                                label="Enforce Unique Numbers"
+                                name="member_profile_passbook_or_unique"
+                            />
+                        </div>
+                    </div>
+
                     <Separator />
 
                     <div className="space-y-4 p-4 bg-secondary/60 dark:bg-popover rounded-xl">
@@ -279,7 +435,7 @@ const BranchSettingsForm = ({
                     </div>
                     <Separator />
 
-                    {/* Withdraw OR Settings */}
+                    {/* Withdraw Reference Number Settings */}
                     <div className="space-y-4 p-4 bg-secondary/60 dark:bg-popover rounded-xl">
                         <div className="flex items-center gap-3">
                             <div className="size-fit rounded-full bg-destructive/40 p-2 dark:bg-destructive/40/20">
@@ -287,11 +443,11 @@ const BranchSettingsForm = ({
                             </div>
                             <div>
                                 <h3 className="text-lg font-semibold">
-                                    Withdraw OR Settings
+                                    Withdraw Reference Number Settings
                                 </h3>
                                 <p className="text-sm text-muted-foreground">
-                                    Configure official receipt settings for
-                                    withdrawals
+                                    Configure reference number settings for
+                                    withdrawals reference number
                                 </p>
                             </div>
                         </div>
@@ -299,471 +455,90 @@ const BranchSettingsForm = ({
                         <div className="grid gap-x-4 gap-y-3 md:grid-cols-4">
                             <FormFieldWrapper
                                 control={form.control}
-                                label="Start OR"
+                                label="Start"
                                 name="withdraw_or_start"
                                 render={({ field }) => (
                                     <Input
                                         {...field}
                                         disabled={isDisabled(field.name)}
                                         min="0"
-                                        placeholder="Start OR"
+                                        placeholder="Start"
                                         type="text"
                                     />
                                 )}
                             />
-
                             <FormFieldWrapper
                                 control={form.control}
-                                label="Current OR"
+                                label="Current"
                                 name="withdraw_or_current"
                                 render={({ field }) => (
                                     <Input
                                         {...field}
                                         disabled={isDisabled(field.name)}
                                         min="0"
-                                        placeholder="Current OR"
+                                        placeholder="Current"
                                         type="text"
                                     />
                                 )}
                             />
-
                             <FormFieldWrapper
                                 control={form.control}
-                                label="End OR"
+                                label="End"
                                 name="withdraw_or_end"
                                 render={({ field }) => (
                                     <Input
                                         {...field}
                                         disabled={isDisabled(field.name)}
                                         min="0"
-                                        placeholder="End OR"
+                                        placeholder="End"
                                         type="text"
                                     />
                                 )}
                             />
-
                             <FormFieldWrapper
                                 control={form.control}
-                                label="OR Iteration"
+                                label="padding"
+                                name="withdraw_padding"
+                                render={({ field }) => (
+                                    <Input
+                                        {...field}
+                                        disabled={isDisabled(field.name)}
+                                        placeholder="Enter prefix (optional)"
+                                        type="text"
+                                    />
+                                )}
+                            />
+                            <FormFieldWrapper
+                                control={form.control}
+                                label="Common Reference Number"
+                                name="withdraw_common_or"
+                                render={({ field }) => (
+                                    <Input
+                                        {...field}
+                                        disabled={isDisabled(field.name)}
+                                        placeholder="Enter common"
+                                        type="text"
+                                    />
+                                )}
+                            />
+                            <FormFieldWrapper
+                                control={form.control}
+                                label="Iteration"
                                 name="withdraw_or_iteration"
                                 render={({ field }) => (
                                     <Input
                                         {...field}
                                         disabled={isDisabled(field.name)}
                                         min="0"
-                                        placeholder="OR Iteration"
+                                        placeholder="Iteration"
                                         type="text"
                                     />
                                 )}
                             />
-                        </div>
-
-                        <FormFieldWrapper
-                            control={form.control}
-                            label="OR Prefix"
-                            name="withdraw_prefix"
-                            render={({ field }) => (
-                                <Input
-                                    {...field}
-                                    disabled={isDisabled(field.name)}
-                                    placeholder="Enter prefix (optional)"
-                                    type="text"
-                                />
-                            )}
-                        />
-
-                        <div className="space-y-3">
                             <FormFieldWrapper
                                 control={form.control}
-                                name="withdraw_allow_user_input"
-                                render={({ field }) => (
-                                    <div className="shadow-xs bg-background/50 relative flex w-full items-start gap-2 rounded-lg border border-input p-4 outline-none duration-200 ease-out has-[:checked]:border-primary/30 has-[:checked]:bg-gradient-to-br has-[:checked]:from-primary/50 has-[:checked]:to-primary/10">
-                                        <Switch
-                                            aria-describedby={`${field.name}-desc`}
-                                            checked={field.value}
-                                            className="order-1 after:absolute after:inset-0"
-                                            disabled={isDisabled(field.name)}
-                                            id={field.name}
-                                            onCheckedChange={field.onChange}
-                                        />
-                                        <div className="flex grow items-center gap-3">
-                                            <div className="size-fit rounded-full bg-secondary p-2">
-                                                <CheckIcon className="h-4 w-4" />
-                                            </div>
-                                            <div className="grid gap-2">
-                                                <Label htmlFor={field.name}>
-                                                    Allow User Input
-                                                </Label>
-                                                <p
-                                                    className="text-xs text-muted-foreground"
-                                                    id={`${field.name}-desc`}
-                                                >
-                                                    Allow users to manually
-                                                    input OR numbers for
-                                                    withdrawals
-                                                </p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                )}
-                            />
-
-                            <FormFieldWrapper
-                                control={form.control}
-                                name="withdraw_or_unique"
-                                render={({ field }) => (
-                                    <div className="shadow-xs bg-background/50 relative flex w-full items-start gap-2 rounded-lg border border-input p-4 outline-none duration-200 ease-out has-[:checked]:border-primary/30 has-[:checked]:bg-gradient-to-br has-[:checked]:from-primary/50 has-[:checked]:to-primary/10">
-                                        <Switch
-                                            aria-describedby={`${field.name}-desc`}
-                                            checked={field.value}
-                                            className="order-1 after:absolute after:inset-0"
-                                            disabled={isDisabled(field.name)}
-                                            id={field.name}
-                                            onCheckedChange={field.onChange}
-                                        />
-                                        <div className="flex grow items-center gap-3">
-                                            <div className="size-fit rounded-full bg-secondary p-2">
-                                                <CheckIcon className="h-4 w-4" />
-                                            </div>
-                                            <div className="grid gap-2">
-                                                <Label htmlFor={field.name}>
-                                                    Unique OR Numbers
-                                                </Label>
-                                                <p
-                                                    className="text-xs text-muted-foreground"
-                                                    id={`${field.name}-desc`}
-                                                >
-                                                    Ensure each withdrawal OR
-                                                    number is unique
-                                                </p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                )}
-                            />
-
-                            <FormFieldWrapper
-                                control={form.control}
-                                name="withdraw_use_date_or"
-                                render={({ field }) => (
-                                    <div className="shadow-xs bg-background/50 relative flex w-full items-start gap-2 rounded-lg border border-input p-4 outline-none duration-200 ease-out has-[:checked]:border-primary/30 has-[:checked]:bg-gradient-to-br has-[:checked]:from-primary/50 has-[:checked]:to-primary/10">
-                                        <Switch
-                                            aria-describedby={`${field.name}-desc`}
-                                            checked={field.value}
-                                            className="order-1 after:absolute after:inset-0"
-                                            disabled={isDisabled(field.name)}
-                                            id={field.name}
-                                            onCheckedChange={field.onChange}
-                                        />
-                                        <div className="flex grow items-center gap-3">
-                                            <div className="size-fit rounded-full bg-secondary p-2">
-                                                <CalendarIcon className="h-4 w-4" />
-                                            </div>
-                                            <div className="grid gap-2">
-                                                <Label htmlFor={field.name}>
-                                                    Use Date in OR
-                                                </Label>
-                                                <p
-                                                    className="text-xs text-muted-foreground"
-                                                    id={`${field.name}-desc`}
-                                                >
-                                                    Include date formatting in
-                                                    withdrawal OR numbers
-                                                </p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                )}
-                            />
-                        </div>
-                    </div>
-
-                    <Separator />
-
-                    {/* Deposit OR Settings */}
-                    <div className="space-y-4 p-4 bg-secondary/60 dark:bg-popover rounded-xl">
-                        <div className="flex items-center gap-3">
-                            <div className="size-fit rounded-full bg-primary/10 p-2 dark:bg-primary/10/20">
-                                <MoneyCheckIcon className="h-5 w-5 text-primary dark:text-primary" />
-                            </div>
-                            <div>
-                                <h3 className="text font-semibold">
-                                    Deposit OR Settings
-                                </h3>
-                                <p className="text-xs text-muted-foreground">
-                                    Configure official receipt settings for
-                                    deposits
-                                </p>
-                            </div>
-                        </div>
-
-                        <div className="grid gap-x-4 gap-y-3 md:grid-cols-4">
-                            <FormFieldWrapper
-                                control={form.control}
-                                label="Start OR"
-                                name="deposit_or_start"
-                                render={({ field }) => (
-                                    <Input
-                                        {...field}
-                                        disabled={isDisabled(field.name)}
-                                        min="0"
-                                        placeholder="Start OR"
-                                        type="text"
-                                    />
-                                )}
-                            />
-
-                            <FormFieldWrapper
-                                control={form.control}
-                                label="Current OR"
-                                name="deposit_or_current"
-                                render={({ field }) => (
-                                    <Input
-                                        {...field}
-                                        disabled={isDisabled(field.name)}
-                                        min="0"
-                                        placeholder="Current OR"
-                                        type="text"
-                                    />
-                                )}
-                            />
-
-                            <FormFieldWrapper
-                                control={form.control}
-                                label="End OR"
-                                name="deposit_or_end"
-                                render={({ field }) => (
-                                    <Input
-                                        {...field}
-                                        disabled={isDisabled(field.name)}
-                                        min="0"
-                                        placeholder="End OR"
-                                        type="text"
-                                    />
-                                )}
-                            />
-
-                            <FormFieldWrapper
-                                control={form.control}
-                                label="OR Iteration"
-                                name="deposit_or_iteration"
-                                render={({ field }) => (
-                                    <Input
-                                        {...field}
-                                        disabled={isDisabled(field.name)}
-                                        min="0"
-                                        placeholder="OR Iteration"
-                                        type="text"
-                                    />
-                                )}
-                            />
-                        </div>
-
-                        <FormFieldWrapper
-                            control={form.control}
-                            label="OR Prefix"
-                            name="deposit_prefix"
-                            render={({ field }) => (
-                                <Input
-                                    {...field}
-                                    disabled={isDisabled(field.name)}
-                                    placeholder="Enter prefix (optional)"
-                                    type="text"
-                                />
-                            )}
-                        />
-
-                        <div className="space-y-3">
-                            <FormFieldWrapper
-                                control={form.control}
-                                name="deposit_allow_user_input"
-                                render={({ field }) => (
-                                    <div className="shadow-xs bg-background/50 relative flex w-full items-start gap-2 rounded-lg border border-input p-4 outline-none duration-200 ease-out has-[:checked]:border-primary/30 has-[:checked]:bg-gradient-to-br has-[:checked]:from-primary/50 has-[:checked]:to-primary/10">
-                                        <Switch
-                                            aria-describedby={`${field.name}-desc`}
-                                            checked={field.value}
-                                            className="order-1 after:absolute after:inset-0"
-                                            disabled={isDisabled(field.name)}
-                                            id={field.name}
-                                            onCheckedChange={field.onChange}
-                                        />
-                                        <div className="flex grow items-center gap-3">
-                                            <div className="size-fit rounded-full bg-secondary p-2">
-                                                <CheckIcon className="h-4 w-4" />
-                                            </div>
-                                            <div className="grid gap-2">
-                                                <Label htmlFor={field.name}>
-                                                    Allow User Input
-                                                </Label>
-                                                <p
-                                                    className="text-xs text-muted-foreground"
-                                                    id={`${field.name}-desc`}
-                                                >
-                                                    Allow users to manually
-                                                    input OR numbers for
-                                                    deposits
-                                                </p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                )}
-                            />
-
-                            <FormFieldWrapper
-                                control={form.control}
-                                name="deposit_or_unique"
-                                render={({ field }) => (
-                                    <div className="shadow-xs bg-background/50 relative flex w-full items-start gap-2 rounded-lg border border-input p-4 outline-none duration-200 ease-out has-[:checked]:border-primary/30 has-[:checked]:bg-gradient-to-br has-[:checked]:from-primary/50 has-[:checked]:to-primary/10">
-                                        <Switch
-                                            aria-describedby={`${field.name}-desc`}
-                                            checked={field.value}
-                                            className="order-1 after:absolute after:inset-0"
-                                            disabled={isDisabled(field.name)}
-                                            id={field.name}
-                                            onCheckedChange={field.onChange}
-                                        />
-                                        <div className="flex grow items-center gap-3">
-                                            <div className="size-fit rounded-full bg-secondary p-2">
-                                                <CheckIcon className="h-4 w-4" />
-                                            </div>
-                                            <div className="grid gap-2">
-                                                <Label htmlFor={field.name}>
-                                                    Unique OR Numbers
-                                                </Label>
-                                                <p
-                                                    className="text-xs text-muted-foreground"
-                                                    id={`${field.name}-desc`}
-                                                >
-                                                    Ensure each deposit OR
-                                                    number is unique
-                                                </p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                )}
-                            />
-
-                            <FormFieldWrapper
-                                control={form.control}
-                                name="deposit_use_date_or"
-                                render={({ field }) => (
-                                    <div className="shadow-xs bg-background/50 relative flex w-full items-start gap-2 rounded-lg border border-input p-4 outline-none duration-200 ease-out has-[:checked]:border-primary/30 has-[:checked]:bg-gradient-to-br has-[:checked]:from-primary/50 has-[:checked]:to-primary/10">
-                                        <Switch
-                                            aria-describedby={`${field.name}-desc`}
-                                            checked={field.value}
-                                            className="order-1 after:absolute after:inset-0"
-                                            disabled={isDisabled(field.name)}
-                                            id={field.name}
-                                            onCheckedChange={field.onChange}
-                                        />
-                                        <div className="flex grow items-center gap-3">
-                                            <div className="size-fit rounded-full bg-secondary p-2">
-                                                <CalendarIcon className="h-4 w-4" />
-                                            </div>
-                                            <div className="grid gap-2">
-                                                <Label htmlFor={field.name}>
-                                                    Use Date in OR
-                                                </Label>
-                                                <p
-                                                    className="text-xs text-muted-foreground"
-                                                    id={`${field.name}-desc`}
-                                                >
-                                                    Include date formatting in
-                                                    deposit OR numbers
-                                                </p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                )}
-                            />
-                        </div>
-                    </div>
-
-                    <Separator />
-
-                    {/* Loan OR Settings */}
-                    <div className="space-y-4 p-4 bg-secondary/60 dark:bg-popover rounded-xl">
-                        <div className="flex items-center gap-3">
-                            <div className="size-fit rounded-full bg-blue-100 p-2 dark:bg-blue-900/20">
-                                <CreditCardIcon className="size-5 text-blue-600 dark:text-blue-400" />
-                            </div>
-                            <div>
-                                <h3 className="font-semibold">
-                                    Loan OR Settings
-                                </h3>
-                                <p className="text-xs text-muted-foreground">
-                                    Configure official receipt settings for
-                                    loans
-                                </p>
-                            </div>
-                        </div>
-
-                        <div className="grid gap-x-4 gap-y-3 md:grid-cols-4">
-                            <FormFieldWrapper
-                                control={form.control}
-                                label="Start OR"
-                                name="loan_or_start"
-                                render={({ field }) => (
-                                    <Input
-                                        {...field}
-                                        disabled={isDisabled(field.name)}
-                                        min="0"
-                                        placeholder="Start OR"
-                                        type="text"
-                                    />
-                                )}
-                            />
-
-                            <FormFieldWrapper
-                                control={form.control}
-                                label="Current OR"
-                                name="loan_or_current"
-                                render={({ field }) => (
-                                    <Input
-                                        {...field}
-                                        disabled={isDisabled(field.name)}
-                                        min="0"
-                                        placeholder="Current OR"
-                                        type="text"
-                                    />
-                                )}
-                            />
-
-                            <FormFieldWrapper
-                                control={form.control}
-                                label="End OR"
-                                name="loan_or_end"
-                                render={({ field }) => (
-                                    <Input
-                                        {...field}
-                                        disabled={isDisabled(field.name)}
-                                        min="0"
-                                        placeholder="End OR"
-                                        type="text"
-                                    />
-                                )}
-                            />
-
-                            <FormFieldWrapper
-                                control={form.control}
-                                label="OR Iteration"
-                                name="loan_or_iteration"
-                                render={({ field }) => (
-                                    <Input
-                                        {...field}
-                                        disabled={isDisabled(field.name)}
-                                        min="0"
-                                        placeholder="OR Iteration"
-                                        type="text"
-                                    />
-                                )}
-                            />
-
-                            <FormFieldWrapper
-                                className="col-span-full"
-                                control={form.control}
-                                label="OR Prefix"
-                                name="loan_prefix"
+                                label="Prefix"
+                                name="withdraw_prefix"
                                 render={({ field }) => (
                                     <Input
                                         {...field}
@@ -776,110 +551,618 @@ const BranchSettingsForm = ({
                         </div>
 
                         <div className="space-y-3">
-                            <FormFieldWrapper
-                                control={form.control}
-                                name="loan_allow_user_input"
-                                render={({ field }) => (
-                                    <div className="shadow-xs bg-background/50 relative flex w-full items-start gap-2 rounded-lg border border-input p-4 outline-none duration-200 ease-out has-[:checked]:border-primary/30 has-[:checked]:bg-gradient-to-br has-[:checked]:from-primary/50 has-[:checked]:to-primary/10">
-                                        <Switch
-                                            aria-describedby={`${field.name}-desc`}
-                                            checked={field.value}
-                                            className="order-1 after:absolute after:inset-0"
-                                            disabled={isDisabled(field.name)}
-                                            id={field.name}
-                                            onCheckedChange={field.onChange}
-                                        />
-                                        <div className="flex grow items-center gap-3">
-                                            <div className="size-fit rounded-full bg-secondary p-2">
-                                                <CheckIcon className="h-4 w-4" />
-                                            </div>
-                                            <div className="grid gap-2">
-                                                <Label htmlFor={field.name}>
-                                                    Allow User Input
-                                                </Label>
-                                                <p
-                                                    className="text-xs text-muted-foreground"
-                                                    id={`${field.name}-desc`}
-                                                >
-                                                    Allow users to manually
-                                                    input OR numbers for loans
-                                                </p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                )}
+                            <SwitchFormField
+                                description="Allow users to manually input reference number numbers form withdrawals"
+                                form={form}
+                                isDisabled={isDisabled}
+                                label="Allow user Input"
+                                name="withdraw_allow_user_input"
                             />
-                            <FormFieldWrapper
-                                control={form.control}
-                                name="loan_or_unique"
-                                render={({ field }) => (
-                                    <div className="shadow-xs bg-background/50 relative flex w-full items-start gap-2 rounded-lg border border-input p-4 outline-none duration-200 ease-out has-[:checked]:border-primary/30 has-[:checked]:bg-gradient-to-br has-[:checked]:from-primary/50 has-[:checked]:to-primary/10">
-                                        <Switch
-                                            aria-describedby={`${field.name}-desc`}
-                                            checked={field.value}
-                                            className="order-1 after:absolute after:inset-0"
-                                            disabled={isDisabled(field.name)}
-                                            id={field.name}
-                                            onCheckedChange={field.onChange}
-                                        />
-                                        <div className="flex grow items-center gap-3">
-                                            <div className="size-fit rounded-full bg-secondary p-2">
-                                                <CheckIcon className="h-4 w-4" />
-                                            </div>
-                                            <div className="grid gap-2">
-                                                <Label htmlFor={field.name}>
-                                                    Unique OR Numbers
-                                                </Label>
-                                                <p
-                                                    className="text-xs text-muted-foreground"
-                                                    id={`${field.name}-desc`}
-                                                >
-                                                    Ensure each loan OR number
-                                                    is unique
-                                                </p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                )}
-                            />
-
-                            <FormFieldWrapper
-                                control={form.control}
-                                name="loan_use_date_or"
-                                render={({ field }) => (
-                                    <div className="shadow-xs bg-background/50 relative flex w-full items-start gap-2 rounded-lg border border-input p-4 outline-none duration-200 ease-out has-[:checked]:border-primary/30 has-[:checked]:bg-gradient-to-br has-[:checked]:from-primary/50 has-[:checked]:to-primary/10">
-                                        <Switch
-                                            aria-describedby={`${field.name}-desc`}
-                                            checked={field.value}
-                                            className="order-1 after:absolute after:inset-0"
-                                            disabled={isDisabled(field.name)}
-                                            id={field.name}
-                                            onCheckedChange={field.onChange}
-                                        />
-                                        <div className="flex grow items-center gap-3">
-                                            <div className="size-fit rounded-full bg-secondary p-2">
-                                                <CalendarIcon className="h-4 w-4" />
-                                            </div>
-                                            <div className="grid gap-2">
-                                                <Label htmlFor={field.name}>
-                                                    Use Date in OR
-                                                </Label>
-                                                <p
-                                                    className="text-xs text-muted-foreground"
-                                                    id={`${field.name}-desc`}
-                                                >
-                                                    Include date formatting in
-                                                    loan OR numbers
-                                                </p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                )}
+                            <SwitchFormField
+                                description="Allow users to use the date as additional to Reference Number"
+                                form={form}
+                                isDisabled={isDisabled}
+                                label="Allow use date to reference number"
+                                name="withdraw_use_date_or"
                             />
                         </div>
                     </div>
 
                     <Separator />
+
+                    {/* Deposit Settings */}
+                    <div className="space-y-4 p-4 bg-secondary/60 dark:bg-popover rounded-xl">
+                        <div className="flex items-center gap-3">
+                            <div className="size-fit rounded-full bg-primary/10 p-2 dark:bg-primary/10/20">
+                                <MoneyCheckIcon className="h-5 w-5 text-primary dark:text-primary" />
+                            </div>
+                            <div>
+                                <h3 className="text font-semibold">
+                                    Deposit Reference Number Settings
+                                </h3>
+                                <p className="text-xs text-muted-foreground">
+                                    Configure reference number settings for
+                                    deposits
+                                </p>
+                            </div>
+                        </div>
+
+                        <div className="grid gap-x-4 gap-y-3 md:grid-cols-4">
+                            <FormFieldWrapper
+                                control={form.control}
+                                label="Start"
+                                name="deposit_or_start"
+                                render={({ field }) => (
+                                    <Input
+                                        {...field}
+                                        disabled={isDisabled(field.name)}
+                                        min="0"
+                                        placeholder="Start"
+                                        type="text"
+                                    />
+                                )}
+                            />
+
+                            <FormFieldWrapper
+                                control={form.control}
+                                label="Current"
+                                name="deposit_or_current"
+                                render={({ field }) => (
+                                    <Input
+                                        {...field}
+                                        disabled={isDisabled(field.name)}
+                                        min="0"
+                                        placeholder="Current"
+                                        type="text"
+                                    />
+                                )}
+                            />
+
+                            <FormFieldWrapper
+                                control={form.control}
+                                label="End"
+                                name="deposit_or_end"
+                                render={({ field }) => (
+                                    <Input
+                                        {...field}
+                                        disabled={isDisabled(field.name)}
+                                        min="0"
+                                        placeholder="End"
+                                        type="text"
+                                    />
+                                )}
+                            />
+                            <FormFieldWrapper
+                                control={form.control}
+                                label="Iteration"
+                                name="deposit_or_iteration"
+                                render={({ field }) => (
+                                    <Input
+                                        {...field}
+                                        disabled={isDisabled(field.name)}
+                                        min="0"
+                                        placeholder="Iteration"
+                                        type="text"
+                                    />
+                                )}
+                            />
+                            <FormFieldWrapper
+                                className="col-span-2"
+                                control={form.control}
+                                label="Padding"
+                                name="deposit_padding"
+                                render={({ field }) => (
+                                    <Input
+                                        {...field}
+                                        disabled={isDisabled(field.name)}
+                                        placeholder="Enter padding"
+                                        type="text"
+                                    />
+                                )}
+                            />
+                            <FormFieldWrapper
+                                className="col-span-2"
+                                control={form.control}
+                                label="Common Reference Number"
+                                name="withdraw_common_or"
+                                render={({ field }) => (
+                                    <Input
+                                        {...field}
+                                        disabled={isDisabled(field.name)}
+                                        placeholder="Enter common"
+                                        type="text"
+                                    />
+                                )}
+                            />
+                        </div>
+                        <div className="space-y-3">
+                            <SwitchFormField
+                                description="Allow users to manually input reference number numbers"
+                                form={form}
+                                isDisabled={isDisabled}
+                                label="Allow user Input"
+                                name="deposit_allow_user_input"
+                            />
+                            <SwitchFormField
+                                description="Include date formatting in deposit reference number numbers"
+                                form={form}
+                                isDisabled={isDisabled}
+                                label="Use Date in Reference Number"
+                                name="deposit_use_date_or"
+                            />
+                        </div>
+                    </div>
+
+                    <Separator />
+
+                    <div className="space-y-4 p-4 bg-secondary/60 dark:bg-popover rounded-xl">
+                        <div className="flex items-center gap-3">
+                            <div className="size-fit rounded-full bg-purple-400/40 p-2 dark:bg-purple-400/20">
+                                <BookOpenIcon className="h-5 w-5 text-purple-600 dark:text-purple-400" />
+                            </div>
+                            <div>
+                                <h3 className="text-lg font-semibold">
+                                    Journal Voucher Reference Number Settings
+                                </h3>
+                                <p className="text-sm text-muted-foreground">
+                                    Configure reference number settings for
+                                    journal vouchers
+                                </p>
+                            </div>
+                        </div>
+
+                        <div className="grid gap-x-4 gap-y-3 md:grid-cols-4">
+                            <FormFieldWrapper
+                                control={form.control}
+                                label="Start"
+                                name="journal_voucher_or_start"
+                                render={({ field }) => (
+                                    <Input
+                                        {...field}
+                                        disabled={isDisabled(field.name)}
+                                        min="0"
+                                        placeholder="Start"
+                                        type="text"
+                                    />
+                                )}
+                            />
+                            <FormFieldWrapper
+                                control={form.control}
+                                label="Current"
+                                name="journal_voucher_or_current"
+                                render={({ field }) => (
+                                    <Input
+                                        {...field}
+                                        disabled={isDisabled(field.name)}
+                                        min="0"
+                                        placeholder="Current"
+                                        type="text"
+                                    />
+                                )}
+                            />
+                            <FormFieldWrapper
+                                control={form.control}
+                                label="padding"
+                                name="journal_voucher_padding"
+                                render={({ field }) => (
+                                    <Input
+                                        {...field}
+                                        disabled={isDisabled(field.name)}
+                                        placeholder="Enter padding (optional)"
+                                        type="text"
+                                    />
+                                )}
+                            />
+                            <FormFieldWrapper
+                                control={form.control}
+                                label="Prefix"
+                                name="journal_voucher_prefix"
+                                render={({ field }) => (
+                                    <Input
+                                        {...field}
+                                        disabled={isDisabled(field.name)}
+                                        placeholder="Enter prefix (optional)"
+                                        type="text"
+                                    />
+                                )}
+                            />
+                        </div>
+
+                        <div className="space-y-3">
+                            <SwitchFormField
+                                description="Allow users to manually input reference number numbers"
+                                form={form}
+                                isDisabled={isDisabled}
+                                label="Allow user Input"
+                                name="journal_voucher_allow_user_input"
+                            />
+                            <SwitchFormField
+                                description="Make reference number Unique (NO DUPLICATES) if this is enabled"
+                                form={form}
+                                isDisabled={isDisabled}
+                                label="Use unique reference number"
+                                name="journal_voucher_or_unique"
+                            />
+                        </div>
+                    </div>
+
+                    {/* Adjustment Voucher Settings */}
+                    <div className="space-y-4 p-4 bg-secondary/60 dark:bg-popover rounded-xl">
+                        <div className="flex items-center gap-3">
+                            <div className="size-fit rounded-full bg-orange-400/40 p-2 dark:bg-orange-400/20">
+                                <WrenchIcon className="h-5 w-5 text-orange-600 dark:text-orange-400" />
+                            </div>
+                            <div>
+                                <h3 className="text-lg font-semibold">
+                                    Adjustment Voucher Reference Number Settings
+                                </h3>
+                                <p className="text-sm text-muted-foreground">
+                                    Configure reference number settings for
+                                    adjustment vouchers
+                                </p>
+                            </div>
+                        </div>
+
+                        <div className="grid gap-x-4 gap-y-3 md:grid-cols-4">
+                            <FormFieldWrapper
+                                control={form.control}
+                                label="Start"
+                                name="adjustment_voucher_or_start"
+                                render={({ field }) => (
+                                    <Input
+                                        {...field}
+                                        disabled={isDisabled(field.name)}
+                                        min="0"
+                                        placeholder="Start"
+                                        type="text"
+                                    />
+                                )}
+                            />
+                            <FormFieldWrapper
+                                control={form.control}
+                                label="Current"
+                                name="adjustment_voucher_or_current"
+                                render={({ field }) => (
+                                    <Input
+                                        {...field}
+                                        disabled={isDisabled(field.name)}
+                                        min="0"
+                                        placeholder="Current"
+                                        type="text"
+                                    />
+                                )}
+                            />
+                            <FormFieldWrapper
+                                control={form.control}
+                                label="padding"
+                                name="adjustment_voucher_padding"
+                                render={({ field }) => (
+                                    <Input
+                                        {...field}
+                                        disabled={isDisabled(field.name)}
+                                        placeholder="Enter padding (optional)"
+                                        type="text"
+                                    />
+                                )}
+                            />
+                            <FormFieldWrapper
+                                control={form.control}
+                                label="Prefix"
+                                name="adjustment_voucher_prefix"
+                                render={({ field }) => (
+                                    <Input
+                                        {...field}
+                                        disabled={isDisabled(field.name)}
+                                        placeholder="Enter prefix (optional)"
+                                        type="text"
+                                    />
+                                )}
+                            />
+                        </div>
+
+                        <div className="space-y-3">
+                            <SwitchFormField
+                                description="Allow users to manually input reference number numbers"
+                                form={form}
+                                isDisabled={isDisabled}
+                                label="Allow user Input"
+                                name="adjustment_voucher_allow_user_input"
+                            />
+                            <SwitchFormField
+                                description="Make reference number Unique (NO DUPLICATES) if this is enabled"
+                                form={form}
+                                isDisabled={isDisabled}
+                                label="Use unique reference number"
+                                name="adjustment_voucher_or_unique"
+                            />
+                        </div>
+                    </div>
+
+                    {/* Loan Voucher Settings */}
+                    <div className="space-y-4 p-4 bg-secondary/60 dark:bg-popover rounded-xl">
+                        <div className="flex items-center gap-3">
+                            <div className="size-fit rounded-full bg-green-400/40 p-2 dark:bg-green-400/20">
+                                <DollarIcon className="h-5 w-5 text-green-600 dark:text-green-400" />
+                            </div>
+                            <div>
+                                <h3 className="text-lg font-semibold">
+                                    Loan Voucher Reference Number Settings
+                                </h3>
+                                <p className="text-sm text-muted-foreground">
+                                    Configure reference number settings for loan
+                                    vouchers
+                                </p>
+                            </div>
+                        </div>
+
+                        <div className="grid gap-x-4 gap-y-3 md:grid-cols-4">
+                            <FormFieldWrapper
+                                control={form.control}
+                                label="Start"
+                                name="loan_voucher_or_start"
+                                render={({ field }) => (
+                                    <Input
+                                        {...field}
+                                        disabled={isDisabled(field.name)}
+                                        min="0"
+                                        placeholder="Start"
+                                        type="text"
+                                    />
+                                )}
+                            />
+                            <FormFieldWrapper
+                                control={form.control}
+                                label="Current"
+                                name="loan_voucher_or_current"
+                                render={({ field }) => (
+                                    <Input
+                                        {...field}
+                                        disabled={isDisabled(field.name)}
+                                        min="0"
+                                        placeholder="Current"
+                                        type="text"
+                                    />
+                                )}
+                            />
+                            <FormFieldWrapper
+                                control={form.control}
+                                label="padding"
+                                name="loan_voucher_padding"
+                                render={({ field }) => (
+                                    <Input
+                                        {...field}
+                                        disabled={isDisabled(field.name)}
+                                        placeholder="Enter padding (optional)"
+                                        type="text"
+                                    />
+                                )}
+                            />
+                            <FormFieldWrapper
+                                control={form.control}
+                                label="Prefix"
+                                name="loan_voucher_prefix"
+                                render={({ field }) => (
+                                    <Input
+                                        {...field}
+                                        disabled={isDisabled(field.name)}
+                                        placeholder="Enter prefix (optional)"
+                                        type="text"
+                                    />
+                                )}
+                            />
+                        </div>
+
+                        <div className="space-y-3">
+                            <SwitchFormField
+                                description="Allow users to manually input reference number numbers"
+                                form={form}
+                                isDisabled={isDisabled}
+                                label="Allow user Input"
+                                name="loan_voucher_allow_user_input"
+                            />
+                            <SwitchFormField
+                                description="Make reference number Unique (NO DUPLICATES) if this is enabled"
+                                form={form}
+                                isDisabled={isDisabled}
+                                label="Use unique reference number"
+                                name="loan_voucher_or_unique"
+                            />
+                        </div>
+                    </div>
+
+                    <Separator />
+                    <div className="space-y-4 p-4 bg-secondary/60 dark:bg-popover rounded-xl">
+                        <div className="flex items-center gap-3">
+                            <div className="size-fit rounded-full bg-purple-100 p-2 dark:bg-purple-900/20">
+                                <ReceiptIcon className="h-5 w-5 text-purple-600 dark:text-purple-400" />
+                            </div>
+                            <div>
+                                <h3 className="font-semibold">
+                                    Check Voucher Reference Number Settings
+                                </h3>
+                                <p className="text-xs text-muted-foreground">
+                                    Configure reference number settings for
+                                    check vouchers
+                                </p>
+                            </div>
+                        </div>
+
+                        <div className="grid gap-x-4 gap-y-3 md:grid-cols-4">
+                            <FormFieldWrapper
+                                control={form.control}
+                                label="Start"
+                                name="cash_check_voucher_or_start"
+                                render={({ field }) => (
+                                    <Input
+                                        {...field}
+                                        disabled={isDisabled(field.name)}
+                                        min="0"
+                                        placeholder="Start"
+                                        type="text"
+                                    />
+                                )}
+                            />
+
+                            <FormFieldWrapper
+                                control={form.control}
+                                label="Current"
+                                name="cash_check_voucher_or_current"
+                                render={({ field }) => (
+                                    <Input
+                                        {...field}
+                                        disabled={isDisabled(field.name)}
+                                        min="0"
+                                        placeholder="Current"
+                                        type="text"
+                                    />
+                                )}
+                            />
+                            <FormFieldWrapper
+                                control={form.control}
+                                label="Padding"
+                                name="cash_check_voucher_padding"
+                                render={({ field }) => (
+                                    <Input
+                                        {...field}
+                                        disabled={isDisabled(field.name)}
+                                        min="0"
+                                        placeholder="Iteration"
+                                        type="text"
+                                    />
+                                )}
+                            />
+                            <FormFieldWrapper
+                                className="col-span-full"
+                                control={form.control}
+                                label="Prefix"
+                                name="cash_check_voucher_prefix"
+                                render={({ field }) => (
+                                    <Input
+                                        {...field}
+                                        disabled={isDisabled(field.name)}
+                                        placeholder="Enter prefix (optional)"
+                                        type="text"
+                                    />
+                                )}
+                            />
+                        </div>
+                        <SwitchFormField
+                            description="Allow the users to input reference number"
+                            form={form}
+                            isDisabled={isDisabled}
+                            label="Allow user to input"
+                            name="cash_check_voucher_allow_user_input"
+                        />
+                        <SwitchFormField
+                            description="Make reference number Unique (NO DUPLICATES) if this is enabled"
+                            form={form}
+                            isDisabled={isDisabled}
+                            label="Use Unique"
+                            name="cash_check_voucher_or_unique"
+                        />
+                    </div>
+
+                    {/* Check Voucher General Settings */}
+                    <div className="space-y-4 p-4 bg-secondary/60 dark:bg-popover rounded-xl">
+                        <div className="flex items-center gap-3">
+                            <div className="size-fit rounded-full bg-indigo-400/40 p-2 dark:bg-indigo-400/20">
+                                <CreditCardIcon className="h-5 w-5 text-indigo-600 dark:text-indigo-400" />
+                            </div>
+                            <div>
+                                <h3 className="text-lg font-semibold">
+                                    Check Voucher General Settings
+                                </h3>
+                                <p className="text-sm text-muted-foreground">
+                                    Configure reference number settings for
+                                    general check vouchers
+                                </p>
+                            </div>
+                        </div>
+
+                        <div className="space-y-3 mb-4">
+                            <SwitchFormField
+                                description="Enable check voucher general feature"
+                                form={form}
+                                isDisabled={isDisabled}
+                                label="Enable Check Voucher General"
+                                name="check_voucher_general"
+                            />
+                        </div>
+
+                        <div className="grid gap-x-4 gap-y-3 md:grid-cols-4">
+                            <FormFieldWrapper
+                                control={form.control}
+                                label="Start"
+                                name="check_voucher_general_or_start"
+                                render={({ field }) => (
+                                    <Input
+                                        {...field}
+                                        disabled={isDisabled(field.name)}
+                                        min="0"
+                                        placeholder="Start"
+                                        type="text"
+                                    />
+                                )}
+                            />
+                            <FormFieldWrapper
+                                control={form.control}
+                                label="Current"
+                                name="check_voucher_general_or_current"
+                                render={({ field }) => (
+                                    <Input
+                                        {...field}
+                                        disabled={isDisabled(field.name)}
+                                        min="0"
+                                        placeholder="Current"
+                                        type="text"
+                                    />
+                                )}
+                            />
+                            <FormFieldWrapper
+                                control={form.control}
+                                label="padding"
+                                name="check_voucher_general_padding"
+                                render={({ field }) => (
+                                    <Input
+                                        {...field}
+                                        disabled={isDisabled(field.name)}
+                                        placeholder="Enter padding (optional)"
+                                        type="text"
+                                    />
+                                )}
+                            />
+                            <FormFieldWrapper
+                                control={form.control}
+                                label="Prefix"
+                                name="check_voucher_general_prefix"
+                                render={({ field }) => (
+                                    <Input
+                                        {...field}
+                                        disabled={isDisabled(field.name)}
+                                        placeholder="Enter prefix (optional)"
+                                        type="text"
+                                    />
+                                )}
+                            />
+                        </div>
+
+                        <div className="space-y-3">
+                            <SwitchFormField
+                                description="Allow users to manually input reference number numbers"
+                                form={form}
+                                isDisabled={isDisabled}
+                                label="Allow user Input"
+                                name="check_voucher_general_allow_user_input"
+                            />
+                            <SwitchFormField
+                                description="Make reference number Unique (NO DUPLICATES) if this is enabled"
+                                form={form}
+                                isDisabled={isDisabled}
+                                label="Use unique reference number"
+                                name="check_voucher_general_or_unique"
+                            />
+                        </div>
+                    </div>
 
                     {/* Additional OR Settings */}
                     <div className="space-y-4 p-4 bg-secondary/60 dark:bg-popover rounded-xl">
@@ -900,7 +1183,7 @@ const BranchSettingsForm = ({
                             name="loan_applied_equal_to_balance"
                             render={({ field }) => (
                                 <Label
-                                    className="hover:bg-accent/40 ease-in-out duration-150 cursor-pointer flex items-start gap-3 rounded-lg border p-3 has-[[aria-checked=true]]:border-primary has-[[aria-checked=true]]:bg-primary/80"
+                                    className="hover:bg-accent/40 ease-in-out duration-150 cursor-pointer flex items-start gap-3 rounded-lg border p-3 has-aria-checked:border-primary has-aria-checked:bg-primary/20"
                                     htmlFor={field.name}
                                 >
                                     <Checkbox
@@ -929,203 +1212,6 @@ const BranchSettingsForm = ({
                     <Separator />
 
                     {/* Check Voucher OR Settings */}
-                    <div className="space-y-4 p-4 bg-secondary/60 dark:bg-popover rounded-xl">
-                        <div className="flex items-center gap-3">
-                            <div className="size-fit rounded-full bg-purple-100 p-2 dark:bg-purple-900/20">
-                                <ReceiptIcon className="h-5 w-5 text-purple-600 dark:text-purple-400" />
-                            </div>
-                            <div>
-                                <h3 className="font-semibold">
-                                    Check Voucher OR Settings
-                                </h3>
-                                <p className="text-xs text-muted-foreground">
-                                    Configure official receipt settings for
-                                    check vouchers
-                                </p>
-                            </div>
-                        </div>
-
-                        <div className="grid gap-x-4 gap-y-3 md:grid-cols-4">
-                            <FormFieldWrapper
-                                control={form.control}
-                                label="Start OR"
-                                name="check_voucher_or_start"
-                                render={({ field }) => (
-                                    <Input
-                                        {...field}
-                                        disabled={isDisabled(field.name)}
-                                        min="0"
-                                        placeholder="Start OR"
-                                        type="text"
-                                    />
-                                )}
-                            />
-
-                            <FormFieldWrapper
-                                control={form.control}
-                                label="Current OR"
-                                name="check_voucher_or_current"
-                                render={({ field }) => (
-                                    <Input
-                                        {...field}
-                                        disabled={isDisabled(field.name)}
-                                        min="0"
-                                        placeholder="Current OR"
-                                        type="text"
-                                    />
-                                )}
-                            />
-
-                            <FormFieldWrapper
-                                control={form.control}
-                                label="End OR"
-                                name="check_voucher_or_end"
-                                render={({ field }) => (
-                                    <Input
-                                        {...field}
-                                        disabled={isDisabled(field.name)}
-                                        min="0"
-                                        placeholder="End OR"
-                                        type="text"
-                                    />
-                                )}
-                            />
-
-                            <FormFieldWrapper
-                                control={form.control}
-                                label="OR Iteration"
-                                name="check_voucher_or_iteration"
-                                render={({ field }) => (
-                                    <Input
-                                        {...field}
-                                        disabled={isDisabled(field.name)}
-                                        min="0"
-                                        placeholder="OR Iteration"
-                                        type="text"
-                                    />
-                                )}
-                            />
-                        </div>
-
-                        <FormFieldWrapper
-                            control={form.control}
-                            label="OR Prefix"
-                            name="check_voucher_prefix"
-                            render={({ field }) => (
-                                <Input
-                                    {...field}
-                                    disabled={isDisabled(field.name)}
-                                    placeholder="Enter prefix (optional)"
-                                    type="text"
-                                />
-                            )}
-                        />
-
-                        <div className="space-y-3">
-                            <FormFieldWrapper
-                                control={form.control}
-                                name="check_voucher_allow_user_input"
-                                render={({ field }) => (
-                                    <div className="shadow-xs bg-background/50 relative flex w-full items-start gap-2 rounded-lg border border-input p-4 outline-none duration-200 ease-out has-[:checked]:border-primary/30 has-[:checked]:bg-gradient-to-br has-[:checked]:from-primary/50 has-[:checked]:to-primary/10">
-                                        <Switch
-                                            aria-describedby={`${field.name}-desc`}
-                                            checked={field.value}
-                                            className="order-1 after:absolute after:inset-0"
-                                            disabled={isDisabled(field.name)}
-                                            id={field.name}
-                                            onCheckedChange={field.onChange}
-                                        />
-                                        <div className="flex grow items-center gap-3">
-                                            <div className="size-fit rounded-full bg-secondary p-2">
-                                                <CheckIcon className="h-4 w-4" />
-                                            </div>
-                                            <div className="grid gap-2">
-                                                <Label htmlFor={field.name}>
-                                                    Allow User Input
-                                                </Label>
-                                                <p
-                                                    className="text-xs text-muted-foreground"
-                                                    id={`${field.name}-desc`}
-                                                >
-                                                    Allow users to manually
-                                                    input OR numbers for check
-                                                    vouchers
-                                                </p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                )}
-                            />
-
-                            <FormFieldWrapper
-                                control={form.control}
-                                name="check_voucher_or_unique"
-                                render={({ field }) => (
-                                    <div className="shadow-xs bg-background/50 relative flex w-full items-start gap-2 rounded-lg border border-input p-4 outline-none duration-200 ease-out has-[:checked]:border-primary/30 has-[:checked]:bg-gradient-to-br has-[:checked]:from-primary/50 has-[:checked]:to-primary/10">
-                                        <Switch
-                                            aria-describedby={`${field.name}-desc`}
-                                            checked={field.value}
-                                            className="order-1 after:absolute after:inset-0"
-                                            disabled={isDisabled(field.name)}
-                                            id={field.name}
-                                            onCheckedChange={field.onChange}
-                                        />
-                                        <div className="flex grow items-center gap-3">
-                                            <div className="size-fit rounded-full bg-secondary p-2">
-                                                <CheckIcon className="h-4 w-4" />
-                                            </div>
-                                            <div className="grid gap-2">
-                                                <Label htmlFor={field.name}>
-                                                    Unique OR Numbers
-                                                </Label>
-                                                <p
-                                                    className="text-xs text-muted-foreground"
-                                                    id={`${field.name}-desc`}
-                                                >
-                                                    Ensure each check voucher OR
-                                                    number is unique
-                                                </p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                )}
-                            />
-
-                            <FormFieldWrapper
-                                control={form.control}
-                                name="check_voucher_use_date_or"
-                                render={({ field }) => (
-                                    <div className="shadow-xs bg-background/50 relative flex w-full items-start gap-2 rounded-lg border border-input p-4 outline-none duration-200 ease-out has-[:checked]:border-primary/30 has-[:checked]:bg-gradient-to-br has-[:checked]:from-primary/50 has-[:checked]:to-primary/10">
-                                        <Switch
-                                            aria-describedby={`${field.name}-desc`}
-                                            checked={field.value}
-                                            className="order-1 after:absolute after:inset-0"
-                                            disabled={isDisabled(field.name)}
-                                            id={field.name}
-                                            onCheckedChange={field.onChange}
-                                        />
-                                        <div className="flex grow items-center gap-3">
-                                            <div className="size-fit rounded-full bg-secondary p-2">
-                                                <CalendarIcon className="h-4 w-4" />
-                                            </div>
-                                            <div className="grid gap-2">
-                                                <Label htmlFor={field.name}>
-                                                    Use Date in OR
-                                                </Label>
-                                                <p
-                                                    className="text-xs text-muted-foreground"
-                                                    id={`${field.name}-desc`}
-                                                >
-                                                    Include date formatting in
-                                                    check voucher OR numbers
-                                                </p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                )}
-                            />
-                        </div>
-                    </div>
                 </fieldset>
 
                 <FormFooterResetSubmit
@@ -1147,7 +1233,7 @@ const BranchSettingsForm = ({
 
 export const BranchSettingsFormModal = ({
     title = 'Branch Settings',
-    description = 'Update branch official receipt settings.',
+    description = 'Update branch reference number settings.',
     className,
     formProps,
     ...props

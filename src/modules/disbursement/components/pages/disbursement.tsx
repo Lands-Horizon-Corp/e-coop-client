@@ -1,6 +1,7 @@
 import { useQueryClient } from '@tanstack/react-query'
 
 import { useAuthUserWithOrgBranch } from '@/modules/authentication/authgentication.store'
+import PermissionGuard from '@/modules/permission/components/permission-guard'
 
 import PageContainer from '@/components/containers/page-container'
 
@@ -10,7 +11,7 @@ import { useSubscribe } from '@/hooks/use-pubsub'
 import DisbursementTable from '../disbursement-table'
 import { DisbursementCreateUpdateFormModal } from '../forms/disbursement-create-update-form'
 
-const DisbursementPage = () => {
+const DisbursementTypePage = () => {
     const createModal = useModalState()
     const queryClient = useQueryClient()
     const {
@@ -44,27 +45,29 @@ const DisbursementPage = () => {
 
     return (
         <PageContainer>
-            <DisbursementCreateUpdateFormModal
-                {...createModal}
-                formProps={{
-                    defaultValues: {
-                        currency,
-                        currency_id,
-                    },
-                }}
-            />
-            <DisbursementTable
-                className="max-h-[90vh] min-h-[90vh] w-full"
-                toolbarProps={{
-                    createActionProps: {
-                        onClick() {
-                            createModal.onOpenChange(true)
+            <PermissionGuard action="Read" resourceType="DisburesmentType">
+                <DisbursementCreateUpdateFormModal
+                    {...createModal}
+                    formProps={{
+                        defaultValues: {
+                            currency,
+                            currency_id,
                         },
-                    },
-                }}
-            />
+                    }}
+                />
+                <DisbursementTable
+                    className="max-h-[90vh] min-h-[90vh] w-full"
+                    toolbarProps={{
+                        createActionProps: {
+                            onClick() {
+                                createModal.onOpenChange(true)
+                            },
+                        },
+                    }}
+                />
+            </PermissionGuard>
         </PageContainer>
     )
 }
 
-export default DisbursementPage
+export default DisbursementTypePage

@@ -36,7 +36,8 @@ import { BrowseReferenceSchema } from '../../browse-reference.validation'
 type TBrowseReferenceFormValues = z.infer<typeof BrowseReferenceSchema>
 
 export interface IBrowseReferenceFormProps
-    extends IClassProps,
+    extends
+        IClassProps,
         IForm<
             Partial<TBrowseReferenceFormValues>,
             IBrowseReference,

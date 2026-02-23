@@ -1,0 +1,368 @@
+import { ReactNode } from 'react'
+
+import { dateAgo, toReadableDate } from '@/helpers/date-utils'
+import { currencyFormat } from '@/modules/currency'
+import { LedgerSourceBadge } from '@/modules/general-ledger/components/ledger-source-badge'
+import { IGeneralLedger } from '@/modules/general-ledger/general-ledger.types'
+import { ColumnDef, Row } from '@tanstack/react-table'
+
+import DataTableColumnHeader from '@/components/data-table/data-table-column-header'
+import ColumnActions from '@/components/data-table/data-table-column-header/column-actions'
+import { createUpdateColumns } from '@/components/data-table/data-table-common-columns'
+// import { IGlobalSearchTargets } from '@/components/data-table/data-table-filters/data-table-global-search'
+import ImageNameDisplay from '@/components/image-name-display'
+import { Badge } from '@/components/ui/badge'
+import CopyWrapper from '@/components/wrappers/copy-wrapper'
+
+// export const generalLedgerGlobalSearchTargets: IGlobalSearchTargets<IGeneralLedger>[] =
+//     [
+//         { field: 'reference_number', displayText: 'Reference Number' },
+//         {
+//             field: 'transaction_reference_number',
+//             displayText: 'Transaction Reference',
+//         },
+//         { field: 'source', displayText: 'Source' },
+//         { field: 'account.name', displayText: 'Account Name' },
+//         { field: 'account.code', displayText: 'Account Code' },
+//         { field: 'member_profile.full_name', displayText: 'Member Name' },
+//         { field: 'employee_user.full_name', displayText: 'Employee Name' },
+//     ]
+
+export interface IGeneralLedgerTableActionComponentProp {
+    row: Row<IGeneralLedger>
+}
+
+export interface IGeneralLedgerTableColumnProps {
+    actionComponent?: (
+        props: IGeneralLedgerTableActionComponentProp
+    ) => ReactNode
+}
+
+const GeneralLedgerRunningTableColumns = (
+    _opts?: IGeneralLedgerTableColumnProps
+): ColumnDef<IGeneralLedger>[] => {
+    return [
+        // {
+        //     id: 'select',
+        //     header: ({ table, column }) => (
+        //         <div className={'flex w-fit items-center gap-x-1 px-2'}>
+        //             <HeaderToggleSelect table={table} />
+        //             {!column.getIsPinned() && (
+        //                 <PushPinSlashIcon
+        //                     className="mr-2 size-3.5 cursor-pointer"
+        //                     onClick={() => column.pin('left')}
+        //                 />
+        //             )}
+        //         </div>
+        //     ),
+        //     cell: ({ row }) => (
+        //         <div className="flex w-fit items-center gap-x-1 px-0">
+        //             {opts?.actionComponent?.({ row })}
+        //             <Checkbox
+        //                 aria-label="Select row"
+        //                 checked={row.getIsSelected()}
+        //                 onCheckedChange={(value) => row.toggleSelected(!!value)}
+        //             />
+        //         </div>
+        //     ),
+        //     enableSorting: false,
+        //     enableResizing: false,
+        //     enableHiding: false,
+        //     size: 80,
+        //     minSize: 80,
+        // },
+        {
+            id: 'reference_number',
+            accessorKey: 'reference_number',
+            header: (props) => (
+                <DataTableColumnHeader {...props} title="Reference No.">
+                    <ColumnActions {...props} />
+                </DataTableColumnHeader>
+            ),
+            cell: ({
+                row: {
+                    original: { reference_number },
+                },
+            }) => (
+                <CopyWrapper>
+                    <span className="font-mono text-sm font-medium">
+                        {reference_number || '-'}
+                    </span>
+                </CopyWrapper>
+            ),
+            enableMultiSort: true,
+            enableSorting: true,
+            enableResizing: true,
+            enableHiding: false,
+            size: 180,
+            minSize: 160,
+        },
+        ...createUpdateColumns<IGeneralLedger>().filter(
+            (col) => col.id === 'created_at'
+        ),
+        {
+            id: 'account',
+            accessorKey: 'account',
+            header: (props) => (
+                <DataTableColumnHeader {...props} title="Account">
+                    <ColumnActions {...props} />
+                </DataTableColumnHeader>
+            ),
+            cell: ({
+                row: {
+                    original: { account },
+                },
+            }) => (
+                <div className="space-y-1">
+                    <p className="font-medium">{account?.name || '-'}</p>
+                    <p className="text-xs text-muted-foreground/70 font-mono">
+                        {account?.loan_account_id || ''}
+                    </p>
+                </div>
+            ),
+            enableMultiSort: true,
+            enableSorting: true,
+            enableResizing: true,
+            enableHiding: false,
+            size: 120,
+            minSize: 125,
+        },
+        {
+            id: 'credit',
+            accessorKey: 'credit',
+            header: (props) => (
+                <DataTableColumnHeader {...props} title="Credit">
+                    <ColumnActions {...props} />
+                </DataTableColumnHeader>
+            ),
+            cell: ({
+                row: {
+                    original: { credit, currency },
+                },
+            }) => (
+                <p className="text-right font-medium">
+                    {credit
+                        ? currencyFormat(credit, {
+                              currency,
+                              showSymbol: !!currency,
+                          })
+                        : ''}
+                </p>
+            ),
+            enableMultiSort: true,
+            enableSorting: true,
+            enableResizing: true,
+            enableHiding: false,
+            minSize: 102,
+        },
+        {
+            id: 'debit',
+            accessorKey: 'debit',
+            header: (props) => (
+                <DataTableColumnHeader {...props} title="Debit">
+                    <ColumnActions {...props} />
+                </DataTableColumnHeader>
+            ),
+            cell: ({
+                row: {
+                    original: { debit, currency },
+                },
+            }) => (
+                <p className="text-right font-medium">
+                    {debit
+                        ? currencyFormat(debit, {
+                              currency,
+                              showSymbol: !!currency,
+                          })
+                        : ''}
+                </p>
+            ),
+            enableMultiSort: true,
+            enableSorting: true,
+            enableResizing: true,
+            enableHiding: false,
+            size: 98,
+            minSize: 98,
+        },
+        {
+            id: 'balance',
+            accessorKey: 'balance',
+            header: (props) => (
+                <DataTableColumnHeader {...props} title="Balance" />
+            ),
+            cell: ({
+                row: {
+                    original: { balance, currency },
+                },
+            }) => (
+                <p className="text-right font-semibold">
+                    {balance !== undefined || balance !== null
+                        ? currencyFormat(balance, {
+                              currency,
+                              showSymbol: !!currency,
+                          })
+                        : ''}
+                </p>
+            ),
+            enableMultiSort: true,
+            enableSorting: true,
+            enableResizing: true,
+            enableHiding: false,
+            size: 120,
+            minSize: 100,
+        },
+        {
+            id: 'type',
+            accessorKey: 'type',
+            header: (props) => (
+                <DataTableColumnHeader {...props} title="Type">
+                    <ColumnActions {...props} />
+                </DataTableColumnHeader>
+            ),
+            cell: ({
+                row: {
+                    original: { source },
+                },
+            }) => (
+                <Badge className="text-xs px-1.5" variant="secondary">
+                    {source || '-'}
+                </Badge>
+            ),
+            enableMultiSort: true,
+            enableSorting: true,
+            enableResizing: true,
+            enableHiding: true,
+            size: 120,
+            minSize: 100,
+        },
+        // {
+        //     id: 'member_profile',
+        //     accessorKey: 'member_profile.full_name',
+        //     header: (props) => (
+        //         <DataTableColumnHeader {...props} title="Member">
+        //             <ColumnActions {...props} />
+        //         </DataTableColumnHeader>
+        //     ),
+        //     cell: ({
+        //         row: {
+        //             original: { member_profile },
+        //         },
+        //     }) => (
+        //         <span>
+        //             {member_profile ? (
+        //                 <ImageNameDisplay
+        //                     name={member_profile.full_name}
+        //                     src={member_profile.media?.download_url}
+        //                 />
+        //             ) : (
+        //                 <span className="text-muted-foreground">-</span>
+        //             )}
+        //         </span>
+        //     ),
+        //     enableMultiSort: true,
+        //     enableSorting: true,
+        //     enableResizing: true,
+        //     enableHiding: true,
+        //     size: 160,
+        //     minSize: 120,
+        // },
+        {
+            id: 'employee_user',
+            accessorKey: 'employee_user',
+            header: (props) => (
+                <DataTableColumnHeader {...props} title="Employee/Teller">
+                    <ColumnActions {...props} />
+                </DataTableColumnHeader>
+            ),
+            cell: ({
+                row: {
+                    original: { employee_user },
+                },
+            }) => (
+                <span className="relative">
+                    {employee_user !== undefined ? (
+                        <ImageNameDisplay
+                            name={employee_user?.full_name}
+                            src={employee_user?.media?.download_url}
+                        />
+                    ) : (
+                        <span className="text-muted-foreground">-</span>
+                    )}
+                </span>
+            ),
+            enableMultiSort: true,
+            enableSorting: true,
+            enableResizing: true,
+            enableHiding: true,
+            size: 160,
+            minSize: 120,
+        },
+        {
+            id: 'source',
+            accessorKey: 'source',
+            header: (props) => (
+                <DataTableColumnHeader {...props} title="Source">
+                    <ColumnActions {...props} />
+                </DataTableColumnHeader>
+            ),
+            cell: ({
+                row: {
+                    original: { source },
+                },
+            }) => (
+                <span>
+                    {source ? (
+                        <LedgerSourceBadge
+                            size={'sm'}
+                            source={source}
+                            variant={source}
+                        />
+                    ) : (
+                        <span className="text-muted-foreground">-</span>
+                    )}
+                </span>
+            ),
+            enableMultiSort: true,
+            enableSorting: true,
+            enableResizing: true,
+            enableHiding: true,
+            size: 160,
+            minSize: 120,
+        },
+        {
+            id: 'entry_date',
+            accessorKey: 'entry_date',
+            header: (props) => (
+                <DataTableColumnHeader {...props} title="Entry Date">
+                    <ColumnActions {...props} />
+                </DataTableColumnHeader>
+            ),
+            cell: ({
+                row: {
+                    original: { entry_date },
+                },
+            }) => (
+                <div>
+                    <p>{entry_date ? toReadableDate(entry_date) : ''} </p>
+                    {entry_date ? (
+                        <p className="text-xs text-muted-foreground/60">
+                            {toReadableDate(entry_date, 'h:mm a -')}{' '}
+                            {dateAgo(entry_date)}
+                        </p>
+                    ) : (
+                        ''
+                    )}
+                </div>
+            ),
+            enableMultiSort: true,
+            enableSorting: true,
+            enableResizing: true,
+            minSize: 200,
+        },
+        ...createUpdateColumns<IGeneralLedger>().filter(
+            (col) => col.id === 'updated_at'
+        ),
+    ]
+}
+
+export default GeneralLedgerRunningTableColumns

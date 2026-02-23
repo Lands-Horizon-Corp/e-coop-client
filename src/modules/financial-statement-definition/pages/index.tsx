@@ -8,9 +8,11 @@ import {
 } from '@radix-ui/react-accordion'
 
 import { payment_bg } from '@/assets/transactions'
+import { hasPermissionFromAuth } from '@/modules/authentication/authgentication.store'
 import { IFinancialStatementAccountGrouping } from '@/modules/financial-statement-account-grouping'
 import { useGetAll } from '@/modules/financial-statement-account-grouping'
 import { FinancialStatementAccountGroupingUpdateModal } from '@/modules/financial-statement-account-grouping'
+import PermissionGuard from '@/modules/permission/components/permission-guard'
 import { useFinancialStatementAccountsGroupingStore } from '@/store/financial-statement-accounts-grouping-store'
 
 import PageContainer from '@/components/containers/page-container'
@@ -118,7 +120,7 @@ const FinancialStatementDefinition = () => {
     )
 
     return (
-        <PageContainer className="w-full relative min-h-[100vh] p-5 ">
+        <>
             {financialStatementGrouping && (
                 <FinancialStatementAccountGroupingUpdateModal
                     description={
@@ -220,6 +222,18 @@ const FinancialStatementDefinition = () => {
                                         <DropdownMenuContent>
                                             <DropdownMenuItem
                                                 className="flex items-center gap-2"
+                                                disabled={
+                                                    !hasPermissionFromAuth({
+                                                        action: [
+                                                            'Update',
+                                                            'OwnUpdate',
+                                                        ],
+                                                        resourceType:
+                                                            'FSDefinition',
+                                                        conditionLogic: 'some',
+                                                        resource: grouping,
+                                                    })
+                                                }
                                                 onClick={(e) => {
                                                     e.preventDefault()
                                                     handleEditFinancialStatementGrouping(
@@ -235,6 +249,14 @@ const FinancialStatementDefinition = () => {
                                             </DropdownMenuItem>
                                             <DropdownMenuItem
                                                 className="flex items-center gap-2"
+                                                disabled={
+                                                    !hasPermissionFromAuth({
+                                                        action: 'Read',
+                                                        resourceType:
+                                                            'FSDefinition',
+                                                        resource: grouping,
+                                                    })
+                                                }
                                                 onClick={(e) => {
                                                     e.preventDefault()
                                                     handleViewFinancialStatementGrouping(
@@ -279,8 +301,18 @@ const FinancialStatementDefinition = () => {
                     ))}
                 </Accordion>
             )}
+        </>
+    )
+}
+
+const FinancialStatementDefinitionPage = () => {
+    return (
+        <PageContainer className="w-full relative min-h-[100vh] p-5 ">
+            <PermissionGuard action="Read" resourceType="FSDefinition">
+                <FinancialStatementDefinition />
+            </PermissionGuard>
         </PageContainer>
     )
 }
 
-export default FinancialStatementDefinition
+export default FinancialStatementDefinitionPage

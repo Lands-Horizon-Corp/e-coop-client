@@ -1,7 +1,5 @@
 import { useMemo } from 'react'
 
-import qs from 'query-string'
-
 import FilterContext from '@/contexts/filter-context/filter-context'
 import { cn } from '@/helpers'
 import { IMemberAccountingLedger } from '@/modules/member-account-ledger'
@@ -36,7 +34,8 @@ import MemberAccountingLedgerTableColumns, {
 } from './columns'
 
 export interface MemberAccountingLedgerTableProps
-    extends TableProps<IMemberAccountingLedger>,
+    extends
+        TableProps<IMemberAccountingLedger>,
         IMemberAccountingLedgerTableColumnProps {
     toolbarProps?: Omit<
         IDataTableToolbarProps<IMemberAccountingLedger>,
@@ -49,6 +48,7 @@ export interface MemberAccountingLedgerTableProps
         | 'deleteActionProps'
     >
     mode: TMemberAccountingLedgerHookMode
+    hideToolbar?: boolean
 }
 
 export type TMemberAccountingLedgerTableProps =
@@ -66,6 +66,7 @@ const MemberAccountingLedgerTable = ({
     className,
     toolbarProps,
     defaultFilter,
+    hideToolbar = false,
     onRowClick,
     onDoubleClick = (row) => {
         row.toggleSelected()
@@ -84,7 +85,7 @@ const MemberAccountingLedgerTable = ({
         () =>
             MemberAccountingLedgerTableColumns({
                 actionComponent,
-            }),
+            }).filter((col) => col.id),
         [actionComponent]
     )
 
@@ -113,7 +114,8 @@ const MemberAccountingLedgerTable = ({
         },
         options: {
             enabled:
-                mode === 'branch' || modeProps.memberProfileId !== undefined,
+                mode === 'branch' ||
+                (mode === 'member' && !!modeProps.memberProfileId),
         },
     })
 
@@ -152,49 +154,38 @@ const MemberAccountingLedgerTable = ({
     useHotkeys('Alt + R', () => {
         refetch()
     })
-    const exportfilter = qs.stringify(
-        {
-            ...pagination,
-            sort: sortingStateBase64,
-            filter: filterState.finalFilterPayloadBase64,
-        },
-        { skipNull: true }
-    )
+
     return (
         <FilterContext.Provider value={filterState}>
             <div
                 className={cn(
                     'flex h-full flex-col gap-y-2',
                     className,
-                    !tableState.isScrollable && 'h-fit !max-h-none'
+                    !tableState.isScrollable && 'h-fit max-h-none!'
                 )}
             >
-                <DataTableToolbar
-                    exportActionProps={{
-                        isLoading: isPending,
-                        filters: exportfilter,
-                        model: 'MemberAccountingLedger',
-                        url: 'api/v1/member-accounting-ledger/search',
-                    }}
-                    filterLogicProps={{
-                        filterLogic: filterState.filterLogic,
-                        setFilterLogic: filterState.setFilterLogic,
-                    }}
-                    globalSearchProps={{
-                        defaultMode: 'contains',
-                        targets: memberGeneralLedgerGlobalSearchTargets,
-                    }}
-                    refreshActionProps={{
-                        onClick: () => refetch(),
-                        isLoading: isPending || isRefetching,
-                    }}
-                    scrollableProps={{
-                        isScrollable: tableState.isScrollable,
-                        setIsScrollable: tableState.setIsScrollable,
-                    }}
-                    table={table}
-                    {...toolbarProps}
-                />
+                {!hideToolbar && (
+                    <DataTableToolbar
+                        filterLogicProps={{
+                            filterLogic: filterState.filterLogic,
+                            setFilterLogic: filterState.setFilterLogic,
+                        }}
+                        globalSearchProps={{
+                            defaultMode: 'contains',
+                            targets: memberGeneralLedgerGlobalSearchTargets,
+                        }}
+                        refreshActionProps={{
+                            onClick: () => refetch(),
+                            isLoading: isPending || isRefetching,
+                        }}
+                        scrollableProps={{
+                            isScrollable: tableState.isScrollable,
+                            setIsScrollable: tableState.setIsScrollable,
+                        }}
+                        table={table}
+                        {...toolbarProps}
+                    />
+                )}
                 <DataTable
                     className="mb-2"
                     isScrollable={tableState.isScrollable}

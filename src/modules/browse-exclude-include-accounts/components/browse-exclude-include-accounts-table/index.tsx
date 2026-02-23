@@ -39,7 +39,8 @@ import {
 import BrowseExcludeIncludeAccountColumns from './columns'
 
 export interface Props
-    extends TableProps<IBrowseExcludeIncludeAccounts>,
+    extends
+        TableProps<IBrowseExcludeIncludeAccounts>,
         IBrowseExcludeIncludeAccountTableColumnProps {
     toolbarProps?: Omit<
         IDataTableToolbarProps<IBrowseExcludeIncludeAccounts>,
@@ -48,7 +49,6 @@ export interface Props
         | 'refreshActionProps'
         | 'scrollableProps'
         | 'filterLogicProps'
-        | 'exportActionProps'
         | 'deleteActionProps'
     >
 }
@@ -161,6 +161,7 @@ const BrowseExcludeIncludeAccountTable = ({
                             }),
                     }}
                     exportActionProps={{
+                        ...toolbarProps?.exportActionProps,
                         isLoading: isPending,
                         filters: exportfilter,
                         model: 'BrowseExcludeIncludeAccounts',

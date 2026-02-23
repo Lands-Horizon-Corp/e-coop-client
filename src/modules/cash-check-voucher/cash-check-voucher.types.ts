@@ -4,6 +4,10 @@ import { IBaseEntityMeta, IPaginatedResult, TEntityId } from '@/types'
 
 import { IAccount } from '../account'
 import {
+    ICashCheckVoucherGeneralORSettings,
+    ICashVoucherORSettings,
+} from '../branch-settings'
+import {
     ICashCheckVoucherEntry,
     ICashCheckVoucherEntryRequest,
 } from '../cash-check-voucher-entry'
@@ -13,6 +17,7 @@ import { IMedia } from '../media'
 import { IMemberProfile } from '../member-profile'
 import { ITransactionBatch } from '../transaction-batch'
 import { IUser } from '../user'
+import { IUserOrganizationSettings } from '../user-organization'
 import {
     CashCheckSignatureSchema,
     CashCheckVoucherPrintSchema,
@@ -141,7 +146,10 @@ export interface ICashCheckVoucherRequest {
     pay_to?: string
     status?: CashCheckVoucherStatus
     description?: string
+
     cash_voucher_number?: string
+    or_auto_generated?: boolean
+
     total_debit?: number
     total_credit?: number
     print_count?: number
@@ -221,5 +229,11 @@ export type TCashCheckSignatureRequest = z.infer<
 export type TCashCheckVoucherPrintRequest = z.infer<
     typeof CashCheckVoucherPrintSchema
 >
-export interface ICashCheckVoucherPaginated
-    extends IPaginatedResult<ICashCheckVoucher> {}
+export interface ICashCheckVoucherPaginated extends IPaginatedResult<ICashCheckVoucher> {}
+
+export type TORCashCheckSettings = Omit<
+    ICashCheckVoucherGeneralORSettings,
+    'check_voucher_general_or_unique'
+> &
+    Omit<ICashVoucherORSettings, 'check_voucher_general_or_unique'> &
+    Pick<IUserOrganizationSettings, 'cash_check_voucher_auto_increment'>

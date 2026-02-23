@@ -34,7 +34,8 @@ type TMemberProfileArchiveFormValues = z.infer<
 }
 
 export interface IMemberProfileArchiveFormProps
-    extends IClassProps,
+    extends
+        IClassProps,
         IForm<
             Partial<IMemberProfileArchiveRequest>,
             IMemberProfileArchive,
@@ -92,15 +93,18 @@ const UpdateMemberProfileArchiveForm = ({
     return (
         <Form {...form}>
             <form
-                className={cn('flex w-full flex-col gap-y-4', className)}
+                className={cn(
+                    'flex w-full max-w-full flex-col gap-y-4',
+                    className
+                )}
                 onSubmit={onSubmit}
                 ref={formRef}
             >
                 <fieldset
-                    className="grid gap-x-6 gap-y-4 sm:gap-y-3"
+                    className="grid gap-x-6 gap-y-4 min-w-0 max-w-full sm:gap-y-3"
                     disabled={isPending || formProps.readOnly}
                 >
-                    <fieldset className="space-y-3">
+                    <fieldset className="space-y-3 min-w-0 max-w-full">
                         <FormFieldWrapper
                             control={form.control}
                             label="Name"

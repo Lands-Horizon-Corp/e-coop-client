@@ -65,6 +65,7 @@ const SignatureField = forwardRef<HTMLButtonElement, SignatureFieldProps>(
                                     value &&
                                         'dark:bg-secondary-foreground bg-secondary-foreground/50'
                                 )}
+                                imageClassName="object-scale-down"
                                 src={value}
                             />
                             <span

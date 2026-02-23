@@ -60,7 +60,7 @@ export const TransactionCardItem = ({
                                 {description}
                             </p>
                         </div>
-                        <p className="font-semibold dark:text-primary flex-shrink-0">
+                        <p className="font-semibold dark:text-primary shrink-0">
                             {currencyFormat(amount, {
                                 currency,
                                 showSymbol: !!currency,

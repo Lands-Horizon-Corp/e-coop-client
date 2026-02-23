@@ -32,7 +32,8 @@ import { MemberIncomeSchema } from '../../member-income.validation'
 type TMemberIncomeFormValues = z.infer<typeof MemberIncomeSchema>
 
 export interface IMemberIncomeFormProps
-    extends IClassProps,
+    extends
+        IClassProps,
         IForm<
             Partial<TMemberIncomeFormValues>,
             IMemberIncome,

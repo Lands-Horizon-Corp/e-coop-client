@@ -8,6 +8,10 @@ import {
     useDeleteById,
     useMoveAccountOrderIndex,
 } from '@/modules/account'
+import {
+    getCrudPermissionFromAuthStore,
+    hasPermissionFromAuth,
+} from '@/modules/authentication/authgentication.store'
 import { TEntryType } from '@/modules/general-ledger'
 import GeneralLedgerTable from '@/modules/general-ledger/components/tables/general-ledger-table'
 import useConfirmModalStore from '@/store/confirm-modal-store'
@@ -74,6 +78,11 @@ const useAccountActions = ({
     >()
     const { onOpen } = useConfirmModalStore()
 
+    const accountCrudPerms = getCrudPermissionFromAuthStore({
+        resourceType: 'Account',
+        resource: account,
+    })
+
     const { isPending: isDeletingAccount, mutate: deleteAccount } =
         useDeleteById({
             options: {
@@ -120,6 +129,7 @@ const useAccountActions = ({
 
     return {
         account,
+        accountCrudPerms,
         isDeletingAccount,
         moveAccountIndexMutation,
         handleEdit,
@@ -154,18 +164,37 @@ export const AccountAction = ({
                 canSelect
                 onDelete={{
                     text: 'Delete',
-                    isAllowed: !isDeletingAccount,
+                    isAllowed:
+                        hasPermissionFromAuth({
+                            action: ['Delete', 'OwnDelete'],
+                            resourceType: 'Account',
+                            conditionLogic: 'some',
+                            resource: account,
+                        }) && !isDeletingAccount,
                     onClick: handleDelete,
                 }}
                 onEdit={{
                     text: 'Edit',
-                    isAllowed: true,
+                    isAllowed: hasPermissionFromAuth({
+                        action: ['Update', 'OwnUpdate'],
+                        resourceType: 'Account',
+                        conditionLogic: 'some',
+                        resource: account,
+                    }),
                     onClick: handleEdit,
                 }}
                 otherActions={
                     <>
                         <DropdownMenuItem
-                            disabled={moveAccountIndexMutation.isPending}
+                            disabled={
+                                moveAccountIndexMutation.isPending ||
+                                !hasPermissionFromAuth({
+                                    action: ['Update', 'OwnUpdate'],
+                                    resourceType: 'Account',
+                                    conditionLogic: 'some',
+                                    resource: account,
+                                })
+                            }
                             onClick={() =>
                                 toast.promise(
                                     moveAccountIndexMutation.mutateAsync({
@@ -179,7 +208,15 @@ export const AccountAction = ({
                             Move to Top
                         </DropdownMenuItem>
                         <DropdownMenuItem
-                            disabled={moveAccountIndexMutation.isPending}
+                            disabled={
+                                moveAccountIndexMutation.isPending ||
+                                !hasPermissionFromAuth({
+                                    action: ['Update', 'OwnUpdate'],
+                                    resourceType: 'Account',
+                                    conditionLogic: 'some',
+                                    resource: account,
+                                })
+                            }
                             onClick={() =>
                                 toast.promise(
                                     moveAccountIndexMutation.mutateAsync({
@@ -193,13 +230,26 @@ export const AccountAction = ({
                             Move to Bottom
                         </DropdownMenuItem>
                         <DropdownMenuItem
+                            disabled={
+                                !hasPermissionFromAuth({
+                                    action: 'Read',
+                                    resourceType: 'AccountTransaction',
+                                })
+                            }
                             onClick={() => handleViewAccountingLedger()}
                         >
                             <BookOpenIcon className="mr-2" strokeWidth={1.5} />
                             View Accounting Ledger
                         </DropdownMenuItem>
                         <DropdownMenuSub>
-                            <DropdownMenuSubTrigger>
+                            <DropdownMenuSubTrigger
+                                disabled={
+                                    !hasPermissionFromAuth({
+                                        action: 'Read',
+                                        resourceType: 'GeneralLedger',
+                                    })
+                                }
+                            >
                                 <BookOpenIcon
                                     className="mr-2"
                                     strokeWidth={1.5}
@@ -373,24 +423,49 @@ export const AccountRowContext = ({
             <DataTableRowContext
                 onDelete={{
                     text: 'Delete',
-                    isAllowed: !isDeletingAccount,
+                    isAllowed:
+                        !isDeletingAccount &&
+                        hasPermissionFromAuth({
+                            action: ['Delete', 'OwnDelete'],
+                            resourceType: 'Account',
+                            resource: account,
+                        }),
                     onClick: handleDelete,
                 }}
                 onEdit={{
                     text: 'Edit',
-                    isAllowed: true,
+                    isAllowed:
+                        !isDeletingAccount &&
+                        hasPermissionFromAuth({
+                            action: ['Update', 'OwnUpdate'],
+                            resourceType: 'Account',
+                            resource: account,
+                        }),
                     onClick: handleEdit,
                 }}
                 otherActions={
                     <>
                         <ContextMenuItem
+                            disabled={
+                                !hasPermissionFromAuth({
+                                    action: 'Read',
+                                    resourceType: 'AccountTransaction',
+                                })
+                            }
                             onClick={() => handleViewAccountingLedger()}
                         >
                             <BookOpenIcon className="mr-2" strokeWidth={1.5} />
                             View Accounting Ledger
                         </ContextMenuItem>
                         <ContextMenuItem
-                            disabled={moveAccountIndexMutation.isPending}
+                            disabled={
+                                moveAccountIndexMutation.isPending ||
+                                !hasPermissionFromAuth({
+                                    action: ['Update', 'OwnUpdate'],
+                                    resourceType: 'Account',
+                                    resource: account,
+                                })
+                            }
                             onClick={() =>
                                 toast.promise(
                                     moveAccountIndexMutation.mutateAsync({
@@ -404,7 +479,14 @@ export const AccountRowContext = ({
                             Move to Top
                         </ContextMenuItem>
                         <ContextMenuItem
-                            disabled={moveAccountIndexMutation.isPending}
+                            disabled={
+                                moveAccountIndexMutation.isPending ||
+                                !hasPermissionFromAuth({
+                                    action: ['Update', 'OwnUpdate'],
+                                    resourceType: 'Account',
+                                    resource: account,
+                                })
+                            }
                             onClick={() =>
                                 toast.promise(
                                     moveAccountIndexMutation.mutateAsync({
@@ -418,7 +500,14 @@ export const AccountRowContext = ({
                             Move to Bottom
                         </ContextMenuItem>
                         <ContextMenuSub>
-                            <ContextMenuSubTrigger>
+                            <ContextMenuSubTrigger
+                                disabled={
+                                    !hasPermissionFromAuth({
+                                        action: 'Read',
+                                        resourceType: 'GeneralLedger',
+                                    })
+                                }
+                            >
                                 <BookOpenIcon
                                     className="mr-2"
                                     strokeWidth={1.5}
@@ -569,7 +658,7 @@ export const AccountRowContext = ({
     )
 }
 
-const getModalTitle = (entryType?: TEntryType) => {
+export const getModalTitle = (entryType?: TEntryType) => {
     if (!entryType) return 'General Ledger'
 
     const entryTypeNames: Record<TEntryType, string> = {
@@ -612,7 +701,7 @@ export const AccountTableActionManager = () => {
             )}
             {state.action === 'view-ledger' && state.defaultValues && (
                 <Modal
-                    className="!max-w-[95vw]"
+                    className="max-w-[95vw]!"
                     description={`You are viewing account (${state.defaultValues.name}) ${getModalTitle(state.extra?.entryType).toLowerCase()}`}
                     onOpenChange={close}
                     open={state.isOpen}
@@ -620,7 +709,7 @@ export const AccountTableActionManager = () => {
                 >
                     <GeneralLedgerTable
                         accountId={state.defaultValues.id}
-                        className="min-h-[90vh] !max-w-[90vw] min-w-0 max-h-[90vh]"
+                        className="min-h-[90vh] max-w-[90vw]! min-w-0 max-h-[90vh]"
                         entryType={state.extra?.entryType || ''}
                         mode="account"
                     />
@@ -629,7 +718,7 @@ export const AccountTableActionManager = () => {
             {state.action === 'view-accounting-ledger-transaction' &&
                 state.defaultValues && (
                     <Modal
-                        className="!max-w-6xl w-full"
+                        className="max-w-6xl! w-full"
                         description={`You are viewing account (${state.defaultValues.name}) accounting transaction`}
                         onOpenChange={close}
                         open={state.isOpen}

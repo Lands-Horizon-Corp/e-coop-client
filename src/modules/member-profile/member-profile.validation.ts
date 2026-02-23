@@ -1,6 +1,7 @@
 import z from 'zod'
 
 import {
+    SexSchema,
     birthDateSchema,
     civilStatusSchema,
     contactNumberSchema,
@@ -18,6 +19,8 @@ import {
     userNameSchema,
 } from '@/validation'
 import { isBefore, startOfDay } from 'date-fns'
+
+import { MemberAddressSchema } from '../member-address/member-address.validation'
 
 export const BaseMemberAccountSchema = z.object({
     id: entityIdSchema.optional(),
@@ -54,7 +57,7 @@ export const MemberCreateUpdateAccountSchema = z
         if (data.password || data.confirmPassword) {
             if (data.password !== data.confirmPassword) {
                 ctx.addIssue({
-                    code: z.ZodIssueCode.custom,
+                    code: 'custom',
                     path: ['confirmPassword'],
                     message: 'Passwords do not match.',
                 })
@@ -87,6 +90,7 @@ export const QuickCreateMemberProfileSchema = z
         passbook: z.coerce
             .string<string>('Passbook is required')
             .min(3, 'Minimum 3 Characters'),
+        pb_auto_generated: z.boolean().default(false).optional(),
 
         organization_id: entityIdSchema.optional(),
         branch_id: entityIdSchema.optional(),
@@ -111,7 +115,8 @@ export const QuickCreateMemberProfileSchema = z
                 { message: 'Birthdate must be in the past' }
             )
             .transform((val) => new Date(val).toISOString()),
-        member_gender_id: entityIdSchema.optional(),
+        sex: SexSchema,
+        // member_gender_id: entityIdSchema.optional(),
 
         civil_status: civilStatusSchema,
         occupation_id: entityIdSchema.optional(),
@@ -150,6 +155,8 @@ export const MemberProfilePersonalInfoSchema = z.object({
     business_address: z.string().optional(),
     business_contact_number: z.string().optional(),
 
+    sex: SexSchema,
+
     notes: z.string().optional(),
     description: z
         .string()
@@ -160,11 +167,20 @@ export const MemberProfilePersonalInfoSchema = z.object({
     media: z.any(), // JUST FOR SHOWING MEDIA IMAGE IN FORM
     signature_media_id: entityIdSchema.optional(),
     signature_media: z.any(), // JUST FOR SHOWING MEDIA IMAGE IN FORM
+
+    member_addresses: z.array(MemberAddressSchema).nullable().optional(),
+    member_address_deleted_id: z.array(entityIdSchema).nullable().optional(),
 })
+
+export type TMemberProfilePersonalInfoSchema = z.infer<
+    typeof MemberProfilePersonalInfoSchema
+>
 
 // 🏛️ Membership Info
 export const MemberProfileMembershipInfoSchema = z.object({
     passbook: z.string().optional(),
+    pb_auto_generated: z.boolean().default(false).optional(),
+
     old_reference_id: z.string().optional(),
 
     status: generalStatusSchema.optional(),

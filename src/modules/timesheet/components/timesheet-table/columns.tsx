@@ -21,6 +21,7 @@ import PreviewMediaWrapper from '@/components/wrappers/preview-media-wrapper'
 
 import { ITimesheet } from '../../timesheet.types'
 import { getTimeDifference } from '../worktimer/utils'
+import { LiveWorkTimeDurationDisplayMini } from '../worktimer/work-time-duration-display'
 
 export const timesheetGlobalSearchTargets: IGlobalSearchTargets<ITimesheet>[] =
     [{ field: 'user.user_name', displayText: 'User' }]
@@ -128,7 +129,7 @@ const TimesheetTableColumns = (
             id: 'photos',
             accessorKey: 'photos',
             header: (props) => (
-                <DataTableColumnHeader {...props} title="Photos" />
+                <DataTableColumnHeader {...props} title="Time In/Out Photo" />
             ),
             cell: ({
                 row: {
@@ -159,6 +160,7 @@ const TimesheetTableColumns = (
                         isOngoing={!time_out}
                         minutes={minutes}
                         seconds={seconds}
+                        timeIn={time_in}
                     />
                 )
             },
@@ -256,6 +258,7 @@ interface DurationBadgeProps {
     minutes: number
     seconds: number
     isOngoing?: boolean
+    timeIn: Date | string
     variant?: 'default' | 'success' | 'warning' | 'destructive' | 'outline'
     className?: string
 }
@@ -264,11 +267,12 @@ const DurationBadge = ({
     hours,
     minutes,
     seconds,
+    timeIn,
     isOngoing = false,
     variant = 'default',
     className,
 }: DurationBadgeProps) => {
-    const formattedTime = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`
+    const formattedTime = `${hours.toString().padStart(1, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`
 
     return (
         <Badge
@@ -287,10 +291,12 @@ const DurationBadge = ({
                 <>
                     <PlayIcon className="h-3 w-3" />
                     <span>Ongoing</span>
+                    <LiveWorkTimeDurationDisplayMini timeIn={timeIn} />
                 </>
             ) : (
                 <>
                     <ClockIcon className="h-3 w-3" />
+                    <span>Completed</span>
                     <span>{formattedTime}</span>
                 </>
             )}

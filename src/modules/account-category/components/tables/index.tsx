@@ -43,8 +43,7 @@ import {
 } from './row-action-context'
 
 export interface AccountCategoryTableProps
-    extends TableProps<IAccountCategory>,
-        IAccountCategoryTableColumnProps {
+    extends TableProps<IAccountCategory>, IAccountCategoryTableColumnProps {
     toolbarProps?: Omit<
         IDataTableToolbarProps<IAccountCategory>,
         | 'table'
@@ -52,7 +51,6 @@ export interface AccountCategoryTableProps
         | 'globalSearchProps'
         | 'scrollableProps'
         | 'filterLogicProps'
-        | 'exportActionProps'
         | 'deleteActionProps'
     >
 }
@@ -186,6 +184,7 @@ const AccountCategoryTable = ({
                                 deleteMany(selectedData.map((data) => data.id)),
                         }}
                         exportActionProps={{
+                            ...toolbarProps,
                             isLoading: isPending,
                             filters: filter,
                             disabled: isPending || isRefetching,

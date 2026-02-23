@@ -14,6 +14,7 @@ import DataTable from '@/components/data-table'
 import DataTableToolbar, {
     IDataTableToolbarProps,
 } from '@/components/data-table/data-table-toolbar'
+import { TableRowActionStoreProvider } from '@/components/data-table/store/data-table-action-store'
 import { TableProps } from '@/components/data-table/table.type'
 import { useDataTableSorting } from '@/components/data-table/use-datatable-sorting'
 import useDataTableState from '@/components/data-table/use-datatable-state'
@@ -29,6 +30,7 @@ import {
 import { IIncludeNegativeAccounts } from '../../include-negative-accounts.types'
 import IncludeNegativeAccountAction, {
     IncludeNegativeAccountRowContext,
+    IncludeNegativeAccountTableActionManager,
 } from './action'
 import {
     IIncludeNegativeAccountTableColumnProps,
@@ -37,7 +39,8 @@ import {
 import IncludeNegativeAccountColumns from './columns'
 
 export interface Props
-    extends TableProps<IIncludeNegativeAccounts>,
+    extends
+        TableProps<IIncludeNegativeAccounts>,
         IIncludeNegativeAccountTableColumnProps {
     toolbarProps?: Omit<
         IDataTableToolbarProps<IIncludeNegativeAccounts>,
@@ -137,47 +140,50 @@ const IncludeNegativeAccountTable = ({
     })
 
     return (
-        <FilterContext.Provider value={filterState}>
-            <div className={cn('flex h-full flex-col gap-y-2', className)}>
-                <DataTableToolbar
-                    deleteActionProps={{
-                        onDeleteSuccess: () =>
-                            queryClient.invalidateQueries({
-                                queryKey: ['include-negative-account'],
-                            }),
-                        onDelete: (selected) =>
-                            deleteManyIncludeNegativeAccounts({
-                                ids: selected.map((item) => item.id),
-                            }),
-                    }}
-                    filterLogicProps={{
-                        filterLogic: filterState.filterLogic,
-                        setFilterLogic: filterState.setFilterLogic,
-                    }}
-                    globalSearchProps={{
-                        defaultMode: 'contains',
-                        defaultVisible: false,
-                        targets: includeNegativeAccountGlobalSearchTargets,
-                    }}
-                    refreshActionProps={{
-                        onClick: () => refetch(),
-                        isLoading: isPending || isRefetching,
-                    }}
-                    scrollableProps={{ isScrollable, setIsScrollable }}
-                    table={table}
-                    {...toolbarProps}
-                />
-                <DataTable
-                    className="mb-2"
-                    isScrollable={isScrollable}
-                    isStickyFooter
-                    isStickyHeader
-                    RowContextComponent={RowContextComponent}
-                    setColumnOrder={setColumnOrder}
-                    table={table}
-                />
-            </div>
-        </FilterContext.Provider>
+        <TableRowActionStoreProvider>
+            <FilterContext.Provider value={filterState}>
+                <div className={cn('flex h-full flex-col gap-y-2', className)}>
+                    <DataTableToolbar
+                        deleteActionProps={{
+                            onDeleteSuccess: () =>
+                                queryClient.invalidateQueries({
+                                    queryKey: ['include-negative-account'],
+                                }),
+                            onDelete: (selected) =>
+                                deleteManyIncludeNegativeAccounts({
+                                    ids: selected.map((item) => item.id),
+                                }),
+                        }}
+                        filterLogicProps={{
+                            filterLogic: filterState.filterLogic,
+                            setFilterLogic: filterState.setFilterLogic,
+                        }}
+                        globalSearchProps={{
+                            defaultMode: 'contains',
+                            defaultVisible: false,
+                            targets: includeNegativeAccountGlobalSearchTargets,
+                        }}
+                        refreshActionProps={{
+                            onClick: () => refetch(),
+                            isLoading: isPending || isRefetching,
+                        }}
+                        scrollableProps={{ isScrollable, setIsScrollable }}
+                        table={table}
+                        {...toolbarProps}
+                    />
+                    <DataTable
+                        className="mb-2"
+                        isScrollable={isScrollable}
+                        isStickyFooter
+                        isStickyHeader
+                        RowContextComponent={RowContextComponent}
+                        setColumnOrder={setColumnOrder}
+                        table={table}
+                    />
+                </div>
+            </FilterContext.Provider>
+            <IncludeNegativeAccountTableActionManager />
+        </TableRowActionStoreProvider>
     )
 }
 

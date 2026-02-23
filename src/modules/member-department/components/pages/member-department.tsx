@@ -3,6 +3,7 @@ import { useQueryClient } from '@tanstack/react-query'
 import { useAuthUserWithOrgBranch } from '@/modules/authentication/authgentication.store'
 import { MemberDepartmentCreateUpdateFormModal } from '@/modules/member-department/components/member-department-create-update-form'
 import MemberDepartmentTable from '@/modules/member-department/components/member-department-table'
+import PermissionGuard from '@/modules/permission/components/permission-guard'
 
 import PageContainer from '@/components/containers/page-container'
 
@@ -38,15 +39,17 @@ const MemberDepartmentPage = () => {
 
     return (
         <PageContainer>
-            <MemberDepartmentCreateUpdateFormModal {...createModal} />
-            <MemberDepartmentTable
-                className="max-h-[90vh] min-h-[90vh] w-full"
-                toolbarProps={{
-                    createActionProps: {
-                        onClick: () => createModal.onOpenChange(true),
-                    },
-                }}
-            />
+            <PermissionGuard action="Read" resourceType="MemberDepartment">
+                <MemberDepartmentCreateUpdateFormModal {...createModal} />
+                <MemberDepartmentTable
+                    className="max-h-[90vh] min-h-[90vh] w-full"
+                    toolbarProps={{
+                        createActionProps: {
+                            onClick: () => createModal.onOpenChange(true),
+                        },
+                    }}
+                />
+            </PermissionGuard>
         </PageContainer>
     )
 }

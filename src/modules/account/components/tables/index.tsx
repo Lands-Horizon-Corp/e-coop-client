@@ -40,8 +40,7 @@ import {
 } from './row-actions'
 
 export interface AccountsTableProps
-    extends TableProps<IAccount>,
-        IAccountsTableColumnProps {
+    extends TableProps<IAccount>, IAccountsTableColumnProps {
     toolbarProps?: Omit<
         IDataTableToolbarProps<IAccount>,
         | 'table'
@@ -49,7 +48,6 @@ export interface AccountsTableProps
         | 'globalSearchProps'
         | 'scrollableProps'
         | 'filterLogicProps'
-        | 'exportActionProps'
         | 'deleteActionProps'
     >
 }
@@ -188,7 +186,7 @@ const AccountsTable = ({
                     className={cn(
                         'flex h-full flex-col gap-y-2',
                         className,
-                        !isScrollable && 'h-fit !max-h-none'
+                        !isScrollable && 'h-fit max-h-none!'
                     )}
                 >
                     <DataTableToolbar
@@ -203,6 +201,7 @@ const AccountsTable = ({
                                 deleteMany(selectedData.map((data) => data.id)),
                         }}
                         exportActionProps={{
+                            ...toolbarProps?.exportActionProps,
                             isLoading: isPending,
                             filters: exportfilter,
                             model: 'Account',

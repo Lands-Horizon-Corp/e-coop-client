@@ -1,5 +1,6 @@
 import { ReactNode } from 'react'
 
+import { hasPermissionFromAuth } from '@/modules/authentication/authgentication.store'
 import { useDeleteById } from '@/modules/member-occupation/member-occupation.service'
 import { IMemberOccupation } from '@/modules/member-occupation/member-occupation.types'
 import useConfirmModalStore from '@/store/confirm-modal-store'
@@ -67,8 +68,7 @@ const useMemberOccupationActions = ({
     }
 }
 
-interface IMemberOccupationTableActionProps
-    extends IMemberOccupationTableActionComponentProp {
+interface IMemberOccupationTableActionProps extends IMemberOccupationTableActionComponentProp {
     onMemberOccupationUpdate?: () => void
     onDeleteSuccess?: () => void
 }
@@ -77,8 +77,12 @@ export const MemberOccupationAction = ({
     row,
     onDeleteSuccess,
 }: IMemberOccupationTableActionProps) => {
-    const { isDeletingMemberOccupation, handleEdit, handleDelete } =
-        useMemberOccupationActions({ row, onDeleteSuccess })
+    const {
+        memberOccupation,
+        isDeletingMemberOccupation,
+        handleEdit,
+        handleDelete,
+    } = useMemberOccupationActions({ row, onDeleteSuccess })
 
     return (
         <>
@@ -87,12 +91,22 @@ export const MemberOccupationAction = ({
                 canSelect
                 onDelete={{
                     text: 'Delete',
-                    isAllowed: !isDeletingMemberOccupation,
+                    isAllowed:
+                        !isDeletingMemberOccupation ||
+                        hasPermissionFromAuth({
+                            action: ['Delete', 'OwnDelete'],
+                            resourceType: 'MemberOccupation',
+                            resource: memberOccupation,
+                        }),
                     onClick: handleDelete,
                 }}
                 onEdit={{
                     text: 'Edit',
-                    isAllowed: true,
+                    isAllowed: hasPermissionFromAuth({
+                        action: ['Update', 'OwnUpdate'],
+                        resourceType: 'MemberOccupation',
+                        resource: memberOccupation,
+                    }),
                     onClick: handleEdit,
                 }}
                 otherActions={<>{/* Additional actions can be added here */}</>}
@@ -102,8 +116,7 @@ export const MemberOccupationAction = ({
     )
 }
 
-interface IMemberOccupationRowContextProps
-    extends IMemberOccupationTableActionComponentProp {
+interface IMemberOccupationRowContextProps extends IMemberOccupationTableActionComponentProp {
     children?: ReactNode
     onDeleteSuccess?: () => void
 }
@@ -113,20 +126,34 @@ export const MemberOccupationRowContext = ({
     children,
     onDeleteSuccess,
 }: IMemberOccupationRowContextProps) => {
-    const { isDeletingMemberOccupation, handleEdit, handleDelete } =
-        useMemberOccupationActions({ row, onDeleteSuccess })
+    const {
+        memberOccupation,
+        isDeletingMemberOccupation,
+        handleEdit,
+        handleDelete,
+    } = useMemberOccupationActions({ row, onDeleteSuccess })
 
     return (
         <>
             <DataTableRowContext
                 onDelete={{
                     text: 'Delete',
-                    isAllowed: !isDeletingMemberOccupation,
+                    isAllowed:
+                        !isDeletingMemberOccupation ||
+                        hasPermissionFromAuth({
+                            action: ['Delete', 'OwnDelete'],
+                            resourceType: 'MemberOccupation',
+                            resource: memberOccupation,
+                        }),
                     onClick: handleDelete,
                 }}
                 onEdit={{
                     text: 'Edit',
-                    isAllowed: true,
+                    isAllowed: hasPermissionFromAuth({
+                        action: ['Update', 'OwnUpdate'],
+                        resourceType: 'MemberOccupation',
+                        resource: memberOccupation,
+                    }),
                     onClick: handleEdit,
                 }}
                 row={row}

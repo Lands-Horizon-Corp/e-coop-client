@@ -89,8 +89,7 @@ const useTransactionActions = ({ row }: UseTransactionActionsProps) => {
     }
 }
 
-interface ITransactionTableActionProps
-    extends ITransactionTableActionComponentProp {
+interface ITransactionTableActionProps extends ITransactionTableActionComponentProp {
     onTransactionUpdate?: () => void
     onDeleteSuccess?: () => void
 }
@@ -259,8 +258,7 @@ export const TransactionAction = ({
     )
 }
 
-interface ITransactionRowContextProps
-    extends ITransactionTableActionComponentProp {
+interface ITransactionRowContextProps extends ITransactionTableActionComponentProp {
     children?: ReactNode
     onDeleteSuccess?: () => void
 }

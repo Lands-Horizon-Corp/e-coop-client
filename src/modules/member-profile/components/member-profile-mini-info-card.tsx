@@ -1,9 +1,8 @@
-import { HoverCardContent } from '@radix-ui/react-hover-card'
-
 import { cn } from '@/helpers'
-import HoveruserInfo from '@/modules/user/components/hover-user-info'
+import { toReadableDate } from '@/helpers/date-utils'
 
 import {
+    CalendarNumberIcon,
     CheckIcon,
     ClockIcon,
     IdCardIcon,
@@ -12,10 +11,8 @@ import {
     XIcon,
 } from '@/components/icons'
 import ImageDisplay from '@/components/image-display'
-import ImageNameDisplay from '@/components/image-name-display'
 import { Badge } from '@/components/ui/badge'
 import { Card, CardContent } from '@/components/ui/card'
-import { HoverCard, HoverCardTrigger } from '@/components/ui/hover-card'
 import { Skeleton } from '@/components/ui/skeleton'
 import CopyWrapper from '@/components/wrappers/copy-wrapper'
 import PreviewMediaWrapper from '@/components/wrappers/preview-media-wrapper'
@@ -102,7 +99,7 @@ const MemberProfileMiniInfoCard = ({ className, memberProfile }: Props) => {
                                 {memberProfile.full_name}
                             </h2>
                             <div className="flex items-center gap-x-2">
-                                {memberProfile.user && (
+                                {/* {memberProfile.user && (
                                     <HoverCard>
                                         <HoverCardTrigger>
                                             <ImageNameDisplay
@@ -115,7 +112,7 @@ const MemberProfileMiniInfoCard = ({ className, memberProfile }: Props) => {
                                                 }
                                             />
                                         </HoverCardTrigger>
-                                        <HoverCardContent>
+                                        <HoverCardContent className="p-0 border-0 bg-transparent">
                                             <HoveruserInfo
                                                 defaultValue={
                                                     memberProfile.user
@@ -124,6 +121,31 @@ const MemberProfileMiniInfoCard = ({ className, memberProfile }: Props) => {
                                             />
                                         </HoverCardContent>
                                     </HoverCard>
+                                )} */}
+                                {memberProfile.branch && (
+                                    <div
+                                        className={cn(
+                                            'flex items-center gap-x-2 max-w-full bg-primary text-primary-foreground text-sm rounded-full px-2 py-1 min-w-0',
+                                            className
+                                        )}
+                                    >
+                                        <ImageDisplay
+                                            className="size-4"
+                                            src={
+                                                memberProfile.branch.media
+                                                    .download_url
+                                            }
+                                        />
+                                        <p
+                                            className={cn(
+                                                'truncate min-w-0 max-w-full',
+                                                !memberProfile.branch.name &&
+                                                    'text-muted-foreground/70'
+                                            )}
+                                        >
+                                            {memberProfile.branch.name || 'N/A'}
+                                        </p>
+                                    </div>
                                 )}
                                 <Badge variant="outline">
                                     {memberProfile.member_type?.name || (
@@ -141,7 +163,7 @@ const MemberProfileMiniInfoCard = ({ className, memberProfile }: Props) => {
                                 )}
                             </div>
                         </div>
-                        <div className="grid grid-cols-2 gap-x-12 gap-y-4 text-xs lg:grid-cols-4">
+                        <div className="grid grid-cols-2 gap-x-12 gap-y-4 text-xs lg:grid-cols-5">
                             <div>
                                 <h3 className="mb-1 font-medium text-muted-foreground">
                                     Member Profile ID
@@ -193,6 +215,20 @@ const MemberProfileMiniInfoCard = ({ className, memberProfile }: Props) => {
                                         <CopyWrapper>
                                             {memberProfile.member_type?.name}
                                         </CopyWrapper>
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div>
+                                <h3 className="mb-1 font-medium text-muted-foreground">
+                                    Membership Date
+                                </h3>
+                                <div className="flex items-center gap-2">
+                                    <CalendarNumberIcon className="size-3" />
+                                    <span>
+                                        {toReadableDate(
+                                            memberProfile.created_at
+                                        )}
                                     </span>
                                 </div>
                             </div>

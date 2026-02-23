@@ -14,7 +14,7 @@ import {
     useUpdateById,
 } from '@/modules/invitation-code'
 import PermissionPicker from '@/modules/permission-template/components/permission-template-picker'
-import PermissionMatrix from '@/modules/permission/components/permission-matrix'
+import PermissionMatrix from '@/modules/permission/components/permission-matrix/permission-matrix'
 import {
     permissionArrayToMap,
     permissionMapToPermissionArray,
@@ -41,7 +41,8 @@ import { useModalState } from '@/hooks/use-modal-state'
 import { IClassProps, IForm, TEntityId } from '@/types'
 
 export interface InvitationCodeFormProps
-    extends IClassProps,
+    extends
+        IClassProps,
         IForm<
             Partial<TInvitationCodeFormValues>,
             IInvitationCode,

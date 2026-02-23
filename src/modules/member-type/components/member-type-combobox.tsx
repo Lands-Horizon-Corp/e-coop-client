@@ -30,11 +30,15 @@ import {
     TMemberTypeForm,
 } from './forms/member-type-create-update-form'
 
-export interface IMemberTypeComboboxCreateProps
-    extends Pick<TMemberTypeForm, 'name' | 'prefix' | 'description'> {}
+export interface IMemberTypeComboboxCreateProps extends Pick<
+    TMemberTypeForm,
+    'name' | 'prefix' | 'description'
+> {}
 
-interface Props
-    extends Omit<React.ComponentPropsWithoutRef<'button'>, 'onChange'> {
+interface Props extends Omit<
+    React.ComponentPropsWithoutRef<'button'>,
+    'onChange'
+> {
     value?: TEntityId
     disabled?: boolean
     className?: string

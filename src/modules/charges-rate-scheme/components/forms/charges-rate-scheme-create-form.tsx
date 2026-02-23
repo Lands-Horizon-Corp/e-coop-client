@@ -33,7 +33,8 @@ import {
 type TChargesRateSchemeFormValues = TChargesRateCreateSchemeSchema
 
 export interface IChargesRateSchemeFormProps
-    extends IClassProps,
+    extends
+        IClassProps,
         IForm<
             Partial<IChargesRateSchemeRequest>,
             IChargesRateScheme,

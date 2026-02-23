@@ -59,8 +59,9 @@ const cashCheckStatusLabels = {
     released: 'Released',
 } as const
 
-export interface CashCheckStatusBadgeProps
-    extends VariantProps<typeof cashCheckStatusVariants> {
+export interface CashCheckStatusBadgeProps extends VariantProps<
+    typeof cashCheckStatusVariants
+> {
     className?: string
     showIcon?: boolean
     status: TCashCheckStatusType

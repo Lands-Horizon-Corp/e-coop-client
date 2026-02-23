@@ -1,6 +1,10 @@
 import { ReactNode } from 'react'
 
 import { withToastCallbacks } from '@/helpers/callback-helper'
+import {
+    hasPermissionFromAuth,
+    useAuthStore,
+} from '@/modules/authentication/authgentication.store'
 import useConfirmModalStore from '@/store/confirm-modal-store'
 import { Row } from '@tanstack/react-table'
 
@@ -8,7 +12,11 @@ import RowActionsGroup from '@/components/data-table/data-table-row-actions'
 import DataTableRowContext from '@/components/data-table/data-table-row-context'
 import { useTableRowActionStore } from '@/components/data-table/store/data-table-action-store'
 
-import { ICashCheckVoucher, useDeleteCashCheckVoucherById } from '../..'
+import {
+    ICashCheckVoucher,
+    TORCashCheckSettings,
+    useDeleteCashCheckVoucherById,
+} from '../..'
 import CashCheckEntryUpdateFormModal from '../forms/cash-check-entry-form-modal'
 import CashCheckVoucherTransactionSignatureUpdateFormModal from '../forms/cash-check-signature-form-modal'
 import CashCheckVoucherApproveReleaseDisplayModal from '../forms/cash-check-voucher-approve-release-display-modal'
@@ -125,8 +133,7 @@ const useCashCheckVoucherActions = ({
     }
 }
 
-interface ICashCheckVoucherRowContextProps
-    extends ICashCheckVoucherTableActionComponentProp {
+interface ICashCheckVoucherRowContextProps extends ICashCheckVoucherTableActionComponentProp {
     children?: ReactNode
     onDeleteSuccess?: () => void
 }
@@ -136,6 +143,7 @@ export const CashCheckJournalVoucherAction = ({
     onDeleteSuccess,
 }: ICashCheckVoucherRowContextProps) => {
     const {
+        cashCheckVoucher,
         handleEdit,
         handleOpenCheckEntry,
         handleOpenSignature,
@@ -150,7 +158,11 @@ export const CashCheckJournalVoucherAction = ({
                 canSelect
                 onEdit={{
                     text: 'Edit',
-                    isAllowed: true,
+                    isAllowed: hasPermissionFromAuth({
+                        action: ['Update', 'OwnUpdate'],
+                        resourceType: 'CashCheckVoucher',
+                        resource: cashCheckVoucher,
+                    }),
                     onClick: handleEdit,
                 }}
                 otherActions={
@@ -175,6 +187,7 @@ export const CashCheckVoucherRowContext = ({
     onDeleteSuccess,
 }: ICashCheckVoucherRowContextProps) => {
     const {
+        cashCheckVoucher,
         handleEdit,
         handleOpenCheckEntry,
         handleOpenSignature,
@@ -188,7 +201,11 @@ export const CashCheckVoucherRowContext = ({
             <DataTableRowContext
                 onEdit={{
                     text: 'Edit',
-                    isAllowed: true,
+                    isAllowed: hasPermissionFromAuth({
+                        action: ['Update', 'OwnUpdate'],
+                        resourceType: 'CashCheckVoucher',
+                        resource: cashCheckVoucher,
+                    }),
                     onClick: handleEdit,
                 }}
                 otherActions={
@@ -219,6 +236,19 @@ export const CashCheckVoucherTableActionManager = () => {
 
     const isPrinted = !!state.defaultValues?.printed_date
 
+    const {
+        currentAuth: { user_organization },
+    } = useAuthStore()
+
+    const resolvedOrSettings: TORCashCheckSettings | undefined =
+        user_organization
+            ? {
+                  ...user_organization.branch.branch_setting,
+                  cash_check_voucher_auto_increment:
+                      user_organization.cash_check_voucher_auto_increment,
+              }
+            : undefined
+
     return (
         <>
             {state.action === 'edit' && state.defaultValues && (
@@ -228,6 +258,7 @@ export const CashCheckVoucherTableActionManager = () => {
                         defaultValues: state.defaultValues,
                         mode: 'update',
                         readOnly: isPrinted,
+                        orSettings: resolvedOrSettings,
                     }}
                     onOpenChange={close}
                     open={state.isOpen}
@@ -238,6 +269,11 @@ export const CashCheckVoucherTableActionManager = () => {
                     className="!min-w-[600px]"
                     formProps={{
                         cashCheckVoucherId: state.defaultValues.id,
+                        defaultValues: {
+                            cash_voucher_number:
+                                state.defaultValues?.cash_voucher_number,
+                        },
+                        orSettings: resolvedOrSettings,
                     }}
                     onOpenChange={close}
                     open={state.isOpen}

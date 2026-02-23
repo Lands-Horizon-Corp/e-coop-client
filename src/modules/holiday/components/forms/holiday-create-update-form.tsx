@@ -25,7 +25,8 @@ import { IHoliday, IHolidayRequest } from '../../holiday.types'
 import { HolidaySchema, THolidaySchema } from '../../holiday.validation'
 
 export interface IHolidayFormProps
-    extends IClassProps,
+    extends
+        IClassProps,
         IForm<Partial<IHolidayRequest>, IHoliday, Error, THolidaySchema> {
     holidayId?: TEntityId
 }

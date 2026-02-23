@@ -13,7 +13,6 @@ export const cashCheckVoucherGlobalSearchTargets: IGlobalSearchTargets<ICashChec
         { field: 'name', displayText: 'Name' },
         { field: 'cash_voucher_number', displayText: 'Cash Voucher Number' },
         { field: 'description', displayText: 'Description' },
-        { field: 'status', displayText: 'Status' },
     ]
 
 export interface ICashCheckVoucherTableActionComponentProp {

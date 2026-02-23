@@ -123,7 +123,7 @@ const AccountCategoryTableColumns = (
         size: 180,
         minSize: 180,
     },
-    ...createUpdateColumns<IAccountCategory>(),
+    ...createUpdateColumns<IAccountCategory>({ withFilter: false }),
 ]
 
 export default AccountCategoryTableColumns

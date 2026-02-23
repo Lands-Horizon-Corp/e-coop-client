@@ -6,6 +6,8 @@ import CurrencyInputField, {
     CurrencyInputOnChangeValues,
 } from 'react-currency-input-field'
 
+import { PesoIcon } from '@/components/icons'
+
 import { ICurrency } from '../currency.types'
 
 type Props = {
@@ -17,6 +19,7 @@ type Props = {
     allowNegativeValue?: boolean
     decimalsLimit?: number
     showFlag?: boolean
+    showIcon?: boolean
     onValueChange?: (
         value: string | undefined,
         name?: string | undefined,
@@ -51,6 +54,7 @@ const CurrencyInput = React.forwardRef<HTMLInputElement, Props>(
             decimalsLimit,
             showFlag = false,
             onValueChange,
+            showIcon = false,
             ...props
         },
         ref
@@ -131,6 +135,12 @@ const CurrencyInput = React.forwardRef<HTMLInputElement, Props>(
                     value={value}
                     {...props}
                 />
+                {showIcon && (
+                    <span className=" absolute right-2 top-2">
+                        <PesoIcon />
+                    </span>
+                )}
+
                 <span
                     className={cn(
                         'flex items-center rounded-e-md border border-input bg-background px-3 text-sm',

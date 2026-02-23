@@ -1,12 +1,21 @@
 import { useQueryClient } from '@tanstack/react-query'
 
 import { cn } from '@/helpers'
-import { toReadableDate } from '@/helpers/date-utils'
-import { useAuthUserWithOrg } from '@/modules/authentication/authgentication.store'
+import { toReadableDate, toReadableDateTime } from '@/helpers/date-utils'
+import {
+    hasPermissionFromAuth,
+    useAuthUserWithOrg,
+} from '@/modules/authentication/authgentication.store'
 import { ICurrency } from '@/modules/currency'
 import { CurrencyBadge } from '@/modules/currency/components/currency-badge'
 
-import { EyeIcon, LayersSharpDotIcon } from '@/components/icons'
+import {
+    ErrorExclamationIcon,
+    EyeIcon,
+    LayersSharpDotIcon,
+    RefreshIcon,
+} from '@/components/icons'
+import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import CopyWrapper from '@/components/wrappers/copy-wrapper'
 
@@ -41,6 +50,7 @@ const TransactionBatch = ({
     const queryClient = useQueryClient()
     const historyModal = useModalState()
     const endModal = useModalState()
+
     const {
         currentAuth: { user, user_organization },
     } = useAuthUserWithOrg()
@@ -58,9 +68,10 @@ const TransactionBatch = ({
     return (
         <div
             className={cn(
-                'ecoop-scroll flex max-h-[90vh] w-full flex-col gap-y-3 overflow-auto rounded-2xl border-2 bg-secondary p-4 ring-offset-1 dark:bg-popover',
+                'ecoop-scroll flex max-h-[90vh] w-full flex-col gap-y-3 overflow-auto rounded-2xl border-2 bg-secondary p-4 ring-offset-0 dark:bg-popover',
                 'shadow-xl',
-                className
+                className,
+                !transactionBatch.is_today && '!ring-destructive ring'
             )}
         >
             <TransactionBatchHistoriesModal
@@ -82,17 +93,44 @@ const TransactionBatch = ({
             />
             <div className="flex items-center justify-between">
                 <div className="flex items-start gap-x-2">
-                    <LayersSharpDotIcon className="mt-1 inline text-primary" />{' '}
+                    <LayersSharpDotIcon
+                        className={cn(
+                            'mt-1 inline text-primary',
+                            !transactionBatch.is_today &&
+                                'text-destructive animate-pulse'
+                        )}
+                    />{' '}
                     <div>
-                        <div>
-                            Transaction Batch{' '}
+                        <div className="flex items-center gap-x-2">
+                            <span
+                                className={cn(
+                                    '',
+                                    !transactionBatch.is_today &&
+                                        'text-destructive'
+                                )}
+                            >
+                                Transaction Batch
+                            </span>{' '}
                             <CurrencyBadge
                                 currency={transactionBatch.currency}
                                 displayFormat="symbol-code"
                                 size="sm"
                             />
+                            {!transactionBatch.is_today && (
+                                <Badge
+                                    className="animate-pulse"
+                                    variant="destructive"
+                                >
+                                    Date Mismatch
+                                </Badge>
+                            )}
                         </div>
-                        <p className="text-xs text-muted-foreground">
+                        <p
+                            className={cn(
+                                'text-xs text-muted-foreground',
+                                !transactionBatch.is_today && 'text-destructive'
+                            )}
+                        >
                             {toReadableDate(
                                 transactionBatch?.created_at,
                                 "MMM, dd yyyy 'at' h:mm a "
@@ -107,15 +145,31 @@ const TransactionBatch = ({
                         </div>
                     </div>
                 </div>
-                <Button
-                    className="h-fit py-1"
-                    hoverVariant="primary"
-                    onClick={() => historyModal.onOpenChange(true)}
-                    size="sm"
-                    variant="secondary"
-                >
-                    <EyeIcon className="mr-2 inline" /> View History
-                </Button>
+                <div className="flex items-center gap-x-2">
+                    <Button
+                        hoverVariant="primary"
+                        onClick={() => invalidateTransactionBatch()}
+                        size="icon-sm"
+                        variant="secondary"
+                    >
+                        <RefreshIcon className="inline" />
+                    </Button>
+                    <Button
+                        className="py-1"
+                        disabled={
+                            !hasPermissionFromAuth({
+                                action: 'Read',
+                                resourceType: 'TransactionBatchHistory',
+                            })
+                        }
+                        hoverVariant="primary"
+                        onClick={() => historyModal.onOpenChange(true)}
+                        size="sm"
+                        variant="secondary"
+                    >
+                        <EyeIcon className="mr-2 inline" /> View History
+                    </Button>
+                </div>
             </div>
             <div className="flex min-h-[40vh] w-full max-w-7xl shrink-0 gap-x-2">
                 <div className="flex-1 space-y-2 rounded-2xl border bg-background p-4">
@@ -167,14 +221,42 @@ const TransactionBatch = ({
                     transactionBatch={transactionBatch as ITransactionBatch}
                 />
             </div>
-            <Button
-                className="shrink-0 sticky bottom-0 rounded-xl dark:bg-secondary dark:text-secondary-foreground"
-                hoverVariant="primary"
-                onClick={() => endModal.onOpenChange(true)}
-                size="sm"
-            >
-                End Batch
-            </Button>
+            <div className="sticky bottom-0 w-full space-y-2">
+                {!transactionBatch.is_today && (
+                    <div className="bg-popover rounded-xl overflow-clip border-destructive/60 border">
+                        <div className="flex items-center gap-2 bg-destructive/10 px-3 py-2 text-sm">
+                            <ErrorExclamationIcon className="size-4 animate-pulse shrink-0 text-destructive" />
+                            <p className="">
+                                Your current transaction batch dated{' '}
+                                <span className="font-medium text-foreground">
+                                    {toReadableDateTime(
+                                        transactionBatch.created_at,
+                                        'MMM dd, yyyy'
+                                    )}
+                                </span>{' '}
+                                does not match today&apos;s date — please close
+                                before continuing.
+                            </p>
+                            <div className="size-2 bg-destructive animate-ping rounded-full ml-auto" />
+                        </div>
+                    </div>
+                )}
+                <Button
+                    className="shrink-0 w-full rounded-xl dark:bg-secondary dark:text-secondary-foreground"
+                    disabled={
+                        !hasPermissionFromAuth({
+                            action: ['Update', 'OwnUpdate'],
+                            resourceType: 'TransactionBatch',
+                            resource: transactionBatch,
+                        })
+                    }
+                    hoverVariant="primary"
+                    onClick={() => endModal.onOpenChange(true)}
+                    size="sm"
+                >
+                    End Batch
+                </Button>
+            </div>
         </div>
     )
 }

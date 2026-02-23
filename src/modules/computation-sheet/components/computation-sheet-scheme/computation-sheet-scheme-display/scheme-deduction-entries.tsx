@@ -4,10 +4,14 @@ import { useQueryClient } from '@tanstack/react-query'
 
 import { cn } from '@/helpers'
 import { useAuthContext } from '@/modules/authentication'
+import { hasPermissionFromAuth } from '@/modules/authentication/authgentication.store'
 import { automaticLoanDeductionBaseKey } from '@/modules/automatic-loan-deduction'
-import AutomaticLoanDeductionTable from '@/modules/automatic-loan-deduction/components/automatic-loan-deductions-table'
+import AutomaticLoanDeductionTable, {
+    AutomaticLoanDeductionTableProps,
+} from '@/modules/automatic-loan-deduction/components/automatic-loan-deductions-table'
 import { AutomaticLoanDeductionCreateUpdateFormModal } from '@/modules/automatic-loan-deduction/components/forms/automatic-loan-deduction-entry-create-update-form'
 import { ICurrency } from '@/modules/currency'
+import PermissionGuard from '@/modules/permission/components/permission-guard'
 
 import { useModalState } from '@/hooks/use-modal-state'
 import { useSubscribe } from '@/hooks/use-pubsub'
@@ -72,24 +76,41 @@ const ComputationSheetSchemeDeductionEntries = forwardRef<
             ref={ref}
         >
             <p>Deduction Entries</p>
-            <AutomaticLoanDeductionCreateUpdateFormModal
-                {...createModal}
-                formProps={{
-                    currency,
-                    defaultValues: {
-                        computation_sheet_id: computationSheetId,
-                    },
-                }}
-            />
-            <AutomaticLoanDeductionTable
-                className="max-h-[60vh] max-w-full min-w-0 min-h-[60vh]"
-                computationSheetId={computationSheetId}
-                toolbarProps={{
-                    createActionProps: {
-                        onClick: () => createModal.onOpenChange(true),
-                    },
-                }}
-            />
+            <PermissionGuard
+                action="Create"
+                resourceType="LoanSchemeAutomaticLoanDeduction"
+            >
+                <AutomaticLoanDeductionCreateUpdateFormModal
+                    {...createModal}
+                    formProps={{
+                        currency,
+                        defaultValues: {
+                            computation_sheet_id: computationSheetId,
+                        },
+                    }}
+                />
+                <AutomaticLoanDeductionTable
+                    className="max-h-[60vh] max-w-full min-w-0 min-h-[60vh]"
+                    computationSheetId={computationSheetId}
+                    toolbarProps={{
+                        createActionProps: {
+                            onClick: () => createModal.onOpenChange(true),
+                            disabled: !hasPermissionFromAuth({
+                                action: 'Create',
+                                resourceType: 'Account',
+                            }),
+                        },
+                        exportActionProps: {
+                            disabled: !hasPermissionFromAuth({
+                                action: 'Export',
+                                resourceType: 'Account',
+                            }),
+                        } as NonNullable<
+                            AutomaticLoanDeductionTableProps['toolbarProps']
+                        >['exportActionProps'],
+                    }}
+                />
+            </PermissionGuard>
         </div>
     )
 })

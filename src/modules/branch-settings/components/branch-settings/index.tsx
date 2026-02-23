@@ -48,9 +48,9 @@ const BranchSettings = ({ className }: Props) => {
     return (
         <div className={cn('flex flex-col gap-y-4 flex-1 w-full', className)}>
             <div>
-                <p className="text-lg">Branch Settings</p>
+                <p className="text-lg">Global Settings</p>
                 <p className="text-muted-foreground text-sm">
-                    Configure settings and preferences for your branch
+                    Configure global settings and preferences for your branch
                     operations.
                 </p>
             </div>

@@ -30,14 +30,15 @@ import {
     MemberOccupationCreateUpdateFormModal,
 } from './member-occupation-create-update-form'
 
-export interface IMemberOccupationComboboxCreateProps
-    extends Pick<
-        IMemberOccupationCreateUpdateFormProps,
-        'defaultValues' | 'disabledFields' | 'hiddenFields'
-    > {}
+export interface IMemberOccupationComboboxCreateProps extends Pick<
+    IMemberOccupationCreateUpdateFormProps,
+    'defaultValues' | 'disabledFields' | 'hiddenFields'
+> {}
 
-interface Props
-    extends Omit<React.ComponentPropsWithoutRef<'button'>, 'onChange'> {
+interface Props extends Omit<
+    React.ComponentPropsWithoutRef<'button'>,
+    'onChange'
+> {
     value?: TEntityId
     disabled?: boolean
     className?: string

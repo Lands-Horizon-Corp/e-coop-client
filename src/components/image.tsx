@@ -5,7 +5,8 @@ import { cn } from '@/helpers/tw-utils'
 import { IClassProps } from '@/types'
 
 interface ImageProps
-    extends IClassProps,
+    extends
+        IClassProps,
         Omit<
             React.ImgHTMLAttributes<HTMLImageElement>,
             'onLoad' | 'onError' | 'className' | 'srcSet'

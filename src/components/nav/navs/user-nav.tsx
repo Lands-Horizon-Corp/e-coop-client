@@ -3,7 +3,10 @@ import React, { useState } from 'react'
 import { useRouter } from '@tanstack/react-router'
 
 import { cn } from '@/helpers/tw-utils'
-import { useAuthStore } from '@/modules/authentication/authgentication.store'
+import {
+    hasPermissionFromAuth,
+    useAuthStore,
+} from '@/modules/authentication/authgentication.store'
 import GeneratedReportsButton from '@/modules/generated-report/components/generated-reports/generated-reports-button'
 import { NotificationNav } from '@/modules/notification/components/notification'
 import TransactionBatchNavButton from '@/modules/transaction-batch/components/batch-nav-button'
@@ -67,9 +70,10 @@ const UserNav = ({
         },
         {
             important: false,
-            component: ['employee', 'owner'].includes(
-                user_organization?.user_type ?? ''
-            ) ? (
+            component: hasPermissionFromAuth({
+                action: 'Read',
+                resourceType: 'Approvals',
+            }) ? (
                 <Button
                     className="rounded-lg group border"
                     hoverVariant="primary"

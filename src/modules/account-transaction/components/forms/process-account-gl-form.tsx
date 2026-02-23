@@ -28,7 +28,8 @@ type TAccountTransactionGenerateSchema = z.infer<
 >
 
 export interface AccountTransactionGenerateFormProps
-    extends IClassProps,
+    extends
+        IClassProps,
         IForm<
             Partial<TAccountTransactionGenerateSchema>,
             unknown,

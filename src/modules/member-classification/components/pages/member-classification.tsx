@@ -1,8 +1,14 @@
 import { useQueryClient } from '@tanstack/react-query'
 
-import { useAuthUserWithOrgBranch } from '@/modules/authentication/authgentication.store'
+import {
+    hasPermissionFromAuth,
+    useAuthUserWithOrgBranch,
+} from '@/modules/authentication/authgentication.store'
 import { MemberClassificationCreateUpdateFormModal } from '@/modules/member-classification/components/member-classification-create-update-form'
-import MemberClassificationTable from '@/modules/member-classification/components/tables/member-classification-table'
+import MemberClassificationTable, {
+    MemberClassificationTableProps,
+} from '@/modules/member-classification/components/tables/member-classification-table'
+import PermissionGuard from '@/modules/permission/components/permission-guard'
 
 import PageContainer from '@/components/containers/page-container'
 
@@ -39,15 +45,29 @@ const MemberClassificationPage = () => {
 
     return (
         <PageContainer>
-            <MemberClassificationCreateUpdateFormModal {...createModal} />
-            <MemberClassificationTable
-                className="max-h-[90vh] min-h-[90vh] w-full"
-                toolbarProps={{
-                    createActionProps: {
-                        onClick: () => createModal.onOpenChange(true),
-                    },
-                }}
-            />
+            <PermissionGuard action="Read" resourceType="MemberClassification">
+                <MemberClassificationCreateUpdateFormModal {...createModal} />
+                <MemberClassificationTable
+                    className="max-h-[90vh] min-h-[90vh] w-full"
+                    toolbarProps={{
+                        createActionProps: {
+                            onClick: () => createModal.onOpenChange(true),
+                            disabled: !hasPermissionFromAuth({
+                                action: 'Create',
+                                resourceType: 'MemberOccupation',
+                            }),
+                        },
+                        exportActionProps: {
+                            disabled: !hasPermissionFromAuth({
+                                action: 'Export',
+                                resourceType: 'MemberOccupation',
+                            }),
+                        } as NonNullable<
+                            MemberClassificationTableProps['toolbarProps']
+                        >['exportActionProps'],
+                    }}
+                />
+            </PermissionGuard>
         </PageContainer>
     )
 }

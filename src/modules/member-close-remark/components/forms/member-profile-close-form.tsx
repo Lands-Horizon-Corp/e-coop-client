@@ -31,8 +31,7 @@ import AccountClosureReasonCombobox from '../closure-reasons-combobox'
 type TMemberCloseForm = z.infer<typeof MemberCreateCloseRemarksSchema>
 
 interface IMemberProfileCloseFormProps
-    extends IClassProps,
-        IForm<Partial<TMemberCloseForm>, unknown, string> {
+    extends IClassProps, IForm<Partial<TMemberCloseForm>, unknown, string> {
     profileId: TEntityId
 }
 

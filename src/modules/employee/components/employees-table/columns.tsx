@@ -24,8 +24,8 @@ import { TGeneralStatus } from '@/types'
 
 export const employeesGlobalSearchTargets: IGlobalSearchTargets<IUserOrganization>[] =
     [
-        { field: 'user.email', displayText: 'Email' },
-        { field: 'user.username', displayText: 'Username' },
+        // { field: 'user.email', displayText: 'Email' },
+        // { field: 'user.username', displayText: 'Username' },
         { field: 'user.full_name', displayText: 'Full Name' },
     ]
 

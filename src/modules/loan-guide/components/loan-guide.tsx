@@ -1,11 +1,16 @@
-import { useMemo } from 'react'
+import { useMemo, useState } from 'react'
 
 import { toast } from 'sonner'
 
 import { cn } from '@/helpers'
-import { toReadableDate, toReadableDateTime } from '@/helpers/date-utils'
+import {
+    dateAgo,
+    toReadableDate,
+    toReadableDateTime,
+} from '@/helpers/date-utils'
+import { sortAccountsByTypePriority } from '@/modules/account/account.utils'
 import { AccountViewerModal } from '@/modules/account/components/account-viewer/account-viewer'
-import { currencyFormat } from '@/modules/currency'
+import { ICurrency, currencyFormat } from '@/modules/currency'
 import { GeneralLedgerViewSheet } from '@/modules/general-ledger/components/ledger-detail'
 import { useGetLoanGuide } from '@/modules/loan-transaction'
 
@@ -42,6 +47,7 @@ import { useModalState } from '@/hooks/use-modal-state'
 
 import { TEntityId } from '@/types'
 
+import { LOAN_SCHEDULE_STATUS } from '../loan-guide-constant'
 import {
     ILoanAccountSummary,
     ILoanGuide,
@@ -99,9 +105,22 @@ const statusConfig: Record<
         iconClassName: 'text-orange-600 dark:text-orange-400',
         bgGradient: 'from-orange-500/20 to-orange-600/5',
     },
+    default: {
+        icon: CalendarNumberIcon,
+        label: 'Default',
+        className: 'bg-muted border-muted/30 text-muted-foreground',
+        iconClassName: 'text-muted-foreground',
+        bgGradient: 'from-muted/20 to-muted/5',
+    },
 }
 
-const LoanPaymentItem = ({ payment }: { payment: ILoanPayments }) => {
+const LoanPaymentItem = ({
+    payment,
+    currency,
+}: {
+    payment: ILoanPayments
+    currency?: ICurrency
+}) => {
     const viewLedgerEntryModal = useModalState()
 
     return (
@@ -137,7 +156,10 @@ const LoanPaymentItem = ({ payment }: { payment: ILoanPayments }) => {
                     </div>
                 </div>
                 <span className="font-semibold text-emerald-600 dark:text-emerald-400">
-                    {currencyFormat(payment.amount)}
+                    {currencyFormat(payment.amount, {
+                        currency,
+                        showSymbol: !!currency,
+                    })}
                 </span>
             </div>
         </>
@@ -146,9 +168,11 @@ const LoanPaymentItem = ({ payment }: { payment: ILoanPayments }) => {
 
 const PaymentScheduleDisplay = ({
     schedule,
+    currency,
     className,
 }: {
     className?: string
+    currency?: ICurrency
     schedule: ILoanPaymentSchedule | null
 }) => {
     if (!schedule) return null
@@ -164,9 +188,11 @@ const PaymentScheduleDisplay = ({
 
     const displayAmount = isPaidOrAdvance
         ? schedule.amount_paid
-        : isDueOrOverdue
-          ? schedule.amount_due
-          : 0
+        : schedule.type === 'default'
+          ? schedule.balance
+          : isDueOrOverdue
+            ? schedule.amount_due
+            : 0
 
     return (
         <div className={cn('p-0 ', className)}>
@@ -186,11 +212,15 @@ const PaymentScheduleDisplay = ({
                     </Badge>
                     <span className="text-sm text-muted-foreground flex items-center gap-1.5">
                         <CalendarNumberIcon className="size-3.5" />
-                        {toReadableDate(schedule.payment_date)}
+                        {toReadableDate(schedule.payment_date)} -{' '}
+                        {dateAgo(schedule.payment_date)}
                     </span>
                 </div>
                 <p className="text-4xl font-bold tracking-tight">
-                    {currencyFormat(displayAmount)}
+                    {currencyFormat(displayAmount, {
+                        currency,
+                        showSymbol: !!currency,
+                    })}
                 </p>
                 {/* <p className="text-sm text-muted-foreground">{accountName}</p> */}
             </div>
@@ -209,7 +239,8 @@ const PaymentScheduleDisplay = ({
                                     </p>
                                     <p className="font-semibold">
                                         {currencyFormat(
-                                            schedule.principal_amount
+                                            schedule.principal_amount,
+                                            { currency, showSymbol: !!currency }
                                         )}
                                     </p>
                                 </div>
@@ -222,7 +253,8 @@ const PaymentScheduleDisplay = ({
                                     </p>
                                     <p className="font-semibold">
                                         {currencyFormat(
-                                            schedule.interest_amount
+                                            schedule.interest_amount,
+                                            { currency, showSymbol: !!currency }
                                         )}
                                     </p>
                                 </div>
@@ -237,7 +269,10 @@ const PaymentScheduleDisplay = ({
                                         Fines
                                     </p>
                                     <p className="font-semibold text-destructive">
-                                        {currencyFormat(schedule.fines_amount)}
+                                        {currencyFormat(schedule.fines_amount, {
+                                            currency,
+                                            showSymbol: !!currency,
+                                        })}
                                     </p>
                                 </div>
                             </div>
@@ -268,7 +303,7 @@ const PaymentScheduleDisplay = ({
                             </span>
                         </div>
 
-                        {schedule.loan_payments.length > 0 && (
+                        {schedule.loan_payments?.length > 0 && (
                             <>
                                 <Separator />
                                 <div className="space-y-3">
@@ -283,6 +318,7 @@ const PaymentScheduleDisplay = ({
                                         {schedule.loan_payments.map(
                                             (payment, idx) => (
                                                 <LoanPaymentItem
+                                                    currency={currency}
                                                     key={idx}
                                                     payment={payment}
                                                 />
@@ -299,7 +335,10 @@ const PaymentScheduleDisplay = ({
                                 Remaining Balance
                             </span>
                             <span className="font-semibold">
-                                {currencyFormat(schedule.balance)}
+                                {currencyFormat(schedule.balance, {
+                                    currency,
+                                    showSymbol: !!currency,
+                                })}
                             </span>
                         </div>
                     </div>
@@ -317,6 +356,27 @@ const PaymentScheduleDisplay = ({
                         <p className="text-sm text-muted-foreground mt-1">
                             {schedule.days_skipped} day(s) added to schedule
                         </p>
+                    </div>
+                )}
+
+                {schedule.type === 'default' && (
+                    <div className="space-y-4">
+                        <div className="grid grid-cols-2 gap-4">
+                            <div className="flex items-start gap-3 p-3 rounded-lg bg-muted/50">
+                                <CalendarNumberIcon className="size-5 text-primary mt-0.5" />
+                                <div>
+                                    <p className="text-xs text-muted-foreground">
+                                        Balance
+                                    </p>
+                                    <p className="font-semibold">
+                                        {currencyFormat(schedule.balance, {
+                                            currency,
+                                            showSymbol: !!currency,
+                                        })}
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 )}
             </div>
@@ -365,7 +425,9 @@ const EmptyState = () => {
 
 const PaymentCell = ({
     schedule,
+    currency,
 }: {
+    currency?: ICurrency
     schedule: ILoanPaymentSchedule | null
 }) => {
     const viewLoanPaymentScheduleModal = useModalState()
@@ -385,7 +447,7 @@ const PaymentCell = ({
             className={cn(
                 'group relative rounded border px-1.5 py-1 transition-all duration-150',
                 'hover:shadow-sm cursor-default',
-                config.className
+                config?.className
             )}
             onClick={() => viewLoanPaymentScheduleModal.onOpenChange(true)}
         >
@@ -397,20 +459,41 @@ const PaymentCell = ({
                 >
                     <PaymentScheduleDisplay
                         className="p-0"
+                        currency={currency}
                         schedule={schedule}
                     />
                 </Modal>
             </div>
             <p className="gap-x-2 w-full gap-y-0.5 text-sm text-center">
                 {(schedule.type === 'paid' || schedule.type === 'advance') && (
-                    <>{currencyFormat(schedule.amount_paid)}</>
+                    <>
+                        {currencyFormat(schedule.amount_paid, {
+                            currency,
+                            showSymbol: !!currency,
+                        })}
+                    </>
                 )}
 
                 {(schedule.type === 'due' || schedule.type === 'overdue') && (
-                    <>{currencyFormat(schedule.amount_due)}</>
+                    <>
+                        {currencyFormat(schedule.amount_due, {
+                            currency,
+                            showSymbol: !!currency,
+                        })}
+                    </>
                 )}
 
-                {schedule.type === 'skipped' && currencyFormat(0)}
+                {schedule.type === 'default' && (
+                    <>
+                        {currencyFormat(schedule.balance, {
+                            currency,
+                            showSymbol: !!currency,
+                        })}
+                    </>
+                )}
+
+                {schedule.type === 'skipped' &&
+                    currencyFormat(0, { currency, showSymbol: !!currency })}
             </p>
         </div>
     )
@@ -500,6 +583,7 @@ const LoanGuide = ({
     loanTransactionId: TEntityId
     initialData?: ILoanGuide
 }) => {
+    const [legend, setLegend] = useState([...LOAN_SCHEDULE_STATUS])
     const {
         data: loanGuide,
         isPending,
@@ -509,6 +593,7 @@ const LoanGuide = ({
         loanTransactionId,
         options: {
             initialData,
+            enabled: !!loanTransactionId,
         },
     })
 
@@ -519,8 +604,21 @@ const LoanGuide = ({
 
     const accounts = useMemo(() => {
         if (!loanGuide) return []
-        return getLoanAccounts(loanGuide)
+        return getLoanAccounts(loanGuide).sort((a, b) =>
+            sortAccountsByTypePriority(
+                a.loan_account.account,
+                b.loan_account.account
+            )
+        )
     }, [loanGuide])
+
+    const toggleLegend = (targetLegend: TLoanScheduleStatus) => {
+        if (legend.includes(targetLegend)) {
+            setLegend((prev) => prev.filter((targ) => targ !== targetLegend))
+        } else {
+            setLegend((prev) => [...prev, targetLegend])
+        }
+    }
 
     return (
         <div
@@ -543,37 +641,143 @@ const LoanGuide = ({
                     <div className="flex flex-wrap items-center bg-primary/5 p-2 rounded-xl border gap-4 text-xs">
                         <p className="font-medium">Legends:</p>
 
-                        <div className="flex items-center gap-2">
-                            <div className="size-3 rounded-full bg-emerald-500" />
-                            <span className="text-muted-foreground">Paid</span>
+                        {/* Paid */}
+                        <div
+                            className="flex items-center gap-2 cursor-pointer"
+                            onClick={() => toggleLegend('paid')}
+                        >
+                            <div
+                                className={cn(
+                                    'size-3 rounded-full bg-emerald-500',
+                                    !legend.includes('paid') &&
+                                        'border-4 border-border'
+                                )}
+                            />
+                            <span
+                                className={cn(
+                                    'text-muted-foreground',
+                                    !legend.includes('paid') && 'line-through'
+                                )}
+                            >
+                                Paid
+                            </span>
                         </div>
 
-                        <div className="flex items-center gap-2">
-                            <div className="size-3 rounded-full bg-sky-500" />
-                            <span className="text-muted-foreground">
+                        {/* Advance */}
+                        <div
+                            className="flex items-center gap-2 cursor-pointer"
+                            onClick={() => toggleLegend('advance')}
+                        >
+                            <div
+                                className={cn(
+                                    'size-3 rounded-full bg-sky-500',
+                                    !legend.includes('advance') &&
+                                        'border-4 border-border'
+                                )}
+                            />
+                            <span
+                                className={cn(
+                                    'text-muted-foreground',
+                                    !legend.includes('advance') &&
+                                        'line-through'
+                                )}
+                            >
                                 Advance
                             </span>
                         </div>
 
-                        <div className="flex items-center gap-2">
-                            <div className="size-3 rounded-full bg-muted-foreground" />
-                            <span className="text-muted-foreground">Due</span>
+                        {/* Due */}
+                        <div
+                            className="flex items-center gap-2 cursor-pointer"
+                            onClick={() => toggleLegend('due')}
+                        >
+                            <div
+                                className={cn(
+                                    'size-3 rounded-full bg-muted-foreground',
+                                    !legend.includes('due') &&
+                                        'border-4 border-border'
+                                )}
+                            />
+                            <span
+                                className={cn(
+                                    'text-muted-foreground',
+                                    !legend.includes('due') && 'line-through'
+                                )}
+                            >
+                                Due
+                            </span>
                         </div>
 
-                        <div className="flex items-center gap-2">
-                            <div className="size-3 rounded-full bg-destructive" />
-                            <span className="text-muted-foreground">
+                        {/* Overdue */}
+                        <div
+                            className="flex items-center gap-2 cursor-pointer"
+                            onClick={() => toggleLegend('overdue')}
+                        >
+                            <div
+                                className={cn(
+                                    'size-3 rounded-full bg-destructive',
+                                    !legend.includes('overdue') &&
+                                        'border-4 border-border'
+                                )}
+                            />
+                            <span
+                                className={cn(
+                                    'text-muted-foreground',
+                                    !legend.includes('overdue') &&
+                                        'line-through'
+                                )}
+                            >
                                 Overdue
                             </span>
                         </div>
 
-                        <div className="flex items-center gap-2">
-                            <div className="size-3 rounded-full bg-orange-500" />
-                            <span className="text-muted-foreground">
+                        {/* Skipped */}
+                        <div
+                            className="flex items-center gap-2 cursor-pointer"
+                            onClick={() => toggleLegend('skipped')}
+                        >
+                            <div
+                                className={cn(
+                                    'size-3 rounded-full bg-orange-500',
+                                    !legend.includes('skipped') &&
+                                        'border-4 border-border'
+                                )}
+                            />
+                            <span
+                                className={cn(
+                                    'text-muted-foreground',
+                                    !legend.includes('skipped') &&
+                                        'line-through'
+                                )}
+                            >
                                 Skipped
                             </span>
                         </div>
+
+                        {/* Default */}
+                        <div
+                            className="flex items-center gap-2 cursor-pointer"
+                            onClick={() => toggleLegend('default')}
+                        >
+                            <div
+                                className={cn(
+                                    'size-3 rounded-full bg-border',
+                                    !legend.includes('default') &&
+                                        'border-4 border-border bg-transparent'
+                                )}
+                            />
+                            <span
+                                className={cn(
+                                    'text-muted-foreground',
+                                    !legend.includes('default') &&
+                                        'line-through'
+                                )}
+                            >
+                                Default
+                            </span>
+                        </div>
                     </div>
+
                     <Button
                         className="gap-2 rounded-xl"
                         disabled={isRefetching}
@@ -614,15 +818,30 @@ const LoanGuide = ({
                         {timeline.map((row) => (
                             <TableRow key={row.payment_date}>
                                 <TableCell className="sticky left-0 z-10 bg-card font-medium whitespace-nowrap">
-                                    {row.payment_date}
+                                    {toReadableDate(row.payment_date)}
                                 </TableCell>
 
-                                {accounts.map((account) => (
+                                {accounts?.map((account) => (
                                     <TableCell
-                                        className="text-center min-w-[150px]"
+                                        className={cn(
+                                            'text-center min-w-[150px]',
+                                            !(
+                                                row.schedules !== null &&
+                                                legend.includes(
+                                                    row.schedules[
+                                                        account.loan_account
+                                                            .account_id
+                                                    ]?.type || 'default'
+                                                )
+                                            ) && 'opacity-50'
+                                        )}
                                         key={account.loan_account.id}
                                     >
                                         <PaymentCell
+                                            currency={
+                                                account.loan_account.account
+                                                    .currency
+                                            }
                                             schedule={
                                                 row.schedules[
                                                     account.loan_account.id

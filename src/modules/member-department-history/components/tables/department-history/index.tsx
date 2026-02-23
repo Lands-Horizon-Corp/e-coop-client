@@ -33,7 +33,8 @@ import memberDepartmentHistoryColumns, {
 } from './columns'
 
 export interface MemberDepartmentHistoryTableProps
-    extends TableProps<IMemberDepartmentHistory>,
+    extends
+        TableProps<IMemberDepartmentHistory>,
         IMemberDepartmentHistoryColumnProps {
     toolbarProps?: Omit<
         IDataTableToolbarProps<IMemberDepartmentHistory>,

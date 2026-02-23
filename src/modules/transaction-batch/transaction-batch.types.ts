@@ -13,18 +13,15 @@ export type TBatchBalanceStatus =
     | 'balance overage'
     | 'balance shortage'
 
-export interface ITransactionBatchRequest
-    extends Omit<
-        IBatchFundingRequest,
-        'transaction_batch_id' | 'provided_by_user_id'
-    > {
+export interface ITransactionBatchRequest extends Omit<
+    IBatchFundingRequest,
+    'transaction_batch_id' | 'provided_by_user_id'
+> {
     provided_by_user_id?: TEntityId
 }
 
 export interface ITransactionBatch
-    extends ITimeStamps,
-        IAuditable,
-        ITransactionBatchSignatures {
+    extends ITimeStamps, IAuditable, ITransactionBatchSignatures {
     id: TEntityId
 
     organization_id: TEntityId
@@ -50,6 +47,7 @@ export interface ITransactionBatch
     // FOR LESS
     petty_cash: number
     loan_releases: number
+    cash_check_voucher_total: number
     time_deposit_withdrawal: number
     savings_withdrawal: number
 
@@ -72,29 +70,30 @@ export interface ITransactionBatch
     ended_at?: string
     total_batch_time?: string
 
+    is_today: boolean
+
     currency_id: TEntityId
     currency: ICurrency
 }
 
-export interface ITransactionBatchMinimal
-    extends Omit<
-        ITransactionBatch,
-        | 'total_cash_collection'
-        | 'total_deposit_entry'
-        | 'petty_cash'
-        | 'loan_releases'
-        | 'time_deposit_withdrawal'
-        | 'savings_withdrawal'
-        | 'total_cash_handled'
-        | 'total_supposed_remitance'
-        | 'total_cash_on_hand'
-        | 'total_check_remittance'
-        | 'total_online_remittance'
-        | 'total_deposit_in_bank'
-        | 'total_actual_remittance'
-        | 'total_actual_supposed_comparison'
-        | keyof ITransactionBatchSignatures
-    > {}
+export interface ITransactionBatchMinimal extends Omit<
+    ITransactionBatch,
+    | 'total_cash_collection'
+    | 'total_deposit_entry'
+    | 'petty_cash'
+    | 'loan_releases'
+    | 'time_deposit_withdrawal'
+    | 'savings_withdrawal'
+    | 'total_cash_handled'
+    | 'total_supposed_remitance'
+    | 'total_cash_on_hand'
+    | 'total_check_remittance'
+    | 'total_online_remittance'
+    | 'total_deposit_in_bank'
+    | 'total_actual_remittance'
+    | 'total_actual_supposed_comparison'
+    | keyof ITransactionBatchSignatures
+> {}
 
 export type TTransactionBatchFullorMin =
     | ITransactionBatch
@@ -161,5 +160,30 @@ export interface ITransactionBatchEndRequest {
     employee_by_position: string
 }
 
-export interface ITransactionBatchPaginated
-    extends IPaginatedResult<ITransactionBatch> {}
+export interface ITransactionBatchHistoryTotal {
+    batch_funding_total: number
+    disbursement_transaction_total: number
+
+    general_ledger_debit_total: number
+    general_ledger_credit_total: number
+
+    check_entry_debit_total: number
+    check_entry_credit_total: number
+
+    online_entry_debit_total: number
+    online_entry_credit_total: number
+
+    cash_entry_debit_total: number
+    cash_entry_credit_total: number
+
+    payment_entry_debit_total: number
+    payment_entry_credit_total: number
+
+    withdraw_entry_debit_total: number
+    withdraw_entry_credit_total: number
+
+    deposit_entry_debit_total: number
+    deposit_entry_credit_total: number
+}
+
+export interface ITransactionBatchPaginated extends IPaginatedResult<ITransactionBatch> {}

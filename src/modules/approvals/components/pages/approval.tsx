@@ -1,3 +1,5 @@
+import PermissionGuard from '@/modules/permission/components/permission-guard'
+
 import PageContainer from '@/components/containers/page-container'
 import {
     BadgeCheckFillIcon,
@@ -24,6 +26,16 @@ type journalVoucherItemType = {
 }[]
 
 const ApprovalPage = () => {
+    return (
+        <PageContainer className="h-[100vh] lg:h-[90vh] flex ecoop-scroll overflow-y-auto flex-col">
+            <PermissionGuard action="Read" resourceType="Approvals">
+                <ApprovalTabPage />
+            </PermissionGuard>
+        </PageContainer>
+    )
+}
+
+const ApprovalTabPage = () => {
     const journalMenuTrigger: journalMenuTriggerType = [
         {
             name: 'Approvals Dashboard',
@@ -68,32 +80,27 @@ const ApprovalPage = () => {
     ]
 
     return (
-        <PageContainer className="h-[100vh] lg:h-[90vh] flex ecoop-scroll overflow-y-auto flex-col">
-            <Tabs
-                className="w-full h-full flex flex-col"
-                defaultValue="approvals"
-            >
-                <TabsList className="sticky top-[0%] z-50 backdrop-blur-2xl backdrop h-auto min-w-fit justify-start gap-2 rounded-none border-b bg-background/50 px-0 py-1 text-foreground">
-                    {journalMenuTrigger.map((item) => (
-                        <TabsTrigger
-                            className="relative flex items-center gap-x-2 after:absolute after:inset-x-0 after:bottom-0 after:-mb-1 after:h-0.5 after:duration-300 after:ease-in-out hover:bg-accent hover:text-foreground data-[state=active]:bg-transparent data-[state=active]:shadow-none data-[state=active]:after:bg-primary data-[state=active]:hover:bg-accent"
-                            key={item.value}
-                            value={item.value}
-                        >
-                            {item.icon}
-                            {item.name}
-                        </TabsTrigger>
-                    ))}
-                </TabsList>
-                <div className="flex-1">
-                    {journalVoucherItem.map((item) => (
-                        <TabsContent key={item.value} value={item.value}>
-                            {item.content}
-                        </TabsContent>
-                    ))}
-                </div>
-            </Tabs>
-        </PageContainer>
+        <Tabs className="w-full h-full flex flex-col" defaultValue="approvals">
+            <TabsList className="sticky top-[0%] z-50 backdrop-blur-2xl backdrop h-auto min-w-fit justify-start gap-2 rounded-none border-b bg-background/50 px-0 py-1 text-foreground">
+                {journalMenuTrigger.map((item) => (
+                    <TabsTrigger
+                        className="relative flex items-center gap-x-2 after:absolute after:inset-x-0 after:bottom-0 after:-mb-1 after:h-0.5 after:duration-300 after:ease-in-out hover:bg-accent hover:text-foreground data-[state=active]:bg-transparent data-[state=active]:shadow-none data-[state=active]:after:bg-primary data-[state=active]:hover:bg-accent"
+                        key={item.value}
+                        value={item.value}
+                    >
+                        {item.icon}
+                        {item.name}
+                    </TabsTrigger>
+                ))}
+            </TabsList>
+            <div className="flex-1">
+                {journalVoucherItem.map((item) => (
+                    <TabsContent key={item.value} value={item.value}>
+                        {item.content}
+                    </TabsContent>
+                ))}
+            </div>
+        </Tabs>
     )
 }
 

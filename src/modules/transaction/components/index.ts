@@ -13,11 +13,10 @@ export { default as TransactionCreateWithPaymentFormModal } from './forms/create
 export { default as TransactionHistory } from './history'
 
 //export inputs
-export { default as TransactionAmountField } from './input/transaction-amount-field'
 export { default as TransactionReferenceNumber } from './input/transaction-reference-number-field'
 
 //export modals
-export { default as TransactionModalJointMember } from './modals/joint-member/transaction-modal-joint-member'
+export { default as TransactionModalJointMember } from './modals/joint-member/joint-member-picker'
 export { default as TransactionModalSuccessPayment } from './modals/transaction-modal-success-payment'
 export { default as TransactionNoFoundBatch } from './modals/transaction-modal-no-found-batch'
 export { default as TransactionMemberProfile } from './modals/joint-member/transaction-member-profile'

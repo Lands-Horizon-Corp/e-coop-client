@@ -6,6 +6,7 @@ import { ICurrency, currencyFormat } from '@/modules/currency'
 import GeneralLedgerTable from '@/modules/general-ledger/components/tables/general-ledger-table'
 import MemberAccountingLedgerTable from '@/modules/member-accounting-ledger/components/member-accounting-ledger-table'
 import { useMemberAccountingLedgerTotal } from '@/modules/member-accounting-ledger/member-accounting-ledger.service'
+import { useGetMemberProfileById } from '@/modules/member-profile/member-profile.service'
 
 import {
     BillIcon,
@@ -22,6 +23,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 
 import { IBaseProps, TEntityId } from '@/types'
 
+import MemberProfileMiniInfoCard from '../../member-profile-mini-info-card'
 import MemberAccountGeneralLedger from './member-account-general-ledger'
 
 interface Props extends IBaseProps {
@@ -110,12 +112,17 @@ export const MemberAccountingLedgerTotal = ({
 const MemberAccountingLedger = ({ memberProfileId, className }: Props) => {
     const [focused, setFocused] = useState<
         | {
+              memberAccountingLedgerId: TEntityId
               memberProfileId: TEntityId
               accountId: TEntityId
               account?: IAccount
           }
         | undefined
     >()
+
+    const { data: memberProfile } = useGetMemberProfileById({
+        id: memberProfileId,
+    })
 
     return (
         <div className={cn('flex flex-col gap-y-4 h-[80vh]', className)}>
@@ -136,9 +143,15 @@ const MemberAccountingLedger = ({ memberProfileId, className }: Props) => {
                                 Account: {focused.account?.name}
                             </h3>
                             <p className="text-sm text-muted-foreground">
-                                Member Account General Ledger Entries
+                                Member Account Ledger Entries
                             </p>
                         </div>
+
+                        {memberProfile && (
+                            <MemberProfileMiniInfoCard
+                                memberProfile={memberProfile}
+                            />
+                        )}
 
                         <Tabs
                             className="mt-2 flex-1 flex-col"
@@ -155,7 +168,7 @@ const MemberAccountingLedger = ({ memberProfileId, className }: Props) => {
                                             className="-ms-0.5 me-1.5 opacity-60"
                                             size={16}
                                         />
-                                        General Ledger
+                                        Ledger
                                     </TabsTrigger>
 
                                     <TabsTrigger
@@ -234,7 +247,12 @@ const MemberAccountingLedger = ({ memberProfileId, className }: Props) => {
                             </ScrollArea>
 
                             <TabsContent asChild value="general-ledger">
-                                <MemberAccountGeneralLedger {...focused} />
+                                <MemberAccountGeneralLedger
+                                    memberAccountLedgerId={
+                                        focused.memberAccountingLedgerId
+                                    }
+                                    {...focused}
+                                />
                             </TabsContent>
 
                             <TabsContent asChild value="check-entry">
@@ -242,6 +260,7 @@ const MemberAccountingLedger = ({ memberProfileId, className }: Props) => {
                                     accountId={focused.accountId}
                                     className="min-h-[70vh] max-h-[70vh] w-full"
                                     entryType="check-entry"
+                                    excludeColumnIds={['member_profile']}
                                     memberProfileId={focused.memberProfileId}
                                     mode="member-account"
                                 />
@@ -252,6 +271,7 @@ const MemberAccountingLedger = ({ memberProfileId, className }: Props) => {
                                     accountId={focused.accountId}
                                     className="min-h-[70vh] max-h-[70vh] w-full"
                                     entryType="online-entry"
+                                    excludeColumnIds={['member_profile']}
                                     memberProfileId={focused.memberProfileId}
                                     mode="member-account"
                                 />
@@ -262,6 +282,7 @@ const MemberAccountingLedger = ({ memberProfileId, className }: Props) => {
                                     accountId={focused.accountId}
                                     className="min-h-[70vh] max-h-[70vh] w-full"
                                     entryType="cash-entry"
+                                    excludeColumnIds={['member_profile']}
                                     memberProfileId={focused.memberProfileId}
                                     mode="member-account"
                                 />
@@ -272,6 +293,7 @@ const MemberAccountingLedger = ({ memberProfileId, className }: Props) => {
                                     accountId={focused.accountId}
                                     className="min-h-[70vh] max-h-[70vh] w-full"
                                     entryType="payment-entry"
+                                    excludeColumnIds={['member_profile']}
                                     memberProfileId={focused.memberProfileId}
                                     mode="member-account"
                                 />
@@ -282,6 +304,7 @@ const MemberAccountingLedger = ({ memberProfileId, className }: Props) => {
                                     accountId={focused.accountId}
                                     className="min-h-[70vh] max-h-[70vh] w-full"
                                     entryType="withdraw-entry"
+                                    excludeColumnIds={['member_profile']}
                                     memberProfileId={focused.memberProfileId}
                                     mode="member-account"
                                 />
@@ -292,6 +315,7 @@ const MemberAccountingLedger = ({ memberProfileId, className }: Props) => {
                                     accountId={focused.accountId}
                                     className="min-h-[70vh] max-h-[70vh] w-full"
                                     entryType="deposit-entry"
+                                    excludeColumnIds={['member_profile']}
                                     memberProfileId={focused.memberProfileId}
                                     mode="member-account"
                                 />
@@ -302,6 +326,7 @@ const MemberAccountingLedger = ({ memberProfileId, className }: Props) => {
             )}
             <MemberAccountingLedgerTable
                 className="w-full flex-1"
+                hideToolbar
                 memberProfileId={memberProfileId}
                 mode="member"
                 onRowClick={(data) =>
@@ -309,6 +334,7 @@ const MemberAccountingLedger = ({ memberProfileId, className }: Props) => {
                         accountId: data.original.account_id,
                         memberProfileId: data.original.member_profile_id,
                         account: data.original.account,
+                        memberAccountingLedgerId: data.original.id,
                     })
                 }
             />

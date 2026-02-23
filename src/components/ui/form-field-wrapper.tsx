@@ -61,7 +61,7 @@ const FormFieldWrapper = <
                         {label && (
                             <FormLabel
                                 className={cn(
-                                    'text-foreground/80',
+                                    'text-muted-foreground text-xs',
                                     labelClassName
                                 )}
                                 htmlFor={field.name}

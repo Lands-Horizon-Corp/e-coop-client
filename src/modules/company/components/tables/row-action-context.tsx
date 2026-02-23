@@ -1,18 +1,22 @@
 import { ReactNode } from 'react'
 
 import { withToastCallbacks } from '@/helpers/callback-helper'
+import { hasPermissionFromAuth } from '@/modules/authentication/authgentication.store'
 import useConfirmModalStore from '@/store/confirm-modal-store'
 import { Row } from '@tanstack/react-table'
 
 import RowActionsGroup from '@/components/data-table/data-table-row-actions'
 import DataTableRowContext from '@/components/data-table/data-table-row-context'
-
-import { useModalState } from '@/hooks/use-modal-state'
+import { useTableRowActionStore } from '@/components/data-table/store/data-table-action-store'
 
 import { useDeleteCompanyById } from '../../company.service'
 import { ICompany } from '../../company.types'
 import { CompanyCreateUpdateFormModal } from '../forms/company-create-update-modal'
 import { ICompanyTableActionComponentProp } from './columns'
+
+export type CompanyActionType = 'edit'
+
+export type CompanyActionExtra = Record<string, never>
 
 interface UseCompanyActionsProps {
     row: Row<ICompany>
@@ -23,8 +27,13 @@ const useCompanyActions = ({
     row,
     onDeleteSuccess,
 }: UseCompanyActionsProps) => {
-    const updateModal = useModalState()
     const company = row.original
+
+    const { open } = useTableRowActionStore<
+        ICompany,
+        CompanyActionType,
+        CompanyActionExtra
+    >()
 
     const { onOpen } = useConfirmModalStore()
 
@@ -38,7 +47,12 @@ const useCompanyActions = ({
             },
         })
 
-    const handleEdit = () => updateModal.onOpenChange(true)
+    const handleEdit = () => {
+        open('edit', {
+            id: company.id,
+            defaultValues: company,
+        })
+    }
 
     const handleDelete = () => {
         onOpen({
@@ -50,7 +64,6 @@ const useCompanyActions = ({
 
     return {
         company,
-        updateModal,
         isDeletingCompany,
         handleEdit,
         handleDelete,
@@ -58,7 +71,6 @@ const useCompanyActions = ({
 }
 
 interface ICompanyTableActionProps extends ICompanyTableActionComponentProp {
-    onCompanyUpdate?: () => void
     onDeleteSuccess?: () => void
 }
 
@@ -66,41 +78,34 @@ export const CompanyAction = ({
     row,
     onDeleteSuccess,
 }: ICompanyTableActionProps) => {
-    const {
-        company,
-        updateModal,
-        isDeletingCompany,
-        handleEdit,
-        handleDelete,
-    } = useCompanyActions({ row, onDeleteSuccess })
+    const { company, isDeletingCompany, handleEdit, handleDelete } =
+        useCompanyActions({ row, onDeleteSuccess })
 
     return (
-        <>
-            <div onClick={(e) => e.stopPropagation()}>
-                <CompanyCreateUpdateFormModal
-                    {...updateModal}
-                    formProps={{
-                        companyId: company.id,
-                        defaultValues: { ...company },
-                    }}
-                />
-            </div>
-            <RowActionsGroup
-                canSelect
-                onDelete={{
-                    text: 'Delete',
-                    isAllowed: !isDeletingCompany,
-                    onClick: handleDelete,
-                }}
-                onEdit={{
-                    text: 'Edit',
-                    isAllowed: true,
-                    onClick: handleEdit,
-                }}
-                otherActions={<>{/* Additional actions can be added here */}</>}
-                row={row}
-            />
-        </>
+        <RowActionsGroup
+            canSelect
+            onDelete={{
+                text: 'Delete',
+                isAllowed:
+                    !isDeletingCompany &&
+                    hasPermissionFromAuth({
+                        action: ['Delete', 'OwnDelete'],
+                        resourceType: 'Company',
+                        resource: company,
+                    }),
+                onClick: handleDelete,
+            }}
+            onEdit={{
+                text: 'Edit',
+                isAllowed: hasPermissionFromAuth({
+                    action: ['Update', 'OwnUpdate'],
+                    resourceType: 'Company',
+                    resource: company,
+                }),
+                onClick: handleEdit,
+            }}
+            row={row}
+        />
     )
 }
 
@@ -114,39 +119,58 @@ export const CompanyRowContext = ({
     children,
     onDeleteSuccess,
 }: ICompanyRowContextProps) => {
-    const {
-        company,
-        updateModal,
-        isDeletingCompany,
-        handleEdit,
-        handleDelete,
-    } = useCompanyActions({ row, onDeleteSuccess })
+    const { company, isDeletingCompany, handleEdit, handleDelete } =
+        useCompanyActions({ row, onDeleteSuccess })
+
+    return (
+        <DataTableRowContext
+            onDelete={{
+                text: 'Delete',
+                isAllowed:
+                    !isDeletingCompany &&
+                    hasPermissionFromAuth({
+                        action: ['Delete', 'OwnDelete'],
+                        resourceType: 'Company',
+                        resource: company,
+                    }),
+                onClick: handleDelete,
+            }}
+            onEdit={{
+                text: 'Edit',
+                isAllowed: hasPermissionFromAuth({
+                    action: ['Update', 'OwnUpdate'],
+                    resourceType: 'Company',
+                    resource: company,
+                }),
+                onClick: handleEdit,
+            }}
+            row={row}
+        >
+            {children}
+        </DataTableRowContext>
+    )
+}
+
+export const CompanyTableActionManager = () => {
+    const { state, close } = useTableRowActionStore<
+        ICompany,
+        CompanyActionType,
+        CompanyActionExtra
+    >()
 
     return (
         <>
-            <CompanyCreateUpdateFormModal
-                {...updateModal}
-                formProps={{
-                    companyId: company.id,
-                    defaultValues: { ...company },
-                    onSuccess: () => updateModal.onOpenChange(false),
-                }}
-            />
-            <DataTableRowContext
-                onDelete={{
-                    text: 'Delete',
-                    isAllowed: !isDeletingCompany,
-                    onClick: handleDelete,
-                }}
-                onEdit={{
-                    text: 'Edit',
-                    isAllowed: true,
-                    onClick: handleEdit,
-                }}
-                row={row}
-            >
-                {children}
-            </DataTableRowContext>
+            {state.action === 'edit' && state.defaultValues && (
+                <CompanyCreateUpdateFormModal
+                    formProps={{
+                        companyId: state.id,
+                        defaultValues: state.defaultValues,
+                        onSuccess: close,
+                    }}
+                    onOpenChange={close}
+                    open={state.isOpen}
+                />
+            )}
         </>
     )
 }

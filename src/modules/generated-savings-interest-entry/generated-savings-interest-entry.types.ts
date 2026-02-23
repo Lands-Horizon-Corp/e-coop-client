@@ -43,5 +43,4 @@ export interface IGeneratedSavingsInterestEntryDailyBalanceView {
     member_profile?: IMemberProfile
 }
 
-export interface IGeneratedSavingsInterestEntryPaginated
-    extends IPaginatedResult<IGeneratedSavingsInterestEntry> {}
+export interface IGeneratedSavingsInterestEntryPaginated extends IPaginatedResult<IGeneratedSavingsInterestEntry> {}

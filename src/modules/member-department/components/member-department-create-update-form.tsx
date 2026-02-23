@@ -29,7 +29,8 @@ import { MemberDepartmentSchema } from '../member-department.validation'
 export type TMemberDepartmentFormValues = z.infer<typeof MemberDepartmentSchema>
 
 export interface IMemberDepartmentFormProps
-    extends IClassProps,
+    extends
+        IClassProps,
         IForm<
             Partial<IMemberDepartmentRequest>,
             IMemberDepartment,

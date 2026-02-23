@@ -41,8 +41,7 @@ import DisbursementAction, {
 } from './row-action-context'
 
 export interface DisbursementTableProps
-    extends TableProps<IDisbursement>,
-        IDisbursementTableColumnProps {
+    extends TableProps<IDisbursement>, IDisbursementTableColumnProps {
     toolbarProps?: Omit<
         IDataTableToolbarProps<IDisbursement>,
         | 'table'
@@ -50,7 +49,6 @@ export interface DisbursementTableProps
         | 'globalSearchProps'
         | 'scrollableProps'
         | 'filterLogicProps'
-        | 'exportActionProps'
         | 'deleteActionProps'
     >
 }
@@ -177,6 +175,7 @@ const DisbursementTable = ({
                                 }),
                         }}
                         exportActionProps={{
+                            ...toolbarProps?.exportActionProps,
                             isLoading: isPending,
                             filters: exportfilter,
                             model: 'Disbursement',

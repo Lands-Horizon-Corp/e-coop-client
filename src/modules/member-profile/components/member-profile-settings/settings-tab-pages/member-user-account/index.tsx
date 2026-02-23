@@ -55,15 +55,14 @@ const MemberUserAccount = forwardRef<HTMLDivElement, Props>(
 
         return (
             <div ref={ref}>
-                <p className="mb-2">Member User Profile</p>
+                <p className="mb-2">User Member Portal Account</p>
 
                 {memberProfile.user !== undefined ? (
                     <div>
                         <p className="mb-4 text-xs leading-relaxed text-muted-foreground">
-                            Member User Profile let them use their
-                            created/issued User Account to access their
-                            information in the system. Below is the connected
-                            User Account for this member profile.
+                            Member Portal Account let them sign in to member
+                            portal. Below is the connected Member Portal Account
+                            for this member profile.
                         </p>
                         <UserAccountCardMini user={memberProfile.user} />
                         <p className="my-4 rounded-md text-xs text-muted-foreground/60">
@@ -75,7 +74,7 @@ const MemberUserAccount = forwardRef<HTMLDivElement, Props>(
                             hoverVariant="destructive"
                             onClick={() => {
                                 onOpen({
-                                    title: 'Disconnect Account',
+                                    title: 'Disconnect Portal Account',
                                     description:
                                         'You are about to disconnect this account from member profile. Are you sure to do this?',
                                     onConfirm: () =>
@@ -93,7 +92,7 @@ const MemberUserAccount = forwardRef<HTMLDivElement, Props>(
                             ) : (
                                 <>
                                     <UnlinkIcon className="mr-1" />
-                                    Disconnect Account
+                                    Disconnect Portal Account
                                 </>
                             )}
                         </Button>
@@ -101,9 +100,9 @@ const MemberUserAccount = forwardRef<HTMLDivElement, Props>(
                 ) : (
                     <div className="space-y-4">
                         <p className="text-sm text-muted-foreground">
-                            This member does not have a user account for logging
-                            in. To enable login access, create a new user
-                            account or connect an existing one.
+                            This member does not have a Member Portal Account
+                            for logging in. To enable login access, create a new
+                            Portal Account or connect an existing one.
                         </p>
                         <fieldset
                             className="flex gap-x-2"
@@ -138,7 +137,7 @@ const MemberUserAccount = forwardRef<HTMLDivElement, Props>(
                                                 <span className="mr-2 inline-flex items-center justify-center rounded-md bg-accent p-1">
                                                     <LinkIcon className="text-primary" />
                                                 </span>
-                                                Connect Member Profile User
+                                                Connect Member Portal Acount
                                                 Account
                                             </p>
                                         ),
@@ -177,13 +176,13 @@ const MemberUserAccount = forwardRef<HTMLDivElement, Props>(
                             >
                                 <div className="flex w-full items-center justify-between">
                                     <p className="shrink truncate group-hover:text-primary">
-                                        Create New User Profile
+                                        Create New User Member Portal Account
                                     </p>
                                     <UserPlusIcon className="size-4 shrink-0 text-muted-foreground/60 duration-200 ease-out group-hover:text-primary" />
                                 </div>
                                 <p className="text-wrap text-left text-xs text-muted-foreground group-hover:text-primary">
-                                    Create a new user profile for this member
-                                    profile.
+                                    Create a new User Member Portal Account for
+                                    this member profile.
                                 </p>
                             </Button>
                             <Button
@@ -214,7 +213,7 @@ const MemberUserAccount = forwardRef<HTMLDivElement, Props>(
                                 >
                                     {isConnecting
                                         ? 'Connecting...'
-                                        : 'Connect this Profile to an existing User Profile that has no profile yet.'}
+                                        : 'Connect this Profile to an existing User Member Portal Account that has no profile yet.'}
                                 </p>
                             </Button>
                         </fieldset>

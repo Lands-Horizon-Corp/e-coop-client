@@ -107,7 +107,7 @@ const AuthGuard = ({ children, pageType = 'AUTHENTICATED' }: Props) => {
                 <div className="relative flex h-screen w-full flex-col items-center justify-center">
                     <ImageMatch
                         alt={'loading-gif'}
-                        className="block size-48 rounded-none !bg-transparent"
+                        className="block size-48 rounded-none bg-transparent!"
                         src={LOADING_ARTWORK_GIF}
                     />
                     <p className="mt-4 animate-pulse text-sm text-muted-foreground drop-shadow-lg">

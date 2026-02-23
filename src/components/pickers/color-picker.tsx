@@ -370,13 +370,13 @@ export default function ColorPicker({
                                 </Button>
                                 {alpha ? (
                                     <HexAlphaColorPicker
-                                        className="!aspect-square !h-[244.79px] !w-[244.79px]"
+                                        className="aspect-square! h-[244.79px]! w-[244.79px]!"
                                         color={value}
                                         onChange={handleColorChange}
                                     />
                                 ) : (
                                     <HexColorPicker
-                                        className="!aspect-square !h-[244.79px] !w-[244.79px]"
+                                        className="aspect-square! h-[244.79px]! w-[244.79px]!"
                                         color={value}
                                         onChange={handleColorChange}
                                     />
@@ -387,7 +387,7 @@ export default function ColorPicker({
                                     onValueChange={setColorFormat}
                                     value={colorFormat}
                                 >
-                                    <SelectTrigger className="!h-7 !w-[4.8rem] rounded-sm px-2 py-1 !text-sm">
+                                    <SelectTrigger className="h-7! w-[4.8rem]! rounded-sm px-2 py-1 text-sm!">
                                         <SelectValue placeholder="Color" />
                                     </SelectTrigger>
                                     <SelectContent className="min-w-20">

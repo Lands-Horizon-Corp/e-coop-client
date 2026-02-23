@@ -50,10 +50,6 @@ export const removeCommaSeparators = (num: string): number => {
     return parseInt(num.replace(/,/g, ''))
 }
 
-export const sanitizeNumberInput = (value: string) => {
-    return value.replace(/,/g, '').trim()
-}
-
 export const isValidDecimalInput = (value: string) => {
     return (
         /^-?\d*\.?\d{0,2}$/.test(value) &&

@@ -1,15 +1,13 @@
 import { useEffect } from 'react'
 
-import { NATS_CLIENT } from '@/constants'
-import logger from '@/helpers/loggers/logger'
 import { useLiveMonitoringStore } from '@/store/live-monitoring-store'
-import { type INatsConnectOpts, useNatsStore } from '@/store/nats-pubsub-store'
-import { StringCodec, type Subscription } from 'nats.ws'
+import {
+    type IPusherConnectOpts,
+    usePusherStore,
+} from '@/store/nats-pubsub-store'
 
-const sc = StringCodec()
-
-export const useNatsConnect = (opts?: INatsConnectOpts) => {
-    const connect = useNatsStore((state) => state.connect)
+export const usePusherConnect = (opts?: IPusherConnectOpts) => {
+    const connect = usePusherStore((state) => state.connect)
 
     useEffect(() => {
         connect(opts)
@@ -20,7 +18,7 @@ export const useSubscribe = <T = unknown>(
     subject: string,
     onReceive?: (data: T) => void
 ) => {
-    const connection = useNatsStore((state) => state.connection)
+    const connection = usePusherStore((state) => state.channel)
     const isLiveEnabled = useLiveMonitoringStore((state) => state.isLiveEnabled)
 
     useEffect(() => {
@@ -35,25 +33,10 @@ export const useSubscribe = <T = unknown>(
             return
         }
 
-        let sub: Subscription
-        const subHandler = async () => {
-            const topic = `${NATS_CLIENT}.${subject}`
-            sub = connection.subscribe(topic)
-            logger.info('🔔 subscribing to subject:', topic, false)
-            for await (const msg of sub) {
-                logger.info('💬 received message on subject:', topic, false)
-                const decodedData = sc.decode(msg.data)
-                const parsedData = JSON.parse(decodedData)
-                onReceive?.(parsedData)
-            }
-        }
+        connection.bind(subject, (data: T) => {
+            onReceive?.(data)
+        })
 
-        subHandler()
-
-        return () => {
-            if (sub) {
-                sub.unsubscribe()
-            }
-        }
+        return () => {}
     }, [connection, subject, onReceive, isLiveEnabled])
 }

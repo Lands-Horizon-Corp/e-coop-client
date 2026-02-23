@@ -1,6 +1,7 @@
 import { ReactNode } from 'react'
 
 import { withToastCallbacks } from '@/helpers/callback-helper'
+import { hasPermissionFromAuth } from '@/modules/authentication/authgentication.store'
 import useConfirmModalStore from '@/store/confirm-modal-store'
 import { Row } from '@tanstack/react-table'
 
@@ -12,7 +13,7 @@ import { IPermissionTemplate, useDeletePermissionTemplateById } from '../..'
 import { PermissionTemplateCreateUpdateFormModal } from '../permission-template-create-update-form'
 import { IPermissionTemplateTableActionComponentProp } from './columns'
 
-export type PermissionTemplateActionType = 'edit' | 'delete'
+export type PermissionTemplateActionType = 'edit'
 
 export type PermissionTemplateActionExtra = Record<string, never>
 
@@ -26,6 +27,7 @@ const usePermissionTemplateActions = ({
     onDeleteSuccess,
 }: UsePermissionTemplateActionsProps) => {
     const permissionTemplate = row.original
+
     const { open } = useTableRowActionStore<
         IPermissionTemplate,
         PermissionTemplateActionType,
@@ -61,15 +63,14 @@ const usePermissionTemplateActions = ({
     }
 
     return {
+        permissionTemplate,
         isDeleting,
         handleEdit,
         handleDelete,
     }
 }
 
-interface IPermissionTemplateTableActionProps
-    extends IPermissionTemplateTableActionComponentProp {
-    onPermissionTemplateUpdate?: () => void
+interface IPermissionTemplateTableActionProps extends IPermissionTemplateTableActionComponentProp {
     onDeleteSuccess?: () => void
 }
 
@@ -77,33 +78,38 @@ export const PermissionTemplateAction = ({
     row,
     onDeleteSuccess,
 }: IPermissionTemplateTableActionProps) => {
-    const { isDeleting, handleEdit, handleDelete } =
+    const { permissionTemplate, isDeleting, handleEdit, handleDelete } =
         usePermissionTemplateActions({ row, onDeleteSuccess })
 
     return (
-        <>
-            <div onClick={(e) => e.stopPropagation()}></div>
-            <RowActionsGroup
-                canSelect
-                onDelete={{
-                    text: 'Delete',
-                    isAllowed: !isDeleting,
-                    onClick: handleDelete,
-                }}
-                onEdit={{
-                    text: 'Edit',
-                    isAllowed: true,
-                    onClick: handleEdit,
-                }}
-                otherActions={<>{/* Additional actions can be added here */}</>}
-                row={row}
-            />
-        </>
+        <RowActionsGroup
+            canSelect
+            onDelete={{
+                text: 'Delete',
+                isAllowed:
+                    !isDeleting &&
+                    hasPermissionFromAuth({
+                        action: ['Delete', 'OwnDelete'],
+                        resourceType: 'PermissionTemplate',
+                        resource: permissionTemplate,
+                    }),
+                onClick: handleDelete,
+            }}
+            onEdit={{
+                text: 'Edit',
+                isAllowed: hasPermissionFromAuth({
+                    action: ['Update', 'OwnUpdate'],
+                    resourceType: 'PermissionTemplate',
+                    resource: permissionTemplate,
+                }),
+                onClick: handleEdit,
+            }}
+            row={row}
+        />
     )
 }
 
-interface IPermissionTemplateRowContextProps
-    extends IPermissionTemplateTableActionComponentProp {
+interface IPermissionTemplateRowContextProps extends IPermissionTemplateTableActionComponentProp {
     children?: ReactNode
     onDeleteSuccess?: () => void
 }
@@ -113,27 +119,35 @@ export const PermissionTemplateRowContext = ({
     children,
     onDeleteSuccess,
 }: IPermissionTemplateRowContextProps) => {
-    const { isDeleting, handleEdit, handleDelete } =
+    const { permissionTemplate, isDeleting, handleEdit, handleDelete } =
         usePermissionTemplateActions({ row, onDeleteSuccess })
 
     return (
-        <>
-            <DataTableRowContext
-                onDelete={{
-                    text: 'Delete',
-                    isAllowed: !isDeleting,
-                    onClick: handleDelete,
-                }}
-                onEdit={{
-                    text: 'Edit',
-                    isAllowed: true,
-                    onClick: handleEdit,
-                }}
-                row={row}
-            >
-                {children}
-            </DataTableRowContext>
-        </>
+        <DataTableRowContext
+            onDelete={{
+                text: 'Delete',
+                isAllowed:
+                    !isDeleting &&
+                    hasPermissionFromAuth({
+                        action: ['Delete', 'OwnDelete'],
+                        resourceType: 'PermissionTemplate',
+                        resource: permissionTemplate,
+                    }),
+                onClick: handleDelete,
+            }}
+            onEdit={{
+                text: 'Edit',
+                isAllowed: hasPermissionFromAuth({
+                    action: ['Update', 'OwnUpdate'],
+                    resourceType: 'PermissionTemplate',
+                    resource: permissionTemplate,
+                }),
+                onClick: handleEdit,
+            }}
+            row={row}
+        >
+            {children}
+        </DataTableRowContext>
     )
 }
 
@@ -154,7 +168,7 @@ export const PermissionTemplateTableActionManager = () => {
                 <PermissionTemplateCreateUpdateFormModal
                     formProps={{
                         permissionTemplateId: permissionTemplate.id,
-                        defaultValues: { ...permissionTemplate },
+                        defaultValues: permissionTemplate,
                         onSuccess: close,
                     }}
                     onOpenChange={close}

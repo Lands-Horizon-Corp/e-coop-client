@@ -1,8 +1,12 @@
 import { useQueryClient } from '@tanstack/react-query'
 
-import { useAuthUserWithOrgBranch } from '@/modules/authentication/authgentication.store'
+import {
+    hasPermissionFromAuth,
+    useAuthUserWithOrgBranch,
+} from '@/modules/authentication/authgentication.store'
 import { BillsAndCoinCreateUpdateFormModal } from '@/modules/bill-and-coins/components/bills-and-coin-create-update-form'
 import BillsAndCoinsTable from '@/modules/bill-and-coins/components/bills-and-coins-table'
+import PermissionGuard from '@/modules/permission/components/permission-guard'
 
 import PageContainer from '@/components/containers/page-container'
 
@@ -43,24 +47,30 @@ export default function BillsAndCoinsPage() {
 
     return (
         <PageContainer>
-            <BillsAndCoinCreateUpdateFormModal
-                {...createModal}
-                formProps={{
-                    defaultValues: {
-                        currency_id: currency_id,
-                        currency: currency,
-                    },
-                    onSuccess: () => {},
-                }}
-            />
-            <BillsAndCoinsTable
-                className="max-h-[90vh] min-h-[90vh] w-full"
-                toolbarProps={{
-                    createActionProps: {
-                        onClick: () => createModal.onOpenChange(true),
-                    },
-                }}
-            />
+            <PermissionGuard action="Read" resourceType="BillsAndCoins">
+                <BillsAndCoinCreateUpdateFormModal
+                    {...createModal}
+                    formProps={{
+                        defaultValues: {
+                            currency_id: currency_id,
+                            currency: currency,
+                        },
+                        onSuccess: () => {},
+                    }}
+                />
+                <BillsAndCoinsTable
+                    className="max-h-[90vh] min-h-[90vh] w-full"
+                    toolbarProps={{
+                        createActionProps: {
+                            onClick: () => createModal.onOpenChange(true),
+                            disabled: !hasPermissionFromAuth({
+                                action: 'Create',
+                                resourceType: 'BillsAndCoins',
+                            }),
+                        },
+                    }}
+                />
+            </PermissionGuard>
         </PageContainer>
     )
 }

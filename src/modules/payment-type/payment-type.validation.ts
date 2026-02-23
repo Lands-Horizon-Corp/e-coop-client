@@ -1,6 +1,6 @@
 import z from 'zod'
 
-import { descriptionTransformerSanitizer } from '@/validation'
+import { descriptionTransformerSanitizer, entityIdSchema } from '@/validation'
 
 export const PaymentTypeSchema = z.object({
     name: z.string().min(1, 'Payment type name is required'),
@@ -15,6 +15,9 @@ export const PaymentTypeSchema = z.object({
         .min(0, 'Number of days must be non-negative')
         .optional(),
     type: z.enum(['cash', 'check', 'online'], 'Payment type is required'),
+
+    account_id: entityIdSchema.optional().nullable(),
+    account: z.any(), // FOR DISPLAY/UI ONLY
 })
 
-export type PaymentTypeFormValues = z.infer<typeof PaymentTypeSchema>
+export type TPaymentTypeSchema = z.infer<typeof PaymentTypeSchema>

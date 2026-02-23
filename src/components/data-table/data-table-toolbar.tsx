@@ -1,6 +1,5 @@
 import { ReactNode } from 'react'
 
-import { SHORTCUT_SCOPES } from '@/constants'
 import { cn } from '@/helpers/tw-utils'
 import { Table } from '@tanstack/react-table'
 import { useHotkeys } from 'react-hotkeys-hook'
@@ -61,7 +60,7 @@ const DataTableToolbar = <TData,>({
     otherActionLeft,
 }: IDataTableToolbarProps<TData>) => {
     useHotkeys(
-        'Enter',
+        'shift + Enter',
         (e) => {
             e.preventDefault()
             if (createActionProps && !hideCreateButton) {
@@ -69,7 +68,7 @@ const DataTableToolbar = <TData,>({
             }
         },
         {
-            scopes: [SHORTCUT_SCOPES.DATA_TABLE],
+            enableOnFormTags: true,
         },
         [createActionProps, hideCreateButton]
     )
@@ -79,9 +78,11 @@ const DataTableToolbar = <TData,>({
             <div className="flex items-center gap-x-1">
                 {otherActionLeft}
                 {globalSearchProps ? (
-                    <DataTableGlobalSearch {...globalSearchProps} />
+                    <>
+                        <DataTableGlobalSearch {...globalSearchProps} />
+                        <DataTableActiveFilters />
+                    </>
                 ) : null}
-                <DataTableActiveFilters />
             </div>
             <div className="flex items-center gap-x-2">
                 <div className="flex items-center">

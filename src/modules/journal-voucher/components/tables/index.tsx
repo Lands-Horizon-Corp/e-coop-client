@@ -42,8 +42,7 @@ import JournalVoucherAction, {
 } from './row-action-context'
 
 export interface JournalVoucherTableProps
-    extends TableProps<IJournalVoucher>,
-        IJournalVoucherTableColumnProps {
+    extends TableProps<IJournalVoucher>, IJournalVoucherTableColumnProps {
     toolbarProps?: Omit<
         IDataTableToolbarProps<IJournalVoucher>,
         | 'table'
@@ -51,7 +50,6 @@ export interface JournalVoucherTableProps
         | 'globalSearchProps'
         | 'scrollableProps'
         | 'filterLogicProps'
-        | 'exportActionProps'
         | 'deleteActionProps'
     >
 }
@@ -166,6 +164,7 @@ const JournalVoucherTable = ({
                 >
                     <DataTableToolbar
                         deleteActionProps={{
+                            disabled: true,
                             onDeleteSuccess: () =>
                                 queryClient.invalidateQueries({
                                     queryKey: [
@@ -179,6 +178,7 @@ const JournalVoucherTable = ({
                                 }),
                         }}
                         exportActionProps={{
+                            ...toolbarProps?.exportActionProps,
                             isLoading: isPending,
                             filters: exportfilter,
                             model: 'JournalVoucher',

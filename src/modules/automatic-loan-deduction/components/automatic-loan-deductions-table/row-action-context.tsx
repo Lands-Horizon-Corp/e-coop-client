@@ -4,6 +4,7 @@ import { ReactNode } from 'react'
 import { useQueryClient } from '@tanstack/react-query'
 
 import { withToastCallbacks } from '@/helpers/callback-helper'
+import { hasPermissionFromAuth } from '@/modules/authentication/authgentication.store'
 import useConfirmModalStore from '@/store/confirm-modal-store'
 import { Row } from '@tanstack/react-table'
 
@@ -69,8 +70,7 @@ const useAutomaticLoanDeductionActions = ({
     }
 }
 
-interface IAutomaticLoanDeductionTableActionProps
-    extends IAutomaticLoanDeductionTableActionComponentProp {
+interface IAutomaticLoanDeductionTableActionProps extends IAutomaticLoanDeductionTableActionComponentProp {
     onAutomaticLoanDeductionUpdate?: () => void
     onDeleteSuccess?: () => void
 }
@@ -104,12 +104,22 @@ export const AutomaticLoanDeductionAction = ({
                 canSelect
                 onDelete={{
                     text: 'Delete',
-                    isAllowed: !isDeletingAutomaticLoanDeduction,
+                    isAllowed:
+                        !isDeletingAutomaticLoanDeduction &&
+                        hasPermissionFromAuth({
+                            action: ['Delete', 'OwnDelete'],
+                            resourceType: 'LoanSchemeAutomaticLoanDeduction',
+                            resource: automaticLoanDeduction,
+                        }),
                     onClick: handleDelete,
                 }}
                 onEdit={{
                     text: 'Edit',
-                    isAllowed: true,
+                    isAllowed: hasPermissionFromAuth({
+                        action: ['Update', 'OwnUpdate'],
+                        resourceType: 'LoanSchemeAutomaticLoanDeduction',
+                        resource: automaticLoanDeduction,
+                    }),
                     onClick: handleEdit,
                 }}
                 otherActions={<>{/* Additional actions can be added here */}</>}
@@ -119,8 +129,7 @@ export const AutomaticLoanDeductionAction = ({
     )
 }
 
-interface IAutomaticLoanDeductionRowContextProps
-    extends IAutomaticLoanDeductionTableActionComponentProp {
+interface IAutomaticLoanDeductionRowContextProps extends IAutomaticLoanDeductionTableActionComponentProp {
     children?: ReactNode
     onDeleteSuccess?: () => void
 }
@@ -158,12 +167,22 @@ export const AutomaticLoanDeductionRowContext = ({
             <DataTableRowContext
                 onDelete={{
                     text: 'Delete',
-                    isAllowed: !isDeletingAutomaticLoanDeduction,
+                    isAllowed:
+                        !isDeletingAutomaticLoanDeduction &&
+                        hasPermissionFromAuth({
+                            action: ['Delete', 'OwnDelete'],
+                            resourceType: 'LoanSchemeAutomaticLoanDeduction',
+                            resource: automaticLoanDeduction,
+                        }),
                     onClick: handleDelete,
                 }}
                 onEdit={{
                     text: 'Edit',
-                    isAllowed: true,
+                    isAllowed: hasPermissionFromAuth({
+                        action: ['Update', 'OwnUpdate'],
+                        resourceType: 'LoanSchemeAutomaticLoanDeduction',
+                        resource: automaticLoanDeduction,
+                    }),
                     onClick: handleEdit,
                 }}
                 row={row}

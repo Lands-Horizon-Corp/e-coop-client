@@ -4,6 +4,7 @@ import Fuse from 'fuse.js'
 import { toast } from 'sonner'
 
 import { cn } from '@/helpers'
+import { hasPermissionFromAuth } from '@/modules/authentication/authgentication.store'
 import { MemberTypeCreateUpdateFormModal } from '@/modules/member-type/components/forms/member-type-create-update-form'
 import { useGetAllMemberTypes } from '@/modules/member-type/member-type.service'
 import { IMemberType } from '@/modules/member-type/member-type.types'
@@ -131,6 +132,12 @@ const BrowseReferenceSidebar = ({
                 />
                 <Button
                     className="flex-1"
+                    disabled={
+                        !hasPermissionFromAuth({
+                            action: 'Create',
+                            resourceType: 'MemberTypeBrowseReference',
+                        })
+                    }
                     onClick={() => createModal.onOpenChange(true)}
                     size="sm"
                     variant="secondary"
@@ -234,9 +241,29 @@ const MemberTypeAccordionItem = ({
                             </p>
                         </div>
                         <span
-                            className="size-6 p-0 opacity-60 rounded-md hover:bg-popover flex items-center justify-center duration-300 hover:opacity-100 shrink-0"
+                            className={cn(
+                                'size-6 p-0 opacity-60 rounded-md hover:bg-popover flex items-center justify-center duration-300 hover:opacity-100 shrink-0',
+                                !hasPermissionFromAuth({
+                                    action: ['Update', 'OwnUpdate'],
+                                    resourceType: 'MemberTypeBrowseReference',
+                                    resource: memberType,
+                                }) && 'pointer-events-none cursor-not-allowed'
+                            )}
                             onClick={(e) => {
                                 e.stopPropagation()
+
+                                if (
+                                    !hasPermissionFromAuth({
+                                        action: ['Update', 'OwnUpdate'],
+                                        resourceType:
+                                            'MemberTypeBrowseReference',
+                                        resource: memberType,
+                                    })
+                                )
+                                    return toast.warning(
+                                        "You don't have permission to update this"
+                                    )
+
                                 memberTypeModal.onOpenChange(true)
                             }}
                         >
@@ -248,6 +275,12 @@ const MemberTypeAccordionItem = ({
                     <div className="mb-2 px-1">
                         <Button
                             className="h-7 text-xs w-full"
+                            disabled={
+                                !hasPermissionFromAuth({
+                                    action: 'Create',
+                                    resourceType: 'MemberTypeBrowseReference',
+                                })
+                            }
                             onClick={(e) => {
                                 e.stopPropagation()
                                 createReferenceModal.onOpenChange(true)
@@ -353,7 +386,14 @@ const BrowseReferenceItem = ({
                     <DropdownMenuSeparator />
                     <DropdownMenuItem
                         className="bg-destructive/05 text-destructive focus:bg-destructive focus:text-destructive-foreground"
-                        disabled={isDeleting}
+                        disabled={
+                            isDeleting ||
+                            !hasPermissionFromAuth({
+                                action: ['Delete', 'OwnDelete'],
+                                resourceType: 'MemberTypeBrowseReference',
+                                resource: reference,
+                            })
+                        }
                         onClick={(e) => {
                             e.stopPropagation()
                             e.preventDefault()

@@ -77,8 +77,8 @@ const SettingsTabs: {
         Component: (props) => <MemberFinancial {...props} />,
     },
     {
-        value: 'addresses-contacts',
-        title: 'Addresses & Contacts',
+        value: 'contacts',
+        title: 'Member Contacts',
         Icon: MapMarkedIcon,
         Component: (props) => <MemberAddressContact {...props} />,
     },
@@ -89,8 +89,8 @@ const SettingsTabs: {
         Component: (props) => <MemberAccountRelationship {...props} />,
     },
     {
-        value: 'user-account',
-        title: 'User Account',
+        value: 'member-portal-account',
+        title: 'Member Portal Account',
         Icon: UserIcon,
         Component: (props) => <MemberUserAccount {...props} />,
     },

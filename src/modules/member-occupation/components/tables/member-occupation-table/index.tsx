@@ -41,8 +41,7 @@ import MemberOccupationAction, {
 } from './row-action-context'
 
 export interface MemberOccupationTableProps
-    extends TableProps<IMemberOccupation>,
-        IMemberOccupationTableColumnProps {
+    extends TableProps<IMemberOccupation>, IMemberOccupationTableColumnProps {
     toolbarProps?: Omit<
         IDataTableToolbarProps<IMemberOccupation>,
         | 'table'
@@ -50,7 +49,6 @@ export interface MemberOccupationTableProps
         | 'globalSearchProps'
         | 'scrollableProps'
         | 'filterLogicProps'
-        | 'exportActionProps'
         | 'deleteActionProps'
     >
 }
@@ -184,6 +182,7 @@ const MemberOccupationTable = ({
                                 }),
                         }}
                         exportActionProps={{
+                            ...toolbarProps?.exportActionProps,
                             isLoading: isPending,
                             filters: exportfilter,
                             model: 'MemberOccupation',

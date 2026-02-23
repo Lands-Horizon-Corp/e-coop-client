@@ -39,8 +39,7 @@ import MemberDepartmentAction, {
 } from './row-action-context'
 
 export interface MemberDepartmentTableProps
-    extends TableProps<IMemberDepartment>,
-        IMemberDepartmentTableColumnProps {
+    extends TableProps<IMemberDepartment>, IMemberDepartmentTableColumnProps {
     toolbarProps?: Omit<
         IDataTableToolbarProps<IMemberDepartment>,
         | 'table'
@@ -48,7 +47,6 @@ export interface MemberDepartmentTableProps
         | 'globalSearchProps'
         | 'scrollableProps'
         | 'filterLogicProps'
-        | 'exportActionProps'
         | 'deleteActionProps'
     >
 }
@@ -181,6 +179,7 @@ const MemberDepartmentTable = ({
                             }),
                     }}
                     exportActionProps={{
+                        ...toolbarProps?.exportActionProps,
                         isLoading: isPending,
                         filters: exportfilter,
                         model: 'MemberDepartment',

@@ -31,7 +31,7 @@ export const BatchBlotterSummaryView = ({
             </p>
             <div className="w-full space-y-2">
                 <div className="flex items-center justify-between gap-x-4">
-                    <p className="grow-1">Collection</p>
+                    <p className="grow-1">Total Cash Handled</p>
                     <Separator className="flex-1" />
                     <p className="grow-1 text-right font-semibold">
                         {currencyFormat(
@@ -51,7 +51,7 @@ export const BatchBlotterSummaryView = ({
                 </div>
                 <div className="rounded-xl bg-accent">
                     <div className="flex items-center justify-between border-b border-b-muted-foreground/5 px-4 py-2 last:border-b-0">
-                        <p className="text-muted-foreground">OR Collection</p>
+                        <p className="text-muted-foreground">Collection</p>
                         <p>
                             {currencyFormat(transBatch.total_cash_collection, {
                                 currency,
@@ -139,12 +139,17 @@ export const BatchBlotterSummaryView = ({
                         </p>
                     </div>
                     <div className="flex items-center justify-between border-b border-b-muted-foreground/5 px-4 py-2 last:border-b-0">
-                        <p className="text-muted-foreground">Petty Cash</p>
+                        <p className="text-muted-foreground">
+                            Cash Check Voucher
+                        </p>
                         <p>
-                            {currencyFormat(transBatch.petty_cash, {
-                                currency,
-                                showSymbol: !!currency,
-                            })}
+                            {currencyFormat(
+                                transBatch.cash_check_voucher_total || 0,
+                                {
+                                    currency,
+                                    showSymbol: !!currency,
+                                }
+                            )}
                         </p>
                     </div>
                     <div className="flex items-center justify-between border-b border-b-muted-foreground/5 px-4 py-2 last:border-b-0">

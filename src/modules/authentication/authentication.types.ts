@@ -1,11 +1,13 @@
-import { IGeneratedReport } from '../generated-report'
+import { IComakerMemberProfile } from '../comaker-member-profile'
+// import { IGeneratedReport } from '../generated-report'
 import { IUserBase } from '../user'
 import { IUserOrganization } from '../user-organization'
 
 export interface IAuthContext<TUser = IUserBase | undefined> {
     user?: TUser
     user_organization?: IUserOrganization | null
-    reports: IGeneratedReport[]
+    // reports: IGeneratedReport[]
+    member_profile?: IComakerMemberProfile | null
 }
 
 export interface IChangePasswordRequest {

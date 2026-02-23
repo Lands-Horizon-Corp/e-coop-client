@@ -16,6 +16,7 @@ import type {
     ITransactionBatch,
     ITransactionBatchDepositInBankRequest,
     ITransactionBatchEndRequest,
+    ITransactionBatchHistoryTotal,
     ITransactionBatchMinimal,
     ITransactionBatchPaginated,
     ITransactionBatchRequest,
@@ -342,5 +343,33 @@ export const useTransBatchUpdateSignApproval = createMutationFactory<
         [transactionBatchQueryKey, 'view-requests'],
     ],
 })
+
+// get transaction batch totals
+export const useTransactionBatchHistoryTotal = ({
+    transactionBatchId,
+    query,
+    options,
+}: {
+    transactionBatchId: TEntityId
+    query?: TAPIQueryOptions
+    options?: HookQueryOptions<ITransactionBatchHistoryTotal, Error>
+}) => {
+    return useQuery<ITransactionBatchHistoryTotal, Error>({
+        ...options,
+        queryKey: [
+            transactionBatchQueryKey,
+            transactionBatchId,
+            'history-total',
+            query,
+        ],
+        queryFn: async () => {
+            const response = await API.get<ITransactionBatchHistoryTotal>(
+                `${transactionBatchAPIRoute}/${transactionBatchId}/history/total`
+            )
+
+            return response.data
+        },
+    })
+}
 
 export const logger = Logger.getInstance('transaction-batch')

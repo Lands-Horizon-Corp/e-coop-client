@@ -1,43 +1,23 @@
-import { AccountCreateUpdateFormModal, AccountsTable } from '@/modules/account'
-import { useAuthUserWithOrgBranch } from '@/modules/authentication/authgentication.store'
+import PermissionGuard from '@/modules/permission/components/permission-guard'
 
 import PageContainer from '@/components/containers/page-container'
+import { TableRowActionStoreProvider } from '@/components/data-table/store/data-table-action-store'
 
-import { useModalState } from '@/hooks/use-modal-state'
+import { AccountList } from '../components/account-list'
+import { AccountProvider } from '../context/account-provider'
+import { AccountTableActionManager } from './account-table-manager'
 
 export const Account = () => {
-    const createModal = useModalState()
-
-    const {
-        currentAuth: {
-            user_organization: { settings_payment_type_default_value },
-        },
-    } = useAuthUserWithOrgBranch()
-
     return (
         <PageContainer>
-            <div className="flex w-full flex-col  items-start gap-4">
-                <AccountCreateUpdateFormModal
-                    className=" min-w-[80vw] max-w-[80vw]"
-                    formProps={{
-                        defaultValues: {
-                            default_payment_type_id:
-                                settings_payment_type_default_value?.id,
-                            default_payment_type:
-                                settings_payment_type_default_value,
-                        },
-                    }}
-                    {...createModal}
-                />
-                <AccountsTable
-                    className="max-h-[90vh] min-h-[90vh] w-full"
-                    toolbarProps={{
-                        createActionProps: {
-                            onClick: () => createModal.onOpenChange(true),
-                        },
-                    }}
-                />
-            </div>
+            <PermissionGuard action="Read" resourceType="Account">
+                <TableRowActionStoreProvider>
+                    <AccountProvider>
+                        <AccountList />
+                    </AccountProvider>
+                    <AccountTableActionManager />
+                </TableRowActionStoreProvider>
+            </PermissionGuard>
         </PageContainer>
     )
 }

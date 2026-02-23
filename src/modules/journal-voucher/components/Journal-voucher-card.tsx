@@ -57,7 +57,7 @@ export const JournalVoucherCard = ({
                         </Button>
                     </InfoTooltip>
                     <JournalVoucherStatusIndicator
-                        className="flex-shrink-0"
+                        className="shrink-0"
                         journalVoucher={journalVoucher}
                     />
                 </div>

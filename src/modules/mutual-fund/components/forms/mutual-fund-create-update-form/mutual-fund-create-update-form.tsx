@@ -50,7 +50,8 @@ import MutualFundTableSection from './mutual-fund-table-section'
 type TMutualFundSchema = z.infer<typeof MutualFundSchema>
 
 export interface IMutualFundFormProps
-    extends IClassProps,
+    extends
+        IClassProps,
         IForm<
             Partial<IMutualFundRequest>,
             IMutualFund,
@@ -196,7 +197,7 @@ const MutualFundCreateUpdateForm = ({
                             name="member_profile_id"
                             render={({ field }) => (
                                 <MemberPicker
-                                    allowShorcutCommand
+                                    allowShortcutHotKey
                                     disabled={isDisabled(field.name)}
                                     onSelect={(selectedMember) => {
                                         field.onChange(selectedMember?.id)

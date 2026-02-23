@@ -1,6 +1,6 @@
 import { useCallback } from 'react'
 
-import { Path, useForm } from 'react-hook-form'
+import { Path, UseFormReturn, useFieldArray, useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 import z from 'zod'
 
@@ -10,14 +10,23 @@ import { cn } from '@/helpers'
 import { toInputDateString } from '@/helpers/date-utils'
 import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
 import { IMedia } from '@/modules/media'
+import { IMemberAddressRequest } from '@/modules/member-address'
+import { MemberAddressCreateUpdateFormModal } from '@/modules/member-address/components/forms/member-address-create-update-form'
 import MemberGenderCombobox from '@/modules/member-gender/components/member-gender-combobox'
 import MemberOccupationCombobox from '@/modules/member-occupation/components/member-occupation-combobox'
 
 import CivilStatusCombobox from '@/components/comboboxes/civil-status-combobox'
 import { CountryCombobox } from '@/components/comboboxes/country-combobox'
+import SexCombobox from '@/components/comboboxes/sex-combobox'
 import FormFooterResetSubmit from '@/components/form-components/form-footer-reset-submit'
-import { VerifiedPatchIcon } from '@/components/icons'
+import {
+    PinLocationIcon,
+    PlusIcon,
+    TrashIcon,
+    VerifiedPatchIcon,
+} from '@/components/icons'
 import TextEditor from '@/components/text-editor'
+import { Button } from '@/components/ui/button'
 import { Form } from '@/components/ui/form'
 import FormFieldWrapper from '@/components/ui/form-field-wrapper'
 import ImageField from '@/components/ui/image-field'
@@ -28,6 +37,7 @@ import { Separator } from '@/components/ui/separator'
 import SignatureField from '@/components/ui/signature-field'
 
 import { useFormHelper } from '@/hooks/use-form-helper'
+import { useModalState } from '@/hooks/use-modal-state'
 
 import { IClassProps } from '@/types'
 import { IForm, TEntityId } from '@/types'
@@ -44,7 +54,8 @@ type TMemberProfilePersonalInfoFormValues = z.infer<
 >
 
 export interface IMemberProfilePersonalInfoFormProps
-    extends IClassProps,
+    extends
+        IClassProps,
         IForm<
             Partial<IMemberProfilePersonalInfoRequest>,
             IMemberProfile,
@@ -69,6 +80,7 @@ const MemberPersonalInfoForm = ({
         reValidateMode: 'onChange',
         mode: 'onSubmit',
         defaultValues: {
+            sex: 'female',
             ...defaultValues,
             birthdate: toInputDateString(
                 defaultValues?.birthdate ?? new Date()
@@ -279,7 +291,7 @@ const MemberPersonalInfoForm = ({
                                 />
                             </div>
                         </div>
-                        <div className="grid grid-cols-1 gap-2 sm:grid-cols-3">
+                        <div className="grid grid-cols-1 gap-2 sm:grid-cols-4">
                             <FormFieldWrapper
                                 control={form.control}
                                 hiddenFields={hiddenFields}
@@ -291,6 +303,19 @@ const MemberPersonalInfoForm = ({
                                         disabled={isDisabled(field.name)}
                                         id={field.name}
                                         placeholder="Civil Status"
+                                    />
+                                )}
+                            />
+                            <FormFieldWrapper
+                                className="col-span-1"
+                                control={form.control}
+                                label="Sex *"
+                                name="sex"
+                                render={({ field }) => (
+                                    <SexCombobox
+                                        {...field}
+                                        disabled={isDisabled(field.name)}
+                                        placeholder="Sex"
                                     />
                                 )}
                             />
@@ -394,14 +419,24 @@ const MemberPersonalInfoForm = ({
                                 hiddenFields={hiddenFields}
                                 label="Business Contact"
                                 name="business_contact_number"
-                                render={({ field }) => (
-                                    <Input
-                                        {...field}
-                                        className="bg-background"
-                                        disabled={isDisabled(field.name)}
-                                        id={field.name}
-                                        placeholder="Business Contact"
-                                    />
+                                render={({
+                                    field,
+                                    fieldState: { invalid },
+                                }) => (
+                                    <div className="relative flex flex-1 items-center gap-x-2">
+                                        <VerifiedPatchIcon
+                                            className={cn(
+                                                'absolute right-2 top-1/2 z-0 size-4 -translate-y-1/2 text-primary delay-300 duration-300 ease-in-out',
+                                                (invalid || error) &&
+                                                    'text-destructive'
+                                            )}
+                                        />
+                                        <PhoneInput
+                                            {...field}
+                                            className="w-full"
+                                            defaultCountry="PH"
+                                        />
+                                    </div>
                                 )}
                             />
                             <FormFieldWrapper
@@ -420,7 +455,6 @@ const MemberPersonalInfoForm = ({
                                 )}
                             />
                         </div>
-
                         <Separator />
                         <div className="space-y-2">
                             <p>Notes & Description</p>
@@ -457,6 +491,11 @@ const MemberPersonalInfoForm = ({
                                 />
                             </div>
                         </div>
+                        <Separator />
+                        <MemberAddressesSection
+                            form={form}
+                            readOnly={readOnly}
+                        />
                     </div>
                 </fieldset>
 
@@ -474,6 +513,168 @@ const MemberPersonalInfoForm = ({
                 />
             </form>
         </Form>
+    )
+}
+
+const MemberAddressesSection = ({
+    form,
+    readOnly,
+    className,
+}: {
+    form: UseFormReturn<TMemberProfilePersonalInfoFormValues>
+    readOnly?: boolean
+    className?: string
+}) => {
+    const { control, watch } = form
+
+    const { append, remove } = useFieldArray({
+        control,
+        name: 'member_address',
+    })
+
+    const { append: removeMemberAddress } = useFieldArray({
+        control,
+        name: 'member_address_deleted_id',
+    })
+
+    const addresses = watch('member_addresses') ?? []
+
+    const addAddressModalState = useModalState()
+
+    return (
+        <div className={cn('space-y-4', className)}>
+            <MemberAddressCreateUpdateFormModal
+                {...addAddressModalState}
+                formProps={{
+                    onSuccess(data) {
+                        append(data)
+                        addAddressModalState.onOpenChange(false)
+                    },
+                }}
+            />
+            <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                    <PinLocationIcon className="h-4 w-4 text-muted-foreground" />
+                    <p className="font-medium">
+                        Addresses
+                        <span className="ml-2 text-xs text-muted-foreground">
+                            ({addresses.length})
+                        </span>
+                    </p>
+                </div>
+
+                {!readOnly && (
+                    <Button
+                        onClick={() => addAddressModalState.onOpenChange(true)}
+                        size="sm"
+                        type="button"
+                        variant="outline"
+                    >
+                        <PlusIcon className="mr-2 h-4 w-4" />
+                        Add Address
+                    </Button>
+                )}
+            </div>
+
+            {addresses.length === 0 ? (
+                <div className="rounded-lg border border-dashed p-6 text-center text-sm text-muted-foreground">
+                    No addresses added
+                </div>
+            ) : (
+                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3">
+                    {addresses.map((_, index) => (
+                        <MemberAddressCard
+                            form={form}
+                            index={index}
+                            key={index}
+                            onRemove={(index, data) => {
+                                remove(index)
+                                if (data.id) removeMemberAddress(data.id)
+                            }}
+                            readOnly={readOnly}
+                        />
+                    ))}
+                </div>
+            )}
+        </div>
+    )
+}
+
+const MemberAddressCard = ({
+    form,
+    index,
+    readOnly,
+    onRemove,
+}: {
+    form: UseFormReturn<TMemberProfilePersonalInfoFormValues>
+    index: number
+    readOnly?: boolean
+    onRemove: (index: number, data: IMemberAddressRequest) => void
+}) => {
+    const address = form.watch(`member_addresses.${index}`)
+    const memberAddressModalState = useModalState()
+
+    if (!address) return null
+
+    return (
+        <div
+            className={cn(
+                'group relative cursor-pointer rounded-xl border border-border bg-card p-4 transition',
+                'hover:border-primary/40'
+            )}
+        >
+            <MemberAddressCreateUpdateFormModal
+                {...memberAddressModalState}
+                formProps={{
+                    onSuccess(data) {
+                        form.setValue(`member_addresses.${index}`, data)
+                        memberAddressModalState.onOpenChange(false)
+                    },
+                }}
+            />
+            <div className="flex items-start gap-3">
+                <div className="flex size-8 items-center justify-center rounded-md bg-primary/10">
+                    <PinLocationIcon className="h-4 w-4 text-primary" />
+                </div>
+
+                <div className="flex-1 space-y-1">
+                    <span className="inline-flex rounded-full bg-emerald-500/10 px-2 py-0.5 text-xs font-medium text-emerald-500">
+                        {address.label}
+                    </span>
+
+                    <p className="text-sm font-medium leading-snug">
+                        {address.address || '—'}
+                    </p>
+
+                    <p className="text-xs text-muted-foreground">
+                        {[address.city, address.province_state]
+                            .filter(Boolean)
+                            .join(', ')}
+                    </p>
+
+                    {address.landmark && (
+                        <p className="text-xs text-muted-foreground">
+                            Landmark: {address.landmark}
+                        </p>
+                    )}
+                </div>
+            </div>
+
+            {!readOnly && (
+                <Button
+                    className="absolute right-2 top-2 opacity-0 transition group-hover:opacity-100"
+                    onClick={(e) => {
+                        e.stopPropagation()
+                        onRemove(index, address)
+                    }}
+                    size="xs"
+                    type="button"
+                    variant="ghost"
+                >
+                    <TrashIcon />
+                </Button>
+            )}
+        </div>
     )
 }
 

@@ -32,8 +32,7 @@ const generatedReportStatusVariants = cva(
 )
 
 interface Props
-    extends IClassProps,
-        VariantProps<typeof generatedReportStatusVariants> {
+    extends IClassProps, VariantProps<typeof generatedReportStatusVariants> {
     status: TGeneratedReportStatus | string
 }
 

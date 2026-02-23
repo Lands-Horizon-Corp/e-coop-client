@@ -5,6 +5,10 @@ import {
     IAccountCategory,
     useDeleteById,
 } from '@/modules/account-category'
+import {
+    getCrudPermissionFromAuthStore,
+    hasPermissionFromAuth,
+} from '@/modules/authentication/authgentication.store'
 import useConfirmModalStore from '@/store/confirm-modal-store'
 import { Row } from '@tanstack/react-table'
 
@@ -37,6 +41,11 @@ const useAccountCategoryActions = ({
     >()
     const { onOpen } = useConfirmModalStore()
 
+    const accountCategoryCrudPerms = getCrudPermissionFromAuthStore({
+        resourceType: 'AccountCategory',
+        resource: accountCategory,
+    })
+
     const {
         mutate: deleteAccountCategory,
         isPending: isDeletingAccountCategory,
@@ -61,14 +70,14 @@ const useAccountCategoryActions = ({
 
     return {
         accountCategory,
+        accountCategoryCrudPerms,
         isDeletingAccountCategory,
         handleEdit,
         handleDelete,
     }
 }
 
-interface IAccountCategoryActionProps
-    extends IAccountCategoryTableActionComponentProp {
+interface IAccountCategoryActionProps extends IAccountCategoryTableActionComponentProp {
     onAccountCategoryUpdate?: () => void
     onDeleteSuccess?: () => void
 }
@@ -77,32 +86,43 @@ export const AccountCategoryAction = ({
     row,
     onDeleteSuccess,
 }: IAccountCategoryActionProps) => {
-    const { isDeletingAccountCategory, handleEdit, handleDelete } =
-        useAccountCategoryActions({ row, onDeleteSuccess })
+    const {
+        accountCategory,
+        isDeletingAccountCategory,
+        handleEdit,
+        handleDelete,
+    } = useAccountCategoryActions({ row, onDeleteSuccess })
 
     return (
-        <>
-            <RowActionsGroup
-                canSelect
-                onDelete={{
-                    text: 'Delete',
-                    isAllowed: !isDeletingAccountCategory,
-                    onClick: handleDelete,
-                }}
-                onEdit={{
-                    text: 'Edit',
-                    isAllowed: true,
-                    onClick: handleEdit,
-                }}
-                otherActions={<></>}
-                row={row}
-            />
-        </>
+        <RowActionsGroup
+            canSelect
+            onDelete={{
+                text: 'Delete',
+                isAllowed:
+                    !isDeletingAccountCategory &&
+                    hasPermissionFromAuth({
+                        action: ['Delete', 'OwnDelete'],
+                        resourceType: 'AccountCategory',
+                        resource: accountCategory,
+                    }),
+                onClick: handleDelete,
+            }}
+            onEdit={{
+                text: 'Edit',
+                isAllowed: hasPermissionFromAuth({
+                    action: ['Update', 'OwnUpdate'],
+                    resourceType: 'AccountCategory',
+                    resource: accountCategory,
+                }),
+                onClick: handleEdit,
+            }}
+            otherActions={<></>}
+            row={row}
+        />
     )
 }
 
-interface IAccountCategoryRowContextProps
-    extends IAccountCategoryTableActionComponentProp {
+interface IAccountCategoryRowContextProps extends IAccountCategoryTableActionComponentProp {
     children?: ReactNode
     onDeleteSuccess?: () => void
 }
@@ -112,27 +132,39 @@ export const AccountCategoryRowContext = ({
     children,
     onDeleteSuccess,
 }: IAccountCategoryRowContextProps) => {
-    const { isDeletingAccountCategory, handleEdit, handleDelete } =
-        useAccountCategoryActions({ row, onDeleteSuccess })
+    const {
+        accountCategory,
+        isDeletingAccountCategory,
+        handleEdit,
+        handleDelete,
+    } = useAccountCategoryActions({ row, onDeleteSuccess })
 
     return (
-        <>
-            <DataTableRowContext
-                onDelete={{
-                    text: 'Delete',
-                    isAllowed: !isDeletingAccountCategory,
-                    onClick: handleDelete,
-                }}
-                onEdit={{
-                    text: 'Edit',
-                    isAllowed: true,
-                    onClick: handleEdit,
-                }}
-                row={row}
-            >
-                {children}
-            </DataTableRowContext>
-        </>
+        <DataTableRowContext
+            onDelete={{
+                text: 'Delete',
+                isAllowed:
+                    !isDeletingAccountCategory &&
+                    hasPermissionFromAuth({
+                        action: ['Delete', 'OwnDelete'],
+                        resourceType: 'AccountCategory',
+                        resource: accountCategory,
+                    }),
+                onClick: handleDelete,
+            }}
+            onEdit={{
+                text: 'Edit',
+                isAllowed: hasPermissionFromAuth({
+                    action: ['Update', 'OwnUpdate'],
+                    resourceType: 'AccountCategory',
+                    resource: accountCategory,
+                }),
+                onClick: handleEdit,
+            }}
+            row={row}
+        >
+            {children}
+        </DataTableRowContext>
     )
 }
 

@@ -16,8 +16,9 @@ import QrCodeScanner from '@/components/qrcode-scanner'
 import LoadingSpinner from '@/components/spinners/loading-spinner'
 import { Button } from '@/components/ui/button'
 
-interface MemberProfilePickerWithScannerProps
-    extends Partial<IPickerBaseProps<IMemberProfile>> {
+interface MemberProfilePickerWithScannerProps extends Partial<
+    IPickerBaseProps<IMemberProfile>
+> {
     className?: string
     isUpdate?: boolean
     handleSuccessScan: (data: IQRMemberProfileDecodedResult) => void
@@ -34,7 +35,7 @@ const ScannerView = ({
     onStartScan: () => void
     onScanSuccess: (data: IQRMemberProfileDecodedResult) => void
 }) => (
-    <div className="flex flex-col flex-shrink-0 xl:w-[15rem] justify-center items-center w-full">
+    <div className="flex flex-col shrink-0 xl:w-[15rem] justify-center items-center w-full">
         <div className="w-full xl:p-1 mr-1 mb-1 xl:mb-0 flex justify-center">
             <div className="xl:w-fit w-full aspect-square min-h-[150px] md:w-[50%] max-w-full rounded-2xl overflow-hidden">
                 {isScanning ? (

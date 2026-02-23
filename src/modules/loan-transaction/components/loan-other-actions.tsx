@@ -1,3 +1,4 @@
+import { hasPermissionFromAuth } from '@/modules/authentication/authgentication.store'
 import {
     CheckCircle2Icon,
     PrinterIcon,
@@ -47,7 +48,12 @@ const LoanTransactionOtherAction = ({
             onSelect: () => {
                 onPrint?.()
             },
-            isVisible: !isPrinted,
+            isVisible:
+                !isPrinted &&
+                hasPermissionFromAuth({
+                    action: 'Update',
+                    resourceType: 'ApprovalsLoanPrinted',
+                }),
         },
         {
             label: 'Undo Print',
@@ -55,7 +61,13 @@ const LoanTransactionOtherAction = ({
             onSelect: () => {
                 onPrintUndo?.()
             },
-            isVisible: isPrinted && !isApproved,
+            isVisible:
+                isPrinted &&
+                !isApproved &&
+                hasPermissionFromAuth({
+                    action: 'Update',
+                    resourceType: 'ApprovalsLoanPrinted',
+                }),
         },
         {
             label: 'Approve',
@@ -65,7 +77,12 @@ const LoanTransactionOtherAction = ({
             onSelect: () => {
                 onApprove?.()
             },
-            isVisible: canApprove,
+            isVisible:
+                canApprove &&
+                hasPermissionFromAuth({
+                    action: 'Update',
+                    resourceType: 'ApprovalsLoanApproved',
+                }),
         },
         {
             label: 'Undo Approve',
@@ -75,7 +92,13 @@ const LoanTransactionOtherAction = ({
             onSelect: () => {
                 onUndoApprove?.()
             },
-            isVisible: isApproved && !loanTransaction.released_date,
+            isVisible:
+                isApproved &&
+                !loanTransaction.released_date &&
+                hasPermissionFromAuth({
+                    action: 'Update',
+                    resourceType: 'ApprovalsLoanPrinted',
+                }),
         },
         {
             label: 'Release',
@@ -85,7 +108,12 @@ const LoanTransactionOtherAction = ({
             onSelect: () => {
                 onRelease?.()
             },
-            isVisible: showRelease,
+            isVisible:
+                showRelease &&
+                hasPermissionFromAuth({
+                    action: 'Update',
+                    resourceType: 'ApprovalsLoanReleased',
+                }),
         },
     ]
 

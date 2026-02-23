@@ -7,8 +7,7 @@ import { TableProps } from '@/components/data-table/table.type'
 import { TEntityId } from '@/types'
 
 export interface MemberAccountGeneralLedgerTableProps
-    extends TableProps<IGeneralLedger>,
-        IGeneralLedgerTableColumnProps {
+    extends TableProps<IGeneralLedger>, IGeneralLedgerTableColumnProps {
     memberProfileId: TEntityId
     accountId: TEntityId
     toolbarProps?: Parameters<typeof GeneralLedgerTable>[0]['toolbarProps']

@@ -38,8 +38,7 @@ import {
 } from './row-action-context'
 
 export interface MemberCenterTableProps
-    extends TableProps<IMemberCenter>,
-        IMemberCenterTableColumnProps {
+    extends TableProps<IMemberCenter>, IMemberCenterTableColumnProps {
     toolbarProps?: Omit<
         IDataTableToolbarProps<IMemberCenter>,
         | 'table'
@@ -47,7 +46,6 @@ export interface MemberCenterTableProps
         | 'globalSearchProps'
         | 'scrollableProps'
         | 'filterLogicProps'
-        | 'exportActionProps'
         | 'deleteActionProps'
     >
 }
@@ -180,6 +178,7 @@ const MemberCenterTable = ({
                                 }),
                         }}
                         exportActionProps={{
+                            ...toolbarProps?.exportActionProps,
                             isLoading: isPending,
                             filters: exportfilter,
                             model: 'MemberCenter',

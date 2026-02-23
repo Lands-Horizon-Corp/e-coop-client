@@ -38,7 +38,8 @@ import { TAG_CATEGORY } from '../../tag.constants'
 type TTagTemplateFormValues = z.infer<typeof TagTemplateSchema>
 
 export interface ITagTemplateFormProps
-    extends IClassProps,
+    extends
+        IClassProps,
         IForm<
             Partial<TTagTemplateFormValues>,
             ITagTemplate,

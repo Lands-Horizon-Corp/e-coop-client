@@ -76,8 +76,9 @@ const iconSizeVariants = cva('flex-shrink-0', {
     },
 })
 
-interface LedgerSourceBadgeProps
-    extends VariantProps<typeof ledgerSourceVariants> {
+interface LedgerSourceBadgeProps extends VariantProps<
+    typeof ledgerSourceVariants
+> {
     source: TGeneralLedgerSource
     className?: string
     showIcon?: boolean

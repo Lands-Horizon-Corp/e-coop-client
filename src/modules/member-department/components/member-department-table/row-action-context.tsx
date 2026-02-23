@@ -1,5 +1,6 @@
 import { ReactNode } from 'react'
 
+import { hasPermissionFromAuth } from '@/modules/authentication/authgentication.store'
 import useConfirmModalStore from '@/store/confirm-modal-store'
 import { Row } from '@tanstack/react-table'
 
@@ -56,8 +57,7 @@ const useMemberDepartmentActions = ({
     }
 }
 
-interface IMemberDepartmentTableActionProps
-    extends IMemberDepartmentTableActionComponentProp {
+interface IMemberDepartmentTableActionProps extends IMemberDepartmentTableActionComponentProp {
     onMemberDepartmentUpdate?: () => void
     onDeleteSuccess?: () => void
 }
@@ -90,12 +90,22 @@ export const MemberDepartmentAction = ({
                 canSelect
                 onDelete={{
                     text: 'Delete',
-                    isAllowed: !isDeletingMemberDepartment,
+                    isAllowed:
+                        !isDeletingMemberDepartment &&
+                        hasPermissionFromAuth({
+                            action: ['Delete', 'OwnDelete'],
+                            resourceType: 'MemberDepartment',
+                            resource: memberDepartment,
+                        }),
                     onClick: handleDelete,
                 }}
                 onEdit={{
                     text: 'Edit',
-                    isAllowed: true,
+                    isAllowed: hasPermissionFromAuth({
+                        action: ['Update', 'OwnUpdate'],
+                        resourceType: 'MemberDepartment',
+                        resource: memberDepartment,
+                    }),
                     onClick: handleEdit,
                 }}
                 otherActions={<></>}
@@ -105,8 +115,7 @@ export const MemberDepartmentAction = ({
     )
 }
 
-interface IMemberDepartmentRowContextProps
-    extends IMemberDepartmentTableActionComponentProp {
+interface IMemberDepartmentRowContextProps extends IMemberDepartmentTableActionComponentProp {
     children?: ReactNode
     onDeleteSuccess?: () => void
 }
@@ -137,12 +146,22 @@ export const MemberDepartmentRowContext = ({
             <DataTableRowContext
                 onDelete={{
                     text: 'Delete',
-                    isAllowed: !isDeletingMemberDepartment,
+                    isAllowed:
+                        !isDeletingMemberDepartment &&
+                        hasPermissionFromAuth({
+                            action: ['Delete', 'OwnDelete'],
+                            resourceType: 'MemberDepartment',
+                            resource: memberDepartment,
+                        }),
                     onClick: handleDelete,
                 }}
                 onEdit={{
                     text: 'Edit',
-                    isAllowed: true,
+                    isAllowed: hasPermissionFromAuth({
+                        action: ['Update', 'OwnUpdate'],
+                        resourceType: 'MemberDepartment',
+                        resource: memberDepartment,
+                    }),
                     onClick: handleEdit,
                 }}
                 row={row}

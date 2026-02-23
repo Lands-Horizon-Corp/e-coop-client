@@ -1,5 +1,6 @@
 import { ReactNode } from 'react'
 
+import { hasPermissionFromAuth } from '@/modules/authentication/authgentication.store'
 import useConfirmModalStore from '@/store/confirm-modal-store'
 import { Row } from '@tanstack/react-table'
 
@@ -12,7 +13,7 @@ import { IBillsAndCoin } from '../../bill-and-coins.types'
 import { BillsAndCoinCreateUpdateFormModal } from '../bills-and-coin-create-update-form'
 import { IBillsAndCoinsTableActionComponentProp } from './columns'
 
-export type BillsAndCoinsActionType = 'edit' | 'delete'
+export type BillsAndCoinsActionType = 'edit'
 
 export interface BillsAndCoinsActionExtra {
     onDeleteSuccess?: () => void
@@ -28,11 +29,13 @@ const useBillsAndCoinsActions = ({
     onDeleteSuccess,
 }: UseBillsAndCoinsActionsProps) => {
     const billsAndCoin = row.original
+
     const { open } = useTableRowActionStore<
         IBillsAndCoin,
         BillsAndCoinsActionType,
         BillsAndCoinsActionExtra
     >()
+
     const { onOpen } = useConfirmModalStore()
 
     const { isPending: isDeletingBillsAndCoin, mutate: deleteBillsAndCoin } =
@@ -67,9 +70,7 @@ const useBillsAndCoinsActions = ({
     }
 }
 
-interface IBillsAndCoinsTableActionProps
-    extends IBillsAndCoinsTableActionComponentProp {
-    onBillsAndCoinsUpdate?: () => void
+interface IBillsAndCoinsTableActionProps extends IBillsAndCoinsTableActionComponentProp {
     onDeleteSuccess?: () => void
 }
 
@@ -77,32 +78,38 @@ export const BillsAndCoinsAction = ({
     row,
     onDeleteSuccess,
 }: IBillsAndCoinsTableActionProps) => {
-    const { isDeletingBillsAndCoin, handleEdit, handleDelete } =
+    const { billsAndCoin, isDeletingBillsAndCoin, handleEdit, handleDelete } =
         useBillsAndCoinsActions({ row, onDeleteSuccess })
 
     return (
-        <>
-            <RowActionsGroup
-                canSelect
-                onDelete={{
-                    text: 'Delete',
-                    isAllowed: !isDeletingBillsAndCoin,
-                    onClick: handleDelete,
-                }}
-                onEdit={{
-                    text: 'Edit',
-                    isAllowed: true,
-                    onClick: handleEdit,
-                }}
-                otherActions={<></>}
-                row={row}
-            />
-        </>
+        <RowActionsGroup
+            canSelect
+            onDelete={{
+                text: 'Delete',
+                isAllowed:
+                    !isDeletingBillsAndCoin &&
+                    hasPermissionFromAuth({
+                        action: ['Delete', 'OwnDelete'],
+                        resourceType: 'BillsAndCoins',
+                        resource: billsAndCoin,
+                    }),
+                onClick: handleDelete,
+            }}
+            onEdit={{
+                text: 'Edit',
+                isAllowed: hasPermissionFromAuth({
+                    action: ['Update', 'OwnUpdate'],
+                    resourceType: 'BillsAndCoins',
+                    resource: billsAndCoin,
+                }),
+                onClick: handleEdit,
+            }}
+            row={row}
+        />
     )
 }
 
-interface IBillsAndCoinsRowContextProps
-    extends IBillsAndCoinsTableActionComponentProp {
+interface IBillsAndCoinsRowContextProps extends IBillsAndCoinsTableActionComponentProp {
     children?: ReactNode
     onDeleteSuccess?: () => void
 }
@@ -112,27 +119,35 @@ export const BillsAndCoinsRowContext = ({
     children,
     onDeleteSuccess,
 }: IBillsAndCoinsRowContextProps) => {
-    const { isDeletingBillsAndCoin, handleEdit, handleDelete } =
+    const { billsAndCoin, isDeletingBillsAndCoin, handleEdit, handleDelete } =
         useBillsAndCoinsActions({ row, onDeleteSuccess })
 
     return (
-        <>
-            <DataTableRowContext
-                onDelete={{
-                    text: 'Delete',
-                    isAllowed: !isDeletingBillsAndCoin,
-                    onClick: handleDelete,
-                }}
-                onEdit={{
-                    text: 'Edit',
-                    isAllowed: true,
-                    onClick: handleEdit,
-                }}
-                row={row}
-            >
-                {children}
-            </DataTableRowContext>
-        </>
+        <DataTableRowContext
+            onDelete={{
+                text: 'Delete',
+                isAllowed:
+                    !isDeletingBillsAndCoin &&
+                    hasPermissionFromAuth({
+                        action: ['Delete', 'OwnDelete'],
+                        resourceType: 'BillsAndCoins',
+                        resource: billsAndCoin,
+                    }),
+                onClick: handleDelete,
+            }}
+            onEdit={{
+                text: 'Edit',
+                isAllowed: hasPermissionFromAuth({
+                    action: ['Update', 'OwnUpdate'],
+                    resourceType: 'BillsAndCoins',
+                    resource: billsAndCoin,
+                }),
+                onClick: handleEdit,
+            }}
+            row={row}
+        >
+            {children}
+        </DataTableRowContext>
     )
 }
 
@@ -150,7 +165,7 @@ export const BillsAndCoinsTableActionManager = () => {
                     formProps={{
                         billsAndCoinId: state.id,
                         defaultValues: state.defaultValues,
-                        onSuccess: () => close(),
+                        onSuccess: close,
                     }}
                     onOpenChange={close}
                     open={state.isOpen}

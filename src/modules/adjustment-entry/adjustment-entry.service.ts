@@ -5,6 +5,7 @@ import {
     HookQueryOptions,
     createDataLayerFactory,
 } from '@/providers/repositories/data-layer-factory'
+import { createMutationFactory } from '@/providers/repositories/mutation-factory'
 
 import { TAPIQueryOptions, TEntityId } from '@/types'
 
@@ -47,7 +48,7 @@ export const {
 export { adjustmentEntryBaseKey } // Exported in case it's needed outside
 
 export const {
-    useCreate: useCreateAdjustmentEntry,
+    // useCreate: useCreateAdjustmentEntry,
     useUpdateById: useUpdateAdjustmentEntryById,
 
     useGetAll: useGetAllAdjustmentEntry,
@@ -57,6 +58,20 @@ export const {
     useDeleteById: useDeleteAdjustmentEntryById,
     useDeleteMany: useDeleteManyAdjustmentEntry,
 } = apiCrudHooks
+
+export const useCreateAdjustmentEntry = createMutationFactory<
+    IAdjustmentEntry,
+    Error,
+    IAdjustmentEntryRequest
+>({
+    mutationFn: (payload) => createAdjustmentEntry({ payload }),
+    defaultInvalidates: [
+        ['auth', 'context'],
+        [adjustmentEntryBaseKey, 'paginated'],
+        [adjustmentEntryBaseKey, 'all'],
+        ['transaction-batch'],
+    ],
+})
 
 export const useAdjustmentEntryTotal = ({
     options,

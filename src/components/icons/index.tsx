@@ -23,6 +23,7 @@ import {
     BsRocketTakeoffFill as RocketIcon,
     BsLayoutSidebarInset as SidebarIcon,
     BsLayoutSidebarInsetReverse as SidebarRightIcon,
+    BsThreeDotsVertical as ThreeDotIcon,
 } from 'react-icons/bs'
 import {
     BsFillPatchCheckFill as BadgeCheckFillIcon,
@@ -274,6 +275,7 @@ import {
     IoLogOut as DoorExitFillIcon,
     IoLogOutOutline as DoorExitIcon,
     IoPencilOutline as EditPencilIcon,
+    IoFemale as FemaleIcon,
     IoFootstepsOutline as FootstepsIcon,
     IoFunnelOutline as FunnelIcon,
     IoKeySharp as KeySharpIcon,
@@ -282,6 +284,7 @@ import {
     IoLink as LinkIcon,
     IoLogoLinkedin as LinkedInIcon,
     IoLocationSharp as LocationPinIcon,
+    IoMale as MaleIcon,
     IoLocation as PinLocationIcon,
     IoPricetag as PriceTagIcon,
     IoPrintOutline as PrinterIcon,
@@ -888,6 +891,9 @@ export {
     GridIcon,
     FilterVintageIcon,
     SortIcon,
+    ThreeDotIcon,
+    MaleIcon,
+    FemaleIcon,
 }
 
 export const IconMap = {
@@ -1298,6 +1304,9 @@ export const IconMap = {
     'Receive Money': ReceiveMoneyIcon,
     'Report Search Icon': ReportsSearchIcon,
     'Sort Icon': SortIcon,
+    'Three Dot ICons': ThreeDotIcon,
+    Male: MaleIcon,
+    Female: FemaleIcon,
 }
 
 export type TIcon = (typeof ICONS)[number]

@@ -28,8 +28,10 @@ import {
 } from '../loan-transaction.service'
 import { ILoanTransaction } from '../loan-transaction.types'
 
-interface Props
-    extends Omit<React.ComponentPropsWithoutRef<'button'>, 'onChange'> {
+interface Props extends Omit<
+    React.ComponentPropsWithoutRef<'button'>,
+    'onChange'
+> {
     value?: TEntityId
     disabled?: boolean
     className?: string

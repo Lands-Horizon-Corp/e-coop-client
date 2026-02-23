@@ -30,7 +30,8 @@ type TComakerMemberProfileFormValues = TComakerMemberProfileSchema & {
 type IComakerMemberProfileForForm = z.infer<typeof ComakerMemberProfileSchema>
 
 export interface IComakerMemberProfileFormProps
-    extends IClassProps,
+    extends
+        IClassProps,
         IForm<
             Partial<TComakerMemberProfileFormValues>,
             IComakerMemberProfileForForm,

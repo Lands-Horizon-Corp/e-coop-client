@@ -29,7 +29,8 @@ import {
 } from '../../loan-purpose.validation'
 
 export interface ILoanPurposeFormProps
-    extends IClassProps,
+    extends
+        IClassProps,
         IForm<Partial<ILoanPurposeRequest>, ILoanPurpose, Error> {
     loanPurposeId?: TEntityId
 }

@@ -21,8 +21,10 @@ import {
 
 import { TGeneralStatus } from '@/types'
 
-interface Props
-    extends Omit<React.ComponentPropsWithoutRef<'button'>, 'onChange'> {
+interface Props extends Omit<
+    React.ComponentPropsWithoutRef<'button'>,
+    'onChange'
+> {
     id?: string
     name?: string
     value?: TGeneralStatus

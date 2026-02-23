@@ -42,8 +42,7 @@ import CashCheckJournalVoucherAction, {
 } from './row-action-context'
 
 export interface CashCheckJournalVoucherTableProps
-    extends TableProps<ICashCheckVoucher>,
-        ICashCheckVoucherTableColumnProps {
+    extends TableProps<ICashCheckVoucher>, ICashCheckVoucherTableColumnProps {
     toolbarProps?: Omit<
         IDataTableToolbarProps<ICashCheckVoucher>,
         | 'table'
@@ -51,7 +50,6 @@ export interface CashCheckJournalVoucherTableProps
         | 'globalSearchProps'
         | 'scrollableProps'
         | 'filterLogicProps'
-        | 'exportActionProps'
         | 'deleteActionProps'
     >
 }
@@ -179,6 +177,7 @@ const CashCheckJournalVoucherTable = ({
                                 }),
                         }}
                         exportActionProps={{
+                            ...toolbarProps?.exportActionProps,
                             isLoading: isPending,
                             filters: exportfilter,
                             model: 'CashCheckVoucher',

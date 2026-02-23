@@ -15,9 +15,9 @@ import {
     CommandItem,
     CommandList,
     CommandSeparator,
-    CommandShortcut,
 } from '@/components/ui/command'
 
+import { Kbd } from '../kbd'
 import { useSidebar } from '../sidebar'
 import { TQuickSearchGroup } from './types'
 
@@ -104,6 +104,7 @@ const AppSidebarQuickNavigate = ({ groups }: Props) => {
         },
         {
             keydown: true,
+            enableOnFormTags: true,
         }
     )
 
@@ -118,9 +119,7 @@ const AppSidebarQuickNavigate = ({ groups }: Props) => {
                 {sidebarOpen && (
                     <>
                         Quick Navigate
-                        <CommandShortcut className="rounded-md bg-secondary p-1">
-                            <span className="text-xs">⌘</span>Q
-                        </CommandShortcut>
+                        <Kbd className="ml-auto">⌘ + Q</Kbd>
                     </>
                 )}
             </Button>
@@ -149,7 +148,7 @@ const AppSidebarQuickNavigate = ({ groups }: Props) => {
                                 <CommandGroup heading={group.title}>
                                     {group.items.map((groupItem) => (
                                         <CommandItem
-                                            className="group items-start gap-x-2 rounded-xl !px-3 text-sm font-normal"
+                                            className="group items-start gap-x-2 rounded-xl px-3! text-sm font-normal"
                                             key={groupItem.url}
                                             onSelect={() => {
                                                 groupItem.onClick?.(groupItem)
@@ -176,7 +175,7 @@ const AppSidebarQuickNavigate = ({ groups }: Props) => {
                                                     to={groupItem.url}
                                                 >
                                                     Open new tab{' '}
-                                                    <ArrowRightIcon className="inline !size-3 -rotate-45" />
+                                                    <ArrowRightIcon className="inline size-3! -rotate-45" />
                                                 </Link>
                                             </div>
                                         </CommandItem>

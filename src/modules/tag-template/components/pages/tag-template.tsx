@@ -1,6 +1,9 @@
 import { useQueryClient } from '@tanstack/react-query'
 
-import { useAuthUserWithOrgBranch } from '@/modules/authentication/authgentication.store'
+import {
+    hasPermissionFromAuth,
+    useAuthUserWithOrgBranch,
+} from '@/modules/authentication/authgentication.store'
 
 import PageContainer from '@/components/containers/page-container'
 
@@ -56,6 +59,10 @@ const TagTemplatePage = () => {
                 toolbarProps={{
                     createActionProps: {
                         onClick: () => createModal.onOpenChange(true),
+                        disabled: !hasPermissionFromAuth({
+                            action: 'Create',
+                            resourceType: 'TagTemplate',
+                        }),
                     },
                 }}
             />

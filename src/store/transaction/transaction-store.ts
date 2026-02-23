@@ -29,6 +29,7 @@ export interface TransactionPropsStore {
               memberProfileId: TEntityId
               accountId: TEntityId
               account?: IAccount
+              memberAccountingLedgerId?: TEntityId
           }
         | undefined
     selectedAccount?: IAccount
@@ -55,6 +56,7 @@ export interface TransactionPropsStore {
                   memberProfileId: TEntityId
                   accountId: TEntityId
                   account?: IAccount
+                  memberAccountingLedgerId: TEntityId
               }
             | undefined
     ) => void
@@ -112,7 +114,7 @@ export const useTransactionStore = create<TransactionPropsStore>(
         handleResetAll: () =>
             set(() => ({
                 focusTypePayment: 'payment',
-                selectedMember: null,
+                // selectedMember: null,
                 openPaymentsEntryModal: false,
                 openMemberPicker: false,
                 selectedAccountId: undefined,

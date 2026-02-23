@@ -8,7 +8,9 @@ import { CashCheckVoucherEntrySchema } from '../cash-check-voucher-entry'
 export const CashCheckVoucherSchema = z.object({
     id: z.string().optional(),
     name: z.string().optional(),
+
     cash_voucher_number: z.string().optional(),
+
     status: z
         .enum(['pending', 'printed', 'approved', 'released'])
         .default('pending')
@@ -178,6 +180,7 @@ export const CashCheckSignatureSchema = z.object({
 
 export const CashCheckVoucherPrintSchema = z.object({
     cash_voucher_number: z.string().min(1, 'Voucher number is required'),
+    or_auto_generated: z.boolean().default(false).optional(),
 })
 
 export type TCashCheckVoucherPrintSchema = z.infer<

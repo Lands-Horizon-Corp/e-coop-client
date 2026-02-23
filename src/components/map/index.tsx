@@ -1,5 +1,6 @@
 import React, { forwardRef, useCallback, useEffect, useRef } from 'react'
 
+import { GOOGLE_MAPS_MAP_ID } from '@/constants'
 import { cn } from '@/helpers/tw-utils'
 import { useTheme } from '@/modules/settings/provider/theme-provider'
 import { GoogleMap, type GoogleMapProps } from '@react-google-maps/api'
@@ -253,7 +254,7 @@ export const MapView: React.FC<MapViewProps> = ({
                             gestureHandling: 'cooperative' as const,
                             clickableIcons: false,
                             colorScheme: resolvedTheme.toUpperCase(),
-                            mapId: '7315fed6ff6d5145e4c926ff',
+                            mapId: GOOGLE_MAPS_MAP_ID,
                             ...mapOptions,
                         }}
                         zoom={zoom}

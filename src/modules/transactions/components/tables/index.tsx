@@ -37,8 +37,7 @@ import TransactionTableColumns, {
 import { TransactionTableActionManager } from './row-action-context'
 
 export interface TransactionTableProps
-    extends TableProps<ITransaction>,
-        ITransactionTableColumnProps {
+    extends TableProps<ITransaction>, ITransactionTableColumnProps {
     toolbarProps?: Omit<
         IDataTableToolbarProps<ITransaction>,
         | 'table'
@@ -199,7 +198,7 @@ const TransactionsTable = ({
                     className={cn(
                         'flex h-full flex-col gap-y-2',
                         className,
-                        !isScrollable && 'h-fit !max-h-none'
+                        !isScrollable && 'h-fit max-h-none!'
                     )}
                 >
                     <DataTableToolbar

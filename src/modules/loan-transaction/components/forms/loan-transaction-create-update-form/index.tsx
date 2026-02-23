@@ -1,4 +1,4 @@
-import { useCallback, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 
 import { Path, UseFormReturn, useForm } from 'react-hook-form'
 import { toast } from 'sonner'
@@ -10,12 +10,18 @@ import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
 import { AccountPicker } from '@/modules/account'
 import { AccountViewerModal } from '@/modules/account/components/account-viewer/account-viewer'
 import { LoanConnectedAccountsConnected } from '@/modules/account/components/account-viewer/loan-content'
-import { useAuthUserWithOrgBranch } from '@/modules/authentication/authgentication.store'
+import {
+    hasPermissionFromAuth,
+    useAuthUserWithOrgBranch,
+} from '@/modules/authentication/authgentication.store'
 import { CurrencyInput } from '@/modules/currency'
 import LoanPurposeCombobox from '@/modules/loan-purpose/components/loan-purpose-combobox'
 import LoanStatusCombobox from '@/modules/loan-status/components/loan-status-combobox'
+import {
+    // buildLoanVoucherOR,
+    resolveLoanDatesToStatus,
+} from '@/modules/loan-transaction/loan-transaction.utils'
 import { LOAN_MODE_OF_PAYMENT } from '@/modules/loan-transaction/loan.constants'
-import { resolveLoanDatesToStatus } from '@/modules/loan-transaction/loan.utils'
 import {
     IMemberProfile,
     useGetMemberProfileById,
@@ -31,25 +37,25 @@ import {
     BadgeCheckFillIcon,
     BookOpenIcon,
     BuildingBranchIcon,
-    CheckIcon,
+    CalculatorIcon,
     DotsHorizontalIcon,
     EyeIcon,
-    HashIcon,
+    GearIcon,
+    // HashIcon,
     LinkIcon,
-    PercentIcon,
     PinLocationIcon,
     QuestionCircleIcon,
     ScanLineIcon,
-    TextFileFillIcon,
     TransactionListIcon,
     UserIcon,
     UserPlusIcon,
     Users3FillIcon,
-    WandSparkleIcon,
+    // WandSparkleIcon,
     XIcon,
 } from '@/components/icons'
 import Modal, { IModalProps } from '@/components/modals/modal'
 import QrCodeScanner from '@/components/qrcode-scanner'
+// import ActionTooltip from '@/components/tooltips/action-tooltip'
 import { Button } from '@/components/ui/button'
 import { CommandShortcut } from '@/components/ui/command'
 import { Form, FormItem } from '@/components/ui/form'
@@ -57,9 +63,14 @@ import FormErrorMessage from '@/components/ui/form-error-message'
 import FormFieldWrapper from '@/components/ui/form-field-wrapper'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import {
+    Popover,
+    PopoverContent,
+    PopoverTrigger,
+} from '@/components/ui/popover'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area'
-import { Separator } from '@/components/ui/separator'
+// import { Separator } from '@/components/ui/separator'
 import { Switch } from '@/components/ui/switch'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Textarea } from '@/components/ui/textarea'
@@ -77,6 +88,7 @@ import {
 import {
     ILoanTransaction,
     ILoanTransactionRequest,
+    TORLoanVoucherSettings,
 } from '../../../loan-transaction.types'
 import {
     LoanTransactionSchema,
@@ -95,9 +107,11 @@ import LoanEntriesEditor from './loan-entries-editor'
 import LoanTermsAndConditionReceiptSection from './loan-terms-and-condition-receipt'
 
 export interface ILoanTransactionFormProps
-    extends IClassProps,
+    extends
+        IClassProps,
         IForm<Partial<ILoanTransactionRequest>, ILoanTransaction, Error> {
     loanTransactionId?: TEntityId
+    orSettings?: TORLoanVoucherSettings
 }
 
 const LoanMemberProfileScanner = ({
@@ -161,7 +175,7 @@ const LoanMemberProfileScanner = ({
     })
 
     return (
-        <div className="flex flex-col flex-shrink-0 w-fit justify-center items-center">
+        <div className="flex flex-col shrink-0 w-fit justify-center items-center">
             <div className=" size-40">
                 {startScan ? (
                     <div className="aspect-square size-full rounded-xl overflow-hidden ">
@@ -256,10 +270,12 @@ const LoanTransactionCreateUpdateForm = ({
     className,
     loanTransactionId: defaultLoanId,
     readOnly,
+    // orSettings,
     ...formProps
 }: ILoanTransactionFormProps) => {
     const [tab, setTab] = useState<TLoanFormTabs>('entries')
     const [tab2, setTab2] = useState<TLoanFormTabs2>('loan-details')
+    const [mounted, setMounted] = useState(false)
     const [startScan, setStartScan] = useState(false)
     const [customLoading, setCustomLoading] = useState(false)
     const memberPickerModal = useModalState()
@@ -268,8 +284,8 @@ const LoanTransactionCreateUpdateForm = ({
     const {
         currentAuth: {
             user_organization: {
-                user_setting_used_or,
-                user_setting_number_padding,
+                // user_setting_used_or,
+                // user_setting_number_padding,
                 branch: {
                     branch_setting: { loan_applied_equal_to_balance },
                 },
@@ -291,6 +307,8 @@ const LoanTransactionCreateUpdateForm = ({
 
             comaker_type: 'none',
             mode_of_payment: 'monthly',
+
+            collector_place: 'office',
 
             comaker_member_profiles: [],
             comaker_member_profiles_deleted: [],
@@ -442,6 +460,24 @@ const LoanTransactionCreateUpdateForm = ({
         !!form.watch('comaker_deposit_member_accounting_ledger_id') &&
         loan_applied_equal_to_balance
 
+    const add_on = form.watch('is_add_on')
+
+    // Prevents add on click onsubmit calls on mount since form data/values is still initializing
+    useEffect(() => {
+        setMounted(true)
+    }, [])
+
+    useEffect(() => {
+        if (!form.getValues('id') || add_on === undefined || !mounted) return
+        onSubmit()
+
+        // Only listens to add_on change, no need to listen to id and onSubmit since they can
+        // change causing this use effect triggeres infinitely.
+        // this may be a bad appraoch, but the requirements need this for UX instead of
+        // making another endpoint for Add-On switch
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [add_on])
+
     return (
         <Form {...form}>
             <form
@@ -449,7 +485,7 @@ const LoanTransactionCreateUpdateForm = ({
                 onSubmit={onSubmit}
                 ref={formRef}
             >
-                <div className="p-4 space-y-3 max-w-full min-w-0">
+                <div className="p-4 space-y-2 max-w-full min-w-0">
                     <div className="space-y-1 rounded-xl bg-popover p-4">
                         <div className="flex items-center justify-between">
                             <div>
@@ -466,6 +502,12 @@ const LoanTransactionCreateUpdateForm = ({
                             <div className="flex items-center gap-x-1">
                                 {loanTransactionId && (
                                     <LoanTagsManagerPopover
+                                        disabled={
+                                            !hasPermissionFromAuth({
+                                                action: 'Create',
+                                                resourceType: 'LoanTag',
+                                            })
+                                        }
                                         loanTransactionId={loanTransactionId}
                                         size="sm"
                                     />
@@ -521,7 +563,7 @@ const LoanTransactionCreateUpdateForm = ({
                                                 startScan={startScan}
                                             />
                                         )}
-                                        <div className="space-y-1 flex-1 bg-gradient-to-br flex flex-col items-center justify-center from-primary/10 to-background bg-popover rounded-xl">
+                                        <div className="space-y-1 flex-1 bg-linear-to-br flex flex-col items-center justify-center from-primary/10 to-background bg-popover rounded-xl">
                                             {memberProfile ? (
                                                 <>
                                                     <MemberProfileInfoViewLoanCard
@@ -586,16 +628,16 @@ const LoanTransactionCreateUpdateForm = ({
                         <AccountPickerField disabled={readOnly} form={form} />
                     </div>
                     <Tabs
-                        className="max-w-full min-w-0"
+                        className="max-w-full gap-y-1 min-w-0"
                         onValueChange={(selectedTab) =>
                             setTab2(selectedTab as TLoanFormTabs2)
                         }
                         value={tab2}
                     >
                         <ScrollArea>
-                            <TabsList className="before:bg-border justify-start relative h-auto w-full gap-0.5 bg-transparent p-0 before:absolute before:inset-x-0 before:bottom-0 before:h-px">
+                            <TabsList className="before:bg-border justify-start relative h-auto w-full gap-0.5 bg-transparent p-0">
                                 <TabsTrigger
-                                    className="bg-muted overflow-hidden rounded-b-none rounded-t-lg border-x border-t py-2 data-[state=active]:z-10 data-[state=active]:shadow-none"
+                                    className="bg-muted/40 !focus-visible:outline-0 border-0 !ovefocus-visible:ring-0 overflow-hidden rounded-t-lg py-1 data-[state=active]:z-10 data-[state=active]:shadow-none"
                                     value="loan-details"
                                 >
                                     <BookOpenIcon
@@ -606,7 +648,7 @@ const LoanTransactionCreateUpdateForm = ({
                                     Loan Details
                                 </TabsTrigger>
                                 <TabsTrigger
-                                    className="bg-muted overflow-hidden rounded-b-none rounded-t-lg border-x border-t py-2 data-[state=active]:z-10 data-[state=active]:shadow-none"
+                                    className="bg-muted/40 !focus-visible:outline-0 border-0 !ovefocus-visible:ring-0 overflow-hidden rounded-t-lg py-1 data-[state=active]:z-10 data-[state=active]:shadow-none"
                                     value="comaker"
                                 >
                                     <Users3FillIcon
@@ -615,6 +657,17 @@ const LoanTransactionCreateUpdateForm = ({
                                         size={16}
                                     />
                                     Comaker
+                                </TabsTrigger>
+                                <TabsTrigger
+                                    className="bg-muted/40 !focus-visible:outline-0 border-0 !ovefocus-visible:ring-0 overflow-hidden rounded-t-lg py-1 data-[state=active]:z-10 data-[state=active]:shadow-none"
+                                    value="other"
+                                >
+                                    <GearIcon
+                                        aria-hidden="true"
+                                        className="-ms-0.5 me-1.5 opacity-60"
+                                        size={16}
+                                    />
+                                    Other
                                 </TabsTrigger>
                             </TabsList>
                             <ScrollBar orientation="horizontal" />
@@ -625,232 +678,95 @@ const LoanTransactionCreateUpdateForm = ({
                             // className="bg-popover p-4 space-y-4 rounded-xl"
                         >
                             {/* LOAN DETAILS */}
-                            <div className="space-y-4 rounded-xl p-4 bg-popover">
-                                <div className="justify-between flex items-center">
-                                    <div className="shrink-0">
-                                        <p className="font-medium">
-                                            <TextFileFillIcon className="inline text-primary" />{' '}
-                                            Loan Details
-                                        </p>
-                                        <p className="text-xs text-muted-foreground">
-                                            Specify loan type, amount, and
-                                            payment terms
-                                        </p>
-                                    </div>
-                                    <div className="flex items-start gap-3">
-                                        <FormFieldWrapper
-                                            className="col-span-1 max-w-72"
-                                            control={form.control}
-                                            label={
-                                                <span className="flex items-center justify-between pb-1">
-                                                    <span>
-                                                        OR{' '}
-                                                        <HashIcon className="inline text-muted-foreground" />
-                                                    </span>
-                                                    <button
-                                                        className="text-xs disabled:pointer-events-none text-muted-foreground duration-150 cursor-pointer hover:text-foreground underline-offset-4 underline"
-                                                        disabled={isDisabled(
-                                                            'official_receipt_number'
-                                                        )}
-                                                        onClick={() => {
-                                                            const constructedOR =
-                                                                user_setting_used_or
-                                                                    .toString()
-                                                                    .padStart(
-                                                                        user_setting_number_padding,
-                                                                        '0'
-                                                                    )
-
-                                                            form.setValue(
-                                                                'official_receipt_number',
-                                                                constructedOR,
-                                                                {
-                                                                    shouldDirty: true,
-                                                                }
-                                                            )
-
-                                                            toast.info(
-                                                                `Set or to ${constructedOR}`
-                                                            )
-                                                        }}
-                                                        type="button"
-                                                    >
-                                                        Auto OR{' '}
-                                                        <WandSparkleIcon className="inline" />
-                                                    </button>
-                                                </span>
-                                            }
-                                            name="official_receipt_number"
-                                            render={({ field }) => (
-                                                <Input
-                                                    {...field}
-                                                    disabled={isDisabled(
-                                                        field.name
-                                                    )}
-                                                />
-                                            )}
-                                        />
-                                        <FormFieldWrapper
-                                            className="w-fit"
-                                            control={form.control}
-                                            label="Loan Status"
-                                            labelClassName="text-right grow block"
-                                            name="loan_status_id"
-                                            render={({ field }) => (
-                                                <LoanStatusCombobox
-                                                    disabled={false}
-                                                    onChange={(loanStatus) =>
-                                                        field.onChange(
-                                                            loanStatus.id
-                                                        )
-                                                    }
-                                                    value={field.value}
-                                                />
-                                            )}
-                                        />
-                                        <FormFieldWrapper
-                                            className="col-span-1"
-                                            control={form.control}
-                                            label="Loan Type"
-                                            labelClassName="text-right grow block"
-                                            name="loan_type"
-                                            render={({ field }) => (
-                                                <LoanTypeCombobox
-                                                    disabled={isDisabled(
-                                                        field.name
-                                                    )}
-                                                    onChange={(loanType) => {
-                                                        onOpen({
-                                                            title: 'Change Loan Type',
-                                                            description:
-                                                                'Are you sure you want to change loan type? This action will affect loan entries.',
-                                                            content:
-                                                                LoanTypeConfirmDisplay(
-                                                                    { loanType }
-                                                                ),
-                                                            onConfirm: () => {
-                                                                field.onChange(
-                                                                    loanType
-                                                                )
-                                                            },
-                                                        })
-                                                    }}
-                                                    value={field.value}
-                                                />
-                                            )}
-                                        />
-                                    </div>
-                                </div>
-                                {!memberProfile && (
-                                    <FormErrorMessage errorMessage="Select member profile first to enable this section" />
-                                )}
-                                <fieldset
-                                    className="grid grid-cols-12 gap-x-4"
-                                    disabled={!memberProfile || isReadOnly}
-                                >
-                                    <div className="space-y-4 col-span-5">
-                                        <FormFieldWrapper
-                                            className="col-span-1"
-                                            control={form.control}
-                                            label="Loan Purpose"
-                                            name="loan_purpose_id"
-                                            render={({ field }) => (
-                                                <LoanPurposeCombobox
-                                                    {...field}
-                                                    disabled={isDisabled(
-                                                        field.name
-                                                    )}
-                                                    onChange={(loanPurpose) =>
-                                                        field.onChange(
-                                                            loanPurpose.id
-                                                        )
-                                                    }
-                                                />
-                                            )}
-                                        />
-                                        <FormFieldWrapper
-                                            className="shrink-0 col-span-3 w-full"
-                                            control={form.control}
-                                            label="Collector"
-                                            name="collector_place"
-                                            render={({ field }) => (
-                                                <RadioGroup
-                                                    className="grid grid-cols-2"
-                                                    disabled={isDisabled(
-                                                        field.name
-                                                    )}
-                                                    onValueChange={
-                                                        field.onChange
-                                                    }
-                                                    value={field.value ?? ''}
-                                                >
-                                                    <FormItem className="border-input has-data-[state=checked]:border-primary/50 has-data-[state=checked]:bg-primary/20 hover:bg-accent/60 hover:border-primary ease-in-out duration-200 relative flex w-full items-start gap-2 rounded-md border p-2.5 shadow-xs outline-none">
-                                                        <RadioGroupItem
-                                                            aria-describedby="collector-field-description"
-                                                            className="order-1 after:absolute after:inset-0"
-                                                            id="collector-field"
-                                                            value="field"
+                            <div className="space-y-2 rounded-xl p-4 bg-popover">
+                                <div className="flex flex-1 items-center gap-3">
+                                    {/* <OrField
+                                        disabled={isDisabled('voucher')}
+                                        form={form}
+                                        orSettings={orSettings}
+                                    /> */}
+                                    <FormFieldWrapper
+                                        className="shrink-0 w-fit"
+                                        control={form.control}
+                                        label="Collector"
+                                        name="collector_place"
+                                        render={({ field }) => (
+                                            <RadioGroup
+                                                className="grid grid-cols-2"
+                                                disabled={isDisabled(
+                                                    field.name
+                                                )}
+                                                onValueChange={field.onChange}
+                                                value={field.value ?? ''}
+                                            >
+                                                <FormItem className="border-input has-data-[state=checked]:border-primary/50 has-data-[state=checked]:bg-primary/20 hover:bg-accent/60 hover:border-primary ease-in-out duration-200 relative flex w-full items-start gap-2 rounded-full border p-1 px-2 shadow-xs outline-none">
+                                                    <RadioGroupItem
+                                                        aria-describedby="collector-field-description"
+                                                        className="order-1 sr-only after:absolute after:inset-0"
+                                                        id="collector-field"
+                                                        value="field"
+                                                    />
+                                                    <div className="flex grow items-center gap-1">
+                                                        <PinLocationIcon
+                                                            aria-hidden="true"
+                                                            className="shrink-0 size-4 opacity-60 text-rose-400"
                                                         />
-                                                        <div className="flex grow items-start gap-3">
-                                                            <PinLocationIcon
-                                                                aria-hidden="true"
-                                                                className="shrink-0 size-4 opacity-60"
-                                                            />
-                                                            <div>
-                                                                <label
-                                                                    className="text-foreground text-sm font-medium cursor-pointer"
-                                                                    htmlFor="collector-field"
-                                                                >
-                                                                    Field
-                                                                    Collection
-                                                                </label>
-                                                                <p
-                                                                    className="text-muted-foreground text-xs"
-                                                                    id="collector-field-description"
-                                                                >
-                                                                    visits
-                                                                    member's
-                                                                    location
-                                                                </p>
-                                                            </div>
+                                                        <div>
+                                                            <label
+                                                                className="text-foreground text-xs font-medium cursor-pointer"
+                                                                htmlFor="collector-field"
+                                                            >
+                                                                Field
+                                                            </label>
+                                                            <p
+                                                                className="text-muted-foreground text-xs hidden"
+                                                                id="collector-field-description"
+                                                            >
+                                                                visits member's
+                                                                location
+                                                            </p>
                                                         </div>
-                                                    </FormItem>
-                                                    <FormItem className="border-input has-data-[state=checked]:border-primary/50 has-data-[state=checked]:bg-primary/20 hover:bg-accent/60 hover:border-primary ease-in-out duration-200 relative flex w-full items-start gap-2 rounded-md border p-2.5 shadow-xs outline-none">
-                                                        <RadioGroupItem
-                                                            aria-describedby="collector-office-description"
-                                                            className="order-1 after:absolute after:inset-0"
-                                                            id="collector-office"
-                                                            value="office"
+                                                    </div>
+                                                </FormItem>
+                                                <FormItem className="border-input has-data-[state=checked]:border-primary/50 has-data-[state=checked]:bg-primary/20 hover:bg-accent/60 hover:border-primary ease-in-out duration-200 relative flex w-full items-start gap-2 rounded-full border p-1 px-2 shadow-xs outline-none">
+                                                    <RadioGroupItem
+                                                        aria-describedby="collector-office-description"
+                                                        className="order-1 sr-only hidden after:absolute after:inset-0"
+                                                        id="collector-office"
+                                                        value="office"
+                                                    />
+                                                    <div className="flex grow items-center gap-1">
+                                                        <BuildingBranchIcon
+                                                            aria-hidden="true"
+                                                            className="shrink-0 size-3 opacity-60"
                                                         />
-                                                        <div className="flex grow items-start gap-3">
-                                                            <BuildingBranchIcon
-                                                                aria-hidden="true"
-                                                                className="shrink-0 size-4 opacity-60"
-                                                            />
-                                                            <div>
-                                                                <label
-                                                                    className="text-foreground text-sm font-medium cursor-pointer"
-                                                                    htmlFor="collector-office"
-                                                                >
-                                                                    Office
-                                                                    Collection
-                                                                </label>
-                                                                <p
-                                                                    className="text-muted-foreground text-xs"
-                                                                    id="collector-office-description"
-                                                                >
-                                                                    payments at
-                                                                    the office
-                                                                </p>
-                                                            </div>
+                                                        <div>
+                                                            <label
+                                                                className="text-foreground text-xs font-medium cursor-pointer"
+                                                                htmlFor="collector-office"
+                                                            >
+                                                                Office
+                                                            </label>
+                                                            <p
+                                                                className="text-muted-foreground text-xs hidden"
+                                                                id="collector-office-description"
+                                                            >
+                                                                payments at the
+                                                                office
+                                                            </p>
                                                         </div>
-                                                    </FormItem>
-                                                </RadioGroup>
-                                            )}
-                                        />
-                                        <div className="flex gap-x-2 w-fit items-center">
+                                                    </div>
+                                                </FormItem>
+                                            </RadioGroup>
+                                        )}
+                                    />
+                                    <div className="mr-auto">
+                                        <Label className="text-muted-foreground text-sm">
+                                            Excludes
+                                        </Label>
+                                        <div className="flex gap-x-2 w-full justify-start items-center">
                                             <FormFieldWrapper
-                                                className="mb-1"
+                                                className="w-fit"
                                                 control={form.control}
                                                 name="exclude_holiday"
                                                 render={({ field }) => (
@@ -871,14 +787,13 @@ const LoanTransactionCreateUpdateForm = ({
                                                             className="shrink-0 text-xs font-medium"
                                                             htmlFor={field.name}
                                                         >
-                                                            Exclude Holiday
+                                                            Holiday
                                                         </Label>
                                                     </div>
                                                 )}
                                             />
-
                                             <FormFieldWrapper
-                                                className="mb-1"
+                                                className="w-fit"
                                                 control={form.control}
                                                 name="exclude_saturday"
                                                 render={({ field }) => (
@@ -899,14 +814,13 @@ const LoanTransactionCreateUpdateForm = ({
                                                             className="shrink-0 text-xs font-medium"
                                                             htmlFor={field.name}
                                                         >
-                                                            Exclude Saturday
+                                                            Saturday
                                                         </Label>
                                                     </div>
                                                 )}
                                             />
-
                                             <FormFieldWrapper
-                                                className="mb-1"
+                                                className="w-fit"
                                                 control={form.control}
                                                 name="exclude_sunday"
                                                 render={({ field }) => (
@@ -927,269 +841,280 @@ const LoanTransactionCreateUpdateForm = ({
                                                             className="font-medium text-xs"
                                                             htmlFor={field.name}
                                                         >
-                                                            Exclude Sunday
+                                                            Sunday
                                                         </Label>
                                                     </div>
                                                 )}
                                             />
                                         </div>
                                     </div>
-                                    <div className="space-y-4 col-span-7 flex-1">
-                                        <div className="flex gap-3">
-                                            <FormFieldWrapper
-                                                control={form.control}
-                                                label="Applied Amount *"
-                                                name="applied_1"
-                                                render={({
-                                                    field: {
-                                                        onChange,
-                                                        ...field
-                                                    },
-                                                }) => (
-                                                    <CurrencyInput
-                                                        {...field}
-                                                        currency={
-                                                            form.watch(
-                                                                'account'
-                                                            )?.currency
-                                                        }
-                                                        disabled={
-                                                            isDisabled(
-                                                                field.name
-                                                            ) ||
-                                                            isLoanAppliedEqualBalance
-                                                        }
-                                                        id={field.name}
-                                                        onValueChange={(
-                                                            newValue = ''
-                                                        ) => onChange(newValue)}
-                                                        placeholder="Applied amount"
-                                                    />
+                                    <FormFieldWrapper
+                                        className="col-span-1 max-w-[200px]"
+                                        control={form.control}
+                                        label="Loan Type"
+                                        labelClassName="text-left grow block"
+                                        name="loan_type"
+                                        render={({ field }) => (
+                                            <LoanTypeCombobox
+                                                disabled={isDisabled(
+                                                    field.name
                                                 )}
+                                                onChange={(loanType) => {
+                                                    onOpen({
+                                                        title: 'Change Loan Type',
+                                                        description:
+                                                            'Are you sure you want to change loan type? This action will affect loan entries.',
+                                                        content:
+                                                            LoanTypeConfirmDisplay(
+                                                                { loanType }
+                                                            ),
+                                                        onConfirm: () => {
+                                                            field.onChange(
+                                                                loanType
+                                                            )
+                                                        },
+                                                    })
+                                                }}
+                                                value={field.value}
                                             />
-                                            <Separator
-                                                className="min-h-8 mt-6"
-                                                orientation="vertical"
+                                        )}
+                                    />
+                                    <FormFieldWrapper
+                                        className="max-w-[130px]"
+                                        control={form.control}
+                                        label="Applied Amount *"
+                                        name="applied_1"
+                                        render={({
+                                            field: { onChange, ...field },
+                                        }) => (
+                                            <CurrencyInput
+                                                {...field}
+                                                currency={
+                                                    form.watch('account')
+                                                        ?.currency
+                                                }
+                                                disabled={
+                                                    isDisabled(field.name) ||
+                                                    isLoanAppliedEqualBalance
+                                                }
+                                                id={field.name}
+                                                onValueChange={(
+                                                    newValue = ''
+                                                ) => onChange(newValue)}
+                                                placeholder="Applied amount"
                                             />
-                                            <FormFieldWrapper
-                                                control={form.control}
-                                                label="Terms"
-                                                name="terms"
-                                                render={({ field }) => (
-                                                    <Input
-                                                        {...field}
-                                                        disabled={isDisabled(
-                                                            field.name
+                                        )}
+                                    />
+                                    <div className="flex gap-3 max-w-[150px]">
+                                        <FormFieldWrapper
+                                            className="flex-1"
+                                            control={form.control}
+                                            label="Terms"
+                                            name="terms"
+                                            render={({ field }) => (
+                                                <Input
+                                                    {...field}
+                                                    disabled={isDisabled(
+                                                        field.name
+                                                    )}
+                                                    id={field.name}
+                                                    placeholder="Terms"
+                                                />
+                                            )}
+                                        />
+                                        <SuggestedAmortizationSection
+                                            form={form}
+                                        />
+                                    </div>
+                                </div>
+                                {!memberProfile && (
+                                    <FormErrorMessage errorMessage="Select member profile first to enable this section" />
+                                )}
+                                <fieldset
+                                    className="flex-1 space-y-2"
+                                    disabled={!memberProfile || isReadOnly}
+                                >
+                                    <div className="flex items-center w-full gap-x-4">
+                                        <FormFieldWrapper
+                                            className="shrink-0 w-fit "
+                                            control={form.control}
+                                            label="Mode of Payment"
+                                            name="mode_of_payment"
+                                            render={({ field }) => (
+                                                <div>
+                                                    <div className="flex flex-wrap gap-1.5">
+                                                        {LOAN_MODE_OF_PAYMENT.map(
+                                                            (mode) => (
+                                                                <button
+                                                                    className={`px-3 py-1.5 rounded-md text-xs font-medium transition-colors ${
+                                                                        field.value ===
+                                                                        mode
+                                                                            ? 'bg-primary text-primary-foreground'
+                                                                            : 'bg-secondary text-secondary-foreground hover:bg-muted'
+                                                                    }`}
+                                                                    key={mode}
+                                                                    onClick={() =>
+                                                                        field.onChange(
+                                                                            mode
+                                                                        )
+                                                                    }
+                                                                    type="button"
+                                                                >
+                                                                    {mode}
+                                                                </button>
+                                                            )
                                                         )}
-                                                        id={field.name}
-                                                        placeholder="Terms"
-                                                    />
+                                                    </div>
+                                                </div>
+                                            )}
+                                        />
+                                        {mode_of_payment === 'monthly' && (
+                                            <FormFieldWrapper
+                                                className="w-fit ml-auto mt-5"
+                                                control={form.control}
+                                                name="mode_of_payment_monthly_exact_day"
+                                                render={({ field }) => (
+                                                    <div
+                                                        className="group flex items-center gap-2"
+                                                        data-state={
+                                                            field.value
+                                                                ? 'checked'
+                                                                : 'unchecked'
+                                                        }
+                                                    >
+                                                        <span
+                                                            aria-controls={
+                                                                field.name
+                                                            }
+                                                            className="group-data-[state=checked]:text-muted-foreground/70 flex-1 text-nowrap cursor-pointer text-right text-xs font-medium"
+                                                            id={`${field.name}-off`}
+                                                            onClick={() =>
+                                                                field.onChange(
+                                                                    false
+                                                                )
+                                                            }
+                                                        >
+                                                            30 Days
+                                                        </span>
+                                                        <Switch
+                                                            aria-labelledby={`${field.name}-off ${field.name}-on`}
+                                                            checked={
+                                                                field.value
+                                                            }
+                                                            className="peer inline-flex shrink-0 cursor-pointer items-center rounded-full border-2 border-transparent transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:cursor-not-allowed disabled:opacity-50 data-[state=checked]:bg-primary data-[state=unchecked]:bg-input h-4 w-6 [&_span]:size-3 data-[state=checked]:[&_span]:translate-x-2 data-[state=checked]:[&_span]:rtl:-translate-x-2"
+                                                            id={field.name}
+                                                            onCheckedChange={(
+                                                                switchValue
+                                                            ) =>
+                                                                field.onChange(
+                                                                    switchValue
+                                                                )
+                                                            }
+                                                        />
+                                                        <span
+                                                            aria-controls={
+                                                                field.name
+                                                            }
+                                                            className="group-data-[state=unchecked]:text-muted-foreground/70 flex-1 cursor-pointer w-fit text-nowrap text-left text-xs font-medium"
+                                                            id={`${field.name}-on`}
+                                                            onClick={() =>
+                                                                field.onChange(
+                                                                    true
+                                                                )
+                                                            }
+                                                        >
+                                                            Exact Day
+                                                        </span>
+                                                    </div>
+                                                    // <div className="inline-flex items-center gap-2">
+                                                    //     <Switch
+                                                    //         id={field.name}
+                                                    //         aria-label="Toggle exact day"
+                                                    //         checked={
+                                                    //             field.value ||
+                                                    //             false
+                                                    //         }
+                                                    //         onCheckedChange={
+                                                    //             field.onChange
+                                                    //         }
+                                                    //         className="peer inline-flex shrink-0 cursor-pointer items-center rounded-full border-2 border-transparent transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:cursor-not-allowed disabled:opacity-50 data-[state=checked]:bg-primary data-[state=unchecked]:bg-input h-4 w-6 [&_span]:size-3 data-[state=checked]:[&_span]:translate-x-2 data-[state=checked]:[&_span]:rtl:-translate-x-2"
+                                                    //     />
+                                                    //     <Label
+                                                    //         htmlFor={
+                                                    //             field.name
+                                                    //         }
+                                                    //         className="text-sm font-medium"
+                                                    //     >
+
+                                                    //     </Label>
+                                                    // </div>
                                                 )}
                                             />
-                                            <SuggestedAmortizationSection
-                                                form={form}
-                                            />
-                                        </div>
+                                        )}
+                                        {mode_of_payment === 'day' && (
+                                            <>
+                                                <FormFieldWrapper
+                                                    className="space-y-1 w-fit"
+                                                    control={form.control}
+                                                    label="Fixed Days"
+                                                    name="mode_of_payment_fixed_days"
+                                                    render={({ field }) => (
+                                                        <Input
+                                                            {...field}
+                                                            disabled={isDisabled(
+                                                                field.name
+                                                            )}
+                                                            id={field.name}
+                                                            placeholder="No of Days"
+                                                        />
+                                                    )}
+                                                />
+                                            </>
+                                        )}
+                                        {mode_of_payment === 'weekly' && (
+                                            <>
+                                                <FormFieldWrapper
+                                                    className="space-y-1 w-fit"
+                                                    control={form.control}
+                                                    label="Weekdays"
+                                                    name="mode_of_payment_weekly"
+                                                    render={({ field }) => (
+                                                        <WeekdayCombobox
+                                                            {...field}
+                                                        />
+                                                    )}
+                                                />
+                                            </>
+                                        )}
+                                        {mode_of_payment === 'semi-monthly' && (
+                                            <div className="grid grid-cols-2 gap-3">
+                                                <FormFieldWrapper
+                                                    className="col-span-1"
+                                                    control={form.control}
+                                                    label="Pay 1 (Day of Month) *"
+                                                    name="mode_of_payment_semi_monthly_pay_1"
+                                                    render={({ field }) => (
+                                                        <Input {...field} />
+                                                    )}
+                                                />
+                                                <FormFieldWrapper
+                                                    className="col-span-1"
+                                                    control={form.control}
+                                                    label="Pay 2 (Day of Month) *"
+                                                    name="mode_of_payment_semi_monthly_pay_2"
+                                                    render={({ field }) => (
+                                                        <Input {...field} />
+                                                    )}
+                                                />
+                                            </div>
+                                        )}
+                                    </div>
+
+                                    <div className="flex ml-auto items-baseline gap-x-2">
                                         <LoanPickerSection
                                             form={form}
                                             isDisabled={isDisabled}
                                         />
-                                        <div className="space-y-4">
-                                            <div className="flex max-w-full overflow-x-auto ecoop-scroll items-center gap-3">
-                                                <FormFieldWrapper
-                                                    className="shrink-0 w-fit col-span-4"
-                                                    control={form.control}
-                                                    label="Mode of Payment"
-                                                    name="mode_of_payment"
-                                                    render={({ field }) => (
-                                                        <RadioGroup
-                                                            className="flex flex-wrap gap-x-2"
-                                                            onValueChange={
-                                                                field.onChange
-                                                            }
-                                                            value={
-                                                                field.value ??
-                                                                ''
-                                                            }
-                                                        >
-                                                            {LOAN_MODE_OF_PAYMENT.map(
-                                                                (mop) => (
-                                                                    <FormItem
-                                                                        className="flex items-center gap-4"
-                                                                        key={
-                                                                            mop
-                                                                        }
-                                                                    >
-                                                                        <label
-                                                                            className="border-accent/50 hover:bg-accent/40 ease-in-out duration-100 bg-muted has-data-[state=checked]:text-primary-foreground has-data-[state=checked]:border-primary/50 has-data-[state=checked]:bg-primary has-focus-visible:border-ring has-focus-visible:ring-ring/50 relative flex cursor-pointer items-center gap-1 rounded-md border py-2.5 px-3 text-center shadow-xs outline-none has-focus-visible:ring-[3px] has-data-disabled:cursor-not-allowed has-data-disabled:opacity-50"
-                                                                            key={`mop-${mop}`}
-                                                                        >
-                                                                            <RadioGroupItem
-                                                                                className="absolute border-0 inset-0 opacity-0 cursor-pointer"
-                                                                                id={`mop-${mop}`}
-                                                                                value={
-                                                                                    mop
-                                                                                }
-                                                                            />
-                                                                            <p className="capitalize text-xs leading-none font-medium pointer-events-none">
-                                                                                {
-                                                                                    mop
-                                                                                }
-                                                                            </p>
-                                                                            {field.value ===
-                                                                                mop && (
-                                                                                <CheckIcon className="inline pointer-events-none" />
-                                                                            )}
-                                                                        </label>
-                                                                    </FormItem>
-                                                                )
-                                                            )}
-                                                        </RadioGroup>
-                                                    )}
-                                                />
-                                            </div>
-                                            {mode_of_payment === 'monthly' && (
-                                                <FormFieldWrapper
-                                                    className="mb-1"
-                                                    control={form.control}
-                                                    name="mode_of_payment_monthly_exact_day"
-                                                    render={({ field }) => (
-                                                        <div
-                                                            className="group inline-flex items-center gap-2"
-                                                            data-state={
-                                                                field.value
-                                                                    ? 'checked'
-                                                                    : 'unchecked'
-                                                            }
-                                                        >
-                                                            <span
-                                                                aria-controls={
-                                                                    field.name
-                                                                }
-                                                                className="group-data-[state=checked]:text-muted-foreground/70 flex-1 text-nowrap cursor-pointer text-right text-sm font-medium"
-                                                                id={`${field.name}-off`}
-                                                                onClick={() =>
-                                                                    field.onChange(
-                                                                        false
-                                                                    )
-                                                                }
-                                                            >
-                                                                By 30 Days
-                                                            </span>
-                                                            <Switch
-                                                                aria-labelledby={`${field.name}-off ${field.name}-on`}
-                                                                checked={
-                                                                    field.value
-                                                                }
-                                                                className="ease-in-out duration-200"
-                                                                id={field.name}
-                                                                onCheckedChange={(
-                                                                    switchValue
-                                                                ) =>
-                                                                    field.onChange(
-                                                                        switchValue
-                                                                    )
-                                                                }
-                                                            />
-                                                            <span
-                                                                aria-controls={
-                                                                    field.name
-                                                                }
-                                                                className="group-data-[state=unchecked]:text-muted-foreground/70 flex-1 cursor-pointer text-left text-sm font-medium"
-                                                                id={`${field.name}-on`}
-                                                                onClick={() =>
-                                                                    field.onChange(
-                                                                        true
-                                                                    )
-                                                                }
-                                                            >
-                                                                Exact Day
-                                                            </span>
-                                                        </div>
-                                                        // <div className="inline-flex items-center gap-2">
-                                                        //     <Switch
-                                                        //         id={field.name}
-                                                        //         aria-label="Toggle exact day"
-                                                        //         checked={
-                                                        //             field.value ||
-                                                        //             false
-                                                        //         }
-                                                        //         onCheckedChange={
-                                                        //             field.onChange
-                                                        //         }
-                                                        //         className="peer inline-flex shrink-0 cursor-pointer items-center rounded-full border-2 border-transparent transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:cursor-not-allowed disabled:opacity-50 data-[state=checked]:bg-primary data-[state=unchecked]:bg-input h-4 w-6 [&_span]:size-3 data-[state=checked]:[&_span]:translate-x-2 data-[state=checked]:[&_span]:rtl:-translate-x-2"
-                                                        //     />
-                                                        //     <Label
-                                                        //         htmlFor={
-                                                        //             field.name
-                                                        //         }
-                                                        //         className="text-sm font-medium"
-                                                        //     >
-
-                                                        //     </Label>
-                                                        // </div>
-                                                    )}
-                                                />
-                                            )}
-                                            {mode_of_payment === 'day' && (
-                                                <>
-                                                    <FormFieldWrapper
-                                                        className="space-y-1 col-span-1"
-                                                        control={form.control}
-                                                        label="Fixed Days"
-                                                        name="mode_of_payment_fixed_days"
-                                                        render={({ field }) => (
-                                                            <Input
-                                                                {...field}
-                                                                disabled={isDisabled(
-                                                                    field.name
-                                                                )}
-                                                                id={field.name}
-                                                                placeholder="No of Days"
-                                                            />
-                                                        )}
-                                                    />
-                                                </>
-                                            )}
-                                            {mode_of_payment === 'weekly' && (
-                                                <>
-                                                    <FormFieldWrapper
-                                                        className="space-y-1 col-span-1"
-                                                        control={form.control}
-                                                        label="Weekdays"
-                                                        name="mode_of_payment_weekly"
-                                                        render={({ field }) => (
-                                                            <WeekdayCombobox
-                                                                {...field}
-                                                            />
-                                                        )}
-                                                    />
-                                                </>
-                                            )}
-                                            {mode_of_payment ===
-                                                'semi-monthly' && (
-                                                <div className="grid grid-cols-2 gap-3">
-                                                    <FormFieldWrapper
-                                                        className="col-span-1"
-                                                        control={form.control}
-                                                        label="Pay 1 (Day of Month) *"
-                                                        name="mode_of_payment_semi_monthly_pay_1"
-                                                        render={({ field }) => (
-                                                            <Input {...field} />
-                                                        )}
-                                                    />
-                                                    <FormFieldWrapper
-                                                        className="col-span-1"
-                                                        control={form.control}
-                                                        label="Pay 2 (Day of Month) *"
-                                                        name="mode_of_payment_semi_monthly_pay_2"
-                                                        render={({ field }) => (
-                                                            <Input {...field} />
-                                                        )}
-                                                    />
-                                                </div>
-                                            )}
-                                        </div>
                                     </div>
                                 </fieldset>
                             </div>
@@ -1202,19 +1127,67 @@ const LoanTransactionCreateUpdateForm = ({
                                 isDisabled={isDisabled}
                             />
                         </TabsContent>
+                        <TabsContent
+                            value="other"
+                            // className="bg-popover p-4 space-y-4 rounded-xl"
+                        >
+                            <div className="space-y-4 rounded-xl p-4 bg-popover">
+                                <div className="justify-between flex items-center">
+                                    <div className="flex items-start gap-3">
+                                        <FormFieldWrapper
+                                            className="w-fit"
+                                            control={form.control}
+                                            label="Loan Status"
+                                            name="loan_status_id"
+                                            render={({ field }) => (
+                                                <LoanStatusCombobox
+                                                    disabled={false}
+                                                    onChange={(loanStatus) =>
+                                                        field.onChange(
+                                                            loanStatus.id
+                                                        )
+                                                    }
+                                                    value={field.value}
+                                                />
+                                            )}
+                                        />
+                                        <FormFieldWrapper
+                                            className="col-span-1"
+                                            control={form.control}
+                                            label="Loan Purpose"
+                                            name="loan_purpose_id"
+                                            render={({ field }) => (
+                                                <LoanPurposeCombobox
+                                                    {...field}
+                                                    disabled={isDisabled(
+                                                        field.name
+                                                    )}
+                                                    onChange={(loanPurpose) =>
+                                                        field.onChange(
+                                                            loanPurpose.id
+                                                        )
+                                                    }
+                                                />
+                                            )}
+                                        />
+                                    </div>
+                                </div>
+                                {!memberProfile && (
+                                    <FormErrorMessage errorMessage="Select member profile first to enable this section" />
+                                )}
+                            </div>
+                        </TabsContent>
                     </Tabs>
 
-                    <Separator />
-
                     <Tabs
-                        className="max-w-full min-w-0"
+                        className="max-w-full min-w-0 gap-y-1"
                         onValueChange={(tab) => setTab(tab as TLoanFormTabs)}
                         value={tab}
                     >
                         <ScrollArea>
-                            <TabsList className="before:bg-border justify-start relative h-auto w-full gap-0.5 bg-transparent p-0 before:absolute before:inset-x-0 before:bottom-0 before:h-px">
+                            <TabsList className="before:bg-border justify-start relative h-auto w-full gap-0.5 bg-transparent p-0 ">
                                 <TabsTrigger
-                                    className="bg-muted overflow-hidden rounded-b-none rounded-t-lg border-x border-t py-2 data-[state=active]:z-10 data-[state=active]:shadow-none"
+                                    className="bg-muted/40 !focus-visible:outline-0 border-0 !ovefocus-visible:ring-0 overflow-hidden rounded-t-lg py-1 data-[state=active]:z-10 data-[state=active]:shadow-none"
                                     value="entries"
                                 >
                                     <TransactionListIcon
@@ -1225,7 +1198,7 @@ const LoanTransactionCreateUpdateForm = ({
                                     Loan Entries
                                 </TabsTrigger>
                                 <TabsTrigger
-                                    className="bg-muted overflow-hidden rounded-b-none rounded-t-lg border-x border-t py-2 data-[state=active]:z-10 data-[state=active]:shadow-none"
+                                    className="bg-muted/40 !focus-visible:outline-0 border-0 !ovefocus-visible:ring-0 overflow-hidden rounded-t-lg py-1 data-[state=active]:z-10 data-[state=active]:shadow-none"
                                     value="clearance"
                                 >
                                     <BadgeCheckFillIcon
@@ -1236,7 +1209,7 @@ const LoanTransactionCreateUpdateForm = ({
                                     Clearance
                                 </TabsTrigger>
                                 <TabsTrigger
-                                    className="bg-muted overflow-hidden rounded-t-lg rounded-b-none border-x border-t py-2 data-[state=active]:z-10 data-[state=active]:shadow-none"
+                                    className="bg-muted/40 !focus-visible:outline-0 border-0 !ovefocus-visible:ring-0 overflow-hidden rounded-t-lg py-1 data-[state=active]:z-10 data-[state=active]:shadow-none"
                                     value="terms-and-condition-receipt"
                                 >
                                     <QuestionCircleIcon
@@ -1247,7 +1220,7 @@ const LoanTransactionCreateUpdateForm = ({
                                     Terms & Condition / Receipt
                                 </TabsTrigger>
                                 <TabsTrigger
-                                    className="bg-muted overflow-hidden rounded-t-lg rounded-b-none border-x border-t py-2 data-[state=active]:z-10 data-[state=active]:shadow-none"
+                                    className="bg-muted/40 !focus-visible:outline-0 border-0 !ovefocus-visible:ring-0 overflow-hidden rounded-t-lg py-1 data-[state=active]:z-10 data-[state=active]:shadow-none"
                                     value="other"
                                 >
                                     <DotsHorizontalIcon
@@ -1402,7 +1375,7 @@ const LoanPickerSection = ({
                         value={form.getValues('previous_loan')}
                     />
                     <Button
-                        className="size-fit !p-2.5 shrink-0"
+                        className="size-fit p-2.5! shrink-0"
                         onClick={() => {
                             field.onChange(undefined)
                             form.setValue('previous_loan', undefined)
@@ -1452,7 +1425,7 @@ const SuggestedAmortizationSection = ({
                 size="icon"
                 type="button"
             >
-                <PercentIcon />
+                <CalculatorIcon />
             </Button>
         </>
     )
@@ -1473,9 +1446,23 @@ const AccountPickerField = ({
         <>
             <FormFieldWrapper
                 control={form.control}
-                label={
-                    <>
-                        Loan Account
+                // label={<>Loan Account</>}
+                labelClassName="flex justify-between items-end"
+                name="account_id"
+                render={({ field }) => (
+                    <div className="flex items-center gap-x-2">
+                        <AccountPicker
+                            disabled={disabled}
+                            hideDescription
+                            mode="loan"
+                            onSelect={(account) => {
+                                field.onChange(account?.id)
+                                form.setValue('account', account)
+                            }}
+                            placeholder="Select Loan Account"
+                            triggerClassName="flex-1"
+                            value={form.getValues('account')}
+                        />{' '}
                         {accountId && (
                             <>
                                 <AccountViewerModal
@@ -1485,55 +1472,56 @@ const AccountPickerField = ({
                                         defaultValue: account,
                                     }}
                                 />
+                                {accountId && (
+                                    <Popover>
+                                        <PopoverTrigger asChild>
+                                            <Button
+                                                className="ml-auto"
+                                                size="sm"
+                                                variant="secondary"
+                                            >
+                                                <LinkIcon /> Account Connections
+                                            </Button>
+                                        </PopoverTrigger>
+                                        <PopoverContent className="w-full max-w-5xl">
+                                            <div className="space-y-3 w-full">
+                                                <div>
+                                                    <p className="font-medium text-sm">
+                                                        <LinkIcon className="inline" />{' '}
+                                                        Loan Account Connection
+                                                    </p>
+                                                    <p className="text-sm text-muted-foreground mt-1">
+                                                        These accounts that are
+                                                        connected may affect how
+                                                        interest, fines, and
+                                                        other charges are
+                                                        computed for this loan
+                                                        account.
+                                                    </p>
+                                                </div>
+                                                <LoanConnectedAccountsConnected
+                                                    accountId={account.id}
+                                                    className="md:grid-cols-3"
+                                                />
+                                            </div>
+                                        </PopoverContent>
+                                    </Popover>
+                                )}
                                 <Button
-                                    className="size-fit p-1"
                                     onClick={() =>
                                         accountViewerModal.onOpenChange(true)
                                     }
-                                    // size="icon"
+                                    size="sm"
                                     type="button"
-                                    variant="ghost"
+                                    variant="secondary"
                                 >
                                     <EyeIcon /> View Account
                                 </Button>
                             </>
                         )}
-                    </>
-                }
-                labelClassName="flex justify-between items-end"
-                name="account_id"
-                render={({ field }) => (
-                    <AccountPicker
-                        disabled={disabled}
-                        mode="loan"
-                        onSelect={(account) => {
-                            field.onChange(account?.id)
-                            form.setValue('account', account)
-                        }}
-                        placeholder="Select Loan Account"
-                        value={form.getValues('account')}
-                    />
+                    </div>
                 )}
             />
-            {accountId && (
-                <div className="space-y-3">
-                    <div>
-                        <p className="font-medium text-sm">
-                            <LinkIcon className="inline" /> Loan Account
-                            Connection
-                        </p>
-                        <p className="text-sm text-muted-foreground mt-1">
-                            These accounts that are connected may affect how
-                            interest, fines, and other charges are computed for
-                            this loan account.
-                        </p>
-                    </div>
-                    <LoanConnectedAccountsConnected
-                        accountId={account.id}
-                        className="md:grid-cols-3"
-                    />
-                </div>
-            )}
         </>
     )
 }
@@ -1547,7 +1535,7 @@ export const LoanTransactionCreateUpdateFormModal = ({
 }) => {
     return (
         <Modal
-            className={cn('p-0 !max-w-5xl gap-y-0', className)}
+            className={cn('p-0 max-w-5xl! gap-y-0', className)}
             description=""
             descriptionClassName="sr-only"
             title=""
@@ -1563,5 +1551,56 @@ export const LoanTransactionCreateUpdateFormModal = ({
         </Modal>
     )
 }
+
+// const OrField = ({
+//     form,
+//     orSettings,
+//     disabled,
+// }: {
+//     disabled?: boolean
+//     orSettings?: TORLoanVoucherSettings
+//     form: UseFormReturn<TLoanTransactionSchema>
+// }) => {
+//     return (
+//         <FormFieldWrapper
+//             className="w-full max-w-[300px] mr-auto"
+//             control={form.control}
+//             label={
+//                 <span className="flex items-center justify-between pb-0.5">
+//                     <span className="inline-flex gap-x-1 items-center">
+//                         <HashIcon className="inline text-muted-foreground" />{' '}
+//                         Generated Voucher
+//                     </span>
+//                     <ActionTooltip tooltipContent="Auto generate Reference Number">
+//                         <button
+//                             className="text-xs disabled:pointer-events-none text-muted-foreground duration-150 cursor-pointer hover:text-foreground underline-offset-4 underline"
+//                             onClick={() => {
+//                                 if (!orSettings)
+//                                     return toast.warning(
+//                                         'Reference Number Generate Failed - could not load settings'
+//                                     )
+
+//                                 const constructedCV =
+//                                     buildLoanVoucherOR(orSettings)
+
+//                                 form.setValue('voucher', constructedCV, {
+//                                     shouldDirty: true,
+//                                 })
+//                                 toast.info(
+//                                     `Set Reference Number to ${constructedCV}`
+//                                 )
+//                             }}
+//                             type="button"
+//                         >
+//                             <WandSparkleIcon className="inline ml-1" />
+//                         </button>
+//                     </ActionTooltip>
+//                 </span>
+//             }
+//             name="voucher"
+//             render={({ field }) => <Input {...field} disabled={disabled} />}
+//         />
+//     )
+// }
 
 export default LoanTransactionCreateUpdateForm

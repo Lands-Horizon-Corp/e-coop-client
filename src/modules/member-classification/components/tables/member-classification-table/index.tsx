@@ -40,6 +40,19 @@ import MemberClassificationAction, {
     MemberClassificationTableActionManager,
 } from './row-action-context'
 
+export type MemberClassificationTableProps = TableProps<IMemberClassification> &
+    IMemberClassificationTableColumnProps & {
+        toolbarProps?: Omit<
+            IDataTableToolbarProps<IMemberClassification>,
+            | 'table'
+            | 'refreshActionProps'
+            | 'globalSearchProps'
+            | 'scrollableProps'
+            | 'filterLogicProps'
+            | 'deleteActionProps'
+        >
+    }
+
 const MemberClassificationTable = ({
     persistKey = ['member-classification'],
     className,
@@ -52,19 +65,7 @@ const MemberClassificationTable = ({
     },
     actionComponent = MemberClassificationAction,
     RowContextComponent = MemberClassificationRowContext,
-}: TableProps<IMemberClassification> &
-    IMemberClassificationTableColumnProps & {
-        toolbarProps?: Omit<
-            IDataTableToolbarProps<IMemberClassification>,
-            | 'table'
-            | 'refreshActionProps'
-            | 'globalSearchProps'
-            | 'scrollableProps'
-            | 'filterLogicProps'
-            | 'exportActionProps'
-            | 'deleteActionProps'
-        >
-    }) => {
+}: MemberClassificationTableProps) => {
     const queryClient = useQueryClient()
     const { pagination, setPagination } = usePagination()
     const { sortingStateBase64, tableSorting, setTableSorting } =
@@ -184,6 +185,7 @@ const MemberClassificationTable = ({
                                 }),
                         }}
                         exportActionProps={{
+                            ...toolbarProps?.exportActionProps,
                             isLoading: isPending,
                             filters: exportfilter,
                             model: 'MemberClassification',

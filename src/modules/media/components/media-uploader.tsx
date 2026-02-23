@@ -222,7 +222,7 @@ const FileItem = ({
 const MediaUploader = (props: MediaUploaderProps) => {
     const {
         mode,
-        maxSize = 10 * 1024 * 1024, // 10 MB default
+        maxSize = 4 * 1024 * 1024, // 10 MB default
         accept,
         maxFiles = mode === 'single' ? 1 : 10,
         disabled = false,

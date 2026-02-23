@@ -10,7 +10,7 @@ export const MemberEducationalAttainmentSchema = z.object({
     id: z.string().optional(),
     branch_id: entityIdSchema.optional(),
     member_profile_id: entityIdSchema,
-    school_name: z.string().min(1, 'School name is required').optional(),
+    school_name: z.string().optional(),
     school_year: z.coerce
         .number({ error: 'Invalid Year' })
         .transform((val) => Math.trunc(val))
@@ -23,7 +23,7 @@ export const MemberEducationalAttainmentSchema = z.object({
             { message: 'Enter a valid school year' }
         )
         .optional(),
-    program_course: z.string().min(1, 'Program/Course is required').optional(),
+    program_course: z.string().optional(),
     educational_attainment: z.enum(EDUCATIONAL_ATTAINMENT, {
         error: 'Educational attainment is required',
     }),

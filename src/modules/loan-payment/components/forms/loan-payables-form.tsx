@@ -31,6 +31,7 @@ import {
     useCreateMultiTransactionPayment,
     useCreateTransactionStandalone,
 } from '@/modules/transaction'
+import { usePaymentOnSuccessStore } from '@/modules/transaction/hooks/use-transaction-payment-success'
 
 import FormFooterResetSubmit from '@/components/form-components/form-footer-reset-submit'
 import {
@@ -66,13 +67,12 @@ import {
     TLoanPayablePaymentSchema,
 } from '../../loan-payment.validation'
 
-export interface LoanPayablesFormProps
-    extends IForm<
-        Partial<TLoanPayablePaymentSchema>,
-        ITransaction,
-        Error,
-        TLoanPayablePaymentSchema
-    > {
+export interface LoanPayablesFormProps extends IForm<
+    Partial<TLoanPayablePaymentSchema>,
+    ITransaction,
+    Error,
+    TLoanPayablePaymentSchema
+> {
     payables: ILoanPayableAccount[]
     memberProfileId: TEntityId
     loanTransactionId: TEntityId
@@ -90,18 +90,17 @@ const LoanPayablesForm = ({
     const [transaction, setTransaction] = useState<ITransaction>()
     const [successTransaction, setSuccessTransaction] =
         useState<IGeneralLedger | null>(null)
-    const [showSuccessModal, setShowSuccessModal] = useState(false)
 
     const {
         currentAuth: {
             user_organization: {
-                user_setting_used_or,
-                user_setting_number_padding,
                 settings_payment_type_default_value_id,
                 settings_payment_type_default_value,
             },
         },
     } = useAuthUserWithOrgBranch()
+
+    const { onOpen } = usePaymentOnSuccessStore()
 
     const form = useForm<TLoanPayablePaymentSchema>({
         mode: 'onChange',
@@ -209,7 +208,10 @@ const LoanPayablesForm = ({
                 // Show success modal with the payment transaction
                 if (result) {
                     setSuccessTransaction(result)
-                    setShowSuccessModal(true)
+                    onOpen({
+                        generalLedger: result,
+                        mode: 'payment',
+                    })
                 }
 
                 formProps.onSuccess?.(focusedTransaction)
@@ -301,22 +303,22 @@ const LoanPayablesForm = ({
                                     onClick={() => {
                                         alert('trigged')
 
-                                        const constructedOR =
-                                            user_setting_used_or
-                                                .toString()
-                                                .padStart(
-                                                    user_setting_number_padding,
-                                                    '0'
-                                                )
+                                        // const constructedOR =
+                                        //     user_setting_used_or
+                                        //         .toString()
+                                        //         .padStart(
+                                        //             user_setting_number_padding,
+                                        //             '0'
+                                        //         )
 
-                                        form.setValue(
-                                            'reference_number',
-                                            constructedOR,
-                                            {
-                                                shouldDirty: true,
-                                            }
-                                        )
-                                        toast.info(`Set or to ${constructedOR}`)
+                                        // form.setValue(
+                                        //     'reference_number',
+                                        //     constructedOR,
+                                        //     {
+                                        //         shouldDirty: true,
+                                        //     }
+                                        // )
+                                        // toast.info(`Set or to ${constructedOR}`)
                                     }}
                                     type="button"
                                 >
@@ -673,7 +675,7 @@ const LoanPayablesForm = ({
                                                     return (
                                                         <ImageField
                                                             {...field}
-                                                            className="!max-h-10"
+                                                            className="max-h-10!"
                                                             disabled={isDisabled(
                                                                 `payables`
                                                             )}
@@ -722,16 +724,7 @@ const LoanPayablesForm = ({
                 />
             </form>
 
-            <TransactionModalSuccessPayment
-                isOpen={showSuccessModal}
-                onClose={() => {
-                    setShowSuccessModal(false)
-                    setSuccessTransaction(null)
-                }}
-                onOpenChange={setShowSuccessModal}
-                open={showSuccessModal}
-                transaction={successTransaction}
-            />
+            {successTransaction && <TransactionModalSuccessPayment />}
         </Form>
     )
 }

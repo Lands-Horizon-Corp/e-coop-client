@@ -5,6 +5,7 @@ import qs from 'query-string'
 
 import FilterContext from '@/contexts/filter-context/filter-context'
 import { cn } from '@/helpers'
+import { hasPermissionFromAuth } from '@/modules/authentication/authgentication.store'
 import {
     IPaymentType,
     deleteMany,
@@ -42,8 +43,7 @@ import {
 } from './row-action-context'
 
 export interface PaymentTypeTableProps
-    extends TableProps<IPaymentType>,
-        IPaymentTypeTableColumnProps {
+    extends TableProps<IPaymentType>, IPaymentTypeTableColumnProps {
     toolbarProps?: Omit<
         IDataTableToolbarProps<IPaymentType>,
         | 'table'
@@ -51,7 +51,6 @@ export interface PaymentTypeTableProps
         | 'globalSearchProps'
         | 'scrollableProps'
         | 'filterLogicProps'
-        | 'exportActionProps'
         | 'deleteActionProps'
     >
 }
@@ -109,6 +108,7 @@ export const PaymentTypeTable = ({
         defaultFilter,
         onFilterChange: () => setPagination({ ...pagination, pageIndex: 0 }),
     })
+
     const {
         isPending,
         isRefetching,
@@ -121,11 +121,12 @@ export const PaymentTypeTable = ({
             filter: filterState.finalFilterPayloadBase64,
         },
     })
+
     const handleRowSelectionChange = createHandleRowSelectionChange(data)
 
     const table = useReactTable({
         columns,
-        data: data,
+        data,
         initialState: {
             columnPinning: { left: ['select'] },
         },
@@ -161,6 +162,7 @@ export const PaymentTypeTable = ({
         },
         { skipNull: true }
     )
+
     return (
         <FilterContext.Provider value={filterState}>
             <TableRowActionStoreProvider>
@@ -175,14 +177,20 @@ export const PaymentTypeTable = ({
                         deleteActionProps={{
                             onDeleteSuccess: () =>
                                 queryClient.invalidateQueries({
-                                    queryKey: ['payment_type', 'paginated'],
+                                    queryKey: ['payment-type'],
                                 }),
                             onDelete: (selectedData) =>
                                 deleteMany({
                                     ids: selectedData.map((data) => data.id),
                                 }),
+                            disabled: !hasPermissionFromAuth({
+                                action: ['Delete', 'OwnDelete'],
+                                resourceType: 'PaymentType',
+                                conditionLogic: 'some',
+                            }),
                         }}
                         exportActionProps={{
+                            ...toolbarProps?.exportActionProps,
                             isLoading: isPending,
                             filters: exportfilter,
                             model: 'PaymentType',
@@ -222,4 +230,5 @@ export const PaymentTypeTable = ({
         </FilterContext.Provider>
     )
 }
+
 export default PaymentTypeTable

@@ -4,6 +4,10 @@ import { toast } from 'sonner'
 
 import { withToastCallbacks } from '@/helpers/callback-helper'
 import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
+import {
+    hasPermissionFromAuth,
+    useAuthStore,
+} from '@/modules/authentication/authgentication.store'
 import useConfirmModalStore from '@/store/confirm-modal-store'
 import { Row } from '@tanstack/react-table'
 
@@ -18,7 +22,6 @@ import {
     ThumbsUpIcon,
     UndoIcon,
 } from '@/components/icons'
-import { ActionNameConfirmModal } from '@/components/modals/ action-name-confirm-modal'
 import LoadingSpinner from '@/components/spinners/loading-spinner'
 import { ContextMenuItem } from '@/components/ui/context-menu'
 import { DropdownMenuItem } from '@/components/ui/dropdown-menu'
@@ -28,8 +31,11 @@ import {
     useReprintLoanTransaction,
     useUndoPrintLoanTransaction,
 } from '../../loan-transaction.service'
-import { ILoanTransaction } from '../../loan-transaction.types'
-import { resolveLoanDatesToStatus } from '../../loan.utils'
+import {
+    ILoanTransaction,
+    TORLoanVoucherSettings,
+} from '../../loan-transaction.types'
+import { resolveLoanDatesToStatus } from '../../loan-transaction.utils'
 import { LoanEditFormModal } from '../forms/loan-edit-form'
 import { LoanTransactionPrintFormModal } from '../forms/loan-print-form'
 import { LoanTransactionCreateUpdateFormModal } from '../forms/loan-transaction-create-update-form'
@@ -43,7 +49,6 @@ import { ILoanTransactionTableActionComponentProp } from './columns'
 export type LoanTransactionActionType =
     | 'edit'
     | 'loan-edit'
-    | 'edit-confirm'
     | 'signature'
     | 'print'
     | 'approve-release'
@@ -89,7 +94,7 @@ const useLoanTransactionActions = ({
     const loanApplicationStatus = resolveLoanDatesToStatus(loanTransaction)
 
     const handleEdit = () => {
-        open('edit-confirm', {
+        open('edit', {
             id: loanTransaction.id,
             defaultValues: loanTransaction,
             extra: { onDeleteSuccess },
@@ -164,8 +169,7 @@ const useLoanTransactionActions = ({
     }
 }
 
-interface ILoanTransactionTableActionProps
-    extends ILoanTransactionTableActionComponentProp {
+interface ILoanTransactionTableActionProps extends ILoanTransactionTableActionComponentProp {
     onLoanTransactionUpdate?: () => void
     onDeleteSuccess?: () => void
 }
@@ -197,18 +201,44 @@ export const LoanTransactionAction = ({
             canSelect
             onDelete={{
                 text: 'Delete',
-                isAllowed: !isDeletingLoanTransaction,
+                isAllowed:
+                    !isDeletingLoanTransaction &&
+                    !loanTransaction?.printed_date &&
+                    hasPermissionFromAuth({
+                        action: ['Delete', 'OwnDelete'],
+                        resourceType: 'Loan',
+                        resource: loanTransaction,
+                    }),
                 onClick: handleDelete,
             }}
             onEdit={{
-                text: 'Edit',
-                isAllowed: true,
+                text:
+                    loanTransaction.printed_date !== undefined
+                        ? 'View Loan'
+                        : 'Edit Loan',
+                isAllowed:
+                    !loanTransaction.released_by &&
+                    hasPermissionFromAuth({
+                        action: ['Update', 'OwnUpdate'],
+                        resourceType: 'Loan',
+                        resource: loanTransaction,
+                    }),
                 onClick: handleEdit,
             }}
             otherActions={
                 <>
                     {loanTransaction.released_date && (
-                        <DropdownMenuItem onClick={handleEditLoan}>
+                        <DropdownMenuItem
+                            disabled={
+                                !loanTransaction?.released_date ||
+                                !hasPermissionFromAuth({
+                                    action: ['Update', 'OwnUpdate'],
+                                    resourceType: 'Loan',
+                                    resource: loanTransaction,
+                                })
+                            }
+                            onClick={handleEditLoan}
+                        >
                             <PencilFillIcon
                                 className="mr-2"
                                 strokeWidth={1.5}
@@ -224,7 +254,14 @@ export const LoanTransactionAction = ({
                         Signature
                     </DropdownMenuItem>
                     <DropdownMenuItem
-                        disabled={loanTransaction.printed_date !== undefined}
+                        disabled={
+                            loanTransaction.printed_date !== undefined ||
+                            !hasPermissionFromAuth({
+                                action: ['Update', 'OwnUpdate'],
+                                resourceType: 'ApprovalsLoanPrinted',
+                                resource: loanTransaction,
+                            })
+                        }
                         onClick={handlePrint}
                     >
                         <PrinterFillIcon className="mr-2" strokeWidth={1.5} />
@@ -234,7 +271,12 @@ export const LoanTransactionAction = ({
                         disabled={
                             loanTransaction.printed_date === undefined ||
                             loanApplicationStatus === 'released' ||
-                            isPrintingProcess
+                            isPrintingProcess ||
+                            !hasPermissionFromAuth({
+                                action: ['Update', 'OwnUpdate'],
+                                resourceType: 'ApprovalsLoanPrinted',
+                                resource: loanTransaction,
+                            })
                         }
                         onClick={() => {
                             toast.promise(
@@ -272,7 +314,12 @@ export const LoanTransactionAction = ({
                             loanTransaction.printed_date === undefined ||
                             loanApplicationStatus === 'released' ||
                             loanApplicationStatus === 'approved' ||
-                            isPrintingProcess
+                            isPrintingProcess ||
+                            !hasPermissionFromAuth({
+                                action: ['Update', 'OwnUpdate'],
+                                resourceType: 'ApprovalsLoanPrinted',
+                                resource: loanTransaction,
+                            })
                         }
                         onClick={() =>
                             onOpen({
@@ -314,7 +361,12 @@ export const LoanTransactionAction = ({
                         disabled={
                             loanTransaction.printed_date === undefined ||
                             loanApplicationStatus === 'approved' ||
-                            loanApplicationStatus === 'released'
+                            loanApplicationStatus === 'released' ||
+                            !hasPermissionFromAuth({
+                                action: ['Update', 'OwnUpdate'],
+                                resourceType: 'ApprovalsLoanApproved',
+                                resource: loanTransaction,
+                            })
                         }
                         onClick={() => openApprovalModal('approve')}
                     >
@@ -322,14 +374,28 @@ export const LoanTransactionAction = ({
                         Approve
                     </DropdownMenuItem>
                     <DropdownMenuItem
-                        disabled={loanApplicationStatus !== 'approved'}
+                        disabled={
+                            loanApplicationStatus !== 'approved' ||
+                            !hasPermissionFromAuth({
+                                action: ['Update', 'OwnUpdate'],
+                                resourceType: 'ApprovalsLoanApproved',
+                                resource: loanTransaction,
+                            })
+                        }
                         onClick={() => openApprovalModal('undo-approve')}
                     >
                         <UndoIcon className="mr-2" strokeWidth={1.5} />
                         Undo Approval
                     </DropdownMenuItem>
                     <DropdownMenuItem
-                        disabled={loanApplicationStatus !== 'approved'}
+                        disabled={
+                            loanApplicationStatus !== 'approved' ||
+                            !hasPermissionFromAuth({
+                                action: ['Update', 'OwnUpdate'],
+                                resourceType: 'ApprovalsLoanReleased',
+                                resource: loanTransaction,
+                            })
+                        }
                         onClick={() => openApprovalModal('release')}
                     >
                         <CheckFillIcon className="mr-2" strokeWidth={1.5} />
@@ -342,8 +408,7 @@ export const LoanTransactionAction = ({
     )
 }
 
-interface ILoanTransactionRowContextProps
-    extends ILoanTransactionTableActionComponentProp {
+interface ILoanTransactionRowContextProps extends ILoanTransactionTableActionComponentProp {
     children?: ReactNode
     onDeleteSuccess?: () => void
 }
@@ -375,18 +440,44 @@ export const LoanTransactionRowContext = ({
         <DataTableRowContext
             onDelete={{
                 text: 'Delete',
-                isAllowed: !isDeletingLoanTransaction,
+                isAllowed:
+                    !isDeletingLoanTransaction &&
+                    !loanTransaction.printed_date &&
+                    hasPermissionFromAuth({
+                        action: ['Delete', 'OwnDelete'],
+                        resourceType: 'Loan',
+                        resource: loanTransaction,
+                    }),
                 onClick: handleDelete,
             }}
             onEdit={{
-                text: 'Edit',
-                isAllowed: !loanTransaction.released_by,
+                text:
+                    loanTransaction.printed_date !== undefined
+                        ? 'View Loan'
+                        : 'Edit Loan',
+                isAllowed:
+                    !loanTransaction.released_by &&
+                    hasPermissionFromAuth({
+                        action: ['Update', 'OwnUpdate'],
+                        resourceType: 'Loan',
+                        resource: loanTransaction,
+                    }),
                 onClick: handleEdit,
             }}
             otherActions={
                 <>
                     {loanTransaction.released_date && (
-                        <ContextMenuItem onClick={handleEditLoan}>
+                        <ContextMenuItem
+                            disabled={
+                                !!loanTransaction.released_date &&
+                                !hasPermissionFromAuth({
+                                    action: ['Update', 'OwnUpdate'],
+                                    resourceType: 'Loan',
+                                    resource: loanTransaction,
+                                })
+                            }
+                            onClick={handleEditLoan}
+                        >
                             <PencilFillIcon
                                 className="mr-2"
                                 strokeWidth={1.5}
@@ -402,7 +493,14 @@ export const LoanTransactionRowContext = ({
                         Signature
                     </ContextMenuItem>
                     <ContextMenuItem
-                        disabled={loanTransaction.printed_date !== undefined}
+                        disabled={
+                            loanTransaction.printed_date !== undefined ||
+                            !hasPermissionFromAuth({
+                                action: ['Update', 'OwnUpdate'],
+                                resourceType: 'ApprovalsLoanPrinted',
+                                resource: loanTransaction,
+                            })
+                        }
                         onClick={handlePrint}
                     >
                         <PrinterFillIcon className="mr-2" strokeWidth={1.5} />
@@ -412,7 +510,12 @@ export const LoanTransactionRowContext = ({
                         disabled={
                             loanTransaction.printed_date === undefined ||
                             loanApplicationStatus === 'released' ||
-                            isPrintingProcess
+                            isPrintingProcess ||
+                            !hasPermissionFromAuth({
+                                action: ['Update', 'OwnUpdate'],
+                                resourceType: 'ApprovalsLoanPrinted',
+                                resource: loanTransaction,
+                            })
                         }
                         onClick={() => {
                             toast.promise(
@@ -450,7 +553,12 @@ export const LoanTransactionRowContext = ({
                             loanTransaction.printed_date === undefined ||
                             loanApplicationStatus === 'released' ||
                             loanApplicationStatus === 'approved' ||
-                            isPrintingProcess
+                            isPrintingProcess ||
+                            !hasPermissionFromAuth({
+                                action: ['Update', 'OwnUpdate'],
+                                resourceType: 'ApprovalsLoanPrinted',
+                                resource: loanTransaction,
+                            })
                         }
                         onClick={() =>
                             onOpen({
@@ -491,7 +599,12 @@ export const LoanTransactionRowContext = ({
                         disabled={
                             loanTransaction.printed_date === undefined ||
                             loanApplicationStatus === 'approved' ||
-                            loanApplicationStatus === 'released'
+                            loanApplicationStatus === 'released' ||
+                            !hasPermissionFromAuth({
+                                action: ['Update', 'OwnUpdate'],
+                                resourceType: 'ApprovalsLoanApproved',
+                                resource: loanTransaction,
+                            })
                         }
                         onClick={() => openApprovalModal('approve')}
                     >
@@ -499,14 +612,28 @@ export const LoanTransactionRowContext = ({
                         Approve
                     </ContextMenuItem>
                     <ContextMenuItem
-                        disabled={loanApplicationStatus !== 'approved'}
+                        disabled={
+                            loanApplicationStatus !== 'approved' ||
+                            !hasPermissionFromAuth({
+                                action: ['Update', 'OwnUpdate'],
+                                resourceType: 'ApprovalsLoanApproved',
+                                resource: loanTransaction,
+                            })
+                        }
                         onClick={() => openApprovalModal('undo-approve')}
                     >
                         <UndoIcon className="mr-2" strokeWidth={1.5} />
                         Undo Approval
                     </ContextMenuItem>
                     <ContextMenuItem
-                        disabled={loanApplicationStatus !== 'approved'}
+                        disabled={
+                            loanApplicationStatus !== 'approved' ||
+                            !hasPermissionFromAuth({
+                                action: ['Update', 'OwnUpdate'],
+                                resourceType: 'ApprovalsLoanReleased',
+                                resource: loanTransaction,
+                            })
+                        }
                         onClick={() => openApprovalModal('release')}
                     >
                         <CheckFillIcon className="mr-2" strokeWidth={1.5} />
@@ -522,7 +649,7 @@ export const LoanTransactionRowContext = ({
 }
 
 export const LoanTransactionTableActionManager = () => {
-    const { state, close, open } = useTableRowActionStore<
+    const { state, close } = useTableRowActionStore<
         ILoanTransaction,
         LoanTransactionActionType,
         LoanTransactionActionExtra
@@ -531,35 +658,27 @@ export const LoanTransactionTableActionManager = () => {
     const loanTransaction = state.defaultValues
     const approveReleaseMode = state.extra?.approveReleaseMode ?? 'approve'
 
-    const handleConfirmEdit = () => {
-        close()
-        // Open the actual edit modal after confirmation
-        if (loanTransaction) {
-            open('edit', {
-                id: loanTransaction.id,
-                defaultValues: loanTransaction,
-                extra: state.extra,
-            })
-        }
-    }
+    const {
+        currentAuth: { user_organization },
+    } = useAuthStore()
+
+    const resolvedOrSettings: TORLoanVoucherSettings | undefined =
+        user_organization
+            ? {
+                  ...user_organization.branch.branch_setting,
+                  loan_voucher_auto_increment:
+                      user_organization.loan_voucher_auto_increment,
+              }
+            : undefined
 
     return (
         <>
-            {state.action === 'edit-confirm' && loanTransaction && (
-                <ActionNameConfirmModal
-                    name={loanTransaction.account?.name || 'confirm'}
-                    onCancel={close}
-                    onConfirm={handleConfirmEdit}
-                    onOpenChange={close}
-                    open={state.isOpen}
-                />
-            )}
-
             {state.action === 'edit' && loanTransaction && (
                 <LoanTransactionCreateUpdateFormModal
                     formProps={{
                         loanTransactionId: loanTransaction.id,
                         defaultValues: loanTransaction,
+                        orSettings: resolvedOrSettings,
                     }}
                     onOpenChange={close}
                     open={state.isOpen}
@@ -582,6 +701,7 @@ export const LoanTransactionTableActionManager = () => {
                     formProps={{
                         defaultValues: loanTransaction,
                         loanTransactionId: loanTransaction.id,
+                        orSettings: resolvedOrSettings,
                     }}
                     onOpenChange={close}
                     open={state.isOpen}

@@ -1,7 +1,10 @@
 import KanbanContainer from '@/modules/approvals/components/kanban/kanban-container'
 import KanbanItemsContainer from '@/modules/approvals/components/kanban/kanban-items-container'
 import KanbanTitle from '@/modules/approvals/components/kanban/kanban-title'
-import { useAuthUserWithOrgBranch } from '@/modules/authentication/authgentication.store'
+import {
+    hasPermissionFromAuth,
+    useAuthUserWithOrgBranch,
+} from '@/modules/authentication/authgentication.store'
 import { currencyFormat } from '@/modules/currency'
 import {
     ITransactionBatch,
@@ -20,7 +23,6 @@ import {
 import ImageDisplay from '@/components/image-display'
 import LoadingSpinner from '@/components/spinners/loading-spinner'
 import { Button } from '@/components/ui/button'
-import { Separator } from '@/components/ui/separator'
 
 import { useModalState } from '@/hooks/use-modal-state'
 import { useSubscribe } from '@/hooks/use-pubsub'
@@ -35,6 +37,7 @@ const EndedTransactionBatchKanban = (_props: Props) => {
             user_organization: { branch_id },
         },
     } = useAuthUserWithOrgBranch()
+
     const {
         data = [],
         isRefetching,
@@ -60,7 +63,6 @@ const EndedTransactionBatchKanban = (_props: Props) => {
                     totalItems={data.length}
                 />
             </div>
-            <Separator />
             <KanbanItemsContainer>
                 {data.map((transactionBatch) => (
                     <TransactionBatchCard
@@ -110,6 +112,12 @@ const TransactionBatchCard = ({
                 <div className="flex items-center gap-x-1">
                     <Button
                         className="size-fit p-1"
+                        disabled={
+                            !hasPermissionFromAuth({
+                                action: 'Update',
+                                resourceType: 'ApprovalsEndBatch',
+                            })
+                        }
                         onClick={() => viewModalState.onOpenChange(true)}
                         size="icon"
                         variant="secondary"

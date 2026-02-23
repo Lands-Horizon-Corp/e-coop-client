@@ -71,8 +71,9 @@ const symbolSizeVariants = cva('flex-shrink-0 font-bold', {
     },
 })
 
-interface CurrencyBadgeProps
-    extends VariantProps<typeof currencyBadgeVariants> {
+interface CurrencyBadgeProps extends VariantProps<
+    typeof currencyBadgeVariants
+> {
     currency: ICurrency
     className?: string
     showEmoji?: boolean

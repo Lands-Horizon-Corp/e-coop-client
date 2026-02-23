@@ -35,8 +35,6 @@ const LoanSchemeDisplay = ({ selectedId, defaultData, className }: Props) => {
 
     const error = serverRequestErrExtractor({ error: rawError })
 
-    // TODO: Realtime delete listener
-
     if (error)
         return (
             <div

@@ -13,6 +13,7 @@ import {
 
 import { TAPIQueryOptions, TEntityId } from '@/types'
 
+import { createMutationInvalidateFn } from '../../providers/repositories/mutation-factory'
 import type {
     ICashCheckVoucher,
     ICashCheckVoucherPaginated,
@@ -61,6 +62,27 @@ export const {
     useDeleteById: useDeleteCashCheckVoucherById,
     useDeleteMany: useDeleteManyCashCheckVoucher,
 } = apiCrudHooks
+
+// use-create-update-cash-check-voucher.ts
+export const useCreateUpdateCashCheckVoucher = createMutationFactory<
+    ICashCheckVoucher,
+    Error,
+    { payload: ICashCheckVoucherRequest; id?: TEntityId }
+>({
+    mutationFn: async ({ payload, id }) => {
+        if (!id) {
+            return await createCashCheckVoucher({ payload })
+        }
+        return await updateCashCheckVoucherById({
+            id,
+            payload,
+        })
+    },
+    invalidationFn: (args) => {
+        updateMutationInvalidationFn(cashCheckVoucherBaseKey, args)
+        createMutationInvalidateFn(cashCheckVoucherBaseKey, args)
+    },
+})
 
 export const useGetAllCashCheckVoucher = ({
     mode,
@@ -139,6 +161,7 @@ export const useEditPrintCashCheckVoucher = createMutationFactory<
         )
         return response.data
     },
+    defaultInvalidates: [['auth', 'context']],
     invalidationFn: (args) =>
         updateMutationInvalidationFn(cashCheckVoucherBaseKey, args),
 })
@@ -159,8 +182,14 @@ export const useCashCheckVoucherActions = createMutationFactory<
         >(`${cashCheckVoucherAPIRoute}/${cash_check_voucher_id}/${mode}`)
         return response.data
     },
-    invalidationFn: (args) =>
-        updateMutationInvalidationFn(cashCheckVoucherBaseKey, args),
+    invalidationFn: (args) => {
+        if (args.variables.mode === 'release') {
+            args.queryClient.invalidateQueries({
+                queryKey: ['transaction-batch'],
+            })
+        }
+        updateMutationInvalidationFn(cashCheckVoucherBaseKey, args)
+    },
 })
 
 // PRINT CASH CHECK VOUCHER
@@ -184,6 +213,7 @@ export const usePrintCashCheckVoucherTransaction = createMutationFactory<
     { cashCheckVoucherId: TEntityId; payload: TCashCheckVoucherPrintRequest }
 >({
     mutationFn: (data) => printCashCheckVoucher(data),
+    defaultInvalidates: [['auth', 'context']],
     invalidationFn: (args) =>
         updateMutationInvalidationFn(cashCheckVoucherBaseKey, args),
 })

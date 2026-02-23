@@ -1,5 +1,6 @@
 import { ReactNode } from 'react'
 
+import { hasPermissionFromAuth } from '@/modules/authentication/authgentication.store'
 import useConfirmModalStore from '@/store/confirm-modal-store'
 import { Row } from '@tanstack/react-table'
 
@@ -64,8 +65,7 @@ const useMemberCenterActions = ({
     }
 }
 
-interface IMemberCenterTableActionProps
-    extends IMemberCenterTableActionComponentProp {
+interface IMemberCenterTableActionProps extends IMemberCenterTableActionComponentProp {
     onMemberCenterUpdate?: () => void
     onDeleteSuccess?: () => void
 }
@@ -74,7 +74,7 @@ export const MemberCenterAction = ({
     row,
     onDeleteSuccess,
 }: IMemberCenterTableActionProps) => {
-    const { isDeletingMemberCenter, handleEdit, handleDelete } =
+    const { memberCenter, isDeletingMemberCenter, handleEdit, handleDelete } =
         useMemberCenterActions({ row, onDeleteSuccess })
 
     return (
@@ -84,12 +84,22 @@ export const MemberCenterAction = ({
                 canSelect
                 onDelete={{
                     text: 'Delete',
-                    isAllowed: !isDeletingMemberCenter,
+                    isAllowed:
+                        !isDeletingMemberCenter &&
+                        hasPermissionFromAuth({
+                            action: ['Delete', 'OwnDelete'],
+                            resourceType: 'MemberCenter',
+                            resource: memberCenter,
+                        }),
                     onClick: handleDelete,
                 }}
                 onEdit={{
                     text: 'Edit',
-                    isAllowed: true,
+                    isAllowed: hasPermissionFromAuth({
+                        action: ['Update', 'OwnUpdate'],
+                        resourceType: 'MemberCenter',
+                        resource: memberCenter,
+                    }),
                     onClick: handleEdit,
                 }}
                 otherActions={<>{/* Additional actions can be added here */}</>}
@@ -99,8 +109,7 @@ export const MemberCenterAction = ({
     )
 }
 
-interface IMemberCenterRowContextProps
-    extends IMemberCenterTableActionComponentProp {
+interface IMemberCenterRowContextProps extends IMemberCenterTableActionComponentProp {
     children?: ReactNode
     onDeleteSuccess?: () => void
 }
@@ -110,7 +119,7 @@ export const MemberCenterRowContext = ({
     children,
     onDeleteSuccess,
 }: IMemberCenterRowContextProps) => {
-    const { isDeletingMemberCenter, handleEdit, handleDelete } =
+    const { memberCenter, isDeletingMemberCenter, handleEdit, handleDelete } =
         useMemberCenterActions({ row, onDeleteSuccess })
 
     return (
@@ -118,12 +127,22 @@ export const MemberCenterRowContext = ({
             <DataTableRowContext
                 onDelete={{
                     text: 'Delete',
-                    isAllowed: !isDeletingMemberCenter,
+                    isAllowed:
+                        !isDeletingMemberCenter &&
+                        hasPermissionFromAuth({
+                            action: ['Delete', 'OwnDelete'],
+                            resourceType: 'MemberCenter',
+                            resource: memberCenter,
+                        }),
                     onClick: handleDelete,
                 }}
                 onEdit={{
                     text: 'Edit',
-                    isAllowed: true,
+                    isAllowed: hasPermissionFromAuth({
+                        action: ['Update', 'OwnUpdate'],
+                        resourceType: 'MemberCenter',
+                        resource: memberCenter,
+                    }),
                     onClick: handleEdit,
                 }}
                 row={row}

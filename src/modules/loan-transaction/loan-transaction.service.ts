@@ -263,6 +263,7 @@ export const usePrintLoanTransaction = createMutationFactory<
     { loanTransactionId: TEntityId; payload: ILoanTransactionPrintRequest }
 >({
     mutationFn: (data) => printLoanTransaction(data),
+    defaultInvalidates: [['auth', 'context']],
     invalidationFn: (args) =>
         updateMutationInvalidationFn(loanTransactionBaseKey, args),
 })
@@ -343,8 +344,12 @@ export const useReleaseLoanTransaction = createMutationFactory<
         )
         return response.data
     },
-    invalidationFn: (args) =>
-        updateMutationInvalidationFn(loanTransactionBaseKey, args),
+    invalidationFn: (args) => {
+        args.queryClient.invalidateQueries({
+            queryKey: ['transaction-batch'],
+        })
+        updateMutationInvalidationFn(loanTransactionBaseKey, args)
+    },
 })
 
 // Change Cash Account

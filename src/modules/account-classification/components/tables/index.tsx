@@ -43,7 +43,8 @@ import {
 } from './row-action'
 
 export interface AccountClassificationTableProps
-    extends TableProps<IAccountClassification>,
+    extends
+        TableProps<IAccountClassification>,
         IAccountClassificationTableColumnProps {
     toolbarProps?: Omit<
         IDataTableToolbarProps<IAccountClassification>,
@@ -52,7 +53,6 @@ export interface AccountClassificationTableProps
         | 'globalSearchProps'
         | 'scrollableProps'
         | 'filterLogicProps'
-        | 'exportActionProps'
         | 'deleteActionProps'
     >
 }
@@ -191,6 +191,7 @@ const AccountClassificationTable = ({
                                 deleteMany(selectedData.map((data) => data.id)),
                         }}
                         exportActionProps={{
+                            ...toolbarProps,
                             isLoading: isPending,
                             filters: exportfilter,
                             model: 'AccountClassification',

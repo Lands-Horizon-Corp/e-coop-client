@@ -34,7 +34,8 @@ import { MemberJointAccountSchema } from '../../member-joint-account.validation'
 type TMemberJointAccountFormValues = z.infer<typeof MemberJointAccountSchema>
 
 export interface IMemberJointAccountFormProps
-    extends IClassProps,
+    extends
+        IClassProps,
         IForm<
             Partial<IMemberJointAccount>,
             IMemberJointAccount,
@@ -347,7 +348,7 @@ export const MemberJointAccountCreateUpdateFormModal = ({
 }) => {
     return (
         <Modal
-            className={cn('w-full !max-w-2xl', className)}
+            className={cn('w-full max-w-2xl!', className)}
             description={description}
             title={title}
             {...props}

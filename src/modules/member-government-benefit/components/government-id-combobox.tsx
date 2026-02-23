@@ -23,8 +23,10 @@ import {
 import { useGetAllGovernmentIds } from '../member-government-benefit.service'
 import { IGovernmentId } from '../member-government-benefit.types'
 
-interface Props
-    extends Omit<React.ComponentPropsWithoutRef<'button'>, 'onChange'> {
+interface Props extends Omit<
+    React.ComponentPropsWithoutRef<'button'>,
+    'onChange'
+> {
     value?: string
     disabled?: boolean
     className?: string

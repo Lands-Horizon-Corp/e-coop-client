@@ -49,8 +49,7 @@ import MemberProfileAction, {
 // import { MemberProfileRowContext } from './row-action-context'
 
 export interface MemberProfileTableProps
-    extends TableProps<IMemberProfile>,
-        IMemberProfilesTableColumnProps {
+    extends TableProps<IMemberProfile>, IMemberProfilesTableColumnProps {
     toolbarProps?: Omit<
         IDataTableToolbarProps<IMemberProfile>,
         | 'table'
@@ -58,7 +57,6 @@ export interface MemberProfileTableProps
         | 'globalSearchProps'
         | 'scrollableProps'
         | 'filterLogicProps'
-        | 'exportActionProps'
         | 'deleteActionProps'
     >
 }
@@ -199,6 +197,7 @@ const MemberProfileTable = ({
                         //         }),
                         // }}
                         exportActionProps={{
+                            ...toolbarProps?.exportActionProps,
                             isLoading: isPending,
                             filters: exportfilter,
                             model: 'MemberProfile',

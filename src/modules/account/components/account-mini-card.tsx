@@ -95,7 +95,7 @@ const AccountMiniCard = ({ accountId, defaultAccount, className }: Props) => {
             <CardContent className="pt-0">
                 <div className="space-y-3">
                     <div className="flex items-start gap-2">
-                        <TextFileFillIcon className="size-4 text-muted-foreground/80 mt-0.5 flex-shrink-0" />
+                        <TextFileFillIcon className="size-4 text-muted-foreground/80 mt-0.5 shrink-0" />
                         <p className="text-sm text-muted-foreground/90 leading-relaxed">
                             {data?.description}
                         </p>

@@ -32,7 +32,8 @@ const forgotPasswordFormSchema = z.object({
 export type TForgotPasswordEmail = z.infer<typeof forgotPasswordFormSchema>
 
 interface IForgotPasswordEmailFormProps
-    extends IClassProps,
+    extends
+        IClassProps,
         IForm<Partial<TForgotPasswordEmail>, TForgotPasswordEmail> {}
 
 const ForgotPasswordEmail = ({

@@ -6,7 +6,7 @@ import { cn } from '@/helpers'
 import { withToastCallbacks } from '@/helpers/callback-helper'
 import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
 import PermissionPicker from '@/modules/permission-template/components/permission-template-picker'
-import PermissionMatrix from '@/modules/permission/components/permission-matrix'
+import PermissionMatrix from '@/modules/permission/components/permission-matrix/permission-matrix'
 import {
     permissionArrayToMap,
     permissionMapToPermissionArray,
@@ -34,7 +34,8 @@ import {
 } from '../../user-organization.validation'
 
 export interface IUserOrgPermissionUpdateFormProps
-    extends IClassProps,
+    extends
+        IClassProps,
         IForm<
             Partial<IUserOrganizationPermissionRequest>,
             IUserOrganizationPermissionRequest,
@@ -94,12 +95,15 @@ const UserOrgPermissionUpdateForm = ({
     return (
         <Form {...form}>
             <form
-                className={cn('flex w-full flex-col gap-y-4', className)}
+                className={cn(
+                    'flex w-full flex-col gap-y-4 min-w-0 max-w-full',
+                    className
+                )}
                 onSubmit={onSubmit}
                 ref={formRef}
             >
                 <fieldset
-                    className="grid gap-x-6 gap-y-4 sm:gap-y-3"
+                    className="grid gap-x-6 gap-y-4 sm:gap-y-3 min-w-0 max-w-full"
                     disabled={isPending || formProps.readOnly}
                 >
                     <div className="border p-2 rounded-xl flex items-center justify-between bg-card">
@@ -135,7 +139,7 @@ const UserOrgPermissionUpdateForm = ({
                         </Button>
                     </div>
 
-                    <fieldset className="space-y-3">
+                    <fieldset className="space-y-3 min-w-0 max-w-full">
                         <FormFieldWrapper
                             control={form.control}
                             label="Permission Name *"
@@ -188,6 +192,7 @@ const UserOrgPermissionUpdateForm = ({
                     </fieldset>
                 </fieldset>
                 <FormFooterResetSubmit
+                    className="sticky bottom-0 bg-popover/40 p-4"
                     disableSubmit={!form.formState.isDirty || isPending}
                     error={error}
                     isLoading={isPending}
@@ -214,7 +219,7 @@ export const UserOrgPermissionUpdateFormModal = ({
 }) => {
     return (
         <Modal
-            className={cn('!max-w-[95vw]', className)}
+            className={cn('!max-w-5xl', className)}
             description={description}
             title={title}
             {...props}

@@ -39,8 +39,7 @@ import { MemberProfileUserAccountSchema } from '../../member-user-account.valida
 type TForm = z.infer<typeof MemberProfileUserAccountSchema>
 
 interface IMemberUserAccountFormProps
-    extends IClassProps,
-        IForm<Partial<TForm>, IMemberProfile, Error> {
+    extends IClassProps, IForm<Partial<TForm>, IMemberProfile, Error> {
     memberProfileId: TEntityId
     userId?: TEntityId
 }

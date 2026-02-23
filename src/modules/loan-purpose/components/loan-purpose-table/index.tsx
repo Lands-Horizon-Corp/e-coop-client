@@ -41,8 +41,7 @@ import {
 } from './row-action-context'
 
 export interface LoanPurposeTableProps
-    extends TableProps<ILoanPurpose>,
-        ILoanPurposeTableColumnProps {
+    extends TableProps<ILoanPurpose>, ILoanPurposeTableColumnProps {
     toolbarProps?: Omit<
         IDataTableToolbarProps<ILoanPurpose>,
         | 'table'
@@ -50,7 +49,6 @@ export interface LoanPurposeTableProps
         | 'globalSearchProps'
         | 'scrollableProps'
         | 'filterLogicProps'
-        | 'exportActionProps'
         | 'deleteActionProps'
     >
 }
@@ -175,6 +173,7 @@ const LoanPurposeTable = ({
                                 }),
                         }}
                         exportActionProps={{
+                            ...toolbarProps?.exportActionProps,
                             isLoading: isPending,
                             filters: exportfilter,
                             model: 'LoanPurpose',

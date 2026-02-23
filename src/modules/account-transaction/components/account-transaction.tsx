@@ -1,7 +1,10 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 
+import { toast } from 'sonner'
+
 import { cn } from '@/helpers'
 import { toReadableDate } from '@/helpers/date-utils'
+import { hasPermissionFromAuth } from '@/modules/authentication/authgentication.store'
 import { currencyFormat } from '@/modules/currency'
 
 import {
@@ -11,6 +14,7 @@ import {
     CalendarIcon,
     ChevronLeftIcon,
     ChevronRightIcon,
+    PlusIcon,
     ReceiptIcon,
     RefreshIcon,
     TextFileFillIcon,
@@ -394,11 +398,24 @@ export function TransactionCard({
 }) {
     const isDebit = transaction.debit > 0
     const updateModalState = useModalState()
+
+    const canUpdate = hasPermissionFromAuth({
+        action: 'Update',
+        resourceType: 'AccountTransaction',
+    })
+
     return (
         <>
             <Card
                 className="hover:shadow-md shadow-none rounded-xl cursor-pointer bg-secondary/20 transition-shadow"
-                onClick={() => updateModalState.onOpenChange(true)}
+                onClick={() => {
+                    if (!canUpdate)
+                        return toast.warning(
+                            'You are not allowed to update account transaction'
+                        )
+
+                    updateModalState.onOpenChange(true)
+                }}
             >
                 <CardContent className="p-4">
                     <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4">
@@ -473,6 +490,10 @@ export function TransactionCard({
 
 const GenerateAccountTransaction = () => {
     const modalState = useModalState()
+    const canGenerate = hasPermissionFromAuth({
+        action: 'Create',
+        resourceType: 'AccountTransaction',
+    })
 
     return (
         <>
@@ -486,9 +507,10 @@ const GenerateAccountTransaction = () => {
                 {...modalState}
             />
             <Button
+                disabled={!canGenerate}
                 onClick={() => modalState.onOpenChange(true)}
-                variant="secondary"
             >
+                <PlusIcon className="mr-1" />
                 Generate
             </Button>
         </>

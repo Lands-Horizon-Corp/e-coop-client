@@ -3,6 +3,7 @@ import { ReactNode } from 'react'
 import { useRouter } from '@tanstack/react-router'
 
 import { withToastCallbacks } from '@/helpers/callback-helper'
+import { hasPermissionFromAuth } from '@/modules/authentication/authgentication.store'
 import FootstepTable from '@/modules/footstep/components/footsteps-table'
 import { TEntryType } from '@/modules/general-ledger'
 import GeneralLedgerTable from '@/modules/general-ledger/components/tables/general-ledger-table'
@@ -196,8 +197,7 @@ const useMemberProfileActions = ({
     }
 }
 
-interface IMemberProfileTableActionProps
-    extends IMemberProfileTableActionComponentProp {
+interface IMemberProfileTableActionProps extends IMemberProfileTableActionComponentProp {
     onMemberUpdate?: () => void
     onDeleteSuccess?: () => void
 }
@@ -232,7 +232,11 @@ export const MemberProfileAction = ({
             // }}
             onEdit={{
                 text: 'Edit',
-                isAllowed: true,
+                isAllowed: hasPermissionFromAuth({
+                    resourceType: 'MemberProfile',
+                    action: ['Update', 'OwnUpdate'],
+                    resource: member,
+                }),
                 onClick: () => {
                     handleEdit()
                 },
@@ -410,6 +414,12 @@ export const MemberProfileAction = ({
 
                     <DropdownMenuItem
                         className="focus:bg-destructive focus:text-destructive-foreground"
+                        disabled={
+                            !hasPermissionFromAuth({
+                                action: 'Create',
+                                resourceType: 'MemberProfileClose',
+                            })
+                        }
                         onClick={handleClose}
                     >
                         <HeartBreakFillIcon
@@ -425,8 +435,7 @@ export const MemberProfileAction = ({
     )
 }
 
-interface IMemberProfileRowContextProps
-    extends IMemberProfileTableActionComponentProp {
+interface IMemberProfileRowContextProps extends IMemberProfileTableActionComponentProp {
     children?: ReactNode
     onDeleteSuccess?: () => void
 }
@@ -461,7 +470,11 @@ export const MemberProfileRowContext = ({
             // }}
             onEdit={{
                 text: 'Edit',
-                isAllowed: true,
+                isAllowed: hasPermissionFromAuth({
+                    resourceType: 'MemberProfile',
+                    action: ['Update', 'OwnUpdate'],
+                    resource: member,
+                }),
                 onClick: () => {
                     handleEdit()
                 },
@@ -639,6 +652,12 @@ export const MemberProfileRowContext = ({
 
                     <ContextMenuItem
                         className="focus:bg-destructive focus:text-destructive-foreground"
+                        disabled={
+                            !hasPermissionFromAuth({
+                                action: 'Create',
+                                resourceType: 'MemberProfileClose',
+                            })
+                        }
                         onClick={handleClose}
                     >
                         <HeartBreakFillIcon

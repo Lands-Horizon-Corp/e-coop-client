@@ -1,6 +1,10 @@
 import { ReactNode } from 'react'
 
 import { withToastCallbacks } from '@/helpers/callback-helper'
+import {
+    hasPermissionFromAuth,
+    useAuthStore,
+} from '@/modules/authentication/authgentication.store'
 import useConfirmModalStore from '@/store/confirm-modal-store'
 import { Row } from '@tanstack/react-table'
 
@@ -8,7 +12,11 @@ import RowActionsGroup from '@/components/data-table/data-table-row-actions'
 import DataTableRowContext from '@/components/data-table/data-table-row-context'
 import { useTableRowActionStore } from '@/components/data-table/store/data-table-action-store'
 
-import { IJournalVoucher, useDeleteJournalVoucherById } from '../..'
+import {
+    IJournalVoucher,
+    TORJournalVoucherSettings,
+    useDeleteJournalVoucherById,
+} from '../..'
 import JournalVoucherApproveReleaseDisplayModal, {
     TJournalVoucherApproveReleaseDisplayMode,
 } from '../forms/journal-voucher-approve-release-modal'
@@ -109,8 +117,7 @@ const useJournalVoucherActions = ({
     }
 }
 
-interface IJournalVoucherTableActionProps
-    extends IJournalVoucherTableActionComponentProp {
+interface IJournalVoucherTableActionProps extends IJournalVoucherTableActionComponentProp {
     onJournalVoucherUpdate?: () => void
     onDeleteSuccess?: () => void
 }
@@ -120,6 +127,7 @@ export const JournalVoucherAction = ({
     onDeleteSuccess,
 }: IJournalVoucherTableActionProps) => {
     const {
+        journalVoucher,
         handleEdit,
         handleOpenPrintModal,
         handleApproveModal,
@@ -133,7 +141,11 @@ export const JournalVoucherAction = ({
                 canSelect
                 onEdit={{
                     text: 'Edit',
-                    isAllowed: true,
+                    isAllowed: hasPermissionFromAuth({
+                        action: ['Update', 'OwnUpdate'],
+                        resourceType: 'JournalVoucher',
+                        resource: journalVoucher,
+                    }),
                     onClick: handleEdit,
                 }}
                 otherActions={
@@ -150,8 +162,7 @@ export const JournalVoucherAction = ({
     )
 }
 
-interface IJournalVoucherRowContextProps
-    extends IJournalVoucherTableActionComponentProp {
+interface IJournalVoucherRowContextProps extends IJournalVoucherTableActionComponentProp {
     children?: ReactNode
     onDeleteSuccess?: () => void
 }
@@ -162,6 +173,7 @@ export const JournalVoucherRowContext = ({
     onDeleteSuccess,
 }: IJournalVoucherRowContextProps) => {
     const {
+        journalVoucher,
         handleEdit,
         handleApproveModal,
         handleReleaseModal,
@@ -173,7 +185,11 @@ export const JournalVoucherRowContext = ({
             <DataTableRowContext
                 onEdit={{
                     text: 'Edit',
-                    isAllowed: true,
+                    isAllowed: hasPermissionFromAuth({
+                        action: ['Update', 'OwnUpdate'],
+                        resourceType: 'JournalVoucher',
+                        resource: journalVoucher,
+                    }),
                     onClick: handleEdit,
                 }}
                 otherActions={
@@ -200,11 +216,24 @@ export const JournalVoucherTableActionManager = () => {
         JournalVoucherActionExtra
     >()
 
+    const {
+        currentAuth: { user_organization },
+    } = useAuthStore()
+
     if (!state || !state.defaultValues) return null
 
     const journalVoucher = state.defaultValues
     const isPrinted = !!journalVoucher.printed_date
     const approveReleaseMode = state.extra?.approveReleaseMode ?? 'approve'
+
+    const resolvedOrSettings: TORJournalVoucherSettings | undefined =
+        user_organization
+            ? {
+                  ...user_organization.branch.branch_setting,
+                  journal_voucher_auto_increment:
+                      user_organization.journal_voucher_auto_increment,
+              }
+            : undefined
 
     return (
         <>
@@ -220,11 +249,13 @@ export const JournalVoucherTableActionManager = () => {
                     open={state.isOpen}
                 />
             )}
+
             {state.action === 'print' && (
                 <JournalVoucherPrintFormModal
                     formProps={{
                         defaultValues: journalVoucher,
                         journalVoucherId: journalVoucher.id,
+                        orSettings: resolvedOrSettings,
                     }}
                     onOpenChange={close}
                     open={state.isOpen}

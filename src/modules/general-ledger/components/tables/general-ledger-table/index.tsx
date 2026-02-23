@@ -3,7 +3,7 @@ import { useMemo } from 'react'
 import FilterContext from '@/contexts/filter-context/filter-context'
 import { cn } from '@/helpers'
 import {
-    TGeneralLedgerMode,
+    TGeneralLedgerEndpointMode,
     useFilteredPaginatedGeneralLedger,
 } from '@/modules/general-ledger/general-ledger.service'
 import {
@@ -43,8 +43,7 @@ import {
 } from './row-action-context'
 
 export interface GeneralLedgerTableProps
-    extends TableProps<IGeneralLedger>,
-        IGeneralLedgerTableColumnProps {
+    extends TableProps<IGeneralLedger>, IGeneralLedgerTableColumnProps {
     toolbarProps?: Omit<
         IDataTableToolbarProps<IGeneralLedger>,
         | 'table'
@@ -55,40 +54,53 @@ export interface GeneralLedgerTableProps
         | 'exportActionProps'
         | 'deleteActionProps'
     >
-    mode: TGeneralLedgerMode
+    mode: TGeneralLedgerEndpointMode
     entryType?: TEntryType
 }
 
-export type TGeneralLedgerTableProps = GeneralLedgerTableProps &
-    (
-        | { mode: 'branch' }
-        | { mode: 'current' }
-        | {
-              mode: 'employee'
-              userOrganizationId: TEntityId
-          }
-        | {
-              mode: 'member'
-              memberProfileId: TEntityId
-          }
-        | {
-              mode: 'member-account'
-              memberProfileId: TEntityId
-              accountId: TEntityId
-          }
-        | {
-              mode: 'transaction-batch'
-              transactionBatchId: TEntityId
-          }
-        | {
-              mode: 'transaction'
-              transactionId: TEntityId
-          }
-        | {
-              mode: 'account'
-              accountId: TEntityId
-          }
-    )
+export type TGeneralLedgerTableProps =
+    | (GeneralLedgerTableProps & {
+          mode: 'all'
+      })
+    | (GeneralLedgerTableProps & {
+          mode: 'branch'
+      })
+    | (GeneralLedgerTableProps & {
+          mode: 'current'
+      })
+    | (GeneralLedgerTableProps & {
+          mode: 'employee'
+          userOrganizationId: TEntityId
+      })
+    | (GeneralLedgerTableProps & {
+          mode: 'member'
+          memberProfileId: TEntityId
+      })
+    | (GeneralLedgerTableProps & {
+          mode: 'member-account'
+          memberProfileId: TEntityId
+          accountId: TEntityId
+      })
+    | (GeneralLedgerTableProps & {
+          mode: 'transaction-batch'
+          transactionBatchId: TEntityId
+      })
+    | (GeneralLedgerTableProps & {
+          mode: 'transaction'
+          transactionId: TEntityId
+      })
+    | (GeneralLedgerTableProps & {
+          mode: 'loan-transaction'
+          loanTransactionId: TEntityId
+      })
+    | (GeneralLedgerTableProps & {
+          mode: 'member-accounting-ledger'
+          memberAccountingLedgerId: TEntityId
+      })
+    | (GeneralLedgerTableProps & {
+          mode: 'account'
+          accountId: TEntityId
+      })
 
 const GeneralLedgerTable = ({
     persistKey = ['general-ledger'],

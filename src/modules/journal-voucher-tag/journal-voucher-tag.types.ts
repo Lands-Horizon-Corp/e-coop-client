@@ -18,5 +18,4 @@ export type IJournalVoucherTagRequest = {
     icon?: string
 }
 
-export interface IJournalVoucherTagPaginated
-    extends IPaginatedResult<IJournalVoucherTag> {}
+export interface IJournalVoucherTagPaginated extends IPaginatedResult<IJournalVoucherTag> {}

@@ -1,7 +1,10 @@
 import { ReactNode } from 'react'
 
 import { withToastCallbacks } from '@/helpers/callback-helper'
-import { useAuthUserWithOrgBranch } from '@/modules/authentication/authgentication.store'
+import {
+    hasPermissionFromAuth,
+    useAuthUserWithOrgBranch,
+} from '@/modules/authentication/authgentication.store'
 import useConfirmModalStore from '@/store/confirm-modal-store'
 import { Row } from '@tanstack/react-table'
 
@@ -65,6 +68,7 @@ const useAdjustmentEntryActions = ({
             onConfirm: () => deleteEntry(adjustmentEntry.id),
         })
     }
+
     const handleOnView = () => {
         open('view', {
             id: adjustmentEntry.id,
@@ -84,8 +88,7 @@ const useAdjustmentEntryActions = ({
     }
 }
 
-interface IAdjustmentEntryTableActionProps
-    extends IAdjustmentEntryTableActionComponentProp {
+interface IAdjustmentEntryTableActionProps extends IAdjustmentEntryTableActionComponentProp {
     onEntryUpdate?: () => void
     onDeleteSuccess?: () => void
 }
@@ -94,9 +97,15 @@ export const AdjustmentEntryAction = ({
     row,
     onDeleteSuccess,
 }: IAdjustmentEntryTableActionProps) => {
-    const { handleOnView } = useAdjustmentEntryActions({
+    const { adjustmentEntry, handleOnView } = useAdjustmentEntryActions({
         row,
         onDeleteSuccess,
+    })
+
+    const canView = hasPermissionFromAuth({
+        action: ['Read', 'OwnRead'],
+        resourceType: 'AdjustmentEntry',
+        resource: adjustmentEntry,
     })
 
     return (
@@ -105,7 +114,7 @@ export const AdjustmentEntryAction = ({
                 canSelect={false}
                 onView={{
                     text: 'view',
-                    isAllowed: true,
+                    isAllowed: canView,
                     onClick: handleOnView,
                 }}
                 row={row}
@@ -114,8 +123,7 @@ export const AdjustmentEntryAction = ({
     )
 }
 
-interface IAdjustmentEntryRowContextProps
-    extends IAdjustmentEntryTableActionComponentProp {
+interface IAdjustmentEntryRowContextProps extends IAdjustmentEntryTableActionComponentProp {
     children?: ReactNode
     onDeleteSuccess?: () => void
 }
@@ -125,9 +133,15 @@ export const AdjustmentEntryRowContext = ({
     children,
     onDeleteSuccess,
 }: IAdjustmentEntryRowContextProps) => {
-    const { handleOnView } = useAdjustmentEntryActions({
+    const { adjustmentEntry, handleOnView } = useAdjustmentEntryActions({
         row,
         onDeleteSuccess,
+    })
+
+    const canView = hasPermissionFromAuth({
+        action: ['Read', 'OwnRead'],
+        resourceType: 'AdjustmentEntry',
+        resource: adjustmentEntry,
     })
 
     return (
@@ -136,7 +150,7 @@ export const AdjustmentEntryRowContext = ({
                 canSelect={false}
                 onView={{
                     text: 'view',
-                    isAllowed: true,
+                    isAllowed: canView,
                     onClick: handleOnView,
                 }}
                 row={row}

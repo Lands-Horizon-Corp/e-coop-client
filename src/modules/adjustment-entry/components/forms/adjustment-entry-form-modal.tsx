@@ -1,5 +1,8 @@
+import { useCallback, useEffect } from 'react'
+
 import { useQueryClient } from '@tanstack/react-query'
 import { useForm } from 'react-hook-form'
+import { toast } from 'sonner'
 import z from 'zod'
 
 import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
@@ -13,6 +16,7 @@ import { CurrencyInput, ICurrency } from '@/modules/currency'
 import { IMedia } from '@/modules/media/media.types'
 import MemberPicker from '@/modules/member-profile/components/member-picker'
 import { PaymentTypeCombobox } from '@/modules/transaction'
+import { useHotkeys } from 'react-hotkeys-hook'
 
 import FormFooterResetSubmit from '@/components/form-components/form-footer-reset-submit'
 import Modal, { IModalProps } from '@/components/modals/modal'
@@ -20,7 +24,10 @@ import { Form } from '@/components/ui/form'
 import FormFieldWrapper from '@/components/ui/form-field-wrapper'
 import { Input } from '@/components/ui/input'
 import InputDate from '@/components/ui/input-date'
+import { Kbd, KbdGroup } from '@/components/ui/kbd'
+import { Label } from '@/components/ui/label'
 import SignatureField from '@/components/ui/signature-field'
+import { Switch } from '@/components/ui/switch'
 import { Textarea } from '@/components/ui/textarea'
 
 import { useFormHelper } from '@/hooks/use-form-helper'
@@ -34,13 +41,16 @@ import {
 import {
     IAdjustmentEntry,
     IAdjustmentEntryRequest,
+    TORAdjustmentVoucherSettings,
 } from '../../adjustment-entry.types'
+import { buildAdjustmentVoucherOR } from '../../adjustment-entry.utils'
 import { AdjustmentEntrySchema } from '../../adjustment-entry.validation'
 
 type TAdjustmentEntryFormValues = z.infer<typeof AdjustmentEntrySchema>
 
 export interface IAdjustmentEntryFormProps
-    extends IClassProps,
+    extends
+        IClassProps,
         IForm<
             Partial<IAdjustmentEntryRequest>,
             IAdjustmentEntry,
@@ -49,11 +59,13 @@ export interface IAdjustmentEntryFormProps
         > {
     adjustmentEntryId?: TEntityId
     baseCurrency: ICurrency
+    orSettings?: TORAdjustmentVoucherSettings
 }
 
 const AdjustmentEntryCreateUpdateForm = ({
     className,
     baseCurrency,
+    orSettings,
     ...formProps
 }: IAdjustmentEntryFormProps) => {
     const queryClient = useQueryClient()
@@ -137,6 +149,46 @@ const AdjustmentEntryCreateUpdateForm = ({
 
     const error = serverRequestErrExtractor({ error: errorResponse })
 
+    const handleAutoGenerateOR = useCallback(
+        (isAuto?: boolean) => {
+            form.setValue('or_auto_generated', isAuto)
+
+            if (!orSettings)
+                return toast.warning(
+                    'Failed to generate Cash Check OR, could not retrieve settings'
+                )
+
+            if (isAuto) {
+                form.setValue(
+                    'reference_number',
+                    buildAdjustmentVoucherOR(orSettings)
+                )
+            }
+        },
+        [orSettings, form]
+    )
+
+    useHotkeys(
+        'alt + E',
+        (e) => {
+            e.preventDefault()
+            handleAutoGenerateOR(!form.getValues('or_auto_generated'))
+        },
+        { enableOnFormTags: true },
+        [orSettings, form, handleAutoGenerateOR]
+    )
+
+    useEffect(() => {
+        const shouldGenerate =
+            !form.getValues('reference_number') &&
+            (!orSettings?.adjustment_voucher_allow_user_input ||
+                orSettings?.adjustment_entry_auto_increment)
+
+        if (!shouldGenerate) return
+
+        handleAutoGenerateOR(true)
+    }, [orSettings, form, handleAutoGenerateOR])
+
     return (
         <Form {...form}>
             <form
@@ -156,7 +208,7 @@ const AdjustmentEntryCreateUpdateForm = ({
                         render={({ field }) => {
                             return (
                                 <MemberPicker
-                                    allowShorcutCommand
+                                    allowShortcutHotKey
                                     disabled={isDisabled(field.name)}
                                     onSelect={(selectedMember) => {
                                         field.onChange(selectedMember?.id)
@@ -217,20 +269,53 @@ const AdjustmentEntryCreateUpdateForm = ({
                             />
                         )}
                     />
-                    <FormFieldWrapper
-                        control={form.control}
-                        label="Reference Number"
-                        name="reference_number"
-                        render={({ field }) => (
-                            <Input
-                                {...field}
-                                autoComplete="off"
-                                disabled={isDisabled(field.name)}
-                                id={field.name}
-                                placeholder="Reference Number"
-                            />
-                        )}
-                    />
+                    <div className="space-y-2">
+                        <FormFieldWrapper
+                            control={form.control}
+                            label="Reference Number"
+                            name="reference_number"
+                            render={({ field }) => (
+                                <Input
+                                    {...field}
+                                    autoComplete="off"
+                                    disabled={isDisabled(field.name)}
+                                    id={field.name}
+                                    placeholder="Reference Number"
+                                />
+                            )}
+                        />
+                        <FormFieldWrapper
+                            className=""
+                            control={form.control}
+                            labelClassName="text-xs font-medium text-muted-foreground"
+                            name="or_auto_generated"
+                            render={({ field }) => (
+                                <div className="flex gap-x-2 justify-between items-center">
+                                    <Label className="text-xs font-medium text-muted-foreground mr-1">
+                                        Auto Generated
+                                    </Label>
+                                    <div className="flex items-center gap-x-2">
+                                        <Label className="text-xs font-medium text-muted-foreground">
+                                            <KbdGroup>
+                                                <Kbd>Alt</Kbd>
+                                                <span>+</span>
+                                                <Kbd>E</Kbd>
+                                            </KbdGroup>
+                                        </Label>
+                                        <Switch
+                                            checked={field.value}
+                                            className="mr-2 max-h-5 max-w-9"
+                                            onCheckedChange={(value) => {
+                                                handleAutoGenerateOR(value)
+                                                field.onChange(value)
+                                            }}
+                                            thumbClassName="size-3"
+                                        />
+                                    </div>
+                                </div>
+                            )}
+                        />
+                    </div>
                     <div className="md:col-span-3 grid grid-cols-1 gap-x-3 md:grid-cols-2">
                         <FormFieldWrapper
                             control={form.control}

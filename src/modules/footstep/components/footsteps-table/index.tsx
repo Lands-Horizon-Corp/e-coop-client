@@ -40,8 +40,7 @@ import {
 } from './row-action-context'
 
 export interface FootstepTableProps
-    extends TableProps<IFootstep>,
-        IFootstepTableColumnProps {
+    extends TableProps<IFootstep>, IFootstepTableColumnProps {
     toolbarProps?: Omit<
         IDataTableToolbarProps<IFootstep>,
         | 'table'
@@ -129,7 +128,7 @@ const FootstepTable = ({
         userOrgId,
         memberProfileId,
         query: {
-            pagination,
+            ...pagination,
             sort: sortingStateBase64,
             filter: filterState.finalFilterPayloadBase64,
         },

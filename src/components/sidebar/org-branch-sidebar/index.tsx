@@ -1,13 +1,15 @@
 import { useMemo } from 'react'
 
-import { Link, useParams, useRouter } from '@tanstack/react-router'
+import { useParams, useRouter } from '@tanstack/react-router'
 
 import { useAuthUserWithOrgBranch } from '@/modules/authentication/authgentication.store'
+import BranchModalDisplay from '@/modules/branch/components/modal/branch-modal-display'
 import { TUserType } from '@/modules/user'
 
 // import { useHotkeys } from 'react-hotkeys-hook'
 
 import EcoopLogo from '@/components/ecoop-logo'
+import { BuildingIcon, UserLockIcon } from '@/components/icons'
 import ActionTooltip from '@/components/tooltips/action-tooltip'
 import AppSidebarItem from '@/components/ui/app-sidebar/app-sidebar-item'
 import AppSidebarQuickNavigate from '@/components/ui/app-sidebar/app-sidebar-quick-navigate'
@@ -29,6 +31,8 @@ import {
     SidebarRail,
     // useSidebar,
 } from '@/components/ui/sidebar'
+
+import { useModalState } from '@/hooks/use-modal-state'
 
 import { IBaseProps } from '@/types'
 
@@ -78,15 +82,25 @@ const OrgBranchSidebar = (props: IBaseProps) => {
     // })
 
     const orgLogo = user_organization.organization.media?.download_url
+    const viewBranchInfoModal = useModalState()
 
     return (
         // <Sidebar collapsible='icon' variant="inset" {...props}>
         <Sidebar collapsible="icon" {...props}>
             <SidebarHeader>
                 <SidebarMenu>
+                    <BranchModalDisplay
+                        branchId={user_organization.branch.id}
+                        className="!rounded-2xl"
+                        {...viewBranchInfoModal}
+                    />
                     <SidebarMenuItem>
                         <SidebarMenuButton asChild size="lg">
-                            <Link to={baseUrl}>
+                            <div
+                                onClick={() =>
+                                    viewBranchInfoModal.onOpenChange(true)
+                                }
+                            >
                                 <EcoopLogo
                                     className="size-9 rounded-md"
                                     darkUrl={orgLogo}
@@ -115,7 +129,8 @@ const OrgBranchSidebar = (props: IBaseProps) => {
                                         }
                                     >
                                         <span className="truncate text-xs text-muted-foreground/80">
-                                            <span>
+                                            <span className="font-bold">
+                                                <BuildingIcon className="inline mr-1" />
                                                 {
                                                     user_organization.branch
                                                         .name
@@ -130,7 +145,7 @@ const OrgBranchSidebar = (props: IBaseProps) => {
                                         </span>
                                     </ActionTooltip>
                                 </div>
-                            </Link>
+                            </div>
                         </SidebarMenuButton>
                     </SidebarMenuItem>
                 </SidebarMenu>
@@ -138,8 +153,8 @@ const OrgBranchSidebar = (props: IBaseProps) => {
             </SidebarHeader>
             <SidebarContent className="ecoop-scroll group-data-[collapsible=icon]:overflow-y-auto ">
                 {memoizedSidebarRouteGroup.map((navGroupItem, i) => {
-                    if (!navGroupItem.userType.includes(currentUserType))
-                        return null
+                    // if (!navGroupItem.userType.includes(currentUserType))
+                    //     return null
 
                     return (
                         <SidebarGroup key={`${navGroupItem.title}-${i}`}>
@@ -152,11 +167,11 @@ const OrgBranchSidebar = (props: IBaseProps) => {
                             <SidebarGroupContent>
                                 <SidebarMenu>
                                     {navGroupItem.navItems
-                                        .filter((item) =>
-                                            item.userType.includes(
-                                                currentUserType
-                                            )
-                                        )
+                                        // .filter((item) =>
+                                        //     item.userType.includes(
+                                        //         currentUserType
+                                        //     )
+                                        // )
                                         .map((navItem, index) => (
                                             <AppSidebarItem
                                                 key={index}
@@ -172,8 +187,19 @@ const OrgBranchSidebar = (props: IBaseProps) => {
                     )
                 })}
                 {memoizedSidebarRouteGroup.length === 0 && (
-                    <SidebarGroupLabel className="px-4 text-xs text-muted-foreground">
-                        No accessible
+                    <SidebarGroupLabel className="px-4 text-xs text-muted-foreground h-fit">
+                        <div className="flex flex-col items-center justify-center px-4 py-8">
+                            <div className="flex items-center gap-2 text-muted-foreground">
+                                <UserLockIcon className="size-4" />
+                                <span className="text-sm">
+                                    No accessible Modules
+                                </span>
+                            </div>
+                            <p className="mt-2 text-xs text-muted-foreground text-center max-w-[180px]">
+                                Contact your administrator to request access to
+                                modules.
+                            </p>
+                        </div>
                     </SidebarGroupLabel>
                 )}
             </SidebarContent>

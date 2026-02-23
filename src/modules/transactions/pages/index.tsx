@@ -1,6 +1,7 @@
 import { useQueryClient } from '@tanstack/react-query'
 
 import { useAuthUserWithOrgBranch } from '@/modules/authentication/authgentication.store'
+import PermissionGuard from '@/modules/permission/components/permission-guard'
 
 import PageContainer from '@/components/containers/page-container'
 
@@ -36,10 +37,12 @@ export default function TransactionPage() {
 
     return (
         <PageContainer>
-            <TransactionsTable
-                className="max-h-[90vh] min-h-[90vh] w-full"
-                mode="current-branch"
-            />
+            <PermissionGuard action="Read" resourceType="Transactions">
+                <TransactionsTable
+                    className="max-h-[90vh] min-h-[90vh] w-full"
+                    mode="current-branch"
+                />
+            </PermissionGuard>
         </PageContainer>
     )
 }

@@ -21,6 +21,7 @@ import { useHotkeys } from 'react-hotkeys-hook'
 import { PlusIcon, TrashIcon } from '@/components/icons'
 import { Button } from '@/components/ui/button'
 import { CommandShortcut } from '@/components/ui/command'
+import { Kbd } from '@/components/ui/kbd'
 import {
     Table,
     TableBody,
@@ -45,7 +46,6 @@ const columns: ColumnDef<IJournalVoucherEntryRequest>[] = [
             const meta = props.table.options.meta as JournalEntryTableMeta
             const form = meta.form
             const rowIndex = props.row.index
-
             return (
                 <AccountPicker
                     allowClear
@@ -113,7 +113,6 @@ const columns: ColumnDef<IJournalVoucherEntryRequest>[] = [
 
             const original = props.row.original
             const account: IAccount | undefined = original.account
-
             return (
                 <LoanPicker
                     disabled={
@@ -157,7 +156,7 @@ const columns: ColumnDef<IJournalVoucherEntryRequest>[] = [
 
             return (
                 <CurrencyInput
-                    className="text-left !w-full !min-w-0"
+                    className="text-left w-full! min-w-0!"
                     currency={props.row.original.account?.currency}
                     onValueChange={(newValue) => {
                         const numValue =
@@ -190,7 +189,7 @@ const columns: ColumnDef<IJournalVoucherEntryRequest>[] = [
 
             return (
                 <CurrencyInput
-                    className="text-left !w-full !min-w-0"
+                    className="text-left w-full! min-w-0!"
                     currency={props.row.original.account?.currency}
                     onValueChange={(newValue) => {
                         const numValue =
@@ -218,7 +217,7 @@ const columns: ColumnDef<IJournalVoucherEntryRequest>[] = [
             const meta = row.table.options.meta as JournalEntryTableMeta
             return (
                 <Button
-                    className="w-full hover:bg-primary/10 !p-0 text-destructive"
+                    className="w-full hover:bg-primary/10 p-0! text-destructive"
                     onClick={(e) => {
                         e.preventDefault()
                         meta.handleDeleteRow(row.row.index)
@@ -268,7 +267,6 @@ export const JournalEntryTable = ({
     const isReadOnlyMode = mode === 'readOnly'
 
     const watchedJournalEntries = form.watch('journal_voucher_entries')
-
     const { append: addEntry, remove: removeEntry } = useFieldArray({
         name: 'journal_voucher_entries',
         control: form.control,
@@ -286,7 +284,6 @@ export const JournalEntryTable = ({
             const entryId = form.getValues(
                 `journal_voucher_entries.${index}.id`
             )
-
             if (entryId && isUpdateMode) {
                 removeEntry(index)
                 addRemoveId(entryId)
@@ -346,7 +343,10 @@ export const JournalEntryTable = ({
     return (
         <div className={cn('', className)}>
             <div className="w-full flex justify-between">
-                <h1 className="text-lg font-semibold">Journal Entries</h1>
+                <h1 className="text-lg font-semibold">
+                    Journal Entries
+                    <Kbd className="ml-1">Tab</Kbd>
+                </h1>
                 <div className="flex py-2 items-center space-x-2">
                     <Button
                         aria-label="Add new journal entry"
@@ -354,7 +354,7 @@ export const JournalEntryTable = ({
                         disabled={isReadOnlyMode}
                         onClick={handleAddRow}
                         size="sm"
-                        tabIndex={0}
+                        tabIndex={-1}
                         type="button"
                     >
                         Add <PlusIcon className="inline" />
@@ -382,12 +382,13 @@ export const JournalEntryTable = ({
                                 <TableHead
                                     className={cn(
                                         'h-10 bg-sidebar',
-                                        'first:!rounded-tl-2xl',
-                                        'last:!rounded-tr-2xl'
+                                        'first:rounded-tl-2xl!',
+                                        'last:rounded-tr-2xl!'
                                     )}
                                     colSpan={header.colSpan}
                                     key={header.id}
                                     style={{ width: header.getSize() }}
+                                    tabIndex={-1}
                                 >
                                     {!header.isPlaceholder &&
                                         flexRender(
@@ -413,12 +414,15 @@ export const JournalEntryTable = ({
                         table.getRowModel().rows.map((row) => (
                             <TableRow
                                 className={cn(
-                                    'hover:bg-background !border-b-[0.5px] border-b-primary/20'
+                                    'hover:bg-background border-b-[0.5px]! border-b-primary/20'
                                 )}
                                 key={row.id}
                             >
                                 {row.getVisibleCells().map((cell) => (
-                                    <TableCell className="!p-1" key={cell.id}>
+                                    <TableCell
+                                        className="p-1! via-10%"
+                                        key={cell.id}
+                                    >
                                         {flexRender(
                                             cell.column.columnDef.cell,
                                             cell.getContext()

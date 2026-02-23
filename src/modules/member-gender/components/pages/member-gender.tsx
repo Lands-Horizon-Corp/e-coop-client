@@ -1,8 +1,14 @@
 import { useQueryClient } from '@tanstack/react-query'
 
-import { useAuthUserWithOrgBranch } from '@/modules/authentication/authgentication.store'
+import {
+    hasPermissionFromAuth,
+    useAuthUserWithOrgBranch,
+} from '@/modules/authentication/authgentication.store'
 import { MemberGenderCreateUpdateFormModal } from '@/modules/member-gender/components/member-gender-create-update-form'
-import MemberGenderTable from '@/modules/member-gender/components/member-genders-table'
+import MemberGenderTable, {
+    MemberGenderTableProps,
+} from '@/modules/member-gender/components/member-genders-table'
+import PermissionGuard from '@/modules/permission/components/permission-guard'
 
 import PageContainer from '@/components/containers/page-container'
 
@@ -39,15 +45,29 @@ const MemberGenderPage = () => {
 
     return (
         <PageContainer>
-            <MemberGenderCreateUpdateFormModal {...createModal} />
-            <MemberGenderTable
-                className="max-h-[90vh] min-h-[90vh] w-full"
-                toolbarProps={{
-                    createActionProps: {
-                        onClick: () => createModal.onOpenChange(true),
-                    },
-                }}
-            />
+            <PermissionGuard action="Read" resourceType="MemberGender">
+                <MemberGenderCreateUpdateFormModal {...createModal} />
+                <MemberGenderTable
+                    className="max-h-[90vh] min-h-[90vh] w-full"
+                    toolbarProps={{
+                        createActionProps: {
+                            onClick: () => createModal.onOpenChange(true),
+                            disabled: !hasPermissionFromAuth({
+                                action: 'Create',
+                                resourceType: 'MemberGender',
+                            }),
+                        },
+                        exportActionProps: {
+                            disabled: !hasPermissionFromAuth({
+                                action: 'Export',
+                                resourceType: 'MemberGender',
+                            }),
+                        } as NonNullable<
+                            MemberGenderTableProps['toolbarProps']
+                        >['exportActionProps'],
+                    }}
+                />
+            </PermissionGuard>
         </PageContainer>
     )
 }

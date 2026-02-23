@@ -1,4 +1,4 @@
-import { APP_ENV } from '@/constants'
+import { IS_STAGING } from '@/constants'
 import { TFootstepLevel, createFootstep } from '@/modules/footstep'
 
 /* eslint-disable no-console */
@@ -17,8 +17,9 @@ class Logger {
     public debug: LogMethod
 
     private constructor(module?: string, footstep: boolean = true) {
-        this.isDevelopment = ['development', 'local'].includes(APP_ENV)
+        this.isDevelopment = !IS_STAGING
         this.module = module
+
         if (!Logger.hasLoggedAsciiArt && !this.isDevelopment) {
             console.log(
                 '\n                  ......                                    \n            .,,,,,,,,,,,,,,,,,,,                             \n        ,,,,,,,,,,,,,,,,,,,,,,,,,,                          \n      ,,,,,,,,,,,,,,  .,,,,,,,,,,,,,                        \n    ,,,,,,,,,,           ,,,,,,,,,,,,                       \n      ,,,,,,,          .,,,,,,,,,,,                          \n  ,*,,,,,,          ,,,,,,,,,,,,                             \n.**,,,,.**      .,,,,,,,,,,,                                \n.,,,,,,,**    ,,,,,,,,,,,                                   \n  .,,,,.**       ,,,,,,                                      \n    *******       ,                                         \n    **********              **,                             \n      ************,,  ,,*********,                          \n        **************************                          \n            ********************                             \n                  ******.\n'

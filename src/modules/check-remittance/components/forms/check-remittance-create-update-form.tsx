@@ -33,7 +33,8 @@ import { CheckRemittanceSchema } from '../../check-remittance.validation'
 type TFormValues = z.infer<typeof CheckRemittanceSchema>
 
 export interface ICheckRemittanceFormProps
-    extends IClassProps,
+    extends
+        IClassProps,
         IForm<
             Partial<ICheckRemittanceRequest>,
             ICheckRemittance,
@@ -258,7 +259,7 @@ export const CheckRemittanceCreateUpdateFormModal = ({
 }) => {
     return (
         <Modal
-            className={cn('!max-w-xl', className)}
+            className={cn('max-w-xl!', className)}
             description={description}
             title={title}
             {...props}

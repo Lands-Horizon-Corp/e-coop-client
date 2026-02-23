@@ -1,21 +1,14 @@
 import { useAuthUserWithOrg } from '@/modules/authentication/authgentication.store'
 
 export const useGetUserSettings = () => {
-    const { currentAuth: user } = useAuthUserWithOrg()
-
     const {
-        user_organization: {
-            user_setting_used_or: userSettingOR,
-            user_setting_number_padding: user_setting_number_padding,
-        },
-    } = user
-    console.log(userSettingOR)
+        currentAuth: { user_organization },
+    } = useAuthUserWithOrg()
+    const OR = '0'
     return {
-        userSettingOR:
-            userSettingOR
-                ?.toString()
-                ?.padStart(user_setting_number_padding, '0') ?? '',
-        ...user.user_organization,
+        ...user_organization,
+        userOrganization: user_organization,
+        ORWithPadding: OR.padStart(user_organization.payment_padding, '0'),
     }
 }
 export default useGetUserSettings

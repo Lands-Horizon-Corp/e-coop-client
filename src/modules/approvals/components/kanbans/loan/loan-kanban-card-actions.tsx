@@ -1,10 +1,15 @@
 import { toast } from 'sonner'
 
 import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
+import {
+    hasPermissionFromAuth,
+    useAuthStore,
+} from '@/modules/authentication/authgentication.store'
 import PrintReportFormModal from '@/modules/generated-report/components/forms/print-modal-config'
 import { useGenerateReport } from '@/modules/generated-report/components/generate-report-hooks/use-report-generate'
 import {
     ILoanTransaction,
+    TORLoanVoucherSettings,
     useUndoPrintLoanTransaction,
 } from '@/modules/loan-transaction'
 import { LoanTransactionPrintFormModal } from '@/modules/loan-transaction/components/forms/loan-print-form'
@@ -155,6 +160,19 @@ export const LoanTransactionCardActions = ({
         },
     })
 
+    const {
+        currentAuth: { user_organization },
+    } = useAuthStore()
+
+    const resolvedOrSettings: TORLoanVoucherSettings | undefined =
+        user_organization
+            ? {
+                  ...user_organization.branch.branch_setting,
+                  loan_voucher_auto_increment:
+                      user_organization.loan_voucher_auto_increment,
+              }
+            : undefined
+
     return (
         <>
             <LoanTransactionCreateUpdateFormModal
@@ -188,6 +206,7 @@ export const LoanTransactionCardActions = ({
                 {...printModal}
                 className=""
                 formProps={{
+                    orSettings: resolvedOrSettings,
                     defaultValues: { ...loanTransaction },
                     loanTransactionId: loanTransaction.id,
                     onSuccess: () => {
@@ -223,11 +242,23 @@ export const LoanTransactionCardActions = ({
             })}
             <div className="w-full flex items-center space-x-1 justify-start flex-shrink-0">
                 <LoanTagsManagerPopover
+                    disabled={
+                        !hasPermissionFromAuth({
+                            action: 'Create',
+                            resourceType: 'LoanTag',
+                        })
+                    }
                     loanTransactionId={loanTransaction.id}
                     size="sm"
                 />
                 <Button
                     aria-label="View Loan Transaction"
+                    disabled={
+                        !hasPermissionFromAuth({
+                            action: 'Create',
+                            resourceType: 'LoanTag',
+                        })
+                    }
                     onClick={handleOpenViewModal}
                     size={'icon'}
                     variant="ghost"

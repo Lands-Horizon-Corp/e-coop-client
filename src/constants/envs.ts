@@ -8,14 +8,10 @@ export const API_URL =
     import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000'
 
 // WS
-export const WS_URL = import.meta.env.VITE_WS_URL || 'ws://localhost:8080'
-
-// NATS
-export const NATS_CLIENT = import.meta.env.VITE_WS_CLIENT || ''
-
-export const NATS_USER = import.meta.env.VITE_WS_USER || ''
-
-export const NATS_PASS = import.meta.env.VITE_WS_PASSWORD || ''
+export const SOKETI_KEY = import.meta.env.VITE_SOKETI_KEY || ''
+export const SOKETI_HOST = import.meta.env.VITE_SOKETI_HOST || 'localhost'
+export const SOKETI_PORT = parseInt(import.meta.env.VITE_SOKETI_PORT || '6001')
+export const SOKETI_CLIENT = import.meta.env.VITE_SOKETI_CLIENT || 'horizon'
 
 // TURNSTILE CAPTCHA
 export const TURNSTILE_CAPTCHA_SITE_KEY =
@@ -25,4 +21,6 @@ export const TURNSTILE_CAPTCHA_SITE_KEY =
 export const GOOGLE_MAPS_API_KEY =
     import.meta.env.VITE_GOOGLE_MAPS_API_KEY || ''
 
-export const GOOGLE_MAPS_MAP_ID = import.meta.env.VITE_GOOGLE_MAPS_MAP_ID || ''
+export const GOOGLE_MAPS_MAP_ID = import.meta.env.VITE_GOOGLE_MAPS_ID || ''
+
+export const IS_STAGING = !['development', 'local'].includes(APP_ENV)

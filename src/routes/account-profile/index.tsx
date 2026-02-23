@@ -7,13 +7,11 @@ import AccountProfilePicture from '@/modules/user-profile/components/account-pro
 import AccountGeneralForm from '@/modules/user-profile/components/forms/account-general-form'
 import { AccountProfileFormModal } from '@/modules/user-profile/components/forms/account-profile-form'
 
-import { BackIcon, EmailIcon, PencilFillIcon } from '@/components/icons'
+import { EmailIcon, PencilFillIcon } from '@/components/icons'
 import { Button } from '@/components/ui/button'
 
 import { useModalState } from '@/hooks/use-modal-state'
 import { useSubscribe } from '@/hooks/use-pubsub'
-
-import { useGetIntoBranch } from '../../hooks/use-go-to-org'
 
 export const Route = createFileRoute('/account-profile/')({
     component: RouteComponent,
@@ -31,21 +29,8 @@ function RouteComponent() {
         updateCurrentAuth({ user: newUserData })
     })
 
-    const { handleGetStarted } = useGetIntoBranch()
-
     return (
         <div className="space-y-4 max-w-4xl rounded-3xl mx-auto p-4">
-            <div className="flex justify-end">
-                <Button
-                    className=""
-                    onClick={handleGetStarted}
-                    size={'sm'}
-                    variant={'ghost'}
-                >
-                    <BackIcon className="" size={20} />
-                    Go Back
-                </Button>
-            </div>
             <div className="bg-[url('/profile-cover-light.png')] dark:bg-[url('profile-cover-dark.png')] bg-no-repeat bg-cover rounded-3xl h-48"></div>
 
             <div className="relative flex justify-between">

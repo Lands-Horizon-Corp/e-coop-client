@@ -1,9 +1,15 @@
 import { useQueryClient } from '@tanstack/react-query'
 
-import { useAuthUserWithOrgBranch } from '@/modules/authentication/authgentication.store'
+import {
+    hasPermissionFromAuth,
+    useAuthUserWithOrgBranch,
+} from '@/modules/authentication/authgentication.store'
 import { MemberProfileQuickCreateFormModal } from '@/modules/member-profile/components/forms/member-profile-quick-create-form'
-import MemberProfileTable from '@/modules/member-profile/components/tables/members-profile-table'
+import MemberProfileTable, {
+    MemberProfileTableProps,
+} from '@/modules/member-profile/components/tables/members-profile-table'
 import { MemberProfileRowContext } from '@/modules/member-profile/components/tables/members-profile-table/row-action-context'
+import PermissionGuard from '@/modules/permission/components/permission-guard'
 
 import PageContainer from '@/components/containers/page-container'
 
@@ -19,7 +25,12 @@ function ViewMemberProfilePage() {
                 branch_id,
                 organization_id,
                 branch: {
-                    branch_setting: { default_member_type_id },
+                    branch_setting: {
+                        default_member_type_id,
+                        currency,
+                        ...rest
+                        // default_member_gender_id,
+                    },
                 },
             },
         },
@@ -45,26 +56,44 @@ function ViewMemberProfilePage() {
 
     return (
         <PageContainer>
-            <MemberProfileQuickCreateFormModal
-                {...createModal}
-                formProps={{
-                    defaultValues: {
-                        organization_id,
-                        branch_id,
-                        member_type_id: default_member_type_id,
-                    },
-                    onSuccess: () => {},
-                }}
-            />
-            <MemberProfileTable
-                className="max-h-[90vh] min-h-[90vh] w-full"
-                RowContextComponent={MemberProfileRowContext}
-                toolbarProps={{
-                    createActionProps: {
-                        onClick: () => createModal.onOpenChange(true),
-                    },
-                }}
-            />
+            <PermissionGuard action="Read" resourceType="MemberProfile">
+                <MemberProfileQuickCreateFormModal
+                    {...createModal}
+                    formProps={{
+                        defaultValues: {
+                            organization_id,
+                            branch_id,
+                            member_type_id: default_member_type_id,
+                            birth_place:
+                                currency.iso_3166_alpha3?.toUpperCase(),
+                            // member_gender_id: default_member_gender_id,
+                        },
+                        pbSettings: rest,
+                        onSuccess: () => {},
+                    }}
+                />
+                <MemberProfileTable
+                    className="max-h-[90vh] min-h-[90vh] w-full"
+                    RowContextComponent={MemberProfileRowContext}
+                    toolbarProps={{
+                        createActionProps: {
+                            onClick: () => createModal.onOpenChange(true),
+                            disabled: !hasPermissionFromAuth({
+                                action: 'Create',
+                                resourceType: 'MemberProfile',
+                            }),
+                        },
+                        exportActionProps: {
+                            disabled: !hasPermissionFromAuth({
+                                action: 'Export',
+                                resourceType: 'MemberProfile',
+                            }),
+                        } as NonNullable<
+                            MemberProfileTableProps['toolbarProps']
+                        >['exportActionProps'],
+                    }}
+                />
+            </PermissionGuard>
         </PageContainer>
     )
 }

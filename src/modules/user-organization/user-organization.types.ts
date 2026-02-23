@@ -7,6 +7,7 @@ import { IOrganization } from '../organization'
 import { IPaymentType } from '../payment-type/payment-type.types'
 import { TPermission } from '../permission'
 import { IUserBase, TUserType } from '../user/user.types'
+import { TUserOrganizationSettingsSchema } from './user-organization.validation'
 
 export interface IUserOrganizationContext<
     TUserOrganization = IUserOrganization | undefined,
@@ -18,7 +19,8 @@ export type TUserOrganizationApplicationStatus =
     (typeof USER_ORG_APPLICATION_STATUS)[number]
 
 export interface IUserOrganization<TUser = IUserBase>
-    extends IBaseEntityMeta,
+    extends
+        IBaseEntityMeta,
         Omit<IUserOrganizationSettings, 'user_type' | 'description'> {
     id: TEntityId
 
@@ -79,6 +81,16 @@ export interface IUserOrganization<TUser = IUserBase>
 
     settings_payment_type_default_value_id?: TEntityId
     settings_payment_type_default_value?: IPaymentType
+
+    // AUTO INCREMENTS
+    // check_voucher_general_auto_increment: boolean
+    loan_voucher_auto_increment: boolean
+    adjustment_entry_auto_increment: boolean
+    journal_voucher_auto_increment: boolean
+    cash_check_voucher_auto_increment: boolean
+    deposit_auto_increment: boolean
+    withdraw_auto_increment: boolean
+    payment_auto_increment: boolean
 }
 
 export interface IUserOrganizationResponse {
@@ -105,40 +117,8 @@ export interface IUserOrganizationPermissionRequest {
     permissions: TPermission[]
 }
 
-export interface IUserOrganizationSettings {
-    user_type: TUserType
-    description: string
+export type IUserOrganizationSettings = TUserOrganizationSettingsSchema
 
-    user_setting_description: string
-    user_setting_start_or: number
-    user_setting_end_or: number
-    user_setting_used_or: number
-    user_setting_start_voucher: number
-    user_setting_end_voucher: number
-    user_setting_used_voucher: number
-    user_setting_number_padding: number
-
-    allow_withdraw_negative_balance: boolean
-    allow_withdraw_exact_balance: boolean
-    maintaining_balance: boolean
-
-    settings_accounting_payment_default_value_id?: TEntityId | null
-    settings_accounting_payment_default_value?: IAccount
-
-    settings_accounting_deposit_default_value_id?: TEntityId | null
-    settings_accounting_deposit_default_value?: IAccount
-
-    settings_accounting_withdraw_default_value_id?: TEntityId | null
-    settings_accounting_withdraw_default_value?: IAccount
-
-    settings_payment_type_default_value_id?: TEntityId | null
-    settings_payment_type_default_value?: IPaymentType
-
-    time_machine_time?: string
-}
-
-export interface IUserOrganizationSettingsRequest
-    extends IUserOrganizationSettings {}
-
-export interface IUserOrganizationPaginated<TUser = IUserBase>
-    extends IPaginatedResult<IUserOrganization<TUser>> {}
+export interface IUserOrganizationPaginated<
+    TUser = IUserBase,
+> extends IPaginatedResult<IUserOrganization<TUser>> {}

@@ -1,3 +1,5 @@
+import { useCallback, useEffect } from 'react'
+
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 
@@ -9,21 +11,32 @@ import {
     IJournalVoucher,
     JournalVoucherPrintSchema,
     TJournalVoucherPrintSchema,
+    TORJournalVoucherSettings,
     usePrintJournalVoucherTransaction,
 } from '@/modules/journal-voucher'
+import { useHotkeys } from 'react-hotkeys-hook'
 
 import FormFooterResetSubmit from '@/components/form-components/form-footer-reset-submit'
 import Modal, { IModalProps } from '@/components/modals/modal'
 import { Form } from '@/components/ui/form'
 import FormFieldWrapper from '@/components/ui/form-field-wrapper'
 import { Input } from '@/components/ui/input'
+import { Kbd, KbdGroup } from '@/components/ui/kbd'
+import { Label } from '@/components/ui/label'
+import { Switch } from '@/components/ui/switch'
 
 import { useFormHelper } from '@/hooks/use-form-helper'
 
 import { IClassProps, IForm, TEntityId } from '@/types'
 
+import {
+    buildJournalVoucherOR,
+    isAllowedInputJournalVoucherOR,
+} from '../../journal-voucher.utils'
+
 export interface IJournalVoucherPrintFormProps
-    extends IClassProps,
+    extends
+        IClassProps,
         IForm<
             Partial<TJournalVoucherPrintSchema>,
             IJournalVoucher,
@@ -31,11 +44,13 @@ export interface IJournalVoucherPrintFormProps
             TJournalVoucherPrintSchema
         > {
     journalVoucherId: TEntityId
+    orSettings?: TORJournalVoucherSettings
 }
 
 const JournalVoucherPrintForm = ({
     journalVoucherId,
     className,
+    orSettings,
     ...formProps
 }: IJournalVoucherPrintFormProps) => {
     const form = useForm<TJournalVoucherPrintSchema>({
@@ -62,14 +77,10 @@ const JournalVoucherPrintForm = ({
         })
 
     const onSubmit = form.handleSubmit(async (payload) => {
-        const apiPayload = {
-            cash_voucher_number: payload.cash_voucher_number,
-        }
-
         toast.promise(
             printMutation.mutateAsync({
                 journalVoucherId,
-                payload: apiPayload,
+                payload,
             }),
             {
                 loading: 'Printing Journal Voucher...',
@@ -83,6 +94,46 @@ const JournalVoucherPrintForm = ({
     const { error: rawError, isPending, reset } = printMutation
 
     const error = serverRequestErrExtractor({ error: rawError })
+
+    const handleAutoGenerateOR = useCallback(
+        (isAuto?: boolean) => {
+            form.setValue('or_auto_generated', isAuto)
+
+            if (!orSettings)
+                return toast.warning(
+                    'Failed to generate Journal Voucher OR, could not retrieve settings'
+                )
+
+            if (isAuto) {
+                form.setValue(
+                    'cash_voucher_number',
+                    buildJournalVoucherOR(orSettings)
+                )
+            }
+        },
+        [orSettings, form]
+    )
+
+    useHotkeys(
+        'alt + E',
+        (e) => {
+            e.preventDefault()
+            handleAutoGenerateOR(!form.getValues('or_auto_generated'))
+        },
+        { enableOnFormTags: true },
+        [orSettings, form, handleAutoGenerateOR]
+    )
+
+    useEffect(() => {
+        const shouldGenerate =
+            !form.getValues('cash_voucher_number') &&
+            (!orSettings?.journal_voucher_allow_user_input ||
+                orSettings?.journal_voucher_auto_increment)
+
+        if (!shouldGenerate) return
+
+        handleAutoGenerateOR(true)
+    }, [orSettings, form, handleAutoGenerateOR])
 
     return (
         <Form {...form}>
@@ -103,14 +154,46 @@ const JournalVoucherPrintForm = ({
                             <Input
                                 {...field}
                                 autoComplete="off"
-                                disabled={isDisabled(field.name)}
+                                disabled={
+                                    isDisabled(field.name) ||
+                                    !isAllowedInputJournalVoucherOR(orSettings)
+                                }
                                 id={field.name}
                                 placeholder="Voucher Number"
                             />
                         )}
                     />
+                    <FormFieldWrapper
+                        className=""
+                        control={form.control}
+                        labelClassName="text-xs font-medium text-muted-foreground"
+                        name="or_auto_generated"
+                        render={({ field }) => (
+                            <div className="flex items-center">
+                                <Switch
+                                    checked={field.value}
+                                    className="mr-2 max-h-4 max-w-9"
+                                    onCheckedChange={(value) => {
+                                        handleAutoGenerateOR(value)
+                                        field.onChange(value)
+                                    }}
+                                    thumbClassName="size-3"
+                                />
+                                <Label className="text-xs font-medium text-muted-foreground mr-1">
+                                    OR Auto Generated
+                                </Label>
+                                <Label className="text-xs font-medium text-muted-foreground">
+                                    Press Alt{' '}
+                                    <KbdGroup>
+                                        <Kbd>Alt</Kbd>
+                                        <span>+</span>
+                                        <Kbd>E</Kbd>
+                                    </KbdGroup>
+                                </Label>
+                            </div>
+                        )}
+                    />
                 </fieldset>
-
                 <FormFooterResetSubmit
                     disableSubmit={!form.formState.isDirty || isPending}
                     error={error}
@@ -138,7 +221,7 @@ export const JournalVoucherPrintFormModal = ({
 }) => {
     return (
         <Modal
-            className={cn('!max-w-lg', className)}
+            className={cn('max-w-lg!', className)}
             description={description}
             title={title}
             {...props}

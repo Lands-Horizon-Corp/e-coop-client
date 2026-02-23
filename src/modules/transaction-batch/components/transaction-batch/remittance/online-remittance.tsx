@@ -1,5 +1,6 @@
 import { useQueryClient } from '@tanstack/react-query'
 
+import { hasPermissionFromAuth } from '@/modules/authentication/authgentication.store'
 import { ICurrency, currencyFormat } from '@/modules/currency'
 import {
     IOnlineRemittance,
@@ -122,6 +123,12 @@ const BatchOnlineRemittance = ({
                 </div>
                 <Button
                     className="size-fit p-1"
+                    disabled={
+                        !hasPermissionFromAuth({
+                            action: 'Create',
+                            resourceType: 'OnlineRemittance',
+                        })
+                    }
                     onClick={() => modalState.onOpenChange(true)}
                     size="icon"
                 >
@@ -221,7 +228,14 @@ const OnlineRemittanceListRow = ({
                     <div className="flex justify-end gap-1">
                         <Button
                             className="!size-fit px-1.5 py-1.5 text-muted-foreground/40"
-                            disabled={isDeleting}
+                            disabled={
+                                isDeleting ||
+                                !hasPermissionFromAuth({
+                                    action: ['Update', 'OwnUpdate'],
+                                    resourceType: 'OnlineRemittance',
+                                    resource: onlineRemittance,
+                                })
+                            }
                             onClick={() => modalState.onOpenChange(true)}
                             size="icon"
                             variant="ghost"
@@ -230,7 +244,13 @@ const OnlineRemittanceListRow = ({
                         </Button>
                         <Button
                             className="!size-fit px-1.5 py-1.5 text-muted-foreground/40"
-                            disabled={isDeleting}
+                            disabled={
+                                isDeleting ||
+                                !hasPermissionFromAuth({
+                                    action: ['Delete', 'OwnDelete'],
+                                    resourceType: 'OnlineRemittance',
+                                })
+                            }
                             hoverVariant="destructive"
                             onClick={() =>
                                 onOpen({

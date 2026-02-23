@@ -16,5 +16,4 @@ export interface IAccountsComputationType extends ITimeStamps {
     updatedBy: TEntityId
 }
 
-export interface IAccountsComputationTypePaginated
-    extends IPaginatedResult<IAccountsComputationType> {}
+export interface IAccountsComputationTypePaginated extends IPaginatedResult<IAccountsComputationType> {}

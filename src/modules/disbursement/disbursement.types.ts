@@ -17,5 +17,4 @@ export interface IDisbursement extends IBaseEntityMeta {
 
 export type IDisbursementRequest = TDisbursementSchema
 
-export interface IDisbursementPaginated
-    extends IPaginatedResult<IDisbursement> {}
+export interface IDisbursementPaginated extends IPaginatedResult<IDisbursement> {}

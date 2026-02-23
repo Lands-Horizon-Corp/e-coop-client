@@ -5,7 +5,7 @@ import { GradientText } from '@/components/ui/gradient-text'
 
 function SidePanelPoster() {
     return (
-        <div className="hidden sm:flex sm:flex-col sm:w-1/3 sm:h-screen relative bg-gradient-to-br from-primary/5 via-primary/10 to-primary/20">
+        <div className="hidden sm:flex sm:flex-col sm:w-1/3 sm:h-screen relative bg-linear-to-br from-primary/5 via-primary/10 to-primary/20">
             <div className="flex-1 flex flex-col items-center justify-center relative overflow-hidden p-8">
                 {/* Header text - desktop only */}
                 <div className="text-center mb-12 z-20 relative">

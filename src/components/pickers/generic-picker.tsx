@@ -62,7 +62,7 @@ const GenericPicker = <T extends { id: TEntityId }>({
         <Modal
             {...other}
             className={cn(
-                '!h-fit max-w-[90vw] !gap-y-0 border p-0 shadow-none backdrop-blur-none sm:max-w-2xl',
+                'h-fit! max-w-[90vw] gap-y-0! border p-0 shadow-none backdrop-blur-none sm:max-w-2xl',
                 className
             )}
             closeButtonClassName="hidden"

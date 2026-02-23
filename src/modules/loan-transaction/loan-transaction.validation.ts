@@ -427,6 +427,7 @@ export const LoanTransactionPrintWithCheck = z.discriminatedUnion(
 export const LoanTransactionPrintSchema = z
     .object({
         voucher: z.string(),
+        or_auto_generated: z.boolean().default(false).optional(),
         check_number: z.string().optional(),
         check_date: z
             .string()

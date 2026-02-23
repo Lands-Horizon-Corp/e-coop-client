@@ -15,7 +15,11 @@ import type {
     IDisbursementTransactionRequest,
 } from './disbursement-transaction.types'
 
-const { apiCrudHooks, apiCrudService, baseQueryKey } = createDataLayerFactory<
+const {
+    apiCrudHooks,
+    apiCrudService,
+    baseQueryKey: disbursementTransactionBaseKey,
+} = createDataLayerFactory<
     IDisbursementTransaction,
     IDisbursementTransactionRequest
 >({
@@ -43,7 +47,6 @@ export const {
 // ex: export const getSomethingByOrgId = async () => disbursementTransactionAPI.get({....})
 
 // 🪝 HOOK STARTS HERE
-export { baseQueryKey } // might needed outside
 
 export const {
     useCreate: useCreateDisbursementTransaction,
@@ -80,8 +83,8 @@ export const useGetDisbursementTransaction = ({
     return useQuery<IDisbursementTransaction[], Error>({
         ...options,
         queryKey: [
-            'disbursement-transaction',
-            'filtered-paginated',
+            disbursementTransactionBaseKey,
+            'all',
             mode,
             userOrganizationId,
             transactionBatchId,
@@ -153,7 +156,7 @@ export const useFilteredPaginatedDisbursementTransaction = ({
     return useQuery<IDisbursementTransactionPaginated, Error>({
         ...options,
         queryKey: [
-            'disbursement-transaction',
+            disbursementTransactionBaseKey,
             'filtered-paginated',
             mode,
             userOrganizationId,

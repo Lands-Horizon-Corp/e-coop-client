@@ -1,15 +1,20 @@
-import { useCallback } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 
 import { toast } from 'sonner'
 
+import { cn } from '@/helpers'
 import { toReadableDate } from '@/helpers/date-utils'
-import { useAuthUserWithOrgBranch } from '@/modules/authentication/authgentication.store'
+import {
+    hasPermissionFromAuth,
+    useAuthUserWithOrgBranch,
+} from '@/modules/authentication/authgentication.store'
 import {
     TTransactionBatchFullorMin,
     useCurrentTransactionBatch,
 } from '@/modules/transaction-batch'
 import { useTransactionBatchStore } from '@/modules/transaction-batch/store/transaction-batch-store'
 import { IEmployee } from '@/modules/user'
+import { useInfoModalStore } from '@/store/info-modal-store'
 import { useHotkeys } from 'react-hotkeys-hook'
 
 import { LayersIcon, LayersSharpDotIcon } from '@/components/icons'
@@ -28,11 +33,14 @@ import { IClassProps } from '@/types'
 
 import { TransactionBatchCreateFormModal } from './forms/transaction-batch-create-form'
 import TransactionBatch from './transaction-batch'
+import TransactionBatchDayMismatchDisplay from './transaction-batch-date-mismatch-display'
 
 interface Props extends IClassProps {}
 
 const TransactionBatchNavButton = (_props: Props) => {
     const modalState = useModalState()
+    const manageBatchModalState = useModalState(false)
+
     const {
         currentAuth: { user, user_organization },
     } = useAuthUserWithOrgBranch<IEmployee>()
@@ -42,8 +50,9 @@ const TransactionBatchNavButton = (_props: Props) => {
         setData,
         reset,
     } = useTransactionBatchStore()
-
+    const { hasNoTransactionBatch } = useTransactionBatchStore()
     const { data, error, isSuccess, isError } = useCurrentTransactionBatch()
+    const { onOpen } = useInfoModalStore()
 
     const handleSuccess = useCallback(
         (data: TTransactionBatchFullorMin) => {
@@ -98,16 +107,49 @@ const TransactionBatchNavButton = (_props: Props) => {
         }
     )
 
-    useHotkeys('alt+s', (e) => {
-        modalState.onOpenChange(true)
-        e.preventDefault()
-    })
+    useHotkeys(
+        'ctrl+alt+k',
+        (e) => {
+            e.preventDefault()
+            manageBatchModalState.onOpenChange(!manageBatchModalState.open)
+            if (!hasNoTransactionBatch) modalState.onOpenChange(true)
+        },
+        [manageBatchModalState.open, hasNoTransactionBatch]
+    )
+
+    const [mounted, setMounted] = useState(false)
+
+    useEffect(() => {
+        if (!transactionBatch || transactionBatch.is_today || mounted) return
+
+        onOpen({
+            hideSeparator: true,
+            classNames: {
+                footerActionClassName: 'justify-center',
+                closeButtonClassName: 'w-full',
+            },
+            component: (
+                <TransactionBatchDayMismatchDisplay
+                    batchId={transactionBatch.id}
+                    transactionBatchDate={transactionBatch.created_at}
+                />
+            ),
+        })
+
+        setMounted(true)
+    }, [onOpen, transactionBatch, mounted])
 
     if (!transactionBatch)
         return (
             <>
                 <Button
                     className="group rounded-lg border"
+                    disabled={
+                        !hasPermissionFromAuth({
+                            action: 'Create',
+                            resourceType: 'TransactionBatch',
+                        })
+                    }
                     hoverVariant="primary"
                     onClick={() => modalState.onOpenChange((prev) => !prev)}
                     shadow="none"
@@ -136,22 +178,56 @@ const TransactionBatchNavButton = (_props: Props) => {
         )
 
     return (
-        <Popover modal>
+        <Popover
+            modal
+            onOpenChange={manageBatchModalState.onOpenChange}
+            open={manageBatchModalState.open}
+        >
             <PopoverTrigger asChild>
                 <Button
-                    className="group rounded-lg border"
-                    hoverVariant="primary"
+                    className={cn(
+                        'group rounded-lg border relative',
+                        !transactionBatch.is_today &&
+                            'animate-pulse border border-destructive'
+                    )}
+                    disabled={
+                        !hasPermissionFromAuth({
+                            action: ['Create'],
+                            resourceType: 'TransactionBatch',
+                        }) &&
+                        !hasPermissionFromAuth({
+                            action: ['Update', 'OwnUpdate'],
+                            resourceType: 'TransactionBatch',
+                            resource: transactionBatch,
+                        })
+                    }
+                    hoverVariant={
+                        transactionBatch.is_today ? 'default' : 'destructive'
+                    }
                     shadow="none"
                     size="xs"
-                    variant="default"
+                    variant={
+                        transactionBatch.is_today ? 'default' : 'destructive'
+                    }
                 >
                     <LayersSharpDotIcon className="duration-300 group-hover:text-inherit" />
-                    Manage Batch
+                    {transactionBatch.is_today
+                        ? 'Manage Batch'
+                        : 'Batch Overdue'}
+                    {!transactionBatch.is_today && (
+                        <div className="size-2 absolute top-0 left-0 -translate-y-1/2 -translate-x-1/2 bg-destructive animate-ping rounded-full ml-auto" />
+                    )}
                 </Button>
             </PopoverTrigger>
             <PopoverContent
                 align="end"
                 className="h-fit w-fit border-none bg-transparent p-0 shadow-none"
+                onEscapeKeyDown={(e) => {
+                    e.stopPropagation()
+                }}
+                onKeyDown={(e) => {
+                    e.stopPropagation()
+                }}
             >
                 <TransactionBatch
                     onBatchEnded={() => setData(null)}

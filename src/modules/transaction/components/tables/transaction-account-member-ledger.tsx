@@ -2,44 +2,43 @@ import { IMemberAccountingLedger } from '@/modules/member-account-ledger'
 import { TransactionMemberAccountLedger } from '@/modules/member-accounting-ledger'
 import { MemberAccountGeneralLedgerAction } from '@/modules/member-accounting-ledger'
 import MemberAccountingLedgerTable from '@/modules/member-accounting-ledger/components/member-accounting-ledger-table'
-import { Row } from '@tanstack/react-table'
 
 import { useModalState } from '@/hooks/use-modal-state'
 
 import { TEntityId } from '@/types'
 
-type TransactionAccountMemberLedgerProps = {
-    memberProfileId: TEntityId
-    onRowClick: ((row: Row<IMemberAccountingLedger>) => void) | undefined
+interface TransactionAccountMemberLedgerProps {
+    memberProfileId?: TEntityId
+    onRowClick?: (member: IMemberAccountingLedger) => void
+    generalLedger?: ReturnType<typeof useModalState>
 }
+
 const TransactionAccountMemberLedger = ({
     memberProfileId,
     onRowClick,
+    generalLedger,
 }: TransactionAccountMemberLedgerProps) => {
-    const openTransactionMemberAccountLedger = useModalState()
-
     return (
         <>
-            <TransactionMemberAccountLedger
-                {...openTransactionMemberAccountLedger}
-            />
+            <TransactionMemberAccountLedger {...generalLedger} />
             <MemberAccountingLedgerTable
                 actionComponent={(props) => (
                     <>
                         <MemberAccountGeneralLedgerAction
                             memberAccountLedger={props.row.original}
                             onOpen={() => {
-                                openTransactionMemberAccountLedger.onOpenChange(
-                                    true
-                                )
+                                generalLedger?.onOpenChange(true)
                             }}
                         />
                     </>
                 )}
                 className="w-full min-h-[40vh] h-full"
-                memberProfileId={memberProfileId}
+                hideToolbar
+                memberProfileId={memberProfileId ?? ''}
                 mode="member"
-                onRowClick={onRowClick}
+                onRowClick={({ original }) => {
+                    onRowClick?.(original)
+                }}
                 persistKey={['general-ledger', 'transaction']}
             />
         </>

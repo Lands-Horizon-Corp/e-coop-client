@@ -13,7 +13,7 @@ const { apiCrudHooks, apiCrudService } = createDataLayerFactory<
 
 export const {
     useGetById,
-    useGetAll,
+    useGetAll: useGetAllPaymentType,
     useCreate,
     useUpdateById,
     useDeleteById,

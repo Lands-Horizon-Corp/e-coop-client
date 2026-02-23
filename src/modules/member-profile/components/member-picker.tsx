@@ -20,7 +20,7 @@ import ImageDisplay from '@/components/image-display'
 import MiniPaginationBar from '@/components/pagination-bars/mini-pagination-bar'
 import GenericPicker from '@/components/pickers/generic-picker'
 import LoadingSpinner from '@/components/spinners/loading-spinner'
-import { Button } from '@/components/ui/button'
+import { Button, ButtonProps } from '@/components/ui/button'
 import PreviewMediaWrapper from '@/components/wrappers/preview-media-wrapper'
 
 import useFilterState from '@/hooks/use-filter-state'
@@ -31,10 +31,10 @@ import { IMemberProfile, useGetPaginatedMemberProfiles } from '..'
 
 interface Props extends IPickerBaseProps<IMemberProfile> {
     defaultFilter?: TFilterObject
-    allowShorcutCommand?: boolean
     showPBNo?: boolean
     allowClear?: boolean
     mainTriggerClassName?: string
+    mainTriggerProps?: ButtonProps
 }
 
 const MemberPicker = forwardRef<HTMLButtonElement, Props>(
@@ -44,13 +44,15 @@ const MemberPicker = forwardRef<HTMLButtonElement, Props>(
             disabled,
             modalState,
             placeholder,
-            allowShorcutCommand = false,
             triggerClassName,
             onSelect,
             triggerVariant = 'secondary',
             showPBNo = true,
             allowClear = false,
+            mainTriggerProps,
             mainTriggerClassName,
+            shortcutHotKey = 'Enter',
+            allowShortcutHotKey = false,
         },
         ref
     ) => {
@@ -94,7 +96,7 @@ const MemberPicker = forwardRef<HTMLButtonElement, Props>(
         })
 
         useHotkeys(
-            'Enter',
+            shortcutHotKey,
             (event) => {
                 event?.preventDefault()
                 if (
@@ -103,10 +105,13 @@ const MemberPicker = forwardRef<HTMLButtonElement, Props>(
                     !isPending &&
                     !isLoading &&
                     !isFetching &&
-                    allowShorcutCommand
+                    allowShortcutHotKey
                 ) {
-                    setState(true)
+                    setState(!state)
                 }
+            },
+            {
+                enableOnFormTags: true,
             },
             [
                 value,
@@ -114,7 +119,8 @@ const MemberPicker = forwardRef<HTMLButtonElement, Props>(
                 isPending,
                 isLoading,
                 isFetching,
-                allowShorcutCommand,
+                allowShortcutHotKey,
+                state,
             ]
         )
 
@@ -131,16 +137,16 @@ const MemberPicker = forwardRef<HTMLButtonElement, Props>(
                                 [
                                     {
                                         displayText: 'full name',
-                                        field: 'fullName',
+                                        field: 'full_name',
                                     },
                                     {
                                         displayText: 'PB',
-                                        field: 'memberProfile.passbookNumber',
+                                        field: 'passbook',
                                     },
                                 ],
                                 {
                                     displayText: '',
-                                    mode: 'equal',
+                                    mode: 'contains',
                                     dataType: 'text',
                                     value: searchValue,
                                 }
@@ -232,6 +238,7 @@ const MemberPicker = forwardRef<HTMLButtonElement, Props>(
                         )}
                     >
                         <Button
+                            {...mainTriggerProps}
                             className={cn(
                                 'flex-1 items-center justify-between rounded-md border p-0 px-2 h-10',
                                 triggerClassName
@@ -244,7 +251,7 @@ const MemberPicker = forwardRef<HTMLButtonElement, Props>(
                         >
                             <span className="flex flex-1 min-w-0 items-center justify-between text-sm text-foreground/90">
                                 <span className="inline-flex flex-1 min-w-0 items-center gap-x-2">
-                                    <div className="flex-shrink-0">
+                                    <div className="shrink-0">
                                         {isFetching ? (
                                             <LoadingSpinner className="size-6" />
                                         ) : (
@@ -268,11 +275,11 @@ const MemberPicker = forwardRef<HTMLButtonElement, Props>(
                                         </span>
                                     ) : (
                                         <span className="inline-flex flex-1 w-0 max-w-fit items-center gap-x-4">
-                                            <span className="truncate font-medium flex-shrink min-w-0">
+                                            <span className="truncate font-medium shrink min-w-0">
                                                 {value.full_name}
                                             </span>
                                             {showPBNo && (
-                                                <span className="flex-shrink-0 font-mono text-sm text-muted-foreground ml-auto">
+                                                <span className="shrink-0 font-mono text-sm text-muted-foreground ml-auto">
                                                     {value?.passbook || ''}
                                                 </span>
                                             )}
@@ -280,19 +287,19 @@ const MemberPicker = forwardRef<HTMLButtonElement, Props>(
                                     )}
                                 </span>
 
-                                {allowShorcutCommand && (
-                                    <span className="ml-2 text-sm flex-shrink-0 text-muted-foreground">
+                                {allowShortcutHotKey && (
+                                    <span className="ml-2 text-sm shrink-0 text-muted-foreground">
                                         ⌘ ↵
                                     </span>
                                 )}
                             </span>
 
-                            <ChevronDownIcon className="flex-shrink-0 ml-2 h-4 w-4 text-muted-foreground" />
+                            <ChevronDownIcon className="shrink-0 ml-2 h-4 w-4 text-muted-foreground" />
                         </Button>
 
                         {allowClear && value && (
                             <Button
-                                className="cursor-pointer rounded-full !p-0 !px-0 flex-shrink-0"
+                                className="cursor-pointer rounded-full p-0! !px-0! shrink-0"
                                 onClick={(e) => {
                                     e.preventDefault()
                                     e.stopPropagation()

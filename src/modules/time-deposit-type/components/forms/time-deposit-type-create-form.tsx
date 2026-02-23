@@ -37,7 +37,8 @@ import {
 type TTimeDepositTypeFormValues = TTimeDepositTypeCreateSchema
 
 export interface ITimeDepositTypeFormProps
-    extends IClassProps,
+    extends
+        IClassProps,
         IForm<
             Partial<ITimeDepositTypeCreateRequest>,
             ITimeDepositType,

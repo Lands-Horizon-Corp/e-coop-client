@@ -12,7 +12,7 @@ import {
     ValueChecklistMeter,
 } from '@/modules/authentication/components/value-checklist-indicator'
 import PermissionPicker from '@/modules/permission-template/components/permission-template-picker'
-import PermissionMatrix from '@/modules/permission/components/permission-matrix'
+import PermissionMatrix from '@/modules/permission/components/permission-matrix/permission-matrix'
 import {
     permissionArrayToMap,
     permissionMapToPermissionArray,
@@ -45,7 +45,8 @@ import { EmployeeCreateSchema } from '../../employee.validation'
 type TEmployeeCreateSchema = z.infer<typeof EmployeeCreateSchema>
 
 export interface IEmployeeCreateFormProps
-    extends IClassProps,
+    extends
+        IClassProps,
         IForm<
             Partial<IEmployeeCreateRequest>,
             IUserOrganization,

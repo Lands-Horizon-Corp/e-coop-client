@@ -29,8 +29,7 @@ const Command = React.forwardRef<
 Command.displayName = CommandPrimitive.displayName
 
 export interface CommandDialogProps
-    extends DialogProps,
-        Pick<DialogExtraProps, 'overlayClassName'> {
+    extends DialogProps, Pick<DialogExtraProps, 'overlayClassName'> {
     contentClassName?: string
     commandClassName?: string
     shouldFilter?: boolean

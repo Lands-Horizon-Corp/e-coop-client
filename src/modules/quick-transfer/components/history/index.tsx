@@ -1,6 +1,7 @@
 import { useState } from 'react'
 
 import { PAGINATION_INITIAL_INDEX } from '@/constants'
+import { cn } from '@/helpers'
 import { formatDate } from '@/helpers/common-helper'
 import { dateAgo, toReadableDateTime } from '@/helpers/date-utils'
 import { currencyFormat } from '@/modules/currency'
@@ -13,6 +14,7 @@ import { PaymentsEntryItem } from '@/modules/transaction/components/current-paym
 import TransactionNoFound from '@/modules/transaction/components/history/transaction-no-found'
 import TransactionUserInfoGrid from '@/modules/transaction/components/transaction-user-info-grid'
 import { PaginationState } from '@tanstack/react-table'
+import { ArrowDownLeft, ArrowUpRight } from 'lucide-react'
 import { useHotkeys } from 'react-hotkeys-hook'
 
 import RefreshButton from '@/components/buttons/refresh-button'
@@ -22,13 +24,14 @@ import MiniPaginationBar from '@/components/pagination-bars/mini-pagination-bar'
 import SheetModal from '@/components/sheet/sheet'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
+import { Kbd, KbdGroup } from '@/components/ui/kbd'
 import { Separator } from '@/components/ui/separator'
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import PreviewMediaWrapper from '@/components/wrappers/preview-media-wrapper'
 
 import useFilterState from '@/hooks/use-filter-state'
-import { useShortcut } from '@/hooks/use-shorcuts'
+import { useModalState } from '@/hooks/use-modal-state'
 
 import { TPaymentMode } from '../../quick-transfer.types'
 
@@ -92,7 +95,7 @@ export const TransactionDetailsCard = ({
                                 {description}
                             </p>
                         </div>
-                        <p className="font-semibold text-primary flex-shrink-0">
+                        <p className="font-semibold text-primary shrink-0">
                             {currencyFormat(balance, {
                                 currency,
                                 showSymbol: !!currency,
@@ -187,71 +190,83 @@ type TransactionDepositWithdrawCardListItemProps = {
     item: IGeneralLedger
     onClick?: () => void
 }
+
 const TransactionDepositWithdrawCardListItem = ({
     item,
     onClick,
 }: TransactionDepositWithdrawCardListItemProps) => {
+    const isDeposit = item.source === 'deposit'
+
     return (
-        <div className="w-full min-w-0 max-w-full space-x-2 cursor-pointer flex flex-row items-center p-3 rounded-xl bg-muted/30">
+        <div
+            className={cn(
+                'w-full min-w-0 max-w-full cursor-pointer flex items-center gap-3 p-3 rounded-2xl bg-muted/40 hover:bg-muted/60 transition-colors border-l-[3px]',
+                isDeposit ? 'border-l-emerald-500' : 'border-l-red-400'
+            )}
+            onClick={() => onClick?.()}
+        >
             {/* LEFT ICON */}
-            <div className="flex-none">
-                <Sheet>
-                    <SheetTrigger asChild className="text-xs">
-                        <LedgerSourceBadge
-                            className="rounded-lg size-10 flex items-center justify-center"
-                            showValue={false}
-                            source={item.source}
-                        />
-                    </SheetTrigger>
+            <Sheet>
+                <SheetTrigger asChild>
+                    <LedgerSourceBadge
+                        className="rounded-xl size-11 flex items-center justify-center shrink-0"
+                        showValue={false}
+                        source={item.source}
+                    />
+                </SheetTrigger>
+                <SheetContent className="min-w-full max-w-[400px] md:min-w-[500px] overflow-y-auto ecoop-scroll p-0 border m-5 pt-4 rounded-lg">
+                    <TransactionDetailsCard transaction={item} />
+                </SheetContent>
+            </Sheet>
 
-                    <SheetContent className="min-w-full max-w-[400px] md:min-w-[500px] overflow-y-auto ecoop-scroll p-0 border m-5 pt-4 rounded-lg">
-                        <TransactionDetailsCard transaction={item} />
-                    </SheetContent>
-                </Sheet>
-            </div>
-
-            {/* CENTER CONTENT */}
-            <div className="grow min-w-0">
-                <div
-                    className="flex items-center gap-2 min-w-0"
-                    onClick={() => onClick?.()}
-                >
-                    {/* TRUNCATED NAME */}
-                    <p className="flex-1 min-w-0 truncate">
-                        {item.member_profile?.full_name || 'Unknown Member'}
-                    </p>
-
-                    {/* ACCOUNT BADGE */}
-                    <Badge className="shrink-0">
+            {/* CENTER */}
+            <div className="flex-1 min-w-0 space-y-0.5">
+                <p className="text-sm font-medium truncate">
+                    {item.member_profile?.full_name || 'Unknown Member'}
+                </p>
+                <div className="flex items-center gap-1.5 flex-wrap">
+                    <Badge
+                        className="text-[10px] px-1.5 py-0 h-5 font-normal"
+                        variant="secondary"
+                    >
                         <RenderIcon
-                            className="mr-1"
+                            className="mr-1 size-3"
                             icon={item.account.icon as TIcon}
                         />
                         {item.account.name}
                     </Badge>
-                </div>
-
-                {item.reference_number && (
-                    <div className="mt-1">
-                        <span className="text-xs rounded-sm bg-secondary px-1.5 py-1">
-                            - {item.reference_number}
+                    {item.reference_number && (
+                        <span className="text-[10px] text-muted-foreground">
+                            #{item.reference_number}
                         </span>
-                    </div>
-                )}
-                <p className="text-[11px] text-muted-foreground mt-1">
+                    )}
+                </div>
+                <p className="text-[11px] text-muted-foreground">
                     {toReadableDateTime(item.created_at)}
                 </p>
             </div>
 
             {/* RIGHT AMOUNT */}
-            <div className="flex-none shrink-0 text-xs min-w-fit text-right">
-                <p className="font-bold text-primary dark:text-primary">
-                    {currencyFormat(item.balance, {
-                        currency: item.currency,
-                        showSymbol: !!item.currency,
-                    })}
-                </p>
-                <p className="text-xs text-muted-foreground">
+            <div className="shrink-0 text-right space-y-0.5">
+                <div className="flex items-center justify-end gap-1">
+                    {isDeposit ? (
+                        <ArrowDownLeft className="size-3.5 text-emerald-500" />
+                    ) : (
+                        <ArrowUpRight className="size-3.5 text-red-400" />
+                    )}
+                    <p
+                        className={cn(
+                            'text-sm font-semibold tabular-nums',
+                            isDeposit ? 'text-emerald-500' : 'text-red-400'
+                        )}
+                    >
+                        {currencyFormat(item.balance, {
+                            currency: item.currency,
+                            showSymbol: !!item.currency,
+                        })}
+                    </p>
+                </div>
+                <p className="text-[11px] text-muted-foreground">
                     {dateAgo(item.created_at)}
                 </p>
             </div>
@@ -270,7 +285,7 @@ const CurrentTransactionWithdrawHistoryData = ({
 }: CurrentTransactionWithdrawHistoryDataProps) => {
     const [pagination, setPagination] = useState<PaginationState>({
         pageIndex: PAGINATION_INITIAL_INDEX,
-        pageSize: 10,
+        pageSize: 50,
     })
 
     const { finalFilterPayloadBase64 } = useFilterState({
@@ -354,34 +369,37 @@ type CurrentTransactionWithdrawHistoryProps = {
 const CurrentTransactionWithdrawHistory = ({
     mode,
 }: CurrentTransactionWithdrawHistoryProps) => {
-    const [onOpen, setOnOpen] = useState(false)
+    const historyModalState = useModalState()
     const [modeState, setModeState] = useState<'branch' | 'current'>('current')
 
-    useShortcut(
-        'h',
-        () => {
-            setOnOpen(true)
+    useHotkeys(
+        'f12',
+        (e) => {
+            e.preventDefault()
+            historyModalState.onOpenChange(!historyModalState.open)
         },
         {
-            disableTextInputs: true,
-        }
+            enableOnFormTags: true,
+        },
+        [historyModalState]
     )
 
     return (
         <div>
             <Button
-                className=""
-                onClick={() => setOnOpen(true)}
+                onClick={() => historyModalState.onOpenChange(true)}
                 size="sm"
-                variant="ghost"
+                variant="secondary"
             >
                 <HistoryIcon className="mr-2" />
                 History
+                <KbdGroup>
+                    <Kbd>F12</Kbd>
+                </KbdGroup>
             </Button>
             <SheetModal
                 className=" max-w-[500px] md:min-w-[600px] "
-                onOpenChange={setOnOpen}
-                open={onOpen}
+                {...historyModalState}
             >
                 <div className="">
                     <div className="overflow-y-auto min-w-0 ecoop-scroll w-full p-5">
@@ -404,7 +422,7 @@ const CurrentTransactionWithdrawHistory = ({
                                     </TabsTrigger>
                                 </TabsList>
                             </div>
-                            <TabsContent className="!min-w-0" value={modeState}>
+                            <TabsContent className="min-w-0!" value={modeState}>
                                 <CurrentTransactionWithdrawHistoryData
                                     mode={mode}
                                     modeState={modeState}

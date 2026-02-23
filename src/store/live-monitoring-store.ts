@@ -11,8 +11,7 @@ interface LiveMonitoringActions {
 }
 
 interface LiveMonitoringStore
-    extends LiveMonitoringState,
-        LiveMonitoringActions {}
+    extends LiveMonitoringState, LiveMonitoringActions {}
 
 export const useLiveMonitoringStore = create<LiveMonitoringStore>()(
     persist(

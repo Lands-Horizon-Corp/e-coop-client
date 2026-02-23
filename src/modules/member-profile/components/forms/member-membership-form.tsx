@@ -1,3 +1,5 @@
+import { useCallback } from 'react'
+
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 import z from 'zod'
@@ -7,11 +9,13 @@ import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
 import { cn } from '@/helpers'
 import { withToastCallbacks } from '@/helpers/callback-helper'
 import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
+import { IMemberPassbookSettings } from '@/modules/branch-settings'
 import MemberCenterCombobox from '@/modules/member-center/components/member-center-combobox'
 import MemberClassificationCombobox from '@/modules/member-classification/components/member-classification-combobox'
 import MemberDepartmentCombobox from '@/modules/member-department/components/member-department-combobox'
 import MemberGroupCombobox from '@/modules/member-group/components/member-group-combobox'
 import MemberTypeCombobox from '@/modules/member-type/components/member-type-combobox'
+import { useHotkeys } from 'react-hotkeys-hook'
 
 import GeneralStatusCombobox from '@/components/comboboxes/general-status-combobox'
 import FormFooterResetSubmit from '@/components/form-components/form-footer-reset-submit'
@@ -20,7 +24,9 @@ import { Checkbox } from '@/components/ui/checkbox'
 import { Form } from '@/components/ui/form'
 import FormFieldWrapper from '@/components/ui/form-field-wrapper'
 import { Input } from '@/components/ui/input'
+import { Kbd, KbdGroup } from '@/components/ui/kbd'
 import { Label } from '@/components/ui/label'
+import { Switch } from '@/components/ui/switch'
 
 import { useFormHelper, useFormPreventExit } from '@/hooks/use-form-helper'
 
@@ -31,6 +37,7 @@ import {
     IMemberProfileMembershipInfoRequest,
     useUpdateMemberProfileMembershipInfo,
 } from '../..'
+import { buildMemberProfilePB } from '../../member-profile.utils'
 import { MemberProfileMembershipInfoSchema } from '../../member-profile.validation'
 import MemberPicker from '../member-picker'
 
@@ -39,7 +46,8 @@ type TMemberProfileMembershipInfoFormValues = z.infer<
 >
 
 export interface IMemberProfileMembershipInfoFormProps
-    extends IClassProps,
+    extends
+        IClassProps,
         IForm<
             Partial<IMemberProfileMembershipInfoRequest>,
             IMemberProfile,
@@ -47,11 +55,13 @@ export interface IMemberProfileMembershipInfoFormProps
             TMemberProfileMembershipInfoFormValues
         > {
     memberProfileId: TEntityId
+    pbSettings?: IMemberPassbookSettings
 }
 
 const MemberMembershipForm = ({
     className,
     memberProfileId,
+    pbSettings,
     ...formProps
 }: IMemberProfileMembershipInfoFormProps) => {
     const form = useForm<TMemberProfileMembershipInfoFormValues>({
@@ -107,6 +117,33 @@ const MemberMembershipForm = ({
         )
     }, handleFocusError)
 
+    const handleAutoGeneratePB = useCallback(
+        (isAuto?: boolean) => {
+            form.setValue('pb_auto_generated', isAuto)
+
+            if (!pbSettings)
+                return toast.warning(
+                    'Failed to generate PB, could not retrieve settings'
+                )
+
+            if (isAuto) {
+                form.setValue('passbook', buildMemberProfilePB(pbSettings))
+            }
+        },
+        [pbSettings, form]
+    )
+
+    useHotkeys(
+        'alt + E',
+        (e) => {
+            e.preventDefault()
+            if (form.getValues('status') === 'verified') return
+            handleAutoGeneratePB(!form.getValues('pb_auto_generated'))
+        },
+        { enableOnFormTags: true },
+        [pbSettings, form, handleAutoGeneratePB]
+    )
+
     return (
         <Form {...form}>
             <form
@@ -127,13 +164,46 @@ const MemberMembershipForm = ({
                                 label="Passbook"
                                 name="passbook"
                                 render={({ field }) => (
-                                    <Input
-                                        {...field}
-                                        className="bg-background"
-                                        disabled={isDisabled(field.name)}
-                                        id={field.name}
-                                        placeholder="Passbook"
-                                    />
+                                    <div>
+                                        <Input
+                                            {...field}
+                                            className="bg-background"
+                                            disabled={
+                                                isDisabled(field.name) ||
+                                                form.watch('status') ===
+                                                    'verified'
+                                            }
+                                            id={field.name}
+                                            placeholder="Passbook"
+                                        />
+                                        <div className="flex items-center">
+                                            <Switch
+                                                checked={form.watch(
+                                                    'pb_auto_generated'
+                                                )}
+                                                className="mr-2 max-h-4 max-w-9"
+                                                disabled={
+                                                    formProps.defaultValues
+                                                        ?.status !== 'pending'
+                                                }
+                                                onCheckedChange={(value) => {
+                                                    handleAutoGeneratePB(value)
+                                                }}
+                                                thumbClassName="size-3"
+                                            />
+                                            <Label className="text-xs font-medium text-muted-foreground mr-1">
+                                                PB Auto Generated
+                                            </Label>
+                                            <Label className="text-xs font-medium text-muted-foreground">
+                                                Press Alt{' '}
+                                                <KbdGroup>
+                                                    <Kbd>Alt</Kbd>
+                                                    <span>+</span>
+                                                    <Kbd>E</Kbd>
+                                                </KbdGroup>
+                                            </Label>
+                                        </div>
+                                    </div>
                                 )}
                             />
                             <FormFieldWrapper

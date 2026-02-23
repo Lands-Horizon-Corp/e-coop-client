@@ -113,7 +113,6 @@ const AccountViewer = ({
                 isHistoryAccount && 'saturate-50'
             )}
         >
-            {/*  HEADER */}
             {isHistoryAccount && (
                 <p className="text-center px-3 py-1 sticky top-0 bg-accent/40 text-accent-foreground border-accent border shadow w-fit rounded-md backdrop-blur-sm z-10 mx-auto text-sm ">
                     This account is a history preview only
@@ -188,12 +187,10 @@ const AccountViewer = ({
                 <AccountTagsContainer accountId={accountId} />
             </div>
 
-            {/* CONTENT */}
             <div className="mt-4">
                 <AccountTypeContent account={account} />
             </div>
 
-            {/* COMMONS */}
             <AccountCommonConfig account={account} />
         </div>
     )

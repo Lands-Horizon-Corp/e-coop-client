@@ -10,6 +10,22 @@ import { NodeGlobalsPolyfillPlugin } from '@esbuild-plugins/node-globals-polyfil
 import rollupNodePolyFill from 'rollup-plugin-node-polyfills';
 import createSitemap from 'vite-plugin-sitemap';
 import { VitePWA } from 'vite-plugin-pwa';
+import fs from 'node:fs';
+import path from 'node:path';
+
+const pwaAssetManifest = () => ({
+    name: 'pwa-asset-manifest',
+    closeBundle() {
+        const distDir = path.resolve(__dirname, 'dist')
+        if (!fs.existsSync(distDir)) return
+
+        const files = fs.readdirSync(distDir, { recursive: true })
+            .filter((file) => /\.(js|css|html|ico|png|svg|jpg|jpeg|webp|mp4|woff2)$/.test(file as string))
+            .map(file => `/${(file as string).replace(/\\/g, '/')}`)
+
+        fs.writeFileSync(path.join(distDir, 'pwa-assets.json'), JSON.stringify(files))
+    }
+})
 
 export default defineConfig({
   plugins: [
@@ -25,80 +41,62 @@ export default defineConfig({
       gzipSize: true,
       brotliSize: true,
     }) as PluginOption,
+    {
+    name: 'legal-notice',
+      renderChunk(code) {
+        return `/** * © 2026 Lands Horizon Corp. All Rights Reserved.
+          * Unauthorized copying, modification, or distribution 
+          * of this software is strictly prohibited.
+          * Proprietary to e-coop-suite.
+          */\n${code}`;
+      }
+    },
     compression(),
     NodeGlobalsPolyfillPlugin({
       buffer: true,
       process: true,
     }),
     createSitemap({
-      hostname: 'https://ecoop-suite.com'
+      hostname: 'https://e-coop-client-development.up.railway.app'
     }),
+    pwaAssetManifest(),
     VitePWA({
       registerType: 'autoUpdate',
+      injectRegister: 'auto',
       workbox: {
-        globPatterns: ['**/*.{js,css,html,ico,png,svg,webp,woff,woff2}'],
-        navigateFallback: '/index.html',
-        navigateFallbackDenylist: [/^\/api\//],
-        maximumFileSizeToCacheInBytes: 10 * 1024 * 1024, // 10MB limit
-        skipWaiting: true,
-        clientsClaim: true,
-        // Reduce warnings in development
-        globIgnores: ['**/node_modules/**/*', 'sw.js', 'workbox-*.js'],
-        runtimeCaching: [
+        globPatterns: ['**/*.{js,css,html,ico,png,svg,jpg,jpeg,webp,mp4,woff2}'],
+        maximumFileSizeToCacheInBytes: 50 * 1024 * 1024,
+        runtimeCaching:  [
           {
-            urlPattern: /^https:\/\/fonts\.googleapis\.com\/.*/i,
+            urlPattern: /\.(?:js|css)$/i,
             handler: 'CacheFirst',
             options: {
-              cacheName: 'google-fonts-cache',
-              expiration: {
-                maxEntries: 10,
-                maxAgeSeconds: 60 * 60 * 24 * 365 // 1 year
-              }
+              cacheName: 'static-chunks',
+              expiration: { maxEntries: 100, maxAgeSeconds: 60 * 60 * 24 * 30 }
             }
           },
           {
-            urlPattern: /^https:\/\/api\.ecoop-suite\.com\/.*/i,
+            urlPattern: /\.(?:png|jpg|jpeg|svg|webp|mp4|woff2)$/i,
+            handler: 'CacheFirst',
+            options: {
+              cacheName: 'media-assets',
+              expiration: { maxEntries: 150, maxAgeSeconds: 60 * 60 * 24 * 60 }
+            }
+          },
+          {
+            urlPattern: ({ url }) => !url.pathname.includes('.'),
             handler: 'NetworkFirst',
             options: {
-              cacheName: 'api-cache',
-              networkTimeoutSeconds: 10,
-              expiration: {
-                maxEntries: 100,
-                maxAgeSeconds: 60 * 60 * 24 // 1 day
-              }
-            }
-          },
-          {
-            urlPattern: /^\/assets\/vendor-.*\.js$/,
-            handler: 'CacheFirst',
-            options: {
-              cacheName: 'vendor-cache',
-              expiration: {
-                maxEntries: 5,
-                maxAgeSeconds: 60 * 60 * 24 * 30 // 30 days
-              }
-            }
-          },
-          {
-            urlPattern: /^\/assets\/.*\.(js|css)$/,
-            handler: 'StaleWhileRevalidate',
-            options: {
-              cacheName: 'assets-cache',
-              expiration: {
-                maxEntries: 50,
-                maxAgeSeconds: 60 * 60 * 24 * 7 // 7 days
-              }
+              cacheName: 'pages-cache',
             }
           }
         ]
       },
-      includeAssets: ['favicon.ico', 'e-coop-logo-*.webp', 'og-image.png'],
       manifest: {
         name: 'e-coop-suite | Empowering Cooperatives',
         short_name: 'e-coop-suite',
         description: 'Secure digital banking platform for Philippine cooperatives. Complete coop management solution with online banking, member portal, and analytics.',
         theme_color: '#1f2937',
-        background_color: '#ffffff',
         display: 'standalone',
         orientation: 'portrait',
         scope: '/',
@@ -106,32 +104,36 @@ export default defineConfig({
         categories: ['finance', 'business', 'productivity'],
         lang: 'en',
         icons: [
-          {
-            src: '/e-coop-logo-1.webp',
-            sizes: '192x192',
-            type: 'image/webp',
-            purpose: 'any'
-          },
-          {
-            src: '/e-coop-logo-1.webp',
-            sizes: '512x512',
-            type: 'image/webp',
-            purpose: 'any'
-          },
-          {
-            src: '/e-coop-logo-1.webp',
-            sizes: '192x192',
-            type: 'image/webp',
-            purpose: 'maskable'
-          },
-          {
-            src: '/e-coop-logo-1.webp',
-            sizes: '512x512',
-            type: 'image/webp',
-            purpose: 'maskable'
-          }
-        ]
-      }
+                {
+                  src: '/e-coop-logo-1.webp',
+                  sizes: '192x192',
+                  type: 'image/webp',
+                  purpose: 'any'
+                },
+                {
+                  src: '/e-coop-logo-1.webp',
+                  sizes: '512x512',
+                  type: 'image/webp',
+                  purpose: 'any'
+                },
+                {
+                  src: '/e-coop-logo-1.webp',
+                  sizes: '192x192',
+                  type: 'image/webp',
+                  purpose: 'maskable'
+                },
+                {
+                  src: '/e-coop-logo-1.webp',
+                  sizes: '512x512',
+                   type: 'image/webp',
+                  purpose: 'maskable'
+                }
+        ],
+      },
+      devOptions: { 
+        enabled: false,
+        type: 'module',
+     }
     }),
   ],
   resolve: {
@@ -141,11 +143,26 @@ export default defineConfig({
     },
   },
   build: {
+    sourcemap: false,
+    minify: "terser",
+    terserOptions: {
+      compress: {
+        drop_console: true,
+        drop_debugger: true,
+        passes: 3,
+      },
+      mangle: {
+        toplevel: true,
+      },
+      format: {
+        comments: false,
+      },
+    },
     rollupOptions: {
       plugins: [rollupNodePolyFill()],
       output: {
         manualChunks(id) {
-          // Split React into its own chunk
+          // Split React into its own chun
           if (id.includes('react') || id.includes('react-dom')) {
             return 'react-vendor';
           }
@@ -173,4 +190,7 @@ export default defineConfig({
       }
     }
   },
+  server : {
+    allowedHosts : ['e-coop-client-development.up.railway.app']
+  }
 });

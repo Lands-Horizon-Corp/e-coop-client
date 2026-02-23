@@ -21,7 +21,8 @@ import {
 import QrCode, { IQrCodeProps } from './qr-code'
 
 interface Props
-    extends Omit<IQrCodeProps, 'children'>,
+    extends
+        Omit<IQrCodeProps, 'children'>,
         Omit<UseDownloadOptions, 'fileType'> {
     containerClassName?: string
 }

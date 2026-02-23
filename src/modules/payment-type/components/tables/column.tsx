@@ -1,9 +1,9 @@
-import { toReadableDate } from '@/helpers/date-utils'
 import { IPaymentType } from '@/modules/payment-type'
 import { ColumnDef, Row } from '@tanstack/react-table'
 
 import DataTableColumnHeader from '@/components/data-table/data-table-column-header'
 import ColumnActions from '@/components/data-table/data-table-column-header/column-actions'
+import { createUpdateColumns } from '@/components/data-table/data-table-common-columns'
 import { IGlobalSearchTargets } from '@/components/data-table/data-table-filters/data-table-global-search'
 import TextFilter from '@/components/data-table/data-table-filters/text-filter'
 import HeaderToggleSelect from '@/components/data-table/data-table-row-actions/header-toggle-select'
@@ -79,9 +79,7 @@ export const PaymentTypeTableColumns = (
             },
         }) => (
             <div className="flex min-w-0 items-center gap-3">
-                <span className="truncate text-xs text-muted-foreground/70">
-                    {name || '-'}
-                </span>
+                <span className="truncate text-foreground">{name || '-'}</span>
             </div>
         ),
         enableMultiSort: true,
@@ -111,7 +109,7 @@ export const PaymentTypeTableColumns = (
             },
         }) => (
             <div className="flex min-w-0 items-center gap-3">
-                <span className="truncate text-xs text-muted-foreground/70">
+                <span className="truncate text-xs">
                     {type ? type.charAt(0).toUpperCase() + type.slice(1) : '-'}
                 </span>
             </div>
@@ -173,29 +171,6 @@ export const PaymentTypeTableColumns = (
         size: 180,
         minSize: 180,
     },
-    {
-        id: 'created_at',
-        accessorKey: 'created_at',
-        header: (props) => (
-            <DataTableColumnHeader {...props} title="Date Created">
-                <ColumnActions {...props} />
-            </DataTableColumnHeader>
-        ),
-        cell: ({
-            row: {
-                original: { created_at },
-            },
-        }) => (
-            <span className="text-sm font-semibold">
-                {created_at ? toReadableDate(created_at) : '-'}
-            </span>
-        ),
-        enableMultiSort: true,
-        enableSorting: true,
-        enableResizing: true,
-        enableHiding: false,
-        size: 180,
-        minSize: 150,
-    },
+    ...createUpdateColumns<IPaymentType>(),
 ]
 export default PaymentTypeTableColumns

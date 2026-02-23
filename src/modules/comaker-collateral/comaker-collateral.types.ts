@@ -17,5 +17,4 @@ export interface IComakerCollateral extends IBaseEntityMeta {
 
 export type IComakerCollateralRequest = z.infer<typeof ComakerCollateralSchema>
 
-export interface IComakerCollateralPaginated
-    extends IPaginatedResult<IComakerCollateral> {}
+export interface IComakerCollateralPaginated extends IPaginatedResult<IComakerCollateral> {}

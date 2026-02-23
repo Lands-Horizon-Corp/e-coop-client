@@ -34,6 +34,7 @@ export const memberGlobalSearchTargets: IGlobalSearchTargets<IMemberProfile>[] =
     [
         { field: 'full_name', displayText: 'Full Name' },
         { field: 'contact_number', displayText: 'Contact' },
+        { field: 'passbook', displayText: 'Passbook' },
     ]
 
 export interface IMemberProfileTableActionComponentProp {

@@ -15,9 +15,7 @@ export interface IGroceryComputationSheetMonthlyRequest {
 }
 
 export interface IGroceryComputationSheetMonthly
-    extends ITimeStamps,
-        IAuditable,
-        IOrgBranchIdentity {
+    extends ITimeStamps, IAuditable, IOrgBranchIdentity {
     id: TEntityId
     grocery_computation_sheet_id: TEntityId
     grocery_computation_sheet?: IGroceryComputationSheet

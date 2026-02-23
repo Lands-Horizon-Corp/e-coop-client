@@ -46,8 +46,7 @@ import {
 } from './row-action-context'
 
 export interface BaseAdjustmentEntryTableProps
-    extends TableProps<IAdjustmentEntry>,
-        IAdjustmentEntryTableColumnProps {
+    extends TableProps<IAdjustmentEntry>, IAdjustmentEntryTableColumnProps {
     toolbarProps?: Omit<
         IDataTableToolbarProps<IAdjustmentEntry>,
         | 'table'
@@ -55,7 +54,6 @@ export interface BaseAdjustmentEntryTableProps
         | 'globalSearchProps'
         | 'scrollableProps'
         | 'filterLogicProps'
-        | 'exportActionProps'
         | 'deleteActionProps'
     >
     currencyId?: TEntityId
@@ -224,6 +222,7 @@ const AdjustmentEntryTable = ({
                         }}
                         // --- Export Action Props (Placeholder) ---
                         exportActionProps={{
+                            ...toolbarProps,
                             isLoading: isPending,
                             filters: exportfilter,
                             model: 'AdjustmentEntry',

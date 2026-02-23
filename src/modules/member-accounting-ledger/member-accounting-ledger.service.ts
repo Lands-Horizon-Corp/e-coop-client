@@ -16,16 +16,18 @@ import {
 
 // ⚙️🛠️ API SERVICE HERE
 
-export const { getPaginated, API, route } = createAPIRepository(
-    '/api/v1/member-accounting-ledger'
-)
+export const {
+    getPaginated,
+    API,
+    route: memberAccountingLedgerAPIRoute,
+} = createAPIRepository('/api/v1/member-accounting-ledger')
 
 // API function to get the total accounting ledger for a member
 export const getMemberAccountingLedgerTotal = async (
     id: TEntityId
 ): Promise<IMemberAccountingLedgerTotal> => {
     const response = await API.get<IMemberAccountingLedgerTotal>(
-        `${route}/member-profile/${id}/total`
+        `${memberAccountingLedgerAPIRoute}/member-profile/${id}/total`
     )
     return response.data
 }
@@ -38,7 +40,7 @@ export const getMemberAccountGeneralLedgerTotal = async ({
     memberProfileId: TEntityId
     accountId: TEntityId
 }): Promise<IMemberGeneralLedgerTotal> => {
-    const url = `${route}/member-profile/${memberProfileId}/account/${accountId}/total`
+    const url = `${memberAccountingLedgerAPIRoute}/member-profile/${memberProfileId}/account/${accountId}/total`
     const response = await API.get<IMemberGeneralLedgerTotal>(url)
     return response.data
 }
@@ -53,7 +55,7 @@ export const getAccountingLedger = async ({
 }): Promise<IMemberAccountingLedgerPaginated> => {
     const finalUrl = qs.stringifyUrl(
         {
-            url: url || `${route}/branch/search`,
+            url: url || `${memberAccountingLedgerAPIRoute}/branch/search`,
             query,
         },
         { skipNull: true }
@@ -91,10 +93,10 @@ export const useFilteredPaginatedMemberAccountingLedger = ({
             query,
         ],
         queryFn: async () => {
-            let url: string = `${route}/branch/search`
+            let url: string = `${memberAccountingLedgerAPIRoute}/branch/search`
 
             if (mode === 'member') {
-                url = `${route}/member-profile/${memberProfileId}/search`
+                url = `${memberAccountingLedgerAPIRoute}/member-profile/${memberProfileId}/search`
             }
 
             return getAccountingLedger({

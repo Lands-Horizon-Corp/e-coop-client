@@ -4,6 +4,7 @@ import Fuse from 'fuse.js'
 
 import { cn } from '@/helpers'
 import { withToastCallbacks } from '@/helpers/callback-helper'
+import { hasPermissionFromAuth } from '@/modules/authentication/authgentication.store'
 import { ICurrency } from '@/modules/currency'
 import { CurrencyBadge } from '@/modules/currency/components/currency-badge'
 import useConfirmModalStore from '@/store/confirm-modal-store'
@@ -117,6 +118,12 @@ const TimeDepositTypesSidebar = ({
                 />
                 <Button
                     className="flex-1"
+                    disabled={
+                        !hasPermissionFromAuth({
+                            action: 'Create',
+                            resourceType: 'TimeDepositScheme',
+                        })
+                    }
                     onClick={() => createModal.onOpenChange(true)}
                     size="sm"
                     variant="secondary"
@@ -241,7 +248,14 @@ const TimeDepositType = ({
                             <DropdownMenuSeparator />
                             <DropdownMenuItem
                                 className="bg-destructive/05 text-destructive focus:bg-destructive focus:text-destructive-foreground"
-                                disabled={isDeleting}
+                                disabled={
+                                    isDeleting ||
+                                    !hasPermissionFromAuth({
+                                        action: ['Delete', 'OwnDelete'],
+                                        resourceType: 'TimeDepositScheme',
+                                        resource: type,
+                                    })
+                                }
                                 onClick={(e) => {
                                     e.stopPropagation()
                                     e.preventDefault()
@@ -268,7 +282,14 @@ const TimeDepositType = ({
                 <ContextMenuSeparator />
                 <ContextMenuItem
                     className="bg-destructive/05 text-destructive focus:bg-destructive focus:text-destructive-foreground"
-                    disabled={isDeleting}
+                    disabled={
+                        isDeleting ||
+                        !hasPermissionFromAuth({
+                            action: ['Delete', 'OwnDelete'],
+                            resourceType: 'TimeDepositScheme',
+                            resource: type,
+                        })
+                    }
                     onClick={(e) => {
                         e.stopPropagation()
                         e.preventDefault()

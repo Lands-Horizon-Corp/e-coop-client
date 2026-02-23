@@ -2,6 +2,7 @@ import { ReactNode } from 'react'
 
 import { toast } from 'sonner'
 
+import { hasPermissionFromAuth } from '@/modules/authentication/authgentication.store'
 import {
     IPaymentType,
     PaymentTypeCreateUpdateFormModal,
@@ -30,6 +31,7 @@ const usePaymentTypeActions = ({
     onDeleteSuccess,
 }: UsePaymentTypeActionsProps) => {
     const paymentType = row.original
+
     const { open } = useTableRowActionStore<
         IPaymentType,
         PaymentTypeActionType,
@@ -39,7 +41,14 @@ const usePaymentTypeActions = ({
     const { onOpen } = useConfirmModalStore()
 
     const { mutate: deletePaymentType, isPending: isDeletingPaymentType } =
-        useDeleteById({ options: { onSuccess: onDeleteSuccess } })
+        useDeleteById({
+            options: {
+                onSuccess: () => {
+                    onDeleteSuccess?.()
+                    toast.success('Payment type deleted successfully')
+                },
+            },
+        })
 
     const handleEdit = () => {
         open('edit', {
@@ -64,9 +73,7 @@ const usePaymentTypeActions = ({
     }
 }
 
-interface IPaymentTypeTableActionProps
-    extends IPaymentTypeTableActionComponentProp {
-    onPaymentTypeUpdate?: () => void
+interface IPaymentTypeTableActionProps extends IPaymentTypeTableActionComponentProp {
     onDeleteSuccess?: () => void
 }
 
@@ -74,33 +81,43 @@ export const PaymentTypeActions = ({
     row,
     onDeleteSuccess,
 }: IPaymentTypeTableActionProps) => {
-    const { isDeletingPaymentType, handleEdit, handleDelete } =
+    const { paymentType, isDeletingPaymentType, handleEdit, handleDelete } =
         usePaymentTypeActions({ row, onDeleteSuccess })
 
     return (
         <>
-            <div onClick={(e) => e.stopPropagation()}></div>
+            <div onClick={(e) => e.stopPropagation()} />
             <RowActionsGroup
                 canSelect
                 onDelete={{
                     text: 'Delete',
-                    isAllowed: !isDeletingPaymentType,
+                    isAllowed:
+                        !isDeletingPaymentType &&
+                        hasPermissionFromAuth({
+                            action: ['Delete', 'OwnDelete'],
+                            resourceType: 'PaymentType',
+                            conditionLogic: 'some',
+                            resource: paymentType,
+                        }),
                     onClick: handleDelete,
                 }}
                 onEdit={{
                     text: 'Edit',
-                    isAllowed: true,
+                    isAllowed: hasPermissionFromAuth({
+                        action: ['Update', 'OwnUpdate'],
+                        resourceType: 'PaymentType',
+                        conditionLogic: 'some',
+                        resource: paymentType,
+                    }),
                     onClick: handleEdit,
                 }}
-                otherActions={<>{/* Additional actions can be added here */}</>}
                 row={row}
             />
         </>
     )
 }
 
-interface IPaymentTypeRowContextProps
-    extends IPaymentTypeTableActionComponentProp {
+interface IPaymentTypeRowContextProps extends IPaymentTypeTableActionComponentProp {
     children?: ReactNode
     onDeleteSuccess?: () => void
 }
@@ -110,7 +127,7 @@ export const PaymentTypeRowContext = ({
     children,
     onDeleteSuccess,
 }: IPaymentTypeRowContextProps) => {
-    const { isDeletingPaymentType, handleEdit, handleDelete } =
+    const { paymentType, isDeletingPaymentType, handleEdit, handleDelete } =
         usePaymentTypeActions({ row, onDeleteSuccess })
 
     return (
@@ -118,12 +135,24 @@ export const PaymentTypeRowContext = ({
             <DataTableRowContext
                 onDelete={{
                     text: 'Delete',
-                    isAllowed: !isDeletingPaymentType,
+                    isAllowed:
+                        !isDeletingPaymentType &&
+                        hasPermissionFromAuth({
+                            action: ['Delete', 'OwnDelete'],
+                            resourceType: 'PaymentType',
+                            conditionLogic: 'some',
+                            resource: paymentType,
+                        }),
                     onClick: handleDelete,
                 }}
                 onEdit={{
                     text: 'Edit',
-                    isAllowed: true,
+                    isAllowed: hasPermissionFromAuth({
+                        action: ['Update', 'OwnUpdate'],
+                        resourceType: 'PaymentType',
+                        conditionLogic: 'some',
+                        resource: paymentType,
+                    }),
                     onClick: handleEdit,
                 }}
                 row={row}
@@ -152,12 +181,7 @@ export const PaymentTypeTableActionManager = () => {
                     description="Update details for this payment type."
                     formProps={{
                         paymentTypeId: paymentType.id,
-                        defaultValues: {
-                            name: paymentType.name,
-                            description: paymentType.description,
-                            number_of_days: paymentType.number_of_days,
-                            type: paymentType.type,
-                        },
+                        defaultValues: paymentType,
                         onSuccess: () => {
                             toast.success('Payment type updated successfully')
                             close()

@@ -1,6 +1,7 @@
 import { ReactNode } from 'react'
 
 import { withToastCallbacks } from '@/helpers/callback-helper'
+import { hasPermissionFromAuth } from '@/modules/authentication/authgentication.store'
 import useConfirmModalStore from '@/store/confirm-modal-store'
 import { Row } from '@tanstack/react-table'
 
@@ -68,8 +69,7 @@ const useLoanPurposeActions = ({
     }
 }
 
-interface ILoanPurposeTableActionProps
-    extends ILoanPurposeTableActionComponentProp {
+interface ILoanPurposeTableActionProps extends ILoanPurposeTableActionComponentProp {
     onLoanPurposeUpdate?: () => void
     onDeleteSuccess?: () => void
 }
@@ -78,7 +78,7 @@ export const LoanPurposeAction = ({
     row,
     onDeleteSuccess,
 }: ILoanPurposeTableActionProps) => {
-    const { isDeletingLoanPurpose, handleEdit, handleDelete } =
+    const { loanPurpose, isDeletingLoanPurpose, handleEdit, handleDelete } =
         useLoanPurposeActions({ row, onDeleteSuccess })
 
     return (
@@ -88,12 +88,22 @@ export const LoanPurposeAction = ({
                 canSelect
                 onDelete={{
                     text: 'Delete',
-                    isAllowed: !isDeletingLoanPurpose,
+                    isAllowed:
+                        !isDeletingLoanPurpose &&
+                        hasPermissionFromAuth({
+                            action: ['Delete', 'OwnDelete'],
+                            resourceType: 'LoanPurpose',
+                            resource: loanPurpose,
+                        }),
                     onClick: handleDelete,
                 }}
                 onEdit={{
                     text: 'Edit',
-                    isAllowed: true,
+                    isAllowed: hasPermissionFromAuth({
+                        action: ['Update', 'OwnUpdate'],
+                        resourceType: 'LoanPurpose',
+                        resource: loanPurpose,
+                    }),
                     onClick: handleEdit,
                 }}
                 otherActions={<>{/* Additional actions can be added here */}</>}
@@ -103,8 +113,7 @@ export const LoanPurposeAction = ({
     )
 }
 
-interface ILoanPurposeRowContextProps
-    extends ILoanPurposeTableActionComponentProp {
+interface ILoanPurposeRowContextProps extends ILoanPurposeTableActionComponentProp {
     children?: ReactNode
     onDeleteSuccess?: () => void
 }
@@ -114,7 +123,7 @@ export const LoanPurposeRowContext = ({
     children,
     onDeleteSuccess,
 }: ILoanPurposeRowContextProps) => {
-    const { isDeletingLoanPurpose, handleEdit, handleDelete } =
+    const { loanPurpose, isDeletingLoanPurpose, handleEdit, handleDelete } =
         useLoanPurposeActions({ row, onDeleteSuccess })
 
     return (
@@ -122,12 +131,22 @@ export const LoanPurposeRowContext = ({
             <DataTableRowContext
                 onDelete={{
                     text: 'Delete',
-                    isAllowed: !isDeletingLoanPurpose,
+                    isAllowed:
+                        !isDeletingLoanPurpose &&
+                        hasPermissionFromAuth({
+                            action: ['Delete', 'OwnDelete'],
+                            resourceType: 'LoanPurpose',
+                            resource: loanPurpose,
+                        }),
                     onClick: handleDelete,
                 }}
                 onEdit={{
                     text: 'Edit',
-                    isAllowed: true,
+                    isAllowed: hasPermissionFromAuth({
+                        action: ['Update', 'OwnUpdate'],
+                        resourceType: 'LoanPurpose',
+                        resource: loanPurpose,
+                    }),
                     onClick: handleEdit,
                 }}
                 row={row}

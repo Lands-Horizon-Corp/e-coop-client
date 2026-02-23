@@ -1,80 +1,85 @@
 import { toast } from 'sonner'
 
-import { SHORTCUT_SCOPES } from '@/constants'
 import { toReadableDate } from '@/helpers/date-utils'
-import { IGeneralLedger } from '@/modules/general-ledger'
 import { usePrintGeneralLedgerTransaction } from '@/modules/transaction'
 import { useTransactionStore } from '@/store/transaction/transaction-store'
 import { useHotkeys } from 'react-hotkeys-hook'
 
 import { CheckFillIcon, DoorExitFillIcon } from '@/components/icons'
-import Modal, { IModalProps } from '@/components/modals/modal'
-// import { useShortcutContext } from '@/components/shorcuts/general-shortcuts-wrapper';
+import Modal from '@/components/modals/modal'
+import LoadingSpinner from '@/components/spinners/loading-spinner'
 import { Button } from '@/components/ui/button'
 
-import { TEntityId } from '@/types'
+import { usePaymentOnSuccessStore } from '../../hooks/use-transaction-payment-success'
 
-interface PaymentSuccessModalProps extends IModalProps {
-    transaction: IGeneralLedger | null
-    onClose?: () => void
-    isOpen?: boolean
+interface TransactionModalSuccessProps {
+    onOpenPicker?: () => void
 }
-
 const TransactionModalSuccessPayment = ({
-    transaction,
-    onClose,
-    isOpen,
-    ...props
-}: PaymentSuccessModalProps) => {
-    // const { setActiveScope } = useShortcutContext()
+    onOpenPicker,
+}: TransactionModalSuccessProps) => {
+    const {
+        open,
+        generalLedgerId,
+        onClear,
+        generalLedger,
+        onOpenChange,
+        mode,
+    } = usePaymentOnSuccessStore()
 
-    const { mutate: printGeneralLedgerTransaction } =
+    const { mutateAsync: printGeneralLedgerTransaction, isPending } =
         usePrintGeneralLedgerTransaction({
             options: {
                 onSuccess: () => {
-                    toast.success('Printing transaction...')
+                    toast.success('Printing general ledger...')
                 },
             },
         })
-
     const { focusTypePayment } = useTransactionStore()
 
-    const memberName = transaction?.member_profile?.full_name
+    const handlePrint = async () => {
+        if (!generalLedgerId) {
+            return
+        }
 
-    const handlePrintGeneralLedgerTransaction = (
-        generalLedgerId: TEntityId
-    ) => {
-        printGeneralLedgerTransaction({ id: generalLedgerId })
+        try {
+            await printGeneralLedgerTransaction({
+                id: generalLedgerId,
+            })
+            onOpenPicker?.()
+            onClear()
+        } catch {
+            toast.error('Failed to print general ledger')
+        }
     }
 
     useHotkeys(
         'enter',
-        (e) => {
+        async (e) => {
             e.preventDefault()
-            if (!transaction || !isOpen) return
-            handlePrintGeneralLedgerTransaction(transaction.id)
-            onClose?.()
+            if (!generalLedgerId || isPending) return
+            await handlePrint()
         },
-        {
-            scopes: [SHORTCUT_SCOPES.MODAL],
-        },
-        [transaction, isOpen, onClose /*, setActiveScope*/]
+        [isPending, generalLedgerId]
     )
 
-    const paymentType =
-        focusTypePayment === 'withdraw' ? 'Withdrawal' : focusTypePayment
+    const memberName = generalLedger?.member_profile?.full_name
 
-    if (!transaction) {
+    const paymentType = mode === 'withdraw' ? 'Withdrawal' : mode
+
+    if (!generalLedger || !generalLedgerId) {
         return null
     }
 
     return (
         <Modal
-            {...props}
             footer={
                 <div className="flex items-center justify-end w-full space-x-2">
                     <Button
-                        onClick={() => onClose?.()}
+                        onClick={() => {
+                            onOpenPicker?.()
+                            onClear()
+                        }}
                         tabIndex={-1}
                         type="submit"
                         variant={'ghost'}
@@ -83,18 +88,26 @@ const TransactionModalSuccessPayment = ({
                         <DoorExitFillIcon className="ml-2" size={20} />
                     </Button>
                     <Button
-                        onClick={() => {
-                            handlePrintGeneralLedgerTransaction(transaction.id)
-                            onClose?.()
+                        disabled={isPending}
+                        onClick={async () => {
+                            await handlePrint()
                         }}
                     >
-                        Print
+                        {isPending ? <LoadingSpinner /> : 'Print'}
                         <span className="text-lg ml-2 translate-y-[2px]">
                             ↵
                         </span>
                     </Button>
                 </div>
             }
+            onOpenChange={(newState) => {
+                if (!newState) {
+                    onOpenPicker?.()
+                    onClear()
+                }
+                onOpenChange(newState)
+            }}
+            open={open}
         >
             <div className="flex items-center justify-center w-full h-full">
                 <div className="flex flex-col items-center justify-center gap-2">
@@ -117,14 +130,14 @@ const TransactionModalSuccessPayment = ({
                             {paymentType === 'Withdrawal' ? 'from' : 'for'}{' '}
                         </span>
                         <span className="text-primary italic">
-                            {transaction.account?.name}
+                            {generalLedger.account?.name}
                         </span>
                     </p>
                     <p className="text-muted-foreground text-sm">
-                        {toReadableDate(transaction.created_at)}
+                        {toReadableDate(generalLedger.created_at)}
                     </p>
                     <p className="text-muted-foreground text-sm border flex items-center p-1 rounded-sm bg-secondary">
-                        ID: {transaction.id}
+                        ID: {generalLedger.id}
                     </p>
                 </div>
             </div>

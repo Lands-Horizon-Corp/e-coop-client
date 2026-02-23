@@ -23,5 +23,4 @@ export interface IMutualFundEntry extends IBaseEntityMeta {
 
 export type IMutualFundEntryRequest = z.infer<typeof MutualFundEntrySchema>
 
-export interface IMutualFundEntryPaginated
-    extends IPaginatedResult<IMutualFundEntry> {}
+export interface IMutualFundEntryPaginated extends IPaginatedResult<IMutualFundEntry> {}

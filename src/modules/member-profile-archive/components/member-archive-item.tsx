@@ -84,18 +84,20 @@ const MemberArchiveItem = ({
                     <p className="text-xs text-muted-foreground">
                         Uploaded by : {uploadedBy ?? 'Unknown'}
                     </p>
+                    <div className="flex items-center gap-6 text-xs text-muted-foreground">
+                        <span className="flex items-center gap-1">
+                            <HardDriveIcon className="size-3.5" />
+                            {formatBytes(media?.file_size ?? 0)}
+                        </span>
+                        <span className="flex items-center gap-1">
+                            <CalendarIcon className="size-3.5" />
+                            {createdDate
+                                ? toReadableDateTime(createdDate)
+                                : '-'}
+                        </span>
+                    </div>
                 </div>
 
-                <div className="hidden md:flex items-center gap-6 text-sm text-muted-foreground">
-                    <span className="flex items-center gap-1">
-                        <HardDriveIcon className="size-3.5" />
-                        {formatBytes(media?.file_size ?? 0)}
-                    </span>
-                    <span className="flex items-center gap-1">
-                        <CalendarIcon className="size-3.5" />
-                        {createdDate ? toReadableDateTime(createdDate) : '-'}
-                    </span>
-                </div>
                 <div className="flex gap-1 flex-shrink-0">
                     {media?.download_url && (
                         <ActionTooltip

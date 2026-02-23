@@ -35,8 +35,7 @@ import MemberGroupTableColumns, {
 import MemberGroupAction, { MemberGroupRowContext } from './row-action-context'
 
 export interface MemberGroupTableProps
-    extends TableProps<IMemberGroup>,
-        IMemberGroupTableColumnProps {
+    extends TableProps<IMemberGroup>, IMemberGroupTableColumnProps {
     toolbarProps?: Omit<
         IDataTableToolbarProps<IMemberGroup>,
         | 'table'
@@ -44,7 +43,6 @@ export interface MemberGroupTableProps
         | 'globalSearchProps'
         | 'scrollableProps'
         | 'filterLogicProps'
-        | 'exportActionProps'
         | 'deleteActionProps'
     >
 }
@@ -178,6 +176,7 @@ const MemberGroupTable = ({
                                 }),
                         }}
                         exportActionProps={{
+                            ...toolbarProps?.exportActionProps,
                             isLoading: isPending,
                             filters: exportfilter,
                             model: 'MemberGroup',

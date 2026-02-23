@@ -11,8 +11,6 @@ export interface IPermissionTemplate extends IBaseEntityMeta {
 
 export type IPermissionTemplateRequest = TPermissionTemplateSchema
 
-export interface IPermissionTemplatePaginated
-    extends IPaginatedResult<IPermissionTemplate> {}
+export interface IPermissionTemplatePaginated extends IPaginatedResult<IPermissionTemplate> {}
 
-export interface IPermissionTemplatePaginated
-    extends IPaginatedResult<IPermissionTemplate> {}
+export interface IPermissionTemplatePaginated extends IPaginatedResult<IPermissionTemplate> {}

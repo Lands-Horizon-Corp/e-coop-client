@@ -5,6 +5,13 @@ import { IUserBase } from '@/modules/user'
 import { IUserOrganization } from '@/modules/user-organization'
 import { create } from 'zustand'
 
+import {
+    GetCrudPermissionOpts,
+    IHasPermissionOpts,
+    getCrudPermissions,
+    hasPermission,
+} from '../permission/permission.utils'
+
 type TAuthStoreStatus = 'loading' | 'authorized' | 'unauthorized' | 'error'
 
 interface UserAuthStore {
@@ -20,7 +27,7 @@ export const useAuthStore = create<UserAuthStore>((set) => ({
     currentAuth: {
         user: undefined,
         user_organization: null,
-        reports: [],
+        // reports: [],
     },
     authStatus: 'loading',
     setCurrentAuth: (newAuth: IAuthContext) =>
@@ -43,12 +50,34 @@ export const useAuthStore = create<UserAuthStore>((set) => ({
             currentAuth: defaultAuthContextValue ?? {
                 user: undefined,
                 user_organization: null,
-                reports: [],
+                member_profile: null,
             },
             authStatus: 'unauthorized',
         })
     },
 }))
+
+// permission helper function utils
+// Why this is here, we want permission utils pure without coupled to this store
+// Purpose : hasPermission requires user org, but this function auto place user org
+export const hasPermissionFromAuth = ({
+    userOrg = useAuthStore.getState().currentAuth?.user_organization,
+    ...opts
+}: Omit<IHasPermissionOpts, 'userOrg'> & {
+    userOrg?: IHasPermissionOpts['userOrg']
+}) => {
+    return hasPermission({ userOrg, ...opts })
+}
+
+// SAME AS ABOVE
+export const getCrudPermissionFromAuthStore = ({
+    userOrg = useAuthStore.getState().currentAuth?.user_organization,
+    ...opts
+}: Omit<GetCrudPermissionOpts, 'userOrg'> & {
+    userOrg?: GetCrudPermissionOpts['userOrg']
+}) => {
+    return getCrudPermissions({ userOrg, ...opts })
+}
 
 // USE only kapag sure ka na user ay existing
 // ideal usage is in onboarding, since we dont care if nag eexist ang branch or organization sa authContext
@@ -77,9 +106,9 @@ export const useAuthUser = <TUser = IUserBase>() => {
 export const useAuthUserWithOrg = <TUser = IUserBase>() => {
     const { currentAuth, ...rest } = useAuthUser<TUser>()
 
-    // if (!currentAuth.organization) {
-    //     throw new Error('Authenticated user has no organization context.')
-    // }
+    if (!currentAuth.user_organization) {
+        throw new Error('Authenticated user has no organization context.')
+    }
 
     return {
         ...rest,

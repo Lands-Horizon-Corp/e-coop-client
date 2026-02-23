@@ -4,4 +4,5 @@ export const LOAN_SCHEDULE_STATUS = [
     'overdue',
     'skipped',
     'advance',
+    'default',
 ] as const

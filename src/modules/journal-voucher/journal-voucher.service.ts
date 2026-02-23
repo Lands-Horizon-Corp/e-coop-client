@@ -8,6 +8,7 @@ import {
 } from '@/providers/repositories/data-layer-factory'
 import {
     createMutationFactory,
+    createMutationInvalidateFn,
     updateMutationInvalidationFn,
 } from '@/providers/repositories/mutation-factory'
 
@@ -91,6 +92,26 @@ export const useGetAllJournalVoucher = ({
         },
     })
 }
+
+export const useCreateUpdateJournalVoucher = createMutationFactory<
+    IJournalVoucher,
+    Error,
+    { payload: IJournalVoucherRequest; journalVoucherId?: TEntityId }
+>({
+    mutationFn: async ({ payload, journalVoucherId }) => {
+        if (!journalVoucherId) {
+            return await createJournalVoucher({ payload })
+        }
+        return updateJournalVoucherById({
+            id: journalVoucherId,
+            payload,
+        })
+    },
+    invalidationFn: (args) => {
+        updateMutationInvalidationFn(journalVoucherBaseKey, args)
+        createMutationInvalidateFn(journalVoucherBaseKey, args)
+    },
+})
 
 export const useFilteredPaginatedJournalVoucher = ({
     mode,
@@ -184,6 +205,7 @@ export const usePrintJournalVoucherTransaction = createMutationFactory<
     { journalVoucherId: TEntityId; payload: IJournalVoucherPrintRequest }
 >({
     mutationFn: (data) => printJournalVoucher(data),
+    defaultInvalidates: [['auth', 'context']],
     invalidationFn: (args) =>
         updateMutationInvalidationFn(journalVoucherBaseKey, args),
 })

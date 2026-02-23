@@ -2,7 +2,7 @@ import { cn } from '@/helpers'
 import { IAccount } from '@/modules/account'
 import AccountMiniCard from '@/modules/account/components/account-mini-card'
 import { currencyFormat } from '@/modules/currency'
-import GeneralLedgerTable from '@/modules/general-ledger/components/tables/general-ledger-table'
+import GeneralLedgerRunningTable from '@/modules/general-ledger/components/tables/general-ledger-running-table'
 import { useMemberAccountGeneralLedgerTotal } from '@/modules/member-accounting-ledger/member-accounting-ledger.service'
 
 import { RefreshIcon } from '@/components/icons'
@@ -101,6 +101,7 @@ export const MemberAccountLedgerTotal = ({
 
 interface Props extends IBaseProps {
     memberProfileId: TEntityId
+    memberAccountLedgerId: TEntityId
     accountId: TEntityId
     defaultAccount?: IAccount
 }
@@ -122,12 +123,11 @@ const MemberAccountGeneralLedger = ({
                 />
                 <MemberAccountLedgerTotal {...other} />
             </div>
-            <GeneralLedgerTable
-                accountId={other.accountId}
+            <GeneralLedgerRunningTable
                 className={cn('bg-background p-2 rounded-xl', className)}
                 excludeColumnIds={['account']}
-                memberProfileId={other.memberProfileId}
-                mode="member-account"
+                memberAccountingLedgerId={other.memberAccountLedgerId}
+                mode="member-accounting-ledger"
             />
         </div>
     )

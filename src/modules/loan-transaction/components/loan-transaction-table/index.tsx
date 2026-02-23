@@ -41,8 +41,7 @@ import LoanStatusTableColumns, {
 import { LoanTransactionTableActionManager } from './row-action-context'
 
 export interface LoanTransactionTableProps
-    extends TableProps<ILoanTransaction>,
-        ILoanTransactionTableColumnProps {
+    extends TableProps<ILoanTransaction>, ILoanTransactionTableColumnProps {
     toolbarProps?: Omit<
         IDataTableToolbarProps<ILoanTransaction>,
         | 'table'
@@ -50,7 +49,6 @@ export interface LoanTransactionTableProps
         | 'globalSearchProps'
         | 'scrollableProps'
         | 'filterLogicProps'
-        | 'exportActionProps'
         | 'deleteActionProps'
     >
 
@@ -187,6 +185,7 @@ const LoanTransactionTable = ({
                                 }),
                         }}
                         exportActionProps={{
+                            ...toolbarProps?.exportActionProps,
                             isLoading: isPending,
                             filters: exportfilter,
                             model: 'LoanTransaction',

@@ -1,3 +1,5 @@
+import { useCallback, useEffect } from 'react'
+
 import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 
@@ -9,21 +11,32 @@ import {
     CashCheckVoucherPrintSchema,
     ICashCheckVoucher,
     TCashCheckVoucherPrintSchema,
+    TORCashCheckSettings,
     usePrintCashCheckVoucherTransaction,
 } from '@/modules/cash-check-voucher'
+import { useHotkeys } from 'react-hotkeys-hook'
 
 import FormFooterResetSubmit from '@/components/form-components/form-footer-reset-submit'
 import Modal, { IModalProps } from '@/components/modals/modal'
 import { Form } from '@/components/ui/form'
 import FormFieldWrapper from '@/components/ui/form-field-wrapper'
 import { Input } from '@/components/ui/input'
+import { Kbd, KbdGroup } from '@/components/ui/kbd'
+import { Label } from '@/components/ui/label'
+import { Switch } from '@/components/ui/switch'
 
 import { useFormHelper } from '@/hooks/use-form-helper'
 
 import { IClassProps, IForm, TEntityId } from '@/types'
 
+import {
+    buildCashCheckOR,
+    isAllowedInputCashCheckOR,
+} from '../../cash-check-voucher.utils'
+
 export interface ICashCheckVoucherPrintFormProps
-    extends IClassProps,
+    extends
+        IClassProps,
         IForm<
             Partial<TCashCheckVoucherPrintSchema>,
             ICashCheckVoucher,
@@ -31,11 +44,13 @@ export interface ICashCheckVoucherPrintFormProps
             TCashCheckVoucherPrintSchema
         > {
     cashCheckVoucherId: TEntityId
+    orSettings?: TORCashCheckSettings
 }
 
 const CashCheckVoucherPrintForm = ({
     cashCheckVoucherId,
     className,
+    orSettings,
     ...formProps
 }: ICashCheckVoucherPrintFormProps) => {
     const form = useForm<TCashCheckVoucherPrintSchema>({
@@ -62,14 +77,10 @@ const CashCheckVoucherPrintForm = ({
         })
 
     const onSubmit = form.handleSubmit(async (payload) => {
-        const apiPayload = {
-            cash_voucher_number: payload.cash_voucher_number,
-        }
-
         toast.promise(
             printMutation.mutateAsync({
                 cashCheckVoucherId,
-                payload: apiPayload,
+                payload,
             }),
             {
                 loading: 'Printing Cash/Check Voucher...',
@@ -83,6 +94,46 @@ const CashCheckVoucherPrintForm = ({
     const { error: rawError, isPending, reset } = printMutation
 
     const error = serverRequestErrExtractor({ error: rawError })
+
+    const handleAutoGenerateOR = useCallback(
+        (isAuto?: boolean) => {
+            form.setValue('or_auto_generated', isAuto)
+
+            if (!orSettings)
+                return toast.warning(
+                    'Failed to generate Cash Check OR, could not retrieve settings'
+                )
+
+            if (isAuto) {
+                form.setValue(
+                    'cash_voucher_number',
+                    buildCashCheckOR(orSettings)
+                )
+            }
+        },
+        [orSettings, form]
+    )
+
+    useHotkeys(
+        'alt + E',
+        (e) => {
+            e.preventDefault()
+            handleAutoGenerateOR(!form.getValues('or_auto_generated'))
+        },
+        { enableOnFormTags: true },
+        [orSettings, form, handleAutoGenerateOR]
+    )
+
+    useEffect(() => {
+        const shouldGenerate =
+            !form.getValues('cash_voucher_number') &&
+            (!orSettings?.cash_check_voucher_allow_user_input ||
+                orSettings?.cash_check_voucher_auto_increment)
+
+        if (!shouldGenerate) return
+
+        handleAutoGenerateOR(true)
+    }, [orSettings, form, handleAutoGenerateOR])
 
     return (
         <Form {...form}>
@@ -103,10 +154,43 @@ const CashCheckVoucherPrintForm = ({
                             <Input
                                 {...field}
                                 autoComplete="off"
-                                disabled={isDisabled(field.name)}
+                                disabled={
+                                    isDisabled(field.name) ||
+                                    !isAllowedInputCashCheckOR(orSettings)
+                                }
                                 id={field.name}
                                 placeholder="Voucher Number"
                             />
+                        )}
+                    />
+                    <FormFieldWrapper
+                        className=""
+                        control={form.control}
+                        labelClassName="text-xs font-medium text-muted-foreground"
+                        name="or_auto_generated"
+                        render={({ field }) => (
+                            <div className="flex items-center">
+                                <Switch
+                                    checked={field.value}
+                                    className="mr-2 max-h-4 max-w-9"
+                                    onCheckedChange={(value) => {
+                                        handleAutoGenerateOR(value)
+                                        field.onChange(value)
+                                    }}
+                                    thumbClassName="size-3"
+                                />
+                                <Label className="text-xs font-medium text-muted-foreground mr-1">
+                                    OR Auto Generated
+                                </Label>
+                                <Label className="text-xs font-medium text-muted-foreground">
+                                    Press Alt{' '}
+                                    <KbdGroup>
+                                        <Kbd>Alt</Kbd>
+                                        <span>+</span>
+                                        <Kbd>E</Kbd>
+                                    </KbdGroup>
+                                </Label>
+                            </div>
                         )}
                     />
                 </fieldset>

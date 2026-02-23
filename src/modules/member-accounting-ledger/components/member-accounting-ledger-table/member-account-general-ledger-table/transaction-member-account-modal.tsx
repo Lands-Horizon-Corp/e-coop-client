@@ -25,7 +25,7 @@ const TransactionMemberAccountLedger = ({
     return (
         <Modal
             {...props}
-            className={cn('!max-w-[90vw] p-2')}
+            className={cn('max-w-[90vw]! p-2')}
             closeButtonClassName="md:hidden"
             descriptionClassName="hidden"
             titleClassName="hidden"
@@ -36,7 +36,7 @@ const TransactionMemberAccountLedger = ({
                         Account: {focusedLedger.account?.name}
                     </h3>
                     <p className="text-sm text-muted-foreground">
-                        Member Account General Ledger Entries
+                        Member Account Ledger Entries
                     </p>
                 </div>
                 <Tabs
@@ -133,7 +133,18 @@ const TransactionMemberAccountLedger = ({
                     </ScrollArea>
 
                     <TabsContent asChild value="general-ledger">
-                        <MemberAccountGeneralLedger {...focusedLedger} />
+                        <MemberAccountGeneralLedger
+                            memberAccountLedgerId={
+                                focusedLedger.memberAccountingLedgerId!
+                            }
+                            {...focusedLedger}
+                        />
+                        {/* <MemberAccountGeneralLedger
+                            memberAccountLedgerId={
+                                focusedLedger.memberProfileId
+                            }
+                            {...focusedLedger}
+                        /> */}
                     </TabsContent>
 
                     <TabsContent asChild value="check-entry">

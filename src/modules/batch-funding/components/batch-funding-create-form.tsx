@@ -28,7 +28,8 @@ import { BatchFundingSchema } from '../batch-funding.validation'
 type TBatchFundingFormValues = z.infer<typeof BatchFundingSchema>
 
 export interface IBatchFundingCreateFormProps
-    extends IClassProps,
+    extends
+        IClassProps,
         IForm<
             Partial<IBatchFundingRequest>,
             IBatchFunding,

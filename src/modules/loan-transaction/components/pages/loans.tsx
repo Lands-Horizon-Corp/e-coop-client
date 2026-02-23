@@ -1,7 +1,11 @@
 import { useQueryClient } from '@tanstack/react-query'
 import { toast } from 'sonner'
 
-import { useAuthUserWithOrgBranch } from '@/modules/authentication/authgentication.store'
+import {
+    hasPermissionFromAuth,
+    useAuthUserWithOrgBranch,
+} from '@/modules/authentication/authgentication.store'
+import PermissionGuard from '@/modules/permission/components/permission-guard'
 import { useTransactionBatchStore } from '@/modules/transaction-batch/store/transaction-batch-store'
 
 import PageContainer from '@/components/containers/page-container'
@@ -9,8 +13,11 @@ import PageContainer from '@/components/containers/page-container'
 import { useModalState } from '@/hooks/use-modal-state'
 import { useSubscribe } from '@/hooks/use-pubsub'
 
+import { TORLoanVoucherSettings } from '../../loan-transaction.types'
 import { LoanTransactionCreateUpdateFormModal } from '../forms/loan-transaction-create-update-form'
-import LoanTransactionTable from '../loan-transaction-table'
+import LoanTransactionTable, {
+    LoanTransactionTableProps,
+} from '../loan-transaction-table'
 import LoanTransactionAction, {
     LoanTransactionRowContext,
 } from '../loan-transaction-table/row-action-context'
@@ -21,7 +28,11 @@ const LoansPage = () => {
 
     const {
         currentAuth: {
-            user_organization: { branch_id },
+            user_organization: {
+                branch_id,
+                branch: { branch_setting },
+                ...user_organization
+            },
         },
     } = useAuthUserWithOrgBranch()
 
@@ -31,26 +42,54 @@ const LoansPage = () => {
         queryClient.invalidateQueries({ queryKey: ['loan-transaction'] })
     })
 
+    const resolvedOrSettings: TORLoanVoucherSettings | undefined =
+        user_organization
+            ? {
+                  ...branch_setting,
+                  loan_voucher_auto_increment:
+                      user_organization.loan_voucher_auto_increment,
+              }
+            : undefined
+
     return (
         <PageContainer>
-            <LoanTransactionCreateUpdateFormModal {...createModal} />
-            <LoanTransactionTable
-                actionComponent={LoanTransactionAction}
-                className="max-h-[90vh] min-h-[90vh] w-full"
-                mode="branch"
-                RowContextComponent={LoanTransactionRowContext}
-                toolbarProps={{
-                    createActionProps: {
-                        onClick: () => {
-                            if (!data)
-                                return toast.warning(
-                                    'Please create transaction batch first before making any loan.'
-                                )
-                            createModal.onOpenChange(true)
+            <PermissionGuard action="Read" resourceType="Loan">
+                <LoanTransactionCreateUpdateFormModal
+                    {...createModal}
+                    formProps={{
+                        orSettings: resolvedOrSettings,
+                    }}
+                />
+                <LoanTransactionTable
+                    actionComponent={LoanTransactionAction}
+                    className="max-h-[90vh] min-h-[90vh] w-full"
+                    mode="branch"
+                    RowContextComponent={LoanTransactionRowContext}
+                    toolbarProps={{
+                        createActionProps: {
+                            disabled: !hasPermissionFromAuth({
+                                action: 'Create',
+                                resourceType: 'Loan',
+                            }),
+                            onClick: () => {
+                                if (!data)
+                                    return toast.warning(
+                                        'Please create transaction batch first before making any loan.'
+                                    )
+                                createModal.onOpenChange(true)
+                            },
                         },
-                    },
-                }}
-            />
+                        exportActionProps: {
+                            disabled: !hasPermissionFromAuth({
+                                action: 'Export',
+                                resourceType: 'Loan',
+                            }),
+                        } as NonNullable<
+                            LoanTransactionTableProps['toolbarProps']
+                        >['exportActionProps'],
+                    }}
+                />
+            </PermissionGuard>
         </PageContainer>
     )
 }

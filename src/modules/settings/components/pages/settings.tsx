@@ -10,7 +10,7 @@ import { Button } from '@/components/ui/button'
 
 import UserOrganizationSettings from '../../../user-organization/components/user-org-settings'
 
-type TSettingPage = 'my-settings' | 'branch-settings'
+type TSettingPage = 'MySettings' | 'BranchSettings'
 
 interface SettingsNavItem {
     id: TSettingPage
@@ -22,15 +22,15 @@ interface SettingsNavItem {
 
 const settingsNavItems: SettingsNavItem[] = [
     {
-        id: 'my-settings',
+        id: 'MySettings',
         label: 'My Settings',
         icon: GearIcon,
         component: UserOrganizationSettings,
         requiredUserTypes: ['employee', 'admin', 'owner'],
     },
     {
-        id: 'branch-settings',
-        label: 'Branch Settings',
+        id: 'BranchSettings',
+        label: 'Global Settings',
         icon: BuildingGearIcon,
         component: BranchSettings,
         requiredUserTypes: ['employee', 'admin', 'owner'],
@@ -43,7 +43,7 @@ const MainSettingsPage = () => {
             user_organization: { user_type },
         },
     } = useAuthUserWithOrg()
-    const [page, setPage] = useState<TSettingPage>('my-settings')
+    const [page, setPage] = useState<TSettingPage>('MySettings')
 
     const currentPageItem = settingsNavItems.find((item) => item.id === page)
     const CurrentComponent = currentPageItem?.component

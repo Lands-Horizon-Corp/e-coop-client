@@ -1,5 +1,9 @@
 import { ReactNode } from 'react'
 
+import {
+    getCrudPermissionFromAuthStore,
+    hasPermissionFromAuth,
+} from '@/modules/authentication/authgentication.store'
 import useConfirmModalStore from '@/store/confirm-modal-store'
 import { Row } from '@tanstack/react-table'
 
@@ -13,7 +17,6 @@ import { DisbursementCreateUpdateFormModal } from '../forms/disbursement-create-
 import { IDisbursementTableActionComponentProp } from './columns'
 
 export type DisbursementActionType = 'edit' | 'delete'
-
 export type DisbursementActionExtra = Record<string, never>
 
 interface UseDisbursementActionsProps {
@@ -31,8 +34,12 @@ const useDisbursementActions = ({
         DisbursementActionType,
         DisbursementActionExtra
     >()
-
     const { onOpen } = useConfirmModalStore()
+
+    const disbursementCrudPerms = getCrudPermissionFromAuthStore({
+        resourceType: 'DisburesmentType',
+        resource: disbursement,
+    })
 
     const { isPending: isDeletingDisbursement, mutate: deleteDisbursement } =
         useDeleteDisbursementById({
@@ -57,14 +64,14 @@ const useDisbursementActions = ({
 
     return {
         disbursement,
+        disbursementCrudPerms,
         isDeletingDisbursement,
         handleEdit,
         handleDelete,
     }
 }
 
-interface IDisbursementTableActionProps
-    extends IDisbursementTableActionComponentProp {
+interface IDisbursementTableActionProps extends IDisbursementTableActionComponentProp {
     onDisbursementUpdate?: () => void
     onDeleteSuccess?: () => void
 }
@@ -73,7 +80,7 @@ export const DisbursementAction = ({
     row,
     onDeleteSuccess,
 }: IDisbursementTableActionProps) => {
-    const { isDeletingDisbursement, handleEdit, handleDelete } =
+    const { disbursement, isDeletingDisbursement, handleEdit, handleDelete } =
         useDisbursementActions({ row, onDeleteSuccess })
 
     return (
@@ -83,12 +90,23 @@ export const DisbursementAction = ({
                 canSelect
                 onDelete={{
                     text: 'Delete',
-                    isAllowed: !isDeletingDisbursement,
+                    isAllowed:
+                        hasPermissionFromAuth({
+                            action: ['Delete', 'OwnDelete'],
+                            resourceType: 'DisburesmentType',
+                            conditionLogic: 'some',
+                            resource: disbursement,
+                        }) && !isDeletingDisbursement,
                     onClick: handleDelete,
                 }}
                 onEdit={{
                     text: 'Edit',
-                    isAllowed: true,
+                    isAllowed: hasPermissionFromAuth({
+                        action: ['Update', 'OwnUpdate'],
+                        resourceType: 'DisburesmentType',
+                        conditionLogic: 'some',
+                        resource: disbursement,
+                    }),
                     onClick: handleEdit,
                 }}
                 otherActions={<></>}
@@ -98,8 +116,7 @@ export const DisbursementAction = ({
     )
 }
 
-interface IDisbursementRowContextProps
-    extends IDisbursementTableActionComponentProp {
+interface IDisbursementRowContextProps extends IDisbursementTableActionComponentProp {
     children?: ReactNode
     onDeleteSuccess?: () => void
 }
@@ -109,7 +126,7 @@ export const DisbursementRowContext = ({
     children,
     onDeleteSuccess,
 }: IDisbursementRowContextProps) => {
-    const { isDeletingDisbursement, handleEdit, handleDelete } =
+    const { disbursement, isDeletingDisbursement, handleEdit, handleDelete } =
         useDisbursementActions({ row, onDeleteSuccess })
 
     return (
@@ -117,12 +134,22 @@ export const DisbursementRowContext = ({
             <DataTableRowContext
                 onDelete={{
                     text: 'Delete',
-                    isAllowed: !isDeletingDisbursement,
+                    isAllowed:
+                        !isDeletingDisbursement &&
+                        hasPermissionFromAuth({
+                            action: ['Delete', 'OwnDelete'],
+                            resourceType: 'DisburesmentType',
+                            resource: disbursement,
+                        }),
                     onClick: handleDelete,
                 }}
                 onEdit={{
                     text: 'Edit',
-                    isAllowed: true,
+                    isAllowed: hasPermissionFromAuth({
+                        action: ['Update', 'OwnUpdate'],
+                        resourceType: 'DisburesmentType',
+                        resource: disbursement,
+                    }),
                     onClick: handleEdit,
                 }}
                 row={row}

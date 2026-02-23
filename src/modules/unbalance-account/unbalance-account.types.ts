@@ -18,6 +18,9 @@ export interface IUnbalanceAccount extends IBaseEntityMeta {
     account_for_overage_id: TEntityId
     account_for_overage: IAccount
 
+    cash_on_hand_account_id: TEntityId
+    cash_on_hand_account: IAccount
+
     member_profile_id_for_shortage?: TEntityId
     member_profile_for_shortage?: IMemberProfile
 
@@ -30,5 +33,4 @@ export interface IUnbalanceAccount extends IBaseEntityMeta {
 
 export type IUnbalanceAccountRequest = z.infer<typeof UnbalanceAccountSchema>
 
-export interface IUnbalanceAccountPaginated
-    extends IPaginatedResult<IUnbalanceAccount> {}
+export interface IUnbalanceAccountPaginated extends IPaginatedResult<IUnbalanceAccount> {}

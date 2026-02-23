@@ -41,7 +41,8 @@ import PermissionTemplateAction, {
 } from './row-action-context'
 
 export interface PermissionTemplateTableProps
-    extends TableProps<IPermissionTemplate>,
+    extends
+        TableProps<IPermissionTemplate>,
         IPermissionTemplateTableColumnProps {
     toolbarProps?: Omit<
         IDataTableToolbarProps<IPermissionTemplate>,
@@ -50,7 +51,6 @@ export interface PermissionTemplateTableProps
         | 'globalSearchProps'
         | 'scrollableProps'
         | 'filterLogicProps'
-        | 'exportActionProps'
         | 'deleteActionProps'
     >
 }
@@ -187,6 +187,7 @@ const PermissionTemplateTable = ({
                                 }),
                         }}
                         exportActionProps={{
+                            ...toolbarProps?.exportActionProps,
                             isLoading: isPending,
                             filters: exportfilter,
                             model: 'PermissionTemplate',

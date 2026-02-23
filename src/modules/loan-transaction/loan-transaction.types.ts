@@ -4,6 +4,10 @@ import { IBaseEntityMeta, IPaginatedResult, TEntityId } from '@/types'
 
 import { IAccount } from '../account'
 import { IAccountHistory } from '../account-history'
+import {
+    ICashCheckVoucherGeneralORSettings,
+    ILoanVoucherORSettings,
+} from '../branch-settings'
 import { IComakerCollateral } from '../comaker-collateral'
 import { IComakerMemberProfile } from '../comaker-member-profile'
 import { ICurrency } from '../currency'
@@ -23,6 +27,7 @@ import { IMemberAccountingLedger } from '../member-account-ledger'
 import { IMemberProfile } from '../member-profile'
 import { ITransactionBatch } from '../transaction-batch'
 import { IUser } from '../user'
+import { IUserOrganizationSettings } from '../user-organization'
 import {
     LoanEditTransactionSchema,
     LoanTransactionPrintSchema,
@@ -69,7 +74,8 @@ export type TLoanMode =
     | 'release-today'
 
 export interface ILoanTransaction
-    extends IBaseEntityMeta,
+    extends
+        IBaseEntityMeta,
         ILoanTransactionSignatures,
         ILoanTransactionStatusDates {
     voucher?: string
@@ -267,8 +273,7 @@ export type ILoanEditTransactionRequest = z.infer<
     typeof LoanEditTransactionSchema
 >
 
-export interface ILoanTransactionPaginated
-    extends IPaginatedResult<ILoanTransaction> {}
+export interface ILoanTransactionPaginated extends IPaginatedResult<ILoanTransaction> {}
 
 // Loan Transaction Signature
 export type ILoanTransactionSignatureRequest = TLoanTransactionSignatureSchema
@@ -449,3 +454,13 @@ export interface IAllMembersLoanSummaryResponse {
     branch_id: TEntityId
     generated_at: string
 }
+
+export type TORLoanVoucherSettings = Omit<
+    ILoanVoucherORSettings,
+    'loan_voucher_or_unique'
+> &
+    Omit<
+        ICashCheckVoucherGeneralORSettings,
+        'check_voucher_general_or_unique'
+    > &
+    Pick<IUserOrganizationSettings, 'loan_voucher_auto_increment'>
