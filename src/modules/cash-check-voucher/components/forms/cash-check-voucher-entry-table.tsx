@@ -166,7 +166,7 @@ const columns: ColumnDef<ICashCheckVoucherEntryRequest>[] = [
 
             return (
                 <CurrencyInput
-                    className="text-left !w-full !min-w-0"
+                    className="text-left w-full! min-w-0!"
                     currency={props.row.original.account?.currency}
                     onValueChange={(newValue) => {
                         const numValue =
@@ -200,7 +200,7 @@ const columns: ColumnDef<ICashCheckVoucherEntryRequest>[] = [
 
             return (
                 <CurrencyInput
-                    className="text-left !w-full !min-w-0"
+                    className="text-left w-full! min-w-0!"
                     currency={props.row.original.account?.currency}
                     onValueChange={(newValue) => {
                         const numValue =
@@ -228,7 +228,7 @@ const columns: ColumnDef<ICashCheckVoucherEntryRequest>[] = [
             const meta = row.table.options.meta as CashCheckEntryTableMeta
             return (
                 <Button
-                    className="w-full hover:bg-primary/10 !p-0 text-destructive"
+                    className="w-full hover:bg-primary/10 p-0! text-destructive"
                     onClick={(e) => {
                         e.preventDefault()
                         meta.handleDeleteRow(row.row.index)
@@ -353,7 +353,7 @@ export const CashCheckJournalEntryTable = ({
                         className="size-fit px-2 py-0.5 text-xs"
                         onClick={(e) => handleAddRow(e)}
                         size="sm"
-                        tabIndex={0}
+                        tabIndex={-1}
                         type="button"
                     >
                         Add <PlusIcon className="inline" />
@@ -379,8 +379,8 @@ export const CashCheckJournalEntryTable = ({
                                 <TableHead
                                     className={cn(
                                         'h-10 bg-sidebar',
-                                        'first:!rounded-tl-2xl',
-                                        'last:!rounded-tr-2xl'
+                                        'first:rounded-tl-2xl!',
+                                        'last:rounded-tr-2xl!'
                                     )}
                                     colSpan={header.colSpan}
                                     key={header.id}
@@ -411,12 +411,12 @@ export const CashCheckJournalEntryTable = ({
                         table.getRowModel().rows.map((row) => (
                             <TableRow
                                 className={cn(
-                                    'hover:bg-background !border-b-[0.5px] border-b-primary/20'
+                                    'hover:bg-background border-b-[0.5px]! border-b-primary/20'
                                 )}
                                 key={row.id}
                             >
                                 {row.getVisibleCells().map((cell) => (
-                                    <TableCell className="!p-1" key={cell.id}>
+                                    <TableCell className="p-1!" key={cell.id}>
                                         {flexRender(
                                             cell.column.columnDef.cell,
                                             cell.getContext()

@@ -17,8 +17,7 @@ import {
     IJournalVoucherRequest,
     JournalVoucherSchema,
     journalVoucherBaseKey,
-    useCreateJournalVoucher,
-    useUpdateJournalVoucherById,
+    useCreateUpdateJournalVoucher,
 } from '@/modules/journal-voucher'
 import { JournalVoucherTagsManagerPopover } from '@/modules/journal-voucher-tag/components/journal-voucher-tag-management'
 import { IMemberProfile } from '@/modules/member-profile'
@@ -83,9 +82,6 @@ const JournalVoucherCreateUpdateForm = ({
     const companyState = useModalState(false)
 
     const { data } = useTransactionBatchStore()
-    const [defaultMode, setDefaultMode] = useState<
-        'create' | 'update' | 'readOnly'
-    >(formProps.readOnly ? 'readOnly' : mode)
 
     const [defaultMemberProfile, setDefaultMemberProfile] = useState<
         IMemberProfile | undefined
@@ -117,14 +113,14 @@ const JournalVoucherCreateUpdateForm = ({
                 account_id: '',
             },
         ])
-    }, [editJournalId, defaultMode, form])
+    }, [editJournalId, mode, form])
 
     const {
-        mutate: createJournalVoucher,
+        mutate: createUpdateJournalVoucher,
         isPending: isCreating,
         error: createError,
         reset: resetCreate,
-    } = useCreateJournalVoucher({
+    } = useCreateUpdateJournalVoucher({
         options: {
             ...withToastCallbacks({
                 textSuccess: 'Journal Voucher Created',
@@ -132,26 +128,8 @@ const JournalVoucherCreateUpdateForm = ({
                     form.reset(data)
                     formProps.onSuccess?.(data)
                     setEditJournalId(data.id)
-                    setDefaultMode('update')
-                    form.reset(data)
-                },
-                onError: formProps.onError,
-            }),
-        },
-    })
-
-    const {
-        mutate: updateJournalVoucher,
-        isPending: isUpdating,
-        error: updateError,
-        reset: resetUpdate,
-    } = useUpdateJournalVoucherById({
-        options: {
-            ...withToastCallbacks({
-                textSuccess: 'Journal Voucher updated',
-                onSuccess: (data) => {
-                    form.reset(data)
-                    formProps.onSuccess?.(data)
+                    // setDefaultMode('update')
+                    // form.reset(data)
                 },
                 onError: formProps.onError,
             }),
@@ -171,18 +149,14 @@ const JournalVoucherCreateUpdateForm = ({
             date: new Date(formData.date).toISOString(),
         }
 
-        if (isUpdate) {
-            updateJournalVoucher({
-                id: editJournalId,
-                payload: payload,
-            })
-        } else {
-            createJournalVoucher(payload)
-        }
+        createUpdateJournalVoucher({
+            journalVoucherId: journalVoucherId,
+            payload: payload,
+        })
     }, handleFocusError)
 
-    const isPending = isCreating || isUpdating
-    const rawError = isUpdate ? updateError : createError
+    const isPending = isCreating
+    const rawError = createError
 
     const error =
         serverRequestErrExtractor({ error: rawError }) ||
@@ -209,7 +183,7 @@ const JournalVoucherCreateUpdateForm = ({
         'ctrl + enter',
         (e) => {
             e.preventDefault()
-            if (defaultMode !== 'readOnly') {
+            if (mode !== 'readOnly') {
                 onSubmit()
             }
         },
@@ -325,9 +299,7 @@ const JournalVoucherCreateUpdateForm = ({
                                     Amount{' '}
                                     <span>
                                         <KbdGroup>
-                                            <Kbd>Alt</Kbd>
-                                            <span>+</span>
-                                            <Kbd>1</Kbd>
+                                            <Kbd>Alt + 1</Kbd>
                                         </KbdGroup>
                                     </span>
                                 </Label>
@@ -372,9 +344,7 @@ const JournalVoucherCreateUpdateForm = ({
                                     Particulars/Description{' '}
                                     <span>
                                         <KbdGroup>
-                                            <Kbd>Alt</Kbd>
-                                            <span>+</span>
-                                            <Kbd>2</Kbd>
+                                            <Kbd>Alt + 2</Kbd>
                                         </KbdGroup>
                                     </span>
                                 </Label>
@@ -450,9 +420,7 @@ const JournalVoucherCreateUpdateForm = ({
                                         Company{' '}
                                         <span>
                                             <KbdGroup>
-                                                <Kbd>Alt</Kbd>
-                                                <span>+</span>
-                                                <Kbd>4</Kbd>
+                                                <Kbd>Alt + 4</Kbd>
                                             </KbdGroup>
                                         </span>
                                     </Label>
@@ -521,9 +489,7 @@ const JournalVoucherCreateUpdateForm = ({
                                         Reference{' '}
                                         <span>
                                             <KbdGroup>
-                                                <Kbd>Alt</Kbd>
-                                                <span>+</span>
-                                                <Kbd>6</Kbd>
+                                                <Kbd>Alt + 5</Kbd>
                                             </KbdGroup>
                                         </span>
                                     </Label>
@@ -555,9 +521,7 @@ const JournalVoucherCreateUpdateForm = ({
                                         <span className="ml-1 text-xs font-medium text-muted-foreground">
                                             others
                                             <KbdGroup>
-                                                <Kbd>Alt</Kbd>
-                                                <span>+</span>
-                                                <Kbd>w</Kbd>
+                                                <Kbd>Alt + W</Kbd>
                                             </KbdGroup>
                                         </span>
                                         <ChevronDownIcon
@@ -580,9 +544,7 @@ const JournalVoucherCreateUpdateForm = ({
                                             Currency *{' '}
                                             <span>
                                                 <KbdGroup>
-                                                    <Kbd>Alt</Kbd>
-                                                    <span>+</span>
-                                                    <Kbd>E</Kbd>
+                                                    <Kbd>Alt + E</Kbd>
                                                 </KbdGroup>
                                             </span>
                                         </Label>
@@ -625,7 +587,7 @@ const JournalVoucherCreateUpdateForm = ({
                                     defaultMemberProfile={defaultMemberProfile}
                                     form={form}
                                     journalVoucherId={journalVoucherId ?? ''}
-                                    mode={defaultMode}
+                                    mode={mode}
                                     ref={field.ref}
                                     transactionBatchId={data?.id}
                                 />
@@ -662,7 +624,7 @@ const JournalVoucherCreateUpdateForm = ({
                                     ? new Date(defaultValues.date).toISOString()
                                     : undefined,
                             })
-                            resetUpdate()
+                            // resetUpdate()
                         } else {
                             form.reset()
                             resetCreate()

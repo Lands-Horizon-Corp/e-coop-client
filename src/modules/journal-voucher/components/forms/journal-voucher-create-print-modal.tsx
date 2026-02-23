@@ -221,7 +221,7 @@ export const JournalVoucherPrintFormModal = ({
 }) => {
     return (
         <Modal
-            className={cn('!max-w-lg', className)}
+            className={cn('max-w-lg!', className)}
             description={description}
             title={title}
             {...props}

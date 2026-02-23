@@ -354,7 +354,7 @@ export const JournalEntryTable = ({
                         disabled={isReadOnlyMode}
                         onClick={handleAddRow}
                         size="sm"
-                        tabIndex={0}
+                        tabIndex={-1}
                         type="button"
                     >
                         Add <PlusIcon className="inline" />

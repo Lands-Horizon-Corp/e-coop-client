@@ -13,6 +13,7 @@ import {
 
 import { TAPIQueryOptions, TEntityId } from '@/types'
 
+import { createMutationInvalidateFn } from '../../providers/repositories/mutation-factory'
 import type {
     ICashCheckVoucher,
     ICashCheckVoucherPaginated,
@@ -61,6 +62,27 @@ export const {
     useDeleteById: useDeleteCashCheckVoucherById,
     useDeleteMany: useDeleteManyCashCheckVoucher,
 } = apiCrudHooks
+
+// use-create-update-cash-check-voucher.ts
+export const useCreateUpdateCashCheckVoucher = createMutationFactory<
+    ICashCheckVoucher,
+    Error,
+    { payload: ICashCheckVoucherRequest; id?: TEntityId }
+>({
+    mutationFn: async ({ payload, id }) => {
+        if (!id) {
+            return await createCashCheckVoucher({ payload })
+        }
+        return await updateCashCheckVoucherById({
+            id,
+            payload,
+        })
+    },
+    invalidationFn: (args) => {
+        updateMutationInvalidationFn(cashCheckVoucherBaseKey, args)
+        createMutationInvalidateFn(cashCheckVoucherBaseKey, args)
+    },
+})
 
 export const useGetAllCashCheckVoucher = ({
     mode,
