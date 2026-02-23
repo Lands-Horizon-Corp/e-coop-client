@@ -296,7 +296,7 @@ const JournalVoucherCreateUpdateForm = ({
                             control={form.control}
                             label={
                                 <Label className="text-xs font-medium text-muted-foreground">
-                                    Amount{' '}
+                                    Name{' '}
                                     <span>
                                         <KbdGroup>
                                             <Kbd>Alt + 1</Kbd>
