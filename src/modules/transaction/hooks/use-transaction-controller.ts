@@ -71,7 +71,7 @@ export const useTransactionController = ({
     const form = useForm<TTransactionFormSchema>({
         resolver: standardSchemaResolver(TransactionFromSchema),
         defaultValues: {
-            reference_number: '',
+            reference_number: finalPaymentOR,
         },
     })
 
