@@ -20,6 +20,7 @@ import { Separator } from '@/components/ui/separator'
 export interface IModalClassNames extends DialogExtraProps, IClassProps {
     titleClassName?: string
     descriptionClassName?: string
+    titleHeaderContainerClassName?: string
 }
 export interface IModalProps
     extends IBaseProps, DialogPrimitive.DialogProps, IModalClassNames {
@@ -40,6 +41,7 @@ const Modal = ({
     showCloseButton,
     closeButtonClassName,
     descriptionClassName,
+    titleHeaderContainerClassName,
     ...other
 }: IModalProps) => {
     return (
@@ -59,7 +61,8 @@ const Modal = ({
                 <div
                     className={cn(
                         'space-y-2',
-                        !title && !description && 'hidden'
+                        !title && !description && 'hidden',
+                        titleHeaderContainerClassName
                     )}
                 >
                     <DialogTitle className={cn('font-medium', titleClassName)}>

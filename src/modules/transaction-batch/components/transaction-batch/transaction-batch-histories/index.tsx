@@ -228,7 +228,7 @@ export const TransactionBatchHistoriesModal = ({
             className={cn('flex !max-w-[95vw] px-0 pb-4 pt-0', className)}
             closeButtonClassName="top-2 right-2"
             title={title}
-            titleClassName="hidden"
+            titleHeaderContainerClassName="sr-only"
         >
             <TransactionBatchHistories {...transactionBatchHistoryProps} />
         </Modal>
