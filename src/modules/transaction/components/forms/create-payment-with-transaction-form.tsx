@@ -86,6 +86,8 @@ const PaymentWithTransactionForm = ({
     } = useTransactionContext()
 
     const { onOpenReverseRequestAction } = modalTransactionReverseState
+    const { onOpen } = usePaymentOnSuccessStore()
+    const { hasNoTransactionBatch } = useTransactionBatchStore()
 
     const [focusTypePayment, _] = useState<TPaymentMode>('payment')
 
@@ -128,8 +130,6 @@ const PaymentWithTransactionForm = ({
                 settings_payment_type_default_value_id || undefined,
         })
     }
-
-    const { onOpen } = usePaymentOnSuccessStore()
 
     const {
         mutate: creatTransactionDeposit,
@@ -282,7 +282,6 @@ const PaymentWithTransactionForm = ({
     )
 
     const errorMessage = serverRequestErrExtractor({ error })
-    const { hasNoTransactionBatch } = useTransactionBatchStore()
 
     useEffect(() => {
         if (memberProfileId || selectedAccountFromTable) {
@@ -296,8 +295,6 @@ const PaymentWithTransactionForm = ({
         selectedAccountFromTable,
         history.open,
     ])
-
-    if (!memberProfileId) return
 
     return (
         <Card

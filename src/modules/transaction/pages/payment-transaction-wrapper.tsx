@@ -44,8 +44,7 @@ const PaymentTransactionWrapper = () => {
                     </main>
                 </div>
             </PageContainer>
-
-            <PaymentWithTransactionForm />
+            {selectedMemberId && <PaymentWithTransactionForm />}
         </>
     )
 }

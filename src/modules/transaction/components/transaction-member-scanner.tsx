@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react'
+import { useState } from 'react'
 
 import { toast } from 'sonner'
 
@@ -14,18 +14,15 @@ import { useHotkeys } from 'react-hotkeys-hook'
 
 import { EyeIcon } from '@/components/icons'
 import QrCodeScanner from '@/components/qrcode-scanner'
-import LoadingSpinner from '@/components/spinners/loading-spinner'
 import { Button } from '@/components/ui/button'
 import FormErrorMessage from '@/components/ui/form-error-message'
 import { Kbd } from '@/components/ui/kbd'
-
-import { useQeueryHookCallback } from '@/hooks/use-query-hook-cb'
+import { Skeleton } from '@/components/ui/skeleton'
 
 import { IBaseProps } from '@/types'
 
-import { IMemberProfile } from '../../member-profile'
 import MemberPicker from '../../member-profile/components/member-picker'
-import { useGetMemberProfileById } from '../../member-profile/member-profile.service'
+import { useGetMemberProfile } from '../../member-profile/member-profile.service'
 import { useTransactionContext } from '../context/transaction-context'
 
 interface MemberQrScannerProps extends IBaseProps {}
@@ -43,34 +40,21 @@ const TransactionMemberScanner = ({ className }: MemberQrScannerProps) => {
         handlers: { resetTransaction },
     } = useTransactionContext()
 
-    const focusedId = form.getValues('decoded_member_profile_id') ?? ''
     const {
-        data,
-        isPending,
-        isError,
+        mutate: getMemberProfile,
+        isPending: isLoadingMember,
         error: rawError,
-        isSuccess,
-    } = useGetMemberProfileById({
-        id: focusedId,
+    } = useGetMemberProfile({
         options: {
-            enabled: focusedId !== undefined && focusedId !== null,
+            onSuccess: (data) => {
+                form.setValue('member_profile', data)
+                form.setValue('member_profile_id', data.id)
+            },
+            onError: (error) => {
+                const errorMessage = serverRequestErrExtractor({ error })
+                toast.error(errorMessage || 'Failed to fetch member profile')
+            },
         },
-    })
-
-    const handleSuccess = useCallback(
-        (data: IMemberProfile) => {
-            form.setValue('member_profile', data)
-            form.setValue('member_profile_id', data.id)
-        },
-        [form]
-    )
-
-    useQeueryHookCallback({
-        data,
-        onSuccess: handleSuccess,
-        error: rawError,
-        isError,
-        isSuccess,
     })
 
     const error = serverRequestErrExtractor({ error: rawError })
@@ -81,6 +65,9 @@ const TransactionMemberScanner = ({ className }: MemberQrScannerProps) => {
             setStartScan((start) => !start)
         }
     })
+
+    const hasMember = !!selectedMember && !!selectedMemberId
+    const showEmptyState = !isLoadingMember && !hasMember
 
     return (
         <div
@@ -99,19 +86,17 @@ const TransactionMemberScanner = ({ className }: MemberQrScannerProps) => {
                 placeholder="Select Member"
                 triggerClassName="hidden"
             />
+
             {/* Left: Scanner Column */}
-            {!selectedMemberId && (
+            {!hasMember && (
                 <div className="flex flex-col justify-center items-center">
                     <div className="w-full flex justify-center">
                         <div
                             className={cn(
-                                '',
-                                startScan && !selectedMemberId
-                                    ? 'size-48'
-                                    : 'p-4'
+                                startScan && !hasMember ? 'size-48' : 'p-4'
                             )}
                         >
-                            {startScan && !selectedMemberId ? (
+                            {startScan && !hasMember ? (
                                 <QrCodeScanner<IQRMemberProfileDecodedResult>
                                     allowMultiple
                                     onSuccessDecode={(data) => {
@@ -120,22 +105,21 @@ const TransactionMemberScanner = ({ className }: MemberQrScannerProps) => {
                                                 'Invalid QR. Please use a valid Member Profile QR'
                                             )
                                         }
-                                        form.setValue(
-                                            'decoded_member_profile_id',
+                                        getMemberProfile(
                                             data.data.member_profile_id
                                         )
                                     }}
                                 />
                             ) : (
                                 <div className="flex flex-col size-40 aspect-square items-center justify-center text-center gap-y-2">
-                                    <ScanLineIcon className=" text-muted-foreground/70 size-[40%]" />
+                                    <ScanLineIcon className="text-muted-foreground/70 size-[40%]" />
                                     <Button
                                         disabled={
                                             !!transactionId ||
                                             !!selectedMemberId
                                         }
                                         onClick={() =>
-                                            setStartScan((start) => !start)
+                                            setStartScan((prev) => !prev)
                                         }
                                         size="sm"
                                     >
@@ -151,27 +135,16 @@ const TransactionMemberScanner = ({ className }: MemberQrScannerProps) => {
                     </div>
                 </div>
             )}
-            {!selectedMemberId && (
-                <TransactionViewNoMemberSelected
-                    className="min-h-54"
-                    disabledSelectTrigger={!!transactionId}
-                    onClick={(e) => {
-                        e.preventDefault()
-                        memberScanner.onOpenChange(true)
-                    }}
-                />
-            )}
 
             {/* Right: Content Column */}
-            <div className="flex flex-col flex-1">
-                {isPending && focusedId !== undefined && (
-                    <p className="text-muted-foreground/70 flex items-center">
-                        <LoadingSpinner className="mr-2 h-4 w-4" />
-                        Loading member profile
-                    </p>
+            <div className="flex flex-col flex-1 ">
+                {isLoadingMember && <MemberProfileSkeleton />}
+
+                {!isLoadingMember && error && (
+                    <FormErrorMessage errorMessage={error} />
                 )}
-                {error && <FormErrorMessage errorMessage={error} />}
-                {selectedMember && selectedMemberId && (
+
+                {hasMember && !isLoadingMember && (
                     <div className="h-full">
                         <TransactionMemberProfile
                             allowRemoveButton
@@ -190,6 +163,33 @@ const TransactionMemberScanner = ({ className }: MemberQrScannerProps) => {
                         />
                     </div>
                 )}
+
+                {/* 4️⃣ Empty State */}
+                {showEmptyState && (
+                    <TransactionViewNoMemberSelected
+                        className="min-h-54"
+                        disabledSelectTrigger={!!transactionId}
+                        onClick={(e) => {
+                            e.preventDefault()
+                            memberScanner.onOpenChange(true)
+                        }}
+                    />
+                )}
+            </div>
+        </div>
+    )
+}
+
+const MemberProfileSkeleton = () => {
+    return (
+        <div className="space-y-4 p-4 flex w-full h-full items-center justify-center ">
+            <div className="w-full inline-flex items-start justify-center rounded-2xl bg-card p-5">
+                <Skeleton className=" size-20 rounded-xl" />
+                <div className=" w-full flex flex-col items-start justify-between gap-y-3 ml-4">
+                    <Skeleton className="h-4 w-full rounded-xl" />
+                    <Skeleton className="h-4 w-3/4 rounded-xl" />
+                    <Skeleton className="h-4 w-1/2 rounded-xl" />
+                </div>
             </div>
         </div>
     )

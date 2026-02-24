@@ -1,13 +1,12 @@
 import { useCallback, useEffect } from 'react'
 
 import { useNavigate } from '@tanstack/react-router'
-import { useForm } from 'react-hook-form'
+import { useForm, useWatch } from 'react-hook-form'
 import { toast } from 'sonner'
 
 import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
 
 import { useAuthUserWithOrgBranch } from '@/modules/authentication/authgentication.store'
-import { IGeneralLedger } from '@/modules/general-ledger'
 import {
     TTransactionFormSchema,
     TransactionFromSchema,
@@ -89,9 +88,18 @@ export const useTransactionController = ({
         [user_organization, form, finalPaymentOR]
     )
 
-    const selectedMember = form.getValues('member_profile')
-    const selectedMemberId = form.getValues('member_profile_id')
-
+    const selectedMember = useWatch({
+        control: form.control,
+        name: 'member_profile',
+    })
+    const selectedMemberId = useWatch({
+        control: form.control,
+        name: 'member_profile_id',
+    })
+    const generalLedger = useWatch({
+        control: form.control,
+        name: 'general_ledger',
+    })
     const resetTransaction = useCallback(() => {
         navigate.clear()
         form.reset({
@@ -187,7 +195,7 @@ export const useTransactionController = ({
         isLoadingTransaction,
 
         form,
-        generalLedger: form.getValues('general_ledger') as IGeneralLedger,
+        generalLedger,
 
         selectedMember,
         selectedMemberId,

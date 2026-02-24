@@ -314,4 +314,22 @@ export const useUnlinkMemberProfileMemberType = createMutationFactory<
     },
 })
 
+export const useGetMemberProfile = createMutationFactory<
+    IMemberProfile,
+    Error,
+    TEntityId
+>({
+    mutationFn: async (id) => {
+        const response = await API.get<IMemberProfile>(
+            `${memberProfileAPIRoute}/${id}`
+        )
+        return response.data
+    },
+    invalidationFn: (args) => {
+        args.queryClient.invalidateQueries({
+            queryKey: [memberProfileBaseKey, 'by-id', args.variables],
+        })
+    },
+})
+
 export const logger = Logger.getInstance('member-profile')
