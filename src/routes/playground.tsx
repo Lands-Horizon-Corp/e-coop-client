@@ -3,7 +3,8 @@ import { createFileRoute } from '@tanstack/react-router'
 import { useSubscribe } from '@/hooks/use-pubsub'
 
 function RouteComponent() {
-    useSubscribe('test', 'client-test', (data) => console.log('shit', data))
+    console.log('Helo')
+    useSubscribe('test', 'client-test', (data) => console.log(data))
 
     return (
         <div style={{ padding: '20px', fontFamily: 'sans-serif' }}>

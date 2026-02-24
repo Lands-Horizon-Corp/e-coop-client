@@ -592,7 +592,7 @@ const LoanTransactionCreateUpdateForm = ({
                                                     <p className="text-center text-muted-foreground/80 text-xs">
                                                         select member or press
                                                         'CTRL + Enter' to show
-                                                        picker | or press 'Shit
+                                                        picker | or press 'Shift
                                                         + S' to scan QR Code
                                                     </p>
                                                 </button>
