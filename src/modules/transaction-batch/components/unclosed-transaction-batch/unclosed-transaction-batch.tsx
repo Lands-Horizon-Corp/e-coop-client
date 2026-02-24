@@ -16,6 +16,7 @@ import {
     SwitchArrowIcon,
 } from '@/components/icons'
 import LoadingSpinner from '@/components/spinners/loading-spinner'
+import ActionTooltip from '@/components/tooltips/action-tooltip'
 import { Button } from '@/components/ui/button'
 import { Skeleton } from '@/components/ui/skeleton'
 
@@ -131,9 +132,16 @@ const UnclosedBatchItem = ({
     const { mutateAsync: timeMachineAsync } = useSetTimeMachine()
 
     const hasPassed = isPast(new Date(batch.created_at))
+    const isToday = batch.is_today
 
     return (
-        <div className="group flex items-center justify-between relative gap-3 rounded-lg border border-border bg-card p-3 transition-colors hover:bg-accent">
+        <div
+            className={cn(
+                'group flex items-center justify-between relative gap-3 rounded-lg border border-border bg-card p-3 transition-colors hover:bg-accent',
+                !isToday &&
+                    'bg-linear-to-tl from-destructive/20 to-transparent border-destructive'
+            )}
+        >
             <div className="flex-1 min-w-0 space-y-1">
                 <div className="items-center w-full">
                     <p className="text-xs font-semibold">{batch.batch_name}</p>
@@ -162,41 +170,59 @@ const UnclosedBatchItem = ({
                 </div>
             </div>
             {!isCurrent && (
-                <Button
-                    className="shrink-0 size-fit p-1.5 hover:text-primary cursor-pointer text-muted-foreground"
-                    disabled={isSwitching || disableSwitch || isCurrent}
-                    onClick={() =>
-                        toast.promise(
-                            (async () => {
-                                onLoading?.(true)
-                                await batchSwitchAsync(batch.id)
-
-                                if (batch.created_at && hasPassed) {
-                                    const timeValue = formatISO(
-                                        new Date(batch.created_at)
-                                    )
-                                    await timeMachineAsync({
-                                        time_machine_time: timeValue,
-                                    })
-                                }
-                            })(),
-                            {
-                                loading: 'Switching...',
-                                success: () => {
-                                    onSwitch?.(batch.id)
-                                    return `Switched to transaction batch '${batch.batch_name}'`
-                                },
-                                error: 'Failed to switch',
-                                finally: () => onLoading?.(false),
-                            }
-                        )
+                <ActionTooltip
+                    tooltipContent={
+                        <span>{`Switch to batch ${batch.batch_name}`}</span>
                     }
-                    size="icon"
-                    title={`Switch to batch ${batch.id}`}
-                    variant="secondary"
+                    tooltipContentProps={{
+                        className: 'bg-secondary text-secondary-foreground',
+                    }}
                 >
-                    <SwitchArrowIcon className="size-4" />
-                </Button>
+                    <Button
+                        className={cn(
+                            'shrink-0 size-fit p-1.5 hover:text-primary text-xs cursor-pointer text-muted-foreground',
+                            !isToday &&
+                                'border border-destructive/40 hover:text-destructive'
+                        )}
+                        disabled={isSwitching || disableSwitch || isCurrent}
+                        onClick={() =>
+                            toast.promise(
+                                (async () => {
+                                    onLoading?.(true)
+                                    await batchSwitchAsync(batch.id)
+
+                                    if (batch.created_at && hasPassed) {
+                                        const timeValue = formatISO(
+                                            new Date(batch.created_at)
+                                        )
+                                        await timeMachineAsync({
+                                            time_machine_time: timeValue,
+                                        })
+                                    }
+                                })(),
+                                {
+                                    loading: 'Switching...',
+                                    success: () => {
+                                        onSwitch?.(batch.id)
+                                        return `Switched to transaction batch '${batch.batch_name}'`
+                                    },
+                                    error: 'Failed to switch',
+                                    finally: () => onLoading?.(false),
+                                }
+                            )
+                        }
+                        size="icon"
+                        variant="secondary"
+                    >
+                        <SwitchArrowIcon
+                            className={cn(
+                                'size-4',
+                                !isToday && 'text-destructive animate-pulse'
+                            )}
+                        />{' '}
+                        Switch
+                    </Button>
+                </ActionTooltip>
             )}
         </div>
     )

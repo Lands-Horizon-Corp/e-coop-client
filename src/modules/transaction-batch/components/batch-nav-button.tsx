@@ -150,9 +150,9 @@ const TransactionBatchNavButton = (_props: Props) => {
                 {...modalState}
                 formProps={{
                     defaultValues: {
-                        name: `${user.user_name}'s-batch-${toReadableDateTime(
+                        name: `${user.last_name}-batch-${toReadableDateTime(
                             new Date(),
-                            'MM-dd-yyyy'
+                            'mmddyyyy-hhmmss'
                         )}`.toLowerCase(),
                         branch_id: user_organization.branch_id,
                         organization_id: user_organization.organization_id,
@@ -253,9 +253,9 @@ const TransactionBatchNavButton = (_props: Props) => {
                                 {...modalState}
                                 formProps={{
                                     defaultValues: {
-                                        name: `${user.user_name}'s-batch-${toReadableDateTime(
+                                        name: `${user.last_name}-batch-${toReadableDateTime(
                                             new Date(),
-                                            'MM-dd-yyyy'
+                                            'mmddyyyy-hhmmss'
                                         )}`.toLowerCase(),
                                         branch_id: user_organization.branch_id,
                                         organization_id:
