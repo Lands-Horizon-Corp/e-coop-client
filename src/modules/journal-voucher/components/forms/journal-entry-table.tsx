@@ -21,7 +21,6 @@ import { useHotkeys } from 'react-hotkeys-hook'
 import { PlusIcon, TrashIcon } from '@/components/icons'
 import { Button } from '@/components/ui/button'
 import { CommandShortcut } from '@/components/ui/command'
-import { Kbd } from '@/components/ui/kbd'
 import {
     Table,
     TableBody,
@@ -191,6 +190,17 @@ const columns: ColumnDef<IJournalVoucherEntryRequest>[] = [
                 <CurrencyInput
                     className="text-left w-full! min-w-0!"
                     currency={props.row.original.account?.currency}
+                    onKeyDown={(e) => {
+                        if (e.key === 'Tab') {
+                            if (
+                                rowIndex ===
+                                form.watch('journal_voucher_entries').length - 1
+                            ) {
+                                e.preventDefault()
+                                meta.handleAddRow()
+                            }
+                        }
+                    }}
                     onValueChange={(newValue) => {
                         const numValue =
                             typeof newValue === 'string'
@@ -252,6 +262,8 @@ type JournalEntryTableMeta = {
     handleDeleteRow: (index: number) => void
     defaultCurrency?: ICurrency
     form: UseFormReturn<TJournalVoucherSchema>
+    handleFocus: (fieldName: string | null) => void
+    handleAddRow: () => void
 }
 
 export const JournalEntryTable = ({
@@ -295,25 +307,20 @@ export const JournalEntryTable = ({
         [isReadOnlyMode, form, isUpdateMode, removeEntry, addRemoveId]
     )
 
-    const handleAddRow = useCallback(
-        (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-            e.preventDefault()
+    const handleAddRow = useCallback(() => {
+        if (isReadOnlyMode) return
 
-            if (isReadOnlyMode) return
+        const newRow: IJournalVoucherEntryRequest = {
+            debit: '' as unknown as number,
+            credit: '' as unknown as number,
+            member_profile_id: defaultMemberProfile?.id,
+            member_profile: defaultMemberProfile,
+            account_id: '' as TEntityId,
+            transaction_batch_id: transactionBatchId ?? undefined,
+        }
 
-            const newRow: IJournalVoucherEntryRequest = {
-                debit: '' as unknown as number,
-                credit: '' as unknown as number,
-                member_profile_id: defaultMemberProfile?.id,
-                member_profile: defaultMemberProfile,
-                account_id: '' as TEntityId,
-                transaction_batch_id: transactionBatchId ?? undefined,
-            }
-
-            addEntry(newRow)
-        },
-        [addEntry, defaultMemberProfile, isReadOnlyMode, transactionBatchId]
-    )
+        addEntry(newRow)
+    }, [addEntry, defaultMemberProfile, isReadOnlyMode, transactionBatchId])
 
     const table = useReactTable<IJournalVoucherEntryRequest>({
         data: watchedJournalEntries || [],
@@ -323,6 +330,7 @@ export const JournalEntryTable = ({
             defaultCurrency: currency,
             handleDeleteRow,
             form,
+            handleAddRow,
         } as JournalEntryTableMeta,
     })
 
@@ -331,9 +339,7 @@ export const JournalEntryTable = ({
         (e) => {
             e.preventDefault()
             if (isReadOnlyMode) return
-            handleAddRow(
-                e as unknown as React.MouseEvent<HTMLButtonElement, MouseEvent>
-            )
+            handleAddRow()
         },
         {
             enabled: !isReadOnlyMode,
@@ -342,17 +348,16 @@ export const JournalEntryTable = ({
 
     return (
         <div className={cn('', className)}>
-            <div className="w-full flex justify-between">
-                <h1 className="text-lg font-semibold">
-                    Journal Entries
-                    <Kbd className="ml-1">Tab</Kbd>
-                </h1>
+            <div className="w-full flex justify-end">
                 <div className="flex py-2 items-center space-x-2">
                     <Button
                         aria-label="Add new journal entry"
                         className="size-fit px-2 py-0.5 text-xs"
                         disabled={isReadOnlyMode}
-                        onClick={handleAddRow}
+                        onClick={(e) => {
+                            e.preventDefault()
+                            handleAddRow()
+                        }}
                         size="sm"
                         tabIndex={-1}
                         type="button"

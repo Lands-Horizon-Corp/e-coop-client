@@ -39,6 +39,7 @@ type CashCheckEntryTableMeta = {
     handleDeleteRow: (index: number) => void
     defaultCurrency?: ICurrency
     form: UseFormReturn<TCashCheckVoucherSchema>
+    handleAddRow: () => void
 }
 
 const columns: ColumnDef<ICashCheckVoucherEntryRequest>[] = [
@@ -85,7 +86,6 @@ const columns: ColumnDef<ICashCheckVoucherEntryRequest>[] = [
             const meta = props.table.options.meta as CashCheckEntryTableMeta
             const form = meta.form
             const rowIndex = props.row.index
-
             return (
                 <MemberPicker
                     allowClear
@@ -197,11 +197,23 @@ const columns: ColumnDef<ICashCheckVoucherEntryRequest>[] = [
             const meta = props.table.options.meta as CashCheckEntryTableMeta
             const form = meta.form
             const rowIndex = props.row.index
-
             return (
                 <CurrencyInput
                     className="text-left w-full! min-w-0!"
                     currency={props.row.original.account?.currency}
+                    onKeyDown={(e) => {
+                        if (e.key === 'Tab') {
+                            if (
+                                rowIndex ===
+                                form.getValues('cash_check_voucher_entries')
+                                    .length -
+                                    1
+                            ) {
+                                e.preventDefault()
+                                meta.handleAddRow()
+                            }
+                        }
+                    }}
                     onValueChange={(newValue) => {
                         const numValue =
                             typeof newValue === 'string'
@@ -235,6 +247,7 @@ const columns: ColumnDef<ICashCheckVoucherEntryRequest>[] = [
                     }}
                     size="icon"
                     variant="ghost"
+                    // tabIndex={-1}
                 >
                     <TrashIcon />
                 </Button>
@@ -299,24 +312,19 @@ export const CashCheckJournalEntryTable = ({
         [isReadOnlyMode, form, isUpdateMode, removeEntry, addRemovedId]
     )
 
-    const handleAddRow = useCallback(
-        (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-            e.preventDefault()
+    const handleAddRow = useCallback(() => {
+        if (isReadOnlyMode) return
 
-            if (isReadOnlyMode) return
+        const newRow: ICashCheckVoucherEntryRequest = {
+            debit: 0,
+            credit: 0,
+            account_id: '' as TEntityId,
+            member_profile_id: defaultMemberProfile?.id,
+            member_profile: defaultMemberProfile,
+        }
 
-            const newRow: ICashCheckVoucherEntryRequest = {
-                debit: 0,
-                credit: 0,
-                account_id: '' as TEntityId,
-                member_profile_id: defaultMemberProfile?.id,
-                member_profile: defaultMemberProfile,
-            }
-
-            addEntry(newRow)
-        },
-        [addEntry, defaultMemberProfile, isReadOnlyMode]
-    )
+        addEntry(newRow)
+    }, [addEntry, defaultMemberProfile, isReadOnlyMode])
 
     const table = useReactTable<ICashCheckVoucherEntryRequest>({
         data: watchedCashCheckEntries || [],
@@ -326,6 +334,7 @@ export const CashCheckJournalEntryTable = ({
             defaultCurrency: cashCheckCurrency,
             handleDeleteRow,
             form,
+            handleAddRow,
         } as CashCheckEntryTableMeta,
     })
 
@@ -334,9 +343,7 @@ export const CashCheckJournalEntryTable = ({
         (e) => {
             e.preventDefault()
             if (isReadOnlyMode) return
-            handleAddRow(
-                e as unknown as React.MouseEvent<HTMLButtonElement, MouseEvent>
-            )
+            handleAddRow()
         },
         {
             enabled: !isReadOnlyMode,
@@ -345,13 +352,16 @@ export const CashCheckJournalEntryTable = ({
 
     return (
         <div className={cn('', className)}>
-            <div className="w-full flex justify-between">
-                <h1 className="text-lg font-semibold">Cash Check Entries</h1>
+            <div className="w-full flex justify-end items-center">
+                {/* <h1 className="text-lg font-semibold">Cash Check Entries</h1> */}
                 <div className="flex py-2 items-center space-x-2">
                     <Button
                         aria-label="Add new cash check entry"
                         className="size-fit px-2 py-0.5 text-xs"
-                        onClick={(e) => handleAddRow(e)}
+                        onClick={(e) => {
+                            e.preventDefault()
+                            handleAddRow()
+                        }}
                         size="sm"
                         tabIndex={-1}
                         type="button"
