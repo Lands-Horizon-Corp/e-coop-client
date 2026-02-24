@@ -27,6 +27,7 @@ import {
     IUserOrganizationPaginated,
     IUserOrganizationPermissionRequest,
     IUserOrganizationSettings,
+    IUserOrganizationTimeMachine,
 } from './user-organization.types'
 
 export const { apiCrudHooks, apiCrudService, baseQueryKey } =
@@ -416,6 +417,35 @@ export const useUpdateUserOrganizationPermission = createMutationFactory<
         // special ocasion since both of them need each other, I hardcoded this here
         // instead of importing employee service base key because it will circular depndency
         updateMutationInvalidationFn('employee', args)
+    },
+})
+
+export const useSetTimeMachine = createMutationFactory<
+    IUserOrganization,
+    Error,
+    IUserOrganizationTimeMachine
+>({
+    mutationFn: async (payload) => {
+        const response = await API.put<
+            IUserOrganizationTimeMachine,
+            IUserOrganization
+        >(`${userOrganizationAPIRoute}/time-machine/`, payload)
+        return response.data
+    },
+    invalidationFn: (args) => {
+        args.queryClient.invalidateQueries({
+            queryKey: ['auth', 'context'],
+        })
+        args.queryClient.invalidateQueries({
+            queryKey: ['transaction-batch'],
+        })
+        args.queryClient.invalidateQueries({
+            queryKey: ['employee', 'paginated'],
+        })
+        args.queryClient.invalidateQueries({
+            queryKey: ['user-organization', args.resultData.id],
+        })
+        updateMutationInvalidationFn('user-organization', args)
     },
 })
 
