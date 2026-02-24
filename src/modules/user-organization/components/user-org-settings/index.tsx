@@ -5,9 +5,9 @@ import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
 import { useAuthUserWithOrg } from '@/modules/authentication/authgentication.store'
 import { useUserOrganizationById } from '@/modules/user-organization'
 
-import LoadingSpinner from '@/components/spinners/loading-spinner'
 import { Button } from '@/components/ui/button'
 import FormErrorMessage from '@/components/ui/form-error-message'
+import { Skeleton } from '@/components/ui/skeleton'
 
 import { useSubscribe } from '@/hooks/use-pubsub'
 
@@ -47,7 +47,80 @@ const UserOrganizationSettings = ({ className }: Props) => {
                     branch
                 </p>
             </div>
-            {isPending && <LoadingSpinner className="mx-auto" />}
+            {isPending && (
+                <div className="w-full mx-auto space-y-6">
+                    <div className="rounded-lg border border-border bg-muted p-5 space-y-4">
+                        <div className="flex items-start gap-3">
+                            <Skeleton className="h-8 w-8 rounded-full shrink-0" />
+                            <div className="space-y-1.5">
+                                <Skeleton className="h-5 w-44" />
+                                <Skeleton className="h-3.5 w-72" />
+                            </div>
+                        </div>
+                        <div className="space-y-1.5">
+                            <Skeleton className="h-3.5 w-20" />
+                            <Skeleton className="h-16 w-full rounded-md" />
+                        </div>
+                        <div className="space-y-1.5">
+                            <Skeleton className="h-3.5 w-12" />
+                            <Skeleton className="h-20 w-full rounded-md" />
+                        </div>
+                    </div>
+
+                    <div className="rounded-lg border border-border bg-muted p-5 space-y-4">
+                        <div className="flex items-start gap-3">
+                            <Skeleton className="h-8 w-8 rounded-full shrink-0" />
+                            <div className="space-y-1.5">
+                                <Skeleton className="h-5 w-32" />
+                                <Skeleton className="h-3.5 w-80" />
+                            </div>
+                        </div>
+                        <div className="flex items-center justify-between">
+                            <Skeleton className="h-3.5 w-28" />
+                            <Skeleton className="h-3.5 w-36" />
+                        </div>
+                        <Skeleton className="h-10 w-full rounded-md" />
+                    </div>
+
+                    <div className="rounded-lg border border-border bg-muted p-5 space-y-4">
+                        <div className="flex items-start gap-3">
+                            <Skeleton className="h-8 w-8 rounded-full shrink-0" />
+                            <div className="space-y-1.5">
+                                <Skeleton className="h-5 w-48" />
+                                <Skeleton className="h-3.5 w-[90%]" />
+                            </div>
+                        </div>
+                        <div className="grid grid-cols-3 gap-4">
+                            <div className="space-y-1.5">
+                                <Skeleton className="h-3.5 w-10" />
+                                <Skeleton className="h-10 w-full rounded-md" />
+                            </div>
+                            <div className="space-y-1.5">
+                                <Skeleton className="h-3.5 w-20" />
+                                <Skeleton className="h-10 w-full rounded-md" />
+                            </div>
+                            <div className="space-y-1.5">
+                                <Skeleton className="h-3.5 w-14" />
+                                <Skeleton className="h-10 w-full rounded-md" />
+                            </div>
+                        </div>
+                        <div className="grid grid-cols-3 gap-4">
+                            <div className="space-y-1.5">
+                                <Skeleton className="h-3.5 w-24" />
+                                <Skeleton className="h-10 w-full rounded-md" />
+                            </div>
+                            <div className="space-y-1.5">
+                                <Skeleton className="h-3.5 w-24" />
+                                <Skeleton className="h-10 w-full rounded-md" />
+                            </div>
+                            <div className="space-y-1.5">
+                                <Skeleton className="h-3.5 w-28" />
+                                <Skeleton className="h-10 w-full rounded-md" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
             {!isPending && userOrganization && (
                 <UserOrgSettingsForm
                     defaultValues={
