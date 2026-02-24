@@ -1,78 +1,61 @@
-import {
-    IS_STAGING,
-    // SOKETI_CLIENT,
-    SOKETI_HOST,
-    SOKETI_KEY,
-    SOKETI_PORT,
-} from '@/constants'
+import { IS_STAGING, SOKETI_HOST, SOKETI_KEY, SOKETI_PORT } from '@/constants'
 import logger from '@/helpers/loggers/logger'
-import PusherJS, { Channel } from 'pusher-js'
+import Pusher, { type Options } from 'pusher-js'
 import { create } from 'zustand'
 
-export interface IPusherConnectOpts {
-    key?: string
-    host?: string
-    port?: number
-    client?: string
-    onConnect?: () => void
-    onError?: (err: unknown) => void
-    onClosed?: () => void
+interface PusherState {
+    pusher: Pusher | null
+    isConnected: boolean
+    error: string | null
+    initPusher: () => void
+    disconnect: () => void
 }
 
-interface IPusherState {
-    channel: Channel | null
-    connect: (opts?: IPusherConnectOpts) => void
+const DEFAULT_OPTIONS: Options = {
+    wsHost: SOKETI_HOST,
+    wsPort: SOKETI_PORT,
+    forceTLS: IS_STAGING,
+    disableStats: true,
+    enabledTransports: ['ws', 'wss'],
+    cluster: 'mt1',
 }
 
-export const usePusherStore = create<IPusherState>((set, get) => ({
-    channel: null,
+export const usePusherStore = create<PusherState>((set, get) => ({
+    pusher: null,
+    isConnected: false,
+    error: null,
 
-    connect: ({
-        key = SOKETI_KEY!,
-        host = SOKETI_HOST,
-        port = SOKETI_PORT,
-        onConnect,
-        onError,
-        onClosed,
-    } = {}) => {
-        if (get().channel) {
-            logger.warn('📡: already connected to Pusher, reusing.')
-            onConnect?.()
-            return
-        }
+    initPusher: () => {
+        if (get().pusher) return
 
-        try {
-            const pusher = new PusherJS(key, {
-                cluster: '',
-                wsHost: host,
-                wsPort: port,
-                forceTLS: IS_STAGING,
-                disableStats: true,
-                enabledTransports: ['ws', 'wss'],
-            })
+        const pusher = new Pusher(SOKETI_KEY, DEFAULT_OPTIONS)
 
-            // Connection state events
-            pusher.connection.bind('connected', () => {
-                logger.info('📡🛰️: Pusher connected.')
-                onConnect?.()
-            })
+        pusher.connection.bind('connected', () => {
+            logger.info('📡🛰️: Soketi connected.')
+            set({ isConnected: true, error: null })
+        })
 
-            pusher.connection.bind('error', (err: any) => {
-                logger.error('📡❌🛰️: Pusher connection error:', err)
-                onError?.(err)
-            })
+        pusher.connection.bind('error', (err: any) => {
+            const msg =
+                err?.error?.data?.code === 4004
+                    ? 'App not found'
+                    : 'Connection Refused'
+            logger.error('📡❌: Soketi error:', msg)
+            set({ error: msg, isConnected: false })
+        })
 
-            pusher.connection.bind('disconnected', () => {
-                logger.warn('📡💤🛰️: Pusher disconnected.')
-                onClosed?.()
-                set({ channel: null })
-            })
+        pusher.connection.bind('disconnected', () => {
+            set({ isConnected: false })
+        })
 
-            // set({ channel: pusher.subscribe(SOKETI_CLIENT) })
-        } catch (error) {
-            logger.error('📡🔥🛰️: Failed to connect to Pusher:', error)
-            onError?.(error)
-            throw error
+        set({ pusher })
+    },
+
+    disconnect: () => {
+        const { pusher } = get()
+        if (pusher) {
+            pusher.disconnect()
+            set({ pusher: null, isConnected: false })
         }
     },
 }))

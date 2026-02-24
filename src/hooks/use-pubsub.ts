@@ -1,42 +1,39 @@
 import { useEffect } from 'react'
 
 import { useLiveMonitoringStore } from '@/store/live-monitoring-store'
-import {
-    type IPusherConnectOpts,
-    usePusherStore,
-} from '@/store/nats-pubsub-store'
+import { usePusherStore } from '@/store/nats-pubsub-store'
 
-export const usePusherConnect = (opts?: IPusherConnectOpts) => {
-    const connect = usePusherStore((state) => state.connect)
-
+export const usePusherConnect = () => {
+    const initPusher = usePusherStore((state) => state.initPusher)
     useEffect(() => {
-        connect(opts)
-    }, [opts, connect])
+        initPusher()
+    }, [initPusher])
 }
 
 export const useSubscribe = <T = unknown>(
-    subject: string,
-    onReceive?: (data: T) => void
+    channelName: string,
+    eventName: string,
+    onReceive: (data: T) => void
 ) => {
-    const connection = usePusherStore((state) => state.channel)
+    const pusher = usePusherStore((state) => state.pusher)
     const isLiveEnabled = useLiveMonitoringStore((state) => state.isLiveEnabled)
 
     useEffect(() => {
-        if (
-            !connection ||
-            !isLiveEnabled ||
-            subject.includes('undefined') ||
-            subject.includes('null') ||
-            subject === undefined ||
-            subject === null
-        ) {
+        if (!pusher || !isLiveEnabled || !channelName || !eventName) return
+        if (channelName.includes('undefined') || channelName.includes('null'))
             return
-        }
 
-        connection.bind(subject, (data: T) => {
-            onReceive?.(data)
+        const channel = pusher.subscribe(channelName)
+
+        channel.bind(eventName, (incoming: { data: T; success: unknown }) => {
+            const data =
+                incoming?.success !== undefined ? incoming.data : incoming
+            onReceive(data as T)
         })
 
-        return () => {}
-    }, [connection, subject, onReceive, isLiveEnabled])
+        return () => {
+            channel.unbind(eventName)
+            pusher.unsubscribe(channelName)
+        }
+    }, [pusher, channelName, eventName, onReceive, isLiveEnabled])
 }
