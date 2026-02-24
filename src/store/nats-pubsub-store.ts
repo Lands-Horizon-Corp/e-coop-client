@@ -1,6 +1,6 @@
 import {
     IS_STAGING,
-    SOKETI_CLIENT,
+    // SOKETI_CLIENT,
     SOKETI_HOST,
     SOKETI_KEY,
     SOKETI_PORT,
@@ -68,7 +68,7 @@ export const usePusherStore = create<IPusherState>((set, get) => ({
                 set({ channel: null })
             })
 
-            set({ channel: pusher.subscribe(SOKETI_CLIENT) })
+            // set({ channel: pusher.subscribe(SOKETI_CLIENT) })
         } catch (error) {
             logger.error('📡🔥🛰️: Failed to connect to Pusher:', error)
             onError?.(error)
