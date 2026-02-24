@@ -290,7 +290,6 @@ const JournalVoucherCreateUpdateForm = ({
                                 className="size-fit px-2 py-0.5 mr-1 text-xs"
                                 size="sm"
                                 tabIndex={-1}
-                                type="button"
                                 variant={'ghost'}
                             >
                                 Submit{' '}
@@ -310,6 +309,12 @@ const JournalVoucherCreateUpdateForm = ({
                                             <Button
                                                 className="px-1"
                                                 variant="secondary"
+                                                onClick={(e) => {
+                                                    e.preventDefault()
+                                                    popOverState.onOpenChange(
+                                                        !popOverState.open
+                                                    )
+                                                }}
                                             >
                                                 <GearIcon className="size-4" />
                                             </Button>

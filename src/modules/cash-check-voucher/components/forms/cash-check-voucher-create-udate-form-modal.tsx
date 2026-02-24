@@ -301,7 +301,9 @@ const CashCheckVoucherCreateUpdateForm = ({
                             className="size-fit px-2 py-0.5 mr-1 text-xs"
                             size="sm"
                             tabIndex={-1}
-                            type="button"
+                            onClick={(e) => {
+                                e.preventDefault()
+                            }}
                             variant={'ghost'}
                         >
                             Submit{' '}
@@ -325,6 +327,12 @@ const CashCheckVoucherCreateUpdateForm = ({
                                         <Button
                                             className="px-1"
                                             variant="secondary"
+                                            onClick={(e) => {
+                                                e.preventDefault()
+                                                popOverState.onOpenChange(
+                                                    !popOverState.open
+                                                )
+                                            }}
                                         >
                                             <GearIcon className="size-4" />
                                         </Button>
