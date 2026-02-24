@@ -24,19 +24,19 @@ const AreaPage = () => {
 
     const queryClient = useQueryClient()
 
-    useSubscribe(`area.created.branch.${branch_id}`, () => {
+    useSubscribe('area', `created.branch.${branch_id}`, () => {
         queryClient.invalidateQueries({
             queryKey: ['area', 'paginated'],
         })
     })
 
-    useSubscribe(`area.updated.branch.${branch_id}`, () => {
+    useSubscribe('area', `updated.branch.${branch_id}`, () => {
         queryClient.invalidateQueries({
             queryKey: ['area', 'paginated'],
         })
     })
 
-    useSubscribe(`area.deleted.branch.${branch_id}`, () => {
+    useSubscribe('area', `deleted.branch.${branch_id}`, () => {
         queryClient.invalidateQueries({
             queryKey: ['area', 'paginated'],
         })

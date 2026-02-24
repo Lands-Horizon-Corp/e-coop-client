@@ -120,11 +120,12 @@ export const GeneratedReportCard = ({
     }, [downloadReport, report.id])
 
     useSubscribe<IGeneratedReport>(
-        `generated_report.update.${report.id}`,
+        'generated_report',
+        `update.${report.id}`,
         () => {}
     )
 
-    useSubscribe<IMedia>(`media.update.${report.media_id}`, (media) => {
+    useSubscribe<IMedia>('media', `update.${report.media_id}`, (media) => {
         if (media.progress) {
             setMediaProgress(media.progress)
         }

@@ -20,19 +20,19 @@ const CompanyPage = () => {
         },
     } = useAuthUserWithOrgBranch()
 
-    useSubscribe(`company.created.branch.${branch_id}`, () =>
+    useSubscribe('company', `created.branch.${branch_id}`, () =>
         queryClient.invalidateQueries({
             queryKey: ['company', 'paginated'],
         })
     )
 
-    useSubscribe(`company.updated.branch.${branch_id}`, () =>
+    useSubscribe('company', `updated.branch.${branch_id}`, () =>
         queryClient.invalidateQueries({
             queryKey: ['company', 'paginated'],
         })
     )
 
-    useSubscribe(`company.deleted.branch.${branch_id}`, () =>
+    useSubscribe('company', `deleted.branch.${branch_id}`, () =>
         queryClient.invalidateQueries({
             queryKey: ['company', 'paginated'],
         })

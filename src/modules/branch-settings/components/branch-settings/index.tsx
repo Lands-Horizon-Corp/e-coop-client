@@ -41,7 +41,7 @@ const BranchSettings = ({ className }: Props) => {
         onSuccess,
     })
 
-    useSubscribe(`branch.update.${user_organization.branch_id}`, () => {
+    useSubscribe('branch', `update.${user_organization.branch_id}`, () => {
         refetch()
     })
 

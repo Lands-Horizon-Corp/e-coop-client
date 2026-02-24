@@ -76,7 +76,8 @@ const TransactionBatchNavButton = (_props: Props) => {
     })
 
     useSubscribe<TTransactionBatchFullorMin>(
-        `transaction_batch.create.${transactionBatch?.id}`,
+        'transaction_batch',
+        `create.${transactionBatch?.id}`,
         (batch) => {
             toast.info('Your current transaction batch has been created.')
             reset()
@@ -85,7 +86,8 @@ const TransactionBatchNavButton = (_props: Props) => {
     )
 
     useSubscribe<TTransactionBatchFullorMin>(
-        `transaction_batch.update.${transactionBatch?.id}`,
+        'transaction_batch',
+        `update.${transactionBatch?.id}`,
         (batch) => {
             if (batch.is_closed) {
                 toast.info('Your current transaction batch has been ended.')
@@ -98,7 +100,8 @@ const TransactionBatchNavButton = (_props: Props) => {
     )
 
     useSubscribe<TTransactionBatchFullorMin>(
-        `transaction_batch.delete.${transactionBatch?.id}`,
+        'transaction_batch',
+        `delete.${transactionBatch?.id}`,
         () => {
             reset()
             toast.info('Your current transaction batch has been deleted.')

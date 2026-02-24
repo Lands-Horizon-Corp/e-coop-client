@@ -23,19 +23,19 @@ const BankPage = () => {
         },
     } = useAuthUserWithOrgBranch()
 
-    useSubscribe(`bank.created.branch.${branch_id}`, () =>
+    useSubscribe('bank', `created.branch.${branch_id}`, () =>
         queryClient.invalidateQueries({
             queryKey: ['bank', 'paginated'],
         })
     )
 
-    useSubscribe(`bills_and_coins.updated.branch.${branch_id}`, () =>
+    useSubscribe('bank', `updated.branch.${branch_id}`, () =>
         queryClient.invalidateQueries({
             queryKey: ['bank', 'paginated'],
         })
     )
 
-    useSubscribe(`bills_and_coins.deleted.branch.${branch_id}`, () =>
+    useSubscribe('bank', `deleted.branch.${branch_id}`, () =>
         queryClient.invalidateQueries({
             queryKey: ['bank', 'paginated'],
         })

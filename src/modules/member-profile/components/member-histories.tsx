@@ -48,7 +48,8 @@ const historyTabs: {
         Component: ({ profileId }) => {
             const queryClient = useQueryClient()
             useSubscribe(
-                `member_occupation_history.create.member_profile.${profileId}`,
+                'member_occupation_history',
+                `create.member_profile.${profileId}`,
                 () =>
                     queryClient.invalidateQueries({
                         queryKey: [
@@ -79,7 +80,8 @@ const historyTabs: {
         Component: ({ profileId }) => {
             const queryClient = useQueryClient()
             useSubscribe(
-                `member_center_history.create.member_profile.${profileId}`,
+                'member_center_history',
+                `create.member_profile.${profileId}`,
                 () =>
                     queryClient.invalidateQueries({
                         queryKey: [
@@ -110,7 +112,8 @@ const historyTabs: {
         Component: ({ profileId }) => {
             const queryClient = useQueryClient()
             useSubscribe(
-                `member_classification_history.create.member_profile.${profileId}`,
+                'member_classification_history',
+                `create.member_profile.${profileId}`,
                 () =>
                     queryClient.invalidateQueries({
                         queryKey: [
@@ -141,7 +144,8 @@ const historyTabs: {
         Component: ({ profileId }) => {
             const queryClient = useQueryClient()
             useSubscribe(
-                `member_department_history.create.member_profile.${profileId}`,
+                'member_department_history',
+                `create.member_profile.${profileId}`,
                 () =>
                     queryClient.invalidateQueries({
                         queryKey: [
@@ -172,7 +176,8 @@ const historyTabs: {
         Component: ({ profileId }) => {
             const queryClient = useQueryClient()
             useSubscribe(
-                `member_type_history.create.member_profile.${profileId}`,
+                'member_type_history',
+                `create.member_profile.${profileId}`,
                 () =>
                     queryClient.invalidateQueries({
                         queryKey: [
@@ -203,7 +208,8 @@ const historyTabs: {
         Component: ({ profileId }) => {
             const queryClient = useQueryClient()
             useSubscribe(
-                `member_group_history.create.member_profile.${profileId}`,
+                'member_group_history',
+                `create.member_profile.${profileId}`,
                 () =>
                     queryClient.invalidateQueries({
                         queryKey: [
@@ -233,7 +239,8 @@ const historyTabs: {
         Component: ({ profileId }) => {
             const queryClient = useQueryClient()
             useSubscribe(
-                `member_gender_history.create.member_profile.${profileId}`,
+                'member_gender_history',
+                `create.member_profile.${profileId}`,
                 () =>
                     queryClient.invalidateQueries({
                         queryKey: [

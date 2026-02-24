@@ -17,19 +17,19 @@ export default function TransactionPage() {
     } = useAuthUserWithOrgBranch()
     const queryClient = useQueryClient()
 
-    useSubscribe(`transaction.create.branch.${branch_id}`, () => {
+    useSubscribe('transaction', `create.branch.${branch_id}`, () => {
         queryClient.invalidateQueries({
             queryKey: ['transaction', 'paginated', 'current-branch'],
         })
     })
 
-    useSubscribe(`transaction.update.branch.${branch_id}`, () => {
+    useSubscribe('transaction', `update.branch.${branch_id}`, () => {
         queryClient.invalidateQueries({
             queryKey: ['transaction', 'paginated', 'current-branch'],
         })
     })
 
-    useSubscribe(`transaction.delete.branch.${branch_id}`, () => {
+    useSubscribe('transaction', `delete.branch.${branch_id}`, () => {
         queryClient.invalidateQueries({
             queryKey: ['transaction', 'paginated', 'current-branch'],
         })

@@ -26,19 +26,19 @@ const MemberCenterPage = () => {
 
     const queryClient = useQueryClient()
 
-    useSubscribe(`member_center.created.branch.${branch_id}`, () => {
+    useSubscribe('member_center', `created.branch.${branch_id}`, () => {
         queryClient.invalidateQueries({
             queryKey: ['member-center', 'paginated'],
         })
     })
 
-    useSubscribe(`member_center.updated.branch.${branch_id}`, () => {
+    useSubscribe('member_center', `updated.branch.${branch_id}`, () => {
         queryClient.invalidateQueries({
             queryKey: ['member-center', 'paginated'],
         })
     })
 
-    useSubscribe(`member_center.deleted.branch.${branch_id}`, () => {
+    useSubscribe('member_center', `deleted.branch.${branch_id}`, () => {
         queryClient.invalidateQueries({
             queryKey: ['member-center', 'paginated'],
         })

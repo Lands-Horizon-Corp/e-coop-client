@@ -17,19 +17,19 @@ const EmployeeFootstepPage = () => {
     } = useAuthUserWithOrgBranch()
     const queryClient = useQueryClient()
 
-    useSubscribe(`footstep.create.branch.${branch_id}`, () => {
+    useSubscribe('footstep', `create.branch.${branch_id}`, () => {
         queryClient.invalidateQueries({
             queryKey: ['footstep', 'paginated', 'branch'],
         })
     })
 
-    useSubscribe(`footstep.update.user.${branch_id}`, () => {
+    useSubscribe('footstep', `update.user.${branch_id}`, () => {
         queryClient.invalidateQueries({
             queryKey: ['footstep', 'paginated', 'branch'],
         })
     })
 
-    useSubscribe(`footstep.delete.user.${branch_id}`, () => {
+    useSubscribe('footstep', `delete.user.${branch_id}`, () => {
         queryClient.invalidateQueries({
             queryKey: ['footstep', 'paginated', 'branch'],
         })

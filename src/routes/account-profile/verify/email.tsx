@@ -23,7 +23,7 @@ function RouteComponent() {
         currentAuth: { user },
     } = useAuthUser()
 
-    useSubscribe<IUserBase>(`user.update.${user.id}`, (newUserData) => {
+    useSubscribe<IUserBase>('user', `update.${user.id}`, (newUserData) => {
         updateCurrentAuth({ user: newUserData })
     })
 

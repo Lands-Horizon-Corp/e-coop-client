@@ -46,7 +46,8 @@ const UserJoinRequestKanban = (_props: Props) => {
     const { data = [], isRefetching, refetch } = useUserOrgJoinRequests()
 
     useSubscribe<IUserOrganization>(
-        `user_organization.create.branch.${branch_id}`,
+        'user_organization',
+        `create.branch.${branch_id}`,
         (newData) => {
             queryClient.setQueryData<IUserOrganization[]>(
                 ['user-organization', 'join-request', 'all'],
@@ -58,7 +59,8 @@ const UserJoinRequestKanban = (_props: Props) => {
     )
 
     useSubscribe<IUserOrganization>(
-        `user_organization.update.branch.${branch_id}`,
+        'user_organization',
+        `update.branch.${branch_id}`,
         () => {
             queryClient.invalidateQueries({
                 queryKey: ['user-organization', 'join-request', 'all'],
@@ -67,7 +69,8 @@ const UserJoinRequestKanban = (_props: Props) => {
     )
 
     useSubscribe<IUserOrganization>(
-        `user_organization.delete.branch.${branch_id}`,
+        'user_organization',
+        `delete.branch.${branch_id}`,
         (deletedData) => {
             queryClient.setQueryData<IUserOrganization[]>(
                 ['user-organization', 'join-request', 'all'],

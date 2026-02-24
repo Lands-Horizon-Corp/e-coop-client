@@ -28,22 +28,31 @@ const GeneratedSavingsInterestPage = () => {
         },
     } = useAuthUserWithOrgBranch()
 
-    useSubscribe(`generated-savings-interest.created.branch.${branch_id}`, () =>
-        queryClient.invalidateQueries({
-            queryKey: ['generated-savings-interest'],
-        })
+    useSubscribe(
+        'generated-savings-interest',
+        `created.branch.${branch_id}`,
+        () =>
+            queryClient.invalidateQueries({
+                queryKey: ['generated-savings-interest'],
+            })
     )
 
-    useSubscribe(`generated-savings-interest.updated.branch.${branch_id}`, () =>
-        queryClient.invalidateQueries({
-            queryKey: ['generated-savings-interest'],
-        })
+    useSubscribe(
+        'generated-savings-interest',
+        `updated.branch.${branch_id}`,
+        () =>
+            queryClient.invalidateQueries({
+                queryKey: ['generated-savings-interest'],
+            })
     )
 
-    useSubscribe(`generated-savings-interest.deleted.branch.${branch_id}`, () =>
-        queryClient.invalidateQueries({
-            queryKey: ['generated-savings-interest'],
-        })
+    useSubscribe(
+        'generated-savings-interest',
+        `deleted.branch.${branch_id}`,
+        () =>
+            queryClient.invalidateQueries({
+                queryKey: ['generated-savings-interest'],
+            })
     )
 
     return (

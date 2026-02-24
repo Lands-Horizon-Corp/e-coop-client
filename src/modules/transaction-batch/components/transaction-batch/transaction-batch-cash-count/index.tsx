@@ -30,7 +30,7 @@ const TransactionBatchCashCount = ({
         refetch: refetchBillsAndCoins,
     } = useGetAllBillsAndCoins()
 
-    useSubscribe(`bills-and-coins.update`, refetchBillsAndCoins)
+    useSubscribe('bills-and-coins', `update`, refetchBillsAndCoins)
 
     const {
         data: cashCounts = [],
@@ -43,7 +43,8 @@ const TransactionBatchCashCount = ({
     })
 
     useSubscribe(
-        `cash-count.transaction-batch.${transactionBatch?.id}.update`,
+        'cash-count',
+        `transaction-batch.${transactionBatch?.id}.update`,
         refetchCashCounts
     )
 

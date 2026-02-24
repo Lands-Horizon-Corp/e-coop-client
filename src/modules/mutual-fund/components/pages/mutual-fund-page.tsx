@@ -31,19 +31,19 @@ const MutualFundPage = () => {
         },
     } = useAuthUserWithOrgBranch()
 
-    useSubscribe(`mutual-fund.created.branch.${branch_id}`, () =>
+    useSubscribe('mutual-fund', `created.branch.${branch_id}`, () =>
         queryClient.invalidateQueries({
             queryKey: ['mutual-fund'],
         })
     )
 
-    useSubscribe(`mutual-fund.updated.branch.${branch_id}`, () =>
+    useSubscribe('mutual-fund', `updated.branch.${branch_id}`, () =>
         queryClient.invalidateQueries({
             queryKey: ['mutual-fund'],
         })
     )
 
-    useSubscribe(`mutual-fund.deleted.branch.${branch_id}`, () =>
+    useSubscribe('mutual-fund', `deleted.branch.${branch_id}`, () =>
         queryClient.invalidateQueries({
             queryKey: ['mutual-fund'],
         })

@@ -18,7 +18,6 @@ import { useTransactionReverseSecurityStore } from '@/store/transaction-reverse-
 import { useHotkeys } from 'react-hotkeys-hook'
 
 import { useModalState } from '@/hooks/use-modal-state'
-import { useSubscribe } from '@/hooks/use-pubsub'
 import { useQeueryHookCallback } from '@/hooks/use-query-hook-cb'
 
 import { TEntityId } from '@/types'
@@ -150,20 +149,6 @@ export const useTransactionController = ({
             member_profile_id: transaction.member_profile_id,
         })
     }, [transaction, form])
-
-    //    Subscriptions (safe)
-    useSubscribe(
-        `member_occupation_history.create.member_profile.${selectedMemberId}`
-    )
-    useSubscribe(
-        `member_occupation_history.update.member_profile.${selectedMemberId}`
-    )
-    useSubscribe(
-        `member_occupation_history.delete.member_profile.${selectedMemberId}`
-    )
-
-    useSubscribe(`transaction.create.${transactionId}`)
-    useSubscribe(`transaction.update.${transactionId}`)
 
     //    Hotkeys
     useHotkeys(

@@ -38,7 +38,7 @@ const LoansPage = () => {
 
     const queryClient = useQueryClient()
 
-    useSubscribe(`loan-transaction.update.branch.${branch_id}`, () => {
+    useSubscribe('loan-transaction', `update.branch.${branch_id}`, () => {
         queryClient.invalidateQueries({ queryKey: ['loan-transaction'] })
     })
 

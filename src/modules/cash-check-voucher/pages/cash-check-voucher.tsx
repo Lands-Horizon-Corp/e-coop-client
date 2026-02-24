@@ -37,40 +37,49 @@ const CashCheckJournalVoucherPage = () => {
         },
     } = useAuthUserWithOrgBranch()
 
-    useSubscribe(`cash_check_voucher.created.branch.${branch_id}`, () =>
+    useSubscribe('cash_check_voucher', `created.branch.${branch_id}`, () =>
         queryClient.invalidateQueries({
             queryKey: ['cash-check-voucher', 'paginated'],
         })
     )
 
-    useSubscribe(`cash_check_voucher.updated.branch.${branch_id}`, () =>
+    useSubscribe('cash_check_voucher', `updated.branch.${branch_id}`, () =>
         queryClient.invalidateQueries({
             queryKey: ['cash-check-voucher', 'paginated'],
         })
     )
 
-    useSubscribe(`cash_check_voucher.deleted.branch.${branch_id}`, () =>
+    useSubscribe('cash_check_voucher', `deleted.branch.${branch_id}`, () =>
         queryClient.invalidateQueries({
             queryKey: ['cash-check-voucher', 'paginated'],
         })
     )
 
-    useSubscribe(`cash_check_voucher_entry.created.branch.${branch_id}`, () =>
-        queryClient.invalidateQueries({
-            queryKey: ['cash-check-voucher', 'paginated'],
-        })
+    useSubscribe(
+        'cash_check_voucher_entry',
+        `created.branch.${branch_id}`,
+        () =>
+            queryClient.invalidateQueries({
+                queryKey: ['cash-check-voucher', 'paginated'],
+            })
     )
 
-    useSubscribe(`cash_check_voucher_entry.updated.branch.${branch_id}`, () =>
-        queryClient.invalidateQueries({
-            queryKey: ['cash-check-voucher', 'paginated'],
-        })
+    useSubscribe(
+        'cash_check_voucher_entry',
+        `updated.branch.${branch_id}`,
+        () =>
+            queryClient.invalidateQueries({
+                queryKey: ['cash-check-voucher', 'paginated'],
+            })
     )
 
-    useSubscribe(`cash_check_voucher_entry.deleted.branch.${branch_id}`, () =>
-        queryClient.invalidateQueries({
-            queryKey: ['cash-check-voucher', 'paginated'],
-        })
+    useSubscribe(
+        'cash_check_voucher_entry',
+        `deleted.branch.${branch_id}`,
+        () =>
+            queryClient.invalidateQueries({
+                queryKey: ['cash-check-voucher', 'paginated'],
+            })
     )
 
     const resolvedOrSettings: TORCashCheckSettings | undefined =
