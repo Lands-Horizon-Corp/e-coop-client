@@ -523,7 +523,7 @@ const PaymentWithTransactionForm = ({
                                                     <KbdGroup>
                                                         <Kbd>Alt</Kbd>
                                                         <span>+</span>
-                                                        <Kbd>1</Kbd>
+                                                        <Kbd>3</Kbd>
                                                     </KbdGroup>
                                                 </span>
                                             </Label>
