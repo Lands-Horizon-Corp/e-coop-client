@@ -426,7 +426,7 @@ export const LoanTransactionPrintWithCheck = z.discriminatedUnion(
 )
 export const LoanTransactionPrintSchema = z
     .object({
-        voucher: z.string(),
+        voucher: z.string().min(1, 'Voucher is required'),
         or_auto_generated: z.boolean().default(false).optional(),
         check_number: z.string().optional(),
         check_date: z
@@ -450,7 +450,7 @@ export const LoanTransactionPrintSchema = z
         { message: 'Check date is required', path: ['check_date'] }
     )
 
-export type LoanTransactionPrintSchema = z.infer<
+export type TLoanTransactionPrintSchema = z.infer<
     typeof LoanTransactionPrintSchema
 >
 

@@ -1,6 +1,7 @@
 import * as React from 'react'
 
 import { cn } from '@/helpers/tw-utils'
+import { currencyFormat } from '@/modules/currency'
 import { Check } from 'lucide-react'
 
 import { ChevronDownIcon } from '@/components/icons'
@@ -152,18 +153,38 @@ const LoanTransactionCombobox = React.forwardRef<HTMLButtonElement, Props>(
                                                         `Loan #${option.id}`}
                                                 </span>
                                                 {option.member_profile && (
-                                                    <span className="text-xs text-muted-foreground">
-                                                        {
-                                                            option
-                                                                .member_profile
-                                                                .first_name
-                                                        }{' '}
-                                                        {
-                                                            option
-                                                                .member_profile
-                                                                .last_name
-                                                        }
-                                                    </span>
+                                                    <>
+                                                        <span className="text-xs text-muted-foreground">
+                                                            {
+                                                                option
+                                                                    .member_profile
+                                                                    .first_name
+                                                            }{' '}
+                                                            {
+                                                                option
+                                                                    .member_profile
+                                                                    .last_name
+                                                            }
+                                                        </span>
+                                                        <span className="text-xs text-muted-foreground">
+                                                            <span className="mr-1">
+                                                                Balance:
+                                                            </span>
+                                                            {currencyFormat(
+                                                                option.balance,
+                                                                {
+                                                                    currency:
+                                                                        option
+                                                                            .account
+                                                                            ?.currency,
+                                                                    showSymbol:
+                                                                        !!option
+                                                                            .account
+                                                                            ?.currency,
+                                                                }
+                                                            )}
+                                                        </span>
+                                                    </>
                                                 )}
                                             </div>
                                             <Check

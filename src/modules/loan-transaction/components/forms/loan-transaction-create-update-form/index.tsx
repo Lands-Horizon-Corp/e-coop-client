@@ -679,6 +679,9 @@ const LoanTransactionCreateUpdateForm = ({
                         >
                             {/* LOAN DETAILS */}
                             <div className="space-y-2 rounded-xl p-4 bg-popover">
+                                {!memberProfile && (
+                                    <FormErrorMessage errorMessage="Select member profile first to enable this section" />
+                                )}
                                 <div className="flex flex-1 items-center gap-3">
                                     {/* <OrField
                                         disabled={isDisabled('voucher')}
@@ -927,9 +930,7 @@ const LoanTransactionCreateUpdateForm = ({
                                         />
                                     </div>
                                 </div>
-                                {!memberProfile && (
-                                    <FormErrorMessage errorMessage="Select member profile first to enable this section" />
-                                )}
+
                                 <fieldset
                                     className="flex-1 space-y-2"
                                     disabled={!memberProfile || isReadOnly}

@@ -3,6 +3,7 @@ import { ILoanTransaction } from '@/modules/loan-transaction/loan-transaction.ty
 
 import { IBaseEntityMeta, IPaginatedResult, TEntityId } from '@/types'
 
+import { IMemberProfile } from '../member-profile'
 import { LOAN_TRANSACTION_ENTRY_TYPE } from './loan-transaction-constant'
 import { TLoanTransactionEntrySchema } from './loan-transaction-entry.validation'
 
@@ -20,6 +21,12 @@ export interface ILoanTransactionEntry extends IBaseEntityMeta {
 
     name: string // incase madelete yung account, nakasurvive yung name
     description: string
+
+    member_profile_id?: TEntityId
+    member_profile?: IMemberProfile
+
+    member_loan_transaction_id?: TEntityId
+    member_loan_transaction?: ILoanTransaction
 
     credit: number
     debit: number

@@ -377,6 +377,12 @@ const LoanEntriesEditor = forwardRef<
                                 onSuccess: (newLoanTransaction) =>
                                     form.reset(newLoanTransaction),
                                 loanTransactionId,
+                                defaultValues: {
+                                    member_profile_id:
+                                        form.getValues('member_profile_id'),
+                                    member_profile:
+                                        form.getValues('member_profile'),
+                                },
                             }}
                         />
                     )}
