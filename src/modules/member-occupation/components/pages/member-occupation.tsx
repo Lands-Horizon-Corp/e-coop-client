@@ -24,19 +24,19 @@ const MemberOccupationPage = () => {
     } = useAuthUserWithOrgBranch()
     const queryClient = useQueryClient()
 
-    useSubscribe('member_occupation', `created.branch.${branch_id}`, () => {
+    useSubscribe('member_occupation', `create.branch.${branch_id}`, () => {
         queryClient.invalidateQueries({
             queryKey: ['member-occupation', 'paginated'],
         })
     })
 
-    useSubscribe('member_occupation', `updated.branch.${branch_id}`, () => {
+    useSubscribe('member_occupation', `update.branch.${branch_id}`, () => {
         queryClient.invalidateQueries({
             queryKey: ['member-occupation', 'paginated'],
         })
     })
 
-    useSubscribe('member_occupation', `deleted.branch.${branch_id}`, () => {
+    useSubscribe('member_occupation', `delete.branch.${branch_id}`, () => {
         queryClient.invalidateQueries({
             queryKey: ['member-occupation', 'paginated'],
         })

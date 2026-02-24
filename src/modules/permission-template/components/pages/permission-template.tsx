@@ -26,19 +26,19 @@ const PermissionTemplatePage = () => {
         },
     } = useAuthUserWithOrgBranch()
 
-    useSubscribe('permission_template', `created.branch.${branch_id}`, () => {
+    useSubscribe('permission_template', `create.branch.${branch_id}`, () => {
         queryClient.invalidateQueries({
             queryKey: ['permission-template', 'paginated'],
         })
     })
 
-    useSubscribe('permission_template', `updated.branch.${branch_id}`, () => {
+    useSubscribe('permission_template', `update.branch.${branch_id}`, () => {
         queryClient.invalidateQueries({
             queryKey: ['permission-template', 'paginated'],
         })
     })
 
-    useSubscribe('permission_template', `deleted.branch.${branch_id}`, () => {
+    useSubscribe('permission_template', `delete.branch.${branch_id}`, () => {
         queryClient.invalidateQueries({
             queryKey: ['permission-template', 'paginated'],
         })

@@ -27,13 +27,13 @@ const MemberAccountingLedgerPage = () => {
         }
     )
 
-    useSubscribe('member_profile', `updated.branch.${branch_id}`, () => {
+    useSubscribe('member_profile', `update.branch.${branch_id}`, () => {
         queryClient.invalidateQueries({
             queryKey: ['member-profile', 'paginated'],
         })
     })
 
-    useSubscribe('member_profile', `deleted.branch.${branch_id}`, () => {
+    useSubscribe('member_profile', `delete.branch.${branch_id}`, () => {
         queryClient.invalidateQueries({
             queryKey: ['member-profile', 'paginated'],
         })

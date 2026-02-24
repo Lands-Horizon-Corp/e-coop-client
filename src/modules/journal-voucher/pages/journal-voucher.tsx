@@ -30,37 +30,37 @@ const JournalVoucherPage = () => {
         },
     } = useAuthUserWithOrgBranch()
 
-    useSubscribe('journal_voucher', `created.branch.${branch_id}`, () =>
+    useSubscribe('journal_voucher', `create.branch.${branch_id}`, () =>
         queryClient.invalidateQueries({
             queryKey: ['journal-voucher', 'paginated'],
         })
     )
 
-    useSubscribe('journal_voucher', `updated.branch.${branch_id}`, () =>
+    useSubscribe('journal_voucher', `update.branch.${branch_id}`, () =>
         queryClient.invalidateQueries({
             queryKey: ['journal-voucher', 'paginated'],
         })
     )
 
-    useSubscribe('journal_voucher', `deleted.branch.${branch_id}`, () =>
+    useSubscribe('journal_voucher', `delete.branch.${branch_id}`, () =>
         queryClient.invalidateQueries({
             queryKey: ['journal-voucher', 'paginated'],
         })
     )
 
-    useSubscribe('journal_voucher_entry', `created.branch.${branch_id}`, () =>
+    useSubscribe('journal_voucher_entry', `create.branch.${branch_id}`, () =>
         queryClient.invalidateQueries({
             queryKey: ['journal-voucher', 'paginated'],
         })
     )
 
-    useSubscribe('journal_voucher_entry', `updated.branch.${branch_id}`, () =>
+    useSubscribe('journal_voucher_entry', `update.branch.${branch_id}`, () =>
         queryClient.invalidateQueries({
             queryKey: ['journal-voucher', 'paginated'],
         })
     )
 
-    useSubscribe('journal_voucher_entry', `deleted.branch.${branch_id}`, () =>
+    useSubscribe('journal_voucher_entry', `delete.branch.${branch_id}`, () =>
         queryClient.invalidateQueries({
             queryKey: ['journal-voucher', 'paginated'],
         })
