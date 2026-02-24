@@ -6,7 +6,7 @@ import { cn } from '@/helpers'
 import { dateAgo, toReadableDateTime } from '@/helpers/date-utils'
 import { currencyFormat } from '@/modules/currency'
 import { useSetTimeMachine } from '@/modules/user-organization'
-import { formatISO, isPast } from 'date-fns'
+import { formatISO } from 'date-fns'
 
 import {
     CalendarNumberIcon,
@@ -131,7 +131,6 @@ const UnclosedBatchItem = ({
 
     const { mutateAsync: timeMachineAsync } = useSetTimeMachine()
 
-    const hasPassed = isPast(new Date(batch.created_at))
     const isToday = batch.is_today
 
     return (
@@ -191,7 +190,7 @@ const UnclosedBatchItem = ({
                                     onLoading?.(true)
                                     await batchSwitchAsync(batch.id)
 
-                                    if (batch.created_at && hasPassed) {
+                                    if (batch.created_at && !isToday) {
                                         const timeValue = formatISO(
                                             new Date(batch.created_at)
                                         )
