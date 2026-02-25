@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from 'react'
 
+import { useQueryClient } from '@tanstack/react-query'
 import { toast } from 'sonner'
 
 import { cn } from '@/helpers'
@@ -10,6 +11,7 @@ import {
 } from '@/modules/authentication/authgentication.store'
 import {
     TTransactionBatchFullorMin,
+    transactionBatchQueryKey,
     useCurrentTransactionBatch,
 } from '@/modules/transaction-batch'
 import { useTransactionBatchStore } from '@/modules/transaction-batch/store/transaction-batch-store'
@@ -42,6 +44,7 @@ interface Props extends IClassProps {}
 const TransactionBatchNavButton = (_props: Props) => {
     const modalState = useModalState()
     const manageBatchModalState = useModalState(false)
+    const queryClient = useQueryClient()
 
     const {
         currentAuth: { user, user_organization },
@@ -75,29 +78,19 @@ const TransactionBatchNavButton = (_props: Props) => {
         onSuccess: handleSuccess,
     })
 
-    useSubscribe<TTransactionBatchFullorMin>(
-        'transaction_batch',
-        `create.${transactionBatch?.id}`,
-        (batch) => {
-            toast.info('Your current transaction batch has been created.')
-            reset()
-            setData(batch)
-        }
-    )
+    useSubscribe('transaction_batch', `create.${transactionBatch?.id}`, () => {
+        toast.info('Your current transaction batch has been created.')
+        queryClient.invalidateQueries({ queryKey: [transactionBatchQueryKey] })
+    })
 
-    useSubscribe<TTransactionBatchFullorMin>(
-        'transaction_batch',
-        `update.${transactionBatch?.id}`,
-        (batch) => {
-            if (batch.is_closed) {
-                toast.info('Your current transaction batch has been ended.')
-                return reset()
-            }
-            toast.info('Your current transaction batch has been updated.')
-            reset()
-            setData(batch)
-        }
-    )
+    useSubscribe('transaction_batch', `update.${transactionBatch?.id}`, () => {
+        queryClient.invalidateQueries({ queryKey: [transactionBatchQueryKey] })
+    })
+
+    useSubscribe('transaction_batch', `end.${transactionBatch?.id}`, () => {
+        toast.info('Your current transaction batch has been ended.')
+        reset()
+    })
 
     useSubscribe<TTransactionBatchFullorMin>(
         'transaction_batch',

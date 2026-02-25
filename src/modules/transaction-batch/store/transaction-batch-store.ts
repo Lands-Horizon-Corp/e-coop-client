@@ -4,11 +4,14 @@ import {
 } from '@/modules/transaction-batch'
 import { create } from 'zustand'
 
-interface ITransactionBatchStore {
+interface ITransactionBatchStoreContent {
     data: ITransactionBatch | ITransactionBatchMinimal | null
     hasNoTransactionBatch: boolean
+}
+
+interface ITransactionBatchStore extends ITransactionBatchStoreContent {
     setData: (data: ITransactionBatch | ITransactionBatchMinimal | null) => void
-    reset: () => void
+    reset: (defautlData?: Partial<ITransactionBatchStoreContent>) => void
 }
 
 export const useTransactionBatchStore = create<ITransactionBatchStore>(
@@ -31,8 +34,8 @@ export const useTransactionBatchStore = create<ITransactionBatchStore>(
             })
         },
 
-        reset: () => {
-            set({ data: null, hasNoTransactionBatch: false })
+        reset: (defaultData) => {
+            set({ data: null, hasNoTransactionBatch: false, ...defaultData })
         },
     })
 )
