@@ -82,14 +82,11 @@ const JournalVoucherCreateUpdateForm = ({
 
     const { data } = useTransactionBatchStore()
 
+    const [isEditMode, setIsEditMode] = useState<boolean>(!!journalVoucherId)
+
     const [defaultMemberProfile, setDefaultMemberProfile] = useState<
         IMemberProfile | undefined
     >(defaultValues?.member_profile)
-
-    const [editJournalId, setEditJournalId] = useState<TEntityId>(
-        journalVoucherId ?? ''
-    )
-    const isUpdate = !!editJournalId
 
     const { setSelectedMember } = useMemberPickerStore()
 
@@ -106,13 +103,13 @@ const JournalVoucherCreateUpdateForm = ({
     })
 
     useEffect(() => {
-        if (editJournalId) return
+        if (isEditMode) return
         form.setValue('journal_voucher_entries', [
             {
                 account_id: '',
             },
         ])
-    }, [editJournalId, mode, form])
+    }, [isEditMode, mode, form])
 
     const {
         mutate: createUpdateJournalVoucher,
@@ -126,7 +123,7 @@ const JournalVoucherCreateUpdateForm = ({
                 onSuccess: (data) => {
                     form.reset(data)
                     formProps.onSuccess?.(data)
-                    setEditJournalId(data.id)
+                    setIsEditMode(true)
                     // setDefaultMode('update')
                     // form.reset(data)
                 },
@@ -269,14 +266,14 @@ const JournalVoucherCreateUpdateForm = ({
             >
                 <fieldset disabled={isPending || formProps.readOnly}>
                     <div className="absolute top-4 right-10 z-10 flex gap-2">
-                        {isUpdate && (
+                        {journalVoucherId && (
                             <JournalVoucherTagsManagerPopover
-                                journalVoucherId={editJournalId}
+                                journalVoucherId={journalVoucherId}
                                 readOnly={isPrinted}
                                 size="sm"
                             />
                         )}
-                        {editJournalId && defaultValues && (
+                        {isEditMode && defaultValues && (
                             <div>
                                 <JournalVoucherStatusIndicator
                                     journalVoucher={
@@ -627,7 +624,7 @@ const JournalVoucherCreateUpdateForm = ({
                     error={error}
                     isLoading={isPending}
                     onReset={() => {
-                        if (isUpdate) {
+                        if (isEditMode) {
                             form.reset({
                                 ...defaultValues,
                                 date: defaultValues?.date
@@ -647,7 +644,7 @@ const JournalVoucherCreateUpdateForm = ({
                     submitText={
                         <div className="inline-flex items-center gap-2">
                             <kbd className="text-xs">
-                                {isUpdate ? 'Update' : 'Create'}
+                                {isEditMode ? 'Update' : 'Create'}
                             </kbd>
                             <CommandShortcut className="bg-accent text-xs min-w-fit size-fit px-2 py-0.5 rounded-sm text-primary">
                                 Ctrl + Enter

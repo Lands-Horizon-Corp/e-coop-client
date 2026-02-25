@@ -94,11 +94,7 @@ const CashCheckVoucherCreateUpdateForm = ({
         IMemberProfile | undefined
     >(defaultValues?.member_profile)
 
-    const [editCashCheckVoucherId, setEditCashCheckVoucherId] =
-        useState<TEntityId>(cashCheckVoucherId ?? '')
-
-    const isUpdate = !!editCashCheckVoucherId
-
+    const [isEditMode, setIsEditMode] = useState<boolean>(!!cashCheckVoucherId)
     const { setSelectedMember } = useMemberPickerStore()
 
     const form = useForm<TCashCheckVoucherFormValues>({
@@ -125,7 +121,7 @@ const CashCheckVoucherCreateUpdateForm = ({
                 textSuccess: 'Cash Check Voucher Created',
                 onSuccess: (data) => {
                     formProps.onSuccess?.(data)
-                    setEditCashCheckVoucherId(data.id)
+                    setIsEditMode(true)
                 },
                 onError: formProps.onError,
             }),
@@ -153,7 +149,7 @@ const CashCheckVoucherCreateUpdateForm = ({
         }
 
         createUpdateCashCheckVoucher({
-            id: editCashCheckVoucherId,
+            id: cashCheckVoucherId,
             payload: {
                 ...payload,
             },
@@ -271,7 +267,7 @@ const CashCheckVoucherCreateUpdateForm = ({
         [popOverState]
     )
     useEffect(() => {
-        if (isUpdate) return
+        if (isEditMode) return
         form.setValue('cash_check_voucher_entries', [
             {
                 account_id: '',
@@ -279,7 +275,7 @@ const CashCheckVoucherCreateUpdateForm = ({
                 credit: 0,
             },
         ])
-    }, [cashCheckVoucherId, isUpdate, form])
+    }, [cashCheckVoucherId, isEditMode, form])
 
     return (
         <Form {...form}>
@@ -664,7 +660,7 @@ const CashCheckVoucherCreateUpdateForm = ({
                     error={error}
                     isLoading={isPending}
                     onReset={() => {
-                        if (isUpdate) {
+                        if (isEditMode) {
                             form.reset({
                                 ...defaultValues,
                             })
@@ -681,7 +677,7 @@ const CashCheckVoucherCreateUpdateForm = ({
                     submitText={
                         <div className="inline-flex items-center gap-2">
                             <kbd className="text-xs">
-                                {isUpdate ? 'Update' : 'Create'}
+                                {isEditMode ? 'Update' : 'Create'}
                             </kbd>
                             <CommandShortcut className="bg-accent text-xs min-w-fit size-fit px-2 py-0.5 rounded-sm text-primary">
                                 Ctrl + Enter

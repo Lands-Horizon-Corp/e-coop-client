@@ -192,15 +192,15 @@ function RouteComponent() {
                                     </div>
                                     <div className="flex items-center gap-1">
                                         <button
-                                            onClick={() => adjustThrottle(-250)}
-                                            disabled={currentDelay <= 100}
                                             className="p-1 rounded-md bg-background border border-border text-muted-foreground hover:bg-secondary hover:text-secondary-foreground disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                                            disabled={currentDelay <= 100}
+                                            onClick={() => adjustThrottle(-250)}
                                         >
                                             <Minus size={14} />
                                         </button>
                                         <button
-                                            onClick={() => adjustThrottle(250)}
                                             className="p-1 rounded-md bg-background border border-border text-muted-foreground hover:bg-secondary hover:text-secondary-foreground transition-colors"
+                                            onClick={() => adjustThrottle(250)}
                                         >
                                             <Plus size={14} />
                                         </button>
@@ -211,8 +211,8 @@ function RouteComponent() {
 
                         {/* Test Actions */}
                         <button
-                            onClick={simulateBurst}
                             className="w-full py-3 px-4 rounded-xl bg-secondary hover:bg-secondary/80 text-secondary-foreground font-semibold text-sm transition-colors flex items-center justify-center gap-2 border border-border"
+                            onClick={simulateBurst}
                         >
                             <Zap size={16} />
                             Set Burst Options

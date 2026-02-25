@@ -27,7 +27,7 @@ type journalVoucherItemType = {
 
 const ApprovalPage = () => {
     return (
-        <PageContainer className="h-[100vh] lg:h-[90vh] flex ecoop-scroll overflow-y-auto flex-col">
+        <PageContainer className="h-screen lg:h-[90vh] flex ecoop-scroll overflow-y-auto flex-col">
             <PermissionGuard action="Read" resourceType="Approvals">
                 <ApprovalTabPage />
             </PermissionGuard>
