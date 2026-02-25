@@ -122,6 +122,7 @@ const CashCheckVoucherCreateUpdateForm = ({
                 onSuccess: (data) => {
                     formProps.onSuccess?.(data)
                     setIsEditMode(true)
+                    form.reset(data)
                 },
                 onError: formProps.onError,
             }),

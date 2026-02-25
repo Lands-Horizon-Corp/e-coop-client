@@ -124,8 +124,6 @@ const JournalVoucherCreateUpdateForm = ({
                     form.reset(data)
                     formProps.onSuccess?.(data)
                     setIsEditMode(true)
-                    // setDefaultMode('update')
-                    // form.reset(data)
                 },
                 onError: formProps.onError,
             }),
