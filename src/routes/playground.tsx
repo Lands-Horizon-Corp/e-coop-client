@@ -1,22 +1,25 @@
+import { useState } from 'react'
+
 import { createFileRoute } from '@tanstack/react-router'
 
 import { useSubscribe } from '@/hooks/use-pubsub'
 
 function RouteComponent() {
-    useSubscribe('test', 'client-test', (data) => console.log(data))
+    const [live, setLive] = useState<{ timestamp: string }>()
+    useSubscribe<{ timestamp: string }>('test', 'client-test', (data) =>
+        setLive(data)
+    )
 
     return (
         <div style={{ padding: '20px', fontFamily: 'sans-serif' }}>
-            <h1>Soketi + Go + Reactsss</h1>
-
-            {/* {error && <p style={{ color: 'red' }}>Error: {error}</p>}
+            <h1>Playground</h1>
             <p>
                 Status:{' '}
-                <strong style={{ color: isConnected ? 'green' : 'red' }}>
-                    {isConnected ? 'Online' : 'Offline'}
+                <strong style={{ color: live ? 'green' : 'red' }}>
+                    {live ? `Online ${new Date(live.timestamp)}` : 'Offline'}
                 </strong>
             </p>
-            <hr /> */}
+            <hr />
         </div>
     )
 }
