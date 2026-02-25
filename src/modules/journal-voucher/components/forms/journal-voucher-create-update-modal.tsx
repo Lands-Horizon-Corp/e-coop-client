@@ -25,7 +25,6 @@ import MemberPicker from '@/modules/member-profile/components/member-picker'
 import { useTransactionBatchStore } from '@/modules/transaction-batch/store/transaction-batch-store'
 import { getTimeMachineValue } from '@/modules/user-organization/user-organization-utils'
 import { useMemberPickerStore } from '@/store/member-picker-store'
-import { is } from 'date-fns/locale'
 import { useHotkeys } from 'react-hotkeys-hook'
 
 import FormFooterResetSubmit from '@/components/form-components/form-footer-reset-submit'

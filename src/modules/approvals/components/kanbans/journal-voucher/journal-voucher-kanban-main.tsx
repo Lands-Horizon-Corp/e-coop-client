@@ -69,6 +69,10 @@ export const JournalVoucherKanbanMain = ({
         },
     } = useAuthUserWithOrgBranch()
 
+    useSubscribe('journal_voucher', `dashboard.branch.${branch_id}`, () => {
+        refetch()
+    })
+
     const {
         data: rawJournalVouchers,
         isLoading,
@@ -148,10 +152,6 @@ export const JournalVoucherKanbanMain = ({
         })
     }
 
-    useSubscribe('journal_voucher', `dashboard.branch.${branch_id}`, () => {
-        refetch()
-    })
-
     return (
         <KanbanContainer
             className={cn(
@@ -178,7 +178,7 @@ export const JournalVoucherKanbanMain = ({
                                 )}
                                 {hasItem && (
                                     <Button
-                                        className="!size-fit !p-0.5"
+                                        className="size-fit! p-0.5!"
                                         onClick={handleExpandedToggle}
                                         size="sm"
                                         variant="ghost"
@@ -234,7 +234,7 @@ export const JournalVoucherKanbanMain = ({
                                 >
                                     <div className="flex justify-between items-center">
                                         <JournalVoucherStatusIndicator
-                                            className="flex-shrink-0"
+                                            className="shrink-0"
                                             journalVoucher={journalVoucher}
                                         />
                                         <p className="text-xs right-3 top-1 text-end text-muted-foreground/70 truncate">
