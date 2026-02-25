@@ -28,7 +28,7 @@ import { useMemberPickerStore } from '@/store/member-picker-store'
 import { useHotkeys } from 'react-hotkeys-hook'
 
 import FormFooterResetSubmit from '@/components/form-components/form-footer-reset-submit'
-import { BookIcon, GearIcon, XIcon } from '@/components/icons'
+import { BookIcon, GearIcon } from '@/components/icons'
 import Modal, { IModalProps } from '@/components/modals/modal'
 import { Button } from '@/components/ui/button'
 import { CommandShortcut } from '@/components/ui/command'
@@ -301,6 +301,7 @@ const JournalVoucherCreateUpdateForm = ({
                                                         !popOverState.open
                                                     )
                                                 }}
+                                                tabIndex={-1}
                                                 variant="secondary"
                                             >
                                                 <GearIcon className="size-4" />
@@ -503,28 +504,28 @@ const JournalVoucherCreateUpdateForm = ({
                                                     // tabIndex={-1}
                                                     {...field}
                                                     id={field.name}
+                                                    onChange={(item) => {
+                                                        if (
+                                                            item.target
+                                                                .value === ''
+                                                        ) {
+                                                            form.setValue(
+                                                                'member_id',
+                                                                undefined
+                                                            )
+                                                            form.setValue(
+                                                                'company_id',
+                                                                undefined
+                                                            )
+                                                            form.setValue(
+                                                                'member_profile',
+                                                                undefined
+                                                            )
+                                                        }
+                                                        field.onChange(item)
+                                                    }}
                                                     value={field.value || ''}
                                                 />
-                                                <Button
-                                                    className="absolute m-auto top-0 bottom-0 right-1 hover:bg-primary/20!"
-                                                    onClick={(e) => {
-                                                        e.preventDefault()
-                                                        form.reset({
-                                                            company_id:
-                                                                undefined,
-                                                            member_profile:
-                                                                undefined,
-                                                            member_id:
-                                                                undefined,
-                                                            name: '',
-                                                        })
-                                                    }}
-                                                    size={'sm'}
-                                                    // tabIndex={-1}
-                                                    variant="ghost"
-                                                >
-                                                    <XIcon />
-                                                </Button>
                                             </div>
                                         )
                                     }}

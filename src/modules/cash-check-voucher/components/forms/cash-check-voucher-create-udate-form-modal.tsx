@@ -35,7 +35,6 @@ import {
     HashIcon,
     MoneyCheck2Icon,
     WandSparkleIcon,
-    XIcon,
 } from '@/components/icons'
 import Modal, { IModalProps } from '@/components/modals/modal'
 import { Button } from '@/components/ui/button'
@@ -324,6 +323,7 @@ const CashCheckVoucherCreateUpdateForm = ({
                                                     !popOverState.open
                                                 )
                                             }}
+                                            tabIndex={-1}
                                             variant="secondary"
                                         >
                                             <GearIcon className="size-4" />
@@ -576,25 +576,25 @@ const CashCheckVoucherCreateUpdateForm = ({
                                         // tabIndex={-1}
                                         {...field}
                                         id={field.name}
+                                        onChange={(item) => {
+                                            if (item.target.value === '') {
+                                                form.setValue(
+                                                    'company_id',
+                                                    undefined
+                                                )
+                                                form.setValue(
+                                                    'member_profile',
+                                                    undefined
+                                                )
+                                                form.setValue(
+                                                    'member_profile_id',
+                                                    undefined
+                                                )
+                                            }
+                                            field.onChange(item)
+                                        }}
                                         value={field.value || ''}
                                     />
-                                    <Button
-                                        className="absolute m-auto top-0 bottom-0 right-1 hover:bg-primary/20!"
-                                        onClick={(e) => {
-                                            e.preventDefault()
-                                            form.reset({
-                                                company_id: undefined,
-                                                member_profile: undefined,
-                                                member_profile_id: undefined,
-                                                name: '',
-                                            })
-                                        }}
-                                        size="sm"
-                                        // tabIndex={-1}
-                                        variant="ghost"
-                                    >
-                                        <XIcon />
-                                    </Button>
                                 </div>
                             )}
                         />
