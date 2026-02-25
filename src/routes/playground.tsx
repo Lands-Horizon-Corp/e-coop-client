@@ -6,32 +6,47 @@ import { Activity, Clock, Layers, Wifi, WifiOff, Zap } from 'lucide-react'
 
 import { useSubscribe } from '@/hooks/use-pubsub'
 
+export interface TSubscribeOptions {
+    delay?: number
+    maxQueueSize?: number
+    debounceTime?: number
+}
+
 function RouteComponent() {
     const [liveData, setLiveData] = useState<{ timestamp: Date } | null>(null)
 
+    // 1. Create a state to hold the subscription options
+    const [subOptions, setSubOptions] = useState<TSubscribeOptions>({
+        debounceTime: 0,
+        delay: 1000,
+        maxQueueSize: 10,
+    })
+
+    // 2. Pass the state into the hook
     const { isSyncing, pendingCount, isLive } = useSubscribe<{
         timestamp: Date
     }>(
         'test',
         'client-test',
         (data) => {
-            console.log(data)
             setLiveData(data)
         },
-        {
-            debounceTime: 300,
-            delay: 1000,
-            maxQueueSize: 10,
-        }
+        subOptions
     )
 
-    // Manual simulation for testing the logic locally
+    // 3. Just set the state to change the hook's configuration dynamically
     const simulateBurst = () => {
-        // We simulate the pusher store's behavior by manually dispatching events
-        // or just calling the logic if you expose the pusher mock.
-        // For now, this playground shows the UI state.
-        console.log('Triggering burst simulation...')
+        console.log('Switching to Burst Mode options...')
+        setSubOptions({
+            debounceTime: 0, // Still 0 to catch everything
+            delay: 250, // Speed up processing to 4 items per second
+            maxQueueSize: 100, // Vastly increase bucket size to hold the burst
+        })
     }
+
+    // Helper for safe display math
+    const currentMaxQueue = subOptions.maxQueueSize || 10
+    const currentDelay = subOptions.delay || 1000
 
     return (
         <div className="min-h-screen bg-background p-8 font-sans text-foreground transition-colors duration-300">
@@ -118,7 +133,7 @@ function RouteComponent() {
                                 <div className="text-xl font-bold">
                                     {pendingCount}
                                     <span className="ml-1 text-xs font-normal text-muted-foreground">
-                                        msgs
+                                        / {currentMaxQueue}
                                     </span>
                                 </div>
                             </div>
@@ -130,7 +145,8 @@ function RouteComponent() {
                                     </span>
                                 </div>
                                 <div className="text-xl font-bold">
-                                    1.0
+                                    {/* Dynamically display the delay in seconds */}
+                                    {(currentDelay / 1000).toFixed(2)}
                                     <span className="ml-1 text-xs font-normal text-muted-foreground">
                                         s
                                     </span>
@@ -144,7 +160,7 @@ function RouteComponent() {
                             className="w-full py-3 px-4 rounded-xl bg-secondary hover:bg-secondary/80 text-secondary-foreground font-semibold text-sm transition-colors flex items-center justify-center gap-2 border border-border"
                         >
                             <Zap size={16} />
-                            Simulate Burst
+                            Set Burst Options
                         </button>
                     </div>
 
@@ -153,7 +169,8 @@ function RouteComponent() {
                         <div
                             className="h-full bg-primary transition-all duration-500 ease-in-out"
                             style={{
-                                width: `${Math.min((pendingCount / 10) * 100, 100)}%`,
+                                // Calculate width dynamically based on current maxQueueSize
+                                width: `${Math.min((pendingCount / currentMaxQueue) * 100, 100)}%`,
                             }}
                         />
                     </div>
@@ -164,7 +181,7 @@ function RouteComponent() {
                         <p className="text-[11px] text-muted-foreground text-center leading-relaxed italic">
                             FILO implementation ensures that during high-traffic
                             bursts, the newest data is processed immediately
-                            after the 1s cooldown.
+                            after the cooldown.
                         </p>
                     </div>
                 </footer>
