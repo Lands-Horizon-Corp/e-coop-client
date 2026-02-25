@@ -166,10 +166,12 @@ const columns: ColumnDef<IJournalVoucherEntryRequest>[] = [
                             `journal_voucher_entries.${rowIndex}.debit`,
                             numValue
                         )
-                        form.setValue(
-                            `journal_voucher_entries.${rowIndex}.credit`,
-                            0
-                        )
+                        if (numValue > 0) {
+                            form.setValue(
+                                `journal_voucher_entries.${rowIndex}.credit`,
+                                0
+                            )
+                        }
                     }}
                     value={props.row.original.debit}
                 />
@@ -206,14 +208,18 @@ const columns: ColumnDef<IJournalVoucherEntryRequest>[] = [
                             typeof newValue === 'string'
                                 ? parseFloat(newValue) || 0
                                 : (newValue ?? 0)
+
                         form.setValue(
                             `journal_voucher_entries.${rowIndex}.credit`,
                             numValue
                         )
-                        form.setValue(
-                            `journal_voucher_entries.${rowIndex}.debit`,
-                            0
-                        )
+
+                        if (numValue > 0) {
+                            form.setValue(
+                                `journal_voucher_entries.${rowIndex}.debit`,
+                                0
+                            )
+                        }
                     }}
                     value={props.row.original.credit}
                 />
@@ -393,7 +399,6 @@ export const JournalEntryTable = ({
                                     colSpan={header.colSpan}
                                     key={header.id}
                                     style={{ width: header.getSize() }}
-                                    tabIndex={-1}
                                 >
                                     {!header.isPlaceholder &&
                                         flexRender(

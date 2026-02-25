@@ -177,10 +177,12 @@ const columns: ColumnDef<ICashCheckVoucherEntryRequest>[] = [
                             `cash_check_voucher_entries.${rowIndex}.debit`,
                             numValue
                         )
-                        form.setValue(
-                            `cash_check_voucher_entries.${rowIndex}.credit`,
-                            0
-                        )
+                        if (numValue > 0) {
+                            form.setValue(
+                                `cash_check_voucher_entries.${rowIndex}.credit`,
+                                0
+                            )
+                        }
                     }}
                     value={props.row.original.debit}
                 />
@@ -223,10 +225,12 @@ const columns: ColumnDef<ICashCheckVoucherEntryRequest>[] = [
                             `cash_check_voucher_entries.${rowIndex}.credit`,
                             numValue
                         )
-                        form.setValue(
-                            `cash_check_voucher_entries.${rowIndex}.debit`,
-                            0
-                        )
+                        if (numValue > 0) {
+                            form.setValue(
+                                `cash_check_voucher_entries.${rowIndex}.debit`,
+                                0
+                            )
+                        }
                     }}
                     value={props.row.original.credit}
                 />
