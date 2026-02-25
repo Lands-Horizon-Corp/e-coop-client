@@ -273,16 +273,7 @@ function RouteComponent() {
                 </Button>
             </div>
 
-            {/* {file && ( */}
-            {
-                <PdfViewer
-                    file={
-                        // file
-                        'https://e-coop-storage-r3wisiu87k.t3.storageapi.dev/zazazaza.pdf?x-id=GetObject&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=tid_kErVDLy_wogbyLda_iwzTDEiemeQMmtTehgwJ_pes_pAGntFlS%2F20260225%2Fauto%2Fs3%2Faws4_request&X-Amz-Date=20260225T091929Z&X-Amz-Expires=360000&X-Amz-SignedHeaders=host&X-Amz-Signature=c0d32c9cd3d3a382f04012c2a9ecb8df79a9d702aa146dfee57301e521ac12bf'
-                    }
-                    onClose={() => setFile(null)}
-                />
-            }
+            {file && <PdfViewer file={file} onClose={() => setFile(null)} />}
         </div>
     )
 }
