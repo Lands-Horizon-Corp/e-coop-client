@@ -96,6 +96,9 @@ const TransactionBatchNavButton = (_props: Props) => {
         'transaction_batch',
         `delete.${transactionBatch?.id}`,
         () => {
+            queryClient.invalidateQueries({
+                queryKey: [transactionBatchQueryKey],
+            })
             reset()
             toast.info('Your current transaction batch has been deleted.')
         }
