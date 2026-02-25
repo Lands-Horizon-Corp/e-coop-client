@@ -8,6 +8,7 @@ import { dateAgo } from '@/helpers/date-utils'
 import KanbanContainer from '@/modules/approvals/components/kanban/kanban-container'
 import KanbanItemsContainer from '@/modules/approvals/components/kanban/kanban-items-container'
 import KanbanTitle from '@/modules/approvals/components/kanban/kanban-title'
+import { useAuthUserWithOrgBranch } from '@/modules/authentication/authgentication.store'
 import {
     ICashCheckVoucher,
     // Ensure this is imported or defined if it wasn't
@@ -30,6 +31,8 @@ import {
 } from '@/components/ui/accordion'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
+
+import { useSubscribe } from '@/hooks/use-pubsub'
 
 import { JournalVoucherSkeletonCard } from '../../../../journal-voucher/components/journal-voucher-skeleton-card'
 import {
@@ -60,6 +63,17 @@ export const CashCheckVoucherKanbanMain = ({
 }: CashCheckVoucherKanbanProps) => {
     const [openVouchers, setOpenVouchers] = useState<string[]>([])
     const invalidate = useQueryClient()
+
+    const {
+        currentAuth: {
+            user_organization: { branch_id },
+        },
+    } = useAuthUserWithOrgBranch()
+
+    useSubscribe('cash_check_voucher', `dashboard.branch.${branch_id}`, () => {
+        refetch()
+    })
+
     const {
         data: rawCashCheckVouchers,
         isLoading,
