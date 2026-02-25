@@ -5,8 +5,8 @@ import { createFileRoute } from '@tanstack/react-router'
 import { useSubscribe } from '@/hooks/use-pubsub'
 
 function RouteComponent() {
-    const [live, setLive] = useState<{ timestamp: string }>()
-    useSubscribe<{ timestamp: string }>('test', 'client-test', (data) =>
+    const [live, setLive] = useState<{ timestamp: Date }>()
+    useSubscribe<{ timestamp: Date }>('test', 'client-test', (data) =>
         setLive(data)
     )
 
@@ -16,7 +16,9 @@ function RouteComponent() {
             <p>
                 Status:{' '}
                 <strong style={{ color: live ? 'green' : 'red' }}>
-                    {live ? `Online ${new Date(live.timestamp)}` : 'Offline'}
+                    {live
+                        ? `Online ${new Date(live.timestamp).toLocaleTimeString()}`
+                        : 'Offline'}{' '}
                 </strong>
             </p>
             <hr />
