@@ -2,7 +2,16 @@ import { useState } from 'react'
 
 import { createFileRoute } from '@tanstack/react-router'
 
-import { Activity, Clock, Layers, Wifi, WifiOff, Zap } from 'lucide-react'
+import {
+    Activity,
+    Clock,
+    Layers,
+    Minus,
+    Plus,
+    Wifi,
+    WifiOff,
+    Zap,
+} from 'lucide-react'
 
 import { useSubscribe } from '@/hooks/use-pubsub'
 
@@ -12,20 +21,24 @@ export interface TSubscribeOptions {
     debounceTime?: number
 }
 
-function RouteComponent() {
-    const [liveData, setLiveData] = useState<{ timestamp: Date } | null>(null)
+export interface TLivePayload {
+    timestamp: string
+    date?: string
+    time?: string
+    second?: number
+    milliseconds?: number
+}
 
-    // 1. Create a state to hold the subscription options
+function RouteComponent() {
+    const [liveData, setLiveData] = useState<TLivePayload | null>(null)
+
     const [subOptions, setSubOptions] = useState<TSubscribeOptions>({
         debounceTime: 0,
         delay: 1000,
         maxQueueSize: 10,
     })
 
-    // 2. Pass the state into the hook
-    const { isSyncing, pendingCount, isLive } = useSubscribe<{
-        timestamp: Date
-    }>(
+    const { isSyncing, pendingCount, isLive } = useSubscribe<TLivePayload>(
         'test',
         'client-test',
         (data) => {
@@ -34,17 +47,24 @@ function RouteComponent() {
         subOptions
     )
 
-    // 3. Just set the state to change the hook's configuration dynamically
     const simulateBurst = () => {
         console.log('Switching to Burst Mode options...')
         setSubOptions({
-            debounceTime: 0, // Still 0 to catch everything
-            delay: 250, // Speed up processing to 4 items per second
-            maxQueueSize: 100, // Vastly increase bucket size to hold the burst
+            debounceTime: 0,
+            delay: 250,
+            maxQueueSize: 100,
         })
     }
 
-    // Helper for safe display math
+    // Helper to adjust the throttle dynamically
+    const adjustThrottle = (amount: number) => {
+        setSubOptions((prev) => ({
+            ...prev,
+            // Prevent going below 100ms
+            delay: Math.max(100, (prev.delay || 1000) + amount),
+        }))
+    }
+
     const currentMaxQueue = subOptions.maxQueueSize || 10
     const currentDelay = subOptions.delay || 1000
 
@@ -105,12 +125,29 @@ function RouteComponent() {
                                     )}
                                 </div>
                                 <div>
-                                    <div className="text-3xl font-mono font-bold tracking-tighter">
-                                        {liveData
-                                            ? new Date(
-                                                  liveData.timestamp
-                                              ).toLocaleTimeString()
-                                            : '--:--:--'}
+                                    <div className="flex items-baseline font-mono tracking-tighter">
+                                        {liveData ? (
+                                            <>
+                                                <span className="text-3xl font-bold">
+                                                    {new Date(
+                                                        liveData.timestamp
+                                                    ).toLocaleTimeString()}
+                                                </span>
+                                                <span className="text-lg font-bold text-muted-foreground ml-1">
+                                                    .
+                                                    {String(
+                                                        liveData.milliseconds ||
+                                                            new Date(
+                                                                liveData.timestamp
+                                                            ).getMilliseconds()
+                                                    ).padStart(3, '0')}
+                                                </span>
+                                            </>
+                                        ) : (
+                                            <span className="text-3xl font-bold">
+                                                --:--:--
+                                            </span>
+                                        )}
                                     </div>
                                     <p className="text-xs text-muted-foreground font-medium">
                                         {liveData
@@ -130,26 +167,44 @@ function RouteComponent() {
                                         Stack
                                     </span>
                                 </div>
-                                <div className="text-xl font-bold">
+                                <div className="text-xl font-bold mt-1">
                                     {pendingCount}
                                     <span className="ml-1 text-xs font-normal text-muted-foreground">
                                         / {currentMaxQueue}
                                     </span>
                                 </div>
                             </div>
-                            <div className="p-4 rounded-xl border border-border bg-muted/20">
+
+                            {/* Updated Throttle Card */}
+                            <div className="p-4 rounded-xl border border-border bg-muted/20 flex flex-col justify-between">
                                 <div className="flex items-center gap-2 text-muted-foreground mb-1">
                                     <Clock size={14} />
                                     <span className="text-[10px] font-bold uppercase">
                                         Throttle
                                     </span>
                                 </div>
-                                <div className="text-xl font-bold">
-                                    {/* Dynamically display the delay in seconds */}
-                                    {(currentDelay / 1000).toFixed(2)}
-                                    <span className="ml-1 text-xs font-normal text-muted-foreground">
-                                        s
-                                    </span>
+                                <div className="flex items-center justify-between mt-1">
+                                    <div className="text-xl font-bold">
+                                        {(currentDelay / 1000).toFixed(2)}
+                                        <span className="ml-1 text-xs font-normal text-muted-foreground">
+                                            s
+                                        </span>
+                                    </div>
+                                    <div className="flex items-center gap-1">
+                                        <button
+                                            onClick={() => adjustThrottle(-250)}
+                                            disabled={currentDelay <= 100}
+                                            className="p-1 rounded-md bg-background border border-border text-muted-foreground hover:bg-secondary hover:text-secondary-foreground disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                                        >
+                                            <Minus size={14} />
+                                        </button>
+                                        <button
+                                            onClick={() => adjustThrottle(250)}
+                                            className="p-1 rounded-md bg-background border border-border text-muted-foreground hover:bg-secondary hover:text-secondary-foreground transition-colors"
+                                        >
+                                            <Plus size={14} />
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -169,7 +224,6 @@ function RouteComponent() {
                         <div
                             className="h-full bg-primary transition-all duration-500 ease-in-out"
                             style={{
-                                // Calculate width dynamically based on current maxQueueSize
                                 width: `${Math.min((pendingCount / currentMaxQueue) * 100, 100)}%`,
                             }}
                         />
