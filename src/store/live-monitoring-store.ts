@@ -16,7 +16,7 @@ interface LiveMonitoringStore
 export const useLiveMonitoringStore = create<LiveMonitoringStore>()(
     persist(
         (set) => ({
-            isLiveEnabled: false,
+            isLiveEnabled: true,
             setLiveEnabled: (enabled) => set({ isLiveEnabled: enabled }),
             toggleLive: () =>
                 set((state) => ({ isLiveEnabled: !state.isLiveEnabled })),
