@@ -1,7 +1,8 @@
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 
 import { createFileRoute } from '@tanstack/react-router'
 
+import PdfViewer from '@/modules/pdf-viewer/components/pdf-viewer'
 import {
     Activity,
     Clock,
@@ -12,6 +13,9 @@ import {
     WifiOff,
     Zap,
 } from 'lucide-react'
+
+import { UploadIcon } from '@/components/icons'
+import { Button } from '@/components/ui/button'
 
 import { useSubscribe } from '@/hooks/use-pubsub'
 
@@ -67,6 +71,17 @@ function RouteComponent() {
 
     const currentMaxQueue = subOptions.maxQueueSize || 10
     const currentDelay = subOptions.delay || 1000
+
+    const [file, setFile] = useState<File | null>(null)
+    const inputRef = useRef<HTMLInputElement>(null)
+
+    const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const f = e.target.files?.[0]
+        if (f && f.type === 'application/pdf') {
+            setFile(f)
+        }
+        e.target.value = ''
+    }
 
     return (
         <div className="min-h-screen bg-background p-8 font-sans text-foreground transition-colors duration-300">
@@ -240,6 +255,34 @@ function RouteComponent() {
                     </div>
                 </footer>
             </div>
+            <div className="text-center space-y-4">
+                <input
+                    accept="application/pdf"
+                    className="hidden"
+                    onChange={handleFileChange}
+                    ref={inputRef}
+                    type="file"
+                />
+                <Button
+                    className="gap-2"
+                    onClick={() => inputRef.current?.click()}
+                    variant="outline"
+                >
+                    <UploadIcon className="h-4 w-4" />
+                    Choose PDF
+                </Button>
+            </div>
+
+            {/* {file && ( */}
+            {
+                <PdfViewer
+                    file={
+                        // file
+                        'https://e-coop-storage-r3wisiu87k.t3.storageapi.dev/zazazaza.pdf?x-id=GetObject&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=tid_kErVDLy_wogbyLda_iwzTDEiemeQMmtTehgwJ_pes_pAGntFlS%2F20260225%2Fauto%2Fs3%2Faws4_request&X-Amz-Date=20260225T091929Z&X-Amz-Expires=360000&X-Amz-SignedHeaders=host&X-Amz-Signature=c0d32c9cd3d3a382f04012c2a9ecb8df79a9d702aa146dfee57301e521ac12bf'
+                    }
+                    onClose={() => setFile(null)}
+                />
+            }
         </div>
     )
 }

@@ -1,7 +1,7 @@
 import react from "@vitejs/plugin-react";
 import tsconfigPaths from "vite-tsconfig-paths";
 import { visualizer } from "rollup-plugin-visualizer";
-import { defineConfig, type PluginOption } from "vite";
+import { defineConfig, normalizePath, type PluginOption } from "vite";
 import { tanstackRouter } from '@tanstack/router-plugin/vite'
 import tailwindcss from '@tailwindcss/vite'
 import { compression } from 'vite-plugin-compression2'
@@ -12,6 +12,13 @@ import createSitemap from 'vite-plugin-sitemap';
 import { VitePWA } from 'vite-plugin-pwa';
 import fs from 'node:fs';
 import path from 'node:path';
+
+import { createRequire } from 'node:module';
+import { viteStaticCopy } from 'vite-plugin-static-copy';
+
+const require = createRequire(import.meta.url);
+const pdfjsDistPath = path.dirname(require.resolve('pdfjs-dist/package.json'));
+const cMapsDir = normalizePath(path.join(pdfjsDistPath, 'cmaps'));
 
 const pwaAssetManifest = () => ({
     name: 'pwa-asset-manifest',
@@ -29,6 +36,14 @@ const pwaAssetManifest = () => ({
 
 export default defineConfig({
   plugins: [
+viteStaticCopy({
+     targets: [
+       {
+         src: cMapsDir,
+         dest: '',
+       },
+     ],
+   }),
     UnheadVite(),
     tanstackRouter({ target: 'react', autoCodeSplitting: true }),
     react(),
