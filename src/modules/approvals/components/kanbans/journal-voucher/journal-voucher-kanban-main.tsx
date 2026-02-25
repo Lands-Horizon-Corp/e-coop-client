@@ -11,6 +11,7 @@ import {
 
 import { cn } from '@/helpers'
 import { dateAgo } from '@/helpers/date-utils'
+import { useAuthUserWithOrgBranch } from '@/modules/authentication/authgentication.store'
 import {
     IJournalVoucher,
     TJournalVoucherMode,
@@ -28,6 +29,8 @@ import InfoTooltip from '@/components/tooltips/info-tooltip'
 import { Accordion } from '@/components/ui/accordion'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
+
+import { useSubscribe } from '@/hooks/use-pubsub'
 
 import KanbanContainer from '../../kanban/kanban-container'
 import KanbanItemsContainer from '../../kanban/kanban-items-container'
@@ -58,7 +61,13 @@ export const JournalVoucherKanbanMain = ({
     isSearchHighlighted = false,
 }: JournalVoucherKanbanProps) => {
     const invalidate = useQueryClient()
+
     const [openVouchers, setOpenVouchers] = useState<string[]>([])
+    const {
+        currentAuth: {
+            user_organization: { branch_id },
+        },
+    } = useAuthUserWithOrgBranch()
 
     const {
         data: rawJournalVouchers,
@@ -138,6 +147,10 @@ export const JournalVoucherKanbanMain = ({
             queryKey: ['get-all-journal-voucher'],
         })
     }
+
+    useSubscribe('journal_voucher', `dashboard.branch.${branch_id}`, () => {
+        refetch()
+    })
 
     return (
         <KanbanContainer

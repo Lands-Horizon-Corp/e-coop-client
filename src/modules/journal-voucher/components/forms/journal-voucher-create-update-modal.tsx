@@ -25,6 +25,7 @@ import MemberPicker from '@/modules/member-profile/components/member-picker'
 import { useTransactionBatchStore } from '@/modules/transaction-batch/store/transaction-batch-store'
 import { getTimeMachineValue } from '@/modules/user-organization/user-organization-utils'
 import { useMemberPickerStore } from '@/store/member-picker-store'
+import { is } from 'date-fns/locale'
 import { useHotkeys } from 'react-hotkeys-hook'
 
 import FormFooterResetSubmit from '@/components/form-components/form-footer-reset-submit'
@@ -82,7 +83,10 @@ const JournalVoucherCreateUpdateForm = ({
 
     const { data } = useTransactionBatchStore()
 
-    const [isEditMode, setIsEditMode] = useState<boolean>(!!journalVoucherId)
+    const [journalId, setJournalVoucherId] = useState<TEntityId | undefined>(
+        journalVoucherId
+    )
+    const isEditMode = !!journalId
 
     const [defaultMemberProfile, setDefaultMemberProfile] = useState<
         IMemberProfile | undefined
@@ -123,7 +127,7 @@ const JournalVoucherCreateUpdateForm = ({
                 onSuccess: (data) => {
                     form.reset(data)
                     formProps.onSuccess?.(data)
-                    setIsEditMode(true)
+                    setJournalVoucherId(data.id)
                 },
                 onError: formProps.onError,
             }),
@@ -144,7 +148,7 @@ const JournalVoucherCreateUpdateForm = ({
         }
 
         createUpdateJournalVoucher({
-            journalVoucherId: journalVoucherId,
+            journalVoucherId: isEditMode ? journalId : journalVoucherId,
             payload: payload,
         })
     }, handleFocusError)

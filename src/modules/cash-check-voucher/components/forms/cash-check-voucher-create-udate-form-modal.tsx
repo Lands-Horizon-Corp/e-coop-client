@@ -94,7 +94,11 @@ const CashCheckVoucherCreateUpdateForm = ({
         IMemberProfile | undefined
     >(defaultValues?.member_profile)
 
-    const [isEditMode, setIsEditMode] = useState<boolean>(!!cashCheckVoucherId)
+    const [cashCheckId, setCashCheckId] = useState<TEntityId | undefined>(
+        cashCheckVoucherId
+    )
+    const isEditMode = !!cashCheckId
+
     const { setSelectedMember } = useMemberPickerStore()
 
     const form = useForm<TCashCheckVoucherFormValues>({
@@ -121,7 +125,7 @@ const CashCheckVoucherCreateUpdateForm = ({
                 textSuccess: 'Cash Check Voucher Created',
                 onSuccess: (data) => {
                     formProps.onSuccess?.(data)
-                    setIsEditMode(true)
+                    setCashCheckId(data.id)
                     form.reset(data)
                 },
                 onError: formProps.onError,
@@ -150,7 +154,7 @@ const CashCheckVoucherCreateUpdateForm = ({
         }
 
         createUpdateCashCheckVoucher({
-            id: cashCheckVoucherId,
+            id: cashCheckId,
             payload: {
                 ...payload,
             },

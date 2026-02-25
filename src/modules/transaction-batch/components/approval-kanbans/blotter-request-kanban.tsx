@@ -52,6 +52,10 @@ const BlotterRequestKanban = (_props: Props) => {
         refetch()
     })
 
+    useSubscribe('transaction_batch', `view.branch.${branch_id}`, () => {
+        refetch()
+    })
+
     return (
         <KanbanContainer className="w-[360px]">
             <div className="flex items-center">

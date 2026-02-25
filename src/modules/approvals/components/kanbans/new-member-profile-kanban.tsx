@@ -55,6 +55,23 @@ const NewMemberProfileKanban = (_props: Props) => {
             queryKey: ['member-profile', 'paginated'],
         })
     })
+    useSubscribe('member_profile', `create.branch.${branch_id}`, () => {
+        toast.info('Member profile Kanban - created : Triggered')
+        queryClient.invalidateQueries({
+            queryKey: ['member-profile', 'all', 'pending'],
+        })
+        queryClient.invalidateQueries({
+            queryKey: ['member-profile', 'paginated'],
+        })
+    })
+
+    useSubscribe('member_profile', `approve.branch.${branch_id}`, () => {
+        toast.info('Member profile Kanban - approve : Triggered')
+    })
+
+    useSubscribe('member_profile', `reject.branch.${branch_id}`, () => {
+        toast.info('Member profile Kanban - reject : Triggered')
+    })
 
     return (
         <KanbanContainer className="w-[360px]">

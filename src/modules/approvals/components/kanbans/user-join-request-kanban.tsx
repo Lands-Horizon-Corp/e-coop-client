@@ -82,6 +82,18 @@ const UserJoinRequestKanban = (_props: Props) => {
             )
         }
     )
+    useSubscribe<IUserOrganization>(
+        'user_organization',
+        `view.branch.${branch_id}`,
+        (newData) => {
+            queryClient.setQueryData<IUserOrganization[]>(
+                ['user-organization', 'join-request', 'all'],
+                (oldData) => {
+                    return [newData, ...(oldData ?? [])]
+                }
+            )
+        }
+    )
 
     return (
         <KanbanContainer className="w-[360px]">
