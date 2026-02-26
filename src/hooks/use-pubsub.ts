@@ -59,7 +59,6 @@ export const useSubscribe = <T = unknown>(
                 while (state.queue.length > 0 && state.isActive) {
                     const nextData = state.queue.shift()
                     syncStatus()
-
                     if (nextData !== undefined) {
                         state.onReceive(nextData)
                         await new Promise((res) =>
@@ -84,11 +83,12 @@ export const useSubscribe = <T = unknown>(
             const data =
                 incoming?.success !== undefined ? incoming.data : incoming
             state.latest = data
-            const now = Date.now()
-            const isIdle = state.queue.length === 0 && !state.isProcessing
-            const isOutsideDebounce =
-                now - state.lastEnqueue > state.config.debounceTime
-            if (isIdle && isOutsideDebounce) return handleData(data)
+            if (
+                state.queue.length === 0 &&
+                !state.isProcessing &&
+                Date.now() - state.lastEnqueue > state.config.debounceTime
+            )
+                return handleData(data)
             if (state.timer) clearTimeout(state.timer)
             state.timer = setTimeout(() => {
                 if (state.latest !== null) {
