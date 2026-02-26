@@ -177,7 +177,7 @@ export const CashCheckVoucherKanbanMain = ({
                                 )}
                                 {hasItem && (
                                     <Button
-                                        className="!size-fit !p-0.5"
+                                        className="size-fit! p-0.5!"
                                         onClick={handleExpandedToggle}
                                         size="sm"
                                         variant="ghost"
@@ -233,7 +233,7 @@ export const CashCheckVoucherKanbanMain = ({
                                 >
                                     <div className="flex justify-between items-center">
                                         <CashCheckVoucherStatusIndicator
-                                            className="flex-shrink-0"
+                                            className="shrink-0"
                                             voucherDates={ccvDates}
                                         />
                                         {cashCheckVoucher.updated_at && (

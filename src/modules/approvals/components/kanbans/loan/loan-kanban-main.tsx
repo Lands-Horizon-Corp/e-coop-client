@@ -70,7 +70,7 @@ export const LoanKanbanMain = ({
     } = useGetAllLoanTransaction({
         mode: mode,
     })
-    
+
     const {
         currentAuth: {
             user_organization: { branch_id },
@@ -183,7 +183,7 @@ export const LoanKanbanMain = ({
                                 )}
                                 {hasItem && (
                                     <Button
-                                        className="!size-fit !p-0.5"
+                                        className="size-fit! p-0.5!"
                                         onClick={handleExpandedToggle}
                                         size="sm"
                                         variant="ghost"
@@ -245,7 +245,7 @@ export const LoanKanbanMain = ({
                                 >
                                     <div className="flex justify-between items-center">
                                         <LoanStatusIndicator
-                                            className="flex-shrink-0"
+                                            className="shrink-0"
                                             loanTransactionDates={loanDates}
                                         />
                                         <p className="text-xs right-3 top-1 text-end text-muted-foreground/70 truncate">
