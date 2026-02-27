@@ -112,7 +112,7 @@ export const AccountCard = memo(
                 >
                     <PopoverTrigger asChild>
                         <div>
-                            <Tooltip delayDuration={200}>
+                            <Tooltip delayDuration={500}>
                                 <TooltipTrigger asChild>
                                     <div
                                         className={cn(

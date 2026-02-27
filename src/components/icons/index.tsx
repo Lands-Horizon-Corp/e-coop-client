@@ -148,6 +148,7 @@ import {
     FaHouseLock as HouseLockIcon,
     FaIdCard as IdCardIcon,
     FaLandmarkFlag as LandmarkIcon,
+    FaCodeMerge as MergeIcon,
     FaMoneyCheck as MoneyCheckIcon,
     FaMoneyBillTrendUp as MoneyTrendIcon,
     FaPeopleGroup as PeopleGroupIcon,
@@ -896,6 +897,7 @@ export {
     ThreeDotIcon,
     MaleIcon,
     FemaleIcon,
+    MergeIcon,
 }
 
 export const IconMap = {
@@ -1309,6 +1311,7 @@ export const IconMap = {
     'Three Dot ICons': ThreeDotIcon,
     Male: MaleIcon,
     Female: FemaleIcon,
+    'Merge Icon': MergeIcon,
 }
 
 export type TIcon = (typeof ICONS)[number]

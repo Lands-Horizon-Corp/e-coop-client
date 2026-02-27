@@ -21,11 +21,11 @@ export const useAccountController = () => {
     })
 
     useEffect(() => {
-        if (!getAllAccounts || !getAllAccounts.data) return
-        if (getAllAccounts.data) {
+        if (!getAllAccounts?.data) return
+        if (accounts.length === 0) {
             setAccounts(getAllAccounts.data)
         }
-    }, [getAllAccounts, setAccounts])
+    }, [getAllAccounts.data])
 
     const modals = {
         createModal: useModalState(false),

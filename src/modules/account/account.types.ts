@@ -102,7 +102,6 @@ export interface IAccount extends IAuditable, ITimeStamps {
     account_category_id?: TEntityId
     account_category?: IAccountCategory
 
-    general_ledger_definition_id?: TEntityId
     financial_statement_definition_entries_id?: TEntityId
 
     account_classification_id?: TEntityId
@@ -205,6 +204,20 @@ export interface IAccount extends IAuditable, ITimeStamps {
     other_information_of_an_account?: TOtherInformationOfAnAccount
 
     interest_diminishing_by_year?: boolean
+    is_included_in_general_ledger?: boolean
+    is_included_in_financial_statement: boolean
+
+    general_ledger_definition_id?: TEntityId
+
+    net_surplus_positive_percentage_2?: number
+    net_surplus_negative_percentage_1?: number
+    net_surplus_negative_percentage_2?: number
+
+    financial_statement_title_id: TEntityId
+
+    gl_total_debit?: number
+    gl_total_credit?: number
+    gl_total_balance?: number
 }
 
 export interface IAccountHistory extends IAccount {

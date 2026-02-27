@@ -289,11 +289,17 @@ export const useReorderAccounts = () => {
                 (old) => {
                     if (!old) return old
 
+                    const map = new Map(old.map((a) => [a.id, a]))
+
+                    const idSet = new Set(variables.ids)
+
                     const reordered = variables.ids
-                        .map((id) => old.find((a) => a.id === id))
+                        .map((id) => map.get(id))
                         .filter(Boolean)
 
-                    return reordered as IAccount[]
+                    const remaining = old.filter((a) => !idSet.has(a.id))
+
+                    return [...reordered, ...remaining] as IAccount[]
                 }
             )
 
@@ -307,14 +313,6 @@ export const useReorderAccounts = () => {
                     context.previousAccounts
                 )
             }
-        },
-
-        onSettled: () => {
-            setTimeout(() => {
-                queryClient.invalidateQueries({
-                    queryKey: ['account', 'all', 'all'],
-                })
-            }, 2000)
         },
     })
 }

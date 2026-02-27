@@ -19,9 +19,9 @@ import {
     sortableKeyboardCoordinates,
     verticalListSortingStrategy,
 } from '@dnd-kit/sortable'
-import { useVirtualizer } from '@tanstack/react-virtual'
 import debounce from 'lodash-es/debounce'
 import { ArrowUpDown, Plus, Search } from 'lucide-react'
+import { AutoSizer, List } from 'react-virtualized'
 
 import RefreshButton from '@/components/buttons/refresh-button'
 import { ChevronDownIcon } from '@/components/icons'
@@ -50,12 +50,6 @@ export const AccountList = () => {
 
     const accountIds = useMemo(() => accounts.map((a) => a.id), [accounts])
 
-    const rowVirtualizer = useVirtualizer({
-        count: accounts.length,
-        getScrollElement: () => parentRef.current,
-        estimateSize: () => 75, // Card Spacing Height Sheesh
-        overscan: 5,
-    })
     const { mutate: reorderAccounts } = useReorderAccounts()
 
     const [modalState, setModalState] = useState<{
@@ -280,42 +274,40 @@ export const AccountList = () => {
                         strategy={verticalListSortingStrategy}
                     >
                         <div
-                            className="h-screen overflow-auto ecoop-scroll"
+                            className="h-screen v1 ecoop-scroll"
                             ref={parentRef}
                         >
-                            <div
-                                style={{
-                                    height: `${rowVirtualizer.getTotalSize()}px`,
-                                    position: 'relative',
-                                }}
-                            >
-                                {rowVirtualizer
-                                    .getVirtualItems()
-                                    .map((virtualRow) => {
-                                        const account =
-                                            accounts[virtualRow.index]
+                            <AutoSizer>
+                                {({ height, width }) => (
+                                    <List
+                                        className="ecoop-scroll"
+                                        height={height}
+                                        overscanRowCount={10}
+                                        rowCount={accounts.length}
+                                        rowHeight={75}
+                                        rowRenderer={({
+                                            key,
+                                            index,
+                                            style,
+                                        }) => {
+                                            const item = accounts[index]
 
-                                        return (
-                                            <div
-                                                key={account.id}
-                                                style={{
-                                                    position: 'absolute',
-                                                    top: 0,
-                                                    left: 0,
-                                                    width: '99.5%',
-                                                    transform: `translateY(${virtualRow.start}px)`,
-                                                }}
-                                            >
-                                                <AccountCard
-                                                    account={account}
-                                                    setModalState={
-                                                        handleModalState
-                                                    }
-                                                />
-                                            </div>
-                                        )
-                                    })}
-                            </div>
+                                            return (
+                                                <div key={key} style={style}>
+                                                    <AccountCard
+                                                        account={item}
+                                                        setModalState={
+                                                            handleModalState
+                                                        }
+                                                    />
+                                                </div>
+                                            )
+                                        }}
+                                        width={width}
+                                    />
+                                )}
+                            </AutoSizer>
+
                             <div className="fixed bottom-6 right-6 flex flex-col gap-2 z-50">
                                 {canScrollUp ? (
                                     <Button
