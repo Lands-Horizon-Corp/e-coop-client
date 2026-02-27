@@ -272,8 +272,8 @@ export const AccountList = () => {
                                             return (
                                                 <div key={key} style={style}>
                                                     <AccountCard
-                                                        key={item.id}
                                                         account={item}
+                                                        key={item.id}
                                                         setModalState={
                                                             handleModalState
                                                         }
