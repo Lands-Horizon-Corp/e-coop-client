@@ -36,17 +36,10 @@ import { AccountCard, TAccountModalState } from './account-card'
 import AccountCreateUpdateFormModal from './forms/account-create-update-form'
 
 export const AccountList = () => {
-    const {
-        accountsQuery,
-        createModal,
-        setAccounts,
-        accounts,
-        // settings_payment_type_default_value,
-    } = useAccountContext()
-    const [canScrollUp, setCanScrollUp] = useState(false)
-    const [_, setCanScrollDown] = useState(false)
+    const { accountsQuery, createModal, setAccounts, accounts } =
+        useAccountContext()
 
-    const parentRef = useRef<HTMLDivElement>(null)
+    const parentRef = useRef<List>(null)
 
     const accountIds = useMemo(() => accounts.map((a) => a.id), [accounts])
 
@@ -150,33 +143,19 @@ export const AccountList = () => {
     }
 
     const scrollTo = (direction: 'up' | 'down') => {
-        const container = parentRef.current
-        if (!container) return
+        const list = parentRef.current
+        if (!list) return
 
-        container.scrollTo({
-            top: direction === 'up' ? 0 : container.scrollHeight,
-            behavior: 'smooth',
-        })
+        if (direction === 'up') {
+            list.scrollToRow(0)
+        } else {
+            list.scrollToRow(accounts.length - 1) // last item
+        }
     }
 
     useEffect(() => {
         const container = parentRef.current
         if (!container) return
-
-        const handleScroll = () => {
-            setCanScrollUp(container.scrollTop > 0)
-            setCanScrollDown(
-                container.scrollTop + container.clientHeight <
-                    container.scrollHeight
-            )
-        }
-
-        handleScroll()
-        container.addEventListener('scroll', handleScroll)
-
-        return () => {
-            container.removeEventListener('scroll', handleScroll)
-        }
     }, [])
 
     return (
@@ -273,13 +252,14 @@ export const AccountList = () => {
                         items={accountIds}
                         strategy={verticalListSortingStrategy}
                     >
-                        <div className="h-screen ecoop-scroll" ref={parentRef}>
+                        <div className="h-screen ecoop-scroll">
                             <AutoSizer>
                                 {({ height, width }) => (
                                     <List
                                         className="ecoop-scroll"
                                         height={height}
                                         overscanRowCount={10}
+                                        ref={parentRef}
                                         rowCount={accounts.length}
                                         rowHeight={75}
                                         rowRenderer={({
@@ -306,25 +286,22 @@ export const AccountList = () => {
                             </AutoSizer>
 
                             <div className="fixed bottom-6 right-6 flex flex-col gap-2 z-50">
-                                {canScrollUp ? (
-                                    <Button
-                                        className="rounded-full shadow-lg border border-border h-10 w-10"
-                                        onClick={() => scrollTo('up')}
-                                        size="icon"
-                                        variant={'secondary'}
-                                    >
-                                        <ChevronDownIcon className="h-5 w-5 rotate-180" />
-                                    </Button>
-                                ) : (
-                                    <Button
-                                        className="rounded-full shadow-lg border border-border h-10 w-10"
-                                        onClick={() => scrollTo('down')}
-                                        size="icon"
-                                        variant={'secondary'}
-                                    >
-                                        <ChevronDownIcon className="h-5 w-5" />
-                                    </Button>
-                                )}
+                                <Button
+                                    className="rounded-full shadow-lg border border-border h-10 w-10"
+                                    onClick={() => scrollTo('up')}
+                                    size="icon"
+                                    variant={'secondary'}
+                                >
+                                    <ChevronDownIcon className="h-5 w-5 rotate-180" />
+                                </Button>
+                                <Button
+                                    className="rounded-full shadow-lg border border-border h-10 w-10"
+                                    onClick={() => scrollTo('down')}
+                                    size="icon"
+                                    variant={'secondary'}
+                                >
+                                    <ChevronDownIcon className="h-5 w-5" />
+                                </Button>
                             </div>
                         </div>
                     </SortableContext>
