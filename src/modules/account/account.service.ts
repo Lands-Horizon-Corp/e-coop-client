@@ -314,6 +314,11 @@ export const useReorderAccounts = () => {
                 )
             }
         },
+        onSuccess: () => {
+            queryClient.invalidateQueries({
+                queryKey: ['account', 'all', 'all'],
+            })
+        },
     })
 }
 

@@ -98,9 +98,10 @@ const AccountCreateUpdateForm = ({
 
     const onSubmit = form.handleSubmit((data: TAccountFormValues) => {
         const request = {
+            ...data,
             branch_id: branchId,
             organization_id: organizationId,
-            ...data,
+            // index: data.index - 1,
         }
         if (accountId) {
             toast.promise(

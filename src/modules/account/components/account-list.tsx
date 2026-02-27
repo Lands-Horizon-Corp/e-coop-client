@@ -20,11 +20,11 @@ import {
     verticalListSortingStrategy,
 } from '@dnd-kit/sortable'
 import debounce from 'lodash-es/debounce'
-import { ArrowUpDown, Plus, Search } from 'lucide-react'
+import { ArrowUpDown, Plus } from 'lucide-react'
 import { AutoSizer, List } from 'react-virtualized'
 
 import RefreshButton from '@/components/buttons/refresh-button'
-import { ChevronDownIcon } from '@/components/icons'
+import { ChevronDownIcon, MagnifyingGlassIcon } from '@/components/icons'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Skeleton } from '@/components/ui/skeleton'
@@ -128,9 +128,10 @@ export const AccountList = () => {
         let newIndex = currentIndex
 
         if (type === 'positive') {
+            console.log('hello')
             newIndex = currentIndex + 1
         } else if (type === 'negative') {
-            newIndex = currentIndex - 1
+            newIndex = currentIndex
         }
 
         // Clamp index within bounds
@@ -149,7 +150,7 @@ export const AccountList = () => {
         if (direction === 'up') {
             list.scrollToRow(0)
         } else {
-            list.scrollToRow(accounts.length - 1) // last item
+            list.scrollToRow(accounts.length - 1)
         }
     }
 
@@ -167,10 +168,6 @@ export const AccountList = () => {
                         index: modalState.index,
                         general_ledger_type:
                             modalState.account?.general_ledger_type,
-                        // default_payment_type_id:
-                        //     settings_payment_type_default_value?.id,
-                        // default_payment_type:
-                        //     settings_payment_type_default_value,
                     },
                 }}
                 {...createModal}
@@ -200,7 +197,7 @@ export const AccountList = () => {
 
                 {/* Search */}
                 <div className="relative">
-                    <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                    <MagnifyingGlassIcon className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
                     <Input
                         className="pl-10 bg-secondary border-border"
                         onChange={(e) => setSearch(e.target.value)}

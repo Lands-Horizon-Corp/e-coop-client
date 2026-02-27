@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 
+import Fuse from 'fuse.js'
 import { toast } from 'sonner'
 
 import useConfirmModalStore from '@/store/confirm-modal-store'
@@ -22,6 +23,7 @@ import { /*  */ Plus } from 'lucide-react'
 import { AutoSizer, List } from 'react-virtualized'
 
 import RefreshButton from '@/components/buttons/refresh-button'
+import GenericSearchInput from '@/components/search/generic-search-input'
 import { Button } from '@/components/ui/button'
 import {
     Empty,
@@ -55,8 +57,14 @@ import { FinancialStatementTitleCreateUpdateFormModal } from '../components/fina
 //         exclude_consolidate_total: false,
 //         index,
 //         color: `hsl(${(index * 35) % 360}, 70%, 50%)`,
-//         created_at: new Date(),
-//         updated_at: new Date(),
+//         created_at: new Date().toISOString(),
+//         updated_at: new Date().toISOString(),
+//         organization: {},
+//         organization_id: `org-${index + 1}`,
+//         branch: {},
+//         branch_id: `branch-${index + 1}`,
+//         created_by: {},
+//         created_by_id: '',
 //     }))
 // }
 
@@ -64,6 +72,8 @@ const FinancialStatementTitleList = () => {
     const [selectedFinancialTitle, setFinancialTitle] =
         useState<IFinancialStatementTitle | null>(null)
     const { onOpen } = useConfirmModalStore()
+
+    const [search, setSearch] = useState('')
 
     const {
         data,
@@ -88,6 +98,25 @@ const FinancialStatementTitleList = () => {
     const onOpenState = useModalState(false)
 
     const [titles, setTitles] = useState<IFinancialStatementTitle[]>([])
+
+    const fuse = useMemo(
+        () =>
+            new Fuse<IFinancialStatementTitle>(titles, {
+                keys: [{ name: 'title', weight: 0.7 }],
+                threshold: 0.3,
+                ignoreLocation: true,
+                minMatchCharLength: 3,
+            }),
+        [titles]
+    )
+
+    const filteredTitles = useMemo(() => {
+        if (!search.trim()) return titles
+
+        return fuse.search(search).map((result) => result.item)
+    }, [search, fuse, titles])
+
+    const isSearching = !!search.trim()
 
     useEffect(() => {
         if (!data) return
@@ -142,7 +171,7 @@ const FinancialStatementTitleList = () => {
     const isLoading = isLoadingData || isRefetching
 
     return (
-        <div className=" flex-1 w-full h-screen max-w-2xl mx-auto space-y-4 p-5 bg-card rounded-2xl">
+        <div className=" flex-1 w-full h-screen max-w-2xl mx-auto overflow-auto overflow-y-hidden space-y-4 p-5 bg-card rounded-2xl">
             <FinancialStatementTitleCreateUpdateFormModal
                 {...onOpenState}
                 formProps={{
@@ -151,10 +180,13 @@ const FinancialStatementTitleList = () => {
                         selectedFinancialTitle?.id ?? undefined,
                 }}
             />
-            <div className="flex justify-between items-center">
-                <h2 className="text-lg font-semibold">
-                    Financial Statement Titles
-                </h2>
+            <div className="flex justify-between gap-x-2 items-center">
+                <GenericSearchInput
+                    debounce={500}
+                    inputClassName="pl-10 !bg-card border-border"
+                    placeholder="search financial statement title"
+                    setSearchTerm={setSearch}
+                />
                 <div className=" inline-flex gap-x-1 items-center">
                     <Button
                         onClick={() => {
@@ -169,12 +201,24 @@ const FinancialStatementTitleList = () => {
                 </div>
             </div>
 
+            {/* Content */}
             {isLoading ? (
                 <FinancialStatementTitleSkeleton />
-            ) : titles.length === 0 ? (
+            ) : filteredTitles.length === 0 ? (
                 <FinancialStatementTitleEmptyState
                     onCreate={() => onOpenState.onOpenChange(true)}
                 />
+            ) : isSearching ? (
+                <div className="space-y-2">
+                    {filteredTitles.map((item) => (
+                        <SortableRowFinancialStatementTitle
+                            item={item}
+                            key={item.id}
+                            onSelect={handleFinancialStatementTitleAction}
+                            searchTerm={search}
+                        />
+                    ))}
+                </div>
             ) : (
                 <DndContext
                     collisionDetection={closestCenter}
@@ -189,13 +233,13 @@ const FinancialStatementTitleList = () => {
                         <AutoSizer>
                             {({ height, width }) => (
                                 <List
-                                    className="v1 ecoop-scroll h-screen"
+                                    className="ecoop-scroll"
                                     height={height}
-                                    overscanRowCount={10}
-                                    rowCount={titles.length}
-                                    rowHeight={60} // adjust to your real height
+                                    overscanRowCount={50}
+                                    rowCount={filteredTitles.length}
+                                    rowHeight={35}
                                     rowRenderer={({ key, index, style }) => {
-                                        const item = titles[index]
+                                        const item = filteredTitles[index]
 
                                         return (
                                             <div key={key} style={style}>

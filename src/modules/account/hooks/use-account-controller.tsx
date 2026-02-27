@@ -22,9 +22,7 @@ export const useAccountController = () => {
 
     useEffect(() => {
         if (!getAllAccounts?.data) return
-        if (accounts.length === 0) {
-            setAccounts(getAllAccounts.data)
-        }
+        setAccounts(getAllAccounts.data)
     }, [getAllAccounts.data])
 
     const modals = {

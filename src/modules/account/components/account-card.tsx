@@ -139,7 +139,14 @@ export const AccountCard = memo(
                                         >
                                             <GripVertical />
                                         </Button>
-
+                                        <Button
+                                            className="cursor-grab rounded p-1 hover:bg-transparent! text-muted-foreground hover:text-foreground active:cursor-grabbing"
+                                            disabled={isSearching}
+                                            size="xs"
+                                            variant="ghost"
+                                        >
+                                            <span>{account.index}</span>
+                                        </Button>
                                         <div
                                             className={cn(
                                                 'flex h-9 w-9 shrink-0 items-center justify-center rounded-md transition-all duration-300',

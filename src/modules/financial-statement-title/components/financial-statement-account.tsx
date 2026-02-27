@@ -2,6 +2,7 @@ import { useSortable } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
 import { GripVertical, MoreHorizontal } from 'lucide-react'
 
+import { highlightMatch } from '@/components/hightlight-match'
 import { PencilFillIcon, TrashFillIcon } from '@/components/icons'
 import { Button } from '@/components/ui/button'
 import {
@@ -21,9 +22,14 @@ export type TSelectFinancialItem = {
 interface RowProps {
     item: IFinancialStatementTitle
     onSelect?: (data: TSelectFinancialItem) => void
+    searchTerm?: string
 }
 
-const SortableRowFinancialStatementTitle = ({ item, onSelect }: RowProps) => {
+const SortableRowFinancialStatementTitle = ({
+    item,
+    onSelect,
+    searchTerm,
+}: RowProps) => {
     const {
         attributes,
         listeners,
@@ -41,7 +47,7 @@ const SortableRowFinancialStatementTitle = ({ item, onSelect }: RowProps) => {
         <div className="" ref={setNodeRef} style={style}>
             <div
                 className={`
-                    group flex items-center gap-4 p-2 rounded-lg border transition-all duration-200
+                    group flex items-center gap-4 p-0 rounded-r-lg border transition-all duration-200
                     ${
                         isDragging
                             ? 'bg-accent/50 border-primary/50 shadow-xl scale-[1.02] rotate-1'
@@ -51,7 +57,7 @@ const SortableRowFinancialStatementTitle = ({ item, onSelect }: RowProps) => {
             >
                 {/* Decorative Color Strip - more modern than a full left border */}
                 <div
-                    className="w-1.5 h-10 rounded-full"
+                    className="w-1.5 h-8"
                     style={{ backgroundColor: item.color }}
                 />
 
@@ -67,7 +73,9 @@ const SortableRowFinancialStatementTitle = ({ item, onSelect }: RowProps) => {
                 {/* Title Content */}
                 <div className="flex-1 min-w-0">
                     <h4 className="font-semibold text-sm truncate tracking-tight">
-                        {item.title}
+                        {searchTerm
+                            ? highlightMatch(item.title, searchTerm)
+                            : item.title}
                     </h4>
                     {/* <div className="flex items-center gap-2 mt-0.5">
                         <span className="text-[10px] uppercase font-bold text-muted-foreground tracking-wider">
