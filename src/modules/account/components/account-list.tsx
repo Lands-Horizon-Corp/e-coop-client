@@ -273,10 +273,7 @@ export const AccountList = () => {
                         items={accountIds}
                         strategy={verticalListSortingStrategy}
                     >
-                        <div
-                            className="h-screen v1 ecoop-scroll"
-                            ref={parentRef}
-                        >
+                        <div className="h-screen ecoop-scroll" ref={parentRef}>
                             <AutoSizer>
                                 {({ height, width }) => (
                                     <List
