@@ -117,9 +117,6 @@ httpClient.interceptors.request.use(async (config) => {
 
 const API = {
     getHttpClient: (): AxiosInstance => httpClient,
-
-    // Request geolocation permission and cache the result
-    // Call this in response to user interaction (e.g., button click)
     requestGeolocation,
 
     addRequestInterceptor(
@@ -197,6 +194,75 @@ const API = {
             },
             ...config,
         })
+    },
+
+    async stream<D = unknown, R = unknown>(
+        url: string,
+        data: D,
+        onChunk: (data: R) => void,
+        config?: {
+            params?: IRequestParams
+            headers?: Record<string, string>
+            signal?: AbortSignal
+        }
+    ): Promise<void> {
+        const baseUrl = httpClient.defaults.baseURL || ''
+        const fullUrl = url.startsWith('http')
+            ? url
+            : `${baseUrl.replace(/\/$/, '')}/${url.replace(/^\//, '')}`
+
+        const queryString = config?.params
+            ? `?${new URLSearchParams(config.params as any).toString()}`
+            : ''
+        const csrfToken = getCsrfTokenFromCookies()
+        const geoHeaders = getGeoHeaders()
+        const response = await fetch(`${fullUrl}${queryString}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                ...geoHeaders,
+                ...(csrfToken && { 'X-CSRF-Token': csrfToken }),
+                ...(typeof navigator !== 'undefined' && {
+                    'X-User-Agent': navigator.userAgent,
+                }),
+                ...config?.headers,
+            },
+            body: JSON.stringify(data),
+            credentials: 'include',
+            signal: config?.signal,
+        })
+        if (!response.ok) {
+            const errorText = await response.text()
+            throw new Error(errorText || `Stream failed: ${response.status}`)
+        }
+        if (!response.body) return
+        const reader = response.body.getReader()
+        const decoder = new TextDecoder()
+        let buffer = ''
+        try {
+            while (true) {
+                const { value, done } = await reader.read()
+                if (done) break
+                buffer += decoder.decode(value, { stream: true })
+                const lines = buffer.split('\n')
+                buffer = lines.pop() || ''
+                for (const line of lines) {
+                    const trimmed = line.trim()
+                    if (!trimmed) continue
+                    try {
+                        const parsed = JSON.parse(trimmed) as R
+                        onChunk(parsed)
+                    } catch (e) {
+                        console.warn(
+                            'Skipping unparsable stream line:',
+                            trimmed
+                        )
+                    }
+                }
+            }
+        } finally {
+            reader.releaseLock()
+        }
     },
 }
 
