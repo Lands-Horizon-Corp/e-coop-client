@@ -266,3 +266,13 @@ export type TAccountLoanConnect = {
 }
 
 export type TGetAllAccountMode = 'all' | 'loan-account-connections'
+
+export interface IAccountQuickSearchResponse {
+    id: string
+    name: string
+    description: string
+    type: string
+    account_classification?: IAccountClassification
+    account_category?: IAccountCategory
+    currency?: ICurrency
+}

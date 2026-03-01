@@ -18,6 +18,7 @@ import { TAPIQueryOptions, TEntityId, UpdateIndexRequest } from '@/types'
 import {
     IAccount,
     IAccountPaginated,
+    IAccountQuickSearchResponse,
     IAccountRequest,
     TAccountComputationsheetConnect,
     TAccountLoanConnect,
@@ -73,7 +74,17 @@ export const exportSelected = async (ids: TEntityId[]) => {
         { skipNull: true }
     )
 
-    await downloadFile(url, 'selected_banks_export.xlsx')
+    await downloadFile(url, 'selected_account_report.xlsx')
+}
+
+export const getAccountQuickSearch = async (search: string) => {
+    const url = qs.stringifyUrl({
+        url: `${accountAPIRoute}/quick/search`,
+        query: { search },
+    })
+
+    const response = await API.get<IAccountQuickSearchResponse[]>(url)
+    return response.data
 }
 
 export const AccountUpdateIndex = async (
@@ -450,5 +461,21 @@ export const useMoveAccountOrderIndex = createMutationFactory<
         [accountBaseQueryKey, 'all', 'loan-account-connections'],
     ],
 })
+
+export const useGetAccountQuickSearch = ({
+    search,
+    options,
+}: {
+    search: string
+    options?: HookQueryOptions<IAccountQuickSearchResponse[], Error>
+}) => {
+    return useQuery<IAccountQuickSearchResponse[], Error>({
+        queryKey: [accountBaseQueryKey, 'quick-search', search],
+        queryFn: () => getAccountQuickSearch(search),
+        enabled: search.length >= 2,
+        staleTime: 1000 * 30,
+        ...options,
+    })
+}
 
 export const logger = Logger.getInstance('account')
