@@ -21,6 +21,7 @@ import type {
     IMemberProfilePaginated,
     IMemberProfilePersonalInfoRequest,
     IMemberProfileQuickCreateRequest,
+    IMemberProfileQuickSearchResponse,
     IMemberProfileRequest,
 } from './member-profile.types'
 import { TMemberProfileCoordinatesSchema } from './member-profile.validation'
@@ -92,6 +93,16 @@ export const getMemberProfileDashboardSummary = async () => {
         )
     ).data
 }
+
+export const getMemberProfileQuickSearch = async (search: string) => {
+    const url = qs.stringifyUrl({
+        url: `${memberProfileAPIRoute}/quick/search`,
+        query: { search },
+    })
+    const response = await API.get<IMemberProfileQuickSearchResponse[]>(url)
+    return response.data
+}
+
 export const useGetPendingMemberProfiles = ({
     query,
     options,
@@ -331,5 +342,21 @@ export const useGetMemberProfile = createMutationFactory<
         })
     },
 })
+
+export const useGetMemberProfileQuickSearch = ({
+    search,
+    options,
+}: {
+    search: string
+    options?: HookQueryOptions<IMemberProfileQuickSearchResponse[], Error>
+}) => {
+    return useQuery<IMemberProfileQuickSearchResponse[], Error>({
+        queryKey: [memberProfileBaseKey, 'quick-search', search],
+        queryFn: () => getMemberProfileQuickSearch(search),
+        enabled: search.length >= 2,
+        staleTime: 1000 * 30,
+        ...options,
+    })
+}
 
 export const logger = Logger.getInstance('member-profile')
