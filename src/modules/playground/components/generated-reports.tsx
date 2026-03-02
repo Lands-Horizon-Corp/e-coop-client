@@ -197,8 +197,8 @@ function GeneratedReports() {
                             <div className="space-y-3 animate-in fade-in slide-in-from-top-2">
                                 <div className="flex justify-between items-center">
                                     <Badge
-                                        variant="secondary"
                                         className="uppercase tracking-wider"
+                                        variant="secondary"
                                     >
                                         {currentStatus.replace(/_/g, ' ')}
                                     </Badge>
@@ -207,16 +207,16 @@ function GeneratedReports() {
                                     </span>
                                 </div>
                                 <Progress
-                                    value={progress}
                                     className="w-full h-2"
+                                    value={progress}
                                 />
                             </div>
                         )}
 
                         <Button
-                            onClick={handleGenerateReport}
-                            disabled={loading}
                             className="w-full h-11"
+                            disabled={loading}
+                            onClick={handleGenerateReport}
                         >
                             {loading
                                 ? 'Generating Report...'
@@ -244,12 +244,12 @@ function GeneratedReports() {
                                 View PDF Document
                             </Button>
                             <Button
-                                variant="outline"
                                 onClick={() => {
                                     setReportData(null)
                                     setProgress(0)
                                     setCurrentStatus('IDLE')
                                 }}
+                                variant="outline"
                             >
                                 Reset
                             </Button>

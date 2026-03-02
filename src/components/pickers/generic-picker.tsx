@@ -123,7 +123,7 @@ const GenericPicker = <T extends { id: TEntityId }>({
     )
 }
 
-const GenericPickerInputSearch = ({
+export const GenericPickerInputSearch = ({
     placeHolder = 'Search...',
     defaultValue = '',
     onChange,
