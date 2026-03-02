@@ -2,7 +2,7 @@ import z from 'zod'
 
 export const FinancialStatementTitleSchema = z.object({
     title: z.string().min(1, 'FinancialStatementTitle title is required'),
-    total_title: z.string().optional(),
+    total_title: z.string().min(1, 'Financial total Title is required'),
 
     exclude_consolidate_total: z.boolean().optional(),
 

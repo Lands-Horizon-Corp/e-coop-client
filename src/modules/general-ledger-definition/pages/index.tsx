@@ -8,7 +8,7 @@
 // import { GLAccountsGroupingUpdateFormModal } from '@/modules/general-ledger-account-grouping'
 // import { GENERAL_LEDGER_TYPE } from '@/modules/general-ledger/general-ledger.constants'
 // import { useGeneralLedgerAccountsGroupingStore } from '@/store/general-ledger-accounts-groupings-store'
-import FinancialStatementTitleList from '@/modules/financial-statement-title/pages'
+import { FinancialStatement } from '@/modules/financial-statement-title/pages'
 import PermissionGuard from '@/modules/permission/components/permission-guard'
 
 import PageContainer from '@/components/containers/page-container'
@@ -323,7 +323,7 @@ const GeneralLedgerDefinitionPage = () => {
                             General Definition under construction
                         </Empty>
                     </div>
-                    <FinancialStatementTitleList />
+                    <FinancialStatement />
                     {/* <FinancialStatementTitleList /> */}
                 </div>
             </PermissionGuard>

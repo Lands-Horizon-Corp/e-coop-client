@@ -1,5 +1,6 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useMemo, useState } from 'react'
 
+import { UseQueryResult } from '@tanstack/react-query'
 import Fuse from 'fuse.js'
 import { toast } from 'sonner'
 
@@ -18,11 +19,12 @@ import {
     arrayMove,
     verticalListSortingStrategy,
 } from '@dnd-kit/sortable'
-import { FileText } from 'lucide-react'
-import { /*  */ Plus } from 'lucide-react'
+// import { FileText } from 'lucide-react'
+// import { /*  */ Plus } from 'lucide-react'
 import { AutoSizer, List } from 'react-virtualized'
 
 import RefreshButton from '@/components/buttons/refresh-button'
+import { FilesIcon, PlusIcon } from '@/components/icons'
 import GenericSearchInput from '@/components/search/generic-search-input'
 import { Button } from '@/components/ui/button'
 import {
@@ -47,40 +49,28 @@ import SortableRowFinancialStatementTitle, {
 } from '../components/financial-statement-account'
 import { FinancialStatementTitleCreateUpdateFormModal } from '../components/financial-statement-title-create-update'
 
-// export const generateMockFinancialStatementTitles = (
-//     count: number
-// ): IFinancialStatementTitle[] => {
-//     return Array.from({ length: count }).map((_, index) => ({
-//         id: `fst-${index + 1}`,
-//         title: `Section ${index + 1}`,
-//         total_title: `Total Section ${index + 1}`,
-//         exclude_consolidate_total: false,
-//         index,
-//         color: `hsl(${(index * 35) % 360}, 70%, 50%)`,
-//         created_at: new Date().toISOString(),
-//         updated_at: new Date().toISOString(),
-//         organization: {},
-//         organization_id: `org-${index + 1}`,
-//         branch: {},
-//         branch_id: `branch-${index + 1}`,
-//         created_by: {},
-//         created_by_id: '',
-//     }))
-// }
+const FinancialStatementTitleList = ({
+    financialStatementTitleQuery,
+    data: titles,
+}: {
+    financialStatementTitleQuery: UseQueryResult<
+        IFinancialStatementTitle[],
+        Error
+    >
+    data: IFinancialStatementTitle[]
+}) => {
+    const {
+        isLoading: isLoadingData,
+        // isRefetching: isRefetching,
+        refetch,
+    } = financialStatementTitleQuery
 
-const FinancialStatementTitleList = () => {
     const [selectedFinancialTitle, setFinancialTitle] =
         useState<IFinancialStatementTitle | null>(null)
     const { onOpen } = useConfirmModalStore()
 
     const [search, setSearch] = useState('')
 
-    const {
-        data,
-        isLoading: isLoadingData,
-        isRefetching: isRefetching,
-        refetch,
-    } = useGetAllFinancialStatementTitle()
     const { mutate: deleteFinancialStatementTitle } =
         useDeleteFinancialStatementTitleById({
             options: {
@@ -96,8 +86,6 @@ const FinancialStatementTitleList = () => {
     const { mutate: reorderTitles } = useFinancialStatementTitleOrder()
 
     const onOpenState = useModalState(false)
-
-    const [titles, setTitles] = useState<IFinancialStatementTitle[]>([])
 
     const fuse = useMemo(
         () =>
@@ -118,13 +106,6 @@ const FinancialStatementTitleList = () => {
 
     const isSearching = !!search.trim()
 
-    useEffect(() => {
-        if (!data) return
-        if (titles.length === 0) {
-            setTitles(data)
-        }
-    }, [data])
-
     const sensors = useSensors(
         useSensor(PointerSensor, {
             activationConstraint: { distance: 5 },
@@ -135,18 +116,17 @@ const FinancialStatementTitleList = () => {
 
     const handleDragEnd = (event: DragEndEvent) => {
         const { active, over } = event
+
         if (!over || active.id === over.id) return
 
-        setTitles((prev) => {
-            const oldIndex = prev.findIndex((i) => i.id === active.id)
-            const newIndex = prev.findIndex((i) => i.id === over.id)
+        const oldIndex = titles.findIndex((i) => i.id === active.id)
+        const newIndex = titles.findIndex((i) => i.id === over.id)
 
-            const newItems = arrayMove(prev, oldIndex, newIndex)
+        if (oldIndex === -1 || newIndex === -1) return
 
-            reorderTitles(newItems.map((i) => i.id))
+        const newItems = arrayMove(titles, oldIndex, newIndex)
 
-            return newItems
-        })
+        reorderTitles({ ids: newItems.map((item) => item.id) })
     }
 
     const handleFinancialStatementTitleAction = (
@@ -168,7 +148,7 @@ const FinancialStatementTitleList = () => {
         }
     }
 
-    const isLoading = isLoadingData || isRefetching
+    const isLoading = isLoadingData
 
     return (
         <div className=" flex-1 w-full h-screen max-w-2xl mx-auto overflow-auto overflow-y-hidden space-y-4 p-5 bg-card rounded-2xl">
@@ -194,7 +174,7 @@ const FinancialStatementTitleList = () => {
                         }}
                         size="sm"
                     >
-                        <Plus className="h-4 w-4 mr-1" />
+                        <PlusIcon className="h-4 w-4 mr-1" />
                         Create
                     </Button>
                     <RefreshButton onClick={refetch} />
@@ -244,7 +224,9 @@ const FinancialStatementTitleList = () => {
                                         return (
                                             <div key={key} style={style}>
                                                 <SortableRowFinancialStatementTitle
+                                                    isSearching={isSearching}
                                                     item={item}
+                                                    key={item.id}
                                                     onSelect={
                                                         handleFinancialStatementTitleAction
                                                     }
@@ -260,6 +242,17 @@ const FinancialStatementTitleList = () => {
                 </DndContext>
             )}
         </div>
+    )
+}
+
+export const FinancialStatement = () => {
+    const getFinancialStatementTitleData = useGetAllFinancialStatementTitle()
+
+    return (
+        <FinancialStatementTitleList
+            data={getFinancialStatementTitleData.data ?? []}
+            financialStatementTitleQuery={getFinancialStatementTitleData}
+        />
     )
 }
 
@@ -286,7 +279,7 @@ const FinancialStatementTitleEmptyState = ({
             <EmptyHeader>
                 <EmptyContent>
                     <div className="flex h-12 w-12 items-center justify-center rounded-md bg-muted">
-                        <FileText className="h-6 w-6 text-muted-foreground" />
+                        <FilesIcon className="h-6 w-6 text-muted-foreground" />
                     </div>
                 </EmptyContent>
 
@@ -299,7 +292,7 @@ const FinancialStatementTitleEmptyState = ({
             </EmptyHeader>
 
             <Button onClick={onCreate}>
-                <Plus className="mr-2 h-4 w-4" />
+                <PlusIcon className="mr-2 h-4 w-4" />
                 Create Title
             </Button>
         </Empty>

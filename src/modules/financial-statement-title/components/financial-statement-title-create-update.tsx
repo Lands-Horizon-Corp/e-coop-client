@@ -6,6 +6,7 @@ import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
 import { withToastCallbacks } from '@/helpers/callback-helper'
 import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
 import { cn } from '@/helpers/tw-utils'
+import { useHotkeys } from 'react-hotkeys-hook'
 
 import FormFooterResetSubmit from '@/components/form-components/form-footer-reset-submit'
 import { GradientBackground } from '@/components/gradient-background/gradient-background'
@@ -114,6 +115,18 @@ const FinancialStatementTitleCreateUpdateForm = ({
     const error = serverRequestErrExtractor({
         error: errorResponse,
     })
+
+    useHotkeys(
+        'ctrl + enter',
+        (e) => {
+            e.preventDefault()
+            onSubmit()
+        },
+        {
+            enableOnFormTags: true,
+        },
+        [onSubmit]
+    )
 
     return (
         <Form {...form}>

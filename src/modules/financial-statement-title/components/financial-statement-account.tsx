@@ -23,12 +23,14 @@ interface RowProps {
     item: IFinancialStatementTitle
     onSelect?: (data: TSelectFinancialItem) => void
     searchTerm?: string
+    isSearching?: boolean
 }
 
 const SortableRowFinancialStatementTitle = ({
     item,
     onSelect,
     searchTerm,
+    isSearching,
 }: RowProps) => {
     const {
         attributes,
@@ -47,7 +49,7 @@ const SortableRowFinancialStatementTitle = ({
         <div className="" ref={setNodeRef} style={style}>
             <div
                 className={`
-                    group flex items-center gap-4 p-0 rounded-r-lg border transition-all duration-200
+                    group flex items-center bg-background! gap-2 p-0 transition-all duration-200
                     ${
                         isDragging
                             ? 'bg-accent/50 border-primary/50 shadow-xl scale-[1.02] rotate-1'
@@ -55,20 +57,30 @@ const SortableRowFinancialStatementTitle = ({
                     }
                 `}
             >
-                {/* Decorative Color Strip - more modern than a full left border */}
                 <div
                     className="w-1.5 h-8"
                     style={{ backgroundColor: item.color }}
                 />
 
-                {/* Drag Handle - Only visible on hover to reduce clutter */}
-                <button
+                {/* Drag Handle */}
+                <Button
                     {...attributes}
                     {...listeners}
-                    className=" transition-opacity cursor-grab active:cursor-grabbing p-1 hover:bg-muted rounded"
+                    className="cursor-grab rounded p-1 hover:bg-transparent! text-muted-foreground hover:text-foreground active:cursor-grabbing"
+                    disabled={isSearching}
+                    size="xs"
+                    variant="ghost"
                 >
-                    <GripVertical className="text-muted-foreground" size={18} />
-                </button>
+                    <GripVertical />
+                </Button>
+                <Button
+                    className="cursor-grab rounded p-1 hover:bg-transparent! text-muted-foreground hover:text-foreground active:cursor-grabbing"
+                    disabled={isSearching}
+                    size="xs"
+                    variant="ghost"
+                >
+                    <span>{item.index}</span>
+                </Button>
 
                 {/* Title Content */}
                 <div className="flex-1 min-w-0">
@@ -118,10 +130,8 @@ const SortableRowFinancialStatementTitle = ({
                             className="text-destructive focus:text-destructive"
                             onClick={(e) => {
                                 e.stopPropagation()
-
                                 onSelect?.({
                                     item,
-
                                     action: 'delete',
                                 })
                             }}

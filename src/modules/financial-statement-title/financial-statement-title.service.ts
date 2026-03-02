@@ -1,6 +1,7 @@
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+
 import { Logger } from '@/helpers/loggers'
 import { createDataLayerFactory } from '@/providers/repositories/data-layer-factory'
-import { createMutationFactory } from '@/providers/repositories/mutation-factory'
 
 import type {
     IFinancialStatementTitle,
@@ -22,7 +23,7 @@ const {
 // ⚙️🛠️ API SERVICE HERE
 export const {
     API, // rarely used, for raw calls
-    route: financialStatementTitleAPIRoute, // matches url above
+    route: financialStatementTitleAPIRoute,
 
     create: createFinancialStatementTitle,
     updateById: updateFinancialStatementTitleById,
@@ -52,22 +53,63 @@ export const {
     useDeleteMany: useDeleteManyFinancialStatementTitle,
 } = apiCrudHooks
 
-type ids = string[]
+export const useFinancialStatementTitleOrder = () => {
+    const queryClient = useQueryClient()
 
-export const useFinancialStatementTitleOrder = createMutationFactory<
-    void,
-    void,
-    ids
->({
-    mutationFn: async (ids) => {
-        return (
-            await API.put<ids, void>(
-                `${financialStatementTitleAPIRoute}/order`,
-                ids
+    return useMutation({
+        mutationFn: async (variables: { ids: string[] }) => {
+            await API.put(`${financialStatementTitleAPIRoute}/order`, variables)
+        },
+
+        onMutate: async (variables) => {
+            await queryClient.cancelQueries({
+                queryKey: [`${financialStatementTitleBaseKey}`, 'all'],
+            })
+
+            const previousFinancialStatementTitle = queryClient.getQueryData<
+                IFinancialStatementTitle[]
+            >([`${financialStatementTitleBaseKey}`, 'all'])
+
+            queryClient.setQueryData<IFinancialStatementTitle[]>(
+                [`${financialStatementTitleBaseKey}`, 'all'],
+                (old) => {
+                    if (!old) return old
+
+                    const map = new Map(old.map((a) => [a.id, a]))
+
+                    const idSet = new Set(variables.ids)
+
+                    const reordered = variables.ids
+                        .map((id) => map.get(id))
+                        .filter(Boolean)
+
+                    const remaining = old.filter((a) => !idSet.has(a.id))
+
+                    return [
+                        ...reordered,
+                        ...remaining,
+                    ] as IFinancialStatementTitle[]
+                }
             )
-        ).data
-    },
-})
+
+            return { previousFinancialStatementTitle }
+        },
+
+        onError: (_err, _variables, context) => {
+            if (context?.previousFinancialStatementTitle) {
+                queryClient.setQueryData(
+                    [`${financialStatementTitleBaseKey}`, 'all'],
+                    context.previousFinancialStatementTitle
+                )
+            }
+        },
+        onSuccess: () => {
+            queryClient.invalidateQueries({
+                queryKey: [`${financialStatementTitleBaseKey}`, 'all'],
+            })
+        },
+    })
+}
 
 export const logger = Logger.getInstance('financial-statement-title')
 // custom hooks can go here
