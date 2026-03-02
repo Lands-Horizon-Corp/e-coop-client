@@ -12,25 +12,21 @@ import {
     BadgeCheckFillIcon,
     ChevronDownIcon,
     MagnifyingGlassIcon,
+    ScanLineIcon,
     XIcon,
 } from '@/components/icons'
 import ImageDisplay from '@/components/image-display'
-import Modal from '@/components/modals/modal'
 import MiniPaginationBar from '@/components/pagination-bars/mini-pagination-bar'
-import { GenericPickerInputSearch } from '@/components/pickers/generic-picker'
+import GenericPicker, {
+    GenericPickerInputSearch,
+} from '@/components/pickers/generic-picker'
 import LoadingSpinner from '@/components/spinners/loading-spinner'
 import { Button, ButtonProps } from '@/components/ui/button'
-import {
-    Command,
-    CommandEmpty,
-    CommandGroup,
-    CommandItem,
-    CommandList,
-} from '@/components/ui/command'
 import PreviewMediaWrapper from '@/components/wrappers/preview-media-wrapper'
 
 import useFilterState from '@/hooks/use-filter-state'
 import { useInternalState } from '@/hooks/use-internal-state'
+import { useModalState } from '@/hooks/use-modal-state'
 
 import {
     IMemberProfile,
@@ -39,6 +35,7 @@ import {
     useGetMemberProfileQuickSearch,
     useGetPaginatedMemberProfiles,
 } from '..'
+import { MemberQrScannerModal } from './member-qr-scanner'
 
 type MemberPickerVariant = 'quick' | 'full'
 
@@ -77,6 +74,7 @@ const MemberPicker = forwardRef<HTMLButtonElement, Props>(
     ) => {
         const isQuick = mode === 'quick'
         const queryClient = useQueryClient()
+        const qrScannerModal = useModalState()
 
         const [open, setOpen] = useInternalState(
             false,
@@ -98,7 +96,8 @@ const MemberPicker = forwardRef<HTMLButtonElement, Props>(
             },
         })
 
-        const { mutateAsync: getMember } = useGetMemberProfile()
+        const { mutateAsync: getMember, isPending: isPendingGetMember } =
+            useGetMemberProfile()
 
         // ================= FULL SEARCH =================
         const { finalFilterPayloadBase64, bulkSetFilter } = useFilterState({
@@ -133,165 +132,134 @@ const MemberPicker = forwardRef<HTMLButtonElement, Props>(
             quickQuery.isFetching ||
             fullQuery.isFetching ||
             quickQuery.isLoading ||
-            fullQuery.isLoading
+            fullQuery.isLoading ||
+            isPendingGetMember
 
-        // ================= HOTKEY =================
         useHotkeys(
             shortcutHotKey,
             (event) => {
                 event.preventDefault()
-                if (!disabled && allowShortcutHotKey) {
-                    setOpen(true)
+                event.stopPropagation()
+                if (!value && !disabled && !isFetching && allowShortcutHotKey) {
+                    setOpen(!open)
                 }
             },
-            { enableOnFormTags: true },
-            [disabled, allowShortcutHotKey]
+            {
+                enableOnFormTags: true,
+            },
+            [value, disabled, isFetching, allowShortcutHotKey, open]
         )
 
-        // ================= SELECT =================
+        console.log(value)
+
         const handleSelect = async (
             member: IMemberProfileQuickSearchResponse | IMemberProfile
         ) => {
             if (!member) return
-
             if (isQuick) {
                 const fullMember = await getMember(member.id)
-                onSelect?.(fullMember)
+                onSelect?.(fullMember as IMemberProfile)
             } else {
                 queryClient.setQueryData(['member', member.id], member)
+                console.log('hell')
                 onSelect?.(member as IMemberProfile)
             }
-
-            setOpen(false)
         }
 
         return (
             <>
-                {/* ================= MODAL ================= */}
-                <Modal
-                    className="h-fit max-w-[90vw] sm:max-w-2xl p-0"
-                    onOpenChange={setOpen}
-                    open={open}
-                >
-                    <div className="max-h-[70vh] flex flex-col">
-                        {/* SEARCH HEADER */}
-                        <div className="relative flex items-center border-b px-3">
-                            <MagnifyingGlassIcon className="mr-2 size-4 opacity-50" />
-
-                            {isQuick ? (
-                                <GenericPickerInputSearch
-                                    onChange={setSearch}
-                                    placeHolder={searchPlaceholder}
-                                />
-                            ) : (
-                                <GenericPickerInputSearch
-                                    onChange={(value) =>
-                                        bulkSetFilter(
-                                            [
-                                                {
-                                                    displayText: 'Full Name',
-                                                    field: 'full_name',
-                                                },
-                                                {
-                                                    displayText: 'PB',
-                                                    field: 'passbook',
-                                                },
-                                            ],
-                                            {
-                                                displayText: '',
-                                                mode: 'contains',
-                                                dataType: 'text',
-                                                value,
+                <div className="max-h-[70vh] flex flex-col">
+                    <GenericPicker
+                        customSearchComponent={
+                            isQuick && (
+                                <>
+                                    <div className="relative flex items-center border-b px-3">
+                                        <MagnifyingGlassIcon className="mr-2 size-4 opacity-50" />
+                                        <GenericPickerInputSearch
+                                            onChange={setSearch}
+                                            placeHolder={searchPlaceholder}
+                                        />
+                                        <Button
+                                            className="size-fit p-2 text-muted-foreground "
+                                            onClick={() =>
+                                                qrScannerModal.onOpenChange(
+                                                    true
+                                                )
                                             }
-                                        )
-                                    }
-                                    placeHolder={searchPlaceholder}
-                                />
-                            )}
-                        </div>
+                                            size="icon"
+                                            variant="ghost"
+                                        >
+                                            <ScanLineIcon />
+                                        </Button>
+                                    </div>
+                                </>
+                            )
+                        }
+                        isLoading={isFetching}
+                        items={members}
+                        listHeading={`Matched Results (${totalSize})`}
+                        onOpenChange={setOpen}
+                        onSearchChange={(searchValue) => {
+                            bulkSetFilter(
+                                [
+                                    {
+                                        displayText: 'full name',
+                                        field: 'full_name',
+                                    },
+                                    {
+                                        displayText: 'PB',
+                                        field: 'passbook',
+                                    },
+                                ],
+                                {
+                                    displayText: '',
+                                    mode: 'contains',
+                                    dataType: 'text',
+                                    value: searchValue,
+                                }
+                            )
+                        }}
+                        onSelect={(member) => {
+                            handleSelect(member)
+                        }}
+                        open={open}
+                        renderItem={(member) => {
+                            const isSelected = value?.id === member.id
+                            return (
+                                <div className="flex w-full items-center justify-between">
+                                    {/* LEFT SIDE */}
+                                    <div className="flex items-center gap-2 min-w-0">
+                                        <PreviewMediaWrapper
+                                            media={member.media}
+                                        >
+                                            <ImageDisplay
+                                                className="h-8 w-8 rounded-full object-cover shrink-0"
+                                                src={member.media?.download_url}
+                                            />
+                                        </PreviewMediaWrapper>
+                                        <div className="flex flex-col min-w-0">
+                                            <span className="truncate font-medium">
+                                                {member.full_name}
+                                            </span>
+                                            {showPBNo &&
+                                                'passbook' in member && (
+                                                    <span className="text-xs text-muted-foreground truncate">
+                                                        {(member.passbook as string) ||
+                                                            '-'}
+                                                    </span>
+                                                )}
+                                        </div>
+                                    </div>
 
-                        {/* LIST */}
-                        <Command
-                            className="flex-1 bg-transparent"
-                            shouldFilter={false}
-                        >
-                            <CommandList className="ecoop-scroll max-h-[400px] px-1">
-                                {/* Loading / Empty */}
-                                <CommandEmpty className="text-sm text-foreground/50">
-                                    {isFetching ? (
-                                        <LoadingSpinner className="inline" />
-                                    ) : (
-                                        'No members found.'
+                                    {/* RIGHT SIDE */}
+                                    {isSelected && (
+                                        <BadgeCheckFillIcon className="size-4 text-primary shrink-0" />
                                     )}
-                                </CommandEmpty>
-
-                                {members.length > 0 && (
-                                    <CommandGroup>
-                                        {members.map((member) => {
-                                            const isSelected =
-                                                value?.id === member.id
-
-                                            return (
-                                                <CommandItem
-                                                    className={cn(
-                                                        'cursor-pointer rounded-lg px-3 py-2'
-                                                    )}
-                                                    key={member.id}
-                                                    onSelect={() =>
-                                                        handleSelect(member)
-                                                    }
-                                                    value={member.full_name}
-                                                >
-                                                    <div className="flex w-full items-center justify-between">
-                                                        {/* LEFT SIDE */}
-                                                        <div className="flex items-center gap-2 min-w-0">
-                                                            <PreviewMediaWrapper
-                                                                media={
-                                                                    member.media
-                                                                }
-                                                            >
-                                                                <ImageDisplay
-                                                                    className="h-8 w-8 rounded-full object-cover shrink-0"
-                                                                    src={
-                                                                        member
-                                                                            .media
-                                                                            ?.download_url
-                                                                    }
-                                                                />
-                                                            </PreviewMediaWrapper>
-
-                                                            <div className="flex flex-col min-w-0">
-                                                                <span className="truncate font-medium">
-                                                                    {
-                                                                        member.full_name
-                                                                    }
-                                                                </span>
-
-                                                                {showPBNo &&
-                                                                    'passbook' in
-                                                                        member && (
-                                                                        <span className="text-xs text-muted-foreground truncate">
-                                                                            {(member.passbook as string) ||
-                                                                                '-'}
-                                                                        </span>
-                                                                    )}
-                                                            </div>
-                                                        </div>
-
-                                                        {/* RIGHT SIDE */}
-                                                        {isSelected && (
-                                                            <BadgeCheckFillIcon className="size-4 text-primary shrink-0" />
-                                                        )}
-                                                    </div>
-                                                </CommandItem>
-                                            )
-                                        })}
-                                    </CommandGroup>
-                                )}
-                            </CommandList>
-                        </Command>
-
-                        {/* PAGINATION ONLY FOR FULL MODE */}
+                                </div>
+                            )
+                        }}
+                        searchPlaceHolder="Search account name"
+                    >
                         {!isQuick && (
                             <MiniPaginationBar
                                 disablePageMove={fullQuery.isFetching}
@@ -315,10 +283,18 @@ const MemberPicker = forwardRef<HTMLButtonElement, Props>(
                                 }}
                             />
                         )}
-                    </div>
-                </Modal>
+                    </GenericPicker>
+                    <MemberQrScannerModal
+                        {...qrScannerModal}
+                        scannerProps={{
+                            onSelectMemberProfile: (memberProfile) => {
+                                onSelect?.(memberProfile)
+                                setOpen(false)
+                            },
+                        }}
+                    />
+                </div>
 
-                {/* ================= TRIGGER ================= */}
                 <div
                     className={cn(
                         'flex items-center space-x-1',
