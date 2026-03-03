@@ -34,11 +34,17 @@ const TransactionNoFoundBatch = ({ mode }: TransactionNoFoundBatchProps) => {
         return setData(newBatchData)
     }
 
-    useHotkeys('Enter', (e) => {
-        e.preventDefault()
-        if (hasNoTransactionBatch) return
-        createBatchModalState.onOpenChange(true)
-    })
+    useHotkeys(
+        'Enter',
+        (e) => {
+            e.preventDefault()
+            if (hasNoTransactionBatch) return
+            createBatchModalState.onOpenChange(true)
+        },
+        {
+            enableOnFormTags: true,
+        }
+    )
 
     // Logic Check: Usually you'd return null if a batch EXISTS.
     // Assuming your store logic 'hasNoTransactionBatch' means "there is no batch currently active"
