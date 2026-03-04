@@ -13,8 +13,9 @@ import {
     updateMutationInvalidationFn,
 } from '@/providers/repositories/mutation-factory'
 
-import { TAPIQueryOptions, TEntityId, UpdateIndexRequest } from '@/types'
+import { TAPIQueryOptions, TEntityId } from '@/types'
 
+import { TGeneralLedgerType } from '../general-ledger'
 import {
     IAccount,
     IAccountPaginated,
@@ -37,7 +38,7 @@ const { baseQueryKey, apiCrudHooks, apiCrudService } = createDataLayerFactory<
 
 export const accountBaseQueryKey = baseQueryKey
 
-export const { getAll: getAllAccounts } = apiCrudService
+export const { getAll: getAllAccounts, getById } = apiCrudService
 
 export const { API, route: accountAPIRoute } = apiCrudService
 
@@ -87,18 +88,18 @@ export const getAccountQuickSearch = async (search: string) => {
     return response.data
 }
 
-export const AccountUpdateIndex = async (
-    changedItems: UpdateIndexRequest[]
-): Promise<IAccount> => {
-    const response = await Promise.all(
-        changedItems.map((item) =>
-            API.put<{ accountId: TEntityId; index: number }, IAccount>(
-                `${accountAPIRoute}/${item.id}/index/${item.index}`
-            )
-        )
-    )
-    return response[0].data
-}
+// export const AccountUpdateIndex = async (
+//     changedItems: UpdateIndexRequest[]
+// ): Promise<IAccount> => {
+//     const response = await Promise.all(
+//         changedItems.map((item) =>
+//             API.put<{ accountId: TEntityId; index: number }, IAccount>(
+//                 `${accountAPIRoute}/${item.id}/index/${item.index}`
+//             )
+//         )
+//     )
+//     return response[0].data
+// }
 
 export const deleteAccountFromGLFS = async ({
     id,
@@ -112,15 +113,15 @@ export const deleteAccountFromGLFS = async ({
     ).data
 }
 
-export const useUpdateAccountIndex = createMutationFactory<
-    IAccount,
-    Error,
-    UpdateIndexRequest[]
->({
-    mutationFn: AccountUpdateIndex,
-    invalidationFn: (args) =>
-        updateMutationInvalidationFn('update-account-index', args),
-})
+// export const useUpdateAccountIndex = createMutationFactory<
+//     IAccount,
+//     Error,
+//     UpdateIndexRequest[]
+// >({
+//     mutationFn: AccountUpdateIndex,
+//     invalidationFn: (args) =>
+//         updateMutationInvalidationFn('update-account-index', args),
+// })
 
 export const useDeleteAccountFromGLFS = createMutationFactory<
     IAccount,
@@ -477,5 +478,18 @@ export const useGetAccountQuickSearch = ({
         ...options,
     })
 }
+
+export const useGetFirstAccountIndexByGlType = createMutationFactory<
+    number | undefined,
+    Error,
+    TGeneralLedgerType
+>({
+    mutationFn: async (glType) => {
+        const Accounts = await getAllAccounts()
+        return Accounts.find(
+            (account) => account.general_ledger_type === glType
+        )?.index
+    },
+})
 
 export const logger = Logger.getInstance('account')

@@ -171,7 +171,6 @@ export const AccountCard = memo(
 
                                         <div className="flex-1 min-w-0">
                                             <p className="font-semibold text-foreground truncate">
-                                                {/* {account.index} */}
                                                 {searchTerm
                                                     ? highlightMatch(
                                                           account.name,

@@ -7,11 +7,9 @@ import {
     AccountPicker,
     IAccount,
     useDeleteAccountFromGLFS,
-    useUpdateAccountIndex,
+    // useUpdateAccountIndex,
 } from '@/modules/account'
 import {
-    GeneralLedgerDefinitionCreateUpdateFormModal,
-    GeneralLedgerDefinitionNode,
     IGeneralLedgerDefinition,
     useConnectAccount,
     useDeleteById,
@@ -40,6 +38,9 @@ import {
 
 import { TEntityId, UpdateIndexRequest } from '@/types'
 
+import { GeneralLedgerDefinitionCreateUpdateFormModal } from '../../components'
+import GeneralLedgerDefinitionNode from './gl-definition-node'
+
 type GeneralLedgerTreeViewerProps = {
     treeData: IGeneralLedgerDefinition[]
     refetch?: () => void
@@ -58,9 +59,9 @@ const findNodePathByGlIdOnly = (
             return newPath
         }
 
-        if (node.general_ledger_definition) {
+        if (node.general_ledger_definition_entries) {
             const found = findNodePathByGlIdOnly(
-                node.general_ledger_definition,
+                node.general_ledger_definition_entries,
                 newPath,
                 glId
             )
@@ -91,9 +92,9 @@ const findNodePathWithAccounts = (
             return newPath
         }
 
-        if (node.general_ledger_definition) {
+        if (node.general_ledger_definition_entries) {
             const foundPath = findNodePathWithAccounts(
-                node.general_ledger_definition,
+                node.general_ledger_definition_entries,
                 newPath,
                 searchTerm
             )
@@ -133,7 +134,7 @@ const GeneralLedgerDefinitionTreeViewer = ({
         // ── Accounts Management ──
         changedAccounts,
         moveGeneralLedgerNode,
-        generalLedgerAccountsGroupingId,
+        // generalLedgerAccountsGroupingId,
     } = useGeneralLedgerAccountsGroupingStore()
 
     const {
@@ -142,7 +143,7 @@ const GeneralLedgerDefinitionTreeViewer = ({
         setViewAccountModalOpen,
         // openGeneralLedgerAccountTableModal,
         // setOpenGeneralLedgerAccountTableModal,
-        setChangedAccounts,
+        // setChangedAccounts,
         expandPath,
         resetExpansion,
         setTargetNodeId,
@@ -151,6 +152,7 @@ const GeneralLedgerDefinitionTreeViewer = ({
     } = useGLFSStore()
 
     const [searchTerm, setSearchTerm] = useState('')
+
     const { mutate: updateIndex, isPending } = useUpdateIndex({
         options: {
             onSuccess: () => {
@@ -197,14 +199,14 @@ const GeneralLedgerDefinitionTreeViewer = ({
         },
     })
 
-    const { mutate: updateAccountIndex } = useUpdateAccountIndex({
-        options: {
-            onSuccess: () => {
-                refetch?.()
-                setChangedAccounts?.([])
-            },
-        },
-    })
+    // const { mutate: updateAccountIndex } = useUpdateAccountIndex({
+    //     options: {
+    //         onSuccess: () => {
+    //             refetch?.()
+    //             setChangedAccounts?.([])
+    //         },
+    //     },
+    // })
 
     const { mutate: removeGLAccount } = useDeleteAccountFromGLFS({
         options: {
@@ -297,7 +299,7 @@ const GeneralLedgerDefinitionTreeViewer = ({
         changedAccounts: UpdateIndexRequest[]
     ) => {
         if (changedAccounts.length > 0) {
-            updateAccountIndex(changedAccounts)
+            // updateAccountIndex(changedAccounts)
         }
         if (changedGeneralLedgerItems.length > 0) {
             updateIndex(changedGeneralLedgerItems)
@@ -360,15 +362,13 @@ const GeneralLedgerDefinitionTreeViewer = ({
                 open={openViewAccountModal}
                 title="Account Details"
             />
-            {generalLedgerAccountsGroupingId && (
+            {generalLedgerDefinitionId && (
                 <GeneralLedgerDefinitionCreateUpdateFormModal
                     description={createOrUpdateDescription}
                     formProps={{
                         defaultValues: formDefaultValues,
                         generalLedgerDefinitionEntriesId:
                             generalLedgerDefinitionEntriesId,
-                        generalLedgerAccountsGroupingId:
-                            generalLedgerAccountsGroupingId,
                         generalLedgerDefinitionId: generalLedgerDefinitionId,
                         readOnly: isReadOnly,
                         onSuccess: OnSuccessCreateUpdateGLModal,

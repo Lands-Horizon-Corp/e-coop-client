@@ -42,6 +42,7 @@ export interface IAccountCreateUpdateFormProps
         IForm<Partial<IAccountRequest>, IAccount, string, TAccountFormValues> {
     accountId?: TEntityId
     onEditSuccess?: (account: IAccount) => void
+    accounts?: IAccount[]
 }
 
 const AccountCreateUpdateForm = ({
@@ -49,6 +50,7 @@ const AccountCreateUpdateForm = ({
     accountId,
     autoSave = false,
     onEditSuccess,
+    accounts,
     ...formProps
 }: IAccountCreateUpdateFormProps) => {
     const { currentAuth } = useAuthUserWithOrgBranch()
@@ -170,6 +172,7 @@ const AccountCreateUpdateForm = ({
 
                 <FormErrorMessage errorMessage={error} />
                 <AccountHeaderForm
+                    accounts={accounts}
                     form={form}
                     isDisabled={isDisabled}
                     isReadOnly={formProps.readOnly}

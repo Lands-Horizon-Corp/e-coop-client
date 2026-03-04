@@ -4,6 +4,10 @@ import { useRef } from 'react'
 import Fuse from 'fuse.js'
 
 import {
+    GENERAL_LEDGER_TYPE,
+    TGeneralLedgerType,
+} from '@/modules/general-ledger'
+import {
     DndContext,
     DragEndEvent,
     KeyboardSensor,
@@ -34,6 +38,22 @@ import { IAccount } from '../account.types'
 import { useAccountContext } from '../context/account-provider'
 import { AccountCard, TAccountModalState } from './account-card'
 import AccountCreateUpdateFormModal from './forms/account-create-update-form'
+
+export const getLastAccountForEachType = (
+    data: IAccount[]
+): Partial<Record<TGeneralLedgerType, IAccount>> => {
+    const result: Partial<Record<TGeneralLedgerType, IAccount>> = {}
+    const remainingTypes = new Set(GENERAL_LEDGER_TYPE)
+    for (let i = data.length - 1; i >= 0; i--) {
+        const currentAccount = data[i]
+        if (remainingTypes.has(currentAccount.general_ledger_type)) {
+            result[currentAccount.general_ledger_type] = currentAccount
+            remainingTypes.delete(currentAccount.general_ledger_type)
+            if (remainingTypes.size === 0) break
+        }
+    }
+    return result
+}
 
 export const AccountList = () => {
     const { accountsQuery, createModal, setAccounts, accounts } =
@@ -128,7 +148,6 @@ export const AccountList = () => {
         let newIndex = currentIndex
 
         if (type === 'positive') {
-            console.log('hello')
             newIndex = currentIndex + 1
         } else if (type === 'negative') {
             newIndex = currentIndex
@@ -162,13 +181,14 @@ export const AccountList = () => {
     return (
         <div className="mx-auto w-full max-w-3xl space-y-4 p-6">
             <AccountCreateUpdateFormModal
-                className=" min-w-[80vw] max-w-[80vw]"
+                className="min-w-[80vw] max-w-[80vw]"
                 formProps={{
                     defaultValues: {
                         index: modalState.index,
                         general_ledger_type:
                             modalState.account?.general_ledger_type,
                     },
+                    accounts,
                 }}
                 {...createModal}
             />

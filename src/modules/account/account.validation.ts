@@ -313,6 +313,8 @@ export const IAccountRequestSchema = z
             .default('None'),
 
         interest_diminishing_by_year: z.boolean().optional().default(false),
+
+        financial_statement_title_id: entityIdSchema.optional(),
     })
     .and(AccountTypeDiscriminator)
 

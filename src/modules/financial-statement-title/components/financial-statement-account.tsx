@@ -1,3 +1,4 @@
+import { cn } from '@/helpers'
 import { useSortable } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
 import { GripVertical, MoreHorizontal } from 'lucide-react'
@@ -24,6 +25,7 @@ interface RowProps {
     onSelect?: (data: TSelectFinancialItem) => void
     searchTerm?: string
     isSearching?: boolean
+    className?: string
 }
 
 const SortableRowFinancialStatementTitle = ({
@@ -31,6 +33,7 @@ const SortableRowFinancialStatementTitle = ({
     onSelect,
     searchTerm,
     isSearching,
+    className,
 }: RowProps) => {
     const {
         attributes,
@@ -42,11 +45,13 @@ const SortableRowFinancialStatementTitle = ({
     } = useSortable({ id: item.id })
 
     const style = {
+        opacity: isDragging ? 0.4 : undefined,
         transform: CSS.Transform.toString(transform),
         transition,
     }
+
     return (
-        <div className="" ref={setNodeRef} style={style}>
+        <div className={cn('', className)} ref={setNodeRef} style={style}>
             <div
                 className={`
                     group flex items-center bg-background! gap-2 p-0 transition-all duration-200

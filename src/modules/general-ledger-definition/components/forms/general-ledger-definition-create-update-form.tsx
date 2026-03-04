@@ -111,8 +111,8 @@ const GeneralLedgerDefinitionCreateUpdateForm = ({
         if (generalLedgerDefinitionId) {
             const request = {
                 ...data,
-                general_ledger_definition_entries_id:
-                    defaultValues?.general_ledger_definition_entries_id,
+                // general_ledger_definition_entries_id:
+                //     defaultValues?.id,
                 general_ledger_accounts_grouping_id:
                     generalLedgerAccountsGroupingId,
             }
@@ -242,7 +242,7 @@ const GeneralLedgerDefinitionCreateUpdateForm = ({
                     render={({ field }) => {
                         return (
                             <GradientBackground
-                                className="shadow-xs relative flex w-full items-start gap-2 rounded-2xl border border-input p-4 outline-none duration-200 ease-out has-[:checked]:border-primary/30 has-[:checked]:bg-primary/40"
+                                className="shadow-xs relative flex w-full items-start gap-2 rounded-2xl border border-input p-4 outline-none duration-200 ease-out has-checked:border-primary/30 has-checked:bg-primary/40"
                                 gradientOnly
                             >
                                 <Checkbox

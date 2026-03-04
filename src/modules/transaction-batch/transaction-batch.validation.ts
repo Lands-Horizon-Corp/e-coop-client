@@ -91,4 +91,8 @@ export const DepositInBankSchema = z.object({
     currency_id: entityIdSchema,
 })
 
+export const TimeMachineRequestSchema = z.object({
+    time_machine_time: z.date(),
+})
+export type TimeMachineRequest = z.infer<typeof TimeMachineRequestSchema>
 export type TDepositInBankSchema = z.infer<typeof DepositInBankSchema>

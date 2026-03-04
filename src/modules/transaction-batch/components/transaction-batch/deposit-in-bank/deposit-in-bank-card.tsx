@@ -35,10 +35,7 @@ const DepositInBankCard = ({
 
     return (
         <div
-            className={cn(
-                'relative flex-1 rounded-xl bg-accent p-2',
-                className
-            )}
+            className={cn('relative flex-1 rounded-xl bg-card p-2', className)}
         >
             <p className="text-lg">
                 {currencyFormat(depositInBankAmount, {

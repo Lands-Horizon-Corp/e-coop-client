@@ -150,8 +150,6 @@ const MemberPicker = forwardRef<HTMLButtonElement, Props>(
             [value, disabled, isFetching, allowShortcutHotKey, open]
         )
 
-        console.log(value)
-
         const handleSelect = async (
             member: IMemberProfileQuickSearchResponse | IMemberProfile
         ) => {
@@ -161,7 +159,6 @@ const MemberPicker = forwardRef<HTMLButtonElement, Props>(
                 onSelect?.(fullMember as IMemberProfile)
             } else {
                 queryClient.setQueryData(['member', member.id], member)
-                console.log('hell')
                 onSelect?.(member as IMemberProfile)
             }
         }

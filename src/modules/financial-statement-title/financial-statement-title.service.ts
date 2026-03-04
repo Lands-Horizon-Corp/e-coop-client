@@ -58,9 +58,13 @@ export const useFinancialStatementTitleOrder = () => {
 
     return useMutation({
         mutationFn: async (variables: { ids: string[] }) => {
-            await API.put(`${financialStatementTitleAPIRoute}/order`, variables)
+            return (
+                await API.put(
+                    `${financialStatementTitleAPIRoute}/order`,
+                    variables
+                )
+            ).data
         },
-
         onMutate: async (variables) => {
             await queryClient.cancelQueries({
                 queryKey: [`${financialStatementTitleBaseKey}`, 'all'],
@@ -94,7 +98,6 @@ export const useFinancialStatementTitleOrder = () => {
 
             return { previousFinancialStatementTitle }
         },
-
         onError: (_err, _variables, context) => {
             if (context?.previousFinancialStatementTitle) {
                 queryClient.setQueryData(
@@ -104,12 +107,11 @@ export const useFinancialStatementTitleOrder = () => {
             }
         },
         onSuccess: () => {
-            queryClient.invalidateQueries({
-                queryKey: [`${financialStatementTitleBaseKey}`, 'all'],
-            })
+            // queryClient.invalidateQueries({
+            //     queryKey: [`${financialStatementTitleBaseKey}`, 'all'],
+            // })
         },
     })
 }
 
 export const logger = Logger.getInstance('financial-statement-title')
-// custom hooks can go here

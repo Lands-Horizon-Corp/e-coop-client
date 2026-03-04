@@ -84,7 +84,7 @@ export const useGeneralLedgerAccountsGroupingStore =
                 for (const id of path) {
                     const node = current.find((item) => item.id === id)
                     if (!node) return null
-                    current = node.general_ledger_definition || []
+                    current = node.general_ledger_definition_entries || []
                 }
                 return current
             }
@@ -128,7 +128,7 @@ export const useGeneralLedgerAccountsGroupingStore =
                         item.index !== sorted[i]?.index
                 )
                 .map((item) => ({
-                    id: item.id,
+                    general_ledger_definition_id: item.id,
                     index: item.index,
                 }))
 
@@ -150,7 +150,7 @@ export const useGeneralLedgerAccountsGroupingStore =
                         return {
                             ...node,
                             general_ledger_definition: updateTree(
-                                node.general_ledger_definition || [],
+                                node.general_ledger_definition_entries || [],
                                 path,
                                 level + 1
                             ),

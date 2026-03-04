@@ -1,5 +1,6 @@
 import { useState } from 'react'
 
+import { UseQueryResult } from '@tanstack/react-query'
 import { toast } from 'sonner'
 
 import { cn } from '@/helpers'
@@ -23,20 +24,27 @@ import { Skeleton } from '@/components/ui/skeleton'
 import { IClassProps } from '@/types'
 
 import {
+    ITransactionBatch,
     TTransactionBatchFullorMin,
     useTransactionBatchSwitch,
-    useUnclosedTransactionBatches,
 } from '../..'
 import { useTransactionBatchStore } from '../../store/transaction-batch-store'
 
-const UnclosedTransactionBatchesList = ({ className }: IClassProps) => {
+interface UncloseTransactionBatch extends IClassProps {
+    uncloseBatchQuery: UseQueryResult<ITransactionBatch[], Error>
+}
+
+const UnclosedTransactionBatchesList = ({
+    className,
+    uncloseBatchQuery,
+}: UncloseTransactionBatch) => {
     const [isSwitching, setSwitching] = useState(false)
     const {
         data: unclosedBatches = [],
         isPending,
         isRefetching,
         refetch,
-    } = useUnclosedTransactionBatches()
+    } = uncloseBatchQuery
 
     return (
         <div
@@ -70,7 +78,7 @@ const UnclosedTransactionBatchesList = ({ className }: IClassProps) => {
                     one to close it out.
                 </p>
             </div>
-            <div className="space-y-2 w-full overflow-y-auto p-3">
+            <div className="space-y-2 w-full  overflow-y-auto p-3">
                 {unclosedBatches.map((batch) => (
                     <UnclosedBatchItem
                         batch={batch}
@@ -137,8 +145,9 @@ const UnclosedBatchItem = ({
         <div
             className={cn(
                 'group flex items-center justify-between relative gap-3 rounded-lg border border-border bg-card p-3 transition-colors hover:bg-accent',
-                !isToday &&
-                    'bg-linear-to-tl from-destructive/20 to-transparent border-destructive'
+                !isToday
+                    ? 'bg-linear-to-tl from-destructive/20 to-transparent border-destructive'
+                    : 'border-primary'
             )}
         >
             <div className="flex-1 min-w-0 space-y-1">

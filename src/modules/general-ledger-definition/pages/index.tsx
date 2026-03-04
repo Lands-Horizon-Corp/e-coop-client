@@ -8,11 +8,16 @@
 // import { GLAccountsGroupingUpdateFormModal } from '@/modules/general-ledger-account-grouping'
 // import { GENERAL_LEDGER_TYPE } from '@/modules/general-ledger/general-ledger.constants'
 // import { useGeneralLedgerAccountsGroupingStore } from '@/store/general-ledger-accounts-groupings-store'
-import { FinancialStatement } from '@/modules/financial-statement-title/pages'
+import FinancialStatementTitleList from '@/modules/financial-statement-title/pages'
 import PermissionGuard from '@/modules/permission/components/permission-guard'
+
+// 5import { useGeneralLedgerAccountsGroupingStore } from '@/store/general-ledger-accounts-groupings-store'
 
 import PageContainer from '@/components/containers/page-container'
 import { Empty } from '@/components/ui/empty'
+
+// import { useGetAll } from '../general-ledger-definition.service'
+// import GeneralLedgerDefinitionTreeViewer from './components/general-ledger-tree'
 
 // import {
 //     EditPencilIcon,
@@ -304,6 +309,20 @@ import { Empty } from '@/components/ui/empty'
 // }
 
 const GeneralLedgerDefinitionPage = () => {
+    // const {
+    //     data: generalLedgerGropings,
+    //     refetch: refetchGeneralLedgerAccountsGrouping,
+    //     isRefetching: isRefetchingGeneralLedgerAccountsGrouping,
+    //     isLoading: isLoadingGeneralLedgerAccountsGrouping,
+    // } = useGetAll()
+
+    // const { setGeneralLedgerAccountsGroupingId, setGeneralLedgerType } =
+    //     useGeneralLedgerAccountsGroupingStore()
+
+    // const refetch = () => refetchGeneralLedgerAccountsGrouping()
+    // const hasGeneralLedgerGropings =
+    //     generalLedgerGropings && generalLedgerGropings.length > 0
+
     return (
         <PageContainer className="w-full relative min-h-screen p-5">
             <PermissionGuard
@@ -319,11 +338,15 @@ const GeneralLedgerDefinitionPage = () => {
                         </Empty>
                     </div>
                     <div className="flex-2 h-screen ">
+                        {/* <GeneralLedgerDefinitionTreeViewer
+                            refetch={refetch}
+                            treeData={generalLedgerGropings ?? []}
+                        /> */}
                         <Empty className="border">
-                            General Definition under construction
+                            GL/FS is under construction
                         </Empty>
                     </div>
-                    <FinancialStatement />
+                    <FinancialStatementTitleList />
                     {/* <FinancialStatementTitleList /> */}
                 </div>
             </PermissionGuard>

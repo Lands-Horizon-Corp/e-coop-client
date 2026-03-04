@@ -46,7 +46,7 @@ export const GeneralLedgerAccountItem = ({
         transition,
         transform: transform ? CSS.Transform.toString(transform) : undefined,
     }
-
+    console.log(account.financial_statement_title?.title)
     return (
         <div
             className="flex items-center  p-2 border-b bg-sidebar rounded-sm"
@@ -119,7 +119,7 @@ export default function GLFSAccountsCardList({
                         item.index !== account[i]?.index
                 )
                 .map((item) => ({
-                    id: item.id,
+                    general_ledger_definition_id: item.id,
                     index: item.index,
                 }))
 
@@ -147,7 +147,7 @@ export default function GLFSAccountsCardList({
                                 handleDeleteAccount={handleRemoveAcount}
                                 id={accountItem.id}
                                 key={accountItem.id}
-                                title={accountItem.name}
+                                title={`${accountItem.name}`}
                             />
                         ))}
                     </div>

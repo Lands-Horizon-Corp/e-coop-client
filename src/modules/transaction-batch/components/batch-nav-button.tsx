@@ -13,6 +13,7 @@ import {
     TTransactionBatchFullorMin,
     transactionBatchQueryKey,
     useCurrentTransactionBatch,
+    useUnclosedTransactionBatches,
 } from '@/modules/transaction-batch'
 import { useTransactionBatchStore } from '@/modules/transaction-batch/store/transaction-batch-store'
 import { IEmployee } from '@/modules/user'
@@ -139,6 +140,12 @@ const TransactionBatchNavButton = (_props: Props) => {
     const {
         branch_setting: { currency },
     } = user_organization.branch
+
+    const unclosedTransactionBatchesList = useUnclosedTransactionBatches()
+
+    const hasNotToday = unclosedTransactionBatchesList?.data?.some(
+        (item) => !item.is_today
+    )
 
     return (
         <div className="flex gap-2 items-center">
@@ -269,12 +276,22 @@ const TransactionBatchNavButton = (_props: Props) => {
                     <Popover>
                         <PopoverTrigger asChild>
                             <Button
-                                className="relative group cursor-pointer rounded-lg border bg-warning gap-1.5 border-warning-foreground/40 dark:border-warning/80 text-warning-foreground/90 hover:bg-warning/10 hover:text-warning-foreground"
+                                className={cn(
+                                    'relative group  cursor-pointer rounded-lg border gap-1.5 border-warning-foreground/40  text-warning-foreground/90 hover:bg-warning/10 hover:text-warning-foreground',
+                                    hasNotToday
+                                        ? 'border-destructive! bg-destructive/20!'
+                                        : 'dark:border-warning/80  bg-warning'
+                                )}
                                 shadow="none"
                                 size="xs"
                                 variant="outline"
                             >
                                 <LayersIcon className="size-3 opacity-60" />
+                                {hasNotToday && (
+                                    <span className=" text-destructive text-2xl absolute -top-4 -right-1 animate-pulse  ">
+                                        •
+                                    </span>
+                                )}
                             </Button>
                         </PopoverTrigger>
                         <PopoverContent
@@ -282,7 +299,11 @@ const TransactionBatchNavButton = (_props: Props) => {
                             className="h-fit min-w-[360px] p-0 border border-none bg-transparent shadow-none"
                             sideOffset={8}
                         >
-                            <UnclosedTransactionBatchesList />
+                            <UnclosedTransactionBatchesList
+                                uncloseBatchQuery={
+                                    unclosedTransactionBatchesList
+                                }
+                            />
                         </PopoverContent>
                     </Popover>
                 </ButtonGroup>

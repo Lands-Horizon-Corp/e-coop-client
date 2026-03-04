@@ -27,16 +27,13 @@ export const createGLSFSService = <
     const { API, route } = createAPIRepository<TResponse, TRequest>(url)
 
     const updateIndex = async (
-        changedItems: UpdateIndexRequest[]
+        general_ledger_definition: UpdateIndexRequest[]
     ): Promise<TResponse> => {
-        const response = await Promise.all(
-            changedItems.map((item) =>
-                API.put<UpdateIndexRequest, TResponse>(
-                    `${route}/${item.id}/index/${item.index}`
-                )
-            )
+        const response = await API.put<UpdateIndexRequest[], TResponse>(
+            `${route}/order`,
+            general_ledger_definition
         )
-        return response[0].data
+        return response.data
     }
 
     const connectAccount = async ({

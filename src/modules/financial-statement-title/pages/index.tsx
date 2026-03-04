@@ -1,6 +1,5 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 
-import { UseQueryResult } from '@tanstack/react-query'
 import Fuse from 'fuse.js'
 import { toast } from 'sonner'
 
@@ -19,8 +18,6 @@ import {
     arrayMove,
     verticalListSortingStrategy,
 } from '@dnd-kit/sortable'
-// import { FileText } from 'lucide-react'
-// import { /*  */ Plus } from 'lucide-react'
 import { AutoSizer, List } from 'react-virtualized'
 
 import RefreshButton from '@/components/buttons/refresh-button'
@@ -49,24 +46,21 @@ import SortableRowFinancialStatementTitle, {
 } from '../components/financial-statement-account'
 import { FinancialStatementTitleCreateUpdateFormModal } from '../components/financial-statement-title-create-update'
 
-const FinancialStatementTitleList = ({
-    financialStatementTitleQuery,
-    data: titles,
-}: {
-    financialStatementTitleQuery: UseQueryResult<
-        IFinancialStatementTitle[],
-        Error
-    >
-    data: IFinancialStatementTitle[]
-}) => {
-    const {
-        isLoading: isLoadingData,
-        // isRefetching: isRefetching,
-        refetch,
-    } = financialStatementTitleQuery
+export const FinancialStatementTitleList = () => {
+    const getFinancialStatementTitleData = useGetAllFinancialStatementTitle()
+
+    const [titles, setTitles] = useState<IFinancialStatementTitle[]>(
+        getFinancialStatementTitleData.data ?? []
+    )
+
+    useEffect(() => {
+        if (!getFinancialStatementTitleData.data) return
+        setTitles(getFinancialStatementTitleData.data)
+    }, [getFinancialStatementTitleData.data])
 
     const [selectedFinancialTitle, setFinancialTitle] =
         useState<IFinancialStatementTitle | null>(null)
+
     const { onOpen } = useConfirmModalStore()
 
     const [search, setSearch] = useState('')
@@ -93,7 +87,7 @@ const FinancialStatementTitleList = ({
                 keys: [{ name: 'title', weight: 0.7 }],
                 threshold: 0.3,
                 ignoreLocation: true,
-                minMatchCharLength: 3,
+                minMatchCharLength: 1,
             }),
         [titles]
     )
@@ -122,11 +116,20 @@ const FinancialStatementTitleList = ({
         const oldIndex = titles.findIndex((i) => i.id === active.id)
         const newIndex = titles.findIndex((i) => i.id === over.id)
 
-        if (oldIndex === -1 || newIndex === -1) return
+        if (oldIndex === -1 || newIndex === -1) return titles
 
         const newItems = arrayMove(titles, oldIndex, newIndex)
 
-        reorderTitles({ ids: newItems.map((item) => item.id) })
+        setTitles(newItems)
+
+        reorderTitles(
+            { ids: newItems.map((item) => item.id) },
+            {
+                onSuccess: (titles) => {
+                    setTitles(titles as IFinancialStatementTitle[])
+                },
+            }
+        )
     }
 
     const handleFinancialStatementTitleAction = (
@@ -148,7 +151,7 @@ const FinancialStatementTitleList = ({
         }
     }
 
-    const isLoading = isLoadingData
+    const isLoading = getFinancialStatementTitleData.isLoading
 
     return (
         <div className=" flex-1 w-full h-screen max-w-2xl mx-auto overflow-auto overflow-y-hidden space-y-4 p-5 bg-card rounded-2xl">
@@ -177,7 +180,9 @@ const FinancialStatementTitleList = ({
                         <PlusIcon className="h-4 w-4 mr-1" />
                         Create
                     </Button>
-                    <RefreshButton onClick={refetch} />
+                    <RefreshButton
+                        onClick={getFinancialStatementTitleData.refetch}
+                    />
                 </div>
             </div>
 
@@ -189,9 +194,10 @@ const FinancialStatementTitleList = ({
                     onCreate={() => onOpenState.onOpenChange(true)}
                 />
             ) : isSearching ? (
-                <div className="space-y-2">
+                <div className="space-y-1">
                     {filteredTitles.map((item) => (
                         <SortableRowFinancialStatementTitle
+                            isSearching
                             item={item}
                             key={item.id}
                             onSelect={handleFinancialStatementTitleAction}
@@ -220,7 +226,6 @@ const FinancialStatementTitleList = ({
                                     rowHeight={35}
                                     rowRenderer={({ key, index, style }) => {
                                         const item = filteredTitles[index]
-
                                         return (
                                             <div key={key} style={style}>
                                                 <SortableRowFinancialStatementTitle
@@ -242,17 +247,6 @@ const FinancialStatementTitleList = ({
                 </DndContext>
             )}
         </div>
-    )
-}
-
-export const FinancialStatement = () => {
-    const getFinancialStatementTitleData = useGetAllFinancialStatementTitle()
-
-    return (
-        <FinancialStatementTitleList
-            data={getFinancialStatementTitleData.data ?? []}
-            financialStatementTitleQuery={getFinancialStatementTitleData}
-        />
     )
 }
 
