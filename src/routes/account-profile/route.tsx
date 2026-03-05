@@ -88,7 +88,7 @@ function RouteComponent() {
                             <div className="bg-popover/20 rounded-3xl overflow-clip mx-3 border border-border/20">
                                 <SidebarMenuButton
                                     asChild
-                                    className="last:border-b-0 group/sidebar-item transition-colors ease-in-out duration-75 px-2 py-5 rounded-none border-b-1 border-border/50  focus:bg-sidebar-accent/30"
+                                    className="last:border-b-0 group/sidebar-item transition-colors ease-in-out duration-75 px-2 py-5 rounded-none border-b border-border/50  focus:bg-sidebar-accent/30"
                                 >
                                     <Link
                                         className="flex items-center gap-x-2 px-4"
@@ -101,7 +101,7 @@ function RouteComponent() {
                                 </SidebarMenuButton>
                                 <SidebarMenuButton
                                     asChild
-                                    className="last:border-b-0 group/sidebar-item transition-colors ease-in-out duration-75 px-2 py-5 rounded-none border-b-1 border-border/50  focus:bg-sidebar-accent/30"
+                                    className="last:border-b-0 group/sidebar-item transition-colors ease-in-out duration-75 px-2 py-5 rounded-none border-b border-border/50  focus:bg-sidebar-accent/30"
                                 >
                                     <Link
                                         className="flex items-center gap-x-2 px-4"
@@ -114,7 +114,7 @@ function RouteComponent() {
                                 </SidebarMenuButton>
                                 <SidebarMenuButton
                                     asChild
-                                    className="last:border-b-0 group/sidebar-item transition-colors ease-in-out duration-75 px-2 py-5 rounded-none border-b-1 border-border/50  focus:bg-sidebar-accent/30"
+                                    className="last:border-b-0 group/sidebar-item transition-colors ease-in-out duration-75 px-2 py-5 rounded-none border-b border-border/50  focus:bg-sidebar-accent/30"
                                 >
                                     <Link
                                         className="flex items-center gap-x-2 px-4"
@@ -135,7 +135,7 @@ function RouteComponent() {
                             <div className="bg-popover/20 rounded-3xl overflow-clip mx-3 border border-border/20">
                                 <SidebarMenuButton
                                     asChild
-                                    className="last:border-b-0 group/sidebar-item transition-colors ease-in-out duration-75 px-2 py-5 rounded-none border-b-1 border-border/50  focus:bg-sidebar-accent/30"
+                                    className="last:border-b-0 group/sidebar-item transition-colors ease-in-out duration-75 px-2 py-5 rounded-none border-b border-border/50  focus:bg-sidebar-accent/30"
                                 >
                                     <Link
                                         className="flex items-center gap-x-2 px-4"
@@ -148,7 +148,7 @@ function RouteComponent() {
                                 </SidebarMenuButton>
                                 <SidebarMenuButton
                                     asChild
-                                    className="last:border-b-0 group/sidebar-item transition-colors ease-in-out duration-75 px-2 py-5 rounded-none border-b-1 border-border/50  focus:bg-sidebar-accent/30"
+                                    className="last:border-b-0 group/sidebar-item transition-colors ease-in-out duration-75 px-2 py-5 rounded-none border-b border-border/50  focus:bg-sidebar-accent/30"
                                 >
                                     <Link
                                         className="flex items-center gap-x-2 px-4"
@@ -161,7 +161,7 @@ function RouteComponent() {
                                 </SidebarMenuButton>
                                 <SidebarMenuButton
                                     asChild
-                                    className="last:border-b-0 group/sidebar-item transition-colors ease-in-out duration-75 px-2 py-5 rounded-none border-b-1 border-border/50  focus:bg-sidebar-accent/30"
+                                    className="last:border-b-0 group/sidebar-item transition-colors ease-in-out duration-75 px-2 py-5 rounded-none border-b border-border/50  focus:bg-sidebar-accent/30"
                                 >
                                     <Link
                                         className="flex items-center gap-x-2 px-4"
@@ -174,7 +174,7 @@ function RouteComponent() {
                                 </SidebarMenuButton>
                                 <SidebarMenuButton
                                     asChild
-                                    className="last:border-b-0 group/sidebar-item transition-colors ease-in-out duration-75 px-2 py-5 rounded-none border-b-1 border-border/50  focus:bg-sidebar-accent/30"
+                                    className="last:border-b-0 group/sidebar-item transition-colors ease-in-out duration-75 px-2 py-5 rounded-none border-b border-border/50  focus:bg-sidebar-accent/30"
                                 >
                                     <Link
                                         className="flex items-center gap-x-2 px-4"
@@ -195,7 +195,7 @@ function RouteComponent() {
                             <div className="bg-popover/20 rounded-3xl overflow-clip mx-3 border border-border/20">
                                 <SidebarMenuButton
                                     asChild
-                                    className="last:border-b-0 group/sidebar-item transition-colors ease-in-out duration-75 px-2 py-5 rounded-none border-b-1 border-border/50  focus:bg-sidebar-accent/30"
+                                    className="last:border-b-0 group/sidebar-item transition-colors ease-in-out duration-75 px-2 py-5 rounded-none border-b border-border/50  focus:bg-sidebar-accent/30"
                                 >
                                     <Link
                                         className="flex items-center gap-x-2 px-4"
@@ -218,7 +218,7 @@ function RouteComponent() {
                             <div className="bg-popover/20 rounded-3xl overflow-clip mx-3 border border-border/20">
                                 <SidebarMenuButton
                                     asChild
-                                    className="last:border-b-0 group/sidebar-item transition-colors ease-in-out duration-75 px-2 py-5 rounded-none border-b-1 border-border/50  focus:bg-sidebar-accent/30"
+                                    className="last:border-b-0 group/sidebar-item transition-colors ease-in-out duration-75 px-2 py-5 rounded-none border-b border-border/50  focus:bg-sidebar-accent/30"
                                 >
                                     <Link
                                         className="flex items-center gap-x-2 px-4"
@@ -231,7 +231,7 @@ function RouteComponent() {
                                 </SidebarMenuButton>
                                 <SidebarMenuButton
                                     asChild
-                                    className="last:border-b-0 group/sidebar-item transition-colors ease-in-out duration-75 px-2 py-5 rounded-none border-b-1 border-border/50  focus:bg-sidebar-accent/30"
+                                    className="last:border-b-0 group/sidebar-item transition-colors ease-in-out duration-75 px-2 py-5 rounded-none border-b border-border/50  focus:bg-sidebar-accent/30"
                                 >
                                     <Link
                                         className="flex items-center gap-x-2 px-4"
@@ -244,7 +244,7 @@ function RouteComponent() {
                                 </SidebarMenuButton>
                                 <SidebarMenuButton
                                     asChild
-                                    className="last:border-b-0 group/sidebar-item transition-colors ease-in-out duration-75 px-2 py-5 rounded-none border-b-1 border-border/50  focus:bg-sidebar-accent/30"
+                                    className="last:border-b-0 group/sidebar-item transition-colors ease-in-out duration-75 px-2 py-5 rounded-none border-b border-border/50  focus:bg-sidebar-accent/30"
                                 >
                                     <Link
                                         className="flex items-center gap-x-2 px-4"
@@ -257,7 +257,7 @@ function RouteComponent() {
                                 </SidebarMenuButton>
                                 <SidebarMenuButton
                                     asChild
-                                    className="last:border-b-0 group/sidebar-item transition-colors ease-in-out duration-75 px-2 py-5 rounded-none border-b-1 border-border/50  focus:bg-sidebar-accent/30"
+                                    className="last:border-b-0 group/sidebar-item transition-colors ease-in-out duration-75 px-2 py-5 rounded-none border-b border-border/50  focus:bg-sidebar-accent/30"
                                 >
                                     <Link
                                         className="flex items-center gap-x-2 px-4"
@@ -270,7 +270,7 @@ function RouteComponent() {
                                 </SidebarMenuButton>
                                 <SidebarMenuButton
                                     asChild
-                                    className="last:border-b-0 group/sidebar-item transition-colors ease-in-out duration-75 px-2 py-5 rounded-none border-b-1 border-border/50  focus:bg-sidebar-accent/30"
+                                    className="last:border-b-0 group/sidebar-item transition-colors ease-in-out duration-75 px-2 py-5 rounded-none border-b border-border/50  focus:bg-sidebar-accent/30"
                                 >
                                     <Link
                                         className="flex items-center gap-x-2 px-4"
@@ -283,7 +283,7 @@ function RouteComponent() {
                                 </SidebarMenuButton>
                                 <SidebarMenuButton
                                     asChild
-                                    className="last:border-b-0 group/sidebar-item transition-colors ease-in-out duration-75 px-2 py-5 rounded-none border-b-1 border-border/50  focus:bg-sidebar-accent/30"
+                                    className="last:border-b-0 group/sidebar-item transition-colors ease-in-out duration-75 px-2 py-5 rounded-none border-b border-border/50  focus:bg-sidebar-accent/30"
                                 >
                                     <Link
                                         className="flex items-center gap-x-2 px-4"
@@ -296,7 +296,7 @@ function RouteComponent() {
                                 </SidebarMenuButton>
                                 <SidebarMenuButton
                                     asChild
-                                    className="last:border-b-0 group/sidebar-item transition-colors ease-in-out duration-75 px-2 py-5 rounded-none border-b-1 border-border/50  focus:bg-sidebar-accent/30"
+                                    className="last:border-b-0 group/sidebar-item transition-colors ease-in-out duration-75 px-2 py-5 rounded-none border-b border-border/50  focus:bg-sidebar-accent/30"
                                 >
                                     <Link
                                         className="flex items-center gap-x-2 px-4"
@@ -311,7 +311,7 @@ function RouteComponent() {
                                 </SidebarMenuButton>
                                 <SidebarMenuButton
                                     asChild
-                                    className="last:border-b-0 group/sidebar-item transition-colors ease-in-out duration-75 px-2 py-5 rounded-none border-b-1 border-border/50  focus:bg-sidebar-accent/30"
+                                    className="last:border-b-0 group/sidebar-item transition-colors ease-in-out duration-75 px-2 py-5 rounded-none border-b border-border/50  focus:bg-sidebar-accent/30"
                                 >
                                     <Link
                                         className="flex items-center gap-x-2 px-4"
@@ -328,7 +328,7 @@ function RouteComponent() {
                                 </SidebarMenuButton>
                                 <SidebarMenuButton
                                     asChild
-                                    className="last:border-b-0 group/sidebar-item transition-colors ease-in-out duration-75 px-2 py-5 rounded-none border-b-1 border-border/50  focus:bg-sidebar-accent/30"
+                                    className="last:border-b-0 group/sidebar-item transition-colors ease-in-out duration-75 px-2 py-5 rounded-none border-b border-border/50  focus:bg-sidebar-accent/30"
                                 >
                                     <Link
                                         className="flex items-center gap-x-2 px-4"
@@ -343,7 +343,7 @@ function RouteComponent() {
                                 </SidebarMenuButton>
                                 <SidebarMenuButton
                                     asChild
-                                    className="last:border-b-0 group/sidebar-item transition-colors ease-in-out duration-75 px-2 py-5 rounded-none border-b-1 border-border/50  focus:bg-sidebar-accent/30"
+                                    className="last:border-b-0 group/sidebar-item transition-colors ease-in-out duration-75 px-2 py-5 rounded-none border-b border-border/50  focus:bg-sidebar-accent/30"
                                 >
                                     <Link
                                         className="flex items-center gap-x-2 px-4"
@@ -359,7 +359,7 @@ function RouteComponent() {
                                 </SidebarMenuButton>
                                 <SidebarMenuButton
                                     asChild
-                                    className="last:border-b-0 group/sidebar-item transition-colors ease-in-out duration-75 px-2 py-5 rounded-none border-b-1 border-border/50  focus:bg-sidebar-accent/30"
+                                    className="last:border-b-0 group/sidebar-item transition-colors ease-in-out duration-75 px-2 py-5 rounded-none border-b! border-border/50  focus:bg-sidebar-accent/30"
                                 >
                                     <Link
                                         className="flex items-center gap-x-2 px-4"
@@ -374,7 +374,7 @@ function RouteComponent() {
                                 </SidebarMenuButton>
                                 <SidebarMenuButton
                                     asChild
-                                    className="last:border-b-0 group/sidebar-item transition-colors ease-in-out duration-75 px-2 py-5 rounded-none border-b-1 border-border/50  focus:bg-sidebar-accent/30"
+                                    className="last:border-b-0 group/sidebar-item transition-colors ease-in-out duration-75 px-2 py-5 rounded-none border-b border-border/50  focus:bg-sidebar-accent/30"
                                 >
                                     <Link
                                         className="flex items-center gap-x-2 px-4"
@@ -448,7 +448,7 @@ const UserSidebarItem = ({ className }: IClassProps) => {
     return (
         <div
             className={cn(
-                '!text-lg flex rounded-3xl bg-popover border border-border/70 p-4 items-center gap-x-2',
+                'text-lg! flex rounded-3xl bg-popover border border-border/70 p-4 items-center gap-x-2',
                 className
             )}
         >
@@ -489,7 +489,7 @@ const SignOutButton = () => {
     return (
         <SidebarMenuButton
             asChild
-            className="last:border-b-0 group/sidebar-item transition-colors ease-in-out duration-75 px-2 py-5 rounded-none border-b-1 border-border/50  focus:bg-sidebar-accent/30"
+            className="last:border-b-0 group/sidebar-item transition-colors ease-in-out duration-75 px-2 py-5 rounded-none border-b border-border/50  focus:bg-sidebar-accent/30"
         >
             <a
                 className="flex items-center gap-x-2 px-4"

@@ -87,17 +87,7 @@ const FinancialStatemenTitleCombobox = ({
 
     return (
         <>
-            <FinancialStatementTitleCreateUpdateFormModal
-                {...createModal}
-                formProps={
-                    {
-                        //  onSuccess={(newDoc) => {
-                        // onChange?.(newDoc as IFinancialStatementDefinition)
-                        // setCreateModal(false)
-                    }
-                }
-            />
-
+            <FinancialStatementTitleCreateUpdateFormModal {...createModal} />
             <Popover modal onOpenChange={setOpen} open={open}>
                 <PopoverTrigger asChild>
                     <Button

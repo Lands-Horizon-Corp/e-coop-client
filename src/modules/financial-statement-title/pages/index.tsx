@@ -156,12 +156,18 @@ export const FinancialStatementTitleList = () => {
     return (
         <div className=" flex-1 w-full h-screen max-w-2xl mx-auto overflow-auto overflow-y-hidden space-y-4 p-5 bg-card rounded-2xl">
             <FinancialStatementTitleCreateUpdateFormModal
-                {...onOpenState}
                 formProps={{
                     defaultValues: selectedFinancialTitle ?? undefined,
                     financialStatementTitleId:
                         selectedFinancialTitle?.id ?? undefined,
                 }}
+                onOpenChange={(prev) => {
+                    if (!prev) {
+                        setFinancialTitle(null)
+                    }
+                    return onOpenState.onOpenChange(prev)
+                }}
+                open={onOpenState.open}
             />
             <div className="flex justify-between gap-x-2 items-center">
                 <GenericSearchInput

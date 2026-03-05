@@ -69,7 +69,10 @@ const FinancialStatementTitleCreateUpdateForm = ({
         options: {
             ...withToastCallbacks({
                 textSuccess: 'Financial Statement Title Created',
-                onSuccess: formProps.onSuccess,
+                onSuccess: (data) => {
+                    form.reset()
+                    formProps.onSuccess?.(data)
+                },
                 onError: formProps.onError,
             }),
         },
@@ -79,7 +82,10 @@ const FinancialStatementTitleCreateUpdateForm = ({
         options: {
             ...withToastCallbacks({
                 textSuccess: 'Financial Statement Title Updated',
-                onSuccess: formProps.onSuccess,
+                onSuccess: (data) => {
+                    form.reset()
+                    formProps.onSuccess?.(data)
+                },
                 onError: formProps.onError,
             }),
         },
