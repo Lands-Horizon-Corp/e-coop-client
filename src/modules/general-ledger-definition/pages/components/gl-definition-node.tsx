@@ -1,9 +1,10 @@
 import { useEffect, useRef } from 'react'
 
+import { cn } from '@/helpers'
+import { glTypeStyleMap } from '@/modules/account/components/account-card'
 import { IGeneralLedgerDefinition } from '@/modules/general-ledger-definition'
 import { GeneralLedgerTypeBadge } from '@/modules/general-ledger/components/general-ledger-type-badge'
 import { GLFSAccountsCardList } from '@/modules/gl-fs'
-import { useGLFSStore } from '@/store/gl-fs-store'
 import {
     DndContext,
     DragEndEvent,
@@ -25,11 +26,10 @@ import {
     DragHandleIcon,
 } from '@/components/icons'
 
-// import { PlainTextEditor } from '@/components/ui/text-editor'
-
 import { TEntityId } from '@/types'
 
-import GeneralLedgerDefinitionActions from './gl-definition-actions'
+import { useGeneralLedgerDefinition } from '../ context/general-ledger-context-provider'
+import GeneralLedgerDefinitionActions from './actions/gl-definition-actions'
 
 interface GeneralLedgerTreeNodeProps {
     node: IGeneralLedgerDefinition
@@ -44,8 +44,6 @@ interface GeneralLedgerTreeNodeProps {
     depth?: number
     refetch?: () => void
     isDeletingGLDefinition?: boolean
-    hanldeDeleteGeneralLedgerDefinition: (id: TEntityId) => void
-    handleRemoveAccountFromGLDefinition: (accountId: TEntityId) => void
 }
 
 const GeneralLedgerDefinitionNode = ({
@@ -55,18 +53,17 @@ const GeneralLedgerDefinitionNode = ({
     onDragEndNested,
     parentPath,
     isDeletingGLDefinition,
-    hanldeDeleteGeneralLedgerDefinition,
-    handleRemoveAccountFromGLDefinition,
 }: GeneralLedgerTreeNodeProps) => {
     const ref = useRef<HTMLDivElement>(null)
     const dragHandleRef = useRef<HTMLDivElement>(null)
 
     const {
+        queries,
         expandedNodeIds,
         targetNodeId,
         clearTargetNodeIdAfterScroll,
         toggleNode,
-    } = useGLFSStore()
+    } = useGeneralLedgerDefinition()
 
     const isNodeExpanded = expandedNodeIds.has(node.id)
 
@@ -118,7 +115,7 @@ const GeneralLedgerDefinitionNode = ({
         node.general_ledger_definition_entries &&
         node.general_ledger_definition_entries.length > 0
 
-    const isFirstLevel = depth === 0
+    const isFirstLevel = node.depth === 0
     const childLength = node.general_ledger_definition_entries?.length
     const hasAccountNode = node.accounts && node.accounts.length > 0
 
@@ -149,8 +146,14 @@ const GeneralLedgerDefinitionNode = ({
             ref={setNodeRef}
             style={style}
             {...attributes}
-            className={` ${isFirstLevel ? 'dark:border-0 py-5 pl-0 rounded-lg mt-1 border border-gray-400/30 dark:bg-background shadow-sm' : 'pt-1.5 pb-3  border border-gray-500/40 bg-gray-100 dark:bg-secondary/30 pl-0 rounded-lg mt-2 px-0'} ${isDragging ? 'rounded-lg border-2 border-primary ' : ''} `}
+            className={cn(
+                `'pb-3  bg-background p-2 mt-2 px-0'} ${isDragging ? 'rounded-lg border-2 border-primary ' : ''}   `,
+                node.general_ledger_type
+                    ? glTypeStyleMap[node.general_ledger_type].border
+                    : ''
+            )}
         >
+            <div className={cn()} />
             <div
                 className={`flex h-fit cursor-pointer items-center px-3 `}
                 onClick={(event) => {
@@ -183,7 +186,7 @@ const GeneralLedgerDefinitionNode = ({
                         hanldeDeleteGeneralLedgerDefinition={(
                             nodeId: TEntityId
                         ) => {
-                            hanldeDeleteGeneralLedgerDefinition(nodeId)
+                            queries.deleteGLQuery.mutate(nodeId)
                         }}
                         isDeletingGLDefinition={isDeletingGLDefinition}
                         node={node}
@@ -229,7 +232,7 @@ const GeneralLedgerDefinitionNode = ({
                 {Array.isArray(showGLFSAccountsCardList) && (
                     <GLFSAccountsCardList
                         accounts={showGLFSAccountsCardList}
-                        removeAccount={handleRemoveAccountFromGLDefinition}
+                        generalLedgerId={node.id}
                     />
                 )}
                 <DndContext
@@ -254,12 +257,6 @@ const GeneralLedgerDefinitionNode = ({
                                                 depth={depth + 1}
                                                 handleOpenAccountPicker={
                                                     handleOpenAccountPicker
-                                                }
-                                                handleRemoveAccountFromGLDefinition={
-                                                    handleRemoveAccountFromGLDefinition
-                                                }
-                                                hanldeDeleteGeneralLedgerDefinition={
-                                                    hanldeDeleteGeneralLedgerDefinition
                                                 }
                                                 isDeletingGLDefinition={
                                                     isDeletingGLDefinition

@@ -137,7 +137,7 @@ const AccountHeaderForm = ({
                         <FinancialStatemenTitleCombobox
                             disabled={isDisabled(field.name)}
                             onChange={(selected) => field.onChange(selected.id)}
-                            placeholder="Select Currency"
+                            placeholder="Select Financial Statement Title"
                             value={field.value}
                         />
                     )}

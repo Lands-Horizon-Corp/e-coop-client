@@ -1,47 +1,11 @@
-// import { useState } from 'react'
-// import { toast } from 'sonner'
-// import { payment_bg } from '@/assets/transactions'
-// import { hasPermissionFromAuth } from '@/modules/authentication/authgentication.store'
-// import FinancialStatementSkeleton from '@/modules/financial-statement-definition/pages/components/financial-statement-skeleton'
-// import { useGetAll } from '@/modules/general-ledger-account-grouping'
-// import { IGeneralLedgerAccountGrouping } from '@/modules/general-ledger-account-grouping'
-// import { GLAccountsGroupingUpdateFormModal } from '@/modules/general-ledger-account-grouping'
-// import { GENERAL_LEDGER_TYPE } from '@/modules/general-ledger/general-ledger.constants'
-// import { useGeneralLedgerAccountsGroupingStore } from '@/store/general-ledger-accounts-groupings-store'
 import FinancialStatementTitleList from '@/modules/financial-statement-title/pages'
 import PermissionGuard from '@/modules/permission/components/permission-guard'
-
-// 5import { useGeneralLedgerAccountsGroupingStore } from '@/store/general-ledger-accounts-groupings-store'
 
 import PageContainer from '@/components/containers/page-container'
 import { Empty } from '@/components/ui/empty'
 
-// import { useGetAll } from '../general-ledger-definition.service'
-// import GeneralLedgerDefinitionTreeViewer from './components/general-ledger-tree'
-
-// import {
-//     EditPencilIcon,
-//     SettingsIcon,
-//     SigiBookIcon,
-//     ViewIcon,
-// } from '@/components/icons'
-// import {
-//     Accordion,
-//     AccordionContent,
-//     AccordionItem,
-//     AccordionTrigger,
-// } from '@/components/ui/accordion'
-// import {
-//     DropdownMenu,
-//     DropdownMenuContent,
-//     DropdownMenuItem,
-//     DropdownMenuShortcut,
-//     DropdownMenuTrigger,
-// } from '@/components/ui/dropdown-menu'
-
-// import { useShortcut } from '@/hooks/use-shorcuts'
-
-// import { GeneralLedgerDefinitionTreeViewer } from './components'
+import { GeneralLedgerContextProvider } from './ context/general-ledger-context-provider'
+import GeneralLedgerDefinitionTreeViewer from './components/general-ledger-tree'
 
 // const GeneralLedgerDefinition = () => {
 //     const [onOpenEditGLGrouping, setOnOpenEditGLGrouping] = useState(false)
@@ -309,20 +273,6 @@ import { Empty } from '@/components/ui/empty'
 // }
 
 const GeneralLedgerDefinitionPage = () => {
-    // const {
-    //     data: generalLedgerGropings,
-    //     refetch: refetchGeneralLedgerAccountsGrouping,
-    //     isRefetching: isRefetchingGeneralLedgerAccountsGrouping,
-    //     isLoading: isLoadingGeneralLedgerAccountsGrouping,
-    // } = useGetAll()
-
-    // const { setGeneralLedgerAccountsGroupingId, setGeneralLedgerType } =
-    //     useGeneralLedgerAccountsGroupingStore()
-
-    // const refetch = () => refetchGeneralLedgerAccountsGrouping()
-    // const hasGeneralLedgerGropings =
-    //     generalLedgerGropings && generalLedgerGropings.length > 0
-
     return (
         <PageContainer className="w-full relative min-h-screen p-5">
             <PermissionGuard
@@ -330,25 +280,19 @@ const GeneralLedgerDefinitionPage = () => {
                 className=" inline-flex w-full v1"
                 resourceType="GLDefinition"
             >
-                {/* <GeneralLedgerDefinition /> */}
-                <div className="w-full inline-flex p-2 gap-x-4">
-                    <div className="flex-1 h-screen  ">
-                        <Empty className="border">
-                            Reports is under construction
-                        </Empty>
+                <GeneralLedgerContextProvider>
+                    <div className="w-full inline-flex p-2 gap-x-4">
+                        <div className="flex-1 h-screen  ">
+                            <Empty className="border">
+                                Reports is under construction
+                            </Empty>
+                        </div>
+                        <div className="flex-2 h-screen ">
+                            <GeneralLedgerDefinitionTreeViewer />
+                        </div>
+                        <FinancialStatementTitleList />
                     </div>
-                    <div className="flex-2 h-screen ">
-                        {/* <GeneralLedgerDefinitionTreeViewer
-                            refetch={refetch}
-                            treeData={generalLedgerGropings ?? []}
-                        /> */}
-                        <Empty className="border">
-                            GL/FS is under construction
-                        </Empty>
-                    </div>
-                    <FinancialStatementTitleList />
-                    {/* <FinancialStatementTitleList /> */}
-                </div>
+                </GeneralLedgerContextProvider>
             </PermissionGuard>
         </PageContainer>
     )

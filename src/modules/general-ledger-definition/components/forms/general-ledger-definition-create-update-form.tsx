@@ -49,17 +49,15 @@ interface IGeneralLedgerDefinitionCreateUpdateFormProps
             string,
             IGeneralLedgerDefinitionFormValues
         > {
-    generalLedgerDefinitionEntriesId?: TEntityId
+    generalLedgerDefinitionEntryId?: TEntityId
     generalLedgerDefinitionId?: TEntityId
-    generalLedgerAccountsGroupingId?: TEntityId
 }
 const GeneralLedgerDefinitionCreateUpdateForm = ({
     defaultValues,
     className,
     readOnly,
     disabledFields,
-    generalLedgerDefinitionEntriesId,
-    generalLedgerAccountsGroupingId,
+    generalLedgerDefinitionEntryId,
     generalLedgerDefinitionId,
     onSuccess,
     ...formProps
@@ -100,35 +98,28 @@ const GeneralLedgerDefinitionCreateUpdateForm = ({
         })
 
     const onSubmit = form.handleSubmit((data) => {
-        if (!generalLedgerAccountsGroupingId) {
-            form.setError('root', {
-                type: 'manual',
-                message: 'Please select a General Ledger Accounts Grouping.',
+        // if (!generalLedgerAccountsGroupingId) {
+        //     form.setError('root', {
+        //         type: 'manual',
+        //         message: 'Please select a General Ledger Accounts Grouping.',
+        //     })
+        //     return
+        // }
+        if (generalLedgerDefinitionEntryId) {
+            CreateGeneralLedgerDefinition({
+                general_ledger_definition_entry_id:
+                    generalLedgerDefinitionEntryId,
+                ...data,
             })
             return
         }
-
         if (generalLedgerDefinitionId) {
-            const request = {
-                ...data,
-                // general_ledger_definition_entries_id:
-                //     defaultValues?.id,
-                general_ledger_accounts_grouping_id:
-                    generalLedgerAccountsGroupingId,
-            }
             UpdateGeneralLedgerDefinition({
                 id: generalLedgerDefinitionId,
-                payload: request,
+                payload: data,
             })
         } else {
-            const CreateRequest = {
-                ...data,
-                general_ledger_definition_entries_id:
-                    generalLedgerDefinitionEntriesId,
-                general_ledger_accounts_grouping_id:
-                    generalLedgerAccountsGroupingId,
-            }
-            CreateGeneralLedgerDefinition(CreateRequest)
+            CreateGeneralLedgerDefinition(data)
         }
     }, handleFocusError)
 
@@ -307,6 +298,57 @@ const GeneralLedgerDefinitionCreateUpdateForm = ({
                         )}
                     />
                 </div>
+                <div className="grid w-full grid-cols-1 gap-4 md:grid-cols-2">
+                    <FormFieldWrapper
+                        control={form.control}
+                        label="Budget Forecasting of the Year (%)"
+                        name="budget_forecasting_of_the_year_percent"
+                        render={({ field }) => (
+                            <Input
+                                {...field}
+                                disabled={isDisabled(field.name)}
+                                onChange={(e) =>
+                                    field.onChange(
+                                        parseFloat(e.target.value) || undefined
+                                    )
+                                }
+                                placeholder="e.g., 10"
+                                type="number"
+                                value={field.value ?? ''}
+                            />
+                        )}
+                    />
+
+                    <FormFieldWrapper
+                        control={form.control}
+                        label="Past Due"
+                        name="past_due"
+                        render={({ field }) => (
+                            <Input
+                                {...field}
+                                disabled={isDisabled(field.name)}
+                                id={field.name}
+                                placeholder="Past due description"
+                                value={field.value || ''}
+                            />
+                        )}
+                    />
+                </div>
+
+                <FormFieldWrapper
+                    control={form.control}
+                    label="In Litigation"
+                    name="in_litigation"
+                    render={({ field }) => (
+                        <Input
+                            {...field}
+                            disabled={isDisabled(field.name)}
+                            id={field.name}
+                            placeholder="Litigation notes"
+                            value={field.value || ''}
+                        />
+                    )}
+                />
                 {!readOnly && (
                     <>
                         <Separator />
@@ -348,8 +390,6 @@ const GeneralLedgerDefinitionCreateUpdateForm = ({
 }
 
 export const GeneralLedgerDefinitionCreateUpdateFormModal = ({
-    title,
-    description,
     className,
     formProps,
     ...props
@@ -358,10 +398,10 @@ export const GeneralLedgerDefinitionCreateUpdateFormModal = ({
 }) => {
     return (
         <Modal
-            className={cn('', className)}
-            description={description}
+            className={cn('min-w-fit!', className)}
+            description={`fill up the form to ${formProps?.generalLedgerDefinitionId ? 'Update' : 'Create'} general ledger definition`}
             overlayClassName="!bg-transparent !backdrop-blur-sm"
-            title={title}
+            title={`${formProps?.generalLedgerDefinitionId ? 'Update' : 'Create'} general ledger definition.`}
             {...props}
         >
             <GeneralLedgerDefinitionCreateUpdateForm

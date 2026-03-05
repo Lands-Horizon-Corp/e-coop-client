@@ -127,7 +127,7 @@ const FinancialStatemenTitleCombobox = ({
                                 <>
                                     <CommandGroup>
                                         <CommandItem
-                                            className="cursor-pointer text-primary"
+                                            className="cursor-pointer "
                                             onSelect={() => {
                                                 setOpen(false)
                                                 createModal.onOpenChange(true)

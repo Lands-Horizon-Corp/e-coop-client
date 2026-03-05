@@ -1,13 +1,13 @@
 import z from 'zod'
 
-import { IBaseEntityMeta } from '@/types/common'
+import { IBaseEntityMeta, TEntityId } from '@/types/common'
 
 import { IAccount } from '../account'
 import { TGeneralLedgerType } from '../general-ledger/general-ledger.types'
 import { GeneralLedgerDefinitionSchema } from './general-ledger-definition.validation'
 
 export interface IGeneralLedgerDefinition extends IBaseEntityMeta {
-    general_ledger_definition_entry_id?: IGeneralLedgerDefinition
+    general_ledger_definition_entry_id?: TEntityId
 
     general_ledger_definition_entries?: IGeneralLedgerDefinition[]
     accounts?: IAccount[]
@@ -18,6 +18,8 @@ export interface IGeneralLedgerDefinition extends IBaseEntityMeta {
     name_in_total: string
     is_posting?: boolean
     general_ledger_type?: TGeneralLedgerType
+
+    depth?: number
 
     beginning_balance_of_the_year_credit?: number
     beginning_balance_of_the_year_debit?: number

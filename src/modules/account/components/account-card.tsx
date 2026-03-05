@@ -33,7 +33,7 @@ interface AccountCardProps {
     isSearching?: boolean
     setModalState: (data: TAccountModalState) => void
 }
-const glTypeStyleMap: Record<
+export const glTypeStyleMap: Record<
     TGeneralLedgerType,
     {
         border: string

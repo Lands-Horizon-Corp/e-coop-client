@@ -13,6 +13,7 @@ import { CurrencyCombobox, CurrencyInput } from '@/modules/currency'
 import EmployeePicker from '@/modules/employee/components/employee-picker'
 import { IMedia } from '@/modules/media'
 import { motion } from 'motion/react'
+import { useHotkeys } from 'react-hotkeys-hook'
 
 import FormFooterResetSubmit from '@/components/form-components/form-footer-reset-submit'
 import ImageDisplay from '@/components/image-display'
@@ -93,6 +94,16 @@ const TransactionBatchCreateForm = ({
     useEffect(() => {
         form.setFocus('amount')
     }, [form])
+
+    useHotkeys(
+        'control + enter',
+        () => {
+            onSubmit()
+        },
+        {
+            enableOnFormTags: true,
+        }
+    )
 
     return (
         <Form {...form}>

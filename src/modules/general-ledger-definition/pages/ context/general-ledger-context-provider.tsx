@@ -22,7 +22,7 @@ export const GeneralLedgerContextProvider = ({
 const GeneralLedgerFeatureContext =
     createContext<TGeneralLedgerController | null>(null)
 
-export const useGeneralLedger = () => {
+export const useGeneralLedgerDefinition = () => {
     const accountContext = useContext(GeneralLedgerFeatureContext)
     if (!accountContext)
         throw new Error('useAccountContext must be used within AccountProvider')

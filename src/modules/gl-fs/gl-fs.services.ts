@@ -5,7 +5,7 @@ import {
     createMutationInvalidateFn,
 } from '@/providers/repositories/mutation-factory'
 
-import { TEntityId, UpdateIndexRequest } from '@/types'
+import { TEntityId, UdpateGeneralLedgerOrder } from '@/types'
 
 import { ConnectAccountType, CreateAPIProps } from './gl-fs.types'
 
@@ -27,9 +27,9 @@ export const createGLSFSService = <
     const { API, route } = createAPIRepository<TResponse, TRequest>(url)
 
     const updateIndex = async (
-        general_ledger_definition: UpdateIndexRequest[]
+        general_ledger_definition: UdpateGeneralLedgerOrder[]
     ): Promise<TResponse> => {
-        const response = await API.put<UpdateIndexRequest[], TResponse>(
+        const response = await API.put<UdpateGeneralLedgerOrder[], TResponse>(
             `${route}/order`,
             general_ledger_definition
         )
@@ -50,7 +50,7 @@ export const createGLSFSService = <
     const useUpdateIndex = createMutationFactory<
         TResponse,
         Error,
-        UpdateIndexRequest[]
+        UdpateGeneralLedgerOrder[]
     >({
         mutationFn: updateIndex,
         invalidationFn: (args) =>
