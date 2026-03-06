@@ -1,16 +1,27 @@
-import { useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 
 import { toast } from 'sonner'
 
+import { IS_STAGING } from '@/constants'
 import { useVirtualizer } from '@tanstack/react-virtual'
 import { ChevronLeft, ChevronRight, Printer } from 'lucide-react'
-import { Document, Page, pdfjs } from 'react-pdf'
+import { Document, Page } from 'react-pdf'
+import { pdfjs } from 'react-pdf'
 import 'react-pdf/dist/Page/AnnotationLayer.css'
 import 'react-pdf/dist/Page/TextLayer.css'
+import { DocumentCallback } from 'react-pdf/dist/shared/types.js'
 
-import { XIcon } from '@/components/icons'
+import { ShieldLockIcon, XIcon } from '@/components/icons'
 import { Button } from '@/components/ui/button'
 import { ButtonGroup } from '@/components/ui/button-group'
+import {
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogFooter,
+    DialogHeader,
+    DialogTitle,
+} from '@/components/ui/dialog'
 import { Input } from '@/components/ui/input'
 import {
     Popover,
@@ -18,10 +29,19 @@ import {
     PopoverTrigger,
 } from '@/components/ui/popover'
 
-pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`
+import { useModalState } from '@/hooks/use-modal-state'
 
-const PAGE_GAP = 0
-const PAGE_WIDTH = 800
+const PAGE_GAP = 12
+const DEFAULT_PAGE_WIDTH = 800
+
+if (!IS_STAGING) {
+    pdfjs.GlobalWorkerOptions.workerSrc = `https://unpkg.com/pdfjs-dist@5.4.296/build/pdf.worker.min.mjs`
+} else {
+    pdfjs.GlobalWorkerOptions.workerSrc = new URL(
+        'pdfjs-dist/build/pdf.worker.min.js',
+        import.meta.url
+    ).toString()
+}
 
 interface PdfViewerProps {
     file: File | string
@@ -37,15 +57,34 @@ export default function PdfViewer({ file, fileName, onClose }: PdfViewerProps) {
     const [fileUrl, setFileUrl] = useState<string | null>() // only usable if file is File
     const parentRef = useRef<HTMLDivElement>(null)
 
+    // FOR password shit
+    const passwordNeeded = useModalState()
+    const [passwordValue, setPasswordValue] = useState('')
+    const [passwordError, setPasswordError] = useState(false)
+    const passwordCallbackRef = useRef<((password: string) => void) | null>(
+        null
+    )
+
+    // Pang sizing
+    const pageSizesRef = useRef<number[]>([])
+    const pdfDocRef = useRef<null | DocumentCallback>(null)
+
     // const estimateSize = useCallback(() => {
-    //     return Math.round(PAGE_WIDTH * 1.214)
+    //     return Math.round(DEFAULT_PAGE_WIDTH * 1.214)
     // }, [])
+    const estimateSize = useCallback((index: number) => {
+        return (
+            pageSizesRef.current[index] ||
+            Math.round(DEFAULT_PAGE_WIDTH * 1.414)
+        )
+    }, [])
 
     const virtualizer = useVirtualizer({
         count: numPages,
         getScrollElement: () => parentRef.current,
-        estimateSize: () => 1000 * 0.5,
+        estimateSize,
         overscan: 2,
+        gap: PAGE_GAP,
     })
 
     useEffect(() => {
@@ -131,8 +170,44 @@ export default function PdfViewer({ file, fileName, onClose }: PdfViewerProps) {
         })
     }
 
-    function onDocumentLoadSuccess({ numPages: n }: { numPages: number }) {
+    async function onDocumentLoadSuccess(pdf: DocumentCallback) {
+        const n = pdf.numPages
+        pdfDocRef.current = pdf
+        passwordNeeded.onOpenChange(false)
+        setPasswordError(false)
+
+        // Measure actual dimensions of every page
+        const sizes: number[] = []
+        for (let i = 1; i <= n; i++) {
+            const page = await pdf.getPage(i)
+            const viewport = page.getViewport({ scale: 1 })
+            const scale = DEFAULT_PAGE_WIDTH / viewport.width
+            sizes.push(Math.round(viewport.height * scale))
+        }
+        pageSizesRef.current = sizes
         setNumPages(n)
+
+        // Tell virtualizer to re-measure with real sizes
+        virtualizer.measure()
+    }
+
+    const handlePassword = useCallback(
+        (callback: (password: string) => void, reason: number) => {
+            passwordCallbackRef.current = callback
+            passwordNeeded.onOpenChange(true)
+            if (reason === 2) {
+                toast.warning('Wrong password')
+                setPasswordError(true)
+            }
+        },
+        []
+    )
+
+    const submitPassword = () => {
+        if (passwordCallbackRef.current && passwordValue) {
+            passwordCallbackRef.current(passwordValue)
+            setPasswordValue('')
+        }
     }
 
     const fileTitle = file instanceof File ? file.name : fileName || 'PDF View'
@@ -186,6 +261,7 @@ export default function PdfViewer({ file, fileName, onClose }: PdfViewerProps) {
                             </div>
                         }
                         onLoadSuccess={onDocumentLoadSuccess}
+                        onPassword={handlePassword}
                     >
                         <div
                             className="mx-auto"
@@ -204,8 +280,7 @@ export default function PdfViewer({ file, fileName, onClose }: PdfViewerProps) {
                                             top: 0,
                                             left: '50%',
                                             transform: `translateX(-50%) translateY(${virtualItem.start}px)`,
-                                            width: PAGE_WIDTH,
-                                            paddingBottom: PAGE_GAP,
+                                            width: DEFAULT_PAGE_WIDTH,
                                         }}
                                     >
                                         <div className="shadow-lg bg-background rounded-lg overflow-hidden">
@@ -215,7 +290,7 @@ export default function PdfViewer({ file, fileName, onClose }: PdfViewerProps) {
                                                 }
                                                 renderAnnotationLayer={true}
                                                 renderTextLayer={true}
-                                                width={PAGE_WIDTH}
+                                                width={DEFAULT_PAGE_WIDTH}
                                             />
                                         </div>
                                     </div>
@@ -303,6 +378,60 @@ export default function PdfViewer({ file, fileName, onClose }: PdfViewerProps) {
                         </Button>
                     </ButtonGroup> */}
                 </div>
+
+                {/* FOR password desu */}
+                <Dialog
+                    onOpenChange={(open) => {
+                        if (!open) {
+                            passwordNeeded.onOpenChange(false)
+                            onClose?.()
+                        }
+                    }}
+                    open={passwordNeeded.open}
+                >
+                    <DialogContent className="sm:max-w-sm">
+                        <DialogHeader>
+                            <DialogTitle className="flex items-center gap-2">
+                                <ShieldLockIcon className="size-4" />
+                                Password Required
+                            </DialogTitle>
+                            <DialogDescription>
+                                {passwordError
+                                    ? 'Incorrect password. Please try again.'
+                                    : 'This PDF is password protected. Enter the password to view it.'}
+                            </DialogDescription>
+                        </DialogHeader>
+                        <form
+                            className="space-y-4"
+                            onSubmit={(e) => {
+                                e.preventDefault()
+                                submitPassword()
+                            }}
+                        >
+                            <Input
+                                autoFocus
+                                onChange={(e) =>
+                                    setPasswordValue(e.target.value)
+                                }
+                                placeholder="Enter password"
+                                type="password"
+                                value={passwordValue}
+                            />
+                            <DialogFooter>
+                                <Button
+                                    onClick={onClose}
+                                    type="button"
+                                    variant="outline"
+                                >
+                                    Cancel
+                                </Button>
+                                <Button disabled={!passwordValue} type="submit">
+                                    Unlock
+                                </Button>
+                            </DialogFooter>
+                        </form>
+                    </DialogContent>
+                </Dialog>
             </div>
         </div>
     )
