@@ -151,6 +151,9 @@ viteStaticCopy({
      }
     }),
   ],
+  optimizeDeps : {
+    include : []
+  },
   resolve: {
     alias: {
       stream: "stream-browserify",
