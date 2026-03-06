@@ -28,7 +28,7 @@ import {
 
 import { TEntityId } from '@/types'
 
-import { useGeneralLedgerDefinition } from '../ context/general-ledger-context-provider'
+import { useGeneralLedgerDefinitionContext } from '../ context/general-ledger-context-provider'
 import GeneralLedgerDefinitionActions from './actions/gl-definition-actions'
 
 interface GeneralLedgerTreeNodeProps {
@@ -63,7 +63,7 @@ const GeneralLedgerDefinitionNode = ({
         targetNodeId,
         clearTargetNodeIdAfterScroll,
         toggleNode,
-    } = useGeneralLedgerDefinition()
+    } = useGeneralLedgerDefinitionContext()
 
     const isNodeExpanded = expandedNodeIds.has(node.id)
 

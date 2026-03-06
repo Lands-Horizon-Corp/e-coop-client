@@ -1,9 +1,8 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import { sortBy } from '@/helpers/common-helper'
 import { IAccount } from '@/modules/account'
-import { useGeneralLedgerDefinition } from '@/modules/general-ledger-definition/pages/ context/general-ledger-context-provider'
-import { useGLFSStore } from '@/modules/general-ledger-definition/pages/store/gl-fs-store'
+import { useGeneralLedgerDefinitionContext } from '@/modules/general-ledger-definition/pages/ context/general-ledger-context-provider'
 import {
     DndContext,
     DragEndEvent,
@@ -76,10 +75,14 @@ export default function GLFSAccountsCardList({
     accounts,
     generalLedgerId,
 }: GlAccountListProps) {
-    const [account, setAccount] = useState(accounts.sort(sortBy('index')))
+    const [account, setAccount] = useState<IAccount[]>([])
 
-    const { setChangedAccounts, updateAccounts } = useGLFSStore()
-    const { queries } = useGeneralLedgerDefinition()
+    useEffect(() => {
+        setAccount([...accounts].sort(sortBy('index')))
+    }, [accounts])
+
+    const { queries, setChangedAccounts, updateAccounts } =
+        useGeneralLedgerDefinitionContext()
 
     const sensors = useSensors(
         useSensor(PointerSensor),
@@ -96,41 +99,35 @@ export default function GLFSAccountsCardList({
         })
     }
 
-    const getTaskPos = (id: string | number) =>
-        account.findIndex((task) => task.id === id)
-
     const handleDragEnd = (event: DragEndEvent) => {
         const { active, over } = event
 
         if (!over || active.id === over.id) return
-        setAccount((account) => {
-            const originalPos = getTaskPos(active.id)
-            const newPos = getTaskPos(over.id)
 
-            const updatedAccounts = arrayMove(account, originalPos, newPos)
+        const originalPos = account.findIndex((a) => a.id === active.id)
+        const newPos = account.findIndex((a) => a.id === over.id)
 
-            const finalAccounts = updatedAccounts.map((item, i) => ({
-                ...item,
-                index: i,
+        const updatedAccounts = arrayMove(account, originalPos, newPos)
+
+        const finalAccounts = updatedAccounts.map((item, i) => ({
+            ...item,
+            index: i,
+        }))
+
+        const changed: UpdateAccountOrder[] = finalAccounts
+            .filter(
+                (item, i) =>
+                    item.id !== account[i]?.id ||
+                    item.index !== account[i]?.index
+            )
+            .map((item) => ({
+                account_id: item.id,
+                index: item.index,
             }))
 
-            updateAccounts(generalLedgerId, finalAccounts)
-
-            const changed: UpdateAccountOrder[] = finalAccounts
-                .filter(
-                    (item, i) =>
-                        item.id !== account[i]?.id ||
-                        item.index !== account[i]?.index
-                )
-                .map((item) => ({
-                    account_id: item.id,
-                    index: item.index,
-                }))
-
-            setChangedAccounts?.(changed)
-
-            return finalAccounts
-        })
+        setAccount(finalAccounts)
+        updateAccounts(generalLedgerId, finalAccounts)
+        setChangedAccounts?.(changed)
     }
 
     return (

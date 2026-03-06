@@ -1,10 +1,11 @@
 import { IAccount } from '@/modules/account'
-import { useGeneralLedgerDefinition } from '@/modules/general-ledger-definition/pages/ context/general-ledger-context-provider'
+import { useGeneralLedgerDefinitionContext } from '@/modules/general-ledger-definition/pages/ context/general-ledger-context-provider'
 import useConfirmModalStore from '@/store/confirm-modal-store'
 
 import {
     DotsHorizontalIcon,
     EyeViewIcon,
+    MinusIcon,
     PencilFillIcon,
     PlusIcon,
     TrashIcon,
@@ -27,14 +28,24 @@ type GeneralLedgerDefinitionActionsProps = {
     handleDeleteAccount: (id: TEntityId) => void
 }
 
-type ActionType = 'view' | 'edit' | 'remove' | 'add' | 'ledger'
+type ActionType =
+    | 'view'
+    | 'edit'
+    | 'remove'
+    | 'add'
+    | 'ledger'
+    | 'add-below'
+    | 'add-up'
 
 const GLFSAccountActions = ({
     node,
     handleDeleteAccount,
 }: GeneralLedgerDefinitionActionsProps) => {
     const { onOpen } = useConfirmModalStore()
-    const { modals, states } = useGeneralLedgerDefinition()
+    const {
+        modals: { accountDetails },
+    } = useGeneralLedgerDefinitionContext()
+
     const handleGLAccountAction = (
         e: React.MouseEvent<HTMLDivElement, MouseEvent>,
         action: ActionType,
@@ -45,30 +56,31 @@ const GLFSAccountActions = ({
 
         switch (action) {
             case 'ledger':
-                states.setSelectedAccount?.({
-                    mode: 'view',
-                    data: node,
+                accountDetails.view?.({
+                    account: node,
                 })
-                modals.accountLedger.onOpenChange?.(true)
                 break
             case 'add':
-                modals.accountDetails.onOpenChange(true)
-                states.setSelectedAccount?.({
-                    mode: 'create',
-                    data: null,
-                })
+                accountDetails.create?.()
                 break
             case 'view':
-                modals.accountDetails.onOpenChange(true)
-                states.setSelectedAccount?.({
-                    mode: 'view',
-                    data: node,
-                })
+                accountDetails.view({ account: node })
                 break
             case 'edit':
-                states.setSelectedAccount?.({
-                    mode: 'edit',
-                    data: node,
+                accountDetails.edit?.({
+                    account: node,
+                })
+                break
+            case 'add-up':
+                accountDetails.edit?.({
+                    index: node.index + 1,
+                    account: undefined,
+                })
+                break
+            case 'add-below':
+                accountDetails.edit?.({
+                    index: node.index - 1,
+                    account: undefined,
                 })
                 break
             case 'remove':
@@ -138,6 +150,23 @@ const GLFSAccountActions = ({
                             >
                                 <PencilFillIcon className="mr-2" />
                                 edit
+                            </DropdownMenuItem>
+                            <DropdownMenuSeparator />
+                            <DropdownMenuItem
+                                onClick={(e) =>
+                                    handleGLAccountAction(e, 'add-below')
+                                }
+                            >
+                                <PlusIcon className="mr-2" />
+                                Add account below
+                            </DropdownMenuItem>
+                            <DropdownMenuItem
+                                onClick={(e) =>
+                                    handleGLAccountAction(e, 'add-below')
+                                }
+                            >
+                                <MinusIcon className="mr-2" />
+                                Add account above
                             </DropdownMenuItem>
                             <DropdownMenuSeparator />
                             <DropdownMenuItem

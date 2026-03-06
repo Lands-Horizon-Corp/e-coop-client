@@ -8,6 +8,9 @@ import {
 interface IGeneralLedgerProps {
     children: React.ReactNode
 }
+const GeneralLedgerFeatureContext =
+    createContext<TGeneralLedgerController | null>(null)
+
 export const GeneralLedgerContextProvider = ({
     children,
 }: IGeneralLedgerProps) => {
@@ -19,12 +22,13 @@ export const GeneralLedgerContextProvider = ({
     )
 }
 
-const GeneralLedgerFeatureContext =
-    createContext<TGeneralLedgerController | null>(null)
-
-export const useGeneralLedgerDefinition = () => {
-    const accountContext = useContext(GeneralLedgerFeatureContext)
-    if (!accountContext)
-        throw new Error('useAccountContext must be used within AccountProvider')
-    return accountContext
+export const useGeneralLedgerDefinitionContext = () => {
+    const generalLedgerDefinitionContext = useContext(
+        GeneralLedgerFeatureContext
+    )
+    if (!generalLedgerDefinitionContext)
+        throw new Error(
+            'useGeneralLedgerDefinitionContextContext must be used within GeneralLedgerDefinitionProvider'
+        )
+    return generalLedgerDefinitionContext
 }

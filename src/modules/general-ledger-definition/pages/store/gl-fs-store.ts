@@ -99,8 +99,6 @@ export const useGLFSStore = create<GLFSStoreProps>((set, get) => ({
             return current
         }
 
-        // console.log(findTargetArray(newLedger, path), newLedger)
-
         const targetArray =
             path.length === 0 ? newLedger : findTargetArray(newLedger, path)
 

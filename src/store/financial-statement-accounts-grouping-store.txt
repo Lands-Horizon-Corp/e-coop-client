@@ -15,7 +15,7 @@ interface FinancialStatementAccountsGroupingStore {
     financialStatementDefinition: IFinancialStatementDefinition[]
     onCreate?: boolean
     isReadOnly?: boolean
-    openCreateFinancialStatementModal: boolean
+    createFinancialStatementModal: boolean
 
     selectedFinancialStatementDefinition: IFinancialStatementDefinition | null
     financialStatementDefinitionEntriesId?: TEntityId
@@ -51,7 +51,7 @@ interface FinancialStatementAccountsGroupingStore {
 export const useFinancialStatementAccountsGroupingStore =
     create<FinancialStatementAccountsGroupingStore>((set, get) => ({
         financialStatementDefinition: [],
-        openCreateFinancialStatementModal: false,
+        createFinancialStatementModal: false,
         financialStatementAccountsGroupingId: null,
         selectedFinancialStatementDefinition: null,
         selectedFinancialStatementDefinitionId: null,
@@ -164,7 +164,7 @@ export const useFinancialStatementAccountsGroupingStore =
         setIsReadyOnly: (isReadyOnly) => set({ isReadOnly: isReadyOnly }),
         setOnCreate: (onCreate) => set({ onCreate }),
         setOpenCreateFinancialStatementModal: (open) =>
-            set({ openCreateFinancialStatementModal: open }),
+            set({ createFinancialStatementModal: open }),
 
         setSelectedFinancialStatementDefinition: (
             financialStatementDefinition

@@ -15,7 +15,7 @@ import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable'
 import { PlusIcon } from '@/components/icons'
 import { Button } from '@/components/ui/button'
 
-import { useGeneralLedgerDefinition } from '../ context/general-ledger-context-provider'
+import { useGeneralLedgerDefinitionContext } from '../ context/general-ledger-context-provider'
 import GeneralLedgerDefinitionHeaderSearch from './general-ledger-definition-header-search'
 import GeneralLedgerDefinitionNode from './gl-definition-node'
 import { buildPayload } from './gl-utils'
@@ -28,7 +28,7 @@ const GeneralLedgerDefinitionTreeViewer = () => {
         moveGeneralLedgerNode,
         setGeneralLedgerDefinitions,
         generalLedgerDefinitions,
-    } = useGeneralLedgerDefinition()
+    } = useGeneralLedgerDefinitionContext()
 
     const { refetch, data: GeneralLedgerDefinitions } =
         queries.generalLedgerDefinitionQuery

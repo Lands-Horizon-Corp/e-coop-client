@@ -103,7 +103,6 @@ const AccountCreateUpdateForm = ({
             ...data,
             branch_id: branchId,
             organization_id: organizationId,
-            // index: data.index - 1,
         }
         if (accountId) {
             toast.promise(
@@ -178,7 +177,11 @@ const AccountCreateUpdateForm = ({
                     isReadOnly={formProps.readOnly}
                 />
                 <div className="flex gap-x-2">
-                    <AccountContentForm form={form} isDisabled={isDisabled} />
+                    <AccountContentForm
+                        form={form}
+                        isDisabled={isDisabled}
+                        readOnly={formProps.readOnly}
+                    />
                     <LoanConnectAccountSection
                         className="my-2 w-xs shrink-0 max-w-xs"
                         form={form}

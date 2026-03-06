@@ -13,16 +13,22 @@ import Modal from '@/components/modals/modal'
 import GenericSearchInput from '@/components/search/generic-search-input'
 import { Button } from '@/components/ui/button'
 
-import { useGeneralLedgerDefinition } from '../ context/general-ledger-context-provider'
+import { useGeneralLedgerDefinitionContext } from '../ context/general-ledger-context-provider'
 import { GeneralLedgerDefinitionCreateUpdateFormModal } from '../../components'
 
 const GeneralLedgerDefinitionHeaderSearch = () => {
-    const { modals, queries, states, actions } = useGeneralLedgerDefinition()
+    const {
+        selectors: { glDefinition, glId, account },
+        modals: { accountDetails, glForm, accountPicker, accountLedger },
+        queries,
+        states,
+        actions,
+    } = useGeneralLedgerDefinitionContext()
 
     const handleAccountSelection = async (account: IAccount) => {
-        if (account && states.selectedGL?.data?.id) {
+        if (account && glDefinition?.id) {
             await queries.addAccountToGLQuery.mutateAsync({
-                id: states.selectedGL.data?.id,
+                id: glDefinition?.id,
                 accountId: account.id,
             })
         } else {
@@ -39,40 +45,41 @@ const GeneralLedgerDefinitionHeaderSearch = () => {
         { enableOnFormTags: true },
         [actions.handleSearch]
     )
-
     return (
         <div>
-            {states.selectedAccount?.data && (
+            {account && (
                 <Modal
-                    {...modals.accountLedger}
+                    {...accountLedger}
                     className="max-w-6xl! w-full"
-                    description={`You are viewing account (${states.selectedAccount?.data?.name}) accounting transaction`}
+                    description={`You are viewing account (${account?.name}) accounting transaction`}
                     title="Accounting Transaction"
                 >
-                    <ViewAccountTransactionLedger
-                        accountId={states.selectedAccount?.data?.id}
-                    />
+                    <ViewAccountTransactionLedger accountId={account?.id} />
                 </Modal>
             )}
             <AccountCreateUpdateFormModal
-                {...modals.accountDetails}
+                {...accountDetails}
                 description="this account is part of the General Ledger Definition"
                 formProps={{
-                    defaultValues: states.selectedAccount?.data ?? {},
-                    readOnly: states.selectedAccount?.mode === 'view',
-                    accountId: states.selectedAccount?.data?.id,
+                    defaultValues: account ?? {
+                        index: accountDetails.data?.index,
+                    },
+                    readOnly: accountDetails?.mode === 'view',
+                    accountId: account?.id,
                     onSuccess: () => {
-                        modals.accountDetails.onOpenChange(false)
+                        accountDetails.close()
                     },
                 }}
                 title="Account Details"
             />
             <GeneralLedgerDefinitionCreateUpdateFormModal
-                {...modals.glForm}
+                {...glForm}
                 formProps={{
-                    defaultValues: states.selectedGL?.data ?? {},
-                    readOnly: states.selectedGL?.mode === 'view',
-                    generalLedgerDefinitionId: states.selectedGL?.data?.id,
+                    defaultValues: glDefinition ?? {
+                        index: 0,
+                    },
+                    readOnly: glForm.mode === 'view',
+                    generalLedgerDefinitionId: glId ?? undefined,
                     generalLedgerDefinitionEntryId:
                         states.selectedEntry ?? undefined,
                 }}
@@ -80,20 +87,19 @@ const GeneralLedgerDefinitionHeaderSearch = () => {
             <AccountPicker
                 modalOnly
                 modalState={{
-                    ...modals.accountPicker,
+                    ...accountPicker,
                 }}
                 mode="all"
                 onSelect={(account) => {
                     handleAccountSelection(account)
                 }}
             />
-
             <div className="flex gap-2 pb-4">
                 <Button
                     className="rounded-xl"
                     disabled={queries.addAccountToGLQuery.isPending}
                     onClick={() => {
-                        modals.glForm.onOpenChange(true)
+                        glForm.create()
                     }}
                     size="sm"
                 >
@@ -106,7 +112,6 @@ const GeneralLedgerDefinitionHeaderSearch = () => {
                 />
                 <Button
                     className="flex items-center rounded-2xl space-x-2"
-                    // disabled={!isSearchOnChanged || isReadOnly || isPending}
                     onClick={actions.handleSearch}
                     onKeyDown={(e) => {
                         if (e.key === 'Enter') {

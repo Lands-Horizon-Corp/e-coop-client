@@ -27,7 +27,7 @@ export const useAccountController = () => {
 
     const modals = {
         createModal: useModalState(false),
-        openEdit: useModalState(false),
+        edit: useModalState(false),
     }
 
     return {

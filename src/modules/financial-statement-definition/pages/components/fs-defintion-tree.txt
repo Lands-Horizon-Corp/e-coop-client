@@ -126,7 +126,7 @@ const FinancialStatementDefinitionTreeViewer = ({
         selectedFinancialStatementTypes,
 
         // ── Modal Controls ──
-        openCreateFinancialStatementModal,
+        createFinancialStatementModal,
         setOpenCreateFinancialStatementModal,
 
         // ── View & Interaction State ──
@@ -385,7 +385,7 @@ const FinancialStatementDefinitionTreeViewer = ({
                         onSuccess: OnSuccessCreateUpdateFSModal,
                     }}
                     onOpenChange={setOpenCreateFinancialStatementModal}
-                    open={openCreateFinancialStatementModal}
+                    open={createFinancialStatementModal}
                     title={createOrUpdateTitle}
                 />
             )}

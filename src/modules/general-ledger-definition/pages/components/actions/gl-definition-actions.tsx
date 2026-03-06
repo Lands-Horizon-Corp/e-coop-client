@@ -22,7 +22,7 @@ import {
 
 import { TEntityId } from '@/types'
 
-import { useGeneralLedgerDefinition } from '../../ context/general-ledger-context-provider'
+import { useGeneralLedgerDefinitionContext } from '../../ context/general-ledger-context-provider'
 
 type GeneralLedgerDefinitionActionsProps = {
     node: IGeneralLedgerDefinition
@@ -42,7 +42,11 @@ const GeneralLedgerDefinitionActions = ({
     // isDeletingGLDefinition,
 }: GeneralLedgerDefinitionActionsProps) => {
     const { onOpen } = useConfirmModalStore()
-    const { modals, states } = useGeneralLedgerDefinition()
+    const {
+        modals: { glForm },
+        states,
+        modals: { accountPicker },
+    } = useGeneralLedgerDefinitionContext()
 
     const handleGeneralLedgerAction = (
         e: React.MouseEvent<HTMLDivElement, MouseEvent>,
@@ -53,31 +57,22 @@ const GeneralLedgerDefinitionActions = ({
         e.preventDefault()
         switch (action) {
             case 'addAccount':
-                modals.accountPicker.onOpenChange?.(true)
+                accountPicker.onOpenChange(true)
                 states.setSelectedEntry(null)
                 break
 
             case 'addGL':
-                modals.glForm.onOpenChange?.(true)
-                states.setSelectedGL?.(undefined)
+                glForm.create()
                 states.setSelectedEntry(node.id)
                 break
 
             case 'edit':
-                modals.glForm.onOpenChange?.(true)
-                states.setSelectedGL({
-                    mode: 'edit',
-                    data: node,
-                })
+                glForm.edit({ gl_definition: node })
                 states.setSelectedEntry(null)
                 break
 
             case 'view':
-                modals.glForm.onOpenChange?.(true)
-                states.setSelectedGL({
-                    mode: 'view',
-                    data: node,
-                })
+                glForm.view({ gl_definition: node })
                 break
             case 'remove':
                 onOpen({
