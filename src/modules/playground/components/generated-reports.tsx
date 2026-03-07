@@ -1,215 +1,203 @@
 import { useState } from 'react'
 
+import { z } from 'zod'
+
 import API from '@/providers/api'
+import { entityIdSchema } from '@/validation'
 
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Progress } from '@/components/ui/progress'
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from '@/components/ui/select'
 
-interface ReportRequest {
-    name: string
-    landscape: boolean
-    paper_size: string
-    template: string
-}
+/**
+ * 1. CONFIGURATION & DIMENSIONS
+ */
+const PAPER_SIZES = {
+    A4: { label: 'A4 (Standard)', width: '210mm', height: '297mm' },
+    LETTER: { label: 'US Letter', width: '8.5in', height: '11in' },
+    LEGAL: { label: 'Legal', width: '8.5in', height: '14in' },
+    TABLOID: { label: 'Tabloid', width: '11in', height: '17in' },
+} as const
 
-// Define the shape of our progress updates from the backend
-interface ProgressData {
-    phase?: string
-    percentage?: number
-    // any other fields from horizon.ProgressInfo
-}
+type PaperSizeKey = keyof typeof PAPER_SIZES
 
-// Define the shape of our final return value
-interface ReportResponse {
-    url: string
-}
+export const ReportProgressStatusSchema = z.enum([
+    'pending',
+    'in_progress',
+    'formatting',
+    'uploading',
+    'completed',
+    'failed',
+])
 
+export const CreateReportRequestSchema = z.object({
+    module: z.string().min(1, 'Module is required'),
+    template: z.string().min(1, 'Template content is required'),
+    name: z.string().min(1, 'Name is required'),
+    password: z.string().optional(),
+    width: z.string().optional(),
+    height: z.string().optional(),
+    filters: z.record(z.string(), z.any()).optional(),
+})
+
+export const GeneratedReportSchema = z.object({
+    id: entityIdSchema,
+    module: z.string().optional(),
+    template: z.string().optional(),
+    filters: z.record(z.string(), z.any()).optional().nullable(),
+    name: z.string(),
+    media_id: z.string().uuid().optional().nullable(),
+    media: z
+        .object({
+            url: z.string().optional(),
+        })
+        .optional()
+        .nullable(),
+    status: ReportProgressStatusSchema,
+    system_message: z.string().optional().nullable(),
+    created_at: z.string(),
+    updated_at: z.string(),
+})
+
+export type ICreateReportRequest = z.infer<typeof CreateReportRequestSchema>
+export type IGeneratedReport = z.infer<typeof GeneratedReportSchema>
+
+/**
+ * 3. COMPONENT
+ */
 function GeneratedReports() {
     const [loading, setLoading] = useState(false)
     const [currentStatus, setCurrentStatus] = useState('IDLE')
     const [progress, setProgress] = useState(0)
-    const [reportData, setReportData] = useState<ReportResponse | null>(null)
+    const [reportData, setReportData] = useState<IGeneratedReport | null>(null)
+
+    const [selectedSize, setSelectedSize] = useState<PaperSizeKey>('A4')
 
     const handleGenerateReport = async () => {
         setLoading(true)
-        setCurrentStatus('STARTING')
-        setProgress(0)
+        setCurrentStatus('pending')
+        setProgress(10)
         setReportData(null)
 
-        const requestPayload: ReportRequest = {
-            name: 'Member_Contribution_Report',
-            landscape: false,
-            paper_size: 'A4',
+        const today = new Date().toISOString().split('T')[0]
+        const dimensions = PAPER_SIZES[selectedSize]
+
+        const requestPayload: ICreateReportRequest = {
+            module: 'MEMBERSHIP',
+            name: `Member_Report_${today}.pdf`,
+            width: dimensions.width,
+            height: dimensions.height,
+            // Example of injecting dynamic filters for the backend worker
+            filters: {
+                generated_by_ui: 'web_dashboard',
+                report_type: 'summary',
+                exported_at: new Date().getTime(),
+            },
             template: `
-        <!DOCTYPE html>
-        <html>
-        <head>
-            <style>
-                body { 
-                    font-family: 'Helvetica', 'Arial', sans-serif; 
-                    margin: 0; 
-                    padding: 20px; 
-                    color: #333; 
-                }
-                .header { 
-                    text-align: center; 
-                    margin-bottom: 30px; 
-                    border-bottom: 2px solid #444;
-                    padding-bottom: 10px;
-                }
-                .company-info { font-size: 12px; color: #666; }
-                
-                table { 
-                    width: 100%; 
-                    border-collapse: collapse; 
-                    margin-top: 20px;
-                    font-size: 11px;
-                }
-                th { 
-                    background-color: #f2f2f2; 
-                    color: #444; 
-                    text-align: left; 
-                    padding: 10px; 
-                    border-bottom: 1px solid #ddd;
-                }
-                td { 
-                    padding: 8px 10px; 
-                    border-bottom: 1px solid #eee; 
-                }
-                tr:nth-child(even) { background-color: #fafafa; }
-                
-                .status { 
-                    font-weight: bold; 
-                    text-transform: uppercase; 
-                    font-size: 9px;
-                }
-                .status-active { color: #27ae60; }
-                .status-inactive { color: #e74c3c; }
-                .status-pending { color: #f39c12; }
-                
-                .amount { text-align: right; font-family: 'Courier', monospace; }
-
-                /* Page Numbering for PDF engines */
-                @page {
-                    margin: 1cm;
-                }
-                .footer {
-                    position: fixed;
-                    bottom: 0;
-                    width: 100%;
-                    text-align: center;
-                    font-size: 10px;
-                    color: #999;
-                }
-            </style>
-        </head>
-        <body>
-            <div class="header">
-                <h1>Member Contribution Report</h1>
-                <div class="company-info">
-                    TIN: {{company_tin}} | Generated: {{generated_at}}
+            <!DOCTYPE html>
+            <html>
+            <head>
+                <style>
+                    @page {
+                        size: ${dimensions.width} ${dimensions.height};
+                        margin: 1cm;
+                    }
+                    body { font-family: sans-serif; padding: 20px; }
+                    .filter-box { background: #eee; padding: 10px; margin-top: 20px; font-size: 12px; }
+                </style>
+            </head>
+            <body>
+                <h1>Report for {{module}}</h1>
+                <p>Dimensions: ${dimensions.width} x ${dimensions.height}</p>
+                <div class="filter-box">
+                    <strong>Internal Reference:</strong> {{filters.report_type}}
                 </div>
-            </div>
-
-            <table>
-                <thead>
-                    <tr>
-                        <th>#</th>
-                        <th>Member Name</th>
-                        <th>Status</th>
-                        <th class="amount">Contribution</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {{#each members}}
-                    <tr>
-                        <td>{{@index}}</td>
-                        <td>{{this.name}}</td>
-                        <td><span class="status status-{{lower this.status}}">{{this.status}}</span></td>
-                        <td class="amount">{{formatCurrency this.contribution}}</td>
-                    </tr>
-                    {{/each}}
-                </tbody>
-            </table>
-
-            <div class="footer">
-                Page <span class="pageNumber"></span> of <span class="totalPages"></span>
-            </div>
-        </body>
-        </html>
-    `,
+            </body>
+            </html>
+        `,
         }
 
         try {
-            await API.streamer<ReportRequest, ProgressData, ReportResponse>(
-                '/api/v1/generated-report',
-                requestPayload,
-                {
-                    onStarted: () => {
-                        setCurrentStatus('CONNECTED')
-                    },
-                    onProcess: (data) => {
-                        if (data.phase) {
-                            setCurrentStatus(data.phase)
-                        }
-                        if (typeof data.percentage === 'number') {
-                            const safeValue = Math.min(
-                                100,
-                                Math.max(0, data.percentage)
-                            )
-                            setProgress(safeValue)
-                        }
-                    },
-                    onEnd: (result) => {
-                        if (result?.url) {
-                            setReportData({ url: result.url })
-                        }
-                        setCurrentStatus('COMPLETED')
-                        setProgress(100)
-                        setLoading(false)
-                    },
-                }
-            )
+            const response = await API.post<
+                ICreateReportRequest,
+                IGeneratedReport
+            >('/api/v1/generated-report', requestPayload)
+
+            const validated = GeneratedReportSchema.parse(response)
+            setReportData(validated)
+            setCurrentStatus(validated.status)
+            setProgress(validated.status === 'completed' ? 100 : 50)
         } catch (err: any) {
-            console.error('Stream failure:', err)
-            setCurrentStatus('FAILED')
-            setLoading(false)
+            console.error('Generation failure:', err)
+            setCurrentStatus('failed')
             alert(err.message || 'Failed to generate report')
+        } finally {
+            setLoading(false)
         }
     }
 
     return (
         <div className="p-8 space-y-6">
             <div className="border p-6 rounded-lg bg-card max-w-2xl mx-auto shadow-sm">
-                <h2 className="text-2xl font-bold mb-4 text-primary">
-                    Report Generator
-                </h2>
+                <div className="mb-6">
+                    <h2 className="text-2xl font-bold text-primary">
+                        Report Generator
+                    </h2>
+                    <p className="text-sm text-muted-foreground">
+                        Select a format and generate your document.
+                    </p>
+                </div>
 
                 {!reportData ? (
-                    <div className="space-y-4">
-                        <p className="text-muted-foreground">
-                            Generate real-time PDF reports with sensitive member
-                            data.
-                        </p>
+                    <div className="space-y-6">
+                        <div className="space-y-2">
+                            <label className="text-sm font-semibold">
+                                Paper Size
+                            </label>
+                            <Select
+                                value={selectedSize}
+                                onValueChange={(val) =>
+                                    setSelectedSize(val as PaperSizeKey)
+                                }
+                                disabled={loading}
+                            >
+                                <SelectTrigger className="w-full">
+                                    <SelectValue placeholder="Choose a size" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    {Object.entries(PAPER_SIZES).map(
+                                        ([key, config]) => (
+                                            <SelectItem key={key} value={key}>
+                                                {config.label} ({config.width} ×{' '}
+                                                {config.height})
+                                            </SelectItem>
+                                        )
+                                    )}
+                                </SelectContent>
+                            </Select>
+                        </div>
 
                         {loading && (
                             <div className="space-y-3 animate-in fade-in slide-in-from-top-2">
                                 <div className="flex justify-between items-center">
                                     <Badge
-                                        className="uppercase tracking-wider"
                                         variant="secondary"
+                                        className="uppercase"
                                     >
                                         {currentStatus.replace(/_/g, ' ')}
                                     </Badge>
-                                    <span className="text-sm font-mono font-bold text-primary">
+                                    <span className="text-sm font-mono font-bold">
                                         {Math.round(progress)}%
                                     </span>
                                 </div>
-                                <Progress
-                                    className="w-full h-2"
-                                    value={progress}
-                                />
+                                <Progress value={progress} className="h-2" />
                             </div>
                         )}
 
@@ -218,9 +206,7 @@ function GeneratedReports() {
                             disabled={loading}
                             onClick={handleGenerateReport}
                         >
-                            {loading
-                                ? 'Generating Report...'
-                                : 'Generate Profile List (PDF)'}
+                            {loading ? 'Processing...' : 'Generate PDF Report'}
                         </Button>
                     </div>
                 ) : (
@@ -228,20 +214,24 @@ function GeneratedReports() {
                         <div className="flex items-center gap-2">
                             <Badge className="bg-green-600">SUCCESS</Badge>
                             <span className="text-sm text-muted-foreground">
-                                Report Ready
+                                Report Ready ({reportData.status})
                             </span>
                         </div>
+
                         <div className="p-4 bg-muted/50 border rounded-md font-mono text-[10px] break-all text-muted-foreground">
-                            {reportData.url}
+                            {reportData.media?.url ||
+                                'The PDF is being generated in the background. Check back in a moment.'}
                         </div>
+
                         <div className="flex gap-3">
                             <Button
                                 className="flex-1"
+                                disabled={!reportData.media?.url}
                                 onClick={() =>
-                                    window.open(reportData.url, '_blank')
+                                    window.open(reportData.media?.url, '_blank')
                                 }
                             >
-                                View PDF Document
+                                View PDF
                             </Button>
                             <Button
                                 onClick={() => {
@@ -251,7 +241,7 @@ function GeneratedReports() {
                                 }}
                                 variant="outline"
                             >
-                                Reset
+                                New Report
                             </Button>
                         </div>
                     </div>
