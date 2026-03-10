@@ -4,18 +4,33 @@ import PdfViewer from '@/modules/pdf-viewer/components/pdf-viewer'
 
 import { UploadIcon } from '@/components/icons'
 import { Button } from '@/components/ui/button'
+import {
+    Dialog,
+    DialogClose,
+    DialogContent,
+    DialogHeader,
+    DialogTitle,
+} from '@/components/ui/dialog'
 
 function PDFUploader() {
     const [file, setFile] = useState<File | null>(null)
+    const [open, setOpen] = useState(false)
     const inputRef = useRef<HTMLInputElement>(null)
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const f = e.target.files?.[0]
         if (f && f.type === 'application/pdf') {
             setFile(f)
+            setOpen(true)
         }
         e.target.value = ''
     }
+
+    const handleClose = () => {
+        setOpen(false)
+        setFile(null)
+    }
+
     return (
         <>
             <div className="text-center space-y-4">
@@ -36,12 +51,32 @@ function PDFUploader() {
                 </Button>
             </div>
 
-            {file && (
-                <div className="w-screen h-screen">
-                    <PdfViewer file={file} onClose={() => setFile(null)} />
-                </div>
-            )}
+            <Dialog onOpenChange={setOpen} open={open}>
+                <DialogContent className="flex flex-col w-[90vw] !max-w-[1200px] h-[90vh] p-0 overflow-hidden">
+                    <DialogHeader className="p-4 border-b">
+                        <DialogTitle>PDF Viewer</DialogTitle>
+                        <DialogClose asChild>
+                            <Button
+                                className="absolute top-4 right-4"
+                                variant="ghost"
+                            >
+                                ✕
+                            </Button>
+                        </DialogClose>
+                    </DialogHeader>
+
+                    {file && (
+                        <PdfViewer
+                            className="flex-1 min-h-0 h-[400px]"
+                            file={file}
+                            onClose={handleClose}
+                            pageWidth={1400}
+                        />
+                    )}
+                </DialogContent>
+            </Dialog>
         </>
     )
 }
+
 export default PDFUploader

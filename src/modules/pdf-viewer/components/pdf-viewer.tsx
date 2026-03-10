@@ -3,6 +3,7 @@ import { memo, useCallback, useEffect, useRef, useState } from 'react'
 import { toast } from 'sonner'
 
 import { IS_STAGING } from '@/constants'
+import { cn } from '@/helpers'
 import { Virtualizer, useVirtualizer } from '@tanstack/react-virtual'
 import { ChevronLeft, ChevronRight, Printer } from 'lucide-react'
 import { Document, Page, pdfjs } from 'react-pdf'
@@ -30,8 +31,13 @@ import {
 
 import { useModalState } from '@/hooks/use-modal-state'
 
+import { IClassProps } from '@/types'
+
 const PAGE_GAP = 12
 const DEFAULT_PAGE_WIDTH = 800
+// const ZOOM_STEP = 0.1
+const MIN_ZOOM = 0.25
+const MAX_ZOOM = 3
 
 if (!IS_STAGING) {
     pdfjs.GlobalWorkerOptions.workerSrc = `https://unpkg.com/pdfjs-dist@5.4.296/build/pdf.worker.min.mjs`
@@ -42,71 +48,28 @@ if (!IS_STAGING) {
     ).toString()
 }
 
-interface PdfViewerProps {
+interface PdfViewerProps extends IClassProps {
     file: File | string
     fileName?: string
     onClose?: () => void
+    pageWidth?: number
 }
-
-const Header = memo(function Header({
-    fileTitle,
-    onClose,
-    onPrint,
-}: {
-    fileTitle: string
-    onClose?: () => void
-    onPrint: () => void
-}) {
-    return (
-        <div className="flex items-center sticky z-9 top-0 gap-x-2 justify-end px-4 py-2">
-            <ButtonGroup className="flex">
-                <Button
-                    className="rounded-lg text-sm cursor-pointer"
-                    disabled
-                    size="sm"
-                    variant="secondary"
-                >
-                    {fileTitle}
-                </Button>
-            </ButtonGroup>
-            <ButtonGroup>
-                <Button
-                    className="rounded-lg cursor-pointer"
-                    onClick={onPrint}
-                    size="sm"
-                    variant="secondary"
-                >
-                    <Printer className="h-4 w-4" />
-                </Button>
-            </ButtonGroup>
-            <ButtonGroup>
-                <Button
-                    className="rounded-lg cursor-pointer"
-                    onClick={() => onClose?.()}
-                    size="sm"
-                    variant="secondary"
-                >
-                    <XIcon className="h-4 w-4" />
-                </Button>
-            </ButtonGroup>
-        </div>
-    )
-})
 
 const VirtualPages = memo(function VirtualPages({
     virtualizer,
-    // pageHeights,
-    containerWidth,
+    pageWidth,
+    scale,
 }: {
     virtualizer: Virtualizer<HTMLDivElement, Element>
     pageHeights: number[]
-    containerWidth: number
+    pageWidth: number
+    scale: number
 }) {
     return (
         <div
-            className="mx-auto"
             style={{
                 height: virtualizer.getTotalSize(),
+                minWidth: pageWidth * scale,
                 position: 'relative',
             }}
         >
@@ -118,15 +81,15 @@ const VirtualPages = memo(function VirtualPages({
                         top: 0,
                         left: '50%',
                         transform: `translateX(-50%) translateY(${virtualItem.start}px)`,
-                        width: containerWidth,
+                        width: pageWidth * scale,
                     }}
                 >
-                    <div className="shadow-lg bg-background rounded-lg overflow-hidden">
+                    <div className="shadow-lg rounded-lg overflow-hidden">
                         <Page
                             pageNumber={virtualItem.index + 1}
                             renderAnnotationLayer={true}
                             renderTextLayer={true}
-                            width={containerWidth}
+                            width={pageWidth * scale}
                         />
                     </div>
                 </div>
@@ -135,14 +98,20 @@ const VirtualPages = memo(function VirtualPages({
     )
 })
 
-const FooterControls = memo(function FooterControls({
+const PDFFooterControl = memo(function FooterControls({
     currentPage,
     numPages,
+    fileTitle,
+    onPrint,
+    onClose,
     scrollToPage,
 }: {
     currentPage: number
     numPages: number
     scrollToPage: (p: number) => void
+    fileTitle: string
+    onClose?: () => void
+    onPrint: () => void
 }) {
     const [goToInput, setGoToInput] = useState('')
     const [popoverOpen, setPopoverOpen] = useState(false)
@@ -157,7 +126,7 @@ const FooterControls = memo(function FooterControls({
     }
 
     return (
-        <div className="mx-auto px-2 py-2 w-fit flex items-center sticky bottom-5 justify-center gap-2">
+        <div className="mx-auto px-2 py-2 w-fit flex items-center sticky left-1/2 -translate-x-1/2 bottom-0 gap-2">
             <ButtonGroup className="flex bg-popover border border-secondary-foreground/70 p-1 rounded-xl">
                 <Button
                     className="rounded-lg cursor-pointer"
@@ -217,6 +186,32 @@ const FooterControls = memo(function FooterControls({
                     <ChevronRight />
                 </Button>
             </ButtonGroup>
+            <ButtonGroup className="flex bg-popover border border-secondary-foreground/70 p-1 rounded-xl">
+                <Button
+                    className="rounded-lg text-sm cursor-pointer"
+                    disabled
+                    size="sm"
+                    variant="secondary"
+                >
+                    {fileTitle}
+                </Button>
+                <Button
+                    className="rounded-lg cursor-pointer"
+                    onClick={onPrint}
+                    size="sm"
+                    variant="secondary"
+                >
+                    <Printer className="h-4 w-4" />
+                </Button>
+                <Button
+                    className="rounded-lg cursor-pointer"
+                    onClick={onClose}
+                    size="sm"
+                    variant="secondary"
+                >
+                    <XIcon className="h-4 w-4" />
+                </Button>
+            </ButtonGroup>
         </div>
     )
 })
@@ -237,12 +232,7 @@ const PasswordDialog = memo(function PasswordDialog({
     submitPassword: () => void
 }) {
     return (
-        <Dialog
-            onOpenChange={(open) => {
-                if (!open) onClose?.()
-            }}
-            open={open}
-        >
+        <Dialog onOpenChange={(open) => !open && onClose?.()} open={open}>
             <DialogContent className="sm:max-w-sm">
                 <DialogHeader>
                     <DialogTitle className="flex items-center gap-2">
@@ -287,22 +277,26 @@ const PasswordDialog = memo(function PasswordDialog({
     )
 })
 
-export default function PdfViewer({ file, fileName, onClose }: PdfViewerProps) {
+export default function PdfViewer({
+    file,
+    fileName,
+    className,
+    pageWidth = DEFAULT_PAGE_WIDTH,
+    onClose,
+}: PdfViewerProps) {
     const [numPages, setNumPages] = useState<number>(0)
     const [currentPage, setCurrentPage] = useState(1)
     const [fileUrl, setFileUrl] = useState<string | null>(null)
-    const [containerWidth, setContainerWidth] = useState(DEFAULT_PAGE_WIDTH)
     const [pageHeights, setPageHeights] = useState<number[]>([])
+    const [scale, setScale] = useState(1)
 
     const parentRef = useRef<HTMLDivElement>(null)
-
     const passwordNeeded = useModalState()
     const [passwordValue, setPasswordValue] = useState('')
     const [passwordError, setPasswordError] = useState(false)
     const passwordCallbackRef = useRef<((password: string) => void) | null>(
         null
     )
-
     const pdfDocRef = useRef<null | DocumentCallback>(null)
 
     const estimateSize = useCallback(
@@ -317,19 +311,6 @@ export default function PdfViewer({ file, fileName, onClose }: PdfViewerProps) {
         overscan: 2,
         gap: PAGE_GAP,
     })
-
-    useEffect(() => {
-        const el = parentRef.current
-        if (!el) return
-        const ro = new ResizeObserver((entries) => {
-            const entry = entries[0]
-            if (entry) {
-                setContainerWidth(Math.floor(entry.contentRect.width))
-            }
-        })
-        ro.observe(el)
-        return () => ro.disconnect()
-    }, [])
 
     useEffect(() => {
         let url: string | null = null
@@ -347,7 +328,6 @@ export default function PdfViewer({ file, fileName, onClose }: PdfViewerProps) {
     useEffect(() => {
         const scrollEl = parentRef.current
         if (!scrollEl) return
-
         let raf = 0
         const onScroll = () => {
             if (raf) return
@@ -403,12 +383,11 @@ export default function PdfViewer({ file, fileName, onClose }: PdfViewerProps) {
         setPasswordError(false)
 
         const heights: number[] = []
-
         for (let i = 1; i <= n; i++) {
             const page = await pdf.getPage(i)
             const viewport = page.getViewport({ scale: 1 })
-            const scale = containerWidth / viewport.width
-            heights.push(Math.round(viewport.height * scale))
+            const scaleFactor = pageWidth / viewport.width
+            heights.push(Math.round(viewport.height * scaleFactor * scale))
         }
 
         setPageHeights(heights)
@@ -435,21 +414,61 @@ export default function PdfViewer({ file, fileName, onClose }: PdfViewerProps) {
         }
     }
 
+    useEffect(() => {
+        const el = parentRef.current
+        if (!el) return
+        const handleWheel = (e: WheelEvent) => {
+            if (e.ctrlKey) {
+                e.preventDefault()
+                setScale((prev) => {
+                    const next = Math.min(
+                        MAX_ZOOM,
+                        Math.max(MIN_ZOOM, prev - e.deltaY * 0.001)
+                    )
+                    return next
+                })
+            }
+        }
+        el.addEventListener('wheel', handleWheel, { passive: false })
+        return () => el.removeEventListener('wheel', handleWheel)
+    }, [])
+
+    // Recalculate page heights on scale change
+    useEffect(() => {
+        const pdf = pdfDocRef.current
+        if (!pdf) return
+
+        const recalcHeights = async () => {
+            const heights: number[] = []
+            for (let i = 1; i <= pdf.numPages; i++) {
+                const page = await pdf.getPage(i)
+                const viewport = page.getViewport({ scale: 1 })
+                const scaleFactor = pageWidth / viewport.width
+                heights.push(Math.round(viewport.height * scaleFactor * scale))
+            }
+            setPageHeights(heights)
+            virtualizer.measure()
+        }
+
+        recalcHeights()
+    }, [scale, pageWidth, virtualizer])
+
     const fileTitle = file instanceof File ? file.name : fileName || 'PDF View'
 
     return (
-        <div className="fixed inset-0 z-50 flex flex-col bg-background/95 backdrop-blur-sm">
+        <div
+            className={cn(
+                'flex relative flex-col p-4 bg-background/95 min-w-full max-w-full backdrop-blur-sm',
+                className
+            )}
+        >
             <div
-                className="flex-1 overflow-auto p-8 will-change-transform ecoop-scroll bg-muted"
+                className="flex-1 overflow-auto will-change-transform max-w-full ecoop-scroll"
                 ref={parentRef}
             >
-                <Header
-                    fileTitle={fileTitle}
-                    onClose={onClose}
-                    onPrint={handlePrint}
-                />
                 {fileUrl ? (
                     <Document
+                        className="min-w-max"
                         file={fileUrl}
                         loading={
                             <div className="flex items-center justify-center h-64 text-muted-foreground">
@@ -460,8 +479,9 @@ export default function PdfViewer({ file, fileName, onClose }: PdfViewerProps) {
                         onPassword={handlePassword}
                     >
                         <VirtualPages
-                            containerWidth={containerWidth}
                             pageHeights={pageHeights}
+                            pageWidth={pageWidth}
+                            scale={scale}
                             virtualizer={virtualizer}
                         />
                     </Document>
@@ -470,9 +490,12 @@ export default function PdfViewer({ file, fileName, onClose }: PdfViewerProps) {
                         No selected PDF file
                     </p>
                 )}
-                <FooterControls
+                <PDFFooterControl
                     currentPage={currentPage}
+                    fileTitle={fileTitle}
                     numPages={numPages}
+                    onClose={onClose}
+                    onPrint={handlePrint}
                     scrollToPage={scrollToPage}
                 />
                 <PasswordDialog
