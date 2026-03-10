@@ -36,7 +36,11 @@ function PDFUploader() {
                 </Button>
             </div>
 
-            {file && <PdfViewer file={file} onClose={() => setFile(null)} />}
+            {file && (
+                <div className="w-screen h-screen">
+                    <PdfViewer file={file} onClose={() => setFile(null)} />
+                </div>
+            )}
         </>
     )
 }
