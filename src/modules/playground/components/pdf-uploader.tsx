@@ -6,7 +6,6 @@ import { UploadIcon } from '@/components/icons'
 import { Button } from '@/components/ui/button'
 import {
     Dialog,
-    DialogClose,
     DialogContent,
     DialogHeader,
     DialogTitle,
@@ -55,14 +54,7 @@ function PDFUploader() {
                 <DialogContent className="flex flex-col w-[90vw] !max-w-[1200px] h-[90vh] p-0 overflow-hidden">
                     <DialogHeader className="p-4 border-b">
                         <DialogTitle>PDF Viewer</DialogTitle>
-                        <DialogClose asChild>
-                            <Button
-                                className="absolute top-4 right-4"
-                                variant="ghost"
-                            >
-                                ✕
-                            </Button>
-                        </DialogClose>
+
                     </DialogHeader>
 
                     {file && (

@@ -433,7 +433,6 @@ export default function PdfViewer({
         return () => el.removeEventListener('wheel', handleWheel)
     }, [])
 
-    // Recalculate page heights on scale change
     useEffect(() => {
         const pdf = pdfDocRef.current
         if (!pdf) return
@@ -452,6 +451,102 @@ export default function PdfViewer({
 
         recalcHeights()
     }, [scale, pageWidth, virtualizer])
+
+    useEffect(() => {
+        const el = parentRef.current
+        if (!el) return
+
+        let isDragging = false
+        let startX = 0
+        let startY = 0
+        let scrollLeft = 0
+        let scrollTop = 0
+        let velocityX = 0
+        let velocityY = 0
+        let lastTime = 0
+        let lastX = 0
+        let lastY = 0
+        let animationFrame: number | null = null
+
+        const friction = 0.95 
+        const minVelocity = 0.1
+
+        const onMouseDown = (e: MouseEvent) => {
+            isDragging = true
+            el.style.cursor = 'grabbing'
+            startX = e.pageX
+            startY = e.pageY
+            scrollLeft = el.scrollLeft
+            scrollTop = el.scrollTop
+            lastX = e.pageX
+            lastY = e.pageY
+            lastTime = performance.now()
+            velocityX = 0
+            velocityY = 0
+            if (animationFrame) cancelAnimationFrame(animationFrame)
+        }
+
+        const onMouseMove = (e: MouseEvent) => {
+            if (!isDragging) return
+            e.preventDefault()
+            const dx = e.pageX - startX
+            const dy = e.pageY - startY
+            el.scrollLeft = scrollLeft - dx
+            el.scrollTop = scrollTop - dy
+
+            const now = performance.now()
+            const dt = now - lastTime
+            if (dt > 0) {
+                velocityX = (e.pageX - lastX) / dt
+                velocityY = (e.pageY - lastY) / dt
+                lastX = e.pageX
+                lastY = e.pageY
+                lastTime = now
+            }
+        }
+
+        const onMouseUpOrLeave = () => {
+            isDragging = false
+            el.style.cursor = 'grab'
+
+            const momentum = () => {
+                el.scrollLeft -= velocityX * 16 
+                el.scrollTop -= velocityY * 16
+
+                velocityX *= friction
+                velocityY *= friction
+
+                if (
+                    Math.abs(velocityX) > minVelocity ||
+                    Math.abs(velocityY) > minVelocity
+                ) {
+                    animationFrame = requestAnimationFrame(momentum)
+                } else {
+                    animationFrame = null
+                }
+            }
+
+            if (
+                Math.abs(velocityX) > minVelocity ||
+                Math.abs(velocityY) > minVelocity
+            ) {
+                animationFrame = requestAnimationFrame(momentum)
+            }
+        }
+
+        el.addEventListener('mousedown', onMouseDown)
+        el.addEventListener('mousemove', onMouseMove)
+        el.addEventListener('mouseup', onMouseUpOrLeave)
+        el.addEventListener('mouseleave', onMouseUpOrLeave)
+
+        return () => {
+            el.removeEventListener('mousedown', onMouseDown)
+            el.removeEventListener('mousemove', onMouseMove)
+            el.removeEventListener('mouseup', onMouseUpOrLeave)
+            el.removeEventListener('mouseleave', onMouseUpOrLeave)
+            if (animationFrame) cancelAnimationFrame(animationFrame)
+        }
+    }, [])
 
     const fileTitle = file instanceof File ? file.name : fileName || 'PDF View'
 
