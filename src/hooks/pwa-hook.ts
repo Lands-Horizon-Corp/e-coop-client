@@ -85,13 +85,11 @@ export const usePWA = () => {
                 if (!res.ok) return
                 const assets: string[] = await res.json()
                 const cache = await caches.open('local-assets')
-
                 let found = 0
                 for (const url of assets) {
                     const match = await cache.match(url)
                     if (match) found++
                 }
-
                 if (assets.length > 0) {
                     const currentProgress = Math.round(
                         (found / assets.length) * 100
@@ -102,7 +100,6 @@ export const usePWA = () => {
                         found > 0 &&
                         navigator.onLine
                     ) {
-                        console.log('New version detected. Re-syncing...')
                         startDownload()
                     }
                 }

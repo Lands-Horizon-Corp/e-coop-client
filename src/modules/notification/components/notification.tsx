@@ -122,7 +122,7 @@ export const NotificationNav = () => {
         refetch,
     } = useGetAllNotification()
 
-    useSubscribe(`notification.create.user.${id}`, () => refetch())
+    useSubscribe('notification', `create.user.${id}`, () => refetch())
 
     const {
         unreadCount,

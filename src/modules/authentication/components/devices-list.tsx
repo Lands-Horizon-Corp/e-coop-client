@@ -128,7 +128,7 @@ const DevicesList = ({ defaultDevices }: Props) => {
             </div>
             {isPending && <LoadingSpinner className="mx-auto" />}
             {devices.length === 0 && !isPending && (
-                <Empty className="from-muted/50 mx-auto to-background h-full bg-gradient-to-b from-30%">
+                <Empty className="from-muted/50 mx-auto to-background h-full bg-linear-to-b from-30%">
                     <EmptyHeader>
                         <EmptyMedia variant="icon">
                             <DevicesIcon />
@@ -187,7 +187,7 @@ const DevicesList = ({ defaultDevices }: Props) => {
                         <CardContent className="space-y-4">
                             <div className="grid gap-3">
                                 <div className="flex items-start gap-3">
-                                    <LocationPinIcon className="h-4 w-4 text-muted-foreground mt-0.5 flex-shrink-0" />
+                                    <LocationPinIcon className="h-4 w-4 text-muted-foreground mt-0.5 shrink-0" />
                                     <div className="min-w-0 flex-1">
                                         <p className="text-sm font-medium text-foreground">
                                             Location
@@ -199,7 +199,7 @@ const DevicesList = ({ defaultDevices }: Props) => {
                                 </div>
 
                                 <div className="flex items-start gap-3">
-                                    <LanguageIcon className="h-4 w-4 text-muted-foreground mt-0.5 flex-shrink-0" />
+                                    <LanguageIcon className="h-4 w-4 text-muted-foreground mt-0.5 shrink-0" />
                                     <div className="min-w-0 flex-1">
                                         <p className="text-sm font-medium text-foreground">
                                             Language
@@ -211,7 +211,7 @@ const DevicesList = ({ defaultDevices }: Props) => {
                                 </div>
 
                                 <div className="flex items-start gap-3">
-                                    <GlobeIcon className="h-4 w-4 text-muted-foreground mt-0.5 flex-shrink-0" />
+                                    <GlobeIcon className="h-4 w-4 text-muted-foreground mt-0.5 shrink-0" />
                                     <div className="min-w-0 ">
                                         <p className="text-sm font-medium text-foreground">
                                             IP Address
@@ -223,7 +223,7 @@ const DevicesList = ({ defaultDevices }: Props) => {
                                 </div>
 
                                 <div className="flex items-start gap-3">
-                                    <NavigationIcon className="h-4 w-4 text-muted-foreground mt-0.5 flex-shrink-0" />
+                                    <NavigationIcon className="h-4 w-4 text-muted-foreground mt-0.5 shrink-0" />
                                     <div className="min-w-0 flex-1">
                                         <p className="text-sm font-medium text-foreground">
                                             Coordinates

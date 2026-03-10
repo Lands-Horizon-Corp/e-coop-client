@@ -21,7 +21,8 @@ const InvitationCode = () => {
     const queryClient = useQueryClient()
 
     useSubscribe(
-        `invitation_code.create.branch.${user_organization.branch_id}`,
+        'invitation_code',
+        `create.branch.${user_organization.branch_id}`,
         () => {
             queryClient.invalidateQueries({
                 queryKey: ['invitation-code', 'paginated'],
@@ -30,7 +31,8 @@ const InvitationCode = () => {
     )
 
     useSubscribe(
-        `invitation_code.update.branch.${user_organization.branch_id}`,
+        'invitation_code',
+        `update.branch.${user_organization.branch_id}`,
         () => {
             queryClient.invalidateQueries({
                 queryKey: ['invitation-code', 'paginated'],
@@ -39,7 +41,8 @@ const InvitationCode = () => {
     )
 
     useSubscribe(
-        `invitation_code.delete.branch.${user_organization.branch_id}`,
+        'invitation_code',
+        `delete.branch.${user_organization.branch_id}`,
         () => {
             queryClient.invalidateQueries({
                 queryKey: ['invitation-code', 'paginated'],

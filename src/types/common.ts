@@ -61,6 +61,16 @@ export interface ITimeStamps {
 
 export type TCivilStatus = (typeof CIVIL_STATUS)[number] // move to member profile
 
+export interface UdpateGeneralLedgerOrder {
+    general_ledger_definition_id: TEntityId
+    index: number
+    general_ledger_definition_entries?: UpdateAccountOrder[]
+    accounts: UpdateAccountOrder[]
+}
+export interface UpdateAccountOrder {
+    account_id: TEntityId
+    index: number
+}
 export interface UpdateIndexRequest {
     id: TEntityId
     index: number

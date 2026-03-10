@@ -36,7 +36,7 @@ const UserOrganizationSettings = ({ className }: Props) => {
 
     const error = serverRequestErrExtractor({ error: rawError })
 
-    useSubscribe(`user_organization.update.${id}`, refetch)
+    useSubscribe('user_organization', `update.${id}`, refetch)
 
     return (
         <div className={cn('flex flex-col gap-y-4 flex-1 w-full', className)}>

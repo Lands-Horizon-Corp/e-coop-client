@@ -1,7 +1,10 @@
 import * as React from 'react'
 
 import { cn } from '@/helpers/tw-utils'
+import { currencyFormat } from '@/modules/currency'
+import { IPickerBaseProps } from '@/types/component-types/picker'
 import { Check } from 'lucide-react'
+import { useHotkeys } from 'react-hotkeys-hook'
 
 import { ChevronDownIcon } from '@/components/icons'
 import LoadingSpinner from '@/components/spinners/loading-spinner'
@@ -20,6 +23,8 @@ import {
     PopoverTrigger,
 } from '@/components/ui/popover'
 
+import { useInternalState } from '@/hooks/use-internal-state'
+
 import { TAPIQueryOptions, TEntityId } from '@/types'
 
 import {
@@ -28,20 +33,22 @@ import {
 } from '../loan-transaction.service'
 import { ILoanTransaction } from '../loan-transaction.types'
 
-interface Props extends Omit<
-    React.ComponentPropsWithoutRef<'button'>,
-    'onChange'
-> {
+interface Props
+    extends
+        Omit<React.ComponentPropsWithoutRef<'button'>, 'onChange'>,
+        Omit<
+            IPickerBaseProps<ILoanTransaction | undefined>,
+            'value' | 'onSelect'
+        > {
     value?: TEntityId
-    disabled?: boolean
     className?: string
-    placeholder?: string
     undefinable?: boolean
     mode?: TLoanTransactionHookModeGetAll
     loanTransactionId?: TEntityId
     memberProfileId?: TEntityId
     loanAccountId?: TEntityId
     query?: TAPIQueryOptions
+
     onChange?: (selected: ILoanTransaction | undefined) => void
 }
 
@@ -58,12 +65,18 @@ const LoanTransactionCombobox = React.forwardRef<HTMLButtonElement, Props>(
             query,
             placeholder = 'Select Loan Transaction...',
             onChange,
+            modalState,
+            shortcutHotKey = 'alt + t',
+            allowShortcutHotKey,
             ...other
         },
         ref
     ) => {
-        const [open, setOpen] = React.useState(false)
-
+        const [state, setState] = useInternalState(
+            false,
+            modalState?.open,
+            modalState?.onOpenChange
+        )
         const { data, isLoading } = useGetAllLoanTransaction({
             mode,
             memberProfileId,
@@ -77,12 +90,25 @@ const LoanTransactionCombobox = React.forwardRef<HTMLButtonElement, Props>(
             },
         })
 
+        useHotkeys(
+            shortcutHotKey,
+            (event) => {
+                event?.preventDefault()
+                setState(!state)
+            },
+            {
+                enableOnFormTags: true,
+                enabled: allowShortcutHotKey && !disabled && !isLoading,
+            },
+            [value, disabled, isLoading, allowShortcutHotKey, state]
+        )
+
         return (
-            <Popover modal onOpenChange={setOpen} open={open}>
+            <Popover onOpenChange={setState} open={state}>
                 <PopoverTrigger asChild>
                     <Button
                         {...other}
-                        aria-expanded={open}
+                        aria-expanded={state}
                         className={cn('w-full justify-between px-3', className)}
                         disabled={disabled || isLoading}
                         ref={ref}
@@ -124,7 +150,7 @@ const LoanTransactionCombobox = React.forwardRef<HTMLButtonElement, Props>(
                                         <CommandItem
                                             className="justify-center text-muted-foreground"
                                             onSelect={() => {
-                                                setOpen(false)
+                                                setState(false)
                                                 onChange?.(undefined)
                                             }}
                                             value={undefined}
@@ -136,7 +162,7 @@ const LoanTransactionCombobox = React.forwardRef<HTMLButtonElement, Props>(
                                         <CommandItem
                                             key={option.id}
                                             onSelect={() => {
-                                                setOpen(false)
+                                                setState(false)
                                                 onChange?.(option)
                                             }}
                                             value={
@@ -152,18 +178,38 @@ const LoanTransactionCombobox = React.forwardRef<HTMLButtonElement, Props>(
                                                         `Loan #${option.id}`}
                                                 </span>
                                                 {option.member_profile && (
-                                                    <span className="text-xs text-muted-foreground">
-                                                        {
-                                                            option
-                                                                .member_profile
-                                                                .first_name
-                                                        }{' '}
-                                                        {
-                                                            option
-                                                                .member_profile
-                                                                .last_name
-                                                        }
-                                                    </span>
+                                                    <>
+                                                        <span className="text-xs text-muted-foreground">
+                                                            {
+                                                                option
+                                                                    .member_profile
+                                                                    .first_name
+                                                            }{' '}
+                                                            {
+                                                                option
+                                                                    .member_profile
+                                                                    .last_name
+                                                            }
+                                                        </span>
+                                                        <span className="text-xs text-muted-foreground">
+                                                            <span className="mr-1">
+                                                                Balance:
+                                                            </span>
+                                                            {currencyFormat(
+                                                                option.balance,
+                                                                {
+                                                                    currency:
+                                                                        option
+                                                                            .account
+                                                                            ?.currency,
+                                                                    showSymbol:
+                                                                        !!option
+                                                                            .account
+                                                                            ?.currency,
+                                                                }
+                                                            )}
+                                                        </span>
+                                                    </>
                                                 )}
                                             </div>
                                             <Check

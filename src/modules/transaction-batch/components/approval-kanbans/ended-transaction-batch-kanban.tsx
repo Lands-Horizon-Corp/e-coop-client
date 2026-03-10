@@ -44,11 +44,15 @@ const EndedTransactionBatchKanban = (_props: Props) => {
         refetch,
     } = useTransactionBatchEndApprovals()
 
-    useSubscribe(`transaction_batch.update.branch.${branch_id}`, () => {
+    useSubscribe('transaction_batch', `update.branch.${branch_id}`, () => {
         refetch()
     })
 
-    useSubscribe(`transaction_batch.delete.branch.${branch_id}`, () => {
+    useSubscribe('transaction_batch', `delete.branch.${branch_id}`, () => {
+        refetch()
+    })
+
+    useSubscribe('transaction_batch', `end.branch.${branch_id}`, () => {
         refetch()
     })
 

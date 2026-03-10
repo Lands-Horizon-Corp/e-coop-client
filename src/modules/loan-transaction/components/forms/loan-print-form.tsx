@@ -35,7 +35,7 @@ import {
 } from '../../loan-transaction.utils'
 import {
     LoanTransactionPrintSchema,
-    LoanTransactionPrintSchema as TLoanTransactionPrintSchema,
+    TLoanTransactionPrintSchema,
 } from '../../loan-transaction.validation'
 
 export interface ILoanTransactionPrintFormProps

@@ -28,7 +28,7 @@ import { useMemberPickerStore } from '@/store/member-picker-store'
 import { useHotkeys } from 'react-hotkeys-hook'
 
 import FormFooterResetSubmit from '@/components/form-components/form-footer-reset-submit'
-import { BookIcon, GearIcon, XIcon } from '@/components/icons'
+import { BookIcon, GearIcon } from '@/components/icons'
 import Modal, { IModalProps } from '@/components/modals/modal'
 import { Button } from '@/components/ui/button'
 import { CommandShortcut } from '@/components/ui/command'
@@ -82,14 +82,14 @@ const JournalVoucherCreateUpdateForm = ({
 
     const { data } = useTransactionBatchStore()
 
+    const [journalId, setJournalVoucherId] = useState<TEntityId | undefined>(
+        journalVoucherId
+    )
+    const isEditMode = !!journalId
+
     const [defaultMemberProfile, setDefaultMemberProfile] = useState<
         IMemberProfile | undefined
     >(defaultValues?.member_profile)
-
-    const [editJournalId, setEditJournalId] = useState<TEntityId>(
-        journalVoucherId ?? ''
-    )
-    const isUpdate = !!editJournalId
 
     const { setSelectedMember } = useMemberPickerStore()
 
@@ -106,13 +106,13 @@ const JournalVoucherCreateUpdateForm = ({
     })
 
     useEffect(() => {
-        if (editJournalId) return
+        if (isEditMode) return
         form.setValue('journal_voucher_entries', [
             {
                 account_id: '',
             },
         ])
-    }, [editJournalId, mode, form])
+    }, [isEditMode, mode, form])
 
     const {
         mutate: createUpdateJournalVoucher,
@@ -126,9 +126,7 @@ const JournalVoucherCreateUpdateForm = ({
                 onSuccess: (data) => {
                     form.reset(data)
                     formProps.onSuccess?.(data)
-                    setEditJournalId(data.id)
-                    // setDefaultMode('update')
-                    // form.reset(data)
+                    setJournalVoucherId(data.id)
                 },
                 onError: formProps.onError,
             }),
@@ -149,7 +147,7 @@ const JournalVoucherCreateUpdateForm = ({
         }
 
         createUpdateJournalVoucher({
-            journalVoucherId: journalVoucherId,
+            journalVoucherId: isEditMode ? journalId : journalVoucherId,
             payload: payload,
         })
     }, handleFocusError)
@@ -269,14 +267,14 @@ const JournalVoucherCreateUpdateForm = ({
             >
                 <fieldset disabled={isPending || formProps.readOnly}>
                     <div className="absolute top-4 right-10 z-10 flex gap-2">
-                        {isUpdate && (
+                        {journalVoucherId && (
                             <JournalVoucherTagsManagerPopover
-                                journalVoucherId={editJournalId}
+                                journalVoucherId={journalVoucherId}
                                 readOnly={isPrinted}
                                 size="sm"
                             />
                         )}
-                        {editJournalId && defaultValues && (
+                        {isEditMode && defaultValues && (
                             <div>
                                 <JournalVoucherStatusIndicator
                                     journalVoucher={
@@ -285,128 +283,31 @@ const JournalVoucherCreateUpdateForm = ({
                                 />
                             </div>
                         )}
-                        <div className="bg-muted p-1 rounded-sm -top-1 right-0 z-10 flex items-center">
-                            <Button
-                                className="size-fit px-2 py-0.5 mr-1 text-xs"
-                                size="sm"
-                                tabIndex={-1}
-                                type="button"
-                                variant={'ghost'}
-                            >
-                                Submit{' '}
-                            </Button>
-                            <CommandShortcut className="bg-accent text-xs min-w-fit size-fit px-2 py-0.5 rounded-sm text-primary">
-                                Ctrl + Enter
-                            </CommandShortcut>
-                        </div>
                     </div>
                     <div className="gap-2 w-full flex flex-col">
                         <div className="col-span-2 inline-flex gap-2 w-full">
-                            <div className=" flex justify-end items-end">
+                            <div className="flex col-span-2 space-x-2 w-full ">
                                 <Popover {...popOverState}>
                                     <PopoverTrigger asChild>
-                                        <div className="flex flex-col w-fit!">
+                                        <div className="flex flex-0 flex-col space-y-1 w-fit!">
                                             <Kbd className="block">alt + ;</Kbd>
                                             <Button
                                                 className="px-1"
+                                                onClick={(e) => {
+                                                    e.preventDefault()
+                                                    popOverState.onOpenChange(
+                                                        !popOverState.open
+                                                    )
+                                                }}
+                                                tabIndex={-1}
                                                 variant="secondary"
                                             >
                                                 <GearIcon className="size-4" />
+                                                More Options
                                             </Button>
                                         </div>
                                     </PopoverTrigger>
                                     <PopoverContent className="bg-card w-fit">
-                                        <FormFieldWrapper
-                                            className="relative"
-                                            control={form.control}
-                                            label={
-                                                <Label className="text-xs font-medium text-muted-foreground">
-                                                    Member Profile{' '}
-                                                    <Kbd>alt + m</Kbd>
-                                                </Label>
-                                            }
-                                            name="member_id"
-                                            render={({ field }) => {
-                                                return (
-                                                    <>
-                                                        <MemberPicker
-                                                            allowClear
-                                                            allowShortcutHotKey
-                                                            disabled={isDisabled(
-                                                                field.name
-                                                            )}
-                                                            mainTriggerProps={{
-                                                                tabIndex: -1,
-                                                            }}
-                                                            onSelect={(
-                                                                selectedMember
-                                                            ) => {
-                                                                field.onChange(
-                                                                    selectedMember?.id
-                                                                )
-                                                                form.setValue(
-                                                                    'member_profile',
-                                                                    selectedMember
-                                                                )
-                                                                form.setValue(
-                                                                    'name',
-                                                                    selectedMember?.full_name
-                                                                )
-                                                                form.setValue(
-                                                                    'company_id',
-                                                                    undefined
-                                                                )
-                                                                setDefaultMemberProfile(
-                                                                    selectedMember
-                                                                )
-                                                            }}
-                                                            placeholder="Relative Member Profile"
-                                                            shortcutHotKey="alt + m"
-                                                            value={form.getValues(
-                                                                'member_profile'
-                                                            )}
-                                                        />
-                                                    </>
-                                                )
-                                            }}
-                                        />
-                                        <FormFieldWrapper
-                                            control={form.control}
-                                            label={
-                                                <Label className="text-xs font-medium text-muted-foreground">
-                                                    Currency *{' '}
-                                                    <span>
-                                                        <KbdGroup>
-                                                            <Kbd>Alt + ,</Kbd>
-                                                        </KbdGroup>
-                                                    </span>
-                                                </Label>
-                                            }
-                                            name="currency_id"
-                                            render={({ field }) => (
-                                                <CurrencyCombobox
-                                                    {...field}
-                                                    allowShortcutHotKey
-                                                    disabled={isDisabled(
-                                                        field.name
-                                                    )}
-                                                    mainTriggerProps={{
-                                                        tabIndex: -1,
-                                                    }}
-                                                    onChange={(currency) => {
-                                                        field.onChange(
-                                                            currency?.id
-                                                        )
-                                                        form.setValue(
-                                                            'currency',
-                                                            currency
-                                                        )
-                                                    }}
-                                                    shortcutHotKey="alt + period"
-                                                    value={field.value}
-                                                />
-                                            )}
-                                        />
                                         <FormFieldWrapper
                                             control={form.control}
                                             label={
@@ -428,9 +329,11 @@ const JournalVoucherCreateUpdateForm = ({
                                                     disabled={isDisabled(
                                                         field.name
                                                     )}
-                                                    mainTriggerProps={{
-                                                        tabIndex: -1,
-                                                    }}
+                                                    mainTriggerProps={
+                                                        {
+                                                            // tabIndex: -1,
+                                                        }
+                                                    }
                                                     onChange={(
                                                         selectedCompany
                                                     ) => {
@@ -457,6 +360,61 @@ const JournalVoucherCreateUpdateForm = ({
                                             )}
                                         />
                                         <FormFieldWrapper
+                                            className="relative"
+                                            control={form.control}
+                                            label={
+                                                <Label className="text-xs font-medium text-muted-foreground">
+                                                    Member <Kbd>alt + m</Kbd>
+                                                </Label>
+                                            }
+                                            name="member_id"
+                                            render={({ field }) => {
+                                                return (
+                                                    <>
+                                                        <MemberPicker
+                                                            allowClear
+                                                            allowShortcutHotKey
+                                                            disabled={isDisabled(
+                                                                field.name
+                                                            )}
+                                                            mainTriggerProps={
+                                                                {
+                                                                    // tabIndex: -1,
+                                                                }
+                                                            }
+                                                            onSelect={(
+                                                                selectedMember
+                                                            ) => {
+                                                                field.onChange(
+                                                                    selectedMember?.id
+                                                                )
+                                                                form.setValue(
+                                                                    'member_profile',
+                                                                    selectedMember
+                                                                )
+                                                                form.setValue(
+                                                                    'name',
+                                                                    selectedMember?.full_name
+                                                                )
+                                                                form.setValue(
+                                                                    'company_id',
+                                                                    undefined
+                                                                )
+                                                                setDefaultMemberProfile(
+                                                                    selectedMember
+                                                                )
+                                                            }}
+                                                            placeholder="Select a member"
+                                                            shortcutHotKey="alt + m"
+                                                            value={form.getValues(
+                                                                'member_profile'
+                                                            )}
+                                                        />
+                                                    </>
+                                                )
+                                            }}
+                                        />
+                                        <FormFieldWrapper
                                             control={form.control}
                                             label={
                                                 <Label className="text-xs font-medium text-muted-foreground">
@@ -477,15 +435,53 @@ const JournalVoucherCreateUpdateForm = ({
                                                     )}
                                                     id={field.name}
                                                     placeholder="Enter reference"
-                                                    tabIndex={-1}
+                                                    // tabIndex={-1}
+                                                />
+                                            )}
+                                        />{' '}
+                                        <FormFieldWrapper
+                                            control={form.control}
+                                            label={
+                                                <Label className="text-xs font-medium text-muted-foreground">
+                                                    Currency *{' '}
+                                                    <span>
+                                                        <KbdGroup>
+                                                            <Kbd>Alt + ,</Kbd>
+                                                        </KbdGroup>
+                                                    </span>
+                                                </Label>
+                                            }
+                                            name="currency_id"
+                                            render={({ field }) => (
+                                                <CurrencyCombobox
+                                                    {...field}
+                                                    allowShortcutHotKey
+                                                    disabled={isDisabled(
+                                                        field.name
+                                                    )}
+                                                    mainTriggerProps={
+                                                        {
+                                                            // tabIndex: -1,
+                                                        }
+                                                    }
+                                                    onChange={(currency) => {
+                                                        field.onChange(
+                                                            currency?.id
+                                                        )
+                                                        form.setValue(
+                                                            'currency',
+                                                            currency
+                                                        )
+                                                    }}
+                                                    shortcutHotKey="alt + period"
+                                                    value={field.value}
                                                 />
                                             )}
                                         />
                                     </PopoverContent>
                                 </Popover>
-                            </div>
-                            <div className="flex space-x-2 w-full">
                                 <FormFieldWrapper
+                                    className="w-full"
                                     control={form.control}
                                     label={
                                         <Label className="text-xs font-medium text-muted-foreground">
@@ -503,37 +499,37 @@ const JournalVoucherCreateUpdateForm = ({
                                             <div className="relative w-full">
                                                 <Input
                                                     className="text-md! pr-12 font-semibold"
-                                                    tabIndex={-1}
+                                                    // tabIndex={-1}
                                                     {...field}
                                                     id={field.name}
+                                                    onChange={(item) => {
+                                                        if (
+                                                            item.target
+                                                                .value === ''
+                                                        ) {
+                                                            form.setValue(
+                                                                'member_id',
+                                                                undefined
+                                                            )
+                                                            form.setValue(
+                                                                'company_id',
+                                                                undefined
+                                                            )
+                                                            form.setValue(
+                                                                'member_profile',
+                                                                undefined
+                                                            )
+                                                        }
+                                                        field.onChange(item)
+                                                    }}
                                                     value={field.value || ''}
                                                 />
-                                                <Button
-                                                    className="absolute m-auto top-0 bottom-0 right-1 hover:bg-primary/20!"
-                                                    onClick={(e) => {
-                                                        e.preventDefault()
-                                                        form.reset({
-                                                            company_id:
-                                                                undefined,
-                                                            member_profile:
-                                                                undefined,
-                                                            member_id:
-                                                                undefined,
-                                                            name: '',
-                                                        })
-                                                    }}
-                                                    size={'sm'}
-                                                    tabIndex={-1}
-                                                    variant="ghost"
-                                                >
-                                                    <XIcon />
-                                                </Button>
                                             </div>
                                         )
                                     }}
                                 />{' '}
                                 <FormFieldWrapper
-                                    className="relative"
+                                    className="relative max-w-xs"
                                     control={form.control}
                                     description="mm/dd/yyyy"
                                     descriptionClassName="absolute top-0 right-0"
@@ -550,7 +546,7 @@ const JournalVoucherCreateUpdateForm = ({
                                     name="date"
                                     render={({ field }) => (
                                         <InputDate
-                                            tabIndex={-1}
+                                            // tabIndex={-1}
                                             {...field}
                                             value={field.value ?? ''}
                                         />
@@ -578,21 +574,19 @@ const JournalVoucherCreateUpdateForm = ({
                                     <div className="relative w-full">
                                         <Textarea
                                             className="text-md! pr-12 font-semibold"
-                                            tabIndex={-1}
+                                            // tabIndex={-1}
                                             {...field}
                                         />
                                     </div>
                                 )
                             }}
                         />
-                        <div className="grid grid-cols-2 gap-2"></div>
                     </div>
 
                     <>
                         <FormFieldWrapper
                             className="col-span-1 md:col-span-4 max-h-xs!"
                             control={form.control}
-                            label="Particulars"
                             name="journal_voucher_entries"
                             render={({ field }) => (
                                 <JournalEntryTable
@@ -631,7 +625,7 @@ const JournalVoucherCreateUpdateForm = ({
                     error={error}
                     isLoading={isPending}
                     onReset={() => {
-                        if (isUpdate) {
+                        if (isEditMode) {
                             form.reset({
                                 ...defaultValues,
                                 date: defaultValues?.date
@@ -648,7 +642,16 @@ const JournalVoucherCreateUpdateForm = ({
                         })
                     }}
                     readOnly={formProps.readOnly}
-                    submitText={isUpdate ? 'Update' : 'Create'}
+                    submitText={
+                        <div className="inline-flex items-center gap-2">
+                            <kbd className="text-xs">
+                                {isEditMode ? 'Update' : 'Create'}
+                            </kbd>
+                            <CommandShortcut className="bg-accent text-xs min-w-fit size-fit px-2 py-0.5 rounded-sm text-primary">
+                                Ctrl + Enter
+                            </CommandShortcut>
+                        </div>
+                    }
                 />
             </form>
         </Form>

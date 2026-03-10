@@ -1,8 +1,6 @@
 import { GENERAL_LEDGER_DEFINITION_MAX_DEPTH } from '@/constants'
 import { IGeneralLedgerDefinition } from '@/modules/general-ledger-definition'
 import useConfirmModalStore from '@/store/confirm-modal-store'
-import { useGeneralLedgerAccountsGroupingStore } from '@/store/general-ledger-accounts-groupings-store'
-import { useGLFSStore } from '@/store/gl-fs-store'
 
 import {
     DotsHorizontalIcon,
@@ -17,10 +15,14 @@ import {
     DropdownMenuContent,
     DropdownMenuGroup,
     DropdownMenuItem,
+    DropdownMenuLabel,
+    DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 
 import { TEntityId } from '@/types'
+
+import { useGeneralLedgerDefinitionContext } from '../../ context/general-ledger-context-provider'
 
 type GeneralLedgerDefinitionActionsProps = {
     node: IGeneralLedgerDefinition
@@ -34,23 +36,17 @@ type ActionType = 'addAccount' | 'addGL' | 'edit' | 'view' | 'remove'
 
 const GeneralLedgerDefinitionActions = ({
     node,
-    canDelete,
+    canDelete = true,
     depth,
     hanldeDeleteGeneralLedgerDefinition,
-    isDeletingGLDefinition,
+    // isDeletingGLDefinition,
 }: GeneralLedgerDefinitionActionsProps) => {
     const { onOpen } = useConfirmModalStore()
-
     const {
-        setSelectedGeneralLedgerDefinitionId,
-        setOnCreate,
-        setOpenCreateGeneralLedgerModal,
-        setIsReadyOnly,
-        setSelectedGeneralLedgerDefinition,
-        setGeneralLedgerDefinitionEntriesId,
-    } = useGeneralLedgerAccountsGroupingStore()
-
-    const { setAddAccountPickerModalOpen } = useGLFSStore()
+        modals: { glForm },
+        states,
+        modals: { accountPicker },
+    } = useGeneralLedgerDefinitionContext()
 
     const handleGeneralLedgerAction = (
         e: React.MouseEvent<HTMLDivElement, MouseEvent>,
@@ -59,33 +55,24 @@ const GeneralLedgerDefinitionActions = ({
     ) => {
         e.stopPropagation()
         e.preventDefault()
-        setIsReadyOnly?.(false)
-
         switch (action) {
             case 'addAccount':
-                setAddAccountPickerModalOpen?.(true)
-                setSelectedGeneralLedgerDefinitionId?.(node.id)
+                accountPicker.onOpenChange(true)
+                states.setSelectedEntry(null)
                 break
 
             case 'addGL':
-                setOnCreate?.(true)
-                setOpenCreateGeneralLedgerModal?.(true)
-                setSelectedGeneralLedgerDefinition?.(null)
-                setGeneralLedgerDefinitionEntriesId?.(node.id)
+                glForm.create()
+                states.setSelectedEntry(node.id)
                 break
 
             case 'edit':
-                setOnCreate?.(false)
-                setOpenCreateGeneralLedgerModal?.(true)
-                setSelectedGeneralLedgerDefinition?.(node)
-                setSelectedGeneralLedgerDefinitionId?.(node.id)
+                glForm.edit({ gl_definition: node })
+                states.setSelectedEntry(null)
                 break
 
             case 'view':
-                setOnCreate?.(false)
-                setIsReadyOnly?.(true)
-                setSelectedGeneralLedgerDefinition?.(node)
-                setOpenCreateGeneralLedgerModal?.(true)
+                glForm.view({ gl_definition: node })
                 break
             case 'remove':
                 onOpen({
@@ -110,7 +97,7 @@ const GeneralLedgerDefinitionActions = ({
             <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                     <Button
-                        className="border-0 !px-0 bg-transparent text-xl"
+                        className="border-0 px-0! bg-transparent text-xl"
                         size={'sm'}
                         variant="outline"
                     >
@@ -119,14 +106,17 @@ const GeneralLedgerDefinitionActions = ({
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="start" className="w-56">
                     <DropdownMenuGroup>
+                        <DropdownMenuLabel>Create</DropdownMenuLabel>
+
                         <DropdownMenuItem
                             onClick={(e) =>
                                 handleGeneralLedgerAction(e, 'addAccount')
                             }
                         >
-                            <PlusIcon className="mr-2">+</PlusIcon>
+                            <PlusIcon className="mr-2" />
                             Add Account
                         </DropdownMenuItem>
+
                         {depth < GENERAL_LEDGER_DEFINITION_MAX_DEPTH && (
                             <DropdownMenuItem
                                 onClick={(e) =>
@@ -134,40 +124,46 @@ const GeneralLedgerDefinitionActions = ({
                                 }
                             >
                                 <PlusIcon className="mr-2" />
-                                Add GL Definition
+                                Add GL
                             </DropdownMenuItem>
                         )}
-                        <div>
-                            <DropdownMenuItem
-                                onClick={(e) =>
-                                    handleGeneralLedgerAction(e, 'edit')
-                                }
-                            >
-                                <EditPencilIcon className="mr-2" />
-                                edit
-                            </DropdownMenuItem>
-                            <DropdownMenuItem
-                                onClick={(e) =>
-                                    handleGeneralLedgerAction(e, 'view')
-                                }
-                            >
-                                <EyeViewIcon className="mr-2" />
-                                View Details
-                            </DropdownMenuItem>
-                            <DropdownMenuItem
-                                disabled={isDeletingGLDefinition || canDelete}
-                                onClick={(e) =>
-                                    handleGeneralLedgerAction(
-                                        e,
-                                        'remove',
-                                        node.id
-                                    )
-                                }
-                            >
-                                <TrashIcon className="mr-2 text-destructive" />
-                                Remove
-                            </DropdownMenuItem>
-                        </div>
+                    </DropdownMenuGroup>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuGroup>
+                        <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                        <DropdownMenuItem
+                            onClick={(e) =>
+                                handleGeneralLedgerAction(e, 'edit')
+                            }
+                        >
+                            <EditPencilIcon className="mr-2" />
+                            Edit
+                        </DropdownMenuItem>
+
+                        <DropdownMenuItem
+                            onClick={(e) =>
+                                handleGeneralLedgerAction(e, 'view')
+                            }
+                        >
+                            <EyeViewIcon className="mr-2" />
+                            View
+                        </DropdownMenuItem>
+                    </DropdownMenuGroup>
+
+                    <DropdownMenuSeparator />
+
+                    <DropdownMenuGroup>
+                        <DropdownMenuItem
+                            disabled={!canDelete}
+                            onClick={(e) => {
+                                e.preventDefault()
+                                e.stopPropagation()
+                                handleGeneralLedgerAction(e, 'remove', node.id)
+                            }}
+                        >
+                            <TrashIcon className="mr-2 text-destructive" />
+                            Remove
+                        </DropdownMenuItem>
                     </DropdownMenuGroup>
                 </DropdownMenuContent>
             </DropdownMenu>

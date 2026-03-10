@@ -3,6 +3,7 @@ import { Path, UseFormReturn } from 'react-hook-form'
 import { AccountCategoryComboBox } from '@/modules/account-category'
 import { AccountClassificationComboBox } from '@/modules/account-classification'
 import { CurrencyCombobox } from '@/modules/currency'
+import { TGeneralLedgerType } from '@/modules/general-ledger'
 import { GENERAL_LEDGER_TYPE } from '@/modules/general-ledger/general-ledger.constants'
 import MemberTypeCombobox from '@/modules/member-type/components/member-type-combobox'
 import { EyeIcon } from 'lucide-react'
@@ -41,7 +42,10 @@ import { useModalState } from '@/hooks/use-modal-state'
 
 import { TEntityId } from '@/types'
 
+import FinancialStatemenTitleCombobox from '../../../financial-statement-title/components/finanicial-statement-combobox'
+import { IAccount } from '../../account.types'
 import { TAccountFormValues } from '../../account.validation'
+import { getLastAccountForEachType } from '../account-list'
 import AccountPicker from '../picker/account-picker'
 
 type AccountHeaderProps = {
@@ -49,13 +53,30 @@ type AccountHeaderProps = {
     isReadOnly?: boolean
     isDisabled: (fieldName: Path<TAccountFormValues>) => boolean
     isLoading?: boolean
+    accounts?: IAccount[]
 }
 
 const AccountHeaderForm = ({
     form,
     isReadOnly,
     isDisabled,
+    accounts,
 }: AccountHeaderProps) => {
+    const handleOnTypeOnChange = (selectedGlType: TGeneralLedgerType) => {
+        const lastAccount = getLastAccountForEachType(accounts ?? [])
+        if (lastAccount[selectedGlType]) {
+            form.setValue('index', lastAccount[selectedGlType].index)
+        }
+    }
+    const handleIndexOnChange = (index: number) => {
+        const general_ledger_type = accounts?.find(
+            (item) => item.index === index + 1
+        )?.general_ledger_type
+        if (general_ledger_type) {
+            form.setValue('general_ledger_type', general_ledger_type)
+        }
+    }
+
     return (
         <div>
             <div className="flex space-x-2">
@@ -109,6 +130,21 @@ const AccountHeaderForm = ({
                 <FormFieldWrapper
                     className="flex-1"
                     control={form.control}
+                    disabled={isReadOnly}
+                    label="Financial Statement Title"
+                    name="financial_statement_title_id"
+                    render={({ field }) => (
+                        <FinancialStatemenTitleCombobox
+                            disabled={isDisabled(field.name)}
+                            onChange={(selected) => field.onChange(selected.id)}
+                            placeholder="Select Financial Statement Title"
+                            value={field.value}
+                        />
+                    )}
+                />
+                <FormFieldWrapper
+                    className="flex-1"
+                    control={form.control}
                     label="General Ledger Type *"
                     name="general_ledger_type"
                     render={({ field }) => (
@@ -116,8 +152,11 @@ const AccountHeaderForm = ({
                             <Select
                                 defaultValue={field.value}
                                 disabled={isDisabled(field.name)}
-                                onValueChange={(selectedValue) => {
+                                onValueChange={(
+                                    selectedValue: TGeneralLedgerType
+                                ) => {
                                     field.onChange(selectedValue)
+                                    handleOnTypeOnChange(selectedValue)
                                 }}
                             >
                                 <SelectTrigger className="w-full">
@@ -154,6 +193,10 @@ const AccountHeaderForm = ({
                             autoComplete="off"
                             disabled={isDisabled(field.name)}
                             id={field.name}
+                            onChange={(value) => {
+                                field.onChange(value)
+                                handleIndexOnChange(Number(value.target.value))
+                            }}
                             placeholder="Index"
                             value={field.value ?? ''}
                         />
@@ -298,7 +341,7 @@ export const AccountGlSourceVisibility = ({
         <Popover modal {...modalState}>
             <PopoverTrigger asChild>
                 <Button
-                    className="mb-0 rounded-full size-fit !p-0 border-accent !py-0.5 !px-2 "
+                    className="mb-0 rounded-full size-fit p-0! border-accent py-0.5! px-2! "
                     onClick={(e) => {
                         modalState.onOpenChange(true)
                         e.preventDefault()
@@ -320,7 +363,7 @@ export const AccountGlSourceVisibility = ({
                         name="show_in_general_ledger_source_withdraw"
                         render={({ field }) => (
                             <GradientBackground gradientOnly>
-                                <div className="shadow-xs relative flex w-full items-start gap-2 rounded-2xl border border-input p-4 outline-none duration-200 ease-out has-[:checked]:border-primary/30 has-[:checked]:bg-primary/40">
+                                <div className="shadow-xs relative flex w-full items-start gap-2 rounded-2xl border border-input p-4 outline-none duration-200 ease-out has-checked:border-primary/30 has-checked:bg-primary/40">
                                     <Checkbox
                                         checked={field.value}
                                         className="order-1 after:absolute after:inset-0"
@@ -354,7 +397,7 @@ export const AccountGlSourceVisibility = ({
                         name="show_in_general_ledger_source_deposit"
                         render={({ field }) => (
                             <GradientBackground gradientOnly>
-                                <div className="shadow-xs relative flex w-full items-start gap-2 rounded-2xl border border-input p-4 outline-none duration-200 ease-out has-[:checked]:border-primary/30 has-[:checked]:bg-primary/40">
+                                <div className="shadow-xs relative flex w-full items-start gap-2 rounded-2xl border border-input p-4 outline-none duration-200 ease-out has-checked:border-primary/30 has-checked:bg-primary/40">
                                     <Checkbox
                                         checked={field.value}
                                         className="order-1 after:absolute after:inset-0"
@@ -387,7 +430,7 @@ export const AccountGlSourceVisibility = ({
                         name="show_in_general_ledger_source_journal"
                         render={({ field }) => (
                             <GradientBackground gradientOnly>
-                                <div className="shadow-xs relative flex w-full items-start gap-2 rounded-2xl border border-input p-4 outline-none duration-200 ease-out has-[:checked]:border-primary/30 has-[:checked]:bg-primary/40">
+                                <div className="shadow-xs relative flex w-full items-start gap-2 rounded-2xl border border-input p-4 outline-none duration-200 ease-out has-checked:border-primary/30 has-checked:bg-primary/40">
                                     <Checkbox
                                         checked={field.value}
                                         className="order-1 after:absolute after:inset-0"
@@ -420,7 +463,7 @@ export const AccountGlSourceVisibility = ({
                         name="show_in_general_ledger_source_payment"
                         render={({ field }) => (
                             <GradientBackground gradientOnly>
-                                <div className="shadow-xs relative flex w-full items-start gap-2 rounded-2xl border border-input p-4 outline-none duration-200 ease-out has-[:checked]:border-primary/30 has-[:checked]:bg-primary/40">
+                                <div className="shadow-xs relative flex w-full items-start gap-2 rounded-2xl border border-input p-4 outline-none duration-200 ease-out has-checked:border-primary/30 has-checked:bg-primary/40">
                                     <Checkbox
                                         checked={field.value}
                                         className="order-1 after:absolute after:inset-0"
@@ -453,7 +496,7 @@ export const AccountGlSourceVisibility = ({
                         name="show_in_general_ledger_source_adjustment"
                         render={({ field }) => (
                             <GradientBackground gradientOnly>
-                                <div className="shadow-xs relative flex w-full items-start gap-2 rounded-2xl border border-input p-4 outline-none duration-200 ease-out has-[:checked]:border-primary/30 has-[:checked]:bg-primary/40">
+                                <div className="shadow-xs relative flex w-full items-start gap-2 rounded-2xl border border-input p-4 outline-none duration-200 ease-out has-checked:border-primary/30 has-checked:bg-primary/40">
                                     <Checkbox
                                         checked={field.value}
                                         className="order-1 after:absolute after:inset-0"
@@ -486,7 +529,7 @@ export const AccountGlSourceVisibility = ({
                         name="show_in_general_ledger_source_journal_voucher"
                         render={({ field }) => (
                             <GradientBackground gradientOnly>
-                                <div className="shadow-xs relative flex w-full items-start gap-2 rounded-2xl border border-input p-4 outline-none duration-200 ease-out has-[:checked]:border-primary/30 has-[:checked]:bg-primary/40">
+                                <div className="shadow-xs relative flex w-full items-start gap-2 rounded-2xl border border-input p-4 outline-none duration-200 ease-out has-checked:border-primary/30 has-checked:bg-primary/40">
                                     <Checkbox
                                         checked={field.value}
                                         className="order-1 after:absolute after:inset-0"
@@ -519,7 +562,7 @@ export const AccountGlSourceVisibility = ({
                         name="show_in_general_ledger_source_check_voucher"
                         render={({ field }) => (
                             <GradientBackground gradientOnly>
-                                <div className="shadow-xs relative flex w-full items-start gap-2 rounded-2xl border border-input p-4 outline-none duration-200 ease-out has-[:checked]:border-primary/30 has-[:checked]:bg-primary/40">
+                                <div className="shadow-xs relative flex w-full items-start gap-2 rounded-2xl border border-input p-4 outline-none duration-200 ease-out has-checked:border-primary/30 has-checked:bg-primary/40">
                                     <Checkbox
                                         checked={field.value}
                                         className="order-1 after:absolute after:inset-0"

@@ -1,9 +1,10 @@
 import { useEffect, useRef } from 'react'
 
+import { cn } from '@/helpers'
+import { glTypeStyleMap } from '@/modules/account/components/account-card'
 import { IGeneralLedgerDefinition } from '@/modules/general-ledger-definition'
 import { GeneralLedgerTypeBadge } from '@/modules/general-ledger/components/general-ledger-type-badge'
 import { GLFSAccountsCardList } from '@/modules/gl-fs'
-import { useGLFSStore } from '@/store/gl-fs-store'
 import {
     DndContext,
     DragEndEvent,
@@ -24,11 +25,11 @@ import {
     ArrowChevronRight,
     DragHandleIcon,
 } from '@/components/icons'
-import { PlainTextEditor } from '@/components/ui/text-editor'
 
 import { TEntityId } from '@/types'
 
-import GeneralLedgerDefinitionActions from './gl-definition-actions'
+import { useGeneralLedgerDefinitionContext } from '../ context/general-ledger-context-provider'
+import GeneralLedgerDefinitionActions from './actions/gl-definition-actions'
 
 interface GeneralLedgerTreeNodeProps {
     node: IGeneralLedgerDefinition
@@ -43,8 +44,6 @@ interface GeneralLedgerTreeNodeProps {
     depth?: number
     refetch?: () => void
     isDeletingGLDefinition?: boolean
-    hanldeDeleteGeneralLedgerDefinition: (id: TEntityId) => void
-    handleRemoveAccountFromGLDefinition: (accountId: TEntityId) => void
 }
 
 const GeneralLedgerDefinitionNode = ({
@@ -54,18 +53,17 @@ const GeneralLedgerDefinitionNode = ({
     onDragEndNested,
     parentPath,
     isDeletingGLDefinition,
-    hanldeDeleteGeneralLedgerDefinition,
-    handleRemoveAccountFromGLDefinition,
 }: GeneralLedgerTreeNodeProps) => {
     const ref = useRef<HTMLDivElement>(null)
     const dragHandleRef = useRef<HTMLDivElement>(null)
 
     const {
+        queries,
         expandedNodeIds,
         targetNodeId,
         clearTargetNodeIdAfterScroll,
         toggleNode,
-    } = useGLFSStore()
+    } = useGeneralLedgerDefinitionContext()
 
     const isNodeExpanded = expandedNodeIds.has(node.id)
 
@@ -114,22 +112,22 @@ const GeneralLedgerDefinitionNode = ({
     }, [targetNodeId, node.id, clearTargetNodeIdAfterScroll])
 
     const hasChildren =
-        node.general_ledger_definition &&
-        node.general_ledger_definition.length > 0
+        node.general_ledger_definition_entries &&
+        node.general_ledger_definition_entries.length > 0
 
-    const isFirstLevel = depth === 0
-    const childLength = node.general_ledger_definition?.length
+    const isFirstLevel = node.depth === 0
+    const childLength = node.general_ledger_definition_entries?.length
     const hasAccountNode = node.accounts && node.accounts.length > 0
 
     const firstLevelItemLabel = childLength
         ? `${childLength} item${childLength > 1 ? 's' : ''}`
         : ''
 
-    const firstLevelAccountsLabel = hasAccountNode
-        ? `${node.accounts?.length ?? 0} account${(node.accounts?.length ?? 0) > 1 ? 's' : ''}`
-        : ''
+    // const firstLevelAccountsLabel = hasAccountNode
+    //     ? `${node.accounts?.length ?? 0} account${(node.accounts?.length ?? 0) > 1 ? 's' : ''}`
+    //     : ''
 
-    if (node.general_ledger_definition_entries_id && isFirstLevel) {
+    if (node.general_ledger_definition_entry_id && isFirstLevel) {
         return null
     }
     const showGLFSAccountsCardList =
@@ -139,7 +137,7 @@ const GeneralLedgerDefinitionNode = ({
 
     const showGLDefinitionNode = isNodeExpanded && hasChildren
 
-    if (node.general_ledger_definition_entries_id && isFirstLevel) {
+    if (node.general_ledger_definition_entry_id && isFirstLevel) {
         return null
     }
 
@@ -148,8 +146,14 @@ const GeneralLedgerDefinitionNode = ({
             ref={setNodeRef}
             style={style}
             {...attributes}
-            className={` ${isFirstLevel ? 'dark:border-0 py-5 pl-0 rounded-lg mt-1 border-[1px] border-gray-400/30 dark:bg-background shadow-sm' : 'pt-1.5 pb-3  border-[1px] border-gray-500/40 bg-gray-100 dark:bg-secondary/30 pl-0 rounded-lg mt-2 px-0'} ${isDragging ? 'rounded-lg border-2 border-primary ' : ''} `}
+            className={cn(
+                `'pb-3  bg-background p-2 mt-2 px-0'} ${isDragging ? 'rounded-lg border-2 border-primary ' : ''}   `,
+                node.general_ledger_type
+                    ? glTypeStyleMap[node.general_ledger_type].border
+                    : ''
+            )}
         >
+            <div className={cn()} />
             <div
                 className={`flex h-fit cursor-pointer items-center px-3 `}
                 onClick={(event) => {
@@ -182,7 +186,7 @@ const GeneralLedgerDefinitionNode = ({
                         hanldeDeleteGeneralLedgerDefinition={(
                             nodeId: TEntityId
                         ) => {
-                            hanldeDeleteGeneralLedgerDefinition(nodeId)
+                            queries.deleteGLQuery.mutate(nodeId)
                         }}
                         isDeletingGLDefinition={isDeletingGLDefinition}
                         node={node}
@@ -195,6 +199,7 @@ const GeneralLedgerDefinitionNode = ({
                                 className={` ${isFirstLevel ? 'text-xl font-semibold' : `text-md font-semibold`}`}
                             >
                                 {node.name}
+                                {/* {node.id} */}
                             </h1>
                             {!isFirstLevel && (
                                 <span className="text-xs /50">
@@ -207,17 +212,17 @@ const GeneralLedgerDefinitionNode = ({
                             )}
                         </div>
                     </span>
-                    {node.description && (
+                    {/* {node.description && (
                         <span className="text-xs /70">
                             <PlainTextEditor content={node.description} />
                         </span>
-                    )}
+                    )} */}
 
                     {isFirstLevel && (
                         <p className="text-xs /30">
                             {firstLevelItemLabel}
                             {childLength && hasAccountNode ? ' • ' : ''}
-                            {firstLevelAccountsLabel}
+                            {/* {firstLevelAccountsLabel} */}
                         </p>
                     )}
                 </div>
@@ -227,7 +232,7 @@ const GeneralLedgerDefinitionNode = ({
                 {Array.isArray(showGLFSAccountsCardList) && (
                     <GLFSAccountsCardList
                         accounts={showGLFSAccountsCardList}
-                        removeAccount={handleRemoveAccountFromGLDefinition}
+                        generalLedgerId={node.id}
                     />
                 )}
                 <DndContext
@@ -238,7 +243,7 @@ const GeneralLedgerDefinitionNode = ({
                     {hasChildren && (
                         <SortableContext
                             items={
-                                node.general_ledger_definition?.map(
+                                node.general_ledger_definition_entries?.map(
                                     (gc) => gc.id
                                 ) || []
                             }
@@ -246,18 +251,12 @@ const GeneralLedgerDefinitionNode = ({
                         >
                             {showGLDefinitionNode && (
                                 <div className="ml-4">
-                                    {node.general_ledger_definition?.map(
+                                    {node.general_ledger_definition_entries?.map(
                                         (childNode) => (
                                             <GeneralLedgerDefinitionNode
                                                 depth={depth + 1}
                                                 handleOpenAccountPicker={
                                                     handleOpenAccountPicker
-                                                }
-                                                handleRemoveAccountFromGLDefinition={
-                                                    handleRemoveAccountFromGLDefinition
-                                                }
-                                                hanldeDeleteGeneralLedgerDefinition={
-                                                    hanldeDeleteGeneralLedgerDefinition
                                                 }
                                                 isDeletingGLDefinition={
                                                     isDeletingGLDefinition

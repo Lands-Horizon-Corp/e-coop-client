@@ -11,6 +11,7 @@ import {
 
 import { cn } from '@/helpers'
 import { dateAgo } from '@/helpers/date-utils'
+import { useAuthUserWithOrgBranch } from '@/modules/authentication/authgentication.store'
 import {
     IJournalVoucher,
     TJournalVoucherMode,
@@ -28,6 +29,8 @@ import InfoTooltip from '@/components/tooltips/info-tooltip'
 import { Accordion } from '@/components/ui/accordion'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
+
+import { useSubscribe } from '@/hooks/use-pubsub'
 
 import KanbanContainer from '../../kanban/kanban-container'
 import KanbanItemsContainer from '../../kanban/kanban-items-container'
@@ -58,7 +61,17 @@ export const JournalVoucherKanbanMain = ({
     isSearchHighlighted = false,
 }: JournalVoucherKanbanProps) => {
     const invalidate = useQueryClient()
+
     const [openVouchers, setOpenVouchers] = useState<string[]>([])
+    const {
+        currentAuth: {
+            user_organization: { branch_id },
+        },
+    } = useAuthUserWithOrgBranch()
+
+    useSubscribe('journal_voucher', `dashboard.branch.${branch_id}`, () => {
+        refetch()
+    })
 
     const {
         data: rawJournalVouchers,
@@ -165,7 +178,7 @@ export const JournalVoucherKanbanMain = ({
                                 )}
                                 {hasItem && (
                                     <Button
-                                        className="!size-fit !p-0.5"
+                                        className="size-fit! p-0.5!"
                                         onClick={handleExpandedToggle}
                                         size="sm"
                                         variant="ghost"
@@ -221,7 +234,7 @@ export const JournalVoucherKanbanMain = ({
                                 >
                                     <div className="flex justify-between items-center">
                                         <JournalVoucherStatusIndicator
-                                            className="flex-shrink-0"
+                                            className="shrink-0"
                                             journalVoucher={journalVoucher}
                                         />
                                         <p className="text-xs right-3 top-1 text-end text-muted-foreground/70 truncate">

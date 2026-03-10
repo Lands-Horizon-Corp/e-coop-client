@@ -154,9 +154,21 @@ const AccountClassificationTable = ({
         defaultColumn: { minSize: 100, size: 150, maxSize: 800 },
     })
 
-    useSubscribe(`account_classification.update.branch.${branch_id}`, refetch)
-    useSubscribe(`account_classification.create.branch.${branch_id}`, refetch)
-    useSubscribe(`account_classification.delete.branch.${branch_id}`, refetch)
+    useSubscribe(
+        'account_classification',
+        `update.branch.${branch_id}`,
+        refetch
+    )
+    useSubscribe(
+        'account_classification',
+        `create.branch.${branch_id}`,
+        refetch
+    )
+    useSubscribe(
+        'account_classification',
+        `delete.branch.${branch_id}`,
+        refetch
+    )
 
     const exportfilter = qs.stringify(
         {

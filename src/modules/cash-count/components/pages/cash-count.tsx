@@ -18,19 +18,19 @@ const CashCountPage = () => {
     } = useAuthUserWithOrgBranch()
     const queryClient = useQueryClient()
 
-    useSubscribe(`cash_count.create.branch.${branch_id}`, () =>
+    useSubscribe('cash_count', `create.branch.${branch_id}`, () =>
         queryClient.invalidateQueries({
             queryKey: [cashCountBaseKey, 'paginated'],
         })
     )
 
-    useSubscribe(`cash_count.update.branch.${branch_id}`, () =>
+    useSubscribe('cash_count', `update.branch.${branch_id}`, () =>
         queryClient.invalidateQueries({
             queryKey: [cashCountBaseKey, 'paginated'],
         })
     )
 
-    useSubscribe(`cash_count.delete.branch.${branch_id}`, () =>
+    useSubscribe('cash_count', `delete.branch.${branch_id}`, () =>
         queryClient.invalidateQueries({
             queryKey: [cashCountBaseKey, 'paginated'],
         })

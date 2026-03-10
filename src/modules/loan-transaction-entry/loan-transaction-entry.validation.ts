@@ -1,6 +1,6 @@
 import z from 'zod'
 
-import { entityIdSchema } from '@/validation'
+import { EntityIdSchema, entityIdSchema } from '@/validation'
 
 import { LOAN_TRANSACTION_ENTRY_TYPE } from './loan-transaction-constant'
 
@@ -12,6 +12,12 @@ export const LoanTransactionEntrySchema = z
         description: z.coerce.string().optional(),
         is_add_on: z.boolean().default(false),
         type: z.enum(LOAN_TRANSACTION_ENTRY_TYPE).optional(),
+
+        member_profile_id: EntityIdSchema('Invalid Member').optional(),
+        member_profile: z.any().optional(),
+
+        member_loan_transaction_id: EntityIdSchema('Invalid Loan').optional(),
+        member_loan_transaction: z.any().optional(),
     })
     .refine(
         (data) => {

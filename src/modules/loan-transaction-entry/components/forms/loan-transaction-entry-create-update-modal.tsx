@@ -5,8 +5,9 @@ import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
 
 import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
 import { cn } from '@/helpers/tw-utils'
-import { AccountPicker } from '@/modules/account'
+import { AccountPicker, TAccountType } from '@/modules/account'
 import { CurrencyInput, ICurrency } from '@/modules/currency'
+import { LoanGuideModal } from '@/modules/loan-guide/components/loan-guide'
 import {
     ILoanTransactionEntry,
     LoanTransactionEntrySchema,
@@ -14,9 +15,13 @@ import {
     useCreateLoanTransactionEntry,
     useUpdateLoanTransactionEntryById,
 } from '@/modules/loan-transaction-entry'
+import LoanTransactionCombobox from '@/modules/loan-transaction/components/loan-combobox'
+import MemberPicker from '@/modules/member-profile/components/member-picker'
 
 import FormFooterResetSubmit from '@/components/form-components/form-footer-reset-submit'
+import { CalendarNumberIcon, XIcon } from '@/components/icons'
 import Modal, { IModalProps } from '@/components/modals/modal'
+import { Button } from '@/components/ui/button'
 import { Form } from '@/components/ui/form'
 import FormFieldWrapper from '@/components/ui/form-field-wrapper'
 import { Label } from '@/components/ui/label'
@@ -24,6 +29,7 @@ import { Switch } from '@/components/ui/switch'
 import { Textarea } from '@/components/ui/textarea'
 
 import { useFormHelper } from '@/hooks/use-form-helper'
+import { useModalState } from '@/hooks/use-modal-state'
 
 import { IClassProps, IForm, TEntityId } from '@/types'
 
@@ -87,6 +93,8 @@ const LoanTransactionEntryCreateUpdate = ({
 
     const error = firstError || serverRequestErrExtractor({ error: rawError })
 
+    const loanGuidePaymentModal = useModalState()
+
     const onSubmit = form.handleSubmit(async (formData, e) => {
         e?.stopPropagation()
         e?.preventDefault()
@@ -104,6 +112,9 @@ const LoanTransactionEntryCreateUpdate = ({
             error: `Something went wrong, please try again. ${error || ''}`,
         })
     })
+
+    const member = form.watch('member_profile')
+    const member_id = form.watch('member_profile_id')
 
     return (
         <Form {...form}>
@@ -145,7 +156,6 @@ const LoanTransactionEntryCreateUpdate = ({
                             />
                         )}
                     />
-
                     <FormFieldWrapper
                         control={form.control}
                         label="Amount"
@@ -183,6 +193,130 @@ const LoanTransactionEntryCreateUpdate = ({
                             />
                         )}
                     />
+
+                    <FormFieldWrapper
+                        className="md:col-span-3"
+                        control={form.control}
+                        label="Member Profile"
+                        name="member_profile_id"
+                        render={({ field }) => {
+                            return (
+                                <div className="flex flex-1 items-center gap-x-1">
+                                    <MemberPicker
+                                        disabled={isDisabled(field.name)}
+                                        mainTriggerClassName="flex-1"
+                                        onSelect={(selectedMember) => {
+                                            field.onChange(selectedMember?.id)
+                                            form.setValue(
+                                                'member_profile',
+                                                selectedMember
+                                            )
+                                        }}
+                                        placeholder="Member Profile"
+                                        value={member}
+                                    />
+                                    {field.value && (
+                                        <Button
+                                            className="size-fit p-2.5! shrink-0"
+                                            onClick={() => {
+                                                field.onChange(undefined)
+                                                form.setValue(
+                                                    'member_profile',
+                                                    undefined
+                                                )
+                                            }}
+                                            type="button"
+                                            variant="destructive"
+                                        >
+                                            <XIcon />
+                                        </Button>
+                                    )}
+                                </div>
+                            )
+                        }}
+                    />
+
+                    {(
+                        [
+                            'Loan',
+                            'SVF-Ledger',
+                            'Interest',
+                            'Fines',
+                        ] as TAccountType[]
+                    ).includes(form.watch('account')?.type) && (
+                        <div className="flex gap-x-1 items-end">
+                            <FormFieldWrapper
+                                control={form.control}
+                                label="Loan"
+                                labelClassName="text-xs font-medium text-muted-foreground"
+                                name="member_loan_transaction_id"
+                                render={({ field }) => (
+                                    <LoanTransactionCombobox
+                                        {...field}
+                                        disabled={isDisabled(
+                                            'member_loan_transaction_id'
+                                        )}
+                                        loanAccountId={form.watch('account_id')}
+                                        memberProfileId={member_id}
+                                        mode="member-profile-loan-account"
+                                        onChange={(selectedLoanTransaction) => {
+                                            if (
+                                                (selectedLoanTransaction?.balance ||
+                                                    0) <= 0
+                                            )
+                                                return toast.warning(
+                                                    "You can't select loan is fully paid"
+                                                )
+
+                                            field.onChange(
+                                                selectedLoanTransaction?.id
+                                            )
+                                            form.setValue(
+                                                'member_loan_transaction',
+                                                selectedLoanTransaction
+                                            )
+                                            form.setValue(
+                                                'amount',
+                                                selectedLoanTransaction?.balance ||
+                                                    0
+                                            )
+                                        }}
+                                        placeholder="Select loan type"
+                                        value={field.value ?? undefined}
+                                    />
+                                )}
+                            />
+                            {form.watch('member_loan_transaction_id') && (
+                                <>
+                                    <div
+                                        className="absolute"
+                                        onClick={(e) => e.stopPropagation()}
+                                    >
+                                        <LoanGuideModal
+                                            {...loanGuidePaymentModal}
+                                            loanTransactionId={
+                                                form.watch(
+                                                    'member_loan_transaction_id'
+                                                )!
+                                            }
+                                        />
+                                    </div>
+                                    <Button
+                                        className="text-xs px-2 w-fit mb-0.5 mr-auto"
+                                        onClick={() =>
+                                            loanGuidePaymentModal.onOpenChange(
+                                                true
+                                            )
+                                        }
+                                        size="sm"
+                                        type="button"
+                                    >
+                                        <CalendarNumberIcon />
+                                    </Button>
+                                </>
+                            )}
+                        </div>
+                    )}
 
                     <div className="flex items-center gap-6">
                         <FormFieldWrapper

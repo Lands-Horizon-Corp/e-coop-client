@@ -13,6 +13,7 @@ type GenericSearchInputProps = {
     placeholder?: string
     inputClassName?: string
     className?: string
+    debounce?: number
 }
 
 const GenericSearchInput = ({
@@ -20,10 +21,11 @@ const GenericSearchInput = ({
     placeholder,
     className,
     inputClassName,
+    debounce = 200,
 }: GenericSearchInputProps) => {
     const [inputValue, setInputValue] = useState('')
 
-    const debounceSearchTerm = useDebounce(inputValue, 200)
+    const debounceSearchTerm = useDebounce(inputValue, debounce)
 
     useEffect(() => {
         setSearchTerm(debounceSearchTerm)
@@ -48,7 +50,7 @@ const GenericSearchInput = ({
 
     return (
         <div className={cn(`relative flex-1 max-w-2xl mx-auto`, className)}>
-            <MagnifyingGlassIcon className="absolute left-4 top-1/2 transform -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+            <MagnifyingGlassIcon className="absolute left-4 top-1/2 transform -translate-y-1/2 size-4 text-muted-foreground" />
             <Input
                 className={cn(
                     'pl-12 pr-4 py-3 text-lg border-2 focus:border-primary/50',

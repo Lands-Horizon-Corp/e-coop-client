@@ -31,9 +31,9 @@ export const BatchBlotterSummaryView = ({
             </p>
             <div className="w-full space-y-2">
                 <div className="flex items-center justify-between gap-x-4">
-                    <p className="grow-1">Total Cash Handled</p>
+                    <p className="grow">Total Cash Handled</p>
                     <Separator className="flex-1" />
-                    <p className="grow-1 text-right font-semibold">
+                    <p className="grow text-right font-semibold">
                         {currencyFormat(
                             getCollectionTotal({
                                 total_cash_collection:
@@ -49,7 +49,7 @@ export const BatchBlotterSummaryView = ({
                         )}
                     </p>
                 </div>
-                <div className="rounded-xl bg-accent">
+                <div className="rounded-xl bg-card">
                     <div className="flex items-center justify-between border-b border-b-muted-foreground/5 px-4 py-2 last:border-b-0">
                         <p className="text-muted-foreground">Collection</p>
                         <p>
@@ -84,9 +84,9 @@ export const BatchBlotterSummaryView = ({
 
             <div className="w-full space-y-2">
                 <div className="flex items-center justify-between gap-x-4">
-                    <p className="grow-1">Less (Disbursements)</p>
+                    <p className="grow">Less (Disbursements)</p>
                     <Separator className="flex-1" />
-                    <p className="grow-1 text-right font-semibold">
+                    <p className="grow text-right font-semibold">
                         {currencyFormat(
                             getLessTotal({
                                 petty_cash: transBatch.petty_cash,
@@ -103,7 +103,7 @@ export const BatchBlotterSummaryView = ({
                         )}
                     </p>
                 </div>
-                <div className="rounded-xl bg-accent">
+                <div className="rounded-xl bg-card">
                     <div className="flex items-center justify-between border-b border-b-muted-foreground/5 px-4 py-2 last:border-b-0">
                         <p className="text-muted-foreground">
                             Savings Withdrawal
@@ -173,7 +173,7 @@ export const BatchBlotterSummaryView = ({
 
             <div className="w-full space-y-2">
                 <p>Summary</p>
-                <div className="rounded-xl bg-accent">
+                <div className="rounded-xl bg-card">
                     <div className="flex items-center justify-between border-b border-b-muted-foreground/5 px-4 py-2 last:border-b-0">
                         <p className="text-muted-foreground">
                             Total Supposed Remittance

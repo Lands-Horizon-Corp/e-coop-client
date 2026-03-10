@@ -65,6 +65,7 @@ const UploadTrigger = ({
             <MediaUploaderModal
                 {...uploaderModal}
                 uploaderProps={{
+                    maxSize: 500 * 1024 * 1024,
                     mode: 'multiple',
                     onMultipleUploadComplete: (files) =>
                         mutateAsync({

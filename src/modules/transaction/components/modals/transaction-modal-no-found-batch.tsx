@@ -3,7 +3,7 @@ import { Link } from '@tanstack/react-router'
 // Modern icons
 
 import { cn } from '@/helpers'
-import { toReadableDate } from '@/helpers/date-utils'
+import { toReadableDateTime } from '@/helpers/date-utils'
 import { useAuthUserWithOrgBranch } from '@/modules/authentication/authgentication.store'
 import { ITransactionBatchMinimal } from '@/modules/transaction-batch'
 import { TransactionBatchCreateFormModal } from '@/modules/transaction-batch/components/forms/transaction-batch-create-form'
@@ -34,11 +34,17 @@ const TransactionNoFoundBatch = ({ mode }: TransactionNoFoundBatchProps) => {
         return setData(newBatchData)
     }
 
-    useHotkeys('Enter', (e) => {
-        e.preventDefault()
-        if (hasNoTransactionBatch) return
-        createBatchModalState.onOpenChange(true)
-    })
+    useHotkeys(
+        'Enter',
+        (e) => {
+            e.preventDefault()
+            if (hasNoTransactionBatch) return
+            createBatchModalState.onOpenChange(true)
+        },
+        {
+            enableOnFormTags: true,
+        }
+    )
 
     // Logic Check: Usually you'd return null if a batch EXISTS.
     // Assuming your store logic 'hasNoTransactionBatch' means "there is no batch currently active"
@@ -50,7 +56,10 @@ const TransactionNoFoundBatch = ({ mode }: TransactionNoFoundBatchProps) => {
                 {...createBatchModalState}
                 formProps={{
                     defaultValues: {
-                        name: `${user.user_name}-batch-${toReadableDate(new Date(), 'MM-dd-yyyy')}`.toLowerCase(),
+                        name: `${user.last_name}-batch-${toReadableDateTime(
+                            new Date(),
+                            'mmddyyyy-hhmmss'
+                        )}`.toLowerCase(),
                         branch_id: user_organization.branch_id,
                         organization_id: user_organization.organization_id,
                         provided_by_user: user_organization,

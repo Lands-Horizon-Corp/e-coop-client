@@ -1,8 +1,8 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import { sortBy } from '@/helpers/common-helper'
 import { IAccount } from '@/modules/account'
-import { useGLFSStore } from '@/store/gl-fs-store'
+import { useGeneralLedgerDefinitionContext } from '@/modules/general-ledger-definition/pages/ context/general-ledger-context-provider'
 import {
     DndContext,
     DragEndEvent,
@@ -22,9 +22,9 @@ import { CSS } from '@dnd-kit/utilities'
 
 import { DragHandleIcon } from '@/components/icons'
 
-import { TEntityId, UpdateIndexRequest } from '@/types'
+import { TEntityId, UpdateAccountOrder } from '@/types'
 
-import GLFSAccountActions from './gl-fs-account-actions'
+import GLFSAccountActions from './actions/gl-account-actions'
 
 type AccountItemProps = {
     id: string
@@ -46,7 +46,6 @@ export const GeneralLedgerAccountItem = ({
         transition,
         transform: transform ? CSS.Transform.toString(transform) : undefined,
     }
-
     return (
         <div
             className="flex items-center  p-2 border-b bg-sidebar rounded-sm"
@@ -69,15 +68,21 @@ export const GeneralLedgerAccountItem = ({
 }
 type GlAccountListProps = {
     accounts: IAccount[]
-    removeAccount: (accountId: string) => void
+    generalLedgerId: TEntityId
 }
 
 export default function GLFSAccountsCardList({
     accounts,
-    removeAccount,
+    generalLedgerId,
 }: GlAccountListProps) {
-    const [account, setAccount] = useState(accounts.sort(sortBy('index')))
-    const { setChangedAccounts } = useGLFSStore()
+    const [account, setAccount] = useState<IAccount[]>([])
+
+    useEffect(() => {
+        setAccount([...accounts].sort(sortBy('index')))
+    }, [accounts])
+
+    const { queries, setChangedAccounts, updateAccounts } =
+        useGeneralLedgerDefinitionContext()
 
     const sensors = useSensors(
         useSensor(PointerSensor),
@@ -88,45 +93,41 @@ export default function GLFSAccountsCardList({
 
     const handleRemoveAcount = (accountId: TEntityId) => {
         setAccount((prev) => prev.filter((acc) => acc.id !== accountId))
-        if (typeof removeAccount === 'function') {
-            removeAccount(accountId)
-        }
+        queries.removeAccountFromGLQuery.mutate({
+            mode: 'general-ledger',
+            id: accountId,
+        })
     }
-
-    const getTaskPos = (id: string | number) =>
-        account.findIndex((task) => task.id === id)
 
     const handleDragEnd = (event: DragEndEvent) => {
         const { active, over } = event
 
-        if (over && active.id === over.id) return
+        if (!over || active.id === over.id) return
 
-        setAccount((account) => {
-            const originalPos = getTaskPos(active.id)
-            const newPos = over ? getTaskPos(over.id) : -1
+        const originalPos = account.findIndex((a) => a.id === active.id)
+        const newPos = account.findIndex((a) => a.id === over.id)
 
-            const updatedAccounts = arrayMove(account, originalPos, newPos)
+        const updatedAccounts = arrayMove(account, originalPos, newPos)
 
-            const finalAccounts = updatedAccounts.map((item, i) => ({
-                ...item,
-                index: i,
+        const finalAccounts = updatedAccounts.map((item, i) => ({
+            ...item,
+            index: i,
+        }))
+
+        const changed: UpdateAccountOrder[] = finalAccounts
+            .filter(
+                (item, i) =>
+                    item.id !== account[i]?.id ||
+                    item.index !== account[i]?.index
+            )
+            .map((item) => ({
+                account_id: item.id,
+                index: item.index,
             }))
 
-            const changed: UpdateIndexRequest[] = finalAccounts
-                .filter(
-                    (item, i) =>
-                        item.id !== account[i]?.id ||
-                        item.index !== account[i]?.index
-                )
-                .map((item) => ({
-                    id: item.id,
-                    index: item.index,
-                }))
-
-            setChangedAccounts?.(changed)
-
-            return finalAccounts
-        })
+        setAccount(finalAccounts)
+        updateAccounts(generalLedgerId, finalAccounts)
+        setChangedAccounts?.(changed)
     }
 
     return (
@@ -147,7 +148,7 @@ export default function GLFSAccountsCardList({
                                 handleDeleteAccount={handleRemoveAcount}
                                 id={accountItem.id}
                                 key={accountItem.id}
-                                title={accountItem.name}
+                                title={`${accountItem.name}`}
                             />
                         ))}
                     </div>

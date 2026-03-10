@@ -339,7 +339,7 @@ export const generateSidebarGroups = (
                 {
                     type: 'item',
                     icon: BookOpenIcon,
-                    title: 'General Ledger',
+                    title: 'GL / FS',
                     url: `${baseUrl}/general-ledger-definition`,
                     // canAccess: hasPermissionFromAuth({
                     //     action: 'Read',
@@ -347,17 +347,17 @@ export const generateSidebarGroups = (
                     // }),
                     shortDescription: 'View general ledger',
                 },
-                {
-                    type: 'item',
-                    icon: BillIcon,
-                    title: 'Financial Statement',
-                    url: `${baseUrl}/financial-statement-definition`,
-                    canAccess: hasPermissionFromAuth({
-                        action: 'Read',
-                        resourceType: 'FSDefinition',
-                    }),
-                    shortDescription: 'View financial statements',
-                },
+                // {
+                //     type: 'item',
+                //     icon: BillIcon,
+                //     title: 'Financial Statement',
+                //     url: `${baseUrl}/financial-statement-definition`,
+                //     canAccess: hasPermissionFromAuth({
+                //         action: 'Read',
+                //         resourceType: 'FSDefinition',
+                //     }),
+                //     shortDescription: 'View financial statements',
+                // },
                 {
                     type: 'item',
                     icon: BookIcon,

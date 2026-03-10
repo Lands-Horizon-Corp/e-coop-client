@@ -43,7 +43,8 @@ const BatchOnlineRemittance = ({
     const { data = [], refetch } = useCurrentBatchOnlineRemittances()
 
     useSubscribe<IOnlineRemittance>(
-        `online-remittance.transaction-batch.create.${transactionBatchId}`,
+        'online-remittance',
+        `transaction-batch.create.${transactionBatchId}`,
         (newData) => {
             queryClient.setQueryData<IOnlineRemittance[]>(
                 [onlineRemittanceBaseKey, 'transaction-batch', 'current'],
@@ -56,7 +57,8 @@ const BatchOnlineRemittance = ({
     )
 
     useSubscribe<IOnlineRemittance>(
-        `online-remittance.transaction-batch.update.${transactionBatchId}`,
+        'online-remittance',
+        `transaction-batch.update.${transactionBatchId}`,
         (newData) => {
             queryClient.setQueryData<IOnlineRemittance[]>(
                 ['online-remittance', 'transaction-batch', 'current'],
@@ -81,7 +83,8 @@ const BatchOnlineRemittance = ({
     )
 
     useSubscribe<IOnlineRemittance>(
-        `online-remittance.transaction-batch.delete.${transactionBatchId}`,
+        'online-remittance',
+        `transaction-batch.delete.${transactionBatchId}`,
         (deletedData) => {
             queryClient.setQueryData<IOnlineRemittance[]>(
                 ['online-remittance', 'transaction-batch', 'current'],

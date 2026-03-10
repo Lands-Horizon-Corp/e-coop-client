@@ -7,7 +7,10 @@ import { IOrganization } from '../organization'
 import { IPaymentType } from '../payment-type/payment-type.types'
 import { TPermission } from '../permission'
 import { IUserBase, TUserType } from '../user/user.types'
-import { TUserOrganizationSettingsSchema } from './user-organization.validation'
+import {
+    TTimeMachineSchema,
+    TUserOrganizationSettingsSchema,
+} from './user-organization.validation'
 
 export interface IUserOrganizationContext<
     TUserOrganization = IUserOrganization | undefined,
@@ -118,6 +121,8 @@ export interface IUserOrganizationPermissionRequest {
 }
 
 export type IUserOrganizationSettings = TUserOrganizationSettingsSchema
+
+export type IUserOrganizationTimeMachine = TTimeMachineSchema
 
 export interface IUserOrganizationPaginated<
     TUser = IUserBase,

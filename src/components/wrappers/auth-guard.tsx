@@ -84,12 +84,14 @@ const AuthGuard = ({ children, pageType = 'AUTHENTICATED' }: Props) => {
     })
 
     useSubscribe(
-        `user_organization.update.${currentAuth.user_organization?.id}`,
+        'user_organization',
+        `update.${currentAuth.user_organization?.id}`,
         refetch
     )
 
     useSubscribe(
-        `branch.update.${currentAuth.user_organization?.branch_id}`,
+        'user_organization',
+        `update.${currentAuth.user_organization?.branch_id}`,
         refetch
     )
 

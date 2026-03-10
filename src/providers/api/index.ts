@@ -1,127 +1,20 @@
-import axios, {
+import {
     type AxiosInstance,
     type AxiosRequestConfig,
     type AxiosResponse,
     type InternalAxiosRequestConfig,
 } from 'axios'
 
-import { API_URL } from '@/constants/envs'
+import { httpClient, requestGeolocation } from './client'
+import { streamer } from './streamer'
 
 export interface IRequestParams {
     [key: string]: unknown
 }
 
-const getDefaultUrl = (): string => {
-    return API_URL?.endsWith('/') ? API_URL : `${API_URL}/`
-}
-
-const getCsrfTokenFromCookies = (): string | null => {
-    const name = 'csrf='
-    const decodedCookies = decodeURIComponent(document.cookie)
-    const cookies = decodedCookies.split(';')
-    for (let cookie of cookies) {
-        cookie = cookie.trim()
-        if (cookie.startsWith(name)) {
-            return cookie.substring(name.length)
-        }
-    }
-    return null
-}
-
-const getDeviceType = (): string => {
-    const ua = navigator.userAgent
-    if (/mobile/i.test(ua)) return 'Mobile'
-    if (/tablet/i.test(ua)) return 'Tablet'
-    if (/iPad|Android|Touch/.test(ua)) return 'Tablet'
-    if (/Macintosh/i.test(ua) && 'ontouchend' in document) return 'Tablet'
-    return 'Desktop'
-}
-
-// Cache for geolocation data to avoid repeated requests
-let geoCache: Record<string, string> | null = null
-let geoPermissionRequested = false
-
-const getGeoHeaders = (): Record<string, string> => {
-    const baseHeaders = {
-        'X-Device-Type': getDeviceType(),
-        Location: Intl.DateTimeFormat().resolvedOptions().timeZone,
-    }
-    if (geoCache) {
-        return { ...baseHeaders, ...geoCache }
-    }
-
-    return baseHeaders
-}
-
-const requestGeolocation = (): Promise<void> => {
-    return new Promise((resolve) => {
-        if (
-            typeof window === 'undefined' ||
-            !navigator.geolocation ||
-            geoPermissionRequested
-        ) {
-            resolve()
-            return
-        }
-
-        geoPermissionRequested = true
-        navigator.geolocation.getCurrentPosition(
-            (pos) => {
-                const longitude = pos.coords.longitude.toString()
-                const latitude = pos.coords.latitude.toString()
-                geoCache = {
-                    'X-Longitude': longitude,
-                    'X-Latitude': latitude,
-                }
-                resolve()
-            },
-            () => {
-                resolve()
-            },
-            {
-                timeout: 5000,
-                maximumAge: 300000, // 5 minutes
-                enableHighAccuracy: false,
-            }
-        )
-    })
-}
-
-const httpClient: AxiosInstance = axios.create({
-    baseURL: getDefaultUrl(),
-    headers: {
-        'Content-Type': 'application/json',
-    },
-    withCredentials: true,
-})
-
-httpClient.interceptors.request.use(async (config) => {
-    const csrfToken = getCsrfTokenFromCookies()
-    if (csrfToken) {
-        config.headers['X-CSRF-Token'] = csrfToken
-    }
-    if (typeof navigator !== 'undefined' && navigator.userAgent) {
-        config.headers['X-User-Agent'] = navigator.userAgent
-    }
-
-    const geoHeaders = getGeoHeaders()
-    if (config.headers && typeof config.headers.set === 'function') {
-        Object.entries(geoHeaders).forEach(([key, value]) => {
-            config.headers.set(key, value)
-        })
-    } else {
-        Object.assign(config.headers, geoHeaders)
-    }
-    return config
-})
-
 const API = {
     getHttpClient: (): AxiosInstance => httpClient,
-
-    // Request geolocation permission and cache the result
-    // Call this in response to user interaction (e.g., button click)
     requestGeolocation,
-
     addRequestInterceptor(
         onFulfilled?: (
             value: InternalAxiosRequestConfig
@@ -130,7 +23,6 @@ const API = {
     ): number {
         return httpClient.interceptors.request.use(onFulfilled, onRejected)
     },
-
     addResponseInterceptor(
         onFulfilled?: (
             value: AxiosResponse
@@ -139,7 +31,6 @@ const API = {
     ): number {
         return httpClient.interceptors.response.use(onFulfilled, onRejected)
     },
-
     async get<R = unknown>(
         url: string,
         params?: IRequestParams,
@@ -198,6 +89,7 @@ const API = {
             ...config,
         })
     },
+    streamer,
 }
 
 export default API

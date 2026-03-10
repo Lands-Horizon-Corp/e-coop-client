@@ -238,7 +238,7 @@ const ThemesSettings = ({ className }: Props) => {
                     disabled={selectedTheme === 'Default'}
                     onClick={resetToDefault}
                     size="sm"
-                    variant="outline"
+                    variant="secondary"
                 >
                     Reset to Default
                 </Button>

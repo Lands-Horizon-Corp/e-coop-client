@@ -1,45 +1,38 @@
-import { IAuditable, ITimeStamps, TEntityId } from '@/types/common'
+import z from 'zod'
 
-import { IAccount } from '../account/account.types'
+import { IBaseEntityMeta, TEntityId } from '@/types/common'
+
+import { IAccount } from '../account'
 import { TGeneralLedgerType } from '../general-ledger/general-ledger.types'
+import { GeneralLedgerDefinitionSchema } from './general-ledger-definition.validation'
 
-export interface IGeneralLedgerDefinition extends IAuditable, ITimeStamps {
-    id: TEntityId
+export interface IGeneralLedgerDefinition extends IBaseEntityMeta {
+    general_ledger_definition_entry_id?: TEntityId
 
-    organization_id: TEntityId
-    branch_id: TEntityId
-
-    general_ledger_definition_entries_id?: TEntityId
-
-    parent_id?: TEntityId
-    parent?: IGeneralLedgerDefinition
+    general_ledger_definition_entries?: IGeneralLedgerDefinition[]
     accounts?: IAccount[]
-    general_ledger_definition?: IGeneralLedgerDefinition[]
-    general_ledger_accounts_grouping_id: TEntityId
 
     name: string
     description?: string
     index?: number
-
-    name_in_total?: string
+    name_in_total: string
     is_posting?: boolean
-    general_ledger_type: TGeneralLedgerType
+    general_ledger_type?: TGeneralLedgerType
+
+    depth?: number
 
     beginning_balance_of_the_year_credit?: number
     beginning_balance_of_the_year_debit?: number
+    budget_forecasting_of_the_year_percent?: number
+
+    past_due?: string
+    in_litigation?: string
+
+    total_debit?: number
+    total_credit?: number
+    balance?: number
 }
 
-export interface IGeneralLedgerDefinitionRequest {
-    name: string
-    general_ledger_type: TGeneralLedgerType
-
-    description?: string
-    index?: number
-    name_in_total?: string
-    is_posting?: boolean
-    beginning_balance_of_the_year_credit?: number
-    beginning_balance_of_the_year_debit?: number
-
-    general_ledger_definition_entries_id?: TEntityId
-    general_ledger_accounts_grouping_id: TEntityId
-}
+export interface IGeneralLedgerDefinitionRequest extends z.infer<
+    typeof GeneralLedgerDefinitionSchema
+> {}

@@ -240,7 +240,7 @@ export const LoanTransactionCardActions = ({
                     </div>
                 )
             })}
-            <div className="w-full flex items-center space-x-1 justify-start flex-shrink-0">
+            <div className="w-full flex items-center space-x-1 justify-start shrink-0">
                 <LoanTagsManagerPopover
                     disabled={
                         !hasPermissionFromAuth({

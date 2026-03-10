@@ -306,3 +306,9 @@ export type TMemberPassbookGenerateSettings = Omit<
     'check_voucher_general_or_unique'
 > &
     Omit<IMemberPassbookSettings, 'member_profile_passbook_or_unique'>
+
+export interface IMemberProfileQuickSearchResponse {
+    id: string
+    full_name: string
+    media?: IMedia
+}

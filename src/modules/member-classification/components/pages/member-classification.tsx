@@ -25,19 +25,19 @@ const MemberClassificationPage = () => {
 
     const queryClient = useQueryClient()
 
-    useSubscribe(`member_classification.created.branch.${branch_id}`, () => {
+    useSubscribe('member_classification', `create.branch.${branch_id}`, () => {
         queryClient.invalidateQueries({
             queryKey: ['member-classification', 'paginated'],
         })
     })
 
-    useSubscribe(`member_classification.updated.branch.${branch_id}`, () => {
+    useSubscribe('member_classification', `update.branch.${branch_id}`, () => {
         queryClient.invalidateQueries({
             queryKey: ['member-classification', 'paginated'],
         })
     })
 
-    useSubscribe(`member_classification.deleted.branch.${branch_id}`, () => {
+    useSubscribe('member_classification', `delete.branch.${branch_id}`, () => {
         queryClient.invalidateQueries({
             queryKey: ['member-classification', 'paginated'],
         })

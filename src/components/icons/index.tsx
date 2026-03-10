@@ -148,6 +148,7 @@ import {
     FaHouseLock as HouseLockIcon,
     FaIdCard as IdCardIcon,
     FaLandmarkFlag as LandmarkIcon,
+    FaCodeMerge as MergeIcon,
     FaMoneyCheck as MoneyCheckIcon,
     FaMoneyBillTrendUp as MoneyTrendIcon,
     FaPeopleGroup as PeopleGroupIcon,
@@ -452,6 +453,7 @@ import {
     TbRecycle as RecycleIcon,
     TbReportSearch as ReportsSearchIcon,
     TbSunMoon as SunMoonIcon,
+    TbSwitch3 as SwitchArrowIcon,
     TbTargetArrow as TargetArrowIcon,
     TbTransactionDollar as TransactionDollarIcon,
     TbUnlink as UnlinkIcon,
@@ -615,6 +617,8 @@ export {
     MonitorIcon,
     OptionsIcon,
     ZapIcon,
+    ListUIIcon,
+    DollarIcon,
     UserCogIcon,
     GendersIcon,
     RefreshIcon,
@@ -740,12 +744,11 @@ export {
     CreditCardIcon,
     ChatBubbleIcon,
     UserShieldIcon,
-    ListUIIcon,
     Users3FillIcon,
-    DollarIcon,
     PaintBrushIcon,
     RedoCircleIcon,
     TrendingUpIcon,
+    SwitchArrowIcon,
     WeightScaleIcon,
     PeopleGroupIcon,
     TargetArrowIcon,
@@ -894,6 +897,7 @@ export {
     ThreeDotIcon,
     MaleIcon,
     FemaleIcon,
+    MergeIcon,
 }
 
 export const IconMap = {
@@ -1307,6 +1311,7 @@ export const IconMap = {
     'Three Dot ICons': ThreeDotIcon,
     Male: MaleIcon,
     Female: FemaleIcon,
+    'Merge Icon': MergeIcon,
 }
 
 export type TIcon = (typeof ICONS)[number]

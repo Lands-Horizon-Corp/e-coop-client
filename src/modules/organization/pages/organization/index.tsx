@@ -76,9 +76,9 @@ const Organization = () => {
         useState<IOrganization>()
     const orgModalState = useModalState()
 
-    useSubscribe(`user_organization.create.user.${user.id}`, () => refetch())
-    useSubscribe(`user_organization.update.user.${user.id}`, () => refetch())
-    useSubscribe(`user_organization.delete.user.${user.id}`, () => refetch())
+    useSubscribe('user_organization', `create.user.${user.id}`, () => refetch())
+    useSubscribe('user_organization', `update.user.${user.id}`, () => refetch())
+    useSubscribe('user_organization', `delete.user.${user.id}`, () => refetch())
 
     const [onOpenJoinWithCodeModal, setOpenJoinWithCodeModal] =
         useState(!!invitation_code)

@@ -33,7 +33,7 @@ interface AccountCardProps {
     isSearching?: boolean
     setModalState: (data: TAccountModalState) => void
 }
-const glTypeStyleMap: Record<
+export const glTypeStyleMap: Record<
     TGeneralLedgerType,
     {
         border: string
@@ -112,7 +112,7 @@ export const AccountCard = memo(
                 >
                     <PopoverTrigger asChild>
                         <div>
-                            <Tooltip delayDuration={200}>
+                            <Tooltip delayDuration={500}>
                                 <TooltipTrigger asChild>
                                     <div
                                         className={cn(
@@ -139,7 +139,14 @@ export const AccountCard = memo(
                                         >
                                             <GripVertical />
                                         </Button>
-
+                                        <Button
+                                            className="cursor-grab rounded p-1 hover:bg-transparent! text-muted-foreground hover:text-foreground active:cursor-grabbing"
+                                            disabled={isSearching}
+                                            size="xs"
+                                            variant="ghost"
+                                        >
+                                            <span>{account.index}</span>
+                                        </Button>
                                         <div
                                             className={cn(
                                                 'flex h-9 w-9 shrink-0 items-center justify-center rounded-md transition-all duration-300',
@@ -164,7 +171,6 @@ export const AccountCard = memo(
 
                                         <div className="flex-1 min-w-0">
                                             <p className="font-semibold text-foreground truncate">
-                                                {/* {account.index} */}
                                                 {searchTerm
                                                     ? highlightMatch(
                                                           account.name,

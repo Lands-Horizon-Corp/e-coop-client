@@ -4,6 +4,10 @@ import { useRef } from 'react'
 import Fuse from 'fuse.js'
 
 import {
+    GENERAL_LEDGER_TYPE,
+    TGeneralLedgerType,
+} from '@/modules/general-ledger'
+import {
     DndContext,
     DragEndEvent,
     KeyboardSensor,
@@ -19,12 +23,12 @@ import {
     sortableKeyboardCoordinates,
     verticalListSortingStrategy,
 } from '@dnd-kit/sortable'
-import { useVirtualizer } from '@tanstack/react-virtual'
 import debounce from 'lodash-es/debounce'
-import { ArrowUpDown, Plus, Search } from 'lucide-react'
+import { ArrowUpDown, Plus } from 'lucide-react'
+import { AutoSizer, List } from 'react-virtualized'
 
 import RefreshButton from '@/components/buttons/refresh-button'
-import { ChevronDownIcon } from '@/components/icons'
+import { ChevronDownIcon, MagnifyingGlassIcon } from '@/components/icons'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Skeleton } from '@/components/ui/skeleton'
@@ -35,27 +39,30 @@ import { useAccountContext } from '../context/account-provider'
 import { AccountCard, TAccountModalState } from './account-card'
 import AccountCreateUpdateFormModal from './forms/account-create-update-form'
 
-export const AccountList = () => {
-    const {
-        accountsQuery,
-        createModal,
-        setAccounts,
-        accounts,
-        // settings_payment_type_default_value,
-    } = useAccountContext()
-    const [canScrollUp, setCanScrollUp] = useState(false)
-    const [_, setCanScrollDown] = useState(false)
+export const getLastAccountForEachType = (
+    data: IAccount[]
+): Partial<Record<TGeneralLedgerType, IAccount>> => {
+    const result: Partial<Record<TGeneralLedgerType, IAccount>> = {}
+    const remainingTypes = new Set(GENERAL_LEDGER_TYPE)
+    for (let i = data.length - 1; i >= 0; i--) {
+        const currentAccount = data[i]
+        if (remainingTypes.has(currentAccount.general_ledger_type)) {
+            result[currentAccount.general_ledger_type] = currentAccount
+            remainingTypes.delete(currentAccount.general_ledger_type)
+            if (remainingTypes.size === 0) break
+        }
+    }
+    return result
+}
 
-    const parentRef = useRef<HTMLDivElement>(null)
+export const AccountList = () => {
+    const { accountsQuery, createModal, setAccounts, accounts } =
+        useAccountContext()
+
+    const parentRef = useRef<List>(null)
 
     const accountIds = useMemo(() => accounts.map((a) => a.id), [accounts])
 
-    const rowVirtualizer = useVirtualizer({
-        count: accounts.length,
-        getScrollElement: () => parentRef.current,
-        estimateSize: () => 75, // Card Spacing Height Sheesh
-        overscan: 5,
-    })
     const { mutate: reorderAccounts } = useReorderAccounts()
 
     const [modalState, setModalState] = useState<{
@@ -143,7 +150,7 @@ export const AccountList = () => {
         if (type === 'positive') {
             newIndex = currentIndex + 1
         } else if (type === 'negative') {
-            newIndex = currentIndex - 1
+            newIndex = currentIndex
         }
 
         // Clamp index within bounds
@@ -156,49 +163,32 @@ export const AccountList = () => {
     }
 
     const scrollTo = (direction: 'up' | 'down') => {
-        const container = parentRef.current
-        if (!container) return
+        const list = parentRef.current
+        if (!list) return
 
-        container.scrollTo({
-            top: direction === 'up' ? 0 : container.scrollHeight,
-            behavior: 'smooth',
-        })
+        if (direction === 'up') {
+            list.scrollToRow(0)
+        } else {
+            list.scrollToRow(accounts.length - 1)
+        }
     }
 
     useEffect(() => {
         const container = parentRef.current
         if (!container) return
-
-        const handleScroll = () => {
-            setCanScrollUp(container.scrollTop > 0)
-            setCanScrollDown(
-                container.scrollTop + container.clientHeight <
-                    container.scrollHeight
-            )
-        }
-
-        handleScroll()
-        container.addEventListener('scroll', handleScroll)
-
-        return () => {
-            container.removeEventListener('scroll', handleScroll)
-        }
     }, [])
 
     return (
         <div className="mx-auto w-full max-w-3xl space-y-4 p-6">
             <AccountCreateUpdateFormModal
-                className=" min-w-[80vw] max-w-[80vw]"
+                className="min-w-[80vw] max-w-[80vw]"
                 formProps={{
                     defaultValues: {
                         index: modalState.index,
                         general_ledger_type:
                             modalState.account?.general_ledger_type,
-                        // default_payment_type_id:
-                        //     settings_payment_type_default_value?.id,
-                        // default_payment_type:
-                        //     settings_payment_type_default_value,
                     },
+                    accounts,
                 }}
                 {...createModal}
             />
@@ -227,7 +217,7 @@ export const AccountList = () => {
 
                 {/* Search */}
                 <div className="relative">
-                    <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                    <MagnifyingGlassIcon className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
                     <Input
                         className="pl-10 bg-secondary border-border"
                         onChange={(e) => setSearch(e.target.value)}
@@ -279,63 +269,57 @@ export const AccountList = () => {
                         items={accountIds}
                         strategy={verticalListSortingStrategy}
                     >
-                        <div
-                            className="h-screen overflow-auto ecoop-scroll"
-                            ref={parentRef}
-                        >
-                            <div
-                                style={{
-                                    height: `${rowVirtualizer.getTotalSize()}px`,
-                                    position: 'relative',
-                                }}
-                            >
-                                {rowVirtualizer
-                                    .getVirtualItems()
-                                    .map((virtualRow) => {
-                                        const account =
-                                            accounts[virtualRow.index]
+                        <div className="h-screen ecoop-scroll">
+                            <AutoSizer>
+                                {({ height, width }) => (
+                                    <List
+                                        className="ecoop-scroll"
+                                        height={height}
+                                        overscanRowCount={10}
+                                        ref={parentRef}
+                                        rowCount={accounts.length}
+                                        rowHeight={75}
+                                        rowRenderer={({
+                                            key,
+                                            index,
+                                            style,
+                                        }) => {
+                                            const item = accounts[index]
 
-                                        return (
-                                            <div
-                                                key={account.id}
-                                                style={{
-                                                    position: 'absolute',
-                                                    top: 0,
-                                                    left: 0,
-                                                    width: '99.5%',
-                                                    transform: `translateY(${virtualRow.start}px)`,
-                                                }}
-                                            >
-                                                <AccountCard
-                                                    account={account}
-                                                    setModalState={
-                                                        handleModalState
-                                                    }
-                                                />
-                                            </div>
-                                        )
-                                    })}
-                            </div>
-                            <div className="fixed bottom-6 right-6 flex flex-col gap-2 z-50">
-                                {canScrollUp ? (
-                                    <Button
-                                        className="rounded-full shadow-lg border border-border h-10 w-10"
-                                        onClick={() => scrollTo('up')}
-                                        size="icon"
-                                        variant={'secondary'}
-                                    >
-                                        <ChevronDownIcon className="h-5 w-5 rotate-180" />
-                                    </Button>
-                                ) : (
-                                    <Button
-                                        className="rounded-full shadow-lg border border-border h-10 w-10"
-                                        onClick={() => scrollTo('down')}
-                                        size="icon"
-                                        variant={'secondary'}
-                                    >
-                                        <ChevronDownIcon className="h-5 w-5" />
-                                    </Button>
+                                            return (
+                                                <div key={key} style={style}>
+                                                    <AccountCard
+                                                        account={item}
+                                                        key={item.id}
+                                                        setModalState={
+                                                            handleModalState
+                                                        }
+                                                    />
+                                                </div>
+                                            )
+                                        }}
+                                        width={width}
+                                    />
                                 )}
+                            </AutoSizer>
+
+                            <div className="fixed bottom-6 right-6 flex flex-col gap-2 z-50">
+                                <Button
+                                    className="rounded-full shadow-lg border border-border h-10 w-10"
+                                    onClick={() => scrollTo('up')}
+                                    size="icon"
+                                    variant={'secondary'}
+                                >
+                                    <ChevronDownIcon className="h-5 w-5 rotate-180" />
+                                </Button>
+                                <Button
+                                    className="rounded-full shadow-lg border border-border h-10 w-10"
+                                    onClick={() => scrollTo('down')}
+                                    size="icon"
+                                    variant={'secondary'}
+                                >
+                                    <ChevronDownIcon className="h-5 w-5" />
+                                </Button>
                             </div>
                         </div>
                     </SortableContext>

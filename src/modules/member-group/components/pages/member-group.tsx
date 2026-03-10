@@ -24,19 +24,19 @@ const MemberGroupPage = () => {
     } = useAuthUserWithOrgBranch()
     const queryClient = useQueryClient()
 
-    useSubscribe(`member_group.created.branch.${branch_id}`, () => {
+    useSubscribe('member_group', `create.branch.${branch_id}`, () => {
         queryClient.invalidateQueries({
             queryKey: ['member-group', 'paginated'],
         })
     })
 
-    useSubscribe(`member_group.updated.branch.${branch_id}`, () => {
+    useSubscribe('member_group', `update.branch.${branch_id}`, () => {
         queryClient.invalidateQueries({
             queryKey: ['member-group', 'paginated'],
         })
     })
 
-    useSubscribe(`member_group.deleted.branch.${branch_id}`, () => {
+    useSubscribe('member_group', `delete.branch.${branch_id}`, () => {
         queryClient.invalidateQueries({
             queryKey: ['member-group', 'paginated'],
         })

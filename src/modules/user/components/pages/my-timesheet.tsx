@@ -15,19 +15,19 @@ const MyTimesheetPage = () => {
     } = useAuthUser()
     const queryClient = useQueryClient()
 
-    useSubscribe(`timesheet.create.user.${user.id}`, () => {
+    useSubscribe('timesheet', `create.user.${user.id}`, () => {
         queryClient.invalidateQueries({
             queryKey: ['timesheet', 'paginated', 'me'],
         })
     })
 
-    useSubscribe(`timesheet.update.user.${user.id}`, () => {
+    useSubscribe('timesheet', `update.user.${user.id}`, () => {
         queryClient.invalidateQueries({
             queryKey: ['timesheet', 'paginated', 'me'],
         })
     })
 
-    useSubscribe(`timesheet.delete.user.${user.id}`, () => {
+    useSubscribe('timesheet', `delete.user.${user.id}`, () => {
         queryClient.invalidateQueries({
             queryKey: ['timesheet', 'paginated', 'me'],
         })

@@ -12,6 +12,7 @@ import { IAccountClassification } from '../account-classification'
 import { IComputationSheet } from '../computation-sheet'
 import { ICurrency } from '../currency'
 import { TFinancialStatementType } from '../financial-statement-definition'
+import { IFinancialStatementTitle } from '../financial-statement-title'
 import { TGeneralLedgerType } from '../general-ledger'
 import { IMemberType } from '../member-type'
 import { IPaymentType } from '../payment-type'
@@ -102,7 +103,6 @@ export interface IAccount extends IAuditable, ITimeStamps {
     account_category_id?: TEntityId
     account_category?: IAccountCategory
 
-    general_ledger_definition_id?: TEntityId
     financial_statement_definition_entries_id?: TEntityId
 
     account_classification_id?: TEntityId
@@ -205,6 +205,30 @@ export interface IAccount extends IAuditable, ITimeStamps {
     other_information_of_an_account?: TOtherInformationOfAnAccount
 
     interest_diminishing_by_year?: boolean
+    is_included_in_general_ledger?: boolean
+    is_included_in_financial_statement: boolean
+
+    general_ledger_definition_id?: TEntityId
+
+    net_surplus_positive_percentage_2?: number
+    net_surplus_negative_percentage_1?: number
+    net_surplus_negative_percentage_2?: number
+
+    financial_statement_title_id?: TEntityId
+    financial_statement_title?: IFinancialStatementTitle
+
+    gl_total_debit?: number
+    gl_total_credit?: number
+    gl_total_balance?: number
+
+    coh_cib_fines_grace_period_entry_cash_hand?: number
+    coh_cib_fines_grace_period_entry_cash_in_bank?: number
+
+    net_surplus_positive_percentage_1?: number
+
+    interest_secured?: number
+
+    account_history_id?: TEntityId
 }
 
 export interface IAccountHistory extends IAccount {
@@ -253,3 +277,13 @@ export type TAccountLoanConnect = {
 }
 
 export type TGetAllAccountMode = 'all' | 'loan-account-connections'
+
+export interface IAccountQuickSearchResponse {
+    id: string
+    name: string
+    description: string
+    type: string
+    account_classification?: IAccountClassification
+    account_category?: IAccountCategory
+    currency?: ICurrency
+}

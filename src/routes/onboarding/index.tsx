@@ -29,9 +29,9 @@ function RouteComponent() {
         error,
     } = useGetUserOrganizationByUserId({ userId: user.id })
 
-    useSubscribe(`user_organization.create.user.${user.id}`, () => refetch())
-    useSubscribe(`user_organization.update.user.${user.id}`, () => refetch())
-    useSubscribe(`user_organization.delete.user.${user.id}`, () => refetch())
+    useSubscribe('user_organization', `create.user.${user.id}`, () => refetch())
+    useSubscribe('user_organization', `update.user.${user.id}`, () => refetch())
+    useSubscribe('user_organization', `delete.user.${user.id}`, () => refetch())
 
     const hasOrganization: boolean = userOrganizationsData
         ? userOrganizationsData.length > 0

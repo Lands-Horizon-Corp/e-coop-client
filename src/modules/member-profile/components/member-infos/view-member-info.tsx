@@ -129,7 +129,8 @@ const MemberOverallInfo = ({
     })
 
     useSubscribe(
-        `member_profile.update.${memberProfileId}`,
+        'member_profile',
+        `update.${memberProfileId}`,
         (newMemberProfileData) => {
             queryClient.setQueryData(
                 ['member-profile', memberProfileId],

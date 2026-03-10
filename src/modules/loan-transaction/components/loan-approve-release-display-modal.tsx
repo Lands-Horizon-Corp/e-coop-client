@@ -196,7 +196,7 @@ const LoanApproveReleaseDisplayModal = ({
                 />
                 {memberProfile && (
                     <MemberProfileInfoViewLoanCard
-                        className="bg-gradient-to-r w-full from-primary/20 to-card/10 p-4 ring-2 ring-card dark:ring-primary/40"
+                        className="bg-linear-to-r w-full from-primary/20 to-card/10 p-4 ring-2 ring-card dark:ring-primary/40"
                         memberProfile={memberProfile}
                     />
                 )}

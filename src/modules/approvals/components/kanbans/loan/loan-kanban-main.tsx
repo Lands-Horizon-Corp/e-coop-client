@@ -8,6 +8,7 @@ import { cn } from '@/helpers/tw-utils'
 import KanbanContainer from '@/modules/approvals/components/kanban/kanban-container'
 import KanbanItemsContainer from '@/modules/approvals/components/kanban/kanban-items-container'
 import KanbanTitle from '@/modules/approvals/components/kanban/kanban-title'
+import { useAuthUserWithOrgBranch } from '@/modules/authentication/authgentication.store'
 import { JournalVoucherSkeletonCard } from '@/modules/journal-voucher/components/journal-voucher-skeleton-card'
 import {
     ILoanTransaction,
@@ -33,6 +34,8 @@ import {
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Skeleton } from '@/components/ui/skeleton'
+
+import { useSubscribe } from '@/hooks/use-pubsub'
 
 import {
     LoanTransactionCard,
@@ -66,6 +69,16 @@ export const LoanKanbanMain = ({
         isRefetching,
     } = useGetAllLoanTransaction({
         mode: mode,
+    })
+
+    const {
+        currentAuth: {
+            user_organization: { branch_id },
+        },
+    } = useAuthUserWithOrgBranch()
+
+    useSubscribe('loan_transaction', `dashboard.branch.${branch_id}`, () => {
+        refetch()
     })
 
     const loanData = useMemo(() => rawLoans ?? [], [rawLoans])
@@ -170,7 +183,7 @@ export const LoanKanbanMain = ({
                                 )}
                                 {hasItem && (
                                     <Button
-                                        className="!size-fit !p-0.5"
+                                        className="size-fit! p-0.5!"
                                         onClick={handleExpandedToggle}
                                         size="sm"
                                         variant="ghost"
@@ -232,7 +245,7 @@ export const LoanKanbanMain = ({
                                 >
                                     <div className="flex justify-between items-center">
                                         <LoanStatusIndicator
-                                            className="flex-shrink-0"
+                                            className="shrink-0"
                                             loanTransactionDates={loanDates}
                                         />
                                         <p className="text-xs right-3 top-1 text-end text-muted-foreground/70 truncate">
