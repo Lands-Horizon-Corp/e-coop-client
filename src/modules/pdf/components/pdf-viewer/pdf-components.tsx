@@ -189,7 +189,7 @@ export const PdfFooterControl = memo(function FooterControls({
         }
     }, [scrollRef, virtualizer])
 
-    // Pang scroll
+    // pang page scroll jump
     const scrollToPage = useCallback(
         (page: number) => {
             const clamped = Math.max(1, Math.min(page, numPages))
@@ -199,7 +199,6 @@ export const PdfFooterControl = memo(function FooterControls({
         [numPages, virtualizer]
     )
 
-    // pang page scroll jump
     const handleGoTo = () => {
         const page = parseInt(goToInput, 10)
         if (!isNaN(page)) {
