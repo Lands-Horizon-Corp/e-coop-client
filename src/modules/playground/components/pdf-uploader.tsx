@@ -1,5 +1,7 @@
 import { useRef, useState } from 'react'
 
+import PdfViewer from '@/modules/pdf/components/pdf-viewer/pdf-viewer'
+
 import { UploadIcon } from '@/components/icons'
 import { Button } from '@/components/ui/button'
 import {
@@ -8,7 +10,6 @@ import {
     DialogHeader,
     DialogTitle,
 } from '@/components/ui/dialog'
-import PdfViewer from '@/modules/pdf/components/pdf-viewer/pdf-viewer'
 
 function PDFUploader() {
     const [file, setFile] = useState<File | null>(null)
