@@ -11,6 +11,7 @@ import { IClassProps } from '@/types'
 
 import {
     PDFFooterControl,
+    PDFHeaderTitle,
     PdfPasswordDialog,
     PdfPasswordRequired,
 } from './pdf-components'
@@ -90,13 +91,10 @@ const PdfViewer = ({
 
     const handlePassword = useCallback(
         (callback: (password: string) => void, reason: number) => {
-            // reason: 1 = need password, 2 = incorrect password
             passwordCallbackRef.current = callback
             setPasswordNeeded(true)
             setPasswordError(reason === 2)
             setCancelled(false)
-
-            console.log(reason)
         },
         []
     )
@@ -162,10 +160,15 @@ const PdfViewer = ({
                 </div>
             ) : (
                 <>
+                    <PDFHeaderTitle
+                        fileTitle={fileTitle}
+                        fileUrl={fileUrl}
+                        onClose={onClose}
+                    />
                     <Document
                         file={file}
                         loading={
-                            <div className="flex items-center min-h-full justify-center p-8 text-muted-foreground">
+                            <div className="flex z-0 items-center min-h-full justify-center p-8 text-muted-foreground">
                                 Loading PDF…
                             </div>
                         }
@@ -221,12 +224,15 @@ const PdfViewer = ({
                     </Document>
                     <PDFFooterControl
                         className="z-50"
-                        fileTitle={fileTitle}
-                        fileUrl={fileUrl}
+                        defaultScale={defaultScale}
+                        maxScale={maxScale}
+                        minScale={minScale}
                         numPages={numPages}
-                        onClose={onClose}
+                        scale={scale}
                         scrollRef={parentRef}
+                        setScale={setScale}
                         virtualizer={virtualizer}
+                        zoomStep={zoomStep}
                     />
                 </>
             )}

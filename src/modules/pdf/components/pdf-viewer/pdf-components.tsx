@@ -6,12 +6,14 @@ import { Virtualizer } from '@tanstack/react-virtual'
 import {
     ChevronLeftIcon,
     ChevronRightIcon,
-    EyeIcon,
-    EyeOffIcon,
+    DownloadIcon,
+    PDFFileFillIcon,
     PrinterFillIcon,
     ShieldIcon,
     ShieldLockIcon,
     XIcon,
+    ZoomInIcon,
+    ZoomOutIcon,
 } from '@/components/icons'
 import { Button } from '@/components/ui/button'
 import { ButtonGroup } from '@/components/ui/button-group'
@@ -32,22 +34,103 @@ import {
     PopoverTrigger,
 } from '@/components/ui/popover'
 
-export const PDFFooterControl = memo(function FooterControls({
+import { downloadPDF, printPDF } from '../../pdf-utils'
+
+export const PDFHeaderTitle = ({
     fileUrl,
+    fileTitle,
+    className,
+    onClose,
+}: {
+    fileUrl?: string | null
+    fileTitle: string
+    className?: string
+    onClose?: () => void
+}) => {
+    // pang download
+    const handleDownload = useCallback(() => {
+        if (!fileUrl) return
+        downloadPDF(fileUrl, fileTitle)
+    }, [fileUrl, fileTitle])
+
+    // pang print
+    const handlePrint = useCallback(() => {
+        if (!fileUrl) return
+        printPDF(fileUrl)
+    }, [fileUrl])
+
+    return (
+        <div
+            className={cn(
+                'mx-auto px-2 py-2 w-fit flex overflow-auto ecoop-scroll items-center sticky z-10 left-1/2 -translate-x-1/2 top-0 gap-2',
+                className
+            )}
+        >
+            <ButtonGroup className="flex bg-popover border border-secondary-foreground/70 p-1 rounded-xl">
+                <Button
+                    className="rounded-lg text-sm cursor-pointer backdrop-blur-sm "
+                    disabled
+                    size="sm"
+                    variant="secondary"
+                >
+                    <PDFFileFillIcon /> {fileTitle}
+                </Button>
+            </ButtonGroup>
+            <ButtonGroup className="flex bg-popover border border-secondary-foreground/70 p-1 rounded-xl">
+                <Button
+                    className="rounded-lg cursor-pointer"
+                    onClick={handlePrint}
+                    size="sm"
+                    variant="secondary"
+                >
+                    <PrinterFillIcon className="size-4" />
+                </Button>
+                <Button
+                    className="rounded-lg cursor-pointer"
+                    onClick={handleDownload}
+                    size="sm"
+                    variant="secondary"
+                >
+                    <DownloadIcon className="size-4" />
+                </Button>
+                <Button
+                    className="rounded-lg cursor-pointer"
+                    onClick={onClose}
+                    size="sm"
+                    variant="secondary"
+                >
+                    <XIcon className="size-4" />
+                </Button>
+            </ButtonGroup>
+        </div>
+    )
+}
+
+export const PDFFooterControl = memo(function FooterControls({
     numPages,
     className,
-    fileTitle,
     scrollRef,
     virtualizer,
-    onClose,
+
+    defaultScale,
+    minScale,
+    maxScale,
+    zoomStep,
+    scale,
+    setScale,
 }: {
     scrollRef: React.RefObject<HTMLDivElement | null>
     virtualizer: Virtualizer<Element, Element>
     numPages: number
     className?: string
-    fileTitle: string
-    fileUrl?: string | null
-    onClose?: () => void
+
+    defaultScale: number
+    minScale: number
+    maxScale: number
+    zoomStep: number
+
+    scale: number
+    setScale?: (value: number | ((prev: number) => number)) => void
 }) {
     const [currentPage, setCurrentPage] = useState(1)
     const rafRef = useRef<number>(0)
@@ -105,18 +188,22 @@ export const PDFFooterControl = memo(function FooterControls({
         }
     }
 
-    // pang print
-    const handlePrint = useCallback(() => {
-        if (!fileUrl) return
-        const iframe = document.createElement('iframe')
-        iframe.style.display = 'none'
-        iframe.src = fileUrl
-        document.body.appendChild(iframe)
-        iframe.onload = () => {
-            iframe.contentWindow?.print()
-            setTimeout(() => document.body.removeChild(iframe), 1000)
-        }
-    }, [fileUrl])
+    // pang zooom in control btns
+    const zoomIn = useCallback(() => {
+        setScale?.((s) =>
+            Math.min(maxScale, Math.round((s + zoomStep) * 100) / 100)
+        )
+    }, [maxScale, setScale, zoomStep])
+
+    const zoomOut = useCallback(() => {
+        setScale?.((s) =>
+            Math.max(minScale, Math.round((s - zoomStep) * 100) / 100)
+        )
+    }, [minScale, setScale, zoomStep])
+
+    const resetZoom = useCallback(() => {
+        setScale?.(defaultScale)
+    }, [defaultScale, setScale])
 
     return (
         <div
@@ -184,30 +271,35 @@ export const PDFFooterControl = memo(function FooterControls({
                     <ChevronRightIcon />
                 </Button>
             </ButtonGroup>
+
             <ButtonGroup className="flex bg-popover border border-secondary-foreground/70 p-1 rounded-xl">
                 <Button
-                    className="rounded-lg text-sm cursor-pointer"
-                    disabled
+                    className="rounded-lg cursor-pointer"
+                    disabled={scale <= minScale}
+                    onClick={zoomOut}
                     size="sm"
                     variant="secondary"
                 >
-                    {fileTitle}
+                    <ZoomOutIcon className="size-4" />
                 </Button>
+
+                <Button
+                    className="rounded-lg text-sm cursor-pointer min-w-[60px]"
+                    onClick={resetZoom}
+                    size="sm"
+                    variant="secondary"
+                >
+                    {Math.round(scale * 100)}%
+                </Button>
+
                 <Button
                     className="rounded-lg cursor-pointer"
-                    onClick={handlePrint}
+                    disabled={scale >= maxScale}
+                    onClick={zoomIn}
                     size="sm"
                     variant="secondary"
                 >
-                    <PrinterFillIcon className="size-4" />
-                </Button>
-                <Button
-                    className="rounded-lg cursor-pointer"
-                    onClick={onClose}
-                    size="sm"
-                    variant="secondary"
-                >
-                    <XIcon className="size-4" />
+                    <ZoomInIcon className="size-4" />
                 </Button>
             </ButtonGroup>
         </div>
