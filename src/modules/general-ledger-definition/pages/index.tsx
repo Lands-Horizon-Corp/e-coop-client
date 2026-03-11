@@ -22,9 +22,7 @@ const GeneralLedgerDefinitionPage = () => {
                                 Reports is under construction
                             </Empty>
                         </div>
-                        <div className="flex-2 h-screen ">
-                            <GeneralLedgerDefinitionTreeViewer />
-                        </div>
+                        <GeneralLedgerDefinitionTreeViewer />
                         <FinancialStatementTitleList />
                     </div>
                 </GeneralLedgerContextProvider>

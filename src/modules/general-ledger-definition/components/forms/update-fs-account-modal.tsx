@@ -3,11 +3,14 @@ import { useForm } from 'react-hook-form'
 import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
 
 import FormFooterResetSubmit from '@/components/form-components/form-footer-reset-submit'
+import { GradientBackground } from '@/components/gradient-background/gradient-background'
+import { MoneyBagIcon } from '@/components/icons'
 import Modal, { IModalProps } from '@/components/modals/modal'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Form } from '@/components/ui/form'
 import FormFieldWrapper from '@/components/ui/form-field-wrapper'
 import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 
 import {
@@ -53,78 +56,204 @@ const FSAccountModal = ({ onSubmit, ...props }: Props) => {
                         name="account_title"
                         render={({ field }) => <Input {...field} />}
                     />
-
                     <FormFieldWrapper
                         control={form.control}
                         label="Types"
                         name="type"
-                        render={({ field }) => (
-                            <RadioGroup
-                                onValueChange={field.onChange}
-                                value={field.value}
-                            >
-                                <RadioGroupItem value="standard">
-                                    Standard
-                                </RadioGroupItem>
-                                <RadioGroupItem value="group_title">
-                                    Group Title
-                                </RadioGroupItem>
-                                <RadioGroupItem value="group_total">
-                                    Group Total
-                                </RadioGroupItem>
-                                <RadioGroupItem value="sub_group_title">
-                                    Sub Group Title
-                                </RadioGroupItem>
-                                <RadioGroupItem value="sub_group_total">
-                                    Sub Group Total
-                                </RadioGroupItem>
-                                <RadioGroupItem value="header_total">
-                                    Header Total
-                                </RadioGroupItem>
-                            </RadioGroup>
-                        )}
+                        render={({ field }) => {
+                            const options = [
+                                {
+                                    value: 'standard',
+                                    label: 'Standard',
+                                    description:
+                                        'Regular financial statement account.',
+                                },
+                                {
+                                    value: 'group_title',
+                                    label: 'Group Title',
+                                    description:
+                                        'Header used to group related accounts.',
+                                },
+                                {
+                                    value: 'group_total',
+                                    label: 'Group Total',
+                                    description:
+                                        'Displays the total for the grouped accounts.',
+                                },
+                                {
+                                    value: 'sub_group_title',
+                                    label: 'Sub Group Title',
+                                    description:
+                                        'Sub-category header within a group.',
+                                },
+                                {
+                                    value: 'sub_group_total',
+                                    label: 'Sub Group Total',
+                                    description:
+                                        'Total of accounts inside a sub-group.',
+                                },
+                                {
+                                    value: 'header_total',
+                                    label: 'Header Total',
+                                    description:
+                                        'Top-level total for a section of the report.',
+                                },
+                            ]
+
+                            return (
+                                <RadioGroup
+                                    className="grid grid-cols-1 gap-2 sm:grid-cols-2"
+                                    onValueChange={field.onChange}
+                                    value={field.value}
+                                >
+                                    {options.map((option) => (
+                                        <div
+                                            className="shadow-xs relative flex w-full items-center gap-2 rounded-2xl border border-input p-3 outline-none duration-200 ease-out has-checked:border-primary/30 has-checked:bg-primary/40"
+                                            key={option.value}
+                                        >
+                                            <RadioGroupItem
+                                                className="order-1 after:absolute after:inset-0"
+                                                id={`type-${option.value}`}
+                                                value={option.value}
+                                            />
+
+                                            <div className="flex grow items-center gap-3">
+                                                <div className="grid gap-1">
+                                                    <Label
+                                                        htmlFor={`type-${option.value}`}
+                                                    >
+                                                        {option.label}
+                                                    </Label>
+
+                                                    <p className="text-xs text-muted-foreground">
+                                                        {option.description}
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    ))}
+                                </RadioGroup>
+                            )
+                        }}
                     />
 
                     <FormFieldWrapper
                         control={form.control}
                         label="Title Margin"
                         name="title_margin"
-                        render={({ field }) => (
-                            <RadioGroup
-                                onValueChange={field.onChange}
-                                value={field.value}
-                            >
-                                <RadioGroupItem value="indent1">
-                                    Indented #1
-                                </RadioGroupItem>
-                                <RadioGroupItem value="indent2">
-                                    Indented #2
-                                </RadioGroupItem>
-                                <RadioGroupItem value="left">
-                                    Left Justify
-                                </RadioGroupItem>
-                                <RadioGroupItem value="center">
-                                    Centered
-                                </RadioGroupItem>
-                                <RadioGroupItem value="left_right">
-                                    Left/Right Indented
-                                </RadioGroupItem>
-                            </RadioGroup>
-                        )}
-                    />
+                        render={({ field }) => {
+                            const options = [
+                                {
+                                    value: 'indent1',
+                                    label: 'Indented #1',
+                                    description:
+                                        'First level indentation for titles.',
+                                },
+                                {
+                                    value: 'indent2',
+                                    label: 'Indented #2',
+                                    description:
+                                        'Second level indentation for titles.',
+                                },
+                                {
+                                    value: 'left',
+                                    label: 'Left Justify',
+                                    description:
+                                        'Align title to the left side.',
+                                },
+                                {
+                                    value: 'center',
+                                    label: 'Centered',
+                                    description:
+                                        'Center the title in the report.',
+                                },
+                                {
+                                    value: 'left_right',
+                                    label: 'Left/Right Indented',
+                                    description:
+                                        'Indent title from both left and right.',
+                                },
+                            ]
 
+                            return (
+                                <RadioGroup
+                                    className="grid grid-cols-1 gap-2 sm:grid-cols-2"
+                                    onValueChange={field.onChange}
+                                    value={field.value}
+                                >
+                                    {options.map((option) => (
+                                        <div
+                                            className="shadow-xs relative flex w-full items-center gap-2 rounded-2xl border border-input p-3 outline-none duration-200 ease-out has-checked:border-primary/30 has-checked:bg-primary/40"
+                                            key={option.value}
+                                        >
+                                            <RadioGroupItem
+                                                className="order-1 after:absolute after:inset-0"
+                                                id={`title-margin-${option.value}`}
+                                                value={option.value}
+                                            />
+
+                                            <div className="flex grow items-center gap-3">
+                                                <div className="grid gap-1">
+                                                    <Label
+                                                        htmlFor={`title-margin-${option.value}`}
+                                                    >
+                                                        {option.label}
+                                                    </Label>
+
+                                                    <p className="text-xs text-muted-foreground">
+                                                        {option.description}
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    ))}
+                                </RadioGroup>
+                            )
+                        }}
+                    />
                     <FormFieldWrapper
                         control={form.control}
                         name="exclude_consolidated"
-                        render={({ field }) => (
-                            <div className="flex items-center gap-2">
-                                <Checkbox
-                                    checked={field.value}
-                                    onCheckedChange={field.onChange}
-                                />
-                                Exclude on consolidated total
-                            </div>
-                        )}
+                        render={({ field }) => {
+                            return (
+                                <GradientBackground
+                                    className="shadow-xs relative flex w-full items-start gap-2 rounded-2xl border border-input p-4 outline-none duration-200 ease-out has-checked:border-primary/30 has-checked:bg-primary/40"
+                                    gradientOnly
+                                >
+                                    <Checkbox
+                                        aria-describedby={`${field.name}-description`}
+                                        checked={field.value || false}
+                                        className="order-1 after:absolute after:inset-0"
+                                        id={field.name}
+                                        name={field.name}
+                                        onCheckedChange={field.onChange}
+                                    />
+
+                                    <div className="flex grow items-center gap-3">
+                                        <div className="size-fit rounded-full bg-secondary p-2">
+                                            {/* you can change icon if you want */}
+                                            <MoneyBagIcon className="size-5" />
+                                        </div>
+
+                                        <div className="grid gap-2">
+                                            <Label htmlFor={field.name}>
+                                                Exclude from Consolidated Total
+                                            </Label>
+
+                                            <p
+                                                className="text-xs text-muted-foreground"
+                                                id={`${field.name}-description`}
+                                            >
+                                                Enable this option if the
+                                                account should not be included
+                                                in the consolidated financial
+                                                statement totals.
+                                            </p>
+                                        </div>
+                                    </div>
+                                </GradientBackground>
+                            )
+                        }}
                     />
 
                     <FormFooterResetSubmit

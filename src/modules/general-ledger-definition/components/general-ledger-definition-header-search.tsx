@@ -94,9 +94,9 @@ const GeneralLedgerDefinitionHeaderSearch = () => {
                     handleAccountSelection(account)
                 }}
             />
-            <div className="flex gap-2 pb-4">
+            <div className="flex gap-2">
                 <Button
-                    className="rounded-xl"
+                    className="rounded-lg"
                     disabled={queries.addAccountToGLQuery.isPending}
                     onClick={() => {
                         glForm.create()
@@ -111,7 +111,7 @@ const GeneralLedgerDefinitionHeaderSearch = () => {
                     setSearchTerm={states.setSearchTerm}
                 />
                 <Button
-                    className="flex items-center rounded-2xl space-x-2"
+                    className="flex items-center rounded-lg space-x-2"
                     onClick={actions.handleSearch}
                     onKeyDown={(e) => {
                         if (e.key === 'Enter') {
