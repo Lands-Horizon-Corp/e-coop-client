@@ -6,12 +6,15 @@ import { useVirtualizer } from '@tanstack/react-virtual'
 import { Document, Page, pdfjs } from 'react-pdf'
 import 'react-pdf/dist/Page/AnnotationLayer.css'
 import 'react-pdf/dist/Page/TextLayer.css'
+import { DocumentCallback } from 'react-pdf/dist/shared/types.js'
 
 import { IClassProps } from '@/types'
 
 import {
-    PDFFooterControl,
-    PDFHeaderTitle,
+    PdfFooterControl,
+    PdfFooterProps,
+    PdfHeaderProps,
+    PdfHeaderTitle,
     PdfPasswordDialog,
     PdfPasswordRequired,
 } from './pdf-components'
@@ -26,7 +29,7 @@ if (!IS_STAGING) {
     ).toString()
 }
 
-interface PdfViewerProps extends IClassProps {
+interface PdfViewerProps extends IClassProps, PdfHeaderProps, PdfFooterProps {
     file: File | string
     fileName?: string
     onClose?: () => void
@@ -36,6 +39,11 @@ interface PdfViewerProps extends IClassProps {
     minScale?: number
     maxScale?: number
     zoomStep?: number
+
+    hideHeader?: boolean
+
+    hideFooterControl?: boolean
+    onPdfLoadSuccess?: ({ document }: { document: DocumentCallback }) => void
 }
 
 // DEFAULTS
@@ -48,11 +56,22 @@ const PdfViewer = ({
     pageWidth = DEFAULT_PAGE_WIDTH,
     className,
 
+    hideHeader = false,
+    canDownload = true,
+    canPrint = true,
+    onPrint,
+
+    hideFooterControl = false,
+    canPaginate = true,
+    canZoom = true,
+
     defaultScale = 1,
     minScale = 0.25,
     maxScale = 5,
     zoomStep = 0.25,
+
     onClose,
+    onPdfLoadSuccess,
 }: PdfViewerProps) => {
     const fileTitle = file instanceof File ? file.name : fileName || 'PDF View'
 
@@ -120,7 +139,7 @@ const PdfViewer = ({
     const [scale, setScale] = useState(defaultScale)
     useEffect(() => {
         const el = parentRef.current
-        if (!el) return
+        if (!el || !canZoom) return
 
         const handleWheel = (e: WheelEvent) => {
             if (!e.ctrlKey && !e.metaKey) return
@@ -134,7 +153,7 @@ const PdfViewer = ({
 
         el.addEventListener('wheel', handleWheel, { passive: false })
         return () => el.removeEventListener('wheel', handleWheel)
-    }, [zoomStep, minScale, maxScale])
+    }, [zoomStep, minScale, maxScale, canZoom])
 
     if (!file) return null
 
@@ -160,10 +179,14 @@ const PdfViewer = ({
                 </div>
             ) : (
                 <>
-                    <PDFHeaderTitle
+                    <PdfHeaderTitle
+                        canDownload={canDownload}
+                        canPrint={canPrint}
+                        className={cn('z-50', hideHeader && 'hidden')}
                         fileTitle={fileTitle}
                         fileUrl={fileUrl}
                         onClose={onClose}
+                        onPrint={onPrint}
                     />
                     <Document
                         file={file}
@@ -172,11 +195,12 @@ const PdfViewer = ({
                                 Loading PDF…
                             </div>
                         }
-                        onLoadSuccess={({ numPages }) => {
-                            setNumPages(numPages)
+                        onLoadSuccess={(document: DocumentCallback) => {
+                            setNumPages(document.numPages)
                             setFirstPageHeight(null)
                             setPasswordNeeded(false)
                             setPasswordError(false)
+                            onPdfLoadSuccess?.({ document })
                         }}
                         onPassword={handlePassword}
                     >
@@ -186,7 +210,7 @@ const PdfViewer = ({
                         >
                             {virtualizer.getVirtualItems().map((virtualRow) => (
                                 <div
-                                    className="absolute left-0 w-fit min-w-full flex justify-center py-2"
+                                    className="absolute left-0 w-fit min-w-full flex rounded-xl justify-center py-2"
                                     data-index={virtualRow.index}
                                     key={virtualRow.key}
                                     ref={virtualizer.measureElement}
@@ -222,8 +246,10 @@ const PdfViewer = ({
                             ))}
                         </div>
                     </Document>
-                    <PDFFooterControl
-                        className="z-50"
+                    <PdfFooterControl
+                        canPaginate={canPaginate}
+                        canZoom={canZoom}
+                        className={cn('z-50', hideFooterControl && 'hidden')}
                         defaultScale={defaultScale}
                         maxScale={maxScale}
                         minScale={minScale}
@@ -236,7 +262,6 @@ const PdfViewer = ({
                     />
                 </>
             )}
-
             <PdfPasswordDialog
                 error={passwordError}
                 onCancel={handlePasswordCancel}
