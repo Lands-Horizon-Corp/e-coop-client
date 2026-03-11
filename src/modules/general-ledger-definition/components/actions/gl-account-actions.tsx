@@ -1,5 +1,4 @@
 import { IAccount } from '@/modules/account'
-import { useGeneralLedgerDefinitionContext } from '@/modules/general-ledger-definition/pages/ context/general-ledger-context-provider'
 import useConfirmModalStore from '@/store/confirm-modal-store'
 
 import {
@@ -22,6 +21,8 @@ import {
 } from '@/components/ui/dropdown-menu'
 
 import { TEntityId } from '@/types'
+
+import { useGeneralLedgerDefinitionContext } from '../../ context/general-ledger-context-provider'
 
 type GeneralLedgerDefinitionActionsProps = {
     node: IAccount

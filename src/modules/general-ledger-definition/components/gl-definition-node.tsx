@@ -4,7 +4,6 @@ import { cn } from '@/helpers'
 import { glTypeStyleMap } from '@/modules/account/components/account-card'
 import { IGeneralLedgerDefinition } from '@/modules/general-ledger-definition'
 import { GeneralLedgerTypeBadge } from '@/modules/general-ledger/components/general-ledger-type-badge'
-import { GLFSAccountsCardList } from '@/modules/gl-fs'
 import {
     DndContext,
     DragEndEvent,
@@ -30,6 +29,7 @@ import { TEntityId } from '@/types'
 
 import { useGeneralLedgerDefinitionContext } from '../ context/general-ledger-context-provider'
 import GeneralLedgerDefinitionActions from './actions/gl-definition-actions'
+import GLFSAccountsCardList from './gl-account-list'
 
 interface GeneralLedgerTreeNodeProps {
     node: IGeneralLedgerDefinition
@@ -153,7 +153,6 @@ const GeneralLedgerDefinitionNode = ({
                     : ''
             )}
         >
-            <div className={cn()} />
             <div
                 className={`flex h-fit cursor-pointer items-center px-3 `}
                 onClick={(event) => {
@@ -217,7 +216,6 @@ const GeneralLedgerDefinitionNode = ({
                             <PlainTextEditor content={node.description} />
                         </span>
                     )} */}
-
                     {isFirstLevel && (
                         <p className="text-xs /30">
                             {firstLevelItemLabel}
@@ -227,7 +225,6 @@ const GeneralLedgerDefinitionNode = ({
                     )}
                 </div>
             </div>
-
             <div className={`w-full ${isNodeExpanded ? 'pl-5 pr-5' : ''}`}>
                 {Array.isArray(showGLFSAccountsCardList) && (
                     <GLFSAccountsCardList

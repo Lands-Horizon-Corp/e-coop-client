@@ -139,7 +139,6 @@ const GeneralLedgerDefinitionActions = ({
                             <EditPencilIcon className="mr-2" />
                             Edit
                         </DropdownMenuItem>
-
                         <DropdownMenuItem
                             onClick={(e) =>
                                 handleGeneralLedgerAction(e, 'view')
@@ -149,9 +148,7 @@ const GeneralLedgerDefinitionActions = ({
                             View
                         </DropdownMenuItem>
                     </DropdownMenuGroup>
-
                     <DropdownMenuSeparator />
-
                     <DropdownMenuGroup>
                         <DropdownMenuItem
                             disabled={!canDelete}

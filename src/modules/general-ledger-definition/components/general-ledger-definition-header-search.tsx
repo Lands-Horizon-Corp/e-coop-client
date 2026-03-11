@@ -14,7 +14,7 @@ import GenericSearchInput from '@/components/search/generic-search-input'
 import { Button } from '@/components/ui/button'
 
 import { useGeneralLedgerDefinitionContext } from '../ context/general-ledger-context-provider'
-import { GeneralLedgerDefinitionCreateUpdateFormModal } from '../../components'
+import GeneralLedgerDefinitionCreateUpdateFormModal from './forms/general-ledger-definition-create-update-form'
 
 const GeneralLedgerDefinitionHeaderSearch = () => {
     const {

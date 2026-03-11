@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react'
 
 import { sortBy } from '@/helpers/common-helper'
 import { IAccount } from '@/modules/account'
-import { useGeneralLedgerDefinitionContext } from '@/modules/general-ledger-definition/pages/ context/general-ledger-context-provider'
 import {
     DndContext,
     DragEndEvent,
@@ -24,6 +23,7 @@ import { DragHandleIcon } from '@/components/icons'
 
 import { TEntityId, UpdateAccountOrder } from '@/types'
 
+import { useGeneralLedgerDefinitionContext } from '../ context/general-ledger-context-provider'
 import GLFSAccountActions from './actions/gl-account-actions'
 
 type AccountItemProps = {

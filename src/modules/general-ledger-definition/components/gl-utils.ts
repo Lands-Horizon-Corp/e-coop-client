@@ -1,6 +1,6 @@
 import { UdpateGeneralLedgerOrder } from '@/types'
 
-import { IGeneralLedgerDefinition } from '../../general-ledger-definition.types'
+import { IGeneralLedgerDefinition } from '../general-ledger-definition.types'
 
 export const findNodePathByGlIdOnly = (
     nodes: IGeneralLedgerDefinition[],

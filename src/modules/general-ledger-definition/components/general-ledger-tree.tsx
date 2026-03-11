@@ -16,6 +16,7 @@ import { PlusIcon } from '@/components/icons'
 import { Button } from '@/components/ui/button'
 
 import { useGeneralLedgerDefinitionContext } from '../ context/general-ledger-context-provider'
+import GLToolsBar from './actions-button'
 import GeneralLedgerDefinitionHeaderSearch from './general-ledger-definition-header-search'
 import GeneralLedgerDefinitionNode from './gl-definition-node'
 import { buildPayload } from './gl-utils'
@@ -73,6 +74,7 @@ const GeneralLedgerDefinitionTreeViewer = () => {
 
     return (
         <div className="w-full bg-card rounded-lg p-4">
+            <GLToolsBar />
             <GeneralLedgerDefinitionHeaderSearch />
             <DndContext
                 collisionDetection={closestCorners}
