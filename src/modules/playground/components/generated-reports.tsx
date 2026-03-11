@@ -162,11 +162,11 @@ function GeneratedReports() {
                                 Paper Size
                             </label>
                             <Select
-                                value={selectedSize}
+                                disabled={loading}
                                 onValueChange={(val) =>
                                     setSelectedSize(val as PaperSizeKey)
                                 }
-                                disabled={loading}
+                                value={selectedSize}
                             >
                                 <SelectTrigger className="w-full">
                                     <SelectValue placeholder="Choose a size" />
@@ -188,8 +188,8 @@ function GeneratedReports() {
                             <div className="space-y-3 animate-in fade-in slide-in-from-top-2">
                                 <div className="flex justify-between items-center">
                                     <Badge
-                                        variant="secondary"
                                         className="uppercase"
+                                        variant="secondary"
                                     >
                                         {currentStatus.replace(/_/g, ' ')}
                                     </Badge>
@@ -197,7 +197,7 @@ function GeneratedReports() {
                                         {Math.round(progress)}%
                                     </span>
                                 </div>
-                                <Progress value={progress} className="h-2" />
+                                <Progress className="h-2" value={progress} />
                             </div>
                         )}
 
