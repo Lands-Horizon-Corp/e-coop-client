@@ -1,7 +1,5 @@
 import { useRef, useState } from 'react'
 
-import PdfViewer from '@/modules/pdf-viewer/components/pdf-viewer'
-
 import { UploadIcon } from '@/components/icons'
 import { Button } from '@/components/ui/button'
 import {
@@ -10,6 +8,7 @@ import {
     DialogHeader,
     DialogTitle,
 } from '@/components/ui/dialog'
+import PdfViewer from '@/modules/pdf/components/pdf-viewer/pdf-viewer'
 
 function PDFUploader() {
     const [file, setFile] = useState<File | null>(null)
@@ -54,7 +53,6 @@ function PDFUploader() {
                 <DialogContent className="flex flex-col w-[90vw] !max-w-[1200px] h-[90vh] p-0 overflow-hidden">
                     <DialogHeader className="p-4 border-b">
                         <DialogTitle>PDF Viewer</DialogTitle>
-
                     </DialogHeader>
 
                     {file && (
@@ -62,7 +60,7 @@ function PDFUploader() {
                             className="flex-1 min-h-0 h-[400px]"
                             file={file}
                             onClose={handleClose}
-                            pageWidth={1400}
+                            pageWidth={800}
                         />
                     )}
                 </DialogContent>
