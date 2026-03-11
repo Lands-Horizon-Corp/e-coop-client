@@ -36,17 +36,27 @@ import {
 
 import { downloadPDF, printPDF } from '../../pdf-utils'
 
-export const PDFHeaderTitle = ({
+export type PdfHeaderProps = {
+    canPrint?: boolean
+    canDownload?: boolean
+    onPrint?: () => void
+}
+
+export const PdfHeaderTitle = ({
     fileUrl,
     fileTitle,
     className,
+
+    canPrint = true,
+    canDownload = true,
+
     onClose,
 }: {
     fileUrl?: string | null
     fileTitle: string
     className?: string
     onClose?: () => void
-}) => {
+} & PdfHeaderProps) => {
     // pang download
     const handleDownload = useCallback(() => {
         if (!fileUrl) return
@@ -79,6 +89,7 @@ export const PDFHeaderTitle = ({
             <ButtonGroup className="flex bg-popover border border-secondary-foreground/70 p-1 rounded-xl">
                 <Button
                     className="rounded-lg cursor-pointer"
+                    disabled={!canPrint}
                     onClick={handlePrint}
                     size="sm"
                     variant="secondary"
@@ -87,6 +98,7 @@ export const PDFHeaderTitle = ({
                 </Button>
                 <Button
                     className="rounded-lg cursor-pointer"
+                    disabled={!canDownload}
                     onClick={handleDownload}
                     size="sm"
                     variant="secondary"
@@ -106,17 +118,26 @@ export const PDFHeaderTitle = ({
     )
 }
 
-export const PDFFooterControl = memo(function FooterControls({
-    numPages,
+export type PdfFooterProps = {
+    canPaginate?: boolean
+    canZoom?: boolean
+}
+
+export const PdfFooterControl = memo(function FooterControls({
     className,
     scrollRef,
-    virtualizer,
 
+    virtualizer,
+    canPaginate = true,
+    numPages,
+
+    canZoom = true,
     defaultScale,
     minScale,
     maxScale,
     zoomStep,
     scale,
+
     setScale,
 }: {
     scrollRef: React.RefObject<HTMLDivElement | null>
@@ -131,7 +152,7 @@ export const PDFFooterControl = memo(function FooterControls({
 
     scale: number
     setScale?: (value: number | ((prev: number) => number)) => void
-}) {
+} & PdfFooterProps) {
     const [currentPage, setCurrentPage] = useState(1)
     const rafRef = useRef<number>(0)
     const [goToInput, setGoToInput] = useState('')
@@ -212,7 +233,12 @@ export const PDFFooterControl = memo(function FooterControls({
                 className
             )}
         >
-            <ButtonGroup className="flex bg-popover border border-secondary-foreground/70 p-1 rounded-xl">
+            <ButtonGroup
+                className={cn(
+                    'flex bg-popover border border-secondary-foreground/70 p-1 rounded-xl',
+                    !canPaginate && 'hidden'
+                )}
+            >
                 <Button
                     className="rounded-lg cursor-pointer"
                     disabled={currentPage <= 1}
@@ -272,7 +298,12 @@ export const PDFFooterControl = memo(function FooterControls({
                 </Button>
             </ButtonGroup>
 
-            <ButtonGroup className="flex bg-popover border border-secondary-foreground/70 p-1 rounded-xl">
+            <ButtonGroup
+                className={cn(
+                    'flex bg-popover border border-secondary-foreground/70 p-1 rounded-xl',
+                    !canZoom && 'hidden'
+                )}
+            >
                 <Button
                     className="rounded-lg cursor-pointer"
                     disabled={scale <= minScale}
