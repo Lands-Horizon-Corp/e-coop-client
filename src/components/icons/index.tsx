@@ -70,8 +70,6 @@ import {
     BsUmbrellaFill as UmbrellaIcon,
     BsPatchCheck as VerifiedPatchIcon,
     BsFileEarmarkPlayFill as VideoFileFillIcon,
-    BsZoomIn as ZoomInIcon,
-    BsZoomOut as ZoomOutIcon,
 } from 'react-icons/bs'
 import {
     CgDetailsLess as DetailsIcon,
@@ -334,6 +332,8 @@ import {
     LuUndo2 as UndoIcon,
     LuView as ViewIcon,
     LuScale as WeightScaleIcon,
+    LuZoomIn as ZoomInIcon,
+    LuZoomOut as ZoomOutIcon,
 } from 'react-icons/lu'
 import {
     MdManageAccounts as AccountSettingIcon,
@@ -576,12 +576,13 @@ export {
     LayersIcon,
     FaBoldIcon,
     ShieldIcon,
+    ZoomInIcon,
+    ZoomOutIcon,
     Users3Icon,
     BranchIcon,
     LogoutIcon,
     ScanQrIcon,
     ExportIcon,
-    ZoomInIcon,
     ShapesIcon,
     FilesIcon,
     AdjustIcon,
@@ -626,7 +627,6 @@ export {
     ArrowUpIcon,
     SidebarIcon,
     SunMoonIcon,
-    ZoomOutIcon,
     TrashFillIcon,
     VillageIcon,
     DevicesIcon,
