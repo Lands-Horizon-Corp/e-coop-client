@@ -1,3 +1,5 @@
+import nunjucks from 'nunjucks'
+
 export const PAPER_SIZE_UNIT = ['mm', 'in', 'pt'] as const
 
 export type TPaperSizeUnit = (typeof PAPER_SIZE_UNIT)[number]
@@ -257,3 +259,42 @@ export const Style = {
         trackingNormal: '0em',
     },
 }
+
+interface ReportTemplate<T> {
+    name: string
+    template: string
+    max_width: number
+    max_height: number
+    min_width: number
+    min_height: number
+    view?: (this: ReportTemplate<T>) => string
+}
+
+// cash-check-disbursement.hbs
+export const GENERATED_REPORT_GENERAL_LEDGER: ReportTemplate<{
+    name: string
+    age: number
+}>[] = [
+    {
+        name: 'Verbose template',
+        template: '/reports/general-ledger-template-1.hbs',
+        max_width: 11,
+        max_height: 12,
+        min_width: 13,
+        min_height: 14,
+    },
+    {
+        name: 'Minimal template',
+        template: '/reports/general-ledger-template-2.hbs',
+        max_width: 11,
+        max_height: 12,
+        min_width: 13,
+        min_height: 14,
+        view: function () {
+            return nunjucks.renderString(this.template, {
+                name: 'John Doe',
+                age: 20,
+            })
+        },
+    },
+]

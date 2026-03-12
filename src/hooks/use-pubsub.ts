@@ -18,92 +18,120 @@ export interface TSubscribeOptions {
 
 export const useSubscribe = <T = unknown>(
     channelName: string,
-    eventName: string,
+    eventName: string | null | undefined,
     onReceive: (data: T) => void,
     options: TSubscribeOptions = {}
 ) => {
     const pusher = usePusherStore((state) => state.pusher)
     const isLiveEnabled = useLiveMonitoringStore((state) => state.isLiveEnabled)
+
     const [status, setStatus] = useState({ isSyncing: false, pendingCount: 0 })
-    const r = useRef({
-        onReceive,
-        config: { delay: 1000, maxQueueSize: 10, debounceTime: 300 },
-        queue: [] as T[],
-        isProcessing: false,
-        isActive: true,
-        latest: null as T | null,
-        lastEnqueue: 0,
-        timer: null as NodeJS.Timeout | null,
-    })
-    r.current.onReceive = onReceive
-    r.current.config = { ...r.current.config, ...options }
+
+    const onReceiveRef = useRef(onReceive)
+    onReceiveRef.current = onReceive
+
+    const { delay = 1000, maxQueueSize = 10, debounceTime = 300 } = options
+
     useEffect(() => {
-        const state = r.current
-        state.isActive = true
+        let isActive = true
+        let queue: T[] = []
+        let isProcessing = false
+        let timer: NodeJS.Timeout | null = null
+        let latestData: T | null = null
+
         if (!pusher || !isLiveEnabled || !channelName || !eventName) return
         if (channelName.includes('undefined') || channelName.includes('null'))
             return
+
         const syncStatus = () => {
-            if (state.isActive) {
+            if (isActive) {
                 setStatus({
-                    isSyncing: state.isProcessing,
-                    pendingCount: state.queue.length,
+                    isSyncing: isProcessing,
+                    pendingCount: queue.length,
                 })
             }
         }
+
         const processQueue = async () => {
-            if (state.isProcessing || state.queue.length === 0) return
-            state.isProcessing = true
+            if (isProcessing || queue.length === 0) return
+
+            isProcessing = true
             syncStatus()
+
             try {
-                while (state.queue.length > 0 && state.isActive) {
-                    const nextData = state.queue.shift()
+                while (queue.length > 0 && isActive) {
+                    const nextData = queue.shift()
                     syncStatus()
+
                     if (nextData !== undefined) {
-                        state.onReceive(nextData)
-                        await new Promise((res) =>
-                            setTimeout(res, state.config.delay)
-                        )
+                        // Call the latest callback via Ref
+                        onReceiveRef.current(nextData)
+
+                        // Artificial delay between processing items
+                        await new Promise((res) => setTimeout(res, delay))
                     }
                 }
             } finally {
-                state.isProcessing = false
+                isProcessing = false
                 syncStatus()
             }
         }
-        const handleData = (data: T) => {
-            state.queue.push(data)
-            if (state.queue.length > state.config.maxQueueSize)
-                state.queue.shift()
-            state.lastEnqueue = Date.now()
+
+        const handleDataPush = (data: T) => {
+            if (!isActive) return
+            queue.push(data)
+
+            // Enforce max queue size (drop oldest)
+            if (queue.length > maxQueueSize) {
+                queue.shift()
+            }
+
             processQueue()
         }
+
+        // 2. Pusher Subscription
         const channel = pusher.subscribe(channelName)
+
         const handleEvent = (incoming: any) => {
+            if (!isActive) return
+
+            // Normalize incoming data structure
             const data =
                 incoming?.success !== undefined ? incoming.data : incoming
-            state.latest = data
-            if (
-                state.queue.length === 0 &&
-                !state.isProcessing &&
-                Date.now() - state.lastEnqueue > state.config.debounceTime
-            )
-                return handleData(data)
-            if (state.timer) clearTimeout(state.timer)
-            state.timer = setTimeout(() => {
-                if (state.latest !== null) {
-                    handleData(state.latest)
-                    state.latest = null
+            latestData = data
+
+            // Debounce logic: wait for silence before adding to processing queue
+            if (timer) clearTimeout(timer)
+
+            timer = setTimeout(() => {
+                if (isActive && latestData !== null) {
+                    handleDataPush(latestData)
+                    latestData = null
                 }
-            }, state.config.debounceTime)
+            }, debounceTime)
         }
+
         channel.bind(eventName, handleEvent)
+
+        // 3. Cleanup
         return () => {
-            state.isActive = false
-            channel.unbind(eventName, handleEvent)
-            if (state.timer) clearTimeout(state.timer)
-            state.queue = []
+            isActive = false
+            if (timer) clearTimeout(timer)
+            if (eventName) {
+                channel.unbind(eventName, handleEvent)
+            }
+            // Reset status for the next ID/subscription
+            setStatus({ isSyncing: false, pendingCount: 0 })
         }
-    }, [pusher, channelName, eventName, isLiveEnabled])
+    }, [
+        pusher,
+        channelName,
+        eventName,
+        isLiveEnabled,
+        delay,
+        maxQueueSize,
+        debounceTime,
+    ])
+
     return { ...status, isLive: isLiveEnabled }
 }

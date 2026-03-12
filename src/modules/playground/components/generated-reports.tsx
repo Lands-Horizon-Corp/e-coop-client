@@ -16,6 +16,8 @@ import {
     SelectValue,
 } from '@/components/ui/select'
 
+import { useSubscribe } from '@/hooks/use-pubsub'
+
 /**
  * 1. CONFIGURATION & DIMENSIONS
  */
@@ -77,28 +79,21 @@ function GeneratedReports() {
     const [currentStatus, setCurrentStatus] = useState('IDLE')
     const [progress, setProgress] = useState(0)
     const [reportData, setReportData] = useState<IGeneratedReport | null>(null)
-
     const [selectedSize, setSelectedSize] = useState<PaperSizeKey>('A4')
-
     const handleGenerateReport = async () => {
         setLoading(true)
         setCurrentStatus('pending')
         setProgress(10)
         setReportData(null)
-
         const today = new Date().toISOString().split('T')[0]
         const dimensions = PAPER_SIZES[selectedSize]
-
         const requestPayload: ICreateReportRequest = {
             module: 'MEMBERSHIP',
             name: `Member_Report_${today}.pdf`,
             width: dimensions.width,
             height: dimensions.height,
-            // Example of injecting dynamic filters for the backend worker
             filters: {
-                generated_by_ui: 'web_dashboard',
-                report_type: 'summary',
-                exported_at: new Date().getTime(),
+                balance: '20',
             },
             template: `
             <!DOCTYPE html>
@@ -123,17 +118,17 @@ function GeneratedReports() {
             </html>
         `,
         }
-
         try {
             const response = await API.post<
                 ICreateReportRequest,
-                IGeneratedReport
+                IGeneratedReport // Note: This type might still be useful for Intellisense
             >('/api/v1/generated-report', requestPayload)
 
-            const validated = GeneratedReportSchema.parse(response)
-            setReportData(validated)
-            setCurrentStatus(validated.status)
-            setProgress(validated.status === 'completed' ? 100 : 50)
+            const data = response.data
+
+            setReportData(data) // Now the types match!
+            setCurrentStatus(data.status)
+            setProgress(data.status === 'completed' ? 100 : 50)
         } catch (err: any) {
             console.error('Generation failure:', err)
             setCurrentStatus('failed')
@@ -142,6 +137,11 @@ function GeneratedReports() {
             setLoading(false)
         }
     }
+    const eventName = reportData?.id ? `live.${reportData.id}` : null
+    console.log(eventName, '-')
+    useSubscribe('generated_report', eventName, (payload) => {
+        console.log(payload)
+    })
 
     return (
         <div className="p-8 space-y-6">
