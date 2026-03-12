@@ -17,10 +17,12 @@ import {
     useDeleteMemberProfileMediaById,
 } from '@/modules/member-profile-media'
 import { UpdateMemberProfileMediaFormModal } from '@/modules/member-profile-media/components/form/update-member-profile-media-form'
+import PdfViewerModal from '@/modules/pdf/components/pdf-viewer/pdf-viewer-modal'
 
 import {
     CalendarIcon,
     DownloadIcon,
+    EyeIcon,
     HardDriveIcon,
     PencilFillIcon,
     TrashIcon,
@@ -42,6 +44,7 @@ interface FileCardProps extends FileItemProps {
 
 export const FileCard = ({ memberMedia, viewMode, index }: FileCardProps) => {
     const editModal = useModalState()
+    const previewPDFModal = useModalState()
     const deleteMutation = useDeleteMemberProfileMediaById()
 
     const media = memberMedia.media
@@ -51,6 +54,7 @@ export const FileCard = ({ memberMedia, viewMode, index }: FileCardProps) => {
 
     const category = media ? getFileCategory(fullFileName, fileType) : 'unknown'
     const isImage = category === 'image'
+    const isPdf = category === 'pdf'
 
     const handleDelete = () => {
         toast.promise(deleteMutation.mutateAsync(memberMedia.id), {
@@ -74,6 +78,14 @@ export const FileCard = ({ memberMedia, viewMode, index }: FileCardProps) => {
                 {...editModal}
                 formProps={{ defaultValues: memberMedia }}
             />
+            {isPdf && (
+                <PdfViewerModal
+                    {...previewPDFModal}
+                    pdfViewerProps={{
+                        file: memberMedia.media?.download_url,
+                    }}
+                />
+            )}
 
             {viewMode === 'list' ? (
                 <div
@@ -138,7 +150,7 @@ export const FileCard = ({ memberMedia, viewMode, index }: FileCardProps) => {
                         </ActionTooltip>
                         <ActionTooltip side="bottom" tooltipContent="Edit File">
                             <Button
-                                className="size-fit rounded-md p-1 hover:text-destructive-foreground"
+                                className="size-fit rounded-md p-1"
                                 onClick={() => editModal.onOpenChange(true)}
                                 size="icon"
                                 variant="secondary"
@@ -146,6 +158,23 @@ export const FileCard = ({ memberMedia, viewMode, index }: FileCardProps) => {
                                 <PencilFillIcon className="size-4 cursor-pointer" />
                             </Button>
                         </ActionTooltip>
+                        {isPdf && (
+                            <ActionTooltip
+                                side="bottom"
+                                tooltipContent="Preview"
+                            >
+                                <Button
+                                    className="size-fit rounded-md p-1"
+                                    onClick={() =>
+                                        previewPDFModal.onOpenChange(true)
+                                    }
+                                    size="icon"
+                                    variant="secondary"
+                                >
+                                    <EyeIcon className="size-4 cursor-pointer" />
+                                </Button>
+                            </ActionTooltip>
+                        )}
                         <ActionTooltip
                             side="bottom"
                             tooltipContent="Delete file"
@@ -198,6 +227,19 @@ export const FileCard = ({ memberMedia, viewMode, index }: FileCardProps) => {
                                     Download
                                 </Button>
                             )}
+                            <Button
+                                className={cn(
+                                    'cursor-pointer',
+                                    !isPdf && 'hidden'
+                                )}
+                                onClick={() =>
+                                    previewPDFModal.onOpenChange(true)
+                                }
+                                size="sm"
+                                variant="secondary"
+                            >
+                                <EyeIcon className="size-4 mr-1" /> View
+                            </Button>
                             <Button
                                 className="cursor-pointer"
                                 onClick={() => editModal.onOpenChange(true)}
