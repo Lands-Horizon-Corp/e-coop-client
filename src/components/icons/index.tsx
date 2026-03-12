@@ -1,6 +1,5 @@
 import type { ICONS } from '@/constants'
 import {
-    AiOutlineDownload as DownloadIcon,
     AiOutlineFullscreenExit as FullscreenExitIcon,
     AiOutlineFullscreen as FullscreenIcon,
     AiFillHome as HomeFillIcon,
@@ -136,6 +135,7 @@ import {
     FaDocker as DockerIcon,
     FaFirstdraft as DraftIcon,
     FaCircleCheck as FaCheckIcon,
+    FaFileCircleQuestion as FileQuestionIcon,
     FaGears as GearsIcon,
     FaVenusMars as GendersIcon,
     FaGithub as GithubIcon,
@@ -334,6 +334,7 @@ import {
     LuScale as WeightScaleIcon,
     LuZoomIn as ZoomInIcon,
     LuZoomOut as ZoomOutIcon,
+    LuDownload as DownloadIcon
 } from 'react-icons/lu'
 import {
     MdManageAccounts as AccountSettingIcon,
@@ -657,6 +658,7 @@ export {
     BookOpenIcon,
     PriceTagIcon,
     UmbrellaIcon,
+    FileQuestionIcon,
     QuestionIcon,
     PieChartIcon,
     AccountsIcon,
