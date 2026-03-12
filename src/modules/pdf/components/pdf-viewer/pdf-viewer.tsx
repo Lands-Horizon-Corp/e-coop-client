@@ -8,6 +8,8 @@ import 'react-pdf/dist/Page/AnnotationLayer.css'
 import 'react-pdf/dist/Page/TextLayer.css'
 import { DocumentCallback } from 'react-pdf/dist/shared/types.js'
 
+import { FileQuestionIcon } from '@/components/icons'
+
 import { IClassProps } from '@/types'
 
 import {
@@ -17,6 +19,7 @@ import {
     PdfHeaderTitle,
     PdfPasswordDialog,
     PdfPasswordRequired,
+    PdfSkeletonPage,
 } from './pdf-components'
 
 // UGLY SHIT To be enhanced later
@@ -29,8 +32,9 @@ if (!IS_STAGING) {
     ).toString()
 }
 
-interface PdfViewerProps extends IClassProps, PdfHeaderProps, PdfFooterProps {
-    file: File | string
+export interface PdfViewerProps
+    extends IClassProps, PdfHeaderProps, PdfFooterProps {
+    file?: File | string | null
     fileName?: string
     onClose?: () => void
     pageWidth?: number
@@ -90,6 +94,8 @@ const PdfViewer = ({
     const [fileUrl, setFileUrl] = useState<string | null>(null)
 
     useEffect(() => {
+        if (!file) return
+
         let url: string | null = null
         if (file instanceof File) {
             url = URL.createObjectURL(file)
@@ -191,8 +197,18 @@ const PdfViewer = ({
                     <Document
                         file={file}
                         loading={
-                            <div className="flex z-0 items-center min-h-full justify-center p-8 text-muted-foreground">
-                                Loading PDF…
+                            <div className="flex justify-center py-4">
+                                <PdfSkeletonPage width={pageWidth} />
+                            </div>
+                        }
+                        noData={
+                            <div className="flex flex-col items-center gap-4 text-center p-8">
+                                <div className="size-16 rounded-2xl bg-muted flex items-center justify-center">
+                                    <FileQuestionIcon className="size-8 text-muted-foreground" />
+                                </div>
+                                <p className="text-sm text-muted-foreground">
+                                    No PDF file provided.
+                                </p>
                             </div>
                         }
                         onLoadSuccess={(document: DocumentCallback) => {
@@ -210,7 +226,7 @@ const PdfViewer = ({
                         >
                             {virtualizer.getVirtualItems().map((virtualRow) => (
                                 <div
-                                    className="absolute left-0 w-fit min-w-full flex rounded-xl justify-center py-2"
+                                    className="absolute left-0 w-fit min-w-full flex justify-center py-2"
                                     data-index={virtualRow.index}
                                     key={virtualRow.key}
                                     ref={virtualizer.measureElement}
@@ -219,6 +235,7 @@ const PdfViewer = ({
                                     }}
                                 >
                                     <Page
+                                        className="rounded-xl overflow-clip"
                                         loading={
                                             <div
                                                 className="bg-muted animate-pulse rounded"

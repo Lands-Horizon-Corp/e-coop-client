@@ -314,6 +314,7 @@ import {
     LuClock8 as ClockIcon,
     LuCopy as CopyIcon,
     LuCrown as CrownIcon,
+    LuDownload as DownloadIcon,
     LuFileX as FileXIcon,
     LuHardDriveUpload as HardDriveUploadIcon,
     LuHeading as HeadingIcon,
@@ -334,7 +335,6 @@ import {
     LuScale as WeightScaleIcon,
     LuZoomIn as ZoomInIcon,
     LuZoomOut as ZoomOutIcon,
-    LuDownload as DownloadIcon
 } from 'react-icons/lu'
 import {
     MdManageAccounts as AccountSettingIcon,

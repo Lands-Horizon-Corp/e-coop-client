@@ -76,10 +76,9 @@ export const PdfHeaderTitle = ({
                 className
             )}
         >
-            <ButtonGroup className="flex bg-popover border border-secondary-foreground/70 p-1 rounded-xl">
+            <ButtonGroup className="flex bg-popover border pointer-events-none border-secondary-foreground/70 p-1 rounded-xl">
                 <Button
                     className="rounded-lg text-sm cursor-pointer backdrop-blur-sm "
-                    disabled
                     size="sm"
                     variant="secondary"
                 >
@@ -523,5 +522,42 @@ export const PdfPasswordDialog = ({
                 </form>
             </DialogContent>
         </Dialog>
+    )
+}
+
+export const PdfSkeletonPage = ({ width = 612 }: { width?: number }) => {
+    return (
+        <div
+            className="bg-background rounded-xl shadow-sm border border-border/80 p-8 flex flex-col gap-6 animate-pulse aspect-[612/792]"
+            style={{ width }}
+        >
+            <div className="flex flex-col gap-3 items-center pt-4">
+                <div className="h-5 w-3/5 bg-muted rounded" />
+                <div className="h-3 w-2/5 bg-muted rounded" />
+            </div>
+            <div className="flex flex-col gap-2 mt-4">
+                <div className="h-3 w-full bg-muted rounded" />
+                <div className="h-3 w-full bg-muted rounded" />
+                <div className="h-3 w-11/12 bg-muted rounded" />
+                <div className="h-3 w-4/5 bg-muted rounded" />
+            </div>
+            <div className="flex flex-col gap-2">
+                <div className="h-3 w-full bg-muted rounded" />
+                <div className="h-3 w-full bg-muted rounded" />
+                <div className="h-3 w-10/12 bg-muted rounded" />
+                <div className="h-3 w-3/4 bg-muted rounded" />
+                <div className="h-3 w-5/6 bg-muted rounded" />
+            </div>
+            <div className="h-32 w-4/5 mx-auto bg-muted rounded" />
+            <div className="flex flex-col gap-2">
+                <div className="h-3 w-full bg-muted rounded" />
+                <div className="h-3 w-full bg-muted rounded" />
+                <div className="h-3 w-9/12 bg-muted rounded" />
+            </div>
+            <div className="mt-auto flex justify-between">
+                <div className="h-2.5 w-20 bg-muted rounded" />
+                <div className="h-2.5 w-8 bg-muted rounded" />
+            </div>
+        </div>
     )
 }
