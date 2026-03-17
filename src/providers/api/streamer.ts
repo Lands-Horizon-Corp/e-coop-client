@@ -16,7 +16,7 @@ export const streamer = async <
     data: D,
     handlers: StreamHandlers<TProcess, TEnd>,
     config?: {
-        params?: Record<string, any>
+        params?: URLSearchParams
         headers?: Record<string, string>
         signal?: AbortSignal
     }
