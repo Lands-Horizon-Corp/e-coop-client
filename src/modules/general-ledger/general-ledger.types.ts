@@ -95,3 +95,7 @@ export interface IMemberGeneralLedgerTotal {
 }
 
 export interface IGeneralLedgerPaginated extends IPaginatedResult<IGeneralLedger> {}
+export interface IChangeOR {
+    or_from: string
+    or_to: string
+}

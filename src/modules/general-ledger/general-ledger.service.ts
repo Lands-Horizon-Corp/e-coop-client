@@ -6,6 +6,7 @@ import {
     HookQueryOptions,
     createDataLayerFactory,
 } from '@/providers/repositories/data-layer-factory'
+import { createMutationFactory } from '@/providers/repositories/mutation-factory'
 
 import { TAPIQueryOptions, TEntityId } from '@/types'
 
@@ -303,5 +304,19 @@ export const useFilteredPaginatedGeneralLedger = ({
         },
     })
 }
+export interface IChangeORRequest {
+    or_from: string
+    or_to: string
+}
+
+export const changeOR = async (payload: IChangeORRequest) => {
+    return (await API.post(`${generalLedgerAPIRoute}/change/or`, payload)).data
+}
+
+export const useChangeOR = createMutationFactory<
+    unknown,
+    Error,
+    IChangeORRequest
+>({ mutationFn: changeOR })
 
 export const logger = Logger.getInstance('general-ledger')

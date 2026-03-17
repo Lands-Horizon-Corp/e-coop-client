@@ -9,6 +9,7 @@ import {
 } from '@/modules/authentication/authgentication.store'
 import { ICurrency } from '@/modules/currency'
 import { CurrencyBadge } from '@/modules/currency/components/currency-badge'
+import { ChangeORFormModal } from '@/modules/general-ledger/components/change-or-form'
 import { useTimeMachine } from '@/modules/user-organization'
 import useActionSecurityStore from '@/store/action-security-store'
 
@@ -218,6 +219,12 @@ const TransactionBatch = ({
                             <ClockIcon />
                         </Button>
                     )}
+                    <ChangeORFormModal
+                        buttonProps={{
+                            variant: 'secondary',
+                            size: 'sm',
+                        }}
+                    />
                 </div>
             </div>
             <div className="flex min-h-[40vh] w-full max-w-7xl shrink-0 gap-x-2">
