@@ -18,10 +18,7 @@ import PreviewMediaWrapper from '@/components/wrappers/preview-media-wrapper'
 import { IBillsAndCoin } from '../../bill-and-coins.types'
 
 export const billsAndCoinsGlobalSearchTargets: IGlobalSearchTargets<IBillsAndCoin>[] =
-    [
-        { field: 'name', displayText: 'Name' },
-        { field: 'currency.currency_code', displayText: 'Currency' },
-    ]
+    [{ field: 'name', displayText: 'Name' }]
 
 export interface IBillsAndCoinsTableActionComponentProp {
     row: Row<IBillsAndCoin>
