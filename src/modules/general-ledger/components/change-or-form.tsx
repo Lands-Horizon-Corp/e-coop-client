@@ -10,6 +10,7 @@ import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
 import { cn } from '@/helpers/tw-utils'
 
 import FormFooterResetSubmit from '@/components/form-components/form-footer-reset-submit'
+import { TicketIcon } from '@/components/icons'
 import Modal, { IModalProps } from '@/components/modals/modal'
 import { Button, ButtonProps } from '@/components/ui/button'
 import { Form } from '@/components/ui/form'
@@ -126,10 +127,11 @@ export const ChangeORFormModal = ({
         <>
             <Button
                 {...buttonProps}
-                className={buttonProps?.className}
+                hoverVariant="primary"
+                className={cn(className)}
                 onClick={() => setOpen(true)}
             >
-                {buttonText}
+                <TicketIcon /> {buttonText}
             </Button>
 
             <Modal
