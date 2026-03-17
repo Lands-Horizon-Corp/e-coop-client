@@ -34,7 +34,7 @@ export const useSubscribe = <T = unknown>(
 
     useEffect(() => {
         let isActive = true
-        let queue: T[] = []
+        const queue: T[] = []
         let isProcessing = false
         let timer: NodeJS.Timeout | null = null
         let latestData: T | null = null

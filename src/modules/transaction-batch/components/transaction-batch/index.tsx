@@ -15,6 +15,7 @@ import useActionSecurityStore from '@/store/action-security-store'
 
 import {
     ClockIcon,
+    DotMediumIcon,
     ErrorExclamationIcon,
     EyeIcon,
     LayersSharpDotIcon,
@@ -191,8 +192,16 @@ const TransactionBatch = ({
                         size="sm"
                         variant="secondary"
                     >
-                        <EyeIcon className="mr-2 inline" /> View History
+                        <EyeIcon className="mr-2 inline" /> Blotter
                     </Button>
+
+                    <DotMediumIcon className="text-primary animate-pulse" />
+                    <ChangeORFormModal
+                        buttonProps={{
+                            variant: 'secondary',
+                            size: 'sm',
+                        }}
+                    />
                     {!transactionBatch.is_today && (
                         <Button
                             disabled={isPendingTimeMachine}
@@ -219,12 +228,6 @@ const TransactionBatch = ({
                             <ClockIcon />
                         </Button>
                     )}
-                    <ChangeORFormModal
-                        buttonProps={{
-                            variant: 'secondary',
-                            size: 'sm',
-                        }}
-                    />
                 </div>
             </div>
             <div className="flex min-h-[40vh] w-full max-w-7xl shrink-0 gap-x-2">

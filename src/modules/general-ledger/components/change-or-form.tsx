@@ -127,8 +127,8 @@ export const ChangeORFormModal = ({
         <>
             <Button
                 {...buttonProps}
-                hoverVariant="primary"
                 className={cn(className)}
+                hoverVariant="primary"
                 onClick={() => setOpen(true)}
             >
                 <TicketIcon /> {buttonText}
