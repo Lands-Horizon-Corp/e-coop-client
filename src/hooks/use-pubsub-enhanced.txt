@@ -64,10 +64,8 @@ export const useSubscribe = <T = unknown>(
                     syncStatus()
 
                     if (nextData !== undefined) {
-                        // Call the latest callback via Ref
                         onReceiveRef.current(nextData)
 
-                        // Artificial delay between processing items
                         await new Promise((res) => setTimeout(res, delay))
                     }
                 }
@@ -81,7 +79,6 @@ export const useSubscribe = <T = unknown>(
             if (!isActive) return
             queue.push(data)
 
-            // Enforce max queue size (drop oldest)
             if (queue.length > maxQueueSize) {
                 queue.shift()
             }
@@ -89,17 +86,14 @@ export const useSubscribe = <T = unknown>(
             processQueue()
         }
 
-        // 2. Pusher Subscription
         const channel = pusher.subscribe(channelName)
 
         const handleEvent = (incoming: { success?: boolean; data: T }) => {
             if (!isActive) return
 
-            // Normalize incoming data structure
             const data = incoming?.success !== undefined ? incoming.data : null
             latestData = data
 
-            // Debounce logic: wait for silence before adding to processing queue
             if (timer) clearTimeout(timer)
 
             timer = setTimeout(() => {
@@ -112,14 +106,13 @@ export const useSubscribe = <T = unknown>(
 
         channel.bind(eventName, handleEvent)
 
-        // 3. Cleanup
         return () => {
             isActive = false
             if (timer) clearTimeout(timer)
             if (eventName) {
                 channel.unbind(eventName, handleEvent)
+                channel.disconnect()
             }
-            // Reset status for the next ID/subscription
             setStatus({ isSyncing: false, pendingCount: 0 })
         }
     }, [
