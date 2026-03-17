@@ -135,6 +135,7 @@ import {
     FaDocker as DockerIcon,
     FaFirstdraft as DraftIcon,
     FaCircleCheck as FaCheckIcon,
+    FaTag as FaTagIcon,
     FaFileCircleQuestion as FileQuestionIcon,
     FaGears as GearsIcon,
     FaVenusMars as GendersIcon,
@@ -162,6 +163,7 @@ import {
     FaThumbsUp as ThumbsUpIcon,
     FaTrash as TrashFillIcon,
     FaTreeCity as TreeCityIcon,
+    FaTruck as TruckIcon,
     FaUser as UserFillIcon,
     FaUserLock as UserLockIcon,
     FaUserPlus as UserPlusIcon,
@@ -477,6 +479,7 @@ import {
 } from 'react-icons/vsc'
 
 export {
+    TruckIcon,
     PesoIcon,
     VoteIcon,
     WifiIcon,
@@ -733,6 +736,7 @@ export {
     BlockQuoteIcon,
     InfoFillCircleIcon,
     DragHandleIcon,
+    FaTagIcon,
     CameraFillIcon,
     EditPencilIcon,
     BadgeMinusIcon,
@@ -1314,6 +1318,8 @@ export const IconMap = {
     Male: MaleIcon,
     Female: FemaleIcon,
     'Merge Icon': MergeIcon,
+    'Fa Tag Icon': FaTagIcon,
+    'Truck Icon': TruckIcon,
 }
 
 export type TIcon = (typeof ICONS)[number]

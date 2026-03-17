@@ -107,7 +107,7 @@ const LandingNav = () => {
                             {/* Desktop active indicator */}
                             <div
                                 className={cn(
-                                    'absolute opacity-0 duration-500 -bottom-2 hidden h-[5px] w-0 !ml-0 rounded-full bg-primary sm:block',
+                                    'absolute opacity-0 duration-500 -bottom-2 hidden h-[5px] w-0 ml-0! rounded-full bg-primary sm:block',
                                     isCurrentTab && 'opacity-100 w-[20px]'
                                 )}
                             ></div>

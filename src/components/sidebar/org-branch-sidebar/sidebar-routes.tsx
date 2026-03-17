@@ -2,18 +2,21 @@ import { hasPermissionFromAuth } from '@/modules/authentication/authgentication.
 import { TUserType } from '@/modules/user'
 
 import {
+    BadgeCheckFillIcon,
     BankDuoToneIcon,
     BankIcon,
     BillIcon,
     BookIcon,
     BookOpenIcon,
     BookStackIcon,
+    BoxesStackedIcon,
     BriefCaseIcon,
     CalendarDotsIcon,
     CashClockIcon,
     ChecksGridIcon,
     CurlyBracketIcon,
     DashboardIcon,
+    FaTagIcon,
     FootstepsIcon,
     GendersIcon,
     GridFillIcon,
@@ -23,6 +26,7 @@ import {
     HandHeartIcon,
     HandWithdrawIcon,
     HomeFillIcon,
+    HouseIcon,
     HouseLockIcon,
     LayersIcon,
     MaintenanceIcon,
@@ -36,14 +40,17 @@ import {
     QrCodeIcon,
     SettingsIcon,
     ShieldIcon,
+    ShoppingCartIcon,
     TagIcon,
     TargetArrowIcon,
+    TruckIcon,
     UserCogIcon,
     UserIcon,
     UserListIcon,
     UserTagIcon,
     Users3Icon,
     Users3LineIcon,
+    WarningIcon,
     WrenchIcon,
 } from '@/components/icons'
 import {
@@ -371,7 +378,22 @@ export const generateSidebarGroups = (
                 },
             ],
         },
-
+        {
+            title: 'Inventory',
+            navItems: [
+                {
+                    type: 'item',
+                    icon: ShoppingCartIcon,
+                    title: 'Inventory',
+                    url: `${baseUrl}/inventory`,
+                    // canAccess: hasPermissionFromAuth({
+                    // action: 'Read',
+                    // resourceType: 'Account',
+                    // }),
+                    // shortDescription: 'View and manage accounts',
+                },
+            ],
+        },
         {
             title: 'Blotter',
             navItems: [
@@ -680,6 +702,47 @@ export const generateSidebarGroups = (
                             shortDescription: 'Manage disbursement types',
                         },
                     ],
+                },
+            ],
+        },
+        {
+            title: 'Inventory Maintenance',
+            navItems: [
+                {
+                    type: 'item',
+                    icon: BadgeCheckFillIcon,
+                    title: 'Inventory Brand',
+                    url: `${baseUrl}/inventory-brand`,
+                },
+                {
+                    type: 'item',
+                    icon: FaTagIcon,
+                    title: 'Inventory Tag',
+                    url: `${baseUrl}/inventory-tag`,
+                },
+                {
+                    type: 'item',
+                    icon: BoxesStackedIcon,
+                    title: 'Inventory Category',
+                    url: `${baseUrl}/inventory-category`,
+                },
+                {
+                    type: 'item',
+                    icon: WarningIcon,
+                    title: 'Inventory Hazard',
+                    url: `${baseUrl}/inventory-hazard`,
+                },
+                {
+                    type: 'item',
+                    icon: HouseIcon,
+                    title: 'Inventory warehouse',
+                    url: `${baseUrl}/inventory-warehouse`,
+                },
+                {
+                    type: 'item',
+                    icon: TruckIcon,
+                    title: 'Inventory Supplier',
+                    url: `${baseUrl}/inventory-supplier`,
                 },
             ],
         },

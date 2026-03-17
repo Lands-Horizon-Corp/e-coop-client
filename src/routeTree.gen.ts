@@ -79,6 +79,13 @@ import { Route as OrgOrgnameBranchBranchnametransactionsCashCheckJournalVoucherR
 import { Route as OrgOrgnameBranchBranchnametransactionsAdjustmentEntryRouteImport } from './routes/org/$orgname/branch.$branchname/(transactions)/adjustment-entry'
 import { Route as OrgOrgnameBranchBranchnamemembersViewMembersRouteImport } from './routes/org/$orgname/branch.$branchname/(members)/view-members'
 import { Route as OrgOrgnameBranchBranchnamemembersMemberAccountingLedgerRouteImport } from './routes/org/$orgname/branch.$branchname/(members)/member-accounting-ledger'
+import { Route as OrgOrgnameBranchBranchnameinventoryMaintenanceInventoryWarehouseRouteImport } from './routes/org/$orgname/branch.$branchname/(inventory-maintenance)/inventory-warehouse'
+import { Route as OrgOrgnameBranchBranchnameinventoryMaintenanceInventoryTagRouteImport } from './routes/org/$orgname/branch.$branchname/(inventory-maintenance)/inventory-tag'
+import { Route as OrgOrgnameBranchBranchnameinventoryMaintenanceInventorySupplierRouteImport } from './routes/org/$orgname/branch.$branchname/(inventory-maintenance)/inventory-supplier'
+import { Route as OrgOrgnameBranchBranchnameinventoryMaintenanceInventoryHazardRouteImport } from './routes/org/$orgname/branch.$branchname/(inventory-maintenance)/inventory-hazard'
+import { Route as OrgOrgnameBranchBranchnameinventoryMaintenanceInventoryCategoryRouteImport } from './routes/org/$orgname/branch.$branchname/(inventory-maintenance)/inventory-category'
+import { Route as OrgOrgnameBranchBranchnameinventoryMaintenanceInventoryBrandRouteImport } from './routes/org/$orgname/branch.$branchname/(inventory-maintenance)/inventory-brand'
+import { Route as OrgOrgnameBranchBranchnameinventoryInventoryRouteImport } from './routes/org/$orgname/branch.$branchname/(inventory)/inventory'
 import { Route as OrgOrgnameBranchBranchnameemployeesViewEmployeesRouteImport } from './routes/org/$orgname/branch.$branchname/(employees)/view-employees'
 import { Route as OrgOrgnameBranchBranchnameemployeesTimesheetsRouteImport } from './routes/org/$orgname/branch.$branchname/(employees)/timesheets'
 import { Route as OrgOrgnameBranchBranchnameemployeesPermissionTemplateRouteImport } from './routes/org/$orgname/branch.$branchname/(employees)/permission-template'
@@ -512,6 +519,58 @@ const OrgOrgnameBranchBranchnamemembersMemberAccountingLedgerRoute =
     path: '/member-accounting-ledger',
     getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
   } as any)
+const OrgOrgnameBranchBranchnameinventoryMaintenanceInventoryWarehouseRoute =
+  OrgOrgnameBranchBranchnameinventoryMaintenanceInventoryWarehouseRouteImport.update(
+    {
+      id: '/(inventory-maintenance)/inventory-warehouse',
+      path: '/inventory-warehouse',
+      getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
+    } as any,
+  )
+const OrgOrgnameBranchBranchnameinventoryMaintenanceInventoryTagRoute =
+  OrgOrgnameBranchBranchnameinventoryMaintenanceInventoryTagRouteImport.update({
+    id: '/(inventory-maintenance)/inventory-tag',
+    path: '/inventory-tag',
+    getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
+  } as any)
+const OrgOrgnameBranchBranchnameinventoryMaintenanceInventorySupplierRoute =
+  OrgOrgnameBranchBranchnameinventoryMaintenanceInventorySupplierRouteImport.update(
+    {
+      id: '/(inventory-maintenance)/inventory-supplier',
+      path: '/inventory-supplier',
+      getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
+    } as any,
+  )
+const OrgOrgnameBranchBranchnameinventoryMaintenanceInventoryHazardRoute =
+  OrgOrgnameBranchBranchnameinventoryMaintenanceInventoryHazardRouteImport.update(
+    {
+      id: '/(inventory-maintenance)/inventory-hazard',
+      path: '/inventory-hazard',
+      getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
+    } as any,
+  )
+const OrgOrgnameBranchBranchnameinventoryMaintenanceInventoryCategoryRoute =
+  OrgOrgnameBranchBranchnameinventoryMaintenanceInventoryCategoryRouteImport.update(
+    {
+      id: '/(inventory-maintenance)/inventory-category',
+      path: '/inventory-category',
+      getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
+    } as any,
+  )
+const OrgOrgnameBranchBranchnameinventoryMaintenanceInventoryBrandRoute =
+  OrgOrgnameBranchBranchnameinventoryMaintenanceInventoryBrandRouteImport.update(
+    {
+      id: '/(inventory-maintenance)/inventory-brand',
+      path: '/inventory-brand',
+      getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
+    } as any,
+  )
+const OrgOrgnameBranchBranchnameinventoryInventoryRoute =
+  OrgOrgnameBranchBranchnameinventoryInventoryRouteImport.update({
+    id: '/(inventory)/inventory',
+    path: '/inventory',
+    getParentRoute: () => OrgOrgnameBranchBranchnameRouteRoute,
+  } as any)
 const OrgOrgnameBranchBranchnameemployeesViewEmployeesRoute =
   OrgOrgnameBranchBranchnameemployeesViewEmployeesRouteImport.update({
     id: '/(employees)/view-employees',
@@ -815,6 +874,13 @@ export interface FileRoutesByFullPath {
   '/org/$orgname/branch/$branchname/permission-template': typeof OrgOrgnameBranchBranchnameemployeesPermissionTemplateRoute
   '/org/$orgname/branch/$branchname/timesheets': typeof OrgOrgnameBranchBranchnameemployeesTimesheetsRoute
   '/org/$orgname/branch/$branchname/view-employees': typeof OrgOrgnameBranchBranchnameemployeesViewEmployeesRoute
+  '/org/$orgname/branch/$branchname/inventory': typeof OrgOrgnameBranchBranchnameinventoryInventoryRoute
+  '/org/$orgname/branch/$branchname/inventory-brand': typeof OrgOrgnameBranchBranchnameinventoryMaintenanceInventoryBrandRoute
+  '/org/$orgname/branch/$branchname/inventory-category': typeof OrgOrgnameBranchBranchnameinventoryMaintenanceInventoryCategoryRoute
+  '/org/$orgname/branch/$branchname/inventory-hazard': typeof OrgOrgnameBranchBranchnameinventoryMaintenanceInventoryHazardRoute
+  '/org/$orgname/branch/$branchname/inventory-supplier': typeof OrgOrgnameBranchBranchnameinventoryMaintenanceInventorySupplierRoute
+  '/org/$orgname/branch/$branchname/inventory-tag': typeof OrgOrgnameBranchBranchnameinventoryMaintenanceInventoryTagRoute
+  '/org/$orgname/branch/$branchname/inventory-warehouse': typeof OrgOrgnameBranchBranchnameinventoryMaintenanceInventoryWarehouseRoute
   '/org/$orgname/branch/$branchname/member-accounting-ledger': typeof OrgOrgnameBranchBranchnamemembersMemberAccountingLedgerRoute
   '/org/$orgname/branch/$branchname/view-members': typeof OrgOrgnameBranchBranchnamemembersViewMembersRoute
   '/org/$orgname/branch/$branchname/adjustment-entry': typeof OrgOrgnameBranchBranchnametransactionsAdjustmentEntryRoute
@@ -917,6 +983,13 @@ export interface FileRoutesByTo {
   '/org/$orgname/branch/$branchname/permission-template': typeof OrgOrgnameBranchBranchnameemployeesPermissionTemplateRoute
   '/org/$orgname/branch/$branchname/timesheets': typeof OrgOrgnameBranchBranchnameemployeesTimesheetsRoute
   '/org/$orgname/branch/$branchname/view-employees': typeof OrgOrgnameBranchBranchnameemployeesViewEmployeesRoute
+  '/org/$orgname/branch/$branchname/inventory': typeof OrgOrgnameBranchBranchnameinventoryInventoryRoute
+  '/org/$orgname/branch/$branchname/inventory-brand': typeof OrgOrgnameBranchBranchnameinventoryMaintenanceInventoryBrandRoute
+  '/org/$orgname/branch/$branchname/inventory-category': typeof OrgOrgnameBranchBranchnameinventoryMaintenanceInventoryCategoryRoute
+  '/org/$orgname/branch/$branchname/inventory-hazard': typeof OrgOrgnameBranchBranchnameinventoryMaintenanceInventoryHazardRoute
+  '/org/$orgname/branch/$branchname/inventory-supplier': typeof OrgOrgnameBranchBranchnameinventoryMaintenanceInventorySupplierRoute
+  '/org/$orgname/branch/$branchname/inventory-tag': typeof OrgOrgnameBranchBranchnameinventoryMaintenanceInventoryTagRoute
+  '/org/$orgname/branch/$branchname/inventory-warehouse': typeof OrgOrgnameBranchBranchnameinventoryMaintenanceInventoryWarehouseRoute
   '/org/$orgname/branch/$branchname/member-accounting-ledger': typeof OrgOrgnameBranchBranchnamemembersMemberAccountingLedgerRoute
   '/org/$orgname/branch/$branchname/view-members': typeof OrgOrgnameBranchBranchnamemembersViewMembersRoute
   '/org/$orgname/branch/$branchname/adjustment-entry': typeof OrgOrgnameBranchBranchnametransactionsAdjustmentEntryRoute
@@ -1025,6 +1098,13 @@ export interface FileRoutesById {
   '/org/$orgname/branch/$branchname/(employees)/permission-template': typeof OrgOrgnameBranchBranchnameemployeesPermissionTemplateRoute
   '/org/$orgname/branch/$branchname/(employees)/timesheets': typeof OrgOrgnameBranchBranchnameemployeesTimesheetsRoute
   '/org/$orgname/branch/$branchname/(employees)/view-employees': typeof OrgOrgnameBranchBranchnameemployeesViewEmployeesRoute
+  '/org/$orgname/branch/$branchname/(inventory)/inventory': typeof OrgOrgnameBranchBranchnameinventoryInventoryRoute
+  '/org/$orgname/branch/$branchname/(inventory-maintenance)/inventory-brand': typeof OrgOrgnameBranchBranchnameinventoryMaintenanceInventoryBrandRoute
+  '/org/$orgname/branch/$branchname/(inventory-maintenance)/inventory-category': typeof OrgOrgnameBranchBranchnameinventoryMaintenanceInventoryCategoryRoute
+  '/org/$orgname/branch/$branchname/(inventory-maintenance)/inventory-hazard': typeof OrgOrgnameBranchBranchnameinventoryMaintenanceInventoryHazardRoute
+  '/org/$orgname/branch/$branchname/(inventory-maintenance)/inventory-supplier': typeof OrgOrgnameBranchBranchnameinventoryMaintenanceInventorySupplierRoute
+  '/org/$orgname/branch/$branchname/(inventory-maintenance)/inventory-tag': typeof OrgOrgnameBranchBranchnameinventoryMaintenanceInventoryTagRoute
+  '/org/$orgname/branch/$branchname/(inventory-maintenance)/inventory-warehouse': typeof OrgOrgnameBranchBranchnameinventoryMaintenanceInventoryWarehouseRoute
   '/org/$orgname/branch/$branchname/(members)/member-accounting-ledger': typeof OrgOrgnameBranchBranchnamemembersMemberAccountingLedgerRoute
   '/org/$orgname/branch/$branchname/(members)/view-members': typeof OrgOrgnameBranchBranchnamemembersViewMembersRoute
   '/org/$orgname/branch/$branchname/(transactions)/adjustment-entry': typeof OrgOrgnameBranchBranchnametransactionsAdjustmentEntryRoute
@@ -1133,6 +1213,13 @@ export interface FileRouteTypes {
     | '/org/$orgname/branch/$branchname/permission-template'
     | '/org/$orgname/branch/$branchname/timesheets'
     | '/org/$orgname/branch/$branchname/view-employees'
+    | '/org/$orgname/branch/$branchname/inventory'
+    | '/org/$orgname/branch/$branchname/inventory-brand'
+    | '/org/$orgname/branch/$branchname/inventory-category'
+    | '/org/$orgname/branch/$branchname/inventory-hazard'
+    | '/org/$orgname/branch/$branchname/inventory-supplier'
+    | '/org/$orgname/branch/$branchname/inventory-tag'
+    | '/org/$orgname/branch/$branchname/inventory-warehouse'
     | '/org/$orgname/branch/$branchname/member-accounting-ledger'
     | '/org/$orgname/branch/$branchname/view-members'
     | '/org/$orgname/branch/$branchname/adjustment-entry'
@@ -1235,6 +1322,13 @@ export interface FileRouteTypes {
     | '/org/$orgname/branch/$branchname/permission-template'
     | '/org/$orgname/branch/$branchname/timesheets'
     | '/org/$orgname/branch/$branchname/view-employees'
+    | '/org/$orgname/branch/$branchname/inventory'
+    | '/org/$orgname/branch/$branchname/inventory-brand'
+    | '/org/$orgname/branch/$branchname/inventory-category'
+    | '/org/$orgname/branch/$branchname/inventory-hazard'
+    | '/org/$orgname/branch/$branchname/inventory-supplier'
+    | '/org/$orgname/branch/$branchname/inventory-tag'
+    | '/org/$orgname/branch/$branchname/inventory-warehouse'
     | '/org/$orgname/branch/$branchname/member-accounting-ledger'
     | '/org/$orgname/branch/$branchname/view-members'
     | '/org/$orgname/branch/$branchname/adjustment-entry'
@@ -1342,6 +1436,13 @@ export interface FileRouteTypes {
     | '/org/$orgname/branch/$branchname/(employees)/permission-template'
     | '/org/$orgname/branch/$branchname/(employees)/timesheets'
     | '/org/$orgname/branch/$branchname/(employees)/view-employees'
+    | '/org/$orgname/branch/$branchname/(inventory)/inventory'
+    | '/org/$orgname/branch/$branchname/(inventory-maintenance)/inventory-brand'
+    | '/org/$orgname/branch/$branchname/(inventory-maintenance)/inventory-category'
+    | '/org/$orgname/branch/$branchname/(inventory-maintenance)/inventory-hazard'
+    | '/org/$orgname/branch/$branchname/(inventory-maintenance)/inventory-supplier'
+    | '/org/$orgname/branch/$branchname/(inventory-maintenance)/inventory-tag'
+    | '/org/$orgname/branch/$branchname/(inventory-maintenance)/inventory-warehouse'
     | '/org/$orgname/branch/$branchname/(members)/member-accounting-ledger'
     | '/org/$orgname/branch/$branchname/(members)/view-members'
     | '/org/$orgname/branch/$branchname/(transactions)/adjustment-entry'
@@ -1883,6 +1984,55 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof OrgOrgnameBranchBranchnamemembersMemberAccountingLedgerRouteImport
       parentRoute: typeof OrgOrgnameBranchBranchnameRouteRoute
     }
+    '/org/$orgname/branch/$branchname/(inventory-maintenance)/inventory-warehouse': {
+      id: '/org/$orgname/branch/$branchname/(inventory-maintenance)/inventory-warehouse'
+      path: '/inventory-warehouse'
+      fullPath: '/org/$orgname/branch/$branchname/inventory-warehouse'
+      preLoaderRoute: typeof OrgOrgnameBranchBranchnameinventoryMaintenanceInventoryWarehouseRouteImport
+      parentRoute: typeof OrgOrgnameBranchBranchnameRouteRoute
+    }
+    '/org/$orgname/branch/$branchname/(inventory-maintenance)/inventory-tag': {
+      id: '/org/$orgname/branch/$branchname/(inventory-maintenance)/inventory-tag'
+      path: '/inventory-tag'
+      fullPath: '/org/$orgname/branch/$branchname/inventory-tag'
+      preLoaderRoute: typeof OrgOrgnameBranchBranchnameinventoryMaintenanceInventoryTagRouteImport
+      parentRoute: typeof OrgOrgnameBranchBranchnameRouteRoute
+    }
+    '/org/$orgname/branch/$branchname/(inventory-maintenance)/inventory-supplier': {
+      id: '/org/$orgname/branch/$branchname/(inventory-maintenance)/inventory-supplier'
+      path: '/inventory-supplier'
+      fullPath: '/org/$orgname/branch/$branchname/inventory-supplier'
+      preLoaderRoute: typeof OrgOrgnameBranchBranchnameinventoryMaintenanceInventorySupplierRouteImport
+      parentRoute: typeof OrgOrgnameBranchBranchnameRouteRoute
+    }
+    '/org/$orgname/branch/$branchname/(inventory-maintenance)/inventory-hazard': {
+      id: '/org/$orgname/branch/$branchname/(inventory-maintenance)/inventory-hazard'
+      path: '/inventory-hazard'
+      fullPath: '/org/$orgname/branch/$branchname/inventory-hazard'
+      preLoaderRoute: typeof OrgOrgnameBranchBranchnameinventoryMaintenanceInventoryHazardRouteImport
+      parentRoute: typeof OrgOrgnameBranchBranchnameRouteRoute
+    }
+    '/org/$orgname/branch/$branchname/(inventory-maintenance)/inventory-category': {
+      id: '/org/$orgname/branch/$branchname/(inventory-maintenance)/inventory-category'
+      path: '/inventory-category'
+      fullPath: '/org/$orgname/branch/$branchname/inventory-category'
+      preLoaderRoute: typeof OrgOrgnameBranchBranchnameinventoryMaintenanceInventoryCategoryRouteImport
+      parentRoute: typeof OrgOrgnameBranchBranchnameRouteRoute
+    }
+    '/org/$orgname/branch/$branchname/(inventory-maintenance)/inventory-brand': {
+      id: '/org/$orgname/branch/$branchname/(inventory-maintenance)/inventory-brand'
+      path: '/inventory-brand'
+      fullPath: '/org/$orgname/branch/$branchname/inventory-brand'
+      preLoaderRoute: typeof OrgOrgnameBranchBranchnameinventoryMaintenanceInventoryBrandRouteImport
+      parentRoute: typeof OrgOrgnameBranchBranchnameRouteRoute
+    }
+    '/org/$orgname/branch/$branchname/(inventory)/inventory': {
+      id: '/org/$orgname/branch/$branchname/(inventory)/inventory'
+      path: '/inventory'
+      fullPath: '/org/$orgname/branch/$branchname/inventory'
+      preLoaderRoute: typeof OrgOrgnameBranchBranchnameinventoryInventoryRouteImport
+      parentRoute: typeof OrgOrgnameBranchBranchnameRouteRoute
+    }
     '/org/$orgname/branch/$branchname/(employees)/view-employees': {
       id: '/org/$orgname/branch/$branchname/(employees)/view-employees'
       path: '/view-employees'
@@ -2307,6 +2457,13 @@ interface OrgOrgnameBranchBranchnameRouteRouteChildren {
   OrgOrgnameBranchBranchnameemployeesPermissionTemplateRoute: typeof OrgOrgnameBranchBranchnameemployeesPermissionTemplateRoute
   OrgOrgnameBranchBranchnameemployeesTimesheetsRoute: typeof OrgOrgnameBranchBranchnameemployeesTimesheetsRoute
   OrgOrgnameBranchBranchnameemployeesViewEmployeesRoute: typeof OrgOrgnameBranchBranchnameemployeesViewEmployeesRoute
+  OrgOrgnameBranchBranchnameinventoryInventoryRoute: typeof OrgOrgnameBranchBranchnameinventoryInventoryRoute
+  OrgOrgnameBranchBranchnameinventoryMaintenanceInventoryBrandRoute: typeof OrgOrgnameBranchBranchnameinventoryMaintenanceInventoryBrandRoute
+  OrgOrgnameBranchBranchnameinventoryMaintenanceInventoryCategoryRoute: typeof OrgOrgnameBranchBranchnameinventoryMaintenanceInventoryCategoryRoute
+  OrgOrgnameBranchBranchnameinventoryMaintenanceInventoryHazardRoute: typeof OrgOrgnameBranchBranchnameinventoryMaintenanceInventoryHazardRoute
+  OrgOrgnameBranchBranchnameinventoryMaintenanceInventorySupplierRoute: typeof OrgOrgnameBranchBranchnameinventoryMaintenanceInventorySupplierRoute
+  OrgOrgnameBranchBranchnameinventoryMaintenanceInventoryTagRoute: typeof OrgOrgnameBranchBranchnameinventoryMaintenanceInventoryTagRoute
+  OrgOrgnameBranchBranchnameinventoryMaintenanceInventoryWarehouseRoute: typeof OrgOrgnameBranchBranchnameinventoryMaintenanceInventoryWarehouseRoute
   OrgOrgnameBranchBranchnamemembersMemberAccountingLedgerRoute: typeof OrgOrgnameBranchBranchnamemembersMemberAccountingLedgerRoute
   OrgOrgnameBranchBranchnamemembersViewMembersRoute: typeof OrgOrgnameBranchBranchnamemembersViewMembersRoute
   OrgOrgnameBranchBranchnametransactionsAdjustmentEntryRoute: typeof OrgOrgnameBranchBranchnametransactionsAdjustmentEntryRoute
@@ -2383,6 +2540,20 @@ const OrgOrgnameBranchBranchnameRouteRouteChildren: OrgOrgnameBranchBranchnameRo
       OrgOrgnameBranchBranchnameemployeesTimesheetsRoute,
     OrgOrgnameBranchBranchnameemployeesViewEmployeesRoute:
       OrgOrgnameBranchBranchnameemployeesViewEmployeesRoute,
+    OrgOrgnameBranchBranchnameinventoryInventoryRoute:
+      OrgOrgnameBranchBranchnameinventoryInventoryRoute,
+    OrgOrgnameBranchBranchnameinventoryMaintenanceInventoryBrandRoute:
+      OrgOrgnameBranchBranchnameinventoryMaintenanceInventoryBrandRoute,
+    OrgOrgnameBranchBranchnameinventoryMaintenanceInventoryCategoryRoute:
+      OrgOrgnameBranchBranchnameinventoryMaintenanceInventoryCategoryRoute,
+    OrgOrgnameBranchBranchnameinventoryMaintenanceInventoryHazardRoute:
+      OrgOrgnameBranchBranchnameinventoryMaintenanceInventoryHazardRoute,
+    OrgOrgnameBranchBranchnameinventoryMaintenanceInventorySupplierRoute:
+      OrgOrgnameBranchBranchnameinventoryMaintenanceInventorySupplierRoute,
+    OrgOrgnameBranchBranchnameinventoryMaintenanceInventoryTagRoute:
+      OrgOrgnameBranchBranchnameinventoryMaintenanceInventoryTagRoute,
+    OrgOrgnameBranchBranchnameinventoryMaintenanceInventoryWarehouseRoute:
+      OrgOrgnameBranchBranchnameinventoryMaintenanceInventoryWarehouseRoute,
     OrgOrgnameBranchBranchnamemembersMemberAccountingLedgerRoute:
       OrgOrgnameBranchBranchnamemembersMemberAccountingLedgerRoute,
     OrgOrgnameBranchBranchnamemembersViewMembersRoute:
