@@ -36,3 +36,15 @@ export const GeneratedReportSchema = z.object({
         .optional(),
 })
 export type TGeneratedReportFormValues = z.infer<typeof GeneratedReportSchema>
+
+// FOR PRINT CONFIG SECTION ON PRINTABLE FORMS
+export const PrintSettingsSchema = z.object({
+    name: z.string().min(1, 'Name is required'),
+    password: z.string().min(1, 'Password is required').optional(),
+    module: z.string().min(1, 'Module is required'),
+    template: z.string().min(1, 'Template path is required'),
+    width: z.string().min(1, 'Width is required'),
+    height: z.string().min(1, 'Height is required'),
+})
+
+export type TPrintSettingsSchema = z.infer<typeof PrintSettingsSchema>

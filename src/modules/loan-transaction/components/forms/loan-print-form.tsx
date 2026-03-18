@@ -1,6 +1,6 @@
 import { useCallback, useEffect } from 'react'
 
-import { useForm } from 'react-hook-form'
+import { UseFormReturn, useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 
 import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
@@ -8,6 +8,8 @@ import { standardSchemaResolver } from '@hookform/resolvers/standard-schema'
 import { cn } from '@/helpers'
 import { toInputDateString } from '@/helpers/date-utils'
 import { serverRequestErrExtractor } from '@/helpers/error-message-extractor'
+import { TPrintSettingsSchema } from '@/modules/generated-report'
+import { PrintConfigSectionDialog } from '@/modules/generated-report/components/forms/print-config-section'
 import { useHotkeys } from 'react-hotkeys-hook'
 
 import FormFooterResetSubmit from '@/components/form-components/form-footer-reset-submit'
@@ -65,6 +67,7 @@ const LoanTransactionPrintForm = ({
             voucher: '',
             check_number: '',
             ...formProps.defaultValues,
+            module: formProps.defaultValues?.module ?? 'loan-transaction',
             check_date: toInputDateString(
                 formProps.defaultValues?.check_date || new Date()
             ),
@@ -139,10 +142,22 @@ const LoanTransactionPrintForm = ({
         handleAutoGenerateOR(true)
     }, [orSettings, form, handleAutoGenerateOR])
 
+    useEffect(() => {
+        if (!formProps.defaultValues?.voucher) return
+        const currentName = form.getValues('name')
+        if (currentName) return
+
+        form.setValue(
+            'name',
+            `loan_voucher_${form.getValues('voucher')}_release`
+        )
+    }, [form, formProps])
+
     return (
         <>
             <Form {...form}>
                 <form
+                    autoComplete="off"
                     className={cn('flex w-full flex-col gap-y-4', className)}
                     onSubmit={onSubmit}
                     ref={formRef}
@@ -228,6 +243,13 @@ const LoanTransactionPrintForm = ({
                                     type="date"
                                 />
                             )}
+                        />
+                        <PrintConfigSectionDialog
+                            printConfigProps={{
+                                // whe're sure na the form instance have the print settings schema LMAO XD
+                                form: form as unknown as UseFormReturn<TPrintSettingsSchema>,
+                                registryKey: 'loan_transaction_print_voucher',
+                            }}
                         />
                     </fieldset>
                     <FormFooterResetSubmit

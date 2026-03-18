@@ -1,5 +1,3 @@
-import nunjucks from 'nunjucks'
-
 export const PAPER_SIZE_UNIT = ['mm', 'in', 'pt'] as const
 
 export type TPaperSizeUnit = (typeof PAPER_SIZE_UNIT)[number]
@@ -12,39 +10,7 @@ export interface PaperSize {
     orientation?: 'portrait' | 'landscape'
 }
 
-type GENERAL_PAPER_SIZE =
-    | 'RECEIPT_58MM'
-    | 'RECEIPT_80MM'
-    | 'LETTER'
-    | 'LEGAL'
-    | 'FOLIO'
-    | 'CHECK'
-    | 'PASSBOOK'
-    | 'DEPOSIT_SLIP'
-    | 'WITHDRAWAL_SLIP'
-    | 'STATEMENT'
-    | 'CHECKBOOK'
-    | 'BANKBOOK'
-
-type B_SERIES_SIZES =
-    // | 'B0'
-    // | 'B1'
-    // | 'B2'
-    // | 'B3'
-    // | 'B4'
-    'B5' | 'B6' | 'B7' | 'B8' | 'B9' | 'B10'
-type A_SERIES_SIZES = 'A0' | 'A1' | 'A2' | 'A3' | 'A4' | 'A5' | 'A6'
-// | 'A7'
-// | 'A8'
-// | 'A9'
-// | 'A10'
-
-export type TPaperSizeName =
-    | GENERAL_PAPER_SIZE
-    | A_SERIES_SIZES
-    | B_SERIES_SIZES
-
-export const PAPER_SIZES: Record<TPaperSizeName, PaperSize> = {
+export const PAPER_SIZES: Record<string, PaperSize> = {
     // Receipt Sizes
     RECEIPT_58MM: { name: '58mm Receipt', width: 58, height: 200, unit: 'mm' },
     RECEIPT_80MM: { name: '80mm Receipt', width: 80, height: 200, unit: 'mm' },
@@ -72,10 +38,10 @@ export const PAPER_SIZES: Record<TPaperSizeName, PaperSize> = {
     A5: { name: 'A5', width: 148, height: 210, unit: 'mm' },
     A6: { name: 'A6', width: 105, height: 148, unit: 'mm' },
     //this sizes are rarely used
-    // A7: { name: 'A7', width: 74, height: 105, unit: 'mm' },
-    // A8: { name: 'A8', width: 52, height: 74, unit: 'mm' },
-    // A9: { name: 'A9', width: 37, height: 52, unit: 'mm' },
-    // A10: { name: 'A10', width: 26, height: 37, unit: 'mm' },
+    A7: { name: 'A7', width: 74, height: 105, unit: 'mm' },
+    A8: { name: 'A8', width: 52, height: 74, unit: 'mm' },
+    A9: { name: 'A9', width: 37, height: 52, unit: 'mm' },
+    A10: { name: 'A10', width: 26, height: 37, unit: 'mm' },
 
     // B Series (ISO 216 Standard)
     // B0: { name: 'B0', width: 1000, height: 1414, unit: 'mm' },
@@ -95,6 +61,34 @@ export const PAPER_SIZES: Record<TPaperSizeName, PaperSize> = {
     LEGAL: { name: 'Legal', width: 8.5, height: 14, unit: 'in' },
     FOLIO: { name: 'Folio', width: 8.5, height: 13, unit: 'in' },
 }
+
+export const PAPER_SIZE_GROUPS = {
+    Receipt: ['RECEIPT_58MM', 'RECEIPT_80MM'],
+    Banking: [
+        'CHECK',
+        'PASSBOOK',
+        'DEPOSIT_SLIP',
+        'WITHDRAWAL_SLIP',
+        'STATEMENT',
+        'CHECKBOOK',
+        'BANKBOOK',
+    ],
+    'A Series': [
+        'A0',
+        'A1',
+        'A2',
+        'A3',
+        'A4',
+        'A5',
+        'A6',
+        'A7',
+        'A8',
+        'A9',
+        'A10',
+    ],
+    'B Series': ['B5', 'B6', 'B7', 'B8', 'B9', 'B10'],
+    'North American': ['LETTER', 'LEGAL', 'FOLIO'],
+} as const
 
 // 🧭 Helper Function to Get Orientation
 export function getPaperSize(
@@ -259,42 +253,3 @@ export const Style = {
         trackingNormal: '0em',
     },
 }
-
-interface ReportTemplate<T> {
-    name: string
-    template: string
-    max_width: number
-    max_height: number
-    min_width: number
-    min_height: number
-    view?: (this: ReportTemplate<T>) => string
-}
-
-// cash-check-disbursement.hbs
-export const GENERATED_REPORT_GENERAL_LEDGER: ReportTemplate<{
-    name: string
-    age: number
-}>[] = [
-    {
-        name: 'Verbose template',
-        template: '/reports/general-ledger-template-1.hbs',
-        max_width: 11,
-        max_height: 12,
-        min_width: 13,
-        min_height: 14,
-    },
-    {
-        name: 'Minimal template',
-        template: '/reports/general-ledger-template-2.hbs',
-        max_width: 11,
-        max_height: 12,
-        min_width: 13,
-        min_height: 14,
-        view: function () {
-            return nunjucks.renderString(this.template, {
-                name: 'John Doe',
-                age: 20,
-            })
-        },
-    },
-]

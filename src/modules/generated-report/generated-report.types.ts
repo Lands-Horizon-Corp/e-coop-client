@@ -4,7 +4,7 @@ import { IGeneratedReportsDownloadUsers } from '../generated-reports-download-us
 import { IMedia } from '../media'
 import { IUser } from '../user'
 import { TPaperSizeName } from './components/forms/paper-size-selector'
-import { TPaperSizeUnit } from './generated-reports.constants'
+import { PAPER_SIZES, TPaperSizeUnit } from './generated-reports.constants'
 
 export const ACCOUNT_MODEL_NAMES = [
     'AccountHistory',
@@ -236,3 +236,35 @@ export type TemplateOptions = {
 
     defaultSize: TPaperSizeName
 }
+
+// for template & preview
+
+export type SizingUnit = 'in' | 'cm' | 'mm' | 'pt' | 'px'
+
+export type TemplateSource = string | (() => Promise<{ default: string }>)
+
+export interface GeneratedReportTemplate<T = unknown> {
+    id: string
+    name: string
+
+    template: TemplateSource
+
+    max_width: number
+    max_height: number
+    min_width: number
+    min_height: number
+
+    default_unit: SizingUnit
+
+    width: string // combined ng value sa default sizing unit 18in
+    height: string // combined ng value sa default sizing unit 14in
+
+    page_size?: (typeof PAPER_SIZES)[number]
+
+    filter?: Record<string, unknown>
+
+    preview_data: T
+}
+
+export type GeneratedReportTemplateCollection<T = unknown> =
+    GeneratedReportTemplate<T>[]

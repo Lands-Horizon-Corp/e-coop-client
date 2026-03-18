@@ -138,10 +138,7 @@ function GeneratedReports() {
         }
     }
     const eventName = reportData?.id ? `live.${reportData.id}` : null
-    console.log(eventName, '-')
-    useSubscribe('generated_report', eventName, (payload) => {
-        console.log(payload)
-    })
+    useSubscribe('generated_report', eventName, () => {})
 
     return (
         <div className="p-8 space-y-6">

@@ -24,6 +24,7 @@ export interface FormFieldWrapperProps<
 
     label?: string | ReactNode
     description?: string | ReactNode
+    descriptionPlacement?: 'before-content' | 'after-content'
 
     className?: string
     labelClassName?: string
@@ -44,6 +45,7 @@ const FormFieldWrapper = <
     messageClassName,
     descriptionClassName,
     hideFieldMessage = false,
+    descriptionPlacement = 'after-content',
     render,
     ...controllerProps
 }: FormFieldWrapperProps<T, TName>) => {
@@ -70,14 +72,29 @@ const FormFieldWrapper = <
                                 {label}
                             </FormLabel>
                         )}
-                        {description && (
-                            <FormDescription
-                                className={cn(descriptionClassName)}
-                            >
-                                {description}
-                            </FormDescription>
-                        )}
+                        {description &&
+                            descriptionPlacement === 'before-content' && (
+                                <FormDescription
+                                    className={cn(
+                                        'text-xs',
+                                        descriptionClassName
+                                    )}
+                                >
+                                    {description}
+                                </FormDescription>
+                            )}
                         {render({ field, ...other })}
+                        {description &&
+                            descriptionPlacement === 'after-content' && (
+                                <FormDescription
+                                    className={cn(
+                                        'text-xs',
+                                        descriptionClassName
+                                    )}
+                                >
+                                    {description}
+                                </FormDescription>
+                            )}
                         {!hideFieldMessage && (
                             <FormMessage
                                 className={cn('text-xs', messageClassName)}

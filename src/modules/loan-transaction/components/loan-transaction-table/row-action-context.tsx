@@ -699,7 +699,14 @@ export const LoanTransactionTableActionManager = () => {
             {state.action === 'print' && loanTransaction && (
                 <LoanTransactionPrintFormModal
                     formProps={{
-                        defaultValues: loanTransaction,
+                        defaultValues: {
+                            name: loanTransaction.voucher
+                                ? `loan_voucher_${loanTransaction.voucher}_release`
+                                : `loan_${loanTransaction.id}_voucher_release`,
+                            check_date: loanTransaction.check_date,
+                            check_number: loanTransaction.check_number,
+                            voucher: loanTransaction.voucher,
+                        },
                         loanTransactionId: loanTransaction.id,
                         orSettings: resolvedOrSettings,
                     }}
