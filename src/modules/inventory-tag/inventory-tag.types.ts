@@ -2,7 +2,7 @@ import z from 'zod'
 
 import { IBaseEntityMeta, IPaginatedResult, TEntityId } from '@/types'
 
-import { IInventoryItem } from '../inventory/inventory.types'
+import { IInventoryItem } from '../inventory-item'
 import { TTagCategory } from '../tag-template'
 import { InventoryTagSchema } from './inventory-tag.validation'
 

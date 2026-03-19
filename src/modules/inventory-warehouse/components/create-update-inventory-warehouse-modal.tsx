@@ -35,8 +35,8 @@ import {
     useUpdateInventoryWarehouseById,
 } from '../inventory-warehouse.service'
 import {
-    IInventoryInternalWarehouse,
-    IInventoryInternalWarehouseRequest,
+    IInventoryWarehouse,
+    IInventoryWarehouseRequest,
     WAREHOUSE_TYPE,
 } from '../inventory-warehouse.types'
 import { InventoryWarehouseSchema } from '../inventory-warehouse.validation'
@@ -47,8 +47,8 @@ export interface IInventoryWarehouseFormProps
     extends
         IClassProps,
         IForm<
-            Partial<IInventoryInternalWarehouseRequest>,
-            IInventoryInternalWarehouse,
+            Partial<IInventoryWarehouseRequest>,
+            IInventoryWarehouse,
             Error,
             TFormValues
         > {

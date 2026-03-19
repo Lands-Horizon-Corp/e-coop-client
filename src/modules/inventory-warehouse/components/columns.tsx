@@ -11,9 +11,9 @@ import ImageDisplay from '@/components/image-display'
 import { Checkbox } from '@/components/ui/checkbox'
 import PreviewMediaWrapper from '@/components/wrappers/preview-media-wrapper'
 
-import { IInventoryInternalWarehouse } from '../inventory-warehouse.types'
+import { IInventoryWarehouse } from '../inventory-warehouse.types'
 
-export const inventoryWarehouseGlobalSearchTargets: IGlobalSearchTargets<IInventoryInternalWarehouse>[] =
+export const inventoryWarehouseGlobalSearchTargets: IGlobalSearchTargets<IInventoryWarehouse>[] =
     [
         { field: 'name', displayText: 'Warehouse Name' },
         { field: 'code', displayText: 'Code' },
@@ -21,7 +21,7 @@ export const inventoryWarehouseGlobalSearchTargets: IGlobalSearchTargets<IInvent
     ]
 
 export interface IInventoryWarehouseTableActionComponentProp {
-    row: Row<IInventoryInternalWarehouse>
+    row: Row<IInventoryWarehouse>
 }
 
 export interface IInventoryWarehouseTableColumnProps {
@@ -32,7 +32,7 @@ export interface IInventoryWarehouseTableColumnProps {
 
 const InventoryWarehouseTableColumns = (
     opts?: IInventoryWarehouseTableColumnProps
-): ColumnDef<IInventoryInternalWarehouse>[] => [
+): ColumnDef<IInventoryWarehouse>[] => [
     {
         id: 'select',
         header: ({ table, column }) => (
@@ -111,7 +111,7 @@ const InventoryWarehouseTableColumns = (
         cell: ({ row }) => <div>{row.original.address || '-'}</div>,
         size: 200,
     },
-    ...createUpdateColumns<IInventoryInternalWarehouse>(),
+    ...createUpdateColumns<IInventoryWarehouse>(),
 ]
 
 export default InventoryWarehouseTableColumns

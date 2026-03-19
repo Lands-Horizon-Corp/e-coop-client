@@ -9,7 +9,7 @@ export const WAREHOUSE_TYPE = ['Bonded', 'Private', 'Public'] as const
 
 export type TWarehouseType = (typeof WAREHOUSE_TYPE)[number]
 
-export interface IInventoryInternalWarehouse extends IBaseEntityMeta, ILongLat {
+export interface IInventoryWarehouse extends IBaseEntityMeta, ILongLat {
     name: string
     description?: string
     type: TWarehouseType
@@ -25,8 +25,8 @@ export interface IInventoryInternalWarehouse extends IBaseEntityMeta, ILongLat {
     media: IMedia
 }
 
-export type IInventoryInternalWarehouseRequest = z.infer<
+export type IInventoryWarehouseRequest = z.infer<
     typeof InventoryWarehouseSchema
 >
 
-export interface IInventoryInternalWarehousePaginated extends IPaginatedResult<IInventoryInternalWarehouse> {}
+export interface IInventoryWarehousePaginated extends IPaginatedResult<IInventoryWarehouse> {}

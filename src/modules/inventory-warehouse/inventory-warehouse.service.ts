@@ -1,19 +1,13 @@
 import { Logger } from '@/helpers/loggers'
 import { createDataLayerFactory } from '@/providers/repositories/data-layer-factory'
 
-import type {
-    IInventoryInternalWarehouse,
-    IInventoryInternalWarehouseRequest,
-} from '.'
+import type { IInventoryWarehouse, IInventoryWarehouseRequest } from '.'
 
 const {
     apiCrudHooks,
     apiCrudService,
     baseQueryKey: inventoryWarehouseBaseKey,
-} = createDataLayerFactory<
-    IInventoryInternalWarehouse,
-    IInventoryInternalWarehouseRequest
->({
+} = createDataLayerFactory<IInventoryWarehouse, IInventoryWarehouseRequest>({
     url: '/api/v1/inventory-warehouse',
     baseKey: 'inventory-warehouse',
 })

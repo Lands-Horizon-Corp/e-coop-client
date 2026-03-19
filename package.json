@@ -93,7 +93,6 @@
         "@typescript-eslint/eslint-plugin": "^8.44.0",
         "@typescript-eslint/parser": "^8.44.0",
         "@yudiel/react-qr-scanner": "^2.3.1",
-        "@zxing/browser": "^0.1.5",
         "axios": "^1.12.2",
         "browser-image-compression": "^2.0.2",
         "chart.js": "^4.5.1",

@@ -6,7 +6,7 @@ import qs from 'query-string'
 import FilterContext from '@/contexts/filter-context/filter-context'
 import { cn } from '@/helpers/tw-utils'
 import {
-    IInventoryInternalWarehouse,
+    IInventoryWarehouse,
     deleteManyInventoryWarehouse,
     useGetPaginatedInventoryWarehouse,
 } from '@/modules/inventory-warehouse'
@@ -42,10 +42,10 @@ import InventoryWarehouseAction, {
 
 export interface InventoryWarehouseTableProps
     extends
-        TableProps<IInventoryInternalWarehouse>,
+        TableProps<IInventoryWarehouse>,
         IInventoryWarehouseTableColumnProps {
     toolbarProps?: Omit<
-        IDataTableToolbarProps<IInventoryInternalWarehouse>,
+        IDataTableToolbarProps<IInventoryWarehouse>,
         | 'table'
         | 'refreshActionProps'
         | 'globalSearchProps'
@@ -89,7 +89,7 @@ const InventoryWarehouseTable = ({
             persistKey,
         })
 
-    const tableState = useDataTableState<IInventoryInternalWarehouse>({
+    const tableState = useDataTableState<IInventoryWarehouse>({
         key: finalKeys,
         defaultColumnOrder: resolvedColumnOrder,
         defaultColumnVisibility: resolvedColumnVisibility,

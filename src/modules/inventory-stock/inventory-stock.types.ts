@@ -3,7 +3,7 @@ import z from 'zod'
 import { IBaseEntityMeta, IPaginatedResult, TEntityId } from '@/types'
 
 import { IInventoryCategory } from '../inventory-category'
-import { IInventoryInternalWarehouse } from '../inventory-warehouse'
+import { IInventoryWarehouse } from '../inventory-warehouse'
 import { InventoryStockSchema } from './inventory-stock.validation'
 
 export const UNITS = [
@@ -52,7 +52,7 @@ export interface IInventoryStock extends IBaseEntityMeta {
 
     unit: TInventoryUnit
     serial_number: string
-    internal_warehouse: IInventoryInternalWarehouse
+    warehouse: IInventoryWarehouse
 }
 
 export type IInventoryStockRequest = z.infer<typeof InventoryStockSchema>

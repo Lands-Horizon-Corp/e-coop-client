@@ -8,7 +8,7 @@ import DataTableRowContext from '@/components/data-table/data-table-row-context'
 import { useTableRowActionStore } from '@/components/data-table/store/data-table-action-store'
 
 import { useDeleteInventoryWarehouseById } from '../inventory-warehouse.service'
-import { IInventoryInternalWarehouse } from '../inventory-warehouse.types'
+import { IInventoryWarehouse } from '../inventory-warehouse.types'
 import { IInventoryWarehouseTableActionComponentProp } from './columns'
 import { InventoryWarehouseCreateUpdateModal } from './create-update-inventory-warehouse-modal'
 
@@ -19,7 +19,7 @@ export interface InventoryWarehouseActionExtra {
 }
 
 interface UseInventoryWarehouseActionsProps {
-    row: Row<IInventoryInternalWarehouse>
+    row: Row<IInventoryWarehouse>
     onDeleteSuccess?: () => void
 }
 
@@ -30,7 +30,7 @@ const useInventoryWarehouseActions = ({
     const warehouse = row.original
 
     const { open } = useTableRowActionStore<
-        IInventoryInternalWarehouse,
+        IInventoryWarehouse,
         InventoryWarehouseActionType,
         InventoryWarehouseActionExtra
     >()
@@ -136,7 +136,7 @@ export const InventoryWarehouseRowContext = ({
 
 export const InventoryWarehouseTableActionManager = () => {
     const { state, close } = useTableRowActionStore<
-        IInventoryInternalWarehouse,
+        IInventoryWarehouse,
         InventoryWarehouseActionType,
         InventoryWarehouseActionExtra
     >()

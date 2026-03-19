@@ -6,7 +6,7 @@ import { IAccount } from '../account'
 import { IInventoryHazard } from '../inventory-hazard'
 import { TInventoryUnit } from '../inventory-stock'
 import { IInventorySupplier } from '../inventory-supplier'
-import { IInventoryInternalWarehouse } from '../inventory-warehouse'
+import { IInventoryWarehouse } from '../inventory-warehouse'
 import { InventoryEntrySchema } from './inventory-entry.validation'
 
 export const InventoryEntryStatus = [
@@ -22,7 +22,7 @@ export const InventoryEntryStatus = [
 export type TInventoryEntryStatus = (typeof InventoryEntryStatus)[number]
 
 export interface IInventoryEntry extends IBaseEntityMeta {
-    inventory_internal: IInventoryInternalWarehouse
+    inventory_internal: IInventoryWarehouse
 
     quantity: number
     debit: number
