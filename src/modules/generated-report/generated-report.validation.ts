@@ -37,6 +37,15 @@ export const GeneratedReportSchema = z.object({
 })
 export type TGeneratedReportFormValues = z.infer<typeof GeneratedReportSchema>
 
+const SIZE_REGEX = new RegExp(`^\\d+(\\.\\d+)?(${PAPER_SIZE_UNIT.join('|')})$`)
+
+export const SizeWithUnitSchema = z
+    .string()
+    .regex(SIZE_REGEX, 'Invalid size format (e.g. 8.5in, 210mm)')
+    .refine((val) => parseFloat(val) > 0, {
+        message: 'Size must be greater than 0',
+    })
+
 // FOR PRINT CONFIG SECTION ON PRINTABLE FORMS
 export const ReportConfigSchema = z.object({
     name: z.string().min(1, 'Name is required'),
@@ -45,8 +54,8 @@ export const ReportConfigSchema = z.object({
     module: z.enum(ACCOUNT_MODEL_NAMES),
 
     template: z.string().min(1, 'Template path is required'),
-    width: z.string().min(1, 'Width is required').default('0in'),
-    height: z.string().min(1, 'Height is required').default('0in'),
+    width: SizeWithUnitSchema.default('0in'),
+    height: SizeWithUnitSchema.default('0in'),
 
     filters: z.any().optional().default({}),
 
